@@ -5,7 +5,7 @@
 import { CustomEventId, WALLET_OR_PERSONA_NAME_MAX_LEN } from './constants'
 import type { CustomEvents } from '../extension/injected-script/CustomEvents'
 
-import { flatten, isNull, random, noop } from 'lodash-es'
+import { isNull, noop } from 'lodash-es'
 
 /**
  * Return a promise that resolved after `time` ms.
@@ -65,10 +65,11 @@ export function dispatchCustomEvents<T extends keyof CustomEvents>(
 
 /**
  * paste image to activeElements
- * @param bytes
+ * @param image
  */
-export function pasteImageToActiveElements(bytes: Uint8Array) {
-    return dispatchCustomEvents(document.activeElement, 'paste', { type: 'image', value: Array.from(bytes) })
+export async function pasteImageToActiveElements(image: File | Blob): Promise<void> {
+    const bytes = new Uint8Array(await image.arrayBuffer())
+    dispatchCustomEvents(document.activeElement, 'paste', { type: 'image', value: Array.from(bytes) })
 }
 
 Object.assign(globalThis, { dispatchCustomEvents })

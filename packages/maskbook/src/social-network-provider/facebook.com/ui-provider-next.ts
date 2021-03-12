@@ -20,7 +20,7 @@ import { injectPageInspectorDefault } from '../../social-network/defaults/inject
 import { profilesCollectorFacebook } from './collecting/profiles'
 import { PostProviderFacebook } from './collecting/posts'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
-import { pasteImageToCompositionFacebook } from './automation/pasteImageToComposition'
+import { pasteImageToCompositionDefault } from '../../social-network-next/defaults/pasteImageToComposition'
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
 const facebookUI: SocialNetworkUI.Definition = {
@@ -57,7 +57,8 @@ const facebookUI: SocialNetworkUI.Definition = {
             appendText(text, recover) {
                 pasteTextToCompositionFacebook(text, { autoPasteFailedRecover: !!recover })
             },
-            attachImage: pasteImageToCompositionFacebook,
+            // TODO: make a better way to detect
+            attachImage: pasteImageToCompositionDefault(() => false),
         },
         nativeCommentBox: {
             appendText: pasteToCommentBoxFacebook,

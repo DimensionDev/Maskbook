@@ -4,7 +4,7 @@ import Services from '../../../extension/service'
 import { decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'
 import { ImagePayloadURLs } from '../../../resources/image-payload'
-import { pasteImageToCompositionFacebook } from './pasteImageToComposition'
+import { pasteImageToCompositionDefault } from '../../../social-network-next/defaults/pasteImageToComposition'
 
 export async function uploadToPostBoxFacebook(
     text: string,
@@ -25,5 +25,9 @@ export async function uploadToPostBoxFacebook(
         ),
     )
     const blob = new Blob([secretImage], { type: 'image/png' })
-    await pasteImageToCompositionFacebook(blob, { recover: autoPasteFailedRecover, relatedTextPayload: relatedText })
+    // TODO: detect if paste has succeed
+    await pasteImageToCompositionDefault(() => false)(blob, {
+        recover: autoPasteFailedRecover,
+        relatedTextPayload: relatedText,
+    })
 }

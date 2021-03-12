@@ -1,5 +1,4 @@
-import type { SocialNetworkUI } from '../../social-network-next/types'
-import { stateCreator } from '../../social-network-next/utils'
+import { stateCreator, SocialNetworkUI } from '../../social-network-next'
 import { twitterBase } from './base'
 import { twitterShared } from './shared'
 import { InitAutonomousStateFriends } from '../../social-network-next/defaults/InitAutonomousStateFriends'
@@ -27,6 +26,7 @@ import { injectSetupPromptAtTwitter } from './injection/SetupPrompt'
 import { injectPostBoxComposed } from './injection/inject'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskbookIcon'
+import { pasteImageToCompositionDefault } from '../../social-network-next/defaults/pasteImageToComposition'
 
 const origins = ['https://www.twitter.com/*', 'https://m.twitter.com/*']
 const twitterUI: SocialNetworkUI.Definition = {
@@ -49,8 +49,8 @@ const twitterUI: SocialNetworkUI.Definition = {
             appendText(content, opts) {
                 pasteTextToCompositionTwitter(content, { autoPasteFailedRecover: !!opts?.recover })
             },
-            // TODO
-            attachImage: undefined,
+            // TODO: make a better way to detect
+            attachImage: pasteImageToCompositionDefault(() => false),
         },
         redirect: {
             newsFeed: gotoNewsFeedPageTwitter,
