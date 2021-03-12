@@ -9,7 +9,6 @@ export enum TransactionProvider {
     DEBANK,
 }
 
-
 export enum AssetProvider {
     OPENSEAN,
 }

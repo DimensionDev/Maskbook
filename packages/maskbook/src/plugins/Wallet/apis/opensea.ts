@@ -27,7 +27,6 @@ export interface Asset {
     description: string
 }
 
-
 export interface AssetsListResponse {
     data: {
         search: {
@@ -39,7 +38,6 @@ export interface AssetsListResponse {
         }
     }
 }
-
 
 export async function getAssetsList(from: string) {
     const response = await fetch('https://api.opensea.io/graphql/', {
