@@ -47,34 +47,34 @@ export async function getAssetsList(from: string) {
             query: `
             {
                 search (identity: { address: "${from.toLowerCase()}" }, first: 100) {
-                  edges {
-                    node {
-                      asset {
-                        assetContract {
-                          account {
-                            address
-                          }
-                          name
-                          symbol
+                    edges {
+                        node {
+                            asset {
+                                assetContract {
+                                    account {
+                                        address
+                                    }
+                                    name
+                                    symbol
+                                }
+                                tokenId
+                                imageUrl
+                                collection {
+                                    imageUrl
+                                    id
+                                    name
+                                    slug
+                                    hidden
+                                    description
+                                }
+                                name
+                                id
+                                description
+                            }
                         }
-                        tokenId
-                        imageUrl
-                        collection {
-                          imageUrl
-                          id
-                          name
-                          slug
-                          hidden
-                          description
-                        }
-                        name
-                        id
-                        description
-                      }
                     }
-                  }
                 }
-              }
+            }
             `,
             variables: null,
         }),
