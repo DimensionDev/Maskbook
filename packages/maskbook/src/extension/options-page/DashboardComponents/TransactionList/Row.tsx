@@ -13,6 +13,11 @@ const useStyles = makeStyles(() =>
     createStyles({
         failed: { opacity: 0.3 },
         hidden: { visibility: 'hidden' },
+        overflow: {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+        },
     }),
 )
 
@@ -27,7 +32,9 @@ export const Row: FC<Props> = ({ transaction }) => {
                 <Address id={transaction.id} />
             </TableCell>
             <TableCell>
-                <Typography color="textSecondary">{transaction.type}</Typography>
+                <Typography className={styles.overflow} color="textSecondary">
+                    {transaction.type}
+                </Typography>
                 <Address id={transaction.toAddress} />
             </TableCell>
             <TableCell>
@@ -38,7 +45,8 @@ export const Row: FC<Props> = ({ transaction }) => {
             <TableCell>
                 <Typography
                     className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}
-                    color="textSecondary" variant="body2">
+                    color="textSecondary"
+                    variant="body2">
                     Gas fee
                 </Typography>
                 <Typography className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}>

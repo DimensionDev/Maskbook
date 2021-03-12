@@ -23,27 +23,31 @@ function fromDeBank({ cate_dict, history_list, token_dict }: DeBankAPI.HISTORY_R
         } else if (type === '') {
             type = 'contract interaction'
         }
-        const wrapped = {
+        return {
             type,
             id: transaction.id,
             timeAt: new Date(transaction.time_at * 1000),
             toAddress: transaction.other_addr,
             failed: transaction.tx?.status === 0,
             pairs: [
-                ...transaction.sends.map(({ amount, token_id }) => ({
-                    name: token_dict[token_id].name,
-                    symbol: token_dict[token_id].optimized_symbol,
-                    address: token_id,
-                    direction: 'send',
-                    amount,
-                })),
-                ...transaction.receives.map(({ amount, token_id }) => ({
-                    name: token_dict[token_id].name,
-                    symbol: token_dict[token_id].optimized_symbol,
-                    address: token_id,
-                    direction: 'receive',
-                    amount,
-                })),
+                ...transaction.sends
+                    .filter(({ token_id }) => token_dict[token_id].is_verified)
+                    .map(({ amount, token_id }) => ({
+                        name: token_dict[token_id].name,
+                        symbol: token_dict[token_id].optimized_symbol,
+                        address: token_id,
+                        direction: 'send',
+                        amount,
+                    })),
+                ...transaction.receives
+                    .filter(({ token_id }) => token_dict[token_id].is_verified)
+                    .map(({ amount, token_id }) => ({
+                        name: token_dict[token_id].name,
+                        symbol: token_dict[token_id].optimized_symbol,
+                        address: token_id,
+                        direction: 'receive',
+                        amount,
+                    })),
             ],
             gasFee: transaction.tx
                 ? {
@@ -52,16 +56,5 @@ function fromDeBank({ cate_dict, history_list, token_dict }: DeBankAPI.HISTORY_R
                   }
                 : undefined,
         }
-        if (transaction.token_approve) {
-            const { value, token_id } = transaction.token_approve
-            wrapped.pairs.push({
-                name: token_dict[token_id].name,
-                symbol: token_dict[token_id].optimized_symbol,
-                address: token_id,
-                direction: 'receive',
-                amount: value,
-            })
-        }
-        return wrapped
     })
 }

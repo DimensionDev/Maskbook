@@ -1,10 +1,28 @@
-import { Box, Button, Skeleton, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core'
+import {
+    Box,
+    Button,
+    createStyles,
+    makeStyles,
+    Skeleton,
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+    Typography,
+} from '@material-ui/core'
 import { useTransactions } from '../../../../plugins/Wallet/hooks/useTransactions'
 import { TransactionProvider } from '../../../../plugins/Wallet/types'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { Row } from './Row'
 
+const useStyles = makeStyles(() =>
+    createStyles({
+        fixed: { tableLayout: 'fixed' },
+    }),
+)
+
 export function TransactionList() {
+    const styles = useStyles()
     const account = useAccount()
     const {
         value: transactions = [],
@@ -51,7 +69,7 @@ export function TransactionList() {
         )
 
     return (
-        <Table>
+        <Table className={styles.fixed}>
             <TableBody>
                 {transactions.map((transaction) => (
                     <Row key={transaction.id} transaction={transaction} />
