@@ -1,5 +1,6 @@
-import { TableRow, TableCell } from '@material-ui/core'
+import { Link, TableCell, TableRow, Typography } from '@material-ui/core'
 import type { FC } from 'react'
+import { Record } from './Record'
 import type { Transaction } from './types'
 
 interface Props {
@@ -9,36 +10,30 @@ interface Props {
 export const Row: FC<Props> = ({ transaction }) => (
     <TableRow>
         <TableCell>
-            <section>{transaction.timeAt.toLocaleString()}</section>
+            <Typography color="textSecondary">{transaction.timeAt.toLocaleString()}</Typography>
             <Address id={transaction.id} />
         </TableCell>
         <TableCell>
-            <section>{transaction.type}</section>
+            <Typography color="textSecondary">{transaction.type}</Typography>
             <Address id={transaction.toAddress} />
         </TableCell>
         <TableCell>
             {transaction.pairs.map((pair, index) => (
-                <section key={index}>
-                    <span>{pair.direction === 'send' ? '-' : '+'}</span>
-                    <span>{pair.amount.toFixed(4)}</span>
-                    <span title={pair.name}>{pair.symbol}</span>
-                </section>
+                <Record pair={pair} key={index} />
             ))}
         </TableCell>
         <TableCell>
-            <section>Gas fee</section>
-            <section>
-                <span>{transaction.gasFee.eth.toFixed(4)} ETH</span>
-                <span>({transaction.gasFee.usd.toFixed(2)} USD)</span>
-            </section>
+            <Typography color="textSecondary">Gas fee</Typography>
+            <Typography>{transaction.gasFee.eth.toFixed(4)} ETH</Typography>
+            <Typography>{transaction.gasFee.usd.toFixed(2)} USD</Typography>
         </TableCell>
     </TableRow>
 )
 
 const Address: FC<{ id: string | undefined }> = ({ id }) => (
-    <a target={id} href={`https://etherscan.io/tx/${id}`}>
+    <Link target={id} href={`https://etherscan.io/tx/${id}`}>
         <span>{id?.slice(0, 5)}</span>
         <span>...</span>
         <span>{id?.slice(id.length - 5)}</span>
-    </a>
+    </Link>
 )

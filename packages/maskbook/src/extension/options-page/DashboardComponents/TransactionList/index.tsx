@@ -7,7 +7,7 @@ import { Row } from './Row'
 export function TransactionList() {
     const account = useAccount()
     const { value: transactions = [], loading: transactionsLoading, error: transactionsError } = useTransactions(
-        process.env.NODE_ENV === 'development' ? '0x9972d940c9a23f84fcf92867d18f28d75d010e5e' : account,
+        account,
         TransactionProvider.DEBANK,
     )
     if (transactionsLoading) return <Typography>Loading...</Typography>

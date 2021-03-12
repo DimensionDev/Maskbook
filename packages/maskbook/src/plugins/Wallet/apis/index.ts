@@ -17,7 +17,7 @@ export async function getTransactionList(address: string, provider: TransactionP
 
 function fromDeBank({ history_list, token_dict }: DeBankAPI.HISTORY_RESPONSE['data']) {
     return history_list.map((transaction) => {
-        return {
+        const wrapped = {
             type: transaction.tx.name === '' ? 'contract' : transaction.tx.name,
             id: transaction.id,
             timeAt: new Date(transaction.time_at * 1000),
@@ -26,14 +26,14 @@ function fromDeBank({ history_list, token_dict }: DeBankAPI.HISTORY_RESPONSE['da
                 ...transaction.sends.map(({ amount, token_id }) => ({
                     name: token_dict[token_id].name,
                     symbol: token_dict[token_id].optimized_symbol,
-                    logo_url: token_dict[token_id].logo_url,
+                    address: token_id,
                     direction: 'send',
                     amount,
                 })),
                 ...transaction.receives.map(({ amount, token_id }) => ({
                     name: token_dict[token_id].name,
                     symbol: token_dict[token_id].optimized_symbol,
-                    logo_url: token_dict[token_id].logo_url,
+                    address: token_id,
                     direction: 'receive',
                     amount,
                 })),
@@ -43,5 +43,16 @@ function fromDeBank({ history_list, token_dict }: DeBankAPI.HISTORY_RESPONSE['da
                 usd: transaction.tx.usd_gas_fee,
             },
         }
+        if (transaction.token_approve) {
+            const { value, token_id } = transaction.token_approve
+            wrapped.pairs.push({
+                name: token_dict[token_id].name,
+                symbol: token_dict[token_id].optimized_symbol,
+                address: token_id,
+                direction: 'receive',
+                amount: value,
+            })
+        }
+        return wrapped
     })
 }
