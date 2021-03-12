@@ -154,13 +154,12 @@ export function PopperView(props: PopperViewProps) {
     //#endregion
 
     //#region display loading skeleton
-    if (loadingTrending || !currency || !trending || loadingTokenDetailed) return <TrendingViewSkeleton />
+    if (!currency || !trending || !tokenDetailed || loadingTrending || loadingTokenDetailed) return <TrendingViewSkeleton />
     //#endregion
 
     //#region tabs
     const { coin, market, tickers } = trending
     const canSwap = !!trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
-    const swapTabIndex = dataProvider !== DataProvider.UNISWAP ? 3 : 1
     const tabs = [
         <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />,
         dataProvider !== DataProvider.UNISWAP ? (
