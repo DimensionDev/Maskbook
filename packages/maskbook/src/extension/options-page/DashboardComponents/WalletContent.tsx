@@ -1,6 +1,5 @@
 import { forwardRef, useCallback, useState } from 'react'
-import { truncate } from 'lodash-es'
-import { Button, Box, IconButton, MenuItem, Tabs, Tab, Typography, Avatar, Alert } from '@material-ui/core'
+import { Button, Box, IconButton, MenuItem, Tabs, Tab, Alert } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
@@ -20,14 +19,12 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorStyles } from '../../../utils/theme'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import type { AssetDetailed } from '../../../web3/types'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { Flags } from '../../../utils/flags'
-import { ElectionTokenAlbum } from '../../../plugins/Election2020/UI/ElectionTokenAlbum'
-import { TokenAlbum as COTM_TokenAlbum } from '../../../plugins/COTM/UI/TokenAlbum'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
+import { TransactionList } from './TransactionList'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -140,6 +137,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                         onChange={onTabChange}>
                         <Tab label={t('dashboard_tab_token')}></Tab>
                         <Tab label={t('dashboard_tab_collectibles')}></Tab>
+                        <Tab label={t('dashboard_tab_transactions')}></Tab>
                     </Tabs>
                 </Box>
 
@@ -186,8 +184,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                 {tabIndex === 0 ? (
                     <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
                 ) : null}
-                {Flags.COTM_enabled && tabIndex === 1 ? <COTM_TokenAlbum /> : null}
-                {Flags.election2020_enabled && tabIndex === 1 ? <ElectionTokenAlbum /> : null}
+                {tabIndex === 2 ? <TransactionList /> : null}
             </Box>
 
             {!xsMatched ? (

@@ -157,7 +157,7 @@ export function SearchResultView(props: SearchResultViewProps) {
     //#endregion
 
     //#region display loading skeleton
-    if (loadingTrending || !currency || !trending || loadingTokenDetailed)
+    if (!currency || !trending || !tokenDetailed || loadingTrending || loadingTokenDetailed)
         return (
             <TrendingViewSkeleton
                 classes={{ footer: classes.skeletonFooter }}

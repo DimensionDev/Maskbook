@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
         cell: {
             paddingLeft: theme.spacing(1),
             paddingRight: theme.spacing(1.5),
+            textAlign: 'center',
             whiteSpace: 'nowrap',
         },
     }),

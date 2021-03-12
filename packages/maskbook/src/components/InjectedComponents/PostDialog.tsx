@@ -44,8 +44,6 @@ import { ErrorBoundary } from '../shared/ErrorBoundary'
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { PluginStage } from '../../plugins/types'
-import { Election2020MetadataReader } from '../../plugins/Election2020/helpers'
-import { COTM_MetadataReader } from '../../plugins/COTM/helpers'
 import { Flags } from '../../utils/flags'
 
 const defaultTheme = {}
@@ -314,12 +312,8 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                 const activeUI = getActivatedUI()
                 // TODO: move into the plugin system
                 const redPacketMetadata = RedPacketMetadataReader(typedMessageMetadata)
-                const election2020Metadata = Election2020MetadataReader(typedMessageMetadata)
-                const COTM_Metadata = COTM_MetadataReader(typedMessageMetadata)
                 if (imagePayloadEnabled) {
                     const isRedPacket = redPacketMetadata.ok
-                    const isElection2020 = election2020Metadata.ok
-                    const isCOTM = COTM_Metadata.ok
                     const isErc20 =
                         redPacketMetadata.ok &&
                         redPacketMetadata.val &&
@@ -336,17 +330,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                         autoPasteFailedRecover: false,
                     })
                     activeUI.taskUploadToPostBox(encrypted, {
-                        template: isRedPacket
-                            ? isDai
-                                ? 'dai'
-                                : isOkb
-                                ? 'okb'
-                                : 'eth'
-                            : isElection2020
-                            ? 'v3'
-                            : isCOTM
-                            ? 'v4'
-                            : 'v2',
+                        template: isRedPacket ? (isDai ? 'dai' : isOkb ? 'okb' : 'eth') : 'v2',
                         autoPasteFailedRecover: true,
                         relatedText,
                     })
@@ -364,9 +348,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                                     ? `Claim this Red Packet with #mask_io @realMaskbook ${encrypted}`
                                     : `Claim this Red Packet with #mask_io ${encrypted}`
                         }
-                    }
-                    if (election2020Metadata.ok) {
-                        text = `Claim the election special NFT with @realMaskbook (mask.io) #mask_io #twitternft ${encrypted}`
                     }
                     activeUI.taskPasteIntoPostBox(text, {
                         autoPasteFailedRecover: true,
