@@ -8,3 +8,8 @@ export enum TransactionProvider {
     ZERION,
     DEBANK,
 }
+
+
+export enum AssetProvider {
+    OPENSEAN,
+}

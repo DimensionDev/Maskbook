@@ -1,6 +1,15 @@
-import { TransactionProvider } from '../types'
+import { AssetProvider, TransactionProvider } from '../types'
 import * as DeBankAPI from './debank'
+import * as OpenSeaAPI from './opensea'
 import { isNil } from 'lodash-es'
+
+export async function getAssetsListNFT(address: string, provider: AssetProvider) {
+    if (provider === AssetProvider.OPENSEAN) {
+        const { data } = await OpenSeaAPI.getAssetsList(address)
+        return data.search.edges.map(x => x.node.asset)
+    }
+    return []
+}
 
 // TOOD:
 // unify transaction type from different transaction provider
