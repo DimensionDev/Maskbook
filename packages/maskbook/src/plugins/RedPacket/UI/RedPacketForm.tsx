@@ -330,7 +330,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     amount={totalAmount.toFixed()}
                     token={token?.type === EthereumTokenType.ERC20 ? token : undefined}
                     spender={RED_PACKET_ADDRESS}>
-                    <ActionButton className={classes.button} fullWidth onClick={createCallback}>
+                    <ActionButton variant="contained" className={classes.button} fullWidth onClick={createCallback}>
                         {validationMessage || `Send ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`}
                     </ActionButton>
                 </EthereumERC20TokenApprovedBoundary>
