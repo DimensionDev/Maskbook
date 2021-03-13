@@ -320,15 +320,17 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                             x.token.type === EthereumTokenType.Ether
                                           : true,
                                   )
-                                  .map((y, idx) => idx < viewLength ? (
-                                    <ViewDetailed
-                                        key={idx}
-                                        x={y}
-                                        isMobile={isMobile}
-                                        stableTokens={stableTokens}
-                                        wallet={wallet}
-                                    />
-                                ) : null,)}
+                                  .map((y, idx) =>
+                                      idx < viewLength ? (
+                                          <ViewDetailed
+                                              key={idx}
+                                              x={y}
+                                              isMobile={isMobile}
+                                              stableTokens={stableTokens}
+                                              wallet={wallet}
+                                          />
+                                      ) : null,
+                                  )}
                     </TableBody>
                 </Table>
             </TableContainer>
