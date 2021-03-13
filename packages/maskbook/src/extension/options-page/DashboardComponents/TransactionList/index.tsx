@@ -28,7 +28,7 @@ export function TransactionList() {
         value: transactions = [],
         loading: transactionsLoading,
         error: transactionsError,
-        retry: transactionRetry,
+        retry: transactionsRetry,
     } = useTransactions(account, TransactionProvider.DEBANK)
 
     if (transactionsLoading)
@@ -62,7 +62,7 @@ export function TransactionList() {
                         marginTop: 1,
                     }}
                     variant="text"
-                    onClick={() => transactionRetry()}>
+                    onClick={() => transactionsRetry()}>
                     Retry
                 </Button>
             </Box>

@@ -10,9 +10,9 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core'
-import { useCollectibles } from "../../../../plugins/Wallet/hooks/useCollectibles";
-import { AssetProvider } from "../../../../plugins/Wallet/types";
-import { useAccount } from "../../../../web3/hooks/useAccount";
+import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
+import { AssetProvider } from '../../../../plugins/Wallet/types'
+import { useAccount } from '../../../../web3/hooks/useAccount'
 
 export function CollectibleList() {
     const account = useAccount()
@@ -20,13 +20,10 @@ export function CollectibleList() {
         value: collectibles = [],
         loading: collectiblesLoading,
         error: collectiblesError,
-        retry: transactionRetry,
+        retry: collectiblesRetry,
     } = useCollectibles(account, AssetProvider.OPENSEAN)
 
-    if (collectiblesLoading)
-        return (
-            <Typography>Loading...</Typography>
-        )
+    if (collectiblesLoading) return <Typography>Loading...</Typography>
 
     if (collectiblesError || collectibles.length === 0)
         return (
@@ -38,24 +35,23 @@ export function CollectibleList() {
                     justifyContent: 'center',
                     height: '100%',
                 }}>
-                <Typography color="textSecondary">No transaction found.</Typography>
+                <Typography color="textSecondary">No collectible found.</Typography>
                 <Button
                     sx={{
                         marginTop: 1,
                     }}
                     variant="text"
-                    onClick={() => transactionRetry()}>
+                    onClick={() => collectiblesRetry()}>
                     Retry
                 </Button>
             </Box>
         )
 
-
     return (
         <>
-            {
-                collectibles.map(x => <Typography>{x.id}</Typography>)
-            }
+            {collectibles.map((x) => (
+                <Typography>{x.id}</Typography>
+            ))}
         </>
     )
 }
