@@ -76,7 +76,7 @@ export function CollectibleList() {
                     <CollectibleCard key={x.id} url={x.image_url ?? x.image_preview_url ?? ''} link={x.permalink} />
                     <div className={classes.description}>
                         <Typography color="textSecondary" variant="body2">
-                            {x.name}
+                            {x.name ?? x.collection.slug}
                         </Typography>
                     </div>
                 </div>

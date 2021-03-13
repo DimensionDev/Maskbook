@@ -227,7 +227,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                     <TableBody>
                         {detailedTokensLoading
                             ? new Array(3).fill(0).map((_, i) => (
-                                <TableRow className={classes.cell} key={i}>
+                                  <TableRow className={classes.cell} key={i}>
                                       <TableCell>
                                           <Skeleton
                                               animation="wave"

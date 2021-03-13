@@ -1,10 +1,14 @@
 import Tilt from 'react-tilt'
 import { Card, createStyles, Link, makeStyles } from '@material-ui/core'
+import ImageIcon from '@material-ui/icons/Image'
 import { Image } from '../../../../components/shared/Image'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             borderRadius: 4,
             position: 'relative',
             backgroundColor: theme.palette.background.paper,
@@ -30,7 +34,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                         width: 160,
                         height: 220,
                     }}>
-                    <Image component="img" width={160} height={220} src={props.url} />
+                    {props.url ? <Image component="img" width={160} height={220} src={props.url} /> : <ImageIcon />}
                 </Card>
             </Tilt>
         </Link>
