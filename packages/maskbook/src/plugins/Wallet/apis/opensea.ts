@@ -123,6 +123,7 @@ export async function getAssetsList(from: string, size = 50, page = 0) {
     const response = await fetch(`https://api.opensea.io/api/v1/assets?${params.toString()}`, {
         method: 'GET',
         mode: 'cors',
+        cache: 'force-cache',
     })
     return (await response.json()) as AssetsListResponse
 }
