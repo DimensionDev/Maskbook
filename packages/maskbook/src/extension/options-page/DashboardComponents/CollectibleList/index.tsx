@@ -33,8 +33,8 @@ export function CollectibleList() {
     if (collectiblesLoading)
         return (
             <Box className={classes.root}>
-                {new Array(3).fill(0).map((_) => (
-                    <Box className={classes.card} display="flex" flexDirection="column">
+                {new Array(3).fill(0).map((_, i) => (
+                    <Box className={classes.card} display="flex" flexDirection="column" key={i}>
                         <Skeleton animation="wave" variant="rectangular" width={160} height={220}></Skeleton>
                         <Skeleton
                             animation="wave"

@@ -35,8 +35,8 @@ export function TransactionList() {
         return (
             <Table>
                 <TableBody>
-                    {new Array(3).fill(0).map((_) => (
-                        <TableRow>
+                    {new Array(3).fill(0).map((_, i) => (
+                        <TableRow key={i}>
                             <TableCell>
                                 <Skeleton animation="wave" variant="rectangular" width="100%" height={30}></Skeleton>
                             </TableCell>
