@@ -1,6 +1,5 @@
 export * from './0x'
 export * from './balancer'
-export { queryPairsFromSubgraph } from './uniswap'
 export * from './trending'
 export * from './blocks'
 export * from './LBP'
