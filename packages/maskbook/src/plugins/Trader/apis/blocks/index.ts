@@ -58,20 +58,19 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[], skipCo
     const response = await Promise.all(
         chunkTimestamps.map(async (chunk) => {
             const queries = chunk.map((x) => {
-                // prettier-ignore
                 return `
-                t${x}: blocks(
-                    first: 1,
-                    orderBy: timestamp,
-                    orderDirection: desc,
-                    where: {
-                        timestamp_gt: ${x},
-                        timestamp_lt: ${x + 600}
+                    t${x}: blocks(
+                        first: 1,
+                        orderBy: timestamp,
+                        orderDirection: desc,
+                        where: {
+                            timestamp_gt: ${x},
+                            timestamp_lt: ${x + 600}
+                        }
+                    ) {
+                        number
                     }
-                ) {
-                    number
-                }
-            `
+                `
             })
 
             return fetchFromEthereumBlocksSubgraph<{
@@ -102,7 +101,6 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[], skipCo
  */
 export async function fetchBlockNumbersObjectByTimestamps(timestamps: number[]) {
     const queries = timestamps.map((x) => {
-        // prettier-ignore
         return `
             t${x}: blocks(
                 first: 1,
