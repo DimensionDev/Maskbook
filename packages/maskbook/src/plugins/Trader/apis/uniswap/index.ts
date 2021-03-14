@@ -1,11 +1,5 @@
 import BigNumber from 'bignumber.js'
 import stringify from 'json-stable-stringify'
-import { ChainId as UniswapChainId, Token, Fetcher, Route } from '@uniswap/sdk'
-import { getConstant } from '../../../../web3/helpers'
-import { CONSTANTS } from '../../../../web3/constants'
-import PREDICTION_MARKET_TOKENS from './prediction_market_tokens.json'
-import { getChainId } from '../../../../extension/background-script/EthereumService'
-import { ChainId } from '../../../../web3/types'
 import type { Coin } from '../../types'
 
 interface QueryPairsResponse {
@@ -56,6 +50,22 @@ export async function queryPairsFromSubgraph(from: string, ids: string[]) {
     }))
 }
 
+/**
+ * For uniswap all coins should be treated as available
+ * Please use getCoinInfo directly
+ */
 export function getAllCoins() {
-    return PREDICTION_MARKET_TOKENS as Coin[]
+    throw new Error('For uniswap all coins are available by default.')
+}
+
+export async function getAllCoinsByKeyword(keyword: string) {
+    return [] as Coin[]
+}
+
+export async function getCoinInfo(id: string) {
+    return {} as Coin
+}
+
+export async function getPriceStats(id: string, coinId: string) {
+    return []
 }
