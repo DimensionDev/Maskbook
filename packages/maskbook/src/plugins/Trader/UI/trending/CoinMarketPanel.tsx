@@ -24,9 +24,7 @@ export function CoinMarketPanel(props: CoinMarketPanelProps) {
         <div className={classes.root}>
             <CoinMetadataTable dataProvider={dataProvider} trending={trending} />
             <br />
-            {/*{dataProvider !== DataProvider.UNISWAP_INFO ? (*/}
             <CoinMarketTable dataProvider={dataProvider} trending={trending} />
-            {/*) : null}*/}
         </div>
     )
 }
