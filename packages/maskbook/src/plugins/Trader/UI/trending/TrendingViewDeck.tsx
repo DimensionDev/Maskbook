@@ -1,7 +1,5 @@
 import { useCallback } from 'react'
 import {
-    Alert,
-    AlertTitle,
     Avatar,
     Button,
     CardActions,
@@ -45,8 +43,7 @@ import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { useApprovedTokens } from '../../trending/useApprovedTokens'
-import { resolveTokenLinkOnEtherscan } from '../../../../web3/pipes'
-import { ChainId, EthereumTokenType } from '../../../../web3/types'
+import { CoinSaftyAlert } from './CoinSaftyAlert'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -68,17 +65,6 @@ const useStyles = makeStyles((theme) => {
             position: 'relative',
         },
         body: {},
-        alertBody: {
-            padding: theme.spacing(2),
-        },
-        approve: {
-            whiteSpace: 'nowrap',
-            backgroundColor: theme.palette.error.main,
-            color: theme.palette.error.contrastText,
-            '&:hover': {
-                backgroundColor: theme.palette.error.main,
-            },
-        },
         footer: {
             justifyContent: 'space-between',
         },
@@ -305,40 +291,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 disableTypography
             />
             <CardContent className={classes.content}>
-                {dataProvider === DataProvider.UNISWAP_INFO &&
-                    trending.coin.eth_address &&
-                    !approvedTokens.some((address) => address === trending.coin.eth_address) && (
-                        <Paper className={classes.alertBody} elevation={0}>
-                            <Alert
-                                variant="outlined"
-                                severity="error"
-                                action={
-                                    <Button variant="contained" className={classes.approve} onClick={onApprove}>
-                                        I understand
-                                    </Button>
-                                }>
-                                <AlertTitle>Token Safety Alert</AlertTitle>
-                                Anyone can create and name any ERC20 token on Ethereum, including creating fake versions
-                                of existing tokens and tokens that claim to represent projects that do not have a token.
-                                Similar to Etherscan, this site automatically tracks analytics for all ERC20 tokens
-                                independent of token integrity. Please do your own research before interacting with any
-                                ERC20 token.
-                                <p>
-                                    <Link
-                                        color="primary"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        href={resolveTokenLinkOnEtherscan({
-                                            type: EthereumTokenType.Ether,
-                                            address: trending.coin.eth_address,
-                                            chainId: ChainId.Mainnet,
-                                        })}>
-                                        View token contract on Etherscan
-                                    </Link>
-                                </p>
-                            </Alert>
-                        </Paper>
-                    )}
+                {dataProvider === DataProvider.UNISWAP_INFO && <CoinSaftyAlert coin={trending.coin} />}
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
