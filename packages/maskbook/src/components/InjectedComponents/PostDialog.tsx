@@ -156,7 +156,6 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 root: classes.MUIInputRoot,
                                 input: classes.MUIInputInput,
                             }}
-                            // ref={(el) => inputRef.current = el}
                             autoFocus
                             value={props.postContent.content}
                             onChange={onPostContentChange}
@@ -164,7 +163,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             multiline
                             placeholder={t('post_dialog__placeholder')}
                             inputProps={{ 'data-testid': 'text_textarea' }}
-                            inputRef={(el) => inputRef.current = el}
+                            inputRef={inputRef}
                         />
 
                         <Typography style={{ marginBottom: 10 }}>
