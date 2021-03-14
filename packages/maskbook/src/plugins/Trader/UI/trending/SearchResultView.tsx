@@ -25,6 +25,7 @@ import { LBPPanel } from './LBPPanel'
 import { useLBP } from '../../LBP/useLBP'
 import { createERC20Token } from '../../../../web3/helpers'
 import { useChainId } from '../../../../web3/hooks/useChainState'
+import { Flags } from '../../../../utils/flags'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -117,11 +118,6 @@ export function SearchResultView(props: SearchResultViewProps) {
 
     //#region LBP
     const LBP = useLBP(tokenDetailed?.type === EthereumTokenType.ERC20 ? tokenDetailed : undefined)
-
-    console.log({
-        LBP,
-        tokenDetailed,
-    })
     //#endregion
 
     //#region trader context
@@ -173,7 +169,7 @@ export function SearchResultView(props: SearchResultViewProps) {
         <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />,
         <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />,
         canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null,
-        LBP ? <Tab className={classes.tab} label="LBP" /> : null,
+        Flags.LBP_enabled && LBP ? <Tab className={classes.tab} label="LBP" /> : null,
     ].filter(Boolean)
     //#endregion
 
@@ -226,7 +222,7 @@ export function SearchResultView(props: SearchResultViewProps) {
                         }}
                     />
                 ) : null}
-                {tabIndex === tabs.length - 1 && LBP ? (
+                {Flags.LBP_enabled && LBP && tabIndex === tabs.length - 1 ? (
                     <LBPPanel
                         duration={LBP.duration}
                         token={createERC20Token(
