@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import {
     makeStyles,
     InputBase,
@@ -89,6 +89,7 @@ export interface PostDialogUIProps extends withClasses<never> {
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
+    const inputRef = useRef(null);
     const isDebug = useValueRef(debugModeSetting)
     const [showPostMetadata, setShowPostMetadata] = useState(false)
     const onPostContentChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
@@ -155,6 +156,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 root: classes.MUIInputRoot,
                                 input: classes.MUIInputInput,
                             }}
+                            // ref={(el) => inputRef.current = el}
                             autoFocus
                             value={props.postContent.content}
                             onChange={onPostContentChange}
@@ -162,11 +164,20 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             multiline
                             placeholder={t('post_dialog__placeholder')}
                             inputProps={{ 'data-testid': 'text_textarea' }}
+                            inputRef={(el) => inputRef.current = el}
                         />
 
                         <Typography style={{ marginBottom: 10 }}>
                             Plugins <sup>(Experimental)</sup>
                         </Typography>
+                        <ClickableChip label='Mask Selected Text' onClick={() => {
+                            if (inputRef.current) {
+                                const maskedContent = props.postContent.content.slice(inputRef.current.selectionStart, inputRef.current.selectionEnd)
+                                const msg = props.postContent
+                                props.setMaskedContent(makeTypedMessageText(maskedContent, msg.meta));
+                                props.onPostContentChanged(makeTypedMessageText(props.postContent.content.replace(maskedContent, '______'), msg.meta))
+                            }
+                        }} />
                         <Box
                             style={{ marginBottom: 10 }}
                             sx={{
@@ -273,6 +284,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
 
     //#region TypedMessage
     const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessageText('', typedMessageMetadata))
+    const [maskedContent, setMaskedContent] = useState(makeTypedMessageText('', typedMessageMetadata));
     useEffect(() => {
         if (typedMessageMetadata !== postBoxContent.meta)
             setPostBoxContent({ ...postBoxContent, meta: typedMessageMetadata })
@@ -298,9 +310,9 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     const onRequestPost = or(
         props.onRequestPost,
         useCallback(
-            async (target: (Profile | Group)[], content: TypedMessage) => {
+            async (target: (Profile | Group)[], content: TypedMessage, maskContent: TypedMessage) => {
                 const [encrypted, token] = await Services.Crypto.encryptTo(
-                    content,
+                    maskContent,
                     target.map((x) => x.identifier),
                     currentIdentity!.identifier,
                     !!shareToEveryone,
@@ -344,7 +356,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                                     : `Claim this Red Packet with #mask_io ${encrypted}`
                         }
                     }
-                    activeUI.taskPasteIntoPostBox(text, {
+                    activeUI.taskPasteIntoPostBox(`${content.content} \n\nInstall Mask to decrypt masked content \n${encrypted}`, {
                         autoPasteFailedRecover: true,
                     })
                 }
@@ -367,7 +379,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
         }, [setOpen]),
     )
     const onFinishButtonClicked = useCallback(() => {
-        onRequestPost(onlyMyself ? [currentIdentity!] : currentShareTarget, postBoxContent)
+        onRequestPost(onlyMyself ? [currentIdentity!] : currentShareTarget, postBoxContent, maskedContent)
         onRequestReset()
     }, [currentIdentity, currentShareTarget, onRequestPost, onRequestReset, onlyMyself, postBoxContent])
     const onCloseButtonClicked = useCallback(() => {
@@ -432,6 +444,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             maxLength={560}
             onSetSelected={setCurrentShareTarget}
             onPostContentChanged={setPostBoxContent}
+            setMaskedContent={setMaskedContent}
             onShareToEveryoneChanged={onShareToEveryoneChanged}
             onOnlyMyselfChanged={onOnlyMyselfChanged}
             onImagePayloadSwitchChanged={onImagePayloadSwitchChanged}
