@@ -25,8 +25,8 @@ export function resolveDataProviderName(dataProvider: DataProvider) {
             return 'CoinGecko'
         case DataProvider.COIN_MARKET_CAP:
             return 'CoinMarketCap'
-        case DataProvider.UNISWAP:
-            return 'Uniswap'
+        case DataProvider.UNISWAP_INFO:
+            return 'Uniswap Info'
         default:
             unreachable(dataProvider)
     }
@@ -38,8 +38,8 @@ export function resolveDataProviderLink(dataProvider: DataProvider) {
             return 'https://www.coingecko.com/'
         case DataProvider.COIN_MARKET_CAP:
             return 'https://coinmarketcap.com/'
-        case DataProvider.UNISWAP:
-            return 'https://uniswap.org/'
+        case DataProvider.UNISWAP_INFO:
+            return 'https://info.uniswap.org/'
         default:
             unreachable(dataProvider)
     }

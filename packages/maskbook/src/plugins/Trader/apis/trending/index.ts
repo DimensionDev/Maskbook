@@ -7,12 +7,16 @@ import { Days } from '../../UI/trending/PriceChartDaysControl'
 import { getEnumAsArray } from '../../../../utils/enum'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import { resolveCoinId, resolveCoinAddress, resolveAlias } from './hotfix'
-import MIRRORED_KEYWORDS from './mirrored.json'
+import MIRRORED_TOKENS from './mirrored_tokens.json'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
 import { unreachable } from '../../../../utils/utils'
 
+/**
+ * Get supported currencies of specific data provider
+ * @param dataProvider
+ */
 export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
@@ -28,7 +32,7 @@ export async function getCurrenies(dataProvider: DataProvider): Promise<Currency
                 symbol: x.token,
                 description: x.name,
             }))
-        case DataProvider.UNISWAP:
+        case DataProvider.UNISWAP_INFO:
             return [
                 {
                     id: 'usd',
@@ -62,7 +66,7 @@ export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<C
                     description: 'Unite State Dollar',
                 },
             ]
-        case DataProvider.UNISWAP:
+        case DataProvider.UNISWAP_INFO:
             return [
                 {
                     id: 'usd',
@@ -71,60 +75,86 @@ export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<C
                     description: 'Unite State Dollar',
                 },
             ]
+        default:
+            unreachable(dataProvider)
     }
 }
 
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
-    if (dataProvider === DataProvider.UNISWAP) return uniswapAPI.getAllCoins()
-
-    if (dataProvider === DataProvider.COIN_GECKO) {
-        const coins = await coinGeckoAPI.getAllCoins()
-        // reserve mask
-        return coins.filter((x) => x.id !== 'nftx-hashmasks-index')
-    }
-
-    const { data: coins } = await coinMarketCapAPI.getAllCoins()
-    return (
-        coins
-            // mask network
-            .map((x) =>
-                x.id === 8536
-                    ? {
-                          ...x,
-                          platform: {
-                              id: 1027,
-                              name: 'Ethereum',
-                              symbol: 'ETH',
-                              slug: 'ethereum',
-                              token_address: '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074',
-                          },
-                          status: 'active',
-                      }
-                    : x,
+    switch (dataProvider) {
+        case DataProvider.COIN_GECKO:
+            const cgCoins = await coinGeckoAPI.getAllCoins()
+            // reserve mask
+            return cgCoins.filter((x) => x.id !== 'nftx-hashmasks-index')
+        case DataProvider.COIN_MARKET_CAP:
+            const { data: cmcCoins } = await coinMarketCapAPI.getAllCoins()
+            return (
+                cmcCoins
+                    // create mask
+                    .map((x) =>
+                        x.id === 8536
+                            ? {
+                                  ...x,
+                                  platform: {
+                                      id: 1027,
+                                      name: 'Ethereum',
+                                      symbol: 'ETH',
+                                      slug: 'ethereum',
+                                      token_address: '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074',
+                                  },
+                                  status: 'active',
+                              }
+                            : x,
+                    )
+                    // for cmc we should filter inactive coins out
+                    .filter((x) => x.status === 'active' && x.id !== 8410)
+                    .map((x) => ({
+                        id: String(x.id),
+                        name: x.name,
+                        symbol: x.symbol,
+                        eth_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
+                    }))
             )
-            // for cmc we should filter inactive coins out
-            .filter((x) => x.status === 'active' && x.id !== 8410)
-            .map((x) => ({
-                id: String(x.id),
-                name: x.name,
-                symbol: x.symbol,
-                eth_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
-            }))
-    )
+        case DataProvider.UNISWAP_INFO:
+            // the uniswap has got huge tokens based (more than 2.2k) since we fetch coin info dynamically
+            return []
+        default:
+            unreachable(dataProvider)
+    }
 }
 
-//#region check a specific coin is available on specific dataProvider
+//#region check a specific coin is available on specific data provider
 const coinNamespace = new Map<
     DataProvider,
     {
+        // all of supported symbols
         supportedSymbolsSet: Set<string>
+
+        // get all supported coins by symbol
         supportedSymbolIdsMap: Map<string, Coin[]>
         lastUpdated: Date
     }
 >()
 
-async function updateCache(dataProvider: DataProvider) {
+async function updateCache(dataProvider: DataProvider, keyword?: string) {
     try {
+        // uniswap update cache with keyword
+        if (dataProvider === DataProvider.UNISWAP_INFO) {
+            if (!keyword) return
+            if (!coinNamespace.has(dataProvider))
+                coinNamespace.set(dataProvider, {
+                    supportedSymbolsSet: new Set(),
+                    supportedSymbolIdsMap: new Map(),
+                    lastUpdated: new Date(),
+                })
+            const cache = coinNamespace.get(dataProvider)!
+            cache.supportedSymbolsSet.add(keyword.toLowerCase())
+            cache.supportedSymbolIdsMap.set(keyword.toLowerCase(), await uniswapAPI.getAllCoinsByKeyword(keyword))
+            cache.lastUpdated = new Date()
+            return
+        }
+
+        // other providers fetch all of supported coins
         const coins = await getCoins(dataProvider)
         const coinsGrouped = groupBy(coins, (x) => x.symbol.toLowerCase())
         coinNamespace.set(dataProvider, {
@@ -152,17 +182,21 @@ function isBlockedKeyword(type: TagType, keyword: string) {
 }
 
 function isMirroredKeyword(symbol: string) {
-    return MIRRORED_KEYWORDS.some((x) => x.toUpperCase() === symbol.toUpperCase())
+    return MIRRORED_TOKENS.map((x) => x.symbol).some((x) => x.toUpperCase() === symbol.toUpperCase())
 }
 
 export async function checkAvailabilityOnDataProvider(keyword: string, type: TagType, dataProvider: DataProvider) {
     if (isBlockedKeyword(type, keyword)) return false
-    const keyword_ = resolveAlias(keyword, dataProvider)
+    // for uniswap we check availability by fetching token info dynamically
+    if (dataProvider === DataProvider.UNISWAP_INFO) await updateCache(dataProvider, keyword)
     // cache never built before update in blocking way
-    if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
+    else if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
     // data fetched before update in nonblocking way
     else if (isCacheExipred(dataProvider)) updateCache(dataProvider)
-    return coinNamespace.get(dataProvider)?.supportedSymbolsSet.has(keyword_.toLowerCase()) ?? false
+    return (
+        coinNamespace.get(dataProvider)?.supportedSymbolsSet.has(resolveAlias(keyword, dataProvider).toLowerCase()) ??
+        false
+    )
 }
 
 export async function getAvailableDataProviders(type: TagType, keyword: string) {
@@ -179,18 +213,16 @@ export async function getAvailableDataProviders(type: TagType, keyword: string) 
 }
 
 export async function getAvailableCoins(keyword: string, type: TagType, dataProvider: DataProvider) {
-    if (isBlockedKeyword(type, keyword)) return []
-    const keyword_ = resolveAlias(keyword, dataProvider)
-    // cache never built before update in blocking way
-    if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
-    // data fetched before update in nonblocking way
-    else if (isCacheExipred(dataProvider)) updateCache(dataProvider)
-    return coinNamespace.get(dataProvider)?.supportedSymbolIdsMap.get(keyword_.toLowerCase()) ?? []
+    if (!(await checkAvailabilityOnDataProvider(keyword, type, dataProvider))) return []
+    return (
+        coinNamespace.get(dataProvider)?.supportedSymbolIdsMap.get(resolveAlias(keyword, dataProvider).toLowerCase()) ??
+        []
+    )
 }
-
 //#endregion
 
-export async function getCoinInfo(id: string, currency: Currency, dataProvider: DataProvider): Promise<Trending> {
+//#region get trending info
+async function getCoinTrending(id: string, currency: Currency, dataProvider: DataProvider): Promise<Trending> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
             const info = await coinGeckoAPI.getCoinInfo(id)
@@ -336,22 +368,33 @@ export async function getCoinInfo(id: string, currency: Currency, dataProvider: 
                     price_change_percentage_7d_in_currency: quotesInfo_.quote[currencyName].percent_change_7d,
                 }
             return trending
-        case DataProvider.UNISWAP:
-            const coin = uniswapAPI.getAllCoins().find((x) => x.id === id)
-            if (!coin) throw new Error(`Cannot find coin with id ${id}`)
+        case DataProvider.UNISWAP_INFO:
+            const { token, marketInfo, tickersInfo } = await uniswapAPI.getCoinInfo(id)
             return {
                 currency,
-                dataProvider: DataProvider.UNISWAP,
-                market: {
-                    current_price: await uniswapAPI.getMidPriceOnDAI(coin),
+                dataProvider: DataProvider.UNISWAP_INFO,
+                market: marketInfo,
+                coin: {
+                    id,
+                    name: token?.name,
+                    symbol: token?.symbol,
+                    decimals: Number(token?.decimals),
+                    is_mirrored: isMirroredKeyword(token?.symbol ?? ''),
+                    blockchain_urls: [`https://info.uniswap.org/token/${id}`, `https://etherscan.io/address/${id}`],
+                    image_url: `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${id}/logo.png`,
+                    platform_url: `https://info.uniswap.org/token/${id}`,
+                    eth_address: id,
                 },
-                coin,
-                tickers: [],
+                tickers: tickersInfo,
                 lastUpdated: '',
             } as Trending
         default:
             unreachable(dataProvider)
     }
+}
+
+export async function getCoinTrendingById(id: string, currency: Currency, dataProvider: DataProvider) {
+    return getCoinTrending(id, currency, dataProvider)
 }
 
 export async function getCoinTrendingByKeyword(
@@ -360,47 +403,73 @@ export async function getCoinTrendingByKeyword(
     currency: Currency,
     dataProvider: DataProvider,
 ) {
-    const keyword_ = resolveAlias(keyword, dataProvider)
-    const coins = await getAvailableCoins(keyword_, tagType, dataProvider)
+    // check if the keyword is supported by given data provider
+    const coins = await getAvailableCoins(keyword, tagType, dataProvider)
     if (!coins.length) return null
+
     // prefer coins on the etherenum network
     const coin = coins.find((x) => x.eth_address) ?? first(coins)
     if (!coin) return null
-    return getCoinTrendingById(resolveCoinId(keyword_, dataProvider) ?? coin.id, currency, dataProvider)
-}
 
-export async function getCoinTrendingById(id: string, currency: Currency, dataProvider: DataProvider) {
-    return getCoinInfo(id, currency, dataProvider)
+    return getCoinTrendingById(
+        resolveCoinId(resolveAlias(keyword, dataProvider), dataProvider) ?? coin.id,
+        currency,
+        dataProvider,
+    )
 }
+//#endregion
 
+//#region get price stats info
 export async function getPriceStats(
     id: string,
     currency: Currency,
     days: number,
     dataProvider: DataProvider,
 ): Promise<Stat[]> {
-    if (dataProvider === DataProvider.COIN_GECKO) {
-        const stats = await coinGeckoAPI.getPriceStats(id, currency.id, days === Days.MAX ? 11430 : days)
-        return stats.prices
+    switch (dataProvider) {
+        case DataProvider.COIN_GECKO:
+            return (await coinGeckoAPI.getPriceStats(id, currency.id, days === Days.MAX ? 11430 : days)).prices
+        case DataProvider.COIN_MARKET_CAP:
+            const interval = (() => {
+                if (days === 0) return '1d' // max
+                if (days > 365) return '1d' // 1y
+                if (days > 90) return '2h' // 3m
+                if (days > 30) return '1h' // 1m
+                if (days > 7) return '15m' // 1w
+                return '5m'
+            })()
+            const endDate = new Date()
+            const startDate = new Date()
+            startDate.setDate(startDate.getDate() - days)
+            const stats = await coinMarketCapAPI.getHistorical(
+                id,
+                currency.name.toUpperCase(),
+                days === Days.MAX ? BTC_FIRST_LEGER_DATE : startDate,
+                endDate,
+                interval,
+            )
+            if (stats.data.is_active === 0) return []
+            return Object.entries(stats.data).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
+        case DataProvider.UNISWAP_INFO:
+            const endTime = new Date()
+            const startTime = new Date()
+            startTime.setDate(endTime.getDate() - days)
+            const uniswap_interval = (() => {
+                if (days === 0 || days > 365) return 86400 // max
+                if (days > 90) return 7200 // 1y
+                if (days > 30) return 3600 // 3m
+                if (days > 7) return 900 // 1w
+                return 300 // 5m
+            })()
+            return uniswapAPI.getPriceStats(
+                id,
+                currency,
+                uniswap_interval,
+                Math.floor((days === Days.MAX ? BTC_FIRST_LEGER_DATE.getTime() : startTime.getTime()) / 1000),
+                Math.floor(endTime.getTime() / 1000),
+            )
+        default:
+            return []
     }
-    const interval = (() => {
-        if (days === 0) return '1d' // max
-        if (days > 365) return '1d' // 1y
-        if (days > 90) return '2h' // 3m
-        if (days > 30) return '1h' // 1m
-        if (days > 7) return '15m' // 1w
-        return '5m'
-    })()
-    const endDate = new Date()
-    const startDate = new Date()
-    startDate.setDate(startDate.getDate() - days)
-    const stats = await coinMarketCapAPI.getHistorical(
-        id,
-        currency.name.toUpperCase(),
-        days === Days.MAX ? BTC_FIRST_LEGER_DATE : startDate,
-        endDate,
-        interval,
-    )
-    if (stats.data.is_active === 0) return []
-    return Object.entries(stats.data).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
 }
+//#endregion

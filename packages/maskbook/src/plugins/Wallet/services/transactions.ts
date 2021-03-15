@@ -1,7 +1,6 @@
 import { TransactionProvider } from '../types'
-import * as DeBankAPI from './debank'
+import * as DeBankAPI from '../apis/debank'
 import { isNil } from 'lodash-es'
-
 // TOOD:
 // unify transaction type from different transaction provider
 export type Transaction = ReturnType<typeof fromDeBank>[number]

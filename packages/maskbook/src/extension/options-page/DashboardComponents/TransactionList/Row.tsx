@@ -1,9 +1,9 @@
-import { createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import type { FC } from 'react'
-import { Record } from './Record'
-import type { Transaction } from './types'
 import classNames from 'classnames'
 import { isNil } from 'lodash-es'
+import { createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Record } from './Record'
+import type { Transaction } from '../../../../plugins/Wallet/services'
 
 interface Props {
     transaction: Transaction
