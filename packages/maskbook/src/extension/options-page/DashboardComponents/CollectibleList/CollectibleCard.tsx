@@ -1,10 +1,11 @@
 import { Card, createStyles, IconButton, Link, makeStyles, MenuItem } from '@material-ui/core'
 import ImageIcon from '@material-ui/icons/Image'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { Image } from '../../../../components/shared/Image'
 import { useMenu } from '../../../../utils/hooks/useMenu'
 import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useModal } from '../../DashboardDialogs/Base'
 import { HideDialog } from './HideDialog'
 
 const useStyles = makeStyles((theme) =>
@@ -33,13 +34,23 @@ export interface CollectibleCardProps {
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
-    const [hideDialog, setHideDialog] = useState(false)
     const { t } = useI18N()
     const classes = useStyles(props)
 
+    const [hideDialog, , openHideDialog] = useModal(HideDialog)
+
     const [menu, openMenu] = useMenu(
         <MenuItem onClick={() => {}}>{t('transfer')}</MenuItem>,
-        <MenuItem onClick={() => setHideDialog(true)}>{t('hide')}</MenuItem>,
+        <MenuItem
+            onClick={() =>
+                openHideDialog({
+                    onConfirm: () => {
+                        console.log('hide confirm')
+                    },
+                })
+            }>
+            {t('hide')}
+        </MenuItem>,
     )
 
     const onClickMore = useCallback(
@@ -61,15 +72,8 @@ export function CollectibleCard(props: CollectibleCardProps) {
                     {props.url ? <Image component="img" width={160} height={220} src={props.url} /> : <ImageIcon />}
                 </Card>
             </Link>
-            <HideDialog
-                open={hideDialog}
-                onClose={() => setHideDialog(false)}
-                onConfirm={() => {
-                    setHideDialog(false)
-                    console.log('hide dialog confirm')
-                }}
-            />
             {menu}
+            {hideDialog}
         </>
     )
 }
