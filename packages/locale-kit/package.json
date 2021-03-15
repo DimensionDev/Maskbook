@@ -2,7 +2,7 @@
   "name": "@dimensiondev/locale-kit",
   "private": true,
   "bin": {
-    "locale-kit": "./locale-kit.ts"
+    "locale-kit": "./index.js"
   },
   "devDependencies": {
     "lodash": "^4.17.21"

@@ -1,4 +1,3 @@
-#!/usr/bin/env ts-node
 /* eslint-disable no-restricted-imports */
 import { difference, isEmpty, isNil, keys, omit, pick, toPairs, without } from 'lodash'
 import { run } from '../../scripts/utils'
