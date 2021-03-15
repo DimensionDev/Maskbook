@@ -76,7 +76,7 @@ export function CreateForm(props: CreateFormProps) {
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
 
-    const [isMask, setIsMask] = useState(true)
+    const [isMask, setIsMask] = useState(Flags.mask_ito_enabled ? true : false)
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
         new BigNumber(origin?.limit || '0').isZero()
