@@ -19,12 +19,12 @@ export function isValidFacebookUsername(name: string) {
 /**
  * Normalize post url
  */
-export function getPostUrlAtFacebook(post: PostIdentifier<ProfileIdentifier>, usage: 'fetch' | 'open') {
+export function getPostUrlAtFacebook(post: PostIdentifier<ProfileIdentifier>) {
     const id = post.identifier
     const { postId } = post
     const { userId } = id
 
-    const host = getFacebookHostName(usage)
+    const host = getFacebookHostName()
     if (!isValidFacebookUsername(userId)) throw new TypeError(i18n.t('service_username_invalid'))
     if (parseFloat(userId)) return `${host}/permalink.php?story_fbid=${postId}&id=${userId}`
     return `${host}/${userId}/posts/${postId}`
@@ -32,17 +32,17 @@ export function getPostUrlAtFacebook(post: PostIdentifier<ProfileIdentifier>, us
 /**
  * Normalize profile url
  */
-export function getProfilePageUrlAtFacebook(user: ProfileIdentifier | GroupIdentifier, usage: 'fetch' | 'open') {
+export function getProfilePageUrlAtFacebook(user: ProfileIdentifier | GroupIdentifier) {
     if (user instanceof GroupIdentifier) throw new Error('Not implemented')
     if (user.network !== 'facebook.com') throw new Error('Wrong origin')
 
-    const host = getFacebookHostName(usage)
+    const host = getFacebookHostName()
     const username = user.userId
     if (!isValidFacebookUsername(username)) throw new TypeError(i18n.t('service_username_invalid'))
     if (parseFloat(username)) return `${host}/profile.php?id=${username}`
     return `${host}/${username}`
 }
-export function getFacebookHostName(usage: 'fetch' | 'open') {
+export function getFacebookHostName() {
     if (isMobileFacebook) return 'https://m.facebook.com'
     return 'https://www.facebook.com'
 }

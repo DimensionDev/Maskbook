@@ -1,5 +1,6 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type {
+    Identifier,
     PersonaIdentifier,
     PostIdentifier,
     ProfileIdentifier,
@@ -10,34 +11,32 @@ import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
 import type { TypedMessage } from '../protocols/typed-message'
 import type { PostInfo } from './PostInfo'
-import type { ProfileUI } from '../social-network/shared'
 import type { ObservableWeakMap } from '../utils/ObservableMapSet'
+import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
 
 // Don't define values in namespaces
 export namespace SocialNetwork {
+    export interface PayloadEncoding {
+        encoder(text: string): string
+        /**
+         * the result is candidates
+         */
+        decoder(text: string): string[]
+    }
+
     export interface Utils {
-        /**
-         * Return the homepage url. e.g.: https://www.twitter.com/
-         */
+        /** @returns the homepage url. e.g.: https://www.twitter.com/ */
         getHomePage?(): string
-        /**
-         * Is this username valid in this network
-         */
+        /** @returns post URL from PostIdentifier */
+        getPostURL?(post: PostIdentifier<Identifier>): URL | null
+        /** Is this username valid in this network */
         isValidUsername?(username: string): boolean
-        publicKeyEncoding?: {
-            encoder(text: string): string
-            /**
-             * the result is candidates
-             */
-            decoder(text: string): string[]
-        }
-        textPayloadPostProcessor?: {
-            encoder(text: string): string
-            /**
-             * the result is candidates
-             */
-            decoder(text: string): string | null
-        }
+        /** How to encode/decode public keys when it is put in the bio. */
+        publicKeyEncoding?: PayloadEncoding
+        /** How to encode/decode text payload (e.g. make it into a link so it will be shortened by SNS). */
+        textPayloadPostProcessor?: PayloadEncoding
+        /** Given a text, return a URL that will allow user to share this text */
+        getShareLinkURL?(text: string): URL
     }
     export interface Shared {
         utils: Utils
@@ -46,55 +45,48 @@ export namespace SocialNetwork {
         /**
          * This name is used internally and should be unique.
          *
-         * THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier
+         * !!! THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier !!!
          */
         networkIdentifier: string
 
         /** Should this UI content script activate? */
         shouldActivate(location: Location | URL): boolean
-        /**
-         * This provider is not ready for production, Mask will not use it in production
-         */
+        /** This provider is not ready for production, Mask will not use it in production */
         notReadyForProduction?: boolean
     }
 }
 export namespace SocialNetworkUI {
     export interface DeferredDefinition extends SocialNetwork.Base {
+        /**
+         * Do not make side effects. It should happen in `.init()`
+         * @returns the completion definition of this SNS
+         * @example load: () => import('./full-definition')
+         */
         load(): Promise<{ default: Definition }>
     }
     export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared {
-        /** Return a function that undo the init */
-        init(signal: AbortSignal): Readonly<AutonomousState>
+        /** @returns the states */
+        init(signal: AbortSignal): Readonly<AutonomousState> | Promise<Readonly<AutonomousState>>
         permission: RuntimePermission
         injection: InjectingCapabilities.Define
         automation: AutomationCapabilities.Define
         collecting: CollectingCapabilities.Define
         customization: Customization.Define
+        configuration: Configuration.Define
     }
     export type State = AutonomousState & ManagedState
     /** The init() should setup watcher for those states */
     export interface AutonomousState {
         /** @deprecated Performance. Don't use it. */
         readonly friends: ValueRef<ReadonlyIdentifierMap<ProfileIdentifier, Profile>>
-        /**
-         * My profiles at current network
-         */
+        /** My profiles at current network */
         readonly profiles: ValueRef<readonly Profile[]>
     }
-    export interface ManagedState {
-        /**
-         * Typed message metadata in the post composition dialog
-         */
-        readonly typedMessageMetadata: ValueRef<ReadonlyMap<string, any>>
-    }
+    export interface ManagedState {}
     export interface RuntimePermission {
-        /**
-         * This function should check if Mask has the permission to the site
-         */
+        /** This function should check if Mask has the permission to the site */
         has(): Promise<boolean>
-        /**
-         * This function should request the related permission, e.g. `browser.permissions.request()`
-         */
+        /** This function should request the related permission, e.g. `browser.permissions.request()` */
         request(): Promise<boolean>
     }
     export namespace InjectingCapabilities {
@@ -185,6 +177,9 @@ export namespace SocialNetworkUI {
             /** @deprecated Seems we don't use it anymore. */
             getProfile?(): Promise<ProfileUI>
         }
+        export type ProfileUI = { bioContent: string }
+        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar'>
+
         /** Resolve the information of who am I on the current network. */
         export interface IdentityResolveProvider {
             /**
@@ -194,7 +189,7 @@ export namespace SocialNetworkUI {
             /**
              * The account that user is using (may not in the database)
              */
-            readonly lastRecognized: ValueRef<Pick<Profile, 'identifier' | 'nickname' | 'avatar'>>
+            readonly lastRecognized: ValueRef<IdentityResolved>
             /**
              * Start to maintain the posts.
              * It should add new seen posts and remove gone posts.
@@ -248,6 +243,19 @@ export namespace SocialNetworkUI {
             [overwritingLanguage: string]: string
         }
     }
+    export namespace Configuration {
+        export interface Define {
+            steganography?: SteganographyConfig
+        }
+        export interface SteganographyConfig {
+            grayscaleAlgorithm?: GrayscaleAlgorithm
+            /**
+             * !!! Please be careful when design this. !!!
+             * !!! Any observable change might cause a breaking change on steganography !!!
+             */
+            password?(): string
+        }
+    }
 }
 
 export namespace SocialNetworkWorker {
@@ -270,7 +278,7 @@ export namespace SocialNetworkWorker {
      * A SocialNetworkWorker is running in the background page
      */
     export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared, WorkerBase {
-        tasks?: Tasks
+        tasks: Tasks
     }
     export interface Tasks {
         /**
@@ -296,6 +304,6 @@ export namespace SocialNetworkWorker {
          * @param identifier The post id
          * @deprecated
          */
-        fetchProfile?(identifier: ProfileIdentifier): Promise<ProfileUI>
+        fetchProfile?(identifier: ProfileIdentifier): Promise<SocialNetworkUI.CollectingCapabilities.ProfileUI>
     }
 }

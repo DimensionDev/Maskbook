@@ -55,29 +55,31 @@ export const twitterEncoding = {
             ['=', '_'],
             [/\|/g, '.'],
         ])}`,
-    payloadDecoder: (text: string) => {
-        if (!text) return null
-        if (!text.includes('%20') || !text.includes('%40')) return null
+    payloadDecoder: (text: string): string[] => {
+        if (!text) return []
+        if (!text.includes('%20') || !text.includes('%40')) return []
         const payloadLink = parseURL(text)
             .map((x) => x.replace(/…$/, ''))
             .filter((x) => x.endsWith('%40'))[0]
         try {
             const { search, pathname } = new URL(payloadLink)
             const payload = search ? search.slice(1) : pathname.slice(1)
-            if (!payload) return null
-            return `🎼${batchReplace(
-                payload
-                    .replace(/^PostData_v\d=/i, '')
-                    .replace(/^%20/, '')
-                    .replace(/%40$/, ''),
-                [
-                    ['-', '+'],
-                    ['_', '='],
-                    [/\./g, '|'],
-                ],
-            )}:||`
+            if (!payload) return []
+            return [
+                `🎼${batchReplace(
+                    payload
+                        .replace(/^PostData_v\d=/i, '')
+                        .replace(/^%20/, '')
+                        .replace(/%40$/, ''),
+                    [
+                        ['-', '+'],
+                        ['_', '='],
+                        [/\./g, '|'],
+                    ],
+                )}:||`,
+            ]
         } catch {
-            return null
+            return []
         }
     },
 }

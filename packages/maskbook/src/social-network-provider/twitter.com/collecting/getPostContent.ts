@@ -1,10 +1,10 @@
 import { timeout } from '../../../utils/utils'
 import { postsSelector } from '../utils/selector'
-import type { SocialNetworkUITasks } from '../../../social-network/ui'
+import type { SocialNetworkUI } from '../../../social-network-next'
 import { postContentParser } from '../utils/fetch'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 
-export const getPostContentTwitter: SocialNetworkUITasks['taskGetPostContent'] = async () => {
+export const getPostContentTwitter: SocialNetworkUI.CollectingCapabilities.Define['getPostContent'] = async () => {
     const contentNode = (await timeout(new MutationObserverWatcher(postsSelector()), 10000))[0]
     return contentNode ? postContentParser(contentNode) : ''
 }

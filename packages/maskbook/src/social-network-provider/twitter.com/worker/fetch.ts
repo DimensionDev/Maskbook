@@ -2,6 +2,7 @@ import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import { getPostUrlAtTwitter, getProfileUrlAtTwitter } from '../utils/url'
 import tasks from '../../../extension/content-script/tasks'
 import { isMobileTwitter } from '../utils/isMobile'
+import type { SocialNetworkUI } from '../../../social-network-next'
 
 /**
  *  get things at server side with legacy twitter
@@ -10,10 +11,10 @@ import { isMobileTwitter } from '../utils/isMobile'
  *  resolve this problem when you can.
  */
 
-export const fetchPostContent = (post: PostIdentifier<ProfileIdentifier>) => {
+export function fetchPostContent(post: PostIdentifier<ProfileIdentifier>): Promise<string> {
     return tasks(getPostUrlAtTwitter(post)).getPostContent()
 }
 
-export const fetchProfile = (self: ProfileIdentifier) => {
-    return tasks(getProfileUrlAtTwitter(self, isMobileTwitter as boolean), {}).getProfile(self)
+export function fetchProfile(self: ProfileIdentifier): Promise<SocialNetworkUI.CollectingCapabilities.ProfileUI> {
+    return tasks(getProfileUrlAtTwitter(self, isMobileTwitter as boolean), {}).getProfile()
 }

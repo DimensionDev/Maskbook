@@ -8,19 +8,21 @@ import { getProfileFacebook } from './collecting/getProfile'
 import { taskOpenComposeBoxFacebook } from './automation/openComposeBox'
 import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposition'
 import { IdentityProviderFacebook } from './collecting/identity'
-import { InitAutonomousStateFriends } from '../../social-network-next/defaults/InitAutonomousStateFriends'
-import { InitAutonomousStateProfiles } from '../../social-network-next/defaults/InitAutonomousStateProfiles'
+import { InitAutonomousStateFriends } from '../../social-network-next/defaults/state/InitFriends'
+import { InitAutonomousStateProfiles } from '../../social-network-next/defaults/state/InitProfiles'
 import { injectCompositionFacebook } from './injection/Composition'
 import { injectSetupPromptFacebook } from './injection/SetupPrompt'
-import { injectPostCommentsDefault } from '../../social-network/defaults/injectComments'
+import { injectPostCommentsDefault } from '../../social-network-next/defaults/inject/Comments'
 import { pasteToCommentBoxFacebook } from './automation/pasteToCommentBoxFacebook'
-import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
+import { injectCommentBoxDefaultFactory } from '../../social-network-next/defaults/inject/CommentBox'
 import { injectPostInspectorFacebook } from './injection/PostInspector'
-import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
 import { profilesCollectorFacebook } from './collecting/profiles'
 import { PostProviderFacebook } from './collecting/posts'
-import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
-import { pasteImageToCompositionDefault } from '../../social-network-next/defaults/pasteImageToComposition'
+import { pasteImageToCompositionDefault } from '../../social-network-next/defaults/automation/AttachImageToComposition'
+import { injectPageInspectorDefault } from '../../social-network-next/defaults/inject/PageInspector'
+import { createTaskStartSetupGuideDefault } from '../../social-network-next/defaults/inject/StartSetupGuide'
+import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
+import { currentSelectedIdentity } from '../../settings/settings'
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
 const facebookUI: SocialNetworkUI.Definition = {
@@ -39,7 +41,7 @@ const facebookUI: SocialNetworkUI.Definition = {
             profilePage(profile) {
                 // there is no PWA way on Facebook desktop.
                 // mobile not tested
-                location.href = getProfilePageUrlAtFacebook(profile, 'open')
+                location.href = getProfilePageUrlAtFacebook(profile)
             },
             newsFeed() {
                 const homeLink = document.querySelector<HTMLAnchorElement>(
@@ -54,9 +56,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         },
         maskCompositionDialog: { open: taskOpenComposeBoxFacebook },
         nativeCompositionDialog: {
-            appendText(text, recover) {
-                pasteTextToCompositionFacebook(text, { autoPasteFailedRecover: !!recover })
-            },
+            appendText: pasteTextToCompositionFacebook,
             // TODO: make a better way to detect
             attachImage: pasteImageToCompositionDefault(() => false),
         },
@@ -103,8 +103,16 @@ const facebookUI: SocialNetworkUI.Definition = {
         },
         postInspector: (s, c) => injectPostInspectorFacebook(c, s),
         pageInspector: injectPageInspectorDefault(),
-        startSetupWizard(for_) {
-            createTaskStartSetupGuideDefault(facebookBase.networkIdentifier)
+        startSetupWizard: createTaskStartSetupGuideDefault(facebookBase.networkIdentifier),
+    },
+    configuration: {
+        steganography: {
+            // ! the color image cannot compression resistance in Facebook
+            grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
+            password() {
+                // ! Change this might be a breaking change !
+                return currentSelectedIdentity[facebookBase.networkIdentifier].value
+            },
         },
     },
 }

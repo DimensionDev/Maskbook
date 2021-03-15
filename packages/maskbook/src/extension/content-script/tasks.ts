@@ -7,7 +7,7 @@ import {
 import { ProfileIdentifier, ECKeyIdentifier, Identifier } from '../../database/type'
 import { disableOpenNewTabInBackgroundSettings, currentSetupGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
-import type { SocialNetworkUI } from '../../social-network/ui'
+import type { SocialNetworkUI } from '../../social-network-next'
 import { memoizePromise } from '../../utils/memoize'
 import { safeGetActiveUI } from '../../utils/safeRequire'
 import Serialization from '../../utils/type-transform/Serialization'
@@ -21,18 +21,20 @@ function getActivatedUI() {
 }
 
 const _tasks = {
-    getPostContent: () => getActivatedUI().taskGetPostContent(),
+    getPostContent: async () => (await getActivatedUI().collecting.getPostContent?.()) || '',
     /**
      * Access profile page
      * Get Profile
      */
-    getProfile: (identifier: ProfileIdentifier) => getActivatedUI().taskGetProfile(identifier),
+    getProfile: async () => (await getActivatedUI().collecting.getProfile?.()) || { bioContent: '' },
     /**
      * Access main page
      * Paste text into PostBox
      */
-    pasteIntoPostBox: async (text: string, options: Parameters<SocialNetworkUI['taskPasteIntoPostBox']>[1]) =>
-        getActivatedUI().taskPasteIntoPostBox(text, options),
+    pasteIntoPostBox: async (
+        text: string,
+        options: SocialNetworkUI.AutomationCapabilities.NativeCompositionAttachTextOptions,
+    ) => getActivatedUI().automation.nativeCompositionDialog?.appendText?.(text, options),
     /**
      * Fetch a url in the current context
      */
@@ -46,7 +48,7 @@ const _tasks = {
         (x) => x,
     ),
     async SetupGuide(for_: ECKeyIdentifier) {
-        getActivatedUI().taskStartSetupGuide(for_)
+        getActivatedUI().injection.startSetupWizard?.(for_)
     },
     async noop() {},
 }

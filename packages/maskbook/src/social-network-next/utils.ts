@@ -20,9 +20,7 @@ export const stateCreator: {
     profiles: () => new ValueRef([]),
 }
 export function managedStateCreator(): SocialNetworkUI.ManagedState {
-    return {
-        typedMessageMetadata: new ValueRef(new Map()),
-    }
+    return {}
 }
 export const creator = {
     IdentityResolveProviderLastRecognized: (): SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['lastRecognized'] =>

@@ -1,14 +1,14 @@
 import { memo, useCallback } from 'react'
-import type { PostInfo } from '../../social-network-next/PostInfo'
+import type { PostInfo } from '../../PostInfo'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { CommentBox, CommentBoxProps } from '../../components/InjectedComponents/CommentBox'
-import Services from '../../extension/service'
-import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
+import { CommentBox, CommentBoxProps } from '../../../components/InjectedComponents/CommentBox'
+import Services from '../../../extension/service'
+import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { makeStyles } from '@material-ui/core'
-import { PostInfoContext, usePostInfoDetails, usePostInfo } from '../../components/DataSource/usePostInfo'
+import { PostInfoContext, usePostInfoDetails, usePostInfo } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-es'
-import { MaskMessage } from '../../utils/messages'
-import { startWatch } from '../../utils/watcher'
+import { MaskMessage } from '../../../utils/messages'
+import { startWatch } from '../../../utils/watcher'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,

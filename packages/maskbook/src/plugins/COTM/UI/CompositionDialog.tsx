@@ -10,9 +10,10 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { resolveChainName } from '../../../web3/pipes'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { COTM_MetaKey, COTM_CONSTANTS } from '../constants'
-import { getActivatedUI } from '../../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../../social-network-next'
 import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { globalTypedMessageMetadata } from '../../../protocols/typed-message/global-state'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -60,7 +61,7 @@ export function COTM_CompositionDialog(props: COTM_CompositionDialogProps) {
         }
 
         // update the composition dialog
-        const ref = getActivatedUI().typedMessageMetadata
+        const ref = globalTypedMessageMetadata
         const next = new Map(ref.value.entries())
         payload ? next.set(COTM_MetaKey, payload) : next.delete(COTM_MetaKey)
         ref.value = next

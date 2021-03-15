@@ -1,4 +1,7 @@
+import Services from '../extension/service'
 import { untilDomLoaded } from '../utils/dom'
+import { Flags } from '../utils/flags'
+import i18nNextInstance from '../utils/i18n-next'
 import type { SocialNetworkUI } from './types'
 import { managedStateCreator } from './utils'
 
@@ -8,6 +11,7 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     automation: {},
     collecting: {},
     customization: {},
+    configuration: {},
     permission: {
         has: async () => false,
         request: async () => false,
@@ -34,20 +38,67 @@ export async function activateSocialNetworkUI(): Promise<void> {
 
     const abort = new AbortController()
     const { signal } = abort
-    untilDomLoaded().then(() => {
-        globalUIState = { ...ui.init(signal), ...managedStateCreator() }
-        // hookUIPostMap
-        ui.collecting.identityProvider?.start(signal)
-        ui.collecting.postsProvider?.start(signal)
-        ui.collecting.profilesCollector?.(signal)
-        ui.injection.pageInspector?.(signal)
-        ui.injection.toolbar?.(signal)
-        ui.injection.setupPrompt?.(signal)
-        ui.injection.newPostComposition?.start?.(signal)
-        ui.injection.searchResult?.(signal)
-        ui.injection.userBadge?.(signal)
-    })
-    // TODO: i18n overwrite
+    await untilDomLoaded()
+
+    i18nOverwrite()
+    const state = await ui.init(signal)
+    globalUIState = { ...state, ...managedStateCreator() }
+
+    ui.customization.paletteMode?.start(signal)
+    $unknownIdentityResolution()
+    ui.collecting.postsProvider?.start(signal)
+    startPostListener()
+    ui.collecting.profilesCollector?.(signal)
+    ui.injection.pageInspector?.(signal)
+    if (Flags.toolbar_enabled) ui.injection.toolbar?.(signal)
+    ui.injection.setupPrompt?.(signal)
+    ui.injection.newPostComposition?.start?.(signal)
+    ui.injection.searchResult?.(signal)
+    ui.injection.userBadge?.(signal)
+
+    function i18nOverwrite() {
+        const i18n = ui.customization.i18nOverwrite || {}
+        for (const namespace in i18n) {
+            const ns = i18n[namespace]
+            for (const i18nKey in ns) {
+                const pair = i18n[namespace][i18nKey]
+                for (const language in pair) {
+                    const value = pair[language]
+                    i18nNextInstance.addResource(language, namespace, i18nKey, value)
+                }
+            }
+        }
+    }
+
+    function $unknownIdentityResolution() {
+        const provider = ui.collecting.identityProvider
+        provider?.start(signal)
+        if (provider?.hasDeprecatedPlaceholderName) {
+            provider.lastRecognized.addListener((id) => {
+                if (signal.aborted) return
+                if (id.identifier.isUnknown) return
+                Services.Identity.resolveIdentity(id.identifier)
+            })
+        }
+    }
+
+    function startPostListener() {
+        const posts = ui.collecting.postsProvider?.posts
+        if (!posts) return
+        const abortSignals = new WeakMap<object, AbortController>()
+        posts.event.on('set', (key, value) => {
+            const abort = new AbortController()
+            abortSignals.set(key, abort)
+            const { signal } = abort
+            ui.injection.enhancedPostRenderer?.(signal, value)
+            ui.injection.postInspector?.(signal, value)
+            ui.injection.commentComposition?.compositionBox(signal, value)
+            ui.injection.commentComposition?.commentInspector(signal, value)
+        })
+        posts.event.on('delete', (key) => {
+            abortSignals.get(key)?.abort()
+        })
+    }
 }
 
 export function defineSocialNetworkUI(UI: SocialNetworkUI.DeferredDefinition) {

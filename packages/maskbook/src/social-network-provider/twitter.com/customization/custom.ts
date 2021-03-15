@@ -2,7 +2,6 @@ import { useMemo, createElement } from 'react'
 import { ValueRef, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { unstable_createMuiStrictModeTheme, ThemeProvider, makeStyles, PaletteMode } from '@material-ui/core'
 import { useMaskbookTheme } from '../../../utils/theme'
-import type { SocialNetworkUICustomUI } from '../../../social-network/ui'
 import type { SocialNetworkUI } from '../../../social-network-next'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
@@ -192,14 +191,6 @@ export const useInjectedDialogClassesOverwriteTwitter = makeStyles((theme) =>
     }),
 )
 
-export const twitterUICustomUI: SocialNetworkUICustomUI = {
-    useTheme: useThemeTwitterVariant,
-    componentOverwrite: {
-        InjectedDialog: {
-            classes: useInjectedDialogClassesOverwriteTwitter,
-        },
-    },
-}
 function createStyles<ClassKey extends string>(styles: Partial<StyleRules<ClassKey, {}>>): StyleRules<ClassKey> {
     return styles as any
 }

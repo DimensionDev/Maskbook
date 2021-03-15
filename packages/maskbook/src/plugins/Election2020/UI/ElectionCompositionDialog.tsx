@@ -23,10 +23,11 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { resolveChainName } from '../../../web3/pipes'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { Election2020MetaKey, ELECTION_2020_CONSTANTS } from '../constants'
-import { getActivatedUI } from '../../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../../social-network-next'
 import { resolveStateName } from '../pipes'
 import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { globalTypedMessageMetadata } from '../../../protocols/typed-message/global-state'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -78,7 +79,7 @@ export function ElectionCompositionDialog(props: ElectionCompositionDialogProps)
         }
 
         // update the composition dialog
-        const ref = getActivatedUI().typedMessageMetadata
+        const ref = globalTypedMessageMetadata
         const next = new Map(ref.value.entries())
         payload ? next.set(Election2020MetaKey, payload) : next.delete(Election2020MetaKey)
         ref.value = next

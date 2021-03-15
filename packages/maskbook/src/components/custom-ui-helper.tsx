@@ -31,7 +31,7 @@ export function mergeClasses<T extends string>(
 }
 
 export function getCustomUIOverwrite() {
-    return safeGetActiveUI().componentOverwrite || {}
+    return safeGetActiveUI().customization.componentOverwrite || {}
 }
 
 /**

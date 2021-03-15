@@ -1,5 +1,5 @@
 import type { PostInfo } from '../../../social-network-next/PostInfo'
-import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
+import { injectPostInspectorDefault } from '../../../social-network-next/defaults/inject/PostInspector'
 import { twitterEncoding } from '../encoding'
 
 export function injectPostInspectorAtTwitter(current: PostInfo, signal?: AbortSignal) {

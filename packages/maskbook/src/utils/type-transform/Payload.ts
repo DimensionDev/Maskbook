@@ -1,6 +1,4 @@
-import type { SocialNetworkWorkerAndUI } from '../../social-network/shared'
-import { isNil } from 'lodash-es'
-import { definedSocialNetworkWorkers } from '../../social-network/worker'
+import type { SocialNetwork } from '../../social-network-next'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { safeGetActiveUI } from '../safeRequire'
 import { i18n } from '../i18n-next'
@@ -95,34 +93,37 @@ const versions = new Set([deconstructAlpha40_Or_Alpha39_Or_Alpha38, deconstructA
 /**
  * @type Decoder - defines decoder. if null, auto select decoder.
  */
-type Decoder = SocialNetworkWorkerAndUI['payloadDecoder'] | null
-type Encoder = SocialNetworkWorkerAndUI['payloadEncoder']
+type Decoder = SocialNetwork.PayloadEncoding['decoder'] | null
+type Encoder = SocialNetwork.PayloadEncoding['encoder']
 
-export function deconstructPayload(str: string, decoder: Decoder = (x) => x): Result<Payload, TypeError> {
-    const decoders = (() => {
-        if (isNil(decoder)) {
+export function deconstructPayload(str: string, decoder: Decoder = (x) => [x]): Result<Payload, TypeError> {
+    const decoders: Decoder[] = (() => {
+        if (!decoder) {
             if (isEnvironment(Environment.ContentScript)) {
-                return [safeGetActiveUI().payloadDecoder]
+                return [safeGetActiveUI().utils.textPayloadPostProcessor?.decoder!]
             }
-            return Array.from(definedSocialNetworkWorkers).map((x) => x.payloadDecoder)
         }
         return [decoder]
     })()
 
-    if (decoders.length === 0) decoders.push((x) => x)
+    if (decoders.length === 0) decoders.push((x: string) => [x])
 
     for (const versionDecoder of versions) {
         for (const networkDecoder of decoders) {
-            if (isNil(networkDecoder(str))) continue
-            const result = versionDecoder(networkDecoder(str)!, false)
-            if (!isNil(result)) return Ok(result)
+            if (!networkDecoder) continue
+            const results = networkDecoder(str)
+            for (const result of results) {
+                if (!result) continue
+                const payload = versionDecoder(result, false)
+                if (payload) return Ok(payload)
+            }
         }
     }
     if (str.includes('🎼') && str.includes(':||')) return Err(new TypeError(i18n.t('service_unknown_payload')))
     return Err(new TypeError(i18n.t('payload_not_found')))
 }
 
-export function constructAlpha38(data: PayloadAlpha38, encoder: Encoder) {
+export function constructAlpha38(data: PayloadAlpha38, encoder: Encoder = (x) => x) {
     const userID = data.authorUserID?.toText().replace('person:', '') || ''
     const fields = [
         data.AESKeyEncrypted,

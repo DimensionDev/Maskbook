@@ -1,8 +1,8 @@
 import { stateCreator, SocialNetworkUI } from '../../social-network-next'
 import { twitterBase } from './base'
 import { twitterShared } from './shared'
-import { InitAutonomousStateFriends } from '../../social-network-next/defaults/InitAutonomousStateFriends'
-import { InitAutonomousStateProfiles } from '../../social-network-next/defaults/InitAutonomousStateProfiles'
+import { InitAutonomousStateFriends } from '../../social-network-next/defaults/state/InitFriends'
+import { InitAutonomousStateProfiles } from '../../social-network-next/defaults/state/InitProfiles'
 import { openComposeBoxTwitter } from './automation/openComposeBox'
 import { pasteTextToCompositionTwitter } from './automation/pasteTextToComposition'
 import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage'
@@ -21,12 +21,13 @@ import { i18NOverwriteTwitter } from './customization/i18n'
 import { injectToolbarAtTwitter } from './injection/Toolbar'
 import { injectSearchResultBoxAtTwitter } from './injection/SearchResult'
 import { injectPostReplacerAtTwitter } from './injection/PostReplacer'
-import { injectPageInspectorDefault } from '../../social-network/defaults/injectPageInspector'
+import { injectPageInspectorDefault } from '../../social-network-next/defaults/inject/PageInspector'
 import { injectSetupPromptAtTwitter } from './injection/SetupPrompt'
 import { injectPostBoxComposed } from './injection/inject'
-import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/taskStartSetupGuideDefault'
+import { createTaskStartSetupGuideDefault } from '../../social-network-next/defaults/inject/StartSetupGuide'
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskbookIcon'
-import { pasteImageToCompositionDefault } from '../../social-network-next/defaults/pasteImageToComposition'
+import { pasteImageToCompositionDefault } from '../../social-network-next/defaults/automation/AttachImageToComposition'
+import { currentSelectedIdentity } from '../../settings/settings'
 
 const origins = ['https://www.twitter.com/*', 'https://m.twitter.com/*']
 const twitterUI: SocialNetworkUI.Definition = {
@@ -46,9 +47,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         },
         nativeCommentBox: undefined,
         nativeCompositionDialog: {
-            appendText(content, opts) {
-                pasteTextToCompositionTwitter(content, { autoPasteFailedRecover: !!opts?.recover })
-            },
+            appendText: pasteTextToCompositionTwitter,
             // TODO: make a better way to detect
             attachImage: pasteImageToCompositionDefault(() => false),
         },
@@ -102,6 +101,14 @@ const twitterUI: SocialNetworkUI.Definition = {
         startSetupWizard: createTaskStartSetupGuideDefault('twitter.com'),
         userBadge: injectMaskUserBadgeAtTwitter,
         commentComposition: undefined,
+    },
+    configuration: {
+        steganography: {
+            password() {
+                // ! Change this might be a breaking change !
+                return currentSelectedIdentity[twitterBase.networkIdentifier].value
+            },
+        },
     },
 }
 export default twitterUI

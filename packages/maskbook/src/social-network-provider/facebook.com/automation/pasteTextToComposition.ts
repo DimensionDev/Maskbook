@@ -1,7 +1,7 @@
 import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { dispatchCustomEvents, delay, timeout } from '../../../utils/utils'
 import { isMobileFacebook } from '../utils/isMobile'
-import type { SocialNetworkUI } from '../../../social-network/ui'
+import type { SocialNetworkUI } from '../../../social-network-next/types'
 import { untilDocumentReady } from '../../../utils/dom'
 import { MaskMessage } from '../../../utils/messages'
 
@@ -59,9 +59,9 @@ async function openPostDialogFacebook() {
  */
 export async function pasteTextToCompositionFacebook(
     text: string,
-    options: Parameters<SocialNetworkUI['taskPasteIntoPostBox']>[1],
+    options: SocialNetworkUI.AutomationCapabilities.NativeCompositionAttachTextOptions,
 ) {
-    const { autoPasteFailedRecover } = options
+    const { recover } = options
     await untilDocumentReady()
     // Save the scrolling position
     const scrolling = document.scrollingElement || document.documentElement
@@ -95,6 +95,6 @@ export async function pasteTextToCompositionFacebook(
     scrollBack()
     function copyFailed(e: any) {
         console.warn('Text not pasted to the text area', e)
-        if (autoPasteFailedRecover) MaskMessage.events.autoPasteFailed.sendToLocal({ text })
+        if (recover) MaskMessage.events.autoPasteFailed.sendToLocal({ text })
     }
 }

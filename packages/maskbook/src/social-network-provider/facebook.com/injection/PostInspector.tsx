@@ -1,7 +1,7 @@
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { isMobileFacebook } from '../utils/isMobile'
 import type { PostInfo } from '../../../social-network-next/PostInfo'
-import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
+import { injectPostInspectorDefault } from '../../../social-network-next/defaults/inject/PostInspector'
 import { Flags } from '../../../utils/flags'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 

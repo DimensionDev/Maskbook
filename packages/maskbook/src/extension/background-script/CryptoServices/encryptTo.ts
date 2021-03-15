@@ -5,12 +5,13 @@ import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/P
 import { queryPrivateKey, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier } from '../../../database/type'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
-import { getNetworkWorker } from '../../../social-network/worker'
+import { getNetworkWorker } from '../../../social-network-next/worker'
 import { createPostDB } from '../../../database/post'
 import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 import { i18n } from '../../../utils/i18n-next'
 import type { TypedMessage } from '../../../protocols/typed-message'
+import { encodePublicKeyWorker } from '../../../social-network-next/utils/text-payload-worker'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -86,9 +87,9 @@ export async function encryptTo(
     })
 
     const postAESKeyToken = encodeArrayBuffer(iv)
-    const worker = getNetworkWorker(whoAmI).unwrap()
+    const worker = await getNetworkWorker(whoAmI)!
     OthersAESKeyEncryptedMap.set(postAESKeyToken, [worker.gunNetworkHint, othersAESKeyEncrypted])
-    return [constructAlpha38(payload, worker.payloadEncoder), postAESKeyToken]
+    return [constructAlpha38(payload, await encodePublicKeyWorker(whoAmI)), postAESKeyToken]
 }
 
 /**

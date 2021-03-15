@@ -1,9 +1,9 @@
 import { IdentifierMap, ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 import produce from 'immer'
-import type { Profile } from '../../database'
-import Services from '../../extension/service'
-import { MaskMessage } from '../../utils/messages'
-import type { SocialNetworkUI } from '../types'
+import type { Profile } from '../../../database'
+import Services from '../../../extension/service'
+import { MaskMessage } from '../../../utils/messages'
+import type { SocialNetworkUI } from '../../types'
 
 function hasFingerprint(x: Profile) {
     return !!x.linkedPersona?.fingerprint

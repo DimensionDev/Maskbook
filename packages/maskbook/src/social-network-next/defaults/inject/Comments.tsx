@@ -1,13 +1,13 @@
 import { memo } from 'react'
-import type { PostInfo } from '../../social-network-next/PostInfo'
+import type { PostInfo } from '../../PostInfo'
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
-import { PostComment, PostCommentProps } from '../../components/InjectedComponents/PostComments'
+import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import { PostComment, PostCommentProps } from '../../../components/InjectedComponents/PostComments'
 import { makeStyles } from '@material-ui/core'
-import { PostInfoContext } from '../../components/DataSource/usePostInfo'
+import { PostInfoContext } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-es'
-import { collectNodeText } from '../../social-network-provider/facebook.com/collecting/posts'
-import { startWatch } from '../../utils/watcher'
+import { collectNodeText } from '../../../social-network-provider/facebook.com/collecting/posts'
+import { startWatch } from '../../../utils/watcher'
 
 interface injectPostCommentsDefaultConfig {
     needZip?(): void

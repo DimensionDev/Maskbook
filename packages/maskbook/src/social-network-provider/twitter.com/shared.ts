@@ -1,3 +1,4 @@
+import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 import type { SocialNetwork } from '../../social-network-next/types'
 import { twitterBase } from './base'
 import { twitterEncoding } from './encoding'
@@ -23,6 +24,13 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
             decoder(text) {
                 return twitterEncoding.payloadDecoder(text)
             },
+        },
+        getPostURL(post) {
+            if (!(post.identifier instanceof ProfileIdentifier)) return null
+            return new URL(`https://twitter.com/${post.identifier.userId}/status/${post.postId}`)
+        },
+        getShareLinkURL(message) {
+            return new URL(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`)
         },
     },
 }

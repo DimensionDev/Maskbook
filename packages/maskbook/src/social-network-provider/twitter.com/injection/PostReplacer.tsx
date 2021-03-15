@@ -1,5 +1,5 @@
 import type { PostInfo } from '../../../social-network-next/PostInfo'
-import { injectPostReplacer } from '../../../social-network/defaults/injectPostReplacer'
+import { injectPostReplacer } from '../../../social-network-next/defaults/inject/PostReplacer'
 
 function resolveLangNode(node: HTMLElement) {
     return node.hasAttribute('lang')

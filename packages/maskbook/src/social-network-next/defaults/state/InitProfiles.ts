@@ -1,8 +1,8 @@
-import { MaskMessage } from '../../utils/messages'
-import Services from '../../extension/service'
-import type { SocialNetworkUI } from '../types'
+import { MaskMessage } from '../../../utils/messages'
+import Services from '../../../extension/service'
+import type { SocialNetworkUI } from '../../types'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import type { Profile } from '../../database'
+import type { Profile } from '../../../database'
 
 export function InitAutonomousStateProfiles(
     signal: AbortSignal,

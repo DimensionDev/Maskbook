@@ -1,6 +1,6 @@
 import { postsContentSelector } from '../utils/selector'
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI } from '../../../social-network/ui'
+import type { SocialNetworkUI } from '../../../social-network-next'
 import { creator, SocialNetworkUI as Next } from '../../../social-network-next'
 import { PostInfo } from '../../../social-network-next/PostInfo'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
@@ -21,7 +21,7 @@ import {
     makeTypedMessageCompound,
     extractTextFromTypedMessage,
 } from '../../../protocols/typed-message'
-import { instanceOfTwitterUI } from '../ui-provider'
+import { twitterShared } from '../shared'
 import type { Result } from 'ts-results'
 import { twitterBase } from '../base'
 import { twitterEncoding } from '../encoding'
@@ -98,9 +98,6 @@ function registerPostCollectorInner(
         })
     startWatch(watcher, cancel)
 }
-export function registerPostCollector(self: SocialNetworkUI) {
-    registerPostCollectorInner(self.posts)
-}
 
 export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
     posts: creator.PostProviderStore(),
@@ -155,7 +152,7 @@ function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo, cancel?:
             if (cancel?.aborted) return
             if (!val) return
             info.postMetadataMentionedLinks.set(x, val)
-            const tryDecode = deconstructPayload(val, instanceOfTwitterUI.payloadDecoder)
+            const tryDecode = deconstructPayload(val, twitterEncoding.payloadDecoder)
             non_overlapping_assign(info.postPayload, tryDecode)
         })
     }

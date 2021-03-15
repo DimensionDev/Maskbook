@@ -21,7 +21,7 @@ import type { Profile, Group } from '../../database'
 import { useFriendsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { currentImagePayloadStatus, debugModeSetting } from '../../settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { editActivatedPostMetadata, getActivatedUI } from '../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../social-network-next'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
@@ -36,7 +36,6 @@ import { EthereumTokenType } from '../../web3/types'
 import { isDAI, isOKB } from '../../web3/helpers'
 import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/PluginUI'
 import { Result } from 'ts-results'
@@ -47,6 +46,9 @@ import { PluginStage } from '../../plugins/types'
 import { Election2020MetadataReader } from '../../plugins/Election2020/helpers'
 import { COTM_MetadataReader } from '../../plugins/COTM/helpers'
 import { Flags } from '../../utils/flags'
+import { editActivatedPostMetadata, globalTypedMessageMetadata } from '../../protocols/typed-message/global-state'
+import { isTwitter } from '../../social-network-provider/twitter.com/base'
+import { SteganographyTextPayload } from './SteganographyTextPayload'
 
 const defaultTheme = {}
 
@@ -231,7 +233,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             )}
                             {showPostMetadata && (
                                 <DebugMetadataInspector
-                                    onNewMetadata={(meta) => (getActivatedUI().typedMessageMetadata.value = meta)}
+                                    onNewMetadata={(meta) => (globalTypedMessageMetadata.value = meta)}
                                     onExit={() => setShowPostMetadata(false)}
                                     meta={props.postContent.meta || new Map()}
                                 />
@@ -270,7 +272,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     const onlyMyself = props.onlyMyself ?? onlyMyselfLocal
     const [shareToEveryoneLocal, setShareToEveryone] = useState(true)
     const shareToEveryone = props.shareToEveryone ?? shareToEveryoneLocal
-    const typedMessageMetadata = or(props.typedMessageMetadata, useValueRef(getActivatedUI().typedMessageMetadata))
+    const typedMessageMetadata = or(props.typedMessageMetadata, useValueRef(globalTypedMessageMetadata))
     const [open, setOpen] = or(props.open, useState<boolean>(false)) as NonNullable<PostDialogProps['open']>
 
     //#region TypedMessage
@@ -287,12 +289,12 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     const [currentShareTarget, setCurrentShareTarget] = useState<(Profile | Group)[]>(() => [])
     //#endregion
     //#region Image Based Payload Switch
-    const imagePayloadStatus = useValueRef(currentImagePayloadStatus[getActivatedUI().networkIdentifier])
+    const imagePayloadStatus = useValueRef(currentImagePayloadStatus[activatedSocialNetworkUI.networkIdentifier])
     const imagePayloadEnabled = imagePayloadStatus === 'true'
     const onImagePayloadSwitchChanged = or(
         props.onImagePayloadSwitchChanged,
         useCallback((checked) => {
-            currentImagePayloadStatus[getActivatedUI().networkIdentifier].value = String(checked)
+            currentImagePayloadStatus[activatedSocialNetworkUI.networkIdentifier].value = String(checked)
         }, []),
     )
     //#endregion
@@ -307,7 +309,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     currentIdentity!.identifier,
                     !!shareToEveryone,
                 )
-                const activeUI = getActivatedUI()
+                const activeUI = activatedSocialNetworkUI
                 // TODO: move into the plugin system
                 const redPacketMetadata = RedPacketMetadataReader(typedMessageMetadata)
                 const election2020Metadata = Election2020MetadataReader(typedMessageMetadata)
@@ -327,11 +329,11 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     const relatedText = t('additional_post_box__steganography_post_pre', {
                         random: new Date().toLocaleString(),
                     })
-                    activeUI.taskPasteIntoPostBox(relatedText, {
-                        autoPasteFailedRecover: false,
+                    activeUI.automation.nativeCompositionDialog?.appendText?.(relatedText, {
+                        recover: false,
                     })
-                    activeUI.taskUploadToPostBox(encrypted, {
-                        template: isRedPacket
+                    const img = await SteganographyTextPayload(
+                        isRedPacket
                             ? isDai
                                 ? 'dai'
                                 : isOkb
@@ -342,29 +344,30 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                             : isCOTM
                             ? 'v4'
                             : 'v2',
-                        autoPasteFailedRecover: true,
-                        relatedText,
+                        encrypted,
+                    )
+                    activeUI.automation.nativeCompositionDialog?.attachImage?.(img, {
+                        recover: true,
+                        relatedTextPayload: relatedText,
                     })
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
                     if (redPacketMetadata.ok) {
                         if (i18n.language?.includes('zh')) {
-                            text =
-                                activeUI.networkIdentifier === twitterUrl.hostIdentifier
-                                    ? `用 #mask_io @realMaskbook 開啟紅包 ${encrypted}`
-                                    : `用 #mask_io 開啟紅包 ${encrypted}`
+                            text = isTwitter(activeUI)
+                                ? `用 #mask_io @realMaskbook 開啟紅包 ${encrypted}`
+                                : `用 #mask_io 開啟紅包 ${encrypted}`
                         } else {
-                            text =
-                                activeUI.networkIdentifier === twitterUrl.hostIdentifier
-                                    ? `Claim this Red Packet with #mask_io @realMaskbook ${encrypted}`
-                                    : `Claim this Red Packet with #mask_io ${encrypted}`
+                            text = isTwitter(activeUI)
+                                ? `Claim this Red Packet with #mask_io @realMaskbook ${encrypted}`
+                                : `Claim this Red Packet with #mask_io ${encrypted}`
                         }
                     }
                     if (election2020Metadata.ok) {
                         text = `Claim the election special NFT with @realMaskbook (mask.io) #mask_io #twitternft ${encrypted}`
                     }
-                    activeUI.taskPasteIntoPostBox(text, {
-                        autoPasteFailedRecover: true,
+                    activeUI.automation.nativeCompositionDialog?.appendText?.(text, {
+                        recover: true,
                     })
                 }
                 // This step write data on gun.
@@ -382,7 +385,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             setShareToEveryone(true)
             setPostBoxContent(makeTypedMessageText(''))
             setCurrentShareTarget([])
-            getActivatedUI().typedMessageMetadata.value = new Map()
+            globalTypedMessageMetadata.value = new Map()
         }, [setOpen]),
     )
     const onFinishButtonClicked = useCallback(() => {

@@ -15,7 +15,6 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
 import { useElectionTokens } from '../hooks/useElectionTokens'
 import { useElectionTokensOfOwner } from '../hooks/useElectionTokensOfOwner'
-import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { useAvailability } from '../hooks/useAvailability'
 import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -25,6 +24,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import type { CSSProperties } from '@material-ui/core/styles/withStyles'
 import { EthereumMessages } from '../../Ethereum/messages'
+import { activatedSocialNetworkUI } from '../../../social-network-next'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -173,15 +173,17 @@ export function ElectionPacket(props: ElectionPacketProps) {
 
     //#region remote controlled transaction dialog
     const postLink = usePostLink()
-    const shareLink = useShareLink(
-        [
-            `I just received an election special ${resolveCandidateBriefName(payload.winner)} NFT from @${
-                payload.sender.name
-            }. Follow @realmaskbook (mask.io) to get your first NFT on Twitter.`,
-            '#mask_io #twitternft',
-            postLink,
-        ].join('\n'),
-    )
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            [
+                `I just received an election special ${resolveCandidateBriefName(payload.winner)} NFT from @${
+                    payload.sender.name
+                }. Follow @realmaskbook (mask.io) to get your first NFT on Twitter.`,
+                '#mask_io #twitternft',
+                postLink,
+            ].join('\n'),
+        )
+        .toString()
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(

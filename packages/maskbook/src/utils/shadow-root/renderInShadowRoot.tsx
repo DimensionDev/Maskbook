@@ -8,10 +8,10 @@ import {
 import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
 import createEmotionCache, { EmotionCache } from '@emotion/cache'
 import ReactDOM from 'react-dom'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import type {} from 'react/experimental'
 import type {} from 'react-dom/experimental'
-import { getActivatedUI } from '../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../social-network-next'
 import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
@@ -258,9 +258,15 @@ function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{
 type MaskbookProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
 
 function Maskbook(_props: MaskbookProps) {
+    const useTheme = useRef(activatedSocialNetworkUI.customization.useTheme).current
+    const theme = useTheme?.()
     return MaskbookUIRoot(
-        <ThemeProvider theme={getActivatedUI().useTheme()}>
+        theme ? (
+            <ThemeProvider theme={theme}>
+                <span {..._props} />
+            </ThemeProvider>
+        ) : (
             <span {..._props} />
-        </ThemeProvider>,
+        ),
     )
 }

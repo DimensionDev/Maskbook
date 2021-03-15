@@ -1,29 +1,60 @@
-import { defineSocialNetworkUI, definedSocialNetworkUIs } from '../../social-network/ui'
 import '../../provider.ui'
-import { emptyDefinition } from '../../social-network/defaults/emptyDefinition'
+import {
+    defineSocialNetworkUI,
+    definedSocialNetworkUIs,
+    SocialNetworkUI,
+    SocialNetwork,
+} from '../../social-network-next'
 import { isEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
-import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdentitiesRef'
+import { IdentifierMap } from '../../database/IdentifierMap'
 
-export const hasPermissionCheckAtPopupPage = new ValueRef(true)
-const popupPageUISelf = defineSocialNetworkUI({
-    ...emptyDefinition,
-    name: 'Popup page data source',
-    async init() {
-        emptyDefinition.init()
+const base: SocialNetwork.Base = {
+    networkIdentifier: 'localhost',
+    shouldActivate() {
+        return isEnvironment(Environment.ManifestAction)
+    },
+}
+const define: SocialNetworkUI.Definition = {
+    ...base,
+    automation: {},
+    collecting: {},
+    configuration: {},
+    customization: {},
+    injection: {},
+    permission: {
+        async has() {
+            return false
+        },
+        async request() {
+            return false
+        },
+    },
+    utils: {},
+    async init(signal) {
+        const state: Readonly<SocialNetworkUI.AutonomousState> = {
+            profiles: new ValueRef([]),
+            friends: new ValueRef(new IdentifierMap(new Map())),
+        }
         const activeTab = ((await browser.tabs.query({ active: true, currentWindow: true })) || [])[0]
-        if (activeTab === undefined) return
+        if (activeTab === undefined) return state
         const location = new URL(activeTab.url || globalThis.location.href)
         for (const ui of definedSocialNetworkUIs) {
             if (ui.shouldActivate(location) && ui.networkIdentifier !== 'localhost') {
-                popupPageUISelf.networkIdentifier = ui.networkIdentifier
-                popupPageUISelf.hasPermission = ui.hasPermission.bind(ui)
-                popupPageUISelf.requestPermission = ui.requestPermission.bind(ui)
-                InitMyIdentitiesValueRef(popupPageUISelf, ui.networkIdentifier)
-                return
+                const _ = (await ui.load()).default
+                if (signal.aborted) return state
+                // TODO: heck, this is not what we expected.
+                this.networkIdentifier = ui.networkIdentifier
+                this.permission = _.permission
+                this.utils = _.utils
+                return _.init(signal)
             }
         }
+        return state
     },
-    shouldActivate() {
-        return isEnvironment(Environment.ManifestBrowserAction)
+}
+defineSocialNetworkUI({
+    ...base,
+    async load() {
+        return { default: define }
     },
 })

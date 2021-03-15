@@ -1,6 +1,6 @@
 import { dispatchCustomEvents, delay } from '../../../utils/utils'
 import { postEditorDraftContentSelector, newPostButtonSelector } from '../utils/selector'
-import type { SocialNetworkUI } from '../../../social-network/ui'
+import type { SocialNetworkUI } from '../../../social-network-next'
 import { getEditorContent, hasFocus, isCompose, hasEditor } from '../utils/postBox'
 import { untilElementAvailable } from '../../../utils/dom'
 import { isMobileTwitter } from '../utils/isMobile'
@@ -10,7 +10,10 @@ import { MaskMessage } from '../../../utils/messages'
  * Wait for up to 5000 ms
  * If not complete, let user do it.
  */
-export const pasteTextToCompositionTwitter: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt) => {
+export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabilities.NativeCompositionDialog['appendText'] = (
+    text,
+    opt,
+) => {
     const interval = 500
     const timeout = 5000
     const worker = async function (abort: AbortController) {
@@ -44,7 +47,7 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI['taskPasteIntoPostBo
     }
 
     const fail = (e: Error) => {
-        if (opt.autoPasteFailedRecover) MaskMessage.events.autoPasteFailed.sendToLocal({ text })
+        if (opt?.recover) MaskMessage.events.autoPasteFailed.sendToLocal({ text })
         throw e
     }
 

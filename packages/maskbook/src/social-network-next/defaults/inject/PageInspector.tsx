@@ -1,9 +1,9 @@
 import { memo } from 'react'
 import { makeStyles } from '@material-ui/core'
-import { PageInspector, PageInspectorProps } from '../../components/InjectedComponents/PageInspector'
-import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
+import { PageInspector, PageInspectorProps } from '../../../components/InjectedComponents/PageInspector'
+import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
-import { startWatch } from '../../utils/watcher'
+import { startWatch } from '../../../utils/watcher'
 
 export function injectPageInspectorDefault<T extends string>(
     config: InjectPageInspectorDefaultConfig = {},

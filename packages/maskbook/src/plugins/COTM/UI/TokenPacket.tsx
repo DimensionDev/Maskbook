@@ -14,7 +14,6 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
 import { useTokens } from '../hooks/useTokens'
 import { useTokensOfOwner } from '../hooks/useTokensOfOwner'
-import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { useAvailability } from '../hooks/useAvailability'
 import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -24,6 +23,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { first } from 'lodash-es'
 import { useMintFromServerCallback } from '../hooks/useMintFromServerCallback'
 import { EthereumMessages } from '../../Ethereum/messages'
+import { activatedSocialNetworkUI } from '../../../social-network-next'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -133,13 +133,15 @@ export function TokenPacket(props: TokenPacketProps) {
 
     //#region remote controlled transaction dialog
     const postLink = usePostLink()
-    const shareLink = useShareLink(
-        [
-            `I just received a special NFT from @${payload.sender.name}. Follow @realmaskbook (mask.io) to get your first NFT on Twitter.`,
-            '#mask_io #twitternft',
-            postLink,
-        ].join('\n'),
-    )
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            [
+                `I just received a special NFT from @${payload.sender.name}. Follow @realmaskbook (mask.io) to get your first NFT on Twitter.`,
+                '#mask_io #twitternft',
+                postLink,
+            ].join('\n'),
+        )
+        .toString()
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(

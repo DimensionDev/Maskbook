@@ -1,7 +1,7 @@
 import { selfInfoSelectors } from '../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier } from '../../../database/type'
-import type { SocialNetworkUI } from '../../../social-network/ui'
+import type { SocialNetworkUI } from '../../../social-network-next'
 import { isNil } from 'lodash-es'
 import { creator, SocialNetworkUI as Next } from '../../../social-network-next'
 import { twitterBase } from '../base'
@@ -33,9 +33,6 @@ function resolveLastRecognizedIdentityInner(
     cancel?.addEventListener('abort', () => watcher.stopWatch())
 }
 
-export function resolveLastRecognizedIdentity(self: SocialNetworkUI) {
-    resolveLastRecognizedIdentityInner(self.lastRecognizedIdentity)
-}
 export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
     lastRecognized: creator.IdentityResolveProviderLastRecognized(),

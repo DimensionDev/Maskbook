@@ -1,21 +1,18 @@
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI } from '../../../social-network/ui'
-import type { SocialNetworkUI as Next } from '../../../social-network-next/types'
+import type { SocialNetworkUI } from '../../../social-network-next/types'
 import { creator } from '../../../social-network-next/utils'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier'
 import { isMobileFacebook } from '../utils/isMobile'
 import { ProfileIdentifier } from '../../../database/type'
 
-export const IdentityProviderFacebook: Next.CollectingCapabilities.IdentityResolveProvider = {
+export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,
     lastRecognized: creator.IdentityResolveProviderLastRecognized(),
     start(signal) {
         resolveLastRecognizedIdentityFacebookInner(this.lastRecognized, signal)
     },
 }
-export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
-    resolveLastRecognizedIdentityFacebookInner(this.lastRecognizedIdentity)
-}
+
 function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal?: AbortSignal) {
     const self = (isMobileFacebook ? myUsernameLiveSelectorMobile : myUsernameLiveSelectorPC)
         .clone()
@@ -51,5 +48,5 @@ const myUsernameLiveSelectorMobile = new LiveSelector().querySelector<HTMLAnchor
     '#bookmarks_flyout .mSideMenu > div > ul > li:first-child a, #MComposer a',
 )
 
-type Value = Next.CollectingCapabilities.IdentityResolveProvider['lastRecognized']['value']
+type Value = SocialNetworkUI.CollectingCapabilities.IdentityResolved
 //#endregion

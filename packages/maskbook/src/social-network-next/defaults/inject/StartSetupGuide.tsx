@@ -1,10 +1,9 @@
-import type { PersonaIdentifier } from '../../database/type'
-import { renderInShadowRoot } from '../../utils/shadow-root/renderInShadowRoot'
-import Services from '../../extension/service'
+import type { PersonaIdentifier } from '../../../database/type'
+import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import Services from '../../../extension/service'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI } from '../ui'
-import { SetupGuide, SetupGuideProps } from '../../components/InjectedComponents/SetupGuide'
-import { Flags } from '../../utils/flags'
+import { SetupGuide, SetupGuideProps } from '../../../components/InjectedComponents/SetupGuide'
+import { Flags } from '../../../utils/flags'
 
 function UI({ unmount, persona }: { unmount: () => void; persona: PersonaIdentifier } & Partial<SetupGuideProps>) {
     return <SetupGuide persona={persona} onClose={unmount} />
