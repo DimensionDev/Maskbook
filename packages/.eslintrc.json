@@ -7,9 +7,10 @@
         "project": "./tsconfig.eslint.json"
     },
     "extends": ["plugin:import/typescript"],
-    "plugins": ["@typescript-eslint", "lodash", "import", "react-hooks"],
+    "plugins": ["@typescript-eslint", "unused-imports", "lodash", "import", "react-hooks"],
     "rules": {
         "import/no-deprecated": "warn",
+        "unused-imports/no-unused-imports-ts": "warn",
         "no-restricted-imports": [
             "error",
             { "paths": [{ "name": "lodash", "message": "Please use lodash-es instead." }] }
