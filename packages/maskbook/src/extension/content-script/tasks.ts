@@ -7,7 +7,7 @@ import {
 import { ProfileIdentifier, ECKeyIdentifier, Identifier } from '../../database/type'
 import { disableOpenNewTabInBackgroundSettings, currentSetupGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
-import type { SocialNetworkUI } from '../../social-network-next'
+import type { SocialNetworkUI } from '../../social-network'
 import { memoizePromise } from '../../utils/memoize'
 import { safeGetActiveUI } from '../../utils/safeRequire'
 import Serialization from '../../utils/type-transform/Serialization'

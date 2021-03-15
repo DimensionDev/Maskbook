@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { activatedSocialNetworkUI } from '../../../social-network-next'
-import { isTwitter } from '../../../social-network-provider/twitter.com/base'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 /**
  * Listing all possible pathnames start from /search that the search box will keep existing on twitter.

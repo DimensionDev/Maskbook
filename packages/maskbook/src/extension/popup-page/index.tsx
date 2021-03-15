@@ -1,4 +1,4 @@
-import '../../social-network-provider/popup-page/index'
+import '../../social-network-adaptor/popup-page/index'
 import '../../setup.ui'
 
 import { SSRRenderer } from '../../utils/SSRRenderer'

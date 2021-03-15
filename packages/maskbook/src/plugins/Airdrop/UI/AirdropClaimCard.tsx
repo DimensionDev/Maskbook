@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { AirdropIcon } from '../../../resources/AirdropIcon'
-import { activatedSocialNetworkUI } from '../../../social-network-next'
+import { activatedSocialNetworkUI } from '../../../social-network'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -18,7 +18,7 @@ import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
 import { ClaimDialog } from './ClaimDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { isTwitter } from '../../../social-network-provider/twitter.com/base'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

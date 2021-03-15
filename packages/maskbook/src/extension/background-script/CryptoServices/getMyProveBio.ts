@@ -1,6 +1,6 @@
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 import { ProfileIdentifier, PersonaIdentifier } from '../../../database/type'
-import { encodePublicKeyWorker } from '../../../social-network-next/utils/text-payload-worker'
+import { encodePublicKeyWorker } from '../../../social-network/utils/text-payload-worker'
 import { queryPublicKey } from '../../../database'
 //#endregion
 //#region ProvePost, create & verify

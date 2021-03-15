@@ -3,7 +3,7 @@ import type { RedPacketJSONPayload } from '../types'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { RedPacket } from './RedPacket'
 import { RedPacketRPC } from '../messages'
-import { activatedSocialNetworkUI } from '../../../social-network-next'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 export interface RedPacketInPostProps {
     payload: RedPacketJSONPayload

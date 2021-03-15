@@ -1,10 +1,10 @@
-import { emptyPostInfo, PostInfo } from '../../social-network-next/PostInfo'
+import { emptyPostInfo, PostInfo } from '../../social-network/PostInfo'
 import { createContext, useContext } from 'react'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { ObservableMap, ObservableSet } from '../../utils/ObservableMapSet'
 import { useObservableValues } from '../../utils/hooks/useObservableMapSet'
-import { activatedSocialNetworkUI } from '../../social-network-next'
+import { activatedSocialNetworkUI } from '../../social-network'
 
 export const PostInfoContext = createContext(emptyPostInfo)
 export function usePostInfo() {

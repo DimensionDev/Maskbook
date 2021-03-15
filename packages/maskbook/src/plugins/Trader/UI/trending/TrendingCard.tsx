@@ -1,7 +1,7 @@
 import { Card, createStyles, makeStyles } from '@material-ui/core'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { activatedSocialNetworkUI } from '../../../../social-network-next'
-import { isTwitter as isTwitterF } from '../../../../social-network-provider/twitter.com/base'
+import { activatedSocialNetworkUI } from '../../../../social-network'
+import { isTwitter as isTwitterF } from '../../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles((theme) => {
     const isTwitter = isTwitterF(activatedSocialNetworkUI)

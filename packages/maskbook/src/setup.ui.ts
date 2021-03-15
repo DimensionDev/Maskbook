@@ -1,6 +1,6 @@
 import './polyfill/index'
 import './utils/debug/general'
-import { definedSocialNetworkUIs, activateSocialNetworkUI } from './social-network-next/ui'
+import { definedSocialNetworkUIs, activateSocialNetworkUI } from './social-network/ui'
 import './provider.ui'
 import { LiveSelector, Watcher, DOMProxy } from '@dimensiondev/holoflows-kit'
 import { enhanceTypedMessageDebugger } from './protocols/typed-message/debugger'

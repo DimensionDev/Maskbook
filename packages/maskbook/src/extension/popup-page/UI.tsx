@@ -1,4 +1,4 @@
-import '../../social-network-provider/popup-page/index'
+import '../../social-network-adaptor/popup-page/index'
 import '../../setup.ui'
 
 import { useCallback, memo } from 'react'
@@ -7,7 +7,7 @@ import { ThemeProvider, makeStyles, Theme, withStyles, StylesProvider, jssPreset
 import { Button, Paper, Divider, Typography, Box } from '@material-ui/core'
 import { useMaskbookTheme } from '../../utils/theme'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
-import { activatedSocialNetworkUI } from '../../social-network-next'
+import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { delay } from '../../utils/utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'

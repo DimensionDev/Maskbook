@@ -20,7 +20,7 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { Flags } from '../../../utils/flags'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
-import { activatedSocialNetworkUI } from '../../../social-network-next'
+import { activatedSocialNetworkUI } from '../../../social-network'
 import { PluginGitcoinMessages } from '../messages'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
@@ -28,7 +28,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
-import { isTwitter } from '../../../social-network-provider/twitter.com/base'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

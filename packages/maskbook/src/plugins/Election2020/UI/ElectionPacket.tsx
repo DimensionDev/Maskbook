@@ -24,7 +24,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import type { CSSProperties } from '@material-ui/core/styles/withStyles'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { activatedSocialNetworkUI } from '../../../social-network-next'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

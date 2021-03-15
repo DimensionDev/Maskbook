@@ -1,2 +1,2 @@
-import './social-network-provider/facebook.com/ui-provider'
-import './social-network-provider/twitter.com/ui-provider'
+import './social-network-adaptor/facebook.com/ui-provider'
+import './social-network-adaptor/twitter.com/ui-provider'

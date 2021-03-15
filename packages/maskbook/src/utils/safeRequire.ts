@@ -2,10 +2,10 @@ import { isEnvironment, Environment, assertNotEnvironment } from '@dimensiondev/
 
 export function safeGetActiveUI() {
     assertNotEnvironment(Environment.ManifestBackground)
-    return (require('../social-network-next') as typeof import('../social-network-next')).activatedSocialNetworkUI
+    return (require('../social-network') as typeof import('../social-network')).activatedSocialNetworkUI
 }
 
 export function safeOptionsPageWorker() {
     if (!isEnvironment(Environment.ManifestOptions)) return
-    return require('../social-network-provider/options-page/index') as typeof import('../social-network-provider/options-page/index')
+    return require('../social-network-adaptor/options-page/index') as typeof import('../social-network-adaptor/options-page/index')
 }

@@ -30,7 +30,7 @@ import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import Services from '../../../extension/service'
 import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { activatedSocialNetworkUI } from '../../../social-network-next'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

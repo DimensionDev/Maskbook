@@ -1,8 +1,8 @@
 import { useTheme, useMediaQuery } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import ArrowBackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
-import { activatedSocialNetworkUI } from '../../social-network-next'
-import { isTwitter } from '../../social-network-provider/twitter.com/base'
+import { activatedSocialNetworkUI } from '../../social-network'
+import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 
 export interface DialogDismissIconUIProps {
     disableArrowBack?: boolean

@@ -1,6 +1,6 @@
 import { decompressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 import { ECKeyIdentifierFromJsonWebKey, ProfileIdentifier } from '../../../database/type'
-import { decodePublicKeyWorker } from '../../../social-network-next/utils/text-payload-worker'
+import { decodePublicKeyWorker } from '../../../social-network/utils/text-payload-worker'
 import { createProfileWithPersona, queryPersonaRecord } from '../../../database'
 
 export async function verifyOthersProve(bio: string | { raw: string }, others: ProfileIdentifier): Promise<boolean> {

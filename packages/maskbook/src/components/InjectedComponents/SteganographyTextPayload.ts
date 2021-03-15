@@ -1,7 +1,7 @@
 import { decodeArrayBuffer } from '@dimensiondev/kit'
 import Services from '../../extension/service'
 import { ImageTemplateTypes, ImagePayloadURLs } from '../../resources/image-payload'
-import { activatedSocialNetworkUI } from '../../social-network-next'
+import { activatedSocialNetworkUI } from '../../social-network'
 import { downloadUrl } from '../../utils/utils'
 
 export async function SteganographyTextPayload(template: ImageTemplateTypes, text: string) {

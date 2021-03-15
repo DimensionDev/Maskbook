@@ -29,7 +29,7 @@ import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { usePoolPayload } from '../hooks/usePoolPayload'
 import Services from '../../../extension/service'
-import { activatedSocialNetworkUI } from '../../../social-network-next'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 export interface IconProps {
     size?: number

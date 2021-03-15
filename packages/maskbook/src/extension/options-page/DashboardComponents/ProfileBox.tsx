@@ -1,8 +1,8 @@
 import type { Persona } from '../../../database'
-import { definedSocialNetworkWorkers } from '../../../social-network-next/worker'
+import { definedSocialNetworkWorkers } from '../../../social-network/worker'
 
 import ProviderLine, { ProviderLineProps } from './ProviderLine'
-import { activatedSocialNetworkUI } from '../../../social-network-next'
+import { activatedSocialNetworkUI } from '../../../social-network'
 import { currentSetupGuideStatus } from '../../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../../settings/types'
 import { exclusiveTasks } from '../../content-script/tasks'

@@ -11,7 +11,7 @@ import { debugModeSetting } from '../../../settings/settings'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { usePostInfoDetails } from '../../DataSource/usePostInfo'
 import { deconstructPayload, PayloadAlpha38 } from '../../../utils/type-transform/Payload'
-import { decodeTextPayloadUI } from '../../../social-network-next/utils/text-payload-ui'
+import { decodeTextPayloadUI } from '../../../social-network/utils/text-payload-ui'
 
 interface DebugDisplayProps {
     whoAmI: ProfileIdentifier

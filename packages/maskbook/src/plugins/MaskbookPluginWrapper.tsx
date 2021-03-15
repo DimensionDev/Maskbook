@@ -1,8 +1,8 @@
 import { makeStyles, Typography, ThemeProvider, SnackbarContent } from '@material-ui/core'
-import { activatedSocialNetworkUI } from '../social-network-next'
+import { activatedSocialNetworkUI } from '../social-network'
 import { MaskbookIcon } from '../resources/MaskbookIcon'
 import { Suspense, useRef } from 'react'
-import { isTwitter } from '../social-network-provider/twitter.com/base'
+import { isTwitter } from '../social-network-adaptor/twitter.com/base'
 
 interface PluginWrapperProps {
     pluginName: string

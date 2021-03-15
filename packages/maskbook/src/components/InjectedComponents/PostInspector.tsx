@@ -15,7 +15,7 @@ import { PluginUI } from '../../plugins/PluginUI'
 import { usePostInfoDetails, usePostInfo } from '../DataSource/usePostInfo'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
 import type { PayloadAlpha40_Or_Alpha39, PayloadAlpha38 } from '../../utils/type-transform/Payload'
-import { decodePublicKeyUI } from '../../social-network-next/utils/text-payload-ui'
+import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessage, raw: string): void

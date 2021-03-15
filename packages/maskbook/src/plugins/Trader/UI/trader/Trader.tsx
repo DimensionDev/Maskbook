@@ -26,7 +26,7 @@ import { currentTradeProviderSettings } from '../../settings'
 import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
-import { activatedSocialNetworkUI } from '../../../../social-network-next'
+import { activatedSocialNetworkUI } from '../../../../social-network'
 import { EthereumMessages } from '../../../Ethereum/messages'
 import Services from '../../../../extension/service'
 import { UST } from '../../constants'
@@ -34,7 +34,7 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
 import { PluginTraderRPC } from '../../messages'
-import { isTwitter } from '../../../../social-network-provider/twitter.com/base'
+import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({

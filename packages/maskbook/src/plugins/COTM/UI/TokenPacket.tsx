@@ -23,7 +23,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { first } from 'lodash-es'
 import { useMintFromServerCallback } from '../hooks/useMintFromServerCallback'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { activatedSocialNetworkUI } from '../../../social-network-next'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

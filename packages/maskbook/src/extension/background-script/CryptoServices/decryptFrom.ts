@@ -8,7 +8,7 @@ import { queryPersonaRecord, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
-import { getNetworkWorker, getNetworkWorkerUninitialized } from '../../../social-network-next/worker'
+import { getNetworkWorker, getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { cryptoProviderTable } from './cryptoProviderTable'
 import type { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { verifyOthersProve } from './verifyOthersProve'
@@ -25,7 +25,7 @@ import { MaskMessage } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
 import { calculatePostKeyPartition } from '../../../network/gun/version.2/hash'
 import { Err, Ok, Result } from 'ts-results'
-import { decodeTextPayloadWorker } from '../../../social-network-next/utils/text-payload-worker'
+import { decodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
 
 type Progress = (
     | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
