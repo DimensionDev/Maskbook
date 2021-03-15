@@ -10,6 +10,8 @@ import type {
     ERC721TokenRecordInDatabase,
     ERC1155TokenRecord,
     ERC1155TokenRecordInDatabase,
+    PhraseRecord,
+    PhraseRecordInDatabase,
 } from '../database/types'
 import { resolveChainId } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
@@ -37,6 +39,14 @@ export function WalletRecordOutDB(x: WalletRecordInDatabase) {
     record.erc1155_token_whitelist = x.erc1155_token_whitelist ?? new Set()
     record.erc1155_token_blacklist = x.erc1155_token_blacklist ?? new Set()
     return record
+}
+
+export function PhraseRecordIntoDB(x: PhraseRecord) {
+    return x as PhraseRecordInDatabase
+}
+
+export function PhraseRecordOutDB(x: PhraseRecordInDatabase) {
+    return x as PhraseRecord
 }
 
 export function ERC20TokenRecordIntoDB(x: ERC20TokenRecord) {

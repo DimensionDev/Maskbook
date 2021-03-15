@@ -361,7 +361,7 @@ export function ConnectNetwork() {
                         disabled={persona?.linkedProfiles.size === 0}
                         onClick={async () => {
                             await Services.Identity.setupPersona(persona.identifier)
-                            await delay(300)
+                            await sleep(300)
                             history.replace(Flags.has_no_browser_tab_ui ? DashboardRoute.Nav : DashboardRoute.Personas)
                         }}>
                         {t('set_up_button_finish')}

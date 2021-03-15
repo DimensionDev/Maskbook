@@ -15,13 +15,14 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages, WalletRPC } from '../messages'
-import { checkInputLengthExceed, delay } from '../../../utils/utils'
+import { checkInputLengthExceed, sleep } from '../../../utils/utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useMnemonicWordsPuzzle } from '../hooks/useMnemonicWordsPuzzle'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
+import { ETHEREUM_PATH } from '../constants'
 
 enum CreateWalletStep {
     Name = 0,
@@ -96,7 +97,7 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
         setOpen({
             open: false,
         })
-        await delay(300)
+        await sleep(300)
         setName('')
         setStep(CreateWalletStep.Name)
     }, [setOpen])
@@ -126,11 +127,17 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
         }
     }, [step, resetCallback])
     const onSubmit = useSnackbarCallback(
-        () =>
-            WalletRPC.importNewWallet({
+        async () => {
+            await WalletRPC.importNewWallet({
                 name,
                 mnemonic: words,
-            }),
+            })
+            await WalletRPC.addPhrase({
+                path: ETHEREUM_PATH,
+                mnemonic: words,
+                passphrase: '',
+            })
+        },
         [name, words],
         onClose,
     )
@@ -161,7 +168,6 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
                         )}
                     </Typography>
                 ) : null}
-
                 {step === CreateWalletStep.Name ? (
                     <Box>
                         <TextField

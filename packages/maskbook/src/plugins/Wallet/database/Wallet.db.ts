@@ -4,6 +4,7 @@ import type {
     ERC1155TokenRecordInDatabase,
     ERC20TokenRecordInDatabase,
     ERC721TokenRecordInDatabase,
+    PhraseRecordInDatabase,
     WalletRecordInDatabase,
 } from './types'
 import type { RedPacketRecordInDatabase } from '../../RedPacket/types'
@@ -14,7 +15,7 @@ function path<T>(x: T) {
     return x
 }
 export const createWalletDBAccess = createDBAccess(() => {
-    return openDB<WalletDB>('maskbook-plugin-wallet', 6, {
+    return openDB<WalletDB>('maskbook-plugin-wallet', 7, {
         async upgrade(db, oldVersion, newVersion, tx) {
             function v0_v1() {
                 // @ts-expect-error
@@ -53,17 +54,25 @@ export const createWalletDBAccess = createDBAccess(() => {
             }
 
             /**
-             * Store ERC721Token records in DB
+             * Add ERC721Token and ERC1155Token records in DB
              */
             function v5_v6() {
                 db.createObjectStore('ERC721Token', { keyPath: path<keyof ERC721TokenRecordInDatabase>('record_id') })
                 db.createObjectStore('ERC1155Token', { keyPath: path<keyof ERC1155TokenRecordInDatabase>('record_id') })
             }
 
+            /**
+             * Add Phrase records in DB
+             */
+            function v6_v7() {
+                db.createObjectStore('Phrase', { keyPath: path<keyof PhraseRecordInDatabase>('id') })
+            }
+
             if (oldVersion < 1) v0_v1()
             if (oldVersion < 2) v1_v2()
             if (oldVersion < 3) v2_v3()
             if (oldVersion < 6) v5_v6()
+            if (oldVersion < 7) v6_v7()
         },
     })
 })
@@ -83,6 +92,10 @@ export interface WalletDB<Data = unknown, Indexes extends [IDBValidKey?, IDBVali
         }
         key: string
         indexes: Indexes & { plugin_id: string }
+    }
+    Phrase: {
+        value: PhraseRecordInDatabase
+        key: string
     }
     Wallet: {
         value: WalletRecordInDatabase

@@ -43,9 +43,7 @@ export function useMnemonicWordsPuzzle() {
         setSeed((x) => (x + 1) % 3)
     }, [])
 
-    const refreshCallback = useCallback(() => {
-        wordsRetry()
-    }, [wordsRetry])
+    const refreshCallback = wordsRetry
 
     return [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] as const
 }

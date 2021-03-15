@@ -1,5 +1,5 @@
 import stringify from 'json-stable-stringify'
-import type { WalletRecord, ERC20TokenRecord, ERC721TokenRecord, ERC1155TokenRecord } from './database/types'
+import type { WalletRecord, ERC20TokenRecord, ERC721TokenRecord, ERC1155TokenRecord, PhraseRecord } from './database/types'
 import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from './settings'
 import { isSameAddress } from '../../web3/helpers'
 import { CurrencyType, ProviderType } from '../../web3/types'
@@ -25,6 +25,16 @@ export function WalletComparer(a: WalletRecord | null, b: WalletRecord | null) {
 export function WalletArrayComparer(a: WalletRecord[], b: WalletRecord[]) {
     if (a.length !== b.length) return false
     return a.every((wallet, index) => WalletComparer(wallet, b[index]))
+}
+
+export function PhraseComparer(a: PhraseRecord | null, b: PhraseRecord | null) {
+    if (!a || !b) return false
+    return a.id === b.id && a.index === b.index
+}
+
+export function PhrasesComparer(a: PhraseRecord[], b: PhraseRecord[]) {
+    if (a.length !== b.length) return false
+    return a.every((phrase, index) => PhraseComparer(phrase, b[index]))
 }
 
 export function ERC20TokenComparer(a: ERC20TokenRecord | null, b: ERC20TokenRecord | null) {

@@ -1,3 +1,4 @@
+import { first } from 'lodash'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { WalletMessages, WalletRPC } from '../messages'
 import { ProviderType } from '../../../web3/types'
@@ -30,4 +31,12 @@ export function useWallets(provider?: ProviderType) {
         return wallets.filter((x) => isSameAddress(x.address, selectedWalletProvider))
     if (provider) return []
     return wallets
+}
+
+export function useWalletToBeDerived() {
+    const wallets = useWallets()
+    const selectedWallet = useWallet()
+
+    if (selectedWallet?.mnemonic.length) return selectedWallet
+    return first(wallets.slice().sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())) ?? null
 }

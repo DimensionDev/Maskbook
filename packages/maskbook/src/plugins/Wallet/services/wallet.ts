@@ -14,10 +14,7 @@ import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './hel
 import { isSameAddress } from '../../../web3/helpers'
 import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
 import { selectMaskbookWallet } from '../helpers'
-
-// Private key at m/44'/coinType'/account'/change/addressIndex
-// coinType = ether
-const path = "m/44'/60'/0'/0/0"
+import { ETHEREUM_PATH } from '../constants'
 
 function sortWallet(a: WalletRecord, b: WalletRecord) {
     const address = currentSelectedWalletAddressSettings.value
@@ -212,10 +209,10 @@ export async function removeWallet(address: string) {
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
-export async function recoverWallet(mnemonic: string[], password: string) {
+export async function recoverWallet(mnemonic: string[], password: string, prefix: string = ETHEREUM_PATH, index = 0) {
     const seed = await bip39.mnemonicToSeed(mnemonic.join(' '), password)
     const masterKey = HDKey.parseMasterSeed(seed)
-    const extendedPrivateKey = masterKey.derive(path).extendedPrivateKey!
+    const extendedPrivateKey = masterKey.derive(`${prefix}/${index}`).extendedPrivateKey!
     const childKey = HDKey.parseExtendedKey(extendedPrivateKey)
     const wallet = childKey.derive('')
     const walletPublicKey = wallet.publicKey

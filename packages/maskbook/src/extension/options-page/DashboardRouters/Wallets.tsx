@@ -16,7 +16,7 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { Flags } from '../../../utils/flags'
-import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
+import { useWallet, useWallets } from '../../../plugins/Wallet/hooks/useWallet'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { extendsTheme } from '../../../utils/theme'
@@ -95,6 +95,7 @@ export default function DashboardWalletsRouter() {
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const selectedWallet = useWallet()
+    const wallets = useWallets()
 
     // show create dialog
     useEffect(() => {
@@ -106,13 +107,16 @@ export default function DashboardWalletsRouter() {
         if (error) openWalletError()
     }, [error, openWalletError])
 
-    //#region remote controlled create wallet dialog
+    //#region create or import wallet
     const [, setOpenCreateWalletDialog] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
-    const onCreate = useCallback(() => setOpenCreateWalletDialog({ open: true }), [])
-    //#endregion
 
-    //#region import wallet dialog
+    const onCreate = useCallback(() => setOpenCreateWalletDialog({ open: true }), [])
     const onImport = useCallback(() => openWalletImport(), [])
+
+    const onCreateOrImportWallet = useCallback(async () => {
+        if (wallets.some(x => x.mnemonic.length)) onImport()
+        else onCreate()
+    }, [onCreate, onImport, selectedWallet?.address])
     //#endregion
 
     //#region right icons from mobile devices
@@ -158,7 +162,7 @@ export default function DashboardWalletsRouter() {
                 <EthereumStatusBar disableEther BoxProps={{ sx: { justifyContent: 'flex-end' } }} />,
                 <Button
                     variant="contained"
-                    onClick={openWalletImport}
+                    onClick={onCreateOrImportWallet}
                     endIcon={<AddCircleIcon />}
                     data-testid="create_button">
                     {t('plugin_wallet_on_create')}

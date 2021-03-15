@@ -71,6 +71,16 @@ export interface WalletRecord {
     updatedAt: Date
 }
 
+export interface PhraseRecord {
+    id: string
+    index: number
+    path: string
+    mnemonic: string[]
+    passphrase: string
+    createdAt: Date
+    updatedAt: Date
+}
+
 export interface ERC20TokenRecordInDatabase extends ERC20TokenRecord {}
 
 export interface ERC721TokenRecordInDatabase extends ERC721TokenRecord {
@@ -82,3 +92,5 @@ export interface ERC1155TokenRecordInDatabase extends ERC1155TokenRecord {
 }
 
 export interface WalletRecordInDatabase extends WalletRecord {}
+
+export interface PhraseRecordInDatabase extends PhraseRecord {}

@@ -1,8 +1,10 @@
 import { useMemo, useState, useEffect, useCallback, ChangeEvent, useContext } from 'react'
 import { useAsync, useCopyToClipboard } from 'react-use'
-import { Send as SendIcon } from 'react-feather'
+import BigNumber from 'bignumber.js'
+import { EthereumAddress } from 'wallet.ts'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import {
+    Send as SendIcon,
     CreditCard as CreditCardIcon,
     Hexagon as HexagonIcon,
     Octagon as OctagonIcon,
@@ -57,11 +59,9 @@ import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { Image } from '../../../components/shared/Image'
 import { MaskbookIconOutlined } from '../../../resources/MaskbookIcon'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import BigNumber from 'bignumber.js'
 import { EthereumMessages } from '../../../plugins/Ethereum/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { EthereumAddress } from 'wallet.ts'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { QRCode } from '../../../components/shared/qrcode'
 import { formatBalance, formatEthereumAddress } from '../../../plugins/Wallet/formatter'
@@ -74,6 +74,7 @@ import type { ERC721 } from '../../../contracts/ERC721'
 import ERC721ABI from '../../../../abis/ERC721.json'
 import { ERC1155_INTERFACE_ID, ERC721_INTERFACE_ID } from '../../../web3/constants'
 import { Flags } from '../../../utils/flags'
+import { useWalletToBeDerived } from '../../../plugins/Wallet/hooks/useWallet'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -174,6 +175,8 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     const { t } = useI18N()
     const state = useState(0)
     const classes = useWalletImportDialogStyle()
+
+    const wallet = useWalletToBeDerived()
 
     const [name, setName] = useState('')
     const [passphrase] = useState('')
@@ -318,10 +321,8 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     const onSubmit = useSnackbarCallback(
         async () => {
             if (state[0] === 0) {
-                await WalletRPC.createNewWallet({
-                    name,
-                    passphrase,
-                })
+                if (!wallet) return
+                await WalletRPC.deriveWalletFromPhrase(name, wallet.mnemonic, wallet.passphrase)
             }
             if (state[0] === 1) {
                 await WalletRPC.importNewWallet({
@@ -340,7 +341,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                 })
             }
         },
-        [state[0], name, passphrase, mnemonic, privKey],
+        [state[0], name, passphrase, mnemonic, privKey, wallet?.address],
         props.onClose,
     )
 
@@ -361,7 +362,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                                 !(state[0] === 2 && name && privKey)) ||
                             checkInputLengthExceed(name)
                         }>
-                        {t('create')}
+                        {t(state[0] === 0 ? 'create' : 'import')}
                     </DebounceButton>
                 }
             />
