@@ -153,6 +153,15 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                             {t('add_token')}
                         </Button>
                     ) : null}
+                    {!xsMatched && tabIndex === 1 ? (
+                        <Button
+                            className={classes.addButton}
+                            variant="text"
+                            onClick={() => openAddToken({ wallet })}
+                            startIcon={<AddIcon />}>
+                            {t('add_asset')}
+                        </Button>
+                    ) : null}
                     {!xsMatched && Flags.transak_enabled ? (
                         <Button
                             onClick={() => {
