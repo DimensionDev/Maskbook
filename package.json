@@ -18,7 +18,7 @@
     "build:ios:webpack": "build iOS",
     "lint": "eslint -c ./packages/.eslintrc.json packages/ --ext .ts,.tsx --fix --cache",
     "lint:report": "eslint -c ./packages/.eslintrc.json packages/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml --cache",
-    "lint:typecoverage": "type-coverage --strict -p packages/maskbook --cache --ignore-catch --ignore-files packages/maskbook/src/plugins/Wallet/contracts/** --ignore-files **/__tests__/** --ignore-files **\\__tests__\\** --detail --at-least 98",
+    "lint:typecoverage": "type-coverage",
     "locale-kit": "locale-kit",
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
@@ -70,8 +70,12 @@
     "prettier": "^2.1.2",
     "ts-node": "^9.1.1",
     "ttypescript": "^1.5.12",
-    "type-coverage": "^2.14.8",
+    "type-coverage": "^2.17.0",
     "typescript": "4.1.3"
+  },
+  "engines": {
+    "node": ">=14.4.0",
+    "pnpm": ">=5"
   },
   "pnpm": {
     "overrides": {
@@ -79,8 +83,17 @@
       "react-dom": "=0.0.0-experimental-dc27b5aaa"
     }
   },
-  "engines": {
-    "node": ">=14.4.0",
-    "pnpm": ">=5"
+  "typeCoverage": {
+    "cache": true,
+    "strict": true,
+    "detail": true,
+    "atLeast": 98,
+    "project": "packages/maskbook",
+    "ignoreCatch": true,
+    "ignoreFiles": [
+      "**/__tests__/**",
+      "**\\__tests__\\**"
+    ],
+    "showRelativePath": true
   }
 }
