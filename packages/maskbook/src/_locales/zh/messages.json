@@ -47,6 +47,7 @@
     "dashboard": "儀表板",
     "dashboard_tab_token": "Token",
     "dashboard_tab_collectibles": "收藏品",
+    "dashboard_tab_transactions": "",
     "dashboard_backup_database_confirmation": "好，現在備份",
     "dashboard_backup_database_hint": "創建資料庫備份文件。要經常做。",
     "dashboard_backup_persona_hint": "您可以通過以下任一方式備份角色。",

@@ -1,16 +1,16 @@
 import {
-    makeStyles,
     createStyles,
-    TableContainer,
+    makeStyles,
     Paper,
     Table,
-    TableRow,
-    TableCell,
-    TableHead,
     TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
     Typography,
 } from '@material-ui/core'
-import type { DataProvider, Trending } from '../../types'
+import { DataProvider, Trending } from '../../types'
 import { formatCurrency } from '../../../Wallet/formatter'
 
 const useStyles = makeStyles((theme) =>
@@ -43,7 +43,7 @@ export interface CoinMarketTableProps {
 }
 
 export function CoinMarketTable(props: CoinMarketTableProps) {
-    const { trending } = props
+    const { trending, dataProvider } = props
     const classes = useStyles()
 
     return (
@@ -51,42 +51,54 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
             <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
-                        <TableCell className={classes.head} align="center">
-                            <Typography color="textSecondary" variant="body2">
-                                Market Cap
-                            </Typography>
-                        </TableCell>
+                        {dataProvider !== DataProvider.UNISWAP_INFO ? (
+                            <TableCell className={classes.head} align="center">
+                                <Typography color="textSecondary" variant="body2">
+                                    Market Cap
+                                </Typography>
+                            </TableCell>
+                        ) : null}
                         <TableCell className={classes.head} align="center">
                             <Typography color="textSecondary" variant="body2">
                                 Volume (24h)
                             </Typography>
                         </TableCell>
-                        <TableCell className={classes.head} align="center">
-                            <Typography color="textSecondary" variant="body2">
-                                Circulating Supply
-                            </Typography>
-                        </TableCell>
-                        <TableCell className={classes.head} align="center">
-                            <Typography color="textSecondary" variant="body2">
-                                Total Supply
-                            </Typography>
-                        </TableCell>
+                        {dataProvider !== DataProvider.UNISWAP_INFO ? (
+                            <>
+                                <TableCell className={classes.head} align="center">
+                                    <Typography color="textSecondary" variant="body2">
+                                        Circulating Supply
+                                    </Typography>
+                                </TableCell>
+                                <TableCell className={classes.head} align="center">
+                                    <Typography color="textSecondary" variant="body2">
+                                        Total Supply
+                                    </Typography>
+                                </TableCell>
+                            </>
+                        ) : null}
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     <TableRow>
-                        <TableCell className={classes.cell} align="center">
-                            {formatCurrency(trending.market?.market_cap ?? 0, '$')} USD
-                        </TableCell>
+                        {dataProvider !== DataProvider.UNISWAP_INFO ? (
+                            <TableCell className={classes.cell} align="center">
+                                {formatCurrency(trending.market?.market_cap ?? 0, '$')} USD
+                            </TableCell>
+                        ) : null}
                         <TableCell className={classes.cell} align="center">
                             {formatCurrency(trending.market?.total_volume ?? 0, '$')} USD
                         </TableCell>
-                        <TableCell className={classes.cell} align="center">
-                            {formatCurrency(trending.market?.circulating_supply ?? 0, '$')} USD
-                        </TableCell>
-                        <TableCell className={classes.cell} align="center">
-                            {formatCurrency(trending.market?.total_supply ?? 0, '$')} USD
-                        </TableCell>
+                        {dataProvider !== DataProvider.UNISWAP_INFO ? (
+                            <>
+                                <TableCell className={classes.cell} align="center">
+                                    {formatCurrency(trending.market?.circulating_supply ?? 0, '$')} USD
+                                </TableCell>
+                                <TableCell className={classes.cell} align="center">
+                                    {formatCurrency(trending.market?.total_supply ?? 0, '$')} USD
+                                </TableCell>
+                            </>
+                        ) : null}
                     </TableRow>
                 </TableBody>
             </Table>

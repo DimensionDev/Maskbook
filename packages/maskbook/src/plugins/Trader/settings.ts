@@ -92,7 +92,7 @@ export function getCurrentDataProviderGeneralSettings(dataProvider: DataProvider
             return coinGeckoSettings
         case DataProvider.COIN_MARKET_CAP:
             return coinMarketCapSettings
-        case DataProvider.UNISWAP:
+        case DataProvider.UNISWAP_INFO:
             return coinUniswapSettings
         default:
             unreachable(dataProvider)
@@ -120,10 +120,15 @@ export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
             return coinGeckoPreferredCoinId
         case DataProvider.COIN_MARKET_CAP:
             return coinMarketCapPreferredCoinId
-        case DataProvider.UNISWAP:
+        case DataProvider.UNISWAP_INFO:
             return coinUniswapPreferredCoinId
         default:
             unreachable(dataProvider)
     }
 }
 //#endregion
+
+/**
+ * The approved tokens from uniswap
+ */
+export const approvedTokensFromUniSwap = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+approvedTokens`, '[]')

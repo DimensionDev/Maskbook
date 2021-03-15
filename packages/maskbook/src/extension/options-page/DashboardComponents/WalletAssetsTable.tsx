@@ -4,6 +4,7 @@ import {
     IconButton,
     createStyles,
     makeStyles,
+    Skeleton,
     Table,
     TableBody,
     TableCell,
@@ -231,8 +232,6 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const [viewLength, setViewLength] = useState(MAX_TOKENS_LENGTH)
     const [price, setPrice] = useState(MIN_VALUE)
 
-    if (detailedTokensLoading) return null
-
     if (detailedTokensError)
         return (
             <Box
@@ -274,24 +273,64 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {detailedTokens
-                            .filter((x) =>
-                                Number(price) !== 0
-                                    ? new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(price) ||
-                                      x.token.type === EthereumTokenType.Ether
-                                    : true,
-                            )
-                            .map((y, idx) =>
-                                idx < viewLength ? (
-                                    <ViewDetailed
-                                        key={idx}
-                                        x={y}
-                                        isMobile={isMobile}
-                                        stableTokens={stableTokens}
-                                        wallet={wallet}
-                                    />
-                                ) : null,
-                            )}
+                        {detailedTokensLoading
+                            ? new Array(3).fill(0).map((_, i) => (
+                                  <TableRow className={classes.cell} key={i}>
+                                      <TableCell>
+                                          <Skeleton
+                                              animation="wave"
+                                              variant="rectangular"
+                                              width="100%"
+                                              height={30}></Skeleton>
+                                      </TableCell>
+                                      <TableCell>
+                                          <Skeleton
+                                              animation="wave"
+                                              variant="rectangular"
+                                              width="100%"
+                                              height={30}></Skeleton>
+                                      </TableCell>
+                                      <TableCell>
+                                          <Skeleton
+                                              animation="wave"
+                                              variant="rectangular"
+                                              width="100%"
+                                              height={30}></Skeleton>
+                                      </TableCell>
+                                      <TableCell>
+                                          <Skeleton
+                                              animation="wave"
+                                              variant="rectangular"
+                                              width="100%"
+                                              height={30}></Skeleton>
+                                      </TableCell>
+                                      <TableCell>
+                                          <Skeleton
+                                              animation="wave"
+                                              variant="rectangular"
+                                              width="100%"
+                                              height={30}></Skeleton>
+                                      </TableCell>
+                                  </TableRow>
+                              ))
+                            : detailedTokens
+                                  .filter((x) =>
+                                      Number(price) !== 0
+                                          ? new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(price) ||
+                                            x.token.type === EthereumTokenType.Ether
+                                          : true,
+                                  )
+                                  .map((y, idx) =>
+                                      idx < viewLength ? (
+                                          <ViewDetailed
+                                              key={idx}
+                                              x={y}
+                                              isMobile={isMobile}
+                                              stableTokens={stableTokens}
+                                              wallet={wallet}
+                                          />
+                                      ) : null,
+                                  )}
                     </TableBody>
                 </Table>
             </TableContainer>

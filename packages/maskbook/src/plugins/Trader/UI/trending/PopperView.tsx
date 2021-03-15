@@ -25,6 +25,7 @@ import { LBPPanel } from './LBPPanel'
 import { createERC20Token } from '../../../../web3/helpers'
 import { useLBP } from '../../LBP/useLBP'
 import { useChainId } from '../../../../web3/hooks/useChainState'
+import { Flags } from '../../../../utils/flags'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -76,7 +77,7 @@ export function PopperView(props: PopperViewProps) {
     //#endregion
 
     const chainId = useChainId()
-    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP ? 1 : 0)
+    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
 
     //#region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
@@ -153,23 +154,19 @@ export function PopperView(props: PopperViewProps) {
     //#endregion
 
     //#region display loading skeleton
-    if (loadingTrending || !currency || !trending || loadingTokenDetailed) return <TrendingViewSkeleton />
+    if (!currency || !trending || !tokenDetailed || loadingTrending || loadingTokenDetailed)
+        return <TrendingViewSkeleton />
     //#endregion
 
     //#region tabs
     const { coin, market, tickers } = trending
     const canSwap = !!trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
-    const swapTabIndex = dataProvider !== DataProvider.UNISWAP ? 3 : 1
     const tabs = [
         <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />,
-        dataProvider !== DataProvider.UNISWAP ? (
-            <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
-        ) : null,
-        dataProvider !== DataProvider.UNISWAP ? (
-            <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
-        ) : null,
+        <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />,
+        <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />,
         canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null,
-        LBP ? <Tab className={classes.tab} label="LBP" /> : null,
+        Flags.LBP_enabled && LBP ? <Tab className={classes.tab} label="LBP" /> : null,
     ].filter(Boolean)
     //#endregion
 
@@ -183,8 +180,8 @@ export function PopperView(props: PopperViewProps) {
                 trending={trending}
                 dataProvider={dataProvider}
                 tradeProvider={tradeProvider}
-                showDataProviderIcon={dataProvider === DataProvider.UNISWAP ? tabIndex === 0 : tabIndex < 3}
-                showTradeProviderIcon={dataProvider === DataProvider.UNISWAP ? tabIndex === 1 : tabIndex === 3}>
+                showDataProviderIcon={tabIndex < 3}
+                showTradeProviderIcon={tabIndex === 3}>
                 <Tabs
                     className={classes.tabs}
                     textColor="primary"
@@ -199,7 +196,7 @@ export function PopperView(props: PopperViewProps) {
                     {tabs}
                 </Tabs>
                 {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
-                {tabIndex === 1 && dataProvider !== DataProvider.UNISWAP ? (
+                {tabIndex === 1 ? (
                     <>
                         {market ? <PriceChangedTable market={market} /> : null}
                         <PriceChart
@@ -211,10 +208,17 @@ export function PopperView(props: PopperViewProps) {
                         </PriceChart>
                     </>
                 ) : null}
-                {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
-                    <TickersTable tickers={tickers} dataProvider={dataProvider} />
+                {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
+                {tabIndex === 3 && canSwap ? (
+                    <TradeView
+                        classes={{ root: classes.tradeViewRoot }}
+                        TraderProps={{
+                            coin,
+                            tokenDetailed,
+                        }}
+                    />
                 ) : null}
-                {LBP && tabIndex === tabs.length - 1 ? (
+                {Flags.LBP_enabled && LBP && tabIndex === tabs.length - 1 ? (
                     <LBPPanel
                         duration={LBP.duration}
                         token={createERC20Token(
@@ -224,15 +228,6 @@ export function PopperView(props: PopperViewProps) {
                             LBP.token.name ?? '',
                             LBP.token.symbol ?? '',
                         )}
-                    />
-                ) : null}
-                {tabIndex === (dataProvider !== DataProvider.UNISWAP ? 3 : 1) && canSwap ? (
-                    <TradeView
-                        classes={{ root: classes.tradeViewRoot }}
-                        TraderProps={{
-                            coin,
-                            tokenDetailed,
-                        }}
                     />
                 ) : null}
             </TrendingViewDeck>

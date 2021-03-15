@@ -47,6 +47,7 @@
     "dashboard": "ダッシュボード",
     "dashboard_tab_token": "トークン",
     "dashboard_tab_collectibles": "収集物",
+    "dashboard_tab_transactions": "",
     "dashboard_backup_database_confirmation": "バックアップしますか？",
     "dashboard_backup_database_hint": "データベースのバックアップを作成します。日常的に行いましょう。",
     "dashboard_backup_persona_hint": "次の方法のうちからペルソナのバックアップ方法を選びましょう。",

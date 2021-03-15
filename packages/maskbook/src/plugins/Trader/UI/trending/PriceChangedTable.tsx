@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
         cell: {
             paddingLeft: theme.spacing(1),
             paddingRight: theme.spacing(1.5),
+            textAlign: 'center',
             whiteSpace: 'nowrap',
         },
     }),
@@ -73,20 +74,24 @@ export function PriceChangedTable({ market }: PriceChangedTableProps) {
             <Table className={classes.table} size="small" stickyHeader>
                 <TableHead>
                     <TableRow>
-                        {filteredRecords.map((x) => (
-                            <TableCell className={classes.cell} key={x.name}>
-                                {x.name}
-                            </TableCell>
-                        ))}
+                        {filteredRecords.map((x) =>
+                            x.percentage ? (
+                                <TableCell className={classes.cell} key={x.name}>
+                                    {x.name}
+                                </TableCell>
+                            ) : null,
+                        )}
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     <TableRow>
-                        {filteredRecords.map((x) => (
-                            <TableCell className={classes.cell} key={x.name}>
-                                <PriceChanged amount={x.percentage} />
-                            </TableCell>
-                        ))}
+                        {filteredRecords.map((x) =>
+                            x.percentage ? (
+                                <TableCell className={classes.cell} key={x.name}>
+                                    <PriceChanged amount={x.percentage} />
+                                </TableCell>
+                            ) : null,
+                        )}
                     </TableRow>
                 </TableBody>
             </Table>
