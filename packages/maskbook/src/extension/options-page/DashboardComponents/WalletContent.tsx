@@ -25,6 +25,7 @@ import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { Flags } from '../../../utils/flags'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { TransactionList } from './TransactionList'
+import { CollectibleList } from './CollectibleList'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -184,6 +185,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                 {tabIndex === 0 ? (
                     <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
                 ) : null}
+                {tabIndex === 1 ? <CollectibleList /> : null}
                 {tabIndex === 2 ? <TransactionList /> : null}
             </Box>
 

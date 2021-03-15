@@ -28,15 +28,15 @@ export function TransactionList() {
         value: transactions = [],
         loading: transactionsLoading,
         error: transactionsError,
-        retry: transactionRetry,
+        retry: transactionsRetry,
     } = useTransactions(account, TransactionProvider.DEBANK)
 
     if (transactionsLoading)
         return (
             <Table>
                 <TableBody>
-                    {new Array(3).fill(0).map((_) => (
-                        <TableRow>
+                    {new Array(3).fill(0).map((_, i) => (
+                        <TableRow key={i}>
                             <TableCell>
                                 <Skeleton animation="wave" variant="rectangular" width="100%" height={30}></Skeleton>
                             </TableCell>
@@ -62,7 +62,7 @@ export function TransactionList() {
                         marginTop: 1,
                     }}
                     variant="text"
-                    onClick={() => transactionRetry()}>
+                    onClick={() => transactionsRetry()}>
                     Retry
                 </Button>
             </Box>

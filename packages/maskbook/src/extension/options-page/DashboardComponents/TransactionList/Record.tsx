@@ -1,8 +1,8 @@
 import { createStyles, makeStyles, Typography } from '@material-ui/core'
 import type { FC } from 'react'
-import type { Transaction } from '../../../../plugins/Wallet/apis'
 import { TokenIcon } from '../TokenIcon'
 import classNames from 'classnames'
+import type { Transaction } from '../../../../plugins/Wallet/services'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
