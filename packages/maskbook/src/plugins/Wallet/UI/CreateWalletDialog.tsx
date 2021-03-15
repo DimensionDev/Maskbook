@@ -32,7 +32,7 @@ enum CreateWalletStep {
 const useStyles = makeStyles((theme) =>
     createStyles({
         content: {
-            padding: theme.spacing(6, 7.6),
+            padding: theme.spacing(8, 6),
         },
         top: {
             display: 'flex',
