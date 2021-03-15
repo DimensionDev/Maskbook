@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { approvedTokensFromUniSwap } from '../settings'
 import stringify from 'json-stable-stringify'
-import { APPROVED_TOKENS_MAX } from '../constants'
+import { UNISWAP_APPROVED_TOKENS_MAX } from '../constants'
 
 export function useApprovedTokens(token_address: string | undefined) {
     const [approvedTokens, setApprovedTokens] = useState<string[]>([])
@@ -13,7 +13,7 @@ export function useApprovedTokens(token_address: string | undefined) {
 
         const parsed = JSON.parse(tokens) as string[]
 
-        if (parsed.length === APPROVED_TOKENS_MAX) parsed.shift()
+        if (parsed.length === UNISWAP_APPROVED_TOKENS_MAX) parsed.shift()
         parsed.push(token_address)
 
         approvedTokensFromUniSwap.value = stringify(parsed)

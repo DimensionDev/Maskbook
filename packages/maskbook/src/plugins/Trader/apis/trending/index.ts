@@ -12,6 +12,7 @@ import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
 import { unreachable } from '../../../../utils/utils'
+import { subscribeCMCPrice, unSubscribeCMCPrice } from '../coinmarketcap/subscribeLastestPrice'
 
 /**
  * Get supported currencies of specific data provider
@@ -471,4 +472,12 @@ export async function getPriceStats(
         default:
             return []
     }
+}
+
+export function subscribeLatestPrice(coinId: string) {
+    subscribeCMCPrice(Number(coinId))
+}
+
+export function unSubscribeLatestPrice(coinId: string) {
+    unSubscribeCMCPrice(Number(coinId))
 }
