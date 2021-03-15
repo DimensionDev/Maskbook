@@ -41,7 +41,6 @@ import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQR
 import { sleep } from '../../../utils/utils'
 import { SetupStep } from '../SetupStep'
 import { Flags } from '../../../utils/flags'
-import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { extendsTheme } from '../../../utils/theme'
 
 //#region setup form
@@ -362,7 +361,7 @@ export function ConnectNetwork() {
                         disabled={persona?.linkedProfiles.size === 0}
                         onClick={async () => {
                             await Services.Identity.setupPersona(persona.identifier)
-                            await sleep(300)
+                            await delay(300)
                             history.replace(Flags.has_no_browser_tab_ui ? DashboardRoute.Nav : DashboardRoute.Personas)
                         }}>
                         {t('set_up_button_finish')}

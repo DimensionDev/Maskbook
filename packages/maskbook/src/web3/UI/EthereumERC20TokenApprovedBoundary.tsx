@@ -1,4 +1,4 @@
-import { createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
+import { createStyles, Grid, makeStyles } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect } from 'react'

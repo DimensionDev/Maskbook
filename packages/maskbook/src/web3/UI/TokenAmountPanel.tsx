@@ -72,16 +72,13 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
 
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region update amount by parent
+    //#region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT } = useMemo(
         () => ({
             RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals}}$`), // d.ddd...d
         }),
         [token?.decimals],
     )
-    //#endregion
-
-    //#region update amount by self
     const onChange = useCallback(
         (ev: ChangeEvent<HTMLInputElement>) => {
             const amount_ = ev.currentTarget.value.replace(/,/g, '.')

@@ -20,21 +20,18 @@ export function useTradeApproveComputed(
     const BALANCER_EXCHANGE_PROXY_ADDRESS = useConstant(TRADE_CONSTANTS, 'BALANCER_EXCHANGE_PROXY_ADDRESS')
 
     return useMemo(() => {
-        if (!trade || !token || token.type !== EthereumTokenType.ERC20)
-            return {
-                approveToken: null,
-                approveAmount: new BigNumber(0),
-                approveAddress: '',
-            }
         return {
-            approveToken: createERC20Token(
-                chainId,
-                token.address,
-                token.decimals ?? 0,
-                token.name ?? '',
-                token.symbol ?? '',
-            ),
-            approveAmount: trade.inputAmount,
+            approveToken:
+                token?.type === EthereumTokenType.ERC20
+                    ? createERC20Token(
+                          chainId,
+                          token.address,
+                          token.decimals ?? 0,
+                          token.name ?? '',
+                          token.symbol ?? '',
+                      )
+                    : null,
+            approveAmount: trade ? trade.inputAmount : new BigNumber(0),
             approveAddress: (() => {
                 switch (provider) {
                     case TradeProvider.UNISWAP:
@@ -44,7 +41,7 @@ export function useTradeApproveComputed(
                     case TradeProvider.SASHIMISWAP:
                         return SASHIMISWAP_ROUTER_ADDRESS
                     case TradeProvider.ZRX:
-                        return trade.trade_ ? (trade.trade_ as SwapQuoteResponse).allowanceTarget : ''
+                        return trade?.trade_ ? (trade.trade_ as SwapQuoteResponse).allowanceTarget : ''
                     case TradeProvider.BALANCER:
                         return BALANCER_EXCHANGE_PROXY_ADDRESS
                     default:

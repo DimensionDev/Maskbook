@@ -1,5 +1,6 @@
 import { createStyles, makeStyles, Box, TextField, Grid, FormControlLabel, Checkbox } from '@material-ui/core'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
+import { useDebounce } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
@@ -139,40 +140,46 @@ export function CreateForm(props: CreateFormProps) {
         Math.floor(Math.random() * 10 ** 18),
     ])
 
-    useEffect(() => {
-        const [first, ...rest] = tokenAndAmounts
-        setTokenAndAmount(first)
-        onChangePoolSettings({
+    //#region update parent pool settings
+    useDebounce(
+        () => {
+            const [first, ...rest] = tokenAndAmounts
+            setTokenAndAmount(first)
+            onChangePoolSettings({
+                isMask,
+                // this is the raw password which should be signed by the sender
+                password: Web3Utils.sha3(`${message}`) ?? '',
+                name: senderName,
+                title: message,
+                limit: formatAmount(new BigNumber(totalOfPerWallet || '0'), first?.token?.decimals ?? 0),
+                token: first?.token as ERC20TokenDetailed,
+                total: formatAmount(new BigNumber(first?.amount || '0'), first?.token?.decimals ?? 0),
+                exchangeAmounts: rest.map((item) =>
+                    formatAmount(new BigNumber(item.amount || '0'), item?.token?.decimals ?? 0),
+                ),
+                exchangeTokens: rest.map((item) => item.token!),
+                startTime: startTime,
+                endTime: endTime,
+                testNums,
+            })
+        },
+        300,
+        [
             isMask,
-            // this is the raw password which should be signed by the sender
-            password: Web3Utils.sha3(`${message}`) ?? '',
-            name: senderName,
-            title: message,
-            limit: formatAmount(new BigNumber(totalOfPerWallet || '0'), first?.token?.decimals ?? 0),
-            token: first?.token as ERC20TokenDetailed,
-            total: formatAmount(new BigNumber(first?.amount || '0'), first?.token?.decimals ?? 0),
-            exchangeAmounts: rest.map((item) =>
-                formatAmount(new BigNumber(item.amount || '0'), item?.token?.decimals ?? 0),
-            ),
-            exchangeTokens: rest.map((item) => item.token!),
-            startTime: startTime,
-            endTime: endTime,
+            senderName,
+            message,
+            totalOfPerWallet,
+            tokenAndAmount,
+            tokenAndAmounts,
+            setTokenAndAmount,
+            startTime,
+            endTime,
+            account,
+            onChangePoolSettings,
             testNums,
-        })
-    }, [
-        isMask,
-        senderName,
-        message,
-        totalOfPerWallet,
-        tokenAndAmount,
-        tokenAndAmounts,
-        setTokenAndAmount,
-        startTime,
-        endTime,
-        account,
-        onChangePoolSettings,
-        testNums,
-    ])
+        ],
+    )
+    //#endregion
 
     const validationMessage = useMemo(() => {
         if (tokenAndAmounts.length === 0) return t('plugin_ito_error_enter_amount_and_token')

@@ -8,7 +8,7 @@ import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
-import { sleep } from '../../../utils/utils'
+import { delay } from '../../../utils/utils'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -63,7 +63,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                 uuid: id,
                 token,
             })
-            await sleep(300)
+            await delay(300)
             setKeyword('')
         },
         [id, setOpen],
@@ -73,7 +73,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
             open: false,
             uuid: id,
         })
-        await sleep(300)
+        await delay(300)
         setKeyword('')
     }, [id, setOpen])
     //#endregion

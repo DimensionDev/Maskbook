@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import classNames from 'classnames'
 import { noop } from 'lodash-es'
 import BigNumber from 'bignumber.js'
@@ -8,13 +8,11 @@ import TuneIcon from '@material-ui/icons/Tune'
 import RefreshOutlined from '@material-ui/icons/RefreshOutlined'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../../Wallet/messages'
 import { TradeStrategy, TokenPanelType, TradeComputed, WarningLevel, TradeProvider } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { useChainIdValid } from '../../../../web3/hooks/useChainState'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../../web3/types'
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
@@ -111,11 +109,6 @@ export function TradeForm(props: TradeFormProps) {
     } = props
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region context
-    const account = useAccount()
-    const chainIdValid = useChainIdValid()
-    //#endregion
-
     //#region approve token
     const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(trade, provider, inputToken)
     //#endregion
@@ -123,15 +116,6 @@ export function TradeForm(props: TradeFormProps) {
     //#region token balance
     const inputTokenBalanceAmount = new BigNumber(inputTokenBalance || '0')
     const outputTokenBalanceAmount = new BigNumber(outputTokenBalance || '0')
-    //#endregion
-
-    //#region remote controlled select provider dialog
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onConnect = useCallback(() => {
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setSelectProviderDialogOpen])
     //#endregion
 
     //#region remote controlled swap settings dialog
@@ -214,15 +198,15 @@ export function TradeForm(props: TradeFormProps) {
 
     // validate form return a message if an error exists
     const validationMessage = useMemo(() => {
-        if (!trade) return t('plugin_trader_error_insufficient_lp')
         if (inputTokenTradeAmount.isZero() && outputTokenTradeAmount.isZero())
             return t('plugin_trader_error_amount_absence')
         if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
+        if (loading) return t('plugin_trader_finding_price')
+        if (!trade) return t('plugin_trader_error_insufficient_lp')
         if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount))
             return t('plugin_trader_error_insufficient_balance', {
                 symbol: inputToken?.symbol,
             })
-        if (loading) return t('plugin_trader_finding_price')
         if (resolveUniswapWarningLevel(trade.priceImpact) === WarningLevel.BLOCKED)
             return t('plugin_trader_error_price_impact_too_high')
         return ''
