@@ -42,7 +42,9 @@ importers:
     specifiers:
       '@commitlint/cli': ^11.0.0
       '@commitlint/config-conventional': ^11.0.0
-      '@dimensiondev/maskbook-cli-dev-or-build': '*'
+      '@dimensiondev/locale-kit': workspace:*
+      '@dimensiondev/maskbook-cli-dev-or-build': workspace:*
+      '@dimensiondev/metamask-extension-provider': ^3.0.0-20210125122006-86e9bae
       '@emotion/cache': ^11
       '@emotion/react': ^11.1.2
       '@emotion/styled': ^11
@@ -2746,6 +2748,16 @@ packages:
     resolution:
       integrity: sha512-Br9l9LKKYXV1djdlfxOSknsVSzd56jNvc9StvPTv3eJfZPD7HbL3Yn+ikE34UR5Qs7Vga3EwtRIZIO77bb9I2g==
       tarball: download/@dimensiondev/matrix-js-sdk-type/1.0.0-20200731085604-dc2de92/f42145da27cab463133d09c9ffd300af2ba5785ec977872991e77cb99930b3fa
+  /@dimensiondev/metamask-extension-provider/3.0.0-20210125122006-e8022b3:
+    dependencies:
+      detect-browser: 3.0.1
+      extension-port-stream: 1.0.0
+      inpage-provider-7: /@metamask/inpage-provider/7.0.0
+      inpage-provider-8: /@metamask/inpage-provider/8.0.4
+    dev: false
+    resolution:
+      integrity: sha512-N+Jb/O1fDfYvlpocg6HaWfek+iC72e9Oj0R6Jl6f0EhV1xeVFUe2QirHFiC9PmNYvtjiJdK1fpyd6kC1ezkueQ==
+      tarball: download/@dimensiondev/metamask-extension-provider/3.0.0-20210125122006-e8022b3/82c2361f688ba2b2f7668c5071b8547678feb183c8956867e7f6a4c2d43e0925
   /@dimensiondev/metamask-extension-provider/3.0.2-20210215121518-716d309:
     dependencies:
       detect-browser: 3.0.1
@@ -3994,6 +4006,34 @@ packages:
     dev: true
     resolution:
       integrity: sha512-H1rQc1ZOHANWBvPcW+JpGwr+juXSxM8Q8YCkm3GhZd8REu1fHR3z99CErO1p9pkcfcxZnMdIZdIsXkOHY0NilA==
+  /@metamask/inpage-provider/7.0.0:
+    dependencies:
+      eth-rpc-errors: 2.1.1
+      fast-deep-equal: 2.0.1
+      is-stream: 2.0.0
+      json-rpc-engine: 5.4.0
+      json-rpc-middleware-stream: 2.1.1
+      obj-multiplex: 1.0.0
+      obs-store: 4.0.3
+      pump: 3.0.0
+      safe-event-emitter: 1.0.1
+    deprecated: The MetaMask wallet applications only support ^8.0.0
+    dev: false
+    resolution:
+      integrity: sha512-5hR9FOwGCv6WTehWdV71M/LrPXUemn/CdlD18M96t03t/sfHP96dTtv0xV3fTO1N1RLhRNIDzowkDWYpKlb5VA==
+  /@metamask/inpage-provider/8.0.4:
+    dependencies:
+      '@metamask/object-multiplex': 1.1.0
+      '@metamask/safe-event-emitter': 2.0.0
+      eth-rpc-errors: 4.0.2
+      fast-deep-equal: 2.0.1
+      is-stream: 2.0.0
+      json-rpc-engine: 6.1.0
+      json-rpc-middleware-stream: 3.0.0
+      pump: 3.0.0
+    dev: false
+    resolution:
+      integrity: sha512-jdI0gVWW/0wQvKZe6shXl70cU+vIb8GpAimKFU4udc/HKtgp8tLd21ezq74RaMP/lHR+qq0coOQ2KnOnl8iNNg==
   /@metamask/object-multiplex/1.1.0:
     dependencies:
       end-of-stream: 1.4.4
@@ -12280,6 +12320,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-MY3zAa5ZF8hvgQu1HOF9agaK5GgigBRGpTJ8H0oVlE0NqMu13CW6syyjLXdeIDCGQTbUeHliU1z9dVmvMKx1Tg==
+  /eth-rpc-errors/3.0.0:
+    dependencies:
+      fast-safe-stringify: 2.0.7
+    dev: false
+    resolution:
+      integrity: sha512-iPPNHPrLwUlR9xCSYm7HHQjWBasor3+KZfRvwEWxMz3ca0yqnlBeJrnyphkGIXZ4J7AMAaOLmwy4AWhnxOiLxg==
   /eth-rpc-errors/4.0.2:
     dependencies:
       fast-safe-stringify: 2.0.7
@@ -16312,6 +16358,13 @@ packages:
   /json-parse-even-better-errors/2.3.1:
     resolution:
       integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==
+  /json-rpc-engine/5.4.0:
+    dependencies:
+      eth-rpc-errors: 3.0.0
+      safe-event-emitter: 1.0.1
+    dev: false
+    resolution:
+      integrity: sha512-rAffKbPoNDjuRnXkecTjnsE3xLLrb00rEkdgalINhaYVYIxDwWtvYBr9UFbhTvPB1B2qUOLoFd/cV6f4Q7mh7g==
   /json-rpc-engine/6.1.0:
     dependencies:
       '@metamask/safe-event-emitter': 2.0.0

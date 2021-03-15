@@ -33,7 +33,6 @@
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix"
   },
   "dependencies": {
-    "@dimensiondev/metamask-extension-provider": "^3.0.0-20210125122006-86e9bae",
     "@emotion/cache": "^11",
     "@emotion/react": "^11.1.2",
     "@emotion/styled": "^11",
