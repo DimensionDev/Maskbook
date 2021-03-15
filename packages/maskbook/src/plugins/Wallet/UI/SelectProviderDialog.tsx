@@ -16,6 +16,7 @@ import { useHistory } from 'react-router-dom'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { Provider } from './Provider'
+import { NearIcon } from '../../../resources/NearIcon'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import { MaskbookIcon } from '../../../resources/MaskbookIcon'
 import { WalletConnectIcon } from '../../../resources/WalletConnectIcon'
@@ -148,6 +149,14 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                     : 'plugin_wallet_connect_to_walletconnect_on_app',
                             )}
                             onClick={() => onConnect(ProviderType.WalletConnect)}
+                        />
+                    </ImageListItem>
+                    <ImageListItem>
+                        <Provider
+                            logo={<NearIcon className={classes.icon} viewBox="0 0 45 45" />}
+                            name="Near"
+                            description={t('plugin_wallet_connect_to_near')}
+                            onClick={() => onConnect(ProviderType.Near)}
                         />
                     </ImageListItem>
                     <ImageListItem>

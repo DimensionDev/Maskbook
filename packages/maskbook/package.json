@@ -171,5 +171,8 @@
   },
   "peerDependencies": {
     "jss": "*"
+  },
+  "volta": {
+    "node": "15.11.0"
   }
 }

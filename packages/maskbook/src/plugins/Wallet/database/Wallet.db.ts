@@ -83,6 +83,7 @@ export const createWalletDBAccess = createDBAccess(() => {
                     if (wallet_.value.provider) continue
                     if (wallet_.value.type === 'managed') wallet_.value.provider = ProviderType.Maskbook
                     else if (wallet_.value.type === 'exotic') wallet_.value.provider = ProviderType.MetaMask
+                    else if (wallet_.value.type === 'near') wallet_.value.provider = ProviderType.Near
                     await wallet.update(wallet_.value)
                 }
             }

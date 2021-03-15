@@ -3,7 +3,7 @@ import { map } from 'lodash-es'
 import { createElement } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { Provider } from '../Provider'
-import { IMTokenIcon, MetaMaskIcon, RainbowIcon, TrustIcon } from './Icons'
+import { IMTokenIcon, MetaMaskIcon, NearIcon, RainbowIcon, TrustIcon } from './Icons'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -21,6 +21,7 @@ interface WalletProvider {
 
 const providers: WalletProvider[] = [
     { name: 'MetaMask', logo: MetaMaskIcon, protocol: 'https://metamask.app.link/wc' },
+    { name: 'Near', logo: NearIcon, protocol: 'https://near.com' },
     { name: 'Rainbow', logo: RainbowIcon, protocol: 'https://rnbwapp.com/wc' },
     { name: 'Trust', logo: TrustIcon, protocol: 'https://link.trustwallet.com/wc' },
     { name: 'imToken', logo: IMTokenIcon, protocol: 'imtokenv2://wc' },
@@ -36,6 +37,7 @@ export const SafariPlatform: React.FC<{ uri: string }> = ({ uri }) => {
     }
     const descriptionMapping: Record<string, string> = {
         MetaMask: t('plugin_wallet_connect_safari_metamask'),
+        Near: t('plugin_wallet_connect_safari_near'),
         Rainbow: t('plugin_wallet_connect_safari_rainbow'),
         Trust: t('plugin_wallet_connect_safari_trust'),
         imToken: t('plugin_wallet_connect_safari_im_token'),

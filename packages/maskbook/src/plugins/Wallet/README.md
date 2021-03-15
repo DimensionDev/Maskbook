@@ -13,6 +13,7 @@ Current Provider:
 
 - Mask (built-in wallet)
 - MetaMask
+- Near (built-in wallet)
 
 ## TODO
 

@@ -3,6 +3,7 @@ import type createMetaMaskProvider from '@dimensiondev/metamask-extension-provid
 export enum ProviderType {
     Maskbook = 'Maskbook',
     MetaMask = 'MetaMask',
+    Near = 'Near',
     WalletConnect = 'WalletConnect',
 }
 
@@ -118,4 +119,19 @@ export enum TransactionEventType {
     RECEIPT = 'receipt',
     CONFIRMATION = 'confirmation',
     ERROR = 'error',
+}
+
+
+//Near Protocol
+export enum NearNetwork {
+    Mainnet = 'Mainnet',
+    Testnet = 'Testnet',
+    Betanet = 'Betanet',
+    Guildnet = 'Guildnet',
+}
+
+export enum NearTokenType {
+    Near = 0,
+    ERC20 = 1,
+    ERC721 = 2,
 }
