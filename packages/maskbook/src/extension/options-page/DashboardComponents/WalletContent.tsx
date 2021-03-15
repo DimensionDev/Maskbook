@@ -4,11 +4,9 @@ import { makeStyles, createStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
-import HistoryIcon from '@material-ui/icons/History'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddERC20TokenDialog,
-    DashboardWalletHistoryDialog,
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
     DashboardWalletRenameDialog,
@@ -25,6 +23,7 @@ import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { Flags } from '../../../utils/flags'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { TransactionList } from './TransactionList'
+import { CollectibleList } from './CollectibleList'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -80,7 +79,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     const xsMatched = useMatchXS()
     const chainIdValid = useChainIdValid()
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
-    const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
@@ -183,36 +181,10 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                 {tabIndex === 0 ? (
                     <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
                 ) : null}
+                {tabIndex === 1 ? <CollectibleList /> : null}
                 {tabIndex === 2 ? <TransactionList /> : null}
             </Box>
-
-            {!xsMatched ? (
-                <Box
-                    className={classes.footer}
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                    }}>
-                    <Button
-                        onClick={() =>
-                            openWalletHistory({
-                                wallet,
-                                onRedPacketClicked(payload) {
-                                    openWalletRedPacket({
-                                        wallet,
-                                        payload,
-                                    })
-                                },
-                            })
-                        }
-                        startIcon={<HistoryIcon />}
-                        variant="text">
-                        {t('activity')}
-                    </Button>
-                </Box>
-            ) : null}
             {addToken}
-            {walletHistory}
             {walletBackup}
             {walletDelete}
             {walletRename}

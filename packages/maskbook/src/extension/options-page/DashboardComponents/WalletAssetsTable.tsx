@@ -274,8 +274,8 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                     </TableHead>
                     <TableBody>
                         {detailedTokensLoading
-                            ? new Array(3).fill(0).map((x) => (
-                                  <TableRow className={classes.cell}>
+                            ? new Array(3).fill(0).map((_, i) => (
+                                  <TableRow className={classes.cell} key={i}>
                                       <TableCell>
                                           <Skeleton
                                               animation="wave"
