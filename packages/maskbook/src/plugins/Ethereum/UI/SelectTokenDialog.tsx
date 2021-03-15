@@ -30,16 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-export interface SelectTokenDialogProps extends withClasses<never> {
-    open?: boolean
-    includeTokens?: string[]
-    excludeTokens?: string[]
-    selectedTokens?: string[]
-    tokens?: (ERC20TokenDetailed | EtherTokenDetailed)[]
-    disableSearchBar?: boolean
-    onSubmit?: (token: ERC20TokenDetailed) => void
-    onClose?: () => void
-}
+export interface SelectTokenDialogProps extends withClasses<never> {}
 
 export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const { t } = useI18N()
