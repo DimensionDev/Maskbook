@@ -472,4 +472,8 @@ export async function getPriceStats(
             return []
     }
 }
-//#endregion
+
+export async function getPrice(coinId: string) {
+    return await coinMarketCapAPI.getPrice(coinId)
+}
+
