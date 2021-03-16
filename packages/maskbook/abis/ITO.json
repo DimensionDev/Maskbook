@@ -9,31 +9,6 @@
         "inputs": [
             {
                 "indexed": false,
-                "internalType": "address",
-                "name": "claimer",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "timestamp",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "to_value",
-                "type": "uint256"
-            }
-        ],
-        "name": "ClaimSuccess",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
                 "internalType": "bytes32",
                 "name": "id",
                 "type": "bytes32"
@@ -223,32 +198,6 @@
     },
     {
         "inputs": [],
-        "name": "check_claimable",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "claimable_amount",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "claim",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "claimed_amount",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "contract_creator",
         "outputs": [
             {
@@ -337,97 +286,6 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "getUnlockTime",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "get_ito_list",
-        "outputs": [
-            {
-                "internalType": "bytes32[]",
-                "name": "",
-                "type": "bytes32[]"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "mask_address",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "future_admin",
-                "type": "address"
-            }
-        ],
-        "name": "setAdmin",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_unlock_time",
-                "type": "uint256"
-            }
-        ],
-        "name": "setUnlockTime",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "bb",
-                "type": "address"
-            }
-        ],
-        "name": "set_bb_address",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "mask",
-                "type": "address"
-            }
-        ],
-        "name": "set_mask_address",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "bytes32",
@@ -440,9 +298,9 @@
                 "type": "bytes32"
             },
             {
-                "internalType": "bytes32",
-                "name": "verification2",
-                "type": "bytes32"
+                "internalType": "address",
+                "name": "_recipient",
+                "type": "address"
             },
             {
                 "internalType": "bytes32",
@@ -485,32 +343,6 @@
             }
         ],
         "name": "withdraw",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address[]",
-                "name": "addrs",
-                "type": "address[]"
-            }
-        ],
-        "name": "withdrawBatchCreator",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "addr",
-                "type": "address"
-            }
-        ],
-        "name": "withdrawCreator",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
