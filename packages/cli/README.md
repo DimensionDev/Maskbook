@@ -1,4 +1,4 @@
-# cli-dev-build
+# cli
 
 This package provides two commands: `build` and `dev`.
 

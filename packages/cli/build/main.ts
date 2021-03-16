@@ -1,11 +1,12 @@
-const { spawn } = require('child_process')
-const { resolve } = require('path')
+import { spawn } from 'child_process'
+import { resolve } from 'path'
+import { PKG_PATH } from '../utils'
 
 const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base']
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'manifest-v3']
 const knownTargets = ['-h', '--help', ...presets, ...otherFlags]
-/** @param {'dev' | 'build'} mode */
-async function main(mode) {
+
+export default async function main(mode: 'dev' | 'build') {
     let args = process.argv.slice(2)
 
     if (args.includes('-h') || args.includes('--help')) {
@@ -22,10 +23,12 @@ async function main(mode) {
             choices: otherFlags,
         })
         args = [...flags, preset]
+
+        const command = ['npx', mode === 'dev' ? 'dev' : 'build', ...args]
         const { confirm } = await inquirer.prompt({
             type: 'confirm',
             name: 'confirm',
-            message: `Command is: "npx ${mode === 'dev' ? 'dev' : 'build'} ${args.join(' ')}". Is that OK?`,
+            message: `Command is: "${command.join(' ')}". Is that OK?`,
         })
         if (!confirm) return
     }
@@ -35,9 +38,12 @@ async function main(mode) {
     args.filter((x) => !x.startsWith('-')).forEach((target) => {
         command.push('--env', target)
         if (!knownTargets.includes(target)) {
-            throw new TypeError('Unknown target ' + target + '. Known targets: ' + knownTargets.join(','))
+            throw new TypeError(`Unknown target ${target}. Known targets: ${knownTargets}`)
         }
     })
-    spawn('npx', ['webpack', ...command], { stdio: 'inherit', shell: true, cwd: resolve(__dirname, '../maskbook/') })
+    return spawn('npx', ['webpack', ...command], {
+        stdio: 'inherit',
+        shell: true,
+        cwd: resolve(PKG_PATH, 'maskbook'),
+    })
 }
-module.exports = main

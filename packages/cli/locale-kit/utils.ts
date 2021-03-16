@@ -1,19 +1,20 @@
 /* eslint-disable no-restricted-imports */
 import { promises as fs, readdirSync } from 'fs'
 import { difference, keys, uniq, without } from 'lodash'
-import * as path from 'path'
+import { resolve, relative } from 'path'
 import { getUsedKeys } from './ast'
+import { ROOT_PATH, PKG_PATH } from '../utils'
 
-const SOURCE_PATH = path.join(__dirname, '..', 'maskbook', 'src')
-export const LOCALE_PATH = path.join(SOURCE_PATH, '_locales')
+const SOURCE_PATH = resolve(PKG_PATH, 'maskbook', 'src')
+export const LOCALE_PATH = resolve(SOURCE_PATH, '_locales')
 export const LOCALE_NAMES = readdirSync(LOCALE_PATH)
 
 export function getMessagePath(name: string) {
-    return path.join(LOCALE_PATH, name, 'messages.json')
+    return resolve(LOCALE_PATH, name, 'messages.json')
 }
 
 export function getLocaleRelativePath(...paths: string[]) {
-    return path.relative(path.join(__dirname, '..', '..'), path.join(LOCALE_PATH, ...paths))
+    return relative(ROOT_PATH, resolve(LOCALE_PATH, ...paths))
 }
 
 export async function readMessages(name: string) {
@@ -51,7 +52,7 @@ export async function findAllUnsyncedLocales(locales = without(LOCALE_NAMES, 'en
 
 async function* walk(dir: string): AsyncIterableIterator<string> {
     for await (const dirent of await fs.opendir(dir)) {
-        const entry = path.join(dir, dirent.name)
+        const entry = resolve(dir, dirent.name)
         if (dirent.isDirectory()) {
             yield* walk(entry)
         } else if (dirent.isFile() && /\.(tsx?)$/.test(entry)) {

@@ -21,8 +21,7 @@
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
     "preinstall": "npx only-allow pnpm",
-    "ci": "pnpm install --frozen-lockfile --store-dir ~/.pnpm/",
-    "netlify-install": "test \"$CI\" = true && npx pnpm install -r --store=node_modules/.pnpm-store || echo skiping pnpm install"
+    "ci": "pnpm install --frozen-lockfile --store-dir ~/.pnpm/"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
@@ -47,8 +46,7 @@
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "@dimensiondev/locale-kit": "workspace:*",
-    "@dimensiondev/maskbook-cli-dev-or-build": "workspace:*",
+    "@dimensiondev/cli": "workspace:*",
     "@magic-works/commonjs-import.meta": "^1.0.0",
     "@magic-works/i18n-codegen": "^0.0.5",
     "@material-ui/codemod": "^5.0.0-alpha.24",

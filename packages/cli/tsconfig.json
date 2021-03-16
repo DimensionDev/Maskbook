@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "ts-node": {
+    "compilerOptions": {
+      "target": "ES2018",
+      "module": "CommonJS"
+    }
+  }
+}
