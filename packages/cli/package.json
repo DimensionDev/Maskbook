@@ -1,5 +1,5 @@
 {
-  "name": "@dimensiondev/maskbook-cli-dev-or-build",
+  "name": "@dimensiondev/cli",
   "private": true,
   "bin": {
     "build": "./build.js",

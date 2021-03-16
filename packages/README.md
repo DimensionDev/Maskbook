@@ -20,7 +20,7 @@
 
 ## Tools
 
-- [cli-dev-build](cli-dev-build)
+- [cli](cli)
 
   Because our project is using TypeScript project reference and code generation, to make the build process work normally, those process must run before any other commands.
 
