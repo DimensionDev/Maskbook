@@ -17,7 +17,7 @@ if (isMobileFacebook) {
         .nth(0)
 }
 
-export function injectSetupPromptFacebook(signal?: AbortSignal) {
+export function injectSetupPromptFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(composeBox.clone())
     startWatch(watcher, signal)
     renderInShadowRoot(<NotSetupYetPrompt />, {

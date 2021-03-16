@@ -13,7 +13,7 @@ export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.Id
     },
 }
 
-function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal?: AbortSignal) {
+function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal: AbortSignal) {
     const self = (isMobileFacebook ? myUsernameLiveSelectorMobile : myUsernameLiveSelectorPC)
         .clone()
         .map((x) => getProfileIdentifierAtFacebook(x, false))

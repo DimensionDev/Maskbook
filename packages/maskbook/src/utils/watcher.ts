@@ -1,7 +1,7 @@
 import type { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Flags } from './flags'
 
-export function startWatch<T extends MutationObserverWatcher<any, any, any, any>>(watcher: T, signal?: AbortSignal) {
+export function startWatch<T extends MutationObserverWatcher<any, any, any, any>>(watcher: T, signal: AbortSignal) {
     watcher
         .setDOMProxyOption({
             afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },

@@ -28,7 +28,7 @@ import { twitterEncoding } from '../encoding'
 
 function registerPostCollectorInner(
     postStore: Next.CollectingCapabilities.PostsProvider['posts'],
-    cancel?: AbortSignal,
+    cancel: AbortSignal,
 ) {
     const getTweetNode = (node: HTMLElement) => {
         return node.closest<HTMLDivElement>(
@@ -106,7 +106,7 @@ export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
     },
 }
 
-function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, cancel?: AbortSignal) {
+function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, cancel: AbortSignal) {
     if (!tweetNode) return
     if (cancel?.aborted) return
     const { pid, messages, handle, name, avatar } = postParser(tweetNode)
@@ -139,7 +139,7 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, cance
     info.postMessage.value = makeTypedMessageCompound([...messages, makeTypedMessageSuspended(images)])
 }
 
-function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo, cancel?: AbortSignal) {
+function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo, cancel: AbortSignal) {
     if (!tweetNode) return
     if (cancel?.aborted) return
     const links = [...tweetNode.querySelectorAll('a')].filter((x) => x.rel)

@@ -31,7 +31,7 @@ export function injectPostInspectorDefault<T extends string>(
 
     const { zipPost } = config
     const zipPostF = zipPost || noop
-    return function injectPostInspector(current: PostInfo, signal?: AbortSignal) {
+    return function injectPostInspector(current: PostInfo, signal: AbortSignal) {
         const jsx = (
             <PostInfoContext.Provider value={current}>
                 <PostInspectorDefault

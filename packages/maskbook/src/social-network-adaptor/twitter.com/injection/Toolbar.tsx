@@ -8,7 +8,7 @@ import { twitterUrl } from '../utils/url'
 const main = new LiveSelector().querySelector('body > noscript')
 const menu = new LiveSelector().querySelector('[role="banner"] [role="heading"]')
 
-export function injectToolbarAtTwitter(signal?: AbortSignal) {
+export function injectToolbarAtTwitter(signal: AbortSignal) {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
 
     // inject placeholder into left column

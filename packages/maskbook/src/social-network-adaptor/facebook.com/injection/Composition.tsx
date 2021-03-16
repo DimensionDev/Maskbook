@@ -20,7 +20,7 @@ if (isMobileFacebook) {
         .map((x) => x.parentElement)
 }
 
-export function injectCompositionFacebook(signal?: AbortSignal) {
+export function injectCompositionFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(composeBox.clone())
     startWatch(watcher, signal)
     renderInShadowRoot(<UI />, {

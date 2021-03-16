@@ -21,7 +21,7 @@ function Icon(props: { size: number }) {
         />
     )
 }
-function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal?: AbortSignal) {
+function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal: AbortSignal) {
     // TODO: for unknown reason the MutationObserverWatcher doesn't work well
     // To reproduce, open a profile and switch to another profile.
     startWatch(
@@ -49,13 +49,13 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal?: A
     )
 }
 
-export function injectMaskUserBadgeAtTwitter(signal?: AbortSignal) {
+export function injectMaskUserBadgeAtTwitter(signal: AbortSignal) {
     // profile
     _(bioPageUserNickNameSelector, 24, signal)
     // floating bio
     _(floatingBioCardSelector, 20, signal)
 }
-export function injectMaskIconToPostTwitter(post: PostInfo, cancel?: AbortSignal) {
+export function injectMaskIconToPostTwitter(post: PostInfo, cancel: AbortSignal) {
     const ls = new LiveSelector([post.rootNodeProxy])
         .map((x) =>
             x.current.parentElement?.parentElement?.previousElementSibling?.querySelector<HTMLDivElement>(

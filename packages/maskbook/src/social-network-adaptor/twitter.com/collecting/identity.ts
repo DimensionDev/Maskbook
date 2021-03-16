@@ -8,7 +8,7 @@ import { twitterBase } from '../base'
 
 function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['lastRecognized'],
-    cancel?: AbortSignal,
+    cancel: AbortSignal,
 ) {
     const selfSelector = selfInfoSelectors().handle
     const assign = () => {

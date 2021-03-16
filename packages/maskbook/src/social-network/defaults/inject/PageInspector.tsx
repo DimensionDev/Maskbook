@@ -16,7 +16,7 @@ export function injectPageInspectorDefault<T extends string>(
         return <PageInspector {...additionalProps} />
     })
 
-    return function injectPageInspector(signal?: AbortSignal) {
+    return function injectPageInspector(signal: AbortSignal) {
         const watcher = new MutationObserverWatcher(new LiveSelector().querySelector('body'))
         startWatch(watcher, signal)
         return renderInShadowRoot(<PageInspectorDefault />, {

@@ -5,13 +5,13 @@ import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoo
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { postEditorContentInPopupSelector, rootSelector } from '../utils/selector'
 import { startWatch } from '../../../utils/watcher'
-export function injectPostDialogAtTwitter(signal?: AbortSignal) {
+export function injectPostDialogAtTwitter(signal: AbortSignal) {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     renderPostDialogTo('popup', postEditorContentInPopupSelector(), signal)
     renderPostDialogTo('timeline', rootSelector(), signal)
 }
 
-function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>, signal?: AbortSignal) {
+function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>, signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, signal)
 

@@ -11,7 +11,7 @@ export function profilesCollectorTwitter(signal: AbortSignal) {
 }
 function registerUserCollectorInner(
     ref: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['lastRecognized'],
-    signal?: AbortSignal,
+    signal: AbortSignal,
 ) {
     const watcher = new MutationObserverWatcher(bioCardSelector())
         .useForeach((cardNode: HTMLDivElement) => {

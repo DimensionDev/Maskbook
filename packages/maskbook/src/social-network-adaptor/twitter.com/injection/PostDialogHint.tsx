@@ -8,7 +8,7 @@ import { MaskMessage } from '../../../utils/messages'
 import { hasEditor, isCompose } from '../utils/postBox'
 import { startWatch } from '../../../utils/watcher'
 
-export function injectPostDialogHintAtTwitter(signal?: AbortSignal) {
+export function injectPostDialogHintAtTwitter(signal: AbortSignal) {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     const emptyNode = document.createElement('div')
     renderPostDialogHintTo('timeline', postEditorInTimelineSelector(), signal)
@@ -19,7 +19,7 @@ export function injectPostDialogHintAtTwitter(signal?: AbortSignal) {
     )
 }
 
-function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>, signal?: AbortSignal) {
+function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>, signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, signal)
 

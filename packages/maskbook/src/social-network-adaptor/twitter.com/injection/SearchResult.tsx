@@ -4,7 +4,7 @@ import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoo
 import { startWatch } from '../../../utils/watcher'
 import { searchResultHeadingSelector } from '../utils/selector'
 
-export function injectSearchResultBoxAtTwitter(signal?: AbortSignal) {
+export function injectSearchResultBoxAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchResultHeadingSelector())
     startWatch(watcher, signal)
     renderInShadowRoot(<SearchResultBox />, {

@@ -21,7 +21,7 @@ export const PaletteModeProviderTwitter: SocialNetworkUI.Customization.PaletteMo
     start: startWatchThemeColor,
 }
 
-export function startWatchThemeColor(signal?: AbortSignal) {
+export function startWatchThemeColor(signal: AbortSignal) {
     function updateThemeColor() {
         const color = getBackgroundColor(composeAnchorSelector().evaluate()!)
         const contrastColor = getForegroundColor(composeAnchorTextSelector().evaluate()!)

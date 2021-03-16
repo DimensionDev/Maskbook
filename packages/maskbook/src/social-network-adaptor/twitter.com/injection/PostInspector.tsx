@@ -2,7 +2,7 @@ import type { PostInfo } from '../../../social-network/PostInfo'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector'
 import { twitterEncoding } from '../encoding'
 
-export function injectPostInspectorAtTwitter(current: PostInfo, signal?: AbortSignal) {
+export function injectPostInspectorAtTwitter(current: PostInfo, signal: AbortSignal) {
     return injectPostInspectorDefault({
         zipPost(node) {
             const content = node.current.parentElement?.querySelector<HTMLDivElement>('[lang]')

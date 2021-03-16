@@ -26,7 +26,7 @@ export const PostProviderFacebook: Next.CollectingCapabilities.PostsProvider = {
         collectPostsFacebookInner(this.posts, signal)
     },
 }
-function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvider['posts'], signal?: AbortSignal) {
+function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvider['posts'], signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
             clickSeeMore(node)
