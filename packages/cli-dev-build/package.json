@@ -3,7 +3,9 @@
   "private": true,
   "bin": {
     "build": "./build.js",
-    "dev": "./dev.js"
+    "build-ci": "./build-ci.ts",
+    "dev": "./dev.js",
+    "webextensiom-shim-prebuilt": "./webextensiom-shim-prebuilt.ts"
   },
   "dependencies": {
     "inquirer": "^7.3.3",
