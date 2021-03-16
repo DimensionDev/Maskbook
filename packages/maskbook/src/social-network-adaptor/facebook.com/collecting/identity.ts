@@ -26,7 +26,7 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal
             subtree: true,
             characterData: true,
         })
-    signal?.addEventListener('abort', () => watcher.stopWatch())
+    signal.addEventListener('abort', () => watcher.stopWatch())
     function assign(i: Value) {
         if (!i.identifier.isUnknown) ref.value = i
     }

@@ -8,6 +8,6 @@ export function startWatch<T extends MutationObserverWatcher<any, any, any, any>
             beforeShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
         })
         .startWatch({ subtree: true, childList: true })
-    signal?.addEventListener('abort', () => watcher.stopWatch())
+    signal.addEventListener('abort', () => watcher.stopWatch())
     return watcher
 }

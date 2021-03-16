@@ -42,8 +42,10 @@ export async function activateSocialNetworkUI(): Promise<void> {
 
     const abort = new AbortController()
     const { signal } = abort
+    debugger
     if (module.hot) {
         ui_deferred.hotModuleReload?.(() => {
+            console.log('SNS adaptor HMR.')
             abort.abort()
             setTimeout(activateSocialNetworkUI, 200)
         })

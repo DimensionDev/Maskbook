@@ -39,7 +39,7 @@ export function startWatchThemeColor(signal: AbortSignal) {
             childList: true,
             subtree: true,
         })
-    signal?.addEventListener('abort', () => watcher.stopWatch())
+    signal.addEventListener('abort', () => watcher.stopWatch())
 }
 export function useThemeTwitterVariant() {
     const primaryColor = useValueRef(primaryColorRef)

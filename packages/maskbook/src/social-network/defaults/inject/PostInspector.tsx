@@ -46,7 +46,7 @@ export function injectPostInspectorDefault<T extends string>(
         )
         if (config.render) {
             const undo = config.render(jsx, current)
-            signal?.addEventListener('abort', undo)
+            signal.addEventListener('abort', undo)
             return undo
         }
         return renderInShadowRoot(jsx, {

@@ -48,5 +48,5 @@ function registerUserCollectorInner(
             childList: true,
             subtree: true,
         })
-    signal?.addEventListener('abort', () => watcher.stopWatch())
+    signal.addEventListener('abort', () => watcher.stopWatch())
 }

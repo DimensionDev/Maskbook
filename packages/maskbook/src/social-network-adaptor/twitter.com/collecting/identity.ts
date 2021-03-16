@@ -30,7 +30,7 @@ function resolveLastRecognizedIdentityInner(
             childList: true,
             subtree: true,
         })
-    cancel?.addEventListener('abort', () => watcher.stopWatch())
+    cancel.addEventListener('abort', () => watcher.stopWatch())
 }
 
 export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolveProvider = {

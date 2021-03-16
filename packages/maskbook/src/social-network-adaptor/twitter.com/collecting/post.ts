@@ -72,7 +72,7 @@ function registerPostCollectorInner(
                 if (payload.err && info.postMetadataImages.size === 0) return
                 updateProfileInfo(info)
             })
-            cancel?.addEventListener('abort', undo)
+            cancel.addEventListener('abort', undo)
             non_overlapping_assign(
                 info.postPayload,
                 deconstructPayload(info.postContent.value, twitterEncoding.payloadDecoder),
@@ -80,7 +80,7 @@ function registerPostCollectorInner(
             const undo2 = info.postContent.addListener((newValue) => {
                 non_overlapping_assign(info.postPayload, deconstructPayload(newValue, twitterEncoding.payloadDecoder))
             })
-            cancel?.addEventListener('abort', undo2)
+            cancel.addEventListener('abort', undo2)
             injectMaskIconToPostTwitter(info, cancel)
             postStore.set(proxy, info)
             return {

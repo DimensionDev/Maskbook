@@ -25,7 +25,7 @@ export function injectPostReplacer<T extends string>(
     const zipPostF = zipPost || noop
     const unzipPostF = unzipPost || noop
     return function injectPostReplacer(current: PostInfo, signal: AbortSignal) {
-        signal?.addEventListener('abort', unzipPostF)
+        signal.addEventListener('abort', unzipPostF)
         return renderInShadowRoot(
             <PostInfoContext.Provider value={current}>
                 <PostReplacerDefault
