@@ -7,7 +7,7 @@ import { NETLIFY_PATH, PKG_PATH } from '../utils'
 const createBuildStorybook6 = (basePath: string, output: string, name: string) => {
     const fn = () => {
         const r = relative(basePath, output)
-        return spawn(`npx`, ['build-storybook', '-o', r, '-s', r, '--quiet'], {
+        return spawn('npx', ['build-storybook', '-o', r, '-s', r, '--quiet'], {
             cwd: basePath,
             shell: true,
             stdio: 'inherit',
@@ -21,7 +21,7 @@ const createBuildStorybook6 = (basePath: string, output: string, name: string) =
 const createBuildSnowpack = (basePath: string, output: string, name: string) => {
     const fn = () => {
         const r = relative(basePath, output)
-        return spawn(`npx`, ['snowpack', 'build', '--buildOptions.out', r, '--quiet'], {
+        return spawn('npx', ['snowpack', 'build', '--buildOptions.out', r, '--quiet'], {
             cwd: basePath,
             shell: true,
             stdio: 'inherit',

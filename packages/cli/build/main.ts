@@ -23,10 +23,12 @@ export default async function main(mode: 'dev' | 'build') {
             choices: otherFlags,
         })
         args = [...flags, preset]
+
+        const command = ['npx', mode === 'dev' ? 'dev' : 'build', ...args]
         const { confirm } = await inquirer.prompt({
             type: 'confirm',
             name: 'confirm',
-            message: `Command is: "npx ${mode === 'dev' ? 'dev' : 'build'} ${args.join(' ')}". Is that OK?`,
+            message: `Command is: "${command.join(' ')}". Is that OK?`,
         })
         if (!confirm) return
     }
@@ -36,7 +38,7 @@ export default async function main(mode: 'dev' | 'build') {
     args.filter((x) => !x.startsWith('-')).forEach((target) => {
         command.push('--env', target)
         if (!knownTargets.includes(target)) {
-            throw new TypeError('Unknown target ' + target + '. Known targets: ' + knownTargets.join(','))
+            throw new TypeError(`Unknown target ${target}. Known targets: ${knownTargets}`)
         }
     })
     return spawnSync('npx', ['webpack', ...command], {
