@@ -13,6 +13,7 @@ import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { DashboardWalletTransferDialog } from './TransferDialog'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
+import { forwardRef } from 'react'
 
 //#region token actions menu
 export interface TokenActionsMenuProps extends withClasses<never> {
@@ -35,7 +36,7 @@ export interface TokenActionsMenuProps extends withClasses<never> {
     ) => void
 }
 
-export function TokenActionsMenu(props: TokenActionsMenuProps) {
+export const TokenActionsMenu = forwardRef((props: TokenActionsMenuProps) => {
     const { chain, wallet, token, onTransferDialogOpen, onHideTokenConfirmDialogOpen } = props
     const account = useAccount()
     const { t } = useI18N()
@@ -70,7 +71,7 @@ export function TokenActionsMenu(props: TokenActionsMenuProps) {
             </MenuItem>
         </div>
     )
-}
+})
 //#endregion
 
 //#region ERC20 token actions bar
