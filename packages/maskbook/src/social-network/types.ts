@@ -63,6 +63,10 @@ export namespace SocialNetworkUI {
          * @example load: () => import('./full-definition')
          */
         load(): Promise<{ default: Definition }>
+        /**
+         * On Hot Module Reload. When call the callback, it will unload the current instance and load the new one.
+         */
+        hotModuleReload?(onHot: (hot: Definition) => void): void
     }
     export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared {
         /** @returns the states */
@@ -272,6 +276,10 @@ export namespace SocialNetworkWorker {
     }
     export interface DeferredDefinition extends SocialNetwork.Base, WorkerBase {
         load(): Promise<{ default: Definition }>
+        /**
+         * On Hot Module Reload. When call the callback, it will unload the current instance and load the new one.
+         */
+        hotModuleReload?(onHot: (hot: Definition) => void): void
     }
 
     /**

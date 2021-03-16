@@ -36,12 +36,18 @@ export async function activateSocialNetworkUI(): Promise<void> {
     if (!ui_deferred) return
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
-    const ui = (activatedSocialNetworkUI = (await ui_deferred.load()).default)
+    const ui = (activatedSocialNetworkUI = await loadSocialNetworkUI(ui_deferred.networkIdentifier))
     console.log('Provider activated. You can access it by globalThis.ui', ui)
     Object.assign(globalThis, { ui })
 
     const abort = new AbortController()
     const { signal } = abort
+    if (module.hot) {
+        ui_deferred.hotModuleReload?.(() => {
+            abort.abort()
+            setTimeout(activateSocialNetworkUI, 200)
+        })
+    }
     await untilDomLoaded()
 
     i18nOverwrite()
@@ -111,6 +117,9 @@ export async function loadSocialNetworkUI(identifier: string): Promise<SocialNet
     if (!define) throw new Error('SNS adaptor not found')
     const ui = (await define.load()).default
     definedSocialNetworkUIsResolved.set(identifier, ui)
+    if (module.hot) {
+        define.hotModuleReload?.((ui) => definedSocialNetworkUIsResolved.set(identifier, ui))
+    }
     return ui
 }
 
