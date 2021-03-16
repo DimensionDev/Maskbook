@@ -7,6 +7,7 @@ import { useMenu } from '../../../../utils/hooks/useMenu'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useModal } from '../../DashboardDialogs/Base'
 import { HideDialog } from './HideDialog'
+import { TransferDialog } from './TransferDialog'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -38,9 +39,20 @@ export function CollectibleCard(props: CollectibleCardProps) {
     const classes = useStyles(props)
 
     const [hideDialog, , openHideDialog] = useModal(HideDialog)
+    const [transferDialog, , openTransferDialog] = useModal(TransferDialog)
 
     const [menu, openMenu] = useMenu(
-        <MenuItem onClick={() => {}}>{t('transfer')}</MenuItem>,
+        <MenuItem
+            onClick={() =>
+                openTransferDialog({
+                    url: props.url,
+                    onTransfer: () => {
+                        console.log('on transfer')
+                    },
+                })
+            }>
+            {t('transfer')}
+        </MenuItem>,
         <MenuItem
             onClick={() =>
                 openHideDialog({
@@ -74,6 +86,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
             </Link>
             {menu}
             {hideDialog}
+            {transferDialog}
         </>
     )
 }
