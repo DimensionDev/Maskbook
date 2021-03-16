@@ -1,11 +1,11 @@
 import { runCli } from '@magic-works/i18n-codegen'
-import { spawn, spawnSync, SpawnSyncOptions } from 'child_process'
+import { spawn, SpawnOptions } from 'child_process'
 import { resolve } from 'path'
-import makeLockSequence from './process-lock'
 import { ROOT_PATH } from '../utils'
+import makeLockSequence from './process-lock'
 
 const config = resolve(ROOT_PATH, '.i18n-codegen.json')
-const options: SpawnSyncOptions = {
+const options: SpawnOptions = {
     cwd: ROOT_PATH,
     stdio: 'inherit',
     shell: true,
@@ -17,7 +17,7 @@ export async function dev() {
     }
     runCli({ config, watch: true }, console.error)
     // start a one-time "tsc -b" or parallel "tsc -b -w"
-    return spawnSync('npx', ['tsc', '-b', '-w'], options)
+    return spawn('npx', ['tsc', '-b', '-w'], options)
 }
 dev.displayName = 'ts'
 dev.description = 'Start to watch TypeScript project reference'

@@ -1,4 +1,4 @@
-import { spawnSync } from 'child_process'
+import { spawn } from 'child_process'
 import { resolve } from 'path'
 import { PKG_PATH } from '../utils'
 
@@ -41,7 +41,7 @@ export default async function main(mode: 'dev' | 'build') {
             throw new TypeError(`Unknown target ${target}. Known targets: ${knownTargets}`)
         }
     })
-    return spawnSync('npx', ['webpack', ...command], {
+    return spawn('npx', ['webpack', ...command], {
         stdio: 'inherit',
         shell: true,
         cwd: resolve(PKG_PATH, 'maskbook'),
