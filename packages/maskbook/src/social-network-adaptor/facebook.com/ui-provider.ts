@@ -21,7 +21,7 @@ import { PostProviderFacebook } from './collecting/posts'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
-import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
+import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
 import { currentSelectedIdentity } from '../../settings/settings'
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
