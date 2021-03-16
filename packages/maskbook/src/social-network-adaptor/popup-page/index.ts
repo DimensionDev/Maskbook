@@ -1,4 +1,3 @@
-import '../../provider.ui'
 import { defineSocialNetworkUI, definedSocialNetworkUIs, SocialNetworkUI, SocialNetwork } from '../../social-network'
 import { isEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentifierMap } from '../../database/IdentifierMap'

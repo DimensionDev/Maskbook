@@ -1,10 +1,8 @@
-import '../../provider.ui'
 import { defineSocialNetworkUI, SocialNetworkUI, SocialNetwork } from '../../social-network'
 import { isEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentifierMap } from '../../database/IdentifierMap'
 import Services from '../../extension/service'
 import { MaskMessage } from '../../utils/messages'
-import '../../provider.ui'
 
 const base: SocialNetwork.Base = {
     networkIdentifier: 'localhost',
