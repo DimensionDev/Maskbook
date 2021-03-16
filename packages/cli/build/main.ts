@@ -1,6 +1,6 @@
 import { spawnSync } from 'child_process'
 import { resolve } from 'path'
-import { PKG_PATH } from './utils'
+import { PKG_PATH } from '../utils'
 
 const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base']
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'manifest-v3']

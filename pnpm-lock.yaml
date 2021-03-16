@@ -78,19 +78,23 @@ importers:
   packages/cli:
     dependencies:
       inquirer: 7.3.3
+      lodash: 4.17.21
       proper-lockfile: 4.1.2
     devDependencies:
       '@types/gulp': 4.0.8
       '@types/inquirer': 7.3.1
+      '@types/lodash': 4.14.168
       '@types/proper-lockfile': 4.1.1
       gulp: 4.0.2
       ts-node: 9.1.1
     specifiers:
       '@types/gulp': ^4.0.8
       '@types/inquirer': ^7.3.1
+      '@types/lodash': ^4.14.168
       '@types/proper-lockfile': ^4.1.1
       gulp: ^4.0.2
       inquirer: ^7.3.3
+      lodash: ^4.17.21
       proper-lockfile: ^4.1.1
       ts-node: ^9.1.1
   packages/contracts:
@@ -6654,7 +6658,6 @@ packages:
     resolution:
       integrity: sha512-BBz79DCJbD2CVYZH67MBeHZRX++HF+5p8Mo5MzjZi64Wac39S3diedJYHZtScbRVf4DjZyN6LzA0SB0zy+HSSQ==
   /@types/lodash/4.14.168:
-    dev: false
     resolution:
       integrity: sha512-oVfRvqHV/V6D1yifJbVRU3TMp8OT6o6BG+U9MkwuJ3U8/CsDHvalRpsxBqivn71ztOFZBTfJMvETbqHiaNSj7Q==
   /@types/markdown-to-jsx/6.11.3:

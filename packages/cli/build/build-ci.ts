@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node
 import git from '@nice-labs/git-rev'
-import { BUILD_PATH, run } from './utils'
+import { BUILD_PATH, run } from '../utils'
 
 const branch = git.branchName()
 const types = {

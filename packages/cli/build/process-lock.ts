@@ -1,6 +1,6 @@
 import path from 'path'
 import { check, lock } from 'proper-lockfile'
-import { delay } from './utils'
+import { delay } from '../utils'
 
 const lockfilePath = path.join(__dirname, 'lockfile.log')
 

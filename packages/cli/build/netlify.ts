@@ -2,7 +2,7 @@ import { spawn } from 'child_process'
 import { parallel, series } from 'gulp'
 import { relative, resolve } from 'path'
 import { build } from './typescript'
-import { NETLIFY_PATH, PKG_PATH } from './utils'
+import { NETLIFY_PATH, PKG_PATH } from '../utils'
 
 const createBuildStorybook6 = (basePath: string, output: string, name: string) => {
     const fn = () => {

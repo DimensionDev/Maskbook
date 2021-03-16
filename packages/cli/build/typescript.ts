@@ -3,7 +3,7 @@ import { runCli } from '@magic-works/i18n-codegen'
 import { spawn, spawnSync, SpawnSyncOptions } from 'child_process'
 import { resolve } from 'path'
 import makeLockSequence from './process-lock'
-import { ROOT_PATH } from './utils'
+import { ROOT_PATH } from '../utils'
 
 const config = resolve(ROOT_PATH, '.i18n-codegen.json')
 const options: SpawnSyncOptions = {
