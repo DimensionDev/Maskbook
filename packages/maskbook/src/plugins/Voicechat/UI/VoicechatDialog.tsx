@@ -58,13 +58,11 @@ export const VoicechatDialog = (props: VoicechatDialogProps) => {
         props.onConfirm(set)
     }
 
+    const currentMeta = useValueRef(getActivatedUI().typedMessageMetadata)
     useEffect(() => {
         if (props.open) {
-            try {
-                const currentMeta = useValueRef(getActivatedUI().typedMessageMetadata)
-                const enabled = Array.from(currentMeta.keys()).includes(VOICECHAT_META_KEY_1)
-                setVoicechatEnabled(enabled)
-            } catch (e) {}
+            const enabled = Array.from(currentMeta.keys()).includes(VOICECHAT_META_KEY_1)
+            setVoicechatEnabled(enabled)
         }
     }, [props.open])
 
