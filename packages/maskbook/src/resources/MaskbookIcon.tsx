@@ -25,6 +25,18 @@ const MaskbookSmileFaceSharpSVG = (
     </svg>
 )
 
+const MaskbookSmileFaceOutlinedSVG = (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 42 42">
+        <path stroke="#fff" strokeWidth="3" d="M39.55 21a18.55 18.55 0 11-37.1 0 18.55 18.55 0 0137.1 0z" />
+        <path
+            fill="#fff"
+            fillRule="evenodd"
+            d="M32.45 16.55v6.36H12.54a8.66 8.66 0 0016.21 1.9h3.7v5.35a2.3 2.3 0 01-2.29 2.3H11.84a2.3 2.3 0 01-2.3-2.3V16.55h22.91zm-5.9 8.27a6.74 6.74 0 01-11.14 0h11.15zM16.1 18.07a3.56 3.56 0 00-3.53 3.06h1.96a1.66 1.66 0 013.14 0h1.96a3.56 3.56 0 00-3.53-3.06zm9.8 0a3.56 3.56 0 00-3.53 3.06h1.96a1.66 1.66 0 013.14 0h1.96a3.56 3.56 0 00-3.53-3.06zm4.26-8.52a2.3 2.3 0 012.3 2.29v2.8H9.54v-2.8a2.3 2.3 0 012.29-2.3h18.32z"
+            clipRule="evenodd"
+        />
+    </svg>
+)
+
 const MaskbookTextSVG = (
     <svg viewBox="0 0 80 20">
         <path
@@ -41,6 +53,10 @@ export function MaskbookTextIcon(props: SvgIconProps) {
 
 export function MaskbookIcon(props: SvgIconProps) {
     return <SvgIcon {...props}>{MaskbookSmileFaceSVG}</SvgIcon>
+}
+
+export function MaskbookIconOutlined(props: SvgIconProps) {
+    return <SvgIcon {...props}>{MaskbookSmileFaceOutlinedSVG}</SvgIcon>
 }
 
 export function MaskbookSharpIcon(props: SvgIconProps) {
