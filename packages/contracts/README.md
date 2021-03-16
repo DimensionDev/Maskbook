@@ -31,3 +31,7 @@ $ git add . # cwd: packages/contracts/types
 $ # or compile a specific contract
 $ npm start -- --abi ITO
 ```
+
+## About CHANGELOG.md
+
+The date is the date of creating contract on the mainnet, commit is the commit of relative smart contract repo which generate the abi.
