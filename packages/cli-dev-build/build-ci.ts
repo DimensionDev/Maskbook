@@ -1,3 +1,4 @@
+#!/usr/bin/env ts-node
 import git from '@nice-labs/git-rev'
 import { BUILD_PATH, run } from './utils'
 

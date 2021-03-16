@@ -1,3 +1,4 @@
+#!/usr/bin/env ts-node
 import fs from 'fs'
 import path from 'path'
 import { BUILD_PATH, run } from './utils'

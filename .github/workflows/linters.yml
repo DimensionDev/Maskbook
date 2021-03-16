@@ -22,11 +22,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: sudo npm i -g pnpm
-      - run: npm run ci
+      - run: pnpm ci
       - run: npx prettier --list-different .
       - run: npx build -- echo "Check tsc"
       - run: npm run lint:typecoverage
-      - run: npm run locale-kit
+        working-directory: packages/maskbook
+      - run: npx locale-kit
       - run: npm run lint:report
       - name: Upload ESLint Report
         uses: actions/upload-artifact@v2
