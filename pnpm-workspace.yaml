@@ -7,4 +7,3 @@ packages:
   - 'packages/theme'
   - 'packages/icons'
   - 'packages/contracts'
-  - 'packages/locale-kit'

@@ -47,7 +47,6 @@
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "@dimensiondev/locale-kit": "workspace:*",
     "@dimensiondev/cli": "workspace:*",
     "@magic-works/commonjs-import.meta": "^1.0.0",
     "@magic-works/i18n-codegen": "^0.0.5",

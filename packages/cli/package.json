@@ -2,10 +2,11 @@
   "name": "@dimensiondev/cli",
   "private": true,
   "bin": {
-    "build": "./build.ts",
-    "build-ci": "./build-ci.ts",
-    "dev": "./dev.ts",
-    "webextensiom-shim-prebuilt": "./webextensiom-shim-prebuilt.ts"
+    "build": "./build/build.ts",
+    "build-ci": "./build/build-ci.ts",
+    "dev": "./build/dev.ts",
+    "locale-kit": "./locale-kit/locale-kit.ts",
+    "webextensiom-shim-prebuilt": "./build/webextensiom-shim-prebuilt.ts"
   },
   "dependencies": {
     "inquirer": "^7.3.3",
