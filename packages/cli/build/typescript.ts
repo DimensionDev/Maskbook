@@ -1,4 +1,3 @@
-// start a one-time "tsc -b" or parallel "tsc -b -w"
 import { runCli } from '@magic-works/i18n-codegen'
 import { spawn, spawnSync, SpawnSyncOptions } from 'child_process'
 import { resolve } from 'path'
@@ -17,7 +16,8 @@ export async function dev() {
         if (await lock()) break lock
     }
     runCli({ config, watch: true }, console.error)
-    spawnSync('npx', ['tsc', '-b', '-w'], options)
+    // start a one-time "tsc -b" or parallel "tsc -b -w"
+    return spawnSync('npx', ['tsc', '-b', '-w'], options)
 }
 dev.displayName = 'ts'
 dev.description = 'Start to watch TypeScript project reference'

@@ -11,14 +11,14 @@ export default async function* () {
         }
         await delay(2000)
     }
+}
 
-    function locker() {
-        return new Promise<boolean>(async (resolve) => {
-            await lock(__filename, {
-                lockfilePath,
-                onCompromised: () => resolve(false),
-            })
-            resolve(true)
+function locker() {
+    return new Promise<boolean>(async (resolve) => {
+        await lock(__filename, {
+            lockfilePath,
+            onCompromised: () => resolve(false),
         })
-    }
+        resolve(true)
+    })
 }
