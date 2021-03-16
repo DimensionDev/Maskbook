@@ -29,7 +29,7 @@ import { injectMaskUserBadgeAtTwitter } from './injection/MaskbookIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { currentSelectedIdentity } from '../../settings/settings'
 
-const origins = ['https://www.twitter.com/*', 'https://m.twitter.com/*']
+const origins = ['https://www.twitter.com/*', 'https://m.twitter.com/*', 'https://twitter.com/*']
 const twitterUI: SocialNetworkUI.Definition = {
     ...twitterBase,
     ...twitterShared,

@@ -14,6 +14,7 @@ export function injectPostReplacerAtTwitter(current: PostInfo, signal?: AbortSig
             if (langNode) langNode.style.display = 'none'
         },
         unzipPost(node) {
+            if (!node.current) return
             const langNode = resolveLangNode(node.current)
             if (langNode) langNode.style.display = 'unset'
         },

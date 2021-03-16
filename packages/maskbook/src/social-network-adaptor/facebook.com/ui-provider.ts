@@ -24,7 +24,7 @@ import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
 import { currentSelectedIdentity } from '../../settings/settings'
 
-const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*']
+const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*', 'https://facebook.com/*']
 const facebookUI: SocialNetworkUI.Definition = {
     ...facebookBase,
     ...facebookShared,
