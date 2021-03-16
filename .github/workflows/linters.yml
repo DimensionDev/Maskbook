@@ -23,11 +23,11 @@ jobs:
             ${{ runner.os }}-node-
       - run: sudo npm i -g pnpm
       - run: pnpm ci
-      - run: echo "PATH=$(pnpm bin):$PATH" >> $GITHUB_ENV
-      - run: prettier --list-different .
-      - run: build -- echo "Check tsc"
-      - run: type-coverage
-      - run: locale-kit
+      - run: npx prettier --list-different .
+      - run: npx build -- echo "Check tsc"
+      - run: npm run lint:typecoverage
+        working-directory: packages/maskbook
+      - run: npx locale-kit
       - run: npm run lint:report
       - name: Upload ESLint Report
         uses: actions/upload-artifact@v2

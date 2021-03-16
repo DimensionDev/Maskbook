@@ -38,7 +38,6 @@ importers:
       prettier: 2.2.1
       ts-node: 9.1.1_typescript@4.1.3
       ttypescript: 1.5.12_ts-node@9.1.1+typescript@4.1.3
-      type-coverage: 2.17.0_typescript@4.1.3
       typescript: 4.1.3
     specifiers:
       '@commitlint/cli': ^11.0.0
@@ -77,7 +76,6 @@ importers:
       react-i18next: ^11.8.7
       ts-node: ^9.1.1
       ttypescript: ^1.5.12
-      type-coverage: ^2.17.0
       typescript: 4.1.3
   packages/cli-dev-build:
     dependencies:
@@ -320,6 +318,7 @@ importers:
       storybook-addon-i18n: 5.1.13
       ts-jest: 26.5.0_jest@26.6.3
       ts-loader: 8.0.17_webpack@5.24.2
+      type-coverage: 2.17.0
       web-ext: 5.5.0
       webpack: 5.24.2_webpack-cli@4.5.0
       webpack-bundle-analyzer: 4.4.0
@@ -469,6 +468,7 @@ importers:
       ts-jest: 26.5.0
       ts-loader: ^8.0.13
       ts-results: ^3.0.0
+      type-coverage: ^2.17.0
       use-subscription: ^1.5.1
       uuid: ^8.3.2
       wallet.ts: ^1.0.1
@@ -7519,7 +7519,7 @@ packages:
     dependencies:
       '@metamask/object-multiplex': 1.1.0
       '@metamask/safe-event-emitter': 2.0.0
-      eth-rpc-errors: 4.0.2
+      eth-rpc-errors: 4.0.3
       fast-deep-equal: 2.0.1
       is-stream: 2.0.0
       json-rpc-engine: 6.1.0
@@ -12393,12 +12393,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-MY3zAa5ZF8hvgQu1HOF9agaK5GgigBRGpTJ8H0oVlE0NqMu13CW6syyjLXdeIDCGQTbUeHliU1z9dVmvMKx1Tg==
-  /eth-rpc-errors/4.0.2:
+  /eth-rpc-errors/4.0.3:
     dependencies:
       fast-safe-stringify: 2.0.7
     dev: false
     resolution:
-      integrity: sha512-n+Re6Gu8XGyfFy1it0AwbD1x0MUzspQs0D5UiPs1fFPCr6WAwZM+vbIhXheBFrpgosqN9bs5PqlB4Q61U/QytQ==
+      integrity: sha512-Z3ymjopaoft7JDoxZcEb3pwdGh7yiYMhOwm2doUt6ASXlMavpNlK6Cre0+IMl2VSGyEU9rkiperQhp5iRxn5Pg==
   /ethereum-blockies/0.1.1:
     dev: false
     resolution:
@@ -16408,7 +16408,7 @@ packages:
   /json-rpc-engine/6.1.0:
     dependencies:
       '@metamask/safe-event-emitter': 2.0.0
-      eth-rpc-errors: 4.0.2
+      eth-rpc-errors: 4.0.3
     dev: false
     engines:
       node: '>=10.0.0'
@@ -23009,7 +23009,7 @@ packages:
       serialize-javascript: 4.0.0
       source-map: 0.6.1
       terser: 4.8.0
-      webpack: 4.46.0
+      webpack: 4.46.0_webpack-cli@4.5.0
       webpack-sources: 1.4.3
       worker-farm: 1.7.0
     dev: true
@@ -23560,10 +23560,9 @@ packages:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
     resolution:
       integrity: sha512-RYbuQuvkhuqVeXweWT3tJLKOEJ/UUw9GjNEZGWdrLLlM+611o1gwLHBpxoFJKKl25fLprp2eVthtKs5JOrNeXg==
-  /tsutils/3.21.0_typescript@4.1.3:
+  /tsutils/3.21.0:
     dependencies:
       tslib: 1.14.1
-      typescript: 4.1.3
     dev: true
     engines:
       node: '>= 6'
@@ -23611,26 +23610,23 @@ packages:
       node: '>= 0.8.0'
     resolution:
       integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==
-  /type-coverage-core/2.16.3_typescript@4.1.3:
+  /type-coverage-core/2.16.3:
     dependencies:
       glob: 7.1.6
       minimatch: 3.0.4
       tslib: 2.1.0
-      tsutils: 3.21.0_typescript@4.1.3
-      typescript: 4.1.3
+      tsutils: 3.21.0
     dev: true
     peerDependencies:
       typescript: 2 || 3 || 4
     resolution:
       integrity: sha512-gOkogkvCALgINVPGY4hLW5qCCj1B8Jiih/Y1geNcMwAhS/Sbt+b0N5r1D6tOhmAPC9rTpxhL8cqJA2v+Ngonxw==
-  /type-coverage/2.17.0_typescript@4.1.3:
+  /type-coverage/2.17.0:
     dependencies:
       minimist: 1.2.5
-      type-coverage-core: 2.16.3_typescript@4.1.3
+      type-coverage-core: 2.16.3
     dev: true
     hasBin: true
-    peerDependencies:
-      typescript: '*'
     resolution:
       integrity: sha512-MlM2gmsQZClsNZhZ+blOflCDhVBoyXSYnQptF4Lr8QZxLCqImCNCAi2oofK8pQDmB6rALokokqyzg69PNY7axA==
   /type-detect/4.0.8:

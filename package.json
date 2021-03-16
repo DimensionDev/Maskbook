@@ -18,7 +18,6 @@
     "build:ios:webpack": "build iOS",
     "lint": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx --fix --cache",
     "lint:report": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml --cache",
-    "lint:typecoverage": "type-coverage",
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
@@ -70,7 +69,6 @@
     "prettier": "^2.1.2",
     "ts-node": "^9.1.1",
     "ttypescript": "^1.5.12",
-    "type-coverage": "^2.17.0",
     "typescript": "4.1.3"
   },
   "engines": {
@@ -82,18 +80,5 @@
       "react": "=0.0.0-experimental-dc27b5aaa",
       "react-dom": "=0.0.0-experimental-dc27b5aaa"
     }
-  },
-  "typeCoverage": {
-    "cache": true,
-    "strict": true,
-    "detail": true,
-    "atLeast": 98,
-    "project": "packages/maskbook",
-    "ignoreCatch": true,
-    "ignoreFiles": [
-      "**/__tests__/**",
-      "**\\__tests__\\**"
-    ],
-    "showRelativePath": true
   }
 }
