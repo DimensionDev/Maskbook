@@ -4,6 +4,8 @@ import { DataProvider } from '../types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { subscribeCoins } from '../settings'
 
+const loop = () => {}
+
 export function useCoinLatestPriceInfo(coinId: string | undefined, dataProvider?: DataProvider) {
     const [latestPriceInfo, setLatestPriceInfo] = useState<{
         latestPrice: number | null
@@ -15,7 +17,6 @@ export function useCoinLatestPriceInfo(coinId: string | undefined, dataProvider?
 
     const coins = useValueRef(subscribeCoins)
 
-    // @ts-ignore
     useEffect(() => {
         if (coinId && dataProvider === DataProvider.COIN_MARKET_CAP) {
             PluginTraderRPC.subscribeLatestPrice(coinId)
@@ -24,6 +25,7 @@ export function useCoinLatestPriceInfo(coinId: string | undefined, dataProvider?
                 PluginTraderRPC.unSubscribeLatestPrice(coinId)
             }
         }
+        return loop
     }, [coinId, dataProvider])
 
     useEffect(() => {
