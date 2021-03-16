@@ -1,11 +1,12 @@
-const { spawn } = require('child_process')
-const { resolve } = require('path')
+import { spawnSync } from 'child_process'
+import { resolve } from 'path'
+import { PKG_PATH } from './utils'
 
 const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base']
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'manifest-v3']
 const knownTargets = ['-h', '--help', ...presets, ...otherFlags]
-/** @param {'dev' | 'build'} mode */
-async function main(mode) {
+
+export default async function main(mode: 'dev' | 'build') {
     let args = process.argv.slice(2)
 
     if (args.includes('-h') || args.includes('--help')) {
@@ -38,6 +39,9 @@ async function main(mode) {
             throw new TypeError('Unknown target ' + target + '. Known targets: ' + knownTargets.join(','))
         }
     })
-    spawn('npx', ['webpack', ...command], { stdio: 'inherit', shell: true, cwd: resolve(__dirname, '../maskbook/') })
+    return spawnSync('npx', ['webpack', ...command], {
+        stdio: 'inherit',
+        shell: true,
+        cwd: resolve(PKG_PATH, 'maskbook'),
+    })
 }
-module.exports = main

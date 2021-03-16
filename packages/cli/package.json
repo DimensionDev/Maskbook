@@ -2,9 +2,9 @@
   "name": "@dimensiondev/cli",
   "private": true,
   "bin": {
-    "build": "./build.js",
+    "build": "./build.ts",
     "build-ci": "./build-ci.ts",
-    "dev": "./dev.js",
+    "dev": "./dev.ts",
     "webextensiom-shim-prebuilt": "./webextensiom-shim-prebuilt.ts"
   },
   "dependencies": {
@@ -12,6 +12,10 @@
     "proper-lockfile": "^4.1.1"
   },
   "devDependencies": {
-    "gulp": "^4.0.2"
+    "@types/gulp": "^4.0.8",
+    "@types/inquirer": "^7.3.1",
+    "@types/proper-lockfile": "^4.1.1",
+    "gulp": "^4.0.2",
+    "ts-node": "^9.1.1"
   }
 }
