@@ -54,6 +54,7 @@ export interface ProviderLineProps extends withClasses<never> {
 
 export default function ProviderLine(props: ProviderLineProps) {
     const { t } = useI18N()
+    // TODO: internal name should not be used to display
     const { internalName, network, connected, userId, onAction } = props
     const classes = useStylesExtends(useStyles(), props)
     return (

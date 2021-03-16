@@ -1,5 +1,5 @@
 import type { Persona } from '../../../database'
-import { definedSocialNetworkWorkers } from '../../../social-network/worker'
+import { definedSocialNetworkUIs } from '../../../social-network'
 
 import ProviderLine, { ProviderLineProps } from './ProviderLine'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -21,16 +21,20 @@ interface ProfileBoxProps {
 
 export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxProps) {
     const profiles = persona ? [...persona.linkedProfiles] : []
-    const providers = [...definedSocialNetworkWorkers].map((i) => {
-        const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
-        return {
-            internalName: i.networkIdentifier,
-            network: i.networkIdentifier,
-            connected: !!profile,
-            userId: profile?.[0].userId,
-            identifier: profile?.[0],
-        }
-    })
+    const providers = [...definedSocialNetworkUIs]
+        .map((i) => {
+            const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
+            if (i.networkIdentifier === 'localhost') return null!
+            return {
+                internalName: i.networkIdentifier,
+                network: i.networkIdentifier,
+                connected: !!profile,
+                userId: profile?.[0].userId,
+                identifier: profile?.[0],
+            }
+        })
+        .filter((x) => x)
+    console.log(providers)
     const [detachProfile, , setDetachProfile] = useModal(DashboardPersonaUnlinkConfirmDialog)
     // TODO: what if it does not have a (single?) home page? (e.g. mastdon)
     const home = activatedSocialNetworkUI.utils.getHomePage?.()
