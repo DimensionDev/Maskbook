@@ -1,14 +1,12 @@
 #!/usr/bin/env ts-node
 /* eslint-disable no-restricted-imports */
 import { difference, isEmpty, isNil, keys, omit, pick, toPairs, without } from 'lodash'
-import { run } from '../../scripts/utils'
 import {
     findAllUnusedKeys,
     findAllUsedKeys,
     getLocaleRelativePath,
     getMessagePath,
     LOCALE_NAMES,
-    LOCALE_PATH,
     readMessages,
     writeMessages,
 } from './utils'
@@ -61,7 +59,7 @@ async function syncKeys(locales = without(LOCALE_NAMES, 'en')) {
 async function diagnosis() {
     const unusedKeys = await findAllUnusedKeys()
     if (unusedKeys.length) {
-        const message = 'Run `npm run locale-kit -- --remove-unused-keys` to solve this problem'
+        const message = 'Run `npx locale-kit --remove-unused-keys` to solve this problem'
         for (const locale of LOCALE_NAMES) {
             const filePath = getLocaleRelativePath(getMessagePath(locale))
             console.log(`::warning file=${filePath}::${message}`)
@@ -76,7 +74,7 @@ async function diagnosis() {
     }
     const unsyncedLocales = await findAllUnsyncedLocales()
     if (!isEmpty(unsyncedLocales)) {
-        const message = 'Run `npm run locale-kit -- --sync-keys` to solve this problem'
+        const message = 'Run `npx locale-kit --sync-keys` to solve this problem'
         for (const [locale, names] of toPairs(unsyncedLocales)) {
             const filePath = getLocaleRelativePath(getMessagePath(locale))
             console.log(`::warning file=${filePath}::${message}`)
@@ -88,12 +86,8 @@ async function diagnosis() {
 }
 
 async function main() {
-    const unusedKeys = await findAllUnusedKeys()
-    console.error('Scanned', unusedKeys.length, 'unused keys')
-    console.error('Run `npm run locale-kit -- --remove-unused-keys` to remove them.')
-    console.error('Unsynced', keys(await findAllUnsyncedLocales()), 'locales')
     if (process.argv.includes('--remove-unused-keys')) {
-        await removeAllUnusedKeys(unusedKeys)
+        await removeAllUnusedKeys(await findAllUnusedKeys())
         console.log('Unused keys removed')
     }
     if (process.argv.includes('--set-missing-keys')) {
@@ -109,7 +103,5 @@ async function main() {
 if (process.env.CI) {
     diagnosis()
 } else {
-    main().then(() => {
-        run(LOCALE_PATH, 'git', 'add', '.')
-    })
+    main()
 }

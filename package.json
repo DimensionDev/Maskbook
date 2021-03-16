@@ -16,10 +16,9 @@
     "build-ios": "run-s build:ios:webpack build:ios:ext:prebuilt",
     "build:ios:ext:prebuilt": "ts-node scripts/webextensiom-shim-prebuilt.ts",
     "build:ios:webpack": "build iOS",
-    "lint": "eslint -c ./packages/.eslintrc.json packages/ --ext .ts,.tsx --fix --cache",
-    "lint:report": "eslint -c ./packages/.eslintrc.json packages/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml --cache",
+    "lint": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx --fix --cache",
+    "lint:report": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml --cache",
     "lint:typecoverage": "type-coverage",
-    "locale-kit": "locale-kit",
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
@@ -28,8 +27,9 @@
     "netlify-install": "test \"$CI\" = true && npx pnpm install -r --store=node_modules/.pnpm-store || echo skiping pnpm install"
   },
   "lint-staged": {
-    "*": "prettier --check",
-    "*.{ts,tsx,js,jsx}": "eslint --cache --fix"
+    "*": "prettier --write --ignore-unknown",
+    "*.{ts,tsx,js,jsx}": "eslint -c packages/.eslintrc.json --cache --fix",
+    "packages/maskbook/**/*": "locale-kit --sync-keys --remove-unused-keys"
   },
   "dependencies": {
     "@emotion/cache": "^11",
