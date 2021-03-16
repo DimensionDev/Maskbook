@@ -32,7 +32,7 @@ const define: SocialNetworkUI.Definition = {
         const activeTab = ((await browser.tabs.query({ active: true, currentWindow: true })) || [])[0]
         if (activeTab === undefined) return state
         const location = new URL(activeTab.url || globalThis.location.href)
-        for (const ui of definedSocialNetworkUIs) {
+        for (const ui of definedSocialNetworkUIs.values()) {
             if (ui.shouldActivate(location) && ui.networkIdentifier !== 'localhost') {
                 const _ = (await ui.load()).default
                 if (signal.aborted) return state

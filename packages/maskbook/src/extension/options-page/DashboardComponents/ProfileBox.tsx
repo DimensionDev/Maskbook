@@ -1,8 +1,7 @@
 import type { Persona } from '../../../database'
-import { definedSocialNetworkUIs } from '../../../social-network'
+import { definedSocialNetworkUIs, loadSocialNetworkUI } from '../../../social-network'
 
 import ProviderLine, { ProviderLineProps } from './ProviderLine'
-import { activatedSocialNetworkUI } from '../../../social-network'
 import { currentSetupGuideStatus } from '../../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../../settings/types'
 import { exclusiveTasks } from '../../content-script/tasks'
@@ -21,7 +20,7 @@ interface ProfileBoxProps {
 
 export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxProps) {
     const profiles = persona ? [...persona.linkedProfiles] : []
-    const providers = [...definedSocialNetworkUIs]
+    const providers = [...definedSocialNetworkUIs.values()]
         .map((i) => {
             const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
             if (i.networkIdentifier === 'localhost') return null!
@@ -34,15 +33,16 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
             }
         })
         .filter((x) => x)
-    console.log(providers)
     const [detachProfile, , setDetachProfile] = useModal(DashboardPersonaUnlinkConfirmDialog)
-    // TODO: what if it does not have a (single?) home page? (e.g. mastdon)
-    const home = activatedSocialNetworkUI.utils.getHomePage?.()
 
     const onConnect = async (provider: typeof providers[0]) => {
+        const ui = await loadSocialNetworkUI(provider.internalName)
+        // TODO: what if it does not have a (single?) home page? (e.g. mastdon)
+        // TODO: maybe add a new action "onConnect"?
+        const home = ui.utils.getHomePage?.()
         if (!persona) return
         if (!Flags.no_web_extension_dynamic_permission_request) {
-            if (!(await activatedSocialNetworkUI.permission.request())) return
+            if (!(await ui.permission.request())) return
         }
 
         // FIXME:

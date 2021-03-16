@@ -5,8 +5,12 @@ import i18nNextInstance from '../utils/i18n-next'
 import type { SocialNetworkUI } from './types'
 import { managedStateCreator } from './utils'
 
-const definedSocialNetworkUIsLocal = new Set<SocialNetworkUI.DeferredDefinition>()
-export const definedSocialNetworkUIs: ReadonlySet<SocialNetworkUI.DeferredDefinition> = definedSocialNetworkUIsLocal
+const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
+export const definedSocialNetworkUIs: ReadonlyMap<
+    string,
+    SocialNetworkUI.DeferredDefinition
+> = definedSocialNetworkUIsLocal
+const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     automation: {},
     collecting: {},
@@ -28,7 +32,7 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
 export let globalUIState: Readonly<SocialNetworkUI.State> = {} as any
 
 export async function activateSocialNetworkUI(): Promise<void> {
-    const ui_deferred = [...definedSocialNetworkUIs].find((x) => x.shouldActivate(location))
+    const ui_deferred = [...definedSocialNetworkUIs.values()].find((x) => x.shouldActivate(location))
     if (!ui_deferred) return
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
@@ -101,8 +105,17 @@ export async function activateSocialNetworkUI(): Promise<void> {
     }
 }
 
+export async function loadSocialNetworkUI(identifier: string): Promise<SocialNetworkUI.Definition> {
+    if (definedSocialNetworkUIsResolved.has(identifier)) return definedSocialNetworkUIsResolved.get(identifier)!
+    const define = definedSocialNetworkUIs.get(identifier)
+    if (!define) throw new Error('SNS adaptor not found')
+    const ui = (await define.load()).default
+    definedSocialNetworkUIsResolved.set(identifier, ui)
+    return ui
+}
+
 export function defineSocialNetworkUI(UI: SocialNetworkUI.DeferredDefinition) {
     if (UI.notReadyForProduction && process.env.NODE_ENV === 'production') return UI
-    definedSocialNetworkUIsLocal.add(UI)
+    definedSocialNetworkUIsLocal.set(UI.networkIdentifier, UI)
     return UI
 }
