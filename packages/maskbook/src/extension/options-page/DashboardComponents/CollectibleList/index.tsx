@@ -1,5 +1,5 @@
 import { Box, Button, makeStyles, Skeleton, Typography } from '@material-ui/core'
-import { CollectibleCard } from './Card'
+import { CollectibleCard } from './CollectibleCard'
 import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
 import { AssetProvider } from '../../../../plugins/Wallet/types'
 import { useAccount } from '../../../../web3/hooks/useAccount'
