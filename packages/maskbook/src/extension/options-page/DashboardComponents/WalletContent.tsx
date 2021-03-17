@@ -10,7 +10,6 @@ import {
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
     DashboardWalletRenameDialog,
-    DashboardWalletRedPacketDetailDialog,
 } from '../DashboardDialogs/Wallet'
 import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -89,7 +88,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
-    const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const [menu, openMenu] = useMenu(
         <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
@@ -207,7 +205,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
             {walletBackup}
             {walletDelete}
             {walletRename}
-            {walletRedPacket}
         </div>
     )
 })
