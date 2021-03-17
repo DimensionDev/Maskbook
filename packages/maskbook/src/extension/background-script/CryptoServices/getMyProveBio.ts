@@ -2,8 +2,7 @@ import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Co
 import { ProfileIdentifier, PersonaIdentifier } from '../../../database/type'
 import { encodePublicKeyWorker } from '../../../social-network/utils/text-payload-worker'
 import { queryPublicKey } from '../../../database'
-//#endregion
-//#region ProvePost, create & verify
+
 export async function getMyProveBio(
     whoAmI: ProfileIdentifier | PersonaIdentifier,
     networkIdentifier?: string,
@@ -11,7 +10,6 @@ export async function getMyProveBio(
     const myIdentity = await queryPublicKey(whoAmI)
     if (!myIdentity) return null
     const compressed = compressSecp256k1Key(myIdentity, 'public')
-    // FIXME: wait for #191
     return whoAmI instanceof ProfileIdentifier
         ? (await encodePublicKeyWorker(whoAmI))(compressed)
         : networkIdentifier
