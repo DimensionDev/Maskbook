@@ -7,6 +7,7 @@ import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddERC20TokenDialog,
+    DashboardWalletAddERC721TokenDialog,
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
     DashboardWalletRenameDialog,
@@ -79,6 +80,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     const xsMatched = useMatchXS()
     const chainIdValid = useChainIdValid()
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
+    const [addAsset, , openAddAsset] = useModal(DashboardWalletAddERC721TokenDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
@@ -157,7 +159,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                         <Button
                             className={classes.addButton}
                             variant="text"
-                            onClick={() => openAddToken({ wallet })}
+                            onClick={() => openAddAsset({ wallet })}
                             startIcon={<AddIcon />}>
                             {t('add_asset')}
                         </Button>
@@ -194,6 +196,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                 {tabIndex === 2 ? <TransactionList /> : null}
             </Box>
             {addToken}
+            {addAsset}
             {walletBackup}
             {walletDelete}
             {walletRename}
