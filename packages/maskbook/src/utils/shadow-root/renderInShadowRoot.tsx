@@ -75,7 +75,7 @@ export function renderInShadowRoot(
         }
     })
     config.signal?.addEventListener('abort', () => unmount())
-    return (): void => void rendered && unmount()
+    return (): void => void (rendered && unmount())
 }
 
 function mount(host: ShadowRoot, _: JSX.Element, keyBy = 'app', concurrent?: boolean) {
