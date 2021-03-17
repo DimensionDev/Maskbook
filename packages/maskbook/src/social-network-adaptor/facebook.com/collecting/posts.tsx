@@ -44,7 +44,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
             // ? inject after comments
             const commentSelectorPC = root
                 .clone()
-                .querySelectorAll('[role=article] span[dir="auto"]')
+                .querySelectorAll('[role=article] [aria-label] span[dir="auto"]')
                 .closest<HTMLElement>(3)
             const commentSelectorMobile = root
                 .clone()
