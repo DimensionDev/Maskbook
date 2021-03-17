@@ -8,6 +8,7 @@ import { delay } from '../utils/utils'
 import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
 import { ECKeyIdentifier, Identifier } from '@dimensiondev/maskbook-shared'
+import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
 
 const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
 export const definedSocialNetworkUIs: ReadonlyMap<
@@ -36,6 +37,7 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
 export let globalUIState: Readonly<SocialNetworkUI.State> = {} as any
 
 export async function activateSocialNetworkUI(): Promise<void> {
+    assertNotEnvironment(Environment.ManifestBackground)
     const ui_deferred = [...definedSocialNetworkUIs.values()].find((x) => x.shouldActivate(location))
     if (!ui_deferred) return
 

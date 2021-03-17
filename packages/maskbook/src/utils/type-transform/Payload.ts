@@ -1,9 +1,9 @@
 import type { SocialNetwork } from '../../social-network'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { safeGetActiveUI } from '../safeRequire'
 import { i18n } from '../i18n-next'
 import { Result, Ok, Err } from 'ts-results'
 import { Identifier, ProfileIdentifier } from '../../database/type'
+import { activatedSocialNetworkUI } from '../../social-network'
 
 export type Payload = PayloadAlpha40_Or_Alpha39 | PayloadAlpha38
 export type PayloadLatest = PayloadAlpha38
@@ -100,7 +100,7 @@ export function deconstructPayload(str: string, decoder: Decoder = (x) => [x]): 
     const decoders: Decoder[] = (() => {
         if (!decoder) {
             if (isEnvironment(Environment.ContentScript)) {
-                return [safeGetActiveUI().utils.textPayloadPostProcessor?.decoder!]
+                return [activatedSocialNetworkUI.utils.textPayloadPostProcessor?.decoder!]
             }
         }
         return [decoder]

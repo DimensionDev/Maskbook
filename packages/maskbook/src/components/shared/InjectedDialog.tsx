@@ -16,9 +16,10 @@ import {
 import { Children, cloneElement } from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { usePortalShadowRoot } from '../../utils/shadow-root/usePortalShadowRoot'
-import { getCustomUIOverwrite, mergeClasses, useStylesExtends } from '../custom-ui-helper'
+import { mergeClasses, useStylesExtends } from '../custom-ui-helper'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
 import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
+import { activatedSocialNetworkUI } from '../../social-network'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -51,7 +52,7 @@ export interface InjectedDialogProps extends withClasses<InjectedDialogClassKey>
 }
 export function InjectedDialog(props: InjectedDialogProps) {
     const classes = useStyles()
-    const overwrite = getCustomUIOverwrite()
+    const overwrite = activatedSocialNetworkUI.customization.componentOverwrite || {}
     props = overwrite.InjectedDialog?.props?.(props) ?? props
     const {
         dialogActions,

@@ -1,26 +1,19 @@
-import {
-    AutomatedTabTask,
-    AutomatedTabTaskRuntimeOptions,
-} from '@dimensiondev/holoflows-kit'
+import { AutomatedTabTask, AutomatedTabTaskRuntimeOptions } from '@dimensiondev/holoflows-kit'
 import { disableOpenNewTabInBackgroundSettings } from '../../settings/settings'
 import type { SocialNetworkUI } from '../../social-network'
 import { memoizePromise } from '../../utils/memoize'
-import { safeGetActiveUI } from '../../utils/safeRequire'
 import Serialization from '../../utils/type-transform/Serialization'
 import { delay } from '../../utils/utils'
 import { Flags } from '../../utils/flags'
-
-function getActivatedUI() {
-    return safeGetActiveUI()
-}
+import { activatedSocialNetworkUI } from '../../social-network'
 
 const _tasks = {
-    getPostContent: async () => (await getActivatedUI().collecting.getPostContent?.()) || '',
+    getPostContent: async () => (await activatedSocialNetworkUI.collecting.getPostContent?.()) || '',
     /**
      * Access profile page
      * Get Profile
      */
-    getProfile: async () => (await getActivatedUI().collecting.getProfile?.()) || { bioContent: '' },
+    getProfile: async () => (await activatedSocialNetworkUI.collecting.getProfile?.()) || { bioContent: '' },
     /**
      * Access main page
      * Paste text into PostBox
@@ -28,7 +21,7 @@ const _tasks = {
     pasteIntoPostBox: async (
         text: string,
         options: SocialNetworkUI.AutomationCapabilities.NativeCompositionAttachTextOptions,
-    ) => getActivatedUI().automation.nativeCompositionDialog?.appendText?.(text, options),
+    ) => activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.(text, options),
     /**
      * Fetch a url in the current context
      */
