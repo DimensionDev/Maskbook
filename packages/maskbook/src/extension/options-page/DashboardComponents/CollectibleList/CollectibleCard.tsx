@@ -1,13 +1,10 @@
-import { Card, createStyles, IconButton, Link, makeStyles, MenuItem } from '@material-ui/core'
-import ImageIcon from '@material-ui/icons/Image'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
-import { useCallback } from 'react'
+import { Card, createStyles, Link, makeStyles } from '@material-ui/core'
 import { Image } from '../../../../components/shared/Image'
-import { useMenu } from '../../../../utils/hooks/useMenu'
+import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
+import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { useModal } from '../../DashboardDialogs/Base'
-import { HideDialog } from './HideDialog'
-import { TransferDialog } from './TransferDialog'
+import type { ERC721TokenDetailed } from '../../../../web3/types'
+import { ERC721TokenActionsBar } from '../ERC721TokenActionsBar'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -26,72 +23,42 @@ const useStyles = makeStyles((theme) =>
             zIndex: 1,
             backgroundColor: `${theme.palette.background.paper} !important`,
         },
+        placeholder: {
+            width: 64,
+            height: 64,
+            opacity: 0.1,
+        },
     }),
 )
 
 export interface CollectibleCardProps {
-    name: string
-    description?: string
-    url: string
     link: string
+    wallet: WalletRecord
+    token: ERC721TokenDetailed
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
+    const { wallet, token } = props
+
     const { t } = useI18N()
     const classes = useStyles(props)
 
-    const [hideDialog, , openHideDialog] = useModal(HideDialog, {
-        name: props.name,
-        description: props.description,
-    })
-    const [transferDialog, , openTransferDialog] = useModal(TransferDialog)
-
-    const [menu, openMenu] = useMenu(
-        <MenuItem
-            onClick={() =>
-                openTransferDialog({
-                    url: props.url,
-                    onTransfer: () => {
-                        console.log('on transfer')
-                    },
-                })
-            }>
-            {t('transfer')}
-        </MenuItem>,
-        <MenuItem
-            onClick={() =>
-                openHideDialog({
-                    onConfirm: () => {
-                        console.log('hide confirm')
-                    },
-                })
-            }>
-            {t('hide')}
-        </MenuItem>,
-    )
-
-    const onClickMore = useCallback(
-        (ev: React.MouseEvent<HTMLButtonElement>) => {
-            ev.stopPropagation()
-            ev.preventDefault()
-            openMenu(ev)
-        },
-        [openMenu],
-    )
-
     return (
-        <>
-            <Link target="_blank" rel="noopener noreferrer" href={props.link}>
-                <Card className={classes.root} style={{ width: 160, height: 220 }}>
-                    <IconButton className={classes.icon} size="small" onClick={onClickMore}>
-                        <MoreVertIcon />
-                    </IconButton>
-                    {props.url ? <Image component="img" width={160} height={220} src={props.url} /> : <ImageIcon />}
-                </Card>
-            </Link>
-            {menu}
-            {hideDialog}
-            {transferDialog}
-        </>
+        <Link target="_blank" rel="noopener noreferrer" href={props.link}>
+            <Card className={classes.root} style={{ width: 160, height: 220 }}>
+                <ERC721TokenActionsBar classes={{ more: classes.icon }} wallet={wallet} token={token} />
+                {token.tokenURI ? (
+                    <Image
+                        component="img"
+                        width={160}
+                        height={220}
+                        style={{ objectFit: 'contain' }}
+                        src={token.tokenURI}
+                    />
+                ) : (
+                    <MaskbookIconOutlined className={classes.placeholder} />
+                )}
+            </Card>
+        </Link>
     )
 }

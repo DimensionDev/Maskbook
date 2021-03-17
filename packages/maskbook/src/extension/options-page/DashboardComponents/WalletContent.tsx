@@ -202,7 +202,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                 {tabIndex === 0 ? (
                     <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
                 ) : null}
-                {tabIndex === 1 ? <CollectibleList /> : null}
+                {tabIndex === 1 ? <CollectibleList wallet={wallet} /> : null}
                 {tabIndex === 2 ? <TransactionList /> : null}
             </Box>
             {addToken}

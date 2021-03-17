@@ -75,7 +75,8 @@ interface WalletMessage {
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
 
     walletsUpdated: void
-    tokensUpdated: void
+    erc20TokensUpdated: void
+    erc721TokensUpdated: void
     rpc: unknown
 }
 

@@ -3,6 +3,13 @@ import { CollectibleCard } from './CollectibleCard'
 import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
 import { AssetProvider } from '../../../../plugins/Wallet/types'
 import { useAccount } from '../../../../web3/hooks/useAccount'
+import { createERC721Token } from '../../../../web3/helpers'
+import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
+import { useChainId } from '../../../../web3/hooks/useChainState'
+
+export interface CollectibleListProps {
+    wallet: WalletRecord
+}
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -11,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
     },
     card: {
+        position: 'relative',
         padding: theme.spacing(1),
     },
     description: {
@@ -20,8 +28,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export function CollectibleList() {
+export function CollectibleList(props: CollectibleListProps) {
+    const { wallet } = props
+
     const account = useAccount()
+    const chainId = useChainId()
     const classes = useStyles()
     const {
         value: collectibles = [],
@@ -69,11 +80,28 @@ export function CollectibleList() {
             </Box>
         )
 
+    console.log({
+        collectibles,
+    })
+
     return (
         <Box className={classes.root}>
             {collectibles.map((x) => (
                 <div className={classes.card} key={x.id}>
-                    <CollectibleCard key={x.id} name={x.name} description={x.description} url={x.image_url ?? x.image_preview_url ?? ''} link={x.permalink} />
+                    <CollectibleCard
+                        key={x.id}
+                        wallet={wallet}
+                        token={createERC721Token(
+                            chainId,
+                            '',
+                            x.asset_contract.address,
+                            x.name,
+                            x.asset_contract.symbol,
+                            '',
+                            x.image_url ?? x.image_preview_url ?? '',
+                        )}
+                        link={x.permalink}
+                    />
                     <div className={classes.description}>
                         <Typography color="textSecondary" variant="body2">
                             {x.name ?? x.collection.slug}

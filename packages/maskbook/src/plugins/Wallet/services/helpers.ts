@@ -1,3 +1,4 @@
+import { omit } from 'lodash-es'
 import type { IDBPSafeTransaction } from '../../../database/helpers/openDB'
 import type { WalletDB } from '../database/Wallet.db'
 import type {
@@ -48,9 +49,15 @@ export function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
 }
 
 export function ERC721TokenRecordIntoDB(x: ERC721TokenRecord) {
-    return x as ERC721TokenRecordInDatabase
+    const record: ERC721TokenRecordInDatabase = {
+        ...x,
+        // NFT cannot be divided and store each token separately
+        record_id: `${formatChecksumAddress(x.address)}_${x.tokenId}`,
+    }
+    return record
 }
 
 export function ERC721TokenRecordOutDB(x: ERC721TokenRecordInDatabase) {
-    return x as ERC721TokenRecord
+    const record: ERC721TokenRecord = omit(x, 'record_id')
+    return record
 }

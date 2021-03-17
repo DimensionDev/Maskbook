@@ -50,6 +50,8 @@ export interface WalletRecord {
 
 export interface ERC20TokenRecordInDatabase extends ERC20TokenRecord {}
 
-export interface ERC721TokenRecordInDatabase extends ERC721TokenRecord {}
+export interface ERC721TokenRecordInDatabase extends ERC721TokenRecord {
+    record_id: string
+}
 
 export interface WalletRecordInDatabase extends WalletRecord {}
