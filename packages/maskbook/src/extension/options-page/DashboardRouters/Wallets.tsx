@@ -24,6 +24,7 @@ import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { extendsTheme } from '../../../utils/theme'
 import { useStableTokensDebank } from '../../../web3/hooks/useStableTokensDebank'
+import { useTrustedERC721TokensFromDB } from '../../../plugins/Wallet/hooks/useERC721Token'
 
 //#region theme
 const walletsTheme = extendsTheme((theme) => ({
@@ -105,13 +106,14 @@ export default function DashboardWalletsRouter() {
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const selectedWallet = useWallet()
-    const tokens = useTrustedERC20TokensFromDB()
+    const erc20Tokens = useTrustedERC20TokensFromDB()
+    const erc721Tokens = useTrustedERC721TokensFromDB()
     const {
         value: detailedTokens,
         error: detailedTokensError,
         loading: detailedTokensLoading,
         retry: detailedTokensRetry,
-    } = useAssetsDetailed(tokens)
+    } = useAssetsDetailed(erc20Tokens)
     const { value: stableTokens = [] } = useStableTokensDebank()
 
     // show create dialog

@@ -9,6 +9,8 @@ function serializeWalletRecord(record: WalletRecord) {
         ...record,
         erc20_token_whitelist: Array.from(record.erc20_token_whitelist.values()),
         erc20_token_blacklist: Array.from(record.erc20_token_blacklist.values()),
+        erc721_token_whitelist: Array.from(record.erc721_token_whitelist.values()),
+        erc721_token_blacklist: Array.from(record.erc721_token_blacklist.values()),
     })
 }
 

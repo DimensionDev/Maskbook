@@ -6,6 +6,7 @@ import { useAccount } from '../../../../web3/hooks/useAccount'
 import { createERC721Token } from '../../../../web3/helpers'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../../web3/hooks/useChainState'
+import { formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
 
 export interface CollectibleListProps {
     wallet: WalletRecord
@@ -80,35 +81,38 @@ export function CollectibleList(props: CollectibleListProps) {
             </Box>
         )
 
-    console.log({
-        collectibles,
-    })
-
     return (
         <Box className={classes.root}>
-            {collectibles.map((x) => (
-                <div className={classes.card} key={x.id}>
-                    <CollectibleCard
-                        key={x.id}
-                        wallet={wallet}
-                        token={createERC721Token(
-                            chainId,
-                            '',
-                            x.asset_contract.address,
-                            x.name,
-                            x.asset_contract.symbol,
-                            '',
-                            x.image_url ?? x.image_preview_url ?? '',
-                        )}
-                        link={x.permalink}
-                    />
-                    <div className={classes.description}>
-                        <Typography color="textSecondary" variant="body2">
-                            {x.name ?? x.collection.slug}
-                        </Typography>
+            {collectibles
+                .filter(
+                    (x) =>
+                        !wallet.erc721_token_blacklist.has(
+                            `${formatEthereumAddress(x.asset_contract.address)}_${x.token_id}`,
+                        ),
+                )
+                .map((y) => (
+                    <div className={classes.card} key={y.id}>
+                        <CollectibleCard
+                            key={y.id}
+                            wallet={wallet}
+                            token={createERC721Token(
+                                chainId,
+                                y.token_id,
+                                y.asset_contract.address,
+                                y.name,
+                                y.asset_contract.symbol,
+                                '',
+                                y.image_url ?? y.image_preview_url ?? '',
+                            )}
+                            link={y.permalink}
+                        />
+                        <div className={classes.description}>
+                            <Typography color="textSecondary" variant="body2">
+                                {y.name ?? y.collection.slug}
+                            </Typography>
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
         </Box>
     )
 }
