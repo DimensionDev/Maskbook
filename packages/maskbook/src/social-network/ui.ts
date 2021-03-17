@@ -4,6 +4,7 @@ import { Flags } from '../utils/flags'
 import i18nNextInstance from '../utils/i18n-next'
 import type { SocialNetworkUI } from './types'
 import { managedStateCreator } from './utils'
+import { delay } from '../utils/utils'
 
 const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
 export const definedSocialNetworkUIs: ReadonlyMap<
@@ -42,7 +43,6 @@ export async function activateSocialNetworkUI(): Promise<void> {
 
     const abort = new AbortController()
     const { signal } = abort
-    debugger
     if (module.hot) {
         ui_deferred.hotModuleReload?.(() => {
             console.log('SNS adaptor HMR.')
@@ -98,18 +98,26 @@ export async function activateSocialNetworkUI(): Promise<void> {
         const posts = ui.collecting.postsProvider?.posts
         if (!posts) return
         const abortSignals = new WeakMap<object, AbortController>()
-        posts.event.on('set', (key, value) => {
+        posts.event.on('set', async (key, value) => {
+            await unmount(key)
             const abort = new AbortController()
+            signal.addEventListener('abort', () => abort.abort())
             abortSignals.set(key, abort)
-            const { signal } = abort
-            ui.injection.enhancedPostRenderer?.(signal, value)
-            ui.injection.postInspector?.(signal, value)
-            ui.injection.commentComposition?.compositionBox(signal, value)
-            ui.injection.commentComposition?.commentInspector(signal, value)
+            const { signal: postSignal } = abort
+            ui.injection.enhancedPostRenderer?.(postSignal, value)
+            ui.injection.postInspector?.(postSignal, value)
+            ui.injection.commentComposition?.compositionBox(postSignal, value)
+            ui.injection.commentComposition?.commentInspector(postSignal, value)
         })
-        posts.event.on('delete', (key) => {
-            abortSignals.get(key)?.abort()
-        })
+        posts.event.on('delete', unmount)
+        function unmount(key: object) {
+            if (!abortSignals.has(key)) return
+            abortSignals.get(key)!.abort()
+            // AbortSignal need an event loop
+            // unmount a React root need another one.
+            // let's guess a number that the React root will unmount.
+            return delay(16 * 3)
+        }
     }
 }
 

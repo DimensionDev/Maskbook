@@ -86,6 +86,13 @@ function mount(host: ShadowRoot, _: JSX.Element, keyBy = 'app', concurrent?: boo
             dom.className = keyBy
             return dom
         })()
+    if (container.childElementCount && process.env.NODE_ENV === 'development') {
+        console.warn(
+            `The node you want to mount on`,
+            container,
+            `already has children in it. It is highly like a mistake. Did you forget to set "keyBy" correctly?`,
+        )
+    }
     for (const each of captureEvents) {
         host.addEventListener(each, (e) => e.stopPropagation())
     }

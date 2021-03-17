@@ -28,6 +28,7 @@ import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskbookIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { currentSelectedIdentity } from '../../settings/settings'
+import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 
 const origins = ['https://www.twitter.com/*', 'https://m.twitter.com/*', 'https://twitter.com/*']
 const twitterUI: SocialNetworkUI.Definition = {
@@ -85,7 +86,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         searchResult: injectSearchResultBoxAtTwitter,
         enhancedPostRenderer: (s, c) => injectPostReplacerAtTwitter(c, s),
         pageInspector: injectPageInspectorDefault(),
-        postInspector: (s, c) => injectPostReplacerAtTwitter(c, s),
+        postInspector: (s, c) => injectPostInspectorAtTwitter(c, s),
         setupPrompt: injectSetupPromptAtTwitter,
         newPostComposition: {
             start: injectPostBoxComposed,
