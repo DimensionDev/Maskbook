@@ -40,7 +40,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                         height: 220,
                     }}>
                     {props.url ? (
-                        <Image component="img" style={{ width: '90%', height: 'auto' }} src={props.url} />
+                        <Image component="img" width={140} height={220} style={{ objectFit: 'contain' }} src={props.url} />
                     ) : (
                         <MaskbookIconOutlined className={classes.placeholder} />
                     )}
