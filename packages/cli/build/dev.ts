@@ -2,11 +2,11 @@
 import { spawn } from 'child_process'
 import { awaitChildProcess, ROOT_PATH } from '../utils'
 import onMain from './main'
-import { dev } from './typescript'
+import { build, dev } from './typescript'
 import { noop } from 'lodash'
 
 async function main() {
-    // await build()
+    await build()
     dev()
     if (process.argv[2] === '--daemon') {
         console.log('Starting TypeScript compiler...')
@@ -23,4 +23,6 @@ async function main() {
     return onMain('dev')
 }
 
-main().then(awaitChildProcess).then(process.exit)
+main().then(async (child) => {
+    process.exit(await awaitChildProcess(child))
+})

@@ -16,4 +16,6 @@ async function main() {
     return onMain('build')
 }
 
-main().then(awaitChildProcess).then(process.exit)
+main().then(async (child) => {
+    process.exit(await awaitChildProcess(child))
+})
