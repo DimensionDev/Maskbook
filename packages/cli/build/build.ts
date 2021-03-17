@@ -16,6 +16,4 @@ async function main() {
     return onMain('build')
 }
 
-main()
-    .then(awaitChildProcess)
-    .catch((code: number) => process.exit(code))
+main().then(awaitChildProcess).then(process.exit)
