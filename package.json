@@ -6,7 +6,7 @@
   "scripts": {
     "start": "dev",
     "start-e2e": "env target=E2E dev",
-    "ts": "dev -- echo Starting TypeScript compiler...",
+    "ts": "dev --daemon",
     "go": "dev --help",
     "start:storybook": "dev -- start-storybook -p 9009 -s public --quiet",
     "build": "build",

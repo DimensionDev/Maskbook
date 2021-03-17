@@ -30,7 +30,7 @@ export default async function main(mode: 'dev' | 'build') {
             name: 'confirm',
             message: `Command is: "${command.join(' ')}". Is that OK?`,
         })
-        if (!confirm) return
+        if (!confirm) return process.exit(0)
     }
 
     const command = ['--mode', mode === 'dev' ? 'development' : 'production']

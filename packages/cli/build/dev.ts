@@ -7,6 +7,11 @@ import { build, dev } from './typescript'
 async function main() {
     await build()
     dev()
+    if (process.argv[2] === '--daemon') {
+        console.log('Starting TypeScript compiler...')
+        // Never ends
+        return new Promise<never>((resolve) => {})
+    }
     if (process.argv[2] === '--') {
         return spawn(process.argv[3], process.argv.slice(4), {
             stdio: 'inherit',
@@ -18,5 +23,5 @@ async function main() {
 }
 
 main().then(({ exitCode }) => {
-    process.exit(exitCode)
+    process.exit(exitCode!)
 })
