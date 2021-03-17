@@ -7,6 +7,11 @@ import { createERC721Token } from '../../../../web3/helpers'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
+import { createContext } from 'react'
+
+export const CollectibleContext = createContext<{
+    collectiblesRetry: () => void
+}>(null!)
 
 export interface CollectibleListProps {
     wallet: WalletRecord
@@ -82,37 +87,39 @@ export function CollectibleList(props: CollectibleListProps) {
         )
 
     return (
-        <Box className={classes.root}>
-            {collectibles
-                .filter(
-                    (x) =>
-                        !wallet.erc721_token_blacklist.has(
-                            `${formatEthereumAddress(x.asset_contract.address)}_${x.token_id}`,
-                        ),
-                )
-                .map((y) => (
-                    <div className={classes.card} key={y.id}>
-                        <CollectibleCard
-                            key={y.id}
-                            wallet={wallet}
-                            token={createERC721Token(
-                                chainId,
-                                y.token_id,
-                                y.asset_contract.address,
-                                y.name,
-                                y.asset_contract.symbol,
-                                '',
-                                y.image_url ?? y.image_preview_url ?? '',
-                            )}
-                            link={y.permalink}
-                        />
-                        <div className={classes.description}>
-                            <Typography color="textSecondary" variant="body2">
-                                {y.name ?? y.collection.slug}
-                            </Typography>
+        <CollectibleContext.Provider value={{ collectiblesRetry }}>
+            <Box className={classes.root}>
+                {collectibles
+                    .filter(
+                        (x) =>
+                            !wallet.erc721_token_blacklist.has(
+                                `${formatEthereumAddress(x.asset_contract.address)}_${x.token_id}`,
+                            ),
+                    )
+                    .map((y) => (
+                        <div className={classes.card} key={y.id}>
+                            <CollectibleCard
+                                key={y.id}
+                                wallet={wallet}
+                                token={createERC721Token(
+                                    chainId,
+                                    y.token_id,
+                                    y.asset_contract.address,
+                                    y.name,
+                                    y.asset_contract.symbol,
+                                    '',
+                                    y.image_url ?? y.image_preview_url ?? '',
+                                )}
+                                link={y.permalink}
+                            />
+                            <div className={classes.description}>
+                                <Typography color="textSecondary" variant="body2">
+                                    {y.name ?? y.collection.slug}
+                                </Typography>
+                            </div>
                         </div>
-                    </div>
-                ))}
-        </Box>
+                    ))}
+            </Box>
+        </CollectibleContext.Provider>
     )
 }

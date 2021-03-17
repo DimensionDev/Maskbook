@@ -1,8 +1,7 @@
+import { createContext, useState } from 'react'
 import {
     Box,
     Button,
-    Card,
-    CardContent,
     IconButton,
     makeStyles,
     Skeleton,
@@ -25,10 +24,11 @@ import { getTokenUSDValue, isSameAddress } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20TokenActionsBar } from './ERC20TokenActionsBar'
-import { useContext, useState } from 'react'
-import { DashboardWalletsContext } from '../DashboardRouters/Wallets'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { useAssetsDetailed } from '../../../web3/hooks/useAssetsDetailed'
+import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Token'
+import { useStableTokensDebank } from '../../../web3/hooks/useStableTokensDebank'
 
 const MAX_TOKENS_LENGTH = 5
 const MIN_VALUE = 5
@@ -77,6 +77,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
+export const WalletAssetsTableContext = createContext<{
+    detailedTokensRetry: () => void
+}>(null!)
+
 export interface WalletAssetsTableProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     wallet: WalletRecord
 }
@@ -84,13 +88,15 @@ export interface WalletAssetsTableProps extends withClasses<KeysInferFromUseStyl
 export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const { t } = useI18N()
     const { wallet } = props
+
+    const erc20Tokens = useTrustedERC20TokensFromDB()
     const {
-        detailedTokens,
-        detailedTokensLoading,
-        detailedTokensError,
-        detailedTokensRetry,
-        stableTokens,
-    } = useContext(DashboardWalletsContext)
+        value: detailedTokens,
+        error: detailedTokensError,
+        loading: detailedTokensLoading,
+        retry: detailedTokensRetry,
+    } = useAssetsDetailed(erc20Tokens)
+    const { value: stableTokens = [] } = useStableTokensDebank()
 
     const classes = useStylesExtends(useStyles(), props)
     const LABELS = [t('wallet_assets'), t('wallet_price'), t('wallet_balance'), t('wallet_value'), ''] as const
@@ -209,7 +215,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     )
 
     return (
-        <>
+        <WalletAssetsTableContext.Provider value={{ detailedTokensRetry }}>
             <TableContainer className={classes.container}>
                 <Table className={classes.table} component="table" size="medium" stickyHeader>
                     <TableHead className={classes.head}>
@@ -277,6 +283,6 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                 </Table>
             </TableContainer>
             <LessButton />
-        </>
+        </WalletAssetsTableContext.Provider>
     )
 }

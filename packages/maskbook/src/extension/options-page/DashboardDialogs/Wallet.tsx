@@ -57,8 +57,9 @@ import { EthereumAddress } from 'wallet.ts'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { QRCode } from '../../../components/shared/qrcode'
 import { formatBalance, formatEthereumAddress } from '../../../plugins/Wallet/formatter'
-import { DashboardWalletsContext } from '../DashboardRouters/Wallets'
 import { useTokenTransferCallback } from '../../../web3/hooks/useTokenTransferCallback'
+import { WalletAssetsTableContext } from '../DashboardComponents/WalletAssetsTable'
+import { CollectibleContext } from '../DashboardComponents/CollectibleList'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -805,17 +806,18 @@ interface TransferTabProps {
 }
 
 function TransferTab(props: TransferTabProps) {
-    const classes = useTransferTabStyles()
     const { token, onClose } = props
-    const { t } = useI18N()
 
-    const { detailedTokensRetry } = useContext(DashboardWalletsContext)
+    const { t } = useI18N()
+    const classes = useTransferTabStyles()
+
+    const { detailedTokensRetry } = useContext(WalletAssetsTableContext)
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
 
     // balance
-    const { value: tokenBalance = '0', retry: retryTokenBalance } = useTokenBalance(
+    const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useTokenBalance(
         token?.type ?? EthereumTokenType.Ether,
         token?.address ?? '',
     )
@@ -851,7 +853,7 @@ function TransferTab(props: TransferTabProps) {
                 if (transferState.type !== TransactionStateType.CONFIRMED) return
                 onClose()
                 detailedTokensRetry()
-                retryTokenBalance()
+                tokenBalanceRetry()
             },
             [transferState.type],
         ),
@@ -1056,10 +1058,54 @@ export function DashboardWalletTransferDialogNFT(
     const classes = useTransferDialogStylesNFT()
 
     const [address, setAddress] = useState('')
+    const { collectiblesRetry } = useContext(CollectibleContext)
 
-    const onTransfer = () => {
-        console.log('transfer')
-    }
+    //#region transfer tokens
+    const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
+        token.type,
+        token.address,
+        token.tokenId,
+        address,
+    )
+
+    const onTransfer = useCallback(async () => {
+        await transferCallback()
+    }, [props.onClose, transferCallback])
+    //#endregion
+
+    //#region remote controlled transaction dialog
+    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+        EthereumMessages.events.transactionDialogUpdated,
+        useCallback(
+            (ev) => {
+                if (ev.open) return
+                resetTransferCallback()
+                if (transferState.type !== TransactionStateType.CONFIRMED) return
+                props.onClose()
+                collectiblesRetry()
+            },
+            [transferState.type],
+        ),
+    )
+
+    // open the transaction dialog
+    useEffect(() => {
+        if (transferState.type === TransactionStateType.UNKNOWN) return
+        setTransactionDialogOpen({
+            open: true,
+            state: transferState,
+            summary: `Transfer ${token.name} to ${formatEthereumAddress(address, 4)}.`,
+        })
+    }, [transferState /* update tx dialog only if state changed */])
+    //#endregion
+
+    //#region validation
+    const validationMessage = useMemo(() => {
+        if (!address) return t('wallet_transfer_error_address_absence')
+        if (!EthereumAddress.isValid(address)) return t('wallet_transfer_error_invalid_address')
+        return ''
+    }, [address, token])
+    //#endregion
 
     return (
         <DashboardDialogCore {...props}>
@@ -1094,7 +1140,7 @@ export function DashboardWalletTransferDialogNFT(
                             color="primary"
                             disabled={!address}
                             onClick={onTransfer}>
-                            {t('wallet_transfer_send')}
+                            {validationMessage || t('wallet_transfer_send')}
                         </Button>
                     </div>
                 }
