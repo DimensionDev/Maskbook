@@ -19,7 +19,7 @@ export function run(cwd = ROOT_PATH, cmd: string, ...args: string[]) {
 export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export const awaitChildProcess = (child: ChildProcess) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<number>((resolve, reject) => {
         child.on('error', () => reject(child.exitCode))
         child.on('exit', (code) => (code === 0 ? resolve : reject)(code))
     })
