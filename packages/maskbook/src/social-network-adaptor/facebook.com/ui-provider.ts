@@ -98,10 +98,10 @@ const facebookUI: SocialNetworkUI.Definition = {
         searchResult: undefined,
         setupPrompt: injectSetupPromptFacebook,
         commentComposition: {
-            compositionBox: (s, c) => injectPostCommentsDefault()(c, s),
-            commentInspector: (s, c) => injectCommentBoxDefaultFactory(pasteToCommentBoxFacebook)(c, s),
+            compositionBox: injectPostCommentsDefault(),
+            commentInspector: injectCommentBoxDefaultFactory(pasteToCommentBoxFacebook),
         },
-        postInspector: (s, c) => injectPostInspectorFacebook(c, s),
+        postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),
         startSetupWizard: createTaskStartSetupGuideDefault(facebookBase.networkIdentifier),
     },

@@ -26,7 +26,7 @@ export function injectPostCommentsDefault<T extends string>(
         const additional = additionalPropsToPostComment(classes)
         return <PostComment {...props} {...additional} />
     })
-    return function injectPostComments(current: PostInfo, signal: AbortSignal) {
+    return function injectPostComments(signal: AbortSignal, current: PostInfo) {
         const selector = current.commentsSelector
         if (!selector) return noop
         const commentWatcher = new MutationObserverWatcher(selector, current.rootNode).useForeach(

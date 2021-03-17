@@ -12,7 +12,7 @@ function getShadowRoot(node: HTMLElement) {
     map.set(node, dom)
     return dom
 }
-export function injectPostInspectorFacebook(current: PostInfo, signal: AbortSignal) {
+export function injectPostInspectorFacebook(signal: AbortSignal, current: PostInfo) {
     clickSeeMore(current.rootNodeProxy.current.parentElement!)
     return injectPostInspectorDefault({
         zipPost(node) {

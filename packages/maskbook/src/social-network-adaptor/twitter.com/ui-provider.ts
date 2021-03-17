@@ -84,9 +84,9 @@ const twitterUI: SocialNetworkUI.Definition = {
     injection: {
         toolbar: injectToolbarAtTwitter,
         searchResult: injectSearchResultBoxAtTwitter,
-        enhancedPostRenderer: (s, c) => injectPostReplacerAtTwitter(c, s),
+        enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
-        postInspector: (s, c) => injectPostInspectorAtTwitter(c, s),
+        postInspector: injectPostInspectorAtTwitter,
         setupPrompt: injectSetupPromptAtTwitter,
         newPostComposition: {
             start: injectPostBoxComposed,

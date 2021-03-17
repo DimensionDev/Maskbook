@@ -44,7 +44,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         if (!(payload && decrypted)) return null
         return <CommentBox onSubmit={onCallback} {...props} />
     })
-    return (current: PostInfo, signal: AbortSignal) => {
+    return (signal: AbortSignal, current: PostInfo) => {
         if (!current.commentBoxSelector) return noop
         const commentBoxWatcher = new MutationObserverWatcher(
             current.commentBoxSelector.clone(),
