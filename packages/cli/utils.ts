@@ -1,6 +1,6 @@
-import { spawnSync } from 'child_process'
+import { ChildProcess, spawnSync } from 'child_process'
 import os from 'os'
-import { resolve, relative } from 'path'
+import { relative, resolve } from 'path'
 
 export const ROOT_PATH = resolve(__dirname, '..', '..')
 export const PKG_PATH = resolve(ROOT_PATH, 'packages')
@@ -17,3 +17,10 @@ export function run(cwd = ROOT_PATH, cmd: string, ...args: string[]) {
 }
 
 export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+export const awaitChildProcess = (child: ChildProcess) => {
+    return new Promise((resolve, reject) => {
+        child.on('error', () => reject(child.exitCode))
+        child.on('exit', (code) => (code === 0 ? resolve : reject)(code))
+    })
+}

@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node
 import { spawn } from 'child_process'
-import { ROOT_PATH } from '../utils'
+import { awaitChildProcess, ROOT_PATH } from '../utils'
 import onMain from './main'
 import { build } from './typescript'
 
@@ -16,8 +16,6 @@ async function main() {
     return onMain('build')
 }
 
-main().then((p) => {
-    p.addListener('exit', (code) => {
-        process.exit(code)
-    })
-})
+main()
+    .then(awaitChildProcess)
+    .catch((code: number) => process.exit(code))
