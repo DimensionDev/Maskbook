@@ -16,7 +16,10 @@ export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
             return null
         },
         getShareLinkURL(message) {
-            return new URL(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(message)}&u=mask.io`)
+            const url = new URL('https://www.facebook.com/sharer/sharer.php')
+            url.searchParams.set('quote', message)
+            url.searchParams.set('u', 'mask.io')
+            return url
         },
     },
 }
