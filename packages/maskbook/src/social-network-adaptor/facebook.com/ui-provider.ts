@@ -103,7 +103,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         },
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),
-        startSetupWizard: createTaskStartSetupGuideDefault(facebookBase.networkIdentifier),
+        setupWizard: createTaskStartSetupGuideDefault(facebookBase.networkIdentifier),
     },
     configuration: {
         steganography: {

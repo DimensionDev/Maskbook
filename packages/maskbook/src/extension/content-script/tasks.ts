@@ -1,18 +1,12 @@
 import {
     AutomatedTabTask,
-    isEnvironment,
     AutomatedTabTaskRuntimeOptions,
-    Environment,
 } from '@dimensiondev/holoflows-kit'
-import { ProfileIdentifier, ECKeyIdentifier, Identifier } from '../../database/type'
-import { disableOpenNewTabInBackgroundSettings, currentSetupGuideStatus } from '../../settings/settings'
-import type { SetupGuideCrossContextStatus } from '../../settings/types'
+import { disableOpenNewTabInBackgroundSettings } from '../../settings/settings'
 import type { SocialNetworkUI } from '../../social-network'
 import { memoizePromise } from '../../utils/memoize'
 import { safeGetActiveUI } from '../../utils/safeRequire'
 import Serialization from '../../utils/type-transform/Serialization'
-import { sideEffect } from '../../utils/side-effects'
-import { untilDocumentReady } from '../../utils/dom'
 import { delay } from '../../utils/utils'
 import { Flags } from '../../utils/flags'
 
@@ -47,9 +41,6 @@ const _tasks = {
         },
         (x) => x,
     ),
-    async SetupGuide(for_: ECKeyIdentifier) {
-        getActivatedUI().injection.startSetupWizard?.(for_)
-    },
     async noop() {},
 }
 const realTasks = AutomatedTabTask(_tasks, {
@@ -123,19 +114,3 @@ export function exclusiveTasks(...args: Parameters<typeof realTasks>) {
         },
     })
 }
-
-sideEffect.then(untilDocumentReady).then(() => {
-    if (!isEnvironment(Environment.ContentScript)) return
-
-    //#region setup guide
-    const network = getActivatedUI().networkIdentifier
-    const id = currentSetupGuideStatus[network].value
-    const onStatusUpdate = (id: string) => {
-        const { persona, status }: SetupGuideCrossContextStatus = JSON.parse(id || '{}')
-        if (persona && status) _tasks.SetupGuide(Identifier.fromString(persona, ECKeyIdentifier).unwrap())
-    }
-    currentSetupGuideStatus[network].addListener(onStatusUpdate)
-    currentSetupGuideStatus[network].readyPromise.then(onStatusUpdate)
-    onStatusUpdate(id)
-    //#endregion
-})

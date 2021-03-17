@@ -5,6 +5,9 @@ import i18nNextInstance from '../utils/i18n-next'
 import type { SocialNetworkUI } from './types'
 import { managedStateCreator } from './utils'
 import { delay } from '../utils/utils'
+import { currentSetupGuideStatus } from '../settings/settings'
+import type { SetupGuideCrossContextStatus } from '../settings/types'
+import { ECKeyIdentifier, Identifier } from '@dimensiondev/maskbook-shared'
 
 const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
 export const definedSocialNetworkUIs: ReadonlyMap<
@@ -57,9 +60,12 @@ export async function activateSocialNetworkUI(): Promise<void> {
     globalUIState = { ...state, ...managedStateCreator() }
 
     ui.customization.paletteMode?.start(signal)
+    startIntermediateSetupGuide()
     $unknownIdentityResolution()
+
     ui.collecting.postsProvider?.start(signal)
     startPostListener()
+
     ui.collecting.profilesCollector?.(signal)
     ui.injection.pageInspector?.(signal)
     if (Flags.toolbar_enabled) ui.injection.toolbar?.(signal)
@@ -118,6 +124,20 @@ export async function activateSocialNetworkUI(): Promise<void> {
             // let's guess a number that the React root will unmount.
             return delay(16 * 3)
         }
+    }
+
+    function startIntermediateSetupGuide() {
+        const network = ui.networkIdentifier
+        const id = currentSetupGuideStatus[network].value
+        const onStatusUpdate = (id: string) => {
+            const { persona, status }: SetupGuideCrossContextStatus = JSON.parse(id || '{}')
+            if (persona && status) {
+                ui.injection.setupWizard?.(signal, Identifier.fromString(persona, ECKeyIdentifier).unwrap())
+            }
+        }
+        currentSetupGuideStatus[network].addListener(onStatusUpdate)
+        currentSetupGuideStatus[network].readyPromise.then(onStatusUpdate)
+        onStatusUpdate(id)
     }
 }
 

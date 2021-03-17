@@ -52,13 +52,7 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
             persona: persona.identifier.toText(),
         } as SetupGuideCrossContextStatus)
         await delay(100)
-        home &&
-            exclusiveTasks(home, {
-                active: true,
-                autoClose: false,
-                important: true,
-                memorable: false,
-            }).SetupGuide(persona.identifier)
+        home && browser.tabs.create({ active: true, url: home })
     }
     const onDisconnect = (provider: typeof providers[0]) => {
         setDetachProfile({ nickname: persona?.nickname, identifier: provider.identifier })

@@ -1,4 +1,3 @@
-import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { postEditorToolbarSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
@@ -9,7 +8,6 @@ import { makeStyles, Theme } from '@material-ui/core'
 import { startWatch } from '../../../utils/watcher'
 
 export function injectPostDialogIconAtTwitter(signal: AbortSignal) {
-    if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     const emptyNode = document.createElement('div')
     renderPostDialogIconTo(
         postEditorToolbarSelector().map((x) => (isMobile() && isCompose() ? x : emptyNode)),

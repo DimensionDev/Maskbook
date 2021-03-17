@@ -9,7 +9,6 @@ import { hasEditor, isCompose } from '../utils/postBox'
 import { startWatch } from '../../../utils/watcher'
 
 export function injectPostDialogHintAtTwitter(signal: AbortSignal) {
-    if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     const emptyNode = document.createElement('div')
     renderPostDialogHintTo('timeline', postEditorInTimelineSelector(), signal)
     renderPostDialogHintTo(

@@ -1,12 +1,10 @@
 import { useRef } from 'react'
-import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { postEditorContentInPopupSelector, rootSelector } from '../utils/selector'
 import { startWatch } from '../../../utils/watcher'
 export function injectPostDialogAtTwitter(signal: AbortSignal) {
-    if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     renderPostDialogTo('popup', postEditorContentInPopupSelector(), signal)
     renderPostDialogTo('timeline', rootSelector(), signal)
 }

@@ -113,7 +113,7 @@ export namespace SocialNetworkUI {
             userBadge?(signal: AbortSignal): void
             /** Inject UI to the search result */
             searchResult?(signal: AbortSignal): void
-            startSetupWizard?(for_: PersonaIdentifier): void
+            setupWizard?(signal: AbortSignal, for_: PersonaIdentifier): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void

@@ -99,7 +99,7 @@ const twitterUI: SocialNetworkUI.Definition = {
                 image: true,
             },
         },
-        startSetupWizard: createTaskStartSetupGuideDefault('twitter.com'),
+        setupWizard: createTaskStartSetupGuideDefault('twitter.com'),
         userBadge: injectMaskUserBadgeAtTwitter,
         commentComposition: undefined,
     },
