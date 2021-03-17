@@ -5,7 +5,7 @@ import onMain from './main'
 import { build, dev } from './typescript'
 
 async function main() {
-    await build()
+    // await build()
     dev()
     if (process.argv[2] === '--daemon') {
         console.log('Starting TypeScript compiler...')
@@ -22,6 +22,8 @@ async function main() {
     return onMain('dev')
 }
 
-main().then(({ exitCode }) => {
-    process.exit(exitCode!)
+main().then((cp) => {
+    cp.addListener('exit', (code) => {
+        process.exit(code!)
+    })
 })
