@@ -5,6 +5,8 @@ import type {
     ERC20TokenRecord,
     WalletRecordInDatabase,
     ERC20TokenRecordInDatabase,
+    ERC721TokenRecord,
+    ERC721TokenRecordInDatabase,
 } from '../database/types'
 import { resolveChainId } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
@@ -43,4 +45,12 @@ export function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
     }
     record.address = formatChecksumAddress(record.address)
     return record
+}
+
+export function ERC721TokenRecordIntoDB(x: ERC721TokenRecord) {
+    return x as ERC721TokenRecordInDatabase
+}
+
+export function ERC721TokenRecordOutDB(x: ERC721TokenRecordInDatabase) {
+    return x as ERC721TokenRecord
 }

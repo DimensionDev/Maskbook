@@ -1,4 +1,5 @@
 export * from './wallet'
-export * from './token'
+export * from './erc20'
+export * from './erc721'
 export * from './assets'
 export * from './transactions'
