@@ -37,9 +37,9 @@ async function main(mode: 'dev' | 'build') {
     // prettier-ignore
     const command = [
         'webpack',
+        mode === 'dev' ? 'serve' : undefined,
         '--mode',
         mode === 'dev' ? 'development' : 'production',
-        mode === 'dev' ? 'serve' : undefined,
     ]
     for (const target of targets) {
         if (target.startsWith('-')) {
