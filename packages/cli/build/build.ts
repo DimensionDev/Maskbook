@@ -8,9 +8,9 @@ async function main() {
     await build()
     if (process.argv[2] === '--') {
         return spawn(process.argv[3], process.argv.slice(4), {
+            cwd: ROOT_PATH,
             stdio: 'inherit',
             shell: true,
-            cwd: ROOT_PATH,
         })
     }
     return onMain('build')
