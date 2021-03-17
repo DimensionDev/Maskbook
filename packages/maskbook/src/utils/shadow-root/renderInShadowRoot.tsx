@@ -270,14 +270,10 @@ type MaskbookProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElemen
 
 function Maskbook(_props: MaskbookProps) {
     const useTheme = useRef(activatedSocialNetworkUI.customization.useTheme).current
-    const theme = useTheme?.()
+    const theme = useTheme?.() || getMaskbookTheme()
     return MaskbookUIRoot(
-        theme ? (
-            <ThemeProvider theme={theme}>
-                <span {..._props} />
-            </ThemeProvider>
-        ) : (
+        <ThemeProvider theme={theme}>
             <span {..._props} />
-        ),
+        </ThemeProvider>,
     )
 }
