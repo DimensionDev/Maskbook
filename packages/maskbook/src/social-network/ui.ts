@@ -129,9 +129,11 @@ export async function activateSocialNetworkUI(): Promise<void> {
     function startIntermediateSetupGuide() {
         const network = ui.networkIdentifier
         const id = currentSetupGuideStatus[network].value
+        let started = false
         const onStatusUpdate = (id: string) => {
             const { persona, status }: SetupGuideCrossContextStatus = JSON.parse(id || '{}')
-            if (persona && status) {
+            if (persona && status && !started) {
+                started = true
                 ui.injection.setupWizard?.(signal, Identifier.fromString(persona, ECKeyIdentifier).unwrap())
             }
         }

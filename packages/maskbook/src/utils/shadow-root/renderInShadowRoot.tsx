@@ -78,14 +78,9 @@ export function renderInShadowRoot(
     return (): void => void (rendered && unmount())
 }
 
+const seen = new WeakMap<HTMLElement, ReactDOM.Root>()
 function mount(host: ShadowRoot, _: JSX.Element, keyBy = 'app', concurrent?: boolean) {
-    const container =
-        host.querySelector<HTMLElement>(`main.${keyBy}`) ||
-        (() => {
-            const dom = host.appendChild(document.createElement('main'))
-            dom.className = keyBy
-            return dom
-        })()
+    const container = getContainer()
     if (container.childElementCount && process.env.NODE_ENV === 'development') {
         console.warn(
             `The node you want to mount on`,
@@ -97,12 +92,21 @@ function mount(host: ShadowRoot, _: JSX.Element, keyBy = 'app', concurrent?: boo
         host.addEventListener(each, (e) => e.stopPropagation())
     }
     if (concurrent) {
-        const root = ReactDOM.unstable_createRoot(container)
+        const root = seen.get(container) || ReactDOM.unstable_createRoot(container)
+        seen.set(container, root)
         root.render(_)
         return () => root.unmount()
     } else {
         ReactDOM.render(_, container)
         return () => ReactDOM.unmountComponentAtNode(container)
+    }
+
+    function getContainer() {
+        const root = host.querySelector<HTMLElement>(`main.${keyBy}`)
+        if (root) return root
+        const dom = host.appendChild(document.createElement('main'))
+        dom.className = keyBy
+        return dom
     }
 }
 try {
