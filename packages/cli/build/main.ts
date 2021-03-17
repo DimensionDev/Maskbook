@@ -1,6 +1,7 @@
 import { spawn } from 'child_process'
 import { resolve } from 'path'
 import { PKG_PATH } from '../utils'
+import { compact } from 'lodash'
 
 const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base']
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'manifest-v3']
@@ -33,8 +34,13 @@ async function main(mode: 'dev' | 'build') {
         if (!confirm) return process.exit(0)
     }
 
-    const command = ['webpack', '--mode', mode === 'dev' ? 'development' : 'production']
-    if (mode === 'dev') command.unshift('serve')
+    // prettier-ignore
+    const command = [
+        'webpack',
+        '--mode',
+        mode === 'dev' ? 'development' : 'production',
+        mode === 'dev' ? 'serve' : undefined,
+    ]
     for (const target of targets) {
         if (target.startsWith('-')) {
             continue
@@ -43,7 +49,7 @@ async function main(mode: 'dev' | 'build') {
         }
         command.push('--env', target)
     }
-    return spawn('npx', command, {
+    return spawn('npx', compact(command), {
         cwd: resolve(PKG_PATH, 'maskbook'),
         stdio: 'inherit',
         shell: true,
