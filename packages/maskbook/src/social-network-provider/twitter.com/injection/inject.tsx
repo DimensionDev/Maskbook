@@ -22,5 +22,6 @@ export const twitterUIInjections: SocialNetworkUIInjections = {
     injectSearchResultBox: injectSearchResultBoxAtTwitter,
     injectPostReplacer: injectPostReplacerAtTwitter,
     injectPostInspector: injectPostInspectorAtTwitter,
+    // injectVCentCurrentBid: injectVCentCurrentBidAtTwitter,
     injectPageInspector: injectPageInspectorDefault(),
 }
