@@ -29,7 +29,7 @@ function bind(f: Function, thisArg: unknown, hook: Function) {
  *      />
  * ))
  */
-export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX.Element, hint = '') {
+export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX.Element) {
     const findMountingShadowRef = useRef<HTMLDivElement>(null)
     const update = useUpdate()
     const { root, container, style } = useEffectRef(() => {
@@ -64,7 +64,7 @@ function useEffectRef<T>(f: () => T): T {
 }
 
 export function createShadowRootForwardedComponent<
-    T extends { container?: Element | (() => Element | null) | null | undefined }
+    T extends { container?: Element | (() => Element | null) | null | undefined; open: boolean }
 >(Component: React.ComponentType<T>) {
     return (forwardRef((props: T, ref) => {
         return usePortalShadowRoot((container) => <Component container={container} {...props} ref={ref} />)

@@ -1,5 +1,5 @@
 packages:
-  - 'packages/cli-dev-build'
+  - 'packages/cli'
   - 'packages/dashboard'
   - 'packages/maskbook'
   - 'packages/shared'
@@ -7,4 +7,3 @@ packages:
   - 'packages/theme'
   - 'packages/icons'
   - 'packages/contracts'
-  - 'packages/locale-kit'

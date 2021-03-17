@@ -1,6 +1,7 @@
+#!/usr/bin/env ts-node
 import fs from 'fs'
 import path from 'path'
-import { BUILD_PATH, run } from './utils'
+import { BUILD_PATH, run } from '../utils'
 
 const BUILD_JS_PATH = path.join(BUILD_PATH, 'js')
 

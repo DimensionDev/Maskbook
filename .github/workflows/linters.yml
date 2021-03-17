@@ -21,18 +21,26 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - run: sudo npm i -g pnpm
-      - run: npm run ci
-      - run: npx prettier --list-different .
+      - run: sudo npm install --global pnpm
+      - run: pnpm ci
       - run: npx build -- echo "Check tsc"
+      - run: npx locale-kit
       - run: npm run lint:typecoverage
-      - run: npm run locale-kit
+        working-directory: packages/maskbook
       - run: npm run lint:report
       - name: Upload ESLint Report
         uses: actions/upload-artifact@v2
         with:
           name: eslint
           path: ./reports/junit
+  prettier:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v2-beta
+      - run: npx prettier --list-different .
   storybook:
     runs-on: ubuntu-20.04
     continue-on-error: false

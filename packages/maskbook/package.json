@@ -2,7 +2,9 @@
   "name": "@dimensiondev/maskbook",
   "private": true,
   "license": "AGPL-3.0-or-later",
-  "scripts": {},
+  "scripts": {
+    "lint:typecoverage": "type-coverage"
+  },
   "dependencies": {
     "@balancer-labs/sor": "^1.0.0",
     "@dimensiondev/common-protocols": "1.6.0-20201027083702-d0ae6e2",
@@ -160,6 +162,7 @@
     "storybook-addon-i18n": "^5.1.13",
     "ts-jest": "26.5.0",
     "ts-loader": "^8.0.13",
+    "type-coverage": "^2.17.0",
     "web-ext": "^5.4.1",
     "webpack": "^5.19.0",
     "webpack-bundle-analyzer": "^4.3.0",
@@ -171,5 +174,17 @@
   },
   "peerDependencies": {
     "jss": "*"
+  },
+  "typeCoverage": {
+    "cache": true,
+    "strict": true,
+    "detail": true,
+    "atLeast": 98,
+    "ignoreCatch": true,
+    "ignoreFiles": [
+      "**/__tests__/**",
+      "**\\__tests__\\**"
+    ],
+    "showRelativePath": true
   }
 }

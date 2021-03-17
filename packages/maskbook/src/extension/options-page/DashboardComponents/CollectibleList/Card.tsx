@@ -1,7 +1,7 @@
 import Tilt from 'react-tilt'
 import { Card, createStyles, Link, makeStyles } from '@material-ui/core'
-import ImageIcon from '@material-ui/icons/Image'
 import { Image } from '../../../../components/shared/Image'
+import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -12,6 +12,11 @@ const useStyles = makeStyles((theme) =>
             borderRadius: 4,
             position: 'relative',
             backgroundColor: theme.palette.background.paper,
+        },
+        placeholder: {
+            width: 64,
+            height: 64,
+            opacity: 0.1,
         },
     }),
 )
@@ -34,7 +39,17 @@ export function CollectibleCard(props: CollectibleCardProps) {
                         width: 160,
                         height: 220,
                     }}>
-                    {props.url ? <Image component="img" width={160} height={220} src={props.url} /> : <ImageIcon />}
+                    {props.url ? (
+                        <Image
+                            component="img"
+                            width={140}
+                            height={220}
+                            style={{ objectFit: 'contain' }}
+                            src={props.url}
+                        />
+                    ) : (
+                        <MaskbookIconOutlined className={classes.placeholder} />
+                    )}
                 </Card>
             </Tilt>
         </Link>

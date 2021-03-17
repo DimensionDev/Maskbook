@@ -1,0 +1,24 @@
+{
+  "name": "@dimensiondev/cli",
+  "private": true,
+  "bin": {
+    "build": "./build/build.ts",
+    "build-ci": "./build/build-ci.ts",
+    "dev": "./build/dev.ts",
+    "locale-kit": "./locale-kit/locale-kit.ts",
+    "webextensiom-shim-prebuilt": "./build/webextensiom-shim-prebuilt.ts"
+  },
+  "dependencies": {
+    "inquirer": "^7.3.3",
+    "lodash": "^4.17.21",
+    "proper-lockfile": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/gulp": "^4.0.8",
+    "@types/inquirer": "^7.3.1",
+    "@types/lodash": "^4.14.168",
+    "@types/proper-lockfile": "^4.1.1",
+    "gulp": "^4.0.2",
+    "ts-node": "^9.1.1"
+  }
+}
