@@ -14,7 +14,7 @@ async function revalidate() {
     const erc721Tokens = await WalletRPC.getERC721Tokens()
     erc721TokensRef.value = erc721Tokens
 }
-WalletMessages.events.erc20TokensUpdated.on(revalidate)
+WalletMessages.events.erc721TokensUpdated.on(revalidate)
 revalidate()
 //#endregion
 
@@ -30,7 +30,7 @@ export function useERC721TokensFromDB(): ERC721TokenDetailed[] {
 }
 
 /**
- * Fetch all trusted ERC20 tokens from DB
+ * Fetch all trusted ERC721 tokens from DB
  * @param address
  */
 export function useTrustedERC721TokensFromDB() {
@@ -39,6 +39,6 @@ export function useTrustedERC721TokensFromDB() {
 
     if (!wallet) return []
     return tokens.filter(
-        (x) => wallet.erc20_token_whitelist.has(x.address) && !wallet.erc20_token_blacklist.has(x.address),
+        (x) => wallet.erc721_token_whitelist.has(x.address) && !wallet.erc721_token_blacklist.has(x.address),
     )
 }

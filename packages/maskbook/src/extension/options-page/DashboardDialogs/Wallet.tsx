@@ -37,7 +37,13 @@ import { DashboardRoute } from '../Route'
 import { sleep, checkInputLengthExceed, unreachable } from '../../../utils/utils'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { ERC20TokenDetailed, ERC721TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import {
+    ERC1155TokenDetailed,
+    ERC20TokenDetailed,
+    ERC721TokenDetailed,
+    EthereumTokenType,
+    EtherTokenDetailed,
+} from '../../../web3/types'
 import { FixedTokenList } from '../DashboardComponents/FixedTokenList'
 import { RedPacketInboundList, RedPacketOutboundList } from '../../../plugins/RedPacket/UI/RedPacketList'
 import { RedPacket } from '../../../plugins/RedPacket/UI/RedPacket'
@@ -534,7 +540,9 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
 
 //#region hide wallet token
 export function DashboardWalletHideTokenConfirmDialog(
-    props: WrappedDialogProps<WalletProps & { token: EtherTokenDetailed | ERC20TokenDetailed | ERC721TokenDetailed }>,
+    props: WrappedDialogProps<
+        WalletProps & { token: EtherTokenDetailed | ERC20TokenDetailed | ERC721TokenDetailed | ERC1155TokenDetailed }
+    >,
 ) {
     const { wallet, token } = props.ComponentProps!
     const { t } = useI18N()
@@ -549,6 +557,8 @@ export function DashboardWalletHideTokenConfirmDialog(
                     return WalletRPC.blockERC20Token(wallet.address, token as ERC20TokenDetailed)
                 case EthereumTokenType.ERC721:
                     return WalletRPC.blockERC721Token(wallet.address, token as ERC721TokenDetailed)
+                case EthereumTokenType.ERC1155:
+                    return WalletRPC.blockERC1155Token(wallet.address, token as ERC1155TokenDetailed)
                 default:
                     unreachable(type)
             }
@@ -1138,7 +1148,7 @@ export function DashboardWalletTransferDialogNFT(
                             className={classes.button}
                             variant="contained"
                             color="primary"
-                            disabled={!address}
+                            disabled={!address || !!validationMessage}
                             onClick={onTransfer}>
                             {validationMessage || t('wallet_transfer_send')}
                         </Button>

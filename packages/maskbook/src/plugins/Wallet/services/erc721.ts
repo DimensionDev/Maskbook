@@ -13,13 +13,7 @@ export async function getERC721Tokens() {
 
 export async function addERC721Token(token: ERC721TokenDetailed) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC721Token', 'Wallet')
-    await t.objectStore('ERC721Token').put(
-        ERC721TokenRecordIntoDB({
-            ...token,
-            name: token.name ?? '',
-            symbol: token.symbol ?? '',
-        }),
-    )
+    await t.objectStore('ERC721Token').put(ERC721TokenRecordIntoDB(token))
     WalletMessages.events.erc721TokensUpdated.sendToAll(undefined)
 }
 
@@ -34,8 +28,7 @@ export async function trustERC721Token(address: string, token: ERC721TokenDetail
     const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
     assert(wallet)
     let updated = false
-    const tokenAddressChecksummed = formatChecksumAddress(token.address)
-    const key = `${tokenAddressChecksummed}_${token.tokenId}`
+    const key = `${formatChecksumAddress(token.address)}_${token.tokenId}`
     if (!wallet.erc721_token_whitelist.has(key)) {
         wallet.erc721_token_whitelist.add(key)
         updated = true
@@ -57,8 +50,7 @@ export async function blockERC721Token(
     const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
     assert(wallet)
     let updated = false
-    const tokenAddressChecksummed = formatChecksumAddress(token.address)
-    const key = `${tokenAddressChecksummed}_${token.tokenId}`
+    const key = `${formatChecksumAddress(token.address)}_${token.tokenId}`
     if (wallet.erc721_token_whitelist.has(key)) {
         wallet.erc721_token_whitelist.delete(key)
         updated = true

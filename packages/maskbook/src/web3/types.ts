@@ -57,10 +57,25 @@ export interface ERC721TokenDetailed extends ERC721Token {
 }
 //#endregion
 
+//#region ERC1155
+export interface ERC1155Token {
+    type: EthereumTokenType.ERC1155
+    address: string
+    chainId: ChainId
+}
+
+export interface ERC1155TokenDetailed extends ERC1155Token {
+    name: string
+    tokenId: string
+    tokenURI?: string
+}
+//#endregion
+
 interface TokenDetailedMap {
     [EthereumTokenType.Ether]: EtherTokenDetailed
     [EthereumTokenType.ERC20]: ERC20TokenDetailed
     [EthereumTokenType.ERC721]: ERC721TokenDetailed
+    [EthereumTokenType.ERC1155]: ERC1155TokenDetailed
 }
 
 export type TokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
@@ -113,6 +128,7 @@ export enum EthereumTokenType {
     Ether = 0,
     ERC20 = 1,
     ERC721 = 2,
+    ERC1155 = 3,
 }
 
 export enum TransactionEventType {

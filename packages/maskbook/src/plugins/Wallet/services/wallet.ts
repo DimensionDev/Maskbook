@@ -105,6 +105,8 @@ export async function updateExoticWalletFromSource(
                 erc20_token_whitelist: new Set(),
                 erc721_token_blacklist: new Set(),
                 erc721_token_whitelist: new Set(),
+                erc1155_token_blacklist: new Set(),
+                erc1155_token_whitelist: new Set(),
                 name: resolveProviderName(provider),
                 passphrase: '',
                 mnemonic: [] as string[],
@@ -128,6 +130,8 @@ export function createNewWallet(
         | 'erc20_token_blacklist'
         | 'erc721_token_whitelist'
         | 'erc721_token_blacklist'
+        | 'erc1155_token_whitelist'
+        | 'erc1155_token_blacklist'
         | 'createdAt'
         | 'updatedAt'
     >,
@@ -155,6 +159,8 @@ export async function importNewWallet(
         erc20_token_blacklist: new Set(),
         erc721_token_whitelist: new Set(),
         erc721_token_blacklist: new Set(),
+        erc1155_token_whitelist: new Set(),
+        erc1155_token_blacklist: new Set(),
         createdAt: new Date(),
         updatedAt: new Date(),
     }

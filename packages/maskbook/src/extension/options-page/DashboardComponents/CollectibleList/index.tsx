@@ -3,7 +3,7 @@ import { CollectibleCard } from './CollectibleCard'
 import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
 import { AssetProvider } from '../../../../plugins/Wallet/types'
 import { useAccount } from '../../../../web3/hooks/useAccount'
-import { createERC721Token } from '../../../../web3/helpers'
+import { createERC1155Token, createERC721Token } from '../../../../web3/helpers'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
@@ -50,7 +50,7 @@ export function CollectibleList(props: CollectibleListProps) {
     if (collectiblesLoading)
         return (
             <Box className={classes.root}>
-                {new Array(3).fill(0).map((_, i) => (
+                {new Array(4).fill(0).map((_, i) => (
                     <Box className={classes.card} display="flex" flexDirection="column" key={i}>
                         <Skeleton animation="wave" variant="rectangular" width={160} height={220}></Skeleton>
                         <Skeleton
@@ -90,26 +90,41 @@ export function CollectibleList(props: CollectibleListProps) {
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
             <Box className={classes.root}>
                 {collectibles
-                    .filter(
-                        (x) =>
-                            !wallet.erc721_token_blacklist.has(
-                                `${formatEthereumAddress(x.asset_contract.address)}_${x.token_id}`,
-                            ),
-                    )
+                    .filter((x) => {
+                        const key = `${formatEthereumAddress(x.asset_contract.address)}_${x.token_id}`
+                        switch (x.asset_contract.schema_name) {
+                            case 'ERC721':
+                                return !wallet.erc721_token_blacklist.has(key)
+                            case 'ERC1155':
+                                return !wallet.erc1155_token_blacklist.has(key)
+                            default:
+                                return false
+                        }
+                    })
                     .map((y) => (
                         <div className={classes.card} key={y.id}>
                             <CollectibleCard
                                 key={y.id}
                                 wallet={wallet}
-                                token={createERC721Token(
-                                    chainId,
-                                    y.token_id,
-                                    y.asset_contract.address,
-                                    y.name,
-                                    y.asset_contract.symbol,
-                                    '',
-                                    y.image_url ?? y.image_preview_url ?? '',
-                                )}
+                                token={
+                                    y.asset_contract.schema_name === 'ERC721'
+                                        ? createERC721Token(
+                                              chainId,
+                                              y.token_id,
+                                              y.asset_contract.address,
+                                              y.name,
+                                              y.asset_contract.symbol,
+                                              '',
+                                              y.image_url ?? y.image_preview_url ?? '',
+                                          )
+                                        : createERC1155Token(
+                                              chainId,
+                                              y.token_id,
+                                              y.asset_contract.address,
+                                              y.name,
+                                              y.image_url ?? y.image_preview_url ?? '',
+                                          )
+                                }
                                 link={y.permalink}
                             />
                             <div className={classes.description}>

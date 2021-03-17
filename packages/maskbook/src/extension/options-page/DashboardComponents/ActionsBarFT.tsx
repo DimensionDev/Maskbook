@@ -19,13 +19,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface ERC20TokenActionsBarProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface ActionsBarFT_Props extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     chain: 'eth' | string
     wallet: WalletRecord
     token: EtherTokenDetailed | ERC20TokenDetailed
 }
 
-export function ERC20TokenActionsBar(props: ERC20TokenActionsBarProps) {
+export function ActionsBarFT(props: ActionsBarFT_Props) {
     const { wallet, chain, token } = props
 
     const { t } = useI18N()

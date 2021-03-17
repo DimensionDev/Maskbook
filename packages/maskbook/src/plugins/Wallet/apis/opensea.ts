@@ -6,7 +6,7 @@ interface AssetContract {
     nft_version: string
     opensea_version: unknown | null
     owner: unknown | null
-    schema_name: 'ERC721'
+    schema_name: 'ERC721' | 'ERC1155'
     symbol: string
     total_supply: string
     description: string | null

@@ -7,8 +7,7 @@ import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogNFT
 import { useMenu } from '../../../utils/hooks/useMenu'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import type { ERC721TokenDetailed } from '../../../web3/types'
-import { useAccount } from '../../../web3/hooks/useAccount'
+import { ERC1155TokenDetailed, ERC721TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 
 const useStyles = makeStyles((theme) => ({
@@ -17,16 +16,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface ERC721TokenActionsBarProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface ActionsBarNFT_Props extends withClasses<'more'> {
     wallet: WalletRecord
-    token: ERC721TokenDetailed
+    token: ERC721TokenDetailed | ERC1155TokenDetailed
 }
 
-export function ERC721TokenActionsBar(props: ERC721TokenActionsBarProps) {
+export function ActionsBarNFT(props: ActionsBarNFT_Props) {
     const { wallet, token } = props
 
     const { t } = useI18N()
-    const account = useAccount()
     const classes = useStylesExtends(useStyles(), props)
 
     const chainIdValid = useChainIdValid()
@@ -35,11 +33,13 @@ export function ERC721TokenActionsBar(props: ERC721TokenActionsBarProps) {
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu(
         ...[
-            <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ wallet, token })}>
-                {t('transfer')}
-            </MenuItem>,
+            token.type === EthereumTokenType.ERC721 ? (
+                <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ wallet, token })}>
+                    {t('transfer')}
+                </MenuItem>
+            ) : undefined,
             <MenuItem onClick={() => openHideTokenConfirmDialog({ wallet, token })}>{t('hide')}</MenuItem>,
-        ],
+        ].filter(Boolean),
     )
 
     const onClickButton = useCallback(

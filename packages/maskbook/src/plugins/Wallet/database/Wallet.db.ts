@@ -1,6 +1,11 @@
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { createDBAccess } from '../../../database/helpers/openDB'
-import type { ERC20TokenRecordInDatabase, ERC721TokenRecordInDatabase, WalletRecordInDatabase } from './types'
+import type {
+    ERC1155TokenRecordInDatabase,
+    ERC20TokenRecordInDatabase,
+    ERC721TokenRecordInDatabase,
+    WalletRecordInDatabase,
+} from './types'
 import type { RedPacketRecordInDatabase } from '../../RedPacket/types'
 import { sideEffect } from '../../../utils/side-effects'
 import { migratePluginDatabase } from './migrate.plugins'
@@ -52,6 +57,7 @@ export const createWalletDBAccess = createDBAccess(() => {
              */
             function v5_v6() {
                 db.createObjectStore('ERC721Token', { keyPath: path<keyof ERC721TokenRecordInDatabase>('record_id') })
+                db.createObjectStore('ERC1155Token', { keyPath: path<keyof ERC1155TokenRecordInDatabase>('record_id') })
             }
 
             if (oldVersion < 1) v0_v1()
@@ -88,6 +94,10 @@ export interface WalletDB<Data = unknown, Indexes extends [IDBValidKey?, IDBVali
     }
     ERC721Token: {
         value: ERC721TokenRecordInDatabase
+        key: string
+    }
+    ERC1155Token: {
+        value: ERC1155TokenRecordInDatabase
         key: string
     }
 }

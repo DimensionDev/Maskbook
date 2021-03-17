@@ -24,6 +24,23 @@ export interface ERC721TokenRecord {
     symbol: string
     /** token id */
     tokenId: string
+    /** base uri */
+    baseURI?: string
+    /** token uri */
+    tokenURI?: string
+}
+
+export interface ERC1155TokenRecord {
+    /** contract address */
+    address: string
+    /** eth chain id */
+    chainId: ChainId
+    /** token name */
+    name: string
+    /** token id */
+    tokenId: string
+    /** token uri */
+    tokenURI?: string
 }
 
 export interface WalletRecord {
@@ -39,6 +56,10 @@ export interface WalletRecord {
     erc721_token_whitelist: Set<string>
     /** A list of untrusted ERC721 contract address */
     erc721_token_blacklist: Set<string>
+    /** A list of trusted ERC1155 contract address */
+    erc1155_token_whitelist: Set<string>
+    /** A list of untrusted ERC1155 contract address */
+    erc1155_token_blacklist: Set<string>
     mnemonic: string[]
     passphrase: string
     _public_key_?: string
@@ -51,6 +72,10 @@ export interface WalletRecord {
 export interface ERC20TokenRecordInDatabase extends ERC20TokenRecord {}
 
 export interface ERC721TokenRecordInDatabase extends ERC721TokenRecord {
+    record_id: string
+}
+
+export interface ERC1155TokenRecordInDatabase extends ERC1155TokenRecord {
     record_id: string
 }
 

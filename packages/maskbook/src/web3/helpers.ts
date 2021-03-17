@@ -11,6 +11,7 @@ import {
     CurrencyType,
     AssetDetailed,
     ERC721TokenDetailed,
+    ERC1155TokenDetailed,
 } from './types'
 
 export function isSameAddress(addrA: string, addrB: string) {
@@ -100,6 +101,17 @@ export function createERC721Token(
         baseURI,
         tokenURI,
     } as ERC721TokenDetailed
+}
+
+export function createERC1155Token(chainId: ChainId, tokenId: string, address: string, name: string, tokenURI: string) {
+    return {
+        type: EthereumTokenType.ERC1155,
+        chainId,
+        tokenId,
+        address,
+        name,
+        tokenURI,
+    } as ERC1155TokenDetailed
 }
 
 export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {

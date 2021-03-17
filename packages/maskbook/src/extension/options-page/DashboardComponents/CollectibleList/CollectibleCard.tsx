@@ -3,8 +3,8 @@ import { Image } from '../../../../components/shared/Image'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import type { ERC721TokenDetailed } from '../../../../web3/types'
-import { ERC721TokenActionsBar } from '../ERC721TokenActionsBar'
+import type { ERC1155TokenDetailed, ERC721TokenDetailed } from '../../../../web3/types'
+import { ActionsBarNFT } from '../ActionsBarNFT'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) =>
 export interface CollectibleCardProps {
     link: string
     wallet: WalletRecord
-    token: ERC721TokenDetailed
+    token: ERC721TokenDetailed | ERC1155TokenDetailed
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
@@ -46,7 +46,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
     return (
         <Link target="_blank" rel="noopener noreferrer" href={props.link}>
             <Card className={classes.root} style={{ width: 160, height: 220 }}>
-                <ERC721TokenActionsBar classes={{ more: classes.icon }} wallet={wallet} token={token} />
+                <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                 {token.tokenURI ? (
                     <Image
                         component="img"
