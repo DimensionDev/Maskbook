@@ -22,8 +22,8 @@ async function main() {
     return onMain('dev')
 }
 
-main().then((cp) => {
-    cp.addListener('exit', (code) => {
-        process.exit(code!)
+main().then((p) => {
+    p.addListener('exit', (code) => {
+        process.exit(code)
     })
 })

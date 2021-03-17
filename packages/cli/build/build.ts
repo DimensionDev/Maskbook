@@ -16,6 +16,8 @@ async function main() {
     return onMain('build')
 }
 
-main().then(({ exitCode }) => {
-    process.exit(exitCode)
+main().then((p) => {
+    p.addListener('exit', (code) => {
+        process.exit(code)
+    })
 })
