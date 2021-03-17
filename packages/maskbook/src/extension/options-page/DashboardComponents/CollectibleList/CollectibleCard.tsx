@@ -30,6 +30,8 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface CollectibleCardProps {
+    name: string
+    description?: string
     url: string
     link: string
 }
@@ -38,7 +40,10 @@ export function CollectibleCard(props: CollectibleCardProps) {
     const { t } = useI18N()
     const classes = useStyles(props)
 
-    const [hideDialog, , openHideDialog] = useModal(HideDialog)
+    const [hideDialog, , openHideDialog] = useModal(HideDialog, {
+        name: props.name,
+        description: props.description,
+    })
     const [transferDialog, , openTransferDialog] = useModal(TransferDialog)
 
     const [menu, openMenu] = useMenu(

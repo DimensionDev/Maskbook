@@ -7,11 +7,14 @@ import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../../DashboardDialogs/Base'
 
 export interface HideDialogProps {
+    name: string
+    description?: string
     onConfirm?: () => void
 }
 
 export const HideDialog: FC<WrappedDialogProps<HideDialogProps>> = ({ ComponentProps, open, onClose }) => {
     const { t } = useI18N()
+
     return (
         <DashboardDialogCore fullScreen={false} open={open} onClose={onClose}>
             <DashboardDialogWrapper
@@ -19,7 +22,7 @@ export const HideDialog: FC<WrappedDialogProps<HideDialogProps>> = ({ ComponentP
                 icon={<TrashIcon />}
                 iconColor="#F4637D"
                 primary={t('hide_token')}
-                secondary={t('hide_token_hint', { token: name })}
+                secondary={t('hide_token_hint', { token: ComponentProps?.name })}
                 footer={
                     <SpacedButtonGroup>
                         <DebounceButton
