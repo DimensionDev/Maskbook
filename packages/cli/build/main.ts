@@ -1,15 +1,16 @@
 import { spawn } from 'child_process'
 import { resolve } from 'path'
 import { PKG_PATH } from '../utils'
+import { compact } from 'lodash'
 
 const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base']
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'manifest-v3']
 const knownTargets = ['-h', '--help', ...presets, ...otherFlags]
 
-export default async function main(mode: 'dev' | 'build') {
-    let args = process.argv.slice(2)
+async function main(mode: 'dev' | 'build') {
+    let targets = process.argv.slice(2)
 
-    if (args.includes('-h') || args.includes('--help')) {
+    if (targets.includes('-h') || targets.includes('--help')) {
         const inquirer = require('inquirer')
         const { preset } = await inquirer.prompt({
             type: 'list',
@@ -22,9 +23,9 @@ export default async function main(mode: 'dev' | 'build') {
             name: 'flags',
             choices: otherFlags,
         })
-        args = [...flags, preset]
+        targets = [...flags, preset]
 
-        const command = ['npx', mode === 'dev' ? 'dev' : 'build', ...args]
+        const command = ['npx', mode === 'dev' ? 'dev' : 'build', ...targets]
         const { confirm } = await inquirer.prompt({
             type: 'confirm',
             name: 'confirm',
@@ -33,17 +34,26 @@ export default async function main(mode: 'dev' | 'build') {
         if (!confirm) return process.exit(0)
     }
 
-    const command = ['--mode', mode === 'dev' ? 'development' : 'production']
-    if (mode === 'dev') command.unshift('serve')
-    args.filter((x) => !x.startsWith('-')).forEach((target) => {
-        command.push('--env', target)
-        if (!knownTargets.includes(target)) {
+    // prettier-ignore
+    const command = [
+        'webpack',
+        mode === 'dev' ? 'serve' : undefined,
+        '--mode',
+        mode === 'dev' ? 'development' : 'production',
+    ]
+    for (const target of targets) {
+        if (target.startsWith('-')) {
+            continue
+        } else if (!knownTargets.includes(target)) {
             throw new TypeError(`Unknown target ${target}. Known targets: ${knownTargets}`)
         }
-    })
-    return spawn('npx', ['webpack', ...command], {
+        command.push('--env', target)
+    }
+    return spawn('npx', compact(command), {
+        cwd: resolve(PKG_PATH, 'maskbook'),
         stdio: 'inherit',
         shell: true,
-        cwd: resolve(PKG_PATH, 'maskbook'),
     })
 }
+
+export default main
