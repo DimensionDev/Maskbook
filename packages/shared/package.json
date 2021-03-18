@@ -1,6 +1,7 @@
 {
   "name": "@dimensiondev/maskbook-shared",
   "dependencies": {
+    "@dimensiondev/holoflows-kit": "0.8.0-20201215084554-2f9e757",
     "async-call-rpc": "^5.0.0",
     "bignumber.js": "^9.0.1",
     "immer": "^8.0.1",
