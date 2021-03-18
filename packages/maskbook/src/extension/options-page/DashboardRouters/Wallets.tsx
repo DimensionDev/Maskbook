@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, createContext, useCallback } from 'react'
+import type { AssetDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { Button } from '@material-ui/core'
 import { makeStyles, createStyles, ThemeProvider } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -12,7 +13,6 @@ import {
     DashboardWalletHistoryDialog,
     DashboardWalletErrorDialog,
     DashboardWalletRedPacketDetailDialog,
-    DashboardWalletCreateDialog,
 } from '../DashboardDialogs/Wallet'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
@@ -21,6 +21,8 @@ import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { extendsTheme } from '../../../utils/theme'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
 
 //#region theme
 const walletsTheme = extendsTheme((theme) => ({
@@ -87,7 +89,6 @@ export default function DashboardWalletsRouter() {
     const classes = useStyles()
     const { create, error } = useQueryParams(['create', 'error', 'rpid'])
 
-    const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
     const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
     const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
@@ -98,13 +99,18 @@ export default function DashboardWalletsRouter() {
 
     // show create dialog
     useEffect(() => {
-        if (create) openWalletCreate()
-    }, [create, openWalletCreate])
+        if (create) openWalletImport()
+    }, [create, openWalletImport])
 
     // show error dialog
     useEffect(() => {
         if (error) openWalletError()
     }, [error, openWalletError])
+
+    //#region remote controlled create wallet dialog
+    const [, setOpenCreateWalletDialog] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
+    const onCreate = useCallback(() => setOpenCreateWalletDialog({ open: true }), [])
+    //#endregion
 
     //#region right icons from mobile devices
     const floatingButtons = [
@@ -167,7 +173,6 @@ export default function DashboardWalletsRouter() {
             </ThemeProvider>
             {addToken}
             {walletHistory}
-            {walletCreate}
             {walletImport}
             {walletError}
             {walletRedPacketDetail}
