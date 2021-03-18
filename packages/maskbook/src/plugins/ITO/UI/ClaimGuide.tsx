@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) =>
 interface ClaimGuideProps extends Pick<ClaimDialogProps, 'exchangeTokens' | 'payload'> {
     open: boolean
     status: ClaimStatus
-    shareSuccessLink: string
+    shareSuccessLink: string | undefined
     isBuyer: boolean
     retryPayload: () => void
     onUpdate: (status: ClaimStatus) => void

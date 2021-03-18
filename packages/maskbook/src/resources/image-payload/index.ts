@@ -1,5 +1,4 @@
-import type { ImageTemplateTypes } from '../../social-network/ui'
-
+export type ImageTemplateTypes = 'v1' | 'v2' | 'v3' | 'v4' | 'eth' | 'dai' | 'okb'
 export const ImagePayloadURLs: Readonly<Record<ImageTemplateTypes, string>> = {
     v1: new URL('./normal/payload-v1.png', import.meta.url).toString(),
     v2: new URL('./normal/payload-v2.png', import.meta.url).toString(),

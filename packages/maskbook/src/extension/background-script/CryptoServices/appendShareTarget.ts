@@ -4,7 +4,7 @@ import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { cryptoProviderTable } from './cryptoProviderTable'
 import { updatePostDB, RecipientDetail, RecipientReason } from '../../../database/post'
-import { getNetworkWorker } from '../../../social-network/worker'
+import { getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { queryPrivateKey, queryLocalKey } from '../../../database'
 import { IdentifierMap } from '../../../database/IdentifierMap'
 import type { AESJsonWebKey, EC_Private_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
@@ -35,12 +35,8 @@ export async function appendShareTarget(
             myPrivateKey,
             Array.from(toKey.values()),
         )
-        Gun2.publishPostAESKeyOnGun2(
-            version,
-            iv,
-            getNetworkWorker(whoAmI).unwrap().gunNetworkHint,
-            othersAESKeyEncrypted,
-        )
+        const gunHint = getNetworkWorkerUninitialized(whoAmI)?.gunNetworkHint
+        gunHint && Gun2.publishPostAESKeyOnGun2(version, iv, gunHint, othersAESKeyEncrypted)
         updatePostDB(
             {
                 identifier: new PostIVIdentifier(whoAmI.network, iv),

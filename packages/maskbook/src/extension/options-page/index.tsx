@@ -1,4 +1,4 @@
-import '../../provider.worker'
+import '../../social-network-adaptor'
 import '../../setup.ui'
 
 import { useState } from 'react'

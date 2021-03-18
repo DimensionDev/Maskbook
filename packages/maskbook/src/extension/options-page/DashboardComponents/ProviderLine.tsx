@@ -7,8 +7,8 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import LinkOffIcon from '@material-ui/icons/LinkOff'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { facebookDomain } from '../../../social-network-provider/facebook.com/utils/isMobile'
-import { twitterDomain } from '../../../social-network-provider/twitter.com/utils/isMobile'
+import { facebookDomain } from '../../../social-network-adaptor/facebook.com/utils/isMobile'
+import { twitterDomain } from '../../../social-network-adaptor/twitter.com/utils/isMobile'
 import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme) =>
@@ -54,6 +54,7 @@ export interface ProviderLineProps extends withClasses<never> {
 
 export default function ProviderLine(props: ProviderLineProps) {
     const { t } = useI18N()
+    // TODO: internal name should not be used to display
     const { internalName, network, connected, userId, onAction } = props
     const classes = useStylesExtends(useStyles(), props)
     return (

@@ -20,7 +20,6 @@ import { formatDateTime } from '../../../utils/date'
 import { getTextUILength } from '../../../utils/getTextUILength'
 import { ClaimGuide, ClaimStatus } from './ClaimGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { sortTokens } from '../helpers'
 import { ITO_EXCHANGE_RATION_MAX, TIME_WAIT_BLOCKCHAIN } from '../constants'
@@ -30,6 +29,7 @@ import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { usePoolPayload } from '../hooks/usePoolPayload'
 import Services from '../../../extension/service'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 export interface IconProps {
     size?: number
@@ -257,13 +257,15 @@ export function ITO(props: ITO_Props) {
     const isBuyer =
         chainId === payload.chain_id &&
         payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
-    const shareSuccessLink = useShareLink(
-        t('plugin_ito_claim_success_share', {
-            user: seller.name,
-            link: postLink,
-            symbol: token.symbol,
-        }),
-    )
+    const shareSuccessLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            t('plugin_ito_claim_success_share', {
+                user: seller.name,
+                link: postLink,
+                symbol: token.symbol,
+            }),
+        )
+        .toString()
     const canWithdraw = useMemo(
         () => isAccountSeller && !tradeInfo?.destructInfo && (listOfStatus.includes(ITO_Status.expired) || noRemain),
         [tradeInfo, listOfStatus, isAccountSeller, noRemain],
@@ -284,13 +286,15 @@ export function ITO(props: ITO_Props) {
     }, [shareSuccessLink])
     //#endregion
 
-    const shareLink = useShareLink(
-        t('plugin_ito_claim_foreshow_share', {
-            link: postLink,
-            name: token.name,
-            symbol: token.symbol ?? 'token',
-        }),
-    )
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            t('plugin_ito_claim_foreshow_share', {
+                link: postLink,
+                name: token.name,
+                symbol: token.symbol ?? 'token',
+            }),
+        )
+        .toString()
     const onShare = useCallback(async () => {
         window.open(shareLink, '_blank', 'noopener noreferrer')
     }, [shareLink])
@@ -595,15 +599,17 @@ export function ITO(props: ITO_Props) {
                                 {t('plugin_ito_unlock_in_advance')}
                             </ActionButton>
                         </Grid>
-                        <Grid item xs={6}>
-                            <ActionButton
-                                onClick={onShare}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_share')}
-                            </ActionButton>
-                        </Grid>
+                        {shareLink ? (
+                            <Grid item xs={6}>
+                                <ActionButton
+                                    onClick={onShare}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_share')}
+                                </ActionButton>
+                            </Grid>
+                        ) : undefined}
                     </Grid>
                 ) : listOfStatus.includes(ITO_Status.started) ? (
                     <ActionButton onClick={onClaim} variant="contained" size="large" className={classes.actionButton}>

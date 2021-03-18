@@ -4,7 +4,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import type { Profile } from '../../database'
 import { List, Accordion, AccordionSummary } from '@material-ui/core'
 import { ProfileOrGroupInList, ProfileOrGroupInListProps } from './SelectPeopleAndGroups'
-import { getActivatedUI } from '../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../social-network'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { ProfileIdentifier } from '../../database/type'
 import { currentSelectedIdentity } from '../../settings/settings'
@@ -80,7 +80,7 @@ export function ChooseIdentity(props: ChooseIdentityProps) {
     const expansionPanelSummaryClasses = useStylesExtends(useAccordionSummaryStyle(), props)
     const [expanded, setExpanded] = useState(false)
 
-    const ui = getActivatedUI()
+    const ui = activatedSocialNetworkUI
     const current = useCurrentIdentity() || ({ identifier: ProfileIdentifier.unknown, nickname: 'Nothing' } as Profile)
 
     const onChange = useCallback(() => {

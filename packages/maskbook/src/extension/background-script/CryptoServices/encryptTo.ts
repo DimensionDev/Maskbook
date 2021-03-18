@@ -11,6 +11,7 @@ import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 import { i18n } from '../../../utils/i18n-next'
 import type { TypedMessage } from '../../../protocols/typed-message'
+import { encodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -86,9 +87,9 @@ export async function encryptTo(
     })
 
     const postAESKeyToken = encodeArrayBuffer(iv)
-    const worker = getNetworkWorker(whoAmI).unwrap()
+    const worker = await getNetworkWorker(whoAmI)!
     OthersAESKeyEncryptedMap.set(postAESKeyToken, [worker.gunNetworkHint, othersAESKeyEncrypted])
-    return [constructAlpha38(payload, worker.payloadEncoder), postAESKeyToken]
+    return [constructAlpha38(payload, await encodeTextPayloadWorker(whoAmI)), postAESKeyToken]
 }
 
 /**

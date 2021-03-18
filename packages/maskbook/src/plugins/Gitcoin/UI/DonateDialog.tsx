@@ -17,11 +17,10 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { Flags } from '../../../utils/flags'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
-import { getActivatedUI } from '../../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../../social-network'
 import { PluginGitcoinMessages } from '../messages'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
@@ -29,6 +28,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -135,21 +135,23 @@ export function DonateDialog(props: DonateDialogProps) {
     //#endregion
 
     //#region transaction dialog
-    const cashTag = getActivatedUI()?.networkIdentifier === 'twitter.com' ? '$' : ''
+    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const postLink = usePostLink()
-    const shareLink = useShareLink(
-        token
-            ? [
-                  `I just donated ${title} with ${formatBalance(
-                      amount,
-                      token.decimals ?? 0,
-                      token.decimals ?? 0,
-                  )} ${cashTag}${token.symbol}. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
-                  '#mask_io',
-                  postLink,
-              ].join('\n')
-            : '',
-    )
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            token
+                ? [
+                      `I just donated ${title} with ${formatBalance(
+                          amount,
+                          token.decimals ?? 0,
+                          token.decimals ?? 0,
+                      )} ${cashTag}${token.symbol}. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
+                      '#mask_io',
+                      postLink,
+                  ].join('\n')
+                : '',
+        )
+        .toString()
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(

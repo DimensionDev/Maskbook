@@ -5,9 +5,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { AirdropIcon } from '../../../resources/AirdropIcon'
-import { getActivatedUI } from '../../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../../social-network'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { ERC20TokenDetailed } from '../../../web3/types'
@@ -19,6 +18,7 @@ import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
 import { ClaimDialog } from './ClaimDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useChainId } from '../../../web3/hooks/useChainState'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -108,19 +108,21 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
     //#endregion
 
     //#region transaction dialog
-    const cashTag = getActivatedUI()?.networkIdentifier === 'twitter.com' ? '$' : ''
+    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const postLink = usePostLink()
-    const shareLink = useShareLink(
-        [
-            `I just claimed ${cashTag}${token?.symbol} with ${
-                new BigNumber(packet?.amount ?? '0')
-                    .multipliedBy(checkState.type === CheckStateType.YEP ? checkState.ratio : 1)
-                    .dp(0)
-                    .toFixed() + '.00'
-            }. Follow @realMaskbook (mask.io) to claim airdrop.`,
-            postLink,
-        ].join('\n'),
-    )
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            [
+                `I just claimed ${cashTag}${token?.symbol} with ${
+                    new BigNumber(packet?.amount ?? '0')
+                        .multipliedBy(checkState.type === CheckStateType.YEP ? checkState.ratio : 1)
+                        .dp(0)
+                        .toFixed() + '.00'
+                }. Follow @realMaskbook (mask.io) to claim airdrop.`,
+                postLink,
+            ].join('\n'),
+        )
+        .toString()
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(

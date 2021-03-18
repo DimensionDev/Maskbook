@@ -8,10 +8,10 @@ import {
 import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
 import createEmotionCache, { EmotionCache } from '@emotion/cache'
 import ReactDOM from 'react-dom'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import type {} from 'react/experimental'
 import type {} from 'react-dom/experimental'
-import { getActivatedUI } from '../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../social-network'
 import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
@@ -78,24 +78,35 @@ export function renderInShadowRoot(
     return (): void => void (rendered && unmount())
 }
 
+const seen = new WeakMap<HTMLElement, ReactDOM.Root>()
 function mount(host: ShadowRoot, _: JSX.Element, keyBy = 'app', concurrent?: boolean) {
-    const container =
-        host.querySelector<HTMLElement>(`main.${keyBy}`) ||
-        (() => {
-            const dom = host.appendChild(document.createElement('main'))
-            dom.className = keyBy
-            return dom
-        })()
+    const container = getContainer()
+    if (container.childElementCount && process.env.NODE_ENV === 'development') {
+        console.warn(
+            `The node you want to mount on`,
+            container,
+            `already has children in it. It is highly like a mistake. Did you forget to set "keyBy" correctly?`,
+        )
+    }
     for (const each of captureEvents) {
         host.addEventListener(each, (e) => e.stopPropagation())
     }
     if (concurrent) {
-        const root = ReactDOM.unstable_createRoot(container)
+        const root = seen.get(container) || ReactDOM.unstable_createRoot(container)
+        seen.set(container, root)
         root.render(_)
         return () => root.unmount()
     } else {
         ReactDOM.render(_, container)
         return () => ReactDOM.unmountComponentAtNode(container)
+    }
+
+    function getContainer() {
+        const root = host.querySelector<HTMLElement>(`main.${keyBy}`)
+        if (root) return root
+        const dom = host.appendChild(document.createElement('main'))
+        dom.className = keyBy
+        return dom
     }
 }
 try {
@@ -258,8 +269,10 @@ function ShadowRootStyleProvider({ shadow, ...props }: React.PropsWithChildren<{
 type MaskbookProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
 
 function Maskbook(_props: MaskbookProps) {
+    const useTheme = useRef(activatedSocialNetworkUI.customization.useTheme).current
+    const theme = useTheme?.() || getMaskbookTheme()
     return MaskbookUIRoot(
-        <ThemeProvider theme={getActivatedUI().useTheme()}>
+        <ThemeProvider theme={theme}>
             <span {..._props} />
         </ThemeProvider>,
     )

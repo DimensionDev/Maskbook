@@ -8,7 +8,7 @@ import { getDimension } from '../../utils/image'
 import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import type { ImageTemplateTypes } from '../../social-network/ui'
+import type { ImageTemplateTypes } from '../../resources/image-payload'
 assertEnvironment(Environment.ManifestBackground)
 
 type Mask = 'v1' | 'v2' | 'v4' | 'transparent'
