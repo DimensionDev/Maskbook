@@ -111,6 +111,10 @@ export default function DashboardWalletsRouter() {
     const onCreate = useCallback(() => setOpenCreateWalletDialog({ open: true }), [])
     //#endregion
 
+    //#region import wallet dialog
+    const onImport = useCallback(() => openWalletImport(), [])
+    //#endregion
+
     //#region right icons from mobile devices
     const floatingButtons = [
         {
