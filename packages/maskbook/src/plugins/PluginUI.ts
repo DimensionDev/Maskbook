@@ -17,7 +17,9 @@ import { TransakPluginDefine } from './Transak/define'
 import { ITO_PluginDefine } from './ITO/define'
 import { NFTPluginsDefine } from './NFT/define'
 import { AirdropPluginDefine } from './Airdrop/define'
+import { ValuablesPluginDefine } from "./Valuables/define"
 import { sideEffect } from '../utils/side-effects'
+
 
 sideEffect.then(() => {
     plugins.add(EthereumPluginDefine)
@@ -26,6 +28,8 @@ sideEffect.then(() => {
     plugins.add(FileServicePluginDefine)
     plugins.add(ITO_PluginDefine)
     plugins.add(NFTPluginsDefine)
+    plugins.add(ValuablesPluginDefine)
+
     if (Flags.gitcoin_enabled) plugins.add(GitcoinPluginDefine)
     if (Flags.poll_enabled) plugins.add(PollsPluginDefine)
     if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
