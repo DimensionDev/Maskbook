@@ -78,11 +78,15 @@ interface ExternalPluginManifestFile {
   code_sign: URL
   integrity?: Record<URL, string>
   i18n?: Record<Language, URL>
-  payload_preview?: Record<PayloadMetadataKey, SupportedPayloadPreviews>
+  metadata?: Record<PayloadMetadataKey, MetadataDetail>
 }
 
 type KnownPayloadTemplates = 'Card_1'
-
+interface MetadataDetail {
+  // points to the JSON schema to validate if it is valid
+  schema?: URL
+  preview?: SupportedPayloadPreviews
+}
 interface SupportedPayloadPreviews extends Record<KnownPayloadTemplates, URL> {
   prefer?: KnownPayloadTemplates
 }
@@ -113,10 +117,13 @@ Here is an example:
     "zh": "./zh.json",
     "ja": "./ja.json"
   },
-  "payload_preview": {
+  "metadata": {
     // In Mask it will be plugin:example.com/my-plugin:kind:1
     "kind1:1": {
-      "Card_1": "./preview/Card_1.json"
+      "schema": "./kind1-v1.schema.json",
+      "preview": {
+        "Card_1": "./preview/Card_1.json"
+      }
     }
   }
 }
