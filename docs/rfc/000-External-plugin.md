@@ -69,7 +69,7 @@ It should be JSONC (JSON with comment) format.
 
 The manifest file should match the following shape:
 
-```ts
+```typescript
 interface ExternalPluginManifestFile {
   manifest_version: 0
   name: string
@@ -137,7 +137,7 @@ we can provide some common templates allowing developers to interpolate with.
 
 Here is an example of `./preview/Card_1.json`
 
-```json
+```jsonc
 {
   "plugin": {
     // $ refers to the payload
@@ -172,7 +172,7 @@ Here is an example of `./preview/Card_1.json`
 
 Report the payload back to the composition.
 
-```ts
+```typescript
 Mask.setMetadata('kind1:1', {
   title,
   description,
