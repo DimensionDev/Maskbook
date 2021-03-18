@@ -116,8 +116,8 @@ export async function updateExoticWalletFromSource(
             if (update) {
                 modified = true
                 await walletStore.put(wallet)
-                continue
             }
+            continue
         }
 
         await walletStore.put(
