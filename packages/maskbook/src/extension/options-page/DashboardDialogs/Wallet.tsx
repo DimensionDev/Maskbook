@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, useCallback, ChangeEvent, useContext } from 'react'
-import { useAsync, useCopyToClipboard } from 'react-use'
+import { useAsync, useAsyncRetry, useCopyToClipboard } from 'react-use'
 import { Send as SendIcon } from 'react-feather'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import {
@@ -23,6 +23,7 @@ import {
     Chip,
     InputAdornment,
     IconButton,
+    Card,
 } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
@@ -140,7 +141,7 @@ interface WalletProps {
     wallet: WalletRecord
 }
 
-const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
+const useWalletImportDialogStyle = makeStyles((theme: Theme) =>
     createStyles({
         confirmation: {
             fontSize: 16,
@@ -169,10 +170,10 @@ const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
     }),
 )
 
-export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
+export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     const { t } = useI18N()
     const state = useState(0)
-    const classes = useWalletCreateDialogStyle()
+    const classes = useWalletImportDialogStyle()
 
     const [name, setName] = useState('')
     const [passphrase] = useState('')
@@ -361,6 +362,87 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                             checkInputLengthExceed(name)
                         }>
                         {t('create')}
+                    </DebounceButton>
+                }
+            />
+        </DashboardDialogCore>
+    )
+}
+//#endregion
+
+//#region wallet create dialog
+const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
+    createStyles({
+        confirmation: {
+            fontSize: 16,
+            lineHeight: 1.75,
+            [theme.breakpoints.down('sm')]: {
+                fontSize: 14,
+            },
+        },
+        notification: {
+            fontSize: 12,
+            fontWeight: 500,
+            textAlign: 'center',
+            backgroundColor: '#FFD5B3',
+            color: 'black',
+            padding: '8px 22px',
+            margin: '24px -36px 0',
+            [theme.breakpoints.down('sm')]: {
+                margin: '24px -16px 0',
+            },
+        },
+        notificationIcon: {
+            width: 16,
+            height: 16,
+            color: '#FF9138',
+        },
+    }),
+)
+
+export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
+    const { t } = useI18N()
+    const classes = useWalletImportDialogStyle()
+
+    const [step, setStep] = useState(0)
+    const [verification, setVerification] = useState('')
+
+    const { value: words = [], retry: retryMnemonicWords } = useAsyncRetry(() => WalletRPC.createMnemonicWords(), [])
+    const onSubmit = useSnackbarCallback(
+        async () => {
+            if (step === 1) {
+                setStep(1)
+                return
+            }
+            if (!words.length || words.join(' ') !== verification) throw new Error('Failed')
+            await WalletRPC.recoverWallet(words, '')
+        },
+        [step, words, verification],
+        props.onClose,
+    )
+
+    const onRefresh = useCallback(() => {
+        retryMnemonicWords()
+    }, [retryMnemonicWords])
+
+    return (
+        <DashboardDialogCore {...props}>
+            <DashboardDialogWrapper
+                icon={<CreditCardIcon />}
+                iconColor="#4EE0BC"
+                primary={t(
+                    step === 0 ? 'plugin_wallet_backup_mnemonic_words' : 'plugin_wallet_backup_confirm_mnemonic_words',
+                )}
+                content={
+                    <Card variant="outlined">
+                        {words.map((word, i) => (
+                            <Chip key={i} label={word} />
+                        ))}
+                    </Card>
+                }
+                footer={
+                    <DebounceButton variant="contained" onClick={onSubmit} disabled>
+                        {t(step === 0 ? 'plugin_wallet_verification_next' : 'plugin_wallet_verification_confirm')}
                     </DebounceButton>
                 }
             />

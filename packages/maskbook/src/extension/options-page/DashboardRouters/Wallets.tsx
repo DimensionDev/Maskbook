@@ -7,11 +7,12 @@ import RestoreIcon from '@material-ui/icons/Restore'
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
 import {
-    DashboardWalletCreateDialog,
+    DashboardWalletImportDialog,
     DashboardWalletAddERC20TokenDialog,
     DashboardWalletHistoryDialog,
     DashboardWalletErrorDialog,
     DashboardWalletRedPacketDetailDialog,
+    DashboardWalletCreateDialog,
 } from '../DashboardDialogs/Wallet'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
@@ -87,6 +88,7 @@ export default function DashboardWalletsRouter() {
     const { create, error } = useQueryParams(['create', 'error', 'rpid'])
 
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
+    const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
     const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
@@ -110,7 +112,7 @@ export default function DashboardWalletsRouter() {
             icon: <AddIcon />,
             handler: () => {
                 if (selectedWallet) openAddToken({ wallet: selectedWallet })
-                else openWalletCreate()
+                else openWalletImport()
             },
         },
     ]
@@ -147,7 +149,7 @@ export default function DashboardWalletsRouter() {
                 <EthereumStatusBar disableEther BoxProps={{ sx: { justifyContent: 'flex-end' } }} />,
                 <Button
                     variant="contained"
-                    onClick={openWalletCreate}
+                    onClick={openWalletImport}
                     endIcon={<AddCircleIcon />}
                     data-testid="create_button">
                     {t('plugin_wallet_on_create')}
@@ -166,6 +168,7 @@ export default function DashboardWalletsRouter() {
             {addToken}
             {walletHistory}
             {walletCreate}
+            {walletImport}
             {walletError}
             {walletRedPacketDetail}
         </DashboardRouterContainer>

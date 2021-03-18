@@ -140,6 +140,10 @@ export function createNewWallet(
     return importNewWallet({ mnemonic, ...rec })
 }
 
+export function createMnemonicWords() {
+    return bip39.generateMnemonic().split(' ')
+}
+
 export async function importNewWallet(
     rec: PartialRequired<
         Omit<WalletRecord, 'id' | 'eth_balance' | '_data_source_' | 'createdAt' | 'updatedAt'>,
