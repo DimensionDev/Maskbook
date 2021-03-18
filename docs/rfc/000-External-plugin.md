@@ -79,6 +79,12 @@ interface ExternalPluginManifestFile {
   integrity?: Record<URL, string>
   i18n?: Record<Language, URL>
   metadata?: Record<PayloadMetadataKey, MetadataDetail>
+  contribution?: {
+    composition?: {
+      target: URL
+      icon: string | URL
+    }
+  }
 }
 
 type KnownPayloadTemplates = 'Card_1'
@@ -124,6 +130,14 @@ Here is an example:
       "preview": {
         "Card_1": "./preview/Card_1.json"
       }
+    }
+  },
+  "contribution": {
+    // This allows to add a new badge in
+    // the composition dialog once user added the plugin
+    "composition": {
+      "icon": "./badge.svg",
+      "target": "./compose.html"
     }
   }
 }
