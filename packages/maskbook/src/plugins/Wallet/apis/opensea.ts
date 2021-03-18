@@ -109,6 +109,13 @@ export interface Asset {
     transfer_fee: unknown | null
 }
 
+export interface AssetInCard {
+    id: string
+    image: string
+    name: string
+    link?: string
+}
+
 export interface AssetsListResponse {
     assets: Asset[]
 }

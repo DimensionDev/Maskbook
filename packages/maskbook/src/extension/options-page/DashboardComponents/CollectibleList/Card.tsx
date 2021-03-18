@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) =>
 
 export interface CollectibleCardProps {
     url: string
-    link: string
+    link: string | undefined
     canViewOnEtherscan?: boolean
 }
 
@@ -26,7 +26,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
     const classes = useStyles(props)
 
     return (
-        <Link target="_blank" rel="noopener noreferrer" href={props.link}>
+        <Link target="_blank" rel="noopener noreferrer" href={props.link ?? ''}>
             <Tilt options={{ scale: 1, max: 30, glare: true, 'max-glare': 1, speed: 1000 }}>
                 <Card
                     className={classes.root}

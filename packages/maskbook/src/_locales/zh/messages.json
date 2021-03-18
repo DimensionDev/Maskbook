@@ -270,6 +270,7 @@
     "wallet_add_nft_address_placeholder": "",
     "wallet_add_nft_id": "",
     "wallet_add_nft_id_placeholder": "",
+    "wallet_add_nft_id_exist": "",
     "wallet_price": "價格",
     "wallet_balance": "餘額",
     "wallet_value": "價值",

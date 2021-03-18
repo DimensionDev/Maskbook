@@ -268,6 +268,7 @@
     "wallet_add_nft_address_placeholder": "0x...",
     "wallet_add_nft_id": "ID",
     "wallet_add_nft_id_placeholder": "Enter the collectible ID",
+    "wallet_add_nft_id_exist": "this token has already loaded",
     "wallet_rename": "Rename Wallet",
     "wallet_assets": "Assets",
     "wallet_price": "Price",

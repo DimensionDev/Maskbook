@@ -383,19 +383,28 @@ export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<Wal
 //#endregion
 
 //#region wallet add ERC20 token dialog
-export function DashboardWalletAddERC721TokenDialog(props: WrappedDialogProps<WalletProps>) {
+export function DashboardWalletAddERC721TokenDialog(
+    props: WrappedDialogProps<
+        WalletProps & {
+            tokenIdsLoaded: string[]
+        }
+    >,
+) {
     const { t } = useI18N()
-    const { wallet } = props.ComponentProps!
+    const { wallet, tokenIdsLoaded } = props.ComponentProps!
     const [id, setId] = useState('')
     const [address, setAddress] = useState('')
     const account = useAccount()
 
     const onSubmit = useSnackbarCallback(
         async () => {
+            if (tokenIdsLoaded.includes(id)) throw new Error(t('wallet_add_nft_id_exist'))
+
             const contract = createContract<ERC721>(account, address, ERC721ABI as AbiItem[])
 
             if (!contract) throw new Error(t('wallet_add_nft_invalid_address'))
 
+            // check if is erc721 contract
             try {
                 const isERC721 = await contract.methods.supportsInterface(ERC165_INTERFACE_ID).call({ from: account })
                 if (!isERC721) throw new Error(t('wallet_add_nft_invalid_erc721_address'))
@@ -403,26 +412,29 @@ export function DashboardWalletAddERC721TokenDialog(props: WrappedDialogProps<Wa
                 throw new Error(t('wallet_add_nft_invalid_erc721_address'))
             }
 
+            // check ownership
             try {
                 // Note: call `ownerOf()` to some address would fail, e.g. OPENSTORE:
                 // https://opensea.io/assets/0x495f947276749ce646f68ac8c248420045cb7b5e/89830317166460882891126040282455488408374211647939875178961827541662050549761
+                // not only OPENSTORE would fail, some other addresses fail as well:
+                // https://opensea.io/assets/0xba8cdaa1c4c294ad634ab3c6ee0fa82d0a019727/3
                 const owner = await contract.methods.ownerOf(id).call({ from: account })
                 if (owner.toLowerCase() !== account.toLowerCase()) throw new Error(t('wallet_add_nft_invalid_owner'))
             } catch (e) {
                 throw new Error(t('wallet_add_nft_invalid_owner'))
             }
 
-            // Note: call `tokenURI()` to some address would fail since it does not implement it, e.g. cryptokitties
-            // https://opensea.io/assets/0x06012c8cf97bead5deae237070f9587f8e7a266d/1800408
+            // retrieve tokenURI
             let tokenURI: string | null = null
             try {
+                // Note: call `tokenURI()` to some address would fail since it does not implement it, e.g. cryptokitties
+                // https://opensea.io/assets/0x06012c8cf97bead5deae237070f9587f8e7a266d/1800408
                 tokenURI = await contract.methods.tokenURI(id).call({ from: account })
             } catch (e) {}
 
             if (tokenURI) {
                 const response = await fetch(tokenURI)
                 const data = await response.json()
-                console.log('response', data)
                 // fetch
             } else {
                 // fetch from opensea api

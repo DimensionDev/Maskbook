@@ -2,6 +2,7 @@ import { forwardRef, useCallback, useState } from 'react'
 import { Button, Box, IconButton, MenuItem, Tabs, Tab, Alert } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
+import { useAccount } from '../../../web3/hooks/useAccount'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import { useModal } from '../DashboardDialogs/Base'
@@ -25,6 +26,9 @@ import { Flags } from '../../../utils/flags'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
+import { useCollectibles } from '../../../plugins/Wallet/hooks/useCollectibles'
+import { AssetProvider } from '../../../plugins/Wallet/types'
+import type { AssetInCard } from '../../../plugins/Wallet/apis/opensea'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -74,6 +78,7 @@ interface WalletContentProps {
 }
 
 export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ wallet }, ref) => {
+    const account = useAccount()
     const classes = useStyles()
     const { t } = useI18N()
     const color = useColorStyles()
@@ -85,7 +90,13 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
     const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
-
+    const {
+        value: collectibles = [],
+        loading: collectiblesLoading,
+        error: collectiblesError,
+        retry: collectiblesRetry,
+    } = useCollectibles(account, AssetProvider.OPENSEAN)
+    console.log('collectibles', collectibles)
     const [menu, openMenu] = useMenu(
         <>
             <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>
@@ -159,7 +170,9 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                         <Button
                             className={classes.addButton}
                             variant="text"
-                            onClick={() => openAddAsset({ wallet })}
+                            onClick={() =>
+                                openAddAsset({ wallet, tokenIdsLoaded: collectibles.map((x) => x.token_id) })
+                            }
                             startIcon={<AddIcon />}>
                             {t('add_asset')}
                         </Button>
@@ -192,7 +205,22 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                 {tabIndex === 0 ? (
                     <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
                 ) : null}
-                {tabIndex === 1 ? <CollectibleList /> : null}
+                {tabIndex === 1 ? (
+                    <CollectibleList
+                        collectibles={collectibles.map(
+                            (x) =>
+                                ({
+                                    id: x.token_id,
+                                    name: x.name ?? x.collection.slug,
+                                    image: x.image_url ?? x.image_preview_url ?? '',
+                                    link: x.permalink,
+                                } as AssetInCard),
+                        )}
+                        collectiblesLoading={collectiblesLoading}
+                        collectiblesError={collectiblesError}
+                        collectiblesRetry={collectiblesRetry}
+                    />
+                ) : null}
                 {tabIndex === 2 ? <TransactionList /> : null}
             </Box>
             {addToken}
