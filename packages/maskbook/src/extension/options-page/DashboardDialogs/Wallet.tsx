@@ -424,8 +424,6 @@ export function DashboardWalletAddERC721TokenDialog(
 
     const onSubmit = useSnackbarCallback(
         async () => {
-            if (tokenIdsLoaded.includes(id)) throw new Error(t('wallet_add_nft_id_exist'))
-
             const contract = createContract<ERC721>(account, address, ERC721ABI as AbiItem[])
 
             if (!contract) throw new Error(t('wallet_add_nft_invalid_address'))
@@ -434,11 +432,25 @@ export function DashboardWalletAddERC721TokenDialog(
             try {
                 const isERC1155 = await contract.methods.supportsInterface(ERC1155_INTERFACE_ID).call({ from: account })
                 const isERC721 = await contract.methods.supportsInterface(ERC721_INTERFACE_ID).call({ from: account })
+                let update = false
+
+                if (isERC721) {
+                    update = await WalletRPC.trustERC721Token(account, { address, tokenId: id })
+                }
+
+                if (isERC1155) {
+                    update = await WalletRPC.trustERC1155Token(account, { address, tokenId: id })
+                }
+
+                // already exist, remove from black_list in database
+                if (update) return
                 if (!isERC721) throw new Error(t('wallet_add_nft_invalid_721_asset_address'))
                 if (isERC1155) throw new Error(t('wallet_add_nft_1155_asset_comming_soon'))
             } catch (e) {
                 throw new Error(t('wallet_add_nft_invalid_721_asset_address'))
             }
+
+            if (tokenIdsLoaded.includes(id)) throw new Error(t('wallet_add_nft_id_exist'))
 
             // check ownership
             try {

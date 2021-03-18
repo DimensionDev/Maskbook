@@ -97,14 +97,14 @@ export async function updateExoticWalletFromSource(
         const wallet = await walletStore.get(formatChecksumAddress(address))
         let update = false
         if (wallet) {
-            [
+            ;[
                 'erc20_token_blacklist',
                 'erc20_token_whitelist',
                 'erc721_token_blacklist',
                 'erc721_token_whitelist',
                 'erc1155_token_blacklist',
-                'erc1155_token_whitelist'
-            ].forEach(x => {
+                'erc1155_token_whitelist',
+            ].forEach((x) => {
                 // @ts-ignore
                 if (!wallet[x]) {
                     // @ts-ignore

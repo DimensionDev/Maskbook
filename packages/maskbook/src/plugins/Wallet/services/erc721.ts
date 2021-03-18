@@ -23,7 +23,10 @@ export async function removeERC721Token(token: PartialRequired<ERC721TokenDetail
     WalletMessages.events.erc721TokensUpdated.sendToAll(undefined)
 }
 
-export async function trustERC721Token(address: string, token: ERC721TokenDetailed) {
+export async function trustERC721Token(
+    address: string,
+    token: PartialRequired<ERC721TokenDetailed, 'address' | 'tokenId'>,
+) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC721Token', 'Wallet')
     const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
     assert(wallet)
@@ -37,9 +40,10 @@ export async function trustERC721Token(address: string, token: ERC721TokenDetail
         wallet.erc721_token_blacklist.delete(key)
         updated = true
     }
-    if (!updated) return
+    if (!updated) return false
     await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
+    return updated
 }
 
 export async function blockERC721Token(

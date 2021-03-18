@@ -23,7 +23,10 @@ export async function removeERC1155Token(token: PartialRequired<ERC1155TokenDeta
     WalletMessages.events.erc1155TokensUpdated.sendToAll(undefined)
 }
 
-export async function trustERC1155Token(address: string, token: ERC1155TokenDetailed) {
+export async function trustERC1155Token(
+    address: string,
+    token: PartialRequired<ERC1155TokenDetailed, 'address' | 'tokenId'>,
+) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC1155Token', 'Wallet')
     const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
     assert(wallet)
@@ -37,9 +40,10 @@ export async function trustERC1155Token(address: string, token: ERC1155TokenDeta
         wallet.erc1155_token_blacklist.delete(key)
         updated = true
     }
-    if (!updated) return
+    if (!updated) return false
     await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
+    return updated
 }
 
 export async function blockERC1155Token(
