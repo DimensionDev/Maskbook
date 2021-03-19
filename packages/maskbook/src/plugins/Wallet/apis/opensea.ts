@@ -116,7 +116,7 @@ export interface AssetInCard {
         symbol: string
     }
     token_id: string
-    image: string
+    image?: string
     name: string
     permalink: string
 }

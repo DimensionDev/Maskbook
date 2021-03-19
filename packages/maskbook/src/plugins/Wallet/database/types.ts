@@ -26,8 +26,8 @@ export interface ERC721TokenRecord {
     tokenId: string
     /** base uri */
     baseURI?: string
-    /** token uri */
-    tokenURI?: string
+    /** token img uri */
+    image?: string
 }
 
 export interface ERC1155TokenRecord {
@@ -39,8 +39,8 @@ export interface ERC1155TokenRecord {
     name: string
     /** token id */
     tokenId: string
-    /** token uri */
-    tokenURI?: string
+    /** token img uri */
+    image?: string
 }
 
 export interface WalletRecord {

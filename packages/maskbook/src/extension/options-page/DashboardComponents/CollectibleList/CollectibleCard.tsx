@@ -44,13 +44,13 @@ export function CollectibleCard(props: CollectibleCardProps) {
         <Link target="_blank" rel="noopener noreferrer" href={props.link ?? ''}>
             <Card className={classes.root} style={{ width: 160, height: 220 }}>
                 <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
-                {token.tokenURI ? (
+                {token.image ? (
                     <Image
                         component="img"
                         width={160}
                         height={220}
                         style={{ objectFit: 'contain' }}
-                        src={token.tokenURI}
+                        src={token.image}
                     />
                 ) : (
                     <MaskbookIconOutlined className={classes.placeholder} />

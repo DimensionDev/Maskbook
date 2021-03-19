@@ -14,6 +14,7 @@ import type {
 import { resolveChainId } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
 import { ChainId } from '../../../web3/types'
+import type { AssetInCard } from '../../../plugins/Wallet/apis/opensea'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatChecksumAddress(address))
@@ -76,4 +77,19 @@ export function ERC1155TokenRecordIntoDB(x: ERC1155TokenRecord) {
 export function ERC1155TokenRecordOutDB(x: ERC1155TokenRecordInDatabase) {
     const record: ERC1155TokenRecord = omit(x, 'record_id')
     return record
+}
+
+export function ERC721TokenToAssetInCard(x: ERC721TokenRecordInDatabase) {
+    const assetInCard: AssetInCard = {
+        asset_contract: {
+            address: x.address,
+            schema_name: 'ERC721',
+            symbol: '',
+        },
+        token_id: x.record_id.split('_')[1],
+        image: x.image,
+        name: x.name,
+        permalink: '',
+    }
+    return assetInCard
 }

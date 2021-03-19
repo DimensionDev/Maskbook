@@ -89,7 +89,7 @@ export function createERC721Token(
     name: string,
     symbol: string,
     baseURI?: string,
-    tokenURI?: string,
+    image?: string,
 ) {
     return {
         type: EthereumTokenType.ERC721,
@@ -99,18 +99,18 @@ export function createERC721Token(
         name,
         symbol,
         baseURI,
-        tokenURI,
+        image,
     } as ERC721TokenDetailed
 }
 
-export function createERC1155Token(chainId: ChainId, tokenId: string, address: string, name: string, tokenURI: string) {
+export function createERC1155Token(chainId: ChainId, tokenId: string, address: string, name: string, image?: string) {
     return {
         type: EthereumTokenType.ERC1155,
         chainId,
         tokenId,
         address,
         name,
-        tokenURI,
+        image,
     } as ERC1155TokenDetailed
 }
 

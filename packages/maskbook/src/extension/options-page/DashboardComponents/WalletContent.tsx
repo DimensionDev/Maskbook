@@ -27,7 +27,7 @@ import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useCollectibles } from '../../../plugins/Wallet/hooks/useCollectibles'
+import { useCollectiblesFromNetwork, useCollectiblesFromDB } from '../../../plugins/Wallet/hooks/useCollectibles'
 import { AssetProvider } from '../../../plugins/Wallet/types'
 import type { AssetInCard } from '../../../plugins/Wallet/apis/opensea'
 
@@ -100,13 +100,13 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const [addAsset, , openAddAsset] = useModal(DashboardWalletAddERC721TokenDialog)
 
     const {
-        value: collectibles = [],
+        value: collectiblesFromNetwork = [],
         loading: collectiblesLoading,
         error: collectiblesError,
         retry: collectiblesRetry,
-    } = useCollectibles(account, AssetProvider.OPENSEAN)
-
-    const [addedAssets, setAddedAssets] = useState<AssetInCard[]>([])
+    } = useCollectiblesFromNetwork(account, AssetProvider.OPENSEAN)
+    const collectiblesFromDB = useCollectiblesFromDB()
+    const collectibles = [...collectiblesFromNetwork, ...collectiblesFromDB]
     const [menu, openMenu] = useMenu(
         <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
         wallet._private_key_ || wallet.mnemonic.length ? (
@@ -197,13 +197,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                             onClick={() =>
                                 openAddAsset({
                                     wallet,
-                                    tokenIdsLoaded: collectibles
-                                        .map((x) => x.token_id)
-                                        .concat(addedAssets.map((x) => x.token_id)),
-                                    setAddedAssets: (assetInCard: AssetInCard) => {
-                                        console.log('assetInCard', assetInCard)
-                                        setAddedAssets([assetInCard, ...addedAssets])
-                                    },
+                                    tokenIdsLoaded: collectibles.map((x) => x.token_id),
                                 })
                             }
                             startIcon={<AddIcon />}>
@@ -238,22 +232,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                 {tabIndex === 1 ? (
                     <CollectibleList
                         wallet={wallet}
-                        collectibles={collectibles
-                            .map(
-                                (x) =>
-                                    ({
-                                        asset_contract: {
-                                            address: x.asset_contract.address,
-                                            symbol: x.asset_contract.symbol,
-                                            schema_name: x.asset_contract.schema_name,
-                                        },
-                                        token_id: x.token_id,
-                                        name: x.name ?? x.collection.slug,
-                                        image: x.image_url ?? x.image_preview_url ?? '',
-                                        permalink: x.permalink,
-                                    } as AssetInCard),
-                            )
-                            .concat(addedAssets)}
+                        collectibles={collectibles}
                         collectiblesLoading={collectiblesLoading}
                         collectiblesError={collectiblesError}
                         collectiblesRetry={collectiblesRetry}

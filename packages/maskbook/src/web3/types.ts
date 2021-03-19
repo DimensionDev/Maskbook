@@ -53,7 +53,7 @@ export interface ERC721TokenDetailed extends ERC721Token {
     symbol: string
     tokenId: string
     baseURI?: string
-    tokenURI?: string
+    image?: string
 }
 //#endregion
 
@@ -67,7 +67,7 @@ export interface ERC1155Token {
 export interface ERC1155TokenDetailed extends ERC1155Token {
     name: string
     tokenId: string
-    tokenURI?: string
+    image?: string
 }
 //#endregion
 

@@ -52,6 +52,7 @@ import { useRedPacketFromDB } from '../../../plugins/RedPacket/hooks/useRedPacke
 import WalletLine from './WalletLine'
 import { isETH, isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
+import { useChainId } from '../../../web3/hooks/useChainState'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { Image } from '../../../components/shared/Image'
 import { MaskbookIconOutlined } from '../../../resources/MaskbookIcon'
@@ -412,15 +413,15 @@ export function DashboardWalletAddERC721TokenDialog(
     props: WrappedDialogProps<
         WalletProps & {
             tokenIdsLoaded: string[]
-            setAddedAssets: (assetInCard: AssetInCard) => void
         }
     >,
 ) {
     const { t } = useI18N()
-    const { wallet, tokenIdsLoaded, setAddedAssets } = props.ComponentProps!
-    const [id, setId] = useState('')
+    const { wallet, tokenIdsLoaded } = props.ComponentProps!
+    const [tokenId, setTokenId] = useState('')
     const [address, setAddress] = useState('')
     const account = useAccount()
+    const chainId = useChainId()
 
     const onSubmit = useSnackbarCallback(
         async () => {
@@ -435,11 +436,11 @@ export function DashboardWalletAddERC721TokenDialog(
                 let update = false
 
                 if (isERC721) {
-                    update = await WalletRPC.trustERC721Token(account, { address, tokenId: id })
+                    update = await WalletRPC.trustERC721Token(account, { address, tokenId })
                 }
 
                 if (isERC1155) {
-                    update = await WalletRPC.trustERC1155Token(account, { address, tokenId: id })
+                    update = await WalletRPC.trustERC1155Token(account, { address, tokenId })
                 }
 
                 // already exist, remove from black_list in database
@@ -450,14 +451,13 @@ export function DashboardWalletAddERC721TokenDialog(
                 throw new Error(t('wallet_add_nft_invalid_721_asset_address'))
             }
 
-            if (tokenIdsLoaded.includes(id)) throw new Error(t('wallet_add_nft_id_exist'))
+            if (tokenIdsLoaded.includes(tokenId)) throw new Error(t('wallet_add_nft_id_exist'))
 
             // check ownership
             try {
                 // Note: call `ownerOf()` to some address would fail since we have not supported erc1155, e.g. OPENSTORE:
                 // https://opensea.io/assets/0x495f947276749ce646f68ac8c248420045cb7b5e/89830317166460882891126040282455488408374211647939875178961827541662050549761
-                const owner = await contract.methods.ownerOf(id).call({ from: account })
-                console.log('owner', owner)
+                const owner = await contract.methods.ownerOf(tokenId).call({ from: account })
                 if (owner.toLowerCase() !== account.toLowerCase()) throw new Error(t('wallet_add_nft_invalid_owner'))
             } catch (e) {
                 throw new Error(t('wallet_add_nft_invalid_owner'))
@@ -468,29 +468,27 @@ export function DashboardWalletAddERC721TokenDialog(
             try {
                 // Note: call `tokenURI()` to some address would fail since we have not supported erc1155, e.g. cryptokitties
                 // https://opensea.io/assets/0x06012c8cf97bead5deae237070f9587f8e7a266d/1800408
-                tokenURI = await contract.methods.tokenURI(id).call({ from: account })
+                tokenURI = await contract.methods.tokenURI(tokenId).call({ from: account })
             } catch (e) {}
 
-            let assetInCard: AssetInCard = {
-                asset_contract: {
-                    address,
-                    symbol: '',
-                    schema_name: 'ERC721',
-                },
-                token_id: id,
+            let tokenDetailed: ERC721TokenDetailed = {
+                address,
+                symbol: '',
+                chainId,
+                tokenId,
                 name: '',
                 image: '',
-                permalink: '',
+                type: EthereumTokenType.ERC721,
             }
 
             if (tokenURI) {
                 const response = await fetch(tokenURI)
                 const data = await response.json()
-                assetInCard.name = data.name
-                assetInCard.image = data.image
+                tokenDetailed.name = data.name
+                tokenDetailed.image = data.image
             }
 
-            setAddedAssets(assetInCard)
+            WalletRPC.addERC721Token(tokenDetailed)
             // Note: Rare Pizzas Box works fine
             // https://opensea.io/assets/0x4ae57798aef4af99ed03818f83d2d8aca89952c7/182
         },
@@ -513,7 +511,7 @@ export function DashboardWalletAddERC721TokenDialog(
                             placeholder={t('wallet_add_nft_address_placeholder')}
                         />
                         <TextField
-                            onChange={(e) => setId(e.target.value)}
+                            onChange={(e) => setTokenId(e.target.value)}
                             required
                             label={t('wallet_add_nft_id')}
                             placeholder={t('wallet_add_nft_id_placeholder')}
@@ -522,7 +520,7 @@ export function DashboardWalletAddERC721TokenDialog(
                 }
                 footer={
                     <DebounceButton
-                        disabled={id.length === 0 || address.length === 0}
+                        disabled={tokenId.length === 0 || address.length === 0}
                         variant="contained"
                         onClick={onSubmit}>
                         {t('add_asset')}
@@ -1256,13 +1254,13 @@ export function DashboardWalletTransferDialogNFT(
             <DashboardDialogWrapper
                 primary={t('wallet_transfer_title')}
                 icon={
-                    token.tokenURI ? (
+                    token.image ? (
                         <Image
                             component="img"
                             width={160}
                             height={220}
                             style={{ objectFit: 'contain' }}
-                            src={token.tokenURI}
+                            src={token.image}
                         />
                     ) : (
                         <MaskbookIconOutlined className={classes.placeholder} />
