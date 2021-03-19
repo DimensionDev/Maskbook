@@ -2,7 +2,7 @@
 
 ## Motivation
 
-The current using v-38 is not prepared for TypedMessage and binary data. That makes our payload wasting space.
+The current payload v-38 is not prepared for TypedMessage and binary data. Thus we need to find a space-optimal solution..
 
 ## Design target
 
@@ -13,7 +13,7 @@ The current using v-38 is not prepared for TypedMessage and binary data. That ma
 
 `PayloadAlpha37` is a extendable tuple type. To omit the field name, the compressed output can have a smaller size.
 
-Future extensions must appended to the end of the tuple, client must ignore the unknown new items in the tuple.
+Future extensions must be appended to the end of the tuple, and the client must ignore the unknown items in the tuple.
 
 Here is the definition of `PayloadAlpha37`. (Note, the syntax is named tuple in TypeScript and it won't appears in the real data.)
 
@@ -24,8 +24,11 @@ type PayloadAlpha37 = [
   // we can save more space
   authorNetwork: UTF8String | SocialNetworkEnum,
   authorID: UTF8String,
-  authorPublicKey: ArrayBuffer,
-  // authorPublicKeyCurve: ???,
+  //authorPublicKey: ArrayBuffer,
+  // array of base58 strings of newly generated ephemeral public keys
+  // indexed by SupportedCurves
+  authorEphemeralPublicKeyList: [String],       // length = Object.keys(SupportedCurves).length 
+  // authorPublicKeyCurve no longer necessary
   encryption: Encryption,
   iv: ArrayBuffer,
   // This should be the binary payload of TypedMessage.
@@ -42,6 +45,11 @@ type Encryption =
 enum SocialNetworkEnum {
   Facebook = 0,
   Twitter = 1,
+}
+enum SupportedCurves {
+    SECP256K1 = 0, 
+    SECP256R1 = 1, 
+    ED25519 = 2,
 }
 ```
 
