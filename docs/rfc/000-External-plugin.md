@@ -2,19 +2,19 @@
 
 ## Principles
 
-- It must be absolutely isolated with the Mask Network.
+- It must be absolutely isolated within the Mask Network extension.
 - Developers should be able to develop a working plugin without acquiring "licence" or any form of agreement from the Mask team.
 - It must not harm the data or property (wallet) safety.
 
 ## General design
 
-An external plugin should be an isolated web site, which means it should not be loaded / installed to the Mask Network.
+An external plugin should be an isolated website, which means it should not be loaded or installed onto the Mask Network.
 
-When Mask Network found a metadata of an external plugin, it will try to fetch the manifest and display the content in the payload. This process **must not** involves dynamic code execution.
+When Mask Network detects the metadata of an external plugin, it will try to fetch the manifest and display the content in the payload. This process **must not** involve dynamic code execution.
 
-When the user decided to interact with the external plugin, Mask Network will open a new popup window and inject some API to it.
+When the user decides to interact with the external plugin, Mask Network will open a popup window and inject some APIs to it.
 
-It is the same when user want to use the external plugin when composing.
+It is the same when user wants to use the external plugin when composing.
 
 ## User story
 
@@ -26,39 +26,38 @@ It is the same when user want to use the external plugin when composing.
 
 - If the user knows the plugin URL, they can manually add it.
 
-- If the user don't know which plugin to use, they can explore plugins in a "external plugin collection".
+- Users can explore plugins in a "external plugin collection", aka Masket Place.
 
 #### Composing
 
-After decided the plugin to use, the user clicked on the plugin entry.
-A popup window appears.
+After selecting the plugin, a popup window will appear.
 If Mask Network has no permission to the plugin site, Mask Network will jump to a permission granting page first.
 
-After permissions got, the plugin page will reveal.
+After permissions granted, the plugin page will appear.
 
-User interact with the plugin.
+User interacts with the plugin.
 
-The plugin send it's payload back to the composition UI, the popup dialog closes.
+The plugin sends its payload back to the composition UI and the popup dialog closes.
 
 ### Seeing external plugin posted by others
 
-User see the plugin UI rendered by the Mask Network.
+User sees the plugin UI rendered by the Mask Network. Partial info, such as on-chain info, can be displayed directly on the card.
 
-User click to interact with the plugin.
+User clicks on the post card to interact with the plugin.
 
 A popup window appears.
 If Mask Network has no permission to the plugin site, Mask Network will jump to a permission granting page first.
-After permissions got, the plugin page will reveal.
+After permissions granted, the plugin page will appear.
 
-User interact with the plugin.
+User interacts with the plugin.
 
 ## Technical details
 
 ### Plugin definition
 
-A plugin should be deployed on a stable HTTPs URL, for example <https://example.com/my-plugin>, let's call it _base url_.
+A plugin should be deployed on a static HTTPs URL, for example <https://example.com/my-plugin>, let's call it _base url_.
 
-It should provide a manifest file called "mask-plugin-manifest.json", for the example above, it should be located at <https://example.com/my-plugin/mask-plugin-manifest.json>. It should be JSONC (JSON with comment) format.
+It should provide a manifest file called "mask-plugin-manifest.json". For the example above, it should be located at <https://example.com/my-plugin/mask-plugin-manifest.json>. It should be in JSONC (JSON with comment) format.
 
 The manifest file should match the following shape:
 
@@ -91,6 +90,7 @@ Here is an example:
   "publisher": "__locales:publisher",
   // Sign this manifest file so people will trust me (if my GPG key is famous)!
   // If you want to sign other resources, add it to the integrity list below
+  // DISCUSS: I think it's better to have users to sign by their Mask account, aka ECC key pair.
   "code_sign": "./sign.gpg",
   "integrity": {
     // I can provide hash to enforce security
@@ -118,12 +118,12 @@ i18n files should follow the i18next format.
 
 ### Permissions
 
-You might noticed there is no permissions in the manifest because all permissions are designed to be required dynamically.
+You might notice that there is no permission in the manifest because all permissions are designed to be requested dynamically.
 
 ### The "payload_preview" part
 
 To avoid code execution in the Mask Network extension itself and still render a plugin UI,
-we can provide some common templates to allow people to interpolate with.
+we can provide some common templates allowing developers to interpolate with.
 
 Here is an example of `./preview/Card_1.json`
 
