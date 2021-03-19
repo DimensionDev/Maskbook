@@ -11,7 +11,7 @@ export interface TypedMessageText extends TypedMessage {
     readonly type: 'text'
     readonly content: string
 }
-/** It represents a signle link */
+/** It represents a single link */
 export interface TypedMessageAnchor extends TypedMessage {
     readonly type: 'anchor'
     readonly category: 'normal' | 'user' | 'cash' | 'hash'
