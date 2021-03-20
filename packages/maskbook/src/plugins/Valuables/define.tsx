@@ -1,5 +1,4 @@
 import { PluginConfig, PluginStage, PluginScope } from '../types'
-import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import { VCENT_PLUGIN_ID } from './constants'
 import BidCard from './UI/BidCard'
@@ -17,6 +16,4 @@ export const ValuablesPluginDefine: PluginConfig = {
 
         return <BidCard id={id} />
     },
-
-    // add similar successDecryptionInspector?
 }

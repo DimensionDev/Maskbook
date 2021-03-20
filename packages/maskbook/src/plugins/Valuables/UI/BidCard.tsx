@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     bidButton: {
         borderRadius: '20px',
         backgroundColor: theme.palette.mode === 'light' ? '#EFF1F2' : '#1E2024',
-        width: '100vw',
+        width: '100%',
         margin: theme.spacing(1),
     },
     bidLink: {
@@ -34,16 +34,11 @@ interface BidCardProps {
 export default function BidCard(props: BidCardProps) {
     const classes = useStyles()
 
-    const tweetBidResponse = useAsync(
-        async function () {
-            const response = await getTweetBid(props.id)
+    const tweetBidResponse = useAsync(() => getTweetBid(props.id), [props.id])
 
-            return response
-        },
-        [props.id],
-    )
+    if (tweetBidResponse.loading || tweetBidResponse.error || !tweetBidResponse.value) return null
 
-    return !tweetBidResponse.loading && !tweetBidResponse.error && tweetBidResponse.value ? (
+    return (
         <div className={classes.root}>
             <Button
                 className={classes.bidButton}
@@ -57,5 +52,5 @@ export default function BidCard(props: BidCardProps) {
                 </Typography>
             </Button>
         </div>
-    ) : null
+    )
 }
