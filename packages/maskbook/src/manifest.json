@@ -2,7 +2,7 @@
     "name": "Mask Network",
     "version": "1.29.13",
     "manifest_version": 2,
-    "permissions": ["storage", "downloads", "webNavigation", "activeTab"],
+    "permissions": ["storage", "downloads", "webNavigation", "activeTab", "https://twitter.com/*"],
     "optional_permissions": ["<all_urls>", "notifications"],
     "background": { "page": "background.html" },
     "options_ui": { "page": "index.html", "open_in_tab": true },
