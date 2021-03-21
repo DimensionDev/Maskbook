@@ -17,9 +17,8 @@ import { TransakPluginDefine } from './Transak/define'
 import { ITO_PluginDefine } from './ITO/define'
 import { NFTPluginsDefine } from './NFT/define'
 import { AirdropPluginDefine } from './Airdrop/define'
-import { ValuablesPluginDefine } from "./Valuables/define"
+import { ValuablesPluginDefine } from './Valuables/define'
 import { sideEffect } from '../utils/side-effects'
-
 
 sideEffect.then(() => {
     plugins.add(EthereumPluginDefine)
