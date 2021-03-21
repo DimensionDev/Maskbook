@@ -27,12 +27,12 @@ sideEffect.then(() => {
     plugins.add(FileServicePluginDefine)
     plugins.add(ITO_PluginDefine)
     plugins.add(NFTPluginsDefine)
-    plugins.add(ValuablesPluginDefine)
 
     if (Flags.gitcoin_enabled) plugins.add(GitcoinPluginDefine)
     if (Flags.poll_enabled) plugins.add(PollsPluginDefine)
     if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
     if (Flags.transak_enabled) plugins.add(TransakPluginDefine)
     if (Flags.airdrop_enabled) plugins.add(AirdropPluginDefine)
+    if (Flags.valuables_enabled) plugins.add(ValuablesPluginDefine)
     if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)
 })
