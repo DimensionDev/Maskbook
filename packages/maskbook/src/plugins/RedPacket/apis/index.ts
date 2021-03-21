@@ -13,6 +13,7 @@ import { EthereumNetwork, EthereumTokenType, ChainId } from '../../../web3/types
 
 const redPacketBasicKeys = [
     'contract_address',
+    'contract_version',
     'rpid',
     'txid',
     'password',
@@ -41,6 +42,7 @@ const RED_PACKET_FIELDS = `
     rpid
     txid
     contract_address
+    contract_version
     password
     shares
     message

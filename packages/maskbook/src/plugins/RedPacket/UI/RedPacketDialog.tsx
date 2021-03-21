@@ -22,6 +22,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const onCreateOrSelect = useCallback(
         (payload: RedPacketJSONPayload) => {
+            if (payload.password === '') {
+                alert('Unable to share a red packet without a password. But you can still withdraw the red packet.')
+                payload.password = prompt('Please enter the password of the red packet:', '') ?? ''
+            }
+
             editActivatedPostMetadata((next) =>
                 payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey),
             )
