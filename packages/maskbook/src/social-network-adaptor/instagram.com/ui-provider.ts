@@ -2,6 +2,7 @@ import { SocialNetworkUI, stateCreator } from '../../social-network'
 import { instagramShared } from './shared'
 import { instagramBase } from './base'
 import { IdentityProviderInstagram } from './collecting/identity-provider'
+import { PostProviderInstagram } from './collecting/posts'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults'
 const origins = ['https://www.instagram.com/*', 'https://m.instagram.com/*', 'https://instagram.com/*']
 const define: SocialNetworkUI.Definition = {
@@ -10,6 +11,7 @@ const define: SocialNetworkUI.Definition = {
     automation: {},
     collecting: {
         identityProvider: IdentityProviderInstagram,
+        postsProvider: PostProviderInstagram,
     },
     configuration: {
         setupWizard: {
