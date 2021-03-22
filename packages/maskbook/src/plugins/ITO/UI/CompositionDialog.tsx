@@ -145,7 +145,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         tabs: [
             {
                 label: t('plugin_ito_create_new'),
-                children: <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={fillCallback} />,
+                children: <CreateForm onNext={onNext} origin={poolSettings} onChangePoolSettings={setPoolSettings} />,
                 sx: { p: 0 },
             },
             {
@@ -189,10 +189,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 title={t('plugin_ito_display_name')}
                 onClose={onClose}>
                 <DialogContent>
-                    {step === ITOCreateFormPageStep.NewItoPage ? (
-                        <CreateForm onNext={onNext} origin={poolSettings} onChangePoolSettings={setPoolSettings} />
+                    {step === ITOCreateFormPageStep.NewItoPage ? <AbstractTab height={540} {...tabProps} /> : null}
+                    {step === ITOCreateFormPageStep.ConfirmItoPage ? (
+                        <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={fillCallback} />
                     ) : null}
-                    {step === ITOCreateFormPageStep.ConfirmItoPage ? <AbstractTab height={540} {...tabProps} /> : null}
                 </DialogContent>
             </InjectedDialog>
         </>
