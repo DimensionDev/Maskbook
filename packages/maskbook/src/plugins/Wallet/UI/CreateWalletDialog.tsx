@@ -91,6 +91,10 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
     const [step, setStep] = useState(CreateWalletStep.Name)
     const [name, setName] = useState('')
 
+    //#region create mnemonic words
+    const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
+    //#endregion
+
     //#region remote controlled dialog logic
     const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
     const onClose = useCallback(async () => {
@@ -100,11 +104,10 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
         await sleep(300)
         setName('')
         setStep(CreateWalletStep.Name)
-    }, [setOpen])
+        refreshCallback()
+    }, [refreshCallback])
     //#endregion
 
-    //#region create mnemonic words
-    const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
     const onNext = useCallback(() => {
         switch (step) {
             case CreateWalletStep.Name:
@@ -144,7 +147,6 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
         onClose,
     )
     const onWordChange = answerCallback
-    //#endregion
 
     return (
         <InjectedDialog
