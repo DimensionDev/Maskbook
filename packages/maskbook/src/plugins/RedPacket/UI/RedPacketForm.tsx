@@ -141,9 +141,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#region blocking
     // password should remain the same rather than change each time when createState change,
     //  otherwise password in database would be different from creating red-packet.
-    const password = useRef(uuid())
     const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback({
-        password: password.current,
         // Todo: revert it back after test
         duration: 60 /* seconds */ * 60 /* mins */ * 1 /* hours */,
         isRandom: Boolean(isRandom),
@@ -227,7 +225,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
             const record: RedPacketRecord = {
                 id: createState.hash,
                 from: '',
-                password: password.current,
+                password: createSettings!.password,
                 contract_version: RED_PACKET_CONTRACT_VERSION,
             }
             RedPacketRPC.discoverRedPacket(record)

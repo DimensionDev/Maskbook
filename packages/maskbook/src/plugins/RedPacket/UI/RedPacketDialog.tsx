@@ -9,6 +9,10 @@ import { RedPacketMetaKey } from '../constants'
 import { RedPacketForm } from './RedPacketForm'
 import { RedPacketHistoryList } from './RedPacketHistoryList'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import Services from '../../../extension/service'
+import { useChainId } from '../../../web3/hooks/useChainState'
+import Web3Utils from 'web3-utils'
+import { useAccount } from '../../../web3/hooks/useAccount'
 
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean
@@ -19,12 +23,25 @@ interface RedPacketDialogProps extends withClasses<never> {
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
     const { onConfirm } = props
+    const chainId = useChainId()
+    const account = useAccount()
 
     const onCreateOrSelect = useCallback(
-        (payload: RedPacketJSONPayload) => {
+        async (payload: RedPacketJSONPayload) => {
             if (payload.password === '') {
-                alert('Unable to share a red packet without a password. But you can still withdraw the red packet.')
-                payload.password = prompt('Please enter the password of the red packet:', '') ?? ''
+                if (payload.contract_version === 1) {
+                    alert('Unable to share a red packet without a password. But you can still withdraw the red packet.')
+                    payload.password = prompt('Please enter the password of the red packet:', '') ?? ''
+                }
+
+                if (payload.contract_version === 2) {
+                    payload.password = await Services.Ethereum.sign(
+                        Web3Utils.sha3(payload.sender.message) ?? '',
+                        account,
+                        chainId,
+                    )
+                    payload.password = payload.password!.slice(2)
+                }
             }
 
             editActivatedPostMetadata((next) =>
