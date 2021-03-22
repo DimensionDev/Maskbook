@@ -1,12 +1,15 @@
 import { SocialNetworkUI, stateCreator } from '../../social-network'
 import { instagramShared } from './shared'
 import { instagramBase } from './base'
+import { IdentityProviderInstagram } from './collecting/identity-provider'
 const origins = ['https://www.instagram.com/*', 'https://m.instagram.com/*', 'https://instagram.com/*']
 const define: SocialNetworkUI.Definition = {
     ...instagramShared,
     ...instagramBase,
     automation: {},
-    collecting: {},
+    collecting: {
+        identityProvider: IdentityProviderInstagram,
+    },
     configuration: {},
     customization: {},
     init(signal) {

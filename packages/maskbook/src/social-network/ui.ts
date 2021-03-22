@@ -49,10 +49,13 @@ export async function activateSocialNetworkUI(): Promise<void> {
     const abort = new AbortController()
     const { signal } = abort
     if (module.hot) {
-        ui_deferred.hotModuleReload?.(() => {
-            console.log('SNS adaptor HMR.')
+        console.log('SNS adaptor HMR enabled.')
+        ui_deferred.hotModuleReload?.(async (newDefinition) => {
+            console.log('SNS adaptor updated. Uninstalling current adaptor.')
             abort.abort()
-            setTimeout(activateSocialNetworkUI, 200)
+            await delay(200)
+            definedSocialNetworkUIsResolved.set(ui_deferred.networkIdentifier, newDefinition)
+            activateSocialNetworkUI()
         })
     }
     await untilDomLoaded()
