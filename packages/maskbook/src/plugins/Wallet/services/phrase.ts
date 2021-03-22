@@ -28,7 +28,6 @@ export async function addPhrase(rec: Omit<PhraseRecord, 'id' | 'index' | 'create
     if (old) throw new Error('Add exists phrase.')
 
     // create a new phrase
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Phrase')
     const now = new Date()
     const record: PhraseRecord = {
         ...rec,
@@ -37,6 +36,7 @@ export async function addPhrase(rec: Omit<PhraseRecord, 'id' | 'index' | 'create
         createdAt: now,
         updatedAt: now,
     }
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Phrase')
     await t.objectStore('Phrase').add(record)
     WalletMessages.events.phrasesUpdated.sendToAll(undefined)
     return record
@@ -51,9 +51,9 @@ export async function removePhrase(id: string) {
 export async function updatePhrase(
     rec: Omit<PhraseRecord, 'path' | 'mnemonic' | 'passphrase' | 'createdAt' | 'updatedAt'>,
 ) {
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Phrase')
     const record = await getPhrase(rec.id)
     assert(record)
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Phrase')
     await t.objectStore('Phrase').put(
         PhraseRecordIntoDB({
             ...record,
@@ -91,9 +91,9 @@ export async function deriveWalletFromPhrase(
         if (walletRecord) continue
 
         // create a wallet from mnemonic words
-        await wallet.importNewWallet({
+        const address = await wallet.importNewWallet({
             name,
-            path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+            path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${i}`,
             mnemonic: phrase.mnemonic,
             passphrase: phrase.passphrase,
         })
@@ -103,6 +103,7 @@ export async function deriveWalletFromPhrase(
             id: phrase.id,
             index: i,
         })
+        return address
     }
     throw new Error('Derive too many times.')
 }

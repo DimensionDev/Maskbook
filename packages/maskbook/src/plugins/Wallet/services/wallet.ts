@@ -209,10 +209,10 @@ export async function removeWallet(address: string) {
 
 export async function recoverWallet(
     mnemonic: string[],
-    password: string,
+    passphrase: string,
     path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
 ) {
-    const seed = await bip39.mnemonicToSeed(mnemonic.join(' '), password)
+    const seed = await bip39.mnemonicToSeed(mnemonic.join(' '), passphrase)
     const masterKey = HDKey.parseMasterSeed(seed)
     const extendedPrivateKey = masterKey.derive(path).extendedPrivateKey!
     const childKey = HDKey.parseExtendedKey(extendedPrivateKey)
@@ -224,7 +224,9 @@ export async function recoverWallet(
         privateKey: walletPrivateKey,
         privateKeyValid: true,
         privateKeyInHex: `0x${buf2hex(walletPrivateKey)}`,
+        path,
         mnemonic,
+        passphrase,
     }
 }
 
