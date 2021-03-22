@@ -27,7 +27,7 @@ type PayloadAlpha37 = [
   authorPublicKey: ArrayBuffer,                 // format: [PublicKey, SupportedCurvesEnum]
   // array of base58 strings of newly generated ephemeral public keys
   // indexed by SupportedCurves
-  authorEphemeralPublicKeyList: String[],       // length = Object.keys(SupportedCurves).length 
+  authorEphemeralPublicKeyList: string[],       // length = Object.keys(SupportedCurves).length 
   // authorPublicKeyCurve no longer necessary
   encryption: Encryption,
   iv: ArrayBuffer,
