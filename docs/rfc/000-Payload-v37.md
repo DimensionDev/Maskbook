@@ -24,10 +24,10 @@ type PayloadAlpha37 = [
   // we can save more space
   authorNetwork: UTF8String | SocialNetworkEnum,
   authorID: UTF8String,
-  //authorPublicKey: ArrayBuffer,
+  authorPublicKey: ArrayBuffer,                 // format: [PublicKey, SupportedCurvesEnum]
   // array of base58 strings of newly generated ephemeral public keys
   // indexed by SupportedCurves
-  authorEphemeralPublicKeyList: [String],       // length = Object.keys(SupportedCurves).length 
+  authorEphemeralPublicKeyList: String[],       // length = Object.keys(SupportedCurves).length 
   // authorPublicKeyCurve no longer necessary
   encryption: Encryption,
   iv: ArrayBuffer,
