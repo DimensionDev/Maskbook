@@ -101,7 +101,7 @@ export async function deriveWalletFromPhrase(
         // update the address index of phrase
         await updatePhrase({
             id: phrase.id,
-            index: i,
+            index: i + 1,
         })
         return address
     }
