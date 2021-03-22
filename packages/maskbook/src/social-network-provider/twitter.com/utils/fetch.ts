@@ -137,7 +137,9 @@ export const postNameParser = (node: HTMLElement) => {
         // type 3:
         // parse name in quoted tweet
         const nameElementInQuoted = nthChild(tweetElement, 0, 0, 0)
-        const nameInQuoteTweet = nameElementInQuoted ? serializeToText(nameElementInQuoted) : ''
+
+        // trim the date: 'zhch · Jan 26, 2020' suitable for all main languages: en/zh/ja/de/fr...
+        const nameInQuoteTweet = nameElementInQuoted ? serializeToText(nameElementInQuoted).split(' · ')[0] : ''
         return (
             [nameInUniqueAnchorTweet, nameInDoubleAnchorsTweet, nameInQuoteTweet]
                 .filter(Boolean)

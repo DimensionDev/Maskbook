@@ -13,7 +13,7 @@ export const hostLeadingUrlAutoTwitter = (isMobile: boolean) =>
 
 export const getPostUrlAtTwitter = (post: PostIdentifier<ProfileIdentifier>, isMobile: boolean = false) => {
     if (!usernameValidator(post.identifier.userId)) {
-        throw new Error(i18n.t('service_username_invalid'))
+        console.error(new Error(i18n.t('service_username_invalid')))
     }
     return `${hostLeadingUrlAutoTwitter(isMobile)}/${post.identifier.userId}/status/${post.postId}`
 }
