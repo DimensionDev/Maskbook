@@ -1,5 +1,4 @@
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import type { CallbackBasedChannel, EventBasedChannel } from 'async-call-rpc'
 
 // key = channel; value = local implementation
 const RPCCache = new WeakMap<object, object>()
@@ -34,4 +33,25 @@ export async function getLocalImplementation<T extends object>(name: string, imp
         Object.defineProperty(localImpl, key, { configurable: true, enumerable: true, value: result[key] })
     }
     return localImpl
+}
+
+export async function getLocalImplementationExotic<T extends object>(
+    name: string,
+    impl: () => T | Promise<T>,
+    ref: object,
+) {
+    const isBackground = isEnvironment(Environment.ManifestBackground)
+    if (!isBackground) return {}
+
+    RPCCache.set(ref, await impl())
+    return new Proxy(
+        {},
+        {
+            get(_, key) {
+                if (key === 'then') return
+                // @ts-ignore
+                return RPCCache.get(ref)?.[key]
+            },
+        },
+    )
 }
