@@ -18,9 +18,11 @@ revalidate()
 export function usePhrase(address?: string) {
     const wallet = useWallet(address)
     const phrases = useValueRef(phrasesRef)
-
     const earliestPhrase = first(phrases.sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime()))
-    return (wallet?.mnemonic ? phrases.find(x => x.mnemonic.join(' ') === wallet.mnemonic.join(' ')) : earliestPhrase) ?? earliestPhrase
+    return (
+        (wallet?.mnemonic ? phrases.find((x) => x.mnemonic.join(' ') === wallet.mnemonic.join(' ')) : earliestPhrase) ??
+        earliestPhrase
+    )
 }
 
 export function usePhrases() {

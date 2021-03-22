@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { assert } from '../../../utils/utils'
-import { ETHEREUM_PATH } from '../constants'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
 import type { PhraseRecord } from '../database/types'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
@@ -14,7 +14,6 @@ export async function getPhrases() {
 }
 
 export async function getPhrase(query: string | ((record: PhraseRecord) => boolean)) {
-    const records: PhraseRecord[] = []
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Phrase')
     if (typeof query === 'string') return t.objectStore('Phrase').get(query) ?? null
     for await (const each of t.objectStore('Phrase')) {
@@ -65,10 +64,15 @@ export async function updatePhrase(
     WalletMessages.events.phrasesUpdated.sendToAll(undefined)
 }
 
-//#region derive a new wallet from phrase
+//#region derive a new wallet from the given secret phrase
 const MAX_DERIVE_COUNT = 999
 
-export async function deriveWalletFromPhrase(name: string, mnemonic: string[], passphrase: string, path = ETHEREUM_PATH, index = 0) {
+export async function deriveWalletFromPhrase(
+    name: string,
+    mnemonic: string[],
+    passphrase: string,
+    path = HD_PATH_WITHOUT_INDEX_ETHEREUM,
+) {
     // find or create phrase from given secret phrase
     let phrase = await getPhrase((record) => record.mnemonic.join(' ') === mnemonic.join(' '))
     if (!phrase) {
@@ -80,16 +84,20 @@ export async function deriveWalletFromPhrase(name: string, mnemonic: string[], p
     }
 
     for (let i = phrase.index; i < MAX_DERIVE_COUNT; i += 1) {
-        const derivedWallet = await wallet.recoverWallet(phrase.mnemonic, phrase.passphrase, path, i)
+        const derivedWallet = await wallet.recoverWallet(phrase.mnemonic, phrase.passphrase, `${path}/${i}`)
+
+        // ensure the wallet had never created or derived before
         const walletRecord = await wallet.getWallet(derivedWallet.address)
-        // ensure the wallet never derived before
         if (walletRecord) continue
-        // create wallet from mnemonic words
+
+        // create a wallet from mnemonic words
         await wallet.importNewWallet({
             name,
+            path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
             mnemonic: phrase.mnemonic,
             passphrase: phrase.passphrase,
         })
+
         // update the address index of phrase
         await updatePhrase({
             id: phrase.id,

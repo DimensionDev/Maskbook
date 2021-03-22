@@ -16,7 +16,7 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { Flags } from '../../../utils/flags'
-import { useWallet, useWallets } from '../../../plugins/Wallet/hooks/useWallet'
+import { useWallet, useWalletHD, useWallets } from '../../../plugins/Wallet/hooks/useWallet'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { extendsTheme } from '../../../utils/theme'
@@ -95,17 +95,7 @@ export default function DashboardWalletsRouter() {
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const selectedWallet = useWallet()
-    const wallets = useWallets()
-
-    // show create dialog
-    useEffect(() => {
-        if (create) openWalletImport()
-    }, [create, openWalletImport])
-
-    // show error dialog
-    useEffect(() => {
-        if (error) openWalletError()
-    }, [error, openWalletError])
+    const hdWallet = useWalletHD()
 
     //#region create or import wallet
     const [, setOpenCreateWalletDialog] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
@@ -114,9 +104,23 @@ export default function DashboardWalletsRouter() {
     const onImport = useCallback(() => openWalletImport(), [])
 
     const onCreateOrImportWallet = useCallback(async () => {
-        if (wallets.some(x => x.mnemonic.length)) onImport()
+        if (hdWallet) onImport()
         else onCreate()
-    }, [onCreate, onImport, selectedWallet?.address])
+    }, [onCreate, onImport, hdWallet?.address])
+    //#endregion
+
+    //#region open dialogs externally
+    // show error dialog
+    useEffect(() => {
+        if (error) openWalletError()
+    }, [error, openWalletError])
+
+    // show create dialog
+    useEffect(() => {
+        if (!create) return
+        if (hdWallet) onImport()
+        else onCreate()
+    }, [hdWallet, create, onCreate, onImport])
     //#endregion
 
     //#region right icons from mobile devices

@@ -10,6 +10,7 @@ import {
     TextField,
     Typography,
 } from '@material-ui/core'
+import RefreshIcon from '@material-ui/icons/Refresh'
 import classNames from 'classnames'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -18,11 +19,10 @@ import { WalletMessages, WalletRPC } from '../messages'
 import { checkInputLengthExceed, sleep } from '../../../utils/utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
-import RefreshIcon from '@material-ui/icons/Refresh'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useMnemonicWordsPuzzle } from '../hooks/useMnemonicWordsPuzzle'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
-import { ETHEREUM_PATH } from '../constants'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
 
 enum CreateWalletStep {
     Name = 0,
@@ -130,10 +130,12 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
         async () => {
             await WalletRPC.importNewWallet({
                 name,
+                path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
                 mnemonic: words,
+                passphrase: '',
             })
             await WalletRPC.addPhrase({
-                path: ETHEREUM_PATH,
+                path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
                 mnemonic: words,
                 passphrase: '',
             })
@@ -141,7 +143,7 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
         [name, words],
         onClose,
     )
-    const onWordChange = useCallback((word: string, index: number) => answerCallback(word, index), [answerCallback])
+    const onWordChange = answerCallback
     //#endregion
 
     return (

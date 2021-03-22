@@ -33,10 +33,14 @@ export function useWallets(provider?: ProviderType) {
     return wallets
 }
 
-export function useWalletToBeDerived() {
+export function useWalletHD() {
     const wallets = useWallets()
     const selectedWallet = useWallet()
-
+    // the select wallet is a HD wallet
     if (selectedWallet?.mnemonic.length) return selectedWallet
-    return first(wallets.slice().sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())) ?? null
+    // the earliest HD wallet
+    return (
+        first(wallets.filter((x) => x.mnemonic.length).sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())) ??
+        null
+    )
 }

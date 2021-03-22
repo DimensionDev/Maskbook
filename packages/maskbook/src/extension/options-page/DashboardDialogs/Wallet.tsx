@@ -74,7 +74,8 @@ import type { ERC721 } from '../../../contracts/ERC721'
 import ERC721ABI from '../../../../abis/ERC721.json'
 import { ERC1155_INTERFACE_ID, ERC721_INTERFACE_ID } from '../../../web3/constants'
 import { Flags } from '../../../utils/flags'
-import { useWalletToBeDerived } from '../../../plugins/Wallet/hooks/useWallet'
+import { useWalletHD } from '../../../plugins/Wallet/hooks/useWallet'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../../plugins/Wallet/constants'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -176,7 +177,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     const state = useState(0)
     const classes = useWalletImportDialogStyle()
 
-    const wallet = useWalletToBeDerived()
+    const hdWallet = useWalletHD()
 
     const [name, setName] = useState('')
     const [passphrase] = useState('')
@@ -321,13 +322,21 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     const onSubmit = useSnackbarCallback(
         async () => {
             if (state[0] === 0) {
-                if (!wallet) return
-                await WalletRPC.deriveWalletFromPhrase(name, wallet.mnemonic, wallet.passphrase)
+                // create wallet in derive way only available if a HD wallet exists
+                if (!hdWallet) return
+                await WalletRPC.deriveWalletFromPhrase(name, hdWallet.mnemonic, hdWallet.passphrase)
             }
             if (state[0] === 1) {
+                const words = mnemonic.split(' ')
                 await WalletRPC.importNewWallet({
                     name,
-                    mnemonic: mnemonic.split(' '),
+                    path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+                    mnemonic: words,
+                    passphrase: '',
+                })
+                await WalletRPC.addPhrase({
+                    path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
+                    mnemonic: words,
                     passphrase: '',
                 })
             }
@@ -341,7 +350,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                 })
             }
         },
-        [state[0], name, passphrase, mnemonic, privKey, wallet?.address],
+        [state[0], name, passphrase, mnemonic, privKey, hdWallet?.address],
         props.onClose,
     )
 

@@ -62,6 +62,8 @@ export interface WalletRecord {
     erc1155_token_whitelist: Set<string>
     /** A list of untrusted ERC1155 contract address */
     erc1155_token_blacklist: Set<string>
+    /** The HD wallet path includes address index */
+    path?: string
     mnemonic: string[]
     passphrase: string
     _public_key_?: string
@@ -73,7 +75,9 @@ export interface WalletRecord {
 
 export interface PhraseRecord {
     id: string
+    /** HD wallet path address index */
     index: number
+    /** HD wallet path w/o address index */
     path: string
     mnemonic: string[]
     passphrase: string

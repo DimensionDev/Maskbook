@@ -1,5 +1,11 @@
 import stringify from 'json-stable-stringify'
-import type { WalletRecord, ERC20TokenRecord, ERC721TokenRecord, ERC1155TokenRecord, PhraseRecord } from './database/types'
+import type {
+    WalletRecord,
+    ERC20TokenRecord,
+    ERC721TokenRecord,
+    ERC1155TokenRecord,
+    PhraseRecord,
+} from './database/types'
 import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from './settings'
 import { isSameAddress } from '../../web3/helpers'
 import { CurrencyType, ProviderType } from '../../web3/types'
