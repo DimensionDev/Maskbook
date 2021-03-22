@@ -1,11 +1,9 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import type { TransactionReceipt } from 'web3-core'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
-import { TransactionEventType } from '../types'
 
 export function useERC20TokenTransferCallback(address: string, amount?: string, recipient?: string) {
     const account = useAccount()
@@ -52,34 +50,29 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
         })
 
         // step 2: blocking
-        return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = erc20Contract.methods.transfer(recipient, amount).send({
-                from: account,
-                to: erc20Contract.options.address,
-                gas: estimatedGas,
-            })
-            promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                setTransferState({
-                    type: TransactionStateType.CONFIRMED,
-                    no: 0,
-                    receipt,
-                })
-            })
-            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                setTransferState({
-                    type: TransactionStateType.CONFIRMED,
-                    no,
-                    receipt,
-                })
-                resolve()
-            })
-            promiEvent.on(TransactionEventType.ERROR, (error) => {
-                setTransferState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
-                reject(error)
-            })
+        return new Promise<string>(async (resolve, reject) => {
+            erc20Contract.methods.transfer(recipient, amount).send(
+                {
+                    from: account,
+                    to: erc20Contract.options.address,
+                    gas: estimatedGas,
+                },
+                (error, hash) => {
+                    if (error) {
+                        setTransferState({
+                            type: TransactionStateType.FAILED,
+                            error,
+                        })
+                        reject(error)
+                    } else {
+                        setTransferState({
+                            type: TransactionStateType.HASH,
+                            hash,
+                        })
+                        resolve(hash)
+                    }
+                },
+            )
         })
     }, [account, address, amount, recipient, erc20Contract])
 
