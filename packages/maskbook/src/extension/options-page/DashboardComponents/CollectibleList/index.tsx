@@ -5,7 +5,7 @@ import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
 import { createContext } from 'react'
-import type { AssetInCard } from '../../../../plugins/Wallet/apis/opensea'
+import type { AssetInCard } from '../../../../plugins/Wallet/types'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -109,6 +109,7 @@ export function CollectibleList(props: CollectibleListProps) {
                                               y.asset_contract.address,
                                               y.name,
                                               y.asset_contract.symbol,
+                                              '',
                                               '',
                                               y.image,
                                           )

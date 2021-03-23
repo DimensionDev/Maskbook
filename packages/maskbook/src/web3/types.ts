@@ -52,8 +52,9 @@ export interface ERC721TokenDetailed extends ERC721Token {
     name: string
     symbol: string
     tokenId: string
-    baseURI?: string
     image?: string
+    baseURI?: string
+    tokenURI?: string
 }
 //#endregion
 

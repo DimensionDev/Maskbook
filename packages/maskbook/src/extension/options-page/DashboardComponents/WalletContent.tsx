@@ -29,7 +29,6 @@ import { DashboardWalletRoute } from '../Route'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useCollectiblesFromNetwork, useCollectiblesFromDB } from '../../../plugins/Wallet/hooks/useCollectibles'
 import { AssetProvider } from '../../../plugins/Wallet/types'
-import type { AssetInCard } from '../../../plugins/Wallet/apis/opensea'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

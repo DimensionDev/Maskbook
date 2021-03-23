@@ -26,6 +26,8 @@ export interface ERC721TokenRecord {
     tokenId: string
     /** base uri */
     baseURI?: string
+    /** token uri */
+    tokenURI?: string
     /** token img uri */
     image?: string
 }

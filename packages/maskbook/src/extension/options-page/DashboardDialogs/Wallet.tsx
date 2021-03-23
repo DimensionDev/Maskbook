@@ -73,7 +73,6 @@ import { createContract } from '../../../web3/hooks/useContract'
 import type { ERC721 } from '../../../contracts/ERC721'
 import ERC721ABI from '../../../../abis/ERC721.json'
 import { ERC1155_INTERFACE_ID, ERC721_INTERFACE_ID } from '../../../web3/constants'
-import type { AssetInCard } from '../../../plugins/Wallet/apis/opensea'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -408,7 +407,7 @@ export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<Wal
 }
 //#endregion
 
-//#region wallet add ERC20 token dialog
+//#region wallet add ERC721 token dialog
 export function DashboardWalletAddERC721TokenDialog(
     props: WrappedDialogProps<
         WalletProps & {
@@ -426,22 +425,16 @@ export function DashboardWalletAddERC721TokenDialog(
     const onSubmit = useSnackbarCallback(
         async () => {
             const contract = createContract<ERC721>(account, address, ERC721ABI as AbiItem[])
-
             if (!contract) throw new Error(t('wallet_add_nft_invalid_address'))
 
             // check if is erc721 contract
             try {
                 const isERC1155 = await contract.methods.supportsInterface(ERC1155_INTERFACE_ID).call({ from: account })
                 const isERC721 = await contract.methods.supportsInterface(ERC721_INTERFACE_ID).call({ from: account })
+
                 let update = false
-
-                if (isERC721) {
-                    update = await WalletRPC.trustERC721Token(account, { address, tokenId })
-                }
-
-                if (isERC1155) {
-                    update = await WalletRPC.trustERC1155Token(account, { address, tokenId })
-                }
+                if (isERC721) update = await WalletRPC.trustERC721Token(account, { address, tokenId })
+                else if (isERC1155) update = await WalletRPC.trustERC1155Token(account, { address, tokenId })
 
                 // already exist, remove from black_list in database
                 if (update) return
@@ -472,29 +465,39 @@ export function DashboardWalletAddERC721TokenDialog(
             } catch (e) {}
 
             let tokenDetailed: ERC721TokenDetailed = {
+                type: EthereumTokenType.ERC721,
                 address,
                 symbol: '',
                 chainId,
                 tokenId,
                 name: '',
                 image: '',
-                type: EthereumTokenType.ERC721,
             }
 
             if (tokenURI) {
                 const response = await fetch(tokenURI)
-                const data = await response.json()
+                const data = (await response.json()) as {
+                    name: string
+                    description: string
+                    image: string
+                }
                 tokenDetailed.name = data.name
                 tokenDetailed.image = data.image
             }
 
-            WalletRPC.addERC721Token(tokenDetailed)
+            await WalletRPC.addERC721Token(tokenDetailed)
             // Note: Rare Pizzas Box works fine
             // https://opensea.io/assets/0x4ae57798aef4af99ed03818f83d2d8aca89952c7/182
         },
         [],
         props.onClose,
     )
+
+    const validationMessage = useMemo(() => {
+        if (EthereumAddress.isValid(address)) return t('wallet_add_nft_invalid_address')
+        return ''
+    }, [address, tokenId])
+
     return (
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
@@ -520,10 +523,10 @@ export function DashboardWalletAddERC721TokenDialog(
                 }
                 footer={
                     <DebounceButton
-                        disabled={tokenId.length === 0 || address.length === 0}
+                        disabled={!!validationMessage || !address || !tokenId}
                         variant="contained"
                         onClick={onSubmit}>
-                        {t('add_asset')}
+                        {validationMessage || t('add_asset')}
                     </DebounceButton>
                 }
             />

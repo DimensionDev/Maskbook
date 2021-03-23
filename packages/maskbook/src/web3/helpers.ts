@@ -89,6 +89,7 @@ export function createERC721Token(
     name: string,
     symbol: string,
     baseURI?: string,
+    tokenURI?: string,
     image?: string,
 ) {
     return {
@@ -99,6 +100,7 @@ export function createERC721Token(
         name,
         symbol,
         baseURI,
+        tokenURI,
         image,
     } as ERC721TokenDetailed
 }

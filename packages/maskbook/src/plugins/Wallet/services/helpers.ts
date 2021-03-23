@@ -14,7 +14,7 @@ import type {
 import { resolveChainId } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
 import { ChainId } from '../../../web3/types'
-import type { AssetInCard } from '../../../plugins/Wallet/apis/opensea'
+import type { AssetInCard } from '../types'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatChecksumAddress(address))
@@ -32,6 +32,10 @@ export function WalletRecordOutDB(x: WalletRecordInDatabase) {
     record.address = formatChecksumAddress(record.address)
     record.erc20_token_whitelist = x.erc20_token_whitelist ?? new Set()
     record.erc20_token_blacklist = x.erc20_token_blacklist ?? new Set()
+    record.erc721_token_whitelist = x.erc721_token_whitelist ?? new Set()
+    record.erc721_token_blacklist = x.erc721_token_blacklist ?? new Set()
+    record.erc1155_token_whitelist = x.erc1155_token_whitelist ?? new Set()
+    record.erc1155_token_blacklist = x.erc1155_token_blacklist ?? new Set()
     return record
 }
 
@@ -79,7 +83,7 @@ export function ERC1155TokenRecordOutDB(x: ERC1155TokenRecordInDatabase) {
     return record
 }
 
-export function ERC721TokenToAssetInCard(x: ERC721TokenRecordInDatabase) {
+export function ERC721TokenRecordToAssetInCard(x: ERC721TokenRecordInDatabase) {
     const assetInCard: AssetInCard = {
         asset_contract: {
             address: x.address,
