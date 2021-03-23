@@ -95,6 +95,8 @@ export enum ChainId {
     Rinkeby = 4,
     Gorli = 5,
     Kovan = 42,
+    Matic = 137,
+    Mumbai = 80001,
 }
 
 // Please don't use this enum but use ChainId instead
@@ -105,6 +107,8 @@ export enum EthereumNetwork {
     Rinkeby = 'Rinkeby',
     Kovan = 'Kovan',
     Gorli = 'Gorli',
+    Matic = 'Matic',
+    Mumbai = 'Matic Testnet',
 }
 
 export enum EthereumTokenType {

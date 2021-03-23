@@ -27,6 +27,10 @@ export function resolveChainId(name: string) {
             return ChainId.Kovan
         case 'gorli':
             return ChainId.Gorli
+        case 'matic':
+            return ChainId.Matic
+        case 'mumbai':
+            return ChainId.Mumbai
         default:
             return
     }
@@ -44,6 +48,10 @@ export function resolveChainName(chainId: ChainId) {
             return 'Kovan'
         case ChainId.Gorli:
             return 'Gorli'
+        case ChainId.Matic:
+            return 'Matic'
+        case ChainId.Mumbai:
+            return 'Matic Testnet'
         default:
             safeUnreachable(chainId)
             return 'Unknown'
@@ -62,6 +70,10 @@ export function resolveChainColor(chainId: ChainId) {
             return 'rgb(246, 195, 67)'
         case ChainId.Gorli:
             return 'rgb(48, 153, 242)'
+        case ChainId.Matic:
+            return 'rgb(48, 153, 242)'
+        case ChainId.Mumbai:
+            return 'rgb(48, 153, 242)'
         default:
             return 'silver'
     }
@@ -79,6 +91,10 @@ export function resolveLinkOnEtherscan(chainId: ChainId) {
             return 'https://kovan.etherscan.io'
         case ChainId.Gorli:
             return 'https://goerli.etherscan.io'
+        case ChainId.Matic:
+            return 'https://explorer.matic.network'
+        case ChainId.Mumbai:
+            return 'https://mumbai-explorer.matic.today'
         default:
             safeUnreachable(chainId)
             return 'https://etherscan.io'
