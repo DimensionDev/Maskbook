@@ -303,4 +303,13 @@ export const CONSTANTS = {
         [ChainId.Kovan]: [0, 0, 0, 0, 0], // 0 - 100%
         [ChainId.Gorli]: [0, 0, 0, 0, 0], // 0 - 100%
     },
+    WALLET_CONNECT_BRIDGE: {
+        [ChainId.Mainnet]: ['https://bridge.walletconnect.org'],
+        [ChainId.Ropsten]: ['https://bridge.walletconnect.org'],
+        [ChainId.Rinkeby]: ['https://bridge.walletconnect.org'],
+        [ChainId.Kovan]: ['https://bridge.walletconnect.org'],
+        [ChainId.Gorli]: ['https://bridge.walletconnect.org'],
+        [ChainId.Matic]: ['https://walletconnect.matic.network'],
+        [ChainId.Mumbai]: ['https://bridge.walletconnect.matic.today'],
+    },
 }

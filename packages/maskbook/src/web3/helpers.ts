@@ -40,7 +40,7 @@ export interface Web3Constants {
 export function getConstant<T extends Web3Constants, K extends keyof T>(
     constants: T,
     key: K,
-    chainId = ChainId.Mainnet,
+    chainId = ChainId.Mainnet | ChainId.Matic,
 ): T[K][ChainId.Mainnet] {
     return constants[key][chainId]
 }
