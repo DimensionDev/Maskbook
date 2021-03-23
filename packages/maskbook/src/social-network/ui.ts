@@ -71,6 +71,7 @@ export async function activateSocialNetworkUI(): Promise<void> {
     ui.collecting.profilesCollector?.(signal)
     ui.injection.pageInspector?.(signal)
     if (Flags.toolbar_enabled) ui.injection.toolbar?.(signal)
+    ui.injection.toolBoxInNavBar?.(signal)
     ui.injection.setupPrompt?.(signal)
     ui.injection.newPostComposition?.start?.(signal)
     ui.injection.searchResult?.(signal)
