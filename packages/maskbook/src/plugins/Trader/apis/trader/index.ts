@@ -7,5 +7,6 @@ export async function getAvailableTraderProviders(type: TagType, keyword: string
         TradeProvider.ZRX,
         TradeProvider.BALANCER,
         TradeProvider.SASHIMISWAP,
+        TradeProvider.QUICKSWAP,
     ]
 }

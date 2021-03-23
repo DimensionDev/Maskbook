@@ -7,6 +7,7 @@ import { useTradeCallback as useBalancerCallback } from './balancer/useTradeCall
 import { useRouterV2Contract as useUniswapRouterV2Contract } from '../contracts/uniswap/useRouterV2Contract'
 import { useRouterV2Contract as useSushiSwapRouterV2Contract } from '../contracts/sushiswap/useRouterV2Contract'
 import { useRouterV2Contract as useSashimiSwapRouterV2Contract } from '../contracts/sashimiswap/useRouterV2Contract'
+import { useRouterV2Contract as useQuickSwapRouterV2Contract } from '../contracts/quickswap/useRouterV2Contract'
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract'
 
 export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeComputed<unknown> | null) {
@@ -14,6 +15,7 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
     const uniswapRouterV2Contract = useUniswapRouterV2Contract()
     const sushiswapRouterV2Contract = useSushiSwapRouterV2Contract()
     const sashimiswapRouterV2Contract = useSashimiSwapRouterV2Contract()
+    const quickswapRouterV2Contract = useQuickSwapRouterV2Contract()
     const exchangeProxyContract = useExchangeProxyContract()
 
     // create trade callbacks
@@ -32,6 +34,10 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         provider === TradeProvider.SASHIMISWAP ? (tradeComputed as TradeComputed<Trade>) : null,
         sashimiswapRouterV2Contract,
     )
+    const quickswap = useUniswapCallback(
+        provider === TradeProvider.QUICKSWAP ? (tradeComputed as TradeComputed<Trade>) : null,
+        quickswapRouterV2Contract,
+    )
     const balancer = useBalancerCallback(
         provider === TradeProvider.BALANCER ? (tradeComputed as TradeComputed<SwapResponse>) : null,
         exchangeProxyContract,
@@ -47,6 +53,8 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
             return sashimiswap
         case TradeProvider.BALANCER:
             return balancer
+        case TradeProvider.QUICKSWAP:
+            return quickswap
         default:
             unreachable(provider)
     }

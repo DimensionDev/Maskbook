@@ -247,7 +247,12 @@ export function TradeSummary(props: TradeSummaryProps) {
             <List className={classes.list} component="ul">
                 {[
                     ...records,
-                    ...([TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider)
+                    ...([
+                        TradeProvider.UNISWAP,
+                        TradeProvider.SUSHISWAP,
+                        TradeProvider.SASHIMISWAP,
+                        TradeProvider.QUICKSWAP,
+                    ].includes(provider)
                         ? uniswapRecords
                         : []),
                     ...(provider === TradeProvider.BALANCER ? balancerRecords : []),

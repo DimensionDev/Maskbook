@@ -56,6 +56,7 @@ const zrxSettings = createInternalSettings<string>(
 const sushiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sushiswap`, '')
 const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sashimiswap`, '')
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+balancer`, '')
+const quickswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -72,6 +73,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return sashimiswapSettings
         case TradeProvider.BALANCER:
             return balancerSettings
+        case TradeProvider.QUICKSWAP:
+            return quickswapSettings
         default:
             unreachable(tradeProvider)
     }

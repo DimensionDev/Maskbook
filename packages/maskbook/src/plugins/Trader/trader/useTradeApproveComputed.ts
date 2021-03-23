@@ -18,6 +18,7 @@ export function useTradeApproveComputed(
     const SUSHISWAP_ROUTER_ADDRESS = useConstant(TRADE_CONSTANTS, 'SUSHISWAP_ROUTER_ADDRESS')
     const SASHIMISWAP_ROUTER_ADDRESS = useConstant(TRADE_CONSTANTS, 'SASHIMISWAP_ROUTER_ADDRESS')
     const BALANCER_EXCHANGE_PROXY_ADDRESS = useConstant(TRADE_CONSTANTS, 'BALANCER_EXCHANGE_PROXY_ADDRESS')
+    const QUICKSWAP_ROUTER_ADDRESS = useConstant(TRADE_CONSTANTS, 'QUICKSWAP_ROUTER_ADDRESS')
 
     return useMemo(() => {
         if (!trade || !token || token.type !== EthereumTokenType.ERC20)
@@ -47,6 +48,8 @@ export function useTradeApproveComputed(
                         return trade.trade_ ? (trade.trade_ as SwapQuoteResponse).allowanceTarget : ''
                     case TradeProvider.BALANCER:
                         return BALANCER_EXCHANGE_PROXY_ADDRESS
+                    case TradeProvider.QUICKSWAP:
+                        return QUICKSWAP_ROUTER_ADDRESS
                     default:
                         safeUnreachable(provider)
                         return ''

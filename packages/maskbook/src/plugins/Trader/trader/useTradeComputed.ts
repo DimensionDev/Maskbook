@@ -25,10 +25,14 @@ export function useTradeComputed(
     // uniswap like providers
     const uniswap_ = useUniswapTrade(
         strategy,
-        [TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider)
+        [TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP, TradeProvider.QUICKSWAP].includes(
+            provider,
+        )
             ? inputAmount_
             : '0',
-        [TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider)
+        [TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP, TradeProvider.QUICKSWAP].includes(
+            provider,
+        )
             ? outputAmount_
             : '0',
         inputToken,
@@ -88,6 +92,11 @@ export function useTradeComputed(
             return {
                 ...balancer_,
                 value: balancer,
+            }
+        case TradeProvider.QUICKSWAP:
+            return {
+                ...uniswap_,
+                value: uniswap,
             }
         default:
             unreachable(provider)

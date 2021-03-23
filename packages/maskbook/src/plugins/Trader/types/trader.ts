@@ -7,6 +7,7 @@ export enum TradeProvider {
     // ONE_INCH,
     SUSHISWAP,
     SASHIMISWAP,
+    QUICKSWAP,
     BALANCER,
 }
 
@@ -41,6 +42,7 @@ export enum ZrxTradePool {
     Swerve = 'Swerve',
     SnowSwap = 'SnowSwap',
     SushiSwap = 'SushiSwap',
+    QuickSwap = 'QuickSwap',
     CryptoCom = 'CryptoCom',
     Dodo = 'DODO',
 }

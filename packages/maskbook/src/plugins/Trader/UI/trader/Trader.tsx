@@ -320,7 +320,12 @@ export function Trader(props: TraderProps) {
                         inputToken={inputToken}
                         outputToken={outputToken}
                     />
-                    {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider) ? (
+                    {[
+                        TradeProvider.UNISWAP,
+                        TradeProvider.SUSHISWAP,
+                        TradeProvider.SASHIMISWAP,
+                        TradeProvider.QUICKSWAP,
+                    ].includes(provider) ? (
                         <UniswapTradeRoute classes={{ root: classes.router }} trade={trade} />
                     ) : null}
                     {[TradeProvider.BALANCER].includes(provider) ? (
@@ -329,7 +334,12 @@ export function Trader(props: TraderProps) {
                             trade={trade as TradeComputed<SwapResponse>}
                         />
                     ) : null}
-                    {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider) ? (
+                    {[
+                        TradeProvider.UNISWAP,
+                        TradeProvider.SUSHISWAP,
+                        TradeProvider.SASHIMISWAP,
+                        TradeProvider.QUICKSWAP,
+                    ].includes(provider) ? (
                         <TradePairViewer trade={trade as TradeComputed<Trade>} provider={provider} />
                     ) : null}
                 </>

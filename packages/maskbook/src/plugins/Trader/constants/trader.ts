@@ -39,8 +39,15 @@ export const TRADE_CONSTANTS = {
         [ChainId.Kovan]: '0xe4fe6a45f354e845f954cddee6084603cedb9410',
         [ChainId.Gorli]: '0xe4fe6a45f354e845f954cddee6084603cedb9410',
     },
-    SASHIMISWAP_FACTORY_ADDRESS: {
-        [ChainId.Mainnet]: '0xF028F723ED1D0fE01cC59973C49298AA95c57472',
+    QUICKSWAP_FACTORY_ADDRESS: {
+        [ChainId.Mainnet]: '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+    },
+    QUICKSWAP_ROUTER_ADDRESS: {
+        [ChainId.Mainnet]: '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff',
         [ChainId.Ropsten]: '',
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
