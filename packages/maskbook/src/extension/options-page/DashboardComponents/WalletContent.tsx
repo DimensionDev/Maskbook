@@ -24,6 +24,7 @@ import { Flags } from '../../../utils/flags'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
+import { useHistory, useLocation } from 'react-router'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -74,6 +75,8 @@ interface WalletContentProps {
 
 export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ wallet }, ref) => {
     const classes = useStyles()
+    const history = useHistory()
+    const location = useLocation()
     const { t } = useI18N()
     const color = useColorStyles()
     const xsMatched = useMatchXS()
@@ -101,10 +104,17 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     //#endregion
 
     //#region tab
-    const [tabIndex, setTabIndex] = useState(0)
-    const onTabChange = useCallback((_, newTabIndex: number) => {
-        setTabIndex(newTabIndex)
-    }, [])
+    const tab = new URLSearchParams(location.search).get('tab')
+    const [tabIndex, setTabIndex] = useState(tab && ['0', '1', '2'].includes(tab) ? Number(tab) : 0)
+    const onTabChange = useCallback(
+        (_, newTabIndex: number) => {
+            const params = new URLSearchParams()
+            params.append('tab', newTabIndex.toString())
+            setTabIndex(newTabIndex)
+            history.push({ search: params.toString() })
+        },
+        [history],
+    )
     //#endregion
 
     return (
