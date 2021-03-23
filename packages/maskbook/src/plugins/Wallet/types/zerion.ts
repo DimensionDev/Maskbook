@@ -93,7 +93,7 @@ export interface TransactionItem {
     address_to?: string
     contract?: string
     nonce?: number
-    changes?: ZerionTransactionChange
+    changes?: ZerionTransactionChange[]
     fee?: ZerionTransactionFee
     meta?: string
 }

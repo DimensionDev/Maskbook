@@ -29,7 +29,7 @@ export function TransactionList() {
         loading: transactionsLoading,
         error: transactionsError,
         retry: transactionsRetry,
-    } = useTransactions(account, TransactionProvider.DEBANK)
+    } = useTransactions(account, TransactionProvider.ZERION)
 
     if (transactionsLoading)
         return (

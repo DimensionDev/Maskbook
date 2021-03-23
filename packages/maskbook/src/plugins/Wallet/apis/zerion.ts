@@ -1,9 +1,10 @@
-import type { SocketRequestBody, SocketNameSpace, SocketResponseBody } from '../types'
+import io from 'socket.io-client'
+import type { SocketRequestBody, SocketNameSpace, SocketResponseBody, TransactionResponseBody } from '../types'
 
-const ZERION_API = 'wss://api-v4.zerion.io/'
+const ZERION_API = 'wss://zerion-api-v4-agent.r2d2.to/'
 
 //TODO: get token from ci env
-const ZERION_TOKEN = 'Zerion.oSQAHALTonDN9HYZiYSX5k6vnm4GZNcM'
+const ZERION_TOKEN = 'Demo.ukEVQp6L5vfgxcz4sBke7XvS873GMYHy'
 
 export const addressSocket = {
     namespace: 'address',
@@ -42,11 +43,14 @@ function subscribeFromZerion(socketNamespace: SocketNameSpace, requestBody: Sock
 }
 
 export async function getTransactionList(address: string) {
-    return subscribeFromZerion(addressSocket, {
+    return (await subscribeFromZerion(addressSocket, {
         scope: ['transactions'],
         payload: {
             address,
-            currency: ' usd',
+            currency: 'usd',
+            transactions_limit: 30,
+            transactions_offset: 0,
+            transactions_search_query: '',
         },
-    })
+    })) as TransactionResponseBody
 }
