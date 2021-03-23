@@ -1,14 +1,14 @@
 import io from 'socket.io-client'
 import type { SocketRequestBody, SocketNameSpace, SocketResponseBody, TransactionResponseBody } from '../types'
 
-const ZERION_API = 'wss://zerion-api-v4-agent.r2d2.to/'
+const ZERION_API = 'wss://zerion-api-v4-agent.r2d2.to'
 
 //TODO: get token from ci env
 const ZERION_TOKEN = 'Demo.ukEVQp6L5vfgxcz4sBke7XvS873GMYHy'
 
 export const addressSocket = {
     namespace: 'address',
-    socket: io(`${ZERION_API}address`, {
+    socket: io(`${ZERION_API}/address`, {
         transports: ['websocket'],
         timeout: 60000,
         query: {
