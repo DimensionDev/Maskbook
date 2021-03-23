@@ -208,7 +208,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         if (!signedPassword) {
             setFillState({
                 type: TransactionStateType.FAILED,
-                error: new Error('Failed to sign password.'),
+                error: new Error(t('plugin_wallet_fail_to_sign')),
             })
             return
         }
