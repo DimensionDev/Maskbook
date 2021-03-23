@@ -24,7 +24,7 @@ import { Flags } from '../../../utils/flags'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
