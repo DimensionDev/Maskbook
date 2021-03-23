@@ -159,7 +159,7 @@ function config(opts: {
             }),
             ...getHotModuleReloadPlugin(),
             target.isProfile && new BundleAnalyzerPlugin(),
-        ].filter(Boolean),
+        ].filter(nonNullable),
         optimization: {
             minimize: false,
             splitChunks: {
@@ -174,7 +174,7 @@ function config(opts: {
                         name(module) {
                             const path = (module.context as string)
                                 .replace(/\\/g, '/')
-                                .match(/node_modules\/\.pnpm\/(.+)/)[1]
+                                .match(/node_modules\/\.pnpm\/(.+)/)![1]
                                 .split('/')
                             const pkg: string[] = [path[0]]
                             if (path[0].startsWith('@')) pkg.push(path[1])
@@ -225,8 +225,11 @@ function config(opts: {
         return [
             new HotModuleReplacementPlugin(),
             !disableReactHMR && new ReactRefreshWebpackPlugin({ overlay: false }),
-        ].filter(Boolean)
+        ].filter(nonNullable)
     }
+}
+function nonNullable<T>(x: T | false | undefined | null): x is T {
+    return Boolean(x)
 }
 
 export default async function (cli_env: Record<string, boolean> = {}, argv: { mode?: 'production' | 'development' }) {
@@ -250,7 +253,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     // Modify Main
     {
         main.plugins!.push(
-            new WebExtensionTarget(), // See https://github.com/crimx/webpack-target-webextension,
+            new (WebExtensionTarget as any)(), // See https://github.com/crimx/webpack-target-webextension,
             new CopyPlugin({ patterns: [{ from: publicDir, to: dist }] }),
             getManifestPlugin(),
             ...getBuildNotificationPlugins(),
@@ -283,16 +286,16 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     {
         manifestV3.entry = { 'background-worker': src('./src/background-worker.ts') }
         manifestV3.target = ['worker', 'es2018']
-        main.plugins!.push(new WebExtensionTarget())
+        main.plugins!.push(new (WebExtensionTarget as any)())
         // ? Service workers must registered at the / root
-        manifestV3.output.filename = 'manifest-v3.entry.js'
+        manifestV3.output!.filename = 'manifest-v3.entry.js'
     }
     // Modify injectedScript
     {
         injectedScript.entry = { 'injected-script': src('./src/extension/injected-script/index.ts') }
-        injectedScript.optimization.splitChunks = false
+        injectedScript.optimization!.splitChunks = false
     }
-    if (mode === 'production') return [main, isManifestV3 && manifestV3, injectedScript].filter(Boolean)
+    if (mode === 'production') return [main, isManifestV3 && manifestV3, injectedScript].filter(nonNullable)
     // TODO: multiple config seems doesn't work well therefore we start the watch mode webpack compiler manually.
     delete injectedScript.devServer
     // TODO: ignore the message currently
