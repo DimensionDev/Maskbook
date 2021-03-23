@@ -6,7 +6,9 @@ export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker.DeferredD
 export const definedSocialNetworkWorkersResolved = new Set<SocialNetworkWorker.Definition>()
 
 export function defineSocialNetworkWorker(worker: SocialNetworkWorker.DeferredDefinition) {
-    if (worker.notReadyForProduction && process.env.NODE_ENV === 'production') return
+    if (worker.notReadyForProduction) {
+        if (process.env.build === 'stable' && process.env.NODE_ENV === 'production') return
+    }
     definedSocialNetworkWorkers.add(worker)
 }
 

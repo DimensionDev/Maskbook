@@ -161,7 +161,9 @@ export async function loadSocialNetworkUI(identifier: string): Promise<SocialNet
 }
 
 export function defineSocialNetworkUI(UI: SocialNetworkUI.DeferredDefinition) {
-    if (UI.notReadyForProduction && process.env.NODE_ENV === 'production') return UI
+    if (UI.notReadyForProduction) {
+        if (process.env.build === 'stable' && process.env.NODE_ENV === 'production') return UI
+    }
     definedSocialNetworkUIsLocal.set(UI.networkIdentifier, UI)
     return UI
 }
