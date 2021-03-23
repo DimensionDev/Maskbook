@@ -25,6 +25,9 @@ export async function getAssetsListNFT(address: string, provider: AssetProvider)
     }
     return []
 }
+
+const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
+
 // TOOD:
 // unify asset from different assets provider
 export async function getAssetsList(address: string): Promise<AssetDetailed[]> {
@@ -36,7 +39,7 @@ export async function getAssetsList(address: string): Promise<AssetDetailed[]> {
 
 function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
     return data
-        .filter(({ asset }) => asset.is_displayable)
+        .filter(({ asset }) => asset.is_displayable && !filterAssetType.some((type) => type === asset.type))
         .map(({ asset, quantity }) => {
             const balance = Number(new BigNumber(quantity).dividedBy(new BigNumber(10).pow(asset.decimals)).toString())
             return {
