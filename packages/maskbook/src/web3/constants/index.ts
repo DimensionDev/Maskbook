@@ -236,7 +236,7 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
-        [ChainId.Matic]: '0x0000000000000000000000000000000000000000',
+        [ChainId.Matic]: '0xDA537104D6A5edd53c6fBba9A898708E465260b6',
         [ChainId.Mumbai]: '0x0000000000000000000000000000000000000000',
     },
     ETH_ADDRESS: {
@@ -246,6 +246,24 @@ export const CONSTANTS = {
         [ChainId.Kovan]: '0x0000000000000000000000000000000000000000',
         [ChainId.Gorli]: '0x0000000000000000000000000000000000000000',
         [ChainId.Matic]: '0x0000000000000000000000000000000000000000',
+        [ChainId.Mumbai]: '0x0000000000000000000000000000000000000000',
+    },
+    QUICK_ADDRESS: {
+        [ChainId.Mainnet]: '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.Matic]: '0x0000000000000000000000000000000000000000',
+        [ChainId.Mumbai]: '0x0000000000000000000000000000000000000000',
+    },
+    MATIC_ADDRESS: {
+        [ChainId.Mainnet]: '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.Matic]: '0x0000000000000000000000000000000000001010',
         [ChainId.Mumbai]: '0x0000000000000000000000000000000000000000',
     },
 

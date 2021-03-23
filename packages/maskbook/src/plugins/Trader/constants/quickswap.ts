@@ -10,7 +10,7 @@ export const QUICKSWAP_CUSTOM_BASES: {
         [tokenAddress: string]: ERC20TokenDetailed[]
     }
 } = {
-    [ChainId.Mainnet]: {
+    [ChainId.Matic]: {
         [AMPL.address]: [DAI, WETH[ChainId.Mainnet]],
     },
 }
@@ -24,4 +24,4 @@ export const QUICKSWAP_BASE_AGAINST_TOKENS: {
 
 export const THEGRAPH_QUICKSWAP = 'https://api.thegraph.com/subgraphs/name/developerfred/quick-swap'
 
-export const QUICKSWAP_INIT_CODE_HASH = '0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9'
+export const QUICKSWAP_INIT_CODE_HASH = '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f'

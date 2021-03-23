@@ -40,14 +40,14 @@ export const TRADE_CONSTANTS = {
         [ChainId.Gorli]: '0xe4fe6a45f354e845f954cddee6084603cedb9410',
     },
     QUICKSWAP_FACTORY_ADDRESS: {
-        [ChainId.Mainnet]: '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32',
+        [ChainId.Matic]: '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32',
         [ChainId.Ropsten]: '',
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },
     QUICKSWAP_ROUTER_ADDRESS: {
-        [ChainId.Mainnet]: '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff',
+        [ChainId.Matic]: '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff',
         [ChainId.Ropsten]: '',
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
@@ -189,6 +189,10 @@ export const YAM = createERC20Token(ChainId.Mainnet, getConstant(CONSTANTS, 'YAM
 export const WBTC = createERC20Token(ChainId.Mainnet, getConstant(CONSTANTS, 'WBTC_ADDRESS'), 18, 'Wrapped BTC', 'WBTC')
 export const RUNE = createERC20Token(ChainId.Mainnet, getConstant(CONSTANTS, 'RUNE_ADDRESS'), 18, 'RUNE.ETH', 'RUNE')
 export const YFI = createERC20Token(ChainId.Mainnet, getConstant(CONSTANTS, 'YFI_ADDRESS'), 18, 'Yearn', 'YFI')
+
+// Matic
+export const QUICK = createERC20Token(ChainId.Matic, getConstant(CONSTANTS, 'QUICK_ADDRESS'), 18, 'Quick', 'QUICK')
+export const MATIC = createERC20Token(ChainId.Matic, getConstant(CONSTANTS, 'MATIC_ADDRESS'), 18, 'Matic', 'MATIC')
 
 // Rinkeby
 export const MSKA = createERC20Token(
