@@ -9,6 +9,7 @@
  */
 import { CustomEventId } from '../../utils/constants'
 import type { CustomEvents } from './CustomEvents'
+import { instagramUpload } from './instagramUpload'
 import {
     redefineEventTargetPrototype,
     clone_into,
@@ -129,7 +130,11 @@ function dispatchInput(text: CustomEvents['input'][0]) {
     )
 }
 if (process.env.NODE_ENV === 'development')
-    console.log(`Invoke custom event:`, clone_into({ dispatchInput, dispatchPaste }), CapturedListeners)
+    console.log(
+        `Invoke custom event:`,
+        clone_into({ dispatchInput, dispatchPaste, instagramUpload }),
+        CapturedListeners,
+    )
 document.addEventListener(CustomEventId, (e) => {
     const ev = e as CustomEvent<string>
     const [eventName, param, selector]: [keyof CustomEvents, any[], string] = JSON.parse(ev.detail)
@@ -138,6 +143,8 @@ document.addEventListener(CustomEventId, (e) => {
             return apply(dispatchInput, null, param)
         case 'paste':
             return apply(dispatchPaste, null, param)
+        case 'instagramUpload':
+            return apply(instagramUpload, null, param)
         default:
             warn(eventName, 'not handled')
     }

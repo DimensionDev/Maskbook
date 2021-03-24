@@ -4,11 +4,19 @@ import { instagramBase } from './base'
 import { IdentityProviderInstagram } from './collecting/identity-provider'
 import { PostProviderInstagram } from './collecting/posts'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults'
+import { dispatchCustomEvents } from '../../utils/utils'
 const origins = ['https://www.instagram.com/*', 'https://m.instagram.com/*', 'https://instagram.com/*']
 const define: SocialNetworkUI.Definition = {
     ...instagramShared,
     ...instagramBase,
-    automation: {},
+    automation: {
+        nativeCompositionDialog: {
+            attachImage(url, options) {
+                if (url instanceof Blob) url = URL.createObjectURL(url)
+                dispatchCustomEvents(null, 'instagramUpload', url)
+            },
+        },
+    },
     collecting: {
         identityProvider: IdentityProviderInstagram,
         postsProvider: PostProviderInstagram,
