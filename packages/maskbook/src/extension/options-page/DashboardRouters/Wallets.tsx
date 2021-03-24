@@ -1,5 +1,4 @@
-import { useEffect, createContext, useCallback } from 'react'
-import type { AssetDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import { useEffect, useCallback } from 'react'
 import { Button } from '@material-ui/core'
 import { makeStyles, createStyles, ThemeProvider } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
