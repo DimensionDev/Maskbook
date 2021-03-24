@@ -42,6 +42,7 @@ function collectPostsInstagramInner(
                 const img = node.querySelectorAll('img')[1]
                 if (img) {
                     nextTypedMessage.push(makeTypedMessageImage(img.src, { height: img.height, width: img.width }))
+                    info.postMetadataImages.add(img.src)
                 } else nextTypedMessage.push(makeTypedMessageImage(''))
                 info.postContent.value = ''
                 info.postMessage.value = makeTypedMessageCompound(nextTypedMessage)
