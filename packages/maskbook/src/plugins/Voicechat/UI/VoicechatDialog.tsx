@@ -84,7 +84,7 @@ export const VoicechatDialog = (props: VoicechatDialogProps) => {
                     }
                     label={t('plugin_voicechat_activate_switch')}
                 />
-                <Box mt={1}>
+                <Box marginTop={1}>
                     <TextField
                         label={t('plugin_voicechat_custom_server_url')}
                         value={customServerURL}
