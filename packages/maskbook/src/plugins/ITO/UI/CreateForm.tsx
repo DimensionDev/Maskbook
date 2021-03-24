@@ -23,6 +23,7 @@ import { sliceTextByUILength } from '../../../utils/getTextUILength'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { Flags } from '../../../utils/flags'
+import { compact } from 'lodash-es'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -98,6 +99,15 @@ export function CreateForm(props: CreateFormProps) {
                 key: uuid(),
             }),
         )
+    }
+
+    // set the default exchange
+    if (TAS.length === 1) {
+        TAS.push({
+            key: uuid(),
+            amount: '',
+            token: undefined,
+        })
     }
 
     const [tokenAndAmounts, setTokenAndAmounts] = useState<ExchangeTokenAndAmountState[]>(TAS)
