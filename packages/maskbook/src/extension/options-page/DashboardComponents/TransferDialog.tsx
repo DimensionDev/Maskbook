@@ -110,10 +110,11 @@ function TransferTab(props: TransferTabProps) {
             (ev) => {
                 if (ev.open) return
                 resetTransferCallback()
-                if (transferState.type !== TransactionStateType.CONFIRMED) return
-                onClose()
-                detailedTokensRetry()
-                retryTokenBalance()
+                if (transferState.type === TransactionStateType.HASH) {
+                    onClose()
+                    detailedTokensRetry()
+                    retryTokenBalance()
+                }
             },
             [transferState.type],
         ),
