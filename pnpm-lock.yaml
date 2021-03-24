@@ -9050,12 +9050,9 @@ packages:
       integrity: sha512-5T6P4xPgpp0YDFvSWwEZ4NoE3aM4QBQXDzmVbraCkFj8zHM+mba8SyqB5DbZWyR7mYHo6Y7BdQo3MoA4m0TeQg==
   /base64-arraybuffer-es6/0.7.0:
     engines:
-      node: '>=0.10.0'
-    peerDependencies:
-      core-js-bundle: ^3.6.5
+      node: '>=6.0.0'
     resolution:
       integrity: sha512-ESyU/U1CFZDJUdr+neHRhNozeCv72Y7Vm0m1DCbjX3KBjT6eYocvAJlSk6+8+HkVwXlT1FNxhGW6q3UKAlCvvw==
-      tarball: base64-arraybuffer-es6/-/base64-arraybuffer-es6-0.7.0.tgz
   /base64-arraybuffer/0.1.4:
     dev: false
     engines:
@@ -13374,11 +13371,8 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-/LFZOIo82WDsyyv7h7oc0MJF9ACOvDRdx9rWPZ2pgMfNWu/z8hQDBtOchuB/0BVLmuFOZjV02YwUVzNsWx/EzA==
-<<<<<<< HEAD
-  /follow-redirects/1.13.3:
-=======
   /follow-redirects/1.13.2:
->>>>>>> NEW: Implemented voicechat plugin
+    dev: false
     engines:
       node: '>=4.0'
     peerDependencies:
@@ -13388,6 +13382,20 @@ packages:
         optional: true
     resolution:
       integrity: sha512-6mPTgLxYm3r6Bkkg0vNM0HTjfGrOEtsfbhagQvbxDEsEkpNhw582upBaoRZylzen6krEmxXJgt9Ju6HiI4O7BA==
+  /follow-redirects/1.13.3_debug@4.3.1:
+    dependencies:
+      debug: 4.3.1_supports-color@6.1.0
+    dev: true
+    engines:
+      node: '>=4.0'
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    resolution:
+      integrity: sha512-6mPTgLxYm3r6Bkkg0vNM0HTjfGrOEtsfbhagQvbxDEsEkpNhw582upBaoRZylzen6krEmxXJgt9Ju6HiI4O7BA==
+      tarball: follow-redirects/-/follow-redirects-1.13.3.tgz
   /for-each/0.3.3:
     dependencies:
       is-callable: 1.2.3
@@ -14711,11 +14719,7 @@ packages:
   /http-proxy/1.18.1_debug@4.3.1:
     dependencies:
       eventemitter3: 4.0.7
-<<<<<<< HEAD
-      follow-redirects: 1.13.3
-=======
-      follow-redirects: 1.13.2
->>>>>>> NEW: Implemented voicechat plugin
+      follow-redirects: 1.13.3_debug@4.3.1
       requires-port: 1.0.0
     dev: true
     engines:
@@ -22212,7 +22216,6 @@ packages:
       fsevents: 2.3.2
     resolution:
       integrity: sha512-USTcpfJ68rbuFvUygw+3n9qS1CC/tGsr/JNVc6FNk0ZRfGBE4OmB+Mmk5nWtdxi546GeCr/GvveJenYLen/WpA==
-      tarball: snowpack/-/snowpack-3.0.13.tgz
   /socket.io-client/3.1.2:
     dependencies:
       '@types/component-emitter': 1.2.10
