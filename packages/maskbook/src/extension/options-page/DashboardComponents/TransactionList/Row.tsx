@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import type { CSSProperties, FC } from 'react'
 import classNames from 'classnames'
 import { isNil } from 'lodash-es'
 import { createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
@@ -7,6 +7,7 @@ import type { Transaction } from '../../../../plugins/Wallet/types'
 
 interface Props {
     transaction: Transaction
+    style?: CSSProperties
 }
 
 const useStyles = makeStyles(() =>
@@ -18,13 +19,17 @@ const useStyles = makeStyles(() =>
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
         },
+        row: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+        },
     }),
 )
 
-export const Row: FC<Props> = ({ transaction }) => {
+export const Row: FC<Props> = ({ transaction, ...rest }) => {
     const styles = useStyles()
     return (
-        <TableRow className={classNames({ [styles.failed]: transaction.failed })}>
+        <TableRow className={classNames(styles.row, { [styles.failed]: transaction.failed })} {...rest}>
             <TableCell>
                 <Typography color="textSecondary" variant="body2">
                     {transaction.timeAt.toLocaleString()}

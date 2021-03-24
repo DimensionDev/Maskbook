@@ -14,15 +14,10 @@ import { useTransactions } from '../../../../plugins/Wallet/hooks/useTransaction
 import { PortfolioProvider } from '../../../../plugins/Wallet/types'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { Row } from './Row'
-
-const useStyles = makeStyles(() =>
-    createStyles({
-        fixed: { tableLayout: 'fixed' },
-    }),
-)
+import AutoResize from 'react-virtualized-auto-sizer'
+import { FixedSizeList } from 'react-window'
 
 export function TransactionList() {
-    const styles = useStyles()
     const account = useAccount()
     const {
         value: transactions = [],
@@ -69,12 +64,19 @@ export function TransactionList() {
         )
 
     return (
-        <Table className={styles.fixed}>
-            <TableBody>
-                {transactions.map((transaction) => (
-                    <Row key={transaction.id} transaction={transaction} />
-                ))}
-            </TableBody>
-        </Table>
+        <AutoResize>
+            {(sizeProps) => {
+                return (
+                    <FixedSizeList itemSize={96} itemCount={transactions.length} overscanCount={5} {...sizeProps}>
+                        {({ index, style }) => {
+                            const transaction = transactions[index]
+                            return transaction ? (
+                                <Row key={transaction.id} transaction={transaction} style={style} />
+                            ) : null
+                        }}
+                    </FixedSizeList>
+                )
+            }}
+        </AutoResize>
     )
 }
