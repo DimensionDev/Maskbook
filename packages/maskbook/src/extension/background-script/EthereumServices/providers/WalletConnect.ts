@@ -1,6 +1,5 @@
 import { first } from 'lodash-es'
 import type { Eth } from 'web3-eth'
-import { web3 } from 'web3-eth'
 import type { Personal } from 'web3-eth-personal'
 import { EthereumAddress } from 'wallet.ts'
 import type { PromiEvent as PromiEventW3 } from 'web3-core'
@@ -14,25 +13,30 @@ import {
     currentSelectedWalletProviderSettings,
 } from '../../../../plugins/Wallet/settings'
 import { TransactionEventType } from '../../../../web3/types'
-import { ProviderType, ChainId } from '../../../../web3/types'
+import { ProviderType } from '../../../../web3/types'
 import { getConstant } from '../../../../web3/helpers'
 import { CONSTANTS } from '../../../../web3/constants'
 
+let connector: WalletConnect | null = null
 
+// 5 is the length of weights
+const SEED = Math.floor(Math.random() * 5)
 
 /**
  * Create a new connector and destroy the previous one if exists
  */
-export async function createConnector(chainId = currentMaskbookChainIdSettings.value, bridge?: string) {
+export async function createConnector(chainId = currentMaskbookChainIdSettings.value, url?: string) {
     // disconnect previous connector if exists
     if (connector?.connected) await connector.killSession()
     connector = null
 
-    if (!bridge) {
-        const bridgeUrl = getConstant(CONSTANTS, 'WALLET_CONNECT_BRIDGE', chainId)
-        bridge = bridgeUrl[0]
+    if (!url) {
+        const urls = getConstant(CONSTANTS, 'WALLET_CONNECT_BRIDGE', chainId)
+        const weights = getConstant(CONSTANTS, 'PROVIDER_WEIGHT_LIST', chainId)
+        url = urls[weights[SEED]]
     }
 
+    const bridge = url
     // create a new connector
     connector = new WalletConnect({
         bridge: bridge,
@@ -147,6 +151,11 @@ export async function requestAccounts() {
     })
 }
 
+const onConnect = async () => {
+    if (!connector?.accounts.length) return
+    currentWalletConnectChainIdSettings.value = connector.chainId
+    await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, true)
+}
 
 const onUpdate = async (
     error: Error | null,

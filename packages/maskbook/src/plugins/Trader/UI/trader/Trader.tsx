@@ -339,6 +339,7 @@ export function Trader(props: TraderProps) {
                         TradeProvider.SUSHISWAP,
                         TradeProvider.SASHIMISWAP,
                         TradeProvider.QUICKSWAP,
+                        ,
                     ].includes(provider) ? (
                         <TradePairViewer trade={trade as TradeComputed<Trade>} provider={provider} />
                     ) : null}

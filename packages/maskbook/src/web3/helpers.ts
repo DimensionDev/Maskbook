@@ -40,12 +40,15 @@ export interface Web3Constants {
 export function getConstant<T extends Web3Constants, K extends keyof T>(
     constants: T,
     key: K,
-    chainId = ChainId.Mainnet | ChainId.Matic,
+    chainId = ChainId.Mainnet || ChainId.Matic,
 ): T[K][ChainId.Mainnet] {
     return constants[key][chainId]
 }
 
-export function getAllConstants<T extends Web3Constants, K extends keyof T>(constants: T, chainId = ChainId.Mainnet) {
+export function getAllConstants<T extends Web3Constants, K extends keyof T>(
+    constants: T,
+    chainId = ChainId.Mainnet || ChainId.Matic,
+) {
     return Object.entries(constants).reduce(
         (accumulate, [key, value]) => {
             accumulate[key as K] = value[chainId]
@@ -113,6 +116,3 @@ export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionRe
         return accumulate
     }, {} as { [eventName: string]: EventLog })
 }
-
-export const getTokenUSDValue = (token: AssetDetailed) =>
-    token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0
