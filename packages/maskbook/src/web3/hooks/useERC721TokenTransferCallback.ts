@@ -51,25 +51,28 @@ export function useERC721TokenTransferCallback(address: string, tokenId?: string
 
         // step 2: blocking
         return new Promise<string>(async (resolve, reject) => {
-            erc721Contract.methods.transferFrom(account, recipient, tokenId).send({
-                from: account,
-                to: erc721Contract.options.address,
-                gas: estimatedGas,
-            }, (error, hash) => {
-                if (error) {
-                    setTransferState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
-                } else {
-                    setTransferState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve(hash)
-                }
-            })
+            erc721Contract.methods.transferFrom(account, recipient, tokenId).send(
+                {
+                    from: account,
+                    to: erc721Contract.options.address,
+                    gas: estimatedGas,
+                },
+                (error, hash) => {
+                    if (error) {
+                        setTransferState({
+                            type: TransactionStateType.FAILED,
+                            error,
+                        })
+                        reject(error)
+                    } else {
+                        setTransferState({
+                            type: TransactionStateType.HASH,
+                            hash,
+                        })
+                        resolve(hash)
+                    }
+                },
+            )
         })
     }, [account, tokenId, recipient, erc721Contract])
 

@@ -99,7 +99,6 @@ export function CollectibleList(props: CollectibleListProps) {
                     .map((y) => (
                         <div className={classes.card} key={y.token_id}>
                             <CollectibleCard
-                                key={y.token_id}
                                 wallet={wallet}
                                 token={
                                     y.asset_contract.schema_name === 'ERC721'
