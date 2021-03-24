@@ -9,7 +9,13 @@
  */
 import { CustomEventId } from '../../utils/constants'
 import type { CustomEvents } from './CustomEvents'
-import { redefineEventTargetPrototype, clone_into, un_xray_DOM as un_xray_DOM } from './utils'
+import {
+    redefineEventTargetPrototype,
+    clone_into,
+    un_xray_DOM as un_xray_DOM,
+    constructUnXrayedFilesFromUintLike,
+    constructUnXrayedDataTransferProxy,
+} from './utils'
 
 const CapturingEvents: Set<string> = new Set(['keyup', 'input', 'paste'] as (keyof DocumentEventMap)[])
 
@@ -99,36 +105,8 @@ function dispatchPaste(textOrImage: CustomEvents['paste'][0]) {
         data.setData('text/plain', textOrImage)
         document.activeElement!.dispatchEvent(e)
     } else if (textOrImage.type === 'image') {
-        const Uint8Array = globalThis.Uint8Array ? globalThis.Uint8Array : globalThis.window.Uint8Array
-        const xray_binary = Uint8Array.from(textOrImage.value)
-        const xray_blob = new Blob([clone_into(xray_binary)], { type: 'image/png' })
-        const file = un_xray_DOM(
-            new File([un_xray_DOM(xray_blob)], 'image.png', {
-                lastModified: Date.now(),
-                type: 'image/png',
-            }),
-        )
-        const dt = new globalThis.window.Proxy(
-            un_xray_DOM(data),
-            clone_into({
-                get(target, key: keyof DataTransfer) {
-                    if (key === 'files') return clone_into([file])
-                    if (key === 'types') return clone_into(['Files'])
-                    if (key === 'items')
-                        return clone_into([
-                            {
-                                kind: 'file',
-                                type: 'image/png',
-                                getAsFile() {
-                                    return file
-                                },
-                            },
-                        ])
-                    if (key === 'getData') return clone_into(() => '')
-                    return un_xray_DOM(target[key])
-                },
-            }),
-        )
+        const file = constructUnXrayedFilesFromUintLike('image/png', 'image.png', textOrImage.value)
+        const dt = constructUnXrayedDataTransferProxy(file)
         dispatchEventRaw(document.activeElement, e, { clipboardData: dt })
     } else {
         const error = new Error(`Unknown event, got ${textOrImage?.type ?? 'unknown'}`)

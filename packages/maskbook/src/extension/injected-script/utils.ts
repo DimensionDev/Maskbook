@@ -40,6 +40,48 @@ export function clone_into<T>(x: T) {
     if (_XPCNativeWrapper && typeof cloneInto === 'function') return cloneInto(x, window, { cloneFunctions: true })
     return x
 }
+
+const XRay_Uint8Array = globalThis.Uint8Array ? globalThis.Uint8Array : globalThis.window.Uint8Array
+
+const unXrayed_Proxy = globalThis.window.Proxy
+export function constructUnXrayedDataTransferProxy(unXrayed_file: File) {
+    return new unXrayed_Proxy(
+        un_xray_DOM(new DataTransfer()),
+        clone_into({
+            get(target, key: keyof DataTransfer) {
+                if (key === 'files') return clone_into([unXrayed_file])
+                if (key === 'types') return clone_into(['Files'])
+                if (key === 'items')
+                    return clone_into([
+                        {
+                            kind: 'file',
+                            type: 'image/png',
+                            getAsFile() {
+                                return unXrayed_file
+                            },
+                        },
+                    ])
+                if (key === 'getData') return clone_into(() => '')
+                return un_xray_DOM(target[key])
+            },
+        }),
+    )
+}
+export function constructUnXrayedFilesFromUintLike(
+    format: string,
+    fileName: string,
+    xray_fileContent: number[] | Uint8Array,
+) {
+    const binary = clone_into(XRay_Uint8Array.from(xray_fileContent))
+    const blob = un_xray_DOM(new Blob([binary], { type: format }))
+    const file = un_xray_DOM(
+        new File([blob], fileName, {
+            lastModified: Date.now(),
+            type: format,
+        }),
+    )
+    return file
+}
 /** @see https://mdn.io/XPCNativeWrapper Firefox only */
 declare namespace XPCNativeWrapper {
     function unwrap<T>(object: T): T
