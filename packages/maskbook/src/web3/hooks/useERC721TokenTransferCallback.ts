@@ -1,9 +1,7 @@
 import { useCallback } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import type { TransactionReceipt } from 'web3-core'
 import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
-import { TransactionEventType } from '../types'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { isSameAddress } from '../helpers'
 
@@ -52,33 +50,25 @@ export function useERC721TokenTransferCallback(address: string, tokenId?: string
         })
 
         // step 2: blocking
-        return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = erc721Contract.methods.transferFrom(account, recipient, tokenId).send({
+        return new Promise<string>(async (resolve, reject) => {
+            erc721Contract.methods.transferFrom(account, recipient, tokenId).send({
                 from: account,
                 to: erc721Contract.options.address,
                 gas: estimatedGas,
-            })
-            promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                setTransferState({
-                    type: TransactionStateType.CONFIRMED,
-                    no: 0,
-                    receipt,
-                })
-            })
-            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                setTransferState({
-                    type: TransactionStateType.CONFIRMED,
-                    no,
-                    receipt,
-                })
-                resolve()
-            })
-            promiEvent.on(TransactionEventType.ERROR, (error) => {
-                setTransferState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
-                reject(error)
+            }, (error, hash) => {
+                if (error) {
+                    setTransferState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                } else {
+                    setTransferState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
+                }
             })
         })
     }, [account, tokenId, recipient, erc721Contract])
