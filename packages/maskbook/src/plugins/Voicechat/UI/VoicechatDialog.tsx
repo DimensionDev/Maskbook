@@ -14,9 +14,9 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useState, useEffect } from 'react'
 import type { VoiceChatMetadata } from '../types'
-import { editActivatedPostMetadata, getActivatedUI } from '../../../social-network/ui'
 import { VOICECHAT_META_KEY_1 } from '../constants'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { globalTypedMessageMetadata, editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 
 const useNewStyles = makeStyles((theme) =>
     createStyles({
@@ -58,7 +58,7 @@ export const VoicechatDialog = (props: VoicechatDialogProps) => {
         props.onConfirm(set)
     }
 
-    const currentMeta = useValueRef(getActivatedUI().typedMessageMetadata)
+    const currentMeta = useValueRef(globalTypedMessageMetadata)
     useEffect(() => {
         if (props.open) {
             const enabled = Array.from(currentMeta.keys()).includes(VOICECHAT_META_KEY_1)
