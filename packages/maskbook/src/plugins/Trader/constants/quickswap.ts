@@ -1,5 +1,5 @@
 import { ChainId, ERC20TokenDetailed } from '../../../web3/types'
-import { AMPL, QUICK, DAI, YAM, WBTC, MSKA, MSKB, MSKC, USDC, USDT, WETH, WETH_ONLY, RUNE } from './trader'
+import { AMPL, QUICK, DAI, YAM, WBTC, MSKA, MSKB, MSKC, USDC, USDT, WETH, WETH_ONLY, WMATIC } from './trader'
 
 /**
  * Some tokens can only be swapped via certain pairs,
@@ -11,15 +11,14 @@ export const QUICKSWAP_CUSTOM_BASES: {
     }
 } = {
     [ChainId.Matic]: {
-        [AMPL.address]: [DAI, WETH[ChainId.Mainnet]],
+        [AMPL.address]: [DAI, WETH[ChainId.Matic]],
     },
 }
 export const QUICKSWAP_BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
     ...WETH_ONLY,
-    [ChainId.Mainnet]: [...WETH_ONLY[ChainId.Mainnet], ...[DAI, USDC, USDT, QUICK, YAM, WBTC, RUNE]],
-    [ChainId.Rinkeby]: [...WETH_ONLY[ChainId.Rinkeby], ...[MSKA, MSKB, MSKC]],
+    [ChainId.Matic]: [...WETH_ONLY[ChainId.Matic], ...[DAI, USDC, USDT, QUICK, YAM, WBTC, WMATIC]],
 }
 
 export const THEGRAPH_QUICKSWAP = 'https://api.thegraph.com/subgraphs/name/developerfred/quick-swap'

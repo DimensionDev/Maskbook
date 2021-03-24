@@ -10,6 +10,8 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
         [ChainId.Kovan]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
         [ChainId.Gorli]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     UNISWAP_FACTORY_ADDRESS: {
         [ChainId.Mainnet]: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
@@ -17,6 +19,8 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
         [ChainId.Kovan]: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
         [ChainId.Gorli]: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     SUSHISWAP_ROUTER_ADDRESS: {
         [ChainId.Mainnet]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
@@ -24,6 +28,8 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
         [ChainId.Kovan]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
         [ChainId.Gorli]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     SUSHISWAP_FACTORY_ADDRESS: {
         [ChainId.Mainnet]: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac',
@@ -31,6 +37,8 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     SASHIMISWAP_ROUTER_ADDRESS: {
         [ChainId.Mainnet]: ' 0x31db862df7be09718a860c46ab17ca57966e69ed',
@@ -38,20 +46,24 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '0xe4fe6a45f354e845f954cddee6084603cedb9410',
         [ChainId.Kovan]: '0xe4fe6a45f354e845f954cddee6084603cedb9410',
         [ChainId.Gorli]: '0xe4fe6a45f354e845f954cddee6084603cedb9410',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     QUICKSWAP_FACTORY_ADDRESS: {
-        [ChainId.Matic]: '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32',
         [ChainId.Ropsten]: '',
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.Matic]: '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32',
+        [ChainId.Mumbai]: '',
     },
     QUICKSWAP_ROUTER_ADDRESS: {
-        [ChainId.Matic]: '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff',
         [ChainId.Ropsten]: '',
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.Matic]: '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff',
+        [ChainId.Mumbai]: '',
     },
     BALANCER_ETH_ADDRESS: {
         [ChainId.Mainnet]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -59,6 +71,8 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         [ChainId.Kovan]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         [ChainId.Gorli]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     BALANCER_EXCHANGE_PROXY_ADDRESS: {
         [ChainId.Mainnet]: '0x3E66B66Fd1d0b02fDa6C811Da9E0547970DB2f21',
@@ -66,6 +80,8 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '0x4e67bf5bD28Dd4b570FBAFe11D0633eCbA2754Ec',
         [ChainId.Gorli]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     BALANCER_POOLS_URL: {
         [ChainId.Mainnet]: 'https://ipfs.fleek.co/ipns/balancer-bucket.storage.fleek.co/balancer-exchange/pools',
@@ -74,6 +90,8 @@ export const TRADE_CONSTANTS = {
         [ChainId.Kovan]:
             'https://ipfs.fleek.co/ipns/balancer-team-bucket.storage.fleek.co/balancer-exchange-kovan/pools',
         [ChainId.Gorli]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
 }
 
@@ -116,6 +134,20 @@ export const WETH: {
         'Wrapped Ether',
         'WETH',
     ),
+    [ChainId.Matic]: createERC20Token(
+        ChainId.Matic,
+        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Matic),
+        18,
+        'Wrapped Ether',
+        'WETH',
+    ),
+    [ChainId.Mumbai]: createERC20Token(
+        ChainId.Mumbai,
+        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Mumbai),
+        18,
+        'Wrapped Ether',
+        'WETH',
+    ),
 }
 
 export const WETH_ONLY: {
@@ -126,6 +158,8 @@ export const WETH_ONLY: {
     [ChainId.Rinkeby]: [WETH[ChainId.Rinkeby]],
     [ChainId.Kovan]: [],
     [ChainId.Gorli]: [],
+    [ChainId.Matic]: [WETH[ChainId.Matic]],
+    [ChainId.Mumbai]: [WETH[ChainId.Mumbai]],
 }
 
 // Mainnet
@@ -193,6 +227,13 @@ export const YFI = createERC20Token(ChainId.Mainnet, getConstant(CONSTANTS, 'YFI
 // Matic
 export const QUICK = createERC20Token(ChainId.Matic, getConstant(CONSTANTS, 'QUICK_ADDRESS'), 18, 'Quick', 'QUICK')
 export const MATIC = createERC20Token(ChainId.Matic, getConstant(CONSTANTS, 'MATIC_ADDRESS'), 18, 'Matic', 'MATIC')
+export const WMATIC = createERC20Token(
+    ChainId.Matic,
+    getConstant(CONSTANTS, 'WMATIC_ADDRESS'),
+    18,
+    'Wrapped Matic',
+    'WMATIC',
+)
 
 // Rinkeby
 export const MSKA = createERC20Token(

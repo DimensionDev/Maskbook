@@ -7,7 +7,7 @@ import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
 import * as Maskbook from '../providers/Maskbook'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
-import { currentWalletConnectChainIdSettings } from '../../../../settings/settings'
+import { currentWalletConnectChainIdSettings, currentMaskbookChainIdSettings } from '../../../../settings/settings'
 import {
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,

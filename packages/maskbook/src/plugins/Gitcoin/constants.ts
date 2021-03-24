@@ -9,6 +9,8 @@ export const GITCOIN_CONSTANT = {
         [ChainId.Rinkeby]: '0x00De4B13153673BCAE2616b67bf822500d325Fc3',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     BULK_CHECKOUT_ADDRESS: {
         [ChainId.Mainnet]: '0x7d655c57f71464B6f83811C55D84009Cd9f5221C',
@@ -16,6 +18,8 @@ export const GITCOIN_CONSTANT = {
         [ChainId.Rinkeby]: '0x7d655c57f71464B6f83811C55D84009Cd9f5221C',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     GITCOIN_ETH_ADDRESS: {
         [ChainId.Mainnet]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -23,6 +27,8 @@ export const GITCOIN_CONSTANT = {
         [ChainId.Rinkeby]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     GITCOIN_TIP_PERCENTAGE: {
         [ChainId.Mainnet]: 5,
@@ -30,6 +36,8 @@ export const GITCOIN_CONSTANT = {
         [ChainId.Rinkeby]: 5,
         [ChainId.Kovan]: 5,
         [ChainId.Gorli]: 5,
+        [ChainId.Matic]: 5,
+        [ChainId.Mumbai]: 5,
     },
 }
 

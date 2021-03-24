@@ -90,6 +90,8 @@ export const ITO_CONSTANTS = {
         [ChainId.Rinkeby]: '0x7751b8c715d1Df74D181C86aE01801330211f370',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     MASK_ITO_CONTRACT_ADDRESS: {
         [ChainId.Mainnet]: '0x86812da3A623ab9606976078588b80C315E55FA3',
@@ -97,6 +99,8 @@ export const ITO_CONSTANTS = {
         [ChainId.Rinkeby]: '0x0aC41A27bA9F132D5687CAC986f5302Da6f5F9f6',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     DEFAULT_QUALIFICATION_ADDRESS: {
         [ChainId.Mainnet]: '0x919931df4c9e943612ef565b334791e26dc26b3f',
@@ -104,6 +108,8 @@ export const ITO_CONSTANTS = {
         [ChainId.Rinkeby]: '0x88AA0AB3B7cDE263073e1cBa1D06473adeC1b38E',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     SUBGRAPH_URL: {
         [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-mainnet',
@@ -111,6 +117,8 @@ export const ITO_CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     EXCHANGE_TOKENS: {
         [ChainId.Mainnet]: [DAI, USDC, USDT, HUSD, BUSD].map((x) => x.address),
@@ -118,6 +126,8 @@ export const ITO_CONSTANTS = {
         [ChainId.Rinkeby]: [],
         [ChainId.Kovan]: [],
         [ChainId.Gorli]: [],
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
 }
 

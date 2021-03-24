@@ -51,7 +51,7 @@ export function createWeb3(chainId = currentMaskbookChainIdSettings.value, privK
         const weights = getConstant(CONSTANTS, 'PROVIDER_WEIGHT_LIST', chainId)
         url = urls[weights[SEED]]
     }
-    const provider = createProvider(url)
+    const provider = createProvider(url as string)
     const web3 = createWeb3Instance(provider)
     if (privKeys.length) {
         web3.eth.accounts.wallet.clear()
