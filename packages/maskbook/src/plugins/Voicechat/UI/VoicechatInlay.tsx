@@ -19,7 +19,7 @@ interface ChannelUsersProps {
 
 interface JoinButtonProps {
     localPeerMediaElement: PeerMediaElement | undefined | null
-    joinChat: Function
+    joinChat(): void
     isJoining: boolean
 }
 
@@ -31,13 +31,13 @@ interface MediaSelectionProps {
 
 interface MuteSwitchProps {
     isMuted: boolean
-    setIsMuted: Function
-    setMuted: Function
+    setIsMuted(b: boolean): void
+    setMuted(b: boolean): void
 }
 
 interface DisconnectButtonProps {
-    setIsMuted: Function
-    disconnectVoice: Function
+    setIsMuted(b: boolean): void
+    disconnectVoice(): void
 }
 
 interface SettingsProps {
@@ -45,9 +45,9 @@ interface SettingsProps {
     activeMediaDevice: string
     mediaDevices: MediaDeviceInfo[]
     isMuted: boolean
-    setIsMuted: Function
-    setMuted: Function
-    disconnectVoice: Function
+    setIsMuted(b: boolean): void
+    setMuted(b: boolean): void
+    disconnectVoice(): void
 }
 
 function ChannelUsers(props: ChannelUsersProps) {
@@ -75,7 +75,7 @@ function ChannelUsers(props: ChannelUsersProps) {
 
                 return (
                     <Box key={peerMedia.username + peerMedia.isLocal} display={'flex'} alignItems={'center'}>
-                        <Box mr={0.5} style={{ marginTop: '6px' }}>
+                        <Box marginRight={0.5} style={{ marginTop: '6px' }}>
                             <SpeakIcon />
                         </Box>
                         <Typography component="p" sx={{ fontWeight: isSpeaking ? 'bold' : 'regular' }}>
@@ -166,8 +166,8 @@ function Settings(props: SettingsProps) {
 
     return localPeerMediaElement ? (
         <Box
-            px={2}
-            py={1}
+            paddingX={2}
+            paddingY={1}
             bgcolor={'#eee'}
             borderTop={1}
             borderColor={'#ccc'}
@@ -232,7 +232,7 @@ export function VoicechatInlay(props: VoicechatInlayProps) {
                     border={1}
                     borderColor={'rgb(196, 207, 214)'}
                     overflow={'hidden'}>
-                    <Box p={2}>
+                    <Box padding={2}>
                         <ChannelUsers {...{ peerMediaElements, localPeerMediaElement }} />
                         <JoinButton {...{ joinChat, isJoining, localPeerMediaElement }} />
                     </Box>

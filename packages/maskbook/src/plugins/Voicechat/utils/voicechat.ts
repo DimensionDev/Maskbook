@@ -71,7 +71,7 @@ export function init(
         signalingSocket?.emit('part', channel)
     }
 
-    signalingSocket.on('addPeer', (config: Config) => {
+    signalingSocket.on('addPeer', async (config: Config) => {
         console.log('Signaling server said to add peer: ', config)
 
         const peerID = config.peer_id
@@ -117,31 +117,23 @@ export function init(
         if (config.should_create_offer) {
             console.log('Creating RTC offer to', peerID)
 
-            peerConnection
-                .createOffer()
-                .then((localDescription) => {
-                    console.log('Local offer description is: ', localDescription)
+            try {
+                const localDescription = await peerConnection.createOffer()
+                console.log('Local offer description is: ', localDescription)
 
-                    peerConnection
-                        .setLocalDescription(localDescription)
-                        .then(() => {
-                            signalingSocket?.emit('relaySessionDescription', {
-                                peer_id: peerID,
-                                session_description: localDescription,
-                            })
-                            console.log('Offer setLocalDescription succeeded')
-                        })
-                        .catch(() => {
-                            alert('Offer setLocalDescription failed!')
-                        })
+                await peerConnection.setLocalDescription(localDescription)
+                signalingSocket?.emit('relaySessionDescription', {
+                    peer_id: peerID,
+                    session_description: localDescription,
                 })
-                .catch((error) => {
-                    console.log('Error sending offer: ', error)
-                })
+                console.log('Offer setLocalDescription succeeded')
+            } catch (e) {
+                alert('Voicechat failed to create offer')
+            }
         }
     })
 
-    signalingSocket.on('sessionDescription', (config: Config) => {
+    signalingSocket.on('sessionDescription', async (config: Config) => {
         console.log('Remote description received: ', config)
 
         const peerID = config.peer_id
@@ -151,36 +143,19 @@ export function init(
         console.log(config.session_description)
 
         const desc = new RTCSessionDescription(remoteDescription)
-        peer.setRemoteDescription(desc)
-            .then(() => {
-                console.log('setRemoteDescription succeeded')
-                if (remoteDescription.type == 'offer') {
-                    console.log('Creating answer')
+        await peer.setRemoteDescription(desc)
+        console.log('setRemoteDescription succeeded')
+        if (remoteDescription.type == 'offer') {
+            console.log('Creating answer')
 
-                    peer.createAnswer()
-                        .then((localDescription) => {
-                            console.log('Answer description is: ', localDescription)
-                            peer.setLocalDescription(localDescription)
-                                .then(() => {
-                                    signalingSocket?.emit('relaySessionDescription', {
-                                        peer_id: peerID,
-                                        session_description: localDescription,
-                                    })
-                                    console.log('Answer setLocalDescription succeeded')
-                                })
-                                .catch(() => {
-                                    alert('Answer setLocalDescription failed!')
-                                })
-                        })
-                        .catch((error) => {
-                            console.log('Error creating answer: ', error)
-                            console.log(peer)
-                        })
-                }
+            const localDescription = await peer.createAnswer()
+            console.log('Answer description is: ', localDescription)
+            await peer.setLocalDescription(localDescription)
+            signalingSocket?.emit('relaySessionDescription', {
+                peer_id: peerID,
+                session_description: localDescription,
             })
-            .catch((error) => {
-                console.log('setRemoteDescription error: ', error)
-            })
+        }
 
         console.log('Description Object: ', desc)
     })
