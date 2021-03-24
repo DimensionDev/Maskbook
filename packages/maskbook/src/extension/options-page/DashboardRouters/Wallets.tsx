@@ -103,10 +103,9 @@ export default function DashboardWalletsRouter() {
     const onCreate = useCallback(() => setOpenCreateWalletDialog({ open: true }), [])
     const onImport = useCallback(() => openWalletImport(), [])
 
-    const onCreateOrImportWallet = useCallback(async () => {
-        if (hdWallet) onImport()
-        else onCreate()
-    }, [onCreate, onImport, hdWallet?.address])
+    const onCreateOrImportWallet = useCallback(() => {
+        onImport()
+    }, [onImport])
     //#endregion
 
     //#region open dialogs externally
@@ -117,10 +116,8 @@ export default function DashboardWalletsRouter() {
 
     // show create dialog
     useEffect(() => {
-        if (!create) return
-        if (hdWallet) onImport()
-        else onCreate()
-    }, [hdWallet, create, onCreate, onImport])
+        if (create) onImport()
+    }, [create, onImport])
     //#endregion
 
     //#region right icons from mobile devices

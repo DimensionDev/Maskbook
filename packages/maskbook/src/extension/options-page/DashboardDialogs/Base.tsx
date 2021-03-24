@@ -317,6 +317,6 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                 },
             ),
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [...deps, enqueueSnackbar, executor, key, onError, onSuccess, t],
+        [...deps, enqueueSnackbar, executor, onError, onSuccess, key, successText],
     )
 }

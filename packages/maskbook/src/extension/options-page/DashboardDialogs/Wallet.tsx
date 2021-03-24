@@ -55,7 +55,7 @@ import WalletLine from './WalletLine'
 import { isETH, isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { WalletRPC } from '../../../plugins/Wallet/messages'
+import { WalletMessages, WalletRPC } from '../../../plugins/Wallet/messages'
 import { Image } from '../../../components/shared/Image'
 import { MaskbookIconOutlined } from '../../../resources/MaskbookIcon'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
@@ -319,40 +319,63 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
         height: 112,
     }
 
-    const onSubmit = useSnackbarCallback(
+    const [, setCreateWalletDialogOpen] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
+
+    const onCreate = useCallback(
+        (name: string) => {
+            if (hdWallet) return
+            setCreateWalletDialogOpen({
+                open: true,
+                name,
+            })
+        },
+        [hdWallet?.address, setCreateWalletDialogOpen],
+    )
+    const onDeriveOrImport = useSnackbarCallback(
         async () => {
-            if (state[0] === 0) {
-                // create wallet in derive way only available if a HD wallet exists
-                if (!hdWallet) return
-                await WalletRPC.deriveWalletFromPhrase(name, hdWallet.mnemonic, hdWallet.passphrase)
-            }
-            if (state[0] === 1) {
-                const words = mnemonic.split(' ')
-                await WalletRPC.importNewWallet({
-                    name,
-                    path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-                    mnemonic: words,
-                    passphrase: '',
-                })
-                await WalletRPC.addPhrase({
-                    path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
-                    mnemonic: words,
-                    passphrase: '',
-                })
-            }
-            if (state[0] === 2) {
-                const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privKey)
-                if (!privateKeyValid) throw new Error(t('import_failed'))
-                await WalletRPC.importNewWallet({
-                    name,
-                    address,
-                    _private_key_: privKey,
-                })
+            switch (state[0]) {
+                case 0:
+                    if (!hdWallet) return
+                    await WalletRPC.deriveWalletFromPhrase(name, hdWallet.mnemonic, hdWallet.passphrase)
+                    break
+                case 1:
+                    const words = mnemonic.split(' ')
+                    await WalletRPC.importNewWallet({
+                        name,
+                        path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+                        mnemonic: words,
+                        passphrase: '',
+                    })
+                    await WalletRPC.addPhrase({
+                        path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
+                        mnemonic: words,
+                        passphrase: '',
+                    })
+                    break
+                case 2:
+                    const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privKey)
+                    if (!privateKeyValid) throw new Error(t('import_failed'))
+                    await WalletRPC.importNewWallet({
+                        name,
+                        address,
+                        _private_key_: privKey,
+                    })
+                    break
+                default:
+                    break
             }
         },
         [state[0], name, passphrase, mnemonic, privKey, hdWallet?.address],
         props.onClose,
     )
+    const onSubmit = useCallback(async () => {
+        if (state[0] !== 0 || hdWallet) {
+            await onDeriveOrImport()
+            return
+        }
+        props.onClose()
+        onCreate(name)
+    }, [state[0], name, hdWallet?.address, onCreate, onDeriveOrImport])
 
     return (
         <DashboardDialogCore {...props}>

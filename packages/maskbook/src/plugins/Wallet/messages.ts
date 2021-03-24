@@ -18,6 +18,7 @@ export type SelectWalletDialogEvent = {
 }
 
 export type CreateWalletDialogEvent = {
+    name?: string
     open: boolean
 }
 
