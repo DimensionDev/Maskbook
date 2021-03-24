@@ -80,6 +80,7 @@
     "promievent": "^0.1.4",
     "pvtsutils": "^1.0.14",
     "qrcode": "^1.4.4",
+    "quickswap-sdk": "^3.0.8",
     "react-draggable": "^4.4.3",
     "react-feather": "^2.0.9",
     "react-highlight-words": "^0.17.0",

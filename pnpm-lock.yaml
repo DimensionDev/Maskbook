@@ -243,6 +243,7 @@ importers:
       promievent: 0.1.5
       pvtsutils: 1.1.2
       qrcode: 1.4.4
+      quickswap-sdk: 3.0.8_72226568922005834619ba32b8bb61bb
       react-draggable: 4.4.3
       react-feather: 2.0.9
       react-highlight-words: 0.17.0
@@ -446,6 +447,7 @@ importers:
       promievent: ^0.1.4
       pvtsutils: ^1.0.14
       qrcode: ^1.4.4
+      quickswap-sdk: ^3.0.8
       react-dev-utils: ^11.0.1
       react-devtools-core: ^4.10.1
       react-docgen-typescript-loader: ^3.7.2
@@ -5101,30 +5103,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
-  /@storybook/client-api/5.3.21_regenerator-runtime@0.13.7:
-    dependencies:
-      '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
-      '@storybook/channel-postmessage': 5.3.21
-      '@storybook/channels': 5.3.21
-      '@storybook/client-logger': 5.3.21
-      '@storybook/core-events': 5.3.21
-      '@storybook/csf': 0.0.1
-      '@types/webpack-env': 1.16.0
-      core-js: 3.9.1
-      eventemitter3: 4.0.7
-      global: 4.4.0
-      is-plain-object: 3.0.1
-      lodash: 4.17.21
-      memoizerific: 1.11.3
-      qs: 6.9.6
-      stable: 0.1.8
-      ts-dedent: 1.2.0
-      util-deprecate: 1.0.2
-    dev: true
-    peerDependencies:
-      regenerator-runtime: '*'
-    resolution:
-      integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
   /@storybook/client-api/6.1.20:
     dependencies:
       '@storybook/addons': 6.1.20
@@ -5287,7 +5265,7 @@ packages:
       '@babel/preset-env': 7.13.9
       '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
       '@storybook/channel-postmessage': 5.3.21
-      '@storybook/client-api': 5.3.21_regenerator-runtime@0.13.7
+      '@storybook/client-api': 5.3.21
       '@storybook/client-logger': 5.3.21
       '@storybook/core-events': 5.3.21
       '@storybook/csf': 0.0.1
@@ -13329,6 +13307,20 @@ packages:
     resolution:
       integrity: sha512-/LFZOIo82WDsyyv7h7oc0MJF9ACOvDRdx9rWPZ2pgMfNWu/z8hQDBtOchuB/0BVLmuFOZjV02YwUVzNsWx/EzA==
   /follow-redirects/1.13.3:
+    dev: false
+    engines:
+      node: '>=4.0'
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    resolution:
+      integrity: sha512-DUgl6+HDzB0iEptNQEXLx/KhTmDb8tZUHSeLqpnjpknR70H0nC2t9N73BK6fN4hOvJ84pKlIQVQ4k5FFlBedKA==
+  /follow-redirects/1.13.3_debug@4.3.1:
+    dependencies:
+      debug: 4.3.1_supports-color@6.1.0
+    dev: true
     engines:
       node: '>=4.0'
     peerDependencies:
@@ -14657,7 +14649,7 @@ packages:
   /http-proxy/1.18.1_debug@4.3.1:
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.13.3
+      follow-redirects: 1.13.3_debug@4.3.1
       requires-port: 1.0.0
     dev: true
     engines:
@@ -19968,6 +19960,31 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
+  /quickswap-sdk/3.0.8_72226568922005834619ba32b8bb61bb:
+    dependencies:
+      '@ethersproject/address': 5.0.10
+      '@ethersproject/contracts': 5.0.11
+      '@ethersproject/networks': 5.0.8
+      '@ethersproject/providers': 5.0.23
+      '@ethersproject/solidity': 5.0.9
+      '@uniswap/v2-core': 1.0.1
+      big.js: 5.2.2
+      decimal.js-light: 2.5.1
+      jsbi: 3.1.4
+      tiny-invariant: 1.1.0
+      tiny-warning: 1.0.3
+      toformat: 2.0.0
+    dev: false
+    engines:
+      node: '>=10'
+    peerDependencies:
+      '@ethersproject/address': ^5.0.0-beta
+      '@ethersproject/contracts': ^5.0.0-beta
+      '@ethersproject/networks': ^5.0.0-beta
+      '@ethersproject/providers': ^5.0.0-beta
+      '@ethersproject/solidity': ^5.0.0-beta
+    resolution:
+      integrity: sha512-1pMOS5/RC4K++RCrt3hrhSHDzzVzy40CiLgM8UbvdSVUuYMN5jZZVocbkG+5fRlJA1JqhKhs2OYYLh08t50KOw==
   /raf/3.4.1:
     dependencies:
       performance-now: 2.1.0
@@ -23109,7 +23126,7 @@ packages:
       serialize-javascript: 4.0.0
       source-map: 0.6.1
       terser: 4.8.0
-      webpack: 4.46.0
+      webpack: 4.46.0_webpack-cli@4.5.0
       webpack-sources: 1.4.3
       worker-farm: 1.7.0
     dev: true

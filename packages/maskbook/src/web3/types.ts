@@ -28,6 +28,14 @@ export interface EtherTokenDetailed extends EtherToken {
 }
 //#endregion
 
+//#region Matic
+export interface MaticTokenDetailed extends EtherToken {
+    name: 'Matic'
+    symbol: 'MATIC'
+    decimals: 18
+}
+//#endregion
+
 //#region ERC20
 export interface ERC20Token {
     type: EthereumTokenType.ERC20
@@ -110,7 +118,7 @@ export enum EthereumNetwork {
     Kovan = 'Kovan',
     Gorli = 'Gorli',
     Matic = 'Matic',
-    Mumbai = 'Matic Testnet',
+    Mumbai = 'Mumbai',
 }
 
 export enum EthereumTokenType {

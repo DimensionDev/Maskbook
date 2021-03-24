@@ -104,6 +104,6 @@ export async function getUnsafeChainId(address?: string) {
 export async function getChainId(address?: string) {
     const unsafeChainId = await getUnsafeChainId(address)
     return unsafeChainId !== ChainId.Mainnet && Flags.wallet_network_strict_mode_enabled
-        ? ChainId.Mainnet
+        ? ChainId.Mainnet || ChainId.Matic
         : unsafeChainId
 }
