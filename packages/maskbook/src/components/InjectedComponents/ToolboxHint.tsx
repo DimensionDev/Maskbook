@@ -131,10 +131,6 @@ export function ToolboxHint() {
 
     const [menu, openMenu] = useMenu(
         <>
-            <MenuItem onClick={openAirdrop}>
-                <Image src={ToolIconURLs.airdrop.image} width={24} height={24} />
-                <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
-            </MenuItem>
             <MenuItem onClick={openEncryptedMessage}>
                 <Image src={ToolIconURLs.encryptedmsg.image} width={24} height={24} />
                 <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
@@ -157,6 +153,10 @@ export function ToolboxHint() {
                     <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
                 </MenuItem>
             ) : null}
+            <MenuItem onClick={openAirdrop}>
+                <Image src={ToolIconURLs.airdrop.image} width={24} height={24} />
+                <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
+            </MenuItem>
         </>,
     )
 
