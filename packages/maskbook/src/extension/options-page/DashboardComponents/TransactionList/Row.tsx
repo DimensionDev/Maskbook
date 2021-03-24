@@ -42,7 +42,7 @@ export const Row: FC<Props> = ({ transaction }) => {
                     <Record pair={pair} key={index} />
                 ))}
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
                 <Typography
                     className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}
                     color="textSecondary">
