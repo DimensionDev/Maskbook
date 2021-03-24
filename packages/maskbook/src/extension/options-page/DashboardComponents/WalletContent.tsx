@@ -24,6 +24,8 @@ import { Flags } from '../../../utils/flags'
 import { useChainIdValid } from '../../../web3/hooks/useChainState'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
+import { useHistory, useLocation } from 'react-router'
+import { DashboardWalletRoute } from '../Route'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -77,6 +79,8 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     ref,
 ) {
     const classes = useStyles()
+    const history = useHistory()
+    const location = useLocation()
     const { t } = useI18N()
     const color = useColorStyles()
     const xsMatched = useMatchXS()
@@ -102,10 +106,26 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     //#endregion
 
     //#region tab
-    const [tabIndex, setTabIndex] = useState(0)
-    const onTabChange = useCallback((_, newTabIndex: number) => {
-        setTabIndex(newTabIndex)
-    }, [])
+    const tab = new URLSearchParams(location.search).get('tab') as DashboardWalletRoute
+    const [tabIndex, setTabIndex] = useState(
+        tab &&
+            [
+                DashboardWalletRoute.Tokens,
+                DashboardWalletRoute.Collectibles,
+                DashboardWalletRoute.Transactions,
+            ].includes(tab)
+            ? Number(tab)
+            : 0,
+    )
+    const onTabChange = useCallback(
+        (_, newTabIndex: number) => {
+            setTabIndex(newTabIndex)
+            const params = new URLSearchParams()
+            params.append('tab', newTabIndex.toString())
+            history.push({ search: params.toString() })
+        },
+        [history],
+    )
     //#endregion
 
     return (

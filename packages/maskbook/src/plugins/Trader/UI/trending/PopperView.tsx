@@ -154,19 +154,19 @@ export function PopperView(props: PopperViewProps) {
     //#endregion
 
     //#region display loading skeleton
-    if (!currency || !trending || !tokenDetailed || loadingTrending || loadingTokenDetailed)
+    const isEthereum = !!trending?.coin.eth_address || trending?.coin.symbol.toLowerCase() === 'eth'
+    if (!currency || !trending || (isEthereum && !tokenDetailed) || loadingTrending || loadingTokenDetailed)
         return <TrendingViewSkeleton />
     //#endregion
 
     //#region tabs
     const { coin, market, tickers } = trending
-    const canSwap = !!trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
     const tabs = [
-        <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />,
-        <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />,
-        <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />,
-        canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null,
-        Flags.LBP_enabled && LBP ? <Tab className={classes.tab} label="LBP" /> : null,
+        <Tab className={classes.tab} key="market" label={t('plugin_trader_tab_market')} />,
+        <Tab className={classes.tab} key="price" label={t('plugin_trader_tab_price')} />,
+        <Tab className={classes.tab} key="exchange" label={t('plugin_trader_tab_exchange')} />,
+        isEthereum ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
+        Flags.LBP_enabled && LBP ? <Tab className={classes.tab} key="lbp" label="LBP" /> : null,
     ].filter(Boolean)
     //#endregion
 
@@ -209,7 +209,7 @@ export function PopperView(props: PopperViewProps) {
                     </>
                 ) : null}
                 {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
-                {tabIndex === 3 && canSwap ? (
+                {tabIndex === 3 && isEthereum ? (
                     <TradeView
                         classes={{ root: classes.tradeViewRoot }}
                         TraderProps={{
