@@ -103,6 +103,8 @@ export async function updateExoticWalletFromSource(
                 updatedAt: new Date(),
                 erc20_token_blacklist: new Set(),
                 erc20_token_whitelist: new Set(),
+                erc721_token_blacklist: new Set(),
+                erc721_token_whitelist: new Set(),
                 name: resolveProviderName(provider),
                 passphrase: '',
                 mnemonic: [] as string[],
@@ -122,9 +124,10 @@ export function createNewWallet(
         | 'mnemonic'
         | 'eth_balance'
         | '_data_source_'
-        | 'erc20_token_balance'
         | 'erc20_token_whitelist'
         | 'erc20_token_blacklist'
+        | 'erc721_token_whitelist'
+        | 'erc721_token_blacklist'
         | 'createdAt'
         | 'updatedAt'
     >,
@@ -135,7 +138,7 @@ export function createNewWallet(
 
 export async function importNewWallet(
     rec: PartialRequired<
-        Omit<WalletRecord, 'id' | 'eth_balance' | '_data_source_' | 'erc20_token_balance' | 'createdAt' | 'updatedAt'>,
+        Omit<WalletRecord, 'id' | 'eth_balance' | '_data_source_' | 'createdAt' | 'updatedAt'>,
         'name'
     >,
 ) {
@@ -150,6 +153,8 @@ export async function importNewWallet(
         address,
         erc20_token_whitelist: new Set(),
         erc20_token_blacklist: new Set(),
+        erc721_token_whitelist: new Set(),
+        erc721_token_blacklist: new Set(),
         createdAt: new Date(),
         updatedAt: new Date(),
     }

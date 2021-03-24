@@ -77,18 +77,22 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
         try {
             for await (const stage of iterator) {
                 switch (stage.type) {
+                    case StageType.TRANSACTION_HASH:
+                        setTransferState({
+                            type: TransactionStateType.HASH,
+                            hash: stage.hash,
+                        })
+                        break
                     case StageType.RECEIPT:
                         setTransferState({
-                            type: TransactionStateType.CONFIRMED,
-                            no: 0,
-                            receipt: stage.receipt,
+                            type: TransactionStateType.HASH,
+                            hash: stage.receipt.transactionHash,
                         })
                         break
                     case StageType.CONFIRMATION:
                         setTransferState({
-                            type: TransactionStateType.CONFIRMED,
-                            no: stage.no,
-                            receipt: stage.receipt,
+                            type: TransactionStateType.HASH,
+                            hash: stage.receipt.transactionHash,
                         })
                         break
                 }

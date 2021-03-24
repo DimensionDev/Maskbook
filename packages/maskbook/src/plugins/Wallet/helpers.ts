@@ -1,5 +1,5 @@
 import stringify from 'json-stable-stringify'
-import type { WalletRecord, ERC20TokenRecord } from './database/types'
+import type { WalletRecord, ERC20TokenRecord, ERC721TokenRecord } from './database/types'
 import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from './settings'
 import { isSameAddress } from '../../web3/helpers'
 import { ProviderType } from '../../web3/types'
@@ -22,14 +22,24 @@ export function WalletArrayComparer(a: WalletRecord[], b: WalletRecord[]) {
     return a.every((wallet, index) => WalletComparer(wallet, b[index]))
 }
 
-export function TokenComparer(a: ERC20TokenRecord | null, b: ERC20TokenRecord | null) {
+export function ERC20TokenComparer(a: ERC20TokenRecord | null, b: ERC20TokenRecord | null) {
     if (!a || !b) return false
     return isSameAddress(a.address, b.address)
 }
 
-export function TokenArrayComparer(a: ERC20TokenRecord[], b: ERC20TokenRecord[]) {
+export function ERC20TokenArrayComparer(a: ERC20TokenRecord[], b: ERC20TokenRecord[]) {
     if (a.length !== b.length) return false
-    return a.every((token, index) => TokenComparer(token, b[index]))
+    return a.every((token, index) => ERC20TokenComparer(token, b[index]))
+}
+
+export function ERC721TokenComparer(a: ERC721TokenRecord | null, b: ERC721TokenRecord | null) {
+    if (!a || !b) return false
+    return a.tokenId === b.tokenId
+}
+
+export function ERC721TokenArrayComparer(a: ERC721TokenRecord[], b: ERC721TokenRecord[]) {
+    if (a.length !== b.length) return false
+    return a.every((token, index) => ERC721TokenComparer(token, b[index]))
 }
 
 export function selectMaskbookWallet(wallet: WalletRecord) {
