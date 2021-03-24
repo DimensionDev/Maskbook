@@ -122,7 +122,7 @@ export namespace SocialNetworkUI {
             supportedInputTypes: NewPostCompositionSupportedTypes
         }
         export interface NewPostCompositionSupportedTypes {
-            image?: boolean
+            image: boolean
             text: boolean
         }
         export interface CommentComposition {

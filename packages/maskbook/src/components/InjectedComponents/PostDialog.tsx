@@ -72,6 +72,7 @@ export interface PostDialogUIProps extends withClasses<never> {
     onlyMyself: boolean
     shareToEveryone: boolean
     imagePayload: boolean
+    imagePayloadUnchangeable: boolean
     maxLength?: number
     availableShareTarget: Array<Profile | Group>
     currentShareTarget: Array<Profile | Group>
@@ -225,6 +226,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 }
                                 onClick={() => props.onImagePayloadSwitchChanged(!props.imagePayload)}
                                 data-testid="image_chip"
+                                disabled={props.imagePayloadUnchangeable}
                             />
                             {isDebug && (
                                 <Chip label="Post metadata inspector" onClick={() => setShowPostMetadata((e) => !e)} />
@@ -265,6 +267,12 @@ export interface PostDialogProps extends Omit<Partial<PostDialogUIProps>, 'open'
     typedMessageMetadata?: ReadonlyMap<string, any>
 }
 export function PostDialog({ reason: props_reason = 'timeline', ...props }: PostDialogProps) {
+    // network support
+    const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
+    const textOnly = networkSupport?.text === true && networkSupport.image === false
+    const imageOnly = networkSupport?.image === true && networkSupport.text === false
+    const imagePayloadButtonForzen = textOnly || imageOnly
+
     const { t, i18n } = useI18N()
     const [onlyMyselfLocal, setOnlyMyself] = useState(false)
     const onlyMyself = props.onlyMyself ?? onlyMyselfLocal
@@ -310,7 +318,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                 const activeUI = activatedSocialNetworkUI
                 // TODO: move into the plugin system
                 const redPacketMetadata = RedPacketMetadataReader(typedMessageMetadata)
-                if (imagePayloadEnabled) {
+                if (imagePayloadEnabled || imageOnly) {
                     const isRedPacket = redPacketMetadata.ok
                     const isErc20 =
                         redPacketMetadata.ok &&
@@ -427,7 +435,8 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             shareToEveryone={shareToEveryoneLocal}
             onlyMyself={onlyMyself}
             availableShareTarget={availableShareTarget}
-            imagePayload={imagePayloadEnabled}
+            imagePayload={!textOnly && (imageOnly || imagePayloadEnabled)}
+            imagePayloadUnchangeable={imagePayloadButtonForzen}
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
             postContent={postBoxContent}
