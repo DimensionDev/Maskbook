@@ -1,6 +1,8 @@
 import { createGlobalSettings } from '../../settings/createSettings'
+import { i18n } from '../../utils/i18n-next'
 import { ProviderType } from '../../web3/types'
 import { PLUGIN_IDENTIFIER } from './constants'
+import { TransactionProvider } from './types'
 
 /**
  * The address of the selected wallet
@@ -32,5 +34,17 @@ export const currentIsMetamaskLockedSettings = createGlobalSettings<boolean>(
     true,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
+/**
+ * The default transaction data provider
+ */
+export const currentTransactionDataProviderSettings = createGlobalSettings<TransactionProvider>(
+    `${PLUGIN_IDENTIFIER}+transactionProvider`,
+    TransactionProvider.ZERION,
+    {
+        primary: () => i18n.t('plugin_wallet_settings_data_source_primary'),
+        secondary: () => i18n.t('plugin_wallet_settings_data_source_secondary'),
     },
 )

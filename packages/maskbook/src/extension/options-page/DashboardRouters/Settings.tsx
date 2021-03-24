@@ -33,11 +33,14 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
 import { Flags } from '../../../utils/flags'
-import { currentDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
-import { resolveDataProviderName, resolveTradeProviderName } from '../../../plugins/Trader/pipes'
+import { currentTrendingDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
+import { resolveDataProviderName as resolveTraderDataProviderName, resolveTradeProviderName } from '../../../plugins/Trader/pipes'
 import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
 import { ChainId } from '../../../web3/types'
 import { extendsTheme } from '../../../utils/theme'
+import { resolveDataProviderName as resolveWalletDataProviderName } from '../../../plugins/Wallet/pipes'
+import { TransactionProvider } from '../../../plugins/Wallet/types'
+import { currentTransactionDataProviderSettings } from '../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -191,9 +194,16 @@ export default function DashboardSettingsRouter() {
                                 <SettingsUIEnum
                                     classes={listStyle}
                                     enumObject={DataProvider}
-                                    getText={resolveDataProviderName}
+                                    getText={resolveTraderDataProviderName}
                                     icon={<TrendingUpIcon />}
-                                    value={currentDataProviderSettings}
+                                    value={currentTrendingDataProviderSettings}
+                                />
+                                <SettingsUIEnum
+                                    classes={listStyle}
+                                    enumObject={TransactionProvider}
+                                    getText={resolveWalletDataProviderName}
+                                    icon={<TrendingUpIcon />}
+                                    value={currentTransactionDataProviderSettings}
                                 />
                                 <SettingsUIEnum
                                     classes={listStyle}

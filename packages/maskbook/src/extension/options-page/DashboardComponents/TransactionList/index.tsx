@@ -29,7 +29,7 @@ export function TransactionList() {
         loading: transactionsLoading,
         error: transactionsError,
         retry: transactionsRetry,
-    } = useTransactions(account, TransactionProvider.ZERION)
+    } = useTransactions(account)
 
     if (transactionsLoading)
         return (
