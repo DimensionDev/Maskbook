@@ -30,7 +30,8 @@ function collectPostsInstagramInner(
                     return node
                 }
                 rootNodeProxy = metadata
-                postContentNode = metadata.realCurrent!
+                postContentNode =
+                    metadata.realCurrent!.querySelector<HTMLDivElement>('header+div+div') || metadata.realCurrent!
             })()
 
             store.set(metadata, info)
