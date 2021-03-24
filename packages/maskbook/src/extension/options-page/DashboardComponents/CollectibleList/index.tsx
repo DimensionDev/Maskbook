@@ -1,13 +1,11 @@
 import { Box, Button, makeStyles, Skeleton, Typography } from '@material-ui/core'
 import { CollectibleCard } from './CollectibleCard'
-import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
-import { AssetProvider } from '../../../../plugins/Wallet/types'
-import { useAccount } from '../../../../web3/hooks/useAccount'
 import { createERC1155Token, createERC721Token } from '../../../../web3/helpers'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
 import { createContext } from 'react'
+import type { AssetInCard } from '../../../../plugins/Wallet/apis/opensea'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -15,6 +13,10 @@ export const CollectibleContext = createContext<{
 
 export interface CollectibleListProps {
     wallet: WalletRecord
+    collectibles: AssetInCard[]
+    collectiblesLoading: boolean
+    collectiblesError: Error | undefined
+    collectiblesRetry: () => void
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -36,16 +38,9 @@ const useStyles = makeStyles((theme) => ({
 
 export function CollectibleList(props: CollectibleListProps) {
     const { wallet } = props
-
-    const account = useAccount()
     const chainId = useChainId()
     const classes = useStyles()
-    const {
-        value: collectibles = [],
-        loading: collectiblesLoading,
-        error: collectiblesError,
-        retry: collectiblesRetry,
-    } = useCollectibles(account, AssetProvider.OPENSEAN)
+    const { collectibles, collectiblesLoading, collectiblesError, collectiblesRetry } = props
 
     if (collectiblesLoading)
         return (
@@ -94,17 +89,17 @@ export function CollectibleList(props: CollectibleListProps) {
                         const key = `${formatEthereumAddress(x.asset_contract.address)}_${x.token_id}`
                         switch (x.asset_contract.schema_name) {
                             case 'ERC721':
-                                return !wallet.erc721_token_blacklist.has(key)
+                                return wallet.erc721_token_blacklist ? !wallet.erc721_token_blacklist.has(key) : true
                             case 'ERC1155':
-                                return !wallet.erc1155_token_blacklist.has(key)
+                                return wallet.erc1155_token_blacklist ? !wallet.erc1155_token_blacklist.has(key) : true
                             default:
                                 return false
                         }
                     })
                     .map((y) => (
-                        <div className={classes.card} key={y.id}>
+                        <div className={classes.card} key={y.token_id}>
                             <CollectibleCard
-                                key={y.id}
+                                key={y.token_id}
                                 wallet={wallet}
                                 token={
                                     y.asset_contract.schema_name === 'ERC721'
@@ -115,21 +110,21 @@ export function CollectibleList(props: CollectibleListProps) {
                                               y.name,
                                               y.asset_contract.symbol,
                                               '',
-                                              y.image_url ?? y.image_preview_url ?? '',
+                                              y.image,
                                           )
                                         : createERC1155Token(
                                               chainId,
                                               y.token_id,
                                               y.asset_contract.address,
                                               y.name,
-                                              y.image_url ?? y.image_preview_url ?? '',
+                                              y.image,
                                           )
                                 }
                                 link={y.permalink}
                             />
                             <div className={classes.description}>
                                 <Typography color="textSecondary" variant="body2">
-                                    {y.name ?? y.collection.slug}
+                                    {y.name}
                                 </Typography>
                             </div>
                         </div>

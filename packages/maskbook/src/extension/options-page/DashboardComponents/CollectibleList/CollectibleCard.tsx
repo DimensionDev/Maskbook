@@ -2,7 +2,6 @@ import { Card, createStyles, Link, makeStyles } from '@material-ui/core'
 import { Image } from '../../../../components/shared/Image'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
-import { useI18N } from '../../../../utils/i18n-next-ui'
 import type { ERC1155TokenDetailed, ERC721TokenDetailed } from '../../../../web3/types'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 
@@ -32,19 +31,17 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface CollectibleCardProps {
-    link: string
+    link: string | undefined
     wallet: WalletRecord
     token: ERC721TokenDetailed | ERC1155TokenDetailed
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
     const { wallet, token } = props
-
-    const { t } = useI18N()
     const classes = useStyles(props)
 
     return (
-        <Link target="_blank" rel="noopener noreferrer" href={props.link}>
+        <Link target="_blank" rel="noopener noreferrer" href={props.link ?? ''}>
             <Card className={classes.root} style={{ width: 160, height: 220 }}>
                 <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                 {token.tokenURI ? (

@@ -5,6 +5,7 @@ import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSna
 import {
     CreditCard as CreditCardIcon,
     Hexagon as HexagonIcon,
+    Octagon as OctagonIcon,
     Clock as ClockIcon,
     Info as InfoIcon,
     Trash2 as TrashIcon,
@@ -66,6 +67,12 @@ import { formatBalance, formatEthereumAddress } from '../../../plugins/Wallet/fo
 import { useTokenTransferCallback } from '../../../web3/hooks/useTokenTransferCallback'
 import { WalletAssetsTableContext } from '../DashboardComponents/WalletAssetsTable'
 import { CollectibleContext } from '../DashboardComponents/CollectibleList'
+import type { AbiItem } from 'web3-utils'
+import { createContract } from '../../../web3/hooks/useContract'
+import type { ERC721 } from '../../../contracts/ERC721'
+import ERC721ABI from '../../../../abis/ERC721.json'
+import { ERC1155_INTERFACE_ID, ERC721_INTERFACE_ID } from '../../../web3/constants'
+import type { AssetInCard } from '../../../plugins/Wallet/apis/opensea'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -392,6 +399,121 @@ export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<Wal
                 footer={
                     <DebounceButton disabled={!token} variant="contained" onClick={onSubmit}>
                         {t('add_token')}
+                    </DebounceButton>
+                }
+            />
+        </DashboardDialogCore>
+    )
+}
+//#endregion
+
+//#region wallet add ERC20 token dialog
+export function DashboardWalletAddERC721TokenDialog(
+    props: WrappedDialogProps<
+        WalletProps & {
+            tokenIdsLoaded: string[]
+            setAddedAssets: (assetInCard: AssetInCard) => void
+        }
+    >,
+) {
+    const { t } = useI18N()
+    const { wallet, tokenIdsLoaded, setAddedAssets } = props.ComponentProps!
+    const [id, setId] = useState('')
+    const [address, setAddress] = useState('')
+    const account = useAccount()
+
+    const onSubmit = useSnackbarCallback(
+        async () => {
+            if (tokenIdsLoaded.includes(id)) throw new Error(t('wallet_add_nft_id_exist'))
+
+            const contract = createContract<ERC721>(account, address, ERC721ABI as AbiItem[])
+
+            if (!contract) throw new Error(t('wallet_add_nft_invalid_address'))
+
+            // check if is erc721 contract
+            try {
+                const isERC1155 = await contract.methods.supportsInterface(ERC1155_INTERFACE_ID).call({ from: account })
+                const isERC721 = await contract.methods.supportsInterface(ERC721_INTERFACE_ID).call({ from: account })
+                if (!isERC721) throw new Error(t('wallet_add_nft_invalid_721_asset_address'))
+                if (isERC1155) throw new Error(t('wallet_add_nft_1155_asset_comming_soon'))
+            } catch (e) {
+                throw new Error(t('wallet_add_nft_invalid_721_asset_address'))
+            }
+
+            // check ownership
+            try {
+                // Note: call `ownerOf()` to some address would fail since we have not supported erc1155, e.g. OPENSTORE:
+                // https://opensea.io/assets/0x495f947276749ce646f68ac8c248420045cb7b5e/89830317166460882891126040282455488408374211647939875178961827541662050549761
+                const owner = await contract.methods.ownerOf(id).call({ from: account })
+                console.log('owner', owner)
+                if (owner.toLowerCase() !== account.toLowerCase()) throw new Error(t('wallet_add_nft_invalid_owner'))
+            } catch (e) {
+                throw new Error(t('wallet_add_nft_invalid_owner'))
+            }
+
+            // retrieve tokenURI
+            let tokenURI: string | null = null
+            try {
+                // Note: call `tokenURI()` to some address would fail since we have not supported erc1155, e.g. cryptokitties
+                // https://opensea.io/assets/0x06012c8cf97bead5deae237070f9587f8e7a266d/1800408
+                tokenURI = await contract.methods.tokenURI(id).call({ from: account })
+            } catch (e) {}
+
+            let assetInCard: AssetInCard = {
+                asset_contract: {
+                    address,
+                    symbol: '',
+                    schema_name: 'ERC721',
+                },
+                token_id: id,
+                name: '',
+                image: '',
+                permalink: '',
+            }
+
+            if (tokenURI) {
+                const response = await fetch(tokenURI)
+                const data = await response.json()
+                assetInCard.name = data.name
+                assetInCard.image = data.image
+            }
+
+            setAddedAssets(assetInCard)
+            // Note: Rare Pizzas Box works fine
+            // https://opensea.io/assets/0x4ae57798aef4af99ed03818f83d2d8aca89952c7/182
+        },
+        [],
+        props.onClose,
+    )
+    return (
+        <DashboardDialogCore {...props}>
+            <DashboardDialogWrapper
+                icon={<OctagonIcon />}
+                iconColor="#699CF7"
+                primary={t('add_asset')}
+                content={
+                    <div>
+                        <TextField
+                            onChange={(e) => setAddress(e.target.value)}
+                            required
+                            autoFocus
+                            label={t('wallet_add_nft_address')}
+                            placeholder={t('wallet_add_nft_address_placeholder')}
+                        />
+                        <TextField
+                            onChange={(e) => setId(e.target.value)}
+                            required
+                            label={t('wallet_add_nft_id')}
+                            placeholder={t('wallet_add_nft_id_placeholder')}
+                        />
+                    </div>
+                }
+                footer={
+                    <DebounceButton
+                        disabled={id.length === 0 || address.length === 0}
+                        variant="contained"
+                        onClick={onSubmit}>
+                        {t('add_asset')}
                     </DebounceButton>
                 }
             />
