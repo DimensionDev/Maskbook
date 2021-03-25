@@ -29,6 +29,7 @@ export interface TypedMessageRendererProps<T extends TypedMessage> {
      * The TypedMessage
      */
     message: T
+    image?: string | Blob
     allowTextEnlarge?: boolean
     afterPreviousMetadata?: React.ReactNode
     beforeLatterMetadata?: React.ReactNode
@@ -92,14 +93,40 @@ registerTypedMessageRenderer('anchor', {
     priority: 0,
 })
 
+function isBase64(str: string) {
+    if (str === '' || str.trim() === '') { return false; }
+    try {
+        return btoa(atob(str)) == str;
+    } catch (err) {
+        return false;
+    }
+}
+
 export const DefaultTypedMessageImageRenderer = memo(function DefaultTypedMessageImageRenderer(
     props: TypedMessageRendererProps<TypedMessageImage>,
 ) {
     const { image, width, height } = props.message
+    // if image is a string, & that string is base64 compliant, prepend with b64 delim
+    const isBase64Image = typeof (image) == 'string' && isBase64(image)
+    const src = isBase64Image ? `data:image/png;base64,${image}` : image
+
+    if (isBase64Image) {
+        if (typeof src == 'string') {
+            return renderWithMetadata(
+                props,
+                <Typography variant="body1" data-testid="image_payload">
+                    <img src={src} width="100%" />
+                </Typography>,
+            )
+        }
+
+        throw Error("src is expected to be a string")
+    }
+
     return renderWithMetadata(
         props,
         <Typography variant="body1" data-testid="image_payload">
-            <Image src={image} width={width} height={height} />
+            <Image src={src} width={width} height={height} />
         </Typography>,
     )
 })
