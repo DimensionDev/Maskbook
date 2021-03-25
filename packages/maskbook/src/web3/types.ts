@@ -81,31 +81,6 @@ interface TokenDetailedMap {
 
 export type TokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
 
-export interface AssetDetailed {
-    token: EtherTokenDetailed | ERC20TokenDetailed
-    /**
-     * The chain name of assets
-     */
-    chain: 'eth' | string
-    /**
-     * The total balance of token
-     */
-    balance: string
-    /**
-     * The estimated price
-     */
-    price?: {
-        [key in CurrencyType]: string
-    }
-    /**
-     * The estimated value
-     */
-    value?: {
-        [key in CurrencyType]: string
-    }
-    logoURL?: string
-}
-
 // Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
 export enum ChainId {
     Mainnet = 1,

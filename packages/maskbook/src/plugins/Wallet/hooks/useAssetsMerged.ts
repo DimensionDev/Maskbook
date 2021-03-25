@@ -1,17 +1,17 @@
 import { uniqBy } from 'lodash-es'
-import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
-import { CONSTANTS } from '../constants'
-import type { AssetDetailed } from '../types'
+import { CONSTANTS } from '../../../web3/constants'
+import { useChainId } from '../../../web3/hooks/useChainState'
+import { useConstant } from '../../../web3/hooks/useConstant'
+import { formatChecksumAddress } from '../formatter'
 import { getTokenUSDValue } from '../helpers'
-import { useChainId } from './useChainState'
-import { useConstant } from './useConstant'
+import type { AssetDetailed } from '../types'
 
 /**
  * Merge multiple token lists into one which sorted by balance.
  * The order of result values is determined by the order they occur in the array.
  * @param listOfTokens
  */
-export function useAssetsDetailedMerged(...listOfTokens: AssetDetailed[][]) {
+export function useAssetsMerged(...listOfTokens: AssetDetailed[][]) {
     const chainId = useChainId()
     const ETH_ADDRSS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     return uniqBy(

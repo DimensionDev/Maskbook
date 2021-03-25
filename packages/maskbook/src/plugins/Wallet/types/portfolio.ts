@@ -1,7 +1,6 @@
 import type { ZerionTransactionDirection } from './zerion'
 import type { DebankTransactionDirection } from './debank'
-
-export enum TransactionType {}
+import type { CurrencyType, ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 
 export type TransactionDirection = ZerionTransactionDirection | DebankTransactionDirection
 
@@ -35,4 +34,29 @@ export enum PortfolioProvider {
 
 export enum AssetProvider {
     OPENSEAN,
+}
+
+export interface AssetDetailed {
+    token: EtherTokenDetailed | ERC20TokenDetailed
+    /**
+     * The chain name of assets
+     */
+    chain: 'eth' | string
+    /**
+     * The total balance of token
+     */
+    balance: string
+    /**
+     * The estimated price
+     */
+    price?: {
+        [key in CurrencyType]: string
+    }
+    /**
+     * The estimated value
+     */
+    value?: {
+        [key in CurrencyType]: string
+    }
+    logoURL?: string
 }

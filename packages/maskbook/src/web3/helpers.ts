@@ -8,8 +8,6 @@ import {
     ERC20TokenDetailed,
     EthereumTokenType,
     EtherTokenDetailed,
-    CurrencyType,
-    AssetDetailed,
     ERC721TokenDetailed,
     ERC1155TokenDetailed,
 } from './types'
@@ -149,6 +147,3 @@ export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionRe
         return accumulate
     }, {} as { [eventName: string]: EventLog })
 }
-
-export const getTokenUSDValue = (token: AssetDetailed) =>
-    token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0

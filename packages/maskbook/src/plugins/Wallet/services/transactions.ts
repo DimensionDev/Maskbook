@@ -2,12 +2,12 @@ import { isNil } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import {
     DebankTransactionDirection,
-    HISTORY_RESPONSE,
     Transaction,
     ZerionTransactionItem,
     PortfolioProvider,
     ZerionRBDTransactionType,
     ZerionTransactionStatus,
+    HistoryResponse,
 } from '../types'
 import * as DeBankAPI from '../apis/debank'
 import * as ZerionApi from '../apis/zerion'
@@ -25,7 +25,7 @@ export async function getTransactionList(address: string, provider: PortfolioPro
     return []
 }
 
-function fromDeBank({ cate_dict, history_list, token_dict }: HISTORY_RESPONSE['data']) {
+function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['data']) {
     return history_list
         .filter((transaction) => transaction.tx?.name ?? transaction.cate_id)
         .filter(({ cate_id }) => cate_id !== 'approve')

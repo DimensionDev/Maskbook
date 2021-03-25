@@ -3,19 +3,19 @@ export enum DebankTransactionDirection {
     RECEIVE = 'receive',
 }
 
-export interface DICT_ITEM {
+export interface DictItem {
     id: string
     cn: string
     en: string
 }
 
-export interface PROJECT_ITEM {
+export interface PorjectItem {
     id: string
     log_url: string
-    name: Omit<DICT_ITEM, 'id'>
+    name: Omit<DictItem, 'id'>
 }
 
-export interface TOKEN_ITEM {
+export interface TokenItem {
     decimals: number
     display_symbol?: string
     id: string
@@ -31,8 +31,8 @@ export interface TOKEN_ITEM {
     time_at: number
 }
 
-export interface HISTRORY_ITEM {
-    cate_id: keyof HISTORY_RESPONSE['data']['cate_dict']
+export interface HistoryItem {
+    cate_id: keyof HistoryResponse['data']['cate_dict']
     // TODO:
     // implement debt_liquidated
     debt_liquidated: null
@@ -80,22 +80,49 @@ export interface Record {
     value: number
 }
 
-export interface HISTORY_RESPONSE {
-    data: {
-        cate_dict: {
-            approve: DICT_ITEM
-            receive: DICT_ITEM
-            send: DICT_ITEM
-            spot_trade: DICT_ITEM
-        }
-        history_list: HISTRORY_ITEM[]
-        project_dict: {
-            [key in string]: PROJECT_ITEM
-        }
-        token_dict: {
-            [key in string | 'eth']: TOKEN_ITEM
-        }
+export interface HistoryRecord {
+    cate_dict: {
+        approve: DictItem
+        receive: DictItem
+        send: DictItem
+        spot_trade: DictItem
     }
+    history_list: HistoryItem[]
+    project_dict: {
+        [key in string]: PorjectItem
+    }
+    token_dict: {
+        [key in string | 'eth']: TokenItem
+    }
+}
+
+export interface BalanceRecord {
+    balance: number
+    chain: 'eth' | 'bsc' | string
+    decimals: number
+    display_symbol: null
+    id: 'eth' | string
+    is_core: boolean
+    is_swap_common: boolean
+    is_swap_hot: null
+    is_verified: boolean
+    logo_url: string
+    name: string
+    optimized_symbol: string
+    price: number
+    symbol: string
+    time_at: null
+}
+
+export interface HistoryResponse {
+    data: HistoryRecord
+    error_code: number
+    _cache_seconds: number
+    _seconds: number
+}
+
+export interface BalanceListResponse {
+    data?: BalanceRecord[]
     error_code: number
     _cache_seconds: number
     _seconds: number
