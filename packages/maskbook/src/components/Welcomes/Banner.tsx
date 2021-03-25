@@ -39,7 +39,7 @@ export function BannerUI(props: BannerUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     return props.nextStep === 'hidden' ? null : (
         <IconButton className={classes.buttonText} onClick={props.nextStep.onClick}>
-            <MaskbookSharpIcon />
+            <MaskbookSharpIcon color="primary" />
         </IconButton>
     )
 }

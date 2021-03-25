@@ -12,5 +12,5 @@ export interface PostDialogIconProps extends withClasses<SvgIconClassKey> {
 
 export function PostDialogIcon(props: PostDialogIconProps) {
     const classes = useStylesExtends(useStyles(), props)
-    return <MaskbookSharpIcon classes={classes} onClick={props.onClick} />
+    return <MaskbookSharpIcon classes={classes} onClick={props.onClick} color="primary" />
 }
