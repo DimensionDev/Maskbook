@@ -2,7 +2,7 @@ import { createStyles, makeStyles, Typography } from '@material-ui/core'
 import type { FC } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import classNames from 'classnames'
-import type { Transaction } from '../../../../plugins/Wallet/services'
+import type { Transaction } from '../../../../plugins/Wallet/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

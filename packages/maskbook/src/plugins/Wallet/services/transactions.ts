@@ -1,9 +1,16 @@
-import { TransactionProvider } from '../types'
+import {
+    Transaction,
+    TransactionDirection,
+    TransactionProvider,
+    DebankTransactionDirection,
+    HISTORY_RESPONSE,
+} from '../types'
 import * as DeBankAPI from '../apis/debank'
+import * as ZerionAPI from '../apis/zerion'
 import { isNil } from 'lodash-es'
 // TOOD:
 // unify transaction type from different transaction provider
-export type Transaction = ReturnType<typeof fromDeBank>[number]
+// export type Transaction = ReturnType<typeof fromDeBank>[number]
 
 export async function getTransactionList(address: string, provider: TransactionProvider): Promise<Transaction[]> {
     if (provider === TransactionProvider.DEBANK) {
@@ -14,7 +21,7 @@ export async function getTransactionList(address: string, provider: TransactionP
     return []
 }
 
-function fromDeBank({ cate_dict, history_list, token_dict }: DeBankAPI.HISTORY_RESPONSE['data']) {
+function fromDeBank({ cate_dict, history_list, token_dict }: HISTORY_RESPONSE['data']) {
     return history_list
         .filter((transaction) => transaction.tx?.name ?? transaction.cate_id)
         .filter(({ cate_id }) => cate_id !== 'approve')
@@ -38,7 +45,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: DeBankAPI.HISTORY_R
                             name: token_dict[token_id].name,
                             symbol: token_dict[token_id].optimized_symbol,
                             address: token_id,
-                            direction: 'send',
+                            direction: DebankTransactionDirection.SEND,
                             amount,
                         })),
                     ...transaction.receives
@@ -47,7 +54,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: DeBankAPI.HISTORY_R
                             name: token_dict[token_id].name,
                             symbol: token_dict[token_id].optimized_symbol,
                             address: token_id,
-                            direction: 'receive',
+                            direction: DebankTransactionDirection.RECEIVE,
                             amount,
                         })),
                 ],
@@ -57,3 +64,5 @@ function fromDeBank({ cate_dict, history_list, token_dict }: DeBankAPI.HISTORY_R
             }
         })
 }
+
+function fromZerion() {}
