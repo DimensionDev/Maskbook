@@ -6,6 +6,8 @@ import { useChainId } from '../../../../web3/hooks/useChainState'
 import { formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
 import { createContext } from 'react'
 import type { Collectible } from '../../../../plugins/Wallet/types'
+import AutoResize from 'react-virtualized-auto-sizer'
+import { FixedSizeGrid } from 'react-window'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -81,55 +83,74 @@ export function CollectibleList(props: CollectibleListProps) {
             </Box>
         )
 
+    const dataSource = collectibles.filter((x) => {
+        const key = `${formatEthereumAddress(x.asset_contract.address)}_${x.token_id}`
+        switch (x.asset_contract.schema_name) {
+            case 'ERC721':
+                return wallet.erc721_token_blacklist ? !wallet.erc721_token_blacklist.has(key) : true
+            case 'ERC1155':
+                return wallet.erc1155_token_blacklist ? !wallet.erc1155_token_blacklist.has(key) : true
+            default:
+                return false
+        }
+    })
+
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
-            <Box className={classes.root}>
-                {collectibles
-                    .filter((x) => {
-                        const key = `${formatEthereumAddress(x.asset_contract.address)}_${x.token_id}`
-                        switch (x.asset_contract.schema_name) {
-                            case 'ERC721':
-                                return wallet.erc721_token_blacklist ? !wallet.erc721_token_blacklist.has(key) : true
-                            case 'ERC1155':
-                                return wallet.erc1155_token_blacklist ? !wallet.erc1155_token_blacklist.has(key) : true
-                            default:
-                                return false
-                        }
-                    })
-                    .map((y) => (
-                        <div className={classes.card} key={y.token_id}>
-                            <CollectibleCard
-                                wallet={wallet}
-                                token={
-                                    y.asset_contract.schema_name === 'ERC721'
-                                        ? createERC721Token(
-                                              chainId,
-                                              y.token_id,
-                                              y.asset_contract.address,
-                                              y.name,
-                                              y.asset_contract.symbol,
-                                              '',
-                                              '',
-                                              y.image,
-                                          )
-                                        : createERC1155Token(
-                                              chainId,
-                                              y.token_id,
-                                              y.asset_contract.address,
-                                              y.name,
-                                              y.image,
-                                          )
+            {/*<Box className={classes.root}>*/}
+            <AutoResize>
+                {({ width, height }) => {
+                    return (
+                        <FixedSizeGrid
+                            columnWidth={176}
+                            rowHeight={260}
+                            columnCount={4}
+                            height={height}
+                            rowCount={Math.ceil(dataSource.length / 4)}
+                            width={width}>
+                            {({ columnIndex, rowIndex, style }) => {
+                                const y = dataSource[rowIndex * 4 + columnIndex]
+                                if (y) {
+                                    return (
+                                        <div className={classes.card} key={y.token_id} style={style}>
+                                            <CollectibleCard
+                                                wallet={wallet}
+                                                token={
+                                                    y.asset_contract.schema_name === 'ERC721'
+                                                        ? createERC721Token(
+                                                              chainId,
+                                                              y.token_id,
+                                                              y.asset_contract.address,
+                                                              y.name,
+                                                              y.asset_contract.symbol,
+                                                              '',
+                                                              '',
+                                                              y.image,
+                                                          )
+                                                        : createERC1155Token(
+                                                              chainId,
+                                                              y.token_id,
+                                                              y.asset_contract.address,
+                                                              y.name,
+                                                              y.image,
+                                                          )
+                                                }
+                                                link={y.permalink}
+                                            />
+                                            <div className={classes.description}>
+                                                <Typography color="textSecondary" variant="body2">
+                                                    {y.name}
+                                                </Typography>
+                                            </div>
+                                        </div>
+                                    )
                                 }
-                                link={y.permalink}
-                            />
-                            <div className={classes.description}>
-                                <Typography color="textSecondary" variant="body2">
-                                    {y.name}
-                                </Typography>
-                            </div>
-                        </div>
-                    ))}
-            </Box>
+                                return null
+                            }}
+                        </FixedSizeGrid>
+                    )
+                }}
+            </AutoResize>
         </CollectibleContext.Provider>
     )
 }
