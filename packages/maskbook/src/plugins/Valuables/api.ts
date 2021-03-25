@@ -11,11 +11,7 @@ export async function getTweetBid(id: string) {
 
     if (results.length === 0) return
 
-    // return results[0].amount_usd
-    return {
-        amount_eth: results[0].amount_eth,
-        amount_usd: results[0].amount_usd,
-    }
+    return results[0]
 }
 
 /*

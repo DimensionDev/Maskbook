@@ -8,11 +8,7 @@ Check for latest bids on tweets, and if found, render them on twitter post.
 
 API endpoint: <https://v.cent.co/data/tweet-txn/latest?tweetID=[TWEETID]>
 
-Most rendering logic resides in UI/BidCard.tsx, fetching is currently done in api.tsx.
-
-### Improvements
-
-ETH text could be replaced by an ethereum logo instead. Also rendering with images and in quote tweets could be improved.
+Most rendering logic resides in UI/BidCard.tsx, fetching is currently done in api.ts
 
 ### Issues
 
