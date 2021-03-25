@@ -46,6 +46,7 @@ export const Flags = {
     airdrop_composition_dialog_enabled: false,
     metamask_support_enabled: webOnly,
     toolbar_enabled: webOnly,
+    toolbox_enabled: webOnly,
     /* construct LBP for all ERC20 tokens */
     LBP_enabled: false,
     LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
