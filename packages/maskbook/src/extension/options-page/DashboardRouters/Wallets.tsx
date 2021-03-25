@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { Button } from '@material-ui/core'
 import { makeStyles, createStyles, ThemeProvider } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -7,7 +7,7 @@ import RestoreIcon from '@material-ui/icons/Restore'
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
 import {
-    DashboardWalletCreateDialog,
+    DashboardWalletImportDialog,
     DashboardWalletAddERC20TokenDialog,
     DashboardWalletHistoryDialog,
     DashboardWalletErrorDialog,
@@ -16,10 +16,12 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { Flags } from '../../../utils/flags'
-import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
+import { useWallet, useWalletHD, useWallets } from '../../../plugins/Wallet/hooks/useWallet'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { extendsTheme } from '../../../utils/theme'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
 
 //#region theme
 const walletsTheme = extendsTheme((theme) => ({
@@ -86,23 +88,37 @@ export default function DashboardWalletsRouter() {
     const classes = useStyles()
     const { create, error } = useQueryParams(['create', 'error', 'rpid'])
 
-    const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
+    const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
     const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
     const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const selectedWallet = useWallet()
+    const hdWallet = useWalletHD()
 
-    // show create dialog
-    useEffect(() => {
-        if (create) openWalletCreate()
-    }, [create, openWalletCreate])
+    //#region create or import wallet
+    const [, setOpenCreateWalletDialog] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
 
+    const onCreate = useCallback(() => setOpenCreateWalletDialog({ open: true }), [])
+    const onImport = useCallback(() => openWalletImport(), [])
+
+    const onCreateOrImportWallet = useCallback(() => {
+        onImport()
+    }, [onImport])
+    //#endregion
+
+    //#region open dialogs externally
     // show error dialog
     useEffect(() => {
         if (error) openWalletError()
     }, [error, openWalletError])
+
+    // show create dialog
+    useEffect(() => {
+        if (create) onImport()
+    }, [create, onImport])
+    //#endregion
 
     //#region right icons from mobile devices
     const floatingButtons = [
@@ -110,7 +126,7 @@ export default function DashboardWalletsRouter() {
             icon: <AddIcon />,
             handler: () => {
                 if (selectedWallet) openAddToken({ wallet: selectedWallet })
-                else openWalletCreate()
+                else openWalletImport()
             },
         },
     ]
@@ -147,7 +163,7 @@ export default function DashboardWalletsRouter() {
                 <EthereumStatusBar disableEther BoxProps={{ sx: { justifyContent: 'flex-end' } }} />,
                 <Button
                     variant="contained"
-                    onClick={openWalletCreate}
+                    onClick={onCreateOrImportWallet}
                     endIcon={<AddCircleIcon />}
                     data-testid="create_button">
                     {t('plugin_wallet_on_create')}
@@ -165,7 +181,7 @@ export default function DashboardWalletsRouter() {
             </ThemeProvider>
             {addToken}
             {walletHistory}
-            {walletCreate}
+            {walletImport}
             {walletError}
             {walletRedPacketDetail}
         </DashboardRouterContainer>

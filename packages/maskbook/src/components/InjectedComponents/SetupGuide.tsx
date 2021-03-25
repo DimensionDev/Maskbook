@@ -31,7 +31,6 @@ import { MaskMessage } from '../../utils/messages'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
-import { currentSelectedWalletAddressSettings } from '../../plugins/Wallet/settings'
 import { WalletRPC } from '../../plugins/Wallet/messages'
 
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
@@ -620,15 +619,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap(),
         )
         if (!persona_.hasPrivateKey) throw new Error('invalid persona')
-        const [_, address] = await Promise.all([
-            Services.Identity.setupPersona(persona_.identifier),
-            WalletRPC.importFirstWallet({
-                name: persona_.nickname ?? t('untitled_wallet'),
-                mnemonic: persona_.mnemonic?.words.split(' '),
-                passphrase: '',
-            }),
-        ])
-        if (address) currentSelectedWalletAddressSettings.value = address
+        await Services.Identity.setupPersona(persona_.identifier)
         MaskMessage.events.personaChanged.sendToAll([{ of: persona, owned: true, reason: 'new' }])
     }
     const onCreate = async () => {

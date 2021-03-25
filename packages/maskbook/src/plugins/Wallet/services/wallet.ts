@@ -14,10 +14,7 @@ import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './hel
 import { isSameAddress } from '../../../web3/helpers'
 import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
 import { selectMaskbookWallet } from '../helpers'
-
-// Private key at m/44'/coinType'/account'/change/addressIndex
-// coinType = ether
-const path = "m/44'/60'/0'/0/0"
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
 
 function sortWallet(a: WalletRecord, b: WalletRecord) {
     const address = currentSelectedWalletAddressSettings.value
@@ -108,8 +105,8 @@ export async function updateExoticWalletFromSource(
                 erc1155_token_blacklist: new Set(),
                 erc1155_token_whitelist: new Set(),
                 name: resolveProviderName(provider),
-                passphrase: '',
                 mnemonic: [] as string[],
+                passphrase: '',
                 ...updates.get(address)!,
             }),
         )
@@ -125,7 +122,6 @@ export function createNewWallet(
         | 'address'
         | 'mnemonic'
         | 'eth_balance'
-        | '_data_source_'
         | 'erc20_token_whitelist'
         | 'erc20_token_blacklist'
         | 'erc721_token_whitelist'
@@ -140,13 +136,14 @@ export function createNewWallet(
     return importNewWallet({ mnemonic, ...rec })
 }
 
+export function createMnemonicWords() {
+    return bip39.generateMnemonic().split(' ')
+}
+
 export async function importNewWallet(
-    rec: PartialRequired<
-        Omit<WalletRecord, 'id' | 'eth_balance' | '_data_source_' | 'createdAt' | 'updatedAt'>,
-        'name'
-    >,
+    rec: PartialRequired<Omit<WalletRecord, 'id' | 'eth_balance' | 'createdAt' | 'updatedAt'>, 'name'>,
 ) {
-    const { name, mnemonic = [], passphrase = '' } = rec
+    const { name, path, mnemonic = [], passphrase = '' } = rec
     const address = await getWalletAddress()
     if (!address) throw new Error('cannot get the wallet address')
     if (rec.name === null) rec.name = address.slice(0, 6)
@@ -164,6 +161,7 @@ export async function importNewWallet(
         createdAt: new Date(),
         updatedAt: new Date(),
     }
+    if (rec.path) record.path = path
     if (rec._private_key_) record._private_key_ = rec._private_key_
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet', 'ERC20Token')
@@ -181,7 +179,8 @@ export async function importNewWallet(
             const recover = await recoverWalletFromPrivateKey(rec._private_key_)
             return recover.privateKeyValid ? recover.address : ''
         }
-        return (await recoverWallet(mnemonic, passphrase)).address
+        if (mnemonic.length) return (await recoverWallet(mnemonic, passphrase, path)).address
+        return
     }
 }
 
@@ -208,8 +207,12 @@ export async function removeWallet(address: string) {
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
-export async function recoverWallet(mnemonic: string[], password: string) {
-    const seed = await bip39.mnemonicToSeed(mnemonic.join(' '), password)
+export async function recoverWallet(
+    mnemonic: string[],
+    passphrase: string,
+    path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+) {
+    const seed = await bip39.mnemonicToSeed(mnemonic.join(' '), passphrase)
     const masterKey = HDKey.parseMasterSeed(seed)
     const extendedPrivateKey = masterKey.derive(path).extendedPrivateKey!
     const childKey = HDKey.parseExtendedKey(extendedPrivateKey)
@@ -221,7 +224,9 @@ export async function recoverWallet(mnemonic: string[], password: string) {
         privateKey: walletPrivateKey,
         privateKeyValid: true,
         privateKeyInHex: `0x${buf2hex(walletPrivateKey)}`,
+        path,
         mnemonic,
+        passphrase,
     }
 }
 

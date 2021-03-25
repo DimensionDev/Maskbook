@@ -1,8 +1,10 @@
 import { useMemo, useState, useEffect, useCallback, ChangeEvent, useContext } from 'react'
 import { useAsync, useCopyToClipboard } from 'react-use'
-import { Send as SendIcon } from 'react-feather'
+import BigNumber from 'bignumber.js'
+import { EthereumAddress } from 'wallet.ts'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import {
+    Send as SendIcon,
     CreditCard as CreditCardIcon,
     Hexagon as HexagonIcon,
     Octagon as OctagonIcon,
@@ -53,15 +55,13 @@ import WalletLine from './WalletLine'
 import { isETH, isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { WalletRPC } from '../../../plugins/Wallet/messages'
+import { WalletMessages, WalletRPC } from '../../../plugins/Wallet/messages'
 import { Image } from '../../../components/shared/Image'
 import { MaskbookIconOutlined } from '../../../resources/MaskbookIcon'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import BigNumber from 'bignumber.js'
 import { EthereumMessages } from '../../../plugins/Ethereum/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { EthereumAddress } from 'wallet.ts'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { QRCode } from '../../../components/shared/qrcode'
 import { formatBalance, formatEthereumAddress } from '../../../plugins/Wallet/formatter'
@@ -73,6 +73,9 @@ import { createContract } from '../../../web3/hooks/useContract'
 import type { ERC721 } from '../../../contracts/ERC721'
 import ERC721ABI from '../../../../abis/ERC721.json'
 import { ERC1155_INTERFACE_ID, ERC721_INTERFACE_ID } from '../../../web3/constants'
+import { Flags } from '../../../utils/flags'
+import { useWalletHD } from '../../../plugins/Wallet/hooks/useWallet'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../../plugins/Wallet/constants'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -140,7 +143,7 @@ interface WalletProps {
     wallet: WalletRecord
 }
 
-const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
+const useWalletImportDialogStyle = makeStyles((theme: Theme) =>
     createStyles({
         confirmation: {
             fontSize: 16,
@@ -169,10 +172,12 @@ const useWalletCreateDialogStyle = makeStyles((theme: Theme) =>
     }),
 )
 
-export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
+export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     const { t } = useI18N()
     const state = useState(0)
-    const classes = useWalletCreateDialogStyle()
+    const classes = useWalletImportDialogStyle()
+
+    const hdWallet = useWalletHD()
 
     const [name, setName] = useState('')
     const [passphrase] = useState('')
@@ -314,34 +319,63 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
         height: 112,
     }
 
-    const onSubmit = useSnackbarCallback(
+    const [, setCreateWalletDialogOpen] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
+
+    const onCreate = useCallback(
+        (name: string) => {
+            if (hdWallet) return
+            setCreateWalletDialogOpen({
+                open: true,
+                name,
+            })
+        },
+        [hdWallet?.address, setCreateWalletDialogOpen],
+    )
+    const onDeriveOrImport = useSnackbarCallback(
         async () => {
-            if (state[0] === 0) {
-                await WalletRPC.createNewWallet({
-                    name,
-                    passphrase,
-                })
-            }
-            if (state[0] === 1) {
-                await WalletRPC.importNewWallet({
-                    name,
-                    mnemonic: mnemonic.split(' '),
-                    passphrase: '',
-                })
-            }
-            if (state[0] === 2) {
-                const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privKey)
-                if (!privateKeyValid) throw new Error(t('import_failed'))
-                await WalletRPC.importNewWallet({
-                    name,
-                    address,
-                    _private_key_: privKey,
-                })
+            switch (state[0]) {
+                case 0:
+                    if (!hdWallet) return
+                    await WalletRPC.deriveWalletFromPhrase(name, hdWallet.mnemonic, hdWallet.passphrase)
+                    break
+                case 1:
+                    const words = mnemonic.split(' ')
+                    await WalletRPC.importNewWallet({
+                        name,
+                        path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+                        mnemonic: words,
+                        passphrase: '',
+                    })
+                    await WalletRPC.addPhrase({
+                        path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
+                        mnemonic: words,
+                        passphrase: '',
+                    })
+                    break
+                case 2:
+                    const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privKey)
+                    if (!privateKeyValid) throw new Error(t('import_failed'))
+                    await WalletRPC.importNewWallet({
+                        name,
+                        address,
+                        _private_key_: privKey,
+                    })
+                    break
+                default:
+                    break
             }
         },
-        [state[0], name, passphrase, mnemonic, privKey],
+        [state[0], name, passphrase, mnemonic, privKey, hdWallet?.address],
         props.onClose,
     )
+    const onSubmit = useCallback(async () => {
+        if (state[0] !== 0 || hdWallet) {
+            await onDeriveOrImport()
+            return
+        }
+        props.onClose()
+        onCreate(name)
+    }, [state[0], name, hdWallet?.address, onCreate, onDeriveOrImport])
 
     return (
         <DashboardDialogCore {...props}>
@@ -360,7 +394,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps<object>) {
                                 !(state[0] === 2 && name && privKey)) ||
                             checkInputLengthExceed(name)
                         }>
-                        {t('create')}
+                        {t(state[0] === 0 ? 'create' : 'import')}
                     </DebounceButton>
                 }
             />
@@ -566,14 +600,16 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
                 constraintSecondary={false}
                 content={
                     <>
-                        {wallet?.mnemonic.length ? (
+                        {Flags.wallet_mnemonic_words_backup_enabled && wallet?.mnemonic.length ? (
                             <section className={classes.section}>
                                 <ShowcaseBox title={t('mnemonic_words')}>{wallet.mnemonic.join(' ')}</ShowcaseBox>
                             </section>
                         ) : null}
-                        <section className={classes.section}>
-                            <ShowcaseBox title={t('private_key')}>{privateKeyInHex}</ShowcaseBox>
-                        </section>
+                        {Flags.wallet_private_key_backup_enabled ? (
+                            <section className={classes.section}>
+                                <ShowcaseBox title={t('private_key')}>{privateKeyInHex}</ShowcaseBox>
+                            </section>
+                        ) : null}
                     </>
                 }
             />
