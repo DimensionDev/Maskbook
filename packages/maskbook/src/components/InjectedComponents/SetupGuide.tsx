@@ -591,8 +591,12 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     username,
                     persona: persona.toText(),
                 } as SetupGuideCrossContextStatus)
-                ui.automation.redirect?.newsFeed?.()
-                setStep(SetupGuideStep.SayHelloWorld)
+                if (activatedSocialNetworkUI.configuration.setupWizard?.disableSayHello) {
+                    onConnect().then(onClose)
+                } else {
+                    ui.automation.redirect?.newsFeed?.()
+                    setStep(SetupGuideStep.SayHelloWorld)
+                }
                 break
             case SetupGuideStep.SayHelloWorld:
                 onClose()

@@ -124,7 +124,7 @@ export namespace SocialNetworkUI {
             supportedInputTypes: NewPostCompositionSupportedTypes
         }
         export interface NewPostCompositionSupportedTypes {
-            image?: boolean
+            image: boolean
             text: boolean
         }
         export interface CommentComposition {
@@ -252,6 +252,7 @@ export namespace SocialNetworkUI {
     export namespace Configuration {
         export interface Define {
             steganography?: SteganographyConfig
+            setupWizard?: SetupWizardConfig
         }
         export interface SteganographyConfig {
             grayscaleAlgorithm?: GrayscaleAlgorithm
@@ -260,6 +261,9 @@ export namespace SocialNetworkUI {
              * !!! Any observable change might cause a breaking change on steganography !!!
              */
             password?(): string
+        }
+        export interface SetupWizardConfig {
+            disableSayHello?: boolean
         }
     }
 }
