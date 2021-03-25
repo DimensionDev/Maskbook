@@ -29,25 +29,25 @@ const useStyles = makeStyles(() =>
 export const Row: FC<Props> = ({ transaction, ...rest }) => {
     const styles = useStyles()
     return (
-        <TableRow className={classNames(styles.row, { [styles.failed]: transaction.failed })} {...rest}>
-            <TableCell>
+        <TableRow component="div" className={classNames(styles.row, { [styles.failed]: transaction.failed })} {...rest}>
+            <TableCell component="div">
                 <Typography color="textSecondary" variant="body2">
                     {transaction.timeAt.toLocaleString()}
                 </Typography>
                 <Address id={transaction.id} />
             </TableCell>
-            <TableCell>
+            <TableCell component="div">
                 <Typography className={styles.overflow} color="textSecondary">
                     {transaction.type}
                 </Typography>
                 <Address id={transaction.toAddress} />
             </TableCell>
-            <TableCell>
+            <TableCell component="div">
                 {transaction.pairs.map((pair, index) => (
                     <Record pair={pair} key={index} />
                 ))}
             </TableCell>
-            <TableCell align="right">
+            <TableCell align="right" component="div">
                 <Typography
                     className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}
                     color="textSecondary">

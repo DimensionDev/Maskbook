@@ -107,11 +107,19 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const collectiblesFromDB = useCollectiblesFromDB()
     const collectibles = [...collectiblesFromNetwork, ...collectiblesFromDB]
     const [menu, openMenu] = useMenu(
-        <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
+        <MenuItem key="rename" onClick={() => openWalletRename({ wallet })}>
+            {t('rename')}
+        </MenuItem>,
         wallet._private_key_ || wallet.mnemonic.length ? (
-            <MenuItem onClick={() => openWalletBackup({ wallet })}>{t('backup')}</MenuItem>
+            <MenuItem key="backup" onClick={() => openWalletBackup({ wallet })}>
+                {t('backup')}
+            </MenuItem>
         ) : undefined,
-        <MenuItem onClick={() => openWalletDelete({ wallet })} className={color.error} data-testid="delete_button">
+        <MenuItem
+            key="delete"
+            onClick={() => openWalletDelete({ wallet })}
+            className={color.error}
+            data-testid="delete_button">
             {t('delete')}
         </MenuItem>,
     )
