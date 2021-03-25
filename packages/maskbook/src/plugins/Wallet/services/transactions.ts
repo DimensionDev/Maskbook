@@ -1,23 +1,23 @@
+import { isNil } from 'lodash-es'
+import BigNumber from 'bignumber.js'
 import {
     DebankTransactionDirection,
     HISTORY_RESPONSE,
     Transaction,
     ZerionTransactionItem,
-    TransactionProvider,
+    PortfolioProvider,
     ZerionRBDTransactionType,
     ZerionTransactionStatus,
 } from '../types'
 import * as DeBankAPI from '../apis/debank'
 import * as ZerionApi from '../apis/zerion'
-import { isNil } from 'lodash-es'
-import BigNumber from 'bignumber.js'
 
-export async function getTransactionList(address: string, provider: TransactionProvider): Promise<Transaction[]> {
-    if (provider === TransactionProvider.DEBANK) {
+export async function getTransactionList(address: string, provider: PortfolioProvider): Promise<Transaction[]> {
+    if (provider === PortfolioProvider.DEBANK) {
         const { data, error_code } = await DeBankAPI.getTransactionList(address)
         if (error_code !== 0) throw new Error('Fail to load transactions.')
         return fromDeBank(data)
-    } else if (provider === TransactionProvider.ZERION) {
+    } else if (provider === PortfolioProvider.ZERION) {
         const { payload, meta } = await ZerionApi.getTransactionList(address)
         if (meta.status !== 'ok') throw new Error('Fail to load transactions.')
         return fromZerion(payload.transactions)

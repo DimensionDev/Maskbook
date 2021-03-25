@@ -398,7 +398,7 @@
     "plugin_trader_error_price_impact_too_high": "購入した時の影響が大きすぎます。",
     "plugin_trader_settings_data_source_primary": "データーのソース",
     "plugin_trader_settings_data_source_secondary": "異なるプラットフォームからトレンドデーターを取得",
-    "plugin_trader_settings_trade_provider_primary": "Swap Network",
+    "plugin_trader_settings_trade_provider_primary": "",
     "plugin_trader_settings_trade_provider_secondary": "その他の取引所で暗号通貨をスワップする",
     "plugin_poll_display_name": "プラグイン: 投票",
     "plugin_poll_question_hint": "質問を入力してください...",

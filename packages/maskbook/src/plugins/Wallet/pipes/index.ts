@@ -1,11 +1,11 @@
-import { unreachable } from "../../../utils/utils";
-import { TransactionProvider } from "../types";
+import { unreachable } from '../../../utils/utils'
+import { PortfolioProvider } from '../types'
 
-export function resolveDataProviderName(provider: TransactionProvider) {
+export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
     switch (provider) {
-        case TransactionProvider.ZERION:
+        case PortfolioProvider.ZERION:
             return 'Zerion'
-        case TransactionProvider.DEBANK:
+        case PortfolioProvider.DEBANK:
             return 'Debank'
         default:
             unreachable(provider)

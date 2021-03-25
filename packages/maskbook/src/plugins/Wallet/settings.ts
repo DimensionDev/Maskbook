@@ -2,7 +2,7 @@ import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
 import { ProviderType } from '../../web3/types'
 import { PLUGIN_IDENTIFIER } from './constants'
-import { TransactionProvider } from './types'
+import { PortfolioProvider } from './types'
 
 /**
  * The address of the selected wallet
@@ -38,11 +38,11 @@ export const currentIsMetamaskLockedSettings = createGlobalSettings<boolean>(
 )
 
 /**
- * The default transaction data provider
+ * The default portfolio data provider
  */
-export const currentTransactionDataProviderSettings = createGlobalSettings<TransactionProvider>(
-    `${PLUGIN_IDENTIFIER}+transactionProvider`,
-    TransactionProvider.ZERION,
+export const currentPortfolioDataProviderSettings = createGlobalSettings<PortfolioProvider>(
+    `${PLUGIN_IDENTIFIER}+portfolioProvider`,
+    PortfolioProvider.ZERION,
     {
         primary: () => i18n.t('plugin_wallet_settings_data_source_primary'),
         secondary: () => i18n.t('plugin_wallet_settings_data_source_secondary'),

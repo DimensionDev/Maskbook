@@ -28,7 +28,7 @@ export interface Transaction {
     gasFee: TransactionGasFee | undefined
 }
 
-export enum TransactionProvider {
+export enum PortfolioProvider {
     ZERION,
     DEBANK,
 }
