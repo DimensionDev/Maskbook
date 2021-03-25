@@ -17,6 +17,7 @@ import { ITO_CompositionEntry } from '../../plugins/ITO/define'
 import { useAccount } from '../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
+import { Flags } from '../../utils/flags'
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
@@ -147,16 +148,18 @@ export function ToolboxHint() {
                 <Image src={ToolIconURLs.markets.image} width={24} height={24} />
                 <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
             </MenuItem>
-            {account ? (
+            {account && Flags.transak_enabled ? (
                 <MenuItem onClick={openBuyCurrency}>
                     <Image src={ToolIconURLs.token.image} width={24} height={24} />
                     <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
                 </MenuItem>
             ) : null}
-            <MenuItem onClick={openAirdrop}>
-                <Image src={ToolIconURLs.airdrop.image} width={24} height={24} />
-                <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
-            </MenuItem>
+            {Flags.airdrop_enabled ? (
+                <MenuItem onClick={openAirdrop}>
+                    <Image src={ToolIconURLs.airdrop.image} width={24} height={24} />
+                    <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
+                </MenuItem>
+            ) : null}
         </>,
     )
 
