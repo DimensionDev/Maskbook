@@ -1,3 +1,4 @@
+import { omit } from 'lodash-es'
 import type { IDBPSafeTransaction } from '../../../database/helpers/openDB'
 import type { WalletDB } from '../database/Wallet.db'
 import type {
@@ -7,10 +8,13 @@ import type {
     ERC20TokenRecordInDatabase,
     ERC721TokenRecord,
     ERC721TokenRecordInDatabase,
+    ERC1155TokenRecord,
+    ERC1155TokenRecordInDatabase,
 } from '../database/types'
 import { resolveChainId } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
 import { ChainId } from '../../../web3/types'
+import type { AssetInCard } from '../types'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatChecksumAddress(address))
@@ -28,6 +32,10 @@ export function WalletRecordOutDB(x: WalletRecordInDatabase) {
     record.address = formatChecksumAddress(record.address)
     record.erc20_token_whitelist = x.erc20_token_whitelist ?? new Set()
     record.erc20_token_blacklist = x.erc20_token_blacklist ?? new Set()
+    record.erc721_token_whitelist = x.erc721_token_whitelist ?? new Set()
+    record.erc721_token_blacklist = x.erc721_token_blacklist ?? new Set()
+    record.erc1155_token_whitelist = x.erc1155_token_whitelist ?? new Set()
+    record.erc1155_token_blacklist = x.erc1155_token_blacklist ?? new Set()
     return record
 }
 
@@ -48,9 +56,44 @@ export function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
 }
 
 export function ERC721TokenRecordIntoDB(x: ERC721TokenRecord) {
-    return x as ERC721TokenRecordInDatabase
+    const record: ERC721TokenRecordInDatabase = {
+        ...x,
+        // NFT cannot be divided and store each token separately
+        record_id: `${formatChecksumAddress(x.address)}_${x.tokenId}`,
+    }
+    return record
 }
 
 export function ERC721TokenRecordOutDB(x: ERC721TokenRecordInDatabase) {
-    return x as ERC721TokenRecord
+    const record: ERC721TokenRecord = omit(x, 'record_id')
+    return record
+}
+
+export function ERC1155TokenRecordIntoDB(x: ERC1155TokenRecord) {
+    const record: ERC1155TokenRecordInDatabase = {
+        ...x,
+        // NFT cannot be divided and store each token separately
+        record_id: `${formatChecksumAddress(x.address)}_${x.tokenId}`,
+    }
+    return record
+}
+
+export function ERC1155TokenRecordOutDB(x: ERC1155TokenRecordInDatabase) {
+    const record: ERC1155TokenRecord = omit(x, 'record_id')
+    return record
+}
+
+export function ERC721TokenRecordToAssetInCard(x: ERC721TokenRecordInDatabase) {
+    const assetInCard: AssetInCard = {
+        asset_contract: {
+            address: x.address,
+            schema_name: 'ERC721',
+            symbol: '',
+        },
+        token_id: x.record_id.split('_')[1],
+        image: x.image,
+        name: x.name,
+        permalink: '',
+    }
+    return assetInCard
 }

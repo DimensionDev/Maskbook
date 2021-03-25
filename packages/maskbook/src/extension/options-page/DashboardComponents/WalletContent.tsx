@@ -7,10 +7,10 @@ import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddERC20TokenDialog,
+    DashboardWalletAddERC721TokenDialog,
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
     DashboardWalletRenameDialog,
-    DashboardWalletRedPacketDetailDialog,
 } from '../DashboardDialogs/Wallet'
 import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -26,6 +26,9 @@ import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
+import { useAccount } from '../../../web3/hooks/useAccount'
+import { useCollectiblesFromNetwork, useCollectiblesFromDB } from '../../../plugins/Wallet/hooks/useCollectibles'
+import { AssetProvider } from '../../../plugins/Wallet/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -78,19 +81,31 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     { wallet }: WalletContentProps,
     ref,
 ) {
+    const { t } = useI18N()
     const classes = useStyles()
+
     const history = useHistory()
     const location = useLocation()
-    const { t } = useI18N()
+    const account = useAccount()
+
     const color = useColorStyles()
     const xsMatched = useMatchXS()
     const chainIdValid = useChainIdValid()
+
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
-    const [walletRedPacket, , openWalletRedPacket] = useModal(DashboardWalletRedPacketDetailDialog)
+    const [addAsset, , openAddAsset] = useModal(DashboardWalletAddERC721TokenDialog)
 
+    const {
+        value: collectiblesFromNetwork = [],
+        loading: collectiblesLoading,
+        error: collectiblesError,
+        retry: collectiblesRetry,
+    } = useCollectiblesFromNetwork(account, AssetProvider.OPENSEAN)
+    const collectiblesFromDB = useCollectiblesFromDB()
+    const collectibles = [...collectiblesFromNetwork, ...collectiblesFromDB]
     const [menu, openMenu] = useMenu(
         <MenuItem onClick={() => openWalletRename({ wallet })}>{t('rename')}</MenuItem>,
         wallet._private_key_ || wallet.mnemonic.length ? (
@@ -174,6 +189,20 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                             {t('add_token')}
                         </Button>
                     ) : null}
+                    {!xsMatched && tabIndex === 1 ? (
+                        <Button
+                            className={classes.addButton}
+                            variant="text"
+                            onClick={() =>
+                                openAddAsset({
+                                    wallet,
+                                    tokenIdsLoaded: collectibles.map((x) => x.token_id),
+                                })
+                            }
+                            startIcon={<AddIcon />}>
+                            {t('add_asset')}
+                        </Button>
+                    ) : null}
                     {!xsMatched && Flags.transak_enabled ? (
                         <Button
                             onClick={() => {
@@ -195,21 +224,27 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                     </IconButton>
                 </Box>
             </Box>
-
-            {menu}
-
             <Box className={classes.content}>
                 {tabIndex === 0 ? (
                     <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
                 ) : null}
-                {tabIndex === 1 ? <CollectibleList /> : null}
+                {tabIndex === 1 ? (
+                    <CollectibleList
+                        wallet={wallet}
+                        collectibles={collectibles}
+                        collectiblesLoading={collectiblesLoading}
+                        collectiblesError={collectiblesError}
+                        collectiblesRetry={collectiblesRetry}
+                    />
+                ) : null}
                 {tabIndex === 2 ? <TransactionList /> : null}
             </Box>
+            {menu}
             {addToken}
+            {addAsset}
             {walletBackup}
             {walletDelete}
             {walletRename}
-            {walletRedPacket}
         </div>
     )
 })

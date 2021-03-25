@@ -21,13 +21,13 @@ export async function addERC20Token(token: ERC20TokenDetailed) {
             decimals: token.decimals ?? 0,
         }),
     )
-    WalletMessages.events.tokensUpdated.sendToAll(undefined)
+    WalletMessages.events.erc20TokensUpdated.sendToAll(undefined)
 }
 
 export async function removeERC20Token(token: PartialRequired<ERC20TokenDetailed, 'address'>) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
     await t.objectStore('ERC20Token').delete(formatChecksumAddress(token.address))
-    WalletMessages.events.tokensUpdated.sendToAll(undefined)
+    WalletMessages.events.erc20TokensUpdated.sendToAll(undefined)
 }
 
 export async function trustERC20Token(address: string, token: ERC20TokenDetailed) {

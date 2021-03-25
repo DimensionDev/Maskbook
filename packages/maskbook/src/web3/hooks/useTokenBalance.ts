@@ -16,6 +16,8 @@ export function useTokenBalance(type: EthereumTokenType, address: string) {
             return r2
         case EthereumTokenType.ERC721:
             return r3
+        case EthereumTokenType.ERC1155:
+            throw new Error('To be implemented')
         default:
             unreachable(type_)
     }
