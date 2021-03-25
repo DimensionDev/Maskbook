@@ -17,6 +17,7 @@ import { TransakPluginDefine } from './Transak/define'
 import { ITO_PluginDefine } from './ITO/define'
 import { NFTPluginsDefine } from './NFT/define'
 import { AirdropPluginDefine } from './Airdrop/define'
+import { IdeamarketPluginDefine } from './Ideamarket/define'
 import { sideEffect } from '../utils/side-effects'
 
 sideEffect.then(() => {
@@ -26,10 +27,12 @@ sideEffect.then(() => {
     plugins.add(FileServicePluginDefine)
     plugins.add(ITO_PluginDefine)
     plugins.add(NFTPluginsDefine)
+
     if (Flags.gitcoin_enabled) plugins.add(GitcoinPluginDefine)
     if (Flags.poll_enabled) plugins.add(PollsPluginDefine)
     if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
     if (Flags.transak_enabled) plugins.add(TransakPluginDefine)
     if (Flags.airdrop_enabled) plugins.add(AirdropPluginDefine)
+    if (Flags.ideamarket_enabled) plugins.add(IdeamarketPluginDefine)
     if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)
 })
