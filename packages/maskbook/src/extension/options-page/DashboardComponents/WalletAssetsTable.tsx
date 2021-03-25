@@ -28,7 +28,7 @@ import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ActionsBarFT } from './ActionsBarFT'
 import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
 import { useStableTokensDebank } from '../../../web3/hooks/useStableTokensDebank'
-import type { AssetDetailed } from '../../../plugins/Wallet/types'
+import type { Asset } from '../../../plugins/Wallet/types'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
 import { useAssets } from '../../../plugins/Wallet/hooks/useAssets'
 
@@ -131,7 +131,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
 
     if (!detailedTokens.length) return null
 
-    const viewDetailed = (x: AssetDetailed) => (
+    const viewDetailed = (x: Asset) => (
         <TableRow className={classes.cell} key={x.token.address}>
             {[
                 <Box

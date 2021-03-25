@@ -4,14 +4,14 @@ import { useChainId } from '../../../web3/hooks/useChainState'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { formatChecksumAddress } from '../formatter'
 import { getTokenUSDValue } from '../helpers'
-import type { AssetDetailed } from '../types'
+import type { Asset } from '../types'
 
 /**
  * Merge multiple token lists into one which sorted by balance.
  * The order of result values is determined by the order they occur in the array.
  * @param listOfTokens
  */
-export function useAssetsMerged(...listOfTokens: AssetDetailed[][]) {
+export function useAssetsMerged(...listOfTokens: Asset[][]) {
     const chainId = useChainId()
     const ETH_ADDRSS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     return uniqBy(

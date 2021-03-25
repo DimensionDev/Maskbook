@@ -1,14 +1,7 @@
 import { values } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import {
-    AssetDetailed,
-    AssetInCard,
-    AssetProvider,
-    BalanceRecord,
-    PortfolioProvider,
-    ZerionAddressAsset,
-} from '../types'
+import { Asset, Collectible, CollectibleProvider, BalanceRecord, PortfolioProvider, ZerionAddressAsset } from '../types'
 import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
 import * as DebankAPI from '../apis/debank'
@@ -19,11 +12,11 @@ import { unreachable } from '../../../utils/utils'
 import { createEtherToken } from '../../../web3/helpers'
 import { formatChecksumAddress } from '../formatter'
 
-export async function getAssetsListNFT(address: string, provider: AssetProvider) {
-    if (provider === AssetProvider.OPENSEAN) {
+export async function getAssetsListNFT(address: string, provider: CollectibleProvider) {
+    if (provider === CollectibleProvider.OPENSEAN) {
         const { assets } = await OpenSeaAPI.getAssetsList(address)
         return assets.map(
-            (x): AssetInCard => ({
+            (x): Collectible => ({
                 asset_contract: {
                     address: x.asset_contract.address,
                     symbol: x.asset_contract.symbol,
@@ -39,7 +32,7 @@ export async function getAssetsListNFT(address: string, provider: AssetProvider)
     return []
 }
 
-export async function getAssetsList(address: string, provider: PortfolioProvider): Promise<AssetDetailed[]> {
+export async function getAssetsList(address: string, provider: PortfolioProvider): Promise<Asset[]> {
     if (!EthereumAddress.isValid(address)) return []
     switch (provider) {
         case PortfolioProvider.ZERION:
@@ -59,7 +52,7 @@ export async function getAssetsList(address: string, provider: PortfolioProvider
 
 function formatAssetsFromDebank(data: BalanceRecord[]) {
     return data.map(
-        (x): AssetDetailed => ({
+        (x): Asset => ({
             chain: x.chain,
             token:
                 x.id === 'eth'
@@ -113,5 +106,5 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
                 },
                 logoURL: asset.icon_url,
             }
-        }) as AssetDetailed[]
+        }) as Asset[]
 }

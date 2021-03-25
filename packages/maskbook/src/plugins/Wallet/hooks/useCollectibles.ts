@@ -3,9 +3,9 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { ERC721TokenRecordInDatabase } from '../database/types'
 import { useAsyncRetry } from 'react-use'
 import { WalletRPC, WalletMessages } from '../messages'
-import { ERC721TokenRecordToAssetInCard } from '../services/helpers'
+import { ERC721TokenRecordToCollectible } from '../services/helpers'
 import { ERC721TokenArrayComparer } from '../helpers'
-import type { AssetProvider } from '../types'
+import type { CollectibleProvider } from '../types'
 
 //#region cache service query result
 const erc721TokensRef = new ValueRef<ERC721TokenRecordInDatabase[]>([], ERC721TokenArrayComparer)
@@ -21,10 +21,10 @@ revalidate()
 
 export function useCollectiblesFromDB() {
     const records = useValueRef(erc721TokensRef)
-    return records.map((x) => ERC721TokenRecordToAssetInCard(x))
+    return records.map((x) => ERC721TokenRecordToCollectible(x))
 }
 
-export function useCollectiblesFromNetwork(address: string, provider: AssetProvider) {
+export function useCollectiblesFromNetwork(address: string, provider: CollectibleProvider) {
     return useAsyncRetry(async () => {
         if (!address) return []
         return WalletRPC.getAssetsListNFT(address.toLowerCase(), provider)

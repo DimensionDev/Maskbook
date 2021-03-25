@@ -1,6 +1,6 @@
 import { useTokensBalance } from '../../../web3/hooks/useTokensBalance'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import type { AssetDetailed } from '../types'
+import type { Asset } from '../types'
 import { useAssetsMerged } from './useAssetsMerged'
 
 export function useAssetsFromChain(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
@@ -10,7 +10,7 @@ export function useAssetsFromChain(tokens: (EtherTokenDetailed | ERC20TokenDetai
             // the length not matched in case of error occurs
             listOfBalance.length === tokens.length
                 ? listOfBalance.map(
-                      (balance, idx): AssetDetailed => ({
+                      (balance, idx): Asset => ({
                           chain: 'eth',
                           token: tokens[idx],
                           balance,

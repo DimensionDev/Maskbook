@@ -32,11 +32,11 @@ export enum PortfolioProvider {
     DEBANK,
 }
 
-export enum AssetProvider {
+export enum CollectibleProvider {
     OPENSEAN,
 }
 
-export interface AssetDetailed {
+export interface Asset {
     token: EtherTokenDetailed | ERC20TokenDetailed
     /**
      * The chain name of assets
@@ -61,7 +61,7 @@ export interface AssetDetailed {
     logoURL?: string
 }
 
-export interface AssetInCard {
+export interface Collectible {
     asset_contract: {
         address: string
         schema_name: 'ERC721' | 'ERC1155'

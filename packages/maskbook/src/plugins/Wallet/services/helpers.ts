@@ -14,7 +14,7 @@ import type {
 import { resolveChainId } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
 import { ChainId } from '../../../web3/types'
-import type { AssetInCard } from '../types'
+import type { Collectible } from '../types'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatChecksumAddress(address))
@@ -83,8 +83,8 @@ export function ERC1155TokenRecordOutDB(x: ERC1155TokenRecordInDatabase) {
     return record
 }
 
-export function ERC721TokenRecordToAssetInCard(x: ERC721TokenRecordInDatabase) {
-    const assetInCard: AssetInCard = {
+export function ERC721TokenRecordToCollectible(x: ERC721TokenRecordInDatabase) {
+    const assetInCard: Collectible = {
         asset_contract: {
             address: x.address,
             schema_name: 'ERC721',
