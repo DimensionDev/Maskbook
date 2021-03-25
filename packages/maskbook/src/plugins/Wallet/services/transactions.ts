@@ -1,20 +1,31 @@
-import { TransactionProvider } from '../types'
-import * as DeBankAPI from '../apis/debank'
 import { isNil } from 'lodash-es'
-// TOOD:
-// unify transaction type from different transaction provider
-export type Transaction = ReturnType<typeof fromDeBank>[number]
+import BigNumber from 'bignumber.js'
+import {
+    DebankTransactionDirection,
+    Transaction,
+    ZerionTransactionItem,
+    PortfolioProvider,
+    ZerionRBDTransactionType,
+    ZerionTransactionStatus,
+    HistoryResponse,
+} from '../types'
+import * as DeBankAPI from '../apis/debank'
+import * as ZerionApi from '../apis/zerion'
 
-export async function getTransactionList(address: string, provider: TransactionProvider): Promise<Transaction[]> {
-    if (provider === TransactionProvider.DEBANK) {
+export async function getTransactionList(address: string, provider: PortfolioProvider): Promise<Transaction[]> {
+    if (provider === PortfolioProvider.DEBANK) {
         const { data, error_code } = await DeBankAPI.getTransactionList(address)
         if (error_code !== 0) throw new Error('Fail to load transactions.')
         return fromDeBank(data)
+    } else if (provider === PortfolioProvider.ZERION) {
+        const { payload, meta } = await ZerionApi.getTransactionList(address)
+        if (meta.status !== 'ok') throw new Error('Fail to load transactions.')
+        return fromZerion(payload.transactions)
     }
     return []
 }
 
-function fromDeBank({ cate_dict, history_list, token_dict }: DeBankAPI.HISTORY_RESPONSE['data']) {
+function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['data']) {
     return history_list
         .filter((transaction) => transaction.tx?.name ?? transaction.cate_id)
         .filter(({ cate_id }) => cate_id !== 'approve')
@@ -38,7 +49,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: DeBankAPI.HISTORY_R
                             name: token_dict[token_id].name,
                             symbol: token_dict[token_id].optimized_symbol,
                             address: token_id,
-                            direction: 'send',
+                            direction: DebankTransactionDirection.SEND,
                             amount,
                         })),
                     ...transaction.receives
@@ -47,13 +58,46 @@ function fromDeBank({ cate_dict, history_list, token_dict }: DeBankAPI.HISTORY_R
                             name: token_dict[token_id].name,
                             symbol: token_dict[token_id].optimized_symbol,
                             address: token_id,
-                            direction: 'receive',
+                            direction: DebankTransactionDirection.RECEIVE,
                             amount,
                         })),
                 ],
                 gasFee: transaction.tx
                     ? { eth: transaction.tx.eth_gas_fee, usd: transaction.tx.usd_gas_fee }
                     : undefined,
+            }
+        })
+}
+
+function fromZerion(data: ZerionTransactionItem[]) {
+    return data
+        .filter(({ type }) => type !== ZerionRBDTransactionType.AUTHORIZE)
+        .map((transaction) => {
+            const ethGasFee = new BigNumber(transaction.fee?.value ?? 0).dividedBy(new BigNumber(10).pow(18)).toString()
+            const usdGasFee = new BigNumber(ethGasFee).multipliedBy(transaction.fee?.price ?? 0).toString()
+
+            return {
+                type: transaction.type,
+                id: transaction.hash,
+                timeAt: new Date(transaction.mined_at * 1000),
+                toAddress: transaction.address_to ?? '',
+                failed: transaction.status === ZerionTransactionStatus.FAILED,
+                pairs:
+                    transaction.changes?.map(({ asset, direction, value }) => {
+                        return {
+                            name: asset.name,
+                            symbol: asset.symbol,
+                            address: asset.asset_code,
+                            direction,
+                            amount: Number(
+                                new BigNumber(value).dividedBy(new BigNumber(10).pow(asset.decimals)).toString(),
+                            ),
+                        }
+                    }) ?? [],
+                gasFee: {
+                    eth: Number(ethGasFee),
+                    usd: Number(usdGasFee),
+                },
             }
         })
 }

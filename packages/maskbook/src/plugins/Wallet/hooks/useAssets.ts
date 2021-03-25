@@ -1,13 +1,13 @@
 import { useCallback } from 'react'
-import { useAssetsDetailedDebank } from './useAssetsDetailedDebank'
-import { useAssetsDetailedChain } from './useAssetsDetailedChain'
-import { useAssetsDetailedMerged } from './useAssetsDetailedMerged'
-import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
-import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../types'
-import { useEtherTokenDetailed } from './useEtherTokenDetailed'
+import { useAssetsFromProvider } from './useAssetsFromProvider'
+import { useAssetsFromChain } from './useAssetsFromChain'
+import { useAssetsMerged } from './useAssetsMerged'
+import { useWallet } from './useWallet'
+import { formatChecksumAddress } from '../formatter'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 
-export function useAssetsDetailed(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
+export function useAssets(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
     const wallet = useWallet()
     const {
         value: etherTokenDetailed,
@@ -20,13 +20,13 @@ export function useAssetsDetailed(tokens: (EtherTokenDetailed | ERC20TokenDetail
         loading: assetsDetailedChainLoading,
         error: assetsDetailedChainError,
         retry: retryAssetsDetailedChain,
-    } = useAssetsDetailedChain(etherTokenDetailed ? [etherTokenDetailed, ...tokens] : tokens)
+    } = useAssetsFromChain(etherTokenDetailed ? [etherTokenDetailed, ...tokens] : tokens)
     const {
         value: assetsDetailedDebank = [],
         loading: assetsDetailedDebankLoading,
         error: assetsDetailedDebankError,
         retry: retryAssetsDetailedDebank,
-    } = useAssetsDetailedDebank()
+    } = useAssetsFromProvider()
 
     const detailedTokensRetry = useCallback(() => {
         retryEtherTokenDetailed()
@@ -36,7 +36,7 @@ export function useAssetsDetailed(tokens: (EtherTokenDetailed | ERC20TokenDetail
 
     // should place debank detailed tokens at the first place
     // it prevents them from replacing by previous detailed tokens because the uniq algorithm
-    const assetsDetailed = useAssetsDetailedMerged(assetsDetailedDebank, assetsDetailedChain)
+    const assetsDetailed = useAssetsMerged(assetsDetailedDebank, assetsDetailedChain)
 
     // filter out tokens in blacklist
     return {

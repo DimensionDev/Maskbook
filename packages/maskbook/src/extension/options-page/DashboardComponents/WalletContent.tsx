@@ -28,7 +28,7 @@ import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useCollectiblesFromNetwork, useCollectiblesFromDB } from '../../../plugins/Wallet/hooks/useCollectibles'
-import { AssetProvider } from '../../../plugins/Wallet/types'
+import { CollectibleProvider } from '../../../plugins/Wallet/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -103,7 +103,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
         loading: collectiblesLoading,
         error: collectiblesError,
         retry: collectiblesRetry,
-    } = useCollectiblesFromNetwork(account, AssetProvider.OPENSEAN)
+    } = useCollectiblesFromNetwork(account, CollectibleProvider.OPENSEAN)
     const collectiblesFromDB = useCollectiblesFromDB()
     const collectibles = [...collectiblesFromNetwork, ...collectiblesFromDB]
     const [menu, openMenu] = useMenu(
@@ -168,7 +168,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                         indicatorColor="primary"
                         textColor="primary"
                         onChange={onTabChange}>
-                        <Tab label={t('dashboard_tab_token')}></Tab>
+                        <Tab label={t('dashboard_tab_assets')}></Tab>
                         <Tab label={t('dashboard_tab_collectibles')}></Tab>
                         <Tab label={t('dashboard_tab_transactions')}></Tab>
                     </Tabs>

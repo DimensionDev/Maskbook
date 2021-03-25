@@ -2,7 +2,8 @@ import stringify from 'json-stable-stringify'
 import type { WalletRecord, ERC20TokenRecord, ERC721TokenRecord, ERC1155TokenRecord } from './database/types'
 import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from './settings'
 import { isSameAddress } from '../../web3/helpers'
-import { ProviderType } from '../../web3/types'
+import { CurrencyType, ProviderType } from '../../web3/types'
+import type { Asset } from './types'
 
 function serializeWalletRecord(record: WalletRecord) {
     return stringify({
@@ -60,3 +61,5 @@ export function selectMaskbookWallet(wallet: WalletRecord) {
     currentSelectedWalletAddressSettings.value = wallet.address
     currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
 }
+
+export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)

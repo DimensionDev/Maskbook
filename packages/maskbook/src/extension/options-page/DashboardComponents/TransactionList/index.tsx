@@ -11,7 +11,7 @@ import {
     Typography,
 } from '@material-ui/core'
 import { useTransactions } from '../../../../plugins/Wallet/hooks/useTransactions'
-import { TransactionProvider } from '../../../../plugins/Wallet/types'
+import { PortfolioProvider } from '../../../../plugins/Wallet/types'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { Row } from './Row'
 
@@ -29,7 +29,7 @@ export function TransactionList() {
         loading: transactionsLoading,
         error: transactionsError,
         retry: transactionsRetry,
-    } = useTransactions(account, TransactionProvider.DEBANK)
+    } = useTransactions(account)
 
     if (transactionsLoading)
         return (

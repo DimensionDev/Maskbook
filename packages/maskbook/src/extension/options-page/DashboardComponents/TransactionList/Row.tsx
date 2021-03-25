@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { isNil } from 'lodash-es'
 import { createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import { Record } from './Record'
-import type { Transaction } from '../../../../plugins/Wallet/services'
+import type { Transaction } from '../../../../plugins/Wallet/types'
 
 interface Props {
     transaction: Transaction
@@ -42,7 +42,7 @@ export const Row: FC<Props> = ({ transaction }) => {
                     <Record pair={pair} key={index} />
                 ))}
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
                 <Typography
                     className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}
                     color="textSecondary">

@@ -35,7 +35,7 @@ import { getEnumAsArray } from '../../../../utils/enum'
 import { TradeProviderIcon } from '../trader/TradeProviderIcon'
 import { DataProviderIcon } from '../trader/DataProviderIcon'
 import {
-    currentDataProviderSettings,
+    currentTrendingDataProviderSettings,
     currentTradeProviderSettings,
     getCurrentPreferredCoinIdSettings,
 } from '../../settings'
@@ -185,7 +185,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     //#region sync with settings
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentDataProviderSettings.value = option.value as DataProvider
+        currentTrendingDataProviderSettings.value = option.value as DataProvider
     }, [])
     const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {
         currentTradeProviderSettings.value = option.value as TradeProvider

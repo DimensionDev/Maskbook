@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import { DataProvider } from '../types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { currentDataProviderSettings } from '../settings'
+import { currentTrendingDataProviderSettings } from '../settings'
 
 export function useCurrentDataProvider(availableDataProviders: DataProvider[]) {
     const [dataProvider, setDataProvider] = useState(
         availableDataProviders.length ? availableDataProviders[0] : DataProvider.COIN_GECKO,
     )
-    const currentDataProvider = useValueRef<DataProvider>(currentDataProviderSettings)
+    const currentDataProvider = useValueRef<DataProvider>(currentTrendingDataProviderSettings)
 
     // sync data provider
     useEffect(() => {

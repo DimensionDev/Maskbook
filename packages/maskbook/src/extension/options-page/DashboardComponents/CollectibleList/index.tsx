@@ -5,7 +5,7 @@ import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
 import { createContext } from 'react'
-import type { AssetInCard } from '../../../../plugins/Wallet/types'
+import type { Collectible } from '../../../../plugins/Wallet/types'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -13,7 +13,7 @@ export const CollectibleContext = createContext<{
 
 export interface CollectibleListProps {
     wallet: WalletRecord
-    collectibles: AssetInCard[]
+    collectibles: Collectible[]
     collectiblesLoading: boolean
     collectiblesError: Error | undefined
     collectiblesRetry: () => void
