@@ -4,7 +4,7 @@ export type SocketNameSpace = {
 }
 
 export type SocketRequestBody = {
-    scope: [string]
+    scope: string[]
     payload: {
         [key: string]: any
     }
@@ -66,6 +66,11 @@ export interface ZerionAsset {
     price?: ZerionPrice
 }
 
+export interface ZerionAddressAsset {
+    asset: ZerionAsset
+    quantity: string
+}
+
 export interface ZerionTransactionChange {
     asset: ZerionAsset
     value: number
@@ -80,7 +85,7 @@ export interface ZerionTransactionFee {
     price: number
 }
 
-export interface TransactionItem {
+export interface ZerionTransactionItem {
     id: string
     type: ZerionRBDTransactionType
     protocol: string
@@ -98,7 +103,7 @@ export interface TransactionItem {
     meta?: string
 }
 
-export interface TransactionResponseBody extends SocketResponseBody {
+export interface ZerionTransactionResponseBody extends SocketResponseBody {
     meta: {
         status: string
         address: string
@@ -109,6 +114,21 @@ export interface TransactionResponseBody extends SocketResponseBody {
         transactions_search_query: string
     }
     payload: {
-        transactions: TransactionItem[]
+        transactions: ZerionTransactionItem[]
+    }
+}
+
+export interface ZerionAssetResponseBody extends SocketResponseBody {
+    meta: {
+        address: string
+        addresses: string[]
+        asset_codes: string[]
+        currency: string
+        status: string
+    }
+    payload: {
+        assets: {
+            [key: string]: ZerionAddressAsset
+        }
     }
 }

@@ -2,7 +2,7 @@ import {
     DebankTransactionDirection,
     HISTORY_RESPONSE,
     Transaction,
-    TransactionItem,
+    ZerionTransactionItem,
     TransactionProvider,
     ZerionRBDTransactionType,
     ZerionTransactionStatus,
@@ -69,7 +69,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HISTORY_RESPONSE['d
         })
 }
 
-function fromZerion(data: TransactionItem[]) {
+function fromZerion(data: ZerionTransactionItem[]) {
     return data
         .filter(({ type }) => type !== ZerionRBDTransactionType.AUTHORIZE)
         .map((transaction) => {

@@ -1,5 +1,11 @@
 import io from 'socket.io-client'
-import type { SocketRequestBody, SocketNameSpace, SocketResponseBody, TransactionResponseBody } from '../types'
+import type {
+    SocketRequestBody,
+    SocketNameSpace,
+    SocketResponseBody,
+    ZerionTransactionResponseBody,
+    ZerionAssetResponseBody,
+} from '../types'
 
 const ZERION_API = 'wss://zerion-api-v4-agent.r2d2.to'
 
@@ -52,5 +58,15 @@ export async function getTransactionList(address: string) {
             transactions_offset: 0,
             transactions_search_query: '',
         },
-    })) as TransactionResponseBody
+    })) as ZerionTransactionResponseBody
+}
+
+export async function getAssetsList(address: string) {
+    return (await subscribeFromZerion(addressSocket, {
+        scope: ['assets'],
+        payload: {
+            address,
+            currency: 'usd',
+        },
+    })) as ZerionAssetResponseBody
 }
