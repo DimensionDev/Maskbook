@@ -16,6 +16,8 @@ import {
 } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
+import ExpandLessIcon from '@material-ui/icons/ExpandLess'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency } from '../../../plugins/Wallet/formatter'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -24,13 +26,11 @@ import { isSameAddress } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { ActionsBarFT } from './ActionsBarFT'
-import ExpandLessIcon from '@material-ui/icons/ExpandLess'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { useAssetsDetailed } from '../../../web3/hooks/useAssetsDetailed'
 import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
 import { useStableTokensDebank } from '../../../web3/hooks/useStableTokensDebank'
 import type { AssetDetailed } from '../../../plugins/Wallet/types'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
+import { useAssets } from '../../../plugins/Wallet/hooks/useAssets'
 
 const MAX_TOKENS_LENGTH = 5
 const MIN_VALUE = 5
@@ -97,7 +97,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         error: detailedTokensError,
         loading: detailedTokensLoading,
         retry: detailedTokensRetry,
-    } = useAssetsDetailed(erc20Tokens)
+    } = useAssets(erc20Tokens)
     const { value: stableTokens = [] } = useStableTokensDebank()
 
     const classes = useStylesExtends(useStyles(), props)

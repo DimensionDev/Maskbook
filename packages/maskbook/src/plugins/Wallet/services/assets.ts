@@ -1,7 +1,14 @@
 import { values } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { AssetDetailed, AssetProvider, BalanceRecord, PortfolioProvider, ZerionAddressAsset } from '../types'
+import {
+    AssetDetailed,
+    AssetInCard,
+    AssetProvider,
+    BalanceRecord,
+    PortfolioProvider,
+    ZerionAddressAsset,
+} from '../types'
 import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
 import * as DebankAPI from '../apis/debank'
