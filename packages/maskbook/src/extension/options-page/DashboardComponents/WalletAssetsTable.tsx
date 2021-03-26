@@ -336,12 +336,19 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <LessButton
-                isMobile={isMobile}
-                setViewLength={setViewLength}
-                setPrice={setPrice}
-                detailedTokens={detailedTokens}
-            />
+            {detailedTokens.filter((x) =>
+                Number(price) !== 0
+                    ? new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(price) ||
+                      x.token.type === EthereumTokenType.Ether
+                    : true,
+            ).length > viewLength ? (
+                <LessButton
+                    isMobile={isMobile}
+                    setViewLength={setViewLength}
+                    setPrice={setPrice}
+                    detailedTokens={detailedTokens}
+                />
+            ) : null}
         </>
     )
 }
