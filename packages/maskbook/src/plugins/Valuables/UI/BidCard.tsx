@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     bidText: {
         margin: theme.spacing(0.7),
         color: '#1C68F3',
+        fontSize: '14px',
     },
 }))
 
