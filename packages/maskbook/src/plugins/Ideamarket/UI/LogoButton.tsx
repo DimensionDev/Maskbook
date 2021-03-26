@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { makeStyles, IconButton, SvgIcon } from '@material-ui/core'
 import Listing from './Listing'
-import { IdeamarketLogo } from './assets/index'
+import IdeamarketLogo from './assets/idea-markets-logo.svg'
 
 const useStyles = makeStyles((theme) => ({
     // root is for aligning the button in twitter itself.. Write a selector bitch.
@@ -25,15 +25,18 @@ interface LogoButtonProps {
 
 export default function LogoButton(props: LogoButtonProps) {
     const [hover, setHover] = useState(false)
+    const [extendedHover, setExtendedHover] = useState(false)
     const [clicked, setClicked] = useState(false)
 
     const classes = useStyles()
 
     const doWeRender = () => {
         if (clicked) {
-            return <Listing username={props.username} />
+            return <Listing username={props.username} setExtendedHover={setExtendedHover} />
         } else if (hover) {
-            return <Listing username={props.username} />
+            return <Listing username={props.username} setExtendedHover={setExtendedHover} />
+        } else if (extendedHover) {
+            return <Listing username={props.username} setExtendedHover={setExtendedHover} />
         } else {
             return null
         }
@@ -43,10 +46,17 @@ export default function LogoButton(props: LogoButtonProps) {
         <div className={classes.root}>
             <IconButton
                 onMouseEnter={() => setHover(true)}
-                onMouseLeave={() => setHover(false)}
+                onMouseLeave={() =>
+
+                                       setTimeout(() => {
+
+                        setHover(false)
+
+                    }, 1000)
+                }
                 onClick={() => setClicked(!clicked)}
                 className={classes.logoButton}>
-                <IdeamarketLogo />
+                <img width={25} height={25} src={IdeamarketLogo} />
             </IconButton>
 
             {doWeRender()}

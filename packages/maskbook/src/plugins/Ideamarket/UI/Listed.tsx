@@ -1,5 +1,5 @@
 import { makeStyles, Typography, Button, Link, Divider, Box } from '@material-ui/core'
-
+import type { SetStateAction } from 'react'
 const test = makeStyles({})
 
 const useStyles = makeStyles((theme) => ({
@@ -68,6 +68,7 @@ interface ListedProps {
     rank: number
     price: string
     dayChange: number
+    setExtendedHover: Dispatch<SetStateAction<boolean>>
 }
 
 export default function Listed(props: ListedProps) {
@@ -76,7 +77,14 @@ export default function Listed(props: ListedProps) {
     const isPositive = props.dayChange >= 0
 
     return (
-        <div className={classes.root}>
+        <div
+            className={classes.root}
+            onMouseEnter={() => props.setExtendedHover(true)}
+            onMouseLeave={() =>
+                setTimeout(() => {
+                    props.setExtendedHover(false)
+                }, 200)
+            }>
             <div className={classes.topInfo}>
                 <Box className={classes.topBox}>
                     <Typography className={classes.topText}>
