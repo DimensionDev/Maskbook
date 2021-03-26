@@ -212,13 +212,6 @@ export default function DashboardSettingsRouter() {
                                         value={launchPageSettings}
                                     />
                                 ) : null}
-                                {process.env.NODE_ENV === 'development' || process.env.build !== 'stable' ? (
-                                    <SettingsUI
-                                        classes={listStyle}
-                                        icon={<MemoryOutlinedIcon />}
-                                        value={newDashboardConnection}
-                                    />
-                                ) : null}
                             </List>
                         </Card>
                     </Paper>
@@ -249,6 +242,13 @@ export default function DashboardSettingsRouter() {
                                     icon={<ShareIcon />}
                                     value={enableGroupSharingSettings}
                                 />
+                                 {process.env.NODE_ENV === 'development' || process.env.build !== 'stable' ? (
+                                    <SettingsUI
+                                        classes={listStyle}
+                                        icon={<MemoryOutlinedIcon />}
+                                        value={newDashboardConnection}
+                                    />
+                                ) : null}
                             </List>
                         </Card>
                     </Paper>
