@@ -103,6 +103,8 @@ export namespace SocialNetworkUI {
             postInspector?(signal: AbortSignal, current: PostInfo): void
             /** Inject a toolbar that displayed on the top of the page */
             toolbar?(signal: AbortSignal): void
+            /** Inject a tool box that displayed in the navigation bar of the SNS */
+            toolBoxInNavBar?(signal: AbortSignal): void
             /** Inject the UI that used to notify if the user has not completely setup the current network. */
             setupPrompt?(signal: AbortSignal): void
             /**
@@ -122,7 +124,7 @@ export namespace SocialNetworkUI {
             supportedInputTypes: NewPostCompositionSupportedTypes
         }
         export interface NewPostCompositionSupportedTypes {
-            image?: boolean
+            image: boolean
             text: boolean
         }
         export interface CommentComposition {
@@ -250,6 +252,7 @@ export namespace SocialNetworkUI {
     export namespace Configuration {
         export interface Define {
             steganography?: SteganographyConfig
+            setupWizard?: SetupWizardConfig
         }
         export interface SteganographyConfig {
             grayscaleAlgorithm?: GrayscaleAlgorithm
@@ -258,6 +261,9 @@ export namespace SocialNetworkUI {
              * !!! Any observable change might cause a breaking change on steganography !!!
              */
             password?(): string
+        }
+        export interface SetupWizardConfig {
+            disableSayHello?: boolean
         }
     }
 }

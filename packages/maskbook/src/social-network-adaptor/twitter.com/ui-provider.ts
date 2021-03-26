@@ -17,6 +17,7 @@ import {
     useInjectedDialogClassesOverwriteTwitter,
     useThemeTwitterVariant,
 } from './customization/custom'
+import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
 import { i18NOverwriteTwitter } from './customization/i18n'
 import { injectToolbarAtTwitter } from './injection/Toolbar'
 import { injectSearchResultBoxAtTwitter } from './injection/SearchResult'
@@ -83,6 +84,7 @@ const twitterUI: SocialNetworkUI.Definition = {
     },
     injection: {
         toolbar: injectToolbarAtTwitter,
+        toolBoxInNavBar: injectToolboxHintAtTwitter,
         searchResult: injectSearchResultBoxAtTwitter,
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
