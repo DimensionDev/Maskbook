@@ -4,6 +4,7 @@ import type { PluginConfig } from './types'
 const plugins = new Set<PluginConfig>()
 export const PluginUI: ReadonlySet<PluginConfig> = plugins
 
+import { ExternalPluginDefine } from './External/define'
 import { Flags } from '../utils/flags'
 import { EthereumPluginDefine } from './Ethereum/define'
 import { WalletPluginDefine } from './Wallet/define'
@@ -23,6 +24,7 @@ import { VCentPluginDefine } from './VCent/define'
 import { SnapShotPluginDefine } from './Snapshot/define'
 
 sideEffect.then(() => {
+    plugins.add(ExternalPluginDefine)
     plugins.add(EthereumPluginDefine)
     plugins.add(WalletPluginDefine)
     plugins.add(RedPacketPluginDefine)
