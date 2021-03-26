@@ -242,7 +242,7 @@ export default function DashboardSettingsRouter() {
                                     icon={<ShareIcon />}
                                     value={enableGroupSharingSettings}
                                 />
-                                 {process.env.NODE_ENV === 'development' || process.env.build !== 'stable' ? (
+                                {process.env.NODE_ENV === 'development' || process.env.build !== 'stable' ? (
                                     <SettingsUI
                                         classes={listStyle}
                                         icon={<MemoryOutlinedIcon />}
