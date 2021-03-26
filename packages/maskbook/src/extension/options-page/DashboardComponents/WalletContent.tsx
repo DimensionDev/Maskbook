@@ -1,9 +1,11 @@
-import { forwardRef, useCallback, useMemo, useState } from 'react'
-import { Button, Box, IconButton, MenuItem, Tabs, Tab, Alert } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { forwardRef, useCallback, useState } from 'react'
+import { Alert, Box, Button, IconButton, MenuItem, Tab, Tabs } from '@material-ui/core'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import Check from '@material-ui/icons/Check'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddERC20TokenDialog,
@@ -28,7 +30,7 @@ import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useCollectibles } from '../../../plugins/Wallet/hooks/useCollectibles'
-import { CollectibleProvider } from '../../../plugins/Wallet/types'
+import { CollectibleProvider, FilterTransactionType } from '../../../plugins/Wallet/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -93,6 +95,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const chainIdValid = useChainIdValid()
 
     const [collectiblesPage, setCollectiblesPage] = useState(1)
+    const [transactionType, setTransactionType] = useState<FilterTransactionType>(FilterTransactionType.ALL)
 
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
@@ -121,6 +124,20 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
             className={color.error}
             data-testid="delete_button">
             {t('delete')}
+        </MenuItem>,
+    )
+
+    const [transactionTypeMenu, openTransactionTypeMenu] = useMenu(
+        <MenuItem key="all" onClick={() => setTransactionType(FilterTransactionType.ALL)}>
+            All Transactions {transactionType === FilterTransactionType.ALL ? <Check fontSize="small" /> : null}
+        </MenuItem>,
+        <MenuItem key="Send" onClick={() => setTransactionType(FilterTransactionType.SEND)}>
+            Send Transactions
+            {transactionType === FilterTransactionType.SEND ? <Check fontSize="small" /> : null}
+        </MenuItem>,
+        <MenuItem key="Received" onClick={() => setTransactionType(FilterTransactionType.RECEIVE)}>
+            Received Transactions{' '}
+            {transactionType === FilterTransactionType.RECEIVE ? <Check fontSize="small" /> : null}
         </MenuItem>,
     )
 
@@ -176,9 +193,27 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                         indicatorColor="primary"
                         textColor="primary"
                         onChange={onTabChange}>
-                        <Tab label={t('dashboard_tab_assets')}></Tab>
-                        <Tab label={t('dashboard_tab_collectibles')}></Tab>
-                        <Tab label={t('dashboard_tab_transactions')}></Tab>
+                        <Tab label={t('dashboard_tab_assets')} />
+                        <Tab label={t('dashboard_tab_collectibles')} />
+                        <Tab
+                            label={
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                    }}>
+                                    {t('dashboard_tab_transactions')}
+                                    {tabIndex === 2 ? (
+                                        <IconButton
+                                            sx={{ color: 'inherit' }}
+                                            size="small"
+                                            onClick={openTransactionTypeMenu}>
+                                            <ExpandMoreIcon />
+                                        </IconButton>
+                                    ) : null}
+                                </Box>
+                            }
+                        />
                     </Tabs>
                 </Box>
 
@@ -247,9 +282,10 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                         collectiblesRetry={() => setCollectiblesPage(1)}
                     />
                 ) : null}
-                {tabIndex === 2 ? <TransactionList /> : null}
+                {tabIndex === 2 ? <TransactionList transactionType={transactionType} /> : null}
             </Box>
             {menu}
+            {transactionTypeMenu}
             {addToken}
             {addAsset}
             {walletBackup}

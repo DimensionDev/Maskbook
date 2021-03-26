@@ -69,6 +69,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['da
                 gasFee: transaction.tx
                     ? { eth: transaction.tx.eth_gas_fee, usd: transaction.tx.usd_gas_fee }
                     : undefined,
+                transactionType: transaction.cate_id,
             }
         })
 }
@@ -102,6 +103,7 @@ function fromZerion(data: ZerionTransactionItem[]) {
                     eth: Number(ethGasFee),
                     usd: Number(usdGasFee),
                 },
+                transactionType: transaction.type,
             }
         })
 }

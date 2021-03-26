@@ -1,9 +1,9 @@
 import {
     Box,
     Button,
+    CircularProgress,
     createStyles,
     makeStyles,
-    CircularProgress,
     Skeleton,
     Table,
     TableBody,
@@ -12,12 +12,12 @@ import {
     Typography,
 } from '@material-ui/core'
 import { useTransactions } from '../../../../plugins/Wallet/hooks/useTransactions'
-import { PortfolioProvider } from '../../../../plugins/Wallet/types'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { Row } from './Row'
 import AutoResize from 'react-virtualized-auto-sizer'
 import { FixedSizeList } from 'react-window'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
+import { FilterTransactionType } from '../../../../plugins/Wallet/types'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -33,7 +33,11 @@ const useStyles = makeStyles(() =>
     }),
 )
 
-export function TransactionList() {
+export interface TransactionListProps {
+    transactionType: FilterTransactionType
+}
+
+export function TransactionList({ transactionType }: TransactionListProps) {
     const styles = useStyles()
     const account = useAccount()
 
@@ -45,6 +49,12 @@ export function TransactionList() {
         error: transactionsError,
         retry: transactionsRetry,
     } = useTransactions(account, page)
+
+    const dataSource = useMemo(() => {
+        return transactions.filter(({ transactionType: type }) =>
+            transactionType === FilterTransactionType.ALL ? true : type === transactionType,
+        )
+    }, [transactions, transactionType])
 
     if (transactionsLoading && page === 1)
         return (
@@ -61,7 +71,7 @@ export function TransactionList() {
             </Table>
         )
 
-    if (transactionsError || transactions.length === 0)
+    if (transactionsError || dataSource.length === 0)
         return (
             <Box
                 sx={{
@@ -90,21 +100,21 @@ export function TransactionList() {
                     return (
                         <FixedSizeList
                             onItemsRendered={({ visibleStopIndex, overscanStopIndex }) => {
-                                if (transactions.length === 0 || transactionsError || transactionsLoading) return
+                                if (dataSource.length === 0 || transactionsError || transactionsLoading) return
 
                                 if (
                                     visibleStopIndex === overscanStopIndex &&
-                                    visibleStopIndex === transactions.length - 1
+                                    visibleStopIndex === dataSource.length - 1
                                 )
                                     setPage((prev) => prev + 1)
                             }}
                             itemSize={96}
-                            itemCount={transactions.length}
+                            itemCount={dataSource.length}
                             overscanCount={5}
                             width={width}
                             height={height - 40}>
                             {({ index, style }) => {
-                                const transaction = transactions[index]
+                                const transaction = dataSource[index]
                                 return transaction ? (
                                     <Row key={transaction.id} transaction={transaction} style={style} />
                                 ) : null
