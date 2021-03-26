@@ -5,7 +5,9 @@ import { useAsyncRetry } from 'react-use'
 import { WalletRPC, WalletMessages } from '../messages'
 import { ERC721TokenRecordToCollectible } from '../services/helpers'
 import { ERC721TokenArrayComparer } from '../helpers'
-import type { CollectibleProvider } from '../types'
+import type { Collectible, CollectibleProvider } from '../types'
+import { useRef } from 'react'
+import { uniqBy } from 'lodash-es'
 
 //#region cache service query result
 const erc721TokensRef = new ValueRef<ERC721TokenRecordInDatabase[]>([], ERC721TokenArrayComparer)
@@ -29,4 +31,20 @@ export function useCollectiblesFromNetwork(address: string, provider: Collectibl
         if (!address) return []
         return WalletRPC.getAssetsListNFT(address.toLowerCase(), provider)
     }, [address, provider])
+}
+
+export function useCollectibles(address: string, provider: CollectibleProvider, page: number) {
+    const values = useRef<Collectible[]>([])
+    return useAsyncRetry(async () => {
+        if (page === 1) values.current = []
+
+        if (!address) return []
+        const result = await WalletRPC.getAssetsListNFT(address.toLowerCase(), provider, page)
+        const erc721Tokens = await WalletRPC.getERC721TokensPaged(page, 50)
+
+        values.current.push(
+            ...uniqBy([...result, ...erc721Tokens.map((x) => ERC721TokenRecordToCollectible(x))], 'token_id'),
+        )
+        return values.current
+    }, [address, provider, page])
 }

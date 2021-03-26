@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useState } from 'react'
+import { forwardRef, useCallback, useMemo, useState } from 'react'
 import { Button, Box, IconButton, MenuItem, Tabs, Tab, Alert } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -27,7 +27,7 @@ import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useCollectiblesFromNetwork, useCollectiblesFromDB } from '../../../plugins/Wallet/hooks/useCollectibles'
+import { useCollectibles } from '../../../plugins/Wallet/hooks/useCollectibles'
 import { CollectibleProvider } from '../../../plugins/Wallet/types'
 
 const useStyles = makeStyles((theme) =>
@@ -92,20 +92,20 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const xsMatched = useMatchXS()
     const chainIdValid = useChainIdValid()
 
+    const [collectiblesPage, setCollectiblesPage] = useState(1)
+
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
     const [addAsset, , openAddAsset] = useModal(DashboardWalletAddERC721TokenDialog)
 
-    const {
-        value: collectiblesFromNetwork = [],
-        loading: collectiblesLoading,
-        error: collectiblesError,
-        retry: collectiblesRetry,
-    } = useCollectiblesFromNetwork(account, CollectibleProvider.OPENSEAN)
-    const collectiblesFromDB = useCollectiblesFromDB()
-    const collectibles = [...collectiblesFromNetwork, ...collectiblesFromDB]
+    const { value: collectibles = [], loading: collectiblesLoading, error: collectiblesError } = useCollectibles(
+        account,
+        CollectibleProvider.OPENSEAN,
+        collectiblesPage,
+    )
+
     const [menu, openMenu] = useMenu(
         <MenuItem key="rename" onClick={() => openWalletRename({ wallet })}>
             {t('rename')}
@@ -239,10 +239,12 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                 {tabIndex === 1 ? (
                     <CollectibleList
                         wallet={wallet}
+                        page={collectiblesPage}
+                        onNextPage={() => setCollectiblesPage((prev) => prev + 1)}
                         collectibles={collectibles}
                         collectiblesLoading={collectiblesLoading}
                         collectiblesError={collectiblesError}
-                        collectiblesRetry={collectiblesRetry}
+                        collectiblesRetry={() => setCollectiblesPage(1)}
                     />
                 ) : null}
                 {tabIndex === 2 ? <TransactionList /> : null}

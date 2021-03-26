@@ -88,30 +88,28 @@ export function TransactionList() {
             <AutoResize>
                 {({ width, height }) => {
                     return (
-                        <>
-                            <FixedSizeList
-                                onItemsRendered={({ visibleStopIndex, overscanStopIndex }) => {
-                                    if (transactions.length === 0 || transactionsError || transactionsLoading) return
+                        <FixedSizeList
+                            onItemsRendered={({ visibleStopIndex, overscanStopIndex }) => {
+                                if (transactions.length === 0 || transactionsError || transactionsLoading) return
 
-                                    if (
-                                        visibleStopIndex === overscanStopIndex &&
-                                        visibleStopIndex === transactions.length - 1
-                                    )
-                                        setPage((prev) => prev + 1)
-                                }}
-                                itemSize={96}
-                                itemCount={transactions.length}
-                                overscanCount={5}
-                                width={width}
-                                height={height - 40}>
-                                {({ index, style }) => {
-                                    const transaction = transactions[index]
-                                    return transaction ? (
-                                        <Row key={transaction.id} transaction={transaction} style={style} />
-                                    ) : null
-                                }}
-                            </FixedSizeList>
-                        </>
+                                if (
+                                    visibleStopIndex === overscanStopIndex &&
+                                    visibleStopIndex === transactions.length - 1
+                                )
+                                    setPage((prev) => prev + 1)
+                            }}
+                            itemSize={96}
+                            itemCount={transactions.length}
+                            overscanCount={5}
+                            width={width}
+                            height={height - 40}>
+                            {({ index, style }) => {
+                                const transaction = transactions[index]
+                                return transaction ? (
+                                    <Row key={transaction.id} transaction={transaction} style={style} />
+                                ) : null
+                            }}
+                        </FixedSizeList>
                     )
                 }}
             </AutoResize>
