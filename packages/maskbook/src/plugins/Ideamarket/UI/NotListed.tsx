@@ -38,7 +38,14 @@ export default function NotListed(props: UIProps) {
     const classes = useStyles()
 
     return (
-        <div className={classes.root} onMouseEnter={()  => props.setExtendedHover(true)} onMouseLeave={() => setTimeout(() => { props.setExtendedHover(false) }, 200)}>
+        <div
+            className={classes.root}
+            onMouseEnter={() => props.setExtendedHover(true)}
+            onMouseLeave={() =>
+                setTimeout(() => {
+                    props.setExtendedHover(false)
+                }, 200)
+            }>
             <Box className={classes.topBox} display="flex" justifyContent="center">
                 <Typography className={classes.topText}>
                     <b>Unlisted</b>

@@ -6,9 +6,15 @@ export interface getListingData {
     price: number
 }
 
-export interface ListingProps {
-    username: string
-    setExtendedHover: Dispatch<SetStateAction<boolean>>
+type pricePoint = {
+    price: string
+}
+
+export interface getAllListingsData {
+    name: string
+    rank: number
+    dayChange: string
+    latestPricePoint: pricePoint
 }
 
 export interface UIProps {

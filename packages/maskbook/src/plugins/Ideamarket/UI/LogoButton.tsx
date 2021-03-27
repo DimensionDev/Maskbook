@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { makeStyles, IconButton, SvgIcon } from '@material-ui/core'
+import { makeStyles, IconButton, Typography } from '@material-ui/core'
 import Listing from './Listing'
-import IdeamarketLogo from './assets/idea-markets-logo.svg'
+import { GreenIcon, GrayIcon } from './assets/index'
 
 const useStyles = makeStyles((theme) => ({
     // root is for aligning the button in twitter itself.. Write a selector bitch.
@@ -17,10 +17,20 @@ const useStyles = makeStyles((theme) => ({
         width: '2em',
         height: '2em',
     },
+
+    rankText: {
+        fontSize: '12px',
+        color: 'gray',
+        marginRight: '4px',
+    },
 }))
 
 interface LogoButtonProps {
     username: string
+    rank?: number
+    dayChange?: string
+    price?: string
+    found: boolean
 }
 
 export default function LogoButton(props: LogoButtonProps) {
@@ -32,11 +42,38 @@ export default function LogoButton(props: LogoButtonProps) {
 
     const doWeRender = () => {
         if (clicked) {
-            return <Listing username={props.username} setExtendedHover={setExtendedHover} />
+            return (
+                <Listing
+                    username={props.username}
+                    setExtendedHover={setExtendedHover}
+                    found={props.found}
+                    rank={props.rank}
+                    dayChange={props.dayChange}
+                    price={props.price}
+                />
+            )
         } else if (hover) {
-            return <Listing username={props.username} setExtendedHover={setExtendedHover} />
+            return (
+                <Listing
+                    username={props.username}
+                    setExtendedHover={setExtendedHover}
+                    found={props.found}
+                    rank={props.rank}
+                    dayChange={props.dayChange}
+                    price={props.price}
+                />
+            )
         } else if (extendedHover) {
-            return <Listing username={props.username} setExtendedHover={setExtendedHover} />
+            return (
+                <Listing
+                    username={props.username}
+                    setExtendedHover={setExtendedHover}
+                    found={props.found}
+                    rank={props.rank}
+                    dayChange={props.dayChange}
+                    price={props.price}
+                />
+            )
         } else {
             return null
         }
@@ -47,16 +84,20 @@ export default function LogoButton(props: LogoButtonProps) {
             <IconButton
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() =>
-
-                                       setTimeout(() => {
-
+                    setTimeout(() => {
                         setHover(false)
-
-                    }, 1000)
+                    }, 500)
                 }
                 onClick={() => setClicked(!clicked)}
                 className={classes.logoButton}>
-                <img width={25} height={25} src={IdeamarketLogo} />
+                {props.found ? (
+                    <>
+                        <Typography className={classes.rankText}>{props.rank}</Typography>
+                        <GreenIcon />
+                    </>
+                ) : (
+                    <GrayIcon />
+                )}
             </IconButton>
 
             {doWeRender()}
