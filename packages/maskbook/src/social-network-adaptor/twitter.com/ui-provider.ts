@@ -29,7 +29,6 @@ import { injectMaskUserBadgeAtTwitter } from './injection/MaskbookIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { currentSelectedIdentity } from '../../settings/settings'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
-import { isUndefined } from 'lodash'
 
 const origins = ['https://www.twitter.com/*', 'https://m.twitter.com/*', 'https://twitter.com/*']
 const twitterUI: SocialNetworkUI.Definition = {
