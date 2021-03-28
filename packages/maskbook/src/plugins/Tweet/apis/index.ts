@@ -1,12 +1,32 @@
 import { TWEET_BASE_URL } from '../constants'
-import type { TweetData } from '../types'
 
-export async function fetchTweet(id: string) {
-    if (!/\d+/.test(id)) return
-    console.log(`${TWEET_BASE_URL}${id}`)
-    //const response = await fetch(`${TWEET_BASE_URL}${id}`)
-    //const { tweet } = (await response.json()) as {
-    //   tweet: TweetData
-    //}
-    //return tweet
+export interface TweetData {
+    id: string
+    tweet_id: string
+    type: string
+    source_address: string
+    target_address: string
+    amount_eth: number
+    txid: string
+    chain_time: string
+    latest: number
+    create_time: string
+    status: string
+    amount_usd: number
+}
+
+export interface TweetDataResponse {
+    results: TweetData[]
+}
+
+export interface TweetAddressResponse {
+    tweetAddress: string
+}
+
+export async function getTweetData(props: TweetAddressResponse) {
+    let url = TWEET_BASE_URL + props.tweetAddress
+    const response = await fetch(url)
+    const tweetResponse = (await response.json()) as TweetDataResponse
+
+    return tweetResponse
 }

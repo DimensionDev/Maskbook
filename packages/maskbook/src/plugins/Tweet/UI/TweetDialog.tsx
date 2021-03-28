@@ -1,53 +1,107 @@
-import { Typography, Card, makeStyles } from '@material-ui/core'
-import type { TweetData } from '../types'
-import { fetchTweet } from '../apis/index'
-import { useAsync } from 'react-use'
+import { useEffect, useState } from 'react'
+import { makeStyles, createStyles, Button } from '@material-ui/core'
+import * as TweetAPI from '../apis/index'
+import { ETHIcon } from '../Icons/ETH'
+import { VCentIcon } from '../Icons/VCent'
+import { VALUABLES_VCENT_URL } from '../constants'
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        marginTop: 20,
+    },
+
+    content: {
+        backgroundColor: '#f3f3f3',
+        color: '#f3f3f3',
         display: 'flex',
-        flexDirection: 'column',
+        height: 45,
         alignItems: 'center',
-        border: `1px solid ${theme.palette.divider}`,
-        boxSizing: 'border-box',
-        borderRadius: 12,
-        cursor: 'default',
-        userSelect: 'none',
-        '& p': { margin: 0 },
+        borderRadius: 25,
+        justifyContent: 'space-between',
     },
-    media: {
-        borderRadius: 12,
-        width: '100%',
+
+    VCent: {
+        marginLeft: -10,
+        marginTop: 5,
     },
-    meta: {
-        flex: 1,
-        minWidth: '1%',
-        marginLeft: 18,
-        marginRight: 18,
-        fontSize: 14,
-        lineHeight: 1.85,
+
+    bidInfo: {
+        color: '#6b6b6b',
+        display: 'flex',
+        fontSize: 16,
+        alignItems: 'center',
+        borderWidth: 2,
+        marginRight: 15,
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+
+    textUSD: {
+        color: '#1d1d1d',
+        fontSize: 15,
+        fontWeight: 400,
+        borderWidth: 2,
+        marginRight: 5,
+    },
+
+    textETH: {
+        color: '#6b6b6b',
+        display: 'flex',
+        fontSize: 15,
+        alignItems: 'center',
+        fontWeight: 400,
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+
+    text: {
+        color: '#1d1d1d',
+        height: 13,
+        fontSize: 13,
+        fontWeight: 500,
+        marginRight: 5,
+        borderWidth: 2,
+        marginBottom: 5.5,
+    },
+
+    typography: {
         padding: theme.spacing(2),
     },
+
+    paper: {
+        padding: theme.spacing(1),
+      },
 }))
 
-interface TweetID {
-    tweet: string
-}
-
-export default function TweetDialog(props: TweetID) {
+export default function TweetDialog(tweetAddress: any) {
     const classes = useStyles()
+    const [tweet, setTweets] = useState<TweetAPI.TweetData>()
+    const [type, setType] = useState('')
 
-    const tweetBidResponse = useAsync(async function () {
-        const response = await fetchTweet(props.tweet)
-        console.log('Tweet: ', response)
+    useEffect(() => {
+        TweetAPI.getTweetData(tweetAddress).then((res) => {
+            setTweets(res.results[0])
+            setType(res.results[0].type)
+        })
+    }, [])
 
-        //if(response?.type == 'Closed') return null
-    })
     return (
-        <Card className={classes.root}>
-            <div className={classes.meta}>
-                <Typography component="p" color="textPrimary"></Typography>
-            </div>
-        </Card>
+        <div className={classes.root}>
+            {tweet && type === 'Offer' ? (
+                <Button className={classes.content} target="_blank" href={VALUABLES_VCENT_URL + tweet.tweet_id} style={{backgroundColor: '#f3f3f3'}}>
+                    <div className={classes.VCent} >
+                        <VCentIcon />
+                    </div>
+                    <div className={classes.bidInfo}>
+                        <div className={classes.text}> LATEST OFFER at</div>
+                        <div className={classes.textUSD}>${tweet.amount_usd}</div>
+                        <div className={classes.textETH}>
+                            (<ETHIcon />
+                            {tweet.amount_eth.toFixed(4)})
+                        </div>
+                    </div>
+                </Button>
+            ) : null}
+        </div>
     )
 }

@@ -10,10 +10,25 @@ export const TweetPluginDefine: PluginConfig = {
     scope: PluginScope.Internal,
 
     postInspector: function Component(): JSX.Element | null {
-        const tweet = usePostInfoDetails('postID')
-
-        if (!tweet) return null
-
-        return <TweetDialog tweet={tweet} />
+        const tweetAddress = usePostInfoDetails('postID')
+        console.log('TWEEEETT ', tweetAddress)
+        if (!tweetAddress) return null
+        return <TweetDialog tweetAddress={tweetAddress} />
     },
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
