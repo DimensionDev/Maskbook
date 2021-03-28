@@ -19,7 +19,6 @@ import {
 } from './customization/custom'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
 import { i18NOverwriteTwitter } from './customization/i18n'
-import { injectToolbarAtTwitter } from './injection/Toolbar'
 import { injectSearchResultBoxAtTwitter } from './injection/SearchResult'
 import { injectPostReplacerAtTwitter } from './injection/PostReplacer'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
@@ -83,7 +82,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         return { friends, profiles }
     },
     injection: {
-        toolbar: injectToolbarAtTwitter,
         toolBoxInNavBar: injectToolboxHintAtTwitter,
         searchResult: injectSearchResultBoxAtTwitter,
         enhancedPostRenderer: injectPostReplacerAtTwitter,
