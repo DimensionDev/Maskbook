@@ -19,7 +19,6 @@ import {
 } from './customization/custom'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
 import { i18NOverwriteTwitter } from './customization/i18n'
-import { injectToolbarAtTwitter } from './injection/Toolbar'
 import { injectSearchResultBoxAtTwitter } from './injection/SearchResult'
 import { injectPostReplacerAtTwitter } from './injection/PostReplacer'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
@@ -30,6 +29,7 @@ import { injectMaskUserBadgeAtTwitter } from './injection/MaskbookIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { currentSelectedIdentity } from '../../settings/settings'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
+import { isUndefined } from 'lodash'
 
 const origins = ['https://www.twitter.com/*', 'https://m.twitter.com/*', 'https://twitter.com/*']
 const twitterUI: SocialNetworkUI.Definition = {
@@ -83,7 +83,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         return { friends, profiles }
     },
     injection: {
-        toolbar: injectToolbarAtTwitter,
+        toolbar: undefined,
         toolBoxInNavBar: injectToolboxHintAtTwitter,
         searchResult: injectSearchResultBoxAtTwitter,
         enhancedPostRenderer: injectPostReplacerAtTwitter,
