@@ -112,7 +112,7 @@ export default function DashboardWalletsRouter() {
         loading: detailedTokensLoading,
         retry: detailedTokensRetry,
     } = useAssetsDetailed(tokens)
-    const { value: stableTokens = [] } = useStableTokensDebank()
+    const stableTokens = useStableTokensDebank()
 
     // show create dialog
     useEffect(() => {
