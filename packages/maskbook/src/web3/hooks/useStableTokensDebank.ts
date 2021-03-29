@@ -8,7 +8,7 @@ export function useStableTokensDebank() {
     const chainId = useChainId()
     if (chainId !== ChainId.Mainnet) return []
 
-    return StableCoins.data.map((x: { id: string; decimals: number; name: string; symbol: string }) =>
+    return StableCoins.map((x: { id: string; decimals: number; name: string; symbol: string }) =>
         createERC20Token(chainId, formatChecksumAddress(x.id), x.decimals, x.name, x.symbol),
     )
 }
