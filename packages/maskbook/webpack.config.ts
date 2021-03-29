@@ -111,8 +111,6 @@ function config(opts: {
             rules: [
                 // Opt in source map
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
-                // support for svg
-                 { test: /\.svg$/, loader: 'file-loader' }, 
                 // TypeScript
                 {
                     test: /\.(ts|tsx)$/,
