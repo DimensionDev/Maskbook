@@ -14,7 +14,7 @@ import { formatChecksumAddress } from '../formatter'
 
 export async function getAssetsListNFT(address: string, provider: CollectibleProvider, page?: number) {
     if (provider === CollectibleProvider.OPENSEAN) {
-        const { assets } = await OpenSeaAPI.getAssetsList(address, page)
+        const { assets } = await OpenSeaAPI.getAssetsList(address, { page })
         return assets.map(
             (x): Collectible => ({
                 asset_contract: {

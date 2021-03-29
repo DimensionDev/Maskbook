@@ -113,7 +113,8 @@ export interface AssetsListResponse {
     assets: Asset[]
 }
 
-export async function getAssetsList(from: string, page = 0, size = 50) {
+export async function getAssetsList(from: string, opts: { page?: number; size?: number }) {
+    const { page = 0, size = 50 } = opts
     const params = new URLSearchParams()
     params.append('exclude_currencies', 'true')
     params.append('owner', from.toLowerCase())
