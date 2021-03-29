@@ -4,7 +4,6 @@ export const blackPicture = new URL('./ideamarkets-black.png', import.meta.url)
 
 export const defaultPicture = new URL('./idea-markets-logo.svg', import.meta.url)
 
-
 export function GreenIcon(props: SvgIconProps) {
     return (
         <SvgIcon {...props}>

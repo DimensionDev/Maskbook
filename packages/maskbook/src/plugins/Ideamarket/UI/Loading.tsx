@@ -39,11 +39,11 @@ export default function Loading() {
                 <CircularProgress />
             </Box>
             <Divider />
-            <Box display="flex" sx={{ backgroundColor: "#f7f7f7" }} justifyContent="center">
+            <Box display="flex" sx={{ backgroundColor: '#f7f7f7' }} justifyContent="center">
                 <CircularProgress />
             </Box>
 
-            <Box display="flex" sx={{ backgroundColor: "#f7f7f7" }} justifyContent="center">
+            <Box display="flex" sx={{ backgroundColor: '#f7f7f7' }} justifyContent="center">
                 <Typography className={classes.bottomText}>
                     powered by <b>Ideamarket</b>
                 </Typography>

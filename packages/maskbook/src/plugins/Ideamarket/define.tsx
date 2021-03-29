@@ -23,10 +23,10 @@ export const IdeamarketPluginDefine: PluginConfig = {
     scope: PluginScope.Internal,
 
     postInspector: function Component(): JSX.Element | null {
-	const user = usePostInfoDetails('postBy').userId
+        const user = usePostInfoDetails('postBy').userId
 
         if (!user) return null
-        
+
         const username = '@' + user
 
         let potentialListing: getAllListingsData | undefined
