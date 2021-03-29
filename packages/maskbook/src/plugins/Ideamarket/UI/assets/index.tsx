@@ -1,13 +1,9 @@
 import { SvgIconProps, SvgIcon } from '@material-ui/core'
-import sweg from './idea-markets-logo.svg'
 
-export function IdeamarketLogo(props: SvgIconProps) {
-    return <SvgIcon {...props}>{sweg}</SvgIcon>
-}
+export const blackPicture = new URL('./ideamarkets-black.png', import.meta.url)
 
-export function IdeamarketPicture() {
-    return <img width={25} height={25} src={sweg} />
-}
+export const defaultPicture = new URL('./idea-markets-logo.svg', import.meta.url)
+
 
 export function GreenIcon(props: SvgIconProps) {
     return (

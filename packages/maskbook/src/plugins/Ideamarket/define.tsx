@@ -23,14 +23,11 @@ export const IdeamarketPluginDefine: PluginConfig = {
     scope: PluginScope.Internal,
 
     postInspector: function Component(): JSX.Element | null {
-        const user = usePostInfoDetails('postBy').toText()
-        // usere in format: "username:  person:twitter.com/elonmusk"
+	const user = usePostInfoDetails('postBy').userId
 
         if (!user) return null
-
-        const pattern = /\/(\S+)/ // match everything after a slash
-        let username = user.match(pattern)![1]
-        username = '@' + username
+        
+        const username = '@' + user
 
         let potentialListing: getAllListingsData | undefined
 

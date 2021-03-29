@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { makeStyles, IconButton, Typography } from '@material-ui/core'
 import Listing from './Listing'
-import { GreenIcon, GrayIcon } from './assets/index'
+import { defaultPicture, GrayIcon } from './assets'
 
 const useStyles = makeStyles((theme) => ({
-    // root is for aligning the button in twitter itself.. Write a selector bitch.
     root: {
         display: 'flex',
         justifyContent: 'flex-end',
@@ -93,7 +92,7 @@ export default function LogoButton(props: LogoButtonProps) {
                 {props.found ? (
                     <>
                         <Typography className={classes.rankText}>{props.rank}</Typography>
-                        <GreenIcon />
+                        <img width={25} height={25} src={defaultPicture.toString()} />
                     </>
                 ) : (
                     <GrayIcon />

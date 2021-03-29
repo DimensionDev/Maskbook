@@ -105,7 +105,7 @@ export default function Listed(props: ListedProps) {
             </div>
 
             <Divider />
-            <Box display="flex" bgcolor="#f7f7f7" justifyContent="center">
+            <Box display="flex" sx={{ backgroundColor: "#f7f7f7" }} justifyContent="center">
                 <Link
                     href={`https://ideamarket.io/i/twitter/${props.username}`}
                     target="_blank"
