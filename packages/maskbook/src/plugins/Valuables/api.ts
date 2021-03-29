@@ -25,7 +25,7 @@ export interface tweetBids {
     amount_eth: number // eth
     txid: string
     chain_time: string
-    latest: number // 0,1
+    latest: 0 | 1
     create_time: string
     status: string
     amount_usd: number // usd
