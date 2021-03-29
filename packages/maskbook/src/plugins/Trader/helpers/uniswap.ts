@@ -17,21 +17,14 @@ import {
     CurrencyAmount as QuickswapCurrencyAmount,
     Percent as QuickswapPercent,
     Price as QuickswapPrice,
-    WETH as WMATIC,
 } from 'quickswap-sdk'
 import { WETH } from '../constants'
-import {
-    ChainId,
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    EtherTokenDetailed,
-    MaticTokenDetailed,
-} from '../../../web3/types'
+import { ChainId, ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
-import { isETH, isWMATIC } from '../../../web3/helpers'
+import { isETH } from '../../../web3/helpers'
 import { formatEthereumAddress } from '../../Wallet/formatter'
 
-export function toUniswapChainId(chainId: ChainId): UniswapChainId | QuickswapChainId {
+export function toUniswapChainId(chainId: ChainId | QuickswapChainId ): UniswapChainId | QuickswapChainId {
     switch (chainId) {
         case ChainId.Mainnet:
             return UniswapChainId.MAINNET
@@ -56,19 +49,12 @@ export function toUniswapPercent(numerator: number, denominator: number) {
     return new UniswapPercent(JSBI.BigInt(numerator), JSBI.BigInt(denominator))
 }
 
-export function toUniswapCurrency(
-    chainId: ChainId,
-    token: EtherTokenDetailed | ERC20TokenDetailed,
-): UniswapCurrency | QuickswapCurrency {
+export function toUniswapCurrency(chainId: ChainId | QuickswapChainId, token: EtherTokenDetailed | ERC20TokenDetailed): QuickswapCurrency | UniswapCurrency {
     if (isETH(token.address)) return ETHER
-    if (isWMATIC(token.address)) return WMATIC
     return toUniswapToken(chainId, token)
 }
 
-export function toUniswapToken(
-    chainId: ChainId,
-    token: EtherTokenDetailed | MaticTokenDetailed | ERC20TokenDetailed,
-): UniswapToken | QuickswapToken {
+export function toUniswapToken(chainId: ChainId | QuickswapChainId, token: EtherTokenDetailed | ERC20TokenDetailed): UniswapToken | QuickswapToken {
     if (isETH(token.address)) return toUniswapToken(chainId, WETH[chainId])
     return new UniswapToken(
         toUniswapChainId(chainId),
@@ -80,7 +66,7 @@ export function toUniswapToken(
 }
 
 export function toUniswapCurrencyAmount(
-    chainId: ChainId,
+    chainId: ChainId | QuickswapChainId,
     token: EtherTokenDetailed | ERC20TokenDetailed,
     amount: string,
 ) {
@@ -101,9 +87,9 @@ export function uniswapChainIdTo(chainId: UniswapChainId | QuickswapChainId) {
             return ChainId.Kovan
         case UniswapChainId.GÖRLI:
             return ChainId.Gorli
-        case QuickswapChainId.MATIC:
+        case UniswapChainId.MATIC:
             return ChainId.Matic
-        case QuickswapChainId.MUMBAI:
+        case UniswapChainId.MUMBAI:
             return ChainId.Mumbai
         default:
             unreachable(chainId)
@@ -118,7 +104,7 @@ export function uniswapPriceTo(price: UniswapPrice) {
     return new BigNumber(price.scalar.numerator.toString()).dividedBy(price.scalar.denominator.toString())
 }
 
-export function uniswapTokenTo(token: UniswapToken) {
+export function uniswapTokenTo(token: UniswapToken | QuickswapToken) {
     return {
         type: token.name === 'ETH' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
         name: token.name,
@@ -129,6 +115,6 @@ export function uniswapTokenTo(token: UniswapToken) {
     } as EtherTokenDetailed | ERC20TokenDetailed
 }
 
-export function uniswapCurrencyAmountTo(currencyAmount: UniswapCurrencyAmount) {
+export function uniswapCurrencyAmountTo(currencyAmount: UniswapCurrencyAmount | QuickswapCurrencyAmount) {
     return new BigNumber(currencyAmount.raw.toString())
 }

@@ -55,6 +55,15 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     AGAINST_TOKENS: SASHIMISWAP_BASE_AGAINST_TOKENS,
                     CUSTOM_TOKENS: SASHIMISWAP_CUSTOM_BASES,
                 }
+                case TradeProvider.QUICKSWAP:
+                    return {
+                        GRAPH_API: THEGRAPH_QUICKSWAP,
+                        INIT_CODE_HASH: QUICKSWAP_INIT_CODE_HASH,
+                        ROUTER_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'SASHIMISWAP_ROUTER_ADDRESS', chainId),
+                        FACTORY_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'SASHIMISWAP_FACTORY_ADDRESS', chainId),
+                        AGAINST_TOKENS: QUICKSWAP_BASE_AGAINST_TOKENS,
+                        CUSTOM_TOKENS: QUICKSWAP_CUSTOM_BASES,
+                    }
             default:
                 return null
         }

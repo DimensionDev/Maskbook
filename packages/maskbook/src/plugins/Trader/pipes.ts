@@ -153,7 +153,6 @@ export function resolveZrxTradePoolName(swapSource: ZrxTradePool) {
         [ZrxTradePool.Swerve]: 'Swerve',
         [ZrxTradePool.SnowSwap]: 'SnowSwap',
         [ZrxTradePool.SushiSwap]: 'SushiSwap',
-        [ZrxTradePool.QuickSwap]: 'QuickSwap',
         [ZrxTradePool.Dodo]: 'DODO',
         [ZrxTradePool.CryptoCom]: 'CryptoCom',
     }

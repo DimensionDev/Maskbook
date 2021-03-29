@@ -42,7 +42,6 @@ export enum ZrxTradePool {
     Swerve = 'Swerve',
     SnowSwap = 'SnowSwap',
     SushiSwap = 'SushiSwap',
-    QuickSwap = 'QuickSwap',
     CryptoCom = 'CryptoCom',
     Dodo = 'DODO',
 }

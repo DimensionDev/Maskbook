@@ -1,5 +1,6 @@
-import { ChainId, ERC20TokenDetailed } from '../../../web3/types'
-import { AMPL, QUICK, DAI, YAM, WBTC, MSKA, MSKB, MSKC, USDC, USDT, WETH, WETH_ONLY, WMATIC } from './trader'
+import { ChainId, JSBI, Percent, Token, WETH, INIT_CODE_HASH } from 'quickswap-sdk'
+import type { ERC20TokenDetailed } from '../../../web3/types'
+import { AMPL, QUICK, DAI, WBTC, USDC, USDT,  WETH_ONLY, WMATIC } from './trader'
 
 /**
  * Some tokens can only be swapped via certain pairs,
@@ -7,20 +8,21 @@ import { AMPL, QUICK, DAI, YAM, WBTC, MSKA, MSKB, MSKC, USDC, USDT, WETH, WETH_O
  */
 export const QUICKSWAP_CUSTOM_BASES: {
     readonly [chainId in ChainId]?: {
-        [tokenAddress: string]: ERC20TokenDetailed[]
+        [tokenAddress: string]: (ERC20TokenDetailed | Token)[]
     }
 } = {
-    [ChainId.Matic]: {
-        [AMPL.address]: [DAI, WETH[ChainId.Matic]],
+    [ChainId.MATIC]: {
+        [AMPL.address]: [DAI, WETH[ChainId.MATIC]],
     },
 }
+
 export const QUICKSWAP_BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
     ...WETH_ONLY,
-    [ChainId.Matic]: [...WETH_ONLY[ChainId.Matic], ...[DAI, USDC, USDT, QUICK, YAM, WBTC, WMATIC]],
+    [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], ...[DAI, USDC, USDT, QUICK, WBTC, WMATIC]],
 }
 
 export const THEGRAPH_QUICKSWAP = 'https://api.thegraph.com/subgraphs/name/developerfred/quick-swap'
 
-export const QUICKSWAP_INIT_CODE_HASH = '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f'
+export const QUICKSWAP_INIT_CODE_HASH = INIT_CODE_HASH

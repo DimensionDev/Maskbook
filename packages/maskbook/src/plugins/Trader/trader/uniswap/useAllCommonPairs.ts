@@ -1,10 +1,11 @@
 import { useContext, useMemo } from 'react'
 import { flatMap } from 'lodash-es'
 import type { Pair } from '@uniswap/sdk'
+import type { Pair as QuickPair, ChainId as QuickswapChainId } from 'quickswap-sdk'
 import { toUniswapChainId, toUniswapToken } from '../../helpers'
 import { usePairs, TokenPair, PairState } from './usePairs'
 import { useChainId } from '../../../../web3/hooks/useChainState'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import type { ERC20TokenDetailed, EtherTokenDetailed, ChainId } from '../../../../web3/types'
 import { useUniswapToken } from './useUniswapToken'
 import { TradeContext } from '../useTradeContext'
 
@@ -12,7 +13,7 @@ export function useAllCommonPairs(
     tokenA?: EtherTokenDetailed | ERC20TokenDetailed,
     tokenB?: EtherTokenDetailed | ERC20TokenDetailed,
 ) {
-    const chainId = useChainId()
+    const chainId = <QuickswapChainId | ChainId> useChainId()
     const context = useContext(TradeContext)
     const uniswapTokenA = useUniswapToken(tokenA)
     const uniswapTokenB = useUniswapToken(tokenB)
@@ -72,7 +73,7 @@ export function useAllCommonPairs(
                           return true
                       })
                 : [],
-        [[uniswapTokenA?.address, uniswapTokenB?.address].sort().join(), bases, basePairs, chainId, context],
+        [uniswapTokenA, uniswapTokenB, chainId, bases, basePairs, context?.CUSTOM_TOKENS],
     )
     const { value: allPairs, ...asyncResult } = usePairs(allPairCombinations)
 
