@@ -43,8 +43,8 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0x42ad527de7d4e9d9d011ac45b31d8551f8fe9821',
         [ChainId.Kovan]: '0x2cc8688c5f75e365aaeeb4ea8d6a480405a48d2a',
         [ChainId.Gorli]: '0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e',
-        [ChainId.Matic]: '',
-        [ChainId.Mumbai]: '',
+        [ChainId.Matic]: '0x95028E5B8a734bb7E2071F96De89BABe75be9C8E',
+        [ChainId.Mumbai]: '0x9Fc8e50Eb08C1F463b45d1AFb9c261B0a1903006',
     },
 
     // tokens
