@@ -2,9 +2,6 @@ import { useAsync } from 'react-use'
 import { makeStyles, Typography, Button } from '@material-ui/core'
 import { getTweetBid } from '../api'
 
-// import { ETHIcon } from '@dimensiondev/icons'
-// <i class="fab fa-ethereum"></i>
-
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
@@ -12,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'flex-end',
     },
     bidButton: {
-        borderRadius: '20px',
+        borderRadius: 20,
         backgroundColor: theme.palette.mode === 'light' ? '#EFF1F2' : '#1E2024',
         width: '100%',
         margin: theme.spacing(1),
@@ -24,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     bidText: {
         margin: theme.spacing(0.7),
         color: '#1C68F3',
-        fontSize: '14px',
+        fontSize: 14,
     },
 }))
 
