@@ -258,6 +258,12 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
 
     if (!detailedTokens.length) return null
 
+    const viewDetailedTokens = detailedTokens.filter((x) =>
+        Number(price) !== 0
+            ? new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(price) ||
+              x.token.type === EthereumTokenType.Ether
+            : true,
+    )
     return (
         <>
             <TableContainer className={classes.container}>
@@ -315,33 +321,28 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                       </TableCell>
                                   </TableRow>
                               ))
-                            : detailedTokens
-                                  .filter((x) =>
-                                      Number(price) !== 0
-                                          ? new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(price) ||
-                                            x.token.type === EthereumTokenType.Ether
-                                          : true,
-                                  )
-                                  .map((y, idx) =>
-                                      idx < viewLength ? (
-                                          <ViewDetailed
-                                              key={idx}
-                                              x={y}
-                                              isMobile={isMobile}
-                                              stableTokens={stableTokens}
-                                              wallet={wallet}
-                                          />
-                                      ) : null,
-                                  )}
+                            : viewDetailedTokens.map((y, idx) =>
+                                  idx < viewLength ? (
+                                      <ViewDetailed
+                                          key={idx}
+                                          x={y}
+                                          isMobile={isMobile}
+                                          stableTokens={stableTokens}
+                                          wallet={wallet}
+                                      />
+                                  ) : null,
+                              )}
                     </TableBody>
                 </Table>
             </TableContainer>
-            <LessButton
-                isMobile={isMobile}
-                setViewLength={setViewLength}
-                setPrice={setPrice}
-                detailedTokens={detailedTokens}
-            />
+            {viewDetailedTokens.length > viewLength ? (
+                <LessButton
+                    isMobile={isMobile}
+                    setViewLength={setViewLength}
+                    setPrice={setPrice}
+                    detailedTokens={detailedTokens}
+                />
+            ) : null}
         </>
     )
 }
