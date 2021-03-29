@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import type { Coin, Stat } from '../../types'
+import type { Coin, Currency, Stat } from '../../types'
 import { makeStyles, Theme, createStyles, CircularProgress, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export interface PriceChartProps extends withClasses<'root'> {
     coin?: Coin
+    currency: Currency
     stats: Stat[]
     loading?: boolean
     width?: number
@@ -87,6 +88,7 @@ export function PriceChart(props: PriceChartProps) {
         })),
         dimension,
         'x-trader-price-line-chart',
+        { sign: props.currency.symbol },
     )
 
     return (

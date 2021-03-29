@@ -202,6 +202,7 @@ export function PopperView(props: PopperViewProps) {
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
+                            currency={currency}
                             stats={stats}
                             retry={retryStats}
                             loading={loadingStats}>
@@ -222,6 +223,7 @@ export function PopperView(props: PopperViewProps) {
                 {Flags.LBP_enabled && LBP && tabIndex === tabs.length - 1 ? (
                     <LBPPanel
                         duration={LBP.duration}
+                        currency={currency}
                         token={createERC20Token(
                             chainId,
                             LBP.token.address,
