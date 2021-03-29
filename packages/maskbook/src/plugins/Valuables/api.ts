@@ -1,16 +1,13 @@
 import { VCENT_BASE_URL } from './constants'
 
-export async function getTweetBid(id: string) {
+export async function getTweetBid(id: string): Promise<undefined | tweetBids> {
     // doublecheck regex testing
-    if (!/\d+/.test(id)) return
+    if (!/\d+/.test(id)) return undefined
 
     const response = await fetch(`${VCENT_BASE_URL}${id}`)
     const { results } = (await response.json()) as {
         results: tweetBids[]
     }
-
-    if (results.length === 0) return
-
     return results[0]
 }
 
