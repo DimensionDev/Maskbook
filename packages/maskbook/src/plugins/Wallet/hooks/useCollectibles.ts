@@ -7,7 +7,7 @@ import { ERC721TokenRecordToCollectible } from '../services/helpers'
 import { ERC721TokenArrayComparer } from '../helpers'
 import type { Collectible, CollectibleProvider } from '../types'
 import { useRef } from 'react'
-import { uniqBy } from 'lodash-es'
+import { uniqWith } from 'lodash-es'
 
 //#region cache service query result
 const erc721TokensRef = new ValueRef<ERC721TokenRecordInDatabase[]>([], ERC721TokenArrayComparer)
@@ -43,7 +43,9 @@ export function useCollectibles(address: string, provider: CollectibleProvider, 
         const erc721Tokens = await WalletRPC.getERC721TokensPaged(page, 50)
 
         values.current.push(
-            ...uniqBy([...result, ...erc721Tokens.map((x) => ERC721TokenRecordToCollectible(x))], 'token_id'),
+            ...uniqWith([...result, ...erc721Tokens.map(ERC721TokenRecordToCollectible)], (a, b) => {
+                return a.asset_contract.address === b.asset_contract.address && a.token_id === b.token_id
+            }),
         )
         return values.current
     }, [address, provider, page])

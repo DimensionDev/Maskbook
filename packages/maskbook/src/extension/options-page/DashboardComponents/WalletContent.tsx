@@ -72,6 +72,9 @@ const useStyles = makeStyles((theme) =>
         assetsTable: {
             flex: 1,
         },
+        checkIcon: {
+            marginLeft: theme.spacing(1),
+        },
     }),
 )
 
@@ -129,15 +132,22 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
 
     const [transactionTypeMenu, openTransactionTypeMenu] = useMenu(
         <MenuItem key="all" onClick={() => setTransactionType(FilterTransactionType.ALL)}>
-            {t('all_transactions')} {transactionType === FilterTransactionType.ALL ? <Check fontSize="small" /> : null}
+            {t('all_transactions')}
+            {transactionType === FilterTransactionType.ALL ? (
+                <Check className={classes.checkIcon} fontSize="small" />
+            ) : null}
         </MenuItem>,
-        <MenuItem key="Send" onClick={() => setTransactionType(FilterTransactionType.SEND)}>
+        <MenuItem key="Sent" onClick={() => setTransactionType(FilterTransactionType.SENT)}>
             {t('sent_transactions')}
-            {transactionType === FilterTransactionType.SEND ? <Check fontSize="small" /> : null}
+            {transactionType === FilterTransactionType.SENT ? (
+                <Check className={classes.checkIcon} fontSize="small" />
+            ) : null}
         </MenuItem>,
         <MenuItem key="Received" onClick={() => setTransactionType(FilterTransactionType.RECEIVE)}>
             {t('received_transactions')}
-            {transactionType === FilterTransactionType.RECEIVE ? <Check fontSize="small" /> : null}
+            {transactionType === FilterTransactionType.RECEIVE ? (
+                <Check className={classes.checkIcon} fontSize="small" />
+            ) : null}
         </MenuItem>,
     )
 

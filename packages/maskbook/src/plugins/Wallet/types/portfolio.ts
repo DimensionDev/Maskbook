@@ -4,7 +4,7 @@ import type { CurrencyType, ERC20TokenDetailed, EtherTokenDetailed } from '../..
 
 export enum FilterTransactionType {
     ALL = 'all',
-    SEND = 'send',
+    SENT = 'sent',
     RECEIVE = 'receive',
 }
 
