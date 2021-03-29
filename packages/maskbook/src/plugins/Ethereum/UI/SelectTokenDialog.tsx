@@ -62,8 +62,9 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                 uuid: id,
                 token,
             })
+            setKeyword('')
         },
-        [id, setOpen],
+        [id, setOpen, setKeyword],
     )
     const onClose = useCallback(() => {
         setOpen({
