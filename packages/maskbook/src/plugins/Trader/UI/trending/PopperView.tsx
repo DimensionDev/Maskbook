@@ -104,7 +104,7 @@ export function PopperView(props: PopperViewProps) {
 
     //#region stats
     const [days, setDays] = useState(Days.ONE_WEEK)
-    const { value: stats = [], loading: loadingStats } = usePriceStats({
+    const { value: stats = [], loading: loadingStats, retry: retryStats } = usePriceStats({
         coinId: trending?.coin.id,
         dataProvider: trending?.dataProvider,
         currency: trending?.currency,
@@ -203,6 +203,7 @@ export function PopperView(props: PopperViewProps) {
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
                             stats={stats}
+                            retry={retryStats}
                             loading={loadingStats}>
                             <PriceChartDaysControl days={days} onDaysChange={setDays} />
                         </PriceChart>
