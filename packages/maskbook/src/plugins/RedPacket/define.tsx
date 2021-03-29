@@ -10,7 +10,7 @@ import RedPacketDialog from './UI/RedPacketDialog'
 import Services from '../../extension/service'
 import { WalletRPC } from '../Wallet/messages'
 
-const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDialog(
+export const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDialog(
     '💰 Red Packet',
     (props) => (
         <RedPacketDialog

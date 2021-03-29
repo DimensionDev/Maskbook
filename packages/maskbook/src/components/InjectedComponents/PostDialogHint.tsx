@@ -37,7 +37,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const classes = useStyles()
     return (
         <IconButton className={classes.button} onClick={props.onHintButtonClicked}>
-            <MaskbookSharpIcon />
+            <MaskbookSharpIcon color="primary" />
         </IconButton>
     )
 })

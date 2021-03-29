@@ -40,7 +40,7 @@ function LabelWrapper(props: LabelWrapperProps) {
     )
 }
 
-const [ITO_CompositionEntry, ITO_CompositionUI] = createCompositionDialog(
+export const [ITO_CompositionEntry, ITO_CompositionUI] = createCompositionDialog(
     <LabelWrapper iconSize={12} labelText={'ITO'} />,
     (props) => <CompositionDialog open={props.open} onConfirm={props.onClose} onClose={props.onClose} />,
 )
