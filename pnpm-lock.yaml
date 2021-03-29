@@ -253,6 +253,7 @@ importers:
       react-use: 15.3.8
       react-virtualized-auto-sizer: 1.0.4
       react-window: 1.8.6
+      snapshot.js: 0.1.0
       stream-browserify: 3.0.0
       stream-http: 2.8.3
       string.prototype.matchall: 4.0.4
@@ -463,6 +464,7 @@ importers:
       react-virtualized-auto-sizer: ^1.0.2
       react-window: ^1.8.6
       rimraf: ^3.0.2
+      snapshot.js: ^0.1.0
       source-map-loader: ^2.0.0
       storybook-addon-designs: ^5.4.2
       storybook-addon-i18n: ^5.1.13
@@ -5101,6 +5103,30 @@ packages:
     dev: true
     resolution:
       integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
+  /@storybook/client-api/5.3.21_regenerator-runtime@0.13.7:
+    dependencies:
+      '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
+      '@storybook/channel-postmessage': 5.3.21
+      '@storybook/channels': 5.3.21
+      '@storybook/client-logger': 5.3.21
+      '@storybook/core-events': 5.3.21
+      '@storybook/csf': 0.0.1
+      '@types/webpack-env': 1.16.0
+      core-js: 3.9.1
+      eventemitter3: 4.0.7
+      global: 4.4.0
+      is-plain-object: 3.0.1
+      lodash: 4.17.21
+      memoizerific: 1.11.3
+      qs: 6.9.6
+      stable: 0.1.8
+      ts-dedent: 1.2.0
+      util-deprecate: 1.0.2
+    dev: true
+    peerDependencies:
+      regenerator-runtime: '*'
+    resolution:
+      integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
   /@storybook/client-api/6.1.20:
     dependencies:
       '@storybook/addons': 6.1.20
@@ -5263,7 +5289,7 @@ packages:
       '@babel/preset-env': 7.13.9
       '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
       '@storybook/channel-postmessage': 5.3.21
-      '@storybook/client-api': 5.3.21
+      '@storybook/client-api': 5.3.21_regenerator-runtime@0.13.7
       '@storybook/client-logger': 5.3.21
       '@storybook/core-events': 5.3.21
       '@storybook/csf': 0.0.1
@@ -8503,7 +8529,7 @@ packages:
       integrity: sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
   /axios/0.21.1:
     dependencies:
-      follow-redirects: 1.13.3_debug@4.3.1
+      follow-redirects: 1.13.3
     dev: false
     resolution:
       integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
@@ -13307,9 +13333,7 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-/LFZOIo82WDsyyv7h7oc0MJF9ACOvDRdx9rWPZ2pgMfNWu/z8hQDBtOchuB/0BVLmuFOZjV02YwUVzNsWx/EzA==
-  /follow-redirects/1.13.3_debug@4.3.1:
-    dependencies:
-      debug: 4.3.1_supports-color@6.1.0
+  /follow-redirects/1.13.3:
     engines:
       node: '>=4.0'
     peerDependencies:
@@ -14638,7 +14662,7 @@ packages:
   /http-proxy/1.18.1_debug@4.3.1:
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.13.3_debug@4.3.1
+      follow-redirects: 1.13.3
       requires-port: 1.0.0
     dev: true
     engines:
@@ -14749,6 +14773,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-xg7taebY/bazEEofy8ocGS3FtQE=
+  /iframe2image/0.1.1:
+    dev: false
+    resolution:
+      integrity: sha1-K83e3zXekLi0M4KGhvboEGFGSy8=
   /ignore/3.3.10:
     dev: true
     resolution:
@@ -22113,6 +22141,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-FtyOnWN/wCHTVXOMwvSv26d+ko5vWlIDD6zoUJ7LW8vh+ZBC8QdljveRP+crNrtBwioEUWy/4dMtbBjA4ioNlg==
+  /snapshot.js/0.1.0:
+    dependencies:
+      iframe2image: 0.1.1
+    dev: false
+    resolution:
+      integrity: sha1-MHUzlu1f7YVDo+oe7yAxSrKm9sI=
   /snowpack/3.0.13:
     dependencies:
       default-browser-id: 2.0.0
