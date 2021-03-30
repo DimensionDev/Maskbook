@@ -1,10 +1,14 @@
 export { useCurrentShadowRootStyles } from './ShadowRootStyleProvider'
-export { createReactRootShadowedPartial } from './renderInShadowRoot'
-export type { CreateRenderInShadowRootConfig, RenderInShadowRootConfig, ReactRootShadowed } from './renderInShadowRoot'
+export { createReactRootShadowedPartial } from './createReactRootShadowed'
+export type {
+    CreateRenderInShadowRootConfig,
+    RenderInShadowRootConfig,
+    ReactRootShadowed,
+} from './createReactRootShadowed'
 export { disableJSSDisconnectedWarning } from './hacks'
 export {
     usePortalShadowRoot,
     setupPortalShadowRoot,
     createShadowRootForwardedComponent,
     createShadowRootForwardedPopperComponent,
-} from './usePortal'
+} from './Portal'
