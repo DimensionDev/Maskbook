@@ -9,16 +9,3 @@ export const CollectibleMetadataReader = createTypedMessageMetadataReader<Collec
     schema,
 )
 export const renderWithCollectibleMetadata = createRenderWithMetadata(CollectibleMetadataReader)
-
-export function composeJSON_Payload(): CollectibleJSON_Payload {
-    return {
-        token: {
-            type: EthereumTokenType.ERC721,
-            address: '',
-            name: 'TEST',
-            symbol: 'TEST',
-            chainId: ChainId.Mainnet,
-            tokenId: '1',
-        },
-    }
-}

@@ -136,10 +136,12 @@ export function Collectible(props: CollectibleProps) {
                                         __html: t('plugin_collectible_description', {
                                             price: '0.632 ETH',
                                         }),
-                                    }}></Typography>
+                                    }}
+                                />
                             </Box>
                         </>
-                    }></CardHeader>
+                    }
+                />
                 <CardContent className={classes.content}>
                     <Tabs
                         className={classes.tabs}
