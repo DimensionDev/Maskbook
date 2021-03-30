@@ -20,7 +20,7 @@ export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve
 
 export const awaitChildProcess = (child: ChildProcess) => {
     return new Promise<number>((resolve) => {
-        child.on('error', () => resolve(child.exitCode))
-        child.on('exit', (code) => resolve(code))
+        child.on('error', () => resolve(child.exitCode || 0))
+        child.on('exit', (code) => resolve(code || 0))
     })
 }
