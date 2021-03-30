@@ -25,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         width: '100%',
-        padding: '12px 26px 12px 12px',
+
         cursor: 'pointer',
         [theme.breakpoints.down('lg')]: {
             transform: 'translateX(-6px)',
-            padding: 12,
+            paddingLeft: 12,
         },
         '&:hover': {
             '& $title': {
@@ -38,6 +38,21 @@ const useStyles = makeStyles((theme) => ({
             '& $icon': {
                 color: theme.palette.primary.main,
             },
+        },
+    },
+    button: {
+        display: 'flex',
+        padding: '12px 26px 12px 12px',
+        borderRadius: 50,
+        [theme.breakpoints.down('lg')]: {
+            transform: 'translateX(-6px)',
+            padding: 12,
+        },
+        '&:hover': {
+            backgroundColor: 'rgb(233, 246, 253)',
+        },
+        '&:active': {
+            backgroundColor: 'rgb(212,237,252)',
         },
     },
     title: {
@@ -170,10 +185,12 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     return (
         <>
-            <Button className={classes.wrapper} onClick={openMenu}>
-                <MaskbookSharpIcon classes={{ root: classes.icon }} />
-                <Typography className={classes.title}>Mask Network</Typography>
-            </Button>
+            <div className={classes.wrapper} onClick={openMenu}>
+                <div className={classes.button}>
+                    <MaskbookSharpIcon classes={{ root: classes.icon }} iconSize={24} />
+                    <Typography className={classes.title}>Mask Network</Typography>
+                </div>
+            </div>
             {menu}
             {maskToken ? (
                 <BreakdownDialog

@@ -15,8 +15,8 @@ const MaskbookSmileFaceSVG = (
     </svg>
 )
 
-const MaskbookSmileFaceSharpSVG = (
-    <svg width="24" height="24" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
+const MaskbookSmileFaceSharpSVG = ({ size = 20 }: { size?: number }) => (
+    <svg width={size} height={size} viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
         <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -59,10 +59,13 @@ export function MaskbookIconOutlined(props: SvgIconProps) {
     return <SvgIcon {...props}>{MaskbookSmileFaceOutlinedSVG}</SvgIcon>
 }
 
-export function MaskbookSharpIcon(props: SvgIconProps) {
+interface MaskbookSharpIconProps extends SvgIconProps {
+    iconSize?: number
+}
+export function MaskbookSharpIcon(props: MaskbookSharpIconProps) {
     return (
         <SvgIcon style={{ transform: 'translate(2px, 1.5px)' }} {...props}>
-            {MaskbookSmileFaceSharpSVG}
+            <MaskbookSmileFaceSharpSVG size={props.iconSize} />
         </SvgIcon>
     )
 }
