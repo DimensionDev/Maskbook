@@ -6,11 +6,14 @@ const lockfilePath = path.join(__dirname, 'lockfile.log')
 
 export default async function* () {
     while (true) {
-        if (!(await Lock.check(__filename, { lockfilePath }))) {
+        if (!(await isLocked())) {
             yield locker
         }
         await delay(2000)
     }
+}
+export function isLocked() {
+    return Lock.check(__filename, { lockfilePath })
 }
 
 function locker() {
