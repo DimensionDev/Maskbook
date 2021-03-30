@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
             padding: 12,
         },
         '&:hover': {
-            '& $text': {
+            '& $title': {
                 color: theme.palette.primary.main,
             },
             '& $icon': {
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
             },
         },
     },
-    text: {
+    title: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
         fontWeight: 700,
         fontSize: 20,
@@ -47,6 +47,19 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('lg')]: {
             display: 'none',
         },
+    },
+    menu: {
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
+    menuItem: {
+        display: 'flex',
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+    },
+    text: {
+        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
+        marginLeft: 22,
     },
     icon: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
@@ -132,31 +145,43 @@ export function ToolboxHint() {
 
     const [menu, openMenu] = useMenu([
         <MenuItem onClick={openEncryptedMessage}>
+            <div className={classes.menuItem}>
             <Image src={ToolIconURLs.encryptedmsg.image} width={24} height={24} />
             <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
+            </div>
         </MenuItem>,
         <MenuItem onClick={openRedPacket}>
+            <div className={classes.menuItem}>
             <Image src={ToolIconURLs.redpacket.image} width={24} height={24} />
             <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
+            </div>
         </MenuItem>,
         <MenuItem onClick={openFileService}>
+            <div className={classes.menuItem}>
             <Image src={ToolIconURLs.files.image} width={24} height={24} />
             <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
+            </div>
         </MenuItem>,
         <MenuItem onClick={openITO}>
+            <div className={classes.menuItem}>
             <Image src={ToolIconURLs.markets.image} width={24} height={24} />
             <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
+            </div>
         </MenuItem>,
         account && Flags.transak_enabled ? (
             <MenuItem onClick={openBuyCurrency}>
+                 <div className={classes.menuItem}>
                 <Image src={ToolIconURLs.token.image} width={24} height={24} />
                 <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
+                </div>
             </MenuItem>
         ) : null,
         Flags.airdrop_enabled ? (
             <MenuItem onClick={openAirdrop}>
+                <div className={classes.menuItem}>
                 <Image src={ToolIconURLs.airdrop.image} width={24} height={24} />
                 <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
+                </div>
             </MenuItem>
         ) : null,
     ])
@@ -165,7 +190,7 @@ export function ToolboxHint() {
         <>
             <Button className={classes.wrapper} onClick={openMenu}>
                 <MaskbookSharpIcon classes={{ root: classes.icon }} />
-                <Typography className={classes.text}>Mask</Typography>
+                <Typography className={classes.title}>Mask Network</Typography>
             </Button>
             {menu}
             {maskToken ? (

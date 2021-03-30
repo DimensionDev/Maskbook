@@ -10,7 +10,22 @@ export function useMenu(elements: Array<JSX.Element | null>, anchorSibling = fal
     const anchorElRef = useRef<HTMLElement>()
     const close = () => setOpen(false)
     return [
-        <ShadowRootMenu open={open} anchorEl={anchorElRef.current} onClose={close} onClick={close}>
+        <ShadowRootMenu
+            PaperProps={{
+                style: {
+                    borderRadius: 4,
+                },
+            }}
+            MenuListProps={{
+                style: {
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                },
+            }}
+            open={open}
+            anchorEl={anchorElRef.current}
+            onClose={close}
+            onClick={close}>
             {elements.map((element, key) =>
                 isValidElement<object>(element) ? cloneElement(element, { ...element.props, key }) : element,
             )}
