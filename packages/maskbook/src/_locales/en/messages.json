@@ -495,7 +495,7 @@
     "plugin_ito_loading_try_again": "Try Again",
     "plugin_ito_amount_approved": "Approved {{amount}} {{symbol}}",
     "plugin_ito_amount_approved_infinity": "Approved infinity {{symbol}}",
-    "plugin_collectible_description": "Current price is <strong>{{price}}</strong>.",
+    "plugin_collectible_description": "Current price is <strong>{{price}} ETH</strong>.",
     "wallet_status_title": "Account",
     "wallet_status_connect_with": "Connected with {{provider}}",
     "wallet_status_button_change": "Change",

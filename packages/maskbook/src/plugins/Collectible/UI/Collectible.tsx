@@ -4,7 +4,6 @@ import {
     createStyles,
     Avatar,
     Box,
-    Card,
     CardHeader,
     CardContent,
     Link,
@@ -14,8 +13,6 @@ import {
     Typography,
 } from '@material-ui/core'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
-import HourglassFullIcon from '@material-ui/icons/HourglassFull'
-import LocalOfferIcon from '@material-ui/icons/LocalOffer'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
@@ -23,6 +20,12 @@ import { ListingTab } from './ListingTab'
 import { HistoryTab } from './HistoryTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CollectibleState } from '../hooks/useCollectibleState'
+import { CollectibleCard } from './CollectibleCard'
+import { CollectibleSkeleton } from './CollectibleSkeleton'
+import { minBy } from 'lodash-es'
+import { NULL_ADDRESS } from 'opensea-js/lib/constants'
+import { formatBalance } from '../../Wallet/formatter'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -98,6 +101,14 @@ export function Collectible(props: CollectibleProps) {
 
     const [tabIndex, setTabIndex] = useState(0)
 
+    if (asset.loading) {
+        return <CollectibleSkeleton />
+    }
+
+    if (!asset.value) return null
+
+    const targetOrder = minBy(asset.value?.orders, (order) => Number(order.currentPrice))
+
     const tabs = [
         <Tab className={classes.tab} key="article" label="Article" />, // This is the tab for the hero image
         <Tab className={classes.tab} key="details" label="Details" />, // This is the tab for the token detailed information
@@ -106,40 +117,57 @@ export function Collectible(props: CollectibleProps) {
         <Tab className={classes.tab} key="history" label="History" />, // This is the tab for the trade history
     ]
 
+    console.log(asset)
+    console.log(targetOrder)
     return (
         <>
-            <Card className={classes.root} elevation={0}>
+            <CollectibleCard>
                 <CardHeader
                     avatar={
                         <Link
                             href="https://opensea.io/assets/0x31385d3520bced94f77aae104b406994d8f2168c/2244"
-                            title="BASTARD GAN PUNKS V2"
+                            title={
+                                asset.value.owner.address === NULL_ADDRESS
+                                    ? targetOrder?.makerAccount?.user?.username ?? ''
+                                    : asset.value.owner.user?.username
+                            }
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Avatar src="https://lh3.googleusercontent.com/1KYi3sOU5v2dnLLCaJ4yY1BRb-Jbr063nDEvA_4DMh5QD1EXZAAoMLHbCjV6k-lJ3AYhc72KHYo9AnGoKVbszkACAtofxMyXeZ7rSA=s0" />
+                            <Avatar
+                                src={
+                                    asset.value.owner.address === NULL_ADDRESS
+                                        ? //cause by https://github.com/ProjectOpenSea/opensea-js/issues/76
+                                          (targetOrder?.makerAccount as any)?.profile_img_url
+                                        : (asset.value.owner as any)?.profile_img_url
+                                }
+                            />
                         </Link>
                     }
-                    title="BASTARD GAN PUNK V2 #2244"
+                    title={asset.value.name ?? ''}
                     subheader={
                         <>
                             <Box display="flex" alignItems="center">
                                 <Typography className={classes.subtitle} variant="body2">
-                                    BASTARD GAN PUNKS V2 BASTARD GAN PUNKS V2 BASTARD GAN PUNKS V2 BASTARD GAN PUNKS V2
-                                    BASTARD GAN PUNKS V2 BASTARD GAN PUNKS V2
+                                    {asset.value.description}
                                 </Typography>
-                                <VerifiedUserIcon color="primary" fontSize="small" />
+                                {!asset.value.collection.hidden ? (
+                                    <VerifiedUserIcon color="primary" fontSize="small" />
+                                ) : null}
                             </Box>
-                            <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
-                                <Typography
-                                    className={classes.description}
-                                    component="span"
-                                    dangerouslySetInnerHTML={{
-                                        __html: t('plugin_collectible_description', {
-                                            price: '0.632 ETH',
-                                        }),
-                                    }}
-                                />
-                            </Box>
+
+                            {targetOrder?.currentPrice ? (
+                                <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
+                                    <Typography
+                                        className={classes.description}
+                                        component="span"
+                                        dangerouslySetInnerHTML={{
+                                            __html: t('plugin_collectible_description', {
+                                                price: formatBalance(new BigNumber(targetOrder?.currentPrice), 18),
+                                            }),
+                                        }}
+                                    />
+                                </Box>
+                            ) : null}
                         </>
                     }
                 />
@@ -165,7 +193,7 @@ export function Collectible(props: CollectibleProps) {
                         {tabIndex === 4 ? <HistoryTab /> : null}
                     </Paper>
                 </CardContent>
-            </Card>
+            </CollectibleCard>
             <Box className={classes.footnote}>
                 <Typography className={classes.countdown}>Sale ends in 00:25:32.</Typography>
             </Box>
