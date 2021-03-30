@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { PageInspector, PageInspectorProps } from '../../../components/InjectedComponents/PageInspector'
-import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { startWatch } from '../../../utils/watcher'
 
@@ -19,10 +19,7 @@ export function injectPageInspectorDefault<T extends string>(
     return function injectPageInspector(signal: AbortSignal) {
         const watcher = new MutationObserverWatcher(new LiveSelector().querySelector('body'))
         startWatch(watcher, signal)
-        return renderInShadowRoot(<PageInspectorDefault />, {
-            shadow: () => watcher.firstDOMProxy.afterShadow,
-            signal,
-        })
+        createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<PageInspectorDefault />)
     }
 }
 

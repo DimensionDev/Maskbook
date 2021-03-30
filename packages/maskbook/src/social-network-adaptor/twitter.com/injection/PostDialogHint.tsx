@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../utils/selector'
-import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { MaskMessage } from '../../../utils/messages'
 import { hasEditor, isCompose } from '../utils/postBox'
@@ -22,10 +22,9 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, signal)
 
-    renderInShadowRoot(<PostDialogHintAtTwitter reason={reason} />, {
-        shadow: () => watcher.firstDOMProxy.afterShadow,
-        signal,
-    })
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+        <PostDialogHintAtTwitter reason={reason} />,
+    )
 }
 
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {

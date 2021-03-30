@@ -39,6 +39,7 @@
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
     "i18next": "^19.8.9",
+    "jss": "10.5.1",
     "react": "=0.0.0-experimental-553440bd1",
     "react-dom": "=0.0.0-experimental-553440bd1",
     "react-i18next": "^11.8.7"

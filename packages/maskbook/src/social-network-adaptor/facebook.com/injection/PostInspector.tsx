@@ -3,7 +3,7 @@ import { isMobileFacebook } from '../utils/isMobile'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector'
 import { Flags } from '../../../utils/flags'
-import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 
 const map = new WeakMap<HTMLElement, ShadowRoot>()
 function getShadowRoot(node: HTMLElement) {
@@ -20,11 +20,9 @@ export function injectPostInspectorFacebook(signal: AbortSignal, current: PostIn
             zipPostLinkPreview(node)
         },
         render(jsx, postInfo) {
-            return renderInShadowRoot(jsx, {
-                shadow: () => getShadowRoot(postInfo.postContentNode!),
-                concurrent: true,
-                signal,
-            })
+            const root = createReactRootShadowed(getShadowRoot(postInfo.postContentNode!), { signal })
+            root.render(jsx)
+            return root.destory
         },
     })(current, signal)
 }
