@@ -1,11 +1,21 @@
 import type { CollectibleJSON_Payload } from '../types'
 import { Collectible } from './Collectible'
+import { CollectibleState } from '../hooks/useCollectibleState'
 
 export interface PostInspectorProps {
     payload: CollectibleJSON_Payload
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    const { token_id, address } = props.payload
-    return <Collectible tokenId={token_id} tokenAddress={address} />
+    const { token } = props.payload
+
+    return (
+        <CollectibleState.Provider
+            initialState={{
+                tokenId: token.tokenId,
+                contractAddress: token.address,
+            }}>
+            <Collectible />
+        </CollectibleState.Provider>
+    )
 }
