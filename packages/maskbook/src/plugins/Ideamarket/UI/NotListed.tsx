@@ -4,7 +4,7 @@ import type { UIProps } from '../types'
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'block',
-        width: '150px',
+        width: '160px',
         borderRadius: '10px',
         boxShadow: '0px 0px 3px 1px #ADADAD',
         marginRight: '10%',

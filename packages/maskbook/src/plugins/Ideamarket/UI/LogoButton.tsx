@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { makeStyles, IconButton, Typography } from '@material-ui/core'
 import Listing from './Listing'
-import { defaultPicture, GrayIcon } from './assets'
+import { IdeaLogo, IdeaLogoGray } from './assets'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -92,10 +92,10 @@ export default function LogoButton(props: LogoButtonProps) {
                 {props.found ? (
                     <>
                         <Typography className={classes.rankText}>{props.rank}</Typography>
-                        <img width={25} height={25} src={defaultPicture.toString()} />
+                        <IdeaLogo height={25} width={25} />
                     </>
                 ) : (
-                    <GrayIcon />
+                    <IdeaLogoGray height={25} width={25} />
                 )}
             </IconButton>
 
