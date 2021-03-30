@@ -171,6 +171,7 @@ importers:
       string.prototype.matchall: 4.0.4
       tiny-secp256k1: 1.1.6
       ts-results: 3.1.1
+      unstated-next: 1.1.0
       use-subscription: 1.5.1
       uuid: 8.3.2
       wallet.ts: 1.0.1
@@ -336,6 +337,7 @@ importers:
       ts-loader: ^8.0.13
       ts-results: ^3.0.0
       type-coverage: ^2.17.0
+      unstated-next: ^1.1.0
       use-subscription: ^1.5.1
       uuid: ^8.3.2
       wallet.ts: ^1.0.1
@@ -20159,7 +20161,14 @@ packages:
       has-value: 0.3.1
       isobject: 3.0.1
     dev: true
-
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-g3aHP30jNRef+x5vw6jtDfyKtVk=
+  /unstated-next/1.1.0:
+    dev: false
+    resolution:
+      integrity: sha512-AAn47ZncPvgBGOvMcn8tSRxsrqwf2VdAPxLASTuLJvZt4rhKfDvUkmYZLGfclImSfTVMv7tF4ynaVxin0JjDCA==
   /untildify/2.1.0:
     resolution: {integrity: sha1-F+soB5h/dpUunASF/DEdBqgmouA=}
     engines: {node: '>=0.10.0'}

@@ -1,10 +1,18 @@
-import { Typography } from '@material-ui/core'
-import type { ProposalIdentifier } from '../types'
+import { SnapshotState } from '../hooks/useSnapshotState'
+import { useProposalIdentifier } from '../hooks/useProposalIdentifier'
+import { Snapshot } from './Snapshot'
 
 export interface PostInspectorProps {
-    proposalIdentifier: ProposalIdentifier
+    url: string
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    return <Typography>{props.proposalIdentifier.space}</Typography>
+    const identifier = useProposalIdentifier(props.url)
+    if (!identifier) return null
+
+    return (
+        <SnapshotState.Provider initialState={identifier}>
+            <Snapshot />
+        </SnapshotState.Provider>
+    )
 }
