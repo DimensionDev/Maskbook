@@ -139,30 +139,30 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     const [menu, openMenu] = useMenu([
         <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
-            <Image src={ToolIconURLs.encryptedmsg.image} width={24} height={24} />
+            <Image src={ToolIconURLs.encryptedmsg.image} width={19} height={19} />
             <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
         </MenuItem>,
         <MenuItem onClick={openRedPacket} className={classes.menuItem}>
-            <Image src={ToolIconURLs.redpacket.image} width={24} height={24} />
+            <Image src={ToolIconURLs.redpacket.image} width={19} height={19} />
             <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
         </MenuItem>,
         <MenuItem onClick={openFileService} className={classes.menuItem}>
-            <Image src={ToolIconURLs.files.image} width={24} height={24} />
+            <Image src={ToolIconURLs.files.image} width={19} height={19} />
             <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
         </MenuItem>,
         <MenuItem onClick={openITO} className={classes.menuItem}>
-            <Image src={ToolIconURLs.markets.image} width={24} height={24} />
+            <Image src={ToolIconURLs.markets.image} width={19} height={19} />
             <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
         </MenuItem>,
         account && Flags.transak_enabled ? (
             <MenuItem onClick={openBuyCurrency} className={classes.menuItem}>
-                <Image src={ToolIconURLs.token.image} width={24} height={24} />
+                <Image src={ToolIconURLs.token.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
             </MenuItem>
         ) : null,
         Flags.airdrop_enabled ? (
             <MenuItem onClick={openAirdrop} className={classes.menuItem}>
-                <Image src={ToolIconURLs.airdrop.image} width={24} height={24} />
+                <Image src={ToolIconURLs.airdrop.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
             </MenuItem>
         ) : null,

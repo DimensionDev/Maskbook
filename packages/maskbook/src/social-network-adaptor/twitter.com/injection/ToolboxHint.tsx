@@ -18,11 +18,9 @@ const useStyles = makeStyles((theme) =>
             paddingTop: theme.spacing(2),
             paddingBottom: theme.spacing(2),
         },
-        wrapper: {
-            padding: '16px 26px 16px 12px',
-            [theme.breakpoints.down('lg')]: {
-                padding: 16,
-            },
+        text: {
+            marginLeft: 12,
+            fontSize: 15,
         },
     }),
 )
@@ -34,7 +32,7 @@ function ToolboxHintAtTwitter() {
         <ToolboxHint
             classes={{
                 menuItem: classes.menuItem,
-                wrapper: classes.wrapper,
+                text: classes.text,
             }}
         />
     )
