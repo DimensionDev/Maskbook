@@ -18,6 +18,7 @@ import { useAccount } from '../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { Flags } from '../../utils/flags'
+import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
@@ -48,14 +49,7 @@ const useStyles = makeStyles((theme) => ({
             display: 'none',
         },
     },
-    menu: {
-        paddingTop: 0,
-        paddingBottom: 0,
-    },
-    menuItem: {
-        paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2),
-    },
+    menuItem: {},
     text: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
         marginLeft: 22,
@@ -65,8 +59,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export function ToolboxHint() {
-    const classes = useStyles()
+interface ToolboxHintProps extends withClasses<never> {}
+export function ToolboxHint(props: ToolboxHintProps) {
+    const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
 
     //#region Airdrop
