@@ -6,7 +6,6 @@ import { PostInspector } from './UI/PostInspector'
 import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import { extractTextFromTypedMessage } from '../../protocols/typed-message'
 import { parseURL } from '../../utils/utils'
-import { useProposalIdentifier } from './hooks/useProposalIdentifier'
 
 const isSnaphotURL = (x: string): boolean => /^https:\/\/(?:www.)?snapshot.[org|page]/.test(x)
 
@@ -32,11 +31,9 @@ export const SnapShotPluginDefine: PluginConfig = {
 }
 
 function Renderer({ url }: { url: string }) {
-    const proposalIdentifier = useProposalIdentifier(url)
-
     return (
         <MaskbookPluginWrapper pluginName="Snapshot">
-            <PostInspector proposalIdentifier={proposalIdentifier} />
+            <PostInspector url={url} />
         </MaskbookPluginWrapper>
     )
 }
