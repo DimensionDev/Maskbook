@@ -11,6 +11,7 @@ importers:
       '@types/react': 17.0.2
       '@types/react-dom': 17.0.1
       i18next: 19.9.1
+      jss: 10.5.1
       react: 0.0.0-experimental-553440bd1
       react-dom: 0.0.0-experimental-553440bd1_fd8fc17fe92b6a650ad81acd32dbe836
       react-i18next: 11.8.8_5a7fb893a584fd9585bb57d41ac49552
@@ -65,6 +66,7 @@ importers:
       esm: ^3.2.25
       husky: ^5.0.8
       i18next: ^19.8.9
+      jss: 10.5.1
       lint-staged: ^10.5.3
       npm-run-all: ^4.1.5
       only-allow: ^1.0.0
@@ -233,7 +235,6 @@ importers:
       json-stable-stringify: 1.0.1
       jsonwebtoken: 8.5.1
       jsqr: 1.3.1
-      jss: 10.5.1
       jsx-jsonml-devtools-renderer: 1.4.3
       lodash-es: /lodash/4.17.21
       loglevel: 1.7.1
@@ -435,7 +436,6 @@ importers:
       json-stable-stringify: ^1.0.1
       jsonwebtoken: ^8.5.1
       jsqr: ^1.3.1
-      jss: '*'
       jsx-jsonml-devtools-renderer: ^1.4.3
       lodash-es: npm:lodash@^4.17.11
       loglevel: ^1.7.0
@@ -504,6 +504,7 @@ importers:
       ts-results: 3.1.1
       typeson: 5.18.2
       typeson-registry: 1.0.0-alpha.39
+      use-subscription: 1.5.1
     specifiers:
       '@dimensiondev/holoflows-kit': 0.8.0-20201215084554-2f9e757
       async-call-rpc: ^5.0.0
@@ -512,6 +513,7 @@ importers:
       ts-results: ^3.1.1
       typeson: ^5.18.2
       typeson-registry: ^1.0.0-alpha.38
+      use-subscription: ^1.5.1
   packages/storybook-shared:
     devDependencies:
       '@storybook/addons': 6.1.20
@@ -2459,6 +2461,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-plcc+hbExy3McchJCEQG3knOsuh3HH+Prx1P6cLIkET/0dLuQDEnrT+s27Axgc9bqfsmNUNHfscgMUdBpC9xfg==
+  /@babel/runtime/7.13.10:
+    dependencies:
+      regenerator-runtime: 0.13.7
+    dev: false
+    resolution:
+      integrity: sha512-4QPkjJq6Ns3V/RgpEahRk+AGfL0eO6RHHtTWoNNr5mO49G6B5+X6d6THgWEAvTrznU5xYpbAlVKRYcsCgh/Akw==
   /@babel/runtime/7.13.9:
     dependencies:
       regenerator-runtime: 0.13.7
@@ -5101,6 +5109,30 @@ packages:
     dev: true
     resolution:
       integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
+  /@storybook/client-api/5.3.21_regenerator-runtime@0.13.7:
+    dependencies:
+      '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
+      '@storybook/channel-postmessage': 5.3.21
+      '@storybook/channels': 5.3.21
+      '@storybook/client-logger': 5.3.21
+      '@storybook/core-events': 5.3.21
+      '@storybook/csf': 0.0.1
+      '@types/webpack-env': 1.16.0
+      core-js: 3.9.1
+      eventemitter3: 4.0.7
+      global: 4.4.0
+      is-plain-object: 3.0.1
+      lodash: 4.17.21
+      memoizerific: 1.11.3
+      qs: 6.9.6
+      stable: 0.1.8
+      ts-dedent: 1.2.0
+      util-deprecate: 1.0.2
+    dev: true
+    peerDependencies:
+      regenerator-runtime: '*'
+    resolution:
+      integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
   /@storybook/client-api/6.1.20:
     dependencies:
       '@storybook/addons': 6.1.20
@@ -5263,7 +5295,7 @@ packages:
       '@babel/preset-env': 7.13.9
       '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
       '@storybook/channel-postmessage': 5.3.21
-      '@storybook/client-api': 5.3.21
+      '@storybook/client-api': 5.3.21_regenerator-runtime@0.13.7
       '@storybook/client-logger': 5.3.21
       '@storybook/core-events': 5.3.21
       '@storybook/csf': 0.0.1
@@ -8503,7 +8535,7 @@ packages:
       integrity: sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
   /axios/0.21.1:
     dependencies:
-      follow-redirects: 1.13.3_debug@4.3.1
+      follow-redirects: 1.13.3
     dev: false
     resolution:
       integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
@@ -13307,9 +13339,7 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-/LFZOIo82WDsyyv7h7oc0MJF9ACOvDRdx9rWPZ2pgMfNWu/z8hQDBtOchuB/0BVLmuFOZjV02YwUVzNsWx/EzA==
-  /follow-redirects/1.13.3_debug@4.3.1:
-    dependencies:
-      debug: 4.3.1_supports-color@6.1.0
+  /follow-redirects/1.13.3:
     engines:
       node: '>=4.0'
     peerDependencies:
@@ -14638,7 +14668,7 @@ packages:
   /http-proxy/1.18.1_debug@4.3.1:
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.13.3_debug@4.3.1
+      follow-redirects: 1.13.3
       requires-port: 1.0.0
     dev: true
     engines:
@@ -16666,7 +16696,7 @@ packages:
       integrity: sha512-cLkH6RaPZWHa1TqSfd2vszNNgxT1W0omlSjAd6hCFHp3KIocSrW21gaHjlMU26JpTHwkc+tJTCQOmE/O1A4FKQ==
   /jss/10.5.1:
     dependencies:
-      '@babel/runtime': 7.13.9
+      '@babel/runtime': 7.13.10
       csstype: 3.0.7
       indefinite-observable: 2.0.1
       is-in-browser: 1.1.3
@@ -21473,7 +21503,7 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-HAfAmL6SDYNWPUOJNrM500x4Thn4PZsEy5pijPh40U9WfNk0z15hUYzO9xVIMAdIHdFtD8CBDHd75Td1g36Mjg==
-  /rollup/2.40.0:
+  /rollup/2.42.4:
     dev: true
     engines:
       node: '>=10.0.0'
@@ -21481,7 +21511,7 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     resolution:
-      integrity: sha512-WiOGAPbXoHu+TOz6hyYUxIksOwsY/21TRWoO593jgYt8mvYafYqQl+axaA8y1z2HFazNUUrsMSjahV2A6/2R9A==
+      integrity: sha512-Zqv3EvNfcllBHyyEUM754npqsZw82VIjK34cDQMwrQ1d6aqxzeYu5yFb7smGkPU4C1Bj7HupIMeT6WU7uIdnMw==
   /rst-selector-parser/2.2.3:
     dependencies:
       lodash.flattendeep: 4.4.0
@@ -22119,7 +22149,7 @@ packages:
       esbuild: 0.8.54
       open: 7.4.2
       resolve: 1.20.0
-      rollup: 2.40.0
+      rollup: 2.42.4
     dev: true
     engines:
       node: '>=10.19.0'
@@ -23090,7 +23120,7 @@ packages:
       serialize-javascript: 4.0.0
       source-map: 0.6.1
       terser: 4.8.0
-      webpack: 4.46.0_webpack-cli@4.5.0
+      webpack: 4.46.0
       webpack-sources: 1.4.3
       worker-farm: 1.7.0
     dev: true

@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostInfoContext } from '../../../components/DataSource/usePostInfo'
 import { PostReplacer, PostReplacerProps } from '../../../components/InjectedComponents/PostReplacer'
 import type { PostInfo } from '../../PostInfo'
@@ -26,7 +26,10 @@ export function injectPostReplacer<T extends string>(
     const unzipPostF = unzipPost || noop
     return function injectPostReplacer(current: PostInfo, signal: AbortSignal) {
         signal.addEventListener('abort', unzipPostF)
-        return renderInShadowRoot(
+        createReactRootShadowed(current.rootNodeProxy.afterShadow, {
+            key: 'post-replacer',
+            signal,
+        }).render(
             <PostInfoContext.Provider value={current}>
                 <PostReplacerDefault
                     zipPost={() => zipPostF(current.rootNodeProxy)}
@@ -34,12 +37,6 @@ export function injectPostReplacer<T extends string>(
                     {...current}
                 />
             </PostInfoContext.Provider>,
-            {
-                shadow: () => current.rootNodeProxy.afterShadow,
-                concurrent: true,
-                keyBy: 'post-replacer',
-                signal,
-            },
         )
     }
 }
