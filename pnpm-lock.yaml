@@ -253,6 +253,7 @@ importers:
       react-use: 15.3.8
       react-virtualized-auto-sizer: 1.0.4
       react-window: 1.8.6
+      remarkable: 2.0.1
       snapshot.js: 0.1.0
       stream-browserify: 3.0.0
       stream-http: 2.8.3
@@ -292,6 +293,7 @@ importers:
       '@types/jest': 26.0.20
       '@types/jest-environment-puppeteer': 4.4.1
       '@types/puppeteer': 5.4.3
+      '@types/remarkable': 2.0.1
       '@types/rimraf': 3.0.0
       '@types/webpack-dev-server': 3.11.1
       '@typescript-eslint/eslint-plugin': 4.16.1_@typescript-eslint+parser@4.16.1
@@ -387,6 +389,7 @@ importers:
       '@types/react-router-dom': ^5.1.6
       '@types/react-virtualized-auto-sizer': ^1.0.0
       '@types/react-window': ^1.8.2
+      '@types/remarkable': ^2.0.1
       '@types/rimraf': ^3.0.0
       '@types/tiny-secp256k1': ^1.0.0
       '@types/use-subscription': ^1.0.0
@@ -464,6 +467,7 @@ importers:
       react-use: ^15.3.4
       react-virtualized-auto-sizer: ^1.0.2
       react-window: ^1.8.6
+      remarkable: ^2.0.1
       rimraf: ^3.0.2
       snapshot.js: ^0.1.0
       source-map-loader: ^2.0.0
@@ -6599,6 +6603,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-viwwrB+6xGzw+G1eWpF9geV3fnsDgXqHG+cqgiHrvQfDUW5hzhCyV7Sy3UJxhfRFBsgky2SSW33qi/YrIkjX5Q==
+  /@types/highlight.js/9.12.4:
+    dev: true
+    resolution:
+      integrity: sha512-t2szdkwmg2JJyuCM20e8kR2X59WCE5Zkl4bzm1u1Oukjm79zpbiAv+QjnwLnuuV0WHEcX2NgUItu0pAMKuOPww==
   /@types/history/4.7.8:
     dev: false
     resolution:
@@ -6910,6 +6918,13 @@ packages:
     dev: true
     resolution:
       integrity: sha512-d2gQQ0IL6hXLnoRfVYZukQNWHuVsE75DzFTLPUuyyEhJS8G2VvlE+qfQQ91SJjaMqlURRCNIsX7Jcsw6cEuJlA==
+  /@types/remarkable/2.0.1:
+    dependencies:
+      '@types/highlight.js': 9.12.4
+      highlight.js: 9.18.5
+    dev: true
+    resolution:
+      integrity: sha512-4KTpW8aVjVkTgaWlEOAuorBAdlUrvlzzPlVrt9vsAAM6nB/nUln7j0bcIRLdUH0Sf2g6ZPVBfibm4+8y1glFwQ==
   /@types/request/2.48.5:
     dependencies:
       '@types/caseless': 0.12.2
@@ -8105,7 +8120,6 @@ packages:
   /argparse/1.0.10:
     dependencies:
       sprintf-js: 1.0.3
-    dev: true
     resolution:
       integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==
   /arr-diff/4.0.0:
@@ -8503,6 +8517,12 @@ packages:
       node: '>=8.0.0'
     resolution:
       integrity: sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==
+  /autolinker/3.14.3:
+    dependencies:
+      tslib: 1.14.1
+    dev: false
+    resolution:
+      integrity: sha512-t81i2bCpS+s+5FIhatoww9DmpjhbdiimuU9ATEuLxtZMQ7jLv9fyFn7SWNG8IkEfD4AmYyirL1ss9k1aqVWRvg==
   /autoprefixer/9.8.6:
     dependencies:
       browserslist: 4.16.3
@@ -14431,6 +14451,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-Sc28JNQNDzaH6PORtRLMvif9RSn1mYuOoX3omVjnb0+HbpPygU2ALBI0R/wsiqCb4/fcp07Gdo8g+fhtFrQl6A==
+  /highlight.js/9.18.5:
+    deprecated: Support has ended for 9.x series. Upgrade to @latest
+    dev: true
+    requiresBuild: true
+    resolution:
+      integrity: sha512-a5bFyofd/BHCX52/8i8uJkjr9DYwXIPnM/plwI6W7ezItLGqzt7X2G2nXuYSfsIJdkwwj/g9DG1LkcGJI/dDoA==
   /history/4.10.1:
     dependencies:
       '@babel/runtime': 7.13.9
@@ -21194,6 +21220,16 @@ packages:
     dev: true
     resolution:
       integrity: sha512-8qRqmL9F4nuLPIgl92XUuxI3pFxize+F1H0e/W3llTk0UsjJaj01+RrirkMw7P21RKe4X6goQhYRSvNWX+70Rw==
+  /remarkable/2.0.1:
+    dependencies:
+      argparse: 1.0.10
+      autolinker: 3.14.3
+    dev: false
+    engines:
+      node: '>= 6.0.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-YJyMcOH5lrR+kZdmB0aJJ4+93bEojRZ1HGDn9Eagu6ibg7aVZhc3OWbbShRid+Q5eAfsEqWxpe+g5W5nYNfNiA==
   /remove-bom-buffer/3.0.0:
     dependencies:
       is-buffer: 1.1.6
@@ -22377,7 +22413,6 @@ packages:
     resolution:
       integrity: sha512-9NThjpgZnifTkJpzTZ7Eue85S49QwpNhZTq6GRJwObb6jnLFNGB7Qm73V5HewTROPyxD0C29xqmaI68bQtV+hg==
   /sprintf-js/1.0.3:
-    dev: true
     resolution:
       integrity: sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
   /sshpk/1.16.1:
