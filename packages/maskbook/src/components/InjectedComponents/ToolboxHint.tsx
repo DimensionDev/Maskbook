@@ -53,9 +53,8 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: 0,
     },
     menuItem: {
-        display: 'flex',
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
     },
     text: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
