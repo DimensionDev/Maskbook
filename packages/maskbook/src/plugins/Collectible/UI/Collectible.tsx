@@ -22,6 +22,7 @@ import { OfferTab } from './OfferTab'
 import { ListingTab } from './ListingTab'
 import { HistoryTab } from './HistoryTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { CollectibleState } from '../hooks/useCollectibleState'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -87,14 +88,13 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface CollectibleProps {
-    tokenId: string
-    tokenAddress: string
-}
+export interface CollectibleProps {}
 
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const classes = useStyles()
+
+    const { token, asset } = CollectibleState.useContainer()
 
     const [tabIndex, setTabIndex] = useState(0)
 
@@ -105,6 +105,7 @@ export function Collectible(props: CollectibleProps) {
         <Tab className={classes.tab} key="listing" label="Listing" />, // This is the tab for listing article
         <Tab className={classes.tab} key="history" label="History" />, // This is the tab for the trade history
     ]
+
     return (
         <>
             <Card className={classes.root} elevation={0}>

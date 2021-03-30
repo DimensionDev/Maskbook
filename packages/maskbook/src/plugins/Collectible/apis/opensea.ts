@@ -9,7 +9,7 @@ function createExternalProvider() {
         host: '',
         path: '',
         sendAsync: console.log,
-        send: console.log,
+        send: console.log, // {version:sdfsdfdf}
         request: console.log,
     }
 }
@@ -23,4 +23,12 @@ async function createOpenSeaPort() {
 
 export async function getAsset(tokenAddress: string, tokenId: string) {
     return (await createOpenSeaPort()).api.getAsset({ tokenAddress, tokenId })
+}
+
+export async function getOrders() {
+    return (await createOpenSeaPort()).api.getOrders()
+}
+
+export async function getOffers() {
+    return (await createOpenSeaPort()).api.getOrders()
 }
