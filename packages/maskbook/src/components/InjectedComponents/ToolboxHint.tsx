@@ -1,5 +1,5 @@
 import { Button, makeStyles, Typography, MenuItem } from '@material-ui/core'
-import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
+import { MaskbookSharpIcon24 } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
 import { BreakdownDialog } from './BreakdownDialog'
@@ -25,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         width: '100%',
-
+        paddingTop: 4,
+        paddingBottom: 4,
         cursor: 'pointer',
         [theme.breakpoints.down('lg')]: {
-            transform: 'translateX(-6px)',
-            paddingLeft: 12,
+            transform: 'translateX(0px)',
         },
         '&:hover': {
             '& $title': {
@@ -42,11 +42,13 @@ const useStyles = makeStyles((theme) => ({
     },
     button: {
         display: 'flex',
-        padding: '12px 26px 12px 12px',
+        padding: '12px 26px 12px 14px',
         borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
         [theme.breakpoints.down('lg')]: {
-            transform: 'translateX(-6px)',
-            padding: 12,
+            transform: 'translateX(0px)',
+            padding: 14,
         },
         '&:hover': {
             backgroundColor: 'rgb(233, 246, 253)',
@@ -60,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 700,
         fontSize: 20,
         marginLeft: 22,
+        lineHeight: 1.35,
         [theme.breakpoints.down('lg')]: {
             display: 'none',
         },
@@ -187,7 +190,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
         <>
             <div className={classes.wrapper} onClick={openMenu}>
                 <div className={classes.button}>
-                    <MaskbookSharpIcon classes={{ root: classes.icon }} iconSize={24} />
+                    <MaskbookSharpIcon24 classes={{ root: classes.icon }} />
                     <Typography className={classes.title}>Mask Network</Typography>
                 </div>
             </div>

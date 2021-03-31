@@ -59,13 +59,18 @@ export function MaskbookIconOutlined(props: SvgIconProps) {
     return <SvgIcon {...props}>{MaskbookSmileFaceOutlinedSVG}</SvgIcon>
 }
 
-interface MaskbookSharpIconProps extends SvgIconProps {
-    iconSize?: number
-}
-export function MaskbookSharpIcon(props: MaskbookSharpIconProps) {
+export function MaskbookSharpIcon(props: SvgIconProps) {
     return (
         <SvgIcon style={{ transform: 'translate(2px, 1.5px)' }} {...props}>
-            <MaskbookSmileFaceSharpSVG size={props.iconSize} />
+            <MaskbookSmileFaceSharpSVG />
+        </SvgIcon>
+    )
+}
+
+export function MaskbookSharpIcon24(props: SvgIconProps) {
+    return (
+        <SvgIcon {...props}>
+            <MaskbookSmileFaceSharpSVG size={24} />
         </SvgIcon>
     )
 }
