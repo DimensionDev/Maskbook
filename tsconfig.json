@@ -9,6 +9,8 @@
     { "path": "./packages/icons/" },
     { "path": "./packages/plugin-infra" },
     { "path": "./packages/plugins/" }
+    { "path": "./packages/icons/" },
+    { "path": "./packages/external-plugin-previewer" }
   ],
   "compilerOptions": {
     /* Basic Options */

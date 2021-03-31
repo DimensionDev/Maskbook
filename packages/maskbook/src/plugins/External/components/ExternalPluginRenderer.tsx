@@ -1,7 +1,8 @@
 import type { ExternalPluginLoadDetails, Manifest } from '../types'
-import { Card, CardHeader, CardContent, Typography, CardActions, Link } from '@material-ui/core'
+import { Card, CardHeader, CardContent, Typography, Link } from '@material-ui/core'
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
+
 export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
     const manifest = useExternalPluginManifest(props.url)
     if (!manifest) return null
@@ -20,7 +21,6 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
                 }
             />
             <CardContent style={{ background: 'red', height: 200 }}>Plugin render area</CardContent>
-            <CardActions disableSpacing></CardActions>
         </Card>
     )
 }

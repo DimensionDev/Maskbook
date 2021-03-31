@@ -1,0 +1,15 @@
+{
+  "name": "@dimensiondev/external-plugin-previewer",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "dev -- snowpack dev"
+  },
+  "dependencies": {
+    "@dimensiondev/maskbook-shared": "workspace:*",
+    "ef.js": "^0.13.6"
+  },
+  "devDependencies": {
+    "snowpack": "^3.0.11"
+  }
+}
