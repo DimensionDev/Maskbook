@@ -15,8 +15,8 @@
     "build-ios": "run-s build:ios:webpack build:ios:ext:prebuilt",
     "build:ios:ext:prebuilt": "webextensiom-shim-prebuilt",
     "build:ios:webpack": "build iOS",
-    "lint": "eslint -c packages/.eslintrc.json packages --cache --fix",
-    "lint:ci": "eslint -c packages/.eslintrc.json packages --cache",
+    "lint": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache --fix",
+    "lint:ci": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache",
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
@@ -26,7 +26,7 @@
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
-    "*.{ts,tsx,js,jsx}": "eslint -c packages/.eslintrc.json --cache --fix",
+    "*.{ts,tsx,js,jsx}": "npm run lint --",
     "packages/maskbook/**/*": "locale-kit --sync-keys --remove-unused-keys"
   },
   "dependencies": {
