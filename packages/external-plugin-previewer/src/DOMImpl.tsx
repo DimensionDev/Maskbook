@@ -7,19 +7,17 @@ import * as Components from './Components'
 const createReactRootShadowed = createReactRootShadowedPartial({
     preventEventPropagationList: [],
 })
-export function enable() {
-    setDOMImpl({
-        Node,
-        document: new Proxy(document, {
-            get(doc, key) {
-                if (key === 'createElement') return createElement
-                const val = (doc as any)[key]
-                if (typeof val === 'function') return val.bind(doc)
-                return val
-            },
-        }),
-    })
-}
+setDOMImpl({
+    Node,
+    document: new Proxy(document, {
+        get(doc, key) {
+            if (key === 'createElement') return createElement
+            const val = (doc as any)[key]
+            if (typeof val === 'function') return val.bind(doc)
+            return val
+        },
+    }),
+})
 
 function createElement(element: string, options: ElementCreationOptions) {
     element = options.is || element

@@ -1,11 +1,9 @@
 import React from 'react'
-import { enable } from './DOMImpl'
 import { t } from 'ef.js'
 import { setupPortalShadowRoot } from '@dimensiondev/maskbook-shared'
 setupPortalShadowRoot({ mode: 'open' }, [])
 
 Object.assign(globalThis, { React })
-enable()
 
 const HelloWorld = t`
 >mask-card
