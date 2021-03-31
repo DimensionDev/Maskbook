@@ -51,10 +51,10 @@ const useStyles = makeStyles((theme) => ({
             padding: 14,
         },
         '&:hover': {
-            backgroundColor: 'rgb(233, 246, 253)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgb(7, 15, 25)' : 'rgb(233, 246, 253)',
         },
         '&:active': {
-            backgroundColor: 'rgb(212,237,252)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgb(13, 29, 48)' : 'rgb(212,237,252)',
         },
     },
     title: {
