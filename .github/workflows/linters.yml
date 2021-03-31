@@ -19,8 +19,7 @@ jobs:
         with:
           path: ~/.pnpm
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          restore-keys: ${{ runner.os }}-node-
       - run: sudo npm install --global pnpm
       - run: pnpm ci
       - run: npx build -- echo "Check tsc"
@@ -53,7 +52,11 @@ jobs:
         with:
           path: ~/.pnpm
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - run: sudo npm i -g pnpm
-      - run: npm run ci
+          restore-keys: ${{ runner.os }}-node-
+      - run: sudo npm install --global pnpm
+      - run: pnpm ci
+      - run: npm run build-storybook
+      - uses: actions/upload-artifact@v2
+        with:
+          name: storybook
+          path: ./storybook-static
