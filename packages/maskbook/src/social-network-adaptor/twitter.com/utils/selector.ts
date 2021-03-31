@@ -95,12 +95,20 @@ export const postsContentSelector = () =>
             '[data-testid="tweet"] > div:last-child div[role="link"] div[lang]', // quoted tweet in timeline page for new twitter
         ].join(),
     ).concat(
-        querySelectorAll('[data-testid="tweet"] > div:last-child').map(
-            (x) =>
-                x.querySelector('[role="group"]')?.parentElement?.querySelector('div[lang]') as
-                    | HTMLDivElement
-                    | undefined,
-        ), // timeline page for new twitter
+        querySelectorAll('[data-testid="tweet"] > div:last-child').map((x) => {
+            const textElement = x.querySelector('[role="group"]')?.parentElement?.querySelector('div[lang]') as
+                | HTMLDivElement
+                | undefined
+
+            if (textElement) return textElement
+
+            // There's no textElement as there's only a twitter summary card parsed by a single url.
+            const summaryCardElement = x
+                .querySelector('[role="group"]')
+                ?.parentElement?.querySelector('[data-testid="card.wrapper"]') as HTMLDivElement | undefined
+
+            return summaryCardElement
+        }), // timeline page for new twitter
     )
 
 const base = querySelector<HTMLScriptElement>('#react-root + script')
