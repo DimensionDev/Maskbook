@@ -1,12 +1,13 @@
-import type { FC } from 'react'
+import type { CSSProperties, FC } from 'react'
 import classNames from 'classnames'
 import { isNil } from 'lodash-es'
 import { createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import { Record } from './Record'
-import type { Transaction } from '../../../../plugins/Wallet/services'
+import type { Transaction } from '../../../../plugins/Wallet/types'
 
 interface Props {
     transaction: Transaction
+    style?: CSSProperties
 }
 
 const useStyles = makeStyles(() =>
@@ -18,31 +19,35 @@ const useStyles = makeStyles(() =>
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
         },
+        row: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+        },
     }),
 )
 
-export const Row: FC<Props> = ({ transaction }) => {
+export const Row: FC<Props> = ({ transaction, ...rest }) => {
     const styles = useStyles()
     return (
-        <TableRow className={classNames({ [styles.failed]: transaction.failed })}>
-            <TableCell>
+        <TableRow component="div" className={classNames(styles.row, { [styles.failed]: transaction.failed })} {...rest}>
+            <TableCell component="div">
                 <Typography color="textSecondary" variant="body2">
                     {transaction.timeAt.toLocaleString()}
                 </Typography>
                 <Address id={transaction.id} />
             </TableCell>
-            <TableCell>
+            <TableCell component="div">
                 <Typography className={styles.overflow} color="textSecondary">
                     {transaction.type}
                 </Typography>
                 <Address id={transaction.toAddress} />
             </TableCell>
-            <TableCell>
+            <TableCell component="div">
                 {transaction.pairs.map((pair, index) => (
                     <Record pair={pair} key={index} />
                 ))}
             </TableCell>
-            <TableCell>
+            <TableCell align="right" component="div">
                 <Typography
                     className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}
                     color="textSecondary">

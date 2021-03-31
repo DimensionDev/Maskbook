@@ -16,6 +16,7 @@ import {
 import { Appearance, LaunchPage, Language } from '../../../settings/types'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
@@ -33,11 +34,17 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
 import { Flags } from '../../../utils/flags'
-import { currentDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
-import { resolveDataProviderName, resolveTradeProviderName } from '../../../plugins/Trader/pipes'
+import { currentTrendingDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
+import {
+    resolveDataProviderName as resolveTraderDataProviderName,
+    resolveTradeProviderName,
+} from '../../../plugins/Trader/pipes'
 import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
 import { ChainId } from '../../../web3/types'
 import { extendsTheme } from '../../../utils/theme'
+import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
+import { PortfolioProvider } from '../../../plugins/Wallet/types'
+import { currentPortfolioDataProviderSettings } from '../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -187,20 +194,27 @@ export default function DashboardSettingsRouter() {
                                         value={currentMaskbookChainIdSettings}
                                     />
                                 ) : null}
-                                {/* TODO: A singe 'Plugins' tab should be added for listing plugin bio and settings. */}
-                                <SettingsUIEnum
-                                    classes={listStyle}
-                                    enumObject={DataProvider}
-                                    getText={resolveDataProviderName}
-                                    icon={<TrendingUpIcon />}
-                                    value={currentDataProviderSettings}
-                                />
                                 <SettingsUIEnum
                                     classes={listStyle}
                                     enumObject={TradeProvider}
                                     getText={resolveTradeProviderName}
                                     icon={<SwapHorizIcon />}
                                     value={currentTradeProviderSettings}
+                                />
+                                {/* TODO: A singe 'Plugins' tab should be added for listing plugin bio and settings. */}
+                                <SettingsUIEnum
+                                    classes={listStyle}
+                                    enumObject={DataProvider}
+                                    getText={resolveTraderDataProviderName}
+                                    icon={<TrendingUpIcon />}
+                                    value={currentTrendingDataProviderSettings}
+                                />
+                                <SettingsUIEnum
+                                    classes={listStyle}
+                                    enumObject={PortfolioProvider}
+                                    getText={resolvePortfolioDataProviderName}
+                                    icon={<AccountBalanceWalletIcon />}
+                                    value={currentPortfolioDataProviderSettings}
                                 />
                                 {isMobile ? (
                                     <SettingsUIEnum

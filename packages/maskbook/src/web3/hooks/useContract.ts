@@ -12,7 +12,7 @@ import type { EstimateGasOptions } from '../../contracts/types'
 import { decodeOutputString, decodeEvents } from '../helpers'
 import { TransactionEventType } from '../types'
 
-function createContract<T extends Contract>(from: string, address: string, ABI: AbiItem[]) {
+export function createContract<T extends Contract>(from: string, address: string, ABI: AbiItem[]) {
     if (!address || !EthereumAddress.isValid(address)) return null
 
     // hijack method invocations and redirect them to the background service
