@@ -98,7 +98,7 @@ export default function Listed(props: ListedProps) {
                         <b>${props.price}</b>
                     </Typography>
                     <Typography className={classes.priceText} style={{ color: isPositive ? 'green' : 'red' }}>
-                        {isPositive ? '+' : '-'}
+                        {isPositive ? '+' : null}
                         {props.dayChange}
                     </Typography>
                 </Box>
@@ -115,12 +115,6 @@ export default function Listed(props: ListedProps) {
                         <Typography className={classes.buttonText}>Buy</Typography>
                     </Button>
                 </Link>
-            </Box>
-
-            <Box display="flex" bgcolor="#f7f7f7" justifyContent="center">
-                <Typography className={classes.bottomText}>
-                    powered by <b>Ideamarket</b>
-                </Typography>
             </Box>
         </div>
     )

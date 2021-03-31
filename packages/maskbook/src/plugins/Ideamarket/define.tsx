@@ -13,7 +13,7 @@ export const IdeamarketPluginDefine: PluginConfig = {
 
         if (!user) return null
 
-        const username = '@' + user
+        const username = '@' + user.toLowerCase()
 
         return <Fetcher username={username} />
     },

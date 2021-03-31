@@ -1,6 +1,6 @@
 # Valuables Plugin
 
-Ideamarket.io <https://ideamarket.io/>
+Ideamarket.io <https://ideamarket.io>
 
 Bounty: <https://gitcoin.co/issue/Ideamarket/gitcoin-bounties/19/100025258>
 

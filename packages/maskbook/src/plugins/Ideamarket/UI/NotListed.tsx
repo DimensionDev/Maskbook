@@ -59,12 +59,6 @@ export default function NotListed(props: UIProps) {
                     </Button>
                 </Link>
             </Box>
-
-            <Box display="flex" bgcolor="#f7f7f7" justifyContent="center">
-                <Typography className={classes.bottomText}>
-                    powered by <b>Ideamarket</b>
-                </Typography>
-            </Box>
         </div>
     )
 }
