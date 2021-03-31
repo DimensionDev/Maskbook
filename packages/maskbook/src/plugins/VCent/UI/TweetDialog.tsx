@@ -70,10 +70,10 @@ const useStyles = makeStyles((theme) => ({
 
     paper: {
         padding: theme.spacing(1),
-      },
+    },
 }))
 
-export default function TweetDialog(tweetAddress: any) {
+export default function VCentDialog(tweetAddress: any) {
     const classes = useStyles()
     const [tweet, setTweets] = useState<TweetAPI.TweetData>()
     const [type, setType] = useState('')
@@ -88,8 +88,12 @@ export default function TweetDialog(tweetAddress: any) {
     return (
         <div className={classes.root}>
             {tweet && type === 'Offer' ? (
-                <Button className={classes.content} target="_blank" href={VALUABLES_VCENT_URL + tweet.tweet_id} style={{backgroundColor: '#f3f3f3'}}>
-                    <div className={classes.VCent} >
+                <Button
+                    className={classes.content}
+                    target="_blank"
+                    href={VALUABLES_VCENT_URL + tweet.tweet_id}
+                    style={{ backgroundColor: '#f3f3f3' }}>
+                    <div className={classes.VCent}>
                         <VCentIcon />
                     </div>
                     <div className={classes.bidInfo}>
