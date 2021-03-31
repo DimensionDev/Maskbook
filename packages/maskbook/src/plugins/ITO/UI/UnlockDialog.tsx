@@ -15,7 +15,7 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { formatBalance, formatEthereumAddress } from '../../Wallet/formatter'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { SelectTokenDialogEvent, EthereumMessages } from '../../Ethereum/messages'
 import { ITO_CONSTANTS } from '../constants'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
@@ -53,7 +53,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const [token, setToken] = useState<ERC20TokenDetailed>(tokens[0])
     const [id] = useState(uuid())
     const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
+        EthereumMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return

@@ -16,7 +16,6 @@ export const WalletPluginDefine: PluginConfig = {
             <>
                 <SelectWalletDialog />
                 <SelectProviderDialog />
-                <SelectTokenDialog />
                 <CreateWalletDialog />
                 <WalletStatusDialog />
                 <WalletConnectQRCodeDialog />
@@ -28,7 +27,6 @@ export const WalletPluginDefine: PluginConfig = {
             <>
                 <SelectWalletDialog />
                 <SelectProviderDialog />
-                <SelectTokenDialog />
                 <CreateWalletDialog />
                 <WalletStatusDialog />
                 <WalletConnectQRCodeDialog />

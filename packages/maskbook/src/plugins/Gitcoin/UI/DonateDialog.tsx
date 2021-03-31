@@ -15,14 +15,14 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages'
+import { SelectTokenDialogEvent, EthereumMessages } from '../../Ethereum/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { Flags } from '../../../utils/flags'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { PluginGitcoinMessages } from '../messages'
-import { EthereumMessages } from '../../Ethereum/messages'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -91,7 +91,7 @@ export function DonateDialog(props: DonateDialogProps) {
     const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
     const [id] = useState(uuid())
     const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
+        EthereumMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return

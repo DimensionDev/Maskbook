@@ -8,7 +8,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
+import { WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useSwapCallback } from '../hooks/useSwapCallback'
@@ -21,7 +21,7 @@ import type { JSON_PayloadInMask } from '../types'
 import { ITO_CONSTANTS } from '../constants'
 import { ClaimStatus } from './ClaimGuide'
 import { isETH, isSameAddress } from '../../../web3/helpers'
-import { EthereumMessages } from '../../Ethereum/messages'
+import { EthereumMessages, SelectTokenDialogEvent } from '../../Ethereum/messages'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 
@@ -138,7 +138,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     //#region select token
     const [id] = useState(uuid())
     const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
+        EthereumMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return

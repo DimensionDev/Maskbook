@@ -6,7 +6,7 @@ import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
 
 
-type SelectTokenDialogEvent =
+export type SelectTokenDialogEvent =
       | {
             open: true
             uuid: string
@@ -24,7 +24,7 @@ type SelectTokenDialogEvent =
             token?: EtherTokenDetailed | ERC20TokenDetailed
         }
 
-type UnlockERC20TokenDialogEvent =
+export type UnlockERC20TokenDialogEvent =
     | {
           open: true
           token: ERC20TokenDetailed
@@ -35,7 +35,7 @@ type UnlockERC20TokenDialogEvent =
           open: false
       }
 
-type TransactionDialogEvent =
+export type TransactionDialogEvent =
     | {
           open: true
           state: TransactionState
@@ -46,7 +46,7 @@ type TransactionDialogEvent =
           open: false
       }
 
-type ConfirmSwapDialogEvent =
+export type ConfirmSwapDialogEvent =
     | {
           open: true
           variableIndex: 1 | 2 | 3 | 'bypass'

@@ -26,7 +26,7 @@ import { activatedSocialNetworkUI } from '../../../../social-network'
 import { EthereumMessages } from '../../../Ethereum/messages'
 import Services from '../../../../extension/service'
 import { UST } from '../../constants'
-import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
+import type { SelectTokenDialogEvent } from '../../../Ethereum/messages'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
 import { PluginTraderRPC } from '../../messages'
@@ -158,7 +158,7 @@ export function Trader(props: TraderProps) {
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
     const [focusedTokenPanelType, setFocusedTokenPanelType] = useState(TokenPanelType.Input)
     const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
+        EthereumMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== String(focusedTokenPanelType)) return

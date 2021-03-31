@@ -11,7 +11,7 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { CONSTANTS } from '../../../web3/constants'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessages, SelectTokenDialogEvent } from '../../Wallet/messages'
+import { EthereumMessages, SelectTokenDialogEvent } from '../../Ethereum/messages'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -83,7 +83,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
     //#region select token dialog
     const [id] = useState(uuid())
     const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
+        EthereumMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return

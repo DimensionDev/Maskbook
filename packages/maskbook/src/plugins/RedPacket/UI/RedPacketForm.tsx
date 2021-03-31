@@ -25,7 +25,7 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumTokenType, EthereumNetwork, ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
+import { useChainId } from '../../../web3/hooks/useChainState'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useCreateCallback } from '../hooks/useCreateCallback'
@@ -33,11 +33,11 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { RedPacketJSONPayload } from '../types'
 import { resolveChainName } from '../../../web3/pipes'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { SelectTokenDialogEvent, EthereumMessages } from '../../Ethereum/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 
@@ -82,7 +82,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
     const RED_PACKET_ADDRESS = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
 
     //#region select token
@@ -90,7 +89,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
     const [id] = useState(uuid())
     const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
+        EthereumMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return
