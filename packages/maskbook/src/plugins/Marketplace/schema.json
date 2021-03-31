@@ -1,0 +1,124 @@
+{
+    "type": "object",
+    "additionalProperties": true,
+    "definitions": {
+        "token": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "chain_id": {
+                    "enum": [1, 3, 4, 5, 42],
+                    "type": "number",
+                    "title": "chain_id"
+                },
+                "type": {
+                    "enum": [0, 1],
+                    "type": "number",
+                    "title": "type"
+                },
+                "address": {
+                    "description": "token address",
+                    "type": "string",
+                    "title": "address"
+                }
+            },
+            "required": ["chain_id", "type", "address"],
+            "title": "token"
+        },
+        "trader": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "title": "address"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "name"
+                }
+            },
+            "required": ["address", "name"],
+            "title": "trader"
+        }
+    },
+    "properties": {
+        "contract_address": {
+            "type": "string",
+            "title": "contract_address"
+        },
+        "chain_id": {
+            "enum": [1, 3, 4, 5, 42],
+            "type": "number",
+            "title": "chain_id"
+        },
+        "start_time": {
+            "type": "number",
+            "title": "start_time"
+        },
+        "end_time": {
+            "type": "number",
+            "title": "end_time"
+        },
+        "creation_time": {
+            "type": "number",
+            "title": "creation_time"
+        },
+        "seller": {
+            "$ref": "#/definitions/trader"
+        },
+        "buyers": {
+            "type": "array",
+            "title": "buyers",
+            "description": "A list of exchange token buyer.",
+            "additionalItems": true,
+            "items": {
+                "anyOf": [
+                    {
+                        "$ref": "#/definitions/trader"
+                    }
+                ]
+            }
+        },
+        "tokenIds": {
+            "type": "array",
+            "title": "tokenIds",
+            "description": "A list of tokens' ID which will be sold in the market.",
+            "items": {
+                "allOf": [
+                    {
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "token": {
+            "$ref": "#/definitions/token"
+        },
+        "exchange_tokens": {
+            "type": "array",
+            "title": "exchange_tokens",
+            "description": "A list of exchange tokens",
+            "additionalItems": true,
+            "items": {
+                "anyOf": [
+                    {
+                        "$ref": "#/definitions/token"
+                    }
+                ]
+            }
+        }
+    },
+    "required": [
+        "contract_address",
+        "chain_id",
+        "start_time",
+        "end_time",
+        "creation_time",
+        "seller",
+        "buyers",
+        "tokenIds",
+        "token",
+        "exchange_tokens"
+    ]
+}

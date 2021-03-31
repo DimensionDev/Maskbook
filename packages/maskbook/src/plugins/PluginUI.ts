@@ -18,6 +18,7 @@ import { ITO_PluginDefine } from './ITO/define'
 import { NFTPluginsDefine } from './NFT/define'
 import { AirdropPluginDefine } from './Airdrop/define'
 import { sideEffect } from '../utils/side-effects'
+import { MarketplacePluginDefine } from './Marketplace/define'
 
 sideEffect.then(() => {
     plugins.add(EthereumPluginDefine)
@@ -26,6 +27,7 @@ sideEffect.then(() => {
     plugins.add(FileServicePluginDefine)
     plugins.add(ITO_PluginDefine)
     plugins.add(NFTPluginsDefine)
+    if (Flags.marketplace_enabled) plugins.add(MarketplacePluginDefine)
     if (Flags.gitcoin_enabled) plugins.add(GitcoinPluginDefine)
     if (Flags.poll_enabled) plugins.add(PollsPluginDefine)
     if (Flags.trader_enabled) plugins.add(TraderPluginDefine)

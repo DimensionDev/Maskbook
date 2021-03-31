@@ -1,6 +1,6 @@
 import { memoizePromise } from '@dimensiondev/kit'
 import { formatChecksumAddress } from '../../../plugins/Wallet/formatter'
-import { EthereumTokenType, ChainId, ERC20TokenDetailed } from '../../../web3/types'
+import { EthereumTokenType, ChainId, ERC20TokenDetailed, ERC721TokenDetailed } from '../../../web3/types'
 
 interface TokenList {
     keywords: string[]
@@ -30,7 +30,7 @@ const fetchTokenList = memoizePromise(
 )
 
 /**
- * Fetch tokens from token list
+ * Fetch ERC20 tokens from token list
  * @param url
  * @param chainId
  */
@@ -53,7 +53,7 @@ export async function fetchERC20TokensFromTokenList(
 }
 
 /**
- * Fetch tokens from multiple token lists
+ * Fetch ERC20 tokens from multiple token lists
  * @param urls
  * @param chainId
  */
@@ -76,4 +76,23 @@ export async function fetchERC20TokensFromTokenLists(
             return true
         }
     })
+}
+
+/**
+ * Fetch ERC721 tokens from token list
+ */
+export async function fetchERC721TokensFromTokenList(
+    url: string,
+    chainId = ChainId.Mainnet,
+): Promise<ERC721TokenDetailed[]> {
+    return Promise.resolve([
+        {
+            type: EthereumTokenType.ERC721,
+            address: '',
+            name: 'Color NFT',
+            symbol: 'CCC',
+            chainId,
+            tokenId: '0',
+        },
+    ])
 }

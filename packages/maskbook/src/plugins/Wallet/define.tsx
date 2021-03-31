@@ -1,4 +1,3 @@
-import { SelectTokenDialog } from '../Ethereum/UI/SelectTokenDialog'
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { CreateWalletDialog } from './UI/CreateWalletDialog'

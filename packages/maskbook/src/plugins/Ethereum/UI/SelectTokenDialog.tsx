@@ -6,7 +6,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessages } from '../../Wallet/messages'
+import { EthereumMessages } from '../../Ethereum/messages'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { delay } from '../../../utils/utils'
 
@@ -49,7 +49,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const [disableSearchBar, setDisableSearchBar] = useState(false)
     const [FixedTokenListProps, setFixedTokenListProps] = useState<FixedTokenListProps | null>(null)
 
-    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, (ev) => {
+    const [open, setOpen] = useRemoteControlledDialog(EthereumMessages.events.selectTokenDialogUpdated, (ev) => {
         if (!ev.open) return
         setId(ev.uuid)
         setDisableEther(ev.disableEther ?? true)
