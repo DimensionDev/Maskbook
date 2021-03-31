@@ -1,14 +1,43 @@
+import Fuse from 'fuse.js'
+import { EthereumAddress } from 'wallet.ts'
 import { createTransaction } from '../../../database/helpers/openDB'
-import { createWalletDBAccess } from '../database/Wallet.db'
+import { createWalletDBAccess, WalletDB } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
 import { formatChecksumAddress } from '../formatter'
-import { WalletRecordIntoDB, ERC20TokenRecordIntoDB, getWalletByAddress } from './helpers'
+import { WalletRecordIntoDB, ERC20TokenRecordIntoDB, getWalletByAddress, ERC20TokenRecordOutDB } from './helpers'
 import type { ERC20TokenDetailed } from '../../../web3/types'
+import type { ERC20TokenRecord } from '../database/types'
+import { isSameAddress } from '../../../web3/helpers'
+import { queryTransactionPaged } from '../../../database/helpers/pagination'
 
 export async function getERC20Tokens() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token', 'Wallet')
     return t.objectStore('ERC20Token').getAll()
+}
+
+const fuse = new Fuse([] as ERC20TokenRecord[], {
+    shouldSort: true,
+    threshold: 0.45,
+    minMatchCharLength: 1,
+    keys: [
+        { name: 'name', weight: 0.8 },
+        { name: 'symbol', weight: 0.2 },
+    ],
+})
+
+export async function getERC20TokensPaged(index: number, count: number, query?: string) {
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token')
+    return queryTransactionPaged(t, 'ERC20Token', {
+        skip: index * count,
+        count,
+        predicate: (record) => {
+            if (!query) return true
+            if (EthereumAddress.isValid(query) && !isSameAddress(query, record.address)) return false
+            fuse.setCollection([record])
+            return !!fuse.search(query).length
+        },
+    })
 }
 
 export async function addERC20Token(token: ERC20TokenDetailed) {
@@ -21,13 +50,13 @@ export async function addERC20Token(token: ERC20TokenDetailed) {
             decimals: token.decimals ?? 0,
         }),
     )
-    WalletMessages.events.tokensUpdated.sendToAll(undefined)
+    WalletMessages.events.erc20TokensUpdated.sendToAll(undefined)
 }
 
 export async function removeERC20Token(token: PartialRequired<ERC20TokenDetailed, 'address'>) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
     await t.objectStore('ERC20Token').delete(formatChecksumAddress(token.address))
-    WalletMessages.events.tokensUpdated.sendToAll(undefined)
+    WalletMessages.events.erc20TokensUpdated.sendToAll(undefined)
 }
 
 export async function trustERC20Token(address: string, token: ERC20TokenDetailed) {
