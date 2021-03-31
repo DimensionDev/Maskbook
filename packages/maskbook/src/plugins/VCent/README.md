@@ -7,9 +7,9 @@ Tweet is a Mask plugin integrating with Valuables API to directly display the cu
 Youtube Plugin Demo: <https://youtu.be/oZhVUIXFUPU>
 
 The plugin is located in
-```
+`
 Maskbook\packages\maskbook\src\plugins\Tweet
-```
+`
 
 The file tree for this plugin is as follows:\
 \
