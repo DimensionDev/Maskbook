@@ -113,12 +113,13 @@ export interface AssetsListResponse {
     assets: Asset[]
 }
 
-export async function getAssetsList(from: string, size = 50, page = 0) {
+export async function getAssetsList(from: string, opts: { page?: number; size?: number }) {
+    const { page = 0, size = 50 } = opts
     const params = new URLSearchParams()
     params.append('exclude_currencies', 'true')
     params.append('owner', from.toLowerCase())
     params.append('limit', String(size))
-    params.append('offset', String(size * page))
+    params.append('offset', String(size * (page - 1)))
 
     const response = await fetch(`https://api.opensea.io/api/v1/assets?${params.toString()}`, {
         method: 'GET',

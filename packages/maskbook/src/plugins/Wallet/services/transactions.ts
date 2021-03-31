@@ -12,13 +12,17 @@ import {
 import * as DeBankAPI from '../apis/debank'
 import * as ZerionApi from '../apis/zerion'
 
-export async function getTransactionList(address: string, provider: PortfolioProvider): Promise<Transaction[]> {
+export async function getTransactionList(
+    address: string,
+    provider: PortfolioProvider,
+    page?: number,
+): Promise<Transaction[]> {
     if (provider === PortfolioProvider.DEBANK) {
         const { data, error_code } = await DeBankAPI.getTransactionList(address)
         if (error_code !== 0) throw new Error('Fail to load transactions.')
         return fromDeBank(data)
     } else if (provider === PortfolioProvider.ZERION) {
-        const { payload, meta } = await ZerionApi.getTransactionList(address)
+        const { payload, meta } = await ZerionApi.getTransactionList(address, page)
         if (meta.status !== 'ok') throw new Error('Fail to load transactions.')
         return fromZerion(payload.transactions)
     }
@@ -65,6 +69,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['da
                 gasFee: transaction.tx
                     ? { eth: transaction.tx.eth_gas_fee, usd: transaction.tx.usd_gas_fee }
                     : undefined,
+                transactionType: transaction.cate_id,
             }
         })
 }
@@ -98,6 +103,7 @@ function fromZerion(data: ZerionTransactionItem[]) {
                     eth: Number(ethGasFee),
                     usd: Number(usdGasFee),
                 },
+                transactionType: transaction.type,
             }
         })
 }
