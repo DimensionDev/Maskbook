@@ -16,7 +16,7 @@
     "build:ios:ext:prebuilt": "webextensiom-shim-prebuilt",
     "build:ios:webpack": "build iOS",
     "lint": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx --fix --cache",
-    "lint:report": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml --cache",
+    "lint:ci": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx --fix-dry-run --cache",
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",

@@ -20,10 +20,8 @@ jobs:
         with:
           path: ~/.pnpm
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - run: sudo npm i -g pnpm
-      - run: npm run ci
+          restore-keys: ${{ runner.os }}-node-
+      - run: npx pnpm ci
       - run: npx build-ci
       - name: Upload `Maskbook.base.zip`
         uses: actions/upload-artifact@v2

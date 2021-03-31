@@ -7,32 +7,6 @@ on:
     branches: [master, released]
 
 jobs:
-  linters:
-    runs-on: ubuntu-20.04
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - uses: actions/setup-node@v2-beta
-      - uses: actions/cache@v2
-        with:
-          path: ~/.pnpm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - run: sudo npm install --global pnpm
-      - run: pnpm ci
-      - run: npx build -- echo "Check tsc"
-      - run: npx locale-kit
-      - run: npm run lint:typecoverage
-        working-directory: packages/maskbook
-      - run: npm run lint:report
-      - name: Upload ESLint Report
-        uses: actions/upload-artifact@v2
-        with:
-          name: eslint
-          path: ./reports/junit
   prettier:
     runs-on: ubuntu-20.04
     steps:
@@ -41,9 +15,8 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2-beta
       - run: npx prettier --list-different .
-  storybook:
+  locale-kit:
     runs-on: ubuntu-20.04
-    continue-on-error: false
     steps:
       - uses: actions/checkout@v2
         with:
@@ -53,7 +26,60 @@ jobs:
         with:
           path: ~/.pnpm
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - run: sudo npm i -g pnpm
-      - run: npm run ci
+          restore-keys: ${{ runner.os }}-node-
+      - run: npx pnpm ci
+      - run: npx locale-kit
+  type-check:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v2-beta
+      - uses: actions/cache@v2
+        with:
+          path: ~/.pnpm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-node-
+      - run: npx pnpm ci
+      - run: npx build -- echo "Check tsc"
+  type-coverage:
+    runs-on: ubuntu-20.04
+    needs: [prettier, locale-kit, type-check]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v2-beta
+      - uses: actions/cache@v2
+        with:
+          path: ~/.pnpm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-node-
+      - run: npx pnpm ci
+      - run: npm run lint:typecoverage
+        working-directory: packages/maskbook
+  eslint:
+    runs-on: ubuntu-20.04
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+    needs: [prettier, locale-kit, type-check]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v2-beta
+      - uses: actions/cache@v2
+        with:
+          path: ~/.pnpm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-node-
+      - run: npx pnpm ci
+      - run: npm run lint:ci -- --quiet
+      - run: npm run lint:ci -- --format junit -o reports/junit/eslint-results.xml
+      - name: Upload eslint report
+        uses: actions/upload-artifact@v2
+        with:
+          name: eslint
+          path: reports/junit
