@@ -4,4 +4,3 @@ export * from './Identifier/type'
 export * from './i18n/register-ns'
 export * from './react/createGlobalState'
 export * from './ShadowRoot'
-const a
