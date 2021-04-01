@@ -954,7 +954,7 @@ function TransferTab(props: TransferTabProps) {
 
     const onTransfer = useCallback(async () => {
         await transferCallback()
-    }, [onClose, transferCallback])
+    }, [transferCallback])
     //#endregion
 
     //#region remote controlled transaction dialog
@@ -964,7 +964,7 @@ function TransferTab(props: TransferTabProps) {
             (ev) => {
                 if (ev.open) return
                 resetTransferCallback()
-                if (transferState.type !== TransactionStateType.CONFIRMED) return
+                if (transferState.type !== TransactionStateType.HASH) return
                 onClose()
                 tokenBalanceRetry()
             },
@@ -1193,7 +1193,7 @@ export function DashboardWalletTransferDialogNFT(
             (ev) => {
                 if (ev.open) return
                 resetTransferCallback()
-                if (transferState.type !== TransactionStateType.CONFIRMED) return
+                if (transferState.type !== TransactionStateType.HASH) return
                 props.onClose()
                 collectiblesRetry()
             },
@@ -1251,7 +1251,7 @@ export function DashboardWalletTransferDialogNFT(
                             className={classes.button}
                             variant="contained"
                             color="primary"
-                            disabled={!address || !!validationMessage}
+                            disabled={!!validationMessage || transferState.type === TransactionStateType.WAIT_FOR_CONFIRMING}
                             onClick={onTransfer}>
                             {validationMessage || t('wallet_transfer_send')}
                         </Button>
