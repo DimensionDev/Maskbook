@@ -1,13 +1,15 @@
-import { createContext } from 'react'
+import { createContext, useState } from 'react'
 import { FixedSizeGrid } from 'react-window'
 import AutoResize from 'react-virtualized-auto-sizer'
 import { Box, Button, CircularProgress, makeStyles, Skeleton, Typography } from '@material-ui/core'
 import { CollectibleCard } from './CollectibleCard'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
-import { useChainId } from '../../../../web3/hooks/useChainState'
 import { formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
-import { ERC721TokenAssetDetailed, ERC1155TokenAssetDetailed, EthereumTokenType } from '../../../../web3/types'
-import type { CollectibleProvider } from '../../../../plugins/Wallet/types'
+import { EthereumTokenType } from '../../../../web3/types'
+import { useValueRef } from '../../../../utils/hooks/useValueRef'
+import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
+import { useAccount } from '../../../../web3/hooks/useAccount'
+import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -40,27 +42,22 @@ const useStyles = makeStyles((theme) => ({
 
 export interface CollectibleListProps {
     wallet: WalletRecord
-    collectibles: (ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed)[]
-    collectiblesLoading: boolean
-    collectiblesError: Error | undefined
-    collectiblesRetry: () => void
-    provider: CollectibleProvider
-    onNextPage: () => void
-    page: number
 }
 
 export function CollectibleList(props: CollectibleListProps) {
+    const { wallet } = props
+
     const classes = useStyles()
+    const account = useAccount()
+
+    const [page, setPage] = useState(1)
+    const provider = useValueRef(currentCollectibleDataProviderSettings)
     const {
-        wallet,
-        collectibles,
-        collectiblesLoading,
-        collectiblesError,
-        collectiblesRetry,
-        provider,
-        onNextPage,
-        page,
-    } = props
+        value: collectibles = [],
+        loading: collectiblesLoading,
+        retry: collectiblesRetry,
+        error: collectiblesError,
+    } = useCollectibles(account, provider, page)
 
     if (collectiblesLoading && page === 1)
         return (
@@ -135,7 +132,7 @@ export function CollectibleList(props: CollectibleListProps) {
                                     visibleRowStopIndex === overscanRowStopIndex &&
                                     visibleRowStopIndex === Math.ceil(dataSource.length / 4) - 1
                                 ) {
-                                    onNextPage()
+                                    setPage((x) => x + 1)
                                 }
                             }}
                             rowCount={Math.ceil(dataSource.length / 4)}

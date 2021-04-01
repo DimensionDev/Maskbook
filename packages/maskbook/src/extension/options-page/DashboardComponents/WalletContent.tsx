@@ -29,10 +29,7 @@ import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useCollectibles } from '../../../plugins/Wallet/hooks/useCollectibles'
-import { CollectibleProvider, FilterTransactionType } from '../../../plugins/Wallet/types'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
+import { FilterTransactionType } from '../../../plugins/Wallet/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -96,7 +93,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     const xsMatched = useMatchXS()
     const chainIdValid = useChainIdValid()
 
-    const [collectiblesPage, setCollectiblesPage] = useState(1)
     const [transactionType, setTransactionType] = useState<FilterTransactionType>(FilterTransactionType.ALL)
 
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
@@ -104,13 +100,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
     const [addAsset, , openAddAsset] = useModal(DashboardWalletAddERC721TokenDialog)
-
-    const collectibleDataProvider = useValueRef(currentCollectibleDataProviderSettings)
-    const { value: collectibles = [], loading: collectiblesLoading, error: collectiblesError } = useCollectibles(
-        account,
-        collectibleDataProvider,
-        collectiblesPage,
-    )
 
     const [menu, openMenu] = useMenu([
         <MenuItem key="rename" onClick={() => openWalletRename({ wallet })}>
@@ -280,18 +269,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                 {tabIndex === 0 ? (
                     <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
                 ) : null}
-                {tabIndex === 1 ? (
-                    <CollectibleList
-                        wallet={wallet}
-                        provider={collectibleDataProvider}
-                        page={collectiblesPage}
-                        onNextPage={() => setCollectiblesPage((prev) => prev + 1)}
-                        collectibles={collectibles}
-                        collectiblesLoading={collectiblesLoading}
-                        collectiblesError={collectiblesError}
-                        collectiblesRetry={() => setCollectiblesPage(1)}
-                    />
-                ) : null}
+                {tabIndex === 1 ? <CollectibleList wallet={wallet} /> : null}
                 {tabIndex === 2 ? <TransactionList transactionType={transactionType} /> : null}
             </Box>
             {menu}

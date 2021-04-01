@@ -441,8 +441,9 @@ export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<Wal
 
 //#region wallet add ERC721 token dialog
 export function DashboardWalletAddERC721TokenDialog(props: WrappedDialogProps<WalletProps>) {
-    const { t } = useI18N()
     const { wallet } = props.ComponentProps!
+
+    const { t } = useI18N()
     const [tokenId, setTokenId] = useState('')
     const [address, setAddress] = useState('')
 
@@ -1183,7 +1184,7 @@ export function DashboardWalletTransferDialogNFT(
 
     const onTransfer = useCallback(async () => {
         await transferCallback()
-    }, [props.onClose, transferCallback])
+    }, [transferCallback])
     //#endregion
 
     //#region remote controlled transaction dialog
