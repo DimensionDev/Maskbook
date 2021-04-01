@@ -179,7 +179,6 @@ importers:
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
       '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-theme': link:../theme
-      '@dimensiondev/matrix-js-sdk-type': 1.0.0-20200731085604-dc2de92
       '@dimensiondev/metamask-extension-provider': 3.0.2-20210215121518-716d309
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@ethersproject/address': 5.1.0
@@ -238,7 +237,6 @@ importers:
       jsx-jsonml-devtools-renderer: 1.4.3
       lodash-es: /lodash/4.17.21
       loglevel: 1.7.1
-      matrix-js-sdk: 9.10.0
       next-tick: 1.1.0
       notistack: 1.0.5
       promievent: 0.1.5
@@ -343,7 +341,6 @@ importers:
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
       '@dimensiondev/maskbook-shared': workspace:*
       '@dimensiondev/maskbook-theme': workspace:*
-      '@dimensiondev/matrix-js-sdk-type': '=1.0.0-20200731085604-dc2de92'
       '@dimensiondev/metamask-extension-provider': 3.0.2-20210215121518-716d309
       '@dimensiondev/stego-js': '=0.11.1-20201027083223-8ab41be'
       '@dimensiondev/webextension-shim': 0.0.3-20201120022530-b318b89
@@ -441,7 +438,6 @@ importers:
       jsx-jsonml-devtools-renderer: ^1.4.3
       lodash-es: npm:lodash@^4.17.11
       loglevel: ^1.7.0
-      matrix-js-sdk: ^9.5.1
       next-tick: ^1.0.0
       notistack: ^1.0.3
       openzeppelin-solidity: ^3.2.0
@@ -2858,14 +2854,6 @@ packages:
     resolution:
       integrity: sha512-VV8LguRtjrfcp6syVpNFtLtppilOyIup7mqmhqrX/8pwFtXAaVeeEvNgrAO84u8quL0UuVJSuaZdiUfewENwow==
       tarball: download/@dimensiondev/kit/0.0.0-20210221102734-0b4a937/91c0b12c97c71cfb7370b1649568df86ee3b24162f753e5420329f52a54502ae
-  /@dimensiondev/matrix-js-sdk-type/1.0.0-20200731085604-dc2de92:
-    dependencies:
-      '@types/node': 12.20.7
-      '@types/request': 2.48.5
-    dev: false
-    resolution:
-      integrity: sha512-Br9l9LKKYXV1djdlfxOSknsVSzd56jNvc9StvPTv3eJfZPD7HbL3Yn+ikE34UR5Qs7Vga3EwtRIZIO77bb9I2g==
-      tarball: download/@dimensiondev/matrix-js-sdk-type/1.0.0-20200731085604-dc2de92/f42145da27cab463133d09c9ffd300af2ba5785ec977872991e77cb99930b3fa
   /@dimensiondev/metamask-extension-provider/3.0.2-20210215121518-716d309:
     dependencies:
       detect-browser: 3.0.1
@@ -6524,10 +6512,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-TbH79tcyi9FHwbyboOKeRachRq63mSuWYXOflsNO9ZyE5ClQ/JaozNKl+aWUq87qPNsXasXxi2AbgfwIJ+8GQw==
-  /@types/caseless/0.12.2:
-    dev: false
-    resolution:
-      integrity: sha512-6ckxMjBBD8URvjB6J3NcnuAn5Pkl7t3TizAg+xdlzzQGSPSmBcXf8KoIH0ua/i+tio+ZRUHEXp0HEmvaR4kt0w==
   /@types/cheerio/0.22.28:
     dependencies:
       '@types/node': 14.14.37
@@ -7174,15 +7158,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-d2gQQ0IL6hXLnoRfVYZukQNWHuVsE75DzFTLPUuyyEhJS8G2VvlE+qfQQ91SJjaMqlURRCNIsX7Jcsw6cEuJlA==
-  /@types/request/2.48.5:
-    dependencies:
-      '@types/caseless': 0.12.2
-      '@types/node': 14.14.37
-      '@types/tough-cookie': 4.0.0
-      form-data: 2.5.1
-    dev: false
-    resolution:
-      integrity: sha512-/LO7xRVnL3DxJ1WkPGDQrp4VTV1reX9RkC85mJ+Qzykj2Bdw+mG15aAfDahc76HtknjzE16SX/Yddn6MxVbmGQ==
   /@types/resolve/0.0.8:
     dependencies:
       '@types/node': 14.14.37
@@ -7257,10 +7232,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-IW3dFGNyVkVLC1MCMogVWQaKH/ZtjPQdOW9c3X128o5lVpFYNsq/l3Qo1pV7sfTmvDzWEXR3QTxg1TMy1pyaAQ==
-  /@types/tough-cookie/4.0.0:
-    dev: false
-    resolution:
-      integrity: sha512-I99sngh224D0M7XgW1s120zxCt3VYQ3IQsuw3P3jbq5GG4yc79+ZjyKznyOGIQrflfylLgcfekeZW/vk0yng6A==
   /@types/uglify-js/3.13.0:
     dependencies:
       source-map: 0.6.1
@@ -8189,10 +8160,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-2iPY3kxDDZvtRzauqKDb4v7a5sTF4GZ+esQTY8nGYvmhAtGTeFPMn4cRnvyWS1qmtPTP0Mv8hyLOp9l3ZzWMKg==
-  /another-json/0.2.0:
-    dev: false
-    resolution:
-      integrity: sha1-tfQBnJc7bdXGUGotk0acttMq7tw=
   /ansi-align/3.0.0:
     dependencies:
       string-width: 3.1.0
@@ -9539,12 +9506,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-9o5UecI3GhkpM6DrXr69PblIuWxPKk9Y0jHBRhdocZ2y7YECBFCsHm79Pr3OyR2AvjhDkabFJaDJMYRazHgsow==
-  /browser-request/0.3.3:
-    dev: false
-    engines:
-      '0': node
-    resolution:
-      integrity: sha1-ns5bWsqJopkyJC4Yv5M975h2zBc=
   /browserify-aes/1.2.0:
     dependencies:
       buffer-xor: 1.0.3
@@ -13795,16 +13756,6 @@ packages:
       node: '>= 0.12'
     resolution:
       integrity: sha512-1lLKB2Mu3aGP1Q/2eCOx0fNbRMe7XdwktwOruhfqqd0rIJWwN4Dh+E3hrPSlDCXnSR7UtZ1N38rVXm+6+MEhJQ==
-  /form-data/2.5.1:
-    dependencies:
-      asynckit: 0.4.0
-      combined-stream: 1.0.8
-      mime-types: 2.1.29
-    dev: false
-    engines:
-      node: '>= 0.12'
-    resolution:
-      integrity: sha512-m21N3WOmEEURgk6B9GLOE4RuWOFf28Lhh9qGYeNlGq4VDXUlJy2th2slBNU8Gp8EzloYZOibZJ7t5ecIrFSjVA==
   /form-data/3.0.1:
     dependencies:
       asynckit: 0.4.0
@@ -17884,20 +17835,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-6qE4B9deFBIa9YSpOc9O0Sgc43zTeVYbgDT5veRKSlB2+ZuHNoVVxA1L/ckMUayV9Ay9y7Z/SZCLcGteW9i7bg==
-  /matrix-js-sdk/9.10.0:
-    dependencies:
-      '@babel/runtime': 7.13.10
-      another-json: 0.2.0
-      browser-request: 0.3.3
-      bs58: 4.0.1
-      content-type: 1.0.4
-      loglevel: 1.7.1
-      qs: 6.10.1
-      request: 2.88.2
-      unhomoglyph: 1.0.6
-    dev: false
-    resolution:
-      integrity: sha512-xvpgvTmCbS8dRTVvVULKbSwyES0y2F17TPukLIIXZMTqqeEBhfycVIjCV6LuACc0WBoRsZbi1/BIlgeWY7J03A==
   /md5.js/1.3.5:
     dependencies:
       hash-base: 3.1.0
@@ -20413,6 +20350,7 @@ packages:
   /qs/6.10.1:
     dependencies:
       side-channel: 1.0.4
+    dev: true
     engines:
       node: '>=0.6'
     resolution:
@@ -24483,10 +24421,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-Ft16BJcnapDKp0+J/rqFC3Rrk6Y/Ng4nzsC028k2jdDII/rdZ7Wd3pPT/6+vIIxRagwRc9K0IUX0Ra4fKvw+WQ==
-  /unhomoglyph/1.0.6:
-    dev: false
-    resolution:
-      integrity: sha512-7uvcWI3hWshSADBu4JpnyYbTVc7YlhF5GDW/oPD5AxIxl34k4wXR3WDkPnzLxkN32LiTCTKMQLtKVZiwki3zGg==
   /unicode-canonical-property-names-ecmascript/1.0.4:
     dev: true
     engines:
