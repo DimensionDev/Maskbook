@@ -75,6 +75,7 @@ import { useWalletHD } from '../../../plugins/Wallet/hooks/useWallet'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../../plugins/Wallet/constants'
 import type { ERC721 } from '@dimensiondev/contracts/types/ERC721'
 import ERC721ABI from '@dimensiondev/contracts/abis/ERC721.json'
+import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -454,6 +455,8 @@ export function DashboardWalletAddERC721TokenDialog(
     const [address, setAddress] = useState('')
     const account = useAccount()
     const chainId = useChainId()
+
+    const tokenDetailed = useERC721TokenDetailed(address)
 
     const onSubmit = useSnackbarCallback(
         async () => {

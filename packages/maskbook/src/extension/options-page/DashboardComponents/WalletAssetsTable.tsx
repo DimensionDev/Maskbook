@@ -81,12 +81,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 //#region view detailed
 interface ViewDetailedProps extends WalletAssetsTableProps {
-    isMobile: boolean
-    x: Asset
+    asset: Asset
 }
 
 function ViewDetailed(props: ViewDetailedProps) {
-    const { wallet, isMobile, x } = props
+    const { wallet, asset: x } = props
+
+    const isMobile = useMatchXS()
     const classes = useStylesExtends(useStyles({ isMobile }), props)
     const stableTokens = useStableTokensDebank()
 
@@ -161,15 +162,17 @@ function ViewDetailed(props: ViewDetailedProps) {
 //#region less button
 const MAX_TOKENS_LENGTH = 5
 const MIN_VALUE = 5
+
 interface LessButtonProps extends withClasses<never> {
-    isMobile: boolean
     setViewLength: React.Dispatch<React.SetStateAction<number>>
     setPrice: React.Dispatch<React.SetStateAction<number>>
     detailedTokens: Asset[]
 }
 
 function LessButton(props: LessButtonProps) {
-    const { isMobile, setViewLength, setPrice, detailedTokens } = props
+    const { setViewLength, setPrice, detailedTokens } = props
+
+    const isMobile = useMatchXS()
     const classes = useStylesExtends(useStyles({ isMobile }), props)
     const [more, setMore] = useState(false)
 
@@ -306,20 +309,13 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                   </TableRow>
                               ))
                             : viewDetailedTokens.map((y, idx) =>
-                                  idx < viewLength ? (
-                                      <ViewDetailed key={idx} x={y} isMobile={isMobile} wallet={wallet} />
-                                  ) : null,
+                                  idx < viewLength ? <ViewDetailed key={idx} asset={y} wallet={wallet} /> : null,
                               )}
                     </TableBody>
                 </Table>
             </TableContainer>
             {viewDetailedTokens.length > viewLength ? (
-                <LessButton
-                    isMobile={isMobile}
-                    setViewLength={setViewLength}
-                    setPrice={setPrice}
-                    detailedTokens={detailedTokens}
-                />
+                <LessButton setViewLength={setViewLength} setPrice={setPrice} detailedTokens={detailedTokens} />
             ) : null}
         </>
     )

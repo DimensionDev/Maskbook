@@ -152,13 +152,13 @@ export function ToolboxHint() {
                 <Image src={ToolIconURLs.token.image} width={24} height={24} />
                 <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
             </MenuItem>
-        ) : undefined,
+        ) : null,
         Flags.airdrop_enabled ? (
             <MenuItem onClick={openAirdrop}>
                 <Image src={ToolIconURLs.airdrop.image} width={24} height={24} />
                 <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
             </MenuItem>
-        ) : undefined,
+        ) : null,
     ])
 
     return (

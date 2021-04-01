@@ -117,7 +117,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
             <MenuItem key="backup" onClick={() => openWalletBackup({ wallet })}>
                 {t('backup')}
             </MenuItem>
-        ) : undefined,
+        ) : null,
         <MenuItem
             key="delete"
             onClick={() => openWalletDelete({ wallet })}

@@ -36,7 +36,7 @@ export function ActionsBarNFT(props: ActionsBarNFT_Props) {
             <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ wallet, token })}>
                 {t('transfer')}
             </MenuItem>
-        ) : undefined,
+        ) : null,
         <MenuItem onClick={() => openHideTokenConfirmDialog({ wallet, token })}>{t('hide')}</MenuItem>,
     ])
 
