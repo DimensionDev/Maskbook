@@ -1,13 +1,14 @@
-import { makeStyles, createStyles, Typography } from '@material-ui/core'
+import { makeStyles, createStyles, Link } from '@material-ui/core'
 import { CollectibleTab } from './CollectibleTab'
+import { CollectibleState } from '../hooks/useCollectibleState'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
-        root: {
+        img: {
             width: '100%',
             height: '100%',
+            objectFit: 'cover',
         },
-        content: {},
     })
 })
 
@@ -16,32 +17,17 @@ export interface ArticleTabProps {}
 export function ArticleTab(props: ArticleTabProps) {
     const classes = useStyles()
 
+    const { asset } = CollectibleState.useContainer()
+
     return (
         <CollectibleTab>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
-            <Typography>This is the hero tab.</Typography>
+            {asset.value?.animation_url ? (
+                <Link href={asset.value?.animation_url} target="_blank" rel="noopener noreferrer">
+                    <img src={asset.value?.imageUrl} className={classes.img} alt={asset.value?.name ?? ''} />
+                </Link>
+            ) : (
+                <img src={asset.value?.imageUrl} className={classes.img} alt={asset.value?.name ?? ''} />
+            )}
         </CollectibleTab>
     )
 }
