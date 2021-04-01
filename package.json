@@ -21,7 +21,7 @@
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
     "preinstall": "npx only-allow pnpm",
-    "ci": "pnpm install --frozen-lockfile --store-dir ~/.pnpm/",
+    "ci": "pnpm install --frozen-lockfile",
     "prepare": "husky install"
   },
   "lint-staged": {
