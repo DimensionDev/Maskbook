@@ -32,7 +32,7 @@ export function useCollectibles(address: string, provider: CollectibleProvider, 
         // 0x65c1b9ae4e4d8dcccfd3dc41b940840fe8570f2a
         // 0xa357a589a37cf7b6edb31b707e8ed3219c8249ac
         const result = await WalletRPC.getAssetsListNFT(
-            '0x3c6137504c38215fea30605b3e364a23c1d3e14f'.toLowerCase(),
+            address.toLowerCase(),
             provider,
             page,
         )
