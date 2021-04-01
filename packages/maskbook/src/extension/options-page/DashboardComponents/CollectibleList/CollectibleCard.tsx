@@ -1,8 +1,10 @@
 import { Card, createStyles, Link, makeStyles } from '@material-ui/core'
 import { Image } from '../../../../components/shared/Image'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
+import { resolveCollectibleLink } from '../../../../plugins/Wallet/pipes'
+import type { CollectibleProvider } from '../../../../plugins/Wallet/types'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
-import type { ERC1155TokenDetailed, ERC721TokenDetailed } from '../../../../web3/types'
+import type { ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '../../../../web3/types'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 
 const useStyles = makeStyles((theme) =>
@@ -31,26 +33,26 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface CollectibleCardProps {
-    link: string | undefined
+    provider: CollectibleProvider
     wallet: WalletRecord
-    token: ERC721TokenDetailed | ERC1155TokenDetailed
+    token: ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
-    const { wallet, token } = props
+    const { wallet, token, provider } = props
     const classes = useStyles(props)
 
     return (
-        <Link target="_blank" rel="noopener noreferrer" href={props.link ?? ''}>
+        <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(provider, token)}>
             <Card className={classes.root} style={{ width: 160, height: 220 }}>
                 <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
-                {token.image ? (
+                {token.asset?.image ? (
                     <Image
                         component="img"
                         width={160}
                         height={220}
                         style={{ objectFit: 'contain' }}
-                        src={token.image}
+                        src={token.asset.image}
                     />
                 ) : (
                     <MaskbookIconOutlined className={classes.placeholder} />

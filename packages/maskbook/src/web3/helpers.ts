@@ -8,8 +8,8 @@ import {
     ERC20TokenDetailed,
     EthereumTokenType,
     EtherTokenDetailed,
-    ERC721TokenDetailed,
-    ERC1155TokenDetailed,
+    ERC721TokenAssetDetailed,
+    ERC1155TokenAssetDetailed,
 } from './types'
 
 export function isSameAddress(addrA: string, addrB: string) {
@@ -58,7 +58,7 @@ export function getAllConstants<T extends Web3Constants, K extends keyof T>(cons
 }
 //#endregion
 
-export function createEtherToken(chainId: ChainId) {
+export function createEtherToken(chainId: ChainId): EtherTokenDetailed {
     return {
         type: EthereumTokenType.Ether,
         chainId,
@@ -66,10 +66,16 @@ export function createEtherToken(chainId: ChainId) {
         decimals: 18,
         name: 'Ether',
         symbol: 'ETH',
-    } as EtherTokenDetailed
+    }
 }
 
-export function createERC20Token(chainId: ChainId, address: string, decimals: number, name: string, symbol: string) {
+export function createERC20Token(
+    chainId: ChainId,
+    address: string,
+    decimals: number,
+    name: string,
+    symbol: string,
+): ERC20TokenDetailed {
     return {
         type: EthereumTokenType.ERC20,
         chainId,
@@ -77,7 +83,7 @@ export function createERC20Token(chainId: ChainId, address: string, decimals: nu
         decimals,
         name,
         symbol,
-    } as ERC20TokenDetailed
+    }
 }
 
 export function createERC721Token(
@@ -88,8 +94,8 @@ export function createERC721Token(
     symbol: string,
     baseURI?: string,
     tokenURI?: string,
-    image?: string,
-) {
+    asset?: ERC721TokenAssetDetailed['asset'],
+): ERC721TokenAssetDetailed {
     return {
         type: EthereumTokenType.ERC721,
         chainId,
@@ -99,19 +105,27 @@ export function createERC721Token(
         symbol,
         baseURI,
         tokenURI,
-        image,
-    } as ERC721TokenDetailed
+        asset,
+    }
 }
 
-export function createERC1155Token(chainId: ChainId, tokenId: string, address: string, name: string, image?: string) {
+export function createERC1155Token(
+    chainId: ChainId,
+    tokenId: string,
+    address: string,
+    name: string,
+    uri?: string,
+    asset?: ERC1155TokenAssetDetailed['asset'],
+): ERC1155TokenAssetDetailed {
     return {
         type: EthereumTokenType.ERC1155,
         chainId,
         tokenId,
         address,
         name,
-        image,
-    } as ERC1155TokenDetailed
+        uri,
+        asset,
+    }
 }
 
 export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {

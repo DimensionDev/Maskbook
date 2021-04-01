@@ -31,6 +31,8 @@ import { DashboardWalletRoute } from '../Route'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useCollectibles } from '../../../plugins/Wallet/hooks/useCollectibles'
 import { CollectibleProvider, FilterTransactionType } from '../../../plugins/Wallet/types'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -103,9 +105,10 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
     const [addAsset, , openAddAsset] = useModal(DashboardWalletAddERC721TokenDialog)
 
+    const collectibleDataProvider = useValueRef(currentCollectibleDataProviderSettings)
     const { value: collectibles = [], loading: collectiblesLoading, error: collectiblesError } = useCollectibles(
         account,
-        CollectibleProvider.OPENSEAN,
+        collectibleDataProvider,
         collectiblesPage,
     )
 
@@ -246,7 +249,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                             onClick={() =>
                                 openAddAsset({
                                     wallet,
-                                    tokenIdsLoaded: collectibles.map((x) => x.token_id),
                                 })
                             }
                             startIcon={<AddIcon />}>
@@ -281,6 +283,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                 {tabIndex === 1 ? (
                     <CollectibleList
                         wallet={wallet}
+                        provider={collectibleDataProvider}
                         page={collectiblesPage}
                         onNextPage={() => setCollectiblesPage((prev) => prev + 1)}
                         collectibles={collectibles}

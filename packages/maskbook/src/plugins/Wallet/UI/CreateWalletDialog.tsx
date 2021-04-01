@@ -247,13 +247,11 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
                             (step === CreateWalletStep.Verify && words.join(' ') !== puzzleWords.join(' '))
                         }
                         onClick={step === CreateWalletStep.Name || step === CreateWalletStep.Words ? onNext : onSubmit}>
-                        {t(
-                            step === CreateWalletStep.Name
-                                ? 'plugin_wallet_setup_create'
-                                : step === CreateWalletStep.Words
-                                ? 'plugin_wallet_setup_next'
-                                : 'plugin_wallet_setup_verify',
-                        )}
+                        {step === CreateWalletStep.Name
+                            ? t('plugin_wallet_setup_create')
+                            : step === CreateWalletStep.Words
+                            ? t('plugin_wallet_setup_next')
+                            : t('plugin_wallet_setup_verify')}
                     </ActionButton>
                 </Box>
             </DialogContent>
