@@ -8,8 +8,8 @@ import {
     ERC20TokenDetailed,
     EthereumTokenType,
     EtherTokenDetailed,
-    CurrencyType,
-    AssetDetailed,
+    ERC721TokenDetailed,
+    ERC1155TokenDetailed,
 } from './types'
 
 export function isSameAddress(addrA: string, addrB: string) {
@@ -80,6 +80,40 @@ export function createERC20Token(chainId: ChainId, address: string, decimals: nu
     } as ERC20TokenDetailed
 }
 
+export function createERC721Token(
+    chainId: ChainId,
+    tokenId: string,
+    address: string,
+    name: string,
+    symbol: string,
+    baseURI?: string,
+    tokenURI?: string,
+    image?: string,
+) {
+    return {
+        type: EthereumTokenType.ERC721,
+        chainId,
+        tokenId,
+        address,
+        name,
+        symbol,
+        baseURI,
+        tokenURI,
+        image,
+    } as ERC721TokenDetailed
+}
+
+export function createERC1155Token(chainId: ChainId, tokenId: string, address: string, name: string, image?: string) {
+    return {
+        type: EthereumTokenType.ERC1155,
+        chainId,
+        tokenId,
+        address,
+        name,
+        image,
+    } as ERC1155TokenDetailed
+}
+
 export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
     if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)
     if (abis.length > 1) return web3.eth.abi.decodeParameters(abis, output)
@@ -113,6 +147,3 @@ export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionRe
         return accumulate
     }, {} as { [eventName: string]: EventLog })
 }
-
-export const getTokenUSDValue = (token: AssetDetailed) =>
-    token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0

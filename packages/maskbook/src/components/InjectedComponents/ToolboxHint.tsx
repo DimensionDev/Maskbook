@@ -130,38 +130,36 @@ export function ToolboxHint() {
 
     // Todo: add a swap dialog
 
-    const [menu, openMenu] = useMenu(
-        <>
-            <MenuItem onClick={openEncryptedMessage}>
-                <Image src={ToolIconURLs.encryptedmsg.image} width={24} height={24} />
-                <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
+    const [menu, openMenu] = useMenu([
+        <MenuItem onClick={openEncryptedMessage}>
+            <Image src={ToolIconURLs.encryptedmsg.image} width={24} height={24} />
+            <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
+        </MenuItem>,
+        <MenuItem onClick={openRedPacket}>
+            <Image src={ToolIconURLs.redpacket.image} width={24} height={24} />
+            <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
+        </MenuItem>,
+        <MenuItem onClick={openFileService}>
+            <Image src={ToolIconURLs.files.image} width={24} height={24} />
+            <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
+        </MenuItem>,
+        <MenuItem onClick={openITO}>
+            <Image src={ToolIconURLs.markets.image} width={24} height={24} />
+            <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
+        </MenuItem>,
+        account && Flags.transak_enabled ? (
+            <MenuItem onClick={openBuyCurrency}>
+                <Image src={ToolIconURLs.token.image} width={24} height={24} />
+                <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
             </MenuItem>
-            <MenuItem onClick={openRedPacket}>
-                <Image src={ToolIconURLs.redpacket.image} width={24} height={24} />
-                <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
+        ) : null,
+        Flags.airdrop_enabled ? (
+            <MenuItem onClick={openAirdrop}>
+                <Image src={ToolIconURLs.airdrop.image} width={24} height={24} />
+                <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
             </MenuItem>
-            <MenuItem onClick={openFileService}>
-                <Image src={ToolIconURLs.files.image} width={24} height={24} />
-                <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
-            </MenuItem>
-            <MenuItem onClick={openITO}>
-                <Image src={ToolIconURLs.markets.image} width={24} height={24} />
-                <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
-            </MenuItem>
-            {account && Flags.transak_enabled ? (
-                <MenuItem onClick={openBuyCurrency}>
-                    <Image src={ToolIconURLs.token.image} width={24} height={24} />
-                    <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
-                </MenuItem>
-            ) : null}
-            {Flags.airdrop_enabled ? (
-                <MenuItem onClick={openAirdrop}>
-                    <Image src={ToolIconURLs.airdrop.image} width={24} height={24} />
-                    <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
-                </MenuItem>
-            ) : null}
-        </>,
-    )
+        ) : null,
+    ])
 
     return (
         <>

@@ -1,4 +1,4 @@
-import { createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
+import { createStyles, Grid, makeStyles } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect } from 'react'
@@ -91,7 +91,13 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     if (approveStateType === ApproveStateType.INSUFFICIENT_BALANCE)
         return (
             <Grid container>
-                <ActionButton className={classes.button} fullWidth variant="contained" size="large" disabled>
+                <ActionButton
+                    className={classes.button}
+                    key="insufficent_balance"
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    disabled>
                     {`Insufficent ${token.symbol ?? token.name ?? 'Token'} Balance`}
                 </ActionButton>
             </Grid>
