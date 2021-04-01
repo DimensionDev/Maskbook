@@ -25,7 +25,7 @@ const useStyles = makeStyles(() =>
         fixed: { tableLayout: 'fixed' },
         loading: {
             position: 'absolute',
-            bottom: 0,
+            bottom: 6,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -56,7 +56,7 @@ export function TransactionList({ transactionType }: TransactionListProps) {
         return transactions.filter(({ transactionType: type }) =>
             transactionType === FilterTransactionType.ALL ? true : type === transactionType,
         )
-    }, [transactions, transactionType])
+    }, [transactions, transactions.length, transactionType])
 
     if (transactionsLoading && page === 1)
         return (
