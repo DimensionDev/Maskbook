@@ -10,9 +10,7 @@ Youtube Plugin Demo: <https://youtu.be/oZhVUIXFUPU>
 
 The plugin is located in
 
-```
-Maskbook\packages\maskbook\src\plugins\Tweet
-```
+`Maskbook\packages\maskbook\src\plugins\Tweet`
 
 The file tree for this plugin is as follows:\
 \
