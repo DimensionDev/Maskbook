@@ -63,7 +63,7 @@ export function TransactionList({ transactionType }: TransactionListProps) {
                     {new Array(3).fill(0).map((_, i) => (
                         <TableRow key={i}>
                             <TableCell>
-                                <Skeleton animation="wave" variant="rectangular" width="100%" height={30}></Skeleton>
+                                <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                             </TableCell>
                         </TableRow>
                     ))}

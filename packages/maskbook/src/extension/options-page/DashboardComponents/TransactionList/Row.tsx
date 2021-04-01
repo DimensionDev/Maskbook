@@ -68,7 +68,7 @@ export const Row: FC<Props> = ({ transaction, ...rest }) => {
 }
 
 const Address: FC<{ id: string | undefined }> = ({ id }) => (
-    <Link target={id} href={`https://etherscan.io/tx/${id}`}>
+    <Link target={id} href={`https://etherscan.io/address/${id}`}>
         <span>{id?.slice(0, 5)}</span>
         <span>...</span>
         <span>{id?.slice(id.length - 5)}</span>
