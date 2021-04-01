@@ -312,8 +312,6 @@
     "plugin_wallet_setup_description_verify": "",
     "plugin_wallet_setup_back": "",
     "plugin_wallet_setup_create": "",
-    "plugin_wallet_setup_next": "",
-    "plugin_wallet_setup_verify": "",
     "plugin_wallet_select_provider_dialog_title": "連接錢包",
     "plugin_wallet_qr_code_with_wallet_connect": "使用 WalletConnect 兼容的錢包掃描 QR 碼",
     "plugin_wallet_wrong_network": "錯誤的網絡",
