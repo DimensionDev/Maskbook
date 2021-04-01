@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-node@v2-beta
       - uses: actions/cache@v2
         with:
-          path: ~/.pnpm
+          path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm ci
@@ -38,14 +38,13 @@ jobs:
       - uses: actions/setup-node@v2-beta
       - uses: actions/cache@v2
         with:
-          path: ~/.pnpm
+          path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm ci
       - run: npx build -- echo "Check tsc"
   type-coverage:
     runs-on: ubuntu-20.04
-    needs: [prettier, locale-kit, type-check]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -53,7 +52,7 @@ jobs:
       - uses: actions/setup-node@v2-beta
       - uses: actions/cache@v2
         with:
-          path: ~/.pnpm
+          path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm ci
@@ -61,10 +60,7 @@ jobs:
         working-directory: packages/maskbook
   eslint:
     runs-on: ubuntu-20.04
-    continue-on-error: true
-    strategy:
-      fail-fast: false
-    needs: [prettier, locale-kit, type-check]
+    needs: [prettier, locale-kit, type-check, type-coverage]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -72,7 +68,7 @@ jobs:
       - uses: actions/setup-node@v2-beta
       - uses: actions/cache@v2
         with:
-          path: ~/.pnpm
+          path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm ci
