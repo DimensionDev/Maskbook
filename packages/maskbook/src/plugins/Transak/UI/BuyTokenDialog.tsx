@@ -5,7 +5,6 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { PluginTransakMessages } from '../messages'
-import { useBlurContext } from '../../../extension/options-page/DashboardContexts/BlurContext'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useTransakURL } from '../hooks/useTransakURL'
 
@@ -63,9 +62,6 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
         })
     }, [setOpen])
     //#endregion
-
-    // render in dashboard
-    useBlurContext(open)
 
     return (
         <div className={classes.root}>

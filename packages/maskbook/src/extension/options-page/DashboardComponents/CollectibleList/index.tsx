@@ -58,10 +58,6 @@ export function CollectibleList(props: CollectibleListProps) {
         error: collectiblesError,
     } = useCollectibles(account, provider, page)
 
-    console.log({
-        collectibles,
-    })
-
     if (collectiblesLoading && page === 1)
         return (
             <Box className={classes.root}>

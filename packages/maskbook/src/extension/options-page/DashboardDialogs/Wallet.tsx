@@ -968,7 +968,7 @@ function TransferTab(props: TransferTabProps) {
                 onClose()
                 tokenBalanceRetry()
             },
-            [transferState.type],
+            [transferState.type, tokenBalanceRetry],
         ),
     )
 
@@ -1166,6 +1166,7 @@ export function DashboardWalletTransferDialogNFT(
     props: WrappedDialogProps<WalletProps & { token: ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed }>,
 ) {
     const { wallet, token } = props.ComponentProps!
+    const { onClose } = props
 
     const { t } = useI18N()
     const classes = useTransferDialogStylesNFT()
@@ -1194,10 +1195,10 @@ export function DashboardWalletTransferDialogNFT(
                 if (ev.open) return
                 resetTransferCallback()
                 if (transferState.type !== TransactionStateType.HASH) return
-                props.onClose()
+                onClose()
                 collectiblesRetry()
             },
-            [transferState.type],
+            [transferState.type, collectiblesRetry],
         ),
     )
 
@@ -1251,7 +1252,9 @@ export function DashboardWalletTransferDialogNFT(
                             className={classes.button}
                             variant="contained"
                             color="primary"
-                            disabled={!!validationMessage || transferState.type === TransactionStateType.WAIT_FOR_CONFIRMING}
+                            disabled={
+                                !!validationMessage || transferState.type === TransactionStateType.WAIT_FOR_CONFIRMING
+                            }
                             onClick={onTransfer}>
                             {validationMessage || t('wallet_transfer_send')}
                         </Button>

@@ -22,7 +22,6 @@ import { WalletConnectIcon } from '../../../resources/WalletConnectIcon'
 import Services from '../../../extension/service'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../messages'
-import { useBlurContext } from '../../../extension/options-page/DashboardContexts/BlurContext'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { ProviderType } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
@@ -81,9 +80,6 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
     )
     //#endregion
-
-    // render in dashboard
-    useBlurContext(open)
 
     const wallets = useWallets(ProviderType.Maskbook)
     const onConnect = useCallback(
