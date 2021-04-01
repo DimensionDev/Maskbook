@@ -34,7 +34,7 @@ export const Services = {
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
 }
 export default Services
-export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', {}, true)
+export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', true)
 
 if (module.hot && isEnvironment(Environment.ManifestBackground)) {
     module.hot.accept(
@@ -57,13 +57,10 @@ if (module.hot && isEnvironment(Environment.ManifestBackground)) {
  * Helper to add a new service to Services.* / ServicesWithProgress.* namespace.
  * @param impl Implementation of the service. Should be things like () => import("./background-script/CryptoService")
  * @param key Name of the service. Used for better debugging.
- * @param mock The mock Implementation, used in Storybook.
  * @param generator Is the service is a generator?
  */
-function add<T>(impl: () => Promise<T>, key: string, mock: Partial<T> = {}, generator = false): T {
-    let channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(
-        process.env.STORYBOOK ? MessageTarget.LocalOnly : MessageTarget.Broadcast,
-    )
+function add<T>(impl: () => Promise<T>, key: string, generator = false): T {
+    let channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(MessageTarget.Broadcast)
 
     const isBackground = isEnvironment(Environment.ManifestBackground)
     const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
