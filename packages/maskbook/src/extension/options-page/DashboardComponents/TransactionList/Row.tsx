@@ -34,13 +34,13 @@ export const Row: FC<Props> = ({ transaction, ...rest }) => {
                 <Typography color="textSecondary" variant="body2">
                     {transaction.timeAt.toLocaleString()}
                 </Typography>
-                <Address id={transaction.id} />
+                <Address mode="tx" id={transaction.id} />
             </TableCell>
             <TableCell component="div">
                 <Typography className={styles.overflow} color="textSecondary">
                     {transaction.type}
                 </Typography>
-                <Address id={transaction.toAddress} />
+                <Address mode="address" id={transaction.toAddress} />
             </TableCell>
             <TableCell component="div">
                 {transaction.pairs.map((pair, index) => (
@@ -67,8 +67,8 @@ export const Row: FC<Props> = ({ transaction, ...rest }) => {
     )
 }
 
-const Address: FC<{ id: string | undefined }> = ({ id }) => (
-    <Link target={id} href={`https://etherscan.io/address/${id}`}>
+const Address: FC<{ id: string | undefined; mode: string }> = ({ id, mode }) => (
+    <Link target={id} href={`https://etherscan.io/${mode}/${id}`}>
         <span>{id?.slice(0, 5)}</span>
         <span>...</span>
         <span>{id?.slice(id.length - 5)}</span>
