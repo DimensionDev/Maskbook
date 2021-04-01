@@ -312,8 +312,6 @@
     "plugin_wallet_setup_description_verify": "Please fill each empty phrase in order to make sure it is correct.",
     "plugin_wallet_setup_back": "Back",
     "plugin_wallet_setup_create": "Create",
-    "plugin_wallet_setup_next": "Next",
-    "plugin_wallet_setup_verify": "Verify",
     "plugin_wallet_select_provider_dialog_title": "Connect Wallet",
     "plugin_wallet_qr_code_with_wallet_connect": "Scan QR code with a WalletConnect-compatible wallet",
     "plugin_wallet_wrong_network": "Wrong Network",
