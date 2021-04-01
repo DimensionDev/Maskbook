@@ -15,6 +15,10 @@ async function main() {
     return onMain('build')
 }
 
-main().then(async (child) => {
-    process.exit(await awaitChildProcess(child))
-})
+main()
+    .then(async (child) => {
+        process.exit(await awaitChildProcess(child))
+    })
+    .catch((e) => {
+        process.exit(1)
+    })

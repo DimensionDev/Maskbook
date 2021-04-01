@@ -1,5 +1,5 @@
 import type { Annotations, BaseStory } from '@storybook/addons'
-import type { StoryFnReactReturnType } from '@storybook/react/dist/client/preview/types'
+import type { StoryFnReactReturnType } from '@storybook/react/dist/ts3.9/client/preview/types'
 import type { Meta, Story } from '@storybook/react/types-6-0'
 import React from 'react'
 export type ComponentAnnotations<T> = Annotations<T, StoryFnReactReturnType> &
