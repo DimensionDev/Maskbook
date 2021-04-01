@@ -27,7 +27,7 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
-      - run: npx pnpm ci -- --filter @dimensiondev/cli...
+      - run: npx pnpm ci
       - run: npx locale-kit
   type-check:
     runs-on: ubuntu-20.04
@@ -41,8 +41,8 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
-      - run: npx pnpm ci -- --filter @dimensiondev/cli...
-      - run: npx tsc --build --noEmit
+      - run: npx pnpm ci
+      - run: npx build -- echo "Check tsc"
   type-coverage:
     runs-on: ubuntu-20.04
     steps:
@@ -55,7 +55,7 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
-      - run: npx pnpm ci -- --filter @dimensiondev/cli...
+      - run: npx pnpm ci
       - run: npm run lint:typecoverage
         working-directory: packages/maskbook
   eslint:
@@ -71,7 +71,7 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
-      - run: npx pnpm ci -- --filter @dimensiondev/cli...
+      - run: npx pnpm ci
       - run: npm run lint:ci
       - run: npm run lint:ci -- --format junit -o reports/junit/eslint-results.xml
       - name: Upload eslint report
