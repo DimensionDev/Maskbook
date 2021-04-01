@@ -22,17 +22,13 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { CollectibleSkeleton } from './CollectibleSkeleton'
-import { minBy } from 'lodash-es'
-import { NULL_ADDRESS } from 'opensea-js/lib/constants'
+import { head } from 'lodash-es'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
-            '--contentHeight': '400px',
-            '--tabHeight': '35px',
-
             width: '100%',
             border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
@@ -46,7 +42,6 @@ const useStyles = makeStyles((theme) => {
         },
         body: {
             flex: 1,
-            hegiht: 'calc(var(--contentHeight) - var(--tabHeight))',
             overflow: 'auto',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
@@ -68,6 +63,7 @@ const useStyles = makeStyles((theme) => {
         subtitle: {
             fontSize: 12,
             marginRight: theme.spacing(0.5),
+            wordBreak: 'break-word',
         },
         description: {
             fontSize: 12,
@@ -97,7 +93,7 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const { token, asset } = CollectibleState.useContainer()
+    const { asset } = CollectibleState.useContainer()
 
     const [tabIndex, setTabIndex] = useState(0)
 
@@ -107,7 +103,7 @@ export function Collectible(props: CollectibleProps) {
 
     if (!asset.value) return null
 
-    const targetOrder = minBy(asset.value?.orders, (order) => Number(order.currentPrice))
+    const targetOrder = head(asset.value?.orders)
 
     const tabs = [
         <Tab className={classes.tab} key="article" label="Article" />, // This is the tab for the hero image
@@ -118,29 +114,21 @@ export function Collectible(props: CollectibleProps) {
     ]
 
     console.log(asset)
+    console.log(JSON.stringify(asset))
     console.log(targetOrder)
     return (
         <>
-            <CollectibleCard>
+            <CollectibleCard classes={classes}>
                 <CardHeader
                     avatar={
                         <Link
-                            href="https://opensea.io/assets/0x31385d3520bced94f77aae104b406994d8f2168c/2244"
-                            title={
-                                asset.value.owner.address === NULL_ADDRESS
-                                    ? targetOrder?.makerAccount?.user?.username ?? ''
-                                    : asset.value.owner.user?.username
-                            }
+                            href={`https://opensea.io/accounts/${
+                                asset.value.owner?.user?.username ?? asset.value.owner?.address ?? ''
+                            }`}
+                            title={asset.value.owner?.user?.username ?? asset.value.owner?.address ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Avatar
-                                src={
-                                    asset.value.owner.address === NULL_ADDRESS
-                                        ? //cause by https://github.com/ProjectOpenSea/opensea-js/issues/76
-                                          (targetOrder?.makerAccount as any)?.profile_img_url
-                                        : (asset.value.owner as any)?.profile_img_url
-                                }
-                            />
+                            <Avatar src={asset.value.owner?.profile_img_url} />
                         </Link>
                     }
                     title={asset.value.name ?? ''}
@@ -150,7 +138,7 @@ export function Collectible(props: CollectibleProps) {
                                 <Typography className={classes.subtitle} variant="body2">
                                     {asset.value.description}
                                 </Typography>
-                                {!asset.value.collection.hidden ? (
+                                {asset.value.collection.safelist_request_status === 'verified' ? (
                                     <VerifiedUserIcon color="primary" fontSize="small" />
                                 ) : null}
                             </Box>

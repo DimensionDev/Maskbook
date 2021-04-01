@@ -3,16 +3,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { Card } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
-        root: {
-            '--contentHeight': '400px',
-            '--tabHeight': '35px',
-
-            width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
-            padding: 0,
-        },
-    })
+    return createStyles({})
 })
 
 export interface CollectibleCardProps extends withClasses<'root'> {
