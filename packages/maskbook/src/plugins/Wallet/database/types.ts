@@ -26,10 +26,14 @@ export interface ERC721TokenRecord {
     tokenId: string
     /** base uri */
     baseURI?: string
-    /** token uri */
+    /** asset uri */
     tokenURI?: string
-    /** token img uri */
-    image?: string
+    /** asset name */
+    assetName?: string
+    /** asset description */
+    assetDescription?: string
+    /** asset img uri */
+    assetImage?: string
 }
 
 export interface ERC1155TokenRecord {
@@ -41,8 +45,14 @@ export interface ERC1155TokenRecord {
     name: string
     /** token id */
     tokenId: string
-    /** token img uri */
-    image?: string
+    /** asset uri */
+    uri?: string
+    /** asset name */
+    assetName?: string
+    /** asset description */
+    assetDescription?: string
+    /** asset img uri */
+    assetImage?: string
 }
 
 export interface WalletRecord {

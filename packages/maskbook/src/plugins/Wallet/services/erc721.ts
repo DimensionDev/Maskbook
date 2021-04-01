@@ -1,13 +1,14 @@
 import Fuse from 'fuse.js'
+import { EthereumAddress } from 'wallet.ts'
+import { omit } from 'lodash-es'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
 import { formatChecksumAddress } from '../formatter'
 import { WalletRecordIntoDB, ERC721TokenRecordIntoDB, getWalletByAddress, ERC721TokenRecordOutDB } from './helpers'
-import type { ERC721TokenDetailed } from '../../../web3/types'
+import type { ERC721TokenAssetDetailed, ERC721TokenDetailed } from '../../../web3/types'
 import type { ERC721TokenRecord } from '../database/types'
-import { EthereumAddress } from 'wallet.ts'
 import { isSameAddress } from '../../../web3/helpers'
 import { queryTransactionPaged } from '../../../database/helpers/pagination'
 
@@ -28,7 +29,7 @@ const fuse = new Fuse([] as ERC721TokenRecord[], {
 
 export async function getERC721TokensPaged(index: number, count: number, query?: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC721Token')
-    return queryTransactionPaged(t, 'ERC721Token', {
+    const records = await queryTransactionPaged(t, 'ERC721Token', {
         skip: index * count,
         count,
         predicate: (record) => {
@@ -38,11 +39,19 @@ export async function getERC721TokensPaged(index: number, count: number, query?:
             return !!fuse.search(query).length
         },
     })
+    return records.map(ERC721TokenRecordOutDB)
 }
 
-export async function addERC721Token(token: ERC721TokenDetailed) {
+export async function addERC721Token(token: ERC721TokenAssetDetailed) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC721Token', 'Wallet')
-    await t.objectStore('ERC721Token').put(ERC721TokenRecordIntoDB(token))
+    await t.objectStore('ERC721Token').put(
+        ERC721TokenRecordIntoDB({
+            ...omit(token, 'asset'),
+            assetName: token.asset?.name,
+            assetDescription: token.asset?.description,
+            assetImage: token.asset?.image,
+        }),
+    )
     WalletMessages.events.erc721TokensUpdated.sendToAll(undefined)
 }
 

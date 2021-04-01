@@ -67,15 +67,3 @@ export interface Asset {
     }
     logoURL?: string
 }
-
-export interface Collectible {
-    asset_contract: {
-        address: string
-        schema_name: 'ERC721' | 'ERC1155'
-        symbol: string
-    }
-    token_id: string
-    image?: string
-    name: string
-    permalink: string
-}
