@@ -159,39 +159,9 @@ function ViewDetailed(props: ViewDetailedProps) {
 }
 //#endregion
 
-//#region less button
-const MAX_TOKENS_LENGTH = 5
+//#region wallet asset table
 const MIN_VALUE = 5
 
-interface LessButtonProps extends withClasses<never> {
-    setViewLength: React.Dispatch<React.SetStateAction<number>>
-    setPrice: React.Dispatch<React.SetStateAction<number>>
-    detailedTokens: Asset[]
-}
-
-function LessButton(props: LessButtonProps) {
-    const { setViewLength, setPrice, detailedTokens } = props
-
-    const isMobile = useMatchXS()
-    const classes = useStylesExtends(useStyles({ isMobile }), props)
-    const [more, setMore] = useState(false)
-
-    return (
-        <div className={classes.lessButton}>
-            <IconButton
-                onClick={() => {
-                    setMore(!more)
-                    setViewLength(more ? MAX_TOKENS_LENGTH : detailedTokens.length)
-                    setPrice(more ? MIN_VALUE : 0)
-                }}>
-                {more ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </IconButton>
-        </div>
-    )
-}
-//#endregion
-
-//#region wallet asset table
 export interface WalletAssetsTableProps extends withClasses<never> {
     wallet: WalletRecord
 }
@@ -218,8 +188,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         retry: detailedTokensRetry,
     } = useAssets(erc20Tokens)
 
-    const [viewLength, setViewLength] = useState(MAX_TOKENS_LENGTH)
-    const [price, setPrice] = useState(MIN_VALUE)
+    const [more, setMore] = useState(false)
 
     if (detailedTokensError)
         return (
@@ -245,12 +214,12 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
 
     if (!detailedTokens.length) return null
 
-    const viewDetailedTokens = detailedTokens.filter((x) =>
-        Number(price) !== 0
-            ? new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(price) ||
-              x.token.type === EthereumTokenType.Ether
-            : true,
+    const viewDetailedTokens = detailedTokens.filter(
+        (x) =>
+            new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(MIN_VALUE) ||
+            x.token.type === EthereumTokenType.Ether,
     )
+
     return (
         <>
             <TableContainer className={classes.container}>
@@ -308,14 +277,21 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                       </TableCell>
                                   </TableRow>
                               ))
-                            : viewDetailedTokens.map((y, idx) =>
-                                  idx < viewLength ? <ViewDetailed key={idx} asset={y} wallet={wallet} /> : null,
-                              )}
+                            : (more ? detailedTokens : viewDetailedTokens).map((y, idx) => (
+                                  <ViewDetailed key={idx} asset={y} wallet={wallet} />
+                              ))}
                     </TableBody>
                 </Table>
             </TableContainer>
-            {viewDetailedTokens.length > viewLength ? (
-                <LessButton setViewLength={setViewLength} setPrice={setPrice} detailedTokens={detailedTokens} />
+            {viewDetailedTokens.length < detailedTokens.length ? (
+                <div className={classes.lessButton}>
+                    <IconButton
+                        onClick={() => {
+                            setMore(!more)
+                        }}>
+                        {more ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    </IconButton>
+                </div>
             ) : null}
         </>
     )

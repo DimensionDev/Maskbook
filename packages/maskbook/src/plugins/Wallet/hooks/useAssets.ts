@@ -22,9 +22,9 @@ export function useAssets(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
         retry: retryAssetsDetailedChain,
     } = useAssetsFromChain(etherTokenDetailed ? [etherTokenDetailed, ...tokens] : tokens)
     const {
-        value: assetsDetailedDebank = [],
-        loading: assetsDetailedDebankLoading,
-        error: assetsDetailedDebankError,
+        value: assetsDetailedProvider = [],
+        loading: assetsDetailedProviderLoading,
+        error: assetsDetailedProviderError,
         retry: retryAssetsDetailedDebank,
     } = useAssetsFromProvider()
 
@@ -36,13 +36,13 @@ export function useAssets(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
 
     // should place debank detailed tokens at the first place
     // it prevents them from replacing by previous detailed tokens because the uniq algorithm
-    const assetsDetailed = useAssetsMerged(assetsDetailedDebank, assetsDetailedChain)
+    const assetsDetailed = useAssetsMerged(assetsDetailedProvider, assetsDetailedChain)
 
     // filter out tokens in blacklist
     return {
         value: assetsDetailed.filter((x) => !wallet?.erc20_token_blacklist.has(formatChecksumAddress(x.token.address))),
-        error: etherTokenDetailedError || assetsDetailedChainError || assetsDetailedDebankError,
-        loading: etherTokenDetailedLoading || assetsDetailedChainLoading || assetsDetailedDebankLoading,
+        error: etherTokenDetailedError || assetsDetailedChainError || assetsDetailedProviderError,
+        loading: etherTokenDetailedLoading || assetsDetailedChainLoading || assetsDetailedProviderLoading,
         retry: detailedTokensRetry,
     }
 }
