@@ -9,8 +9,9 @@ import { CurrencyType } from '../../../web3/types'
 import { ChainId, EthereumTokenType } from '../../../web3/types'
 import { getChainId } from '../../../extension/background-script/EthereumService'
 import { unreachable } from '../../../utils/utils'
-import { createERC1155Token, createERC721Token, createEtherToken } from '../../../web3/helpers'
+import { createERC1155Token, createERC721Token, createEtherToken, getConstant } from '../../../web3/helpers'
 import { formatChecksumAddress } from '../formatter'
+import { CONSTANTS } from '../../../web3/constants'
 
 export async function getAssetsListNFT(address: string, provider: CollectibleProvider, page?: number) {
     if (provider === CollectibleProvider.OPENSEAN) {
@@ -115,9 +116,9 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
                     name: asset.name,
                     symbol: asset.symbol,
                     decimals: asset.decimals,
-                    address: asset.name,
+                    address: asset.name === 'Ether' ? getConstant(CONSTANTS, 'ETH_ADDRESS') : asset.asset_code,
                     chainId: ChainId.Mainnet,
-                    type: EthereumTokenType.ERC20,
+                    type: asset.name === 'Ether' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
                 },
                 chain: 'eth',
                 balance: quantity,

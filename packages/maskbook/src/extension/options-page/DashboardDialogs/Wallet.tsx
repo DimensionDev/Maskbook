@@ -67,13 +67,12 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { QRCode } from '../../../components/shared/qrcode'
 import { formatBalance, formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import { useTokenTransferCallback } from '../../../web3/hooks/useTokenTransferCallback'
-import { CollectibleContext } from '../DashboardComponents/CollectibleList'
 import { Flags } from '../../../utils/flags'
 import { useWalletHD } from '../../../plugins/Wallet/hooks/useWallet'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../../plugins/Wallet/constants'
 import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
-import { useTokenAssetDetailed } from '../../../web3/hooks/useTokenAssetDetailed'
 import { useERC721TokenAssetDetailed } from '../../../web3/hooks/useERC721TokenAssetDetailed'
+import { CollectibleContext } from '../DashboardComponents/CollectibleList'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>

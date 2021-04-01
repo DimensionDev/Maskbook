@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexWrap: 'wrap',
-        padding: theme.spacing(1),
     },
     card: {
         position: 'relative',
@@ -78,14 +77,7 @@ export function CollectibleList(props: CollectibleListProps) {
 
     if (collectiblesError || collectibles.length === 0)
         return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%',
-                }}>
+            <Box className={classes.root}>
                 <Typography color="textSecondary">No collectible found.</Typography>
                 <Button
                     sx={{
