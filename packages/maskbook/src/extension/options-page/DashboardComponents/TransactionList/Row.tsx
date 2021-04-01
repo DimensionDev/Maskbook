@@ -4,8 +4,11 @@ import { isNil } from 'lodash-es'
 import { createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import { Record } from './Record'
 import type { Transaction } from '../../../../plugins/Wallet/types'
+import { resolveLinkOnEtherscan } from '../../../../web3/pipes'
+import type { ChainId } from '../../../../web3/types'
 
 interface Props {
+    chainId: ChainId
     transaction: Transaction
     style?: CSSProperties
 }
@@ -26,7 +29,7 @@ const useStyles = makeStyles(() =>
     }),
 )
 
-export const Row: FC<Props> = ({ transaction, ...rest }) => {
+export const Row: FC<Props> = ({ transaction, chainId, ...rest }) => {
     const styles = useStyles()
     return (
         <TableRow component="div" className={classNames(styles.row, { [styles.failed]: transaction.failed })} {...rest}>
@@ -34,13 +37,13 @@ export const Row: FC<Props> = ({ transaction, ...rest }) => {
                 <Typography color="textSecondary" variant="body2">
                     {transaction.timeAt.toLocaleString()}
                 </Typography>
-                <Address mode="tx" id={transaction.id} />
+                <Address chainId={chainId} mode="tx" id={transaction.id} />
             </TableCell>
             <TableCell component="div">
                 <Typography className={styles.overflow} color="textSecondary">
                     {transaction.type}
                 </Typography>
-                <Address mode="address" id={transaction.toAddress} />
+                <Address chainId={chainId} mode="address" id={transaction.toAddress} />
             </TableCell>
             <TableCell component="div">
                 {transaction.pairs.map((pair, index) => (
@@ -67,10 +70,19 @@ export const Row: FC<Props> = ({ transaction, ...rest }) => {
     )
 }
 
-const Address: FC<{ id: string | undefined; mode: string }> = ({ id, mode }) => (
-    <Link target={id} href={`https://etherscan.io/${mode}/${id}`}>
-        <span>{id?.slice(0, 5)}</span>
-        <span>...</span>
-        <span>{id?.slice(id.length - 5)}</span>
-    </Link>
-)
+interface AddressProps {
+    id: string | undefined
+    mode: 'tx' | 'address'
+    chainId: ChainId
+}
+
+const Address: FC<AddressProps> = ({ id, mode, chainId }) => {
+    const href = `${resolveLinkOnEtherscan(chainId)}/${mode}/${id}`
+    return (
+        <Link target={id} href={href}>
+            <span>{id?.slice(0, 5)}</span>
+            <span>...</span>
+            <span>{id?.slice(id.length - 5)}</span>
+        </Link>
+    )
+}
