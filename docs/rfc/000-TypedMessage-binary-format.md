@@ -77,32 +77,3 @@ enum TextType {
 ```
 
 For unknown textType (might comes from the future version), the client must treat it as `TextType.PlainText`.
-
-### Image
-
-To limit the length of the payload, this data type is not going to support inline binary image data.
-
-```typescript
-type TypedMessageImageTuple = [
-  type: TypedMessageTypeEnum.Image
-  metadata: object | null,
-  imageType: ImageType.PNG | ImageType.JPG | ImageType.WEBP,
-  src: UTF8String,
-  width: Int,
-  height: Int
-] | [
-  type: TypedMessageTypeEnum.Image
-  metadata: object | null,
-  imageType: ImageType.SVG,
-  content: UTF8String,
-  width: Int,
-  height: Int
-]
-
-enum ImageType {
-  PNG = 0,
-  JPG = 1,
-  WEBP = 2,
-  SVG = 3
-}
-```
