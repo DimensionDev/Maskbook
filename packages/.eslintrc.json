@@ -17,7 +17,7 @@
         "react-hooks/exhaustive-deps": "off",
         "react-hooks/rules-of-hooks": "error",
         "lodash/import-scope": ["error", "member"],
-        "unused-imports/no-unused-imports-ts": "error",
+        "unused-imports/no-unused-imports-ts": "warn",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/no-for-in-array": "error"
     }
