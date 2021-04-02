@@ -67,10 +67,14 @@ export function MaskbookSharpIcon(props: SvgIconProps) {
     )
 }
 
-export function MaskbookSharpIcon24(props: SvgIconProps) {
+interface MaskbookSharpIconOfSizeProps extends SvgIconProps {
+    size: number
+}
+
+export function MaskbookSharpIconOfSize(props: MaskbookSharpIconOfSizeProps) {
     return (
         <SvgIcon {...props}>
-            <MaskbookSmileFaceSharpSVG size={24} />
+            <MaskbookSmileFaceSharpSVG size={props.size} />
         </SvgIcon>
     )
 }

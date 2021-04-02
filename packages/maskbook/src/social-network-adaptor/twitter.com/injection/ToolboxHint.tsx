@@ -4,7 +4,6 @@ import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShad
 import { toolBoxInSideBarSelector } from '../utils/selector'
 import { startWatch } from '../../../utils/watcher'
 import { createStyles, makeStyles } from '@material-ui/core'
-import type { ClassNames } from '@emotion/react'
 
 export function injectToolboxHintAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(toolBoxInSideBarSelector())
@@ -14,13 +13,36 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal) {
 
 const useStyles = makeStyles((theme) =>
     createStyles({
+        wrapper: {
+            paddingTop: 4,
+            paddingBottom: 4,
+            cursor: 'pointer',
+            [theme.breakpoints.down('lg')]: {
+                transform: 'translateX(0px)',
+            },
+        },
         menuItem: {
             paddingTop: theme.spacing(2),
             paddingBottom: theme.spacing(2),
         },
+        title: {
+            color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
+        },
         text: {
             marginLeft: 12,
             fontSize: 15,
+            color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
+        },
+        icon: {
+            color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
+        },
+        button: {
+            '&:hover': {
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgb(7, 15, 25)' : 'rgb(233, 246, 253)',
+            },
+            '&:active': {
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgb(13, 29, 48)' : 'rgb(212,237,252)',
+            },
         },
     }),
 )
@@ -31,8 +53,12 @@ function ToolboxHintAtTwitter() {
     return (
         <ToolboxHint
             classes={{
+                wrapper: classes.wrapper,
                 menuItem: classes.menuItem,
+                title: classes.title,
                 text: classes.text,
+                button: classes.button,
+                icon: classes.icon,
             }}
         />
     )

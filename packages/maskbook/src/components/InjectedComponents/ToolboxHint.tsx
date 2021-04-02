@@ -1,5 +1,5 @@
 import { Button, makeStyles, Typography, MenuItem } from '@material-ui/core'
-import { MaskbookSharpIcon24 } from '../../resources/MaskbookIcon'
+import { MaskbookSharpIconOfSize } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
 import { BreakdownDialog } from './BreakdownDialog'
@@ -25,8 +25,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         width: '100%',
-        paddingTop: 4,
-        paddingBottom: 4,
         cursor: 'pointer',
         [theme.breakpoints.down('lg')]: {
             transform: 'translateX(0px)',
@@ -49,12 +47,6 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('lg')]: {
             transform: 'translateX(0px)',
             padding: 14,
-        },
-        '&:hover': {
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgb(7, 15, 25)' : 'rgb(233, 246, 253)',
-        },
-        '&:active': {
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgb(13, 29, 48)' : 'rgb(212,237,252)',
         },
     },
     title: {
@@ -190,7 +182,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
         <>
             <div className={classes.wrapper} onClick={openMenu}>
                 <div className={classes.button}>
-                    <MaskbookSharpIcon24 classes={{ root: classes.icon }} />
+                    <MaskbookSharpIconOfSize classes={{ root: classes.icon }} size={24} />
                     <Typography className={classes.title}>Mask Network</Typography>
                 </div>
             </div>
