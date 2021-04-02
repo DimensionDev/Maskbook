@@ -14,7 +14,9 @@ import {
 } from '@material-ui/core'
 import { SnapshotState } from '../hooks/useSnapshotState'
 import { ProposalTab } from './ProposalTab'
-import { VotesTab } from './ProgressTab'
+import { ProgressTab } from './ProgressTab'
+import { ResultTab } from './ResultTab'
+import { getScores } from '@snapshot-labs/snapshot.js/src/utils'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -65,15 +67,19 @@ export interface SnapshotProps {}
 
 export function Snapshot(props: SnapshotProps) {
     const classes = useStyles()
-    const { identifier } = SnapshotState.useContainer()
-
-    const [tabIndex, setTabIndex] = useState(0)
-
+    const { identifier, message, proposal, votes } = SnapshotState.useContainer()
+    const [tabIndex, setTabIndex] = useState(2)
     const tabs = [
         <Tab className={classes.tab} key="proposal" label="Proposal" />,
         <Tab className={classes.tab} key="progress" label="Progress" />,
+        <Tab className={classes.tab} key="Result" label="Result" />,
     ]
 
+    if (!identifier || !message || !votes) return null
+    console.log('getScores', getScores)
+    console.log('message', message)
+    console.log('proposal', proposal)
+    console.log('votes', votes)
     return (
         <Card className={classes.root} elevation={0}>
             <CardHeader
@@ -81,10 +87,10 @@ export function Snapshot(props: SnapshotProps) {
                     <Box display="flex" alignItems="center" justifyContent="space-between">
                         <Typography sx={{ marginRight: 1 }}>
                             <Typography component="span" sx={{ marginRight: 0.5 }}>
-                                make more quick
+                                {message.payload.name}
                             </Typography>
                             <Typography color="textSecondary" component="span">
-                                #QmdUQF2
+                                #{identifier.id.slice(0, 7)}
                             </Typography>
                         </Typography>
                         <Chip color="primary" size="small" label="Active" />
@@ -93,7 +99,7 @@ export function Snapshot(props: SnapshotProps) {
                 subheader={
                     <Box display="flex" alignItems="center" sx={{ marginTop: 0.5 }}>
                         <Typography color="textSecondary" variant="body2">
-                            we are waiting for all new function for yam, make it quick pls
+                            {identifier.space}
                         </Typography>
                     </Box>
                 }></CardHeader>
@@ -113,7 +119,8 @@ export function Snapshot(props: SnapshotProps) {
                 </Tabs>
                 <Paper className={classes.body}>
                     {tabIndex === 0 ? <ProposalTab /> : null}
-                    {tabIndex === 1 ? <VotesTab /> : null}
+                    {tabIndex === 1 ? <ProgressTab /> : null}
+                    {tabIndex === 2 ? <ResultTab /> : null}
                 </Paper>
             </CardContent>
         </Card>

@@ -4,6 +4,9 @@ import { useRemarkable } from '../hooks/useRemarkable'
 const useStyles = makeStyles(() => ({
     root: {
         fontFamily: 'sans-serif',
+        '& img': {
+            maxWidth: '100%',
+        },
     },
 }))
 
