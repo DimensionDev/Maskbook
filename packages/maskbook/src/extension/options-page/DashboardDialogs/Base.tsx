@@ -16,7 +16,6 @@ import {
 import { ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
 import type { TransitionProps } from '@material-ui/core/transitions'
-import { useBlurContext } from '../DashboardContexts/BlurContext'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { extendsTheme, useMaskbookTheme } from '../../../utils/theme'
@@ -30,6 +29,7 @@ const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             userSelect: 'none',
+            backgroundColor: 'rgba(0, 0, 0, 0.25)',
         },
         close: {
             color: theme.palette.text.primary,
@@ -50,7 +50,6 @@ export function DashboardDialogCore(props: DashboardDialogCoreProps) {
 
     const classes = useStyles()
     const xsMatched = useMatchXS()
-    useBlurContext(dialogProps.open)
 
     return (
         <Dialog

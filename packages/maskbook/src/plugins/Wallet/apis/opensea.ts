@@ -1,3 +1,5 @@
+import { ChainId } from '../../../web3/types'
+
 interface AssetContract {
     address: string
     asset_contract_type: string
@@ -113,17 +115,25 @@ export interface AssetsListResponse {
     assets: Asset[]
 }
 
-export async function getAssetsList(from: string, opts: { page?: number; size?: number }) {
-    const { page = 0, size = 50 } = opts
+export async function getAssetsList(from: string, opts: { chainId?: ChainId; page?: number; size?: number }) {
+    const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
     const params = new URLSearchParams()
     params.append('exclude_currencies', 'true')
     params.append('owner', from.toLowerCase())
     params.append('limit', String(size))
     params.append('offset', String(size * (page - 1)))
 
-    const response = await fetch(`https://api.opensea.io/api/v1/assets?${params.toString()}`, {
-        method: 'GET',
-        mode: 'cors',
-    })
+    if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId))
+        return {
+            assets: [],
+        } as AssetsListResponse
+
+    const response = await fetch(
+        `https://${chainId === ChainId.Mainnet ? 'api' : 'rinkeby-api'}.opensea.io/api/v1/assets?${params.toString()}`,
+        {
+            method: 'GET',
+            mode: 'cors',
+        },
+    )
     return (await response.json()) as AssetsListResponse
 }

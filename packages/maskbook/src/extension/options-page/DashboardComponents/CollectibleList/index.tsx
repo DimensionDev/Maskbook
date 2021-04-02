@@ -77,7 +77,14 @@ export function CollectibleList(props: CollectibleListProps) {
 
     if (collectiblesError || collectibles.length === 0)
         return (
-            <Box className={classes.root}>
+            <Box
+                className={classes.root}
+                sx={{
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '100%',
+                }}>
                 <Typography color="textSecondary">No collectible found.</Typography>
                 <Button
                     sx={{

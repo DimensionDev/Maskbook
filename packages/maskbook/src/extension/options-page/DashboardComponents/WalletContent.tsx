@@ -204,7 +204,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                                     {t('dashboard_tab_transactions')}
                                     {tabIndex === 2 ? (
                                         <IconButton
-                                            sx={{ color: 'inherit' }}
+                                            sx={{ color: 'inherit', marginLeft: 0.5 }}
                                             size="small"
                                             onClick={openTransactionTypeMenu}>
                                             <ExpandMoreIcon />
