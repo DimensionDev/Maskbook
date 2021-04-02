@@ -1,21 +1,18 @@
-import { cloneElement, forwardRef, useCallback, useReducer } from 'react'
+import { cloneElement, useCallback, useReducer } from 'react'
 import classNames from 'classnames'
 import {
     DialogProps,
     Dialog,
-    Fade,
     IconButton,
     createStyles,
     makeStyles,
     DialogContent,
     Typography,
-    FadeProps,
     SvgIconProps,
     IconButtonProps,
 } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
-import type { TransitionProps } from '@material-ui/core/transitions'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { extendsTheme, useMaskbookTheme } from '../../../utils/theme'
@@ -25,6 +22,7 @@ const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             userSelect: 'none',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
         },
         close: {
             color: theme.palette.text.primary,

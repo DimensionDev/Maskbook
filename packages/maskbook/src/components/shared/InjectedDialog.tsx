@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) =>
             verticalAlign: 'middle',
         },
         dialogBackdropRoot: {
-            backgroundColor: 'transparent',
         },
     }),
 )
