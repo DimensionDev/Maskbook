@@ -5,24 +5,23 @@ import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
 
-
 export type SelectTokenDialogEvent =
-      | {
-            open: true
-            uuid: string
-            disableEther?: boolean
-            disableSearchBar?: boolean
-            FixedTokenListProps?: Omit<FixedTokenListProps, 'onSubmit'>
-        }
-      | {
-            open: false
-            uuid: string
+    | {
+          open: true
+          uuid: string
+          disableEther?: boolean
+          disableSearchBar?: boolean
+          FixedTokenListProps?: Omit<FixedTokenListProps, 'onSubmit'>
+      }
+    | {
+          open: false
+          uuid: string
 
-            /**
-             * The selected detailed token.
-             */
-            token?: EtherTokenDetailed | ERC20TokenDetailed
-        }
+          /**
+           * The selected detailed token.
+           */
+          token?: EtherTokenDetailed | ERC20TokenDetailed
+      }
 
 export type UnlockERC20TokenDialogEvent =
     | {
@@ -60,7 +59,7 @@ interface EthereumMessage {
     /**
      * Select token dialog
      */
-     selectTokenDialogUpdated: SelectTokenDialogEvent
+    selectTokenDialogUpdated: SelectTokenDialogEvent
 
     /**
      * Unlock token dialog
