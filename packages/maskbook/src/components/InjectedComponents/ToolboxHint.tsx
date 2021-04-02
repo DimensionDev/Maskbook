@@ -19,8 +19,22 @@ import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlled
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
+import classNames from 'classnames'
 
 const useStyles = makeStyles((theme) => ({
+    paper: {
+        borderRadius: 4,
+        boxShadow: `${
+            theme.palette.mode === 'dark'
+                ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
+                : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
+        }`,
+    },
+    menu: {
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
+
     wrapper: {
         display: 'flex',
         alignItems: 'center',
@@ -147,36 +161,47 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     // Todo: add a swap dialog
 
-    const [menu, openMenu] = useMenu([
-        <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
-            <Image src={ToolIconURLs.encryptedmsg.image} width={19} height={19} />
-            <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
-        </MenuItem>,
-        <MenuItem onClick={openRedPacket} className={classes.menuItem}>
-            <Image src={ToolIconURLs.redpacket.image} width={19} height={19} />
-            <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
-        </MenuItem>,
-        <MenuItem onClick={openFileService} className={classes.menuItem}>
-            <Image src={ToolIconURLs.files.image} width={19} height={19} />
-            <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
-        </MenuItem>,
-        <MenuItem onClick={openITO} className={classes.menuItem}>
-            <Image src={ToolIconURLs.markets.image} width={19} height={19} />
-            <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
-        </MenuItem>,
-        account && Flags.transak_enabled ? (
-            <MenuItem onClick={openBuyCurrency} className={classes.menuItem}>
-                <Image src={ToolIconURLs.token.image} width={19} height={19} />
-                <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
-            </MenuItem>
-        ) : null,
-        Flags.airdrop_enabled ? (
-            <MenuItem onClick={openAirdrop} className={classes.menuItem}>
-                <Image src={ToolIconURLs.airdrop.image} width={19} height={19} />
-                <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
-            </MenuItem>
-        ) : null,
-    ])
+    const [menu, openMenu] = useMenu(
+        [
+            <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
+                <Image src={ToolIconURLs.encryptedmsg.image} width={19} height={19} />
+                <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
+            </MenuItem>,
+            <MenuItem onClick={openRedPacket} className={classes.menuItem}>
+                <Image src={ToolIconURLs.redpacket.image} width={19} height={19} />
+                <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
+            </MenuItem>,
+            <MenuItem onClick={openFileService} className={classes.menuItem}>
+                <Image src={ToolIconURLs.files.image} width={19} height={19} />
+                <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
+            </MenuItem>,
+            <MenuItem onClick={openITO} className={classes.menuItem}>
+                <Image src={ToolIconURLs.markets.image} width={19} height={19} />
+                <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
+            </MenuItem>,
+            account && Flags.transak_enabled ? (
+                <MenuItem onClick={openBuyCurrency} className={classes.menuItem}>
+                    <Image src={ToolIconURLs.token.image} width={19} height={19} />
+                    <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
+                </MenuItem>
+            ) : null,
+            Flags.airdrop_enabled ? (
+                <MenuItem onClick={openAirdrop} className={classes.menuItem}>
+                    <Image src={ToolIconURLs.airdrop.image} width={19} height={19} />
+                    <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
+                </MenuItem>
+            ) : null,
+        ],
+        false,
+        {
+            paperProps: {
+                className: classNames(classes.paper),
+            },
+            menuListProps: {
+                className: classNames(classes.menu),
+            },
+        },
+    )
 
     return (
         <>

@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) =>
             marginLeft: 12,
             fontSize: 15,
             color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
+            paddingRight: theme.spacing(2),
         },
         icon: {
             color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
