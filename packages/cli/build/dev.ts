@@ -7,7 +7,7 @@ import { noop } from 'lodash'
 import { isLocked } from './process-lock'
 
 async function main() {
-    if (!isLocked()) await build()
+    if (!isLocked()) await build().catch(noop)
     dev()
     if (process.argv[2] === '--daemon') {
         console.log('Starting TypeScript compiler...')

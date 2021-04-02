@@ -17,11 +17,10 @@ export interface RedPacketInspectorProps extends withClasses<never> {
 
 export function RedPacketInspector(props: RedPacketInspectorProps) {
     const { message } = props
-    const storybookDebugging: boolean = !!process.env.STORYBOOK
 
     const jsx = message
         ? renderWithRedPacketMetadata(message.meta, (r) => {
-              if (storybookDebugging) return null
+              if (process.env.STORYBOOK) return null
               return (
                   <MaskbookPluginWrapper pluginName="Red Packet">
                       <RedPacketInPost payload={r} />

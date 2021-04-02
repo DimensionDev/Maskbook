@@ -13,7 +13,6 @@ console.log('Build info', {
 export const buildInfoMarkdown = `## Build info
 - Version: ${globalThis.browser?.runtime?.getManifest?.()?.version ?? process.env.TAG_NAME?.slice(1)}
 - NODE_ENV: ${process.env.NODE_ENV}
-- STORYBOOK: ${process.env.STORYBOOK}
 - target: ${process.env.target}
 - build: ${process.env.build}
 - architecture: ${process.env.architecture}

@@ -9,9 +9,7 @@ maintainer:
 
 Hi, Welcome to the Mask Network. Here is some note for developing Mask Network.
 
-> ! [The main Storybook in our project breaks currently](https://github.com/DimensionDev/Maskbook/issues/2187) !
-
-Other storybook are depolyed to <https://compassionate-northcutt-326a3a.netlify.app/>
+Storybooks are depolyed to <https://compassionate-northcutt-326a3a.netlify.app/>
 
 ## Setup
 

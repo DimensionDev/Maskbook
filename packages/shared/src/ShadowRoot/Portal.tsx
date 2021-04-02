@@ -38,7 +38,7 @@ export function setupPortalShadowRoot(
  * ))
  */
 export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX.Element) {
-    const findMountingShadowRef = useRef<HTMLDivElement>(null)
+    const [findMountingShadowRef, setRef] = useState<HTMLDivElement | null>(null)
     const update = useUpdate()
     const { root, container, style } = useSideEffectRef(() => {
         const root = document.createElement('div')
@@ -48,7 +48,7 @@ export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX
         const style = root.appendChild(document.createElement('style'))
         return { root, container, style }
     })
-    const css = useCurrentShadowRootStyles(findMountingShadowRef.current)
+    const css = useCurrentShadowRootStyles(findMountingShadowRef)
     const containerInUse = container.children.length !== 0
 
     useEffect(() => {
@@ -59,10 +59,10 @@ export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX
     }, [containerInUse, root])
 
     useEffect(() => {
-        if (style.innerHTML !== css) style.innerHTML = css
-    }, [style, css])
+        if (findMountingShadowRef && style.innerHTML !== css) style.innerHTML = css
+    }, [style, css, findMountingShadowRef])
 
-    return <div ref={findMountingShadowRef}>{renderer(container)}</div>
+    return <div ref={(ref) => findMountingShadowRef !== ref && setRef(ref)}>{renderer(container)}</div>
 }
 
 export function createShadowRootForwardedComponent<
@@ -102,10 +102,8 @@ function bind(f: Function, thisArg: unknown, hook: Function) {
 }
 
 function useUpdate() {
-    const [i, _update] = useState(0)
-    return () => {
-        _update(i + 1)
-    }
+    const [, _update] = useState(0)
+    return () => _update((i) => i + 1)
 }
 
 function useSideEffectRef<T>(f: () => T): T {

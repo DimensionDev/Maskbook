@@ -1,5 +1,5 @@
-import { Button, makeStyles, Typography, MenuItem } from '@material-ui/core'
-import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
+import { makeStyles, Typography, MenuItem } from '@material-ui/core'
+import { MaskbookSharpIconOfSize } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
 import { BreakdownDialog } from './BreakdownDialog'
@@ -18,20 +18,19 @@ import { useAccount } from '../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { Flags } from '../../utils/flags'
+import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
         display: 'flex',
         alignItems: 'center',
         width: '100%',
-        padding: '12px 26px 12px 12px',
         cursor: 'pointer',
         [theme.breakpoints.down('lg')]: {
-            transform: 'translateX(-6px)',
-            padding: 12,
+            transform: 'translateX(0px)',
         },
         '&:hover': {
-            '& $text': {
+            '& $title': {
                 color: theme.palette.primary.main,
             },
             '& $icon': {
@@ -39,22 +38,40 @@ const useStyles = makeStyles((theme) => ({
             },
         },
     },
-    text: {
+    button: {
+        display: 'flex',
+        padding: '12px 26px 12px 14px',
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        [theme.breakpoints.down('lg')]: {
+            transform: 'translateX(0px)',
+            padding: 14,
+        },
+    },
+    title: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
         fontWeight: 700,
         fontSize: 20,
         marginLeft: 22,
+        lineHeight: 1.35,
         [theme.breakpoints.down('lg')]: {
             display: 'none',
         },
+    },
+    menuItem: {},
+    text: {
+        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
+        marginLeft: 22,
     },
     icon: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
     },
 }))
 
-export function ToolboxHint() {
-    const classes = useStyles()
+interface ToolboxHintProps extends withClasses<never> {}
+export function ToolboxHint(props: ToolboxHintProps) {
+    const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
 
     //#region Airdrop
@@ -130,45 +147,45 @@ export function ToolboxHint() {
 
     // Todo: add a swap dialog
 
-    const [menu, openMenu] = useMenu(
-        <>
-            <MenuItem onClick={openEncryptedMessage}>
-                <Image src={ToolIconURLs.encryptedmsg.image} width={24} height={24} />
-                <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
+    const [menu, openMenu] = useMenu([
+        <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
+            <Image src={ToolIconURLs.encryptedmsg.image} width={19} height={19} />
+            <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
+        </MenuItem>,
+        <MenuItem onClick={openRedPacket} className={classes.menuItem}>
+            <Image src={ToolIconURLs.redpacket.image} width={19} height={19} />
+            <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
+        </MenuItem>,
+        <MenuItem onClick={openFileService} className={classes.menuItem}>
+            <Image src={ToolIconURLs.files.image} width={19} height={19} />
+            <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
+        </MenuItem>,
+        <MenuItem onClick={openITO} className={classes.menuItem}>
+            <Image src={ToolIconURLs.markets.image} width={19} height={19} />
+            <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
+        </MenuItem>,
+        account && Flags.transak_enabled ? (
+            <MenuItem onClick={openBuyCurrency} className={classes.menuItem}>
+                <Image src={ToolIconURLs.token.image} width={19} height={19} />
+                <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
             </MenuItem>
-            <MenuItem onClick={openRedPacket}>
-                <Image src={ToolIconURLs.redpacket.image} width={24} height={24} />
-                <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
+        ) : null,
+        Flags.airdrop_enabled ? (
+            <MenuItem onClick={openAirdrop} className={classes.menuItem}>
+                <Image src={ToolIconURLs.airdrop.image} width={19} height={19} />
+                <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
             </MenuItem>
-            <MenuItem onClick={openFileService}>
-                <Image src={ToolIconURLs.files.image} width={24} height={24} />
-                <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
-            </MenuItem>
-            <MenuItem onClick={openITO}>
-                <Image src={ToolIconURLs.markets.image} width={24} height={24} />
-                <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
-            </MenuItem>
-            {account && Flags.transak_enabled ? (
-                <MenuItem onClick={openBuyCurrency}>
-                    <Image src={ToolIconURLs.token.image} width={24} height={24} />
-                    <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
-                </MenuItem>
-            ) : null}
-            {Flags.airdrop_enabled ? (
-                <MenuItem onClick={openAirdrop}>
-                    <Image src={ToolIconURLs.airdrop.image} width={24} height={24} />
-                    <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
-                </MenuItem>
-            ) : null}
-        </>,
-    )
+        ) : null,
+    ])
 
     return (
         <>
-            <Button className={classes.wrapper} onClick={openMenu}>
-                <MaskbookSharpIcon classes={{ root: classes.icon }} />
-                <Typography className={classes.text}>Mask</Typography>
-            </Button>
+            <div className={classes.wrapper} onClick={openMenu}>
+                <div className={classes.button}>
+                    <MaskbookSharpIconOfSize classes={{ root: classes.icon }} size={24} />
+                    <Typography className={classes.title}>Mask Network</Typography>
+                </div>
+            </div>
             {menu}
             {maskToken ? (
                 <BreakdownDialog
