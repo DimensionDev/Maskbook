@@ -1,4 +1,4 @@
-import { createIcon } from './icons'
+import { createIcon } from '@dimensiondev/icons'
 
 export const VCentIconLight = createIcon(
     'VcentLight',

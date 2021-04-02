@@ -2819,7 +2819,7 @@ packages:
     resolution:
       integrity: sha1-uRf98X3rSkbIQrs+ze3fOloHDF8=
       tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210302070358-e90c55c/53508fd749cc314d345050fa38cc0c233d6b1ce5a5b8aba2cf52a5a56a785c81
-  /@dimensiondev/holoflows-kit/0.8.0-20210302070358-e90c55c_webextension-polyfill@0.7.0:
+  /@dimensiondev/holoflows-kit/0.8.0-20210317064617-6c4792c_webextension-polyfill@0.7.0:
     dependencies:
       '@servie/events': 1.0.0
       async-call-rpc: 4.2.1
@@ -2833,8 +2833,8 @@ packages:
     peerDependencies:
       webextension-polyfill: '*'
     resolution:
-      integrity: sha1-uRf98X3rSkbIQrs+ze3fOloHDF8=
-      tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210302070358-e90c55c/53508fd749cc314d345050fa38cc0c233d6b1ce5a5b8aba2cf52a5a56a785c81
+      integrity: sha512-zB121+yJ3pVCkByf3LEHBUHEMy5rc/r3e4T5E+92SNb+GH/VowvGubSFPygeM2p5lFMyrO+AlvJRPvWQ8ONJTA==
+      tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210317064617-6c4792c/0ad5efd95cb3cbb58a6e30983f6e0ad2a2216a1cf67d7903c9e0d935a7b1ae2a
   /@dimensiondev/kit/0.0.0-20210221102734-0b4a937:
     dev: false
     resolution:

@@ -24,7 +24,6 @@ Tweet\
 |\
 +---Icons\
 | ETH.tsx\
-| icons.tsx\
 | VCent.tsx\
 |\
 \---UI\
