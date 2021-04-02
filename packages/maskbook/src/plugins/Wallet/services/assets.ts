@@ -69,7 +69,8 @@ export async function getAssetsList(address: string, chainId: ChainId, provider:
         case PortfolioProvider.ZERION:
             const { meta, payload } = await ZerionAPI.getAssetsList(address)
             if (meta.status !== 'ok') throw new Error('Fail to load assets.')
-            const assetsList = values(payload.assets)
+            // skip NFT assets
+            const assetsList = values(payload.assets).filter((x) => x.asset.is_displayable && x.asset.icon_url)
             return formatAssetsFromZerion(assetsList)
         case PortfolioProvider.DEBANK:
             const { data = [], error_code } = await DebankAPI.getAssetsList(address)
