@@ -133,7 +133,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     )
 
     // amount
-    const [rawAmount, setRawAmount] = useState('0')
+    const [rawAmount, setRawAmount] = useState('')
     const amount = new BigNumber(rawAmount || '0').multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0))
     const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares || '0')
 
@@ -330,7 +330,12 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     amount={totalAmount.toFixed()}
                     token={token?.type === EthereumTokenType.ERC20 ? token : undefined}
                     spender={RED_PACKET_ADDRESS}>
-                    <ActionButton variant="contained" className={classes.button} fullWidth onClick={createCallback}>
+                    <ActionButton
+                        variant="contained"
+                        className={classes.button}
+                        fullWidth
+                        disabled={!!validationMessage}
+                        onClick={createCallback}>
                         {validationMessage || `Send ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`}
                     </ActionButton>
                 </EthereumERC20TokenApprovedBoundary>
