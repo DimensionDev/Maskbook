@@ -15,14 +15,14 @@ The plugin is located in
 The file tree for this plugin is as follows:\
 \
 Tweet\
-| constants.ts\
-| define.tsx\
+| constants.ts\ (This holds plugin definitions)
+| define.tsx\ (Main entry point)
 | README.md\
 |\
 +---apis\
 | index.ts (This fetches the tweet information)\
 |\
-+---Icons\
++---icons\ (icons in SVG format)
 | ETH.tsx\
 | VCent.tsx\
 |\

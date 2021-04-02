@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { makeStyles, Button } from '@material-ui/core'
 import { isDarkTheme } from '../../../utils/theme-tools'
 import * as TweetAPI from '../apis/index'
-import { ETHIcon } from '../logos/ETH'
-import { VCentIconLight, VCentIconDark } from '../logos/VCent'
+import { ETHIcon } from '../icons/ETH'
+import { VCentIconLight, VCentIconDark } from '../icons/VCent'
 import { VALUABLES_VCENT_URL } from '../constants'
 
 const useStyle = makeStyles((theme) => ({
