@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useState } from 'react'
+import { forwardRef, useCallback, useMemo, useState } from 'react'
 import { Alert, Box, Button, IconButton, MenuItem, Tab, Tabs } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -167,6 +167,19 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     )
     //#endregion
 
+    const content = useMemo(() => {
+        switch (tabIndex) {
+            case 0:
+                return <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
+            case 1:
+                return <CollectibleList wallet={wallet} />
+            case 2:
+                return <TransactionList transactionType={transactionType} />
+            default:
+                return null
+        }
+    }, [tabIndex, classes, wallet, transactionType])
+
     return (
         <div className={classes.root} ref={ref}>
             {!chainIdValid ? (
@@ -265,13 +278,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                     </IconButton>
                 </Box>
             </Box>
-            <Box className={classes.content}>
-                {tabIndex === 0 ? (
-                    <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
-                ) : null}
-                {tabIndex === 1 ? <CollectibleList wallet={wallet} /> : null}
-                {tabIndex === 2 ? <TransactionList transactionType={transactionType} /> : null}
-            </Box>
+            <Box className={classes.content}>{content}</Box>
             {menu}
             {transactionTypeMenu}
             {addToken}

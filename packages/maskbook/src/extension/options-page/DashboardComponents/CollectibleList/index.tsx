@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     },
     loading: {
         position: 'absolute',
-        bottom: 0,
+        bottom: 6,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

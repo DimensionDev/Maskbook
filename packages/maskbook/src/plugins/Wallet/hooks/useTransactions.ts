@@ -19,7 +19,8 @@ export function useTransactions(address: string, page?: number) {
                 values.current.push(...result)
                 break
             case PortfolioProvider.ZERION:
-                values.current = await WalletRPC.getTransactionList(address.toLowerCase(), provider)
+                const response = await WalletRPC.getTransactionList(address.toLowerCase(), provider, page)
+                values.current.push(...response)
                 break
             default:
                 unreachable(provider)
