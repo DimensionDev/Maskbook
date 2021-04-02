@@ -5,6 +5,9 @@ const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
             marginBottom: theme.spacing(2),
+            '&:last-child': {
+                marginBottom: 0,
+            },
         },
         header: {
             backgroundColor: theme.palette.background.paper,
