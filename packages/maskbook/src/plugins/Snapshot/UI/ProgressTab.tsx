@@ -1,5 +1,8 @@
 import { Typography } from '@material-ui/core'
 import { SnapshotState } from '../hooks/useSnapshotState'
+import { ResultCard } from './ResultCard'
+import { VotesCard } from './VotesCard'
+import { InformationCard } from './InformationCard'
 import { SnapshotTab } from './SnapshotTab'
 
 export interface ProgressTabProps {}
@@ -15,15 +18,11 @@ export function ProgressTab(props: ProgressTabProps) {
         message,
     })
 
-    if (votes_.length === 0)
-        return (
-            <SnapshotTab>
-                <Typography>No Data.</Typography>
-            </SnapshotTab>
-        )
     return (
         <SnapshotTab>
-            <Typography>You have got {votes_.length} votes.</Typography>
+            <InformationCard />
+            <ResultCard />
+            <VotesCard />
         </SnapshotTab>
     )
 }
