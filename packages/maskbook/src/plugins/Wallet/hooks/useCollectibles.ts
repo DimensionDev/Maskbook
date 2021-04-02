@@ -41,11 +41,20 @@ export function useCollectibles(address: string, provider: CollectibleProvider, 
                     [
                         ...result,
                         ...erc721Tokens.map((x) =>
-                            createERC721Token(x.chainId, x.tokenId, x.address, x.name, x.symbol, x.baseURI, x.tokenURI, {
-                                name: x.assetName,
-                                description: x.assetDescription,
-                                image: x.assetImage,
-                            }),
+                            createERC721Token(
+                                x.chainId,
+                                x.tokenId,
+                                x.address,
+                                x.name,
+                                x.symbol,
+                                x.baseURI,
+                                x.tokenURI,
+                                {
+                                    name: x.assetName,
+                                    description: x.assetDescription,
+                                    image: x.assetImage,
+                                },
+                            ),
                         ),
                     ],
                     (a, b) => isSameAddress(a.address, b.address) && a.tokenId === b.tokenId,
