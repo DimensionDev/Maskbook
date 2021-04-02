@@ -18,6 +18,7 @@ import AutoResize from 'react-virtualized-auto-sizer'
 import { FixedSizeList } from 'react-window'
 import { useMemo, useState } from 'react'
 import { FilterTransactionType } from '../../../../plugins/Wallet/types'
+import { useChainId } from '../../../../web3/hooks/useChainState'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -39,6 +40,7 @@ export interface TransactionListProps {
 
 export function TransactionList({ transactionType }: TransactionListProps) {
     const styles = useStyles()
+    const chainId = useChainId()
     const account = useAccount()
 
     const [page, setPage] = useState(1)
@@ -63,7 +65,7 @@ export function TransactionList({ transactionType }: TransactionListProps) {
                     {new Array(3).fill(0).map((_, i) => (
                         <TableRow key={i}>
                             <TableCell>
-                                <Skeleton animation="wave" variant="rectangular" width="100%" height={30}></Skeleton>
+                                <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                             </TableCell>
                         </TableRow>
                     ))}
@@ -116,7 +118,12 @@ export function TransactionList({ transactionType }: TransactionListProps) {
                             {({ index, style }) => {
                                 const transaction = dataSource[index]
                                 return transaction ? (
-                                    <Row key={transaction.id} transaction={transaction} style={style} />
+                                    <Row
+                                        key={transaction.id}
+                                        chainId={chainId}
+                                        transaction={transaction}
+                                        style={style}
+                                    />
                                 ) : null
                             }}
                         </FixedSizeList>
