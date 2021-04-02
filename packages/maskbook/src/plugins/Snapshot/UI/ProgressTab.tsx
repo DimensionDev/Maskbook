@@ -8,20 +8,18 @@ import { SnapshotTab } from './SnapshotTab'
 export interface ProgressTabProps {}
 
 export function ProgressTab(props: ProgressTabProps) {
-    const { identifier, proposal, message, votes } = SnapshotState.useContainer()
-    const votes_ = Object.values(votes.value ?? {})
-
-    console.log({
-        identifier,
-        votes,
-        proposal,
-        message,
-    })
+    const snapshotState = SnapshotState.useContainer()
+    if (Object.keys(snapshotState).length === 0) return null
 
     return (
         <SnapshotTab>
             <InformationCard />
-            <ResultCard />
+            <ResultCard
+                identifier={snapshotState.identifier!}
+                message={snapshotState.message!}
+                proposal={snapshotState.proposal!}
+                votes={snapshotState.votes!}
+            />
             <VotesCard />
         </SnapshotTab>
     )

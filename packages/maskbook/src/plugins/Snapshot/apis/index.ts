@@ -13,8 +13,9 @@ export async function fetchAllVotesOfProposal(id: string, space: string) {
     const response = await fetch(`https://hub.snapshot.page/api/${space}/proposal/${id}`, {
         method: 'GET',
     })
-    console.log(fetchAllVotesOfProposal, await response.json())
-    return (await response.json()) as {
+    const result = await response.json()
+    console.log('fetchAllVotesOfProposal', result)
+    return result as {
         [key in string]: Vote
     }
 }

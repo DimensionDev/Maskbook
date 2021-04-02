@@ -189,6 +189,7 @@ importers:
       '@ungap/promise-all-settled': 1.1.2
       '@uniswap/sdk': 3.0.3_72226568922005834619ba32b8bb61bb
       '@walletconnect/client': 1.3.6
+      '@zhouhancheng/snapshot.js': 0.1.8
       anchorme: 2.1.2
       arweave: 1.10.13
       assert: 2.0.0
@@ -308,6 +309,7 @@ importers:
       '@ungap/promise-all-settled': ^1.1.2
       '@uniswap/sdk': ^3.0.3-beta.1
       '@walletconnect/client': ^1.2.2
+      '@zhouhancheng/snapshot.js': ^0.1.8
       anchorme: ^2.1.2
       arweave: ^1.10.13
       assert: ^2.0.0
@@ -5943,7 +5945,6 @@ packages:
     resolution:
       integrity: sha512-vFHy/ezP5qI0rFgJ7aQnjDXwAMrG0KqqIH7tQG5PPv3BWBayOPIQNBjVc/P6hhdZfMx51REc6tfDNXHUio893g==
   /@types/node/14.14.37:
-    dev: false
     resolution:
       integrity: sha512-XYmBiy+ohOR4Lh5jE379fV2IU+6Jn4g5qASinhitfyO71b/sCo6MKsMLF5tc7Zf2CE8hViVQyYSobJNke8OvUw==
   /@types/normalize-package-data/2.4.0:
@@ -5965,12 +5966,11 @@ packages:
     dev: true
 
   /@types/pbkdf2/3.1.0:
-    resolution: {integrity: sha512-Cf63Rv7jCQ0LaL8tNXmEyqTHuIJxRdlS5vMh1mj5voN4+QFhVZnlZruezqpWYDiJ8UTzhP0VmeLXCmBk66YrMQ==}
     dependencies:
       '@types/node': 14.14.37
-
-  /@types/prettier/2.2.3:
-    resolution: {integrity: sha512-PijRCG/K3s3w1We6ynUKdxEc5AcuuH3NBmMDP8uvKVp6X43UY7NQlTzczakXP3DJR0F4dfNQIGjU2cUeRYs2AA==}
+    resolution:
+      integrity: sha512-Cf63Rv7jCQ0LaL8tNXmEyqTHuIJxRdlS5vMh1mj5voN4+QFhVZnlZruezqpWYDiJ8UTzhP0VmeLXCmBk66YrMQ==
+  /@types/prettier/2.2.1:
     dev: true
 
   /@types/pretty-hrtime/1.0.0:
@@ -6128,7 +6128,8 @@ packages:
     resolution: {integrity: sha512-+ZjSA8ELlOp8SlKi0YLB2tz9d5iPNEmOBd+8Rz21wTMdaXQIa9b6TEnD6l5qKOCypE7FSyPyck12qZJxSDNoog==}
     dependencies:
       '@types/node': 14.14.37
-
+    resolution:
+      integrity: sha512-+ZjSA8ELlOp8SlKi0YLB2tz9d5iPNEmOBd+8Rz21wTMdaXQIa9b6TEnD6l5qKOCypE7FSyPyck12qZJxSDNoog==
   /@types/serve-static/1.13.9:
     resolution: {integrity: sha512-ZFqF6qa48XsPdjXV5Gsz0Zqmux2PerNd3a/ktL45mHpa19cuMi/cL8tcxdAx497yRh+QtYPuofjT9oWw9P7nkA==}
     dependencies:
@@ -6801,6 +6802,29 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Stw47QFos4RaEjep2J84xFvi2GVmKCQbweLQwdAIRIi5x7lSmQ7RI3T2pci1fFblcaqaWmauK3C59ZFdexc99w==
+  /@zhouhancheng/snapshot.js/0.1.8:
+    dependencies:
+      '@ensdomains/content-hash': 2.5.6
+      '@ethersproject/abi': 5.1.0
+      '@ethersproject/address': 5.1.0
+      '@ethersproject/bignumber': 5.1.0
+      '@ethersproject/bytes': 5.1.0
+      '@ethersproject/contracts': 5.1.0
+      '@ethersproject/hash': 5.1.0
+      '@ethersproject/providers': 5.1.0
+      '@ethersproject/solidity': 5.1.0
+      '@ethersproject/strings': 5.1.0
+      '@ethersproject/units': 5.1.0
+      ajv: 7.2.4
+      bs58: 4.0.1
+      eth-ens-namehash: 2.0.8
+      ethereumjs-util: 7.0.10
+      json-to-graphql-query: 2.0.0
+      lodash.set: 4.3.2
+      lodash.tonumber: 4.0.3
+    dev: false
+    resolution:
+      integrity: sha512-gFz/uMWX7IjjE/moM7YcNMYecyzTvuuV5dMC3N8khut11vmj5FNJFJTZDdvlJ06A8Y0ljLQgJPCWYKXAF2Cgvg==
   /@zxing/text-encoding/0.9.0:
     dev: false
     optional: true
@@ -15202,11 +15226,12 @@ packages:
   /lodash.sortby/4.7.0:
     resolution: {integrity: sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=}
     dev: true
-
-  /lodash.truncate/4.4.2:
-    resolution: {integrity: sha1-WjUNoLERO4N+z//VgSy+WNbq4ZM=}
-    dev: true
-
+    resolution:
+      integrity: sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
+  /lodash.tonumber/4.0.3:
+    dev: false
+    resolution:
+      integrity: sha1-C5azGzVnJ5Prf1pj7nkfG56QJdk=
   /lodash.union/4.6.0:
     resolution: {integrity: sha1-SLtQiECfFvGCFmZkHETdGqrjzYg=}
     dev: true

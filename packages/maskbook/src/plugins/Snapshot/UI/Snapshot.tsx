@@ -15,9 +15,6 @@ import {
 import { SnapshotState } from '../hooks/useSnapshotState'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
-// import { getScores } from '@snapshot-labs/snapshot.js/src/utils'
-
-function getScores() {}
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -31,14 +28,14 @@ const useStyles = makeStyles((theme) => {
         },
         content: {
             width: '100%',
-            height: 'var(--contentHeight)',
+            minHeight: 'var(--contentHeight)',
             display: 'flex',
             flexDirection: 'column',
             padding: '0 !important',
         },
         body: {
             flex: 1,
-            hegiht: 'calc(var(--contentHeight) - var(--tabHeight))',
+            minHeight: 'calc(var(--contentHeight) - var(--tabHeight))',
             overflow: 'auto',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
@@ -68,18 +65,18 @@ export interface SnapshotProps {}
 
 export function Snapshot(props: SnapshotProps) {
     const classes = useStyles()
-    const { identifier, message, proposal, votes } = SnapshotState.useContainer()
+    const snapshotState = SnapshotState.useContainer()
+
     const [tabIndex, setTabIndex] = useState(1)
     const tabs = [
         <Tab className={classes.tab} key="proposal" label="Proposal" />,
         <Tab className={classes.tab} key="progress" label="Progress" />,
     ]
 
-    if (!identifier || !message || !votes) return null
-    console.log('getScores', getScores)
-    console.log('message', message)
-    console.log('proposal', proposal)
-    console.log('votes', votes)
+    if (Object.keys(snapshotState).length === 0) return null
+    console.log('message', snapshotState.message)
+    console.log('proposal', snapshotState.proposal)
+    console.log('votes', snapshotState.votes)
     return (
         <Card className={classes.root} elevation={0}>
             <CardHeader
@@ -87,10 +84,10 @@ export function Snapshot(props: SnapshotProps) {
                     <Box display="flex" alignItems="center" justifyContent="space-between">
                         <Typography sx={{ marginRight: 1 }}>
                             <Typography component="span" sx={{ marginRight: 0.5 }}>
-                                {message.payload.name}
+                                {snapshotState.message!.payload.name}
                             </Typography>
                             <Typography color="textSecondary" component="span">
-                                #{identifier.id.slice(0, 7)}
+                                #{snapshotState.identifier!.id.slice(0, 7)}
                             </Typography>
                         </Typography>
                         <Chip color="primary" size="small" label="Active" />
@@ -99,7 +96,7 @@ export function Snapshot(props: SnapshotProps) {
                 subheader={
                     <Box display="flex" alignItems="center" sx={{ marginTop: 0.5 }}>
                         <Typography color="textSecondary" variant="body2">
-                            {identifier.space}
+                            {snapshotState.identifier!.space}
                         </Typography>
                     </Box>
                 }></CardHeader>
