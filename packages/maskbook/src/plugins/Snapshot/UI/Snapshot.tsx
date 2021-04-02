@@ -15,8 +15,9 @@ import {
 import { SnapshotState } from '../hooks/useSnapshotState'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
-import { ResultTab } from './ResultTab'
-import { getScores } from '@snapshot-labs/snapshot.js/src/utils'
+// import { getScores } from '@snapshot-labs/snapshot.js/src/utils'
+
+function getScores() {}
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -68,11 +69,10 @@ export interface SnapshotProps {}
 export function Snapshot(props: SnapshotProps) {
     const classes = useStyles()
     const { identifier, message, proposal, votes } = SnapshotState.useContainer()
-    const [tabIndex, setTabIndex] = useState(2)
+    const [tabIndex, setTabIndex] = useState(1)
     const tabs = [
         <Tab className={classes.tab} key="proposal" label="Proposal" />,
         <Tab className={classes.tab} key="progress" label="Progress" />,
-        <Tab className={classes.tab} key="Result" label="Result" />,
     ]
 
     if (!identifier || !message || !votes) return null
@@ -120,7 +120,6 @@ export function Snapshot(props: SnapshotProps) {
                 <Paper className={classes.body}>
                     {tabIndex === 0 ? <ProposalTab /> : null}
                     {tabIndex === 1 ? <ProgressTab /> : null}
-                    {tabIndex === 2 ? <ResultTab /> : null}
                 </Paper>
             </CardContent>
         </Card>

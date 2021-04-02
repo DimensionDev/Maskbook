@@ -1,5 +1,6 @@
 import { Typography } from '@material-ui/core'
 import { SnapshotState } from '../hooks/useSnapshotState'
+import { VotingCard } from './VotingCard'
 import { SnapshotTab } from './SnapshotTab'
 import { Markdown } from './Markdown'
 
@@ -11,6 +12,7 @@ export function ProposalTab(props: ProposalTabProps) {
     return (
         <SnapshotTab>
             <Markdown content={message?.payload?.body ?? ''} />
+            <VotingCard />
         </SnapshotTab>
     )
 }
