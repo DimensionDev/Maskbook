@@ -29,19 +29,3 @@ Tweet\
 |\
 \---UI\
  TweetDialog.tsx (This displays the information in Twitter)
-
-## Issues
-
-Error#1: Access to fetch at
-<https://v.cent.co/data/tweet-txm?tweetID=(TweetIdHere)> from origin
-<https://twitter.com> has been blocked by CORS policy: No
-'Access-Control-Allow-Origin' header is present on the request source.
-
-Current workaorund to Error#1: Allow CORS: Access-Control-Allow-Origin plugin
-for Chrome.
-
-## Contact
-
-Discord: rob-lw#4479\
-Gitcoin: <https://gitcoin.co/rob-lw>\
-Github: <https://github.com/rob-lw>

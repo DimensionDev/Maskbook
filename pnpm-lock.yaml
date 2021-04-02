@@ -175,7 +175,8 @@ importers:
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/contracts': link:../contracts
       '@dimensiondev/dashboard': link:../dashboard
-      '@dimensiondev/holoflows-kit': 0.8.0-20210302070358-e90c55c_webextension-polyfill@0.7.0
+      '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c_webextension-polyfill@0.7.0
+      '@dimensiondev/icons': link:../icons
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
       '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-theme': link:../theme
@@ -338,7 +339,8 @@ importers:
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/contracts': workspace:*
       '@dimensiondev/dashboard': workspace:*
-      '@dimensiondev/holoflows-kit': 0.8.0-20210302070358-e90c55c
+      '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
+      '@dimensiondev/icons': workspace:*
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
       '@dimensiondev/maskbook-shared': workspace:*
       '@dimensiondev/maskbook-theme': workspace:*
