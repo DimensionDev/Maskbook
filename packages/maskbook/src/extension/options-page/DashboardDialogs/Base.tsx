@@ -21,15 +21,10 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { extendsTheme, useMaskbookTheme } from '../../../utils/theme'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
-const Transition = forwardRef<unknown, TransitionProps & Pick<FadeProps, 'children'>>(function Transition(props, ref) {
-    return <Fade ref={ref} {...props} />
-})
-
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             userSelect: 'none',
-            backgroundColor: 'rgba(0, 0, 0, 0.25)',
         },
         close: {
             color: theme.palette.text.primary,
@@ -52,13 +47,7 @@ export function DashboardDialogCore(props: DashboardDialogCoreProps) {
     const xsMatched = useMatchXS()
 
     return (
-        <Dialog
-            className={classes.root}
-            closeAfterTransition
-            fullScreen={fullScreen ?? xsMatched}
-            TransitionComponent={Transition}
-            hideBackdrop
-            {...dialogProps}>
+        <Dialog className={classes.root} fullScreen={fullScreen ?? xsMatched} hideBackdrop {...dialogProps}>
             {children}
             <IconButton
                 className={classes.close}
