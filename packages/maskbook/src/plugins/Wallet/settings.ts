@@ -5,6 +5,13 @@ import { PLUGIN_IDENTIFIER } from './constants'
 import { CollectibleProvider, PortfolioProvider } from './types'
 
 /**
+ * The gas price data records
+ */
+export const currentGasPriceListSettings = createGlobalSettings(`${PLUGIN_IDENTIFIER}+gasPrices`, '', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+/**
  * The address of the selected wallet
  */
 export const currentSelectedWalletAddressSettings = createGlobalSettings<string>(

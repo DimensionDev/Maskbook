@@ -2,10 +2,19 @@ import type { ZerionTransactionDirection } from './zerion'
 import type { DebankTransactionDirection } from './debank'
 import type { CurrencyType, ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 
+export enum PortfolioProvider {
+    ZERION,
+    DEBANK,
+}
+
+export enum CollectibleProvider {
+    OPENSEAN,
+}
+
 export enum FilterTransactionType {
     ALL = 'all',
     SENT = 'sent',
-    RECEIVE = 'receive',
+    RECEIVED = 'received',
 }
 
 export type TransactionDirection = ZerionTransactionDirection | DebankTransactionDirection
@@ -33,16 +42,6 @@ export interface Transaction {
     gasFee: TransactionGasFee | undefined
     transactionType: string
 }
-
-export enum PortfolioProvider {
-    ZERION,
-    DEBANK,
-}
-
-export enum CollectibleProvider {
-    OPENSEAN,
-}
-
 export interface Asset {
     token: EtherTokenDetailed | ERC20TokenDetailed
     /**

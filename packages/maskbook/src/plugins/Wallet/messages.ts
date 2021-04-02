@@ -2,6 +2,15 @@ import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
 
+export type SelectGasPriceDialogEvent =
+    | {
+          open: true
+      }
+    | {
+          open: false
+          gasPrice: string
+      }
+
 export type SelectProviderDialogEvent =
     | {
           open: true
@@ -34,6 +43,10 @@ export type WalletConnectQRCodeDialogEvent =
       }
 
 interface WalletMessage {
+    /**
+     * Select gas price dialog
+     */
+    selectGasPriceDialogUpdated: SelectGasPriceDialogEvent
     /**
      * Select wallet dialog
      */

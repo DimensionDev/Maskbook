@@ -193,7 +193,8 @@ export function TradeSummary(props: TradeSummaryProps) {
             title: 'Liquidity Provider Fee',
             children: (
                 <Typography className={classes.title}>
-                    {formatBalance(fee, inputToken.decimals, 6)} {inputToken.symbol}
+                    <strong className={classes.emphasis}>{formatBalance(fee, inputToken.decimals, 6)}</strong>
+                    {inputToken.symbol}
                 </Typography>
             ),
         },

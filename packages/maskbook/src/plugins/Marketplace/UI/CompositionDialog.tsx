@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useMemo, useCallback, useState } from 'react'
 import { Box, createStyles, DialogContent, DialogProps, FormControl, makeStyles, TextField } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import type { MarketplaceJSONPayloadInMask } from '../types'
@@ -14,6 +14,8 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { globalTypedMessageMetadata } from '../../../protocols/typed-message/global-state'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -23,6 +25,9 @@ const useStyles = makeStyles((theme) =>
         control: {
             width: '100%',
             paddingBottom: theme.spacing(2),
+        },
+        button: {
+            marginTop: theme.spacing(1.5),
         },
     }),
 )
@@ -88,6 +93,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
         props.onClose()
     }, [account, chainId, name, nftToken, props.onClose])
 
+    const validationMessage = useMemo(() => {
+        return ''
+    }, [])
+
     return (
         <InjectedDialog open={props.open} title="Composition Dialog" onClose={props.onClose}>
             <DialogContent className={classes.content}>
@@ -132,9 +141,17 @@ export function CompositionDialog(props: CompositionDialogProps) {
                         display: 'flex',
                         justifyContent: 'flex-end',
                     }}>
-                    <ActionButton fullWidth disabled={!nftToken} variant="contained" onClick={onConfirm}>
-                        {t('confirm')}
-                    </ActionButton>
+                    <EthereumWalletConnectedBoundary>
+                        <ActionButton
+                            className={classes.button}
+                            fullWidth
+                            size="large"
+                            disabled={!nftToken}
+                            variant="contained"
+                            onClick={onConfirm}>
+                            {t('confirm')}
+                        </ActionButton>
+                    </EthereumWalletConnectedBoundary>
                 </Box>
             </DialogContent>
         </InjectedDialog>

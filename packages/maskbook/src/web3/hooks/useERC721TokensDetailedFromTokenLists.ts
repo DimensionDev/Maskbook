@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import Fuse from 'fuse.js'
-import Services from '../../extension/service'
 import { useAsync } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
+import Services from '../../extension/service'
 import { isSameAddress } from '../helpers'
 import { useChainId } from './useChainState'
 import { EthereumTokenType } from '../types'
@@ -55,7 +55,7 @@ export function useERC721TokensDetailedFromTokenLists(lists: string[], keyword: 
     const matchedToken = useMemo(() => {
         if (!keyword || !EthereumAddress.isValid(keyword) || searchedTokens.length) return
         return {
-            type: EthereumTokenType.ERC20,
+            type: EthereumTokenType.ERC721,
             address: keyword,
         }
     }, [keyword, searchedTokens.length])
