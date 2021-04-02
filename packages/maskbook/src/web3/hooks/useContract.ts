@@ -8,7 +8,7 @@ import Services, { ServicesWithProgress } from '../../extension/service'
 import { useAccount } from './useAccount'
 import { nonFunctionalWeb3 } from '../web3'
 import { iteratorToPromiEvent, Stage, StageType } from '../../utils/promiEvent'
-import type { EstimateGasOptions } from '../../contracts/types'
+import type { EstimateGasOptions } from '@dimensiondev/contracts/types/types'
 import { decodeOutputString, decodeEvents } from '../helpers'
 import { TransactionEventType } from '../types'
 

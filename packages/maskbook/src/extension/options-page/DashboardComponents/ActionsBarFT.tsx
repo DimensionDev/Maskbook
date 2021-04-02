@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface ActionsBarFT_Props extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface ActionsBarFT_Props extends withClasses<'more'> {
     chain: 'eth' | string
     wallet: WalletRecord
     token: EtherTokenDetailed | ERC20TokenDetailed
@@ -41,7 +41,7 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
     const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogFT)
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu(
-        ...[
+        [
             <MenuItem
                 onClick={() => {
                     setBuyDialogOpen({

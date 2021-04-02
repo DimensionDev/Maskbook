@@ -3,11 +3,11 @@
         "ecmaVersion": 2020,
         "sourceType": "module"
     },
-    "extends": ["plugin:prettier/recommended", "lodash"],
+    "extends": ["plugin:prettier/recommended"],
     "env": {
         "node": true
     },
-    "plugins": ["unused-imports"],
+    "plugins": ["unused-imports", "lodash"],
     "rules": {
         "constructor-super": "error",
         "dot-notation": "error",

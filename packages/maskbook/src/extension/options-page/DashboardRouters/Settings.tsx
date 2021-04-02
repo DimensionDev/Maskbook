@@ -12,6 +12,7 @@ import {
     currentMaskbookChainIdSettings,
     enableGroupSharingSettings,
     launchPageSettings,
+    newDashboardConnection,
 } from '../../../settings/settings'
 import { Appearance, LaunchPage, Language } from '../../../settings/types'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
@@ -255,6 +256,13 @@ export default function DashboardSettingsRouter() {
                                     icon={<ShareIcon />}
                                     value={enableGroupSharingSettings}
                                 />
+                                {process.env.NODE_ENV === 'development' || process.env.build !== 'stable' ? (
+                                    <SettingsUI
+                                        classes={listStyle}
+                                        icon={<MemoryOutlinedIcon />}
+                                        value={newDashboardConnection}
+                                    />
+                                ) : null}
                             </List>
                         </Card>
                     </Paper>

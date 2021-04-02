@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import type { Contract } from 'web3-eth-contract'
 import type { AbiOutput } from 'web3-utils'
-import type { TransactionObject } from '../../contracts/types'
+import type { TransactionObject } from '@dimensiondev/contracts/types/types'
 import { useMulticallContract } from '../contracts/useMulticallContract'
 import { decodeOutputString } from '../helpers'
 import { nonFunctionalWeb3 } from '../web3'

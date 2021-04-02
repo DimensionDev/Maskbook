@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface RestoreFromBackupBoxProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RestoreFromBackupBoxProps extends withClasses<never> {
     file: File | null
     onChange?: (file: File, content: string) => void
 }
@@ -61,7 +61,8 @@ export function RestoreFromBackupBox(props: RestoreFromBackupBoxProps) {
                 entered={over}
                 enterText={t('restore_database_dragging')}
                 leaveText={t('restore_database_dragged')}
-                placeholder="restore-file-placeholder"
+                darkPlaceholderImageURL={new URL('./RestoreFromBackupBox-dark.png', import.meta.url).toString()}
+                lightPlaceholderImageURL={new URL('./RestoreFromBackupBox-light.png', import.meta.url).toString()}
                 data-active={over}
                 onClick={() => inputRef.current && inputRef.current.click()}
             />

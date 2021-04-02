@@ -10,7 +10,6 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../../../settings/settings'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { usePostInfoDetails } from '../../DataSource/usePostInfo'
-import { getActivatedUI } from '../../../social-network/ui'
 import { deconstructPayload, PayloadAlpha38 } from '../../../utils/type-transform/Payload'
 
 interface DebugDisplayProps {
@@ -21,7 +20,7 @@ interface DebugDisplayProps {
 export function DecryptedPostDebug(props: Partial<DebugDisplayProps>) {
     const postBy = usePostInfoDetails('postBy')
     const postContent = usePostInfoDetails('postContent')
-    const payloadResult = useMemo(() => deconstructPayload(postContent, getActivatedUI().payloadDecoder), [postContent])
+    const payloadResult = useMemo(() => deconstructPayload(postContent), [postContent])
     const setting = useValueRef(debugModeSetting)
     const isDebugging = isEnvironment(Environment.ManifestOptions) ? true : setting
 

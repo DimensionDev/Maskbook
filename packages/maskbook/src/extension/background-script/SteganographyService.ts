@@ -2,15 +2,15 @@ import { encode, decode } from '@dimensiondev/stego-js/cjs/dom'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'
 import { TransformAlgorithm } from '@dimensiondev/stego-js/cjs/transform'
 import type { EncodeOptions, DecodeOptions } from '@dimensiondev/stego-js/cjs/stego'
-import { getUrl, downloadUrl } from '../../utils/utils'
+import { downloadUrl } from '../../utils/utils'
 import { memoizePromise } from '../../utils/memoize'
 import { getDimension } from '../../utils/image'
 import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+import type { ImageTemplateTypes } from '../../resources/image-payload'
 assertEnvironment(Environment.ManifestBackground)
 
-type Template = 'v1' | 'v2' | 'v3' | 'v4' | 'eth' | 'dai' | 'okb'
 type Mask = 'v1' | 'v2' | 'v4' | 'transparent'
 
 type Dimension = {
@@ -56,13 +56,16 @@ const defaultOptions = {
 const isSameDimension = (dimension: Dimension, otherDimension: Dimension) =>
     dimension.width === otherDimension.width && dimension.height === otherDimension.height
 
-const getMaskBuf = memoizePromise(
-    async (type: Mask) => (await downloadUrl(getUrl(`/image-payload/mask-${type}.png`))).arrayBuffer(),
-    undefined,
-)
+const images: Record<Mask, string> = {
+    v1: new URL('./SteganographyResources/mask-v1.png', import.meta.url).toString(),
+    v2: new URL('./SteganographyResources/mask-v2.png', import.meta.url).toString(),
+    v4: new URL('./SteganographyResources/mask-v4.png', import.meta.url).toString(),
+    transparent: new URL('./SteganographyResources/mask-transparent.png', import.meta.url).toString(),
+}
+const getMaskBuf = memoizePromise(async (type: Mask) => (await downloadUrl(images[type])).arrayBuffer(), void 0)
 
 type EncodeImageOptions = {
-    template?: Template
+    template?: ImageTemplateTypes
 } & PartialRequired<Required<EncodeOptions>, 'text' | 'pass'>
 
 export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImageOptions) {

@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { MaskITO } from '../../../contracts/MaskITO'
+import type { MaskITO } from '@dimensiondev/contracts/types/MaskITO'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 

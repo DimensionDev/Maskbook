@@ -12,10 +12,9 @@ import { TradeSummary } from '../trader/TradeSummary'
 import { ConfirmDialog } from './ConfirmDialog'
 import { TradeActionType } from '../../trader/useTradeState'
 import { SwapResponse, TokenPanelType, TradeComputed, TradeProvider, Coin } from '../../types'
-import { sleep } from '../../../../utils/utils'
+import { delay } from '../../../../utils/utils'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
-import { useShareLink } from '../../../../utils/hooks/useShareLink'
 import { formatBalance } from '../../../Wallet/formatter'
 import { TradePairViewer } from '../uniswap/TradePairViewer'
 import { useValueRef } from '../../../../utils/hooks/useValueRef'
@@ -23,7 +22,7 @@ import { currentTradeProviderSettings } from '../../settings'
 import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
-import { getActivatedUI } from '../../../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../../../social-network'
 import { EthereumMessages } from '../../../Ethereum/messages'
 import Services from '../../../../extension/service'
 import { UST } from '../../constants'
@@ -31,6 +30,7 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
 import { PluginTraderRPC } from '../../messages'
+import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface TraderProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface TraderProps extends withClasses<never> {
     coin: Coin
     tokenDetailed: ERC20TokenDetailed | EtherTokenDetailed | undefined
 }
@@ -194,7 +194,7 @@ export function Trader(props: TraderProps) {
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const onConfirmDialogConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
-        await sleep(100)
+        await delay(100)
         setFreezed(true)
         await tradeCallback()
     }, [tradeCallback])
@@ -225,19 +225,21 @@ export function Trader(props: TraderProps) {
     //#endregion
 
     //#region remote controlled transaction dialog
-    const cashTag = getActivatedUI()?.networkIdentifier === 'twitter.com' ? '$' : ''
-    const shareLink = useShareLink(
-        trade && inputToken && outputToken
-            ? [
-                  `I just swapped ${formatBalance(trade.inputAmount, inputToken.decimals ?? 0, 6)} ${cashTag}${
-                      inputToken.symbol
-                  } for ${formatBalance(trade.outputAmount, outputToken.decimals ?? 0, 6)} ${cashTag}${
-                      outputToken.symbol
-                  }. Follow @realMaskbook (mask.io) to swap cryptocurrencies on Twitter.`,
-                  '#mask_io',
-              ].join('\n')
-            : '',
-    )
+    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            trade && inputToken && outputToken
+                ? [
+                      `I just swapped ${formatBalance(trade.inputAmount, inputToken.decimals ?? 0, 6)} ${cashTag}${
+                          inputToken.symbol
+                      } for ${formatBalance(trade.outputAmount, outputToken.decimals ?? 0, 6)} ${cashTag}${
+                          outputToken.symbol
+                      }. Follow @realMaskbook (mask.io) to swap cryptocurrencies on Twitter.`,
+                      '#mask_io',
+                  ].join('\n')
+                : '',
+        )
+        .toString()
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(

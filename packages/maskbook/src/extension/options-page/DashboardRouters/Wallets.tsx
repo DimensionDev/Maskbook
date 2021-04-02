@@ -16,7 +16,7 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { Flags } from '../../../utils/flags'
-import { useWallet, useWalletHD, useWallets } from '../../../plugins/Wallet/hooks/useWallet'
+import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { extendsTheme } from '../../../utils/theme'
@@ -95,7 +95,6 @@ export default function DashboardWalletsRouter() {
     const [walletRedPacketDetail, , openWalletRedPacketDetail] = useModal(DashboardWalletRedPacketDetailDialog)
 
     const selectedWallet = useWallet()
-    const hdWallet = useWalletHD()
 
     //#region create or import wallet
     const [, setOpenCreateWalletDialog] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)

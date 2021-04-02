@@ -1,8 +1,9 @@
-import { createContext, useState } from 'react'
+import { useState } from 'react'
 import {
     Box,
     Button,
     IconButton,
+    createStyles,
     makeStyles,
     Skeleton,
     Table,
@@ -31,125 +32,74 @@ import { useStableTokensDebank } from '../../../web3/hooks/useStableTokensDebank
 import type { Asset } from '../../../plugins/Wallet/types'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
 import { useAssets } from '../../../plugins/Wallet/hooks/useAssets'
+import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
-const MAX_TOKENS_LENGTH = 5
-const MIN_VALUE = 5
-
-const useStyles = makeStyles((theme: Theme) => ({
-    container: {
-        '&::-webkit-scrollbar': {
-            display: 'none',
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles<string, { isMobile: boolean }>({
+        container: {
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+            padding: theme.spacing(0),
         },
-        padding: theme.spacing(0),
-    },
-    table: {},
-    head: {
-        backgroundColor: theme.palette.mode === 'light' ? theme.palette.common.white : 'var(--drawerBody)',
-    },
-    cell: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1.5),
-        whiteSpace: 'nowrap',
-    },
-    record: {
-        display: 'flex',
-    },
-    coin: {
-        width: 24,
-        height: 24,
-    },
-    name: {
-        marginLeft: theme.spacing(1),
-    },
-    symbol: {},
-    memo: {
-        fontSize: 11,
-        verticalAlign: 'middle',
-        color: theme.palette.text.secondary,
-        marginLeft: theme.spacing(1),
-    },
-    price: {},
-    more: {
-        color: theme.palette.text.primary,
-    },
-    lessButton: {
-        display: 'flex',
-        justifyContent: 'center',
-        marginTop: theme.spacing(1),
-    },
-}))
+        table: {},
+        head: {
+            backgroundColor: theme.palette.mode === 'light' ? theme.palette.common.white : 'var(--drawerBody)',
+        },
+        cell: {
+            paddingLeft: ({ isMobile }) => (isMobile ? theme.spacing(0.5) : theme.spacing(2)),
+            paddingRight: ({ isMobile }) => (isMobile ? theme.spacing(0.5) : theme.spacing(1.5)),
+            fontSize: ({ isMobile }) => (isMobile ? '0.8rem' : '0.875rem'),
+            whiteSpace: 'nowrap',
+        },
+        record: {
+            display: 'flex',
+        },
+        coin: {
+            width: ({ isMobile }) => (isMobile ? 20 : 24),
+            height: ({ isMobile }) => (isMobile ? 20 : 24),
+        },
+        name: {
+            marginLeft: theme.spacing(1),
+            fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
+        },
+        price: {
+            fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
+        },
+        more: {
+            color: theme.palette.text.primary,
+            fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
+        },
+        lessButton: {
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: theme.spacing(1),
+        },
+        menuAnchorElRef: {},
+    }),
+)
 
-export const WalletAssetsTableContext = createContext<{
-    detailedTokensRetry: () => void
-}>(null!)
-
-export interface WalletAssetsTableProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    wallet: WalletRecord
+//#region view detailed
+interface ViewDetailedProps extends WalletAssetsTableProps {
+    asset: Asset
 }
 
-export function WalletAssetsTable(props: WalletAssetsTableProps) {
-    const { t } = useI18N()
-    const { wallet } = props
+function ViewDetailed(props: ViewDetailedProps) {
+    const { wallet, asset: x } = props
 
-    const erc20Tokens = useTrustedERC20TokensFromDB()
-    const {
-        value: detailedTokens,
-        error: detailedTokensError,
-        loading: detailedTokensLoading,
-        retry: detailedTokensRetry,
-    } = useAssets(erc20Tokens)
-    const { value: stableTokens = [] } = useStableTokensDebank()
+    const isMobile = useMatchXS()
+    const classes = useStylesExtends(useStyles({ isMobile }), props)
+    const stableTokens = useStableTokensDebank()
 
-    const classes = useStylesExtends(useStyles(), props)
-    const LABELS = [t('wallet_assets'), t('wallet_price'), t('wallet_balance'), t('wallet_value'), ''] as const
-
-    const [viewLength, setViewLength] = useState(MAX_TOKENS_LENGTH)
-    const [more, setMore] = useState(false)
-    const [price, setPrice] = useState(MIN_VALUE)
-
-    if (detailedTokensError)
-        return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%',
-                }}>
-                <Typography color="textSecondary">No token found.</Typography>
-                <Button
-                    sx={{
-                        marginTop: 1,
-                    }}
-                    variant="text"
-                    onClick={() => detailedTokensRetry()}>
-                    Retry
-                </Button>
-            </Box>
-        )
-
-    if (!detailedTokens.length) return null
-
-    const viewDetailed = (x: Asset) => (
+    return (
         <TableRow className={classes.cell} key={x.token.address}>
             {[
                 <Box
                     sx={{
                         display: 'flex',
                     }}>
-                    <TokenIcon
-                        classes={{ icon: classes.coin }}
-                        name={x.token.name}
-                        address={x.token.address}
-                        logoURL={x.logoURL}
-                    />
-                    <Typography className={classes.name}>
-                        <span className={classes.symbol}>{x.token.symbol}</span>
-                        {x.chain !== 'eth' ? (
-                            <span className={classes.memo}>{t('wallet_chain', { chain: x.chain.toUpperCase() })}</span>
-                        ) : null}
-                    </Typography>
+                    <TokenIcon classes={{ icon: classes.coin }} name={x.token.name} address={x.token.address} />
+                    <Typography className={classes.name}>{x.token.symbol}</Typography>
                 </Box>,
                 <Box
                     sx={{
@@ -186,13 +136,17 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                         {formatCurrency(Number(getTokenUSDValue(x).toFixed(2)), '$')}
                     </Typography>
                 </Box>,
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                    }}>
-                    <ActionsBarFT wallet={wallet} chain={x.chain} token={x.token} />
-                </Box>,
+                ...(isMobile
+                    ? []
+                    : [
+                          <Box
+                              sx={{
+                                  display: 'flex',
+                                  justifyContent: 'flex-end',
+                              }}>
+                              <ActionsBarFT chain={x.chain} wallet={wallet} token={x.token} />
+                          </Box>,
+                      ]),
             ]
                 .filter(Boolean)
                 .map((y, i) => (
@@ -202,18 +156,68 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                 ))}
         </TableRow>
     )
+}
+//#endregion
 
-    const LessButton = () => (
-        <div className={classes.lessButton}>
-            <IconButton
-                onClick={() => {
-                    setMore(!more)
-                    setViewLength(more ? MAX_TOKENS_LENGTH : detailedTokens.length)
-                    setPrice(more ? MIN_VALUE : 0)
+//#region wallet asset table
+const MIN_VALUE = 5
+
+export interface WalletAssetsTableProps extends withClasses<never> {
+    wallet: WalletRecord
+}
+
+export function WalletAssetsTable(props: WalletAssetsTableProps) {
+    const { t } = useI18N()
+    const { wallet } = props
+
+    const isMobile = useMatchXS()
+    const classes = useStylesExtends(useStyles({ isMobile }), props)
+    const LABELS = [
+        t('wallet_assets'),
+        t('wallet_price'),
+        t('wallet_balance'),
+        t('wallet_value'),
+        ...(isMobile ? [] : ['']),
+    ] as const
+
+    const erc20Tokens = useTrustedERC20TokensFromDB()
+    const {
+        value: detailedTokens,
+        error: detailedTokensError,
+        loading: detailedTokensLoading,
+        retry: detailedTokensRetry,
+    } = useAssets(erc20Tokens)
+
+    const [more, setMore] = useState(false)
+
+    if (detailedTokensError)
+        return (
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '100%',
                 }}>
-                {more ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </IconButton>
-        </div>
+                <Typography color="textSecondary">No token found.</Typography>
+                <Button
+                    sx={{
+                        marginTop: 1,
+                    }}
+                    variant="text"
+                    onClick={() => detailedTokensRetry()}>
+                    Retry
+                </Button>
+            </Box>
+        )
+
+    if (!detailedTokens.length) return null
+
+    const viewDetailedTokens = detailedTokens.filter(
+        (x) =>
+            new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(MIN_VALUE) ||
+            x.token.type === EthereumTokenType.Ether,
     )
 
     return (
@@ -273,18 +277,23 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                                       </TableCell>
                                   </TableRow>
                               ))
-                            : detailedTokens
-                                  .filter((x) =>
-                                      Number(price) !== 0
-                                          ? new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(price) ||
-                                            x.token.type === EthereumTokenType.Ether
-                                          : true,
-                                  )
-                                  .map((y, idx) => (idx < viewLength ? viewDetailed(y) : null))}
+                            : (more ? detailedTokens : viewDetailedTokens).map((y, idx) => (
+                                  <ViewDetailed key={idx} asset={y} wallet={wallet} />
+                              ))}
                     </TableBody>
                 </Table>
             </TableContainer>
-            <LessButton />
-        </WalletAssetsTableContext.Provider>
+            {viewDetailedTokens.length < detailedTokens.length ? (
+                <div className={classes.lessButton}>
+                    <IconButton
+                        onClick={() => {
+                            setMore(!more)
+                        }}>
+                        {more ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    </IconButton>
+                </div>
+            ) : null}
+        </>
     )
 }
+//#endregion

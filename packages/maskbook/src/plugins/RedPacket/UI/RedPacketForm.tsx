@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface RedPacketFormProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RedPacketFormProps extends withClasses<never> {
     onCreate?(payload: RedPacketJSONPayload): void
     SelectMenuProps?: Partial<MenuProps>
 }
@@ -327,10 +327,10 @@ export function RedPacketForm(props: RedPacketFormProps) {
             </div>
             <EthereumWalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
-                    amount={amount.toFixed()}
+                    amount={totalAmount.toFixed()}
                     token={token?.type === EthereumTokenType.ERC20 ? token : undefined}
                     spender={RED_PACKET_ADDRESS}>
-                    <ActionButton className={classes.button} fullWidth onClick={createCallback}>
+                    <ActionButton variant="contained" className={classes.button} fullWidth onClick={createCallback}>
                         {validationMessage || `Send ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`}
                     </ActionButton>
                 </EthereumERC20TokenApprovedBoundary>

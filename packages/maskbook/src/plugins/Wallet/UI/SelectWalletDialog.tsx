@@ -10,7 +10,7 @@ import { WalletInList } from '../../../components/shared/SelectWallet/WalletInLi
 import type { WalletRecord } from '../database/types'
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
-import { sleep } from '../../../utils/utils'
+import { delay } from '../../../utils/utils'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -58,7 +58,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const history = useHistory()
     const onCreate = useCallback(async () => {
         onClose()
-        await sleep(100)
+        await delay(100)
         if (isEnvironment(Environment.ManifestOptions)) history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
         else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
     }, [history, onClose])
@@ -68,7 +68,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnect = useCallback(async () => {
         onClose()
-        await sleep(100)
+        await delay(100)
         setSelectProviderDialogOpen({
             open: true,
         })

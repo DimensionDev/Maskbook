@@ -16,7 +16,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages, WalletRPC } from '../messages'
-import { checkInputLengthExceed, sleep } from '../../../utils/utils'
+import { checkInputLengthExceed, delay } from '../../../utils/utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -106,7 +106,7 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
         setOpen({
             open: false,
         })
-        await sleep(300)
+        await delay(300)
         setName('')
         setStep(CreateWalletStep.Name)
         refreshCallback()
@@ -157,13 +157,7 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
         <InjectedDialog
             open={open}
             onClose={onClose}
-            title={t(
-                step === CreateWalletStep.Name
-                    ? 'plugin_wallet_setup_title_create'
-                    : step === CreateWalletStep.Words
-                    ? 'plugin_wallet_setup_title_words'
-                    : 'plugin_wallet_setup_title_verify',
-            )}
+            title={t('plugin_wallet_setup_title_create')}
             DialogProps={{
                 maxWidth: step === CreateWalletStep.Name ? 'xs' : 'sm',
             }}>
@@ -253,13 +247,11 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
                             (step === CreateWalletStep.Verify && words.join(' ') !== puzzleWords.join(' '))
                         }
                         onClick={step === CreateWalletStep.Name || step === CreateWalletStep.Words ? onNext : onSubmit}>
-                        {t(
-                            step === CreateWalletStep.Name
-                                ? 'plugin_wallet_setup_create'
-                                : step === CreateWalletStep.Words
-                                ? 'plugin_wallet_setup_next'
-                                : 'plugin_wallet_setup_verify',
-                        )}
+                        {step === CreateWalletStep.Name
+                            ? t('plugin_wallet_setup_create')
+                            : step === CreateWalletStep.Words
+                            ? t('plugin_wallet_setup_next')
+                            : t('plugin_wallet_setup_verify')}
                     </ActionButton>
                 </Box>
             </DialogContent>

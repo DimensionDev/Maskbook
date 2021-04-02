@@ -16,7 +16,7 @@ import {
 import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
 import Color from 'color'
 import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
-import { useState, useContext } from 'react'
+import { useState, useContext, useMemo } from 'react'
 import { DashboardContext } from './context'
 import { Navigation } from './Navigation'
 import { MaskNotSquareIcon } from '@dimensiondev/icons'
@@ -29,7 +29,7 @@ const Root = styled(Grid)(({ theme }) => ({
 const LeftContainer = styled(Grid)(({ theme }) => ({
     height: '100vh',
     [theme.breakpoints.up('lg')]: {
-        // TODO: what is this magic number?
+        // Just meet the design size
         minWidth: 232,
     },
 }))
@@ -41,14 +41,17 @@ export const DashboardFrame = memo((props: DashboardFrameProps) => {
     const [navigationExpanded, setNavigationExpanded] = useState(true)
     const [drawerOpen, setDrawerOpen] = useState(false)
 
+    const context = useMemo(
+        () => ({
+            drawerOpen,
+            expanded: navigationExpanded,
+            toggleNavigationExpand: () => setNavigationExpanded((e) => !e),
+            toggleDrawer: () => setDrawerOpen((e) => !e),
+        }),
+        [drawerOpen, navigationExpanded],
+    )
     return (
-        <DashboardContext.Provider
-            value={{
-                drawerOpen,
-                expanded: navigationExpanded,
-                toggleNavigationExpand: () => setNavigationExpanded((e) => !e),
-                toggleDrawer: () => setDrawerOpen((e) => !e),
-            }}>
+        <DashboardContext.Provider value={context}>
             <Root container>
                 {isLargeScreen && (
                     <LeftContainer item xs={2}>

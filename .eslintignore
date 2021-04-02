@@ -1,10 +1,11 @@
+*.d.ts
 *.test.tsx
-package.json
 build/
 dist/
-scripts/
 e2e
-packages/maskbook/src/plugins/Wallet/contracts
+package.json
 packages/maskbook/src/contracts
+packages/maskbook/src/plugins/Wallet/contracts
+packages/storybook-shared
 public/
-*.d.ts
+scripts/

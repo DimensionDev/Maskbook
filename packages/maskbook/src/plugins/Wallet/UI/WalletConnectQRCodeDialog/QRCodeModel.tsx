@@ -29,7 +29,7 @@ export const QRCodeModel: React.FC<{ uri: string }> = ({ uri }) => {
             <Typography className={classes.tip} color="textSecondary">
                 {t('plugin_wallet_qr_code_with_wallet_connect')}
             </Typography>
-            <QRCode text={uri} options={{ width: 400 }} canvasProps={{ style }} />
+            <QRCode text={uri} canvasProps={{ style }} />
         </Grid>
     )
 }

@@ -37,10 +37,12 @@ import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import type { RedPacketJSONPayload } from '../../../plugins/RedPacket/types'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { DashboardRoute } from '../Route'
-import { sleep, checkInputLengthExceed, unreachable } from '../../../utils/utils'
+import { delay, checkInputLengthExceed, unreachable } from '../../../utils/utils'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import {
+    ERC721TokenAssetDetailed,
+    ERC1155TokenAssetDetailed,
     ERC1155TokenDetailed,
     ERC20TokenDetailed,
     ERC721TokenDetailed,
@@ -54,7 +56,6 @@ import { useRedPacketFromDB } from '../../../plugins/RedPacket/hooks/useRedPacke
 import WalletLine from './WalletLine'
 import { isETH, isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useChainState'
 import { WalletMessages, WalletRPC } from '../../../plugins/Wallet/messages'
 import { Image } from '../../../components/shared/Image'
 import { MaskbookIconOutlined } from '../../../resources/MaskbookIcon'
@@ -66,16 +67,12 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { QRCode } from '../../../components/shared/qrcode'
 import { formatBalance, formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import { useTokenTransferCallback } from '../../../web3/hooks/useTokenTransferCallback'
-import { WalletAssetsTableContext } from '../DashboardComponents/WalletAssetsTable'
-import { CollectibleContext } from '../DashboardComponents/CollectibleList'
-import type { AbiItem } from 'web3-utils'
-import { createContract } from '../../../web3/hooks/useContract'
-import type { ERC721 } from '../../../contracts/ERC721'
-import ERC721ABI from '../../../../abis/ERC721.json'
-import { ERC1155_INTERFACE_ID, ERC721_INTERFACE_ID } from '../../../web3/constants'
 import { Flags } from '../../../utils/flags'
 import { useWalletHD } from '../../../plugins/Wallet/hooks/useWallet'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../../plugins/Wallet/constants'
+import { useERC721TokenDetailed } from '../../../web3/hooks/useERC721TokenDetailed'
+import { useERC721TokenAssetDetailed } from '../../../web3/hooks/useERC721TokenAssetDetailed'
+import { CollectibleContext } from '../DashboardComponents/CollectibleList'
 
 //#region predefined token selector
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
@@ -139,7 +136,7 @@ export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelector
 //#endregion
 
 //#region wallet import dialog
-interface WalletProps {
+export interface WalletProps {
     wallet: WalletRecord
 }
 
@@ -442,88 +439,25 @@ export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<Wal
 //#endregion
 
 //#region wallet add ERC721 token dialog
-export function DashboardWalletAddERC721TokenDialog(
-    props: WrappedDialogProps<
-        WalletProps & {
-            tokenIdsLoaded: string[]
-        }
-    >,
-) {
+export function DashboardWalletAddERC721TokenDialog(props: WrappedDialogProps<WalletProps>) {
+    const { wallet } = props.ComponentProps!
+
     const { t } = useI18N()
-    const { wallet, tokenIdsLoaded } = props.ComponentProps!
     const [tokenId, setTokenId] = useState('')
     const [address, setAddress] = useState('')
-    const account = useAccount()
-    const chainId = useChainId()
+
+    const tokenDetailed = useERC721TokenDetailed(address)
+    const assetDetailed = useERC721TokenAssetDetailed(tokenDetailed.value)
 
     const onSubmit = useSnackbarCallback(
         async () => {
-            const contract = createContract<ERC721>(account, address, ERC721ABI as AbiItem[])
-            if (!contract) throw new Error(t('wallet_add_nft_invalid_address'))
-
-            // check if is erc721 contract
-            try {
-                const isERC1155 = await contract.methods.supportsInterface(ERC1155_INTERFACE_ID).call({ from: account })
-                const isERC721 = await contract.methods.supportsInterface(ERC721_INTERFACE_ID).call({ from: account })
-
-                let update = false
-                if (isERC721) update = await WalletRPC.trustERC721Token(account, { address, tokenId })
-                else if (isERC1155) update = await WalletRPC.trustERC1155Token(account, { address, tokenId })
-
-                // already exist, remove from black_list in database
-                if (update) return
-                if (!isERC721) throw new Error(t('wallet_add_nft_invalid_721_asset_address'))
-                if (isERC1155) throw new Error(t('wallet_add_nft_1155_asset_comming_soon'))
-            } catch (e) {
-                throw new Error(t('wallet_add_nft_invalid_721_asset_address'))
-            }
-
-            if (tokenIdsLoaded.includes(tokenId)) throw new Error(t('wallet_add_nft_id_exist'))
-
-            // check ownership
-            try {
-                // Note: call `ownerOf()` to some address would fail since we have not supported erc1155, e.g. OPENSTORE:
-                // https://opensea.io/assets/0x495f947276749ce646f68ac8c248420045cb7b5e/89830317166460882891126040282455488408374211647939875178961827541662050549761
-                const owner = await contract.methods.ownerOf(tokenId).call({ from: account })
-                if (owner.toLowerCase() !== account.toLowerCase()) throw new Error(t('wallet_add_nft_invalid_owner'))
-            } catch (e) {
-                throw new Error(t('wallet_add_nft_invalid_owner'))
-            }
-
-            // retrieve tokenURI
-            let tokenURI: string | null = null
-            try {
-                // Note: call `tokenURI()` to some address would fail since we have not supported erc1155, e.g. cryptokitties
-                // https://opensea.io/assets/0x06012c8cf97bead5deae237070f9587f8e7a266d/1800408
-                tokenURI = await contract.methods.tokenURI(tokenId).call({ from: account })
-            } catch (e) {}
-
-            let tokenDetailed: ERC721TokenDetailed = {
-                type: EthereumTokenType.ERC721,
-                address,
-                symbol: '',
-                chainId,
-                tokenId,
-                name: '',
-                image: '',
-            }
-
-            if (tokenURI) {
-                const response = await fetch(tokenURI)
-                const data = (await response.json()) as {
-                    name: string
-                    description: string
-                    image: string
-                }
-                tokenDetailed.name = data.name
-                tokenDetailed.image = data.image
-            }
-
-            await WalletRPC.addERC721Token(tokenDetailed)
-            // Note: Rare Pizzas Box works fine
-            // https://opensea.io/assets/0x4ae57798aef4af99ed03818f83d2d8aca89952c7/182
+            if (!tokenDetailed.value || !assetDetailed.value) return
+            await WalletRPC.addERC721Token({
+                ...tokenDetailed.value,
+                asset: assetDetailed.value,
+            })
         },
-        [],
+        [tokenDetailed, assetDetailed],
         props.onClose,
     )
 
@@ -557,7 +491,7 @@ export function DashboardWalletAddERC721TokenDialog(
                 }
                 footer={
                     <DebounceButton
-                        disabled={!!validationMessage || !address || !tokenId}
+                        disabled={!!validationMessage || !address || !tokenId || tokenDetailed.loading}
                         variant="contained"
                         onClick={onSubmit}>
                         {validationMessage || t('add_asset')}
@@ -788,7 +722,7 @@ export function DashboardWalletErrorDialog(props: WrappedDialogProps<object>) {
     const onClose = async () => {
         props.onClose()
         // prevent UI updating before dialog disappearing
-        await sleep(300)
+        await delay(300)
         history.replace(DashboardRoute.Wallets)
     }
 
@@ -992,7 +926,6 @@ function TransferTab(props: TransferTabProps) {
     const { t } = useI18N()
     const classes = useTransferTabStyles()
 
-    const { detailedTokensRetry } = useContext(WalletAssetsTableContext)
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
@@ -1021,7 +954,7 @@ function TransferTab(props: TransferTabProps) {
 
     const onTransfer = useCallback(async () => {
         await transferCallback()
-    }, [onClose, transferCallback])
+    }, [transferCallback])
     //#endregion
 
     //#region remote controlled transaction dialog
@@ -1031,12 +964,11 @@ function TransferTab(props: TransferTabProps) {
             (ev) => {
                 if (ev.open) return
                 resetTransferCallback()
-                if (transferState.type !== TransactionStateType.CONFIRMED) return
+                if (transferState.type !== TransactionStateType.HASH) return
                 onClose()
-                detailedTokensRetry()
                 tokenBalanceRetry()
             },
-            [transferState.type],
+            [transferState.type, tokenBalanceRetry],
         ),
     )
 
@@ -1231,9 +1163,10 @@ const useTransferDialogStylesNFT = makeStyles((theme) =>
 )
 
 export function DashboardWalletTransferDialogNFT(
-    props: WrappedDialogProps<WalletProps & { token: ERC721TokenDetailed }>,
+    props: WrappedDialogProps<WalletProps & { token: ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed }>,
 ) {
     const { wallet, token } = props.ComponentProps!
+    const { onClose } = props
 
     const { t } = useI18N()
     const classes = useTransferDialogStylesNFT()
@@ -1251,7 +1184,7 @@ export function DashboardWalletTransferDialogNFT(
 
     const onTransfer = useCallback(async () => {
         await transferCallback()
-    }, [props.onClose, transferCallback])
+    }, [transferCallback])
     //#endregion
 
     //#region remote controlled transaction dialog
@@ -1261,11 +1194,11 @@ export function DashboardWalletTransferDialogNFT(
             (ev) => {
                 if (ev.open) return
                 resetTransferCallback()
-                if (transferState.type !== TransactionStateType.CONFIRMED) return
-                props.onClose()
+                if (transferState.type !== TransactionStateType.HASH) return
+                onClose()
                 collectiblesRetry()
             },
-            [transferState.type],
+            [transferState.type, collectiblesRetry],
         ),
     )
 
@@ -1293,13 +1226,13 @@ export function DashboardWalletTransferDialogNFT(
             <DashboardDialogWrapper
                 primary={t('wallet_transfer_title')}
                 icon={
-                    token.image ? (
+                    token.asset?.image ? (
                         <Image
                             component="img"
                             width={160}
                             height={220}
                             style={{ objectFit: 'contain' }}
-                            src={token.image}
+                            src={token.asset.image}
                         />
                     ) : (
                         <MaskbookIconOutlined className={classes.placeholder} />
@@ -1319,7 +1252,9 @@ export function DashboardWalletTransferDialogNFT(
                             className={classes.button}
                             variant="contained"
                             color="primary"
-                            disabled={!address || !!validationMessage}
+                            disabled={
+                                !!validationMessage || transferState.type === TransactionStateType.WAIT_FOR_CONFIRMING
+                            }
                             onClick={onTransfer}>
                             {validationMessage || t('wallet_transfer_send')}
                         </Button>

@@ -1,7 +1,7 @@
 import type { AbiItem } from 'web3-utils'
-import type { ExchangeProxy } from '../../../../contracts/ExchangeProxy'
+import type { ExchangeProxy } from '@dimensiondev/contracts/types/ExchangeProxy'
 import { useConstant } from '../../../../web3/hooks/useConstant'
-import ExchangeProxyABI from '../../../../../abis/ExchangeProxy.json'
+import ExchangeProxyABI from '@dimensiondev/contracts/abis/ExchangeProxy.json'
 import { TRADE_CONSTANTS } from '../../constants'
 import { useContract } from '../../../../web3/hooks/useContract'
 

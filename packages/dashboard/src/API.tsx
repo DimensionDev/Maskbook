@@ -1,27 +1,29 @@
-import type { EventBasedChannel } from 'async-call-rpc'
-
-type ServiceType = typeof import('@dimensiondev/maskbook/src/extension/service')['Services']
-
-export let Services: ServiceType = null!
-export function setService(x: ServiceType) {
-    Services = x
+import type { Services as ServiceType } from '../../maskbook/dist/src/extension/service'
+import type { MaskMessage } from '../../maskbook/dist/src/utils/messages'
+export let Services: typeof ServiceType = null!
+export let Messages: typeof MaskMessage = null!
+export let PluginServices: PluginServices = null!
+export let PluginMessages: PluginMessages = null!
+export interface PluginServices {
+    Wallet: typeof import('../../maskbook/dist/src/plugins/Wallet/messages').WalletRPC
 }
-export class WebExtensionExternalChannel implements EventBasedChannel {
-    private f = new Set<Function>()
-    private connection: any // browser.runtime.Port
-    constructor(name: string, id = 'jkoeaghipilijlahjplgbfiocjhldnap') {
-        // @ts-expect-error Chrome only
-        this.connection = chrome.runtime.connect(id, { name })
-        // @ts-expect-error Chrome only
-        const err = chrome.runtime.lastError
-        if (err) console.log(err)
-        this.connection.onMessage.addListener((m: any) => this.f.forEach((f) => f(m)))
-    }
-    on(listener: Function) {
-        this.f.add(listener)
-        return () => this.f.delete(listener)
-    }
-    send(m: any) {
-        this.connection.postMessage(m)
-    }
+export interface PluginMessages {
+    Wallet: typeof import('../../maskbook/dist/src/plugins/Wallet/messages').WalletMessages
+}
+export function setService(x: typeof ServiceType) {
+    Services = x
+    Object.assign(globalThis, { Services: x })
+}
+export function setMessages(x: typeof Messages) {
+    Messages = x
+    Object.assign(globalThis, { Messages: x })
+}
+export function setPluginServices(x: typeof PluginServices) {
+    PluginServices = x
+    Object.assign(globalThis, { PluginServices: x })
+}
+
+export function setPluginMessages(x: typeof PluginMessages) {
+    PluginMessages = x
+    Object.assign(globalThis, { PluginMessages: x })
 }

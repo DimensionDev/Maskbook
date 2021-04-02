@@ -3,7 +3,7 @@ import { StartupActionList, StartupActionListItem } from '../../components/Start
 import { MaskWalletIcon, ImportWalletIcon, CloudLinkIcon } from '@dimensiondev/icons'
 import { useDashboardI18N } from '../../locales'
 
-export const Container = styled('div')`
+const Container = styled('div')`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,21 +15,21 @@ export function StartUp() {
         <Container>
             <StartupActionList>
                 <StartupActionListItem
-                    icon={<MaskWalletIcon />}
+                    icon={<MaskWalletIcon fontSize="inherit" />}
                     title={t.wallets_startup_create()}
                     description={t.wallets_startup_create_desc()}
                     action={t.wallets_startup_create_action()}
                     onClick={() => {}}
                 />
                 <StartupActionListItem
-                    icon={<ImportWalletIcon />}
+                    icon={<ImportWalletIcon fontSize="inherit" />}
                     title={t.wallets_startup_import()}
                     description={t.wallets_startup_import_desc()}
                     action={t.wallets_startup_import_action()}
                     onClick={() => {}}
                 />
                 <StartupActionListItem
-                    icon={<CloudLinkIcon />}
+                    icon={<CloudLinkIcon fontSize="inherit" />}
                     title={t.wallets_startup_connect()}
                     description={t.wallets_startup_connect_desc()}
                     action={t.wallets_startup_connect_action()}

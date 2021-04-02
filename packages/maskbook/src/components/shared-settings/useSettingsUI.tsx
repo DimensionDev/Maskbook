@@ -48,7 +48,7 @@ function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     }
 }
 
-interface SettingsUIProps<T> extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'listItemRoot'> {
+interface SettingsUIProps<T> extends withClasses<'listItemRoot'> {
     value: ValueRef<T>
     primary?: React.ReactNode
     secondary?: React.ReactNode

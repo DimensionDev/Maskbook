@@ -2,15 +2,16 @@ import * as d3 from 'd3'
 import { useEffect, RefObject } from 'react'
 import stringify from 'json-stable-stringify'
 import type { Dimension } from './useDimension'
+import { formatCurrency } from '../Wallet/formatter'
 
 export function usePriceLineChart(
     svgRef: RefObject<SVGSVGElement>,
     data: { date: Date; value: number }[],
     dimension: Dimension,
     id: string,
-    color = 'steelblue',
-    sign = '$',
+    opts: { color?: string; sign?: string },
 ) {
+    const { color = 'steelblue', sign = '$' } = opts
     const { top, right, bottom, left, width, height } = dimension
     const contentWidth = width - left - right
     const contentHeight = height - top - bottom
@@ -131,10 +132,7 @@ export function usePriceLineChart(
 
             tooltip.attr('transform', `translate(${x(date)},${y(value)})`).call(
                 callout,
-                `${value.toLocaleString('en', {
-                    style: 'currency',
-                    currency: 'USD',
-                })}
+                `${formatCurrency(value, sign)}
                 ${date.toLocaleString('en', {
                     month: 'short',
                     day: 'numeric',

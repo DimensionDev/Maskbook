@@ -5,9 +5,9 @@ import { useCallback, useEffect } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { getActivatedUI } from '../../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { ERC20TokenDetailed } from '../../../web3/types'
 import { EthereumMessages } from '../../Ethereum/messages'
@@ -73,19 +73,21 @@ export function ITO_Card(props: ITO_CardProps) {
     //#endregion
 
     //#region transaction dialog
-    const cashTag = getActivatedUI()?.networkIdentifier === 'twitter.com' ? '$' : ''
+    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const postLink = usePostLink()
-    const shareLink = useShareLink(
-        [
-            `I just claimed ${cashTag}${token?.symbol} with ${formatBalance(
-                new BigNumber(packet?.claimable ?? '0'),
-                18,
-                6,
-            )}. Follow @realMaskbook (mask.io) to claim airdrop.`,
-            '#mask_io',
-            postLink,
-        ].join('\n'),
-    )
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            [
+                `I just claimed ${cashTag}${token?.symbol} with ${formatBalance(
+                    new BigNumber(packet?.claimable ?? '0'),
+                    18,
+                    6,
+                )}. Follow @realMaskbook (mask.io) to claim airdrop.`,
+                '#mask_io',
+                postLink,
+            ].join('\n'),
+        )
+        .toString()
 
     // close the transaction dialog
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(

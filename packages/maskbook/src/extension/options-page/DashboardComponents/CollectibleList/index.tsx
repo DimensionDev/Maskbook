@@ -1,33 +1,24 @@
+import { createContext, useState } from 'react'
+import { FixedSizeGrid } from 'react-window'
+import AutoResize from 'react-virtualized-auto-sizer'
 import { Box, Button, CircularProgress, makeStyles, Skeleton, Typography } from '@material-ui/core'
 import { CollectibleCard } from './CollectibleCard'
-import { createERC1155Token, createERC721Token } from '../../../../web3/helpers'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
-import { useChainId } from '../../../../web3/hooks/useChainState'
 import { formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
-import { createContext } from 'react'
-import type { Collectible } from '../../../../plugins/Wallet/types'
-import AutoResize from 'react-virtualized-auto-sizer'
-import { FixedSizeGrid } from 'react-window'
+import { EthereumTokenType } from '../../../../web3/types'
+import { useValueRef } from '../../../../utils/hooks/useValueRef'
+import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
+import { useAccount } from '../../../../web3/hooks/useAccount'
+import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
 }>(null!)
 
-export interface CollectibleListProps {
-    wallet: WalletRecord
-    collectibles: Collectible[]
-    collectiblesLoading: boolean
-    collectiblesError: Error | undefined
-    collectiblesRetry: () => void
-    onNextPage: () => void
-    page: number
-}
-
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexWrap: 'wrap',
-        padding: theme.spacing(1),
     },
     card: {
         position: 'relative',
@@ -40,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     },
     loading: {
         position: 'absolute',
-        bottom: 0,
+        bottom: 6,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -48,10 +39,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+export interface CollectibleListProps {
+    wallet: WalletRecord
+}
+
 export function CollectibleList(props: CollectibleListProps) {
-    const chainId = useChainId()
+    const { wallet } = props
+
     const classes = useStyles()
-    const { wallet, collectibles, collectiblesLoading, collectiblesError, collectiblesRetry, onNextPage, page } = props
+    const account = useAccount()
+
+    const [page, setPage] = useState(1)
+    const provider = useValueRef(currentCollectibleDataProviderSettings)
+    const {
+        value: collectibles = [],
+        loading: collectiblesLoading,
+        retry: collectiblesRetry,
+        error: collectiblesError,
+    } = useCollectibles(account, provider, page)
 
     if (collectiblesLoading && page === 1)
         return (
@@ -73,8 +78,8 @@ export function CollectibleList(props: CollectibleListProps) {
     if (collectiblesError || collectibles.length === 0)
         return (
             <Box
+                className={classes.root}
                 sx={{
-                    display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -93,11 +98,11 @@ export function CollectibleList(props: CollectibleListProps) {
         )
 
     const dataSource = collectibles.filter((x) => {
-        const key = `${formatEthereumAddress(x.asset_contract.address)}_${x.token_id}`
-        switch (x.asset_contract.schema_name) {
-            case 'ERC721':
+        const key = `${formatEthereumAddress(x.address)}_${x.tokenId}`
+        switch (x.type) {
+            case EthereumTokenType.ERC721:
                 return wallet.erc721_token_blacklist ? !wallet.erc721_token_blacklist.has(key) : true
-            case 'ERC1155':
+            case EthereumTokenType.ERC1155:
                 return wallet.erc1155_token_blacklist ? !wallet.erc1155_token_blacklist.has(key) : true
             default:
                 return false
@@ -126,7 +131,7 @@ export function CollectibleList(props: CollectibleListProps) {
                                     visibleRowStopIndex === overscanRowStopIndex &&
                                     visibleRowStopIndex === Math.ceil(dataSource.length / 4) - 1
                                 ) {
-                                    onNextPage()
+                                    setPage((x) => x + 1)
                                 }
                             }}
                             rowCount={Math.ceil(dataSource.length / 4)}
@@ -135,34 +140,11 @@ export function CollectibleList(props: CollectibleListProps) {
                                 const y = dataSource[rowIndex * 4 + columnIndex]
                                 if (y) {
                                     return (
-                                        <div className={classes.card} key={y.token_id} style={style}>
-                                            <CollectibleCard
-                                                wallet={wallet}
-                                                token={
-                                                    y.asset_contract.schema_name === 'ERC721'
-                                                        ? createERC721Token(
-                                                              chainId,
-                                                              y.token_id,
-                                                              y.asset_contract.address,
-                                                              y.name,
-                                                              y.asset_contract.symbol,
-                                                              '',
-                                                              '',
-                                                              y.image,
-                                                          )
-                                                        : createERC1155Token(
-                                                              chainId,
-                                                              y.token_id,
-                                                              y.asset_contract.address,
-                                                              y.name,
-                                                              y.image,
-                                                          )
-                                                }
-                                                link={y.permalink}
-                                            />
+                                        <div className={classes.card} key={y.tokenId} style={style}>
+                                            <CollectibleCard token={y} wallet={wallet} provider={provider} />
                                             <div className={classes.description}>
                                                 <Typography color="textSecondary" variant="body2">
-                                                    {y.name}
+                                                    {y.asset?.name ?? y.name}
                                                 </Typography>
                                             </div>
                                         </div>

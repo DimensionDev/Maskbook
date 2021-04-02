@@ -1,38 +1,27 @@
-import {
-    AutomatedTabTask,
-    isEnvironment,
-    AutomatedTabTaskRuntimeOptions,
-    Environment,
-} from '@dimensiondev/holoflows-kit'
-import { ProfileIdentifier, ECKeyIdentifier, Identifier } from '../../database/type'
-import { disableOpenNewTabInBackgroundSettings, currentSetupGuideStatus } from '../../settings/settings'
-import type { SetupGuideCrossContextStatus } from '../../settings/types'
-import type { SocialNetworkUI } from '../../social-network/ui'
+import { AutomatedTabTask, AutomatedTabTaskRuntimeOptions } from '@dimensiondev/holoflows-kit'
+import { disableOpenNewTabInBackgroundSettings } from '../../settings/settings'
+import type { SocialNetworkUI } from '../../social-network'
 import { memoizePromise } from '../../utils/memoize'
-import { safeGetActiveUI } from '../../utils/safeRequire'
 import Serialization from '../../utils/type-transform/Serialization'
-import { sideEffect } from '../../utils/side-effects'
-import { untilDocumentReady } from '../../utils/dom'
-import { sleep } from '../../utils/utils'
+import { delay } from '../../utils/utils'
 import { Flags } from '../../utils/flags'
-
-function getActivatedUI() {
-    return safeGetActiveUI()
-}
+import { activatedSocialNetworkUI } from '../../social-network'
 
 const _tasks = {
-    getPostContent: () => getActivatedUI().taskGetPostContent(),
+    getPostContent: async () => (await activatedSocialNetworkUI.collecting.getPostContent?.()) || '',
     /**
      * Access profile page
      * Get Profile
      */
-    getProfile: (identifier: ProfileIdentifier) => getActivatedUI().taskGetProfile(identifier),
+    getProfile: async () => (await activatedSocialNetworkUI.collecting.getProfile?.()) || { bioContent: '' },
     /**
      * Access main page
      * Paste text into PostBox
      */
-    pasteIntoPostBox: async (text: string, options: Parameters<SocialNetworkUI['taskPasteIntoPostBox']>[1]) =>
-        getActivatedUI().taskPasteIntoPostBox(text, options),
+    pasteIntoPostBox: async (
+        text: string,
+        options: SocialNetworkUI.AutomationCapabilities.NativeCompositionAttachTextOptions,
+    ) => activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.(text, options),
     /**
      * Fetch a url in the current context
      */
@@ -45,9 +34,6 @@ const _tasks = {
         },
         (x) => x,
     ),
-    async SetupGuide(for_: ECKeyIdentifier) {
-        getActivatedUI().taskStartSetupGuide(for_)
-    },
     async noop() {},
 }
 const realTasks = AutomatedTabTask(_tasks, {
@@ -55,7 +41,7 @@ const realTasks = AutomatedTabTask(_tasks, {
     AsyncCallOptions: { serializer: Serialization, strict: false },
 })!
 // console.log('To debug tasks, use globalThis.tasks, sleep fn is also available')
-Object.assign(globalThis, { tasks: _tasks, sleep: sleep })
+Object.assign(globalThis, { tasks: _tasks, sleep: delay })
 export default function tasks(...args: Parameters<typeof realTasks>) {
     const [tabIdOrUri, options] = args
     if (disableOpenNewTabInBackgroundSettings.value && Number.isNaN(Number(tabIdOrUri))) {
@@ -121,19 +107,3 @@ export function exclusiveTasks(...args: Parameters<typeof realTasks>) {
         },
     })
 }
-
-sideEffect.then(untilDocumentReady).then(() => {
-    if (!isEnvironment(Environment.ContentScript)) return
-
-    //#region setup guide
-    const network = getActivatedUI().networkIdentifier
-    const id = currentSetupGuideStatus[network].value
-    const onStatusUpdate = (id: string) => {
-        const { persona, status }: SetupGuideCrossContextStatus = JSON.parse(id || '{}')
-        if (persona && status) _tasks.SetupGuide(Identifier.fromString(persona, ECKeyIdentifier).unwrap())
-    }
-    currentSetupGuideStatus[network].addListener(onStatusUpdate)
-    currentSetupGuideStatus[network].readyPromise.then(onStatusUpdate)
-    onStatusUpdate(id)
-    //#endregion
-})

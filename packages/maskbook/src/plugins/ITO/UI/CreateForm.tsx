@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Box, TextField, Grid, FormControlLabel, Checkbox } from '@material-ui/core'
+import { createStyles, makeStyles, Box, TextField } from '@material-ui/core'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
 import { useDebounce } from 'react-use'
 import BigNumber from 'bignumber.js'
@@ -23,7 +23,6 @@ import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowR
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -72,12 +71,10 @@ export function CreateForm(props: CreateFormProps) {
 
     const account = useAccount()
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
-    const MASK_ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'MASK_ITO_CONTRACT_ADDRESS')
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
 
-    const [isMask, setIsMask] = useState(Flags.mask_ito_enabled ? true : false)
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
         new BigNumber(origin?.limit || '0').isZero()
@@ -101,6 +98,15 @@ export function CreateForm(props: CreateFormProps) {
                 key: uuid(),
             }),
         )
+    }
+
+    // set the default exchange
+    if (TAS.length === 1) {
+        TAS.push({
+            key: uuid(),
+            amount: '',
+            token: undefined,
+        })
     }
 
     const [tokenAndAmounts, setTokenAndAmounts] = useState<ExchangeTokenAndAmountState[]>(TAS)
@@ -130,56 +136,37 @@ export function CreateForm(props: CreateFormProps) {
         }
     }, [])
 
-    const onCheckboxChange = useCallback(() => {
-        setIsMask((x) => !x)
-    }, [])
-
-    const [testNums] = useState([
-        Math.floor(Math.random() * 10 ** 18),
-        Math.floor(Math.random() * 10 ** 18),
-        Math.floor(Math.random() * 10 ** 18),
+    useEffect(() => {
+        const [first, ...rest] = tokenAndAmounts
+        setTokenAndAmount(first)
+        onChangePoolSettings({
+            isMask: false,
+            // this is the raw password which should be signed by the sender
+            password: Web3Utils.sha3(`${message}`) ?? '',
+            name: senderName,
+            title: message,
+            limit: formatAmount(new BigNumber(totalOfPerWallet || '0'), first?.token?.decimals ?? 0),
+            token: first?.token as ERC20TokenDetailed,
+            total: formatAmount(new BigNumber(first?.amount || '0'), first?.token?.decimals ?? 0),
+            exchangeAmounts: rest.map((item) =>
+                formatAmount(new BigNumber(item.amount || '0'), item?.token?.decimals ?? 0),
+            ),
+            exchangeTokens: rest.map((item) => item.token!),
+            startTime: startTime,
+            endTime: endTime,
+        })
+    }, [
+        senderName,
+        message,
+        totalOfPerWallet,
+        tokenAndAmount,
+        tokenAndAmounts,
+        setTokenAndAmount,
+        startTime,
+        endTime,
+        account,
+        onChangePoolSettings,
     ])
-
-    //#region update parent pool settings
-    useDebounce(
-        () => {
-            const [first, ...rest] = tokenAndAmounts
-            setTokenAndAmount(first)
-            onChangePoolSettings({
-                isMask,
-                // this is the raw password which should be signed by the sender
-                password: Web3Utils.sha3(`${message}`) ?? '',
-                name: senderName,
-                title: message,
-                limit: formatAmount(new BigNumber(totalOfPerWallet || '0'), first?.token?.decimals ?? 0),
-                token: first?.token as ERC20TokenDetailed,
-                total: formatAmount(new BigNumber(first?.amount || '0'), first?.token?.decimals ?? 0),
-                exchangeAmounts: rest.map((item) =>
-                    formatAmount(new BigNumber(item.amount || '0'), item?.token?.decimals ?? 0),
-                ),
-                exchangeTokens: rest.map((item) => item.token!),
-                startTime: startTime,
-                endTime: endTime,
-                testNums,
-            })
-        },
-        300,
-        [
-            isMask,
-            senderName,
-            message,
-            totalOfPerWallet,
-            tokenAndAmount,
-            tokenAndAmounts,
-            setTokenAndAmount,
-            startTime,
-            endTime,
-            account,
-            onChangePoolSettings,
-            testNums,
-        ],
-    )
-    //#endregion
 
     const validationMessage = useMemo(() => {
         if (tokenAndAmounts.length === 0) return t('plugin_ito_error_enter_amount_and_token')
@@ -299,33 +286,11 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.date}>
                 {StartTime} {EndTime}
             </Box>
-            {Flags.mask_ito_enabled ? (
-                <>
-                    <Box className={classes.line} justifyContent="flex-end">
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={isMask}
-                                    onChange={onCheckboxChange}
-                                    name="mask_ito"
-                                    color="primary"
-                                />
-                            }
-                            label="Is Mask ITO?"
-                        />
-                    </Box>
-                    <div>
-                        {testNums.map((n) => (
-                            <p>{n}</p>
-                        ))}
-                    </div>
-                </>
-            ) : null}
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={inputTokenAmount}
-                        spender={isMask ? MASK_ITO_CONTRACT_ADDRESS : ITO_CONTRACT_ADDRESS}
+                        spender={ITO_CONTRACT_ADDRESS}
                         token={
                             tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined
                         }>

@@ -3,7 +3,7 @@ import { makeStyles, createStyles, Box, FormControl, Select, MenuItem, Button } 
 import CropFreeIcon from '@material-ui/icons/CropFree'
 import { useModal } from '../DashboardDialogs/Base'
 import { QRCodeVideoScannerDialog } from '../DashboardDialogs/Setup'
-import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
+import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useVideoDevices } from '../../../utils/hooks/useVideoDevices'
 import { nativeAPI } from '../../../utils/native-rpc'
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface RestoreFromQRCodeCameraBoxProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RestoreFromQRCodeCameraBoxProps extends withClasses<never> {
     onScan?: (content: string) => void
     onError?: () => void
 }
@@ -61,20 +61,22 @@ export const RestoreFromQRCodeCameraBox =
                           justifyContent: 'space-between',
                       }}>
                       <FormControl className={classes.formControl} variant="filled">
-                          <Select
-                              value={selectedDeviceId}
-                              variant="outlined"
-                              MenuProps={{
-                                  container: PortalShadowRoot,
-                                  classes: { paper: classes.menuPaper },
-                              }}
-                              onChange={(e) => setSelectedDeviceId(e.target.value as string)}>
-                              {filteredDevices.map(({ deviceId, label }) => (
-                                  <MenuItem key={deviceId} value={deviceId}>
-                                      {label}
-                                  </MenuItem>
-                              ))}
-                          </Select>
+                          {usePortalShadowRoot((container) => (
+                              <Select
+                                  value={selectedDeviceId}
+                                  variant="outlined"
+                                  MenuProps={{
+                                      container,
+                                      classes: { paper: classes.menuPaper },
+                                  }}
+                                  onChange={(e) => setSelectedDeviceId(e.target.value as string)}>
+                                  {filteredDevices.map(({ deviceId, label }) => (
+                                      <MenuItem key={deviceId} value={deviceId}>
+                                          {label}
+                                      </MenuItem>
+                                  ))}
+                              </Select>
+                          ))}
                       </FormControl>
                       <Button
                           className={classes.button}

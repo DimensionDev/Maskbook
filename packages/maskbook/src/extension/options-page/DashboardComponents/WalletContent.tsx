@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useState } from 'react'
+import { forwardRef, useCallback, useMemo, useState } from 'react'
 import { Alert, Box, Button, IconButton, MenuItem, Tab, Tabs } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -29,8 +29,7 @@ import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useCollectibles } from '../../../plugins/Wallet/hooks/useCollectibles'
-import { CollectibleProvider, FilterTransactionType } from '../../../plugins/Wallet/types'
+import { FilterTransactionType } from '../../../plugins/Wallet/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -82,10 +81,7 @@ interface WalletContentProps {
     wallet: WalletRecord
 }
 
-export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(function WalletContent(
-    { wallet }: WalletContentProps,
-    ref,
-) {
+export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ wallet }, ref) => {
     const { t } = useI18N()
     const classes = useStyles()
 
@@ -97,7 +93,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const xsMatched = useMatchXS()
     const chainIdValid = useChainIdValid()
 
-    const [collectiblesPage, setCollectiblesPage] = useState(1)
     const [transactionType, setTransactionType] = useState<FilterTransactionType>(FilterTransactionType.ALL)
 
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
@@ -106,13 +101,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
     const [addAsset, , openAddAsset] = useModal(DashboardWalletAddERC721TokenDialog)
 
-    const { value: collectibles = [], loading: collectiblesLoading, error: collectiblesError } = useCollectibles(
-        account,
-        CollectibleProvider.OPENSEAN,
-        collectiblesPage,
-    )
-
-    const [menu, openMenu] = useMenu(
+    const [menu, openMenu] = useMenu([
         <MenuItem key="rename" onClick={() => openWalletRename({ wallet })}>
             {t('rename')}
         </MenuItem>,
@@ -120,7 +109,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
             <MenuItem key="backup" onClick={() => openWalletBackup({ wallet })}>
                 {t('backup')}
             </MenuItem>
-        ) : undefined,
+        ) : null,
         <MenuItem
             key="delete"
             onClick={() => openWalletDelete({ wallet })}
@@ -128,7 +117,28 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
             data-testid="delete_button">
             {t('delete')}
         </MenuItem>,
-    )
+    ])
+
+    const [transactionTypeMenu, openTransactionTypeMenu] = useMenu([
+        <MenuItem key="all" onClick={() => setTransactionType(FilterTransactionType.ALL)}>
+            {t('all_transactions')}
+            {transactionType === FilterTransactionType.ALL ? (
+                <Check className={classes.checkIcon} fontSize="small" />
+            ) : null}
+        </MenuItem>,
+        <MenuItem key="Sent" onClick={() => setTransactionType(FilterTransactionType.SENT)}>
+            {t('sent_transactions')}
+            {transactionType === FilterTransactionType.SENT ? (
+                <Check className={classes.checkIcon} fontSize="small" />
+            ) : null}
+        </MenuItem>,
+        <MenuItem key="Received" onClick={() => setTransactionType(FilterTransactionType.RECEIVE)}>
+            {t('received_transactions')}
+            {transactionType === FilterTransactionType.RECEIVE ? (
+                <Check className={classes.checkIcon} fontSize="small" />
+            ) : null}
+        </MenuItem>,
+    ])
 
     const [transactionTypeMenu, openTransactionTypeMenu] = useMenu(
         <MenuItem key="all" onClick={() => setTransactionType(FilterTransactionType.ALL)}>
@@ -178,6 +188,19 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
     )
     //#endregion
 
+    const content = useMemo(() => {
+        switch (tabIndex) {
+            case 0:
+                return <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
+            case 1:
+                return <CollectibleList wallet={wallet} />
+            case 2:
+                return <TransactionList transactionType={transactionType} />
+            default:
+                return null
+        }
+    }, [tabIndex, classes, wallet, transactionType])
+
     return (
         <div className={classes.root} ref={ref}>
             {!chainIdValid ? (
@@ -215,7 +238,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                                     {t('dashboard_tab_transactions')}
                                     {tabIndex === 2 ? (
                                         <IconButton
-                                            sx={{ color: 'inherit' }}
+                                            sx={{ color: 'inherit', marginLeft: 0.5 }}
                                             size="small"
                                             onClick={openTransactionTypeMenu}>
                                             <ExpandMoreIcon />
@@ -249,7 +272,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                             onClick={() =>
                                 openAddAsset({
                                     wallet,
-                                    tokenIdsLoaded: collectibles.map((x) => x.token_id),
                                 })
                             }
                             startIcon={<AddIcon />}>
@@ -277,23 +299,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(func
                     </IconButton>
                 </Box>
             </Box>
-            <Box className={classes.content}>
-                {tabIndex === 0 ? (
-                    <WalletAssetsTable classes={{ container: classes.assetsTable }} wallet={wallet} />
-                ) : null}
-                {tabIndex === 1 ? (
-                    <CollectibleList
-                        wallet={wallet}
-                        page={collectiblesPage}
-                        onNextPage={() => setCollectiblesPage((prev) => prev + 1)}
-                        collectibles={collectibles}
-                        collectiblesLoading={collectiblesLoading}
-                        collectiblesError={collectiblesError}
-                        collectiblesRetry={() => setCollectiblesPage(1)}
-                    />
-                ) : null}
-                {tabIndex === 2 ? <TransactionList transactionType={transactionType} /> : null}
-            </Box>
+            <Box className={classes.content}>{content}</Box>
             {menu}
             {transactionTypeMenu}
             {addToken}

@@ -1,4 +1,4 @@
-import '../../social-network-provider/popup-page/index'
+import '../../social-network-adaptor/popup-page/index'
 import '../../setup.ui'
 
 import { useCallback, memo } from 'react'
@@ -7,16 +7,17 @@ import { ThemeProvider, makeStyles, Theme, withStyles, StylesProvider, jssPreset
 import { Button, Paper, Divider, Typography, Box } from '@material-ui/core'
 import { useMaskbookTheme } from '../../utils/theme'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
-import { getActivatedUI } from '../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { useValueRef } from '../../utils/hooks/useValueRef'
-import { getUrl, sleep } from '../../utils/utils'
+import { delay } from '../../utils/utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { Alert } from '@material-ui/core'
 import { useAsyncRetry } from 'react-use'
 import { MaskbookUIRoot } from '../../UIRoot'
 import { create } from 'jss'
+import { useMyIdentities } from '../../components/DataSource/useActivatedUI'
+import { Flags } from '../../utils/flags'
 
 const GlobalCss = withStyles({
     '@global': {
@@ -24,7 +25,6 @@ const GlobalCss = withStyles({
             overflowX: 'hidden',
             margin: '0 auto',
             width: 340,
-            minHeight: 180,
             maxWidth: '100%',
             backgroundColor: 'transparent',
             '&::-webkit-scrollbar': {
@@ -75,10 +75,10 @@ function PopupUI() {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const ui = getActivatedUI()
-    const identities = useValueRef(ui.myIdentitiesRef)
+    const ui = activatedSocialNetworkUI
+    const identities = useMyIdentities()
 
-    const { value: hasPermission = true, retry: checkPermission } = useAsyncRetry(ui.hasPermission)
+    const { value: hasPermission = true, retry: checkPermission } = useAsyncRetry(ui.permission.has)
 
     const onEnter = useCallback((event: React.MouseEvent) => {
         if (event.shiftKey) {
@@ -98,7 +98,7 @@ function PopupUI() {
     )
     const onConnect = useCallback(async () => {
         setSelectProviderDailogOpen({ open: true })
-        await sleep(200)
+        await delay(200)
         window.close()
     }, [setSelectProviderDailogOpen])
 
@@ -108,9 +108,9 @@ function PopupUI() {
         }
         const src =
             process.env.NODE_ENV === 'production'
-                ? getUrl('MB--ComboCircle--Blue.svg')
-                : getUrl('MB--ComboCircle--Nightly.svg')
-        return <img className={classes.logo} src={src} />
+                ? new URL('./MB--ComboCircle--Blue.svg', import.meta.url)
+                : new URL('./MB--ComboCircle--Nightly.svg', import.meta.url)
+        return <img className={classes.logo} src={src.toString()} />
     })
 
     return (
@@ -123,7 +123,10 @@ function PopupUI() {
                         color="primary"
                         variant="contained"
                         size="small"
-                        onClick={() => ui.requestPermission().then(checkPermission)}>
+                        onClick={() => {
+                            if (Flags.no_web_extension_dynamic_permission_request) return
+                            ui.permission.request().then(checkPermission)
+                        }}>
                         {t('popup_request_permission')}
                     </Button>
                 </Alert>
@@ -141,7 +144,9 @@ function PopupUI() {
                     <ChooseIdentity identities={identities} />
                 </>
             )}
-            <Divider className={classes.divider} />
+            {ui.networkIdentifier === 'localhost' || identities.length === 0 ? null : (
+                <Divider className={classes.divider} />
+            )}
             <Box
                 sx={{
                     display: 'flex',

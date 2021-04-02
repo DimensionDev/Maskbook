@@ -92,18 +92,3 @@ export function ERC1155TokenRecordOutDB(x: ERC1155TokenRecordInDatabase) {
     const record: ERC1155TokenRecord = omit(x, 'record_id')
     return record
 }
-
-export function ERC721TokenRecordToCollectible(x: ERC721TokenRecordInDatabase) {
-    const assetInCard: Collectible = {
-        asset_contract: {
-            address: x.address,
-            schema_name: 'ERC721',
-            symbol: '',
-        },
-        token_id: x.record_id.split('_')[1],
-        image: x.image,
-        name: x.name,
-        permalink: '',
-    }
-    return assetInCard
-}

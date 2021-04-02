@@ -6,7 +6,7 @@ import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { addGasMargin } from '../../../../web3/helpers'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import type { TradeComputed } from '../../types'
-import type { RouterV2 } from '../../../../contracts/RouterV2'
+import type { RouterV2 } from '@dimensiondev/contracts/types/RouterV2'
 
 interface SuccessfulCall {
     parameters: SwapParameters

@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-export interface EthereumStatusBarProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface EthereumStatusBarProps extends withClasses<never> {
     disableEther?: boolean
     BoxProps?: Partial<BoxProps>
     AccountButtonProps?: Partial<ButtonProps>

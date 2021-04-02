@@ -1,7 +1,7 @@
 import { values } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { Asset, Collectible, CollectibleProvider, BalanceRecord, PortfolioProvider, ZerionAddressAsset } from '../types'
+import { Asset, CollectibleProvider, BalanceRecord, PortfolioProvider, ZerionAddressAsset } from '../types'
 import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
 import * as DebankAPI from '../apis/debank'
@@ -9,30 +9,61 @@ import { CurrencyType } from '../../../web3/types'
 import { ChainId, EthereumTokenType } from '../../../web3/types'
 import { getChainId } from '../../../extension/background-script/EthereumService'
 import { unreachable } from '../../../utils/utils'
-import { createEtherToken } from '../../../web3/helpers'
+import { createERC1155Token, createERC721Token, createEtherToken, getConstant } from '../../../web3/helpers'
 import { formatChecksumAddress } from '../formatter'
+import { CONSTANTS } from '../../../web3/constants'
 
-export async function getAssetsListNFT(address: string, provider: CollectibleProvider, page?: number) {
+export async function getAssetsListNFT(
+    address: string,
+    chainId: ChainId,
+    provider: CollectibleProvider,
+    page?: number,
+    size?: number,
+) {
     if (provider === CollectibleProvider.OPENSEAN) {
-        const { assets } = await OpenSeaAPI.getAssetsList(address, { page })
-        return assets.map(
-            (x): Collectible => ({
-                asset_contract: {
-                    address: x.asset_contract.address,
-                    symbol: x.asset_contract.symbol,
-                    schema_name: x.asset_contract.schema_name,
-                },
-                token_id: x.token_id,
-                name: x.name ?? x.collection.slug,
-                image: x.image_url ?? x.image_preview_url ?? '',
-                permalink: x.permalink,
-            }),
-        )
+        const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size })
+        return assets
+            .filter((x) => ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name))
+            .map((x) => {
+                switch (x.asset_contract.schema_name) {
+                    case 'ERC721':
+                        return createERC721Token(
+                            ChainId.Mainnet,
+                            x.token_id,
+                            x.asset_contract.address,
+                            x.asset_contract.name,
+                            x.asset_contract.symbol,
+                            '',
+                            '',
+                            {
+                                name: x.name,
+                                description: x.description,
+                                image: x.image_url ?? x.image_preview_url ?? '',
+                            },
+                        )
+                    case 'ERC1155':
+                        return createERC1155Token(
+                            ChainId.Mainnet,
+                            x.token_id,
+                            x.asset_contract.address,
+                            x.asset_contract.name,
+                            '',
+                            {
+                                name: x.name,
+                                description: x.description,
+                                image: x.image_url ?? x.image_preview_url ?? '',
+                            },
+                        )
+                    default:
+                        unreachable(x.asset_contract.schema_name)
+                }
+            })
     }
     return []
 }
 
-export async function getAssetsList(address: string, provider: PortfolioProvider): Promise<Asset[]> {
+export async function getAssetsList(address: string, chainId: ChainId, provider: PortfolioProvider): Promise<Asset[]> {
+    if (chainId !== ChainId.Mainnet) return []
     if (!EthereumAddress.isValid(address)) return []
     switch (provider) {
         case PortfolioProvider.ZERION:
@@ -41,7 +72,6 @@ export async function getAssetsList(address: string, provider: PortfolioProvider
             const assetsList = values(payload.assets)
             return formatAssetsFromZerion(assetsList)
         case PortfolioProvider.DEBANK:
-            if ((await getChainId()) !== ChainId.Mainnet) return []
             const { data = [], error_code } = await DebankAPI.getAssetsList(address)
             if (error_code === 0) return formatAssetsFromDebank(data)
             return []
@@ -92,9 +122,9 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
                     name: asset.name,
                     symbol: asset.symbol,
                     decimals: asset.decimals,
-                    address: asset.name,
+                    address: asset.name === 'Ether' ? getConstant(CONSTANTS, 'ETH_ADDRESS') : asset.asset_code,
                     chainId: ChainId.Mainnet,
-                    type: EthereumTokenType.ERC20,
+                    type: asset.name === 'Ether' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
                 },
                 chain: 'eth',
                 balance: quantity,

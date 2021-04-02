@@ -18,7 +18,6 @@ export const Flags = {
     has_no_browser_tab_ui: appOnly,
     has_no_connected_user_link: appOnly,
     has_native_nav_bar: appOnly,
-    inject_search_prediction_box: webOnly,
     /** In E2E, prefer open shadow root so we can test it. */
     using_ShadowDOM_attach_mode: process.env.target === 'E2E' ? 'open' : 'closed',
     /** Don't inject injected script in this mode. Native side will do the job. */
@@ -33,7 +32,7 @@ export const Flags = {
     /** Prohibit the use of test networks in production */
     wallet_network_strict_mode_enabled: process.env.NODE_ENV === 'production' && !betaOrInsiderOnly,
     transak_enabled: webOnly,
-    trader_enabled: webOnly,
+    trader_enabled: true,
     trader_zrx_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
     gitcoin_enabled: webOnly,
@@ -46,6 +45,8 @@ export const Flags = {
     airdrop_enabled: webOnly,
     airdrop_composition_dialog_enabled: false,
     metamask_support_enabled: webOnly,
+    toolbar_enabled: webOnly,
+    toolbox_enabled: webOnly,
     wallet_mnemonic_words_backup_enabled: false,
     wallet_private_key_backup_enabled: true,
     /* construct LBP for all ERC20 tokens */
