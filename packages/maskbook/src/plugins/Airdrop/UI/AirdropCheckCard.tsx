@@ -1,9 +1,7 @@
 import { Box, createStyles, makeStyles, TextField, Typography } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
 import { useState, useCallback } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { ERC20TokenDetailed } from '../../../web3/types'
-import { formatBalance } from '../../Wallet/formatter'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 

@@ -1,7 +1,6 @@
 import { selfInfoSelectors } from '../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier } from '../../../database/type'
-import type { SocialNetworkUI } from '../../../social-network'
 import { isNil } from 'lodash-es'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import { twitterBase } from '../base'

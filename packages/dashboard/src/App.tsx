@@ -1,11 +1,5 @@
 import { CssBaseline, MuiThemeProvider, StylesProvider } from '@material-ui/core'
-import {
-    MaskLightTheme,
-    MaskDarkTheme,
-    ErrorBoundary,
-    addMaskThemeI18N,
-    applyMaskColorVars,
-} from '@dimensiondev/maskbook-theme'
+import { MaskLightTheme, ErrorBoundary, addMaskThemeI18N, applyMaskColorVars } from '@dimensiondev/maskbook-theme'
 import { HashRouter } from 'react-router-dom'
 import { Pages } from './pages/routes'
 import { StrictMode } from 'react'

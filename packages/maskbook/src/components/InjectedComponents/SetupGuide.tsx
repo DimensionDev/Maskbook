@@ -31,7 +31,6 @@ import { MaskMessage } from '../../utils/messages'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
-import { WalletRPC } from '../../plugins/Wallet/messages'
 
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import { extendsTheme } from '../../utils/theme'

@@ -1,4 +1,4 @@
-import { experimentalStyled, PaletteMode, Theme, ThemeOptions, useTheme } from '@material-ui/core'
+import { PaletteMode, Theme, ThemeOptions, useTheme } from '@material-ui/core'
 import { kebabCase } from 'lodash-es'
 import { merge } from 'lodash-es'
 export const LightColor = {

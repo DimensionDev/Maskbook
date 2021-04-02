@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { getPastTimestamps } from '../../helpers/blocks'
 import { PluginTraderRPC } from '../../messages'
