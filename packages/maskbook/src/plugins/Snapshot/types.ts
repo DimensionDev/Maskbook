@@ -1,3 +1,5 @@
+import type snapshot from '@zhouhancheng/snapshot.js'
+
 export interface ProposalIdentifier {
     id: string
     space: string
@@ -10,6 +12,15 @@ export interface Proposal {
     version: string
 }
 
+export interface Strategy {
+    name: keyof typeof snapshot.strategies
+    params: {
+        address: string
+        decimals?: number
+        symbol: string
+    }
+}
+
 export interface ProposalPayload {
     body: string
     choice: string[]
@@ -17,7 +28,9 @@ export interface ProposalPayload {
     end: number
     snapshot: string
     name: string
-    metadata: {}
+    metadata: {
+        strategies: Strategy[]
+    }
 }
 
 export interface ProposalMessage {
@@ -26,6 +39,7 @@ export interface ProposalMessage {
     token: string
     type: 'proposal'
     version: string
+    space: string
 }
 
 export interface Vote {

@@ -210,6 +210,7 @@ importers:
       '@ungap/promise-all-settled': 1.1.2
       '@uniswap/sdk': 3.0.3_72226568922005834619ba32b8bb61bb
       '@walletconnect/client': 1.3.6
+      '@zhouhancheng/snapshot.js': 0.1.8
       anchorme: 2.1.2
       arweave: 1.10.13
       assert: 2.0.0
@@ -402,6 +403,7 @@ importers:
       '@ungap/promise-all-settled': ^1.1.2
       '@uniswap/sdk': ^3.0.3-beta.1
       '@walletconnect/client': ^1.2.2
+      '@zhouhancheng/snapshot.js': ^0.1.8
       anchorme: ^2.1.2
       arweave: ^1.10.13
       assert: ^2.0.0
@@ -7045,7 +7047,6 @@ packages:
     resolution:
       integrity: sha512-vFHy/ezP5qI0rFgJ7aQnjDXwAMrG0KqqIH7tQG5PPv3BWBayOPIQNBjVc/P6hhdZfMx51REc6tfDNXHUio893g==
   /@types/node/14.14.37:
-    dev: false
     resolution:
       integrity: sha512-XYmBiy+ohOR4Lh5jE379fV2IU+6Jn4g5qASinhitfyO71b/sCo6MKsMLF5tc7Zf2CE8hViVQyYSobJNke8OvUw==
   /@types/normalize-package-data/2.4.0:
@@ -7068,7 +7069,7 @@ packages:
       integrity: sha512-kUNnecmtkunAoQ3CnjmMkzNU/gtxG8guhi+Fk2U/kOpIKjIMKnXGp4IJCgQJrXSgMsWYimYG4TGjz/UzbGEBTw==
   /@types/pbkdf2/3.1.0:
     dependencies:
-      '@types/node': 14.14.31
+      '@types/node': 14.14.37
     resolution:
       integrity: sha512-Cf63Rv7jCQ0LaL8tNXmEyqTHuIJxRdlS5vMh1mj5voN4+QFhVZnlZruezqpWYDiJ8UTzhP0VmeLXCmBk66YrMQ==
   /@types/prettier/2.2.1:
@@ -7236,7 +7237,7 @@ packages:
       integrity: sha512-7WhJ0MdpFgYQPXlF4Dx+DhgvlPCfz/x5mHaeDQAKhcenvQP1KCpLQ18JklAqeGMYSAT2PxLpzd0g2/HE7fj7hQ==
   /@types/secp256k1/4.0.1:
     dependencies:
-      '@types/node': 14.14.31
+      '@types/node': 14.14.37
     resolution:
       integrity: sha512-+ZjSA8ELlOp8SlKi0YLB2tz9d5iPNEmOBd+8Rz21wTMdaXQIa9b6TEnD6l5qKOCypE7FSyPyck12qZJxSDNoog==
   /@types/serve-static/1.13.9:
@@ -7944,6 +7945,29 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Stw47QFos4RaEjep2J84xFvi2GVmKCQbweLQwdAIRIi5x7lSmQ7RI3T2pci1fFblcaqaWmauK3C59ZFdexc99w==
+  /@zhouhancheng/snapshot.js/0.1.8:
+    dependencies:
+      '@ensdomains/content-hash': 2.5.6
+      '@ethersproject/abi': 5.1.0
+      '@ethersproject/address': 5.1.0
+      '@ethersproject/bignumber': 5.1.0
+      '@ethersproject/bytes': 5.1.0
+      '@ethersproject/contracts': 5.1.0
+      '@ethersproject/hash': 5.1.0
+      '@ethersproject/providers': 5.1.0
+      '@ethersproject/solidity': 5.1.0
+      '@ethersproject/strings': 5.1.0
+      '@ethersproject/units': 5.1.0
+      ajv: 7.2.4
+      bs58: 4.0.1
+      eth-ens-namehash: 2.0.8
+      ethereumjs-util: 7.0.10
+      json-to-graphql-query: 2.0.0
+      lodash.set: 4.3.2
+      lodash.tonumber: 4.0.3
+    dev: false
+    resolution:
+      integrity: sha512-gFz/uMWX7IjjE/moM7YcNMYecyzTvuuV5dMC3N8khut11vmj5FNJFJTZDdvlJ06A8Y0ljLQgJPCWYKXAF2Cgvg==
   /@zxing/text-encoding/0.9.0:
     dev: false
     optional: true
@@ -17516,6 +17540,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
+  /lodash.tonumber/4.0.3:
+    dev: false
+    resolution:
+      integrity: sha1-C5azGzVnJ5Prf1pj7nkfG56QJdk=
   /lodash.union/4.6.0:
     dev: true
     resolution:
@@ -23561,7 +23589,7 @@ packages:
       serialize-javascript: 4.0.0
       source-map: 0.6.1
       terser: 4.8.0
-      webpack: 4.46.0_webpack-cli@4.5.0
+      webpack: 4.46.0
       webpack-sources: 1.4.3
       worker-farm: 1.7.0
     dev: true

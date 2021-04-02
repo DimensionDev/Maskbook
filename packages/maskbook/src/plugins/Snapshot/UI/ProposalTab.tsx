@@ -7,11 +7,12 @@ import { Markdown } from './Markdown'
 export interface ProposalTabProps {}
 
 export function ProposalTab(props: ProposalTabProps) {
-    const { identifier, proposal, message, votes } = SnapshotState.useContainer()
-    console.log('message', message)
+    const snapshotState = SnapshotState.useContainer()
+    if (Object.keys(snapshotState).length === 0) return null
+
     return (
         <SnapshotTab>
-            <Markdown content={message?.payload?.body ?? ''} />
+            <Markdown content={snapshotState.message!.payload.body} />
             <VotingCard />
         </SnapshotTab>
     )
