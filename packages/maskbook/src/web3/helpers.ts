@@ -128,40 +128,6 @@ export function createERC1155Token(
     }
 }
 
-export function createERC721Token(
-    chainId: ChainId,
-    tokenId: string,
-    address: string,
-    name: string,
-    symbol: string,
-    baseURI?: string,
-    tokenURI?: string,
-    image?: string,
-) {
-    return {
-        type: EthereumTokenType.ERC721,
-        chainId,
-        tokenId,
-        address,
-        name,
-        symbol,
-        baseURI,
-        tokenURI,
-        image,
-    } as ERC721TokenDetailed
-}
-
-export function createERC1155Token(chainId: ChainId, tokenId: string, address: string, name: string, image?: string) {
-    return {
-        type: EthereumTokenType.ERC1155,
-        chainId,
-        tokenId,
-        address,
-        name,
-        image,
-    } as ERC1155TokenDetailed
-}
-
 export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
     if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)
     if (abis.length > 1) return web3.eth.abi.decodeParameters(abis, output)

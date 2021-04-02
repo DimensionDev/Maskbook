@@ -34,7 +34,6 @@ export function useERC721TokenDetailed(address: string, token?: Partial<ERC721To
             chainId,
             name: name ?? token?.name ?? '',
             symbol: symbol ?? token?.symbol ?? '',
-            tokenURI: tokenURI ?? token?.tokenURI ?? '',
             baseURI: baseURI ?? token?.baseURI ?? '',
             tokenURI: tokenURI ?? token?.tokenURI ?? '',
         } as ERC721TokenDetailed

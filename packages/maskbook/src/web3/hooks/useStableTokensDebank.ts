@@ -1,5 +1,4 @@
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
-import type { BalanceListResponse } from '../../plugins/Wallet/types'
 import { createERC20Token } from '../helpers'
 import { ChainId } from '../types'
 import { useChainId } from './useChainState'

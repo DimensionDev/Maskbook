@@ -52,7 +52,6 @@ export interface ERC721TokenDetailed extends ERC721Token {
     name: string
     symbol: string
     tokenId: string
-    image?: string
     baseURI?: string
     tokenURI?: string
 }
@@ -89,20 +88,6 @@ export interface ERC1155TokenAssetDetailed extends ERC1155TokenDetailed {
             [key: string]: string | any[] | { [key: string]: any }
         }
     }
-}
-//#endregion
-
-//#region ERC1155
-export interface ERC1155Token {
-    type: EthereumTokenType.ERC1155
-    address: string
-    chainId: ChainId
-}
-
-export interface ERC1155TokenDetailed extends ERC1155Token {
-    name: string
-    tokenId: string
-    image?: string
 }
 //#endregion
 

@@ -140,27 +140,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
         </MenuItem>,
     ])
 
-    const [transactionTypeMenu, openTransactionTypeMenu] = useMenu(
-        <MenuItem key="all" onClick={() => setTransactionType(FilterTransactionType.ALL)}>
-            {t('all_transactions')}
-            {transactionType === FilterTransactionType.ALL ? (
-                <Check className={classes.checkIcon} fontSize="small" />
-            ) : null}
-        </MenuItem>,
-        <MenuItem key="Sent" onClick={() => setTransactionType(FilterTransactionType.SENT)}>
-            {t('sent_transactions')}
-            {transactionType === FilterTransactionType.SENT ? (
-                <Check className={classes.checkIcon} fontSize="small" />
-            ) : null}
-        </MenuItem>,
-        <MenuItem key="Received" onClick={() => setTransactionType(FilterTransactionType.RECEIVE)}>
-            {t('received_transactions')}
-            {transactionType === FilterTransactionType.RECEIVE ? (
-                <Check className={classes.checkIcon} fontSize="small" />
-            ) : null}
-        </MenuItem>,
-    )
-
     //#region remote controlled buy dialog
     const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     //#endregion

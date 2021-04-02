@@ -67,21 +67,3 @@ export function useCollectibles(address: string, provider: CollectibleProvider, 
         }
     }, [address, provider, page])
 }
-
-export function useCollectibles(address: string, provider: CollectibleProvider, page: number) {
-    const values = useRef<Collectible[]>([])
-    return useAsyncRetry(async () => {
-        if (page === 1) values.current = []
-
-        if (!address) return []
-        const result = await WalletRPC.getAssetsListNFT(address.toLowerCase(), provider, page)
-        const erc721Tokens = await WalletRPC.getERC721TokensPaged(page, 50)
-
-        values.current.push(
-            ...uniqWith([...result, ...erc721Tokens.map(ERC721TokenRecordToCollectible)], (a, b) => {
-                return a.asset_contract.address === b.asset_contract.address && a.token_id === b.token_id
-            }),
-        )
-        return values.current
-    }, [address, provider, page])
-}

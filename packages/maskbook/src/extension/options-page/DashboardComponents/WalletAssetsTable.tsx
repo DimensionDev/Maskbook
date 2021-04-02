@@ -221,7 +221,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     )
 
     return (
-        <WalletAssetsTableContext.Provider value={{ detailedTokensRetry }}>
+        <>
             <TableContainer className={classes.container}>
                 <Table className={classes.table} component="table" size="medium" stickyHeader>
                     <TableHead className={classes.head}>

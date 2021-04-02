@@ -1,6 +1,5 @@
 import { createStyles, makeStyles, Box, TextField } from '@material-ui/core'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
-import { useDebounce } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'

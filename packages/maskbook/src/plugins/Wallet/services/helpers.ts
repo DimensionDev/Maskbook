@@ -16,7 +16,6 @@ import type {
 import { resolveChainId } from '../../../web3/pipes'
 import { formatChecksumAddress } from '../formatter'
 import { ChainId } from '../../../web3/types'
-import type { Collectible } from '../types'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatChecksumAddress(address))
