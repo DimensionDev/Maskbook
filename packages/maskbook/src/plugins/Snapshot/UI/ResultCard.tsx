@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => {
 export function ResultCard() {
     const identifier = useContext(SnapshotContext)
     const { payload: votes } = useVotes(identifier)
-    const { payload: results } = useResults(identifier)
+    const { payload } = useResults(identifier)
     const classes = useStyles()
     const { t } = useI18N()
     const results = [
