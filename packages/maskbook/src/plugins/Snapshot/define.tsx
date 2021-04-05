@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import { useMemo, Suspense } from 'react'
+import { Typography } from '@material-ui/core'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { SNAPSHOT_PLUGIN_NAME, SNAPSHOT_PLUGIN_ID } from './constants'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
@@ -33,7 +34,14 @@ export const SnapShotPluginDefine: PluginConfig = {
 function Renderer({ url }: { url: string }) {
     return (
         <MaskbookPluginWrapper pluginName="Snapshot">
-            <PostInspector url={url} />
+            <Suspense
+                fallback={
+                    <Typography color="textPrimary" component="span" variant="body1">
+                        loading...
+                    </Typography>
+                }>
+                <PostInspector url={url} />
+            </Suspense>
         </MaskbookPluginWrapper>
     )
 }

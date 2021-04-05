@@ -1,18 +1,18 @@
-import { Typography } from '@material-ui/core'
-import { SnapshotState } from '../hooks/useSnapshot'
+import { useContext } from 'react'
 import { VotingCard } from './VotingCard'
 import { SnapshotTab } from './SnapshotTab'
 import { Markdown } from './Markdown'
+import { useProposal } from '../hooks/useProposal'
+import type { ProposalMessage } from '../types'
+import { SnapshotContext } from '../context'
 
-export interface ProposalTabProps {}
-
-export function ProposalTab(props: ProposalTabProps) {
-    const { value } = SnapshotState.useContainer()
-    if (!value) return null
-
+export function ProposalTab() {
+    const identifier = useContext(SnapshotContext)
+    const { payload: proposal } = useProposal(identifier.id)
+    const message: ProposalMessage = JSON.parse(proposal.msg)
     return (
         <SnapshotTab>
-            <Markdown content={value.message.payload.body} />
+            <Markdown content={message.payload.body} />
             <VotingCard />
         </SnapshotTab>
     )
