@@ -1,4 +1,4 @@
-import { SnapshotState } from '../hooks/useSnapshotState'
+import { SnapshotState } from '../hooks/useSnapshot'
 import { useProposalIdentifier } from '../hooks/useProposalIdentifier'
 import { Snapshot } from './Snapshot'
 

@@ -12,7 +12,7 @@ import {
     Chip,
     Paper,
 } from '@material-ui/core'
-import { SnapshotState } from '../hooks/useSnapshotState'
+import { SnapshotState } from '../hooks/useSnapshot'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
 
@@ -65,7 +65,7 @@ export interface SnapshotProps {}
 
 export function Snapshot(props: SnapshotProps) {
     const classes = useStyles()
-    const snapshotState = SnapshotState.useContainer()
+    const { value } = SnapshotState.useContainer()
 
     const [tabIndex, setTabIndex] = useState(1)
     const tabs = [
@@ -73,10 +73,8 @@ export function Snapshot(props: SnapshotProps) {
         <Tab className={classes.tab} key="progress" label="Progress" />,
     ]
 
-    if (Object.keys(snapshotState).length === 0) return null
-    console.log('message', snapshotState.message)
-    console.log('proposal', snapshotState.proposal)
-    console.log('votes', snapshotState.votes)
+    if (!value) return null
+
     return (
         <Card className={classes.root} elevation={0}>
             <CardHeader
@@ -84,10 +82,10 @@ export function Snapshot(props: SnapshotProps) {
                     <Box display="flex" alignItems="center" justifyContent="space-between">
                         <Typography sx={{ marginRight: 1 }}>
                             <Typography component="span" sx={{ marginRight: 0.5 }}>
-                                {snapshotState.message!.payload.name}
+                                {value.message.payload.name}
                             </Typography>
                             <Typography color="textSecondary" component="span">
-                                #{snapshotState.identifier!.id.slice(0, 7)}
+                                #{value.identifier.id.slice(0, 7)}
                             </Typography>
                         </Typography>
                         <Chip color="primary" size="small" label="Active" />
@@ -96,7 +94,7 @@ export function Snapshot(props: SnapshotProps) {
                 subheader={
                     <Box display="flex" alignItems="center" sx={{ marginTop: 0.5 }}>
                         <Typography color="textSecondary" variant="body2">
-                            {snapshotState.identifier!.space}
+                            {value.identifier.space}
                         </Typography>
                     </Box>
                 }></CardHeader>
