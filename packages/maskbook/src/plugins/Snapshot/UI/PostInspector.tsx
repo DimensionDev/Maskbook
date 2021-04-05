@@ -1,4 +1,4 @@
-import { SnapshotState } from '../hooks/useSnapshot'
+import { SnapshotContext } from '../context'
 import { useProposalIdentifier } from '../hooks/useProposalIdentifier'
 import { Snapshot } from './Snapshot'
 
@@ -8,11 +8,9 @@ export interface PostInspectorProps {
 
 export function PostInspector(props: PostInspectorProps) {
     const identifier = useProposalIdentifier(props.url)
-    if (!identifier) return null
-
     return (
-        <SnapshotState.Provider initialState={identifier}>
+        <SnapshotContext.Provider value={identifier}>
             <Snapshot />
-        </SnapshotState.Provider>
+        </SnapshotContext.Provider>
     )
 }
