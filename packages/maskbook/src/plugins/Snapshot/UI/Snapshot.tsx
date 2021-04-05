@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -12,7 +12,9 @@ import {
     Chip,
     Paper,
 } from '@material-ui/core'
-import { SnapshotState } from '../hooks/useSnapshot'
+import type { ProposalMessage } from '../types'
+import { SnapshotContext } from '../context'
+import { useProposal } from '../hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
 
@@ -61,19 +63,16 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface SnapshotProps {}
-
-export function Snapshot(props: SnapshotProps) {
+export function Snapshot() {
     const classes = useStyles()
-    const { value } = SnapshotState.useContainer()
-
-    const [tabIndex, setTabIndex] = useState(1)
+    const identifier = useContext(SnapshotContext)
+    const { payload: proposal } = useProposal(identifier.id)
+    const message: ProposalMessage = JSON.parse(proposal.msg)
+    const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
         <Tab className={classes.tab} key="proposal" label="Proposal" />,
         <Tab className={classes.tab} key="progress" label="Progress" />,
     ]
-
-    if (!value) return null
 
     return (
         <Card className={classes.root} elevation={0}>
@@ -82,10 +81,10 @@ export function Snapshot(props: SnapshotProps) {
                     <Box display="flex" alignItems="center" justifyContent="space-between">
                         <Typography sx={{ marginRight: 1 }}>
                             <Typography component="span" sx={{ marginRight: 0.5 }}>
-                                {value.message.payload.name}
+                                {message.payload.name}
                             </Typography>
                             <Typography color="textSecondary" component="span">
-                                #{value.identifier.id.slice(0, 7)}
+                                #{identifier.id.slice(0, 7)}
                             </Typography>
                         </Typography>
                         <Chip color="primary" size="small" label="Active" />
@@ -94,7 +93,7 @@ export function Snapshot(props: SnapshotProps) {
                 subheader={
                     <Box display="flex" alignItems="center" sx={{ marginTop: 0.5 }}>
                         <Typography color="textSecondary" variant="body2">
-                            {value.identifier.space}
+                            {identifier.space}
                         </Typography>
                     </Box>
                 }></CardHeader>

@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import {
     Card,
     createStyles,
@@ -10,8 +11,10 @@ import {
     Typography,
     LinearProgress,
 } from '@material-ui/core'
+import { SnapshotContext } from '../context'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { SnapshotState } from '../hooks/useSnapshot'
+import { useVotes } from '../hooks/useVotes'
+import { useResults } from '../hooks/useResults'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -69,7 +72,9 @@ const useStyles = makeStyles((theme) => {
 })
 
 export function ResultCard() {
-    const { value } = SnapshotState.useContainer()
+    const identifier = useContext(SnapshotContext)
+    const { payload: votes } = useVotes(identifier)
+    const { payload: results } = useResults(identifier)
     const classes = useStyles()
     const { t } = useI18N()
     const results = [
@@ -90,10 +95,6 @@ export function ResultCard() {
         },
     ]
 
-    if (!value) return null
-
-    const { identifier, message, proposal, votes } = value
-
     return (
         <Card className={classes.root} elevation={0}>
             <CardHeader
@@ -101,8 +102,8 @@ export function ResultCard() {
                 title={<Box className={classes.title}>{t('plugin_snapshot_result_title')}</Box>}></CardHeader>
             <CardContent className={classes.content}>
                 <List className={classes.list}>
-                    {results.map((result) => (
-                        <ListItem className={classes.listItem}>
+                    {results.map((result, i) => (
+                        <ListItem className={classes.listItem} key={i.toString()}>
                             <Box className={classes.listItemHeader}>
                                 <Typography className={classes.choice}>{result.choice}</Typography>
                                 <Typography className={classes.power}>{result.power}</Typography>
