@@ -11,17 +11,7 @@ import {
     LinearProgress,
 } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import type { ProposalIdentifier, ProposalMessage, Proposal, Vote } from '../types'
-import snapshot from '@zhouhancheng/snapshot.js'
-
-export interface ResultCardProps {
-    identifier: ProposalIdentifier
-    message: ProposalMessage
-    proposal: Proposal
-    votes: {
-        [x: string]: Vote
-    }
-}
+import { SnapshotState } from '../hooks/useSnapshot'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -78,8 +68,8 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export function ResultCard(props: ResultCardProps) {
-    const { identifier, message, proposal, votes } = props
+export function ResultCard() {
+    const { value } = SnapshotState.useContainer()
     const classes = useStyles()
     const { t } = useI18N()
     const results = [
@@ -99,10 +89,11 @@ export function ResultCard(props: ResultCardProps) {
             power: 1.5,
         },
     ]
-    message.payload.metadata.strategies.map((strategy) => {
-        console.log(snapshot.strategies[strategy.name])
-    })
-    console.log('snapshot', snapshot)
+
+    if (!value) return null
+
+    const { identifier, message, proposal, votes } = value
+
     return (
         <Card className={classes.root} elevation={0}>
             <CardHeader

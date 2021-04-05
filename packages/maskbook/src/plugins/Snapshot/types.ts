@@ -1,4 +1,4 @@
-import type snapshot from '@zhouhancheng/snapshot.js'
+import type snapshot from '@snapshot-labs/snapshot.js'
 
 export interface ProposalIdentifier {
     id: string
@@ -23,7 +23,7 @@ export interface Strategy {
 
 export interface ProposalPayload {
     body: string
-    choice: string[]
+    choices: string[]
     start: number
     end: number
     snapshot: string
@@ -42,10 +42,16 @@ export interface ProposalMessage {
     space: string
 }
 
+type score = number
+
+type scores = score[]
+
 export interface Vote {
     address: string
     authorIpfsHash: string
     relayerIpfsHash: string
+    balance: number
+    scores: scores
     sig: string
     msg: {
         payload: {
@@ -58,4 +64,15 @@ export interface Vote {
         type: 'vote'
         version: string
     }
+}
+
+export type Votes = {
+    [key in string]: Vote
+}
+
+export interface ProposalResult {
+    voteNumberOfChoices: number[]
+    powerOfChoices: score[]
+    powerDetailOfChoices: scores[]
+    totalPower: score
 }
