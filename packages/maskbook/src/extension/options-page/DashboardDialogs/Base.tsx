@@ -123,6 +123,10 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
             width: (props) => (props.size === 'small' ? 280 : 440),
             padding: (props) => (props.size === 'small' ? '40px 24px !important' : '40px 36px !important'),
             margin: '0 auto',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         header: {
             textAlign: 'center',
