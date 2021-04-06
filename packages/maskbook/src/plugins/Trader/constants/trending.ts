@@ -16,6 +16,8 @@ export const THIRD_PARTY_V1_BASE_URL = 'https://3rdparty-apis.coinmarketcap.com/
 // the bitcoin ledger started at 03 Jan 2009
 export const BTC_FIRST_LEGER_DATE = new Date('2009-01-03T00:00:00.000Z')
 
+export const MINIMUM_AMOUNT = 0.000001
+
 //#region settings about trader
 export const CRYPTOCURRENCY_MAP_EXPIRES_AT = 60 /* seconds */ * 1000 /* milliseconds */
 

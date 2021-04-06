@@ -409,6 +409,7 @@
     "plugin_trader_settings_data_source_secondary": "Select the source of cryptocurrencies' trending data.",
     "plugin_trader_settings_trade_provider_primary": "Choose Exchange Network",
     "plugin_trader_settings_trade_provider_secondary": "Swap cryptocurrencies on different exchange networks.",
+    "plugin_trade_error_amount_less_minimum_amount": "Input/Output amount is below the minimum amount.",
     "plugin_poll_display_name": "Plugin: Poll",
     "plugin_poll_question_hint": "Ask a question…",
     "plugin_poll_options_hint": "choice",

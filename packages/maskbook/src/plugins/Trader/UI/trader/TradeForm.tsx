@@ -21,6 +21,7 @@ import { resolveUniswapWarningLevel } from '../../pipes'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
+import { MINIMUM_AMOUNT } from '../../constants'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -199,6 +200,8 @@ export function TradeForm(props: TradeFormProps) {
     const validationMessage = useMemo(() => {
         if (inputTokenTradeAmount.isZero() && outputTokenTradeAmount.isZero())
             return t('plugin_trader_error_amount_absence')
+        if (inputTokenTradeAmount.isLessThan(MINIMUM_AMOUNT) || outputTokenTradeAmount.isLessThan(MINIMUM_AMOUNT))
+            return t('plugin_trade_error_amount_less_minimum_amount')
         if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
         if (loading) return t('plugin_trader_finding_price')
         if (!trade) return t('plugin_trader_error_insufficient_lp')
