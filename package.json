@@ -43,8 +43,8 @@
     "react-i18next": "^11.8.7"
   },
   "devDependencies": {
-    "@commitlint/cli": "^12.0.1",
-    "@commitlint/config-conventional": "^12.0.1",
+    "@commitlint/cli": "^12.1.1",
+    "@commitlint/config-conventional": "^12.1.1",
     "@dimensiondev/cli": "workspace:*",
     "@magic-works/commonjs-import.meta": "^1.0.0",
     "@magic-works/i18n-codegen": "^0.0.5",
