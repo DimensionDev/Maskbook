@@ -62,15 +62,27 @@ export function TokenTab(props: TokenTabProps) {
                     Base
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Typography>
-                        Created by{' '}
-                        <Link
-                            href={`https://opensea.io/accounts/${
-                                asset.value.creator.user?.username ?? asset.value.creator.address
-                            }`}>
-                            {asset.value.creator.user?.username ?? asset.value.creator.address.slice(2, 8)}
-                        </Link>
-                    </Typography>
+                    {asset.value.creator ? (
+                        <Typography>
+                            Created by{' '}
+                            <Link
+                                href={`https://opensea.io/accounts/${
+                                    asset.value.creator.user?.username ?? asset.value.creator.address
+                                }`}>
+                                {asset.value.creator.user?.username ?? asset.value.creator.address.slice(2, 8)}
+                            </Link>
+                        </Typography>
+                    ) : (
+                        <Typography>
+                            Owned by{' '}
+                            <Link
+                                href={`https://opensea.io/accounts/${
+                                    asset.value.owner?.user?.username ?? asset.value.owner?.address ?? ''
+                                }`}>
+                                {asset.value.owner?.user?.username ?? asset.value.owner?.address.slice(2, 8) ?? ''}
+                            </Link>
+                        </Typography>
+                    )}
                     <Typography className={classes.description}>{asset.value.description}</Typography>
                 </AccordionDetails>
             </Accordion>
@@ -117,7 +129,7 @@ export function TokenTab(props: TokenTabProps) {
                     </Box>
                     <Box className={classes.chain_row}>
                         <Typography>BlockChain</Typography>
-                        <Typography>{asset.value.assetContract.schemaName}</Typography>
+                        <Typography>Ethereum</Typography>
                     </Box>
                 </AccordionDetails>
             </Accordion>
