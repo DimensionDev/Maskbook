@@ -476,6 +476,7 @@
     "plugin_ito_amount_approved": "{{amount}} {{symbol}} が承認されました",
     "plugin_ito_amount_approved_infinity": "無限の {{symbol}} が承認されました",
     "plugin_snapshot_result_title": "",
+    "plugin_snapshot_current_result_title": "",
     "wallet_status_title": "アカウント",
     "wallet_status_connect_with": "{{provider}} で接続する",
     "wallet_status_button_change": "変更",

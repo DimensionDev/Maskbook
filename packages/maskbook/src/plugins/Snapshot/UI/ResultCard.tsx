@@ -1,4 +1,5 @@
-import { useContext } from 'react'
+import { useContext, useRef, useEffect, useState } from 'react'
+import classNames from 'classnames'
 import {
     Card,
     createStyles,
@@ -10,9 +11,9 @@ import {
     ListItem,
     Typography,
     LinearProgress,
-    Tooltip,
     withStyles,
 } from '@material-ui/core'
+import { ShadowRootTooltip } from '../../../utils/shadow-root/ShadowRootComponents'
 import millify from 'millify'
 import { SnapshotContext } from '../context'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -63,14 +64,16 @@ const useStyles = makeStyles((theme) => {
             marginLeft: 'auto',
         },
         choice: {
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            width: '60%',
+            maxWidth: 200,
         },
         linearProgressWrap: {
             width: '100%',
             marginTop: theme.spacing(1),
+        },
+        ellipsisText: {
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
         },
     })
 })
@@ -96,26 +99,65 @@ export function ResultCard() {
     } = useResults(identifier)
     const classes = useStyles()
     const { t } = useI18N()
+    const listRef = useRef<HTMLSpanElement[]>([])
+    const [tooltipVisibles, setTooltipVisibles] = useState<boolean[]>(new Array(results.length).fill(false))
+
+    useEffect(() => {
+        setTooltipVisibles(listRef.current.map((element) => (element.offsetWidth === 200 ? true : false)))
+    }, [])
+    console.log({ results })
 
     return (
         <Card className={classes.root} elevation={0}>
             <CardHeader
                 className={classes.header}
-                title={<Box className={classes.title}>{t('plugin_snapshot_result_title')}</Box>}></CardHeader>
+                title={
+                    <Box className={classes.title}>
+                        {proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}
+                    </Box>
+                }></CardHeader>
             <CardContent className={classes.content}>
                 <List className={classes.list}>
                     {results.map((result, i) => (
                         <ListItem className={classes.listItem} key={i.toString()}>
                             <Box className={classes.listItemHeader}>
-                                <Tooltip
-                                    title={<Typography color="primary">{result.choice}</Typography>}
+                                <ShadowRootTooltip
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    title={<Typography color="textPrimary">{result.choice}</Typography>}
+                                    placement="top"
+                                    disableHoverListener={!tooltipVisibles[i]}
+                                    arrow>
+                                    <Typography
+                                        ref={(ref) => {
+                                            listRef.current[i] = ref!
+                                        }}
+                                        className={classNames(classes.choice, classes.ellipsisText)}>
+                                        {result.choice}
+                                    </Typography>
+                                </ShadowRootTooltip>
+                                <ShadowRootTooltip
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    title={
+                                        <Typography color="textPrimary" className={classes.ellipsisText}>
+                                            {result.powerDetail.reduce((sum, cur, i) => {
+                                                return `${sum} ${i === 0 ? '' : '+'} ${
+                                                    millify(cur.power, { precision: 2, lowercase: true }) +
+                                                    ' ' +
+                                                    cur.name
+                                                }`
+                                            }, '')}
+                                        </Typography>
+                                    }
                                     placement="top"
                                     arrow>
-                                    <Typography className={classes.choice}>{result.choice}</Typography>
-                                </Tooltip>
-                                <Typography className={classes.power}>
-                                    {millify(result.power, { precision: 2, lowercase: true })}
-                                </Typography>
+                                    <Typography className={classes.power}>
+                                        {millify(result.power, { precision: 2, lowercase: true })}
+                                    </Typography>
+                                </ShadowRootTooltip>
                                 <Typography className={classes.ratio}>
                                     {parseFloat(result.percentage.toFixed(2))}%
                                 </Typography>
