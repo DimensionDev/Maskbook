@@ -504,6 +504,7 @@
     "plugin_ito_amount_approved_infinity": "Approved infinity {{symbol}}",
     "plugin_snapshot_result_title": "Results",
     "plugin_snapshot_current_result_title": "Current results",
+    "plugin_snapshot_download_report": "Download report",
     "wallet_status_title": "Account",
     "wallet_status_connect_with": "Connected with {{provider}}",
     "wallet_status_button_change": "Change",
