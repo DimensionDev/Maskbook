@@ -39,8 +39,11 @@ async function Suspender(identifier: ProposalIdentifier) {
             choice: message.payload.choices[i],
             power: p,
             voteNumber: voteNumberOfChoices[i],
-            powerDetail: powerDetailOfChoices[i],
-            percentage: (p / totalPower) * 100,
+            powerDetail: powerDetailOfChoices[i].map((p, pI) => ({
+                power: p,
+                name: message.payload.metadata.strategies[pI].params.symbol,
+            })),
+            percentage: totalPower === 0 ? 0 : (p / totalPower) * 100,
         }))
         .sort((a, b) => b.power - a.power)
 

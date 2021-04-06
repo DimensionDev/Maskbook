@@ -10,6 +10,9 @@ export interface Proposal {
     msg: string
     sig: string
     version: string
+    isStart: boolean
+    isEnd: boolean
+    status: string
 }
 
 export interface Strategy {
@@ -69,7 +72,10 @@ export type Votes = {
 export interface ProposalResult {
     choice: string
     voteNumber: number
-    powerDetail: number[]
+    powerDetail: {
+        power: number
+        name: string
+    }[]
     power: number
     percentage: number
 }
