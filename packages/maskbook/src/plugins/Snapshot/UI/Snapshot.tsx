@@ -69,9 +69,9 @@ export function Snapshot() {
     const classes = useStyles()
     const identifier = useContext(SnapshotContext)
     const {
-        payload: { message },
+        payload: { proposal, message },
     } = useProposal(identifier.id)
-
+    console.log({ message })
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
         <Tab className={classes.tab} key="proposal" label="Proposal" />,
@@ -91,7 +91,7 @@ export function Snapshot() {
                                 #{identifier.id.slice(0, 7)}
                             </Typography>
                         </Typography>
-                        <Chip color="primary" size="small" label="Active" />
+                        <Chip color="primary" size="small" label={proposal.status} />
                     </Box>
                 }
                 subheader={

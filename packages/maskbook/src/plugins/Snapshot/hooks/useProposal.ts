@@ -13,6 +13,10 @@ async function Suspender(id: string) {
     // await testDelay(1000)
     const proposal = await PluginSnapshotRPC.fetchProposal(id)
     const message: ProposalMessage = JSON.parse(proposal.msg)
+    const now = new Date().getTime()
+    proposal.isStart = now > message.payload.start * 1000
+    proposal.isEnd = now > message.payload.end * 1000
+    proposal.status = !proposal.isStart ? 'Pending' : proposal.isEnd ? 'Close' : 'Active'
     return { proposal, message }
 }
 
