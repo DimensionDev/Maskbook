@@ -1,4 +1,4 @@
-import { first } from 'lodash'
+import { first } from 'lodash-es'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { WalletMessages, WalletRPC } from '../messages'
 import { ProviderType } from '../../../web3/types'
