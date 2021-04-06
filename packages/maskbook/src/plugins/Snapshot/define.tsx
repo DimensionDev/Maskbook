@@ -1,5 +1,5 @@
 import { useMemo, Suspense } from 'react'
-import { Typography } from '@material-ui/core'
+import { Skeleton, makeStyles, createStyles } from '@material-ui/core'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { SNAPSHOT_PLUGIN_NAME, SNAPSHOT_PLUGIN_ID } from './constants'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
@@ -7,6 +7,17 @@ import { PostInspector } from './UI/PostInspector'
 import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import { extractTextFromTypedMessage } from '../../protocols/typed-message'
 import { parseURL } from '../../utils/utils'
+
+const useStyles = makeStyles((theme) => {
+    return createStyles({
+        skeleton: {
+            margin: theme.spacing(2),
+            '&:first-child': {
+                marginTop: theme.spacing(3),
+            },
+        },
+    })
+})
 
 const isSnaphotURL = (x: string): boolean => /^https:\/\/(?:www.)?snapshot.[org|page]/.test(x)
 
@@ -32,14 +43,18 @@ export const SnapShotPluginDefine: PluginConfig = {
 }
 
 function Renderer({ url }: { url: string }) {
+    const classes = useStyles()
     return (
         <MaskbookPluginWrapper pluginName="Snapshot">
             <Suspense
-                fallback={
-                    <Typography color="textPrimary" component="span" variant="body1">
-                        loading...
-                    </Typography>
-                }>
+                fallback={new Array(3).fill(0).map((_, i) => (
+                    <Skeleton
+                        className={classes.skeleton}
+                        animation="wave"
+                        variant="rectangular"
+                        width={i === 0 ? '80%' : '60%'}
+                        height={15}></Skeleton>
+                ))}>
                 <PostInspector url={url} />
             </Suspense>
         </MaskbookPluginWrapper>
