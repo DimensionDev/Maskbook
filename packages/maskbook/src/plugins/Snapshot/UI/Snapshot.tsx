@@ -71,7 +71,7 @@ export function Snapshot() {
     const {
         payload: { proposal, message },
     } = useProposal(identifier.id)
-    console.log({ message })
+
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
         <Tab className={classes.tab} key="proposal" label="Proposal" />,

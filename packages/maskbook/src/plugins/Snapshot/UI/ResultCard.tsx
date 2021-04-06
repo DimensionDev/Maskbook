@@ -1,4 +1,4 @@
-import { useContext, useRef, useEffect, useState } from 'react'
+import { useContext, useRef, useEffect, useState, useMemo } from 'react'
 import classNames from 'classnames'
 import {
     Card,
@@ -12,6 +12,7 @@ import {
     Typography,
     LinearProgress,
     withStyles,
+    Button,
 } from '@material-ui/core'
 import { ShadowRootTooltip } from '../../../utils/shadow-root/ShadowRootComponents'
 import millify from 'millify'
@@ -20,12 +21,14 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useProposal } from '../hooks/useProposal'
 import { useVotes } from '../hooks/useVotes'
 import { useResults } from '../hooks/useResults'
+import { parse } from 'json2csv'
+
+const choiceMaxWidth = 240
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
             margin: '16px auto',
-            width: '80%',
             border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
             minHeight: 320,
@@ -64,7 +67,7 @@ const useStyles = makeStyles((theme) => {
             marginLeft: 'auto',
         },
         choice: {
-            maxWidth: 200,
+            maxWidth: choiceMaxWidth,
         },
         linearProgressWrap: {
             width: '100%',
@@ -74,6 +77,10 @@ const useStyles = makeStyles((theme) => {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
+        },
+        resultButton: {
+            width: 200,
+            margin: '0 auto',
         },
     })
 })
@@ -103,9 +110,23 @@ export function ResultCard() {
     const [tooltipVisibles, setTooltipVisibles] = useState<boolean[]>(new Array(results.length).fill(false))
 
     useEffect(() => {
-        setTooltipVisibles(listRef.current.map((element) => (element.offsetWidth === 200 ? true : false)))
+        setTooltipVisibles(listRef.current.map((element) => (element.offsetWidth === choiceMaxWidth ? true : false)))
     }, [])
     console.log({ results })
+
+    const dataForCsv = useMemo(
+        () =>
+            Object.entries(votes).map((vote) => ({
+                address: vote[0],
+                choice: vote[1].msg.payload.choice,
+                balance: vote[1].balance,
+                timestamp: vote[1].msg.timestamp,
+                dateUtc: new Date(parseInt(vote[1].msg.timestamp) * 1e3).toUTCString(),
+                authorIpfsHash: vote[1].authorIpfsHash,
+                relayerIpfsHash: vote[1].relayerIpfsHash,
+            })),
+        [votes],
+    )
 
     return (
         <Card className={classes.root} elevation={0}>
@@ -168,6 +189,23 @@ export function ResultCard() {
                         </ListItem>
                     ))}
                 </List>
+                {proposal.isEnd ? (
+                    <Button
+                        color="primary"
+                        variant="outlined"
+                        className={classes.resultButton}
+                        onClick={() => {
+                            const csv = parse(dataForCsv)
+                            const link = document.createElement('a')
+                            link.setAttribute('href', `data:text/csv;charset=utf-8,${csv}`)
+                            link.setAttribute('download', `snapshot-report-${identifier.id}.csv`)
+                            document.body.appendChild(link)
+                            link.click()
+                            document.body.removeChild(link)
+                        }}>
+                        {t('plugin_snapshot_download_report')}
+                    </Button>
+                ) : null}
             </CardContent>
         </Card>
     )
