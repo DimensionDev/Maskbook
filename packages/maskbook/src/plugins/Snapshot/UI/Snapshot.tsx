@@ -11,7 +11,9 @@ import {
     Tabs,
     Chip,
     Paper,
+    Skeleton,
 } from '@material-ui/core'
+import { SnapshotCard } from './SnapshotCard'
 import { SnapshotContext } from '../context'
 import { useProposal } from '../hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
@@ -61,6 +63,15 @@ const useStyles = makeStyles((theme) => {
         },
         fallbackText: {
             marginLeft: theme.spacing(1),
+        },
+        fallbackWrapper: {
+            padding: theme.spacing(2),
+        },
+        skeleton: {
+            margin: theme.spacing(1.5),
+            '&:first-child': {
+                marginTop: theme.spacing(2.5),
+            },
         },
     })
 })
@@ -117,13 +128,18 @@ export function Snapshot() {
                 </Tabs>
                 <Suspense
                     fallback={
-                        <Typography
-                            color="textPrimary"
-                            component="span"
-                            variant="body1"
-                            className={classes.fallbackText}>
-                            loading...
-                        </Typography>
+                        <section className={classes.fallbackWrapper}>
+                            <SnapshotCard title="Information">
+                                {new Array(5).fill(0).map((_, i) => (
+                                    <Skeleton
+                                        className={classes.skeleton}
+                                        animation="wave"
+                                        variant="rectangular"
+                                        width={i === 0 ? '80%' : '60%'}
+                                        height={15}></Skeleton>
+                                ))}
+                            </SnapshotCard>
+                        </section>
                     }>
                     <Paper className={classes.body}>
                         {tabIndex === 0 ? <ProposalTab /> : null}

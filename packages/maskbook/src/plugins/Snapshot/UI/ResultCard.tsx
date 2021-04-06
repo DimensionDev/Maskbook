@@ -1,11 +1,8 @@
 import { useContext, useRef, useEffect, useState, useMemo } from 'react'
 import classNames from 'classnames'
 import {
-    Card,
     createStyles,
     makeStyles,
-    CardContent,
-    CardHeader,
     Box,
     List,
     ListItem,
@@ -21,33 +18,13 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useProposal } from '../hooks/useProposal'
 import { useVotes } from '../hooks/useVotes'
 import { useResults } from '../hooks/useResults'
+import { SnapshotCard } from './SnapshotCard'
 import { parse } from 'json2csv'
 
 const choiceMaxWidth = 240
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
-        root: {
-            margin: '16px auto',
-            border: `solid 1px ${theme.palette.divider}`,
-            padding: 0,
-            minHeight: 320,
-        },
-        content: {
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '0 !important',
-        },
-        header: {
-            backgroundColor: theme.palette.mode === 'dark' ? '#24292e' : 'white',
-            borderBottom: `1px solid ${theme.palette.divider}`,
-            padding: '12px 16px',
-        },
-        title: {
-            paddingLeft: theme.spacing(1),
-            fontSize: 20,
-        },
         list: {
             display: 'flex',
             flexDirection: 'column',
@@ -129,84 +106,74 @@ export function ResultCard() {
     )
 
     return (
-        <Card className={classes.root} elevation={0}>
-            <CardHeader
-                className={classes.header}
-                title={
-                    <Box className={classes.title}>
-                        {proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}
-                    </Box>
-                }></CardHeader>
-            <CardContent className={classes.content}>
-                <List className={classes.list}>
-                    {results.map((result, i) => (
-                        <ListItem className={classes.listItem} key={i.toString()}>
-                            <Box className={classes.listItemHeader}>
-                                <ShadowRootTooltip
-                                    PopperProps={{
-                                        disablePortal: true,
+        <SnapshotCard
+            title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}>
+            <List className={classes.list}>
+                {results.map((result, i) => (
+                    <ListItem className={classes.listItem} key={i.toString()}>
+                        <Box className={classes.listItemHeader}>
+                            <ShadowRootTooltip
+                                PopperProps={{
+                                    disablePortal: true,
+                                }}
+                                title={<Typography color="textPrimary">{result.choice}</Typography>}
+                                placement="top"
+                                disableHoverListener={!tooltipVisibles[i]}
+                                arrow>
+                                <Typography
+                                    ref={(ref) => {
+                                        listRef.current[i] = ref!
                                     }}
-                                    title={<Typography color="textPrimary">{result.choice}</Typography>}
-                                    placement="top"
-                                    disableHoverListener={!tooltipVisibles[i]}
-                                    arrow>
-                                    <Typography
-                                        ref={(ref) => {
-                                            listRef.current[i] = ref!
-                                        }}
-                                        className={classNames(classes.choice, classes.ellipsisText)}>
-                                        {result.choice}
-                                    </Typography>
-                                </ShadowRootTooltip>
-                                <ShadowRootTooltip
-                                    PopperProps={{
-                                        disablePortal: true,
-                                    }}
-                                    title={
-                                        <Typography color="textPrimary" className={classes.ellipsisText}>
-                                            {result.powerDetail.reduce((sum, cur, i) => {
-                                                return `${sum} ${i === 0 ? '' : '+'} ${
-                                                    millify(cur.power, { precision: 2, lowercase: true }) +
-                                                    ' ' +
-                                                    cur.name
-                                                }`
-                                            }, '')}
-                                        </Typography>
-                                    }
-                                    placement="top"
-                                    arrow>
-                                    <Typography className={classes.power}>
-                                        {millify(result.power, { precision: 2, lowercase: true })}
-                                    </Typography>
-                                </ShadowRootTooltip>
-                                <Typography className={classes.ratio}>
-                                    {parseFloat(result.percentage.toFixed(2))}%
+                                    className={classNames(classes.choice, classes.ellipsisText)}>
+                                    {result.choice}
                                 </Typography>
-                            </Box>
-                            <Box className={classes.linearProgressWrap}>
-                                <StyledLinearProgress variant="determinate" value={result.percentage} />
-                            </Box>
-                        </ListItem>
-                    ))}
-                </List>
-                {proposal.isEnd ? (
-                    <Button
-                        color="primary"
-                        variant="outlined"
-                        className={classes.resultButton}
-                        onClick={() => {
-                            const csv = parse(dataForCsv)
-                            const link = document.createElement('a')
-                            link.setAttribute('href', `data:text/csv;charset=utf-8,${csv}`)
-                            link.setAttribute('download', `snapshot-report-${identifier.id}.csv`)
-                            document.body.appendChild(link)
-                            link.click()
-                            document.body.removeChild(link)
-                        }}>
-                        {t('plugin_snapshot_download_report')}
-                    </Button>
-                ) : null}
-            </CardContent>
-        </Card>
+                            </ShadowRootTooltip>
+                            <ShadowRootTooltip
+                                PopperProps={{
+                                    disablePortal: true,
+                                }}
+                                title={
+                                    <Typography color="textPrimary" className={classes.ellipsisText}>
+                                        {result.powerDetail.reduce((sum, cur, i) => {
+                                            return `${sum} ${i === 0 ? '' : '+'} ${
+                                                millify(cur.power, { precision: 2, lowercase: true }) + ' ' + cur.name
+                                            }`
+                                        }, '')}
+                                    </Typography>
+                                }
+                                placement="top"
+                                arrow>
+                                <Typography className={classes.power}>
+                                    {millify(result.power, { precision: 2, lowercase: true })}
+                                </Typography>
+                            </ShadowRootTooltip>
+                            <Typography className={classes.ratio}>
+                                {parseFloat(result.percentage.toFixed(2))}%
+                            </Typography>
+                        </Box>
+                        <Box className={classes.linearProgressWrap}>
+                            <StyledLinearProgress variant="determinate" value={result.percentage} />
+                        </Box>
+                    </ListItem>
+                ))}
+            </List>
+            {proposal.isEnd ? (
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    className={classes.resultButton}
+                    onClick={() => {
+                        const csv = parse(dataForCsv)
+                        const link = document.createElement('a')
+                        link.setAttribute('href', `data:text/csv;charset=utf-8,${csv}`)
+                        link.setAttribute('download', `snapshot-report-${identifier.id}.csv`)
+                        document.body.appendChild(link)
+                        link.click()
+                        document.body.removeChild(link)
+                    }}>
+                    {t('plugin_snapshot_download_report')}
+                </Button>
+            ) : null}
+        </SnapshotCard>
     )
 }
