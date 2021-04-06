@@ -76,6 +76,7 @@
     "lodash-es": "npm:lodash@^4.17.11",
     "loglevel": "^1.7.0",
     "matrix-js-sdk": "^9.5.1",
+    "millify": "^3.5.0",
     "next-tick": "^1.0.0",
     "notistack": "^1.0.3",
     "promievent": "^0.1.4",

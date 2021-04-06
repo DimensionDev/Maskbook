@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, Suspense } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -12,7 +12,6 @@ import {
     Chip,
     Paper,
 } from '@material-ui/core'
-import type { ProposalMessage } from '../types'
 import { SnapshotContext } from '../context'
 import { useProposal } from '../hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
@@ -60,14 +59,19 @@ const useStyles = makeStyles((theme) => {
             fontSize: 12,
             marginRight: theme.spacing(0.5),
         },
+        fallbackText: {
+            marginLeft: theme.spacing(1),
+        },
     })
 })
 
 export function Snapshot() {
     const classes = useStyles()
     const identifier = useContext(SnapshotContext)
-    const { payload: proposal } = useProposal(identifier.id)
-    const message: ProposalMessage = JSON.parse(proposal.msg)
+    const {
+        payload: { message },
+    } = useProposal(identifier.id)
+
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
         <Tab className={classes.tab} key="proposal" label="Proposal" />,
@@ -111,10 +115,21 @@ export function Snapshot() {
                     }}>
                     {tabs}
                 </Tabs>
-                <Paper className={classes.body}>
-                    {tabIndex === 0 ? <ProposalTab /> : null}
-                    {tabIndex === 1 ? <ProgressTab /> : null}
-                </Paper>
+                <Suspense
+                    fallback={
+                        <Typography
+                            color="textPrimary"
+                            component="span"
+                            variant="body1"
+                            className={classes.fallbackText}>
+                            loading...
+                        </Typography>
+                    }>
+                    <Paper className={classes.body}>
+                        {tabIndex === 0 ? <ProposalTab /> : null}
+                        {tabIndex === 1 ? <ProgressTab /> : null}
+                    </Paper>
+                </Suspense>
             </CardContent>
         </Card>
     )

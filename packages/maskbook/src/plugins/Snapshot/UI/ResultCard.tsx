@@ -10,9 +10,13 @@ import {
     ListItem,
     Typography,
     LinearProgress,
+    Tooltip,
+    withStyles,
 } from '@material-ui/core'
+import millify from 'millify'
 import { SnapshotContext } from '../context'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { useProposal } from '../hooks/useProposal'
 import { useVotes } from '../hooks/useVotes'
 import { useResults } from '../hooks/useResults'
 
@@ -71,29 +75,27 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
+const StyledLinearProgress = withStyles({
+    root: {
+        height: 8,
+        borderRadius: 5,
+    },
+    bar: {
+        borderRadius: 5,
+    },
+})(LinearProgress)
+
 export function ResultCard() {
     const identifier = useContext(SnapshotContext)
+    const {
+        payload: { proposal, message },
+    } = useProposal(identifier.id)
     const { payload: votes } = useVotes(identifier)
-    const { payload } = useResults(identifier)
+    const {
+        payload: { results },
+    } = useResults(identifier)
     const classes = useStyles()
     const { t } = useI18N()
-    const results = [
-        {
-            choice: 'Increase AAVE cap to Uncapped',
-            ratio: 70,
-            power: 859.63,
-        },
-        {
-            choice: 'Keep AAVE cap at $100M',
-            ratio: 20,
-            power: 231.62,
-        },
-        {
-            choice: 'Decrease AAVE cap to $30M',
-            ratio: 10,
-            power: 1.5,
-        },
-    ]
 
     return (
         <Card className={classes.root} elevation={0}>
@@ -105,12 +107,21 @@ export function ResultCard() {
                     {results.map((result, i) => (
                         <ListItem className={classes.listItem} key={i.toString()}>
                             <Box className={classes.listItemHeader}>
-                                <Typography className={classes.choice}>{result.choice}</Typography>
-                                <Typography className={classes.power}>{result.power}</Typography>
-                                <Typography className={classes.ratio}>{result.ratio}%</Typography>
+                                <Tooltip
+                                    title={<Typography color="primary">{result.choice}</Typography>}
+                                    placement="top"
+                                    arrow>
+                                    <Typography className={classes.choice}>{result.choice}</Typography>
+                                </Tooltip>
+                                <Typography className={classes.power}>
+                                    {millify(result.power, { precision: 2, lowercase: true })}
+                                </Typography>
+                                <Typography className={classes.ratio}>
+                                    {parseFloat(result.percentage.toFixed(2))}%
+                                </Typography>
                             </Box>
                             <Box className={classes.linearProgressWrap}>
-                                <LinearProgress variant="determinate" value={result.ratio} />
+                                <StyledLinearProgress variant="determinate" value={result.percentage} />
                             </Box>
                         </ListItem>
                     ))}
