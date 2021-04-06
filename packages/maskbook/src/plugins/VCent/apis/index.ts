@@ -19,14 +19,9 @@ export interface TweetDataResponse {
     results: TweetData[]
 }
 
-export interface TweetAddressResponse {
-    tweetAddress: string
-}
-
-export async function getTweetData(props: TweetAddressResponse) {
-    let url = TWEET_BASE_URL + props.tweetAddress
+export async function getTweetData(tweetAddress: string) {
+    let url = TWEET_BASE_URL + tweetAddress
     const response = await fetch(url)
-    const tweetResponse = (await response.json()) as TweetDataResponse
-
-    return tweetResponse
+    const tweetResponse = await response.json()
+    return (tweetResponse as TweetDataResponse).results
 }

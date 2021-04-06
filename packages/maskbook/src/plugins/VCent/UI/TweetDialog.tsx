@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
 import { makeStyles, Button } from '@material-ui/core'
 import { isDarkTheme } from '../../../utils/theme-tools'
 import * as TweetAPI from '../apis/index'
 import { ETHIcon } from '../icons/ETH'
 import { VCentIconLight, VCentIconDark } from '../icons/VCent'
 import { VALUABLES_VCENT_URL } from '../constants'
+import { useAsync } from 'react-use'
 
 const useStyle = makeStyles((theme) => ({
     root: {
@@ -71,18 +71,12 @@ const useStyle = makeStyles((theme) => ({
     },
 }))
 
-export default function VCentDialog(tweetAddress: any) {
+export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) {
     const classes = useStyle()
 
-    const [tweet, setTweets] = useState<TweetAPI.TweetData>()
-    const [type, setType] = useState('')
-
-    useEffect(() => {
-        TweetAPI.getTweetData(tweetAddress).then((res) => {
-            setTweets(res.results[0])
-            setType(res.results[0].type)
-        })
-    }, [])
+    const tweet: TweetAPI.TweetData | undefined = useAsync(() => TweetAPI.getTweetData(tweetAddress), [tweetAddress])
+        .value?.[0]
+    const type = tweet?.type || ''
 
     return (
         <div className={classes.root}>

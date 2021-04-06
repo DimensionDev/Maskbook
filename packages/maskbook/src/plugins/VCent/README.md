@@ -12,8 +12,9 @@ The plugin is located in
 
 `Maskbook\packages\maskbook\src\plugins\Tweet`
 
-The file tree for this plugin is as follows:\
-\
+The file tree for this plugin is as follows:
+
+```plaintext
 Tweet\
 | constants.ts\ (This holds plugin definitions)
 | define.tsx\ (Main entry point)
@@ -28,3 +29,4 @@ Tweet\
 |\
 \---UI\
  TweetDialog.tsx (This displays the information in Twitter)
+```
