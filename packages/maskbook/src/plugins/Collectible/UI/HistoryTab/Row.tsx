@@ -82,20 +82,24 @@ export function Row({ order, isDifferenceToken }: Props) {
                                     />
                                 </Link>
                             )}
-                            {unitPrice}
+                            <Typography>{unitPrice}</Typography>
                         </Box>
                     </TableCell>
                     <TableCell>
-                        {formatBalance(
-                            new BigNumber(order.node.assetQuantity.quantity),
-                            order.node.assetQuantity.asset.decimals ?? 0,
-                        )}
+                        <Typography>
+                            {formatBalance(
+                                new BigNumber(order.node.assetQuantity.quantity),
+                                order.node.assetQuantity.asset.decimals ?? 0,
+                            )}
+                        </Typography>
                     </TableCell>
                 </>
             ) : (
                 <TableCell>
-                    {order.node.price &&
-                        formatBalance(new BigNumber(order.node.price.quantity), order.node.price?.asset.decimals)}
+                    <Typography>
+                        {order.node.price &&
+                            formatBalance(new BigNumber(order.node.price.quantity), order.node.price?.asset.decimals)}
+                    </Typography>
                 </TableCell>
             )}
             <TableCell>

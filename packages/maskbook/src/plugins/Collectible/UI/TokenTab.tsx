@@ -15,12 +15,9 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 const useStyles = makeStyles((theme) => {
     return createStyles({
         summary: {
-            backgroundColor: '#f7f9fa',
             borderRadius: theme.shape.borderRadius,
-            color: '#15181B',
         },
         description: {
-            color: '#15181b',
             fontSize: 14,
             wordBreak: 'break-all',
         },
@@ -30,19 +27,17 @@ const useStyles = makeStyles((theme) => {
             gap: theme.spacing(2),
         },
         trait: {
-            backgroundColor: '#F7F9FA',
             padding: theme.spacing(2),
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             fontSize: 14,
             fontWeight: 600,
-            color: '#15181B',
+            // color: '#15181B',
         },
         chain_row: {
             display: 'flex',
             justifyContent: 'space-between',
-            color: '#15181b',
         },
     })
 })
@@ -59,7 +54,7 @@ export function TokenTab(props: TokenTabProps) {
         <CollectibleTab>
             <Accordion defaultExpanded>
                 <AccordionSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
-                    Base
+                    <Typography>Base</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     {asset.value.creator ? (
@@ -88,7 +83,7 @@ export function TokenTab(props: TokenTabProps) {
             </Accordion>
             <Accordion defaultExpanded>
                 <AccordionSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
-                    Properties
+                    <Typography>Properties</Typography>
                 </AccordionSummary>
                 <AccordionDetails className={classes.trait_content}>
                     {asset.value.traits.map(({ trait_type, value }) => {
@@ -103,7 +98,7 @@ export function TokenTab(props: TokenTabProps) {
             </Accordion>
             <Accordion defaultExpanded>
                 <AccordionSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
-                    About {asset.value.assetContract.name}
+                    <Typography>About {asset.value.assetContract.name}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Typography className={classes.description}>{asset.value.assetContract.description}</Typography>
@@ -111,7 +106,7 @@ export function TokenTab(props: TokenTabProps) {
             </Accordion>
             <Accordion defaultExpanded>
                 <AccordionSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
-                    Chain Info
+                    <Typography>Chain Info</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Box className={classes.chain_row}>
