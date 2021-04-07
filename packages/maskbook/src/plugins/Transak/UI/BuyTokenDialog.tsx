@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) =>
             top: theme.spacing(2),
             right: theme.spacing(2),
             position: 'absolute',
-            // transform: 'translate(-50%, -50%)'
         },
         content: {
             width: '100%',
