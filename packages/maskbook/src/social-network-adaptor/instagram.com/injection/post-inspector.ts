@@ -1,7 +1,7 @@
 import { injectPostInspectorDefault } from '../../../social-network/defaults'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { Flags } from '../../../utils/flags'
-import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 
 const map = new WeakMap<HTMLElement, ShadowRoot>()
 function getShadowRoot(node: HTMLElement) {
@@ -15,15 +15,11 @@ export function injectPostInspectorInstagram(signal: AbortSignal, current: PostI
         {
             zipPost(node) {},
             render(jsx, postInfo) {
-                return renderInShadowRoot(jsx, {
-                    shadow: () => getShadowRoot(postInfo.postContentNode!),
-                    concurrent: true,
-                    signal,
-                })
+                const root = createReactRootShadowed(getShadowRoot(postInfo.postContentNode!), { signal })
+                root.render(jsx)
+                return root.destory
             },
         },
-        () => ({
-            slotPosition: 'after',
-        }),
+        () => ({ slotPosition: 'after' }),
     )(current, signal)
 }

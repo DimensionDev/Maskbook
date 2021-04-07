@@ -92,7 +92,7 @@ export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage',
 })
 
 export const newDashboardConnection = createGlobalSettings('beta-dashboard', false, {
-    primary: () => 'Allow isolated dashboard to connect',
+    primary: () => 'Experimental: Allow isolated dashboard to connect',
     secondary: () => "WARNING: DON'T OPEN THIS UNLESS YOU KNOW WHAT YOU ARE DOING.",
 })
 

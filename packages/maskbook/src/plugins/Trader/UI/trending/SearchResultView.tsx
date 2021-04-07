@@ -108,7 +108,7 @@ export function SearchResultView(props: SearchResultViewProps) {
 
     //#region stats
     const [days, setDays] = useState(Days.ONE_WEEK)
-    const { value: stats = [], loading: loadingStats } = usePriceStats({
+    const { value: stats = [], loading: loadingStats, retry: retryStats } = usePriceStats({
         coinId: trending?.coin.id,
         dataProvider: trending?.dataProvider,
         currency: trending?.currency,
@@ -208,7 +208,12 @@ export function SearchResultView(props: SearchResultViewProps) {
                 {tabIndex === 1 ? (
                     <>
                         {market ? <PriceChangedTable market={market} /> : null}
-                        <PriceChart coin={coin} stats={stats} loading={loadingStats}>
+                        <PriceChart
+                            coin={coin}
+                            currency={currency}
+                            stats={stats}
+                            loading={loadingStats}
+                            retry={retryStats}>
                             <PriceChartDaysControl days={days} onDaysChange={setDays} />
                         </PriceChart>
                     </>
@@ -225,6 +230,7 @@ export function SearchResultView(props: SearchResultViewProps) {
                 {Flags.LBP_enabled && LBP && tabIndex === tabs.length - 1 ? (
                     <LBPPanel
                         duration={LBP.duration}
+                        currency={currency}
                         token={createERC20Token(
                             chainId,
                             LBP.token.address,

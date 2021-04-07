@@ -4,7 +4,6 @@ import { definedSocialNetworkUIs, loadSocialNetworkUI } from '../../../social-ne
 import ProviderLine, { ProviderLineProps } from './ProviderLine'
 import { currentSetupGuideStatus } from '../../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../../settings/types'
-import { exclusiveTasks } from '../../content-script/tasks'
 import stringify from 'json-stable-stringify'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardPersonaUnlinkConfirmDialog } from '../DashboardDialogs/Persona'

@@ -25,6 +25,7 @@ export function InitAutonomousStateFriends(
     signal.addEventListener(
         'abort',
         MaskMessage.events.profilesChanged.on(async (events) => {
+            // eslint-disable-next-line @typescript-eslint/await-thenable
             const newVal = await produce(ref.value, async (draft) => {
                 for (const event of events) {
                     if (event.of.network !== network) continue

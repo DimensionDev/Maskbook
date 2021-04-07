@@ -176,11 +176,10 @@ function config(opts: {
                                 .replace(/\\/g, '/')
                                 .match(/node_modules\/\.pnpm\/(.+)/)![1]
                                 .split('/')
-                            const pkg: string[] = [path[0]]
-                            if (path[0].startsWith('@')) pkg.push(path[1])
-                            // drop version number
-                            pkg[pkg.length - 1] = pkg[pkg.length - 1].replace(/@.+/, '')
-                            return `npm.${pkg.join('.').replace('@', '')}`
+                            // [@org+pkgname@version, node_modules, @org, pkgname, ...inner path]
+                            if (path[0].startsWith('@')) return `npm-ns.${path[2].replace('@', '')}.${path[3]}`
+                            // [pkgname@version, node_modules, pkgname, ...inner path]
+                            return `npm.${path[2]}`
                         },
                     },
                 },

@@ -6,6 +6,7 @@ import { useChainId } from '../../../../web3/hooks/useChainState'
 import { TradeStrategy } from '../../types'
 import { useAllCommonPairs } from './useAllCommonPairs'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import { MAX_HOP } from '../../constants'
 
 export function useV2Trade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
@@ -16,14 +17,17 @@ export function useV2Trade(
 ) {
     const isExactIn = strategy === TradeStrategy.ExactIn
     const isTradable = !new BigNumber(inputAmount).isZero() || !new BigNumber(outputAmount).isZero()
-    const { value: pairs, ...asyncResult } = useAllCommonPairs(
-        isTradable ? inputToken : undefined,
-        isTradable ? outputToken : undefined,
-    )
+    const { value: pairs, ...asyncResult } = useAllCommonPairs(inputToken, outputToken)
     const bestTradeExactIn = useBestTradeExactIn(inputAmount, inputToken, outputToken, pairs)
     const bestTradeExactOut = useBestTradeExactOut(outputAmount, inputToken, outputToken, pairs)
 
-    if (!isTradable || !inputToken || !outputToken)
+    if (
+        !isTradable ||
+        !inputToken ||
+        !outputToken ||
+        (inputAmount === '0' && isExactIn) ||
+        (outputAmount === '0' && !isExactIn)
+    )
         return {
             ...asyncResult,
             error: void 0,
@@ -51,13 +55,13 @@ export function useBestTradeExactIn(
                     toUniswapCurrencyAmount(chainId, inputToken, amount),
                     toUniswapCurrency(chainId, outputToken),
                     {
-                        maxHops: 3,
+                        maxHops: MAX_HOP,
                         maxNumResults: 1,
                     },
                 )[0] ?? null
             )
         return null
-    }, [pairs, amount, chainId, inputToken, outputToken])
+    }, [pairs, amount, chainId, inputToken?.address, outputToken?.address])
 }
 
 export function useBestTradeExactOut(
@@ -75,11 +79,11 @@ export function useBestTradeExactOut(
                     toUniswapCurrency(chainId, inputToken),
                     toUniswapCurrencyAmount(chainId, outputToken, amount),
                     {
-                        maxHops: 3,
+                        maxHops: MAX_HOP,
                         maxNumResults: 1,
                     },
                 )[0] ?? null
             )
         return null
-    }, [pairs, amount, chainId, inputToken, outputToken])
+    }, [pairs, amount, chainId, inputToken?.address, outputToken?.address])
 }

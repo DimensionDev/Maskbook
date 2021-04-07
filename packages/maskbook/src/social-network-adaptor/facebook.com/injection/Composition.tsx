@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { isMobileFacebook } from '../utils/isMobile'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
@@ -23,17 +23,7 @@ if (isMobileFacebook) {
 export function injectCompositionFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(composeBox.clone())
     startWatch(watcher, signal)
-    renderInShadowRoot(<UI />, {
-        shadow: () => watcher.firstDOMProxy.afterShadow,
-        rootProps: {
-            style: {
-                display: 'block',
-                padding: 0,
-                marginTop: 0,
-            },
-        },
-        signal,
-    })
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<UI />)
 }
 function UI() {
     const onHintButtonClicked = useCallback(
@@ -41,9 +31,9 @@ function UI() {
         [],
     )
     return (
-        <>
+        <span style={{ display: 'block', padding: 0, marginTop: 0 }}>
             <PostDialogHint onHintButtonClicked={onHintButtonClicked} />
             <PostDialog reason="popup" />
-        </>
+        </span>
     )
 }

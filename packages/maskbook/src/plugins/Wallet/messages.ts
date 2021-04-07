@@ -17,6 +17,11 @@ export type SelectWalletDialogEvent = {
     open: boolean
 }
 
+export type CreateWalletDialogEvent = {
+    name?: string
+    open: boolean
+}
+
 export type WalletStatusDialogEvent = {
     open: boolean
 }
@@ -55,6 +60,11 @@ interface WalletMessage {
     selectWalletDialogUpdated: SelectWalletDialogEvent
 
     /**
+     * Create wallet dialog
+     */
+    createWalletDialogUpdated: CreateWalletDialogEvent
+
+    /**
      * Select provider dialog
      */
     selectProviderDialogUpdated: SelectProviderDialogEvent
@@ -75,7 +85,10 @@ interface WalletMessage {
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
 
     walletsUpdated: void
-    tokensUpdated: void
+    phrasesUpdated: void
+    erc20TokensUpdated: void
+    erc721TokensUpdated: void
+    erc1155TokensUpdated: void
     rpc: unknown
 }
 

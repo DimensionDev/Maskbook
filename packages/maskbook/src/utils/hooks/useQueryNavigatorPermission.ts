@@ -16,7 +16,7 @@ export function checkPermissionApiUsability(type?: typeof q[number]) {
     return r as Required<typeof r>
 }
 
-export function useQueryNavigatorPermission(needRequest: boolean, name: PermissionNameWithClipboard): PermissionState {
+export function useQueryNavigatorPermission(needRequest: boolean, name: PermissionName): PermissionState {
     const [permission, updatePermission] = useState<PermissionState>('prompt')
 
     useEffect(() => {
