@@ -1,6 +1,5 @@
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { PLUGIN_NAME, PLUGIN_IDENTIFIER } from './constants'
-import { CollectibleMetadataReader } from './helpers'
 import { PostInspector } from './UI/PostInspector'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import type { CollectibleJSON_Payload } from './types'

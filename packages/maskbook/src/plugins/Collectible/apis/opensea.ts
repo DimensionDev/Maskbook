@@ -27,16 +27,6 @@ export interface OpenSeaResponse extends OpenSeaAsset {
     traits: OpenSeaCustomTrait[]
 }
 
-export interface OpenSeaCustomTransaction {
-    from_account?: OpenSeaCustomAccount
-    id: number
-    timestamp: string
-    to_account?: OpenSeaCustomAccount
-    block_hash: string
-    transaction_hash: string
-    transaction_index: string
-}
-
 export interface OpenSeaAssetEventAccount {
     address: string
     chain: {
