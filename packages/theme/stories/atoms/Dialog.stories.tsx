@@ -1,5 +1,5 @@
 import { DialogExample } from './DialogExample'
-import { story, MuiArgs, matrix } from '../utils'
+import { story } from '../utils'
 
 const { meta, of } = story(DialogExample)
 export default meta({

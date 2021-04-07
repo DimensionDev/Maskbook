@@ -18,7 +18,7 @@ import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { ChainId, EthereumTokenType } from '../../../../web3/types'
+import { EthereumTokenType } from '../../../../web3/types'
 import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { LBPPanel } from './LBPPanel'
@@ -104,7 +104,7 @@ export function PopperView(props: PopperViewProps) {
 
     //#region stats
     const [days, setDays] = useState(Days.ONE_WEEK)
-    const { value: stats = [], loading: loadingStats } = usePriceStats({
+    const { value: stats = [], loading: loadingStats, retry: retryStats } = usePriceStats({
         coinId: trending?.coin.id,
         dataProvider: trending?.dataProvider,
         currency: trending?.currency,
@@ -154,19 +154,19 @@ export function PopperView(props: PopperViewProps) {
     //#endregion
 
     //#region display loading skeleton
-    if (!currency || !trending || !tokenDetailed || loadingTrending || loadingTokenDetailed)
+    const isEthereum = !!trending?.coin.eth_address || trending?.coin.symbol.toLowerCase() === 'eth'
+    if (!currency || !trending || (isEthereum && !tokenDetailed) || loadingTrending || loadingTokenDetailed)
         return <TrendingViewSkeleton />
     //#endregion
 
     //#region tabs
     const { coin, market, tickers } = trending
-    const canSwap = !!trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
     const tabs = [
-        <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />,
-        <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />,
-        <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />,
-        canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null,
-        Flags.LBP_enabled && LBP ? <Tab className={classes.tab} label="LBP" /> : null,
+        <Tab className={classes.tab} key="market" label={t('plugin_trader_tab_market')} />,
+        <Tab className={classes.tab} key="price" label={t('plugin_trader_tab_price')} />,
+        <Tab className={classes.tab} key="exchange" label={t('plugin_trader_tab_exchange')} />,
+        isEthereum ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
+        Flags.LBP_enabled && LBP ? <Tab className={classes.tab} key="lbp" label="LBP" /> : null,
     ].filter(Boolean)
     //#endregion
 
@@ -202,14 +202,16 @@ export function PopperView(props: PopperViewProps) {
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
+                            currency={currency}
                             stats={stats}
+                            retry={retryStats}
                             loading={loadingStats}>
                             <PriceChartDaysControl days={days} onDaysChange={setDays} />
                         </PriceChart>
                     </>
                 ) : null}
                 {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
-                {tabIndex === 3 && canSwap ? (
+                {tabIndex === 3 && isEthereum ? (
                     <TradeView
                         classes={{ root: classes.tradeViewRoot }}
                         TraderProps={{
@@ -221,6 +223,7 @@ export function PopperView(props: PopperViewProps) {
                 {Flags.LBP_enabled && LBP && tabIndex === tabs.length - 1 ? (
                     <LBPPanel
                         duration={LBP.duration}
+                        currency={currency}
                         token={createERC20Token(
                             chainId,
                             LBP.token.address,

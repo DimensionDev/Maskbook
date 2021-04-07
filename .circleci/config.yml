@@ -44,7 +44,7 @@ jobs:
           command: sudo apt-get install zip
       - run:
           name: Build Maskbook
-          command: npm run build-ci
+          command: npx build-ci
       - store_artifacts:
           path: Maskbook.base.zip
           destination: /Maskbook.base.zip

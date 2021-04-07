@@ -3,7 +3,7 @@ import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'
 import { useAvailableTraderProviders } from '../../trending/useAvailableTraderProviders'
 import { useSearchedKeywordAtTwitter } from '../../trending/useSearchedKeywordAtTwitter'
-import { TagType, TradeProvider } from '../../types'
+import { TagType } from '../../types'
 import { SearchResultView } from './SearchResultView'
 
 const useStyles = makeStyles({

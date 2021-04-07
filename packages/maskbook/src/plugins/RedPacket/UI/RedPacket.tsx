@@ -15,7 +15,6 @@ import { WalletMessages } from '../../Wallet/messages'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -31,6 +30,7 @@ import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import Services from '../../../extension/service'
 import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
 import { EthereumMessages } from '../../Ethereum/messages'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -173,17 +173,19 @@ export function RedPacket(props: RedPacketProps) {
 
     //#region remote controlled transaction dialog
     const postLink = usePostLink()
-    const shareLink = useShareLink(
-        canClaim
-            ? [
-                  `I just claimed a red packet from @${payload.sender.name}. Follow @realMaskbook (mask.io) to claim red packets.`,
-                  '#mask_io #RedPacket',
-                  postLink,
-              ]
-                  .filter(Boolean)
-                  .join('\n')
-            : '',
-    )
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            canClaim
+                ? [
+                      `I just claimed a red packet from @${payload.sender.name}. Follow @realMaskbook (mask.io) to claim red packets.`,
+                      '#mask_io #RedPacket',
+                      postLink,
+                  ]
+                      .filter(Boolean)
+                      .join('\n')
+                : '',
+        )
+        .toString()
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(account, payload.rpid, payload.password)
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(account, payload.rpid)
 

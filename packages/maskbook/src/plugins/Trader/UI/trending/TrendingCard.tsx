@@ -1,9 +1,10 @@
 import { Card, createStyles, makeStyles } from '@material-ui/core'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { getActivatedUI } from '../../../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../../../social-network'
+import { isTwitter as isTwitterF } from '../../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles((theme) => {
-    const internalName = getActivatedUI()?.name
+    const isTwitter = isTwitterF(activatedSocialNetworkUI)
     return createStyles({
         root: {
             width: 450,
@@ -11,7 +12,7 @@ const useStyles = makeStyles((theme) => {
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-            ...(internalName === 'twitter'
+            ...(isTwitter
                 ? {
                       boxShadow: `${
                           theme.palette.mode === 'dark'

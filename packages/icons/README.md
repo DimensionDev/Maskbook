@@ -9,7 +9,7 @@ This package includes svg icons in our project.
 - Icon for brands (e.g. MetaMask) puts in the `brands/` folder.
 - Other icons puts in the `general/` folder (and might be re-categorized later).
 
-## To add a new icon:
+## To add a new icon
 
 - Place it in the correct folder
 - Export it from `folder/index.tsx`

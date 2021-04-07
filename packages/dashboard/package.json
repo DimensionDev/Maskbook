@@ -11,8 +11,8 @@
   "main": "./dist/src/entry.js",
   "types": "./dist/src/entry.d.ts",
   "dependencies": {
+    "@dimensiondev/holoflows-kit": "0.8.0-20210317064617-6c4792c",
     "@dimensiondev/icons": "workspace:*",
-    "@dimensiondev/holoflows-kit": "0.8.0-20210302070358-e90c55c",
     "@dimensiondev/maskbook-shared": "workspace:*",
     "@dimensiondev/maskbook-storybook-shared": "workspace:*",
     "@dimensiondev/maskbook-theme": "workspace:*",
@@ -24,16 +24,16 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
-    "@snowpack/plugin-dotenv": "^2.0.5",
-    "@snowpack/plugin-react-refresh": "^2.3.9",
-    "@storybook/addon-actions": "^6.1.9",
-    "@storybook/addon-essentials": "^6.1.9",
-    "@storybook/addon-links": "^6.1.9",
-    "@storybook/addons": "^6.1.9",
-    "@storybook/react": "^6.1.9",
-    "@storybook/theming": "^6.1.9",
+    "@snowpack/plugin-dotenv": "^2.1.0",
+    "@snowpack/plugin-react-refresh": "^2.4.2",
+    "@storybook/addon-actions": "^6.2.3",
+    "@storybook/addon-essentials": "^6.2.3",
+    "@storybook/addon-links": "^6.2.3",
+    "@storybook/addons": "^6.2.3",
+    "@storybook/react": "^6.2.3",
+    "@storybook/theming": "^6.2.3",
     "@types/snowpack-env": "^2.3.2",
     "babel-loader": "^8.2.2",
-    "snowpack": "^3.0.11"
+    "snowpack": "^3.2.2"
   }
 }

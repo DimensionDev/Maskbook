@@ -24,18 +24,18 @@ import stringify from 'json-stable-stringify'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { noop } from 'lodash-es'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { getActivatedUI } from '../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../social-network'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { MaskMessage } from '../../utils/messages'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
-import { currentSelectedWalletAddressSettings } from '../../plugins/Wallet/settings'
-import { WalletRPC } from '../../plugins/Wallet/messages'
 
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import { extendsTheme } from '../../utils/theme'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import { makeTypedMessageText } from '../../protocols/typed-message'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -364,7 +364,8 @@ interface FindUsernameProps extends Partial<WizardDialogProps> {
 
 function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange = noop }: FindUsernameProps) {
     const { t } = useI18N()
-    const ui = getActivatedUI()
+    const ui = activatedSocialNetworkUI
+    const gotoProfilePageImpl = ui.automation.redirect?.profilePage
 
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
@@ -378,9 +379,9 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
     const onJump = useCallback(
         (ev: React.MouseEvent<SVGElement>) => {
             ev.preventDefault()
-            ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, username))
+            gotoProfilePageImpl?.(new ProfileIdentifier(ui.networkIdentifier, username))
         },
-        [ui, username],
+        [gotoProfilePageImpl, ui.networkIdentifier, username],
     )
     return (
         <WizardDialog
@@ -413,14 +414,16 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                             onChange={(e) => onUsernameChange(e.target.value)}
                             onKeyDown={onKeyDown}
                             inputProps={{ 'data-testid': 'username_input' }}></TextField>
-                        <Hidden only="xs">
-                            <IconButton
-                                className={findUsernameClasses.button}
-                                color={username ? 'primary' : 'default'}
-                                disabled={!username}>
-                                <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
-                            </IconButton>
-                        </Hidden>
+                        {gotoProfilePageImpl ? (
+                            <Hidden only="xs">
+                                <IconButton
+                                    className={findUsernameClasses.button}
+                                    color={username ? 'primary' : 'default'}
+                                    disabled={!username}>
+                                    <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
+                                </IconButton>
+                            </Hidden>
+                        ) : null}
                     </Box>
                 </form>
             }
@@ -539,7 +542,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const { t } = useI18N()
     const { persona } = props
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
-    const ui = getActivatedUI()
+    const ui = activatedSocialNetworkUI
 
     //#region parse setup status
     const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
@@ -559,13 +562,13 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     //#endregion
 
     //#region setup username
-    const lastRecognized = useValueRef(getActivatedUI().lastRecognizedIdentity)
+    const lastRecognized = useLastRecognizedIdentity()
     const getUsername = () =>
         lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
     const [username, setUsername] = useState(getUsername)
     useEffect(
         () =>
-            getActivatedUI().lastRecognizedIdentity.addListener((val) => {
+            activatedSocialNetworkUI.collecting.identityProvider?.lastRecognized.addListener((val) => {
                 if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
             }),
         [username],
@@ -586,8 +589,12 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     username,
                     persona: persona.toText(),
                 } as SetupGuideCrossContextStatus)
-                ui.taskGotoNewsFeedPage()
-                setStep(SetupGuideStep.SayHelloWorld)
+                if (activatedSocialNetworkUI.configuration.setupWizard?.disableSayHello) {
+                    onConnect().then(onClose)
+                } else {
+                    ui.automation.redirect?.newsFeed?.()
+                    setStep(SetupGuideStep.SayHelloWorld)
+                }
                 break
             case SetupGuideStep.SayHelloWorld:
                 onClose()
@@ -620,21 +627,13 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap(),
         )
         if (!persona_.hasPrivateKey) throw new Error('invalid persona')
-        const [_, address] = await Promise.all([
-            Services.Identity.setupPersona(persona_.identifier),
-            WalletRPC.importFirstWallet({
-                name: persona_.nickname ?? t('untitled_wallet'),
-                mnemonic: persona_.mnemonic?.words.split(' '),
-                passphrase: '',
-            }),
-        ])
-        if (address) currentSelectedWalletAddressSettings.value = address
+        await Services.Identity.setupPersona(persona_.identifier)
         MaskMessage.events.personaChanged.sendToAll([{ of: persona, owned: true, reason: 'new' }])
     }
     const onCreate = async () => {
         const content = t('setup_guide_say_hello_content')
         copyToClipboard(content)
-        ui.taskOpenComposeBox(content, {
+        ui.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
             shareToEveryOne: true,
         })
     }
