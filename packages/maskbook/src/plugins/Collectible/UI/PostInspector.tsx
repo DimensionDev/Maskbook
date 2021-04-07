@@ -1,4 +1,4 @@
-import type { CollectibleJSON_Payload } from '../types'
+import type { CollectibleJSON_Payload } from './types'
 import { Collectible } from './Collectible'
 import { CollectibleState } from '../hooks/useCollectibleState'
 
