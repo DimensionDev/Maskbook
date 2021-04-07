@@ -1,6 +1,6 @@
 import { SyntheticEvent, cloneElement, isValidElement, useCallback, useRef, useState } from 'react'
 import { createStyles, makeStyles } from '@material-ui/core'
-import classNames from 'classnames'
+import type { MenuListProps, PaperProps } from '@material-ui/core'
 import { ShadowRootMenu } from '../shadow-root/ShadowRootComponents'
 
 const useStyles = makeStyles((theme) =>
@@ -15,26 +15,25 @@ const useStyles = makeStyles((theme) =>
         },
     }),
 )
+
+interface MenuProps {
+    paperProps?: PaperProps
+    menuListProps?: MenuListProps
+}
+
 /**
  * A util hooks for easier to use `<Menu>`s.
  * @param menus Material UI `<MenuItem />` elements
  */
-export function useMenu(elements: Array<JSX.Element | null>, anchorSibling = false) {
+export function useMenu(elements: Array<JSX.Element | null>, anchorSibling = false, props?: MenuProps) {
     const [open, setOpen] = useState(false)
     const anchorElRef = useRef<HTMLElement>()
     const close = () => setOpen(false)
     const classes = useStyles()
     return [
         <ShadowRootMenu
-            PaperProps={{
-                className: classNames(classes.paper),
-            }}
-            MenuListProps={{
-                style: {
-                    paddingTop: 0,
-                    paddingBottom: 0,
-                },
-            }}
+            PaperProps={props?.paperProps}
+            MenuListProps={props?.menuListProps}
             open={open}
             anchorEl={anchorElRef.current}
             onClose={close}

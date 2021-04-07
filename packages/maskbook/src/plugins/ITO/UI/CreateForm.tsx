@@ -45,7 +45,9 @@ const useStyles = makeStyles((theme) =>
             fontSize: 12,
             color: theme.palette.text.secondary,
         },
-        button: {},
+        button: {
+            marginTop: theme.spacing(1.5),
+        },
         date: {
             margin: theme.spacing(1),
             display: 'flex',

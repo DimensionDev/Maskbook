@@ -19,6 +19,7 @@ import { FixedSizeList } from 'react-window'
 import { useMemo, useState } from 'react'
 import { FilterTransactionType } from '../../../../plugins/Wallet/types'
 import { useChainId } from '../../../../web3/hooks/useChainState'
+import { Flags } from '../../../../utils/flags'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -95,7 +96,7 @@ export function TransactionList({ transactionType }: TransactionListProps) {
             </Box>
         )
 
-    return (
+    return Flags.transactions_pagination ? (
         <>
             <AutoResize>
                 {({ width, height }) => {
@@ -136,5 +137,13 @@ export function TransactionList({ transactionType }: TransactionListProps) {
                 </Box>
             )}
         </>
+    ) : (
+        <Table className={styles.fixed}>
+            <TableBody>
+                {dataSource.map((transaction) => (
+                    <Row key={transaction.id} chainId={chainId} transaction={transaction} />
+                ))}
+            </TableBody>
+        </Table>
     )
 }

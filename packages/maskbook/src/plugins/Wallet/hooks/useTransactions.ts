@@ -2,13 +2,20 @@ import { useAsyncRetry } from 'react-use'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { WalletRPC } from '../messages'
 import { currentPortfolioDataProviderSettings } from '../settings'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { PortfolioProvider, Transaction } from '../types'
 import { unreachable } from '../../../utils/utils'
 
 export function useTransactions(address: string, page?: number) {
     const values = useRef<Transaction[]>([])
     const provider = useValueRef(currentPortfolioDataProviderSettings)
+
+    useEffect(() => {
+        if (values.current.length) {
+            values.current = []
+        }
+    }, [address])
+
     return useAsyncRetry(async () => {
         if (!address) return []
         if (page === 1) values.current = []
