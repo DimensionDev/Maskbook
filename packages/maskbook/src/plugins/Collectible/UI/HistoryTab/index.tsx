@@ -102,18 +102,32 @@ export function HistoryTab(props: HistoryTabProps) {
             <Table size="small">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Event</TableCell>
+                        <TableCell>
+                            <Typography>Event</Typography>
+                        </TableCell>
                         {isDifferenceToken ? (
                             <>
-                                <TableCell>Unit Price</TableCell>
-                                <TableCell>Quantity</TableCell>
+                                <TableCell>
+                                    <Typography>Unit Price</Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Typography>Quantity</Typography>
+                                </TableCell>
                             </>
                         ) : (
-                            <TableCell>Price</TableCell>
+                            <TableCell>
+                                <Typography>Price</Typography>
+                            </TableCell>
                         )}
-                        <TableCell>From</TableCell>
-                        <TableCell>To</TableCell>
-                        <TableCell>Date</TableCell>
+                        <TableCell>
+                            <Typography>From</Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography>To</Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography>Date</Typography>
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
