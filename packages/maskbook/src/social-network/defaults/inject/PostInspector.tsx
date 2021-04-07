@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '../../PostInfo'
-import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostInspector, PostInspectorProps } from '../../../components/InjectedComponents/PostInspector'
 import { makeStyles } from '@material-ui/core'
 import { PostInfoContext } from '../../../components/DataSource/usePostInfo'
@@ -49,16 +49,16 @@ export function injectPostInspectorDefault<T extends string>(
             signal.addEventListener('abort', undo)
             return undo
         }
-        return renderInShadowRoot(jsx, {
-            shadow: () => current.rootNodeProxy.afterShadow,
-            concurrent: true,
-            keyBy: 'post-inspector',
+        const root = createReactRootShadowed(current.rootNodeProxy.afterShadow, {
+            key: 'post-inspector',
             signal,
         })
+        root.render(jsx)
+        return root.destory
     }
 }
 
 interface InjectPostInspectorDefaultConfig {
     zipPost?(node: DOMProxy): void
-    render?(node: React.ReactNode, postInfo: PostInfo): () => void
+    render?(node: React.ReactChild, postInfo: PostInfo): () => void
 }

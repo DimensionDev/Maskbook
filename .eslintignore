@@ -4,8 +4,9 @@ build/
 dist/
 e2e
 package.json
-packages/maskbook/src/contracts
-packages/maskbook/src/plugins/Wallet/contracts
+packages/contracts
 packages/storybook-shared
+packages/netlify/storybook-static
+packages/netlify/snowpack
 public/
 scripts/

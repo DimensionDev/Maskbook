@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Box, TextField, Grid, FormControlLabel, Checkbox } from '@material-ui/core'
+import { createStyles, makeStyles, Box, TextField } from '@material-ui/core'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
@@ -22,8 +22,6 @@ import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowR
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { Flags } from '../../../utils/flags'
-import { compact } from 'lodash-es'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -47,7 +45,9 @@ const useStyles = makeStyles((theme) =>
             fontSize: 12,
             color: theme.palette.text.secondary,
         },
-        button: {},
+        button: {
+            marginTop: theme.spacing(1.5),
+        },
         date: {
             margin: theme.spacing(1),
             display: 'flex',
