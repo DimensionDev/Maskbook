@@ -1,4 +1,4 @@
-import { ChainId, JSBI, Percent, Token, WETH, INIT_CODE_HASH } from 'quickswap-sdk'
+import { ChainId, Token, WETH, INIT_CODE_HASH } from 'quickswap-sdk'
 import type { ERC20TokenDetailed } from '../../../web3/types'
 import { AMPL, QUICK, DAI, WBTC, USDC, USDT,  WETH_ONLY, WMATIC } from './trader'
 

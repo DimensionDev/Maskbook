@@ -1,7 +1,7 @@
 import { useContext, useMemo } from 'react'
 import { flatMap } from 'lodash-es'
 import type { Pair } from '@uniswap/sdk'
-import type { Pair as QuickPair, ChainId as QuickswapChainId } from 'quickswap-sdk'
+import type { ChainId as QuickswapChainId } from 'quickswap-sdk'
 import { toUniswapChainId, toUniswapToken } from '../../helpers'
 import { usePairs, TokenPair, PairState } from './usePairs'
 import { useChainId } from '../../../../web3/hooks/useChainState'

@@ -15,8 +15,6 @@ import {
     ChainId as QuickswapChainId,
     Currency as QuickswapCurrency,
     CurrencyAmount as QuickswapCurrencyAmount,
-    Percent as QuickswapPercent,
-    Price as QuickswapPrice,
 } from 'quickswap-sdk'
 import { WETH } from '../constants'
 import { ChainId, ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
