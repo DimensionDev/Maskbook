@@ -70,7 +70,7 @@
   },
   "engines": {
     "node": ">=14.4.0",
-    "pnpm": ">=5"
+    "pnpm": ">=6"
   },
   "pnpm": {
     "overrides": {
