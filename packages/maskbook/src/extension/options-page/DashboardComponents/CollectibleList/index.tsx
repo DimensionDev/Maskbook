@@ -10,6 +10,7 @@ import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
+import { Flags } from '../../../../utils/flags'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -111,54 +112,71 @@ export function CollectibleList(props: CollectibleListProps) {
 
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
-            <AutoResize>
-                {({ width, height }) => {
-                    return (
-                        <FixedSizeGrid
-                            columnWidth={176}
-                            rowHeight={260}
-                            columnCount={4}
-                            height={height - 40}
-                            onItemsRendered={({
-                                overscanRowStopIndex,
-                                overscanColumnStopIndex,
-                                visibleRowStopIndex,
-                                visibleColumnStopIndex,
-                            }) => {
-                                if (dataSource.length === 0 || collectiblesError || collectiblesLoading) return
-                                if (
-                                    visibleColumnStopIndex === overscanColumnStopIndex &&
-                                    visibleRowStopIndex === overscanRowStopIndex &&
-                                    visibleRowStopIndex === Math.ceil(dataSource.length / 4) - 1
-                                ) {
-                                    setPage((x) => x + 1)
-                                }
-                            }}
-                            rowCount={Math.ceil(dataSource.length / 4)}
-                            width={width}>
-                            {({ columnIndex, rowIndex, style }) => {
-                                const y = dataSource[rowIndex * 4 + columnIndex]
-                                if (y) {
-                                    return (
-                                        <div className={classes.card} key={y.tokenId} style={style}>
-                                            <CollectibleCard token={y} wallet={wallet} provider={provider} />
-                                            <div className={classes.description}>
-                                                <Typography color="textSecondary" variant="body2">
-                                                    {y.asset?.name ?? y.name}
-                                                </Typography>
-                                            </div>
-                                        </div>
-                                    )
-                                }
-                                return null
-                            }}
-                        </FixedSizeGrid>
-                    )
-                }}
-            </AutoResize>
-            {collectiblesLoading && (
-                <Box className={classes.loading}>
-                    <CircularProgress size={25} />
+            {Flags.transactions_pagination ? (
+                <>
+                    <AutoResize>
+                        {({ width, height }) => {
+                            return (
+                                <FixedSizeGrid
+                                    columnWidth={176}
+                                    rowHeight={260}
+                                    columnCount={4}
+                                    height={height - 40}
+                                    onItemsRendered={({
+                                        overscanRowStopIndex,
+                                        overscanColumnStopIndex,
+                                        visibleRowStopIndex,
+                                        visibleColumnStopIndex,
+                                    }) => {
+                                        if (dataSource.length === 0 || collectiblesError || collectiblesLoading) return
+                                        if (
+                                            visibleColumnStopIndex === overscanColumnStopIndex &&
+                                            visibleRowStopIndex === overscanRowStopIndex &&
+                                            visibleRowStopIndex === Math.ceil(dataSource.length / 4) - 1
+                                        ) {
+                                            setPage((x) => x + 1)
+                                        }
+                                    }}
+                                    rowCount={Math.ceil(dataSource.length / 4)}
+                                    width={width}>
+                                    {({ columnIndex, rowIndex, style }) => {
+                                        const y = dataSource[rowIndex * 4 + columnIndex]
+                                        if (y) {
+                                            return (
+                                                <div className={classes.card} key={y.tokenId} style={style}>
+                                                    <CollectibleCard token={y} wallet={wallet} provider={provider} />
+                                                    <div className={classes.description}>
+                                                        <Typography color="textSecondary" variant="body2">
+                                                            {y.asset?.name ?? y.name}
+                                                        </Typography>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                        return null
+                                    }}
+                                </FixedSizeGrid>
+                            )
+                        }}
+                    </AutoResize>
+                    {collectiblesLoading && (
+                        <Box className={classes.loading}>
+                            <CircularProgress size={25} />
+                        </Box>
+                    )}
+                </>
+            ) : (
+                <Box className={classes.root}>
+                    {dataSource.map((x) => (
+                        <div className={classes.card} key={x.tokenId}>
+                            <CollectibleCard token={x} provider={provider} wallet={wallet} />
+                            <div className={classes.description}>
+                                <Typography color="textSecondary" variant="body2">
+                                    {x.asset?.name ?? x.name}
+                                </Typography>
+                            </div>
+                        </div>
+                    ))}
                 </Box>
             )}
         </CollectibleContext.Provider>

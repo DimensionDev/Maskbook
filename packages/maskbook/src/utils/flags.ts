@@ -54,6 +54,8 @@ export const Flags = {
     LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
     //#endregion
 
+    transactions_pagination: false,
+
     //#region Functionality missing / broken
     /**
      * - iOS: WebExtension polyfill didn't implemented the dynamic permission API
