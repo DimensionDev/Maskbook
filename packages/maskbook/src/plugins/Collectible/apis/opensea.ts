@@ -1,10 +1,10 @@
 import { OpenSeaPort } from 'opensea-js'
+import type { OpenSeaAccount, OpenSeaAsset, OpenSeaCollection, OrderSide } from 'opensea-js/lib/types'
+import stringify from 'json-stable-stringify'
 import { getChainId } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaBaseURL, OpenSeaGraphQLURL } from '../constants'
-import type { OpenSeaAccount, OpenSeaAsset, OpenSeaCollection } from 'opensea-js/lib/types'
 import { Flags } from '../../../utils/flags'
-import stringify from 'json-stable-stringify'
 
 export interface OpenSeaCustomTrait {
     trait_type: string
@@ -140,7 +140,7 @@ export async function getAsset(tokenAddress: string, tokenId: string) {
     } as OpenSeaResponse
 }
 
-export async function getOrders(asset_contract_address: string, token_id: string, cursor?: string, count = 10) {
+export async function getEvents(asset_contract_address: string, token_id: string, cursor?: string, count = 10) {
     const query = {
         id: 'EventHistoryQuery',
         query:
@@ -170,6 +170,13 @@ export async function getOrders(asset_contract_address: string, token_id: string
     return data.assetEvents as OpenSeaAssetEventResponse
 }
 
-export async function getOffers() {
-    return (await createOpenSeaPort()).api.getOrders()
+export async function getOrders(asset_contract_address: string, token_id: string, side: OrderSide) {
+    const orders = (await createOpenSeaPort()).api.getOrders({
+        asset_contract_address,
+        token_id,
+        side,
+    })
+
+    console.log(orders)
+    return orders
 }

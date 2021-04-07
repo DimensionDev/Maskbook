@@ -1,17 +1,11 @@
-import type { CollectibleToken } from '../types'
 import { useAsyncRetry } from 'react-use'
+import { OrderSide } from 'opensea-js/lib/types'
+import type { CollectibleToken } from '../types'
 import { PluginCollectiblesRPC } from '../messages'
-import type { OpenSeaAssetEvent, OpenSeaAssetEventResponse } from '../apis'
 
-export function useOrders(token?: CollectibleToken, cursor?: string) {
+export function useOrders(token?: CollectibleToken, side = OrderSide.Buy) {
     return useAsyncRetry(async () => {
-        if (!token)
-            return {
-                edges: [] as OpenSeaAssetEvent[],
-                pageInfo: {
-                    hasNextPage: false,
-                },
-            } as OpenSeaAssetEventResponse
-        return PluginCollectiblesRPC.getOrders(token.contractAddress, token.tokenId, cursor)
-    }, [token, cursor])
+        if (!token) return []
+        return PluginCollectiblesRPC.getOrders(token.contractAddress, token.tokenId, side)
+    }, [token])
 }
