@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface TradeRouteProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface TradeRouteProps extends withClasses<never> {
     trade: TradeComputed
 }
 

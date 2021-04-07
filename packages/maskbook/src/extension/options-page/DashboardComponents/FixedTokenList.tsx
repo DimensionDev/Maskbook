@@ -1,8 +1,7 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { uniqBy } from 'lodash-es'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { makeStyles, createStyles, Typography } from '@material-ui/core'
-import { EthereumAddress } from 'wallet.ts'
 import {
     TokenListsState,
     useERC20TokensDetailedFromTokenLists,
@@ -21,7 +20,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface FixedTokenListProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface FixedTokenListProps extends withClasses<never> {
     keyword?: string
     whitelist?: string[]
     blacklist?: string[]

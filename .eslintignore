@@ -1,10 +1,12 @@
+*.d.ts
 *.test.tsx
-package.json
 build/
 dist/
-scripts/
 e2e
-packages/maskbook/src/plugins/Wallet/contracts
-packages/maskbook/src/contracts
+package.json
+packages/contracts
+packages/storybook-shared
+packages/netlify/storybook-static
+packages/netlify/snowpack
 public/
-*.d.ts
+scripts/

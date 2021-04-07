@@ -50,11 +50,6 @@ type ConfirmSwapDialogEvent =
 
 interface EthereumMessage {
     /**
-     * Select token dialog
-     */
-    selectERC20TokenDialogUpdated: SelectTokenDialogEvent
-
-    /**
      * Unlock token dialog
      */
     unlockERC20TokenDialogUpdated: UnlockERC20TokenDialogEvent

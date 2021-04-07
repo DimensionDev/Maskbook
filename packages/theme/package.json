@@ -9,18 +9,18 @@
     "start": "dev -- start-storybook -p 6006"
   },
   "dependencies": {
-    "@dimensiondev/maskbook-storybook-shared": "*",
-    "@dimensiondev/maskbook-shared": "*",
+    "@dimensiondev/maskbook-shared": "workspace:*",
+    "@dimensiondev/maskbook-storybook-shared": "workspace:*",
     "lodash-es": "^4.17.20"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
-    "@storybook/addon-actions": "^6.1.9",
-    "@storybook/addon-essentials": "^6.1.9",
-    "@storybook/addon-links": "^6.1.9",
-    "@storybook/addons": "^6.1.9",
-    "@storybook/react": "^6.1.9",
-    "@storybook/theming": "^6.1.9",
+    "@storybook/addon-actions": "^6.2.3",
+    "@storybook/addon-essentials": "^6.2.3",
+    "@storybook/addon-links": "^6.2.3",
+    "@storybook/addons": "^6.2.3",
+    "@storybook/react": "^6.2.3",
+    "@storybook/theming": "^6.2.3",
     "babel-loader": "^8.2.2",
     "storybook-addon-matrix": "^1.6.0"
   }

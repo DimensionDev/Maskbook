@@ -6,10 +6,12 @@ import { merge, cloneDeep } from 'lodash-es'
 import { appearanceSettings, languageSettings } from '../settings/settings'
 import { Appearance, Language } from '../settings/types'
 import { useValueRef } from './hooks/useValueRef'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { zhTW, jaJP } from '@material-ui/core/locale/index'
 import { safeUnreachable } from './utils'
 import { or } from '../components/custom-ui-helper'
+import { activatedSocialNetworkUI } from '../social-network'
+import { ValueRef } from '@dimensiondev/holoflows-kit'
 
 function getFontFamily(monospace?: boolean) {
     // We want to look native.
@@ -94,9 +96,19 @@ const MaskbookDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))
 export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Language }) {
     const language = opt?.language ?? languageSettings.value
     const preference = opt?.appearance ?? appearanceSettings.value
-    const appearance = matchMedia('(prefers-color-scheme: dark)').matches
 
-    const isDark = (appearance && preference === Appearance.default) || preference === Appearance.dark
+    // Priority:
+    // PaletteModeProvider (in SNS adaptor) > User preference > OS preference
+    const isDarkBrowser = matchMedia('(prefers-color-scheme: dark)').matches
+    const detectedPalette = activatedSocialNetworkUI.customization.paletteMode?.current.value
+    let isDark = (isDarkBrowser && preference === Appearance.default) || preference === Appearance.dark
+    if (detectedPalette) {
+        isDark = detectedPalette === 'dark'
+    } else if (preference === Appearance.default) {
+        isDark = isDarkBrowser
+    } else {
+        isDark = preference === Appearance.dark
+    }
     const baseTheme = isDark ? MaskbookDarkTheme : MaskbookLightTheme
     switch (language) {
         case Language.en:
@@ -113,15 +125,12 @@ export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Lan
 
 export function useMaskbookTheme(opt?: { appearance?: Appearance; language?: Language }) {
     const language = or(opt?.language, useValueRef(languageSettings))
-    const appPreference = or(opt?.appearance, useValueRef(appearanceSettings))
+    const appearance = or(opt?.appearance, useValueRef(appearanceSettings))
     const systemPreference = useMediaQuery('(prefers-color-scheme: dark)')
-    return useMemo(() => getMaskbookTheme(opt), [
-        opt?.appearance,
-        opt?.language,
-        language,
-        appPreference,
-        systemPreference,
-    ])
+    const paletteProvider = useRef(activatedSocialNetworkUI.customization.paletteMode?.current || new ValueRef('light'))
+        .current
+    const palette = useValueRef(paletteProvider)
+    return useMemo(() => getMaskbookTheme({ appearance, language }), [language, appearance, systemPreference, palette])
 }
 
 export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {

@@ -27,7 +27,7 @@ import OpenInBrowser from '@material-ui/icons/OpenInBrowser'
 import { formatDateTime } from '../../utils/date'
 import { saveAsFileFromUrl } from '../../extension/background-script/HelperService'
 
-export interface AutoPasteFailedDialogProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface AutoPasteFailedDialogProps extends withClasses<never> {
     onClose: () => void
     data: MaskMessages['autoPasteFailed']
 }
@@ -44,6 +44,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { enqueueSnackbar } = useSnackbar()
     const [, copy] = useCopyToClipboard()
     const isMobile = useMatchXS()
+    // @ts-expect-error Remove this comment after lib.dom.d.ts contains 'clipboard-write'
     const permission = useQueryNavigatorPermission(true, 'clipboard-write')
     const fileName = `maskbook-encrypted-${formatDateTime(new Date()).replace(/:/g, '-')}.png`
 

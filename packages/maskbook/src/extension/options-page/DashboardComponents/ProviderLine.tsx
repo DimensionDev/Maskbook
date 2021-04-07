@@ -7,8 +7,8 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import LinkOffIcon from '@material-ui/icons/LinkOff'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { facebookDomain } from '../../../social-network-provider/facebook.com/isMobile'
-import { twitterDomain } from '../../../social-network-provider/twitter.com/utils/isMobile'
+import { facebookDomain } from '../../../social-network-adaptor/facebook.com/utils/isMobile'
+import { twitterDomain } from '../../../social-network-adaptor/twitter.com/utils/isMobile'
 import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme) =>
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface ProviderLineProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface ProviderLineProps extends withClasses<never> {
     internalName: string
     network: string
     connected?: boolean
@@ -54,6 +54,7 @@ export interface ProviderLineProps extends withClasses<KeysInferFromUseStyles<ty
 
 export default function ProviderLine(props: ProviderLineProps) {
     const { t } = useI18N()
+    // TODO: internal name should not be used to display
     const { internalName, network, connected, userId, onAction } = props
     const classes = useStylesExtends(useStyles(), props)
     return (
@@ -98,6 +99,7 @@ function Goto(network: string, userID?: string) {
         color: 'textPrimary',
         style: { textDecoration: 'underline' } as React.CSSProperties,
     } as const
+    // TODO: should use getHomePage URL I guess?
     if (network === 'facebook.com') return <Link href={facebookDomain} {...props} />
     if (network === 'twitter.com') return <Link href={twitterDomain} {...props} />
     return <span title={title}>{title}</span>

@@ -8,14 +8,14 @@ import { queryPersonaRecord, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
-import { getNetworkWorker } from '../../../social-network/worker'
+import { getNetworkWorker, getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { cryptoProviderTable } from './cryptoProviderTable'
 import type { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { verifyOthersProve } from './verifyOthersProve'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 import { DecryptFailedReason } from '../../../utils/constants'
 import { asyncIteratorWithResult, memorizeAsyncGenerator } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { sleep } from '../../../utils/utils'
+import { delay } from '../../../utils/utils'
 import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 import { decodeImageUrl } from '../SteganographyService'
 import type { TypedMessage } from '../../../protocols/typed-message'
@@ -24,6 +24,8 @@ import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
 import { MaskMessage } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
 import { calculatePostKeyPartition } from '../../../network/gun/version.2/hash'
+import { Err, Ok, Result } from 'ts-results'
+import { decodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
 
 type Progress = (
     | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
@@ -131,8 +133,10 @@ async function* decryptFromPayloadWithProgress_raw(
     if (successDecryptionCache.has(cacheKey)) return successDecryptionCache.get(cacheKey)!
     yield makeProgress('init')
 
-    const authorNetworkWorker = getNetworkWorker(author.network)
-    if (authorNetworkWorker.err) return makeError(authorNetworkWorker.val)
+    const authorNetworkWorker = Result.wrap(() => getNetworkWorkerUninitialized(author.network)).andThen((x) =>
+        x ? Ok(x) : Err(new Error('Worker not found')),
+    )
+    if (authorNetworkWorker.err) return makeError(authorNetworkWorker.val as Error)
 
     const data = post
     const { version } = data
@@ -173,14 +177,14 @@ async function* decryptFromPayloadWithProgress_raw(
 
         // ? Get my public & private key.
         const queryWhoAmI = () => queryPersonaRecord(whoAmI)
-        const mine = await queryWhoAmI().then((x) => x || sleep(1000).then(queryWhoAmI))
+        const mine = await queryWhoAmI().then((x) => x || delay(1000).then(queryWhoAmI))
         if (!mine?.privateKey) return makeError(DecryptFailedReason.MyCryptoKeyNotFound)
 
         const { publicKey: minePublic, privateKey: minePrivate } = mine
-        const networkWorker = getNetworkWorker(whoAmI)
+        const networkWorker = getNetworkWorkerUninitialized(whoAmI)
         try {
             if (version === -40) throw ''
-            const gunNetworkHint = networkWorker.unwrap().gunNetworkHint
+            const gunNetworkHint = networkWorker!.gunNetworkHint
             const { keyHash, postHash } = await calculatePostKeyPartition(version, iv, minePublic, gunNetworkHint)
             yield { type: 'debug', debug: 'debug_finding_hash', hash: [postHash, keyHash] }
         } catch {}
@@ -312,9 +316,9 @@ async function* decryptFromImageUrlWithProgress_raw(
     })
     if (post.indexOf('🎼') !== 0 && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
         return makeError(i18n.t('service_decode_image_payload_failed'), true)
-    const worker = getNetworkWorker(author)
-    if (worker.err) return makeError(worker.val)
-    const payload = deconstructPayload(post, worker.val.payloadDecoder)
+    const worker = await Result.wrapAsync(() => getNetworkWorker(author))
+    if (worker.err) return makeError(worker.val as Error)
+    const payload = deconstructPayload(post, await decodeTextPayloadWorker(author))
     if (payload.err) return makeError(payload.val)
     return yield* decryptFromText(payload.val, author, whoAmI, publicShared)
 }

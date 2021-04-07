@@ -25,7 +25,11 @@ test('dispatch paste image event', () => {
 test('dispatch paste image event with bytes', () => {
     const dispatchEventSpy = spyOn(document, 'dispatchEvent')
     const bytes = new Uint8Array([])
-    pasteImageToActiveElements(bytes)
+    pasteImageToActiveElements({
+        async arrayBuffer() {
+            return bytes.buffer
+        },
+    } as Blob)
     expect(dispatchEventSpy).toHaveBeenCalled()
 
     const event: CustomEvent = dispatchEventSpy.calls.first().args[0]

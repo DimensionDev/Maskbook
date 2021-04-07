@@ -71,8 +71,7 @@ const useStyles = makeStyles((theme) => {
             transform: 'rotate(-180deg)',
         },
         rootStickyShrink: {
-            zIndex: 1,
-            right: '0 !important',
+            left: '10px !important',
             position: 'fixed',
             backgroundColor: theme.palette.background.paper,
             height: TOOLBAR_HEIGHT,
@@ -86,7 +85,7 @@ export function ToolbarAtTwitter(props: ToolbarAtTwitterProps) {
     const classes = useStyles()
     const location = useLocation()
     const isPhotoPage = /\/status\/\d+\/photo\/\d+$/.test(location.pathname ?? '')
-    const [isExpand, setIsExpand] = useState(true)
+    const [isExpand, setExpand] = useState(false)
 
     // inject global css
     useEffectOnce(() => {
@@ -124,12 +123,14 @@ export function ToolbarAtTwitter(props: ToolbarAtTwitterProps) {
     }, [windowWidth])
     //#endregion
 
+    // There's an animation effect when click button which would keep showing after expanded or shrinked,
+    //  so re-render IconButton immediately when isExpand changes.
     const IconButtonMemo = useMemo(
         () => () => (
             <IconButton
-                onClick={() => setIsExpand(!isExpand)}
+                onClick={() => setExpand(!isExpand)}
                 color="primary"
-                className={classNames(classes.sizeButton, isExpand ? '' : classes.rotate)}>
+                className={classNames(classes.sizeButton, isExpand ? classes.rotate : '')}>
                 <DoubleArrowIcon />
             </IconButton>
         ),
@@ -153,9 +154,7 @@ export function ToolbarAtTwitter(props: ToolbarAtTwitterProps) {
                             <MaskbookIcon classes={{ root: classes.logo }} />
                         </div>
                     ) : null}
-                    <div
-                        className={classes.right}
-                        style={isExpand ? { width: mainWidth } : { flexDirection: 'row-reverse' }}>
+                    <div className={classes.right} style={isExpand ? { width: mainWidth } : {}}>
                         <EthereumMaskBalanceButton classes={{ root: classes.maskBalanceButton }} />
                         {isExpand ? <EthereumAccountButton classes={{ root: classes.accountButton }} /> : null}
                         <IconButtonMemo />

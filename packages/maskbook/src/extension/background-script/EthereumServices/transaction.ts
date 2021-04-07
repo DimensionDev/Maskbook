@@ -12,7 +12,7 @@ import { isSameAddress } from '../../../web3/helpers'
 import { getNonce, resetNonce, commitNonce } from './nonce'
 import { TransactionEventType } from '../../../web3/types'
 import { ProviderType } from '../../../web3/types'
-import { sleep } from '../../../utils/utils'
+import { delay } from '../../../utils/utils'
 import { getTransactionReceipt } from './network'
 import { getChainId } from './chainState'
 import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
@@ -48,7 +48,7 @@ function watchTransactionEvent(from: string, event: PromiEventW3<TransactionRece
                 break
             }
             // wait for next block
-            await sleep(15 /* seconds */ * 1000 /* milliseconds */)
+            await delay(15 /* seconds */ * 1000 /* milliseconds */)
         }
         // timeout
         if (!controller.signal.aborted) enhancedEvent.emit(TransactionEventType.ERROR, new Error('timeout'))

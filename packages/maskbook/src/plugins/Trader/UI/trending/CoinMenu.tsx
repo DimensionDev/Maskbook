@@ -41,7 +41,11 @@ export function CoinMenu(props: CoinMenuProps) {
     return (
         <>
             <div onClick={onOpen}>{children}</div>
-            <ShadowRootMenu open={!!anchorEl} onClose={onClose} anchorEl={anchorEl}>
+            <ShadowRootMenu
+                open={!!anchorEl}
+                onClose={onClose}
+                anchorEl={anchorEl}
+                PaperProps={{ style: { maxHeight: 192 } }}>
                 {options.map((x, i) => (
                     <MenuItem selected={selectedIndex === i} key={x.value} onClick={() => onSelect(x)}>
                         <Typography>

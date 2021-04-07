@@ -13,9 +13,7 @@ import { PollsPluginDefine } from './Polls/define'
 import { StorybookPluginDefine } from './Storybook/define'
 import { FileServicePluginDefine } from './FileService/UI-define'
 import { TraderPluginDefine } from './Trader/define'
-import { Election2020PluginDefine } from './Election2020/define'
 import { TransakPluginDefine } from './Transak/define'
-import { COTM_PluginDefine } from './COTM/define'
 import { ITO_PluginDefine } from './ITO/define'
 import { NFTPluginsDefine } from './NFT/define'
 import { AirdropPluginDefine } from './Airdrop/define'
@@ -32,8 +30,6 @@ sideEffect.then(() => {
     if (Flags.poll_enabled) plugins.add(PollsPluginDefine)
     if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
     if (Flags.transak_enabled) plugins.add(TransakPluginDefine)
-    if (Flags.election2020_enabled) plugins.add(Election2020PluginDefine)
-    if (Flags.COTM_enabled) plugins.add(COTM_PluginDefine)
     if (Flags.airdrop_enabled) plugins.add(AirdropPluginDefine)
     if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)
 })

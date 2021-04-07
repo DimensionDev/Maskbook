@@ -32,7 +32,7 @@ export { queryProfile, queryProfilePaged } from '../../database'
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)
 }
-export async function queryMyProfiles(network?: string) {
+export async function queryMyProfiles(network?: string): Promise<Profile[]> {
     const myPersonas = (await queryMyPersonas(network)).filter((x) => !x.uninitialized)
     return Promise.all(
         myPersonas

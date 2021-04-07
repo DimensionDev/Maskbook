@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
-import { makeStyles, createStyles, Button, ButtonProps, Chip, Typography } from '@material-ui/core'
+import { makeStyles, createStyles, Button, ButtonProps, Typography } from '@material-ui/core'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import BigNumber from 'bignumber.js'
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface EthereumAccountButtonProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface EthereumAccountButtonProps extends withClasses<never> {
     disableEther?: boolean
     ButtonProps?: Partial<ButtonProps>
 }

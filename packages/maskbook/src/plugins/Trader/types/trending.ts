@@ -5,7 +5,7 @@ export interface Settings {
 export enum DataProvider {
     COIN_GECKO,
     COIN_MARKET_CAP,
-    UNISWAP,
+    UNISWAP_INFO,
 }
 
 export enum TagType {
@@ -69,9 +69,9 @@ export interface Ticker {
     market_name: string
     base_name: string
     target_name: string
-    price: number
+    price?: number
     volume: number
-    score: string
+    score?: string
     updated: Date
 }
 
