@@ -18,19 +18,20 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { resolveChainName } from '../../../web3/pipes'
+import { resolveChainId, resolveChainName } from '../../../web3/pipes'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import {
     currentIsMetamaskLockedSettings,
     currentSelectedWalletProviderSettings,
 } from '../../../plugins/Wallet/settings'
-import { ProviderType } from '../../../web3/types'
+import { ChainId, ProviderType } from '../../../web3/types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import Services from '../../../extension/service'
 import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -258,11 +259,8 @@ export function RedPacket(props: RedPacketProps) {
             </Card>
         )
 
-    // the chain id is not available
-    if (!canFetch && payload.network) return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
-
     return (
-        <>
+        <EthereumChainBoundary chainId={resolveChainId(payload.network ?? '') ?? ChainId.Mainnet}>
             <Card className={classNames(classes.root)} component="article" elevation={0}>
                 <div className={classes.header}>
                     <Typography className={classes.from} variant="body1" color="inherit">
@@ -341,6 +339,6 @@ export function RedPacket(props: RedPacketProps) {
                     )}
                 </Box>
             ) : null}
-        </>
+        </EthereumChainBoundary>
     )
 }

@@ -125,8 +125,6 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         [dataIndex, onAmountChange],
     )
 
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-
     return (
         <Paper className={classes.line}>
             <TokenAmountPanel
