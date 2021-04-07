@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../utils/selector'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'

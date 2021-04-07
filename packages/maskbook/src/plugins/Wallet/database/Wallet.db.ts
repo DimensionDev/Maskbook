@@ -7,7 +7,6 @@ import type {
     PhraseRecordInDatabase,
     WalletRecordInDatabase,
 } from './types'
-import type { RedPacketRecordInDatabase } from '../../RedPacket/types'
 import { sideEffect } from '../../../utils/side-effects'
 import { migratePluginDatabase } from './migrate.plugins'
 

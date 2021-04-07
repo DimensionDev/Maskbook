@@ -9,7 +9,7 @@ import {
     createStyles,
     FilledInput,
 } from '@material-ui/core'
-import { memo, useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDashboardI18N } from '../../locales'
 
 const useStyles = makeStyles((theme) =>

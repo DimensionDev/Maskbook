@@ -1,4 +1,4 @@
-import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
+import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { ToolboxHint } from '../../../components/InjectedComponents/ToolboxHint'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { toolBoxInSideBarSelector } from '../utils/selector'

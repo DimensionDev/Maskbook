@@ -33,5 +33,6 @@ assignees:
 
 ## Part 2: Resources
 
-## Part 3: Contact and Support
+- [Mask Network Documentation](https://github.com/DimensionDev/Maskbook/tree/master/docs)
 
+## Part 3: Contact and Support

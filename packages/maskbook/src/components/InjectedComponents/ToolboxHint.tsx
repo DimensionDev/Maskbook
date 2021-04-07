@@ -1,4 +1,4 @@
-import { Button, makeStyles, Typography, MenuItem } from '@material-ui/core'
+import { makeStyles, Typography, MenuItem } from '@material-ui/core'
 import { MaskbookSharpIconOfSize } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
