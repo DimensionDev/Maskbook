@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { useUpdateEffect } from 'react-use'
 import {
     makeStyles,
     createStyles,
@@ -14,13 +16,11 @@ import {
     TablePagination,
     IconButton,
 } from '@material-ui/core'
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
 import { CollectibleTab } from '../CollectibleTab'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { Row } from './Row'
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
-import { useOrders } from '../../hooks/useOrders'
-import { useState } from 'react'
-import { useUpdateEffect } from 'react-use'
+import { useEvents } from '../../hooks/useEvents'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -45,7 +45,7 @@ export function HistoryTab(props: HistoryTabProps) {
     const [page, setPage] = useState(0)
 
     const { token } = CollectibleState.useContainer()
-    const orders = useOrders(token, cursors[page - 1])
+    const orders = useEvents(token, cursors[page - 1])
 
     //#region If there is a different asset, the unit price and quantity should be displayed
     const isDifferenceToken = orders.value?.edges.some((item) => item.node.price?.asset.symbol !== 'ETH')
