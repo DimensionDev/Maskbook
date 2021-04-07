@@ -99,7 +99,7 @@ export function HistoryTab(props: HistoryTabProps) {
 
     return (
         <CollectibleTab classes={{ root: classes.root }}>
-            <Table>
+            <Table size="small">
                 <TableHead>
                     <TableRow>
                         <TableCell>Event</TableCell>
