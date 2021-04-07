@@ -1,6 +1,8 @@
 import { createGlobalSettings } from '../../settings/createSettings'
+import { i18n } from '../../utils/i18n-next'
 import { ProviderType } from '../../web3/types'
 import { PLUGIN_IDENTIFIER } from './constants'
+import { CollectibleProvider, PortfolioProvider } from './types'
 
 /**
  * The address of the selected wallet
@@ -32,5 +34,29 @@ export const currentIsMetamaskLockedSettings = createGlobalSettings<boolean>(
     true,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
+/**
+ * The default portfolio data provider
+ */
+export const currentPortfolioDataProviderSettings = createGlobalSettings<PortfolioProvider>(
+    `${PLUGIN_IDENTIFIER}+portfolioProvider`,
+    PortfolioProvider.ZERION,
+    {
+        primary: () => i18n.t('plugin_wallet_settings_portfolio_data_source_primary'),
+        secondary: () => i18n.t('plugin_wallet_settings_portfolio_data_source_secondary'),
+    },
+)
+
+/**
+ * The default collectible data provider
+ */
+export const currentCollectibleDataProviderSettings = createGlobalSettings<CollectibleProvider>(
+    `${PLUGIN_IDENTIFIER}+collectibleProvider`,
+    CollectibleProvider.OPENSEAN,
+    {
+        primary: () => i18n.t('plugin_wallet_settings_collectible_data_source_primary'),
+        secondary: () => i18n.t('plugin_wallet_settings_collectible_data_source_secondary'),
     },
 )

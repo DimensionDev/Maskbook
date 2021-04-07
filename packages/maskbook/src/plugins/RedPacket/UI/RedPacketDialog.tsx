@@ -7,7 +7,7 @@ import { RedPacketMetaKey } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { RedPacketForm } from './RedPacketForm'
 import { RedPacketBacklogList } from './RedPacketList'
-import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
+import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { RedPacketRPC } from '../messages'
 
@@ -38,9 +38,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         tabs: [
             {
                 label: t('plugin_red_packet_create_new'),
-                children: (
-                    <RedPacketForm onCreate={onCreateOrSelect} SelectMenuProps={{ container: PortalShadowRoot }} />
-                ),
+                children: usePortalShadowRoot((container) => (
+                    <RedPacketForm onCreate={onCreateOrSelect} SelectMenuProps={{ container }} />
+                )),
                 sx: { p: 0 },
             },
             {

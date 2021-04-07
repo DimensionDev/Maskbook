@@ -47,10 +47,15 @@ export const Flags = {
     metamask_support_enabled: webOnly,
     toolbar_enabled: webOnly,
     ideamarket_enabled: betaOrInsiderOnly,
+    toolbox_enabled: webOnly,
+    wallet_mnemonic_words_backup_enabled: false,
+    wallet_private_key_backup_enabled: true,
     /* construct LBP for all ERC20 tokens */
     LBP_enabled: false,
     LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
     //#endregion
+
+    transactions_pagination: false,
 
     //#region Functionality missing / broken
     /**

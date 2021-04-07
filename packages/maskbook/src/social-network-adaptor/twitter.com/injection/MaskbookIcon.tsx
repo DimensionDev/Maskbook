@@ -4,7 +4,7 @@ import type { PostInfo } from '../../../social-network/PostInfo'
 import Services from '../../../extension/service'
 import { ProfileIdentifier } from '../../../database/type'
 import { MaskbookIcon } from '../../../resources/MaskbookIcon'
-import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { memoizePromise } from '../../../utils/memoize'
 import { Flags } from '../../../utils/flags'
 import { startWatch } from '../../../utils/watcher'
@@ -32,10 +32,9 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal: Ab
                 ifUsingMaskbook(
                     new ProfileIdentifier('twitter.com', bioPageUserIDSelector(main).evaluate() || ''),
                 ).then(() => {
-                    remover = renderInShadowRoot(<Icon size={size} />, {
-                        shadow: () => meta.afterShadow,
-                        signal,
-                    })
+                    const root = createReactRootShadowed(meta.afterShadow, { signal })
+                    root.render(<Icon size={size} />)
+                    remover = root.destory
                 }, remove)
             }
             check()
@@ -55,7 +54,7 @@ export function injectMaskUserBadgeAtTwitter(signal: AbortSignal) {
     // floating bio
     _(floatingBioCardSelector, 20, signal)
 }
-export function injectMaskIconToPostTwitter(post: PostInfo, cancel: AbortSignal) {
+export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal) {
     const ls = new LiveSelector([post.rootNodeProxy])
         .map((x) =>
             x.current.parentElement?.parentElement?.previousElementSibling?.querySelector<HTMLDivElement>(
@@ -67,15 +66,14 @@ export function injectMaskIconToPostTwitter(post: PostInfo, cancel: AbortSignal)
     post.postBy.addListener((x) => ifUsingMaskbook(x).then(add, remove))
     let remover = () => {}
     function add() {
-        if (cancel?.aborted) return
+        if (signal?.aborted) return
         const node = ls.evaluate()
         if (!node) return
         const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         proxy.realCurrent = node
-        remover = renderInShadowRoot(<Icon size={24} />, {
-            shadow: () => proxy.afterShadow,
-            signal: cancel,
-        })
+        const root = createReactRootShadowed(proxy.afterShadow, { signal })
+        root.render(<Icon size={24} />)
+        remover = root.destory
     }
     function remove() {
         remover()

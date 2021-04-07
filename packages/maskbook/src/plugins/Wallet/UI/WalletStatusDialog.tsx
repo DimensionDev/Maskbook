@@ -18,7 +18,6 @@ import { formatEthereumAddress } from '../formatter'
 import { useWallet } from '../hooks/useWallet'
 import { WalletMessages } from '../messages'
 import { currentSelectedWalletProviderSettings } from '../settings'
-import { useBlurContext } from '../../../extension/options-page/DashboardContexts/BlurContext'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -116,9 +115,6 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
     )
     //#endregion
-
-    // render in dashboard
-    useBlurContext(open)
 
     const onDisconnect = useCallback(async () => {
         if (selectedWalletProvider !== ProviderType.WalletConnect) return

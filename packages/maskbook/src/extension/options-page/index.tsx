@@ -23,7 +23,6 @@ import DashboardWalletsRouter from './DashboardRouters/Wallets'
 import DashboardContactsRouter from './DashboardRouters/Contacts'
 import DashboardSettingsRouter from './DashboardRouters/Settings'
 import { DashboardSetupRouter } from './DashboardRouters/Setup'
-import { DashboardBlurContextUI } from './DashboardContexts/BlurContext'
 import { DashboardRoute } from './Route'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 
@@ -235,10 +234,8 @@ export function Dashboard() {
                     <NoSsr>
                         <Router>
                             <CssBaseline />
-                            <DashboardBlurContextUI>
-                                <DashboardUI />
-                                <DashboardPluginUI />
-                            </DashboardBlurContextUI>
+                            <DashboardUI />
+                            <DashboardPluginUI />
                         </Router>
                     </NoSsr>
                 </DashboardSnackbarProvider>

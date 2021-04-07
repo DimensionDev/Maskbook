@@ -1,6 +1,6 @@
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { postEditorToolbarSelector } from '../utils/selector'
-import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogIcon } from '../../../components/InjectedComponents/PostDialogIcon'
 import { MaskMessage } from '../../../utils/messages'
 import { isCompose, isMobile } from '../utils/postBox'
@@ -19,10 +19,7 @@ function renderPostDialogIconTo<T>(ls: LiveSelector<T, true>, signal: AbortSigna
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, signal)
 
-    renderInShadowRoot(<PostDialogIconAtTwitter />, {
-        shadow: () => watcher.firstDOMProxy.afterShadow,
-        signal,
-    })
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<PostDialogIconAtTwitter />)
 }
 
 const useTwitterMaskbookIcon = makeStyles((theme: Theme) => ({

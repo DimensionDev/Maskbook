@@ -136,7 +136,7 @@ export const postNameParser = (node: HTMLElement) => {
 
         // type 3:
         // parse name in quoted tweet
-        const nameElementInQuoted = nthChild(tweetElement, 0, 0, 0)
+        const nameElementInQuoted = nthChild(tweetElement, 0, 0, 0, 0, 0)
         const nameInQuoteTweet = nameElementInQuoted ? serializeToText(nameElementInQuoted) : ''
         return (
             [nameInUniqueAnchorTweet, nameInDoubleAnchorsTweet, nameInQuoteTweet]
@@ -205,9 +205,11 @@ export const postContentMessageParser = (node: HTMLElement) => {
         } else if (node instanceof HTMLImageElement) {
             const image = node
             const src = image.getAttribute('src')
-            const matched = src?.match(/emoji\/v2\/svg\/([\d\w]+)\.svg/)
-            if (matched && matched[1])
-                return makeTypedMessageText(String.fromCodePoint(Number.parseInt(`0x${matched[1]}`, 16)))
+            const matched = src?.match(/emoji\/v2\/svg\/([\d\w\-]+)\.svg/)
+            if (matched && matched[1]) {
+                const codePoints = matched[1].split('-').map((x) => Number.parseInt(`0x${x}`, 16))
+                return makeTypedMessageText(String.fromCodePoint(...codePoints))
+            }
             return makeTypedMessageEmpty()
         } else if (node.childNodes.length) {
             const flattened = flattenDeep(Array.from(node.childNodes).map(make))

@@ -24,6 +24,8 @@ export interface PostInspectorProps {
     DecryptPostComponent?: React.ComponentType<DecryptPostProps>
     AddToKeyStoreProps?: Partial<AddToKeyStoreProps>
     AddToKeyStoreComponent?: React.ComponentType<AddToKeyStoreProps>
+    /** @default 'before' */
+    slotPosition?: 'before' | 'after'
 }
 export function PostInspector(props: PostInspectorProps) {
     const postBy = usePostInfoDetails('postBy')
@@ -108,12 +110,14 @@ export function PostInspector(props: PostInspectorProps) {
     }
     return withAdditionalContent(null)
     function withAdditionalContent(x: JSX.Element | null) {
+        const slot = encryptedPost.ok ? null : <slot />
         return (
             <>
-                {encryptedPost.ok ? null : <slot />}
+                {props.slotPosition !== 'after' && slot}
                 {x}
                 <PluginPostInspector />
                 {debugInfo}
+                {props.slotPosition !== 'before' && slot}
             </>
         )
     }

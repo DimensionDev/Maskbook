@@ -1,4 +1,3 @@
-import { unstable_useTransition } from 'react'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useMatchXS } from '../../utils/hooks/useMatchXS'
@@ -79,11 +78,10 @@ function SharedListItem(
 export function SettingsUI<T>(props: SettingsUIProps<T>) {
     const { value } = withDefaultText(props)
     const currentValue = useValueRef(value)
-    const [startTransition] = unstable_useTransition()
     switch (typeof currentValue) {
         case 'boolean': {
             const ref = (value as unknown) as ValueRef<boolean>
-            const change = () => startTransition(() => void (ref.value = !ref.value))
+            const change = () => void (ref.value = !ref.value)
             const ui = <Switch color="primary" edge="end" checked={currentValue} onClick={change} />
             const { primary, secondary } = withDefaultText(props)
             return (
@@ -130,8 +128,7 @@ export function SettingsUIEnum<T extends object>(
     const xsMatched = useMatchXS()
     const classes = useStyles()
     const { value, enumObject, getText, SelectProps } = props
-    const [startTransition] = unstable_useTransition()
-    const ui = useEnumSettings(startTransition, value, enumObject, getText, SelectProps)
+    const ui = useEnumSettings(value, enumObject, getText, SelectProps)
     return (
         <SharedListItem
             {...props}
@@ -156,21 +153,16 @@ export function SettingsUIEnum<T extends object>(
  *
  * ? because the limit on the type system, I can't type it as an object which key is enum and value is string
  */
-function useEnumSettings<Q extends object>(
-    startTransition: React.TransitionStartFunction,
-    ...[ref, enumObject, getText, selectProps]: useEnumSettingsParams<Q>
-) {
+function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectProps]: useEnumSettingsParams<Q>) {
     const enum_ = getEnumAsArray(enumObject)
     const change = (value: any) => {
-        startTransition(() => {
-            if (!Number.isNaN(parseInt(value))) {
-                value = parseInt(value)
-            }
-            if (!enum_.some((x) => x.value === value)) {
-                throw new Error('Invalid state')
-            }
-            ref.value = value
-        })
+        if (!Number.isNaN(parseInt(value))) {
+            value = parseInt(value)
+        }
+        if (!enum_.some((x) => x.value === value)) {
+            throw new Error('Invalid state')
+        }
+        ref.value = value
     }
     return (
         <Select
