@@ -1,6 +1,5 @@
 import { SyntheticEvent, cloneElement, isValidElement, useCallback, useRef, useState } from 'react'
 import { createStyles, makeStyles } from '@material-ui/core'
-import classNames from 'classnames'
 import type { MenuListProps, PaperProps } from '@material-ui/core'
 import { ShadowRootMenu } from '../shadow-root/ShadowRootComponents'
 
