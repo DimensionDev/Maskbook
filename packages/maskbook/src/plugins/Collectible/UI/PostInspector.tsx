@@ -7,12 +7,12 @@ export interface PostInspectorProps {
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    const { token } = props.payload
+    const token = props.payload
 
     return (
         <CollectibleState.Provider
             initialState={{
-                tokenId: token.tokenId,
+                tokenId: token.token_id,
                 contractAddress: token.address,
             }}>
             <Collectible />

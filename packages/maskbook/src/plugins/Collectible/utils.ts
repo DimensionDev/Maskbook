@@ -1,5 +1,10 @@
 import { parseURL } from '../../utils/utils'
-import { openseaHostname, openseaPathnameRegexMatcher, raribleHostname, rariblePathnameRegexMatcher } from './constants'
+import {
+    openseaHostname,
+    openseaPathnameRegexMatcher,
+    raribleHostnames,
+    rariblePathnameRegexMatcher,
+} from './constants'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
@@ -7,7 +12,7 @@ export function checkUrl(url: string): boolean {
 
     return (
         (_url.hostname === openseaHostname && openseaPathnameRegexMatcher.test(_url.pathname)) ||
-        (_url.hostname === raribleHostname && rariblePathnameRegexMatcher.test(_url.pathname))
+        (raribleHostnames.includes(_url.hostname) && rariblePathnameRegexMatcher.test(_url.pathname))
     )
 }
 

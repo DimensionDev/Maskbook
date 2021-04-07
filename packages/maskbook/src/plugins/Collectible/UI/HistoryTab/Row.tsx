@@ -39,10 +39,10 @@ const useStyles = makeStyles((theme) => {
 
 interface Props {
     order: OpenSeaAssetEvent
-    isDifferenceAsset: boolean
+    isDifferenceToken?: boolean
 }
 
-export function Row({ order, isDifferenceAsset }: Props) {
+export function Row({ order, isDifferenceToken }: Props) {
     const classes = useStyles()
 
     const accountPair = useMemo(() => {
@@ -59,7 +59,7 @@ export function Row({ order, isDifferenceAsset }: Props) {
     }, [order])
 
     const unitPrice = useMemo(() => {
-        if (!isDifferenceAsset || !order.node.price) return null
+        if (!isDifferenceToken || !order.node.price) return null
         const price = formatBalance(new BigNumber(order.node.price.quantity), order.node.price.asset.decimals)
         const quantity = formatBalance(
             new BigNumber(order.node.assetQuantity.quantity),
@@ -67,17 +67,26 @@ export function Row({ order, isDifferenceAsset }: Props) {
         )
 
         return new BigNumber(price).dividedBy(quantity).toString()
-    }, [order, isDifferenceAsset])
+    }, [order, isDifferenceToken])
 
     return (
         <TableRow>
             <TableCell>{resolveAssetEventType(order.node.eventType, accountPair.from)}</TableCell>
-            {isDifferenceAsset ? (
+            {isDifferenceToken ? (
                 <>
                     <TableCell>
                         <Box display="flex">
-                            {order.node.price?.asset.imageUrl && (
-                                <img src={order.node.price.asset.imageUrl} className={classes.token} />
+                            {order.node.price?.asset && (
+                                <Link
+                                    href={order.node.price.asset.assetContract.blockExplorerLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <img
+                                        src={order.node.price.asset.imageUrl}
+                                        className={classes.token}
+                                        alt={order.node.price.asset.symbol}
+                                    />
+                                </Link>
                             )}
                             {unitPrice}
                         </Box>
@@ -107,7 +116,7 @@ export function Row({ order, isDifferenceAsset }: Props) {
                         rel="noopener noreferrer">
                         <Avatar src={accountPair.from.imageUrl} className={classes.avatar} />
                         <Typography className={classes.accountName}>
-                            {accountPair.from.user?.publicUsername ?? accountPair.from.address.slice(2, 8)}
+                            {accountPair.from.user?.publicUsername ?? accountPair.from.address?.slice(2, 8)}
                         </Typography>
                     </Link>
                 )}
@@ -124,20 +133,18 @@ export function Row({ order, isDifferenceAsset }: Props) {
                         rel="noopener noreferrer">
                         <Avatar src={accountPair.to.imageUrl} className={classes.avatar} />
                         <Typography className={classes.accountName}>
-                            {accountPair.to.user?.publicUsername.slice(0, 20) ?? accountPair.to.address.slice(2, 8)}
+                            {accountPair.to.user?.publicUsername?.slice(0, 20) ?? accountPair.to.address?.slice(2, 8)}
                         </Typography>
                     </Link>
                 )}
             </TableCell>
             <TableCell className={classes.relativeTime}>
                 {order.node.transaction ? (
-                    <Link
-                        href={order.node.transaction.blockExplorerLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{ display: 'flex', alignItems: 'center' }}>
-                        {formatElapsed(dayjs.utc(order.node.eventTimestamp).tz().valueOf())}
-                        <LinkIcon fontSize="inherit" />
+                    <Link href={order.node.transaction.blockExplorerLink} target="_blank" rel="noopener noreferrer">
+                        <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+                            {formatElapsed(dayjs.utc(order.node.eventTimestamp).tz().valueOf())}
+                            <LinkIcon fontSize="inherit" />
+                        </Typography>
                     </Link>
                 ) : (
                     <Typography sx={{ color: 'rgb(29,161,242)' }}>
