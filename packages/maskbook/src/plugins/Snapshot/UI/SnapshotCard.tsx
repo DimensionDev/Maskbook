@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface SnapshotCardProps {
-    title: string
+    title: (JSX.Element & React.ReactNode) | string
     children?: React.ReactNode
 }
 

@@ -46,6 +46,7 @@ export interface ProposalMessage {
 }
 
 export interface Vote {
+    choice: string
     address: string
     authorIpfsHash: string
     relayerIpfsHash: string

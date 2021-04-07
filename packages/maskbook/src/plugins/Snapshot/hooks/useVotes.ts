@@ -37,6 +37,7 @@ async function Suspender(identifier: ProposalIdentifier) {
             .map((voteEntry: [string, Vote]) => {
                 voteEntry[1].scores = strategies.map((_strategy, i) => scores[i][voteEntry[1].address] || 0)
                 voteEntry[1].balance = voteEntry[1].scores.reduce((a: number, b: number) => a + b, 0)
+                voteEntry[1].choice = message.payload.choices[voteEntry[1].msg.payload.choice - 1]
                 return voteEntry
             })
             .sort((a, b) => b[1].balance - a[1].balance)
