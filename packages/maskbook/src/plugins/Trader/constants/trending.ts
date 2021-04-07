@@ -19,9 +19,19 @@ export const BTC_FIRST_LEGER_DATE = new Date('2009-01-03T00:00:00.000Z')
 //#region settings about trader
 export const CRYPTOCURRENCY_MAP_EXPIRES_AT = 60 /* seconds */ * 1000 /* milliseconds */
 
+//#region the max length of approved tokens
+export const APPROVED_TOKENS_MAX = 10
+
 export const TRENDING_CONSTANTS = {
     UNISWAP_V2_SUBGRAPH_URL: {
         [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+    },
+    UNISWAP_V2_HEALTH_URL: {
+        [ChainId.Mainnet]: 'https://api.thegraph.com/index-node/graphql',
         [ChainId.Ropsten]: '',
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',

@@ -37,7 +37,7 @@ export function DataProviderIcon(props: DataProviderIconProps) {
             return <CoinGeckoIcon classes={{ root: classes.coin_gecko }} viewBox="0 0 16 16" />
         case DataProvider.COIN_MARKET_CAP:
             return <CoinMarketCapIcon classes={{ root: classes.cmc }} viewBox="0 0 16 16" />
-        case DataProvider.UNISWAP:
+        case DataProvider.UNISWAP_INFO:
             return <UniswapIcon classes={{ root: classes.uniswap }} viewBox="0 0 16 16" />
         default:
             unreachable(props.provider)

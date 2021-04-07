@@ -1,35 +1,28 @@
-import { cloneElement, forwardRef, useCallback, useReducer } from 'react'
+import { cloneElement, useCallback, useReducer } from 'react'
 import classNames from 'classnames'
 import {
     DialogProps,
     Dialog,
-    Fade,
     IconButton,
     createStyles,
     makeStyles,
     DialogContent,
     Typography,
-    FadeProps,
     SvgIconProps,
     IconButtonProps,
 } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
-import type { TransitionProps } from '@material-ui/core/transitions'
-import { useBlurContext } from '../DashboardContexts/BlurContext'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { extendsTheme, useMaskbookTheme } from '../../../utils/theme'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
-const Transition = forwardRef<unknown, TransitionProps & Pick<FadeProps, 'children'>>(function Transition(props, ref) {
-    return <Fade ref={ref} {...props} />
-})
-
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             userSelect: 'none',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
         },
         close: {
             color: theme.palette.text.primary,
@@ -50,16 +43,9 @@ export function DashboardDialogCore(props: DashboardDialogCoreProps) {
 
     const classes = useStyles()
     const xsMatched = useMatchXS()
-    useBlurContext(dialogProps.open)
 
     return (
-        <Dialog
-            className={classes.root}
-            closeAfterTransition
-            fullScreen={fullScreen ?? xsMatched}
-            TransitionComponent={Transition}
-            hideBackdrop
-            {...dialogProps}>
+        <Dialog className={classes.root} fullScreen={fullScreen ?? xsMatched} hideBackdrop {...dialogProps}>
             {children}
             <IconButton
                 className={classes.close}
@@ -137,6 +123,10 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
             width: (props) => (props.size === 'small' ? 280 : 440),
             padding: (props) => (props.size === 'small' ? '40px 24px !important' : '40px 36px !important'),
             margin: '0 auto',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         header: {
             textAlign: 'center',
@@ -317,6 +307,6 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                 },
             ),
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [...deps, enqueueSnackbar, executor, key, onError, onSuccess, t],
+        [...deps, enqueueSnackbar, executor, onError, onSuccess, key, successText],
     )
 }

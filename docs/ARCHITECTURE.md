@@ -20,7 +20,11 @@ maintainer:
 
 The entry point is `packages/maskbook/src/background-service.ts`
 
-Background service is like a "backend" or "server" in a normal web app. It is running on a web page that not visible to the user ([background page in Web Extensions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#background_scripts)). The background page hosts mosts of our non-UI-related work in the Mask Network. If you see code like
+Background service is like a "backend" or "server" in a normal web app.
+It is running on a web page that not visible to the user ([background page in Web Extensions][background-page]).
+The background page hosts mosts of our non-UI-related work in the Mask Network. If you see code like
+
+[background-page]: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#background_scripts
 
 ```js
 Services.Crypto.encrypt(...)

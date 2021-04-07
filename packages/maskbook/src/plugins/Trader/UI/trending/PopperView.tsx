@@ -18,7 +18,7 @@ import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { ChainId, EthereumTokenType } from '../../../../web3/types'
+import { EthereumTokenType } from '../../../../web3/types'
 import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { LBPPanel } from './LBPPanel'
@@ -77,7 +77,7 @@ export function PopperView(props: PopperViewProps) {
     //#endregion
 
     const chainId = useChainId()
-    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP ? 1 : 0)
+    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
 
     //#region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
@@ -104,7 +104,7 @@ export function PopperView(props: PopperViewProps) {
 
     //#region stats
     const [days, setDays] = useState(Days.ONE_WEEK)
-    const { value: stats = [], loading: loadingStats } = usePriceStats({
+    const { value: stats = [], loading: loadingStats, retry: retryStats } = usePriceStats({
         coinId: trending?.coin.id,
         dataProvider: trending?.dataProvider,
         currency: trending?.currency,
@@ -154,23 +154,19 @@ export function PopperView(props: PopperViewProps) {
     //#endregion
 
     //#region display loading skeleton
-    if (!currency || !trending || !tokenDetailed || loadingTrending || loadingTokenDetailed)
+    const isEthereum = !!trending?.coin.eth_address || trending?.coin.symbol.toLowerCase() === 'eth'
+    if (!currency || !trending || (isEthereum && !tokenDetailed) || loadingTrending || loadingTokenDetailed)
         return <TrendingViewSkeleton />
     //#endregion
 
     //#region tabs
     const { coin, market, tickers } = trending
-    const canSwap = !!trending.coin.eth_address || trending.coin.symbol.toLowerCase() === 'eth'
     const tabs = [
-        <Tab className={classes.tab} label={t('plugin_trader_tab_market')} />,
-        dataProvider !== DataProvider.UNISWAP ? (
-            <Tab className={classes.tab} label={t('plugin_trader_tab_price')} />
-        ) : null,
-        dataProvider !== DataProvider.UNISWAP ? (
-            <Tab className={classes.tab} label={t('plugin_trader_tab_exchange')} />
-        ) : null,
-        canSwap ? <Tab className={classes.tab} label={t('plugin_trader_tab_swap')} /> : null,
-        Flags.LBP_enabled && LBP ? <Tab className={classes.tab} label="LBP" /> : null,
+        <Tab className={classes.tab} key="market" label={t('plugin_trader_tab_market')} />,
+        <Tab className={classes.tab} key="price" label={t('plugin_trader_tab_price')} />,
+        <Tab className={classes.tab} key="exchange" label={t('plugin_trader_tab_exchange')} />,
+        isEthereum ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
+        Flags.LBP_enabled && LBP ? <Tab className={classes.tab} key="lbp" label="LBP" /> : null,
     ].filter(Boolean)
     //#endregion
 
@@ -184,8 +180,8 @@ export function PopperView(props: PopperViewProps) {
                 trending={trending}
                 dataProvider={dataProvider}
                 tradeProvider={tradeProvider}
-                showDataProviderIcon={dataProvider === DataProvider.UNISWAP ? tabIndex === 0 : tabIndex < 3}
-                showTradeProviderIcon={dataProvider === DataProvider.UNISWAP ? tabIndex === 1 : tabIndex === 3}>
+                showDataProviderIcon={tabIndex < 3}
+                showTradeProviderIcon={tabIndex === 3}>
                 <Tabs
                     className={classes.tabs}
                     textColor="primary"
@@ -200,24 +196,34 @@ export function PopperView(props: PopperViewProps) {
                     {tabs}
                 </Tabs>
                 {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
-                {tabIndex === 1 && dataProvider !== DataProvider.UNISWAP ? (
+                {tabIndex === 1 ? (
                     <>
                         {market ? <PriceChangedTable market={market} /> : null}
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
+                            currency={currency}
                             stats={stats}
+                            retry={retryStats}
                             loading={loadingStats}>
                             <PriceChartDaysControl days={days} onDaysChange={setDays} />
                         </PriceChart>
                     </>
                 ) : null}
-                {tabIndex === 2 && dataProvider !== DataProvider.UNISWAP ? (
-                    <TickersTable tickers={tickers} dataProvider={dataProvider} />
+                {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
+                {tabIndex === 3 && isEthereum ? (
+                    <TradeView
+                        classes={{ root: classes.tradeViewRoot }}
+                        TraderProps={{
+                            coin,
+                            tokenDetailed,
+                        }}
+                    />
                 ) : null}
                 {Flags.LBP_enabled && LBP && tabIndex === tabs.length - 1 ? (
                     <LBPPanel
                         duration={LBP.duration}
+                        currency={currency}
                         token={createERC20Token(
                             chainId,
                             LBP.token.address,
@@ -225,15 +231,6 @@ export function PopperView(props: PopperViewProps) {
                             LBP.token.name ?? '',
                             LBP.token.symbol ?? '',
                         )}
-                    />
-                ) : null}
-                {tabIndex === (dataProvider !== DataProvider.UNISWAP ? 3 : 1) && canSwap ? (
-                    <TradeView
-                        classes={{ root: classes.tradeViewRoot }}
-                        TraderProps={{
-                            coin,
-                            tokenDetailed,
-                        }}
                     />
                 ) : null}
             </TrendingViewDeck>

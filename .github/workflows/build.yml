@@ -9,7 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
-    continue-on-error: false
     steps:
       - uses: actions/checkout@v2
         with:
@@ -18,13 +17,11 @@ jobs:
       - uses: actions/setup-node@v2-beta
       - uses: actions/cache@v2
         with:
-          path: ~/.pnpm
+          path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - run: sudo npm i -g pnpm
-      - run: npm run ci
-      - run: npm run build-ci
+          restore-keys: ${{ runner.os }}-node-
+      - run: npx pnpm install
+      - run: npx build-ci
       - name: Upload `Maskbook.base.zip`
         uses: actions/upload-artifact@v2
         with:

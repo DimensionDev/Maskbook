@@ -27,6 +27,7 @@
 ## Pull requests
 
 - <https://github.com/DimensionDev/Maskbook/pull/1331>
+- <https://github.com/DimensionDev/Maskbook/pull/1449>
 
 ## UI Design
 

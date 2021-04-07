@@ -1,13 +1,10 @@
 import { createStyles, makeStyles, Typography, Box } from '@material-ui/core'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import type { JSON_PayloadInMask } from '../types'
 import type BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { useShareLink } from '../../../utils/hooks/useShareLink'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { useCallback } from 'react'
 
@@ -59,7 +56,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface ShareDialogProps extends withClasses<'root'> {
-    shareSuccessLink: string
+    shareSuccessLink: string | undefined
     token: EtherTokenDetailed | ERC20TokenDetailed
     actualSwapAmount: BigNumber
     poolName: string
@@ -91,13 +88,15 @@ export function ShareDialog(props: ShareDialogProps) {
                     <Typography variant="body1" className={classes.shareText}>
                         {actualSwapAmount.isZero() ? t('plugin_ito_out_of_stock_hit') : t('plugin_ito_congratulations')}
                     </Typography>
-                    <ActionButton
-                        onClick={onShareSuccess}
-                        variant="contained"
-                        color="primary"
-                        className={classes.shareButton}>
-                        {t('plugin_ito_dialog_claim_share_title')}
-                    </ActionButton>
+                    {shareSuccessLink ? (
+                        <ActionButton
+                            onClick={onShareSuccess}
+                            variant="contained"
+                            color="primary"
+                            className={classes.shareButton}>
+                            {t('plugin_ito_dialog_claim_share_title')}
+                        </ActionButton>
+                    ) : null}
                 </div>
             </Box>
         </>

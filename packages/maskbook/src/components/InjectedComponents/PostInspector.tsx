@@ -6,7 +6,6 @@ import Services from '../../extension/service'
 import { ProfileIdentifier } from '../../database/type'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
-import { getActivatedUI } from '../../social-network/ui'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../../settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
@@ -16,6 +15,7 @@ import { PluginUI } from '../../plugins/PluginUI'
 import { usePostInfoDetails, usePostInfo } from '../DataSource/usePostInfo'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
 import type { PayloadAlpha40_Or_Alpha39, PayloadAlpha38 } from '../../utils/type-transform/Payload'
+import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessage, raw: string): void
@@ -24,6 +24,8 @@ export interface PostInspectorProps {
     DecryptPostComponent?: React.ComponentType<DecryptPostProps>
     AddToKeyStoreProps?: Partial<AddToKeyStoreProps>
     AddToKeyStoreComponent?: React.ComponentType<AddToKeyStoreProps>
+    /** @default 'before' */
+    slotPosition?: 'before' | 'after'
 }
 export function PostInspector(props: PostInspectorProps) {
     const postBy = usePostInfoDetails('postBy')
@@ -36,7 +38,7 @@ export function PostInspector(props: PostInspectorProps) {
     const whoAmI = useCurrentIdentity()
     const friends = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
-    const provePost = useMemo(() => getActivatedUI().publicKeyDecoder(postContent), [postContent])
+    const provePost = useMemo(() => decodePublicKeyUI(postContent), [postContent])
 
     const { value: sharedListOfPost } = useAsync(async () => {
         if (!whoAmI || !whoAmI.identifier.equals(postBy) || !encryptedPost.ok) return []
@@ -108,12 +110,14 @@ export function PostInspector(props: PostInspectorProps) {
     }
     return withAdditionalContent(null)
     function withAdditionalContent(x: JSX.Element | null) {
+        const slot = encryptedPost.ok ? null : <slot />
         return (
             <>
-                {encryptedPost.ok ? null : <slot />}
+                {props.slotPosition !== 'after' && slot}
                 {x}
                 <PluginPostInspector />
                 {debugInfo}
+                {props.slotPosition !== 'before' && slot}
             </>
         )
     }

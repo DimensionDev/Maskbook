@@ -1,3 +1,4 @@
+import { first } from 'lodash-es'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { WalletMessages, WalletRPC } from '../messages'
 import { ProviderType } from '../../../web3/types'
@@ -30,4 +31,16 @@ export function useWallets(provider?: ProviderType) {
         return wallets.filter((x) => isSameAddress(x.address, selectedWalletProvider))
     if (provider) return []
     return wallets
+}
+
+export function useWalletHD() {
+    const wallets = useWallets()
+    const selectedWallet = useWallet()
+    // the select wallet is a HD wallet
+    if (selectedWallet?.mnemonic.length) return selectedWallet
+    // the earliest HD wallet
+    return (
+        first(wallets.filter((x) => x.mnemonic.length).sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())) ??
+        null
+    )
 }

@@ -1,4 +1,4 @@
-import '../../social-network-provider/popup-page/index'
+import '../../social-network-adaptor/popup-page/index'
 import '../../setup.ui'
 
 import { useCallback, memo } from 'react'
@@ -7,9 +7,8 @@ import { ThemeProvider, makeStyles, Theme, withStyles, StylesProvider, jssPreset
 import { Button, Paper, Divider, Typography, Box } from '@material-ui/core'
 import { useMaskbookTheme } from '../../utils/theme'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
-import { getActivatedUI } from '../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { useValueRef } from '../../utils/hooks/useValueRef'
 import { delay } from '../../utils/utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
@@ -17,6 +16,8 @@ import { Alert } from '@material-ui/core'
 import { useAsyncRetry } from 'react-use'
 import { MaskbookUIRoot } from '../../UIRoot'
 import { create } from 'jss'
+import { useMyIdentities } from '../../components/DataSource/useActivatedUI'
+import { Flags } from '../../utils/flags'
 
 const GlobalCss = withStyles({
     '@global': {
@@ -74,10 +75,10 @@ function PopupUI() {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const ui = getActivatedUI()
-    const identities = useValueRef(ui.myIdentitiesRef)
+    const ui = activatedSocialNetworkUI
+    const identities = useMyIdentities()
 
-    const { value: hasPermission = true, retry: checkPermission } = useAsyncRetry(ui.hasPermission)
+    const { value: hasPermission = true, retry: checkPermission } = useAsyncRetry(ui.permission.has)
 
     const onEnter = useCallback((event: React.MouseEvent) => {
         if (event.shiftKey) {
@@ -122,7 +123,10 @@ function PopupUI() {
                         color="primary"
                         variant="contained"
                         size="small"
-                        onClick={() => ui.requestPermission().then(checkPermission)}>
+                        onClick={() => {
+                            if (Flags.no_web_extension_dynamic_permission_request) return
+                            ui.permission.request().then(checkPermission)
+                        }}>
                         {t('popup_request_permission')}
                     </Button>
                 </Alert>

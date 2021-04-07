@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import {
     makeStyles,
     InputBase,
@@ -21,7 +21,7 @@ import type { Profile, Group } from '../../database'
 import { useFriendsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { currentImagePayloadStatus, debugModeSetting } from '../../settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { editActivatedPostMetadata, getActivatedUI } from '../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../social-network'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
@@ -36,7 +36,6 @@ import { EthereumTokenType } from '../../web3/types'
 import { isDAI, isOKB } from '../../web3/helpers'
 import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/PluginUI'
 import { Result } from 'ts-results'
@@ -45,6 +44,9 @@ import { InjectedDialog } from '../shared/InjectedDialog'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { PluginStage } from '../../plugins/types'
 import { Flags } from '../../utils/flags'
+import { editActivatedPostMetadata, globalTypedMessageMetadata } from '../../protocols/typed-message/global-state'
+import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
+import { SteganographyTextPayload } from './SteganographyTextPayload'
 
 const defaultTheme = {}
 
@@ -70,6 +72,7 @@ export interface PostDialogUIProps extends withClasses<never> {
     onlyMyself: boolean
     shareToEveryone: boolean
     imagePayload: boolean
+    imagePayloadUnchangeable: boolean
     maxLength?: number
     availableShareTarget: Array<Profile | Group>
     currentShareTarget: Array<Profile | Group>
@@ -89,7 +92,7 @@ export interface PostDialogUIProps extends withClasses<never> {
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
-    const inputRef = useRef(null);
+    const inputRef = useRef(null)
     const isDebug = useValueRef(debugModeSetting)
     const [showPostMetadata, setShowPostMetadata] = useState(false)
     const onPostContentChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
@@ -169,14 +172,25 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         <Typography style={{ marginBottom: 10 }}>
                             Plugins <sup>(Experimental)</sup>
                         </Typography>
-                        <ClickableChip label='Mask Selected Text' onClick={() => {
-                            if (inputRef.current) {
-                                const maskedContent = props.postContent.content.slice(inputRef.current.selectionStart, inputRef.current.selectionEnd)
-                                const msg = props.postContent
-                                props.setMaskedContent(makeTypedMessageText(maskedContent, msg.meta));
-                                props.onPostContentChanged(makeTypedMessageText(props.postContent.content.replace(maskedContent, '______'), msg.meta))
-                            }
-                        }} />
+                        <ClickableChip
+                            label="Mask Selected Text"
+                            onClick={() => {
+                                if (inputRef.current) {
+                                    const maskedContent = props.postContent.content.slice(
+                                        inputRef.current.selectionStart,
+                                        inputRef.current.selectionEnd,
+                                    )
+                                    const msg = props.postContent
+                                    props.setMaskedContent(makeTypedMessageText(maskedContent, msg.meta))
+                                    props.onPostContentChanged(
+                                        makeTypedMessageText(
+                                            props.postContent.content.replace(maskedContent, '______'),
+                                            msg.meta,
+                                        ),
+                                    )
+                                }
+                            }}
+                        />
                         <Box
                             style={{ marginBottom: 10 }}
                             sx={{
@@ -233,13 +247,14 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 }
                                 onClick={() => props.onImagePayloadSwitchChanged(!props.imagePayload)}
                                 data-testid="image_chip"
+                                disabled={props.imagePayloadUnchangeable}
                             />
                             {isDebug && (
                                 <Chip label="Post metadata inspector" onClick={() => setShowPostMetadata((e) => !e)} />
                             )}
                             {showPostMetadata && (
                                 <DebugMetadataInspector
-                                    onNewMetadata={(meta) => (getActivatedUI().typedMessageMetadata.value = meta)}
+                                    onNewMetadata={(meta) => (globalTypedMessageMetadata.value = meta)}
                                     onExit={() => setShowPostMetadata(false)}
                                     meta={props.postContent.meta || new Map()}
                                 />
@@ -273,17 +288,23 @@ export interface PostDialogProps extends Omit<Partial<PostDialogUIProps>, 'open'
     typedMessageMetadata?: ReadonlyMap<string, any>
 }
 export function PostDialog({ reason: props_reason = 'timeline', ...props }: PostDialogProps) {
+    // network support
+    const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
+    const textOnly = networkSupport?.text === true && networkSupport.image === false
+    const imageOnly = networkSupport?.image === true && networkSupport.text === false
+    const imagePayloadButtonForzen = textOnly || imageOnly
+
     const { t, i18n } = useI18N()
     const [onlyMyselfLocal, setOnlyMyself] = useState(false)
     const onlyMyself = props.onlyMyself ?? onlyMyselfLocal
     const [shareToEveryoneLocal, setShareToEveryone] = useState(true)
     const shareToEveryone = props.shareToEveryone ?? shareToEveryoneLocal
-    const typedMessageMetadata = or(props.typedMessageMetadata, useValueRef(getActivatedUI().typedMessageMetadata))
+    const typedMessageMetadata = or(props.typedMessageMetadata, useValueRef(globalTypedMessageMetadata))
     const [open, setOpen] = or(props.open, useState<boolean>(false)) as NonNullable<PostDialogProps['open']>
 
     //#region TypedMessage
     const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessageText('', typedMessageMetadata))
-    const [maskedContent, setMaskedContent] = useState(makeTypedMessageText('', typedMessageMetadata));
+    const [maskedContent, setMaskedContent] = useState(makeTypedMessageText('', typedMessageMetadata))
     useEffect(() => {
         if (typedMessageMetadata !== postBoxContent.meta)
             setPostBoxContent({ ...postBoxContent, meta: typedMessageMetadata })
@@ -296,12 +317,12 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     const [currentShareTarget, setCurrentShareTarget] = useState<(Profile | Group)[]>(() => [])
     //#endregion
     //#region Image Based Payload Switch
-    const imagePayloadStatus = useValueRef(currentImagePayloadStatus[getActivatedUI().networkIdentifier])
+    const imagePayloadStatus = useValueRef(currentImagePayloadStatus[activatedSocialNetworkUI.networkIdentifier])
     const imagePayloadEnabled = imagePayloadStatus === 'true'
     const onImagePayloadSwitchChanged = or(
         props.onImagePayloadSwitchChanged,
         useCallback((checked) => {
-            currentImagePayloadStatus[getActivatedUI().networkIdentifier].value = String(checked)
+            currentImagePayloadStatus[activatedSocialNetworkUI.networkIdentifier].value = String(checked)
         }, []),
     )
     //#endregion
@@ -316,10 +337,10 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     currentIdentity!.identifier,
                     !!shareToEveryone,
                 )
-                const activeUI = getActivatedUI()
+                const activeUI = activatedSocialNetworkUI
                 // TODO: move into the plugin system
                 const redPacketMetadata = RedPacketMetadataReader(typedMessageMetadata)
-                if (imagePayloadEnabled) {
+                if (imagePayloadEnabled || imageOnly) {
                     const isRedPacket = redPacketMetadata.ok
                     const isErc20 =
                         redPacketMetadata.ok &&
@@ -332,31 +353,32 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     const relatedText = t('additional_post_box__steganography_post_pre', {
                         random: new Date().toLocaleString(),
                     })
-                    activeUI.taskPasteIntoPostBox(relatedText, {
-                        autoPasteFailedRecover: false,
+                    activeUI.automation.nativeCompositionDialog?.appendText?.(relatedText, {
+                        recover: false,
                     })
-                    activeUI.taskUploadToPostBox(encrypted, {
-                        template: isRedPacket ? (isDai ? 'dai' : isOkb ? 'okb' : 'eth') : 'v2',
-                        autoPasteFailedRecover: true,
-                        relatedText,
+                    const img = await SteganographyTextPayload(
+                        isRedPacket ? (isDai ? 'dai' : isOkb ? 'okb' : 'eth') : 'v2',
+                        encrypted,
+                    )
+                    activeUI.automation.nativeCompositionDialog?.attachImage?.(img, {
+                        recover: true,
+                        relatedTextPayload: relatedText,
                     })
                 } else {
                     let text = t('additional_post_box__encrypted_post_pre', { encrypted })
                     if (redPacketMetadata.ok) {
                         if (i18n.language?.includes('zh')) {
-                            text =
-                                activeUI.networkIdentifier === twitterUrl.hostIdentifier
-                                    ? `用 #mask_io @realMaskbook 開啟紅包 ${encrypted}`
-                                    : `用 #mask_io 開啟紅包 ${encrypted}`
+                            text = isTwitter(activeUI)
+                                ? `用 #mask_io @realMaskbook 開啟紅包 ${encrypted}`
+                                : `用 #mask_io 開啟紅包 ${encrypted}`
                         } else {
-                            text =
-                                activeUI.networkIdentifier === twitterUrl.hostIdentifier
-                                    ? `Claim this Red Packet with #mask_io @realMaskbook ${encrypted}`
-                                    : `Claim this Red Packet with #mask_io ${encrypted}`
+                            text = isTwitter(activeUI)
+                                ? `Claim this Red Packet with #mask_io @realMaskbook ${encrypted}`
+                                : `Claim this Red Packet with #mask_io ${encrypted}`
                         }
                     }
-                    activeUI.taskPasteIntoPostBox(`${content.content} \n\nInstall Mask to decrypt masked content \n${encrypted}`, {
-                        autoPasteFailedRecover: true,
+                    activeUI.automation.nativeCompositionDialog?.appendText?.(text, {
+                        recover: true,
                     })
                 }
                 // This step write data on gun.
@@ -374,7 +396,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             setShareToEveryone(true)
             setPostBoxContent(makeTypedMessageText(''))
             setCurrentShareTarget([])
-            getActivatedUI().typedMessageMetadata.value = new Map()
+            globalTypedMessageMetadata.value = new Map()
         }, [setOpen]),
     )
     const onFinishButtonClicked = useCallback(() => {
@@ -435,7 +457,8 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             shareToEveryone={shareToEveryoneLocal}
             onlyMyself={onlyMyself}
             availableShareTarget={availableShareTarget}
-            imagePayload={imagePayloadEnabled}
+            imagePayload={!textOnly && (imageOnly || imagePayloadEnabled)}
+            imagePayloadUnchangeable={imagePayloadButtonForzen}
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
             postContent={postBoxContent}
