@@ -7,3 +7,9 @@ export enum DashboardRoute {
     Setup = '/setup',
     RequestPermission = '/request-permission',
 }
+
+export enum DashboardWalletRoute {
+    Tokens = '0',
+    Collectibles = '1',
+    Transactions = '2',
+}

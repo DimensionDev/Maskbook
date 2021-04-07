@@ -3,6 +3,9 @@ import { ChainId } from '../types'
 export const MIN_AMOUNT_LENGTH = 1
 export const MAX_AMOUNT_LENGTH = 79
 
+export const ERC1155_INTERFACE_ID = '0xd9b67a26'
+export const ERC721_INTERFACE_ID = '0x80ac58cd'
+
 export const CONSTANTS = {
     // token lists
     ERC20_TOKEN_LISTS: {

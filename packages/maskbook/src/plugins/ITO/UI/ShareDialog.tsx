@@ -1,12 +1,10 @@
 import { createStyles, makeStyles, Typography, Box } from '@material-ui/core'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import type { JSON_PayloadInMask } from '../types'
 import type BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { useCallback } from 'react'
 

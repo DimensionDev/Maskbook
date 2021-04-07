@@ -2,7 +2,7 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { tsGenerator } from 'ts-generator'
 import { TypeChain } from 'typechain/dist/TypeChain'
-import { run } from '../../scripts/utils'
+import { run } from '../cli/utils'
 
 const ABIS_PATH = path.join(__dirname, 'abis')
 const GENERATED_PATH = path.join(__dirname, 'types')

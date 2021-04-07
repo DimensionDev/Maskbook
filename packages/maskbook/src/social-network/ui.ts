@@ -49,10 +49,13 @@ export async function activateSocialNetworkUI(): Promise<void> {
     const abort = new AbortController()
     const { signal } = abort
     if (module.hot) {
-        ui_deferred.hotModuleReload?.(() => {
-            console.log('SNS adaptor HMR.')
+        console.log('SNS adaptor HMR enabled.')
+        ui_deferred.hotModuleReload?.(async (newDefinition) => {
+            console.log('SNS adaptor updated. Uninstalling current adaptor.')
             abort.abort()
-            setTimeout(activateSocialNetworkUI, 200)
+            await delay(200)
+            definedSocialNetworkUIsResolved.set(ui_deferred.networkIdentifier, newDefinition)
+            activateSocialNetworkUI()
         })
     }
     await untilDomLoaded()
@@ -71,6 +74,7 @@ export async function activateSocialNetworkUI(): Promise<void> {
     ui.collecting.profilesCollector?.(signal)
     ui.injection.pageInspector?.(signal)
     if (Flags.toolbar_enabled) ui.injection.toolbar?.(signal)
+    if (Flags.toolbox_enabled) ui.injection.toolBoxInNavBar?.(signal)
     ui.injection.setupPrompt?.(signal)
     ui.injection.newPostComposition?.start?.(signal)
     ui.injection.searchResult?.(signal)
@@ -158,7 +162,9 @@ export async function loadSocialNetworkUI(identifier: string): Promise<SocialNet
 }
 
 export function defineSocialNetworkUI(UI: SocialNetworkUI.DeferredDefinition) {
-    if (UI.notReadyForProduction && process.env.NODE_ENV === 'production') return UI
+    if (UI.notReadyForProduction) {
+        if (process.env.build === 'stable' && process.env.NODE_ENV === 'production') return UI
+    }
     definedSocialNetworkUIsLocal.set(UI.networkIdentifier, UI)
     return UI
 }
