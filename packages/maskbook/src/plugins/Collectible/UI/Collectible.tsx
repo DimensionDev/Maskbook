@@ -113,9 +113,6 @@ export function Collectible(props: CollectibleProps) {
         <Tab className={classes.tab} key="history" label="History" />, // This is the tab for the trade history
     ]
 
-    console.log(asset)
-    console.log(JSON.stringify(asset))
-    console.log(targetOrder)
     return (
         <>
             <CollectibleCard classes={classes}>
