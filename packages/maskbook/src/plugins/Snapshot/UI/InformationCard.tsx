@@ -1,14 +1,15 @@
-import { useState, useContext, Suspense } from 'react'
-import { Card, Grid, Box, Link, createStyles, makeStyles, Typography } from '@material-ui/core'
+import { useContext } from 'react'
+import { Box, Link, createStyles, makeStyles, Typography, Avatar } from '@material-ui/core'
 import { format } from 'date-fns'
 import OpenInNew from '@material-ui/icons/OpenInNew'
 
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { SnapshotCard } from './SnapshotCard'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
+import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
 import { resolveAddressLinkOnEtherscan, resolveBlockLinkOnEtherscan, resolveIPFSLink } from '../../../web3/pipes'
-import { ChainId } from '../../../web3/types'
 import { formatEthereumAddress } from '../../Wallet/formatter'
+import { useChainId } from '../../../web3/hooks/useChainState'
 
 import { SnapshotContext } from '../context'
 import { useProposal } from '../hooks/useProposal'
@@ -33,6 +34,14 @@ const useStyles = makeStyles((theme) => {
             color: 'inherit',
             alignItems: 'center',
             marginLeft: theme.spacing(1),
+            textDecoration: 'none !important',
+        },
+        avatar: {
+            width: 16,
+            height: 16,
+        },
+        avatarWrapper: {
+            marginRight: 8,
         },
     })
 })
@@ -53,18 +62,14 @@ function InfoField(props: InfoFieldProps) {
 export function InformationCard(props: InformationCardProps) {
     const classes = useStyles()
     const { t } = useI18N()
+    const chainId = useChainId()
 
     const identifier = useContext(SnapshotContext)
     const {
         payload: { proposal, message },
     } = useProposal(identifier.id)
 
-    const { start, end, snapshot, metadata } = message.payload
-    const author = proposal.address
-    const strategy = proposal.address
-
-    //FIXME fix the hard code chainId
-    const chainId = ChainId.Mainnet
+    const { start, end, snapshot } = message.payload
 
     return (
         <SnapshotCard title={t('plugin_snapshot_info_title')}>
@@ -88,8 +93,15 @@ export function InformationCard(props: InformationCardProps) {
                         className={classes.link}
                         target="_blank"
                         rel="noopener"
-                        href={resolveAddressLinkOnEtherscan(chainId, author)}>
-                        {formatEthereumAddress(author, 4)}
+                        href={resolveAddressLinkOnEtherscan(chainId, proposal.address)}>
+                        <Box className={classes.avatarWrapper}>
+                            {proposal.authorAvatar ? (
+                                <Avatar src={resolveIPFSLink(proposal.authorAvatar)} className={classes.avatar} />
+                            ) : (
+                                <EthereumBlockie address={proposal.address} />
+                            )}
+                        </Box>
+                        {proposal.authorName ?? formatEthereumAddress(proposal.address, 4)}
                     </Link>
                 </InfoField>
                 <InfoField title={t('plugin_snapshot_info_ipfs')}>

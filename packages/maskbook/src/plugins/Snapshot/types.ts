@@ -13,6 +13,8 @@ export interface Proposal {
     isStart: boolean
     isEnd: boolean
     status: string
+    authorName: string | null
+    authorAvatar: string | null
 }
 
 export interface Strategy {
