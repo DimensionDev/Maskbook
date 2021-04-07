@@ -3,6 +3,8 @@ import { CONSTANTS } from '../../../web3/constants'
 import { createERC20Token, getConstant } from '../../../web3/helpers'
 import { ChainId, ERC20TokenDetailed } from '../../../web3/types'
 
+export const MINIMUM_AMOUNT = 0.000001
+
 export const TRADE_CONSTANTS = {
     UNISWAP_V2_ROUTER_ADDRESS: {
         [ChainId.Mainnet]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
