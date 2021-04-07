@@ -10,9 +10,8 @@
 
 An external plugin should be an isolated website, which means it should not be loaded or installed onto the Mask Network.
 
-When Mask Network found a metadata of an external plugin,
-it will try to fetch the manifest and display the content in the payload.
-This process **must not** involves dynamic code execution.
+When Mask Network detects the metadata of an external plugin, it will try to fetch the manifest and display the content in the payload.
+This process **must not** involve dynamic code execution.
 
 When the user decided to interact with the external plugin,
 Mask Network will open a new popup window and inject some API to it.
@@ -63,9 +62,9 @@ User interacts with the plugin.
 
 A plugin should be deployed on a static HTTPs URL, for example <https://example.com/my-plugin>, let's call it _base url_.
 
-It should provide a manifest file called "mask-plugin-manifest.json", for the example above,
-it should be located at <https://example.com/my-plugin/mask-plugin-manifest.json>.
-It should be JSONC (JSON with comment) format.
+It should provide a manifest file called "mask-plugin-manifest.json".
+For the example above, it should be located at <https://example.com/my-plugin/mask-plugin-manifest.json>.
+It should also be in JSONC (JSON with comment) format.
 
 The manifest file should match the following shape:
 
