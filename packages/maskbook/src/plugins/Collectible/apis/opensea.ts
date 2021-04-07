@@ -1,106 +1,11 @@
 import { OpenSeaPort } from 'opensea-js'
-import type { OpenSeaAccount, OpenSeaAsset, OpenSeaCollection, OrderSide } from 'opensea-js/lib/types'
+import type { OrderSide, WyvernSchemaName } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
 import { getChainId } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
-import { OpenSeaBaseURL, OpenSeaGraphQLURL } from '../constants'
+import { OpenSeaBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
 import { Flags } from '../../../utils/flags'
-
-export interface OpenSeaCustomTrait {
-    trait_type: string
-    value: string
-}
-
-export interface OpenSeaCustomAccount extends OpenSeaAccount {
-    profile_img_url: string
-}
-
-export interface OpenSeaCustomCollection extends OpenSeaCollection {
-    safelist_request_status: string
-}
-
-export interface OpenSeaResponse extends OpenSeaAsset {
-    animation_url: string
-    owner: OpenSeaCustomAccount
-    collection: OpenSeaCustomCollection
-    creator?: OpenSeaCustomAccount
-    traits: OpenSeaCustomTrait[]
-}
-
-export interface OpenSeaAssetEventAccount {
-    address: string
-    chain: {
-        identifier: string
-        id: string
-    }
-    user: {
-        publicUsername: string
-        id: string
-    }
-    imageUrl: string
-    id: string
-}
-
-export enum OpenSeaAssetEventType {
-    CREATED = 'CREATED',
-    SUCCESSFUL = 'SUCCESSFUL',
-    CANCELLED = 'CANCELLED',
-    OFFER_ENTERED = 'OFFER_ENTERED',
-    BID_ENTERED = 'BID_ENTERED',
-    BID_WITHDRAWN = 'BID_WITHDRAWN',
-    TRANSFER = 'TRANSFER',
-    APPROVE = 'APPROVE',
-    COMPOSITION_CREATED = 'COMPOSITION_CREATED',
-    CUSTOM = 'CUSTOM',
-    PAYOUT = 'PAYOUT',
-}
-
-export interface OpenSeaAssetEvent {
-    cursor: string
-    node: {
-        id: string
-        eventType: OpenSeaAssetEventType
-        fromAccount?: OpenSeaAssetEventAccount
-        toAccount?: OpenSeaAssetEventAccount
-        seller?: OpenSeaAssetEventAccount
-        winnerAccount?: OpenSeaAssetEventAccount
-        price?: {
-            quantity: string
-            id: string
-            asset: {
-                decimals: number
-                imageUrl: string
-                symbol: string
-                usdSpotPrice: number
-                assetContract: {
-                    blockExplorerLink: string
-                    id: string
-                }
-            }
-        }
-        transaction?: {
-            blockExplorerLink: string
-            id: string
-        }
-        assetQuantity: {
-            asset: {
-                decimals?: number
-                id: string
-            }
-            quantity: string
-            id: string
-        }
-        eventTimestamp: string
-    }
-}
-
-export interface OpenSeaAssetEventResponse {
-    pageInfo: {
-        hasNextPage: boolean
-        endCursor: string
-    }
-    edges: OpenSeaAssetEvent[]
-}
+import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../UI/types'
 
 function createExternalProvider() {
     return {
@@ -179,4 +84,23 @@ export async function getOrders(asset_contract_address: string, token_id: string
 
     console.log(orders)
     return orders
+}
+
+export async function creteBuyOrder(
+    asset_contract_address: string,
+    token_id: string,
+    schema: WyvernSchemaName,
+    account: string,
+) {
+    return (await createOpenSeaPort()).createBuyOrder({
+        asset: {
+            tokenId: token_id,
+            tokenAddress: asset_contract_address,
+            schemaName: schema,
+        },
+        accountAddress: account,
+        referrerAddress: ReferrerAddress,
+        paymentTokenAddress: '',
+        startAmount: 0.0001,
+    })
 }

@@ -1,5 +1,5 @@
 import { createContainer } from 'unstated-next'
-import type { CollectibleToken } from '../types'
+import type { CollectibleToken } from '../UI/types'
 import { useAsset } from './useAsset'
 
 export const CollectibleState = createContainer(useCollectibleState)

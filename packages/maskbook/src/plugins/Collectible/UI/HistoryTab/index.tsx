@@ -45,22 +45,22 @@ export function HistoryTab(props: HistoryTabProps) {
     const [page, setPage] = useState(0)
 
     const { token } = CollectibleState.useContainer()
-    const orders = useEvents(token, cursors[page - 1])
+    const events = useEvents(token, cursors[page - 1])
 
     //#region If there is a different asset, the unit price and quantity should be displayed
-    const isDifferenceToken = orders.value?.edges.some((item) => item.node.price?.asset.symbol !== 'ETH')
+    const isDifferenceToken = events.value?.edges.some((item) => item.node.price?.asset.symbol !== 'ETH')
 
     useUpdateEffect(() => {
         if (
-            orders.value &&
-            orders.value.pageInfo.endCursor &&
-            !cursors.some((item) => orders.value && item === orders.value.pageInfo.endCursor)
+            events.value &&
+            events.value.pageInfo.endCursor &&
+            !cursors.some((item) => events.value && item === events.value.pageInfo.endCursor)
         ) {
-            setCursors((prev) => (orders.value ? [...prev, orders.value.pageInfo.endCursor] : prev))
+            setCursors((prev) => (events.value ? [...prev, events.value.pageInfo.endCursor] : prev))
         }
-    }, [orders, cursors])
+    }, [events, cursors])
 
-    if (orders.loading)
+    if (events.loading)
         return (
             <Table>
                 <TableBody>
@@ -75,7 +75,7 @@ export function HistoryTab(props: HistoryTabProps) {
             </Table>
         )
 
-    if (!orders.value || orders.error)
+    if (!events.value || events.error)
         return (
             <Box
                 sx={{
@@ -91,7 +91,7 @@ export function HistoryTab(props: HistoryTabProps) {
                         marginTop: 1,
                     }}
                     variant="text"
-                    onClick={() => orders.retry()}>
+                    onClick={() => events.retry()}>
                     Retry
                 </Button>
             </Box>
@@ -131,8 +131,8 @@ export function HistoryTab(props: HistoryTabProps) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {orders.value.edges.map((order) => (
-                        <Row key={order.node.id} order={order} isDifferenceToken={isDifferenceToken} />
+                    {events.value.edges.map((order) => (
+                        <Row key={order.node.id} event={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
                 <TableFooter>
@@ -152,7 +152,7 @@ export function HistoryTab(props: HistoryTabProps) {
                                             <KeyboardArrowLeft />
                                         </IconButton>
                                         <IconButton
-                                            disabled={!orders.value.pageInfo.hasNextPage}
+                                            disabled={!events.value.pageInfo.hasNextPage}
                                             onClick={() => setPage((prev) => prev + 1)}>
                                             <KeyboardArrowRight />
                                         </IconButton>

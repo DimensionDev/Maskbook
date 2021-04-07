@@ -7,9 +7,9 @@ interface CollectibleMessage {
 }
 
 if (module.hot) module.hot.accept()
-export const PluginCollectiblesMessage = createPluginMessage<CollectibleMessage>(PLUGIN_IDENTIFIER)
-export const PluginCollectiblesRPC = createPluginRPC(
+export const PluginCollectibleMessage = createPluginMessage<CollectibleMessage>(PLUGIN_IDENTIFIER)
+export const PluginCollectibleRPC = createPluginRPC(
     PLUGIN_IDENTIFIER,
     () => import('./services'),
-    PluginCollectiblesMessage.events.rpc,
+    PluginCollectibleMessage.events.rpc,
 )

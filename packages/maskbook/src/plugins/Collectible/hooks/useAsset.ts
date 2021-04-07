@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
-import { PluginCollectiblesRPC } from '../messages'
-import type { CollectibleToken } from '../types'
+import { PluginCollectibleRPC } from '../messages'
+import type { CollectibleToken } from '../UI/types'
 
 export function useAsset(token?: CollectibleToken) {
     return useAsyncRetry(async () => {
         if (!token) return
-        return PluginCollectiblesRPC.getAsset(token.contractAddress, token.tokenId)
+        return PluginCollectibleRPC.getAsset(token.contractAddress, token.tokenId)
     })
 }

@@ -1,11 +1,10 @@
 import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography, Box } from '@material-ui/core'
 import LinkIcon from '@material-ui/icons/Link'
-import type { OpenSeaAssetEvent } from '../../apis'
-import { OpenSeaAssetEventType } from '../../apis'
 import { formatBalance, formatElapsed } from '../../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { resolveAssetEventType } from '../../pipes'
+import { OpenSeaAssetEvent, OpenSeaAssetEventType } from '../types'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -32,53 +31,53 @@ const useStyles = makeStyles((theme) => {
 })
 
 interface Props {
-    order: OpenSeaAssetEvent
+    event: OpenSeaAssetEvent
     isDifferenceToken?: boolean
 }
 
-export function Row({ order, isDifferenceToken }: Props) {
+export function Row({ event, isDifferenceToken }: Props) {
     const classes = useStyles()
 
     const accountPair = useMemo(() => {
-        if (order.node.eventType === OpenSeaAssetEventType.SUCCESSFUL) {
+        if (event.node.eventType === OpenSeaAssetEventType.SUCCESSFUL) {
             return {
-                from: order.node.seller,
-                to: order.node.winnerAccount,
+                from: event.node.seller,
+                to: event.node.winnerAccount,
             }
         }
         return {
-            from: order.node.fromAccount,
-            to: order.node.toAccount,
+            from: event.node.fromAccount,
+            to: event.node.toAccount,
         }
-    }, [order])
+    }, [event])
 
     const unitPrice = useMemo(() => {
-        if (!isDifferenceToken || !order.node.price) return null
-        const price = formatBalance(new BigNumber(order.node.price.quantity), order.node.price.asset.decimals)
+        if (!isDifferenceToken || !event.node.price) return null
+        const price = formatBalance(new BigNumber(event.node.price.quantity), event.node.price.asset.decimals)
         const quantity = formatBalance(
-            new BigNumber(order.node.assetQuantity.quantity),
-            order.node.assetQuantity.asset.decimals ?? 0,
+            new BigNumber(event.node.assetQuantity.quantity),
+            event.node.assetQuantity.asset.decimals ?? 0,
         )
 
         return new BigNumber(price).dividedBy(quantity).toString()
-    }, [order, isDifferenceToken])
+    }, [event, isDifferenceToken])
 
     return (
         <TableRow>
-            <TableCell>{resolveAssetEventType(order.node.eventType, accountPair.from)}</TableCell>
+            <TableCell>{resolveAssetEventType(event.node.eventType, accountPair.from)}</TableCell>
             {isDifferenceToken ? (
                 <>
                     <TableCell>
                         <Box display="flex">
-                            {order.node.price?.asset && (
+                            {event.node.price?.asset && (
                                 <Link
-                                    href={order.node.price.asset.assetContract.blockExplorerLink}
+                                    href={event.node.price.asset.assetContract.blockExplorerLink}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <img
-                                        src={order.node.price.asset.imageUrl}
+                                        src={event.node.price.asset.imageUrl}
                                         className={classes.token}
-                                        alt={order.node.price.asset.symbol}
+                                        alt={event.node.price.asset.symbol}
                                     />
                                 </Link>
                             )}
@@ -88,8 +87,8 @@ export function Row({ order, isDifferenceToken }: Props) {
                     <TableCell>
                         <Typography>
                             {formatBalance(
-                                new BigNumber(order.node.assetQuantity.quantity),
-                                order.node.assetQuantity.asset.decimals ?? 0,
+                                new BigNumber(event.node.assetQuantity.quantity),
+                                event.node.assetQuantity.asset.decimals ?? 0,
                             )}
                         </Typography>
                     </TableCell>
@@ -97,8 +96,8 @@ export function Row({ order, isDifferenceToken }: Props) {
             ) : (
                 <TableCell>
                     <Typography>
-                        {order.node.price &&
-                            formatBalance(new BigNumber(order.node.price.quantity), order.node.price?.asset.decimals)}
+                        {event.node.price &&
+                            formatBalance(new BigNumber(event.node.price.quantity), event.node.price?.asset.decimals)}
                     </Typography>
                 </TableCell>
             )}
@@ -137,16 +136,16 @@ export function Row({ order, isDifferenceToken }: Props) {
                 )}
             </TableCell>
             <TableCell className={classes.relativeTime}>
-                {order.node.transaction ? (
-                    <Link href={order.node.transaction.blockExplorerLink} target="_blank" rel="noopener noreferrer">
+                {event.node.transaction ? (
+                    <Link href={event.node.transaction.blockExplorerLink} target="_blank" rel="noopener noreferrer">
                         <Typography sx={{ display: 'flex', alignItems: 'center' }}>
-                            {formatElapsed(new Date(`${order.node.eventTimestamp}Z`).getTime())}
+                            {formatElapsed(new Date(`${event.node.eventTimestamp}Z`).getTime())}
                             <LinkIcon fontSize="inherit" />
                         </Typography>
                     </Link>
                 ) : (
                     <Typography sx={{ color: 'rgb(29,161,242)' }}>
-                        {formatElapsed(new Date(`${order.node.eventTimestamp}Z`).getTime())}
+                        {formatElapsed(new Date(`${event.node.eventTimestamp}Z`).getTime())}
                     </Typography>
                 )}
             </TableCell>

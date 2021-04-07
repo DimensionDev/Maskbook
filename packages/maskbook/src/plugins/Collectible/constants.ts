@@ -11,3 +11,5 @@ export const rariblePathnameRegexMatcher = /^\/token\/(0x[0-9a-fA-F]{40})\:(\d+)
 export const OpenSeaBaseURL = 'https://api.opensea.io/api/v1/'
 export const OpenSeaGraphQLURL = 'https://opensea-agent.r2d2.to/graphql/'
 export const NullAddress = 'NullAddress'
+
+export const ReferrerAddress = ''
