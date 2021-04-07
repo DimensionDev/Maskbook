@@ -19,7 +19,6 @@ import { TransactionState, TransactionStateType } from '../../../web3/hooks/useT
 import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessages } from '../../Wallet/messages'
 import { EthereumMessages } from '../messages'
 
 const useStyles = makeStyles((theme: Theme) =>

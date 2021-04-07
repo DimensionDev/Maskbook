@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import type { PostInfo } from '../../PostInfo'
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostComment, PostCommentProps } from '../../../components/InjectedComponents/PostComments'
 import { makeStyles } from '@material-ui/core'
 import { PostInfoContext } from '../../../components/DataSource/usePostInfo'
@@ -38,11 +38,11 @@ export function injectPostCommentsDefault<T extends string>(
                         commentNode.style.whiteSpace = 'nowrap'
                         commentNode.style.overflow = 'hidden'
                     })
-                const unmount = renderInShadowRoot(
+                const root = createReactRootShadowed(meta.afterShadow, { signal })
+                root.render(
                     <PostInfoContext.Provider value={current}>
                         <PostCommentDefault needZip={needZipF} comment={commentRef} {...current} />
                     </PostInfoContext.Provider>,
-                    { shadow: () => meta.afterShadow, signal },
                 )
                 return {
                     onNodeMutation() {
@@ -52,7 +52,7 @@ export function injectPostCommentsDefault<T extends string>(
                         commentRef.value = collectNodeText(commentNode)
                     },
                     onRemove() {
-                        unmount()
+                        root.destory()
                     },
                 }
             },

@@ -4,6 +4,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { usePriceLineChart } from '../../../hooks/usePriceLineChart'
+import type { Currency } from '../../types'
 
 const DEFAULT_DIMENSION: Dimension = {
     top: 32,
@@ -18,6 +19,7 @@ export interface PriceChartProps extends withClasses<'root'> {
     data: { date: Date; value: number }[]
     width?: number
     height?: number
+    currency: Currency
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -54,7 +56,7 @@ export function LBPPriceChart(props: PriceChartProps) {
     }
 
     useDimension(svgRef, dimension)
-    usePriceLineChart(svgRef, data, dimension, 'x-lbp-price-line-chart')
+    usePriceLineChart(svgRef, data, dimension, 'x-lbp-price-line-chart', { sign: props.currency.symbol })
 
     return (
         <div className={classes.root} ref={rootRef}>

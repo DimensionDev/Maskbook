@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
-import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { postEditorContentInPopupSelector, rootSelector } from '../utils/selector'
 import { startWatch } from '../../../utils/watcher'
@@ -13,10 +13,9 @@ function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T,
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, signal)
 
-    renderInShadowRoot(<PostDialogAtTwitter reason={reason} />, {
-        shadow: () => watcher.firstDOMProxy.afterShadow,
-        signal,
-    })
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+        <PostDialogAtTwitter reason={reason} />,
+    )
 }
 
 function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {

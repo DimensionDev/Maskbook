@@ -18,7 +18,7 @@ import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { ChainId, EthereumTokenType } from '../../../../web3/types'
+import { EthereumTokenType } from '../../../../web3/types'
 import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { LBPPanel } from './LBPPanel'
@@ -104,7 +104,7 @@ export function PopperView(props: PopperViewProps) {
 
     //#region stats
     const [days, setDays] = useState(Days.ONE_WEEK)
-    const { value: stats = [], loading: loadingStats } = usePriceStats({
+    const { value: stats = [], loading: loadingStats, retry: retryStats } = usePriceStats({
         coinId: trending?.coin.id,
         dataProvider: trending?.dataProvider,
         currency: trending?.currency,
@@ -202,7 +202,9 @@ export function PopperView(props: PopperViewProps) {
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
+                            currency={currency}
                             stats={stats}
+                            retry={retryStats}
                             loading={loadingStats}>
                             <PriceChartDaysControl days={days} onDaysChange={setDays} />
                         </PriceChart>
@@ -221,6 +223,7 @@ export function PopperView(props: PopperViewProps) {
                 {Flags.LBP_enabled && LBP && tabIndex === tabs.length - 1 ? (
                     <LBPPanel
                         duration={LBP.duration}
+                        currency={currency}
                         token={createERC20Token(
                             chainId,
                             LBP.token.address,

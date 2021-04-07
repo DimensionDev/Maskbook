@@ -3,7 +3,7 @@ import type { PostInfo } from '../../PostInfo'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CommentBox, CommentBoxProps } from '../../../components/InjectedComponents/CommentBox'
 import Services from '../../../extension/service'
-import { renderInShadowRoot } from '../../../utils/shadow-root/renderInShadowRoot'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { makeStyles } from '@material-ui/core'
 import { PostInfoContext, usePostInfoDetails, usePostInfo } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-es'
@@ -49,14 +49,15 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         const commentBoxWatcher = new MutationObserverWatcher(
             current.commentBoxSelector.clone(),
             current.rootNode,
-        ).useForeach((node, key, meta) =>
-            renderInShadowRoot(
+        ).useForeach((node, key, meta) => {
+            const root = createReactRootShadowed(meta.afterShadow, { signal })
+            root.render(
                 <PostInfoContext.Provider value={current}>
                     <CommentBoxUI {...{ ...current, dom: meta.realCurrent }} />
                 </PostInfoContext.Provider>,
-                { shadow: () => meta.afterShadow, signal },
-            ),
-        )
+            )
+            return root.destory
+        })
         startWatch(commentBoxWatcher, signal)
         return () => commentBoxWatcher.stopWatch()
     }

@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { makeStyles, createStyles, Card, Typography, Button, Grid, Avatar, Box } from '@material-ui/core'
+import { makeStyles, createStyles, Card, Typography, Button, Grid, Avatar } from '@material-ui/core'
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import { useI18N } from '../../../utils/i18n-next-ui'

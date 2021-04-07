@@ -28,6 +28,8 @@ export function useTokenDetailed<P extends EthereumTokenType, Q extends TokenDet
             return r2 as AsyncStateRetry<Q | undefined>
         case EthereumTokenType.ERC721:
             return r3 as AsyncStateRetry<Q | undefined>
+        case EthereumTokenType.ERC1155:
+            throw new Error('To be implemented')
         default:
             unreachable(type_)
     }

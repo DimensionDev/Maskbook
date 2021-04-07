@@ -1,6 +1,7 @@
 import { SelectTokenDialog } from '../Ethereum/UI/SelectTokenDialog'
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { PLUGIN_IDENTIFIER } from './constants'
+import { CreateWalletDialog } from './UI/CreateWalletDialog'
 import { SelectProviderDialog } from './UI/SelectProviderDialog'
 import { SelectWalletDialog } from './UI/SelectWalletDialog'
 import { WalletConnectQRCodeDialog } from './UI/WalletConnectQRCodeDialog'
@@ -17,6 +18,7 @@ export const WalletPluginDefine: PluginConfig = {
                 <SelectWalletDialog />
                 <SelectProviderDialog />
                 <SelectTokenDialog />
+                <CreateWalletDialog />
                 <WalletStatusDialog />
                 <WalletConnectQRCodeDialog />
             </>
@@ -28,6 +30,7 @@ export const WalletPluginDefine: PluginConfig = {
                 <SelectWalletDialog />
                 <SelectProviderDialog />
                 <SelectTokenDialog />
+                <CreateWalletDialog />
                 <WalletStatusDialog />
                 <WalletConnectQRCodeDialog />
             </>
