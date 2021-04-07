@@ -1,4 +1,3 @@
-import type { SetState } from 'immer/dist/internal'
 
 export interface getListingData {
     rank: number
