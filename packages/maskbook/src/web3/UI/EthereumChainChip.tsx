@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface EthereumChainChipProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface EthereumChainChipProps extends withClasses<never> {
     chainId: ChainId
     ChipProps?: Partial<ChipProps>
 }

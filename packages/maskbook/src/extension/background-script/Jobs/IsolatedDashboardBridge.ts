@@ -1,28 +1,22 @@
-import type { EventBasedChannel } from 'async-call-rpc'
-import Services, { BackgroundServicesAdditionalConnections } from '../../service'
+import { Environment, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import { newDashboardConnection } from '../../../settings/settings'
 
+let disconnected = false
 export default function () {
     // Listen to API request from dashboard
     if (
-        process.env.NODE_ENV === 'development' &&
+        (process.env.NODE_ENV === 'development' || process.env.build !== 'stable') &&
         process.env.architecture === 'web' &&
         process.env.target === 'chromium'
     ) {
-        browser.runtime.onConnectExternal.addListener(listener)
+        WebExtensionMessage.acceptExternalConnect((conn) => {
+            if (disconnected) return false
+            console.log('New connection from', conn)
+            if (!newDashboardConnection.value) return false
+            if (!conn.url) return false
+            if (!new URL(conn.url).host.endsWith('compassionate-northcutt-326a3a.netlify.app')) return false
+            return { acceptAs: Environment.HasBrowserAPI }
+        })
     }
-    return () => browser.runtime.onConnectExternal.removeListener(listener)
-}
-class PortChannel implements EventBasedChannel {
-    constructor(public port: browser.runtime.Port) {}
-    on(listener: (data: any) => void): void | (() => void) {
-        return this.port.onMessage.addListener(listener)
-    }
-    send(data: any) {
-        this.port.postMessage(data)
-    }
-}
-
-function listener(port: browser.runtime.Port): void {
-    if (!(port.name in Services)) port.disconnect()
-    BackgroundServicesAdditionalConnections[port.name].newConnection(new PortChannel(port))
+    return () => (disconnected = true)
 }

@@ -5,7 +5,6 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { PluginTransakMessages } from '../messages'
-import { useBlurContext } from '../../../extension/options-page/DashboardContexts/BlurContext'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useTransakURL } from '../hooks/useTransakURL'
 
@@ -20,7 +19,6 @@ const useStyles = makeStyles((theme) =>
             top: theme.spacing(2),
             right: theme.spacing(2),
             position: 'absolute',
-            // transform: 'translate(-50%, -50%)'
         },
         content: {
             width: '100%',
@@ -37,7 +35,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface BuyTokenDialogProps extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root'> {}
+export interface BuyTokenDialogProps extends withClasses<never | 'root'> {}
 
 export function BuyTokenDialog(props: BuyTokenDialogProps) {
     const { t } = useI18N()
@@ -63,9 +61,6 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
         })
     }, [setOpen])
     //#endregion
-
-    // render in dashboard
-    useBlurContext(open)
 
     return (
         <div className={classes.root}>

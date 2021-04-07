@@ -38,11 +38,9 @@ import { RestoreFromQRCodeImageBox } from '../DashboardComponents/RestoreFromQRC
 import { RestoreFromBackupBox } from '../DashboardComponents/RestoreFromBackupBox'
 import { DatabaseRecordType, DatabasePreviewCard } from '../DashboardComponents/DatabasePreviewCard'
 import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQRCodeCameraBox'
-import { sleep } from '../../../utils/utils'
+import { delay } from '../../../utils/utils'
 import { SetupStep } from '../SetupStep'
 import { Flags } from '../../../utils/flags'
-import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
-import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { extendsTheme } from '../../../utils/theme'
 
 //#region setup form
@@ -120,7 +118,7 @@ const useSetupFormStyles = makeStyles((theme) =>
     }),
 )
 
-interface SetupFormProps extends withClasses<KeysInferFromUseStyles<typeof useSetupFormStyles>> {
+interface SetupFormProps extends withClasses<never> {
     primary: string
     secondary?: string
     content?: React.ReactNode
@@ -362,16 +360,8 @@ export function ConnectNetwork() {
                         variant="contained"
                         disabled={persona?.linkedProfiles.size === 0}
                         onClick={async () => {
-                            const [_, address] = await Promise.all([
-                                Services.Identity.setupPersona(persona.identifier),
-                                WalletRPC.importFirstWallet({
-                                    name: persona.nickname ?? t('untitled_wallet'),
-                                    mnemonic: persona.mnemonic?.words.split(' '),
-                                    passphrase: '',
-                                }),
-                            ])
-                            if (address) currentSelectedWalletAddressSettings.value = address
-                            await sleep(300)
+                            await Services.Identity.setupPersona(persona.identifier)
+                            await delay(300)
                             history.replace(Flags.has_no_browser_tab_ui ? DashboardRoute.Nav : DashboardRoute.Personas)
                         }}>
                         {t('set_up_button_finish')}

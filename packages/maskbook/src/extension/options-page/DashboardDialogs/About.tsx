@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            background: 'url(/about-dialog-background.png) no-repeat center / cover',
+            background: `url(${new URL('./AboutDialogBackground.png', import.meta.url)}) no-repeat center / cover`,
         },
         maskface: {
             width: 120,
@@ -105,9 +105,19 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
     const makeTitle = () => {
         if (process.env.NODE_ENV === 'production') {
-            return <img className={classes.masktext} src="/maskbook-title-white.svg" />
+            return (
+                <img
+                    className={classes.masktext}
+                    src={new URL('./AboutMaskTitle-White.svg', import.meta.url).toString()}
+                />
+            )
         }
-        return <img className={classes.masknightly} src="/maskbook-title-nightly.svg" />
+        return (
+            <img
+                className={classes.masknightly}
+                src={new URL('./AboutMaskTitle-Nightly.svg', import.meta.url).toString()}
+            />
+        )
     }
     return (
         <DashboardDialogCore {...props} CloseIconProps={{ className: classes.close }}>
@@ -115,11 +125,10 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
                 <header className={classes.header}>
                     <Avatar
                         className={classes.maskface}
-                        src={
-                            process.env.NODE_ENV === 'production'
-                                ? '/MB--CircleCanvas--WhiteOverBlue.svg'
-                                : '/MB--CircleCanvas--Nightly.svg'
-                        }
+                        src={(process.env.NODE_ENV === 'production'
+                            ? new URL('./AboutAvatar-WhiteOverBlue.svg', import.meta.url)
+                            : new URL('./AboutMaskTitle-Nightly.svg', import.meta.url)
+                        ).toString()}
                     />
                     {makeTitle()}
                     <Typography className={classes.version} variant="body2" color="inherit">

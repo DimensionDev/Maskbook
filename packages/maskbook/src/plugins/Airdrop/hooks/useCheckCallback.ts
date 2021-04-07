@@ -108,7 +108,7 @@ export function useCheckCallback() {
                     packet,
                     start: start_,
                     end: end_,
-                    claimable,
+                    claimable: available && new BigNumber(claimable).isGreaterThan(0) && !isEnd ? claimable : '0',
                     ratio: new BigNumber(claimable).div(amount),
                 })
             } catch (error) {

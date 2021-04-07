@@ -18,8 +18,7 @@ const useStyles = makeStyles({
     },
 })
 
-export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Profile>
-    extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Profile> extends withClasses<never> {
     items: T[]
     selected: T[]
     frozenSelected: T[]

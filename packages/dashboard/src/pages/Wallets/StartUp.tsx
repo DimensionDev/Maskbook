@@ -3,7 +3,7 @@ import { StartupActionList, StartupActionListItem } from '../../components/Start
 import { MaskWalletIcon, ImportWalletIcon, CloudLinkIcon } from '@dimensiondev/icons'
 import { useDashboardI18N } from '../../locales'
 
-export const Container = styled('div')`
+const Container = styled('div')`
     display: flex;
     justify-content: center;
     align-items: center;

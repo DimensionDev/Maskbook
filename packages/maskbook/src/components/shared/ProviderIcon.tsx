@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
-export interface ProviderIconProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface ProviderIconProps extends withClasses<never> {
     size?: number
     providerType?: ProviderType
 }

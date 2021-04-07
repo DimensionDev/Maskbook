@@ -5,15 +5,14 @@
 import { CustomEventId, WALLET_OR_PERSONA_NAME_MAX_LEN } from './constants'
 import type { CustomEvents } from '../extension/injected-script/CustomEvents'
 
-import { flatten, isNull, random, noop } from 'lodash-es'
+import { isNull, noop } from 'lodash-es'
 
 /**
  * Return a promise that resolved after `time` ms.
  * If `time` is `Infinity`, it will never resolve.
  * @param time - Time to sleep. In `ms`.
- * TODO: rename to delay
  */
-export function sleep(time: number) {
+export function delay(time: number) {
     return new Promise<void>((resolve) => (Number.isFinite(time) ? setTimeout(resolve, time) : void 0))
 }
 
@@ -34,22 +33,6 @@ export function timeout<T>(promise: PromiseLike<T>, time: number, rejectReason?:
     ])
     race.finally(() => clearTimeout(timer))
     return race
-}
-
-export function randomElement(arr: unknown[]) {
-    const e = flatten(arr)
-    return e[random(0, e.length - 1)]
-}
-
-/**
- * Get reference of file in both extension and storybook
- * @deprecated Please use `new URL('./file.png', import.meta.url)`
- */
-export function getUrl(path: string, fallback: string = '') {
-    if (typeof browser === 'object' && browser.runtime && browser.runtime.getURL) {
-        return browser.runtime.getURL(path)
-    }
-    return fallback || path
 }
 
 /**
@@ -82,10 +65,11 @@ export function dispatchCustomEvents<T extends keyof CustomEvents>(
 
 /**
  * paste image to activeElements
- * @param bytes
+ * @param image
  */
-export function pasteImageToActiveElements(bytes: Uint8Array) {
-    return dispatchCustomEvents(document.activeElement, 'paste', { type: 'image', value: Array.from(bytes) })
+export async function pasteImageToActiveElements(image: File | Blob): Promise<void> {
+    const bytes = new Uint8Array(await image.arrayBuffer())
+    dispatchCustomEvents(document.activeElement, 'paste', { type: 'image', value: Array.from(bytes) })
 }
 
 Object.assign(globalThis, { dispatchCustomEvents })
@@ -175,31 +159,6 @@ export function batchReplace(source: string, group: Array<[string | RegExp, stri
         storage = storage.replace(v[0], v[1])
     }
     return storage
-}
-
-export async function asyncTimes<T>(
-    times: number,
-    iteratee: () => Promise<T | void>,
-    {
-        delay = 30 * 1000,
-        earlyStop = true,
-    }: {
-        delay?: number
-        earlyStop?: boolean // stop for first value
-    } = {},
-) {
-    const result: (T | void)[] = []
-
-    for await (const i of Array.from(Array(times).keys())) {
-        result.push(await iteratee())
-        if (typeof result[i] !== 'undefined' && earlyStop) {
-            break
-        }
-        if (delay) {
-            await sleep(delay)
-        }
-    }
-    return result
 }
 
 export function pollingTask(

@@ -18,6 +18,7 @@ import { useConstant } from '../../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../../web3/constants'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { usePools } from '../../LBP/usePools'
+import type { Currency } from '../../types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,6 +32,11 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: 14,
             margin: theme.spacing(1, 0),
             padding: theme.spacing(0, 2.5),
+        },
+        placeholder: {
+            color: theme.palette.text.secondary,
+            padding: theme.spacing(2, 2, 0),
+            textAlign: 'center',
         },
         connect: {
             padding: theme.spacing(0, 2.5),
@@ -58,6 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface LBPPanelProps extends withClasses<never> {
     duration: number
     token: ERC20TokenDetailed
+    currency: Currency
 }
 
 export function LBPPanel(props: LBPPanelProps) {
@@ -72,6 +79,15 @@ export function LBPPanel(props: LBPPanelProps) {
         duration,
         100,
     )
+
+    if (!pools.length)
+        return (
+            <div className={classes.root}>
+                <div className={classes.chart}>
+                    <Typography className={classes.placeholder}>No pools found.</Typography>
+                </div>
+            </div>
+        )
 
     return (
         <div className={classes.root}>
@@ -97,38 +113,34 @@ export function LBPPanel(props: LBPPanelProps) {
                                   value: x.price,
                               }))
                     }
+                    currency={props.currency}
                 />
             </div>
-            {pools.length ? (
-                <>
-                    <Typography className={classes.introduce}>
-                        Solid blue line illustrates the historical price of {token.symbol ?? 'Token'} on the{' '}
-                        {token.symbol ?? 'Token'}'s LBP. The price could continue to go down if no one buys. Please make
-                        your investment decision wisely.
-                    </Typography>
-
-                    <Typography className={classes.introduce}>
-                        <Link href="https://link.medium.com/0kfZVzGx8db" target="_blank" rel="noopener noreferrer">
-                            What's LBP?
-                        </Link>
-                        ,{' '}
-                        <Link
-                            href={`https://news.mask.io/2021/02/24/mask-lbp-tutorial`}
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            Tutorial
-                        </Link>{' '}
-                        and{' '}
-                        <Link
-                            href={`https://pools.balancer.exchange/#/pool/${pools[0].id}/`}
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            {token.symbol} LBP Pool in Balancer
-                        </Link>
-                        .
-                    </Typography>
-                </>
-            ) : null}
+            <Typography className={classes.introduce}>
+                Solid blue line illustrates the historical price of {token.symbol ?? 'Token'} on the{' '}
+                {token.symbol ?? 'Token'}'s LBP. The price could continue to go down if no one buys. Please make your
+                investment decision wisely.
+            </Typography>
+            <Typography className={classes.introduce}>
+                <Link href="https://link.medium.com/0kfZVzGx8db" target="_blank" rel="noopener noreferrer">
+                    What's LBP?
+                </Link>
+                ,{' '}
+                <Link
+                    href={`https://news.mask.io/2021/02/24/mask-lbp-tutorial`}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    Tutorial
+                </Link>{' '}
+                and{' '}
+                <Link
+                    href={`https://pools.balancer.exchange/#/pool/${pools[0].id}/`}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    {token.symbol} LBP Pool in Balancer
+                </Link>
+                .
+            </Typography>
             <div className={classes.connect}>
                 <Button
                     color="primary"

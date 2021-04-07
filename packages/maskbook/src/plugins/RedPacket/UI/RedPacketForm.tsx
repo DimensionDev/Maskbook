@@ -28,7 +28,6 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { useERC20TokenApproveCallback, ApproveStateType } from '../../../web3/hooks/useERC20TokenApproveCallback'
 import { useCreateCallback } from '../hooks/useCreateCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -61,7 +60,7 @@ const useStyles = makeStyles((theme) =>
             padding: 12,
         },
         selectShrinkLabel: {
-            transform: 'translate(17px, -12px) scale(0.75) !important',
+            transform: 'translate(17px, -10px) scale(0.75) !important',
         },
         inputShrinkLabel: {
             transform: 'translate(17px, -3px) scale(0.75) !important',
@@ -69,7 +68,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface RedPacketFormProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RedPacketFormProps extends withClasses<never> {
     onCreate?(payload: RedPacketJSONPayload): void
     SelectMenuProps?: Partial<MenuProps>
 }
@@ -133,7 +132,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     )
 
     // amount
-    const [rawAmount, setRawAmount] = useState('0')
+    const [rawAmount, setRawAmount] = useState('')
     const amount = new BigNumber(rawAmount || '0').multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0))
     const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares || '0')
 
@@ -327,10 +326,15 @@ export function RedPacketForm(props: RedPacketFormProps) {
             </div>
             <EthereumWalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
-                    amount={amount.toFixed()}
+                    amount={totalAmount.toFixed()}
                     token={token?.type === EthereumTokenType.ERC20 ? token : undefined}
                     spender={RED_PACKET_ADDRESS}>
-                    <ActionButton className={classes.button} fullWidth onClick={createCallback}>
+                    <ActionButton
+                        variant="contained"
+                        className={classes.button}
+                        fullWidth
+                        disabled={!!validationMessage}
+                        onClick={createCallback}>
                         {validationMessage || `Send ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`}
                     </ActionButton>
                 </EthereumERC20TokenApprovedBoundary>

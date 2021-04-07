@@ -5,8 +5,8 @@ import { useMyIdentities } from '../DataSource/useActivatedUI'
 import type { BannerProps } from '../Welcomes/Banner'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSetupGuideStatus } from '../../settings/settings'
-import { getActivatedUI } from '../../social-network/ui'
-import { isMobileFacebook } from '../../social-network-provider/facebook.com/isMobile'
+import { activatedSocialNetworkUI } from '../../social-network'
+import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
 import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -16,6 +16,7 @@ export interface PostDialogHintUIProps {
 
 const useStyles = makeStyles((theme) => ({
     button: {
+        // TODO: is it correct? (what about twitter?)
         padding: isMobileFacebook ? 0 : '8px',
     },
     text: {
@@ -36,7 +37,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const classes = useStyles()
     return (
         <IconButton className={classes.button} onClick={props.onHintButtonClicked}>
-            <MaskbookSharpIcon />
+            <MaskbookSharpIcon color="primary" />
         </IconButton>
     )
 })
@@ -60,7 +61,7 @@ export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
 }
 export function PostDialogHint(props: PostDialogHintProps) {
     const identities = useMyIdentities()
-    const connecting = useValueRef(currentSetupGuideStatus[getActivatedUI().networkIdentifier])
+    const connecting = useValueRef(currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier])
     if (connecting || identities.length === 0) return null
     return <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
 }

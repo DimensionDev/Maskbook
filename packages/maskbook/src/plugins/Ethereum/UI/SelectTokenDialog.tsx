@@ -8,6 +8,7 @@ import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
+import { delay } from '../../../utils/utils'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,16 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-export interface SelectTokenDialogProps extends withClasses<never> {
-    open?: boolean
-    includeTokens?: string[]
-    excludeTokens?: string[]
-    selectedTokens?: string[]
-    tokens?: (ERC20TokenDetailed | EtherTokenDetailed)[]
-    disableSearchBar?: boolean
-    onSubmit?: (token: ERC20TokenDetailed) => void
-    onClose?: () => void
-}
+export interface SelectTokenDialogProps extends withClasses<never> {}
 
 export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const { t } = useI18N()
@@ -65,20 +57,24 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
         setFixedTokenListProps(ev.FixedTokenListProps ?? null)
     })
     const onSubmit = useCallback(
-        (token: EtherTokenDetailed | ERC20TokenDetailed) => {
+        async (token: EtherTokenDetailed | ERC20TokenDetailed) => {
             setOpen({
                 open: false,
                 uuid: id,
                 token,
             })
+            await delay(300)
+            setKeyword('')
         },
-        [id, setOpen],
+        [id, setOpen, setKeyword],
     )
-    const onClose = useCallback(() => {
+    const onClose = useCallback(async () => {
         setOpen({
             open: false,
             uuid: id,
         })
+        await delay(300)
+        setKeyword('')
     }, [id, setOpen])
     //#endregion
 

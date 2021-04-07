@@ -37,16 +37,14 @@ For general introductions, see [Mask.io](https://mask.io).
 - [Telegram](https://t.me/maskbook_group)
 - [Discord](https://discord.gg/4SVXvj7)
 
-## Caveats for developers
+## Developer documentation
 
-Please check out [caveats.md](docs/caveats.md)
+Please check out [docs](docs)
 
 ## Donation
 
 Help us by donating us:
 
-- Bitcoin: `3PRrXj1HTXDc4j9SCQZ6hovpa74iimqtgX`
-- Ethereum: `0xD71c7150962fd484a4291a193c85426Df9EaABbB`
 - Gitcoin (ETH/ERC20): [Mask Network](https://gitcoin.co/grants/159/mask-networkmaskbook-the-portal-to-the-new-open-i)
 
 [badge-chrome]: https://img.shields.io/chrome-web-store/v/jkoeaghipilijlahjplgbfiocjhldnap.svg?logo=Maskbook&logoColor=%231c68f3&style=flat-square&label=Chrome%20store

@@ -35,5 +35,10 @@
     "wallets_create_wallet_tabs": "創建錢包標籤",
     "wallets_create_wallet_refresh": "刷新",
     "wallets_create_wallet_remember_later": "記得以後",
-    "wallets_create_wallet_verification": "确认"
+    "wallets_balance": "結餘",
+    "wallets_create_wallet_verification": "确认",
+    "wallets_balance_Send": "發送",
+    "wallets_balance_Buy": "購買",
+    "wallets_balance_Swap": "交換",
+    "wallets_balance_Receive": "接收"
 }

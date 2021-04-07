@@ -17,10 +17,10 @@ import {
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import { add as addDate } from 'date-fns'
-import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
+import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
-import { editActivatedPostMetadata } from '../../../social-network/ui'
+import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
@@ -117,12 +117,13 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
         })
     }
 
-    const renderSelect = (count: number, fn: (newVal: number) => void, defaultIndex = 0) => {
+    // react hooks are not binded with the function identity but hooks order
+    const useSelect = (count: number, fn: (newVal: number) => void, defaultIndex = 0) => {
         const options = new Array(count).fill('')
 
-        return (
+        return usePortalShadowRoot((container) => (
             <Select
-                MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}
+                MenuProps={{ container: props.DialogProps?.container ?? container }}
                 value={defaultIndex}
                 onChange={(e) => fn(e.target.value as number)}>
                 {options.map((item, index) => (
@@ -131,7 +132,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                     </MenuItem>
                 ))}
             </Select>
-        )
+        ))
     }
 
     return (
@@ -169,15 +170,15 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                 <div className={classes.line}>
                     <FormControl variant="filled" className={classes.item}>
                         <InputLabel>{t('plugin_poll_length_days')}</InputLabel>
-                        {renderSelect(8, setDays, days)}
+                        {useSelect(8, setDays, days)}
                     </FormControl>
                     <FormControl variant="filled" className={classes.item}>
                         <InputLabel>{t('plugin_poll_length_hours')}</InputLabel>
-                        {renderSelect(25, setHours, hours)}
+                        {useSelect(25, setHours, hours)}
                     </FormControl>
                     <FormControl variant="filled" className={classes.item}>
                         <InputLabel>{t('plugin_poll_length_minutes')}</InputLabel>
-                        {renderSelect(61, setMinutes, minutes)}
+                        {useSelect(61, setMinutes, minutes)}
                     </FormControl>
                 </div>
             </div>

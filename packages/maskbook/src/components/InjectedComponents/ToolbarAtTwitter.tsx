@@ -71,8 +71,7 @@ const useStyles = makeStyles((theme) => {
             transform: 'rotate(-180deg)',
         },
         rootStickyShrink: {
-            zIndex: 1,
-            right: '0 !important',
+            left: '10px !important',
             position: 'fixed',
             backgroundColor: theme.palette.background.paper,
             height: TOOLBAR_HEIGHT,
@@ -86,7 +85,7 @@ export function ToolbarAtTwitter(props: ToolbarAtTwitterProps) {
     const classes = useStyles()
     const location = useLocation()
     const isPhotoPage = /\/status\/\d+\/photo\/\d+$/.test(location.pathname ?? '')
-    const [isExpand, setIsExpand] = useState(true)
+    const [isExpand, setExpand] = useState(false)
 
     // inject global css
     useEffectOnce(() => {
@@ -124,45 +123,44 @@ export function ToolbarAtTwitter(props: ToolbarAtTwitterProps) {
     }, [windowWidth])
     //#endregion
 
+    // There's an animation effect when click button which would keep showing after expanded or shrinked,
+    //  so re-render IconButton immediately when isExpand changes.
+    const IconButtonMemo = useMemo(
+        () => () => (
+            <IconButton
+                onClick={() => setExpand(!isExpand)}
+                color="primary"
+                className={classNames(classes.sizeButton, isExpand ? classes.rotate : '')}>
+                <DoubleArrowIcon />
+            </IconButton>
+        ),
+        [isExpand],
+    )
+
     return isPhotoPage ? null : (
         <Toolbar classes={{ root: classes.root }}>
-            {isExpand ? (
-                <div
-                    className={isSticky ? classes.rootSticky : ''}
-                    style={{
-                        opacity: isSticky ? (y - TOOLBAR_STICKY_POSITION) / TOOLBAR_STICKY_ANIMATION_DISTANCE : 1,
-                    }}>
-                    <div className={classes.content} style={{ left, right, width }}>
+            <div
+                className={isExpand ? (isSticky ? classes.rootSticky : '') : classes.rootStickyShrink}
+                style={
+                    isExpand
+                        ? {
+                              opacity: isSticky ? (y - TOOLBAR_STICKY_POSITION) / TOOLBAR_STICKY_ANIMATION_DISTANCE : 1,
+                          }
+                        : {}
+                }>
+                <div className={classes.content} style={isExpand ? { left, right, width } : {}}>
+                    {isExpand ? (
                         <div className={classes.left} style={{ width: menuWidth }}>
                             <MaskbookIcon classes={{ root: classes.logo }} />
                         </div>
-                        <div className={classes.right} style={{ width: mainWidth }}>
-                            <EthereumMaskBalanceButton classes={{ root: classes.maskBalanceButton }} />
-                            <EthereumAccountButton classes={{ root: classes.accountButton }} />
-                            <IconButton
-                                onClick={() => setIsExpand(false)}
-                                color="primary"
-                                className={classes.sizeButton}>
-                                <DoubleArrowIcon />
-                            </IconButton>
-                        </div>
+                    ) : null}
+                    <div className={classes.right} style={isExpand ? { width: mainWidth } : {}}>
+                        <EthereumMaskBalanceButton classes={{ root: classes.maskBalanceButton }} />
+                        {isExpand ? <EthereumAccountButton classes={{ root: classes.accountButton }} /> : null}
+                        <IconButtonMemo />
                     </div>
                 </div>
-            ) : (
-                <div className={classes.rootStickyShrink}>
-                    <div className={classes.content}>
-                        <div className={classes.right}>
-                            <IconButton
-                                onClick={() => setIsExpand(true)}
-                                color="primary"
-                                className={classNames(classes.sizeButton, classes.rotate)}>
-                                <DoubleArrowIcon />
-                            </IconButton>
-                            <EthereumMaskBalanceButton classes={{ root: classes.maskBalanceButton }} />
-                        </div>
-                    </div>
-                </div>
-            )}
+            </div>
         </Toolbar>
     )
 }

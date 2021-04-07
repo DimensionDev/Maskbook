@@ -32,9 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export interface ProviderProps
-    extends withClasses<
-        KeysInferFromUseStyles<typeof useStyles> | 'root' | 'dialog' | 'backdrop' | 'container' | 'paper' | 'content'
-    > {
+    extends withClasses<never | 'root' | 'dialog' | 'backdrop' | 'container' | 'paper' | 'content'> {
     logo: React.ReactNode
     name: React.ReactNode
     description: React.ReactNode

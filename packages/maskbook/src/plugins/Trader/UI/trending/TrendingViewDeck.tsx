@@ -1,16 +1,16 @@
 import { useCallback } from 'react'
 import {
-    makeStyles,
     Avatar,
-    Typography,
-    CardHeader,
-    CardContent,
-    CardActions,
-    createStyles,
-    Link,
-    Paper,
     Button,
+    CardActions,
+    CardContent,
+    CardHeader,
+    createStyles,
     IconButton,
+    Link,
+    makeStyles,
+    Paper,
+    Typography,
 } from '@material-ui/core'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
@@ -35,13 +35,15 @@ import { getEnumAsArray } from '../../../../utils/enum'
 import { TradeProviderIcon } from '../trader/TradeProviderIcon'
 import { DataProviderIcon } from '../trader/DataProviderIcon'
 import {
-    currentDataProviderSettings,
+    currentTrendingDataProviderSettings,
     currentTradeProviderSettings,
     getCurrentPreferredCoinIdSettings,
 } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
+import { useApprovedTokens } from '../../trending/useApprovedTokens'
+import { CoinSaftyAlert } from './CoinSaftyAlert'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -183,7 +185,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     //#region sync with settings
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentDataProviderSettings.value = option.value as DataProvider
+        currentTrendingDataProviderSettings.value = option.value as DataProvider
     }, [])
     const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {
         currentTradeProviderSettings.value = option.value as TradeProvider
@@ -202,15 +204,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     )
     //#endregion
 
-    const dataProviderOptions = getEnumAsArray(DataProvider).filter((x) => {
-        return dataProvider === DataProvider.UNISWAP
-            ? x.value === DataProvider.UNISWAP
-            : x.value !== DataProvider.UNISWAP
-    })
-    const tradeProviderOptions = getEnumAsArray(TradeProvider).filter((x) => {
-        return dataProvider === DataProvider.UNISWAP ? x.value === TradeProvider.ZRX : true
-    })
-
+    const dataProviderOptions = getEnumAsArray(DataProvider)
+    const tradeProviderOptions = getEnumAsArray(TradeProvider)
+    const { approvedTokens, onApprove } = useApprovedTokens(trending.coin.eth_address)
     return (
         <TrendingCard {...TrendingCardProps}>
             <CardHeader
@@ -295,6 +291,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 disableTypography
             />
             <CardContent className={classes.content}>
+                {dataProvider === DataProvider.UNISWAP_INFO && <CoinSaftyAlert coin={trending.coin} />}
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
@@ -329,6 +326,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             selectedIndex={findIndex(dataProviderOptions, (x) => x.value === dataProvider)}
                             onChange={onDataProviderChange}
                         />
+                        <ArrowDropDownIcon />
                     </div>
                 ) : null}
                 {showTradeProviderIcon ? (
@@ -344,11 +342,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 ),
                                 value: x.value,
                             }))}
-                            selectedIndex={
-                                dataProvider === DataProvider.UNISWAP
-                                    ? 0
-                                    : findIndex(getEnumAsArray(TradeProvider), (x) => x.value === tradeProvider)
-                            }
+                            selectedIndex={findIndex(getEnumAsArray(TradeProvider), (x) => x.value === tradeProvider)}
                             onChange={onTradeProviderChange}>
                             <ArrowDropDownIcon />
                         </FootnoteMenu>

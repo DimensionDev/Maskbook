@@ -47,15 +47,8 @@ declare class ClipboardItem {
     constructor(data: { [mimeType: string]: Blob })
 }
 
-type PermissionNameWithClipboard = PermissionName
-
-interface PermissionWithClipboardDescriptor {
-    name: PermissionNameWithClipboard
-}
-
 interface Permissions {
-    request(permission: { name: string }): Promise<PermissionStatus>
-    query(permissionDesc: PermissionWithClipboardDescriptor): Promise<PermissionStatus>
+    request(permission: { name: PermissionName }): Promise<PermissionStatus>
 }
 
 declare module 'eth-contract-metadata' {
