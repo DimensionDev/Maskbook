@@ -89,7 +89,6 @@ export function ResultCard() {
     useEffect(() => {
         setTooltipVisibles(listRef.current.map((element) => (element.offsetWidth === choiceMaxWidth ? true : false)))
     }, [])
-    console.log({ results })
 
     const dataForCsv = useMemo(
         () =>

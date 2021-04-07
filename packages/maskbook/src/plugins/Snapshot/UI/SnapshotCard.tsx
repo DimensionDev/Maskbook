@@ -1,4 +1,4 @@
-import { Card, createStyles, makeStyles, CardContent, CardHeader, Paper, Typography } from '@material-ui/core'
+import { Card, createStyles, makeStyles, CardContent, CardHeader, Typography } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) => {
