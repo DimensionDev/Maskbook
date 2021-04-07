@@ -4,10 +4,11 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
-            margin: '16px auto',
-            border: `solid 1px ${theme.palette.divider}`,
+            minHeight: 120,
             padding: 0,
-            minHeight: 320,
+            border: `solid 1px ${theme.palette.divider}`,
+            margin: 'theme.spacing(2) auto',
+            marginBottom: theme.spacing(2),
             '&:last-child': {
                 marginBottom: 0,
             },
@@ -15,13 +16,13 @@ const useStyles = makeStyles((theme) => {
         header: {
             backgroundColor: theme.palette.mode === 'dark' ? '#24292e' : 'white',
             borderBottom: `1px solid ${theme.palette.divider}`,
-            padding: '12px 16px',
+            padding: theme.spacing(2),
         },
         content: {
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
-            padding: '0 !important',
+            boxSizing: 'border-box',
         },
         title: {
             paddingLeft: theme.spacing(1),
