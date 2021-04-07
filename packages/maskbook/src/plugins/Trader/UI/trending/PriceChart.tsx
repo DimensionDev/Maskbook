@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import type { Coin, Stat } from '../../types'
+import type { Coin, Currency, Stat } from '../../types'
 import { makeStyles, Theme, createStyles, CircularProgress, Typography } from '@material-ui/core'
+import RefreshIcon from '@material-ui/icons/Refresh'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
 import { usePriceLineChart } from '../../../hooks/usePriceLineChart'
 import { useI18N } from '../../../../utils/i18n-next-ui'
@@ -30,6 +31,12 @@ const useStyles = makeStyles((theme: Theme) => {
             right: theme.spacing(1),
             position: 'absolute',
         },
+        refresh: {
+            bottom: theme.spacing(1),
+            right: theme.spacing(1),
+            position: 'absolute',
+            fontSize: 15,
+        },
         placeholder: {
             paddingTop: theme.spacing(10),
             paddingBottom: theme.spacing(10),
@@ -40,10 +47,12 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export interface PriceChartProps extends withClasses<'root'> {
     coin?: Coin
+    currency: Currency
     stats: Stat[]
     loading?: boolean
     width?: number
     height?: number
+    retry(): void
     children?: React.ReactNode
 }
 
@@ -79,11 +88,16 @@ export function PriceChart(props: PriceChartProps) {
         })),
         dimension,
         'x-trader-price-line-chart',
+        { sign: props.currency.symbol },
     )
 
     return (
         <div className={classes.root} ref={rootRef}>
-            {props.loading ? <CircularProgress className={classes.progress} color="primary" size={15} /> : null}
+            {props.loading ? (
+                <CircularProgress className={classes.progress} color="primary" size={15} />
+            ) : (
+                <RefreshIcon className={classes.refresh} color="primary" onClick={props.retry} />
+            )}
             {props.stats.length ? (
                 <>
                     {props.children}

@@ -1,13 +1,28 @@
+/**
+ * ! Please be super cautious when you're editing this file.
+ *
+ * ! Please make sure you know how JavaScript property access, getter/setter, Proxy, property descriptor works
+ *
+ * ! Please make sure you understand how Firefox content script security boundary works
+ *
+ * ! Please be aware that globalThis is NOT the same as globalThis.window (or window for short) in Firefox.
+ */
 import { CustomEventId } from '../../utils/constants'
 import type { CustomEvents } from './CustomEvents'
+import { instagramUpload } from './instagramUpload'
+import {
+    redefineEventTargetPrototype,
+    clone_into,
+    un_xray_DOM as un_xray_DOM,
+    constructUnXrayedFilesFromUintLike,
+    constructUnXrayedDataTransferProxy,
+} from './utils'
 
 const CapturingEvents: Set<string> = new Set(['keyup', 'input', 'paste'] as (keyof DocumentEventMap)[])
 
 //#region instincts
 const { apply } = Reflect
-const { error, log, warn } = console
-const isConnectedGetter: () => boolean = Object.getOwnPropertyDescriptor(Node.prototype, 'isConnected')!.get!
-const _XPCNativeWrapper = typeof XPCNativeWrapper === 'undefined' ? undefined : XPCNativeWrapper
+const { error, warn } = console
 // The "window."" here is used to create a un-xrayed Proxy on Firefox
 const un_xray_Proxy = globalThis.window.Proxy
 const input_value_setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set!
@@ -17,13 +32,6 @@ const textarea_value_setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElemen
 //#region helpers
 type EventListenerDescriptor = { once: boolean; passive: boolean; capture: boolean }
 const CapturedListeners = new WeakMap<Node | Document, Map<string, Map<EventListener, EventListenerDescriptor>>>()
-function isNodeConnected(x: unknown) {
-    try {
-        return isConnectedGetter.call(x)
-    } catch {
-        return false
-    }
-}
 //#endregion
 
 function dispatchEventRaw<T extends Event>(target: Node | Document | null, eventBase: T, overwrites: Partial<T> = {}) {
@@ -62,7 +70,7 @@ function dispatchEventRaw<T extends Event>(target: Node | Document | null, event
         yield (window as unknown) as Node
     }
     function getMockedEvent<T extends Event>(event: T, currentTarget: () => EventTarget, overwrites: Partial<T> = {}) {
-        const target = un_xray(currentTarget())
+        const target = un_xray_DOM(currentTarget())
         const source = {
             target,
             srcElement: target,
@@ -76,8 +84,8 @@ function dispatchEventRaw<T extends Event>(target: Node | Document | null, event
             event,
             clone_into({
                 get(target: T, key: keyof T) {
-                    if (key === 'currentTarget') return un_xray(currentTarget())
-                    return source[key] ?? un_xray(target)[key]
+                    if (key === 'currentTarget') return un_xray_DOM(currentTarget())
+                    return source[key] ?? un_xray_DOM(target)[key]
                 },
             }),
         )
@@ -98,36 +106,8 @@ function dispatchPaste(textOrImage: CustomEvents['paste'][0]) {
         data.setData('text/plain', textOrImage)
         document.activeElement!.dispatchEvent(e)
     } else if (textOrImage.type === 'image') {
-        const Uint8Array = globalThis.Uint8Array ? globalThis.Uint8Array : globalThis.window.Uint8Array
-        const xray_binary = Uint8Array.from(textOrImage.value)
-        const xray_blob = new Blob([clone_into(xray_binary)], { type: 'image/png' })
-        const file = un_xray(
-            new File([un_xray(xray_blob)], 'image.png', {
-                lastModified: Date.now(),
-                type: 'image/png',
-            }),
-        )
-        const dt = new globalThis.window.Proxy(
-            un_xray(data),
-            clone_into({
-                get(target, key: keyof DataTransfer) {
-                    if (key === 'files') return clone_into([file])
-                    if (key === 'types') return clone_into(['Files'])
-                    if (key === 'items')
-                        return clone_into([
-                            {
-                                kind: 'file',
-                                type: 'image/png',
-                                getAsFile() {
-                                    return file
-                                },
-                            },
-                        ])
-                    if (key === 'getData') return clone_into(() => '')
-                    return un_xray(target[key])
-                },
-            }),
-        )
+        const file = constructUnXrayedFilesFromUintLike('image/png', 'image.png', textOrImage.value)
+        const dt = constructUnXrayedDataTransferProxy(file)
         dispatchEventRaw(document.activeElement, e, { clipboardData: dt })
     } else {
         const error = new Error(`Unknown event, got ${textOrImage?.type ?? 'unknown'}`)
@@ -150,7 +130,11 @@ function dispatchInput(text: CustomEvents['input'][0]) {
     )
 }
 if (process.env.NODE_ENV === 'development')
-    console.log(`Invoke custom event:`, clone_into({ dispatchInput, dispatchPaste }), CapturedListeners)
+    console.log(
+        `Invoke custom event:`,
+        clone_into({ dispatchInput, dispatchPaste, instagramUpload }),
+        CapturedListeners,
+    )
 document.addEventListener(CustomEventId, (e) => {
     const ev = e as CustomEvent<string>
     const [eventName, param, selector]: [keyof CustomEvents, any[], string] = JSON.parse(ev.detail)
@@ -159,6 +143,8 @@ document.addEventListener(CustomEventId, (e) => {
             return apply(dispatchInput, null, param)
         case 'paste':
             return apply(dispatchPaste, null, param)
+        case 'instagramUpload':
+            return apply(instagramUpload, null, param)
         default:
             warn(eventName, 'not handled')
     }
@@ -192,30 +178,6 @@ redefineEventTargetPrototype(
     },
 )
 
-function redefineEventTargetPrototype<K extends keyof EventTarget>(
-    defineAs: K,
-    apply: NonNullable<ProxyHandler<EventTarget[K]>['apply']>,
-) {
-    try {
-        if (_XPCNativeWrapper) {
-            log('Redefine with Firefox private API, cool!')
-            const rawPrototype = _XPCNativeWrapper.unwrap(globalThis.window.EventTarget.prototype)
-            const rawFunction = rawPrototype[defineAs]
-            exportFunction(
-                function (this: any, ...args: unknown[]) {
-                    return apply(rawFunction, this, args)
-                },
-                rawPrototype,
-                { defineAs },
-            )
-            return
-        }
-    } catch {
-        console.error('Redefine failed.')
-    }
-    EventTarget.prototype[defineAs] = new Proxy(EventTarget.prototype[defineAs], { apply })
-}
-
 function normalizeAddEventListenerArgs(
     args: Parameters<EventTarget['addEventListener']>,
 ): EventListenerDescriptor & { type: string; f: EventListener } {
@@ -235,26 +197,4 @@ function normalizeAddEventListenerArgs(
     if (typeof options === 'object') once = options?.once ?? false
     return { type, f, once, capture, passive }
 }
-//#endregion
-
-//#region Firefox magic
-/** get the un xrayed version of a _DOM_ object */
-function un_xray<T>(x: T) {
-    if (_XPCNativeWrapper) return _XPCNativeWrapper.unwrap(x)
-    return x
-}
-
-/** Clone a object into the page realm */
-function clone_into<T>(x: T) {
-    if (typeof cloneInto === 'function') return cloneInto(x, window, { cloneFunctions: true })
-    return x
-}
-/** @see https://mdn.io/XPCNativeWrapper Firefox only */
-declare namespace XPCNativeWrapper {
-    function unwrap<T>(object: T): T
-}
-/** @see https://mdn.io/Component.utils.exportFunction Firefox only */
-declare function exportFunction(f: Function, target: object, opts: { defineAs: string }): void
-/** @see https://mdn.io/Component.utils.cloneInto Firefox only */
-declare function cloneInto<T>(f: T, target: object, opts: { cloneFunctions: boolean }): T
 //#endregion

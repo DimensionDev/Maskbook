@@ -1,6 +1,5 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
-import type { SocialNetworkUI } from '../../../social-network'
 import type { SocialNetworkUI as Next } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
 import { PostInfo } from '../../../social-network/PostInfo'

@@ -174,3 +174,7 @@ common/autoinstallers/*/.npmrc
 
 # Mac
 .DS_Store
+
+# Disallow other package manager lock-file
+/package-lock.json
+/yarn.lock

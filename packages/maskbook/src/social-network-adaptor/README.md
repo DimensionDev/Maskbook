@@ -13,4 +13,6 @@ You should follow the structure as following:
     worker-provider.ts
 ```
 
-⚠ If you're going to support decentralized network like Mastdon, please contact @Jack-Works. The current architecture is not friendly to that kind of SNS.
+⚠ If you're going to support decentralized network like Mastdon, please contact `@Jack-Works`.
+
+The current architecture is not friendly to that kind of SNS.

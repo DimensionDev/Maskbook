@@ -23,10 +23,13 @@ dev.displayName = 'ts'
 dev.description = 'Start to watch TypeScript project reference'
 
 export const build = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
         runCli({ config }, console.error)
         const process = spawn('npx', ['tsc', '-b'], options)
-        process.on('close', resolve)
+        process.on('close', () => {
+            if (process.exitCode) reject()
+            else resolve()
+        })
         process.on('error', reject)
     })
 }

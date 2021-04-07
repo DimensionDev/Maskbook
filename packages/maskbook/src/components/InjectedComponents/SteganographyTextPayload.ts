@@ -1,4 +1,5 @@
 import { decodeArrayBuffer } from '@dimensiondev/kit'
+import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
 import Services from '../../extension/service'
 import { ImageTemplateTypes, ImagePayloadURLs } from '../../resources/image-payload'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -13,7 +14,8 @@ export async function SteganographyTextPayload(template: ImageTemplateTypes, tex
                 text,
                 pass,
                 template,
-                grayscaleAlgorithm: activatedSocialNetworkUI.configuration.steganography?.grayscaleAlgorithm,
+                grayscaleAlgorithm:
+                    activatedSocialNetworkUI.configuration.steganography?.grayscaleAlgorithm ?? GrayscaleAlgorithm.NONE,
             }),
         ),
     )
