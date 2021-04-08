@@ -18,6 +18,7 @@ import { SnapshotContext } from '../context'
 import { useProposal } from '../hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
+import { VoteConfirmDialog } from './VoteConfirmDialog'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -147,6 +148,7 @@ export function Snapshot() {
                     </Paper>
                 </Suspense>
             </CardContent>
+            <VoteConfirmDialog />
         </Card>
     )
 }

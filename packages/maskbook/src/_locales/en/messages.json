@@ -510,6 +510,8 @@
     "plugin_snapshot_info_end": "End date",
     "plugin_snapshot_info_snapshot": "Snapshot",
     "plugin_snapshot_result_title": "Results",
+    "plugin_snapshot_vote": "Vote",
+    "plugin_snapshot_vote_title": "Cast a Vote",
     "plugin_snapshot_current_result_title": "Current results",
     "plugin_snapshot_download_report": "Download report",
     "wallet_status_title": "Account",
