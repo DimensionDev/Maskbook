@@ -10,9 +10,6 @@ import {
     Skeleton,
     Box,
     TableHead,
-    TableFooter,
-    TablePagination,
-    IconButton,
 } from '@material-ui/core'
 import { OrderSide } from 'opensea-js/lib/types'
 import { CollectibleState } from '../hooks/useCollectibleState'
@@ -20,27 +17,27 @@ import { useOrders } from '../hooks/useOrders'
 import { CollectibleTab } from './CollectibleTab'
 import { useMemo, useState } from 'react'
 import { getOrderUnitPrice } from '../utils'
-import { Row } from './OrderRow'
+import { OrderRow } from './OrderRow'
 import BigNumber from 'bignumber.js'
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
+import { TableListPagination } from './Pagination'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
             overflow: 'auto',
         },
-        pagination: {
+        empty: {
             display: 'flex',
-        },
-        spacer: {
-            flex: 0,
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            padding: theme.spacing(6, 0),
         },
     })
 })
 
-export interface OfferTabProps {}
-
-export function OfferTab(props: OfferTabProps) {
+export function OfferTab() {
     const classes = useStyles()
     const [page, setPage] = useState(0)
     const { token } = CollectibleState.useContainer()
@@ -78,39 +75,6 @@ export function OfferTab(props: OfferTabProps) {
             })
     }, [offers.value])
 
-    const tableFooter = useMemo(
-        () => (
-            <TableFooter>
-                <TableRow>
-                    <TablePagination
-                        rowsPerPage={10}
-                        rowsPerPageOptions={[10]}
-                        count={-1}
-                        page={page}
-                        classes={{ spacer: classes.spacer }}
-                        onPageChange={() => {}}
-                        labelDisplayedRows={() => null}
-                        ActionsComponent={() => {
-                            return (
-                                <div>
-                                    <IconButton disabled={page === 0} onClick={() => setPage((prev) => prev - 1)}>
-                                        <KeyboardArrowLeft />
-                                    </IconButton>
-                                    <IconButton
-                                        disabled={dataSource.length < 10}
-                                        onClick={() => setPage((prev) => prev + 1)}>
-                                        <KeyboardArrowRight />
-                                    </IconButton>
-                                </div>
-                            )
-                        }}
-                    />
-                </TableRow>
-            </TableFooter>
-        ),
-        [page, dataSource],
-    )
-
     if (offers.loading)
         return (
             <Table>
@@ -129,15 +93,7 @@ export function OfferTab(props: OfferTabProps) {
     if (!offers.value || offers.error || !dataSource.length)
         return (
             <Table>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        height: '100%',
-                        padding: '16px 0',
-                    }}>
+                <Box className={classes.empty}>
                     <Typography color="textSecondary">No Offers</Typography>
                     <Button
                         sx={{
@@ -148,7 +104,14 @@ export function OfferTab(props: OfferTabProps) {
                         Retry
                     </Button>
                 </Box>
-                {tableFooter}
+                <TableListPagination
+                    handlePrevClick={() => setPage((prev) => prev - 1)}
+                    handleNextClick={() => setPage((prev) => prev + 1)}
+                    prevDisabled={page === 0}
+                    nextDisabled={dataSource.length < 10}
+                    page={page}
+                    pageCount={10}
+                />
             </Table>
         )
 
@@ -183,10 +146,17 @@ export function OfferTab(props: OfferTabProps) {
                 </TableHead>
                 <TableBody>
                     {dataSource.map((order) => (
-                        <Row key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
+                        <OrderRow key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {tableFooter}
+                <TableListPagination
+                    handlePrevClick={() => setPage((prev) => prev - 1)}
+                    handleNextClick={() => setPage((prev) => prev + 1)}
+                    prevDisabled={page === 0}
+                    nextDisabled={dataSource.length < 10}
+                    page={page}
+                    pageCount={10}
+                />
             </Table>
         </CollectibleTab>
     )

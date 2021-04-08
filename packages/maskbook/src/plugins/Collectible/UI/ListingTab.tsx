@@ -2,15 +2,12 @@ import {
     Box,
     Button,
     createStyles,
-    IconButton,
     makeStyles,
     Skeleton,
     Table,
     TableBody,
     TableCell,
-    TableFooter,
     TableHead,
-    TablePagination,
     TableRow,
     Typography,
 } from '@material-ui/core'
@@ -21,25 +18,25 @@ import BigNumber from 'bignumber.js'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { getOrderUnitPrice } from '../utils'
-import { Row } from './OrderRow'
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
+import { OrderRow } from './OrderRow'
+import { TableListPagination } from './Pagination'
 const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
             overflow: 'auto',
         },
-        pagination: {
+        empty: {
             display: 'flex',
-        },
-        spacer: {
-            flex: 0,
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            padding: theme.spacing(6, 0),
         },
     })
 })
 
-export interface ListingTabProps {}
-
-export function ListingTab(props: ListingTabProps) {
+export function ListingTab() {
     const classes = useStyles()
     const [page, setPage] = useState(0)
     const { token } = CollectibleState.useContainer()
@@ -77,39 +74,6 @@ export function ListingTab(props: ListingTabProps) {
             })
     }, [listings.value])
 
-    const tableFooter = useMemo(
-        () => (
-            <TableFooter>
-                <TableRow>
-                    <TablePagination
-                        rowsPerPage={10}
-                        rowsPerPageOptions={[10]}
-                        count={-1}
-                        page={page}
-                        classes={{ spacer: classes.spacer }}
-                        onPageChange={() => {}}
-                        labelDisplayedRows={() => null}
-                        ActionsComponent={() => {
-                            return (
-                                <div>
-                                    <IconButton disabled={page === 0} onClick={() => setPage((prev) => prev - 1)}>
-                                        <KeyboardArrowLeft />
-                                    </IconButton>
-                                    <IconButton
-                                        disabled={dataSource.length < 10}
-                                        onClick={() => setPage((prev) => prev + 1)}>
-                                        <KeyboardArrowRight />
-                                    </IconButton>
-                                </div>
-                            )
-                        }}
-                    />
-                </TableRow>
-            </TableFooter>
-        ),
-        [page, dataSource],
-    )
-
     if (listings.loading)
         return (
             <Table>
@@ -128,15 +92,7 @@ export function ListingTab(props: ListingTabProps) {
     if (!listings.value || listings.error || !dataSource.length)
         return (
             <Table>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        height: '100%',
-                        padding: '16px 0',
-                    }}>
+                <Box className={classes.empty}>
                     <Typography color="textSecondary">No Listings</Typography>
                     <Button
                         sx={{
@@ -147,7 +103,14 @@ export function ListingTab(props: ListingTabProps) {
                         Retry
                     </Button>
                 </Box>
-                {tableFooter}
+                <TableListPagination
+                    handlePrevClick={() => setPage((prev) => prev - 1)}
+                    handleNextClick={() => setPage((prev) => prev + 1)}
+                    prevDisabled={page === 0}
+                    nextDisabled={dataSource.length < 10}
+                    page={page}
+                    pageCount={10}
+                />
             </Table>
         )
 
@@ -182,10 +145,17 @@ export function ListingTab(props: ListingTabProps) {
                 </TableHead>
                 <TableBody>
                     {dataSource.map((order) => (
-                        <Row key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
+                        <OrderRow key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {tableFooter}
+                <TableListPagination
+                    handlePrevClick={() => setPage((prev) => prev - 1)}
+                    handleNextClick={() => setPage((prev) => prev + 1)}
+                    prevDisabled={page === 0}
+                    nextDisabled={dataSource.length < 10}
+                    page={page}
+                    pageCount={10}
+                />
             </Table>
         </CollectibleTab>
     )

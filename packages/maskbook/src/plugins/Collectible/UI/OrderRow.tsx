@@ -38,7 +38,7 @@ interface IRowProps {
     isDifferenceToken?: boolean
 }
 
-export function Row({ order, isDifferenceToken }: IRowProps) {
+export function OrderRow({ order, isDifferenceToken }: IRowProps) {
     const classes = useStyles()
 
     return (

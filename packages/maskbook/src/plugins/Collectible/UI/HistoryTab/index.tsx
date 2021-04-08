@@ -27,11 +27,16 @@ const useStyles = makeStyles((theme) => {
         root: {
             overflow: 'auto',
         },
-        pagination: {
-            display: 'flex',
-        },
         spacer: {
             flex: 0,
+        },
+        empty: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            padding: theme.spacing(6, 0),
         },
     })
 })
@@ -80,15 +85,7 @@ export function HistoryTab(props: HistoryTabProps) {
 
     if (!events.value || events.error)
         return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%',
-                    padding: '16px 0',
-                }}>
+            <Box className={classes.empty}>
                 <Typography color="textSecondary">No History</Typography>
                 <Button
                     sx={{
