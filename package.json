@@ -23,7 +23,7 @@
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
-    "*.{ts,tsx,js,jsx}": "npm run lint --",
+    "packages/**/*.{ts,tsx,js,jsx}": "eslint -c packages/.eslintrc.json --fix",
     "packages/maskbook/**/*": "locale-kit --sync-keys --remove-unused-keys"
   },
   "dependencies": {
