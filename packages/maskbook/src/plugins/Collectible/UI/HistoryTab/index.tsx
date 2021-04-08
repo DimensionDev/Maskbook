@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import {
     makeStyles,
@@ -41,22 +41,25 @@ export interface HistoryTabProps {}
 export function HistoryTab(props: HistoryTabProps) {
     const classes = useStyles()
 
-    const [cursors, setCursors] = useState<string[]>([])
+    const cursors = useRef<string[]>([])
     const [page, setPage] = useState(0)
 
     const { token } = CollectibleState.useContainer()
-    const events = useEvents(token, cursors[page - 1])
+    const events = useEvents(token, cursors.current[page - 1])
 
     //#region If there is a different asset, the unit price and quantity should be displayed
-    const isDifferenceToken = events.value?.edges.some((item) => item.node.price?.asset.symbol !== 'ETH')
+    const isDifferenceToken = useMemo(
+        () => events.value?.edges.some((item) => item.node.price?.asset.symbol !== 'ETH'),
+        [events.value],
+    )
 
     useUpdateEffect(() => {
         if (
             events.value &&
             events.value.pageInfo.endCursor &&
-            !cursors.some((item) => events.value && item === events.value.pageInfo.endCursor)
+            !cursors.current.some((item) => events.value && item === events.value.pageInfo.endCursor)
         ) {
-            setCursors((prev) => (events.value ? [...prev, events.value.pageInfo.endCursor] : prev))
+            cursors.current.push(events.value.pageInfo.endCursor)
         }
     }, [events, cursors])
 
@@ -84,6 +87,7 @@ export function HistoryTab(props: HistoryTabProps) {
                     alignItems: 'center',
                     justifyContent: 'center',
                     height: '100%',
+                    padding: '16px 0',
                 }}>
                 <Typography color="textSecondary">No History</Typography>
                 <Button

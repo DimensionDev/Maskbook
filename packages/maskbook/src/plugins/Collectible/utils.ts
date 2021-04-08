@@ -5,6 +5,9 @@ import {
     raribleHostnames,
     rariblePathnameRegexMatcher,
 } from './constants'
+import type { Order } from 'opensea-js/lib/types'
+import { formatBalance } from '../Wallet/formatter'
+import BigNumber from 'bignumber.js'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
@@ -32,4 +35,15 @@ export function getAssetInfoFromURL(url?: string) {
               token_id: matches[2],
           }
         : null
+}
+
+export function getOrderUnitPrice(order: Order) {
+    if (!order.currentPrice || !order.paymentTokenContract?.decimals) return
+    const price = formatBalance(new BigNumber(order.currentPrice), order.paymentTokenContract.decimals)
+    const quantity = formatBalance(
+        new BigNumber(order.quantity),
+        new BigNumber(order.quantity).toString() !== '1' ? 8 : 0,
+    )
+
+    return new BigNumber(price).dividedBy(quantity).toFixed(4, 1).toString()
 }

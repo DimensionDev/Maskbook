@@ -7,6 +7,8 @@ import { OpenSeaBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants
 import { Flags } from '../../../utils/flags'
 import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../UI/types'
 
+const apiKey = 'c38fe2446ee34f919436c32db480a2e3'
+
 function createExternalProvider() {
     return {
         isMetaMask: false,
@@ -23,6 +25,7 @@ async function createOpenSeaPort() {
     const chainId = await getChainId()
     return new OpenSeaPort(createExternalProvider(), {
         networkName: resolveOpenSeaNetwork(chainId),
+        apiKey,
     })
 }
 
@@ -31,8 +34,9 @@ export async function getAsset(tokenAddress: string, tokenId: string) {
     const fetchResponse = await (
         await fetch(`${OpenSeaBaseURL}asset/${tokenAddress}/${tokenId}`, {
             cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : undefined,
+            mode: 'cors',
             headers: {
-                'X-API-KEY': 'c38fe2446ee34f919436c32db480a2e3',
+                'x-api-key': apiKey,
             },
         })
     ).json()
@@ -76,14 +80,11 @@ export async function getEvents(asset_contract_address: string, token_id: string
 }
 
 export async function getOrders(asset_contract_address: string, token_id: string, side: OrderSide) {
-    const orders = (await createOpenSeaPort()).api.getOrders({
+    return (await createOpenSeaPort()).api.getOrders({
         asset_contract_address,
         token_id,
         side,
     })
-
-    console.log(orders)
-    return orders
 }
 
 export async function creteBuyOrder(

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -15,7 +15,7 @@ import {
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
-import { OfferTab } from './OfferTab'
+import { OfferTab } from './OrrderTab'
 import { ListingTab } from './ListingTab'
 import { HistoryTab } from './HistoryTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -23,8 +23,8 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { CollectibleSkeleton } from './CollectibleSkeleton'
 import { head } from 'lodash-es'
-import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
+import { getOrderUnitPrice } from '../utils'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -97,13 +97,21 @@ export function Collectible(props: CollectibleProps) {
 
     const [tabIndex, setTabIndex] = useState(0)
 
+    //#region The current price needs to be found from the listing list to find the lowest price
+    const currentPrice = useMemo(() => {
+        if (!asset.value || !asset.value.sellOrders || !asset.value.sellOrders.length) return null
+        const unitPrices = asset.value.sellOrders.map((order) => {
+            return new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber()
+        })
+
+        return head(unitPrices.sort())
+    }, [asset.value])
+
     if (asset.loading) {
         return <CollectibleSkeleton />
     }
 
     if (!asset.value) return null
-
-    const targetOrder = head(asset.value?.orders)
 
     const tabs = [
         <Tab className={classes.tab} key="article" label="Article" />, // This is the tab for the hero image
@@ -140,14 +148,14 @@ export function Collectible(props: CollectibleProps) {
                                 ) : null}
                             </Box>
 
-                            {targetOrder?.currentPrice ? (
+                            {currentPrice ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
                                     <Typography
                                         className={classes.description}
                                         component="span"
                                         dangerouslySetInnerHTML={{
                                             __html: t('plugin_collectible_description', {
-                                                price: formatBalance(new BigNumber(targetOrder?.currentPrice), 18),
+                                                price: currentPrice,
                                             }),
                                         }}
                                     />

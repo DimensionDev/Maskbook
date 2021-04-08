@@ -59,7 +59,7 @@ export function Row({ event, isDifferenceToken }: Props) {
             event.node.assetQuantity.asset.decimals ?? 0,
         )
 
-        return new BigNumber(price).dividedBy(quantity).toString()
+        return new BigNumber(price).dividedBy(quantity).toFixed(3, 1).toString()
     }, [event, isDifferenceToken])
 
     return (
