@@ -476,7 +476,6 @@
     "plugin_ito_withdrawn": "取り消しました",
     "plugin_ito_your_claimed_amount": "あなたは {{amount}} {{symbol}} を獲得しました",
     "plugin_ito_your_refund_amount": "{{amount}} {{symbol}} を戻す",
-    "plugin_ito_wait_unlock_time": "{{unlockTime}} に申し込む",
     "plugin_ito_unlock_in_advance": "事前にアンロックする",
     "plugin_ito_swapped_status": "{{remain}} / {{total}} {{token}} をスワップしました",
     "plugin_ito_congratulations": "おめでとうございます！",

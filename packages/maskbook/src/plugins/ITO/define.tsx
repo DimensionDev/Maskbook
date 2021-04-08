@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
-import { ITO_Loading } from './UI/ITO'
 import BigNumber from 'bignumber.js'
 import { makeStyles, createStyles } from '@material-ui/core'
+import { ITO_Loading } from './UI/ITO'
 import { PostInspector } from './UI/PostInspector'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { formatBalance } from '../Wallet/formatter'

@@ -82,18 +82,10 @@ export function ClaimGuide(props: ClaimGuideProps) {
                 {(() => {
                     switch (status) {
                         case ClaimStatus.Remind:
-                            return (
-                                <RemindDialog
-                                    isMask={payload.is_mask ?? false}
-                                    token={payload.token}
-                                    chainId={chainId}
-                                    setStatus={onUpdate}
-                                />
-                            )
+                            return <RemindDialog token={payload.token} chainId={chainId} setStatus={onUpdate} />
                         case ClaimStatus.Unlock:
                             return (
                                 <UnlockDialog
-                                    isMask={payload.is_mask ?? false}
                                     tokens={
                                         payload.exchange_tokens.filter(
                                             (x) => x.type === EthereumTokenType.ERC20,

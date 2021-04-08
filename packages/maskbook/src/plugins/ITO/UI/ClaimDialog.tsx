@@ -110,7 +110,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
 
     const classes = useStylesExtends(useStyles(), props)
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
-    const MASK_ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'MASK_ITO_CONTRACT_ADDRESS')
 
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(new BigNumber(payload.exchange_amounts[0 * 2 + 1])),
@@ -204,8 +203,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
         payload.password,
         claimAmount.toFixed(),
         claimToken,
-        payload.test_nums,
-        payload.is_mask,
     )
     const onClaim = useCallback(async () => {
         setConfirmSwapDialogOpen({
@@ -311,7 +308,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={claimAmount.toFixed()}
-                        spender={payload.is_mask ? MASK_ITO_CONTRACT_ADDRESS : ITO_CONTRACT_ADDRESS}
+                        spender={ITO_CONTRACT_ADDRESS}
                         token={claimToken.type === EthereumTokenType.ERC20 ? claimToken : undefined}>
                         <ActionButton
                             className={classes.button}
