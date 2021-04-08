@@ -110,7 +110,7 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, cance
     const { pid, messages, handle, name, avatar } = postParser(tweetNode)
 
     if (!pid) return
-    const postBy = new ProfileIdentifier(twitterBase.networkIdentifier, handle)
+    const postBy = handle ? new ProfileIdentifier(twitterBase.networkIdentifier, handle) : ProfileIdentifier.unknown
     info.postID.value = pid
     info.postContent.value = messages
         .map((x) => {
