@@ -93,6 +93,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return
+                if (ev.token.type !== EthereumTokenType.Ether && ev.token.type !== EthereumTokenType.ERC20) return
                 setToken(ev.token)
             },
             [id],
@@ -102,6 +103,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         setSelectTokenDialogOpen({
             open: true,
             uuid: id,
+            type: EthereumTokenType.ERC20,
             disableEther: false,
             FixedTokenListProps: {
                 selectedTokens: token ? [token.address] : [],

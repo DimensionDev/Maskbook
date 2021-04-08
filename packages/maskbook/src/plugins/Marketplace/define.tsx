@@ -1,17 +1,20 @@
-import { SnackbarContent } from '@material-ui/core'
 import { Suspense } from 'react'
+import { SnackbarContent } from '@material-ui/core'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { MarketplaceMetaKey, MarketplacePluginID } from './constants'
 import { MarketplaceMetadataReader, payloadIntoMask } from './helpers'
-import type { MarketplaceJSONPayloadOutMask } from './types'
+import type { MarketplaceJSONPayloadInMask, MarketplaceJSONPayloadOutMask } from './types'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import { MarketplacePacket } from './UI/Marketplace'
 import { CompositionDialog } from './UI/CompositionDialog'
 import { Flags } from '../../utils/flags'
+import { MarketplaceSellerState, MarketplaceBuyerState } from './hooks/useMarketplaceState'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 
 const [MarketplaceCompositionEntry, MarketplaceCompositionUI] = createCompositionDialog('🛒  Marketplace', (props) => (
-    <CompositionDialog {...props} />
+    <MarketplaceSellerState.Provider>
+        <CompositionDialog {...props} />
+    </MarketplaceSellerState.Provider>
 ))
 
 export const MarketplacePluginDefine: PluginConfig = {
@@ -22,13 +25,7 @@ export const MarketplacePluginDefine: PluginConfig = {
     successDecryptionInspector: function Comp(props) {
         const payload = MarketplaceMetadataReader(props.message.meta)
         if (!payload.ok) return null
-        return (
-            <MaskbookPluginWrapper pluginName="NFT">
-                <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                    <MarketplacePacket payload={payloadIntoMask(payload.val)} />
-                </Suspense>
-            </MaskbookPluginWrapper>
-        )
+        return Renderer(payloadIntoMask(payload.val))
     },
     postDialogMetadataBadge: new Map([
         [
@@ -40,4 +37,16 @@ export const MarketplacePluginDefine: PluginConfig = {
     ]),
     PageComponent: Flags.marketplace_composition_dialog_enabled ? MarketplaceCompositionUI : undefined,
     postDialogEntries: Flags.marketplace_composition_dialog_enabled ? [MarketplaceCompositionEntry] : undefined,
+}
+
+function Renderer(payload: MarketplaceJSONPayloadInMask) {
+    return (
+        <MaskbookPluginWrapper pluginName="NFT">
+            <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
+                <MarketplaceBuyerState.Provider>
+                    <MarketplacePacket payload={payload} />
+                </MarketplaceBuyerState.Provider>
+            </Suspense>
+        </MaskbookPluginWrapper>
+    )
 }

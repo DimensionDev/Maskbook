@@ -37,7 +37,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // pre-step: start waiting for provider to confirm the tx
         setTradeState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })

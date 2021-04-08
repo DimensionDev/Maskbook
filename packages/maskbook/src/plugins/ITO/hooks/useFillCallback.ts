@@ -188,7 +188,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             password: signedPassword,
         })
 
-        // pre-step: start waiting for provider to confirm tx
+        // pre-step: start waiting for provider to confirm the tx
         setFillState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })

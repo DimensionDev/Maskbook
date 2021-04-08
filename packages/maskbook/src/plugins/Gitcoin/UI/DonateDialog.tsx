@@ -95,6 +95,7 @@ export function DonateDialog(props: DonateDialogProps) {
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return
+                if (ev.token.type !== EthereumTokenType.Ether && ev.token.type !== EthereumTokenType.ERC20) return
                 setToken(ev.token)
             },
             [id],
@@ -104,6 +105,7 @@ export function DonateDialog(props: DonateDialogProps) {
         setSelectTokenDialogOpen({
             open: true,
             uuid: id,
+            type: EthereumTokenType.ERC20,
             disableEther: false,
             FixedTokenListProps: {
                 selectedTokens: token ? [token.address] : [],

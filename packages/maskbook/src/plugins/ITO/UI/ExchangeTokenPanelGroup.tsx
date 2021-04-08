@@ -80,14 +80,16 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
                             label={idx ? t('plugin_ito_swap_ration_label') : t('plugin_ito_sell_total_amount')}
                             dataIndex={item.key}
                             disableBalance={idx !== 0}
-                            isSell={idx === 0}
+                            disableEther={idx === 0}
                             inputAmount={item.amount}
                             selectedTokensAddress={selectedTokensAddress}
                             onAmountChange={onAmountChange}
                             exchangeToken={item.token}
                             onExchangeTokenChange={onTokenChange}
-                            showRemove={idx > 0 && idx < exchangeTokenArray.length && exchangeTokenArray.length !== 2}
-                            showAdd={idx === exchangeTokenArray.length - 1 && idx < ITO_EXCHANGE_RATION_MAX}
+                            disableRemoveButton={
+                                idx > 0 && idx < exchangeTokenArray.length && exchangeTokenArray.length !== 2
+                            }
+                            disableShowButton={idx === exchangeTokenArray.length - 1 && idx < ITO_EXCHANGE_RATION_MAX}
                             onRemove={() =>
                                 dispatchExchangeTokenArray({
                                     type: ExchangeTokenAndAmountActionType.REMOVE,

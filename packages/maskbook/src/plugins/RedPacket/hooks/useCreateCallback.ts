@@ -59,7 +59,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // pre-step: start waiting for provider to confirm the tx
         setCreateState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })

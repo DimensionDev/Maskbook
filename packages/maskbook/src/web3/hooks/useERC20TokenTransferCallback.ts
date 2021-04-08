@@ -38,7 +38,7 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // pre-step: start waiting for provider to confirm the tx
         setTransferState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })

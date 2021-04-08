@@ -2,7 +2,7 @@
 
 ## Feature Set
 
-- [x] View marketplace NFT packet
+- [x] View marketplace NFT packet.
 
 ## Prototype
 

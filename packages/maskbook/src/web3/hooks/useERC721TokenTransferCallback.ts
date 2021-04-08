@@ -38,7 +38,7 @@ export function useERC721TokenTransferCallback(address: string, tokenId?: string
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // pre-step: start waiting for provider to confirm the tx
         setTransferState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })

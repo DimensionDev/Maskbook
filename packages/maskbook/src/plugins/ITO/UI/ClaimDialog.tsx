@@ -147,9 +147,10 @@ export function ClaimDialog(props: ClaimDialogProps) {
                     new BigNumber(payload.exchange_amounts[at * 2 + 1]),
                 )
                 setRatio(ratio)
-                setClaimToken(ev.token)
                 setTokenAmount(initAmount)
                 setClaimAmount(initAmount.multipliedBy(ratio))
+                if (ev.token.type !== EthereumTokenType.Ether && ev.token.type !== EthereumTokenType.ERC20) return
+                setClaimToken(ev.token)
                 setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals ?? 0))
             },
             [
@@ -167,6 +168,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
         setSelectTokenDialogOpen({
             open: true,
             uuid: id,
+            type: EthereumTokenType.ERC20,
             disableEther: !exchangeTokens.some((x) => isETH(x.address)),
             disableSearchBar: true,
             FixedTokenListProps: {

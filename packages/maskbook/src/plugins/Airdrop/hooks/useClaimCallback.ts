@@ -25,7 +25,7 @@ export function useClaimCallback(packet?: AirdropPacket) {
 
         const { index, amount, proof } = packet
 
-        // pre-step: start waiting for provider to confirm tx
+        // pre-step: start waiting for provider to confirm the tx
         setClaimState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })

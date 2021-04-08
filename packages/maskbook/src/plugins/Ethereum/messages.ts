@@ -1,6 +1,6 @@
 import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
 import type { TransactionState } from '../../web3/hooks/useTransactionState'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
+import type { ERC20TokenDetailed, EthereumTokenType, TokenDetailedType } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
@@ -9,9 +9,10 @@ export type SelectTokenDialogEvent =
     | {
           open: true
           uuid: string
+          type: EthereumTokenType
           disableEther?: boolean
           disableSearchBar?: boolean
-          FixedTokenListProps?: Omit<FixedTokenListProps, 'onSubmit'>
+          FixedTokenListProps?: Omit<FixedTokenListProps, 'type' | 'onSubmit'>
       }
     | {
           open: false
@@ -20,7 +21,7 @@ export type SelectTokenDialogEvent =
           /**
            * The selected detailed token.
            */
-          token?: EtherTokenDetailed | ERC20TokenDetailed
+          token?: TokenDetailedType<EthereumTokenType>
       }
 
 export type UnlockERC20TokenDialogEvent =

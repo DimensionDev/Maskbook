@@ -67,6 +67,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
         setSelectTokenDialogOpen({
             open: true,
             uuid: id,
+            type: EthereumTokenType.ERC20,
             disableEther: true,
             disableSearchBar: true,
             FixedTokenListProps: {

@@ -1,17 +1,15 @@
-import { useState } from 'react'
 import { uniqBy } from 'lodash-es'
+import { useState, useMemo } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { makeStyles, createStyles, Typography } from '@material-ui/core'
-import {
-    TokenListsState,
-    useERC20TokensDetailedFromTokenLists,
-} from '../../../web3/hooks/useERC20TokensDetailedFromTokenLists'
+import { TokenListsState, useTokensDetailedFromTokenLists } from '../../../web3/hooks/useTokensDetailedFromTokenLists'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../web3/constants'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { isSameAddress } from '../../../web3/helpers'
 import { TokenInList } from './TokenInList'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { EthereumTokenType, TokenDetailedType } from '../../../web3/types'
+import { unreachable } from '../../../utils/utils'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -21,34 +19,49 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface FixedTokenListProps extends withClasses<never> {
+    type?: EthereumTokenType
     keyword?: string
     whitelist?: string[]
     blacklist?: string[]
-    tokens?: (ERC20TokenDetailed | EtherTokenDetailed)[]
+    tokens?: TokenDetailedType<EthereumTokenType>[]
     selectedTokens?: string[]
-    onSubmit?(token: EtherTokenDetailed | ERC20TokenDetailed): void
     FixedSizeListProps?: Partial<FixedSizeListProps>
+    onSubmit?(token: TokenDetailedType<EthereumTokenType>): void
 }
 
 export function FixedTokenList(props: FixedTokenListProps) {
-    const classes = useStylesExtends(useStyles(), props)
     const {
+        type = EthereumTokenType.Ether,
         keyword,
         whitelist: includeTokens = [],
         blacklist: excludeTokens = [],
         selectedTokens = [],
         tokens = [],
-        onSubmit,
         FixedSizeListProps,
+        onSubmit,
     } = props
+
+    const classes = useStylesExtends(useStyles(), props)
+    const [address, setAddress] = useState('')
 
     //#region search tokens
     const ERC20_TOKEN_LISTS = useConstant(CONSTANTS, 'ERC20_TOKEN_LISTS')
-    const [address, setAddress] = useState('')
-    const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(
-        ERC20_TOKEN_LISTS,
-        keyword,
-    )
+    const ERC721_TOKEN_LISTS = useConstant(CONSTANTS, 'ERC721_TOKEN_LISTS')
+    const tokenLists = useMemo(() => {
+        switch (type) {
+            case EthereumTokenType.Ether:
+                return []
+            case EthereumTokenType.ERC20:
+                return ERC20_TOKEN_LISTS
+            case EthereumTokenType.ERC721:
+                return ERC721_TOKEN_LISTS
+            case EthereumTokenType.ERC1155:
+                return []
+            default:
+                unreachable(type)
+        }
+    }, [type, ERC20_TOKEN_LISTS, ERC721_TOKEN_LISTS])
+    const { state, tokensDetailed } = useTokensDetailedFromTokenLists(type, tokenLists, keyword)
     //#endregion
 
     //#region UI helpers
@@ -59,11 +72,11 @@ export function FixedTokenList(props: FixedTokenListProps) {
     )
     //#endregion
 
-    if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
-    if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token...')
-    if (!erc20TokensDetailed.length) return renderPlaceholder('No token found')
+    if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists…')
+    if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token…')
+    if (!tokensDetailed.length) return renderPlaceholder('No token found.')
 
-    const filteredTokens = erc20TokensDetailed.filter(
+    const filteredTokens = tokensDetailed.filter(
         (x) =>
             (!includeTokens.length || includeTokens.some((y) => isSameAddress(y, x.address))) &&
             (!excludeTokens.length || !excludeTokens.some((y) => isSameAddress(y, x.address))),

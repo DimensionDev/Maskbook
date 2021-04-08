@@ -63,7 +63,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
     ])
 
     const approveCallback = useCallback(
-        async (useExact: boolean = false) => {
+        async (useExact = false) => {
             if (approveStateType === ApproveStateType.UNKNOWN || !amount || !spender || !erc20Contract) {
                 setTransactionState({
                     type: TransactionStateType.UNKNOWN,
@@ -75,12 +75,12 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
             if (approveStateType !== ApproveStateType.NOT_APPROVED) {
                 setTransactionState({
                     type: TransactionStateType.FAILED,
-                    error: new Error('Failed to approve token'),
+                    error: new Error('Failed to approve token.'),
                 })
                 return
             }
 
-            // pre-step: start waiting for provider to confirm tx
+            // pre-step: start waiting for provider to confirm the tx
             setTransactionState({
                 type: TransactionStateType.WAIT_FOR_CONFIRMING,
             })
@@ -142,7 +142,18 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                 })
             })
         },
-        [account, amount, balance, spender, loadingAllowance, loadingBalance, erc20Contract, approveStateType],
+        [
+            account,
+            amount,
+            balance,
+            spender,
+            loadingAllowance,
+            loadingBalance,
+            erc20Contract,
+            approveStateType,
+            revalidateBalance,
+            revalidateAllowance,
+        ],
     )
 
     const resetCallback = useCallback(() => {

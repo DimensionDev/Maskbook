@@ -22,6 +22,13 @@ export const CONSTANTS = {
         [ChainId.Kovan]: [],
         [ChainId.Gorli]: [],
     },
+    ERC721_TOKEN_LISTS: {
+        [ChainId.Mainnet]: [],
+        [ChainId.Ropsten]: [],
+        [ChainId.Rinkeby]: [],
+        [ChainId.Kovan]: [],
+        [ChainId.Gorli]: [],
+    },
 
     // contracts
     BALANCE_CHECKER_ADDRESS: {

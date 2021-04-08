@@ -49,7 +49,7 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // pre-step: start waiting for provider to confirm the tx
         setDonateState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })

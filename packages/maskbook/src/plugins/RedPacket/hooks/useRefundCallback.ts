@@ -17,7 +17,7 @@ export function useRefundCallback(from: string, id?: string) {
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // pre-step: start waiting for provider to confirm the tx
         setRefundState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })

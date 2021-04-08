@@ -4,7 +4,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import type { MarketplaceJSONPayloadInMask } from '../types'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { EtherTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { EtherTokenDetailed, ERC20TokenDetailed, EthereumTokenType, ERC721TokenDetailed } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useConstant } from '../../../web3/hooks/useConstant'
@@ -15,7 +15,8 @@ import { globalTypedMessageMetadata } from '../../../protocols/typed-message/glo
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumERC721TokenApprovedBoundary'
+import { MarketplaceSellerState } from '../hooks/useMarketplaceState'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -45,6 +46,12 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const account = useAccount()
     const chainId = useChainId()
 
+    // use state
+    const [address, setAddress] = useState('')
+    const [spender, setSpender] = useState('')
+    const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | null>(null)
+    const { tokenDetailedAsync, tokenIdsOfOwnerAsync, tokenIdsOfSpenderAsync } = MarketplaceSellerState.useContainer()
+
     // fetch the NTF token
     const TOKEN_ADDRESS = useConstant(MARKETPLACE_CONSTANTS, 'TOKEN_ADDRESS')
     const { value: nftToken } = useERC721TokenDetailed(TOKEN_ADDRESS)
@@ -59,7 +66,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     // payload settings
     const [title, setTitle] = useState('')
-    const [address, setAddress] = useState('')
     const [price, setPrice] = useState('')
     const [name, setName] = useState('')
 
@@ -142,15 +148,20 @@ export function CompositionDialog(props: CompositionDialogProps) {
                         justifyContent: 'flex-end',
                     }}>
                     <EthereumWalletConnectedBoundary>
-                        <ActionButton
-                            className={classes.button}
-                            fullWidth
-                            size="large"
-                            disabled={!nftToken}
-                            variant="contained"
-                            onClick={onConfirm}>
-                            {t('confirm')}
-                        </ActionButton>
+                        <EthereumERC721TokenApprovedBoundary
+                            spender={spender}
+                            tokenIds={tokenIdsOfOwnerAsync.value ?? []}
+                            selectedTokenId={selectedToken?.tokenId ?? ''}>
+                            <ActionButton
+                                className={classes.button}
+                                fullWidth
+                                size="large"
+                                disabled={!nftToken}
+                                variant="contained"
+                                onClick={onConfirm}>
+                                {t('confirm')}
+                            </ActionButton>
+                        </EthereumERC721TokenApprovedBoundary>
                     </EthereumWalletConnectedBoundary>
                 </Box>
             </DialogContent>

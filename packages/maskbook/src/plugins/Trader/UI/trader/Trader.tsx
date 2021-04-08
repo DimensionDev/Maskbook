@@ -162,6 +162,7 @@ export function Trader(props: TraderProps) {
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== String(focusedTokenPanelType)) return
+                if (ev.token.type !== EthereumTokenType.Ether && ev.token.type !== EthereumTokenType.ERC20) return
                 dispatchTradeStore({
                     type:
                         focusedTokenPanelType === TokenPanelType.Input
@@ -179,6 +180,7 @@ export function Trader(props: TraderProps) {
             setSelectTokenDialogOpen({
                 open: true,
                 uuid: String(type),
+                type: EthereumTokenType.ERC20,
                 disableEther: false,
                 FixedTokenListProps: {
                     selectedTokens: excludeTokens,

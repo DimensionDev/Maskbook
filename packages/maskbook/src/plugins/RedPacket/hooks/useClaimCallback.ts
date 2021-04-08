@@ -19,7 +19,7 @@ export function useClaimCallback(from: string, id?: string, password?: string) {
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // pre-step: start waiting for provider to confirm the tx
         setClaimState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })

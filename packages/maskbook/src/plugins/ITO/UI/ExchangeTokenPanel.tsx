@@ -5,11 +5,9 @@ import AddIcon from '@material-ui/icons/AddOutlined'
 import RemoveIcon from '@material-ui/icons/RemoveOutlined'
 
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import { useConstant } from '../../../web3/hooks/useConstant'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
-import { CONSTANTS } from '../../../web3/constants'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { EthereumMessages, SelectTokenDialogEvent } from '../../Ethereum/messages'
 
@@ -39,20 +37,20 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface ExchangetokenPanelProps {
-    onAmountChange: (amount: string, key: string) => void
     inputAmount: string
+    onAmountChange: (amount: string, key: string) => void
 
+    disableEther: boolean
     disableBalance: boolean
-    isSell: boolean
-    exchangeToken: EtherTokenDetailed | ERC20TokenDetailed | undefined
+    disableRemoveButton: boolean
+    disableShowButton: boolean
+
+    exchangeToken?: EtherTokenDetailed | ERC20TokenDetailed
     onExchangeTokenChange: (token: EtherTokenDetailed | ERC20TokenDetailed, key: string) => void
 
     onAdd: () => void
     onRemove: () => void
     dataIndex: string
-
-    showRemove: boolean
-    showAdd: boolean
 
     label: string
     excludeTokensAddress?: string[]
@@ -62,20 +60,24 @@ export interface ExchangetokenPanelProps {
 
 export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
     const {
-        onAmountChange,
-        dataIndex,
         inputAmount,
+        onAmountChange,
+
+        disableEther,
         disableBalance,
+        disableShowButton = true,
+        disableRemoveButton = false,
+
         exchangeToken,
         onExchangeTokenChange,
-        isSell,
-        showAdd = true,
-        showRemove = false,
+
         label,
         excludeTokensAddress = [],
         selectedTokensAddress = [],
-        onRemove,
+
         onAdd,
+        onRemove,
+        dataIndex,
     } = props
 
     const classes = useStyles()
@@ -87,6 +89,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return
+                if (ev.token.type !== EthereumTokenType.Ether && ev.token.type !== EthereumTokenType.ERC20) return
                 onExchangeTokenChange(ev.token, dataIndex)
             },
             [id, dataIndex],
@@ -96,13 +99,14 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         setSelectTokenDialogOpen({
             open: true,
             uuid: id,
-            disableEther: isSell,
+            type: EthereumTokenType.ERC20,
+            disableEther,
             FixedTokenListProps: {
                 blacklist: excludeTokensAddress,
                 selectedTokens: [exchangeToken?.address ?? '', ...selectedTokensAddress],
             },
         })
-    }, [id, isSell, exchangeToken, excludeTokensAddress.sort().join(), selectedTokensAddress.sort().join()])
+    }, [id, disableEther, exchangeToken, excludeTokensAddress.sort().join(), selectedTokensAddress.sort().join()])
     //#endregion
 
     //#region balance
@@ -146,12 +150,12 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
                 }}
                 {...props.TokenAmountPanelProps}
             />
-            {showAdd ? (
+            {disableShowButton ? (
                 <IconButton onClick={onAdd} className={classes.button}>
                     <AddIcon color="primary" />
                 </IconButton>
             ) : null}
-            {showRemove ? (
+            {disableRemoveButton ? (
                 <IconButton onClick={onRemove} className={classes.button}>
                     <RemoveIcon color="secondary" />
                 </IconButton>

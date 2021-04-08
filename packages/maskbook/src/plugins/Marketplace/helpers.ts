@@ -48,7 +48,7 @@ export function payloadOutMask(payload: MarketplaceJSONPayloadInMask): Marketpla
     return {
         ...payload,
 
-        // HOTFIX of image payload for ITO
+        // HOTFIX of image payload
         // remove unnecessary chunks of data to reduce the size of payload
         token: tokenOutMask(payload.token),
         contract_address: 1,

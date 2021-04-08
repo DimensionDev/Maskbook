@@ -46,7 +46,7 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // pre-step: start waiting for provider to confirm the tx
         setTransferState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })

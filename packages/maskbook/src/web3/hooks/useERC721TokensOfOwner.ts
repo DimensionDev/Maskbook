@@ -1,24 +1,21 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
-import type { ERC721Token } from '../types'
-import { useAccount } from './useAccount'
 import { useERC721TokenBalance } from './useERC721TokenBalance'
 import { useSingleContractMultipleData } from './useMulticall'
 
-export function useERC721TokenIdsOfOwner(token?: ERC721Token) {
-    const account = useAccount()
-    const asyncResultOfBalanceOf = useERC721TokenBalance(token?.address ?? '')
-    const erc721Contract = useERC721TokenContract(token?.address ?? '')
+export function useERC721TokenIdsOfOwner(address: string, owner: string) {
+    const { value: balanceOf = '0' } = useERC721TokenBalance(address)
+    const erc721Contract = useERC721TokenContract(address)
+
+    // parameters
     const { names, callDatas } = useMemo(() => {
-        const balanceOf = asyncResultOfBalanceOf.value ?? '0'
+        const balanceOf_ = Number.parseInt(balanceOf, 10)
         return {
-            names: new Array(Number.parseInt(balanceOf, 10)).fill('tokenOfOwnerByIndex') as 'tokenOfOwnerByIndex'[],
-            callDatas: new Array(Number.parseInt(balanceOf, 10))
-                .fill('')
-                .map((_, i) => [account, i] as [string, number]),
+            names: new Array(balanceOf_).fill('tokenOfOwnerByIndex') as 'tokenOfOwnerByIndex'[],
+            callDatas: new Array(balanceOf_).fill('').map((_, i) => [owner, i] as [string, number]),
         }
-    }, [account, asyncResultOfBalanceOf.value])
+    }, [owner, balanceOf])
 
     // valdiate
     const [results, calls, _, callback] = useSingleContractMultipleData(erc721Contract, names, callDatas)

@@ -82,7 +82,7 @@ export async function fetchERC20TokensFromTokenLists(
  * Fetch ERC721 tokens from token list
  */
 export async function fetchERC721TokensFromTokenList(
-    url: string,
+    urls: string[],
     chainId = ChainId.Mainnet,
 ): Promise<ERC721TokenDetailed[]> {
     return Promise.resolve([

@@ -22,7 +22,7 @@ export function useDestructCallback() {
                 return
             }
 
-            // pre-step: start waiting for provider to confirm tx
+            // pre-step: start waiting for provider to confirm the tx
             setDestructState({
                 type: TransactionStateType.WAIT_FOR_CONFIRMING,
             })

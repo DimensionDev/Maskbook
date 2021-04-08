@@ -4,7 +4,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { EthereumTokenType, TokenDetailedType } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
@@ -45,6 +45,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     //#endregion
 
     //#region remote controlled dialog
+    const [type, setType] = useState(EthereumTokenType.Ether)
     const [disableEther, setDisableEther] = useState(true)
     const [disableSearchBar, setDisableSearchBar] = useState(false)
     const [FixedTokenListProps, setFixedTokenListProps] = useState<FixedTokenListProps | null>(null)
@@ -52,12 +53,13 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const [open, setOpen] = useRemoteControlledDialog(EthereumMessages.events.selectTokenDialogUpdated, (ev) => {
         if (!ev.open) return
         setId(ev.uuid)
+        setType(ev.type)
         setDisableEther(ev.disableEther ?? true)
         setDisableSearchBar(ev.disableSearchBar ?? false)
         setFixedTokenListProps(ev.FixedTokenListProps ?? null)
     })
     const onSubmit = useCallback(
-        async (token: EtherTokenDetailed | ERC20TokenDetailed) => {
+        async (token: TokenDetailedType<EthereumTokenType>) => {
             setOpen({
                 open: false,
                 uuid: id,
@@ -75,7 +77,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
         })
         await delay(300)
         setKeyword('')
-    }, [id, setOpen])
+    }, [id, setOpen, setKeyword])
     //#endregion
 
     return (
@@ -97,6 +99,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                 ) : null}
                 <FixedTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
+                    type={type}
                     keyword={keyword}
                     onSubmit={onSubmit}
                     {...{

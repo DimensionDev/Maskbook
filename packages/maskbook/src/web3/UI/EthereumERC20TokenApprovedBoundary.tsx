@@ -1,7 +1,7 @@
 import { createStyles, Grid, makeStyles } from '@material-ui/core'
+import React, { useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { useSnackbar } from 'notistack'
-import React, { useCallback, useEffect } from 'react'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import { formatBalance } from '../../plugins/Wallet/formatter'
 import { useI18N } from '../../utils/i18n-next-ui'
@@ -112,7 +112,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         variant="contained"
                         size="large"
                         onClick={() => onApprove(true)}>
-                        <span className={classes.buttonLabel}>{t('plugin_wallet_token_unlock')}</span>
+                        <span className={classes.buttonLabel}>{t('plugin_wallet_erc20_token_unlock')}</span>
                         <span className={classes.buttonAmount}>{`${formatBalance(
                             new BigNumber(amount),
                             token.decimals,
@@ -127,7 +127,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         variant="contained"
                         size="large"
                         onClick={() => onApprove(false)}>
-                        {t('plugin_wallet_token_infinite_unlock')}
+                        {t('plugin_wallet_erc20_token_infinite_unlock')}
                     </ActionButton>
                 </Grid>
             </Grid>
