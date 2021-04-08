@@ -19,7 +19,8 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-const isSnaphotURL = (x: string): boolean => /^https:\/\/(?:www.)?snapshot.[org|page]/.test(x)
+const isSnaphotURL = (x: string): boolean =>
+    /^https:\/\/(?:www.)?snapshot.(org|page)\/#\/(.*?)\/proposal\/[A-Za-z0-9]+$/.test(x)
 
 export const SnapShotPluginDefine: PluginConfig = {
     pluginName: SNAPSHOT_PLUGIN_NAME,

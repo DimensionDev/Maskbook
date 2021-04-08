@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => {
         list: {
             display: 'flex',
             flexDirection: 'column',
-            height: 'var(--contentHeight)',
+            maxHeight: 'var(--contentHeight)',
             overflow: 'scroll',
             paddingTop: 0,
         },
@@ -65,6 +65,7 @@ export function VotesCard() {
         <SnapshotCard
             title={
                 <Badge
+                    max={9999999}
                     classes={{ anchorOriginTopRightRectangular: classes.anchorTopRight }}
                     badgeContent={voteEntries.length}
                     color="primary">

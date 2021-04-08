@@ -1,4 +1,4 @@
-import { Card, createStyles, makeStyles, Typography } from '@material-ui/core'
+import { createStyles, makeStyles, Typography } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { SnapshotCard } from './SnapshotCard'
 

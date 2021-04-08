@@ -1,5 +1,5 @@
 import ss from '@snapshot-labs/snapshot.js'
-import type { Votes, Proposal } from '../types'
+import type { Votes, Proposal, Profile3Box } from '../types'
 
 export async function fetchProposal(id: string) {
     const response = await fetch(`https://ipfs.io/ipfs/${id}`, {
@@ -18,8 +18,8 @@ export async function fetchAllVotesOfProposal(id: string, space: string) {
     return result
 }
 
-export async function fetch3BoxProfiles(addresses: string[]) {
-    return ss.utils.subgraphRequest('https://api.3box.io/graph', {
+export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Box[]> {
+    const { profiles } = await ss.utils.subgraphRequest('https://api.3box.io/graph', {
         profiles: {
             __args: {
                 ids: addresses,
@@ -29,4 +29,6 @@ export async function fetch3BoxProfiles(addresses: string[]) {
             image: true,
         },
     })
+
+    return profiles ?? []
 }
