@@ -108,10 +108,9 @@ export function useSwapCallback(
             total,
         ] as Parameters<ITO['methods']['swap']>
 
-        const swap = (ITO_Contract as ITO).methods.swap
-
         // step 2-1: estimate gas
-        const estimatedGas = await swap(...swapParams)
+        const estimatedGas = await ITO_Contract.methods
+            .swap(...swapParams)
             .estimateGas(config)
             .catch((error: Error) => {
                 setSwapState({
@@ -138,7 +137,7 @@ export function useSwapCallback(
                 })
                 reject(error)
             }
-            const promiEvent = swap(...swapParams).send({
+            const promiEvent = ITO_Contract.methods.swap(...swapParams).send({
                 gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
                 ...config,
             })
