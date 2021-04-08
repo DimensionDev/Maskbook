@@ -1,8 +1,8 @@
 import type { Order } from 'opensea-js/lib/types'
 import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
-import type { OpenSeaCustomAccount } from '../types'
+import type { OpenSeaCustomAccount } from './types'
 import { formatDistanceToNow } from 'date-fns'
-import { formatBalance } from '../../../Wallet/formatter'
+import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) => {
@@ -106,12 +106,13 @@ export function Row({ order, isDifferenceToken }: IRowProps) {
                     </TableCell>
                     <TableCell>
                         <Typography>
-                            {formatDistanceToNow(
-                                new Date(new BigNumber(order.expirationTime).multipliedBy(1000).toNumber()),
-                                {
-                                    addSuffix: true,
-                                },
-                            )}
+                            {new BigNumber(order.expirationTime).toString() !== '0' &&
+                                formatDistanceToNow(
+                                    new Date(new BigNumber(order.expirationTime).multipliedBy(1000).toNumber()),
+                                    {
+                                        addSuffix: true,
+                                    },
+                                )}
                         </Typography>
                     </TableCell>
                 </>

@@ -15,7 +15,7 @@ import {
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
-import { OfferTab } from './OrrderTab'
+import { OfferTab } from './OfferTab'
 import { ListingTab } from './ListingTab'
 import { HistoryTab } from './HistoryTab'
 import { useI18N } from '../../../utils/i18n-next-ui'

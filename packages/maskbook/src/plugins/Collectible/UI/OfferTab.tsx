@@ -12,12 +12,12 @@ import {
     TableHead,
 } from '@material-ui/core'
 import { OrderSide } from 'opensea-js/lib/types'
-import { CollectibleState } from '../../hooks/useCollectibleState'
-import { useOrders } from '../../hooks/useOrders'
-import { CollectibleTab } from '../CollectibleTab'
+import { CollectibleState } from '../hooks/useCollectibleState'
+import { useOrders } from '../hooks/useOrders'
+import { CollectibleTab } from './CollectibleTab'
 import { useMemo } from 'react'
-import { Row } from './Row'
-import { getOrderUnitPrice } from '../../utils'
+import { getOrderUnitPrice } from '../utils'
+import { Row } from './OrderRow'
 import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) => {
@@ -41,7 +41,8 @@ export function OfferTab(props: OfferTabProps) {
         () =>
             offers.value?.orders.some(
                 (item) =>
-                    item.paymentTokenContract?.symbol !== 'WETH' || new BigNumber(item.quantity).toString() !== '1',
+                    (item.paymentTokenContract?.symbol !== 'WETH' && item.paymentTokenContract?.symbol !== 'ETH') ||
+                    new BigNumber(item.quantity).toString() !== '1',
             ),
         [offers.value],
     )
