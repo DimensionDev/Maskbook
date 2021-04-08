@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => {
             minHeight: 120,
             padding: 0,
             border: `solid 1px ${theme.palette.divider}`,
-            margin: 'theme.spacing(2) auto',
+            margin: `${theme.spacing(2)} auto`,
             marginBottom: theme.spacing(2),
             '&:last-child': {
                 marginBottom: 0,

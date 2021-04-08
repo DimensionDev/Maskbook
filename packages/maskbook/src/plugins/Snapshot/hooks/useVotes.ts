@@ -1,5 +1,5 @@
 import { PluginSnapshotRPC } from '../messages'
-import type { Votes, ProposalIdentifier, Vote, Profile3Box } from '../types'
+import type { Votes, ProposalIdentifier, Vote } from '../types'
 import { useSuspense } from '../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
 import { useChainId, useBlockNumber } from '../../../web3/hooks/useChainState'
@@ -32,7 +32,7 @@ async function Suspender(identifier: ProposalIdentifier) {
     //#endregion
 
     //#region get 3box profile
-    const { profiles }: { profiles: Profile3Box[] } = await PluginSnapshotRPC.fetch3BoxProfiles(voters)
+    const profiles = await PluginSnapshotRPC.fetch3BoxProfiles(voters)
     const profileEntries = Object.fromEntries(profiles.map((p) => [p.eth_address, p]))
     //#endregion
 
