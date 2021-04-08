@@ -46,6 +46,7 @@ export const [ITO_CompositionEntry, ITO_CompositionUI] = createCompositionDialog
 )
 
 export const ITO_PluginDefine: PluginConfig = {
+    ID: ITO_PluginID,
     pluginName: 'ITO',
     identifier: ITO_PluginID,
     stage: PluginStage.Production,

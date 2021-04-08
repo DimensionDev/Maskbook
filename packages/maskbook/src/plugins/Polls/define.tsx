@@ -16,6 +16,7 @@ const [PollCompositionEntry, PollCompositionUI] = createCompositionDialog('ðŸ—³ï
     />
 ))
 export const PollsPluginDefine: PluginConfig = {
+    ID: identifier,
     pluginName,
     identifier,
     stage: PluginStage.Beta,

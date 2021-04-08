@@ -12,6 +12,7 @@ import { PreviewCard } from './UI/PreviewCard'
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
 export const GitcoinPluginDefine: PluginConfig = {
+    ID: GITCOIN_PLUGIN_ID,
     pluginName: 'Gitcoin',
     identifier: GITCOIN_PLUGIN_ID,
     stage: PluginStage.Production,

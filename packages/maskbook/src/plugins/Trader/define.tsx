@@ -15,6 +15,7 @@ const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor =>
     isTypedMessageAnchor(m) && ['cash', 'hash'].includes(m.category) && !/#[\w\d]+lbp$/i.test(m.content)
 
 export const TraderPluginDefine: PluginConfig = {
+    ID: PLUGIN_IDENTIFIER,
     pluginName: 'Trader',
     identifier: PLUGIN_IDENTIFIER,
     stage: PluginStage.Production,

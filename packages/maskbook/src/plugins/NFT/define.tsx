@@ -6,6 +6,7 @@ import NFTInPost from './UI/NFTInPost'
 import { getRelevantUrl } from './utils'
 
 export const NFTPluginsDefine: PluginConfig = {
+    ID: identifier,
     pluginName,
     identifier,
     stage: PluginStage.Beta,

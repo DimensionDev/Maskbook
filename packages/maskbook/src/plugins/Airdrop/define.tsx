@@ -15,6 +15,7 @@ const [AirdropCompositionEntry, AirdropCompositionUI] = createCompositionDialog(
 ))
 
 export const AirdropPluginDefine: PluginConfig = {
+    ID: AirdropPluginID,
     pluginName: 'Airdrop',
     identifier: AirdropPluginID,
     stage: PluginStage.Production,

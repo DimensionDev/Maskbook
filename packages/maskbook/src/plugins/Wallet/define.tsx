@@ -8,6 +8,7 @@ import { WalletConnectQRCodeDialog } from './UI/WalletConnectQRCodeDialog'
 import { WalletStatusDialog } from './UI/WalletStatusDialog'
 
 export const WalletPluginDefine: PluginConfig = {
+    ID: PLUGIN_IDENTIFIER,
     pluginName: 'Wallet',
     identifier: PLUGIN_IDENTIFIER,
     stage: PluginStage.Production,

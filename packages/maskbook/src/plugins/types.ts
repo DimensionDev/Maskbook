@@ -29,6 +29,7 @@ export type BadgeConvertor<T = any> = (metadata: T) => string | React.ReactNode
 export type MessageProcessor = (message: TypedMessageCompound) => TypedMessageCompound
 
 export interface PluginConfig {
+    ID: string
     pluginName: string
     identifier: string
     stage: PluginStage
@@ -41,4 +42,10 @@ export interface PluginConfig {
     postDialogMetadataBadge?: Map<string, BadgeConvertor>
     postDialogEntries?: PostDialogEntry[]
     messageProcessor?: MessageProcessor
+}
+
+export interface PluginMetaData extends Pick<PluginConfig, 'ID' | 'pluginName' | 'identifier' | 'scope'> {
+    description: string
+    logo: string
+    version?: `${number}.${number}.${number}`
 }

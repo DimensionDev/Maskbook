@@ -3,6 +3,7 @@ import { registerTypedMessageRenderer, TypedMessage } from '../../protocols/type
 import type { TypedMessageRendererProps } from '../../components/InjectedComponents/TypedMessageRenderer'
 
 export const StorybookPluginDefine: PluginConfig = {
+    ID: 'storybook.debug',
     pluginName: 'Storybook test',
     identifier: 'storybook.debug',
     stage: PluginStage.Development,

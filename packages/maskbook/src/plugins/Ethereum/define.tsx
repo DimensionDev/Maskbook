@@ -4,6 +4,7 @@ import { ConfirmSwapDialog } from './UI/ConfirmSwapDialog'
 import { TransactionDialog } from './UI/TransactionDialog'
 
 export const EthereumPluginDefine: PluginConfig = {
+    ID: PLUGIN_IDENTIFIER,
     pluginName: 'Ethereum',
     identifier: PLUGIN_IDENTIFIER,
     stage: PluginStage.Production,

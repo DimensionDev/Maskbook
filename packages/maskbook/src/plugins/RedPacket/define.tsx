@@ -31,6 +31,7 @@ export const [RedPacketCompositionEntry, RedPacketCompositionUI] = createComposi
     },
 )
 export const RedPacketPluginDefine: PluginConfig = {
+    ID: RedPacketPluginID,
     pluginName: 'Red Packet',
     identifier: RedPacketPluginID,
     stage: PluginStage.Production,
