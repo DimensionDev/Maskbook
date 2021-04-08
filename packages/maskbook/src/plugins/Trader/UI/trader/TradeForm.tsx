@@ -200,9 +200,9 @@ export function TradeForm(props: TradeFormProps) {
     const validationMessage = useMemo(() => {
         if (inputTokenTradeAmount.isZero() && outputTokenTradeAmount.isZero())
             return t('plugin_trader_error_amount_absence')
-        if (inputTokenTradeAmount.isLessThan(MINIMUM_AMOUNT))
+        if (new BigNumber(inputAmount).isLessThan(MINIMUM_AMOUNT))
             return t('plugin_trade_error_input_amount_less_minimum_amount')
-        if (outputTokenTradeAmount.isLessThan(MINIMUM_AMOUNT))
+        if (new BigNumber(outputAmount).isLessThan(MINIMUM_AMOUNT))
             return t('plugin_trade_error_output_amount_less_minimum_amount')
         if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
         if (loading) return t('plugin_trader_finding_price')
