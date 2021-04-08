@@ -10,22 +10,31 @@ import {
     Skeleton,
     Box,
     TableHead,
+    TableFooter,
+    TablePagination,
+    IconButton,
 } from '@material-ui/core'
 import { OrderSide } from 'opensea-js/lib/types'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { useOrders } from '../hooks/useOrders'
 import { CollectibleTab } from './CollectibleTab'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { getOrderUnitPrice } from '../utils'
 import { Row } from './OrderRow'
 import BigNumber from 'bignumber.js'
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
             overflow: 'auto',
         },
-        content: {},
+        pagination: {
+            display: 'flex',
+        },
+        spacer: {
+            flex: 0,
+        },
     })
 })
 
@@ -33,9 +42,9 @@ export interface OfferTabProps {}
 
 export function OfferTab(props: OfferTabProps) {
     const classes = useStyles()
-
+    const [page, setPage] = useState(0)
     const { token } = CollectibleState.useContainer()
-    const offers = useOrders(token, OrderSide.Buy)
+    const offers = useOrders(token, OrderSide.Buy, page)
 
     const isDifferenceToken = useMemo(
         () =>
@@ -69,6 +78,39 @@ export function OfferTab(props: OfferTabProps) {
             })
     }, [offers.value])
 
+    const tableFooter = useMemo(
+        () => (
+            <TableFooter>
+                <TableRow>
+                    <TablePagination
+                        rowsPerPage={10}
+                        rowsPerPageOptions={[10]}
+                        count={-1}
+                        page={page}
+                        classes={{ spacer: classes.spacer }}
+                        onPageChange={() => {}}
+                        labelDisplayedRows={() => null}
+                        ActionsComponent={() => {
+                            return (
+                                <div>
+                                    <IconButton disabled={page === 0} onClick={() => setPage((prev) => prev - 1)}>
+                                        <KeyboardArrowLeft />
+                                    </IconButton>
+                                    <IconButton
+                                        disabled={dataSource.length < 10}
+                                        onClick={() => setPage((prev) => prev + 1)}>
+                                        <KeyboardArrowRight />
+                                    </IconButton>
+                                </div>
+                            )
+                        }}
+                    />
+                </TableRow>
+            </TableFooter>
+        ),
+        [page, dataSource],
+    )
+
     if (offers.loading)
         return (
             <Table>
@@ -86,25 +128,28 @@ export function OfferTab(props: OfferTabProps) {
 
     if (!offers.value || offers.error || !dataSource.length)
         return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%',
-                    padding: '16px 0',
-                }}>
-                <Typography color="textSecondary">No Offers</Typography>
-                <Button
+            <Table>
+                <Box
                     sx={{
-                        marginTop: 1,
-                    }}
-                    variant="text"
-                    onClick={() => offers.retry()}>
-                    Retry
-                </Button>
-            </Box>
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: '100%',
+                        padding: '16px 0',
+                    }}>
+                    <Typography color="textSecondary">No Offers</Typography>
+                    <Button
+                        sx={{
+                            marginTop: 1,
+                        }}
+                        variant="text"
+                        onClick={() => offers.retry()}>
+                        Retry
+                    </Button>
+                </Box>
+                {tableFooter}
+            </Table>
         )
 
     return (
@@ -141,6 +186,7 @@ export function OfferTab(props: OfferTabProps) {
                         <Row key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
+                {tableFooter}
             </Table>
         </CollectibleTab>
     )

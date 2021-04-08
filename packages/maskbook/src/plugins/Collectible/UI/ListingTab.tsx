@@ -2,29 +2,38 @@ import {
     Box,
     Button,
     createStyles,
+    IconButton,
     makeStyles,
     Skeleton,
     Table,
     TableBody,
     TableCell,
+    TableFooter,
     TableHead,
+    TablePagination,
     TableRow,
     Typography,
 } from '@material-ui/core'
 import { useOrders } from '../hooks/useOrders'
 import { OrderSide } from 'opensea-js/lib/types'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { getOrderUnitPrice } from '../utils'
 import { Row } from './OrderRow'
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
 const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
             overflow: 'auto',
         },
-        content: {},
+        pagination: {
+            display: 'flex',
+        },
+        spacer: {
+            flex: 0,
+        },
     })
 })
 
@@ -32,8 +41,9 @@ export interface ListingTabProps {}
 
 export function ListingTab(props: ListingTabProps) {
     const classes = useStyles()
+    const [page, setPage] = useState(0)
     const { token } = CollectibleState.useContainer()
-    const listings = useOrders(token, OrderSide.Sell)
+    const listings = useOrders(token, OrderSide.Sell, page)
 
     const isDifferenceToken = useMemo(
         () =>
@@ -67,6 +77,39 @@ export function ListingTab(props: ListingTabProps) {
             })
     }, [listings.value])
 
+    const tableFooter = useMemo(
+        () => (
+            <TableFooter>
+                <TableRow>
+                    <TablePagination
+                        rowsPerPage={10}
+                        rowsPerPageOptions={[10]}
+                        count={-1}
+                        page={page}
+                        classes={{ spacer: classes.spacer }}
+                        onPageChange={() => {}}
+                        labelDisplayedRows={() => null}
+                        ActionsComponent={() => {
+                            return (
+                                <div>
+                                    <IconButton disabled={page === 0} onClick={() => setPage((prev) => prev - 1)}>
+                                        <KeyboardArrowLeft />
+                                    </IconButton>
+                                    <IconButton
+                                        disabled={dataSource.length < 10}
+                                        onClick={() => setPage((prev) => prev + 1)}>
+                                        <KeyboardArrowRight />
+                                    </IconButton>
+                                </div>
+                            )
+                        }}
+                    />
+                </TableRow>
+            </TableFooter>
+        ),
+        [page, dataSource],
+    )
+
     if (listings.loading)
         return (
             <Table>
@@ -84,29 +127,32 @@ export function ListingTab(props: ListingTabProps) {
 
     if (!listings.value || listings.error || !dataSource.length)
         return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%',
-                    padding: '16px 0',
-                }}>
-                <Typography color="textSecondary">No Listings</Typography>
-                <Button
+            <Table>
+                <Box
                     sx={{
-                        marginTop: 1,
-                    }}
-                    variant="text"
-                    onClick={() => listings.retry()}>
-                    Retry
-                </Button>
-            </Box>
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: '100%',
+                        padding: '16px 0',
+                    }}>
+                    <Typography color="textSecondary">No Listings</Typography>
+                    <Button
+                        sx={{
+                            marginTop: 1,
+                        }}
+                        variant="text"
+                        onClick={() => listings.retry()}>
+                        Retry
+                    </Button>
+                </Box>
+                {tableFooter}
+            </Table>
         )
 
     return (
-        <CollectibleTab>
+        <CollectibleTab classes={{ root: classes.root }}>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -139,6 +185,7 @@ export function ListingTab(props: ListingTabProps) {
                         <Row key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
+                {tableFooter}
             </Table>
         </CollectibleTab>
     )

@@ -79,11 +79,18 @@ export async function getEvents(asset_contract_address: string, token_id: string
     return data.assetEvents as OpenSeaAssetEventResponse
 }
 
-export async function getOrders(asset_contract_address: string, token_id: string, side: OrderSide) {
+export async function getOrders(
+    asset_contract_address: string,
+    token_id: string,
+    side: OrderSide,
+    opts = { pageNum: 1, count: 10 },
+) {
     return (await createOpenSeaPort()).api.getOrders({
         asset_contract_address,
         token_id,
         side,
+        limit: opts.count,
+        offset: opts.count * opts.pageNum,
     })
 }
 

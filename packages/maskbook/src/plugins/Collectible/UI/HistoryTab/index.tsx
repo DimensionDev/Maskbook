@@ -145,7 +145,7 @@ export function HistoryTab(props: HistoryTabProps) {
                             rowsPerPage={10}
                             rowsPerPageOptions={[10]}
                             count={-1}
-                            page={0}
+                            page={page}
                             classes={{ spacer: classes.spacer }}
                             onPageChange={() => {}}
                             labelDisplayedRows={() => null}
