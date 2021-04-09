@@ -71,7 +71,7 @@ export function Row({ event, isDifferenceToken }: Props) {
                 <>
                     <TableCell>
                         <Box display="flex">
-                            {event.node.price?.asset && (
+                            {event.node.price?.asset?.imageUrl && (
                                 <Link
                                     href={event.node.price.asset.assetContract.blockExplorerLink}
                                     target="_blank"

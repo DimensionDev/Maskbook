@@ -193,9 +193,6 @@ export function Collectible(props: CollectibleProps) {
                     </Paper>
                 </CardContent>
             </CollectibleCard>
-            <Box className={classes.footnote}>
-                <Typography className={classes.countdown}>Sale ends in 00:25:32.</Typography>
-            </Box>
         </>
     )
 }
