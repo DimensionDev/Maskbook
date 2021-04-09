@@ -1,6 +1,21 @@
 import scrypt from 'scrypt-js'
 import * as crypto from 'crypto'
-import { keccak256 } from 'ethereumjs-util'
+import Web3Utils from 'web3-utils'
+
+interface ScryptParams {
+    dklen: number
+    n: number
+    p: number
+    r: number
+    salt: string
+}
+
+interface PDKDF2Params {
+    c: number
+    prf: string
+    dklen: number
+    salt: string
+}
 
 export interface V3Keystore {
     crypto: {
@@ -10,13 +25,7 @@ export interface V3Keystore {
             iv: string
         }
         kdf: string
-        kdfparams: {
-            dklen: number
-            n: number
-            p: number
-            r: number
-            salt: string
-        }
+        kdfparams: ScryptParams | PDKDF2Params
         mac: string
     }
     id: string
@@ -31,9 +40,9 @@ export function exportFromV3Keystore(input: string | V3Keystore, password: strin
         throw new Error('Not a V3 wallet')
     }
 
-    let derivedKey: Uint8Array, kdfparams: any
+    let derivedKey: Uint8Array, kdfparams: ScryptParams | PDKDF2Params
     if (json.crypto.kdf.toLowerCase() === 'scrypt') {
-        kdfparams = json.crypto.kdfparams
+        kdfparams = json.crypto.kdfparams as ScryptParams
         derivedKey = scrypt.syncScrypt(
             Buffer.from(password),
             Buffer.from(kdfparams.salt, 'hex'),
@@ -43,8 +52,8 @@ export function exportFromV3Keystore(input: string | V3Keystore, password: strin
             kdfparams.dklen,
         )
     } else if (json.crypto.kdf.toLowerCase() === 'pbkdf2') {
-        kdfparams = json.crypto.kdfparams
-        if (kdfparams.prf != -'hmac-sha256') {
+        kdfparams = json.crypto.kdfparams as PDKDF2Params
+        if (kdfparams.prf !== 'hmac-sha256') {
             throw new Error('Unsupported parameters to PBKDF2')
         }
         derivedKey = crypto.pbkdf2Sync(
@@ -58,9 +67,9 @@ export function exportFromV3Keystore(input: string | V3Keystore, password: strin
         throw new Error('Unsupport key derivation scheme')
     }
     const ciphertext = Buffer.from(json.crypto.ciphertext, 'hex')
-    const mac = keccak256(Buffer.concat([Buffer.from(derivedKey.slice(16, 32)), ciphertext]))
-    console.log(mac.toString('hex'))
-    if (mac.toString('hex') !== json.crypto.mac) {
+    const buf = Buffer.concat([Buffer.from(derivedKey.slice(16, 32)), ciphertext])
+    const mac = Web3Utils.sha3(`0x${buf.toString('hex')}`)
+    if (mac !== `0x${json.crypto.mac}`) {
         throw new Error('Key derivation failed - possibly wrong passphrase')
     }
 
@@ -70,5 +79,5 @@ export function exportFromV3Keystore(input: string | V3Keystore, password: strin
         Buffer.from(json.crypto.cipherparams.iv, 'hex'),
     )
     const seed = Buffer.concat([decipher.update(ciphertext), decipher.final()])
-    return ['0x' + json.address, '0x' + seed.toString('hex')] as const
+    return [`0x${json.address}`, `0x${seed.toString('hex')}`] as const
 }

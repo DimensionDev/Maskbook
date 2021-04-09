@@ -271,7 +271,6 @@ importers:
       enzyme-adapter-react-16: ^1.15.5
       eth-contract-metadata: ^1.15.0
       ethereum-blockies: ^0.1.1
-      ethereumjs-util: ^7.0.10
       event-iterator: ^2.0.0
       expect-puppeteer: ^4.4.0
       fake-indexeddb: ^3.1.2
@@ -414,7 +413,6 @@ importers:
       elliptic: 6.5.4
       eth-contract-metadata: 1.17.0
       ethereum-blockies: 0.1.1
-      ethereumjs-util: 7.0.10
       event-iterator: 2.0.0
       fuse.js: 6.4.6
       gun: 0.2020.520
@@ -5371,12 +5369,6 @@ packages:
     resolution: {integrity: sha512-pqr857jrp2kPuO9uRjZ3PwnJTjoQy+fcdxvBTvHm6dkmEL9q+hDD/2j/0ELOBPtPnS8LjCX0gI9nbl8lVkadpg==}
     dependencies:
       '@types/node': 14.14.37
-
-  /@types/bn.js/5.1.0:
-    resolution: {integrity: sha512-QSSVYj7pYFN49kW77o2s9xTCwZ8F2xLbjLLSEVh8D2F4JUhZtPAGOFLTD+ffqksBx/u4cE/KImFjyhqCjn/LIA==}
-    dependencies:
-      '@types/node': 14.14.37
-    dev: false
 
   /@types/body-parser/1.19.0:
     resolution: {integrity: sha512-W98JrE0j2K78swW4ukqMleo8R7h/pFETjM2DQ90MF6XK2i4LO4W3gQ71Lt4w3bfm2EvVSyWHplECvB5sK22yFQ==}
