@@ -1,7 +1,4 @@
 import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography, Box } from '@material-ui/core'
-import dayjs from 'dayjs'
-import timezone from 'dayjs/plugin/timezone'
-import utc from 'dayjs/plugin/utc'
 import LinkIcon from '@material-ui/icons/Link'
 import type { OpenSeaAssetEvent } from '../../apis'
 import { OpenSeaAssetEventType } from '../../apis'
@@ -9,9 +6,6 @@ import { formatBalance, formatElapsed } from '../../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { resolveAssetEventType } from '../../pipes'
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -142,13 +136,13 @@ export function Row({ order, isDifferenceToken }: Props) {
                 {order.node.transaction ? (
                     <Link href={order.node.transaction.blockExplorerLink} target="_blank" rel="noopener noreferrer">
                         <Typography sx={{ display: 'flex', alignItems: 'center' }}>
-                            {formatElapsed(dayjs.utc(order.node.eventTimestamp).tz().valueOf())}
+                            {formatElapsed(new Date(`${order.node.eventTimestamp}Z`).getTime())}
                             <LinkIcon fontSize="inherit" />
                         </Typography>
                     </Link>
                 ) : (
                     <Typography sx={{ color: 'rgb(29,161,242)' }}>
-                        {formatElapsed(dayjs.utc(order.node.eventTimestamp).tz().valueOf())}
+                        {formatElapsed(new Date(`${order.node.eventTimestamp}Z`).getTime())}
                     </Typography>
                 )}
             </TableCell>
