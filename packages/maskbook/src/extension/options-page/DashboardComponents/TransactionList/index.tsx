@@ -23,7 +23,7 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
 
 const useStyles = makeStyles(() =>
     createStyles({
-        fixed: { maxHeight: 'calc(100% - 52px)' },
+        fixed: { height: 'calc(100% - 52px)' },
     }),
 )
 
