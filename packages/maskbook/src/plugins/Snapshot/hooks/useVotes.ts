@@ -1,5 +1,5 @@
 import { PluginSnapshotRPC } from '../messages'
-import type { Votes, ProposalIdentifier, Vote } from '../types'
+import type { Votes, ProposalIdentifier, Vote, Profile3Box } from '../types'
 import { useSuspense } from '../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
 import { useChainId, useBlockNumber } from '../../../web3/hooks/useChainState'
@@ -31,6 +31,11 @@ async function Suspender(identifier: ProposalIdentifier) {
     const scores = await ss.utils.getScores(spaceKey, strategies, network, provider, voters, blockTag)
     //#endregion
 
+    //#region get 3box profile
+    const { profiles }: { profiles: Profile3Box[] } = await PluginSnapshotRPC.fetch3BoxProfiles(voters)
+    const profileEntries = Object.fromEntries(profiles.map((p) => [p.eth_address, p]))
+    //#endregion
+
     //#region get power of votes
     const votes = Object.fromEntries(
         Object.entries(votesWithoutScores)
@@ -38,11 +43,15 @@ async function Suspender(identifier: ProposalIdentifier) {
                 voteEntry[1].scores = strategies.map((_strategy, i) => scores[i][voteEntry[1].address] || 0)
                 voteEntry[1].balance = voteEntry[1].scores.reduce((a: number, b: number) => a + b, 0)
                 voteEntry[1].choice = message.payload.choices[voteEntry[1].msg.payload.choice - 1]
+                voteEntry[1].authorAvatar = profileEntries[voteEntry[0].toLowerCase()]?.image
+                voteEntry[1].authorName = profileEntries[voteEntry[0].toLowerCase()]?.name
                 return voteEntry
             })
             .sort((a, b) => b[1].balance - a[1].balance)
             .filter((voteEntry) => voteEntry[1].balance > 0),
     )
+
+    console.log({ votes, profileEntries })
     return votes
     //#endregion
 }

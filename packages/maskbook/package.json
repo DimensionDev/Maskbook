@@ -86,6 +86,7 @@
     "react-draggable": "^4.4.3",
     "react-feather": "^2.0.9",
     "react-highlight-words": "^0.17.0",
+    "react-jazzicon": "github:marcusmolchany/react-jazzicon",
     "react-middle-ellipsis": "^1.1.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",

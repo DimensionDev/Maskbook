@@ -1,7 +1,9 @@
+// import Jazzicon from 'react-jazzicon'
 import { useContext, useRef, useEffect, useState, useMemo } from 'react'
 import type { Vote } from '../types'
 import millify from 'millify'
-import { List, createStyles, makeStyles, Typography, ListItem, Badge } from '@material-ui/core'
+import { Avatar, List, createStyles, makeStyles, Typography, ListItem, Badge, Box } from '@material-ui/core'
+import { resolveIPFSLink } from '../../../web3/pipes'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { SnapshotContext } from '../context'
@@ -29,9 +31,16 @@ const useStyles = makeStyles((theme) => {
         },
         address: {
             width: '40%',
+            display: 'flex',
+            alignItems: 'center',
         },
         choice: {
             flexGrow: 1,
+        },
+        avatar: {
+            width: 20,
+            height: 20,
+            marginRight: 8,
         },
     })
 })
@@ -58,9 +67,17 @@ export function VotesCard(props: VotesCardProps) {
                 {voteEntries.map((voteEntry: [string, Vote]) => {
                     return (
                         <ListItem className={classes.listItem} key={voteEntry[0]}>
-                            <Typography className={classes.address}>
-                                {formatEthereumAddress(voteEntry[0], 4)}
-                            </Typography>
+                            <Box className={classes.address}>
+                                {voteEntry[1].authorAvatar ? (
+                                    <Avatar
+                                        src={resolveIPFSLink(voteEntry[1].authorAvatar)}
+                                        className={classes.avatar}
+                                    />
+                                ) : (
+                                    null
+                                )}
+                                <Typography>{formatEthereumAddress(voteEntry[0], 4)}</Typography>
+                            </Box>
                             <Typography className={classes.choice}>{voteEntry[1].choice}</Typography>
                             <Typography>
                                 {millify(voteEntry[1].balance, { precision: 2, lowercase: true }) +

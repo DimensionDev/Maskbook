@@ -53,6 +53,8 @@ export interface Vote {
     balance: number
     scores: number[]
     sig: string
+    authorName: string | null
+    authorAvatar: string | null
     msg: {
         payload: {
             choice: number
@@ -79,4 +81,10 @@ export interface ProposalResult {
     }[]
     power: number
     percentage: number
+}
+
+export interface Profile3Box {
+    eth_address: string
+    image: string | null
+    name: string | null
 }
