@@ -1,9 +1,121 @@
-import { Typography } from '@material-ui/core'
+import { useState } from 'react'
+import {
+    makeStyles,
+    createStyles,
+    Box,
+    Card,
+    CardHeader,
+    CardContent,
+    Typography,
+    Tab,
+    Tabs,
+    Chip,
+    Paper,
+} from '@material-ui/core'
 import { SnapshotState } from '../hooks/useSnapshotState'
+import { ProposalTab } from './ProposalTab'
+import { VotesTab } from './ProgressTab'
+
+const useStyles = makeStyles((theme) => {
+    return createStyles({
+        root: {
+            '--contentHeight': '400px',
+            '--tabHeight': '35px',
+
+            width: '100%',
+            border: `solid 1px ${theme.palette.divider}`,
+            padding: 0,
+        },
+        content: {
+            width: '100%',
+            height: 'var(--contentHeight)',
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '0 !important',
+        },
+        body: {
+            flex: 1,
+            hegiht: 'calc(var(--contentHeight) - var(--tabHeight))',
+            overflow: 'auto',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
+        tabs: {
+            height: 'var(--tabHeight)',
+            width: '100%',
+            minHeight: 'unset',
+            borderTop: `solid 1px ${theme.palette.divider}`,
+            borderBottom: `solid 1px ${theme.palette.divider}`,
+        },
+        tab: {
+            height: 'var(--tabHeight)',
+            minHeight: 'unset',
+            minWidth: 'unset',
+        },
+        subtitle: {
+            fontSize: 12,
+            marginRight: theme.spacing(0.5),
+        },
+    })
+})
 
 export interface SnapshotProps {}
 
 export function Snapshot(props: SnapshotProps) {
+    const classes = useStyles()
     const { identifier } = SnapshotState.useContainer()
-    return <Typography>{identifier?.space}</Typography>
+
+    const [tabIndex, setTabIndex] = useState(0)
+
+    const tabs = [
+        <Tab className={classes.tab} key="proposal" label="Proposal" />,
+        <Tab className={classes.tab} key="progress" label="Progress" />,
+    ]
+
+    return (
+        <Card className={classes.root} elevation={0}>
+            <CardHeader
+                title={
+                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                        <Typography sx={{ marginRight: 1 }}>
+                            <Typography component="span" sx={{ marginRight: 0.5 }}>
+                                make more quick
+                            </Typography>
+                            <Typography color="textSecondary" component="span">
+                                #QmdUQF2
+                            </Typography>
+                        </Typography>
+                        <Chip color="primary" size="small" label="Active" />
+                    </Box>
+                }
+                subheader={
+                    <Box display="flex" alignItems="center" sx={{ marginTop: 0.5 }}>
+                        <Typography color="textSecondary" variant="body2">
+                            we are waiting for all new function for yam, make it quick pls
+                        </Typography>
+                    </Box>
+                }></CardHeader>
+            <CardContent className={classes.content}>
+                <Tabs
+                    className={classes.tabs}
+                    textColor="primary"
+                    variant="fullWidth"
+                    value={tabIndex}
+                    onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
+                    TabIndicatorProps={{
+                        style: {
+                            display: 'none',
+                        },
+                    }}>
+                    {tabs}
+                </Tabs>
+                <Paper className={classes.body}>
+                    {tabIndex === 0 ? <ProposalTab /> : null}
+                    {tabIndex === 1 ? <VotesTab /> : null}
+                </Paper>
+            </CardContent>
+        </Card>
+    )
 }

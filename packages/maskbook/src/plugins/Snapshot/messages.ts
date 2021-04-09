@@ -7,7 +7,7 @@ interface SnapshotMessages {
 }
 
 export const PluginSnapshotMessages = createPluginMessage<SnapshotMessages>(SNAPSHOT_PLUGIN_ID)
-export const PluginGitcoinRPC = createPluginRPC(
+export const PluginSnapshotRPC = createPluginRPC(
     SNAPSHOT_PLUGIN_ID,
     () => import('./services'),
     PluginSnapshotMessages.events.rpc,
