@@ -21,6 +21,7 @@ import { CollectibleTab } from '../CollectibleTab'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { Row } from './Row'
 import { useEvents } from '../../hooks/useEvents'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme) => {
 export interface HistoryTabProps {}
 
 export function HistoryTab(props: HistoryTabProps) {
+    const { t } = useI18N()
     const classes = useStyles()
 
     const cursors = useRef<string[]>([])
@@ -118,30 +120,30 @@ export function HistoryTab(props: HistoryTabProps) {
                 <TableHead>
                     <TableRow>
                         <TableCell>
-                            <Typography>Event</Typography>
+                            <Typography>{t('plugin_collectible_event')}</Typography>
                         </TableCell>
                         {isDifferenceToken ? (
                             <>
                                 <TableCell>
-                                    <Typography>Unit Price</Typography>
+                                    <Typography>{t('plugin_collectible_unit_price')}</Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography>Quantity</Typography>
+                                    <Typography>{t('plugin_collectible_quantity')}</Typography>
                                 </TableCell>
                             </>
                         ) : (
                             <TableCell>
-                                <Typography>Price</Typography>
+                                <Typography>{t('plugin_collectible_price')}</Typography>
                             </TableCell>
                         )}
                         <TableCell>
-                            <Typography>From</Typography>
+                            <Typography>{t('plugin_collectible_from')}</Typography>
                         </TableCell>
                         <TableCell>
-                            <Typography>To</Typography>
+                            <Typography>{t('plugin_collectible_to')}</Typography>
                         </TableCell>
                         <TableCell>
-                            <Typography>Date</Typography>
+                            <Typography>{t('plugin_collectible_Date')}</Typography>
                         </TableCell>
                     </TableRow>
                 </TableHead>

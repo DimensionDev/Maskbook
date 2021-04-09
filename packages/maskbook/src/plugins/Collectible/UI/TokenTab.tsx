@@ -1,6 +1,7 @@
 import { makeStyles, createStyles, Typography, Link, Box } from '@material-ui/core'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme) => {
 export interface TokenTabProps {}
 
 export function TokenTab(props: TokenTabProps) {
+    const { t } = useI18N()
     const classes = useStyles()
     const { token, asset } = CollectibleState.useContainer()
 
@@ -49,12 +51,12 @@ export function TokenTab(props: TokenTabProps) {
     return (
         <CollectibleTab>
             <Box className={classes.container}>
-                <Typography variant="h6">Base</Typography>
+                <Typography variant="h6">{t('plugin_collectible_base')}</Typography>
 
                 <Typography>
                     {asset.value.creator ? (
                         <Typography variant="subtitle2">
-                            Created by{' '}
+                            {t('plugin_collectible_create_by')}{' '}
                             <Link
                                 href={`https://opensea.io/accounts/${
                                     asset.value.creator.user?.username ?? asset.value.creator.address
@@ -64,7 +66,7 @@ export function TokenTab(props: TokenTabProps) {
                         </Typography>
                     ) : (
                         <Typography variant="subtitle2">
-                            Owned by{' '}
+                            {t('plugin_collectible_owned_by')}{' '}
                             <Link
                                 href={`https://opensea.io/accounts/${
                                     asset.value.owner?.user?.username ?? asset.value.owner?.address ?? ''
@@ -79,7 +81,7 @@ export function TokenTab(props: TokenTabProps) {
 
             {asset.value.traits && asset.value.traits.length ? (
                 <Box className={classes.container}>
-                    <Typography variant="h6">Properties</Typography>
+                    <Typography variant="h6">{t('plugin_collectible_properties')}</Typography>
 
                     <Box className={classes.trait_content}>
                         {asset.value.traits.map(({ trait_type, value }) => {
@@ -96,17 +98,19 @@ export function TokenTab(props: TokenTabProps) {
 
             {asset.value.assetContract.name && asset.value.assetContract.description ? (
                 <Box className={classes.container}>
-                    <Typography variant="h6">About {asset.value.assetContract.name}</Typography>
+                    <Typography variant="h6">
+                        {t('plugin_collectible_about')} {asset.value.assetContract.name}
+                    </Typography>
 
                     <Typography className={classes.description}>{asset.value.assetContract.description}</Typography>
                 </Box>
             ) : null}
 
             <Box className={classes.container}>
-                <Typography variant="h6">Chain Info</Typography>
+                <Typography variant="h6">{t('plugin_collectible_chain_info')}</Typography>
 
                 <Box className={classes.chain_row}>
-                    <Typography>Contract Address</Typography>
+                    <Typography>{t('plugin_collectible_contract_address')}</Typography>
                     <Link
                         href={`https://etherscan.io/address/${token?.contractAddress ?? ''}`}
                         target="_blank"
@@ -117,11 +121,11 @@ export function TokenTab(props: TokenTabProps) {
                     </Link>
                 </Box>
                 <Box className={classes.chain_row}>
-                    <Typography>Token ID</Typography>
+                    <Typography>{t('plugin_collectible_token_id')}</Typography>
                     <Typography className={classes.tokenId}>{token?.tokenId}</Typography>
                 </Box>
                 <Box className={classes.chain_row}>
-                    <Typography>BlockChain</Typography>
+                    <Typography>{t('plugin_collectible_block_chain')}</Typography>
                     <Typography>Ethereum</Typography>
                 </Box>
             </Box>

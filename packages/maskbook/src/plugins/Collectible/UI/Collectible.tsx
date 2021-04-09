@@ -114,11 +114,11 @@ export function Collectible(props: CollectibleProps) {
     if (!asset.value) return null
 
     const tabs = [
-        <Tab className={classes.tab} key="article" label="Article" />, // This is the tab for the hero image
-        <Tab className={classes.tab} key="details" label="Details" />, // This is the tab for the token detailed information
-        <Tab className={classes.tab} key="offers" label="Offers" />, // This is the tab for listing offers
-        <Tab className={classes.tab} key="listing" label="Listing" />, // This is the tab for listing article
-        <Tab className={classes.tab} key="history" label="History" />, // This is the tab for the trade history
+        <Tab className={classes.tab} key="article" label={t('plugin_collectible_article')} />, // This is the tab for the hero image
+        <Tab className={classes.tab} key="details" label={t('plugin_collectible_details')} />, // This is the tab for the token detailed information
+        <Tab className={classes.tab} key="offers" label={t('plugin_collectible_offers')} />, // This is the tab for listing offers
+        <Tab className={classes.tab} key="listing" label={t('plugin_collectible_listing')} />, // This is the tab for listing article
+        <Tab className={classes.tab} key="history" label={t('plugin_collectible_history')} />, // This is the tab for the trade history
     ]
 
     return (
