@@ -8,8 +8,8 @@ import { useAccount } from './useAccount'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
-import Services from '../../extension/service'
 import { StageType } from '../types'
+import { watchTransaction } from '../helpers/transaction'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
@@ -108,9 +108,9 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                 const revalidate = once(() => {
                     revalidateBalance()
                     revalidateAllowance()
-                })
 
-                for await (const stage of Services.Ethereum.watchTransaction(account, transaction)) {
+
+                for await (const stage of watchTransaction(account, transaction)) {
                     switch (stage.type) {
                         case StageType.RECEIPT:
                             setTransactionState({

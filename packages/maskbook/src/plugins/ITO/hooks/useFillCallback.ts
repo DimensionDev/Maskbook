@@ -12,6 +12,7 @@ import { ITO_CONSTANTS, ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import Services from '../../../extension/service'
 import { useChainId } from '../../../web3/hooks/useChainState'
+import { watchTransaction } from '../../../web3/helpers/transaction'
 
 export interface PoolSettings {
     password: string
@@ -225,7 +226,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                 gas: estimatedGas,
             })
 
-            for await (const stage of Services.Ethereum.watchTransaction(account, transaction)) {
+            for await (const stage of watchTransaction(account, transaction)) {
                 switch (stage.type) {
                     case StageType.RECEIPT:
                         setFillState({

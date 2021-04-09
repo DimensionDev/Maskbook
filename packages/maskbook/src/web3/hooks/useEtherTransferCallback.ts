@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount } from './useAccount'
-import Services from '../../extension/service'
 import { useChainId } from './useChainState'
 import { addGasMargin } from '../helpers'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
@@ -11,6 +10,7 @@ import { CONSTANTS } from '../constants'
 import type { TransactionRequest } from '@ethersproject/providers'
 import { toUtf8Bytes } from 'ethers/lib/utils'
 import { StageType } from '../types'
+import { watchTransaction } from '../helpers/transaction'
 
 export function useEtherTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const account = useAccount()
@@ -63,8 +63,7 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
         }
 
         // encode memo as data
-        if (memo) config.data = toUtf8Bytes(memo)
-
+        if (memo) config.data = toUtf8Bytes(memo
         // step 1: estimate gas
         const transaction = await Services.Ethereum.sendTransaction(account, {
             // the esitmated gas limit is too low with arbitrary message to be encoded as data (increase 20% gas limit)
@@ -74,7 +73,7 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
 
         // step 2: blocking
         try {
-            for await (const stage of Services.Ethereum.watchTransaction(account, transaction)) {
+            for await (const stage of watchTransaction(account, transaction)) {
                 switch (stage.type) {
                     case StageType.TRANSACTION_HASH:
                         setTransferState({

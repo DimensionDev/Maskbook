@@ -4,9 +4,9 @@ import { addGasMargin } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import Services from '../../../extension/service'
 import type { TransactionReceipt, TransactionRequest } from '@ethersproject/abstract-provider'
 import { StageType } from '../../../web3/types'
+import { watchTransaction } from '../../../web3/helpers/transaction'
 
 export function useDestructCallback() {
     const account = useAccount()
@@ -62,7 +62,7 @@ export function useDestructCallback() {
                     gasLimit: addGasMargin(new BigNumber(estimatedGas)).toString(),
                 })
 
-                for await (const stage of Services.Ethereum.watchTransaction(account, transaction)) {
+                for await (const stage of watchTransaction(account, transaction)) {
                     switch (stage.type) {
                         case StageType.CONFIRMATION:
                             onConfirm(stage.no, stage.receipt)

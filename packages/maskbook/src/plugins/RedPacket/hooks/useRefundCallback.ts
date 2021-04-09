@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import Services from '../../../extension/service'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import type { TransactionRequest } from '@ethersproject/abstract-provider'
 import { StageType } from '../../../web3/types'
+import { watchTransaction } from '../../../web3/helpers/transaction'
 
 export function useRefundCallback(from: string, id?: string) {
     const account = useAccount()
@@ -42,7 +42,7 @@ export function useRefundCallback(from: string, id?: string) {
         // step 2: blocking
         return new Promise<string>(async (resolve, reject) => {
             const transaction = await redPacketContract.refund(...params)
-            for await (const stage of Services.Ethereum.watchTransaction(account, transaction)) {
+            for await (const stage of watchTransaction(account, transaction)) {
                 switch (stage.type) {
                     case StageType.TRANSACTION_HASH:
                         setRefundState({

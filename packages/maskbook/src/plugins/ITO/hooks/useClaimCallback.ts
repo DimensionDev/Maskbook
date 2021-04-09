@@ -5,9 +5,9 @@ import { TransactionStateType, useTransactionState } from '../../../web3/hooks/u
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { addGasMargin } from '../../../web3/helpers'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import Services from '../../../extension/service'
 import { StageType } from '../../../web3/types'
 import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
+import { watchTransaction } from '../../../web3/helpers/transaction'
 
 export function useClaimCallback() {
     const account = useAccount()
@@ -49,7 +49,7 @@ export function useClaimCallback() {
                 gasLimit: addGasMargin(new BigNumber(estimatedGas)).toString(),
             })
 
-            for await (const stage of Services.Ethereum.watchTransaction(account, transaction)) {
+            for await (const stage of watchTransaction(account, transaction)) {
                 switch (stage.type) {
                     case StageType.RECEIPT:
                         setClaimState({

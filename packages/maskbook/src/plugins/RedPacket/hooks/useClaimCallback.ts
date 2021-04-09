@@ -4,8 +4,8 @@ import type { TransactionRequest } from '@ethersproject/abstract-provider'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { RedPacketRPC } from '../messages'
-import Services from '../../../extension/service'
 import { StageType } from '../../../web3/types'
+import { watchTransaction } from '../../../web3/helpers/transaction'
 
 export function useClaimCallback(from: string, id?: string, password?: string) {
     const [claimState, setClaimState] = useTransactionState()
@@ -57,7 +57,7 @@ export function useClaimCallback(from: string, id?: string, password?: string) {
             }
             const transaction = await redPacketContract.claim(...params)
 
-            for await (const stage of Services.Ethereum.watchTransaction(from, transaction)) {
+            for await (const stage of watchTransaction(from, transaction)) {
                 switch (stage.type) {
                     case StageType.TRANSACTION_HASH:
                         onSucceed(stage.hash)

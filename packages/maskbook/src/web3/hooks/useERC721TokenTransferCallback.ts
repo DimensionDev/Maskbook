@@ -4,8 +4,8 @@ import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { isSameAddress } from '../helpers'
-import Services from '../../extension/service'
 import { StageType } from '../types'
+import { watchTransaction } from '../helpers/transaction'
 
 export function useERC721TokenTransferCallback(address: string, tokenId?: string, recipient?: string) {
     const account = useAccount()
@@ -53,7 +53,7 @@ export function useERC721TokenTransferCallback(address: string, tokenId?: string
             const transaction = await erc721Contract.transferFrom(account, recipient, tokenId, {
                 gasLimit: estimatedGas,
             })
-            for await (const stage of Services.Ethereum.watchTransaction(account, transaction)) {
+            for await (const stage of watchTransaction(account, transaction)) {
                 switch (stage.type) {
                     case StageType.RECEIPT:
                         setTransferState({

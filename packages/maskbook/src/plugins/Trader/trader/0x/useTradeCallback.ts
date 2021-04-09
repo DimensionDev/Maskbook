@@ -10,6 +10,7 @@ import { useChainId } from '../../../../web3/hooks/useChainState'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import { ChainId, StageType } from '../../../../web3/types'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
+import { watchTransaction } from '../../../../web3/helpers/transaction'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {
     const account = useAccount()
@@ -51,7 +52,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
 
             // step 2: send tx
             const transaction = await ServicesWithProgress.sendTransaction(account, config_)
-            for await (const stage of Services.Ethereum.watchTransaction(account, transaction)) {
+            for await (const stage of watchTransaction(account, transaction)) {
                 switch (stage.type) {
                     case StageType.TRANSACTION_HASH:
                         setTradeState({
