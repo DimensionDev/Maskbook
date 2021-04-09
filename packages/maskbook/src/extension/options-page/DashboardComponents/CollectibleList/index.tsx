@@ -140,10 +140,13 @@ export function CollectibleList(props: CollectibleListProps) {
                 ActionsComponent={() => {
                     return (
                         <Box display="flex">
-                            <IconButton disabled={page === 1} onClick={() => setPage((prev) => prev - 1)}>
+                            <IconButton size="small" disabled={page === 1} onClick={() => setPage((prev) => prev - 1)}>
                                 <KeyboardArrowLeft />
                             </IconButton>
-                            <IconButton disabled={!hasNextPage} onClick={() => setPage((prev) => prev + 1)}>
+                            <IconButton
+                                size="small"
+                                disabled={!hasNextPage}
+                                onClick={() => setPage((prev) => prev + 1)}>
                                 <KeyboardArrowRight />
                             </IconButton>
                         </Box>
