@@ -76,9 +76,9 @@ export function InformationCard(props: InformationCardProps) {
             <Typography component="div">
                 <InfoField title={t('plugin_snapshot_info_strategy')}>
                     <Box sx={{ display: 'flex' }}>
-                        {message.payload.metadata.strategies.map((strategy) => (
+                        {message.payload.metadata.strategies.map((strategy, i) => (
                             <Link
-                                key={strategy.params.address}
+                                key={i.toString()}
                                 className={classes.link}
                                 target="_blank"
                                 rel="noopener"
