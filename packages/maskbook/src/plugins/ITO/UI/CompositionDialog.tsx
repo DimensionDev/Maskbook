@@ -20,7 +20,7 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { EthereumMessages } from '../../Ethereum/messages'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { formatBalance } from '../../Wallet/formatter'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { useConstant } from '../../../web3/hooks/useConstant'
 
 export enum ITOCreateFormPageStep {

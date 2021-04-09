@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { formatUnits } from 'ethers/lib/utils'
 import { EthereumAddress } from 'wallet.ts'
 import { i18n } from '../../utils/i18n-next'

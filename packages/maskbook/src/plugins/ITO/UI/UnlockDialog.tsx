@@ -1,5 +1,5 @@
 import { createStyles, Link, makeStyles, Typography } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'

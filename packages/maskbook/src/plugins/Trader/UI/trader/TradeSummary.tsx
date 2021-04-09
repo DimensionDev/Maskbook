@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import {
     makeStyles,
     createStyles,

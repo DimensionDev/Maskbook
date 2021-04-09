@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { sha256 } from 'ethers/lib/utils'
 import type { TransactionRequest } from '@ethersproject/providers'
 import type { MaskITO } from '@dimensiondev/contracts/types/MaskITO'

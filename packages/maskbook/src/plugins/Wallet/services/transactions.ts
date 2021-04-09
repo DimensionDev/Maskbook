@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-es'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import {
     DebankTransactionDirection,
     Transaction,

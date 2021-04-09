@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { omit, pick } from 'lodash-es'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import type { TransactionRequest } from '@ethersproject/abstract-provider'
 import stringify from 'json-stable-stringify'
 import Services, { ServicesWithProgress } from '../../../../extension/service'

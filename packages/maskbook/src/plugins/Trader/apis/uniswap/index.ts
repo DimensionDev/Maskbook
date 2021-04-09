@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import type { Coin, Currency, Stat } from '../../types'
 import {
     fetchTokensByKeyword,

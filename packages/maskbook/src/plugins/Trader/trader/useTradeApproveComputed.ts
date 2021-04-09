@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { createERC20Token } from '../../../web3/helpers'
 import { SwapQuoteResponse, TradeComputed, TradeProvider } from '../types'

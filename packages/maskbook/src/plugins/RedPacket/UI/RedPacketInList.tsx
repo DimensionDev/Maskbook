@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { Skeleton } from '@material-ui/core'
 import { createStyles, ListItem, ListItemText, makeStyles, Theme, Typography } from '@material-ui/core'
 import type { RedPacketJSONPayload } from '../types'

@@ -1,6 +1,6 @@
 import { Alert, Typography, Skeleton, Box, createStyles } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { useCallback, useEffect } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'

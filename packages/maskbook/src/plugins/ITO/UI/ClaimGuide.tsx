@@ -1,7 +1,7 @@
 import { unstable_useTransition } from 'react'
 import { createStyles, DialogContent, makeStyles, DialogProps } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { RemindDialog } from './RemindDialog'

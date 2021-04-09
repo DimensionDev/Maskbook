@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Trade, Pair } from '@uniswap/sdk'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
 import { useChainId } from '../../../../web3/hooks/useChainState'
 import { TradeStrategy } from '../../types'

@@ -1,6 +1,6 @@
 import { Box, ClickAwayListener, createStyles, makeStyles, Skeleton, Tooltip, Typography } from '@material-ui/core'
 import { Info as InfoIcon } from '@material-ui/icons'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { useCallback, useEffect, useState } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'

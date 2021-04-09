@@ -1,6 +1,6 @@
 import { createStyles, makeStyles, Box, TextField, FormControlLabel, Checkbox } from '@material-ui/core'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { sha256 } from 'ethers/lib/utils'
 import { v4 as uuid } from 'uuid'
 import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'

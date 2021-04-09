@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import * as shared from '@dimensiondev/maskbook-shared'
 import * as kit from '@dimensiondev/holoflows-kit'
 

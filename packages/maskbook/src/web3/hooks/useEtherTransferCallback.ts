@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainState'
 import { addGasMargin } from '../helpers'

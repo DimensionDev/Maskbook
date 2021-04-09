@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import classNames from 'classnames'
 import { noop } from 'lodash-es'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { makeStyles, createStyles, Typography, IconButton } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import TuneIcon from '@material-ui/icons/Tune'

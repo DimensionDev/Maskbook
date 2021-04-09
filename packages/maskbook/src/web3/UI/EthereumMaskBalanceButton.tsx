@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { createStyles, makeStyles, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { useStylesExtends } from '../../components/custom-ui-helper'

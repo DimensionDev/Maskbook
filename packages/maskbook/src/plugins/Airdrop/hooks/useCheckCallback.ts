@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { useCallback, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { formatEthereumAddress } from '../../Wallet/formatter'

@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { useCallback } from 'react'
 import { addGasMargin } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'

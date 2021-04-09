@@ -1,7 +1,7 @@
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { RedPacketInspector } from './UI/RedPacketInspector'
 import { formatBalance } from '../Wallet/formatter'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { RedPacketMetadataReader } from './helpers'
 import { RedPacketMetaKey, RedPacketPluginID } from './constants'
 import type { RedPacketJSONPayload } from './types'

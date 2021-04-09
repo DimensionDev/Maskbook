@@ -13,7 +13,7 @@ import {
     TableCell,
     TableBody,
 } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'

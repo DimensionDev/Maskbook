@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { BIPS_BASE } from '../constants'
 
 export function toBips(bips: number) {

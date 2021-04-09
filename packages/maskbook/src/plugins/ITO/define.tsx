@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { makeStyles, createStyles } from '@material-ui/core'
 import { ITO_Loading } from './UI/ITO'
 import { PostInspector } from './UI/PostInspector'

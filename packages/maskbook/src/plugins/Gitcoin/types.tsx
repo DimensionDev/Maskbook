@@ -1,4 +1,4 @@
-import type BigNumber from 'bignumber.js'
+import type { BigNumber } from '@ethersproject/bignumber'
 import type { ERC20TokenRecord } from '../Wallet/database/types'
 import type { ChainId, EthereumTokenType } from '../../web3/types'
 

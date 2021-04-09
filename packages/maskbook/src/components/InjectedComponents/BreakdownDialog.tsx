@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { DialogContent, createStyles, Typography, DialogProps } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { InjectedDialog } from '../shared/InjectedDialog'

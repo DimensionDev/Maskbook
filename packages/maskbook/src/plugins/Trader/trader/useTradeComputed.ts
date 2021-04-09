@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { TradeProvider, TradeStrategy } from '../types'
 import { useV2Trade as useUniswapTrade } from './uniswap/useV2Trade'

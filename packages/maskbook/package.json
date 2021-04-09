@@ -45,7 +45,6 @@
     "arweave": "^1.10.13",
     "assert": "^2.0.0",
     "async-call-rpc": "^5.0.0",
-    "bignumber.js": "^9.0.1",
     "bip39": "^3.0.2",
     "buffer": "^6.0.3",
     "classnames": "^2.3.1",

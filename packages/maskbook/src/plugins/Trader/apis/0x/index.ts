@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { first } from 'lodash-es'
 import { BIPS_BASE, ZRX_BASE_URL } from '../../constants'
 import type {

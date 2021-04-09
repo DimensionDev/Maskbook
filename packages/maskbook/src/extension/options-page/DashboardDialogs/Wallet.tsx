@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect, useCallback, ChangeEvent, useContext } from 'react'
 import { useAsync, useCopyToClipboard } from 'react-use'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { EthereumAddress } from 'wallet.ts'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import {

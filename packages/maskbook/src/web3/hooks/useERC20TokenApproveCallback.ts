@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { once } from 'lodash-es'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import type { TransactionRequest } from '@ethersproject/providers'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { addGasMargin } from '../helpers'

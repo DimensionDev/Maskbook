@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
