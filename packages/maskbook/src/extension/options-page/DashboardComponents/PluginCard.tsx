@@ -3,8 +3,10 @@ import Button from '@material-ui/core/Button'
 import Switch from '@material-ui/core/Switch'
 import Typography from '@material-ui/core/Typography'
 import { Card } from '@material-ui/core'
+import { useModal } from '../DashboardDialogs/Base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { PluginMetaData, PluginScope } from '../../../plugins/types'
+import { DashboardPluginDetailDialog } from '../DashboardDialogs/Plugin'
 
 interface Props {
     plugin: PluginMetaData
@@ -77,6 +79,7 @@ const useStyles = makeStyles((theme) =>
 export default function PluginCard({ plugin }: Props) {
     const { t } = useI18N()
     const classes = useStyles()
+    const [pluginDetail, openPluginDetail] = useModal(DashboardPluginDetailDialog, { plugin })
 
     return (
         <Card className={classes.card} elevation={2}>
@@ -116,6 +119,7 @@ export default function PluginCard({ plugin }: Props) {
                     inputProps={{ 'aria-label': t('eanble_or_disable_plugin') }}
                 />
             </div>
+            {pluginDetail}
         </Card>
     )
 }
