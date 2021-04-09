@@ -16,7 +16,7 @@ function createExternalProvider() {
         host: '',
         path: '',
         sendAsync: console.log,
-        send: console.log, // {version:sdfsdfdf}
+        send: console.log,
         request: console.log,
     }
 }
@@ -94,7 +94,7 @@ export async function getOrders(
     })
 }
 
-export async function creteBuyOrder(
+export async function createBuyOrder(
     asset_contract_address: string,
     token_id: string,
     schema: WyvernSchemaName,
