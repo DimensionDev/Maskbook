@@ -603,5 +603,13 @@
     "wallet_transfer_error_amount_absence": "Enter an amount",
     "wallet_transfer_error_address_absence": "Enter recipient address",
     "wallet_transfer_error_invalid_address": "Invalid recipient address",
-    "wallet_transfer_error_insufficent_balance": "Insufficient {{symbol}} balance"
+    "wallet_transfer_error_insufficent_balance": "Insufficient {{symbol}} balance",
+    "wallet_import_json": "Json Data",
+    "wallet_import_json_keystore": "Keystore",
+    "wallet_import_json_keystore_content": "Paste keystore content",
+    "wallet_import_json_keystore_password": "Keystore Password",
+    "wallet_import_json_keystore_password_helper": "Enter keystore password",
+    "wallet_import_json_wallet_name": "Wallet Name",
+    "wallet_import_json_wallet_name_helper": "Set wallet name",
+    "wlalet_import_json_confirmation_hint": "I Have read and agree with the Tos & Privacy..."
 }

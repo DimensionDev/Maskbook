@@ -603,5 +603,13 @@
     "wallet_transfer_error_amount_absence": "輸入金額",
     "wallet_transfer_error_address_absence": "輸入收款人地址",
     "wallet_transfer_error_invalid_address": "無效的收款人地址",
-    "wallet_transfer_error_insufficent_balance": "{{symbol}} 餘額不足"
+    "wallet_transfer_error_insufficent_balance": "{{symbol}} 餘額不足",
+    "wallet_import_json": "",
+    "wallet_import_json_keystore": "",
+    "wallet_import_json_keystore_content": "",
+    "wallet_import_json_keystore_password": "",
+    "wallet_import_json_keystore_password_helper": "",
+    "wallet_import_json_wallet_name": "",
+    "wallet_import_json_wallet_name_helper": "",
+    "wlalet_import_json_confirmation_hint": ""
 }
