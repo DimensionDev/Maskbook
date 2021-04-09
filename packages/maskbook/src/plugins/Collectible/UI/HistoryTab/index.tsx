@@ -48,7 +48,7 @@ export function HistoryTab(props: HistoryTabProps) {
     const orders = useOrders(token, cursors[page - 1])
 
     //#region If there is a different asset, the unit price and quantity should be displayed
-    const isDifferenceAsset = orders.value?.edges.some((item) => item.node.assetQuantity.quantity !== '1') ?? false
+    const isDifferenceToken = orders.value?.edges.some((item) => item.node.price?.asset.symbol !== 'ETH')
 
     useUpdateEffect(() => {
         if (
@@ -103,7 +103,7 @@ export function HistoryTab(props: HistoryTabProps) {
                 <TableHead>
                     <TableRow>
                         <TableCell>Event</TableCell>
-                        {isDifferenceAsset ? (
+                        {isDifferenceToken ? (
                             <>
                                 <TableCell>Unit Price</TableCell>
                                 <TableCell>Quantity</TableCell>
@@ -118,7 +118,7 @@ export function HistoryTab(props: HistoryTabProps) {
                 </TableHead>
                 <TableBody>
                     {orders.value.edges.map((order) => (
-                        <Row order={order} isDifferenceAsset={isDifferenceAsset} />
+                        <Row key={order.node.id} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
                 <TableFooter>

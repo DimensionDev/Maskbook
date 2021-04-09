@@ -2,7 +2,7 @@ import { OpenSeaPort } from 'opensea-js'
 import { getChainId } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaBaseURL, OpenSeaGraphQLURL } from '../constants'
-import type { OpenSeaAccount, OpenSeaAsset, OpenSeaCollection, AssetEventType } from 'opensea-js/lib/types'
+import type { OpenSeaAccount, OpenSeaAsset, OpenSeaCollection } from 'opensea-js/lib/types'
 import { Flags } from '../../../utils/flags'
 import stringify from 'json-stable-stringify'
 
@@ -68,6 +68,7 @@ export enum OpenSeaAssetEventType {
 export interface OpenSeaAssetEvent {
     cursor: string
     node: {
+        id: string
         eventType: OpenSeaAssetEventType
         fromAccount?: OpenSeaAssetEventAccount
         toAccount?: OpenSeaAssetEventAccount
