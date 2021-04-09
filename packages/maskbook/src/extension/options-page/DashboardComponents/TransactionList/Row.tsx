@@ -1,4 +1,4 @@
-import type { CSSProperties, FC } from 'react'
+import type { FC } from 'react'
 import classNames from 'classnames'
 import { isNil } from 'lodash-es'
 import { createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
@@ -10,7 +10,6 @@ import type { ChainId } from '../../../../web3/types'
 interface Props {
     chainId: ChainId
     transaction: Transaction
-    style?: CSSProperties
 }
 
 const useStyles = makeStyles(() =>
@@ -29,10 +28,10 @@ const useStyles = makeStyles(() =>
     }),
 )
 
-export const Row: FC<Props> = ({ transaction, chainId, ...rest }) => {
+export const Row: FC<Props> = ({ transaction, chainId }) => {
     const styles = useStyles()
     return (
-        <TableRow component="div" className={classNames(styles.row, { [styles.failed]: transaction.failed })} {...rest}>
+        <TableRow component="div" className={classNames({ [styles.failed]: transaction.failed })}>
             <TableCell component="div">
                 <Typography color="textSecondary" variant="body2">
                     {transaction.timeAt.toLocaleString()}
