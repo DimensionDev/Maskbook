@@ -1,5 +1,5 @@
 import { PluginSnapshotRPC } from '../messages'
-import type { Votes, ProposalIdentifier, ProposalMessage, Vote } from '../types'
+import type { Votes, ProposalIdentifier, Vote } from '../types'
 import { useSuspense } from '../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
 import { useChainId, useBlockNumber } from '../../../web3/hooks/useChainState'
@@ -15,8 +15,9 @@ export function useVotes(identifier: ProposalIdentifier) {
 async function Suspender(identifier: ProposalIdentifier) {
     const chainId = useChainId()
     const blockNumber = useBlockNumber(chainId)
-    const { payload: proposal } = useProposal(identifier.id)
-    const message: ProposalMessage = JSON.parse(proposal.msg)
+    const {
+        payload: { proposal, message },
+    } = useProposal(identifier.id)
     const votesWithoutScores = await PluginSnapshotRPC.fetchAllVotesOfProposal(identifier.id, identifier.space)
 
     //#region get scores

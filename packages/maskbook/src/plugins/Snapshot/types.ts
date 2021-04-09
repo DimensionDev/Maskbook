@@ -42,16 +42,12 @@ export interface ProposalMessage {
     space: string
 }
 
-type score = number
-
-type scores = score[]
-
 export interface Vote {
     address: string
     authorIpfsHash: string
     relayerIpfsHash: string
     balance: number
-    scores: scores
+    scores: number[]
     sig: string
     msg: {
         payload: {
@@ -71,8 +67,9 @@ export type Votes = {
 }
 
 export interface ProposalResult {
-    voteNumberOfChoices: number[]
-    powerOfChoices: score[]
-    powerDetailOfChoices: scores[]
-    totalPower: score
+    choice: string
+    voteNumber: number
+    powerDetail: number[]
+    power: number
+    percentage: number
 }
