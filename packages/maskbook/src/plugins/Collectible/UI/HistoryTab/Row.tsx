@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => {
         },
         token: {
             objectFit: 'contain',
-            width: 16,
-            height: 16,
+            width: 22,
+            height: 22,
             marginRight: theme.spacing(0.5),
         },
     })
@@ -64,7 +64,9 @@ export function Row({ event, isDifferenceToken }: Props) {
 
     return (
         <TableRow>
-            <TableCell>{resolveAssetEventType(event.node.eventType, accountPair.from)}</TableCell>
+            <TableCell>
+                <Typography>{resolveAssetEventType(event.node.eventType, accountPair.from)}</Typography>
+            </TableCell>
             {isDifferenceToken ? (
                 <>
                     <TableCell>

@@ -1,21 +1,11 @@
-import {
-    makeStyles,
-    createStyles,
-    Typography,
-    Accordion,
-    AccordionSummary,
-    AccordionDetails,
-    Link,
-    Box,
-} from '@material-ui/core'
+import { makeStyles, createStyles, Typography, Link, Box } from '@material-ui/core'
 import { CollectibleTab } from './CollectibleTab'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { CollectibleState } from '../hooks/useCollectibleState'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
-        summary: {
-            borderRadius: theme.shape.borderRadius,
+        container: {
+            margin: theme.spacing(1.5, 0),
         },
         description: {
             fontSize: 14,
@@ -39,6 +29,12 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             justifyContent: 'space-between',
         },
+        tokenId: {
+            maxWidth: 112,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+        },
     })
 })
 
@@ -52,13 +48,12 @@ export function TokenTab(props: TokenTabProps) {
 
     return (
         <CollectibleTab>
-            <Accordion defaultExpanded>
-                <AccordionSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
-                    <Typography>Base</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
+            <Box className={classes.container}>
+                <Typography variant="h6">Base</Typography>
+
+                <Typography>
                     {asset.value.creator ? (
-                        <Typography>
+                        <Typography variant="subtitle2">
                             Created by{' '}
                             <Link
                                 href={`https://opensea.io/accounts/${
@@ -68,7 +63,7 @@ export function TokenTab(props: TokenTabProps) {
                             </Link>
                         </Typography>
                     ) : (
-                        <Typography>
+                        <Typography variant="subtitle2">
                             Owned by{' '}
                             <Link
                                 href={`https://opensea.io/accounts/${
@@ -79,55 +74,57 @@ export function TokenTab(props: TokenTabProps) {
                         </Typography>
                     )}
                     <Typography className={classes.description}>{asset.value.description}</Typography>
-                </AccordionDetails>
-            </Accordion>
-            <Accordion defaultExpanded>
-                <AccordionSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
-                    <Typography>Properties</Typography>
-                </AccordionSummary>
-                <AccordionDetails className={classes.trait_content}>
-                    {asset.value.traits.map(({ trait_type, value }) => {
-                        return (
-                            <Box className={classes.trait} key={trait_type + value}>
-                                <Typography sx={{ color: '#1C68F3' }}>{trait_type}</Typography>
-                                <Typography>{value}</Typography>
-                            </Box>
-                        )
-                    })}
-                </AccordionDetails>
-            </Accordion>
-            <Accordion defaultExpanded>
-                <AccordionSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
-                    <Typography>About {asset.value.assetContract.name}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
+                </Typography>
+            </Box>
+
+            {asset.value.traits && asset.value.traits.length ? (
+                <Box className={classes.container}>
+                    <Typography variant="h6">Properties</Typography>
+
+                    <Box className={classes.trait_content}>
+                        {asset.value.traits.map(({ trait_type, value }) => {
+                            return (
+                                <Box className={classes.trait} key={trait_type + value}>
+                                    <Typography sx={{ color: '#1C68F3' }}>{trait_type}</Typography>
+                                    <Typography>{value}</Typography>
+                                </Box>
+                            )
+                        })}
+                    </Box>
+                </Box>
+            ) : null}
+
+            {asset.value.assetContract.name && asset.value.assetContract.description ? (
+                <Box className={classes.container}>
+                    <Typography variant="h6">About {asset.value.assetContract.name}</Typography>
+
                     <Typography className={classes.description}>{asset.value.assetContract.description}</Typography>
-                </AccordionDetails>
-            </Accordion>
-            <Accordion defaultExpanded>
-                <AccordionSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
-                    <Typography>Chain Info</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <Box className={classes.chain_row}>
-                        <Typography>Contract Address</Typography>
-                        <Link
-                            href={`https://etherscan.io/address/${token?.contractAddress ?? ''}`}
-                            target="_blank"
-                            rel="noopener noreferrer">
+                </Box>
+            ) : null}
+
+            <Box className={classes.container}>
+                <Typography variant="h6">Chain Info</Typography>
+
+                <Box className={classes.chain_row}>
+                    <Typography>Contract Address</Typography>
+                    <Link
+                        href={`https://etherscan.io/address/${token?.contractAddress ?? ''}`}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <Typography>
                             {token?.contractAddress.slice(0, 6)}...{token?.contractAddress.slice(-6)}
-                        </Link>
-                    </Box>
-                    <Box className={classes.chain_row}>
-                        <Typography>Token ID</Typography>
-                        <Typography>{token?.tokenId}</Typography>
-                    </Box>
-                    <Box className={classes.chain_row}>
-                        <Typography>BlockChain</Typography>
-                        <Typography>Ethereum</Typography>
-                    </Box>
-                </AccordionDetails>
-            </Accordion>
+                        </Typography>
+                    </Link>
+                </Box>
+                <Box className={classes.chain_row}>
+                    <Typography>Token ID</Typography>
+                    <Typography className={classes.tokenId}>{token?.tokenId}</Typography>
+                </Box>
+                <Box className={classes.chain_row}>
+                    <Typography>BlockChain</Typography>
+                    <Typography>Ethereum</Typography>
+                </Box>
+            </Box>
         </CollectibleTab>
     )
 }

@@ -136,17 +136,23 @@ export function Collectible(props: CollectibleProps) {
                             <Avatar src={asset.value.owner?.profile_img_url} />
                         </Link>
                     }
-                    title={asset.value.name ?? ''}
+                    title={
+                        <Typography style={{ display: 'flex', alignItems: 'center' }}>
+                            {asset.value.name ?? ''}
+                            {asset.value.collection.safelist_request_status === 'verified' ? (
+                                <VerifiedUserIcon color="primary" fontSize="small" sx={{ marginLeft: 0.5 }} />
+                            ) : null}
+                        </Typography>
+                    }
                     subheader={
                         <>
-                            <Box display="flex" alignItems="center">
-                                <Typography className={classes.subtitle} variant="body2">
-                                    {asset.value.description}
-                                </Typography>
-                                {asset.value.collection.safelist_request_status === 'verified' ? (
-                                    <VerifiedUserIcon color="primary" fontSize="small" />
-                                ) : null}
-                            </Box>
+                            {asset.value.description ? (
+                                <Box display="flex" alignItems="center">
+                                    <Typography className={classes.subtitle} variant="body2">
+                                        {asset.value.description}
+                                    </Typography>
+                                </Box>
+                            ) : null}
 
                             {currentPrice ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>

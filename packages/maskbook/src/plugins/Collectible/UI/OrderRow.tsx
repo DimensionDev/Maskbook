@@ -22,9 +22,13 @@ const useStyles = makeStyles((theme) => {
         },
         token: {
             objectFit: 'contain',
-            width: 16,
-            height: 16,
+            width: 22,
+            height: 22,
             marginRight: theme.spacing(0.5),
+        },
+        tokenLink: {
+            display: 'flex',
+            alignItems: 'center',
         },
     })
 })
@@ -64,16 +68,19 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
             {isDifferenceToken ? (
                 <>
                     <TableCell>
-                        <Typography>
+                        <Typography style={{ display: 'flex' }}>
                             <Link
                                 href={`https://etherscan.io/address/${order.paymentToken}`}
                                 target="_blank"
-                                rel="noopener noreferrer">
-                                <img
-                                    src={order.paymentTokenContract?.imageUrl}
-                                    className={classes.token}
-                                    alt={order.paymentTokenContract?.symbol}
-                                />
+                                rel="noopener noreferrer"
+                                className={classes.tokenLink}>
+                                {order.paymentTokenContract?.imageUrl && (
+                                    <img
+                                        src={order.paymentTokenContract.imageUrl}
+                                        className={classes.token}
+                                        alt={order.paymentTokenContract?.symbol}
+                                    />
+                                )}
                             </Link>
                             {order.unitPrice}
                         </Typography>
@@ -90,16 +97,19 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
             ) : (
                 <>
                     <TableCell>
-                        <Typography>
+                        <Typography style={{ display: 'flex' }}>
                             <Link
                                 href={`https://etherscan.io/address/${order.paymentToken}`}
                                 target="_blank"
-                                rel="noopener noreferrer">
-                                <img
-                                    src={order.paymentTokenContract?.imageUrl}
-                                    className={classes.token}
-                                    alt={order.paymentTokenContract?.symbol}
-                                />
+                                rel="noopener noreferrer"
+                                className={classes.tokenLink}>
+                                {order.paymentTokenContract?.imageUrl && (
+                                    <img
+                                        src={order.paymentTokenContract.imageUrl}
+                                        className={classes.token}
+                                        alt={order.paymentTokenContract?.symbol}
+                                    />
+                                )}
                             </Link>
                             {order.unitPrice}
                         </Typography>

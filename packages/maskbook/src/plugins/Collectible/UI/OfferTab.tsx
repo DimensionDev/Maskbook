@@ -10,6 +10,7 @@ import {
     Skeleton,
     Box,
     TableHead,
+    TableFooter,
 } from '@material-ui/core'
 import { OrderSide } from 'opensea-js/lib/types'
 import { CollectibleState } from '../hooks/useCollectibleState'
@@ -77,22 +78,36 @@ export function OfferTab() {
 
     if (offers.loading)
         return (
-            <Table>
+            <Table size="small">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>
+                            <Skeleton animation="wave" variant="rectangular" width="100%" height={22} />
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
                 <TableBody>
                     {new Array(10).fill(0).map((_, i) => (
                         <TableRow key={i}>
                             <TableCell>
-                                <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
+                                <Skeleton animation="wave" variant="rectangular" width="100%" height={22} />
                             </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TableCell>
+                            <Skeleton animation="wave" variant="rectangular" width="100%" height={46} />
+                        </TableCell>
+                    </TableRow>
+                </TableFooter>
             </Table>
         )
 
     if (!offers.value || offers.error || !dataSource.length)
         return (
-            <Table>
+            <Table size="small">
                 <Box className={classes.empty}>
                     <Typography color="textSecondary">No Offers</Typography>
                     <Button
@@ -117,7 +132,7 @@ export function OfferTab() {
 
     return (
         <CollectibleTab classes={{ root: classes.root }}>
-            <Table>
+            <Table size="small">
                 <TableHead>
                     <TableRow>
                         <TableCell>
