@@ -292,6 +292,7 @@
     "plugin_wallet_captcha_hint": "",
     "plugin_wallet_select_a_token": "",
     "plugin_wallet_connect_a_wallet": "連接錢包",
+    "plugin_wallet_unlock_metamask": "",
     "plugin_wallet_no_gas_fee": "",
     "plugin_wallet_invalid_network": "",
     "plugin_wallet_select_a_wallet": "",

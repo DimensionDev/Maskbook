@@ -18,7 +18,7 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { resolveChainId, resolveChainName } from '../../../web3/pipes'
+import { resolveChainId } from '../../../web3/pipes'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import {
     currentIsMetamaskLockedSettings,
