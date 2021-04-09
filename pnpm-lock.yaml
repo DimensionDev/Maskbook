@@ -161,6 +161,29 @@ importers:
       color: 3.1.3
       react-router: 5.2.0
       react-router-dom: 5.2.0
+      react-tilt: 0.1.4
+      react-use: 15.3.8
+      react-virtualized-auto-sizer: 1.0.4
+      react-window: 1.8.6
+      snapshot.js: 0.1.0
+      stream-browserify: 3.0.0
+      stream-http: 2.8.3
+      string.prototype.matchall: 4.0.4
+      tiny-secp256k1: 1.1.6
+      ts-results: 3.1.1
+      use-subscription: 1.5.1
+      uuid: 8.3.2
+      wallet.ts: 1.0.1
+      web-ext-types: 3.2.1
+      web3: 1.3.4
+      web3-core: 1.3.4
+      web3-eth: 1.3.4
+      web3-eth-contract: 1.3.4
+      web3-eth-personal: 1.3.4
+      web3-utils: 1.3.4
+      webcrypto-liner: 1.2.3
+      webextension-polyfill: 0.7.0
+      z-schema: 5.0.0
     devDependencies:
       '@babel/core': 7.13.14
       '@snowpack/plugin-dotenv': 2.1.0
@@ -303,7 +326,7 @@ importers:
       react-virtualized-auto-sizer: ^1.0.2
       react-window: ^1.8.6
       rimraf: ^3.0.2
-      socket.io-client: 2.4.0
+      snapshot.js: ^0.1.0
       source-map-loader: ^2.0.0
       stream-browserify: ^3.0.0
       stream-http: ^2.8.3
@@ -4106,8 +4129,56 @@ packages:
   /@storybook/client-api/6.2.4:
     resolution: {integrity: sha512-7ZSuzOyGOwqV9HVODEyQ6wwdzk9Nz6l99erj3m2Kb4BTi1SKZM/rqOtpOo8NJIIPRJn8pITc2AvvwsC7YquSVw==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0
-      react-dom: ^16.8.0 || ^17.0.0
+      react: '*'
+    resolution:
+      integrity: sha512-J5HDtOS7x5YRpF/CMiHdxywV5NIh1i/03Xh2RhG15lmPy87VStIGpLzhF71uCRPLEJinYelcjuXRNAJgRzUOlg==
+  /@storybook/client-api/5.3.21:
+    dependencies:
+      '@storybook/addons': 5.3.21
+      '@storybook/channel-postmessage': 5.3.21
+      '@storybook/channels': 5.3.21
+      '@storybook/client-logger': 5.3.21
+      '@storybook/core-events': 5.3.21
+      '@storybook/csf': 0.0.1
+      '@types/webpack-env': 1.16.0
+      core-js: 3.9.1
+      eventemitter3: 4.0.7
+      global: 4.4.0
+      is-plain-object: 3.0.1
+      lodash: 4.17.21
+      memoizerific: 1.11.3
+      qs: 6.9.6
+      stable: 0.1.8
+      ts-dedent: 1.2.0
+      util-deprecate: 1.0.2
+    dev: true
+    resolution:
+      integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
+  /@storybook/client-api/5.3.21_regenerator-runtime@0.13.7:
+    dependencies:
+      '@storybook/addons': 5.3.21_regenerator-runtime@0.13.7
+      '@storybook/channel-postmessage': 5.3.21
+      '@storybook/channels': 5.3.21
+      '@storybook/client-logger': 5.3.21
+      '@storybook/core-events': 5.3.21
+      '@storybook/csf': 0.0.1
+      '@types/webpack-env': 1.16.0
+      core-js: 3.9.1
+      eventemitter3: 4.0.7
+      global: 4.4.0
+      is-plain-object: 3.0.1
+      lodash: 4.17.21
+      memoizerific: 1.11.3
+      qs: 6.9.6
+      stable: 0.1.8
+      ts-dedent: 1.2.0
+      util-deprecate: 1.0.2
+    dev: true
+    peerDependencies:
+      regenerator-runtime: '*'
+    resolution:
+      integrity: sha512-vS4DfA2Avvl7JNQymO4e3RUNoTWIGVfZJ70Irnd6PTAZNojbCXTYuigDavrmyf83F3g5rQpwmSAPjuoi/X/FRA==
+  /@storybook/client-api/6.1.20:
     dependencies:
       '@storybook/addons': 6.2.4
       '@storybook/channel-postmessage': 6.2.4
@@ -6957,8 +7028,6 @@ packages:
     resolution: {integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==}
     dependencies:
       follow-redirects: 1.13.3
-    transitivePeerDependencies:
-      - debug
     dev: false
 
   /babel-jest/26.6.3_@babel+core@7.13.14:
@@ -11006,19 +11075,23 @@ packages:
       inherits: 2.0.4
       readable-stream: 2.3.7
     dev: true
-
+    resolution:
+      integrity: sha512-3Z4XhFZ3992uIq0XOqb9AreonueSYphE6oYbpt5+3u06JWklbsPkNv3ZKkP9Bz/r+1MWCaMoSQ28P85+1Yc77w==
+  /focus-lock/0.6.8:
+    dev: true
+    resolution:
+      integrity: sha512-vkHTluRCoq9FcsrldC0ulQHiyBYgVJB2CX53I8r0nTC6KnEij7Of0jpBspjt3/CuNb6fyoj3aOh9J2HgQUM0og==
+  /focus-lock/0.8.1:
+    dependencies:
+      tslib: 1.14.1
+    dev: true
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-/LFZOIo82WDsyyv7h7oc0MJF9ACOvDRdx9rWPZ2pgMfNWu/z8hQDBtOchuB/0BVLmuFOZjV02YwUVzNsWx/EzA==
   /follow-redirects/1.13.3:
-    resolution: {integrity: sha512-DUgl6+HDzB0iEptNQEXLx/KhTmDb8tZUHSeLqpnjpknR70H0nC2t9N73BK6fN4hOvJ84pKlIQVQ4k5FFlBedKA==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-
-  /follow-redirects/1.13.3_debug@4.3.1:
-    resolution: {integrity: sha512-DUgl6+HDzB0iEptNQEXLx/KhTmDb8tZUHSeLqpnjpknR70H0nC2t9N73BK6fN4hOvJ84pKlIQVQ4k5FFlBedKA==}
-    engines: {node: '>=4.0'}
+    engines:
+      node: '>=4.0'
     peerDependencies:
       debug: '*'
     peerDependenciesMeta:
@@ -12219,7 +12292,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.13.3_debug@4.3.1
+      follow-redirects: 1.13.3
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -12302,7 +12375,16 @@ packages:
   /iferr/0.1.5:
     resolution: {integrity: sha1-xg7taebY/bazEEofy8ocGS3FtQE=}
     dev: true
-
+    resolution:
+      integrity: sha1-xg7taebY/bazEEofy8ocGS3FtQE=
+  /iframe2image/0.1.1:
+    dev: false
+    resolution:
+      integrity: sha1-K83e3zXekLi0M4KGhvboEGFGSy8=
+  /ignore/3.3.10:
+    dev: true
+    resolution:
+      integrity: sha512-Pgs951kaMm5GXP7MOvxERINe3gsaVjUWFm+UZPSq9xYriQAksyhg0csnS0KXSNRD5NmNdapXEpjxG49+AKh/ug==
   /ignore/4.0.6:
     resolution: {integrity: sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==}
     engines: {node: '>= 4'}
@@ -18369,11 +18451,17 @@ packages:
       source-map-resolve: 0.5.3
       use: 3.1.1
     dev: true
-
-  /snowpack/3.2.2:
-    resolution: {integrity: sha512-lt2FEFpvrWSBhFPlQxDr2hG7hnyucLEh7QSJqUUcAljrt8UoWJjTZlvZ4shGiJLkNjxMgGrJKj37y08/9OvXMw==}
-    engines: {node: '>=10.19.0'}
-    hasBin: true
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha512-FtyOnWN/wCHTVXOMwvSv26d+ko5vWlIDD6zoUJ7LW8vh+ZBC8QdljveRP+crNrtBwioEUWy/4dMtbBjA4ioNlg==
+  /snapshot.js/0.1.0:
+    dependencies:
+      iframe2image: 0.1.1
+    dev: false
+    resolution:
+      integrity: sha1-MHUzlu1f7YVDo+oe7yAxSrKm9sI=
+  /snowpack/3.0.13:
     dependencies:
       cli-spinners: 2.6.0
       default-browser-id: 2.0.0

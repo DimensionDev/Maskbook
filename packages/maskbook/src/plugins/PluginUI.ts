@@ -18,6 +18,7 @@ import { ITO_PluginDefine } from './ITO/define'
 import { NFTPluginsDefine } from './NFT/define'
 import { AirdropPluginDefine } from './Airdrop/define'
 import { sideEffect } from '../utils/side-effects'
+import { SnapShotPluginDefine } from './Snapshot/define'
 
 sideEffect.then(() => {
     plugins.add(EthereumPluginDefine)
@@ -31,5 +32,6 @@ sideEffect.then(() => {
     if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
     if (Flags.transak_enabled) plugins.add(TransakPluginDefine)
     if (Flags.airdrop_enabled) plugins.add(AirdropPluginDefine)
+    if (Flags.snapshot_enabled) plugins.add(SnapShotPluginDefine)
     if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)
 })
