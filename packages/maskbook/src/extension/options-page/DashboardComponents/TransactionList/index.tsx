@@ -2,7 +2,6 @@ import {
     Box,
     Button,
     createStyles,
-    IconButton,
     makeStyles,
     Skeleton,
     Table,
@@ -19,7 +18,6 @@ import { Row } from './Row'
 import { useMemo, useState } from 'react'
 import { FilterTransactionType } from '../../../../plugins/Wallet/types'
 import { useChainId } from '../../../../web3/hooks/useChainState'
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -44,7 +42,7 @@ export function TransactionList({ transactionType }: TransactionListProps) {
         retry: transactionsRetry,
     } = useTransactions(account, page)
 
-    const { transactions, hasNextPage } = value
+    const { transactions = [], hasNextPage } = value
 
     const dataSource = useMemo(() => {
         return transactions.filter(({ transactionType: type }) =>
@@ -108,20 +106,15 @@ export function TransactionList({ transactionType }: TransactionListProps) {
                 rowsPerPage={30}
                 rowsPerPageOptions={[30]}
                 labelDisplayedRows={() => null}
-                ActionsComponent={() => {
-                    return (
-                        <Box display="flex">
-                            <IconButton size="small" disabled={page === 1} onClick={() => setPage((prev) => prev - 1)}>
-                                <KeyboardArrowLeft />
-                            </IconButton>
-                            <IconButton
-                                size="small"
-                                disabled={!hasNextPage}
-                                onClick={() => setPage((prev) => prev + 1)}>
-                                <KeyboardArrowRight />
-                            </IconButton>
-                        </Box>
-                    )
+                backIconButtonProps={{
+                    onClick: () => setPage((prev) => prev - 1),
+                    size: 'small',
+                    disabled: page === 1,
+                }}
+                nextIconButtonProps={{
+                    onClick: () => setPage((prev) => prev + 1),
+                    disabled: !hasNextPage,
+                    size: 'small',
                 }}
             />
         </>

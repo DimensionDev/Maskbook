@@ -1,5 +1,5 @@
 import { createContext, useState } from 'react'
-import { Box, Button, IconButton, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
+import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
 import { CollectibleCard } from './CollectibleCard'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
@@ -8,7 +8,6 @@ import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -61,7 +60,7 @@ export function CollectibleList(props: CollectibleListProps) {
         error: collectiblesError,
     } = useCollectibles(account, provider, page)
 
-    const { collectibles, hasNextPage } = value
+    const { collectibles = [], hasNextPage } = value
 
     if (collectiblesLoading)
         return (
@@ -137,20 +136,15 @@ export function CollectibleList(props: CollectibleListProps) {
                 rowsPerPage={30}
                 rowsPerPageOptions={[30]}
                 labelDisplayedRows={() => null}
-                ActionsComponent={() => {
-                    return (
-                        <Box display="flex">
-                            <IconButton size="small" disabled={page === 1} onClick={() => setPage((prev) => prev - 1)}>
-                                <KeyboardArrowLeft />
-                            </IconButton>
-                            <IconButton
-                                size="small"
-                                disabled={!hasNextPage}
-                                onClick={() => setPage((prev) => prev + 1)}>
-                                <KeyboardArrowRight />
-                            </IconButton>
-                        </Box>
-                    )
+                backIconButtonProps={{
+                    onClick: () => setPage((prev) => prev - 1),
+                    size: 'small',
+                    disabled: page === 1,
+                }}
+                nextIconButtonProps={{
+                    onClick: () => setPage((prev) => prev + 1),
+                    disabled: !hasNextPage,
+                    size: 'small',
                 }}
             />
         </CollectibleContext.Provider>
