@@ -16,10 +16,12 @@ const [AirdropCompositionEntry, AirdropCompositionUI] = createCompositionDialog(
 
 export const AirdropPluginDefine: PluginConfig = {
     ID: AirdropPluginID,
+    pluginIcon: '🪂',
     pluginName: 'Airdrop',
+    pluginDescription: '',
     identifier: AirdropPluginID,
     stage: PluginStage.Production,
-    scope: PluginScope.Public,
+    scope: PluginScope.Internal,
     successDecryptionInspector: function Comp(props) {
         const payload = AirdropMetadataReader(props.message.meta)
         if (!payload.ok) return null

@@ -52,6 +52,7 @@ export const Flags = {
     /* construct LBP for all ERC20 tokens */
     LBP_enabled: false,
     LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
+    plugin_switch_enabled: betaOrInsiderOnly,
     //#endregion
 
     transactions_pagination: false,

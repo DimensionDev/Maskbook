@@ -2,16 +2,14 @@ import { useMemo } from 'react'
 
 import { Card, List, ListItem, ListItemIcon, ListItemText, Paper } from '@material-ui/core'
 import { createStyles, makeStyles, useTheme } from '@material-ui/core/styles'
-import HistoryIcon from '@material-ui/icons/History'
 import DescriptionIcon from '@material-ui/icons/Description'
 import FingerprintIcon from '@material-ui/icons/Fingerprint'
-import PublicIcon from '@material-ui/icons/Public'
 
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from './Base'
 import { DebounceButton } from '../DashboardComponents/ActionButton'
-import { PluginMetaData, PluginScope } from '../../../plugins/types'
+import type { PluginConfig } from '../../../plugins/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -43,7 +41,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 interface PluginProps {
-    plugin: PluginMetaData
+    plugin: PluginConfig
 }
 
 //#region persona create dialog
@@ -52,7 +50,6 @@ export function DashboardPluginDetailDialog({ ComponentProps, ...rest }: Wrapped
     const classes = useStyles()
 
     const theme = useTheme()
-    const elevation = theme.palette.mode === 'dark' ? 1 : 0
 
     const metaFields = useMemo(() => {
         const plugin = ComponentProps?.plugin
@@ -67,18 +64,8 @@ export function DashboardPluginDetailDialog({ ComponentProps, ...rest }: Wrapped
             },
             {
                 field: 'description',
-                value: plugin.description,
+                value: plugin.pluginDescription,
                 icon: <DescriptionIcon />,
-            },
-            {
-                field: 'scope',
-                value: plugin.scope === PluginScope.Public ? t('public') : t('internal'),
-                icon: <PublicIcon />,
-            },
-            {
-                field: 'version',
-                value: plugin.version,
-                icon: <HistoryIcon />,
             },
         ]
     }, [ComponentProps?.plugin])
@@ -86,11 +73,11 @@ export function DashboardPluginDetailDialog({ ComponentProps, ...rest }: Wrapped
     return (
         <DashboardDialogCore fullScreen={false} {...rest}>
             <DashboardDialogWrapper
-                icon={<span className={classes.logo}>{ComponentProps?.plugin.logo}</span>}
+                icon={<span className={classes.logo}>{ComponentProps?.plugin.pluginIcon}</span>}
                 primary={ComponentProps?.plugin.pluginName ?? '-'}
                 secondary={' '}
                 content={
-                    <Paper className={classes.section} component="section" elevation={elevation}>
+                    <Paper className={classes.section} component="section" elevation={0}>
                         <Card elevation={0}>
                             <List className={classes.list} disablePadding>
                                 {metaFields.map((meta) => (

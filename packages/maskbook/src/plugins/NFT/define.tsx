@@ -1,13 +1,15 @@
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { getTypedMessageContent } from '../../protocols/typed-message/types'
 import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
-import { pluginName, identifier } from './constants'
+import { identifier } from './constants'
 import NFTInPost from './UI/NFTInPost'
 import { getRelevantUrl } from './utils'
 
 export const NFT_PluginsDefine: PluginConfig = {
     ID: identifier,
-    pluginName,
+    pluginIcon: '🖼',
+    pluginName: 'NFT',
+    pluginDescription: 'An NFT collectible viewer.',
     identifier,
     stage: PluginStage.Beta,
     scope: PluginScope.Public,

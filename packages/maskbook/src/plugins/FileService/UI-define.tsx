@@ -2,7 +2,7 @@ import { formatFileSize } from '@dimensiondev/kit'
 import { truncate } from 'lodash-es'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
-import { identifier, META_KEY_1, META_KEY_2, pluginName } from './constants'
+import { identifier, META_KEY_1, META_KEY_2, pluginIcon, pluginName, pluginDescription } from './constants'
 import { FileInfoMetadataReader } from './define'
 import FileServiceDialog from './MainDialog'
 import { Preview } from './Preview'
@@ -22,7 +22,9 @@ export const [FileServiceCompositionEntry, FileServiceCompositionUI] = createCom
 )
 export const FileServicePluginDefine: PluginConfig = {
     ID: identifier,
+    pluginIcon,
     pluginName,
+    pluginDescription,
     identifier,
     stage: PluginStage.Production,
     scope: PluginScope.Public,

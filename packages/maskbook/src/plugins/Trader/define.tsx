@@ -16,7 +16,9 @@ const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor =>
 
 export const TraderPluginDefine: PluginConfig = {
     ID: PLUGIN_IDENTIFIER,
+    pluginIcon: '💱',
     pluginName: 'Trader',
+    pluginDescription: 'View trending of cryptocurrencies, swap ERC20 tokens in various DEX markets.',
     identifier: PLUGIN_IDENTIFIER,
     stage: PluginStage.Production,
     scope: PluginScope.Public,

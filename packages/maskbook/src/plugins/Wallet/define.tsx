@@ -9,7 +9,9 @@ import { WalletStatusDialog } from './UI/WalletStatusDialog'
 
 export const WalletPluginDefine: PluginConfig = {
     ID: PLUGIN_IDENTIFIER,
+    pluginIcon: '💰',
     pluginName: 'Wallet',
+    pluginDescription: 'The built-in Ethereum Wallet in Mask Network.',
     identifier: PLUGIN_IDENTIFIER,
     stage: PluginStage.Production,
     scope: PluginScope.Internal,

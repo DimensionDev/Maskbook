@@ -4,7 +4,9 @@ import type { TypedMessageRendererProps } from '../../components/InjectedCompone
 
 export const StorybookPluginDefine: PluginConfig = {
     ID: 'storybook.debug',
+    pluginIcon: '📖',
     pluginName: 'Storybook test',
+    pluginDescription: '',
     identifier: 'storybook.debug',
     stage: PluginStage.Development,
     scope: PluginScope.Internal,

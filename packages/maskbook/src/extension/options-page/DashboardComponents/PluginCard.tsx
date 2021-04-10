@@ -5,11 +5,12 @@ import Typography from '@material-ui/core/Typography'
 import { Card } from '@material-ui/core'
 import { useModal } from '../DashboardDialogs/Base'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { PluginMetaData, PluginScope } from '../../../plugins/types'
+import type { PluginConfig } from '../../../plugins/types'
 import { DashboardPluginDetailDialog } from '../DashboardDialogs/Plugin'
+import { Flags } from '../../../utils/flags'
 
 interface Props {
-    plugin: PluginMetaData
+    plugin: PluginConfig
 }
 
 const useStyles = makeStyles((theme) =>
@@ -17,7 +18,8 @@ const useStyles = makeStyles((theme) =>
         card: {
             display: 'flex',
             flexDirection: 'column',
-            padding: theme.spacing(3, 3, 3, 3),
+            height: '100%',
+            padding: theme.spacing(2, 3),
             boxShadow:
                 theme.palette.mode === 'dark'
                     ? 'none'
@@ -35,7 +37,7 @@ const useStyles = makeStyles((theme) =>
         },
         actions: {
             display: 'flex',
-            marginTop: theme.spacing(1),
+            marginTop: theme.spacing(2),
         },
         logoWraper: {
             alignSelf: 'flex-start',
@@ -85,7 +87,7 @@ export default function PluginCard({ plugin }: Props) {
         <Card className={classes.card} elevation={2}>
             <div className={classes.info}>
                 <div className={classes.logoWraper}>
-                    <span className={classes.logo}>{plugin.logo}</span>
+                    <span className={classes.logo}>{plugin.pluginIcon}</span>
                 </div>
                 <dl className={classes.metas}>
                     <dt className={classes.meta}>
@@ -94,30 +96,29 @@ export default function PluginCard({ plugin }: Props) {
                         </Typography>
                     </dt>
                     <dd className={classes.meta}>
-                        <Typography color="textSecondary">ID: {plugin.ID}</Typography>
+                        <Typography color="textSecondary" variant="body2">
+                            {plugin.pluginDescription}
+                        </Typography>
                     </dd>
                     <dd className={classes.meta}>
-                        <Typography color="textSecondary">{plugin.description}</Typography>
-                    </dd>
-                    <dd className={classes.meta}>
-                        <Typography color="textSecondary">version: {plugin.version}</Typography>
-                    </dd>
-                    <dd className={classes.meta}>
-                        <Typography color="textSecondary">
-                            scope: {plugin.scope === PluginScope.Public ? t('public') : t('internal')}
+                        <Typography color="textSecondary" variant="body2">
+                            ID: {plugin.ID}
                         </Typography>
                     </dd>
                 </dl>
             </div>
             <div className={classes.actions}>
-                <Button variant="outlined" onClick={openPluginDetail}>
+                <Button variant="outlined" size="small" onClick={openPluginDetail}>
                     {t('details')}
                 </Button>
-                <Switch
-                    className={classes.switch}
-                    color="primary"
-                    inputProps={{ 'aria-label': t('eanble_or_disable_plugin') }}
-                />
+                {Flags.plugin_switch_enabled ? (
+                    <Switch
+                        className={classes.switch}
+                        color="primary"
+                        size="small"
+                        inputProps={{ 'aria-label': t('eanble_or_disable_plugin') }}
+                    />
+                ) : null}
             </div>
             {pluginDetail}
         </Card>

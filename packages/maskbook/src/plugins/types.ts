@@ -30,7 +30,9 @@ export type MessageProcessor = (message: TypedMessageCompound) => TypedMessageCo
 
 export interface PluginConfig {
     ID: string
+    pluginIcon: string
     pluginName: string
+    pluginDescription: string
     identifier: string
     stage: PluginStage
     scope: PluginScope
@@ -42,10 +44,4 @@ export interface PluginConfig {
     postDialogMetadataBadge?: Map<string, BadgeConvertor>
     postDialogEntries?: PostDialogEntry[]
     messageProcessor?: MessageProcessor
-}
-
-export interface PluginMetaData extends Pick<PluginConfig, 'ID' | 'pluginName' | 'identifier' | 'scope'> {
-    description: string
-    logo: string
-    version?: `${number}.${number}.${number}`
 }

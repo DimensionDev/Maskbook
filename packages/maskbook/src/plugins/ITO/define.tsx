@@ -47,7 +47,9 @@ export const [ITO_CompositionEntry, ITO_CompositionUI] = createCompositionDialog
 
 export const ITO_PluginDefine: PluginConfig = {
     ID: ITO_PluginID,
+    pluginIcon: '🚀',
     pluginName: 'ITO',
+    pluginDescription: 'Participate in Public Offering on Twitter.',
     identifier: ITO_PluginID,
     stage: PluginStage.Production,
     scope: PluginScope.Public,
