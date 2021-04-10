@@ -526,6 +526,7 @@
     "plugin_collectible_block_chain": "BlockChain",
     "plugin_collectible_create_by": "Created by",
     "plugin_collectible_owned_by": "Owned by",
+    "plugin_collectible_no_history": "No History",
     "wallet_status_title": "Account",
     "wallet_status_connect_with": "Connected with {{provider}}",
     "wallet_status_button_change": "Change",

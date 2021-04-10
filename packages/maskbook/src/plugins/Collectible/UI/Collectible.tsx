@@ -12,6 +12,7 @@ import {
     Tabs,
     Typography,
 } from '@material-ui/core'
+import { Trans } from 'react-i18next'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
@@ -156,15 +157,14 @@ export function Collectible(props: CollectibleProps) {
 
                             {currentPrice ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
-                                    <Typography
-                                        className={classes.description}
-                                        component="span"
-                                        dangerouslySetInnerHTML={{
-                                            __html: t('plugin_collectible_description', {
+                                    <Typography className={classes.description} component="span">
+                                        <Trans
+                                            i18nKey="plugin_collectible_description"
+                                            values={{
                                                 price: currentPrice,
-                                            }),
-                                        }}
-                                    />
+                                            }}
+                                        />
+                                    </Typography>
                                 </Box>
                             ) : null}
                         </>

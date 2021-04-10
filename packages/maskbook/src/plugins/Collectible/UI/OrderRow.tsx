@@ -4,6 +4,8 @@ import type { OpenSeaCustomAccount } from './types'
 import { formatDistanceToNow } from 'date-fns'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
+import { resolveAddressOnEtherscan } from '../../../web3/pipes'
+import { ChainId } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -70,7 +72,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                     <TableCell>
                         <Typography style={{ display: 'flex' }}>
                             <Link
-                                href={`https://etherscan.io/address/${order.paymentToken}`}
+                                href={resolveAddressOnEtherscan(ChainId.Mainnet, order.paymentToken)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={classes.tokenLink}>
@@ -99,7 +101,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                     <TableCell>
                         <Typography style={{ display: 'flex' }}>
                             <Link
-                                href={`https://etherscan.io/address/${order.paymentToken}`}
+                                href={resolveAddressOnEtherscan(ChainId.Mainnet, order.paymentToken)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={classes.tokenLink}>
@@ -116,7 +118,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                     </TableCell>
                     <TableCell>
                         <Typography>
-                            {new BigNumber(order.expirationTime).toString() !== '0' &&
+                            {new BigNumber(order.expirationTime).isZero() &&
                                 formatDistanceToNow(
                                     new Date(new BigNumber(order.expirationTime).multipliedBy(1000).toNumber()),
                                     {

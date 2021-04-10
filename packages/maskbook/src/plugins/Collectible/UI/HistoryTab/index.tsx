@@ -102,7 +102,7 @@ export function HistoryTab(props: HistoryTabProps) {
     if (!events.value || events.error)
         return (
             <Box className={classes.empty}>
-                <Typography color="textSecondary">No History</Typography>
+                <Typography color="textSecondary">{t('plugin_collectible_no_history')}</Typography>
                 <Button
                     sx={{
                         marginTop: 1,

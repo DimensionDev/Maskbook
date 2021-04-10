@@ -1,7 +1,10 @@
-import { makeStyles, createStyles, Typography, Link, Box } from '@material-ui/core'
+import { Box, createStyles, Link, makeStyles, Typography } from '@material-ui/core'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { formatEthereumAddress } from '../../Wallet/formatter'
+import { resolveAddressOnEtherscan } from '../../../web3/pipes'
+import { ChainId } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -112,12 +115,10 @@ export function TokenTab(props: TokenTabProps) {
                 <Box className={classes.chain_row}>
                     <Typography>{t('plugin_collectible_contract_address')}</Typography>
                     <Link
-                        href={`https://etherscan.io/address/${token?.contractAddress ?? ''}`}
+                        href={resolveAddressOnEtherscan(ChainId.Mainnet, token?.contractAddress ?? '')}
                         target="_blank"
                         rel="noopener noreferrer">
-                        <Typography>
-                            {token?.contractAddress.slice(0, 6)}...{token?.contractAddress.slice(-6)}
-                        </Typography>
+                        <Typography>{formatEthereumAddress(token?.contractAddress ?? '', 4)}</Typography>
                     </Link>
                 </Box>
                 <Box className={classes.chain_row}>
