@@ -502,8 +502,6 @@
     "plugin_ito_loading_try_again": "",
     "plugin_ito_amount_approved": "",
     "plugin_ito_amount_approved_infinity": "",
-    "internal": "内部",
-    "public": "Public",
     "wallet_status_title": "帳戶",
     "wallet_status_connect_with": "已連接到 {{provider}}",
     "wallet_status_button_change": "變更",
