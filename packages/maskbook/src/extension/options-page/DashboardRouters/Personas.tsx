@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) =>
             },
         },
         personaList: {
-            padding: theme.spacing(3, 0),
             margin: 0,
+            padding: 0,
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gridGap: theme.spacing(3),
