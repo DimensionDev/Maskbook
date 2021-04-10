@@ -604,7 +604,7 @@
     "wallet_transfer_error_address_absence": "Enter recipient address",
     "wallet_transfer_error_invalid_address": "Invalid recipient address",
     "wallet_transfer_error_insufficent_balance": "Insufficient {{symbol}} balance",
-    "wallet_import_json": "Json Data",
+    "wallet_import_json": "JSON Data",
     "wallet_import_json_keystore": "Keystore",
     "wallet_import_json_keystore_content": "Paste keystore content",
     "wallet_import_json_keystore_password": "Keystore Password",
