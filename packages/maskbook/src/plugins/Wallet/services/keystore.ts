@@ -2,7 +2,7 @@ import scrypt from 'scrypt-js'
 import * as crypto from 'crypto'
 import Web3Utils from 'web3-utils'
 
-interface ScryptParams {
+export interface ScryptParams {
     dklen: number
     n: number
     p: number
@@ -10,7 +10,7 @@ interface ScryptParams {
     salt: string
 }
 
-interface PDKDF2Params {
+export interface PDKDF2Params {
     c: number
     prf: string
     dklen: number
@@ -33,7 +33,7 @@ export interface V3Keystore {
     address: string
 }
 
-export function exportFromV3Keystore(input: string | V3Keystore, password: string) {
+export async function exportFromV3Keystore(input: string | V3Keystore, password: string) {
     const json: V3Keystore = typeof input === 'object' ? input : JSON.parse(input)
 
     if (json.version !== 3) {
@@ -43,7 +43,7 @@ export function exportFromV3Keystore(input: string | V3Keystore, password: strin
     let derivedKey: Uint8Array, kdfparams: ScryptParams | PDKDF2Params
     if (json.crypto.kdf.toLowerCase() === 'scrypt') {
         kdfparams = json.crypto.kdfparams as ScryptParams
-        derivedKey = scrypt.syncScrypt(
+        derivedKey = await scrypt.scrypt(
             Buffer.from(password),
             Buffer.from(kdfparams.salt, 'hex'),
             kdfparams.n,
@@ -79,5 +79,8 @@ export function exportFromV3Keystore(input: string | V3Keystore, password: strin
         Buffer.from(json.crypto.cipherparams.iv, 'hex'),
     )
     const seed = Buffer.concat([decipher.update(ciphertext), decipher.final()])
-    return [`0x${json.address}`, `0x${seed.toString('hex')}`] as const
+    return { address: `0x${json.address}`, privateKey: `0x${seed.toString('hex')}` } as {
+        address: string
+        privateKey: string
+    }
 }
