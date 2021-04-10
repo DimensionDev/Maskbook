@@ -49,7 +49,7 @@ export default function DashboardSettingsRouter() {
                     {[...PluginUI.values()]
                         .filter((x) => x.scope === PluginScope.Public)
                         .map((y) => (
-                            <li className={classes.pluginItem}>
+                            <li className={classes.pluginItem} key={y.ID}>
                                 <PluginCard key={y.ID} plugin={y} />
                             </li>
                         ))}
