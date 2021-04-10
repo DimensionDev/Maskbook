@@ -6,7 +6,7 @@ import { init, changeMediaDevice, disconnectVoice, setMuted, registerSpeakingUse
 import type { PeerMediaElement, VoiceChatMetadata } from '../types'
 import { VolumeUpOutlined, VolumeMuteOutlined, VolumeOffOutlined, CloseOutlined } from '@material-ui/icons'
 import { useState } from 'react'
-import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
+import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
 
 interface VoicechatInlayProps {
     metadata: VoiceChatMetadata
@@ -104,11 +104,11 @@ function JoinButton(props: JoinButtonProps) {
 }
 
 function MediaSelection(props: MediaSelectionProps) {
-    return (
+    return usePortalShadowRoot((container) => (
         <FormControl>
             <Select
                 value={props.activeMediaDevice}
-                MenuProps={{ container: PortalShadowRoot }}
+                MenuProps={{ container }}
                 onChange={(e) => {
                     if (props.localPeerMediaElement) {
                         changeMediaDevice(e.target.value, props.localPeerMediaElement.username)
@@ -121,7 +121,7 @@ function MediaSelection(props: MediaSelectionProps) {
                 ))}
             </Select>
         </FormControl>
-    )
+    ))
 }
 
 function MuteSwitch(props: MuteSwitchProps) {
