@@ -5,12 +5,12 @@ import { pluginName, identifier } from './constants'
 import NFTInPost from './UI/NFTInPost'
 import { getRelevantUrl } from './utils'
 
-export const NFTPluginsDefine: PluginConfig = {
+export const NFT_PluginsDefine: PluginConfig = {
     ID: identifier,
     pluginName,
     identifier,
     stage: PluginStage.Beta,
-    scope: PluginScope.Internal,
+    scope: PluginScope.Public,
     successDecryptionInspector: function Comp(props) {
         const nftUrl = getRelevantUrl(getTypedMessageContent(props.message))
 

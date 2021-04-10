@@ -12,7 +12,7 @@ export const WalletPluginDefine: PluginConfig = {
     pluginName: 'Wallet',
     identifier: PLUGIN_IDENTIFIER,
     stage: PluginStage.Production,
-    scope: PluginScope.Public,
+    scope: PluginScope.Internal,
     PageComponent() {
         return (
             <>

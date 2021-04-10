@@ -5,13 +5,13 @@ import SearchIcon from '@material-ui/icons/Search'
 import ClearIcon from '@material-ui/icons/Clear'
 import { pick } from 'lodash-es'
 import PluginCard from '../DashboardComponents/PluginCard'
-import type { PluginMetaData, PluginConfig } from '../../../plugins/types'
+import { PluginMetaData, PluginConfig, PluginScope } from '../../../plugins/types'
 import { AirdropPluginDefine } from '../../../plugins/Airdrop/define'
 import { EthereumPluginDefine } from '../../../plugins/Ethereum/define'
 import { FileServicePluginDefine } from '../../../plugins/FileService/UI-define'
 import { GitcoinPluginDefine } from '../../../plugins/Gitcoin//define'
 import { ITO_PluginDefine } from '../../../plugins/ITO/define'
-import { NFTPluginsDefine } from '../../../plugins/NFT/define'
+import { NFT_PluginsDefine } from '../../../plugins/NFT/define'
 import { PollsPluginDefine } from '../../../plugins/Polls/define'
 import { RedPacketPluginDefine } from '../../../plugins/RedPacket/define'
 import { TraderPluginDefine } from '../../../plugins/Trader/define'
@@ -50,7 +50,7 @@ const pluginsTheme = extendsTheme((theme) => ({}))
 const pickFields = ['ID', 'pluginName', 'identifier', 'scope']
 const pickPluginMeta = (
     pluginDefine: PluginConfig,
-    extraMeta: Optional<Pick<PluginMetaData, 'description' | 'logo'>>,
+    extraMeta: Partial<Pick<PluginMetaData, 'description' | 'logo'>>,
 ): PluginMetaData => {
     return {
         ...pick(pluginDefine, pickFields),
@@ -59,13 +59,13 @@ const pickPluginMeta = (
         version: '0.0.1',
     } as PluginMetaData
 }
-const mockPlugins: PluginMetaData[] = [
+const plugins: PluginMetaData[] = [
     pickPluginMeta(AirdropPluginDefine, { description: 'Airdrop plugin', logo: '🪂' }),
     pickPluginMeta(EthereumPluginDefine, { description: 'Ethereum plugin', logo: '♦️' }),
     pickPluginMeta(FileServicePluginDefine, { description: 'File Service plugin', logo: '📃' }),
     pickPluginMeta(GitcoinPluginDefine, { description: 'File Service plugin', logo: '🔗' }),
     pickPluginMeta(ITO_PluginDefine, { description: 'ITO plugin' }),
-    pickPluginMeta(NFTPluginsDefine, { description: 'NFT plugin', logo: '🖼' }),
+    pickPluginMeta(NFT_PluginsDefine, { description: 'NFT plugin', logo: '🖼' }),
     pickPluginMeta(PollsPluginDefine, { description: 'Polls plugin', logo: '📊' }),
     pickPluginMeta(RedPacketPluginDefine, { description: 'RedPacket plugin', logo: '🧧' }),
     pickPluginMeta(TraderPluginDefine, { description: 'Trader plugin', logo: '™️' }),
@@ -110,9 +110,9 @@ export default function DashboardSettingsRouter() {
             ]}>
             <ThemeProvider theme={pluginsTheme}>
                 <ul className={classes.pluginList}>
-                    {mockPlugins.map((plugin) => (
+                    {plugins.filter(x => x.scope === PluginScope.Public).map((y) => (
                         <li className={classes.pluginItem}>
-                            <PluginCard key={plugin.ID} plugin={plugin} />
+                            <PluginCard key={y.ID} plugin={y} />
                         </li>
                     ))}
                 </ul>

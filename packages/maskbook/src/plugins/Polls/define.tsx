@@ -20,7 +20,7 @@ export const PollsPluginDefine: PluginConfig = {
     pluginName,
     identifier,
     stage: PluginStage.Beta,
-    scope: PluginScope.Internal,
+    scope: PluginScope.Public,
     successDecryptionInspector: function Comp(props) {
         const metadata = PollMetadataReader(props.message.meta)
         if (!metadata.ok) return null
