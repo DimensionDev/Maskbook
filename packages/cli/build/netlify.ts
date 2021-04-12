@@ -7,7 +7,9 @@ import { NETLIFY_PATH, PKG_PATH } from '../utils'
 const createBuildStorybook6 = (basePath: string, output: string, name: string) => {
     const fn = () => {
         const r = relative(basePath, output)
-        return spawn('npx', ['build-storybook', '-o', r, '-s', r, '--quiet'], {
+        const command = ['build-storybook', '-o', r, '-s', r, '--quiet']
+        console.log(basePath, '$', ...command)
+        return spawn('npx', command, {
             cwd: basePath,
             shell: true,
             stdio: 'inherit',
@@ -21,7 +23,9 @@ const createBuildStorybook6 = (basePath: string, output: string, name: string) =
 const createBuildSnowpack = (basePath: string, output: string, name: string) => {
     const fn = () => {
         const r = relative(basePath, output)
-        return spawn('npx', ['snowpack', 'build', '--buildOptions.out', r, '--quiet'], {
+        const command = ['snowpack', 'build', '--buildOptions.out', r]
+        console.log(basePath, '$', ...command)
+        return spawn('npx', command, {
             cwd: basePath,
             shell: true,
             stdio: 'inherit',
@@ -32,7 +36,7 @@ const createBuildSnowpack = (basePath: string, output: string, name: string) => 
     return fn
 }
 
-const SNOWPACK_PATH = relative(NETLIFY_PATH, 'snowpack')
+const SNOWPACK_PATH = resolve(NETLIFY_PATH, 'snowpack')
 const STATIC_PATH = resolve(NETLIFY_PATH, 'storybook-static')
 
 // prettier-ignore
