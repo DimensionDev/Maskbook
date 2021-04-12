@@ -4,7 +4,7 @@ import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import VCentDialog from './UI/TweetDialog'
 
 export const VCentPluginDefine: PluginConfig = {
-    ID: PLUGIN_IDENTIFIER,
+    id: PLUGIN_IDENTIFIER,
     pluginName: 'VCent',
     pluginIcon: '🔓',
     identifier: PLUGIN_IDENTIFIER,

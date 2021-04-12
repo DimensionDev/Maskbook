@@ -6,7 +6,7 @@ import NFTInPost from './UI/NFTInPost'
 import { getRelevantUrl } from './utils'
 
 export const NFT_PluginsDefine: PluginConfig = {
-    ID: identifier,
+    id: identifier,
     pluginIcon: '🖼',
     pluginName: 'NFT',
     pluginDescription: 'An NFT collectible viewer.',

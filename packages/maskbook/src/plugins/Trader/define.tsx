@@ -15,7 +15,7 @@ const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor =>
     isTypedMessageAnchor(m) && ['cash', 'hash'].includes(m.category) && !/#[\w\d]+lbp$/i.test(m.content)
 
 export const TraderPluginDefine: PluginConfig = {
-    ID: PLUGIN_IDENTIFIER,
+    id: PLUGIN_IDENTIFIER,
     pluginIcon: '💱',
     pluginName: 'Trader',
     pluginDescription: 'View trending of cryptocurrencies, swap ERC20 tokens in various DEX markets.',

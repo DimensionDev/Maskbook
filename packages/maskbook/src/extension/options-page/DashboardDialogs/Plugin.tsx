@@ -59,7 +59,7 @@ export function DashboardPluginDetailDialog({ ComponentProps, ...rest }: Wrapped
         return [
             {
                 field: 'id',
-                value: plugin.ID,
+                value: plugin.id,
                 icon: <FingerprintIcon />,
             },
             {

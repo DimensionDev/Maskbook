@@ -8,7 +8,7 @@ import { WalletConnectQRCodeDialog } from './UI/WalletConnectQRCodeDialog'
 import { WalletStatusDialog } from './UI/WalletStatusDialog'
 
 export const WalletPluginDefine: PluginConfig = {
-    ID: PLUGIN_IDENTIFIER,
+    id: PLUGIN_IDENTIFIER,
     pluginIcon: '💰',
     pluginName: 'Wallet',
     pluginDescription: 'The built-in Ethereum Wallet in Mask Network.',

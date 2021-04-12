@@ -16,7 +16,7 @@ const [PollCompositionEntry, PollCompositionUI] = createCompositionDialog('🗳�
     />
 ))
 export const PollsPluginDefine: PluginConfig = {
-    ID: identifier,
+    id: identifier,
     pluginIcon: '📊',
     pluginName,
     pluginDescription: 'Easily create a Poll for reciving public votes.',

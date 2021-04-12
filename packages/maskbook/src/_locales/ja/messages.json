@@ -97,7 +97,7 @@
     "error_gas_feed_exceeds": "スマートコントラクト呼び出し時にエラーが起こったため、取引を実行できませんでした。",
     "error_insufficient_balance": "ウォレットの残高が不足しています。",
     "error_unknown": "不明のエラー",
-    "eanble_or_disable_plugin": "enable/disable plugin",
+    "eanble_or_disable_plugin": "",
     "feedback": "フィードバック",
     "fingerprint": "指紋（フィンガープリント）",
     "activity": "履歴",

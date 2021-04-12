@@ -21,7 +21,7 @@ export const [FileServiceCompositionEntry, FileServiceCompositionUI] = createCom
     ),
 )
 export const FileServicePluginDefine: PluginConfig = {
-    ID: identifier,
+    id: identifier,
     pluginIcon,
     pluginName,
     pluginDescription,

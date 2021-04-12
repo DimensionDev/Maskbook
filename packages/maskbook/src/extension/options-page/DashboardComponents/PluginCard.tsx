@@ -102,7 +102,7 @@ export default function PluginCard({ plugin }: Props) {
                     </dd>
                     <dd className={classes.meta}>
                         <Typography color="textSecondary" variant="body2">
-                            ID: {plugin.ID}
+                            ID: {plugin.id}
                         </Typography>
                     </dd>
                 </dl>

@@ -44,10 +44,10 @@ export default function DashboardSettingsRouter() {
             <ThemeProvider theme={pluginsTheme}>
                 <ul className={classes.pluginList}>
                     {[...PluginUI.values()]
-                        .filter((x) => x.scope === PluginScope.Public)
-                        .map((y) => (
-                            <li className={classes.pluginItem} key={y.ID}>
-                                <PluginCard key={y.ID} plugin={y} />
+                        .filter((plugin) => plugin.scope === PluginScope.Public)
+                        .map((plugin) => (
+                            <li className={classes.pluginItem} key={plugin.id}>
+                                <PluginCard key={plugin.id} plugin={plugin} />
                             </li>
                         ))}
                 </ul>

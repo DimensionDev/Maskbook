@@ -3,7 +3,7 @@ import { PLUGIN_IDENTIFIER } from './constants'
 import { BuyTokenDialog } from './UI/BuyTokenDialog'
 
 export const TransakPluginDefine: PluginConfig = {
-    ID: PLUGIN_IDENTIFIER,
+    id: PLUGIN_IDENTIFIER,
     pluginIcon: '💸',
     pluginName: 'Transak',
     pluginDescription: 'The Fiat On-Ramp Aggregator on Mask Network.',
