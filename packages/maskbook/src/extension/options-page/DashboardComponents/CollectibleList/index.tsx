@@ -128,25 +128,27 @@ export function CollectibleList(props: CollectibleListProps) {
                     </Box>
                 )}
             </Box>
-            <TablePagination
-                count={-1}
-                component="div"
-                onPageChange={() => {}}
-                page={page}
-                rowsPerPage={30}
-                rowsPerPageOptions={[30]}
-                labelDisplayedRows={() => null}
-                backIconButtonProps={{
-                    onClick: () => setPage((prev) => prev - 1),
-                    size: 'small',
-                    disabled: page === 1,
-                }}
-                nextIconButtonProps={{
-                    onClick: () => setPage((prev) => prev + 1),
-                    disabled: !hasNextPage,
-                    size: 'small',
-                }}
-            />
+            {!(page === 1 && dataSource.length === 0) ? (
+                <TablePagination
+                    count={-1}
+                    component="div"
+                    onPageChange={() => {}}
+                    page={page}
+                    rowsPerPage={30}
+                    rowsPerPageOptions={[30]}
+                    labelDisplayedRows={() => null}
+                    backIconButtonProps={{
+                        onClick: () => setPage((prev) => prev - 1),
+                        size: 'small',
+                        disabled: page === 1,
+                    }}
+                    nextIconButtonProps={{
+                        onClick: () => setPage((prev) => prev + 1),
+                        disabled: !hasNextPage,
+                        size: 'small',
+                    }}
+                />
+            ) : null}
         </CollectibleContext.Provider>
     )
 }

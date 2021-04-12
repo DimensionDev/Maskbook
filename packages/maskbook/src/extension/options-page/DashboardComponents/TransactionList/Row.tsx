@@ -77,11 +77,11 @@ interface AddressProps {
 
 const Address: FC<AddressProps> = ({ id, mode, chainId }) => {
     const href = `${resolveLinkOnEtherscan(chainId)}/${mode}/${id}`
-    return (
+    return id ? (
         <Link target={id} href={href}>
             <span>{id?.slice(0, 5)}</span>
             <span>...</span>
             <span>{id?.slice(id.length - 5)}</span>
         </Link>
-    )
+    ) : null
 }

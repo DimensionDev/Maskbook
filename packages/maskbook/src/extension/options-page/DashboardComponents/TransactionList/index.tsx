@@ -18,6 +18,7 @@ import { Row } from './Row'
 import { useMemo, useState } from 'react'
 import { FilterTransactionType } from '../../../../plugins/Wallet/types'
 import { useChainId } from '../../../../web3/hooks/useChainState'
+import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -40,7 +41,7 @@ export function TransactionList({ transactionType }: TransactionListProps) {
         loading: transactionsLoading,
         error: transactionsError,
         retry: transactionsRetry,
-    } = useTransactions(account, page)
+    } = useTransactions('0x66b57885e8e9d84742fabda0ce6e3496055b012d', page)
 
     const { transactions = [], hasNextPage } = value
 
@@ -49,6 +50,10 @@ export function TransactionList({ transactionType }: TransactionListProps) {
             transactionType === FilterTransactionType.ALL ? true : type === transactionType,
         )
     }, [transactions, transactions.length, transactionType])
+
+    useUpdateEffect(() => {
+        setPage(1)
+    }, [transactionType])
 
     if (transactionsLoading)
         return (
@@ -98,25 +103,27 @@ export function TransactionList({ transactionType }: TransactionListProps) {
                 )}
             </TableContainer>
 
-            <TablePagination
-                count={-1}
-                component="div"
-                onPageChange={() => {}}
-                page={page}
-                rowsPerPage={30}
-                rowsPerPageOptions={[30]}
-                labelDisplayedRows={() => null}
-                backIconButtonProps={{
-                    onClick: () => setPage((prev) => prev - 1),
-                    size: 'small',
-                    disabled: page === 1,
-                }}
-                nextIconButtonProps={{
-                    onClick: () => setPage((prev) => prev + 1),
-                    disabled: !hasNextPage,
-                    size: 'small',
-                }}
-            />
+            {!(page === 1 && dataSource.length === 0) ? (
+                <TablePagination
+                    count={-1}
+                    component="div"
+                    onPageChange={() => {}}
+                    page={page}
+                    rowsPerPage={30}
+                    rowsPerPageOptions={[30]}
+                    labelDisplayedRows={() => null}
+                    backIconButtonProps={{
+                        onClick: () => setPage((prev) => prev - 1),
+                        size: 'small',
+                        disabled: page === 1,
+                    }}
+                    nextIconButtonProps={{
+                        onClick: () => setPage((prev) => prev + 1),
+                        disabled: !hasNextPage,
+                        size: 'small',
+                    }}
+                />
+            ) : null}
         </>
     )
 }
