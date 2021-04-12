@@ -1,11 +1,17 @@
 import { memo } from 'react'
-import { createStyles, IconButton, makeStyles, TableFooter, TablePagination, TableRow } from '@material-ui/core'
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
+import { createStyles, makeStyles, TableFooter, TablePagination, TableRow } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
         spacer: {
             flex: 0,
+        },
+        toolbar: {
+            minHeight: 'unset',
+            paddingLeft: 16,
+        },
+        actions: {
+            marginLeft: 0,
         },
     })
 })
@@ -30,20 +36,18 @@ export const TableListPagination = memo(
                         rowsPerPageOptions={[pageCount]}
                         count={-1}
                         page={page}
-                        classes={{ spacer: classes.spacer }}
+                        classes={classes}
                         onPageChange={() => {}}
                         labelDisplayedRows={() => null}
-                        ActionsComponent={() => {
-                            return (
-                                <div>
-                                    <IconButton disabled={prevDisabled} onClick={handlePrevClick}>
-                                        <KeyboardArrowLeft />
-                                    </IconButton>
-                                    <IconButton disabled={nextDisabled} onClick={handleNextClick}>
-                                        <KeyboardArrowRight />
-                                    </IconButton>
-                                </div>
-                            )
+                        backIconButtonProps={{
+                            onClick: handlePrevClick,
+                            size: 'small',
+                            disabled: prevDisabled,
+                        }}
+                        nextIconButtonProps={{
+                            onClick: handleNextClick,
+                            size: 'small',
+                            disabled: nextDisabled,
                         }}
                     />
                 </TableRow>

@@ -11,26 +11,36 @@ const useStyles = makeStyles((theme) => {
     return createStyles({
         account: {
             display: 'flex',
+            alignItems: 'center',
+            lineHeight: 1,
         },
         avatar: {
-            width: 22,
-            height: 22,
+            width: 18,
+            height: 18,
         },
         accountName: {
             marginLeft: theme.spacing(0.5),
+            fontSize: 14,
+            lineHeight: 1,
         },
         relativeTime: {
             whiteSpace: 'nowrap',
         },
         token: {
             objectFit: 'contain',
-            width: 22,
-            height: 22,
+            width: 18,
+            height: 18,
             marginRight: theme.spacing(0.5),
         },
         tokenLink: {
             display: 'flex',
             alignItems: 'center',
+        },
+        content: {
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: 14,
+            lineHeight: 1,
         },
     })
 })
@@ -70,7 +80,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
             {isDifferenceToken ? (
                 <>
                     <TableCell>
-                        <Typography style={{ display: 'flex' }}>
+                        <Typography className={classes.content}>
                             <Link
                                 href={resolveAddressOnEtherscan(ChainId.Mainnet, order.paymentToken)}
                                 target="_blank"
@@ -88,7 +98,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                         </Typography>
                     </TableCell>
                     <TableCell>
-                        <Typography>
+                        <Typography className={classes.content}>
                             {formatBalance(
                                 new BigNumber(order.quantity),
                                 new BigNumber(order.quantity).toString() !== '1' ? 8 : 0,
@@ -99,7 +109,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
             ) : (
                 <>
                     <TableCell>
-                        <Typography style={{ display: 'flex' }}>
+                        <Typography style={{ display: 'flex' }} className={classes.content}>
                             <Link
                                 href={resolveAddressOnEtherscan(ChainId.Mainnet, order.paymentToken)}
                                 target="_blank"
@@ -117,7 +127,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                         </Typography>
                     </TableCell>
                     <TableCell>
-                        <Typography>
+                        <Typography className={classes.content}>
                             {new BigNumber(order.expirationTime).isZero() &&
                                 formatDistanceToNow(
                                     new Date(new BigNumber(order.expirationTime).multipliedBy(1000).toNumber()),

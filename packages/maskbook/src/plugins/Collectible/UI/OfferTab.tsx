@@ -92,7 +92,7 @@ export function OfferTab() {
                     {new Array(10).fill(0).map((_, i) => (
                         <TableRow key={i}>
                             <TableCell>
-                                <Skeleton animation="wave" variant="rectangular" width="100%" height={22} />
+                                <Skeleton animation="wave" variant="rectangular" width="100%" height={14} />
                             </TableCell>
                         </TableRow>
                     ))}
@@ -100,7 +100,7 @@ export function OfferTab() {
                 <TableFooter>
                     <TableRow>
                         <TableCell>
-                            <Skeleton animation="wave" variant="rectangular" width="100%" height={46} />
+                            <Skeleton animation="wave" variant="rectangular" width="100%" height={28} />
                         </TableCell>
                     </TableRow>
                 </TableFooter>
@@ -138,7 +138,7 @@ export function OfferTab() {
                 <TableHead>
                     <TableRow>
                         <TableCell>
-                            <Typography>From</Typography>
+                            <Typography>{t('plugin_collectible_from')}</Typography>
                         </TableCell>
                         {isDifferenceToken ? (
                             <>

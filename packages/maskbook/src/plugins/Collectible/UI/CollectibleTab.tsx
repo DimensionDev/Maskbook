@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => {
             borderTopRightRadius: 0,
         },
         content: {
-            padding: `${theme.spacing(2)} !important`,
+            padding: `0 !important`,
         },
     })
 })

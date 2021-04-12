@@ -1,4 +1,4 @@
-import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography, Box } from '@material-ui/core'
+import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import LinkIcon from '@material-ui/icons/Link'
 import { formatBalance, formatElapsed } from '../../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
@@ -10,22 +10,32 @@ const useStyles = makeStyles((theme) => {
     return createStyles({
         account: {
             display: 'flex',
+            alignItems: 'center',
+            lineHeight: 1,
         },
         avatar: {
-            width: 22,
-            height: 22,
+            width: 18,
+            height: 18,
         },
         accountName: {
             marginLeft: theme.spacing(0.5),
+            fontSize: 14,
+            lineHeight: 1,
         },
         relativeTime: {
             whiteSpace: 'nowrap',
         },
         token: {
             objectFit: 'contain',
-            width: 22,
-            height: 22,
+            width: 18,
+            height: 18,
             marginRight: theme.spacing(0.5),
+        },
+        content: {
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: 14,
+            lineHeight: 1,
         },
     })
 })
@@ -65,12 +75,14 @@ export function Row({ event, isDifferenceToken }: Props) {
     return (
         <TableRow>
             <TableCell>
-                <Typography>{resolveAssetEventType(event.node.eventType, accountPair.from)}</Typography>
+                <Typography className={classes.content}>
+                    {resolveAssetEventType(event.node.eventType, accountPair.from)}
+                </Typography>
             </TableCell>
             {isDifferenceToken ? (
                 <>
                     <TableCell>
-                        <Box display="flex">
+                        <Typography className={classes.content}>
                             {event.node.price?.asset?.imageUrl && (
                                 <Link
                                     href={event.node.price.asset.assetContract.blockExplorerLink}
@@ -83,11 +95,11 @@ export function Row({ event, isDifferenceToken }: Props) {
                                     />
                                 </Link>
                             )}
-                            <Typography>{unitPrice}</Typography>
-                        </Box>
+                            {unitPrice}
+                        </Typography>
                     </TableCell>
                     <TableCell>
-                        <Typography>
+                        <Typography className={classes.content}>
                             {formatBalance(
                                 new BigNumber(event.node.assetQuantity.quantity),
                                 event.node.assetQuantity.asset.decimals ?? 0,
@@ -97,7 +109,7 @@ export function Row({ event, isDifferenceToken }: Props) {
                 </>
             ) : (
                 <TableCell>
-                    <Typography>
+                    <Typography className={classes.content}>
                         {event.node.price &&
                             formatBalance(new BigNumber(event.node.price.quantity), event.node.price?.asset.decimals)}
                     </Typography>
@@ -140,13 +152,13 @@ export function Row({ event, isDifferenceToken }: Props) {
             <TableCell className={classes.relativeTime}>
                 {event.node.transaction ? (
                     <Link href={event.node.transaction.blockExplorerLink} target="_blank" rel="noopener noreferrer">
-                        <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography className={classes.content}>
                             {formatElapsed(new Date(`${event.node.eventTimestamp}Z`).getTime())}
                             <LinkIcon fontSize="inherit" />
                         </Typography>
                     </Link>
                 ) : (
-                    <Typography sx={{ color: 'rgb(29,161,242)' }}>
+                    <Typography className={classes.content} sx={{ color: 'rgb(29,161,242)' }}>
                         {formatElapsed(new Date(`${event.node.eventTimestamp}Z`).getTime())}
                     </Typography>
                 )}

@@ -13,15 +13,13 @@ import {
     Button,
     TableHead,
     TableFooter,
-    TablePagination,
-    IconButton,
 } from '@material-ui/core'
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
 import { CollectibleTab } from '../CollectibleTab'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { Row } from './Row'
 import { useEvents } from '../../hooks/useEvents'
 import { useI18N } from '../../../../utils/i18n-next-ui'
+import { TableListPagination } from '../Pagination'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -84,7 +82,7 @@ export function HistoryTab(props: HistoryTabProps) {
                     {new Array(10).fill(0).map((_, i) => (
                         <TableRow key={i}>
                             <TableCell>
-                                <Skeleton animation="wave" variant="rectangular" width="100%" height={22} />
+                                <Skeleton animation="wave" variant="rectangular" width="100%" height={14} />
                             </TableCell>
                         </TableRow>
                     ))}
@@ -92,7 +90,7 @@ export function HistoryTab(props: HistoryTabProps) {
                 <TableFooter>
                     <TableRow>
                         <TableCell>
-                            <Skeleton animation="wave" variant="rectangular" width="100%" height={46} />
+                            <Skeleton animation="wave" variant="rectangular" width="100%" height={28} />
                         </TableCell>
                     </TableRow>
                 </TableFooter>
@@ -152,33 +150,14 @@ export function HistoryTab(props: HistoryTabProps) {
                         <Row key={order.node.id} event={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination
-                            rowsPerPage={10}
-                            rowsPerPageOptions={[10]}
-                            count={-1}
-                            page={page}
-                            classes={{ spacer: classes.spacer }}
-                            onPageChange={() => {}}
-                            labelDisplayedRows={() => null}
-                            ActionsComponent={() => {
-                                return (
-                                    <div>
-                                        <IconButton disabled={page === 0} onClick={() => setPage((prev) => prev - 1)}>
-                                            <KeyboardArrowLeft />
-                                        </IconButton>
-                                        <IconButton
-                                            disabled={!events.value.pageInfo.hasNextPage}
-                                            onClick={() => setPage((prev) => prev + 1)}>
-                                            <KeyboardArrowRight />
-                                        </IconButton>
-                                    </div>
-                                )
-                            }}
-                        />
-                    </TableRow>
-                </TableFooter>
+                <TableListPagination
+                    handlePrevClick={() => setPage((prev) => prev - 1)}
+                    handleNextClick={() => setPage((prev) => prev + 1)}
+                    prevDisabled={page === 0}
+                    nextDisabled={!events.value.pageInfo.hasNextPage}
+                    page={page}
+                    pageCount={10}
+                />
             </Table>
         </CollectibleTab>
     )
