@@ -33,7 +33,7 @@ export interface V3Keystore {
     address: string
 }
 
-export async function exportFromV3Keystore(input: string | V3Keystore, password: string) {
+export async function fromV3Keystore(input: string | V3Keystore, password: string) {
     const json: V3Keystore = typeof input === 'object' ? input : JSON.parse(input)
 
     if (json.version !== 3) {
@@ -43,7 +43,7 @@ export async function exportFromV3Keystore(input: string | V3Keystore, password:
     let derivedKey: Uint8Array, kdfparams: ScryptParams | PDKDF2Params
     if (json.crypto.kdf.toLowerCase() === 'scrypt') {
         kdfparams = json.crypto.kdfparams as ScryptParams
-        derivedKey = await scrypt.scrypt(
+        derivedKey = scrypt.syncScrypt(
             Buffer.from(password),
             Buffer.from(kdfparams.salt, 'hex'),
             kdfparams.n,

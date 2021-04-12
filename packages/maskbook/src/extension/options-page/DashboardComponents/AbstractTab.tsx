@@ -20,9 +20,10 @@ export interface AbstractTabProps {
     state: readonly [number, (next: number) => void]
     margin?: true | 'top' | 'bottom'
     height?: number | string
+    variant?: 'fullWidth' | 'standard' | 'scrollable'
 }
 
-export default function AbstractTab({ tabs, state, height = 200 }: AbstractTabProps) {
+export default function AbstractTab({ tabs, state, height = 200, variant = 'fullWidth' }: AbstractTabProps) {
     const classes = useStyles()
     const [value, setValue] = state
     const tabIndicatorStyle = tabs.length ? { width: 100 / tabs.length + '%' } : undefined
@@ -33,7 +34,7 @@ export default function AbstractTab({ tabs, state, height = 200 }: AbstractTabPr
                 <Tabs
                     value={value}
                     TabIndicatorProps={{ style: tabIndicatorStyle }}
-                    variant="fullWidth"
+                    variant={variant}
                     indicatorColor="primary"
                     textColor="primary"
                     onChange={(_: React.SyntheticEvent, newValue: number) => setValue(newValue)}>
