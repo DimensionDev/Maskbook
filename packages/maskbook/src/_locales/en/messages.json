@@ -58,6 +58,8 @@
     "dashboard_load_failed_title": "Fail to load dashboard.",
     "dashboard_mobile_test": "Join Tests for Mobile",
     "dashboard_mobile_test_link": "https://mask.io/download-links/#mobile",
+    "dashboard_bounty_list": "Bounty List",
+    "dashboard_bounty_list_link": "https://github.com/DimensionDev/Maskbook/issues?q=is%3Aissue+is%3Aopen+label%3A%22Bounty%3A+Open%22",
     "dashboard_paste_database_base64_hint": "Paste the Base64 here…",
     "dashboard_paste_database_backup_hint": "Paste the database backup as text here…",
     "dashboard_persona_import_dialog_hint": "You can import a persona backup in the following ways.",
