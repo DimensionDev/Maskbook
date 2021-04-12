@@ -124,3 +124,7 @@ export const ITO_CONSTANTS = {
 export const ITO_CONTRACT_BASE_TIMESTAMP = 1609372800000
 
 export const TIME_WAIT_BLOCKCHAIN = 30000
+
+export const ERC165_INTERFACE_ID = '0x01ffc9a7'
+
+export const QUALIFICATION_INTERFACE_ID = '0xa497ab4b'

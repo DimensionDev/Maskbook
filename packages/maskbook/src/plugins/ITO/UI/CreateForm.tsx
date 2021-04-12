@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Box, TextField } from '@material-ui/core'
+import CheckIcon from '@material-ui/icons/Check'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
@@ -10,7 +11,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { ITO_CONSTANTS } from '../constants'
+import { ITO_CONSTANTS, ERC165_INTERFACE_ID, QUALIFICATION_INTERFACE_ID } from '../constants'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
@@ -59,6 +60,15 @@ const useStyles = makeStyles((theme) =>
                 flex: 1,
                 padding: theme.spacing(1),
             },
+        },
+        iconWrapper: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 26,
+            height: 24,
+            borderRadius: 500,
+            backgroundColor: 'rgba(119, 224, 181, 0.2)',
         },
     }),
 )
@@ -138,6 +148,27 @@ export function CreateForm(props: CreateFormProps) {
         if (total === '') setTotalOfPerWallet('')
         if (/^\d+[\.]?\d*$/.test(total)) {
             setTotalOfPerWallet(total)
+        }
+    }, [])
+
+    // qualification
+    const [qualification, setQualification] = useState('')
+    const [verify, setVerify] = useState(false)
+    const qualificationChange = useCallback(async (ev: ChangeEvent<HTMLInputElement>) => {
+        const address = ev.currentTarget.value
+        setQualification(address)
+        setVerify(false)
+        if (address.length === 42) {
+            const contract = createContract<Qualification>(account, address, QualificationABI as AbiItem[])
+
+            if (!contract) return
+
+            const isERC721 = await contract.methods.supportsInterface(ERC165_INTERFACE_ID).call({ from: account })
+            const isQualification = await contract.methods
+                .supportsInterface(QUALIFICATION_INTERFACE_ID)
+                .call({ from: account })
+            // 0x12d13b8a15368087c8c1fe9f9670c4c5c93387aa is an eligible qualification address
+            setVerify(isERC721 && isQualification)
         }
     }, [])
 
@@ -291,26 +322,24 @@ export function CreateForm(props: CreateFormProps) {
                 {StartTime} {EndTime}
             </Box>
             {account ? (
-                <ActionButton
-                    onClick={async () => {
-                        const contract = createContract<Qualification>(
-                            account,
-                            // '0x12d13b8a15368087c8c1fe9f9670c4c5c93387aa', // good qualification contract ropsten
-                            '0x36b2b0A09d5c77d705F21ECF4e00390005c55D09', // bad qualification contract ropsten
-                            QualificationABI as AbiItem[],
-                        )
-
-                        if (!contract) return
-
-                        const isERC721 = await contract.methods.supportsInterface('0x01ffc9a7').call({ from: account })
-                        const isQualification = await contract.methods
-                            .supportsInterface('0xa497ab4b')
-                            .call({ from: account })
-
-                        console.log({ isERC721, isQualification })
-                    }}>
-                    check
-                </ActionButton>
+                <Box className={classes.line}>
+                    <TextField
+                        className={classes.input}
+                        label={t('plugin_ito_qualification_label')}
+                        onChange={qualificationChange}
+                        value={qualification}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            endAdornment: verify ? (
+                                <Box className={classes.iconWrapper}>
+                                    <CheckIcon style={{ color: '#77E0B5', height: 16, width: 16 }} />
+                                </Box>
+                            ) : null,
+                        }}
+                    />
+                </Box>
             ) : null}
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>
