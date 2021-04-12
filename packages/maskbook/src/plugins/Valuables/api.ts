@@ -23,10 +23,10 @@ export interface tweetBids {
     source_address: string
     target_address: string
     amount_eth: number // eth
+    amount_usd: number // usd
     txid: string
     chain_time: string
     latest: 0 | 1
     create_time: string
     status: string
-    amount_usd: number // usd
 }
