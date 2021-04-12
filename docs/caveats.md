@@ -118,3 +118,12 @@ npx husky install # on project root directory
 - `lodash`, List of unavailable functions.
   1. `_.chain` (not friendly to tree-shake).
   2. `_.template` (see [#1865](https://github.com/DimensionDev/Maskbook/issues/1865))
+- `crypto`, the Node.js built-in library cannot be used in the project. Please use Web Crypto API instead.
+
+## How to resolve merge conflicts in `pnpm-lock.yaml`?
+
+Do not try to pick either side of the lockfile.
+
+Drop both "ours" and "theirs" version (then the file will be in the base version).
+
+Then run `pnpm install` to up the lockfile to date.
