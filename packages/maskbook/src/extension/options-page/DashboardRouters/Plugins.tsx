@@ -1,8 +1,5 @@
 import { useState } from 'react'
-import { TextField, IconButton } from '@material-ui/core'
 import { makeStyles, createStyles, ThemeProvider } from '@material-ui/core/styles'
-import SearchIcon from '@material-ui/icons/Search'
-import ClearIcon from '@material-ui/icons/Clear'
 import PluginCard from '../DashboardComponents/PluginCard'
 
 import DashboardRouterContainer from './Container'
