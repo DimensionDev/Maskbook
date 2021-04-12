@@ -8,6 +8,7 @@ import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
+import { useUpdateEffect } from 'react-use'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -61,6 +62,10 @@ export function CollectibleList(props: CollectibleListProps) {
     } = useCollectibles(account, provider, page)
 
     const { collectibles = [], hasNextPage } = value
+
+    useUpdateEffect(() => {
+        setPage(1)
+    }, [account, provider])
 
     if (collectiblesLoading)
         return (

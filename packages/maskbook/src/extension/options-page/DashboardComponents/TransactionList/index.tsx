@@ -41,7 +41,7 @@ export function TransactionList({ transactionType }: TransactionListProps) {
         loading: transactionsLoading,
         error: transactionsError,
         retry: transactionsRetry,
-    } = useTransactions('0x66b57885e8e9d84742fabda0ce6e3496055b012d', page)
+    } = useTransactions(account, page)
 
     const { transactions = [], hasNextPage } = value
 
@@ -53,7 +53,7 @@ export function TransactionList({ transactionType }: TransactionListProps) {
 
     useUpdateEffect(() => {
         setPage(1)
-    }, [transactionType])
+    }, [transactionType, account, chainId])
 
     if (transactionsLoading)
         return (
