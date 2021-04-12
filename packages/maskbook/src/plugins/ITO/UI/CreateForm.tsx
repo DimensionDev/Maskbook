@@ -22,6 +22,10 @@ import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowR
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import type { Qualification } from '@dimensiondev/contracts/types/Qualification'
+import QualificationABI from '@dimensiondev/contracts/abis/Qualification.json'
+import { createContract } from '../../../web3/hooks/useContract'
+import type { AbiItem } from 'web3-utils'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -286,6 +290,28 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.date}>
                 {StartTime} {EndTime}
             </Box>
+            {account ? (
+                <ActionButton
+                    onClick={async () => {
+                        const contract = createContract<Qualification>(
+                            account,
+                            // '0x12d13b8a15368087c8c1fe9f9670c4c5c93387aa', // good qualification contract ropsten
+                            '0x36b2b0A09d5c77d705F21ECF4e00390005c55D09', // bad qualification contract ropsten
+                            QualificationABI as AbiItem[],
+                        )
+
+                        if (!contract) return
+
+                        const isERC721 = await contract.methods.supportsInterface('0x01ffc9a7').call({ from: account })
+                        const isQualification = await contract.methods
+                            .supportsInterface('0xa497ab4b')
+                            .call({ from: account })
+
+                        console.log({ isERC721, isQualification })
+                    }}>
+                    check
+                </ActionButton>
+            ) : null}
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
