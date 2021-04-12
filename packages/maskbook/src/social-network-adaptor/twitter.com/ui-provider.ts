@@ -109,12 +109,13 @@ const twitterUI: SocialNetworkUI.Definition = {
         steganography: {
             password() {
                 // ! Change this might be a breaking change !
-                return (
+                return new ProfileIdentifier(
+                    'twitter.com',
                     ProfileIdentifier.getUserName(IdentityProviderTwitter.lastRecognized.value.identifier) ||
-                    ProfileIdentifier.getUserName(currentSelectedIdentity[twitterBase.networkIdentifier].value) ||
-                    ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
-                    unreachable('Cannot figure out password' as never)
-                )
+                        ProfileIdentifier.getUserName(currentSelectedIdentity[twitterBase.networkIdentifier].value) ||
+                        ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
+                        unreachable('Cannot figure out password' as never),
+                ).toText()
             },
         },
     },

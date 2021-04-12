@@ -114,12 +114,13 @@ const facebookUI: SocialNetworkUI.Definition = {
             grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
             password() {
                 // ! Change this might be a breaking change !
-                return (
+                return new ProfileIdentifier(
+                    'facebook.com',
                     ProfileIdentifier.getUserName(IdentityProviderFacebook.lastRecognized.value.identifier) ||
-                    ProfileIdentifier.getUserName(currentSelectedIdentity[facebookBase.networkIdentifier].value) ||
-                    ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
-                    unreachable('Cannot figure out password' as never)
-                )
+                        ProfileIdentifier.getUserName(currentSelectedIdentity[facebookBase.networkIdentifier].value) ||
+                        ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
+                        unreachable('Cannot figure out password' as never),
+                ).toText()
             },
         },
     },
