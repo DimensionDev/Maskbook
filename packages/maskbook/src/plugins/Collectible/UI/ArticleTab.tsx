@@ -4,10 +4,13 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
+        body: {
+            display: 'flex',
+            justifyContent: 'center',
+        },
         img: {
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
+            maxWidth: '100%',
+            maxWeight: '100%',
         },
     })
 })
@@ -21,13 +24,15 @@ export function ArticleTab(props: ArticleTabProps) {
 
     return (
         <CollectibleTab>
-            {asset.value?.animation_url ? (
-                <Link href={asset.value?.animation_url} target="_blank" rel="noopener noreferrer">
+            <div className={classes.body}>
+                {asset.value?.animation_url ? (
+                    <Link href={asset.value?.animation_url} target="_blank" rel="noopener noreferrer">
+                        <img src={asset.value?.imageUrl} className={classes.img} alt={asset.value?.name ?? ''} />
+                    </Link>
+                ) : (
                     <img src={asset.value?.imageUrl} className={classes.img} alt={asset.value?.name ?? ''} />
-                </Link>
-            ) : (
-                <img src={asset.value?.imageUrl} className={classes.img} alt={asset.value?.name ?? ''} />
-            )}
+                )}
+            </div>
         </CollectibleTab>
     )
 }

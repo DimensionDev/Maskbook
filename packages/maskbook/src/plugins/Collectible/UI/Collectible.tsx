@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react'
+import { head } from 'lodash-es'
+import BigNumber from 'bignumber.js'
 import {
     makeStyles,
     createStyles,
@@ -22,10 +24,8 @@ import { HistoryTab } from './HistoryTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
-import { CollectibleSkeleton } from './CollectibleSkeleton'
-import { head } from 'lodash-es'
-import BigNumber from 'bignumber.js'
 import { getOrderUnitPrice } from '../utils'
+import { PluginSkeleton } from '../../PluginSkeleton'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => {
         body: {
             flex: 1,
             overflow: 'auto',
+            maxHeight: 350,
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
@@ -108,10 +109,7 @@ export function Collectible(props: CollectibleProps) {
         return head(unitPrices.sort())
     }, [asset.value])
 
-    if (asset.loading) {
-        return <CollectibleSkeleton />
-    }
-
+    if (asset.loading) return <PluginSkeleton />
     if (!asset.value) return null
 
     const tabs = [

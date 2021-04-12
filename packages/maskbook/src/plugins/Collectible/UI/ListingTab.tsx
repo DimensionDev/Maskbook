@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => {
         root: {
             overflow: 'auto',
         },
+        content: {
+            padding: '0 !important',
+        },
         empty: {
             display: 'flex',
             flexDirection: 'column',
@@ -88,7 +91,7 @@ export function ListingTab() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {new Array(10).fill(0).map((_, i) => (
+                    {new Array(5).fill(0).map((_, i) => (
                         <TableRow key={i}>
                             <TableCell>
                                 <Skeleton animation="wave" variant="rectangular" width="100%" height={14} />
@@ -108,7 +111,7 @@ export function ListingTab() {
 
     if (!listings.value || listings.error || !dataSource.length)
         return (
-            <Table size="small">
+            <Table size="small" stickyHeader>
                 <Box className={classes.empty}>
                     <Typography color="textSecondary">No Listings</Typography>
                     <Button
@@ -132,8 +135,8 @@ export function ListingTab() {
         )
 
     return (
-        <CollectibleTab classes={{ root: classes.root }}>
-            <Table size="small">
+        <CollectibleTab classes={{ root: classes.root, content: classes.content }}>
+            <Table size="small" stickyHeader>
                 <TableHead>
                     <TableRow>
                         <TableCell>

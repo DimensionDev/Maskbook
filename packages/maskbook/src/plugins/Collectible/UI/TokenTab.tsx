@@ -9,7 +9,7 @@ import { ChainId } from '../../../web3/types'
 const useStyles = makeStyles((theme) => {
     return createStyles({
         container: {
-            margin: theme.spacing(1.5, 0),
+            padding: theme.spacing(2),
         },
         description: {
             fontSize: 14,

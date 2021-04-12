@@ -9,9 +9,7 @@ const useStyles = makeStyles((theme) => {
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0,
         },
-        content: {
-            padding: `0 !important`,
-        },
+        content: {},
     })
 })
 
