@@ -64,4 +64,6 @@ const themeSB = createBuildStorybook6(
     'theme',
 )
 
-export const buildNetlify = parallel(iconsSnowpack, series(build, parallel(dashboardSB, themeSB, dashboard)))
+// Upstream blocking: snowpack
+// export const buildNetlify = parallel(iconsSnowpack, series(build, parallel(dashboardSB, themeSB, dashboard)))
+export const buildNetlify = series(build, parallel(dashboardSB, themeSB))
