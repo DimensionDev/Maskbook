@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => {
             border: `solid 1px ${theme.palette.divider}`,
             margin: `${theme.spacing(2)} auto`,
             marginBottom: theme.spacing(2),
+            '&:first-child': {
+                marginTop: 0,
+            },
             '&:last-child': {
                 marginBottom: 0,
             },
@@ -22,8 +25,7 @@ const useStyles = makeStyles((theme) => {
             flexDirection: 'column',
             boxSizing: 'border-box',
         },
-        title: {
-        },
+        title: {},
     })
 })
 
