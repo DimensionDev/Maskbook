@@ -286,6 +286,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
             {viewDetailedTokens.length < detailedTokens.length ? (
                 <div className={classes.lessButton}>
                     <IconButton
+                        size="small"
                         onClick={() => {
                             setMore(!more)
                         }}>
