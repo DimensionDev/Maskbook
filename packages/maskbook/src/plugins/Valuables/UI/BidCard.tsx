@@ -46,7 +46,7 @@ export default function BidCard(props: BidCardProps) {
                 target="_blank"
                 rel="noopener noreferrer">
                 <Typography className={classes.bidText}>
-                    Bid: ${tweetBidResponse.value?.amount_usd} ({tweetBidResponse.value?.amount_eth} ETH)
+                    Bid: ${tweetBidResponse.value.amount_usd} ({tweetBidResponse.value.amount_eth} ETH)
                 </Typography>
             </Button>
         </div>
