@@ -40,7 +40,7 @@ export function setupPortalShadowRoot(
 export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX.Element) {
     const [findMountingShadowRef, setRef] = useState<HTMLDivElement | null>(null)
     const update = useUpdate()
-    const { root, container, style } = useSideEffectRef(() => {
+    const doms = useSideEffectRef(() => {
         const root = document.createElement('div')
         const container = root.appendChild(document.createElement('div'))
         container.appendChild = bind(container.appendChild, container, update)
@@ -48,6 +48,35 @@ export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX
         const style = root.appendChild(document.createElement('style'))
         return { root, container, style }
     })
+    const { root, container } = doms
+    const containerInUse = container.children.length !== 0
+
+    useEffect(() => {
+        if (!containerInUse) return root.remove()
+        const shadow = PortalShadowRoot()
+        if (root.parentElement === shadow) return
+        shadow.appendChild(root)
+    }, [containerInUse, root])
+
+    return (
+        <IsolatedRender {...doms} findMountingShadowRef={findMountingShadowRef}>
+            <div ref={(ref) => findMountingShadowRef !== ref && setRef(ref)}>{renderer(container)}</div>
+        </IsolatedRender>
+    )
+}
+
+/*
+Here is a strange problem that `useMemo` in the `useCurrentShadowRootStyles` will re-render every event loop _even_ findMountingShadowRef is the same.
+React is isolating their render process in the unit of components. Split it into another component solves the problem.
+(And now it no longer re-render every event loop).
+ */
+type IsolatedRenderProps = React.PropsWithChildren<{
+    root: HTMLElement
+    container: HTMLElement
+    style: HTMLStyleElement
+    findMountingShadowRef: HTMLDivElement | null
+}>
+const IsolatedRender = ({ container, root, style, children, findMountingShadowRef }: IsolatedRenderProps) => {
     const css = useCurrentShadowRootStyles(findMountingShadowRef)
     const containerInUse = container.children.length !== 0
 
@@ -62,7 +91,7 @@ export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX
         if (findMountingShadowRef && style.innerHTML !== css) style.innerHTML = css
     }, [style, css, findMountingShadowRef])
 
-    return <div ref={(ref) => findMountingShadowRef !== ref && setRef(ref)}>{renderer(container)}</div>
+    return <>{children}</>
 }
 
 export function createShadowRootForwardedComponent<
