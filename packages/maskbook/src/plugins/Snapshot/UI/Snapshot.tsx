@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => {
         },
         body: {
             flex: 1,
-            minHeight: 'calc(var(--contentHeight) - var(--tabHeight))',
+            maxHeight: 'calc(var(--contentHeight) - var(--tabHeight))',
             overflow: 'auto',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {

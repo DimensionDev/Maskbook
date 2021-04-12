@@ -14,9 +14,7 @@ const useStyles = makeStyles((theme) => {
             },
         },
         header: {
-            backgroundColor: theme.palette.mode === 'dark' ? '#24292e' : 'white',
             borderBottom: `1px solid ${theme.palette.divider}`,
-            padding: theme.spacing(2),
         },
         content: {
             width: '100%',
@@ -25,8 +23,6 @@ const useStyles = makeStyles((theme) => {
             boxSizing: 'border-box',
         },
         title: {
-            paddingLeft: theme.spacing(1),
-            fontSize: 20,
         },
     })
 })
