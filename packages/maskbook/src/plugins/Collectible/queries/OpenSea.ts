@@ -1,2 +1,217 @@
-export const OpenSeaEventHistoryQuery =
-    'query EventHistoryQuery(\n  $archetype: ArchetypeInputType\n  $bundle: BundleSlug\n  $collections: [CollectionSlug!]\n  $categories: [CollectionSlug!]\n  $eventTypes: [EventType!]\n  $cursor: String\n  $count: Int = 10\n  $showAll: Boolean = false\n  $identity: IdentityInputType\n) {\n  ...EventHistory_data_3WnwJ9\n}\n\nfragment AccountLink_data on AccountType {\n  address\n  chain {\n    identifier\n    id\n  }\n  user {\n    publicUsername\n    id\n  }\n  ...ProfileImage_data\n  ...wallet_accountKey\n}\n\nfragment AssetCell_asset on AssetType {\n  collection {\n    name\n    id\n  }\n  name\n  ...AssetMedia_asset\n  ...asset_url\n}\n\nfragment AssetCell_assetBundle on AssetBundleType {\n  assetQuantities(first: 2) {\n    edges {\n      node {\n        asset {\n          collection {\n            name\n            id\n          }\n          name\n          ...AssetMedia_asset\n          ...asset_url\n          id\n        }\n        relayId\n        id\n      }\n    }\n  }\n  name\n  slug\n}\n\nfragment AssetMedia_asset on AssetType {\n  animationUrl\n  backgroundColor\n  collection {\n    description\n    displayData {\n      cardDisplayStyle\n    }\n    imageUrl\n    hidden\n    name\n    slug\n    id\n  }\n  description\n  name\n  tokenId\n  imageUrl\n}\n\nfragment AssetQuantity_data on AssetQuantityType {\n  asset {\n    ...Price_data\n    id\n  }\n  quantity\n}\n\nfragment EventHistory_data_3WnwJ9 on Query {\n  assetEvents(after: $cursor, bundle: $bundle, archetype: $archetype, first: $count, categories: $categories, collections: $collections, eventTypes: $eventTypes, identity: $identity, includeHidden: true) {\n    edges {\n      node {\n        assetBundle @include(if: $showAll) {\n          ...AssetCell_assetBundle\n          id\n        }\n        assetQuantity {\n          asset @include(if: $showAll) {\n            ...AssetCell_asset\n            id\n          }\n          ...quantity_data\n          id\n        }\n        relayId\n        eventTimestamp\n        eventType\n        customEventName\n        devFee {\n          quantity\n          ...AssetQuantity_data\n          id\n        }\n        devFeePaymentEvent {\n          ...EventTimestamp_data\n          id\n        }\n        fromAccount {\n          address\n          ...AccountLink_data\n          id\n        }\n        price {\n          quantity\n          ...AssetQuantity_data\n          id\n        }\n        endingPrice {\n          quantity\n          ...AssetQuantity_data\n          id\n        }\n        seller {\n          ...AccountLink_data\n          id\n        }\n        toAccount {\n          ...AccountLink_data\n          id\n        }\n        winnerAccount {\n          ...AccountLink_data\n          id\n        }\n        ...EventTimestamp_data\n        id\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment EventTimestamp_data on AssetEventType {\n  eventTimestamp\n  transaction {\n    blockExplorerLink\n    id\n  }\n}\n\nfragment Price_data on AssetType {\n  decimals\n  imageUrl\n  symbol\n  usdSpotPrice\n  assetContract {\n    blockExplorerLink\n    id\n  }\n}\n\nfragment ProfileImage_data on AccountType {\n  imageUrl\n  address\n  chain {\n    identifier\n    id\n  }\n}\n\nfragment asset_url on AssetType {\n  assetContract {\n    account {\n      address\n      chain {\n        identifier\n        id\n      }\n      id\n    }\n    id\n  }\n  tokenId\n}\n\nfragment quantity_data on AssetQuantityType {\n  asset {\n    decimals\n    id\n  }\n  quantity\n}\n\nfragment wallet_accountKey on AccountType {\n  address\n  chain {\n    identifier\n    id\n  }\n}\n'
+export const OpenSeaEventHistoryQuery = `query EventHistoryQuery(
+  $archetype: ArchetypeInputType
+  $bundle: BundleSlug
+  $collections: [CollectionSlug!]
+  $categories: [CollectionSlug!]
+  $eventTypes: [EventType!]
+  $cursor: String
+  $count: Int = 10
+  $showAll: Boolean = false
+  $identity: IdentityInputType
+) {
+  ...EventHistory_data_3WnwJ9
+}
+
+fragment AccountLink_data on AccountType {
+  address
+  chain {
+    identifier
+    id
+  }
+  user {
+    publicUsername
+    id
+  }
+  ...ProfileImage_data
+  ...wallet_accountKey
+}
+
+fragment AssetCell_asset on AssetType {
+  collection {
+    name
+    id
+  }
+  name
+  ...AssetMedia_asset
+  ...asset_url
+}
+
+fragment AssetCell_assetBundle on AssetBundleType {
+  assetQuantities(first: 2) {
+    edges {
+      node {
+        asset {
+          collection {
+            name
+            id
+          }
+          name
+          ...AssetMedia_asset
+          ...asset_url
+          id
+        }
+        relayId
+        id
+      }
+    }
+  }
+  name
+  slug
+}
+
+fragment AssetMedia_asset on AssetType {
+  animationUrl
+  backgroundColor
+  collection {
+    description
+    displayData {
+      cardDisplayStyle
+    }
+    imageUrl
+    hidden
+    name
+    slug
+    id
+  }
+  description
+  name
+  tokenId
+  imageUrl
+}
+
+fragment AssetQuantity_data on AssetQuantityType {
+  asset {
+    ...Price_data
+    id
+  }
+  quantity
+}
+
+fragment EventHistory_data_3WnwJ9 on Query {
+  assetEvents(after: $cursor, bundle: $bundle, archetype: $archetype, first: $count, categories: $categories, collections: $collections, eventTypes: $eventTypes, identity: $identity, includeHidden: true) {
+    edges {
+      node {
+        assetBundle @include(if: $showAll) {
+          ...AssetCell_assetBundle
+          id
+        }
+        assetQuantity {
+          asset @include(if: $showAll) {
+            ...AssetCell_asset
+            id
+          }
+          ...quantity_data
+          id
+        }
+        relayId
+        eventTimestamp
+        eventType
+        customEventName
+        devFee {
+          quantity
+          ...AssetQuantity_data
+          id
+        }
+        devFeePaymentEvent {
+          ...EventTimestamp_data
+          id
+        }
+        fromAccount {
+          address
+          ...AccountLink_data
+          id
+        }
+        price {
+          quantity
+          ...AssetQuantity_data
+          id
+        }
+        endingPrice {
+          quantity
+          ...AssetQuantity_data
+          id
+        }
+        seller {
+          ...AccountLink_data
+          id
+        }
+        toAccount {
+          ...AccountLink_data
+          id
+        }
+        winnerAccount {
+          ...AccountLink_data
+          id
+        }
+        ...EventTimestamp_data
+        id
+        __typename
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+
+fragment EventTimestamp_data on AssetEventType {
+  eventTimestamp
+  transaction {
+    blockExplorerLink
+    id
+  }
+}
+
+fragment Price_data on AssetType {
+  decimals
+  imageUrl
+  symbol
+  usdSpotPrice
+  assetContract {
+    blockExplorerLink
+    id
+  }
+}
+
+fragment ProfileImage_data on AccountType {
+  imageUrl
+  address
+  chain {
+    identifier
+    id
+  }
+}
+
+fragment asset_url on AssetType {
+  assetContract {
+    account {
+      address
+      chain {
+        identifier
+        id
+      }
+      id
+    }
+    id
+  }
+  tokenId
+}
+
+fragment quantity_data on AssetQuantityType {
+  asset {
+    decimals
+    id
+  }
+  quantity
+}
+
+fragment wallet_accountKey on AccountType {
+  address
+  chain {
+    identifier
+    id
+  }
+}
+`
