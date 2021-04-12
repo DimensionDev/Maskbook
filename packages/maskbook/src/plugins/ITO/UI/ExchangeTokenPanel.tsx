@@ -5,11 +5,9 @@ import AddIcon from '@material-ui/icons/AddOutlined'
 import RemoveIcon from '@material-ui/icons/RemoveOutlined'
 
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import { useConstant } from '../../../web3/hooks/useConstant'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
-import { CONSTANTS } from '../../../web3/constants'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages, SelectTokenDialogEvent } from '../../Wallet/messages'
 

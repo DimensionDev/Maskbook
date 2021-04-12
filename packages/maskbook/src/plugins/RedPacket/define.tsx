@@ -31,7 +31,11 @@ export const [RedPacketCompositionEntry, RedPacketCompositionUI] = createComposi
     },
 )
 export const RedPacketPluginDefine: PluginConfig = {
+    id: RedPacketPluginID,
+    pluginIcon: '🧧',
     pluginName: 'Red Packet',
+    pluginDescription:
+        'Red Packet is a special feature in Mask Network which was launched in early 2020. Once users have installed the Chrome/ Firefox plugin, they can claim and give out cryptocurrencies on Twitter.',
     identifier: RedPacketPluginID,
     stage: PluginStage.Production,
     scope: PluginScope.Public,

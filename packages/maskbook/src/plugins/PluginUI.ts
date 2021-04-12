@@ -15,7 +15,7 @@ import { FileServicePluginDefine } from './FileService/UI-define'
 import { TraderPluginDefine } from './Trader/define'
 import { TransakPluginDefine } from './Transak/define'
 import { ITO_PluginDefine } from './ITO/define'
-import { NFTPluginsDefine } from './NFT/define'
+import { NFT_PluginsDefine } from './NFT/define'
 import { AirdropPluginDefine } from './Airdrop/define'
 import { sideEffect } from '../utils/side-effects'
 import { VCentPluginDefine } from './VCent/define'
@@ -26,7 +26,7 @@ sideEffect.then(() => {
     plugins.add(RedPacketPluginDefine)
     plugins.add(FileServicePluginDefine)
     plugins.add(ITO_PluginDefine)
-    plugins.add(NFTPluginsDefine)
+    plugins.add(NFT_PluginsDefine)
     plugins.add(VCentPluginDefine)
     if (Flags.gitcoin_enabled) plugins.add(GitcoinPluginDefine)
     if (Flags.poll_enabled) plugins.add(PollsPluginDefine)

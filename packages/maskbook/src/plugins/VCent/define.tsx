@@ -4,8 +4,11 @@ import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import VCentDialog from './UI/TweetDialog'
 
 export const VCentPluginDefine: PluginConfig = {
+    id: PLUGIN_IDENTIFIER,
     pluginName: 'VCent',
+    pluginIcon: '🔓',
     identifier: PLUGIN_IDENTIFIER,
+    pluginDescription: 'A Plugin for https://v.cent.co/',
     stage: PluginStage.Production,
     scope: PluginScope.Internal,
 
