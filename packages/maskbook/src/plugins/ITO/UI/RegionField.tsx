@@ -30,7 +30,10 @@ export function RegionField({ value = [], onChange, ...props }: RegionFieldProps
             multiple: true,
             value: value,
             onChange: handleChange,
-            renderValue: (selected: unknown) => <span>{(selected as RegionCode[]).join(', ')}</span>,
+            renderValue: (selected: unknown) => {
+                const len = (select as RegionCode[]).length
+                return <span>{len === allRegions.length ? 'All' : `${len}/${allRegions.length}`} regions</span>
+            },
             MenuProps: {
                 container,
                 PaperProps: {
