@@ -1,20 +1,20 @@
 import type { SetState } from 'immer/dist/internal'
 
-export interface getListingData {
+export interface GetListingData {
     rank: number
     dayChange: number
     price: number
 }
 
-type pricePoint = {
+type PricePoint = {
     price: string
 }
 
-export interface getAllListingsData {
+export interface GetAllListingsData {
     name: string
     rank: number
     dayChange: string
-    latestPricePoint: pricePoint
+    latestPricePoint: PricePoint
 }
 
 export interface UIProps {

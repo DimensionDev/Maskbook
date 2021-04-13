@@ -1,23 +1,23 @@
 import { request, gql } from 'graphql-request'
 import { SUBGRAPH_URI } from './constants'
-import type { getListingData } from './types'
-import type { getAllListingsData } from './types'
+import type { GetListingData } from './types'
+import type { GetAllListingsData } from './types'
 
 const createQuery = (name: string) => {
     const query = gql`
     {
         ideaTokens(where: { name: "${name}" }) {
-          rank
-          dayChange
-	  latestPricePoint {
-	    price
-	  }
+            rank
+            dayChange
+	        latestPricePoint {
+	            price
+	        }
         }
     }`
     return query
 }
 
-export async function getListing(username: string): Promise<getListingData> {
+export async function getListing(username: string): Promise<GetListingData> {
     const result = await request(SUBGRAPH_URI, createQuery(username))
 
     return {
@@ -40,12 +40,12 @@ const allListings = gql`
     }
 `
 
-interface returnedObject {
-    ideaTokens: getAllListingsData[]
+interface ReturnedObject {
+    ideaTokens: GetAllListingsData[]
 }
 
-export async function getAllListings(): Promise<returnedObject> {
-    const result: returnedObject = await request(SUBGRAPH_URI, allListings)
+export async function getAllListings(): Promise<ReturnedObject> {
+    const result: ReturnedObject = await request(SUBGRAPH_URI, allListings)
 
     return result
 }
