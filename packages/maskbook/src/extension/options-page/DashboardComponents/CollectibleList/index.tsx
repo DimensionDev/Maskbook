@@ -52,7 +52,7 @@ export function CollectibleList(props: CollectibleListProps) {
     const classes = useStyles()
     const account = useAccount()
 
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(0)
     const provider = useValueRef(currentCollectibleDataProviderSettings)
     const {
         value = { collectibles: [], hasNextPage: false },
@@ -64,7 +64,7 @@ export function CollectibleList(props: CollectibleListProps) {
     const { collectibles = [], hasNextPage } = value
 
     useUpdateEffect(() => {
-        setPage(1)
+        setPage(0)
     }, [account, provider])
 
     if (collectiblesLoading)
@@ -133,7 +133,7 @@ export function CollectibleList(props: CollectibleListProps) {
                     </Box>
                 )}
             </Box>
-            {!(page === 1 && dataSource.length === 0) ? (
+            {!(page === 0 && dataSource.length === 0) ? (
                 <TablePagination
                     count={-1}
                     component="div"
@@ -145,7 +145,7 @@ export function CollectibleList(props: CollectibleListProps) {
                     backIconButtonProps={{
                         onClick: () => setPage((prev) => prev - 1),
                         size: 'small',
-                        disabled: page === 1,
+                        disabled: page === 0,
                     }}
                     nextIconButtonProps={{
                         onClick: () => setPage((prev) => prev + 1),

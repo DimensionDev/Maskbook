@@ -34,7 +34,7 @@ export function TransactionList({ transactionType }: TransactionListProps) {
     const styles = useStyles()
     const chainId = useChainId()
     const account = useAccount()
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(0)
 
     const {
         value = { transactions: [], hasNextPage: false },
@@ -52,7 +52,7 @@ export function TransactionList({ transactionType }: TransactionListProps) {
     }, [transactions, transactions.length, transactionType])
 
     useUpdateEffect(() => {
-        setPage(1)
+        setPage(0)
     }, [transactionType, account, chainId])
 
     if (transactionsLoading)
@@ -103,7 +103,7 @@ export function TransactionList({ transactionType }: TransactionListProps) {
                 )}
             </TableContainer>
 
-            {!(page === 1 && dataSource.length === 0) ? (
+            {!(page === 0 && dataSource.length === 0) ? (
                 <TablePagination
                     count={-1}
                     component="div"
@@ -115,7 +115,7 @@ export function TransactionList({ transactionType }: TransactionListProps) {
                     backIconButtonProps={{
                         onClick: () => setPage((prev) => prev - 1),
                         size: 'small',
-                        disabled: page === 1,
+                        disabled: page === 0,
                     }}
                     nextIconButtonProps={{
                         onClick: () => setPage((prev) => prev + 1),

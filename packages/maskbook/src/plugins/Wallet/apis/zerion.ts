@@ -55,7 +55,7 @@ export async function getTransactionList(address: string, page?: number) {
             address,
             currency: 'usd',
             transactions_limit: 30,
-            transactions_offset: ((page ?? 1) - 1) * 30,
+            transactions_offset: (page ?? 0) * 30,
             transactions_search_query: '',
         },
     })) as ZerionTransactionResponseBody
