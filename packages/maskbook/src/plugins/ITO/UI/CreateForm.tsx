@@ -1,6 +1,6 @@
-import { createStyles, makeStyles, Box, TextField } from '@material-ui/core'
+import { createStyles, makeStyles, Box, TextField, DialogProps } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
-import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
+import { useState, useCallback, useMemo, useEffect, ChangeEvent, Suspense } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
@@ -11,7 +11,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { ITO_CONSTANTS, ERC165_INTERFACE_ID, QUALIFICATION_INTERFACE_ID } from '../constants'
+import { ITO_CONSTANTS } from '../constants'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
@@ -19,14 +19,9 @@ import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmoun
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatAmount, formatBalance } from '../../Wallet/formatter'
-import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import type { Qualification } from '@dimensiondev/contracts/types/Qualification'
-import QualificationABI from '@dimensiondev/contracts/abis/Qualification.json'
-import { createContract } from '../../../web3/hooks/useContract'
-import type { AbiItem } from 'web3-utils'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -73,10 +68,22 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
+function QualEndAdornment(props: { address: string }) {
+    const classes = useStyles()
+    // const { payload: isQualification } = useERC165(props.address, QUALIFICATION_INTERFACE_ID)
+    console.log(1234)
+    return (
+        <Box className={classes.iconWrapper}>
+            <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
+        </Box>
+    )
+}
+
 export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
     onNext: () => void
     origin?: PoolSettings
+    dateDialogProps: Partial<DialogProps>
 }
 
 export function CreateForm(props: CreateFormProps) {
@@ -153,26 +160,9 @@ export function CreateForm(props: CreateFormProps) {
 
     // qualification
     const [qualification, setQualification] = useState('')
-    const [verify, setVerify] = useState(false)
-    const qualificationChange = useCallback(async (ev: ChangeEvent<HTMLInputElement>) => {
-        const address = ev.currentTarget.value
-        setQualification(address)
-        setVerify(false)
-        if (address.length === 42) {
-            const contract = createContract<Qualification>(account, address, QualificationABI as AbiItem[])
-
-            if (!contract) return
-
-            const isERC721 = await contract.methods.supportsInterface(ERC165_INTERFACE_ID).call({ from: account })
-            const isQualification = await contract.methods
-                .supportsInterface(QUALIFICATION_INTERFACE_ID)
-                .call({ from: account })
-            // 0x12d13b8a15368087c8c1fe9f9670c4c5c93387aa is an eligible qualification address
-            setVerify(isERC721 && isQualification)
-        }
-    }, [])
 
     useEffect(() => {
+        console.log({ onChangePoolSettings })
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
         onChangePoolSettings({
@@ -250,7 +240,7 @@ export function CreateForm(props: CreateFormProps) {
         [startTime],
     )
 
-    const StartTime = usePortalShadowRoot((container) => (
+    const StartTime = (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <MobileDateTimePicker
                 showTodayButton
@@ -259,11 +249,12 @@ export function CreateForm(props: CreateFormProps) {
                 onChange={(date: Date | null) => handleStartTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
                 value={startTime}
-                DialogProps={{ container }}
+                DialogProps={props.dateDialogProps}
             />
         </LocalizationProvider>
-    ))
-    const EndTime = usePortalShadowRoot((container) => (
+    )
+
+    const EndTime = (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <MobileDateTimePicker
                 showTodayButton
@@ -272,10 +263,11 @@ export function CreateForm(props: CreateFormProps) {
                 onChange={(date: Date | null) => handleEndTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
                 value={endTime}
-                DialogProps={{ container }}
+                DialogProps={props.dateDialogProps}
             />
         </LocalizationProvider>
-    ))
+    )
+
     return (
         <>
             <Box className={classes.line} style={{ display: 'block' }}>
@@ -326,17 +318,20 @@ export function CreateForm(props: CreateFormProps) {
                     <TextField
                         className={classes.input}
                         label={t('plugin_ito_qualification_label')}
-                        onChange={qualificationChange}
+                        onChange={(e) => {
+                            console.log('78877')
+                            setQualification(e.currentTarget.value)
+                        }}
                         value={qualification}
                         InputLabelProps={{
                             shrink: true,
                         }}
                         InputProps={{
-                            endAdornment: verify ? (
-                                <Box className={classes.iconWrapper}>
-                                    <CheckIcon style={{ color: '#77E0B5', height: 16, width: 16 }} />
-                                </Box>
-                            ) : null,
+                            endAdornment: (
+                                <Suspense fallback={123}>
+                                    <QualEndAdornment address={qualification} />
+                                </Suspense>
+                            ),
                         }}
                     />
                 </Box>

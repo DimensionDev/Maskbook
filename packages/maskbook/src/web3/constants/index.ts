@@ -5,6 +5,7 @@ export const MAX_AMOUNT_LENGTH = 79
 
 export const ERC1155_INTERFACE_ID = '0xd9b67a26'
 export const ERC721_INTERFACE_ID = '0x80ac58cd'
+export const ERC165_INTERFACE_ID = '0x01ffc9a7'
 
 export const CONSTANTS = {
     // token lists

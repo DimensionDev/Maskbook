@@ -22,6 +22,7 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useConstant } from '../../../web3/hooks/useConstant'
+import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
 
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',
@@ -142,7 +143,14 @@ export function CompositionDialog(props: CompositionDialogProps) {
         tabs: [
             {
                 label: t('plugin_ito_create_new'),
-                children: <CreateForm onNext={onNext} origin={poolSettings} onChangePoolSettings={setPoolSettings} />,
+                children: usePortalShadowRoot((container) => (
+                    <CreateForm
+                        onNext={onNext}
+                        origin={poolSettings}
+                        onChangePoolSettings={setPoolSettings}
+                        dateDialogProps={{ container }}
+                    />
+                )),
                 sx: { p: 0 },
             },
             {
