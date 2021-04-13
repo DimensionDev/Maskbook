@@ -38,7 +38,7 @@ export function setupPortalShadowRoot(
  * ))
  */
 export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX.Element) {
-    const [findMountingShadowRef, setRef] = useState<HTMLDivElement | null>(null)
+    const [findMountingShadowRef, setRef] = useState<HTMLSpanElement | null>(null)
     const update = useUpdate()
     const doms = useSideEffectRef(() => {
         const root = document.createElement('div')
@@ -60,7 +60,8 @@ export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX
 
     return (
         <IsolatedRender {...doms} findMountingShadowRef={findMountingShadowRef}>
-            <div ref={(ref) => findMountingShadowRef !== ref && setRef(ref)}>{renderer(container)}</div>
+            <span style={{ display: 'none' }} ref={(ref) => findMountingShadowRef !== ref && setRef(ref)} />
+            {renderer(container)}
         </IsolatedRender>
     )
 }
@@ -74,7 +75,7 @@ type IsolatedRenderProps = React.PropsWithChildren<{
     root: HTMLElement
     container: HTMLElement
     style: HTMLStyleElement
-    findMountingShadowRef: HTMLDivElement | null
+    findMountingShadowRef: HTMLSpanElement | null
 }>
 const IsolatedRender = ({ container, root, style, children, findMountingShadowRef }: IsolatedRenderProps) => {
     const css = useCurrentShadowRootStyles(findMountingShadowRef)

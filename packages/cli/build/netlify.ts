@@ -7,7 +7,7 @@ import { NETLIFY_PATH, PKG_PATH } from '../utils'
 const createBuildStorybook6 = (basePath: string, output: string, name: string) => {
     const fn = () => {
         const r = relative(basePath, output)
-        const command = ['build-storybook', '-o', r, '-s', r, '--quiet']
+        const command = ['build-storybook', '-o', r, '--quiet']
         console.log(basePath, '$', ...command)
         return spawn('npx', command, {
             cwd: basePath,
