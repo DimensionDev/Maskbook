@@ -269,35 +269,33 @@ type Region = {
 }
 
 interface RegionResolver {
-    getRegion(): Promise<Region>
+    (): Promise<Region>
 }
 
 function createRegionResolver(api: string, field: string): RegionResolver {
-    return {
-        getRegion: async (): Promise<Region> => {
-            const response = await fetch(api)
-            const result = await response.json()
-            const code = result[field]
-            if (!code) {
-                throw new Error('Failed to resolve region')
-            }
+    return async () => {
+        const response = await fetch(api)
+        const result = await response.json()
+        const code = result[field]
+        if (!code) {
+            throw new Error('Failed to resolve region')
+        }
 
-            if (!(code in RegionEnum)) {
-                throw new Error('unknown region')
-            }
+        if (!(code in RegionEnum)) {
+            throw new Error('unknown region')
+        }
 
-            return {
-                code,
-                name: regionNameMap.get(code)!,
-            }
-        },
+        return {
+            code,
+            name: regionNameMap.get(code)!,
+        }
     }
 }
 
-const IPGeo = createRegionResolver('https://service.r2d2.to/geolocation', 'region')
+const IPGeoResolver = createRegionResolver('https://service.r2d2.to/geolocation', 'region')
 
 export function useIPRegion(): AsyncStateRetry<Region> {
-    return useAsyncRetry(IPGeo.getRegion)
+    return useAsyncRetry(IPGeoResolver)
 }
 
 export function useRegionList(): Array<Region> {
