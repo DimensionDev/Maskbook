@@ -463,6 +463,7 @@
     "plugin_ito_swap_ration_label": "Swap Ratio",
     "plugin_ito_qualification_label": "Qualification Contract",
     "plugin_item_message_label": "Title",
+    "plugin_ito_region_label": "IP Region Selection",
     "plugin_ito_next": "Next",
     "plugin_ito_back": "Back",
     "plugin_ito_transaction_dialog_summary": "Create an ITO with {{amount}} {{symbol}}.",

@@ -20,11 +20,13 @@ import { useCurrentIdentity } from '../../../components/DataSource/useActivatedU
 import type { PoolSettings } from '../hooks/useFillCallback'
 import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
+import type { RegionCode } from '../hooks/useRegion'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatAmount, formatBalance } from '../../Wallet/formatter'
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { RegionField } from './RegionField'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -167,6 +169,12 @@ export function CreateForm(props: CreateFormProps) {
     // qualificationAddress
     const [qualificationAddress, setQualificationAddress] = useState('')
     const { value: qualification, loading: loadingQualification } = useQualificationVerify(qualificationAddress)
+
+    const [regions, setRegions] = useState<RegionCode[]>([])
+    const handleRegionChange = (codes: RegionCode[]) => {
+        setRegions(codes)
+    }
+
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
@@ -392,6 +400,14 @@ export function CreateForm(props: CreateFormProps) {
                 </Box>
             ) : null}
             <Box className={classes.date}>{UnlockTime}</Box>
+            <Box className={classes.line}>
+                <RegionField
+                    className={classes.input}
+                    label={t('plugin_ito_region_label')}
+                    value={regions}
+                    onChange={handleRegionChange}
+                />
+            </Box>
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
