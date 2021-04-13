@@ -1,2 +1,2 @@
 export { App as Dashboard } from './App'
-export { setService } from './API'
+export { setService, setPluginMessages, setMessages, setPluginServices } from './API'
