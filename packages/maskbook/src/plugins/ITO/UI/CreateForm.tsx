@@ -20,12 +20,13 @@ import { useCurrentIdentity } from '../../../components/DataSource/useActivatedU
 import type { PoolSettings } from '../hooks/useFillCallback'
 import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import type { RegionCode } from '../hooks/useRegion'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatAmount, formatBalance } from '../../Wallet/formatter'
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { useRegionSelect, encodeRegionCode } from '../hooks/useRegion'
+import type { RegionCode } from '../hooks/useRegion'
 import { RegionField } from './RegionField'
 
 const useStyles = makeStyles((theme) =>
@@ -170,9 +171,10 @@ export function CreateForm(props: CreateFormProps) {
     const [qualificationAddress, setQualificationAddress] = useState('')
     const { value: qualification, loading: loadingQualification } = useQualificationVerify(qualificationAddress)
 
-    const [regions, setRegions] = useState<RegionCode[]>([])
+    const [regions, setRegions] = useRegionSelect()
     const handleRegionChange = (codes: RegionCode[]) => {
         setRegions(codes)
+        console.log(encodeRegionCode(codes))
     }
 
     useEffect(() => {

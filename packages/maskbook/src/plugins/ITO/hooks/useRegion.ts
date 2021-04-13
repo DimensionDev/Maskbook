@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 // TODO better way to do the i18n of region
@@ -260,6 +261,7 @@ enum RegionEnum {
 export type RegionCode = keyof typeof RegionEnum
 
 const regionNameMap = new Map(regions.map((r) => [r.code, r.name])) as Map<RegionCode, string>
+const regionCodes = regions.map((r) => r.code as RegionCode)
 
 type Region = {
     code: RegionCode
@@ -294,11 +296,39 @@ function createRegionResolver(api: string, field: string): RegionResolver {
 
 const IPGeo = createRegionResolver('https://service.r2d2.to/geolocation', 'region')
 
-export function useRegion(): AsyncStateRetry<Region> {
+export function useIPRegion(): AsyncStateRetry<Region> {
     return useAsyncRetry(IPGeo.getRegion)
 }
 
 export function useRegionList(): Array<Region> {
     // TODO return name by i18n
     return regions as Array<Region>
+}
+
+export function useRegionSelect() {
+    return useState<RegionCode[]>([...regionCodes])
+}
+
+export function encodeRegionCode(codes: RegionCode[]) {
+    const isMoreThanHalf = codes.length > regionCodes.length / 2
+    if (isMoreThanHalf) {
+        return '-' + regionCodes.filter((c) => !codes.includes(c))
+    }
+    return '+' + codes.join(',')
+}
+
+export function decodeRegionCode(str: string): RegionCode[] {
+    str = str.toUpperCase()
+
+    const isReverse = str[0] === '-'
+
+    const codes = str
+        .slice(1)
+        .split(',')
+        .filter((c) => regionNameMap.has(c as RegionCode)) as RegionCode[]
+
+    if (isReverse) {
+        return regionCodes.filter((c) => !codes.includes(c))
+    }
+    return codes
 }
