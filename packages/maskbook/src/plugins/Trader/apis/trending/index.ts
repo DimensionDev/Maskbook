@@ -148,9 +148,12 @@ async function updateCache(dataProvider: DataProvider, keyword?: string) {
                     lastUpdated: new Date(),
                 })
             const cache = coinNamespace.get(dataProvider)!
-            cache.supportedSymbolsSet.add(keyword.toLowerCase())
-            cache.supportedSymbolIdsMap.set(keyword.toLowerCase(), await uniswapAPI.getAllCoinsByKeyword(keyword))
-            cache.lastUpdated = new Date()
+            const coins = await uniswapAPI.getAllCoinsByKeyword(keyword)
+            if (coins.length) {
+                cache.supportedSymbolsSet.add(keyword.toLowerCase())
+                cache.supportedSymbolIdsMap.set(keyword.toLowerCase(), coins)
+                cache.lastUpdated = new Date()
+            }
             return
         }
 

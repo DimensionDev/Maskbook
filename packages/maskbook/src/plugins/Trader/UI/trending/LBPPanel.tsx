@@ -18,6 +18,7 @@ import { useConstant } from '../../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../../web3/constants'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { usePools } from '../../LBP/usePools'
+import type { Currency } from '../../types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -63,6 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface LBPPanelProps extends withClasses<never> {
     duration: number
     token: ERC20TokenDetailed
+    currency: Currency
 }
 
 export function LBPPanel(props: LBPPanelProps) {
@@ -111,6 +113,7 @@ export function LBPPanel(props: LBPPanelProps) {
                                   value: x.price,
                               }))
                     }
+                    currency={props.currency}
                 />
             </div>
             <Typography className={classes.introduce}>

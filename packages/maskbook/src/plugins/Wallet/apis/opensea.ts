@@ -1,3 +1,5 @@
+import { ChainId } from '../../../web3/types'
+
 interface AssetContract {
     address: string
     asset_contract_type: string
@@ -6,7 +8,7 @@ interface AssetContract {
     nft_version: string
     opensea_version: unknown | null
     owner: unknown | null
-    schema_name: 'ERC721'
+    schema_name: 'ERC721' | 'ERC1155'
     symbol: string
     total_supply: string
     description: string | null
@@ -113,16 +115,25 @@ export interface AssetsListResponse {
     assets: Asset[]
 }
 
-export async function getAssetsList(from: string, size = 50, page = 0) {
+export async function getAssetsList(from: string, opts: { chainId?: ChainId; page?: number; size?: number }) {
+    const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
     const params = new URLSearchParams()
     params.append('exclude_currencies', 'true')
     params.append('owner', from.toLowerCase())
     params.append('limit', String(size))
-    params.append('offset', String(size * page))
+    params.append('offset', String(size * (page - 1)))
 
-    const response = await fetch(`https://api.opensea.io/api/v1/assets?${params.toString()}`, {
-        method: 'GET',
-        mode: 'cors',
-    })
+    if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId))
+        return {
+            assets: [],
+        } as AssetsListResponse
+
+    const response = await fetch(
+        `https://${chainId === ChainId.Mainnet ? 'api' : 'rinkeby-api'}.opensea.io/api/v1/assets?${params.toString()}`,
+        {
+            method: 'GET',
+            mode: 'cors',
+        },
+    )
     return (await response.json()) as AssetsListResponse
 }

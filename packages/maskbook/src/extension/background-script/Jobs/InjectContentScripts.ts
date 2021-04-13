@@ -46,17 +46,19 @@ export default function () {
             })
         }
         await contentScriptReady
-        for (const script of contentScripts) {
-            const option: browser.extensionTypes.InjectDetails = {
-                runAt: 'document_idle',
-                frameId: arg.frameId,
-                ...script,
-            }
-            try {
+        // it's meaningless if one of the script failed to inject.
+        // so it's try-for not for-try
+        try {
+            for (const script of contentScripts) {
+                const option: browser.extensionTypes.InjectDetails = {
+                    runAt: 'document_idle',
+                    frameId: arg.frameId,
+                    ...script,
+                }
                 await browser.tabs.executeScript(arg.tabId, option)
-            } catch (e) {
-                IgnoreError(option)(e)
             }
+        } catch (e) {
+            IgnoreError(arg)(e)
         }
     }
     browser.webNavigation.onCommitted.addListener(onCommittedListener)
@@ -82,6 +84,6 @@ function IgnoreError(arg: unknown): (reason: Error) => void {
         const ignoredErrorMessages = ['non-structured-clonable data', 'No tab with id']
         if (ignoredErrorMessages.some((x) => e.message.includes(x))) {
             // It's okay we don't need the result, happened on Firefox
-        } else console.error('Inject error', e.message, arg, Object.entries(e))
+        } else console.error('Inject error', e.message, arg, ...Object.entries(e))
     }
 }

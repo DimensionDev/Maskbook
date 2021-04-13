@@ -1,6 +1,5 @@
 import { postsContentSelector } from '../utils/selector'
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI } from '../../../social-network'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import { PostInfo } from '../../../social-network/PostInfo'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
@@ -21,7 +20,6 @@ import {
     makeTypedMessageCompound,
     extractTextFromTypedMessage,
 } from '../../../protocols/typed-message'
-import { twitterShared } from '../shared'
 import type { Result } from 'ts-results'
 import { twitterBase } from '../base'
 import { twitterEncoding } from '../encoding'

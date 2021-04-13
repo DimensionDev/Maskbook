@@ -12,7 +12,13 @@ Project has a subgraph that you can query deployed at: <https://subgraph.backend
 
 ### Components
 
-Rendering logic (inside /UI directory): Each tweet has a <LogoButton> that's passed a username prop. That component renders a <Listing> when hovered on or clicked. Then <Listing> queries the graphQL endpoint, and returns <Loading> if loading, <Listed> if listing is found, or <NotListed> if it isn't.
+Rendering logic (inside `/UI` directory):
+Each tweet has a `<LogoButton>` that's passed a username prop.
+That component renders a `<Listing>` when hovered on or clicked.
+Then `<Listing>` queries the graphQL endpoint,
+and returns `<Loading>`
+if loading, `<Listed>`
+if listing is found, or `<NotListed>` if it isn't.
 
 ### Improvements
 

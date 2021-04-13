@@ -39,18 +39,18 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-async function* queryProfilePaged(query: string | undefined) {
+async function* queryProfilePaged(query: string | undefined, size = 20) {
     if (query === '') query = undefined
     const values: Profile[] = []
-    const page = 20
     while (true) {
-        const current = await Services.Identity.queryProfilePaged({ query, after: last(values)?.identifier }, page)
+        const current = await Services.Identity.queryProfilePaged({ query, after: last(values)?.identifier }, size)
         values.push(...current)
-        if (current.length < page) break
+        if (current.length < size) break
         yield values
     }
     return values
 }
+
 // TODO: support concurrent mode
 function createPaged<P extends any[], T>(
     fetcher: (...args: P) => AsyncGenerator<T[], T[], unknown>,
