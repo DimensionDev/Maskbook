@@ -1,4 +1,4 @@
-import { stateCreator, SocialNetworkUI } from '../../social-network'
+import { stateCreator, SocialNetworkUI, globalUIState } from '../../social-network'
 import { twitterBase } from './base'
 import { twitterShared } from './shared'
 import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
@@ -29,6 +29,8 @@ import { injectMaskUserBadgeAtTwitter } from './injection/MaskbookIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { currentSelectedIdentity } from '../../settings/settings'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
+import { ProfileIdentifier } from '../../database/type'
+import { unreachable } from '../../utils/utils'
 
 const origins = ['https://www.twitter.com/*', 'https://m.twitter.com/*', 'https://twitter.com/*']
 const twitterUI: SocialNetworkUI.Definition = {
@@ -107,7 +109,13 @@ const twitterUI: SocialNetworkUI.Definition = {
         steganography: {
             password() {
                 // ! Change this might be a breaking change !
-                return currentSelectedIdentity[twitterBase.networkIdentifier].value
+                return new ProfileIdentifier(
+                    'twitter.com',
+                    ProfileIdentifier.getUserName(IdentityProviderTwitter.lastRecognized.value.identifier) ||
+                        ProfileIdentifier.getUserName(currentSelectedIdentity[twitterBase.networkIdentifier].value) ||
+                        ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
+                        unreachable('Cannot figure out password' as never),
+                ).toText()
             },
         },
     },
