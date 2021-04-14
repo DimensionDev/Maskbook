@@ -455,6 +455,7 @@
     "plugin_ito_begin_time": "開始時刻 {{zone}}",
     "plugin_ito_end_time": "終了時刻 {{zone}}",
     "plugin_ito_swap_ration_label": "スワップ比率",
+    "plugin_ito_qualification_label": "",
     "plugin_item_message_label": "タイトル",
     "plugin_ito_next": "次",
     "plugin_ito_back": "戻る",
