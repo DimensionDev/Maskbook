@@ -7,10 +7,6 @@ import { ERC165_INTERFACE_ID } from '../constants'
 import type { AbiItem } from 'web3-utils'
 
 export function useERC165(address: string, interfaceId: string) {
-    return useSuspense<boolean, [string, string]>(address, [address, interfaceId], cache, Suspender)
-}
-
-async function Suspender(address: string, interfaceId: string): Promise<boolean> {
     const account = useAccount()
 
     return useAsyncRetry(async () => {
