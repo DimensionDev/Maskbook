@@ -4,6 +4,7 @@ import * as WalletConnect from './providers/WalletConnect'
 import { ChainId, ProviderType } from '../../../web3/types'
 import { getWallet } from '../../../plugins/Wallet/services'
 import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
+import { unreachable } from '../../../utils/utils'
 
 /**
  * Sign a string
@@ -17,7 +18,8 @@ import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/s
 export async function sign(data: string, address: string, chainId: ChainId) {
     const wallet = await getWallet(address)
     if (!wallet) throw new Error('cannot find given wallet')
-    switch (currentSelectedWalletProviderSettings.value) {
+    const providerType = currentSelectedWalletProviderSettings.value
+    switch (providerType) {
         case ProviderType.Maskbook:
             if (!wallet._private_key_ || wallet._private_key_ === '0x') throw new Error('cannot sign with given wallet')
             return Maskbook.createWeb3(chainId, [wallet._private_key_]).eth.sign(data, address)
@@ -26,6 +28,6 @@ export async function sign(data: string, address: string, chainId: ChainId) {
         case ProviderType.WalletConnect:
             return WalletConnect.createWeb3().eth.personal.sign(data, address, '')
         default:
-            throw new Error('cannot sign with given wallet')
+            unreachable(providerType)
     }
 }

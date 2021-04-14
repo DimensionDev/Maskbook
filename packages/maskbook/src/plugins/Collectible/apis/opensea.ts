@@ -7,6 +7,7 @@ import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaGraphQLURL, ReferrerAddress } fr
 import { Flags } from '../../../utils/flags'
 import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../UI/types'
 import { OpenSeaEventHistoryQuery } from '../queries/OpenSea'
+import { send } from '../../../extension/background-script/EthereumServices/send'
 
 function createExternalProvider() {
     return {
@@ -14,9 +15,11 @@ function createExternalProvider() {
         isStatus: true,
         host: '',
         path: '',
-        sendAsync: console.log,
-        send: console.log,
-        request: console.log,
+        sendAsync: send,
+        send: send,
+        request() {
+            throw new Error('The request method is not implemented.')
+        },
     }
 }
 
