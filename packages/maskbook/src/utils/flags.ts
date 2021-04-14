@@ -1,13 +1,12 @@
 export const is_iOSApp = process.env.target === 'safari' && process.env.architecture === 'app'
 export const isAndroidApp = process.env.architecture === 'app' && process.env.target === 'firefox'
+
 const appOnly = process.env.architecture === 'app'
-
 const devOnly = process.env.NODE_ENV === 'development'
-
 const webOnly = process.env.architecture === 'web' || devOnly
-
 const insiderOnly = process.env.build === 'insider' || devOnly
 const betaOrInsiderOnly = insiderOnly || process.env.build === 'beta'
+
 // TODO: In future, we can turn this object into a Proxy to receive flags from remote
 export const Flags = {
     __raw__: {
