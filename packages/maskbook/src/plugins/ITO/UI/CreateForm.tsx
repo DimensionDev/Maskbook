@@ -1,7 +1,9 @@
-import { createStyles, makeStyles, Box, TextField, DialogProps } from '@material-ui/core'
+import { createStyles, makeStyles, Box, TextField, DialogProps, CircularProgress } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
-import { useState, useCallback, useMemo, useEffect, ChangeEvent, Suspense } from 'react'
+import UnCheckIcon from '@material-ui/icons/Close'
+import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
 import BigNumber from 'bignumber.js'
+import classNames from 'classnames'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
 import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
@@ -11,7 +13,8 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { ITO_CONSTANTS } from '../constants'
+import { useERC165 } from '../../../web3/hooks/useERC165'
+import { ITO_CONSTANTS, QUALIFICATION_INTERFACE_ID } from '../constants'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
@@ -63,21 +66,15 @@ const useStyles = makeStyles((theme) =>
             width: 26,
             height: 24,
             borderRadius: 500,
+        },
+        success: {
             backgroundColor: 'rgba(119, 224, 181, 0.2)',
+        },
+        fail: {
+            backgroundColor: 'rgba(255, 78, 89, 0.2)',
         },
     }),
 )
-
-function QualEndAdornment(props: { address: string }) {
-    const classes = useStyles()
-    // const { payload: isQualification } = useERC165(props.address, QUALIFICATION_INTERFACE_ID)
-    console.log(1234)
-    return (
-        <Box className={classes.iconWrapper}>
-            <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
-        </Box>
-    )
-}
 
 export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
@@ -160,6 +157,10 @@ export function CreateForm(props: CreateFormProps) {
 
     // qualification
     const [qualification, setQualification] = useState('')
+    const { value: isQualification, loading: loadingQualification } = useERC165(
+        qualification,
+        QUALIFICATION_INTERFACE_ID,
+    )
 
     useEffect(() => {
         console.log({ onChangePoolSettings })
@@ -318,19 +319,22 @@ export function CreateForm(props: CreateFormProps) {
                     <TextField
                         className={classes.input}
                         label={t('plugin_ito_qualification_label')}
-                        onChange={(e) => {
-                            console.log('78877')
-                            setQualification(e.currentTarget.value)
-                        }}
+                        onChange={(e) => setQualification(e.currentTarget.value)}
                         value={qualification}
                         InputLabelProps={{
                             shrink: true,
                         }}
                         InputProps={{
-                            endAdornment: (
-                                <Suspense fallback={123}>
-                                    <QualEndAdornment address={qualification} />
-                                </Suspense>
+                            endAdornment: isQualification ? (
+                                <Box className={classNames(classes.iconWrapper, classes.success)}>
+                                    <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
+                                </Box>
+                            ) : loadingQualification ? (
+                                <CircularProgress size={16} />
+                            ) : (
+                                <Box className={classNames(classes.iconWrapper, classes.fail)}>
+                                    <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
+                                </Box>
                             ),
                         }}
                     />
