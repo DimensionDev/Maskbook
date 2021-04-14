@@ -27,7 +27,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useRegionSelect, encodeRegionCode } from '../hooks/useRegion'
 import type { RegionCode } from '../hooks/useRegion'
-import { RegionField } from './RegionField'
+import { RegionSelect } from './RegionSelect'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -403,11 +403,21 @@ export function CreateForm(props: CreateFormProps) {
             ) : null}
             <Box className={classes.date}>{UnlockTime}</Box>
             <Box className={classes.line}>
-                <RegionField
+                <TextField
                     className={classes.input}
                     label={t('plugin_ito_region_label')}
-                    value={regions}
-                    onChange={handleRegionChange}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    InputProps={{
+                        // FIXME how to resolve the Type check error
+                        // @ts-ignore
+                        inputComponent: RegionSelect,
+                        inputProps: {
+                            value: regions,
+                            onRegionChange: handleRegionChange,
+                        },
+                    }}
                 />
             </Box>
             <Box className={classes.line}>
