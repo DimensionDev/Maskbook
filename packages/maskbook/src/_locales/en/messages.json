@@ -455,6 +455,7 @@
     "plugin_ito_begin_time": "Start Time {{zone}}",
     "plugin_ito_end_time": "End Time {{zone}}",
     "plugin_ito_swap_ration_label": "Swap Ratio",
+    "plugin_ito_qualification_label": "Qualification Contract",
     "plugin_item_message_label": "Title",
     "plugin_ito_next": "Next",
     "plugin_ito_back": "Back",

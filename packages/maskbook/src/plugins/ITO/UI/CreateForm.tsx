@@ -1,6 +1,9 @@
-import { createStyles, makeStyles, Box, TextField } from '@material-ui/core'
+import { createStyles, makeStyles, Box, TextField, DialogProps, CircularProgress } from '@material-ui/core'
+import CheckIcon from '@material-ui/icons/Check'
+import UnCheckIcon from '@material-ui/icons/Close'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
 import BigNumber from 'bignumber.js'
+import classNames from 'classnames'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
 import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
@@ -10,7 +13,8 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { ITO_CONSTANTS } from '../constants'
+import { useERC165 } from '../../../web3/hooks/useERC165'
+import { ITO_CONSTANTS, QUALIFICATION_INTERFACE_ID } from '../constants'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
@@ -18,7 +22,6 @@ import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmoun
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatAmount, formatBalance } from '../../Wallet/formatter'
-import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -56,6 +59,20 @@ const useStyles = makeStyles((theme) =>
                 padding: theme.spacing(1),
             },
         },
+        iconWrapper: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 26,
+            height: 24,
+            borderRadius: 500,
+        },
+        success: {
+            backgroundColor: 'rgba(119, 224, 181, 0.2)',
+        },
+        fail: {
+            backgroundColor: 'rgba(255, 78, 89, 0.2)',
+        },
     }),
 )
 
@@ -63,6 +80,7 @@ export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
     onNext: () => void
     origin?: PoolSettings
+    dateDialogProps: Partial<DialogProps>
 }
 
 export function CreateForm(props: CreateFormProps) {
@@ -137,7 +155,15 @@ export function CreateForm(props: CreateFormProps) {
         }
     }, [])
 
+    // qualification
+    const [qualification, setQualification] = useState('')
+    const { value: isQualification, loading: loadingQualification } = useERC165(
+        qualification,
+        QUALIFICATION_INTERFACE_ID,
+    )
+
     useEffect(() => {
+        console.log({ onChangePoolSettings })
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
         onChangePoolSettings({
@@ -215,7 +241,7 @@ export function CreateForm(props: CreateFormProps) {
         [startTime],
     )
 
-    const StartTime = usePortalShadowRoot((container) => (
+    const StartTime = (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <MobileDateTimePicker
                 showTodayButton
@@ -224,11 +250,12 @@ export function CreateForm(props: CreateFormProps) {
                 onChange={(date: Date | null) => handleStartTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
                 value={startTime}
-                DialogProps={{ container }}
+                DialogProps={props.dateDialogProps}
             />
         </LocalizationProvider>
-    ))
-    const EndTime = usePortalShadowRoot((container) => (
+    )
+
+    const EndTime = (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <MobileDateTimePicker
                 showTodayButton
@@ -237,10 +264,11 @@ export function CreateForm(props: CreateFormProps) {
                 onChange={(date: Date | null) => handleEndTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
                 value={endTime}
-                DialogProps={{ container }}
+                DialogProps={props.dateDialogProps}
             />
         </LocalizationProvider>
-    ))
+    )
+
     return (
         <>
             <Box className={classes.line} style={{ display: 'block' }}>
@@ -286,6 +314,32 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.date}>
                 {StartTime} {EndTime}
             </Box>
+            {account ? (
+                <Box className={classes.line}>
+                    <TextField
+                        className={classes.input}
+                        label={t('plugin_ito_qualification_label')}
+                        onChange={(e) => setQualification(e.currentTarget.value)}
+                        value={qualification}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            endAdornment: isQualification ? (
+                                <Box className={classNames(classes.iconWrapper, classes.success)}>
+                                    <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
+                                </Box>
+                            ) : loadingQualification ? (
+                                <CircularProgress size={16} />
+                            ) : (
+                                <Box className={classNames(classes.iconWrapper, classes.fail)}>
+                                    <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
+                                </Box>
+                            ),
+                        }}
+                    />
+                </Box>
+            ) : null}
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
