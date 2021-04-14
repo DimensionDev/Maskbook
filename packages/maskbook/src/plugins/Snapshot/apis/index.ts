@@ -1,5 +1,6 @@
 import ss from '@snapshot-labs/snapshot.js'
-import type { Votes, Proposal, Profile3Box } from '../types'
+import { ChainId } from '../../../web3/types'
+import type { Votes, Proposal, Profile3Box, ProposalMessage } from '../types'
 
 export async function fetchProposal(id: string) {
     const response = await fetch(`https://ipfs.io/ipfs/${id}`, {
@@ -31,4 +32,22 @@ export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Bo
     })
 
     return profiles ?? []
+}
+
+export async function getScores(message: ProposalMessage, voters: string[], blockNumber: number) {
+    const spaceKey = message.space
+    const strategies = message.payload.metadata.strategies
+    const network = ChainId.Mainnet.toString()
+    const provider = ss.utils.getProvider(network)
+    const snapshot = Number(message.payload.snapshot)
+    const blockTag = snapshot > blockNumber ? 'latest' : snapshot
+    const scores: { [key in string]: number }[] = await ss.utils.getScores(
+        spaceKey,
+        strategies,
+        network,
+        provider,
+        voters,
+        blockTag,
+    )
+    return scores
 }

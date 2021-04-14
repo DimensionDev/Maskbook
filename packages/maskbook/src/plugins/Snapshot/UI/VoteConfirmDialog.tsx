@@ -1,5 +1,5 @@
-import { useContext, useCallback, useState } from 'react'
 import {
+    Box,
     Typography,
     Button,
     Card,
@@ -10,17 +10,15 @@ import {
     createStyles,
     makeStyles,
 } from '@material-ui/core'
+import millify from 'millify'
 import OpenInNew from '@material-ui/icons/OpenInNew'
-
-import { SnapshotContext } from '../context'
-import { useProposal } from '../hooks/useProposal'
+import type { ProposalMessage } from '../types'
 import { resolveBlockLinkOnEtherscan } from '../../../web3/pipes'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useChainId } from '../../../web3/hooks/useChainState'
-import { PluginSnapshotMessages } from '../messages'
+import { ChainId } from '../../../web3/types'
 import { InfoField } from './InformationCard'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -37,6 +35,7 @@ const useStyles = makeStyles((theme) =>
         },
         button: {
             width: '60%',
+            minHeight: 39,
             margin: `${theme.spacing(1)} auto`,
         },
         link: {
@@ -49,34 +48,19 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export function VoteConfirmDialog() {
+interface VoteConfirmDialogProps {
+    open: boolean
+    message: ProposalMessage
+    onClose: () => void
+    onConfirm: () => void
+    choiceText: string
+    power: number | undefined
+}
+
+export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
+    const { open, onClose, onConfirm, choiceText, message, power = 0 } = props
     const { t } = useI18N()
     const classes = useStyles()
-
-    const chainId = useChainId()
-    const identifier = useContext(SnapshotContext)
-    const {
-        payload: { proposal, message },
-    } = useProposal(identifier.id)
-    const { snapshot } = message.payload
-    const youPower = 0 //  TODO
-
-    const [choiceText, setChoiceText] = useState('')
-
-    //#region remote controlled buy token dialog
-    const [open, setOpen] = useRemoteControlledDialog(PluginSnapshotMessages.events.voteConfirmDialogUpdated, (ev) => {
-        if (ev.open) setChoiceText(ev.choiceText)
-    })
-    const onClose = useCallback(() => {
-        setOpen({
-            open: false,
-        })
-    }, [setOpen])
-    //#endregion
-
-    const onConfirm = () => {
-        // TODO
-    }
 
     return (
         <InjectedDialog
@@ -85,40 +69,48 @@ export function VoteConfirmDialog() {
             title={t('plugin_snapshot_vote_confirm_dialog_title')}
             disableBackdropClick>
             <DialogContent>
-                <Typography variant="h6" align="center">
-                    <div>{t('plugin_snapshot_vote_confirm_dialog_choice', { choiceText })}</div>
-                    <div>{t('plugin_snapshot_vote_confirm_dialog_warning')}</div>
-                </Typography>
+                <Box>
+                    <Typography variant="h6" align="center">
+                        {t('plugin_snapshot_vote_confirm_dialog_choice', { choiceText })}
+                    </Typography>
+                    <Typography variant="h6" align="center">
+                        {t('plugin_snapshot_vote_confirm_dialog_warning')}
+                    </Typography>
+                </Box>
                 <Card className={classes.card} variant="outlined">
                     <CardContent className={classes.content}>
-                        <Typography>
+                        <Box>
                             <InfoField title={t('plugin_snapshot_vote_choice')}>{choiceText}</InfoField>
                             <InfoField title={t('plugin_snapshot_info_snapshot')}>
                                 <Link
                                     className={classes.link}
                                     target="_blank"
                                     rel="noopener"
-                                    href={resolveBlockLinkOnEtherscan(chainId, snapshot)}>
-                                    {snapshot}
+                                    href={resolveBlockLinkOnEtherscan(ChainId.Mainnet, message.payload.snapshot)}>
+                                    {message.payload.snapshot}
                                     <OpenInNew fontSize="small" />
                                 </Link>
                             </InfoField>
                             <InfoField title={t('plugin_snapshot_vote_power')}>
-                                {`${youPower} ${message.space.toUpperCase()}`}
+                                {`${millify(power, { precision: 2, lowercase: true })} ${message.space.toUpperCase()}`}
                             </InfoField>
-                        </Typography>
+                        </Box>
                     </CardContent>
                 </Card>
             </DialogContent>
             <DialogActions>
-                <Button
-                    classes={{ root: classes.button }}
-                    color="primary"
-                    variant="contained"
-                    fullWidth
-                    onClick={onConfirm}>
-                    {t('plugin_snapshot_vote')}
-                </Button>
+                <EthereumWalletConnectedBoundary
+                    connectWalletButtonStyle={classes.button}
+                    unlockMetamaskButtonStyle={classes.button}>
+                    <Button
+                        classes={{ root: classes.button }}
+                        color="primary"
+                        variant="contained"
+                        fullWidth
+                        onClick={onConfirm}>
+                        {t('plugin_snapshot_vote')}
+                    </Button>
+                </EthereumWalletConnectedBoundary>
             </DialogActions>
         </InjectedDialog>
     )

@@ -23,10 +23,12 @@ const useStyles = makeStyles((theme) =>
 
 export interface EthereumWalletConnectedBoundaryProps {
     children?: React.ReactNode
+    connectWalletButtonStyle?: string
+    unlockMetamaskButtonStyle?: string
 }
 
 export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
-    const { children = null } = props
+    const { children = null, connectWalletButtonStyle, unlockMetamaskButtonStyle } = props
 
     const { t } = useI18N()
     const classes = useStyles()
@@ -57,7 +59,12 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     if (!account)
         return (
             <Grid container>
-                <ActionButton className={classes.button} fullWidth variant="contained" size="large" onClick={onConnect}>
+                <ActionButton
+                    className={connectWalletButtonStyle ?? classes.button}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    onClick={onConnect}>
                     {t('plugin_wallet_connect_a_wallet')}
                 </ActionButton>
             </Grid>
@@ -67,7 +74,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
         return (
             <Grid container>
                 <ActionButton
-                    className={classes.button}
+                    className={unlockMetamaskButtonStyle ?? classes.button}
                     fullWidth
                     variant="contained"
                     size="large"

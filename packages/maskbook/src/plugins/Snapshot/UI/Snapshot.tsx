@@ -16,7 +16,6 @@ import { SnapshotContext } from '../context'
 import { useProposal } from '../hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
-import { VoteConfirmDialog } from './VoteConfirmDialog'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -119,7 +118,6 @@ export function Snapshot() {
                     {tabIndex === 1 ? <ProgressTab /> : null}
                 </Paper>
             </CardContent>
-            <VoteConfirmDialog />
         </Card>
     )
 }

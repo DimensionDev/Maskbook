@@ -6,13 +6,15 @@ import { createStyles, makeStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { SnapshotCard } from './SnapshotCard'
 import { useProposal } from '../hooks/useProposal'
-import { PluginSnapshotMessages } from '../messages'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { usePower } from '../hooks/usePower'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { VoteConfirmDialog } from './VoteConfirmDialog'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
         button: {
             width: '80%',
+            minHeight: 39,
             margin: `${theme.spacing(1)} auto`,
         },
         choiceButton: {
@@ -37,10 +39,10 @@ export function VotingCard() {
         payload: { message },
     } = useProposal(identifier.id)
 
+    const { value: power } = usePower(identifier)
     const choices = message.payload.choices
     const [choice, setChoice] = useState(0)
-
-    const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginSnapshotMessages.events.voteConfirmDialogUpdated)
+    const [open, setOpen] = useState(false)
 
     return (
         <SnapshotCard title={t('plugin_snapshot_vote_title')}>
@@ -56,16 +58,25 @@ export function VotingCard() {
                     {choiceText}
                 </Button>
             ))}
-            <Button
-                className={classes.button}
-                variant="contained"
-                disabled={choice === 0}
-                onClick={() => {
-                    console.log('setBuyDialogOpen')
-                    setBuyDialogOpen({ open: true, choice, choiceText: choices[choice - 1] })
-                }}>
-                {t('plugin_snapshot_vote')}
-            </Button>
+            <EthereumWalletConnectedBoundary
+                connectWalletButtonStyle={classes.button}
+                unlockMetamaskButtonStyle={classes.button}>
+                <Button
+                    className={classes.button}
+                    variant="contained"
+                    disabled={choice === 0}
+                    onClick={() => setOpen(true)}>
+                    {t('plugin_snapshot_vote')}
+                </Button>
+            </EthereumWalletConnectedBoundary>
+            <VoteConfirmDialog
+                open={open}
+                onClose={() => setOpen(false)}
+                choiceText={choices[choice - 1]}
+                message={message}
+                power={power}
+                onConfirm={() => {}}
+            />
         </SnapshotCard>
     )
 }
