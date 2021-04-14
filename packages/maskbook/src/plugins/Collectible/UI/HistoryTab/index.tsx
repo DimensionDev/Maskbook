@@ -139,7 +139,7 @@ export function HistoryTab(props: HistoryTabProps) {
                         <Row key={order.node.id} event={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {events.value.edges.length ? (
+                {events.value.edges.length || page > 0 ? (
                     <TableListPagination
                         handlePrevClick={() => setPage((prev) => prev - 1)}
                         handleNextClick={() => setPage((prev) => prev + 1)}

@@ -13,3 +13,5 @@ export const OpenSeaGraphQLURL = 'https://opensea-agent.r2d2.to/graphql/'
 export const NullAddress = 'NullAddress'
 
 export const ReferrerAddress = ''
+
+export const OpenSeaAPI_Key = 'c38fe2446ee34f919436c32db480a2e3'

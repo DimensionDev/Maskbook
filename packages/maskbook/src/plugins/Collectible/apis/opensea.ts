@@ -3,12 +3,10 @@ import type { OrderSide, WyvernSchemaName } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
 import { getChainId } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
-import { OpenSeaBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
+import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
 import { Flags } from '../../../utils/flags'
 import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../UI/types'
 import { OpenSeaEventHistoryQuery } from '../queries/OpenSea'
-
-const apiKey = 'c38fe2446ee34f919436c32db480a2e3'
 
 function createExternalProvider() {
     return {
@@ -26,7 +24,7 @@ async function createOpenSeaPort() {
     const chainId = await getChainId()
     return new OpenSeaPort(createExternalProvider(), {
         networkName: resolveOpenSeaNetwork(chainId),
-        apiKey,
+        apiKey: OpenSeaAPI_Key,
     })
 }
 
@@ -37,7 +35,7 @@ export async function getAsset(tokenAddress: string, tokenId: string) {
             cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : undefined,
             mode: 'cors',
             headers: {
-                'x-api-key': apiKey,
+                'x-api-key': OpenSeaAPI_Key,
             },
         })
     ).json()

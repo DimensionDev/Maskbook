@@ -140,26 +140,16 @@ export function OfferTab() {
             <Table size="small" stickyHeader>
                 <TableHead>
                     <TableRow>
-                        <TableCell>
-                            {t('plugin_collectible_from')}
-                        </TableCell>
+                        <TableCell>{t('plugin_collectible_from')}</TableCell>
                         {isDifferenceToken ? (
                             <>
-                                <TableCell>
-                                    {t('plugin_collectible_unit_price')}
-                                </TableCell>
-                                <TableCell>
-                                    {t('plugin_collectible_quantity')}
-                                </TableCell>
+                                <TableCell>{t('plugin_collectible_unit_price')}</TableCell>
+                                <TableCell>{t('plugin_collectible_quantity')}</TableCell>
                             </>
                         ) : (
                             <>
-                                <TableCell>
-                                    {t('plugin_collectible_price')}
-                                </TableCell>
-                                <TableCell>
-                                    {t('plugin_collectible_expiration')}
-                                </TableCell>
+                                <TableCell>{t('plugin_collectible_price')}</TableCell>
+                                <TableCell>{t('plugin_collectible_expiration')}</TableCell>
                             </>
                         )}
                     </TableRow>
@@ -169,7 +159,7 @@ export function OfferTab() {
                         <OrderRow key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {dataSource.length ? (
+                {dataSource.length || page > 0 ? (
                     <TableListPagination
                         handlePrevClick={() => setPage((prev) => prev - 1)}
                         handleNextClick={() => setPage((prev) => prev + 1)}
