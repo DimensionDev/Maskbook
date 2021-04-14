@@ -39,24 +39,13 @@ export function setupPortalShadowRoot(
  */
 export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX.Element) {
     const [findMountingShadowRef, setRef] = useState<HTMLSpanElement | null>(null)
-    const update = useUpdate()
     const doms = useSideEffectRef(() => {
         const root = document.createElement('div')
         const container = root.appendChild(document.createElement('div'))
-        container.appendChild = bind(container.appendChild, container, update)
-        container.removeChild = bind(container.removeChild, container, update)
         const style = root.appendChild(document.createElement('style'))
         return { root, container, style }
     })
-    const { root, container } = doms
-    const containerInUse = container.children.length !== 0
-
-    useEffect(() => {
-        if (!containerInUse) return root.remove()
-        const shadow = PortalShadowRoot()
-        if (root.parentElement === shadow) return
-        shadow.appendChild(root)
-    }, [containerInUse, root])
+    const { container } = doms
 
     return (
         <IsolatedRender {...doms} findMountingShadowRef={findMountingShadowRef}>
@@ -78,8 +67,14 @@ type IsolatedRenderProps = React.PropsWithChildren<{
     findMountingShadowRef: HTMLSpanElement | null
 }>
 const IsolatedRender = ({ container, root, style, children, findMountingShadowRef }: IsolatedRenderProps) => {
+    const update = useUpdate()
     const css = useCurrentShadowRootStyles(findMountingShadowRef)
     const containerInUse = container.children.length !== 0
+
+    useEffect(() => {
+        container.appendChild = bind(container.appendChild, container, update)
+        container.removeChild = bind(container.removeChild, container, update)
+    }, [])
 
     useEffect(() => {
         if (!containerInUse) return root.remove()
@@ -92,7 +87,7 @@ const IsolatedRender = ({ container, root, style, children, findMountingShadowRe
         if (findMountingShadowRef && style.innerHTML !== css) style.innerHTML = css
     }, [style, css, findMountingShadowRef])
 
-    return <>{children}</>
+    return children as any
 }
 
 export function createShadowRootForwardedComponent<
