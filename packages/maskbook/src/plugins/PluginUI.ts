@@ -27,7 +27,7 @@ sideEffect.then(() => {
     plugins.add(FileServicePluginDefine)
     plugins.add(ITO_PluginDefine)
     plugins.add(NFT_PluginsDefine)
-    plugins.add(VCentPluginDefine)
+    if (Flags.vcent_enabled) plugins.add(VCentPluginDefine)
     if (Flags.gitcoin_enabled) plugins.add(GitcoinPluginDefine)
     if (Flags.poll_enabled) plugins.add(PollsPluginDefine)
     if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
