@@ -53,7 +53,8 @@ export function ListingTab() {
             listings.value?.orders.some(
                 (item) =>
                     (item.paymentTokenContract?.symbol !== 'WETH' && item.paymentTokenContract?.symbol !== 'ETH') ||
-                    new BigNumber(item.quantity).toString() !== '1',
+                    new BigNumber(item.quantity).toString() !== '1' ||
+                    new BigNumber(item.expirationTime).isZero(),
             ),
         [listings.value],
     )

@@ -81,19 +81,22 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                 <>
                     <TableCell>
                         <Typography className={classes.content}>
-                            <Link
-                                href={resolveAddressOnEtherscan(ChainId.Mainnet, order.paymentToken)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={classes.tokenLink}>
-                                {order.paymentTokenContract?.imageUrl && (
-                                    <img
-                                        src={order.paymentTokenContract.imageUrl}
-                                        className={classes.token}
-                                        alt={order.paymentTokenContract?.symbol}
-                                    />
-                                )}
-                            </Link>
+                            {order.paymentTokenContract?.symbol !== 'ETH' &&
+                            order.paymentTokenContract?.symbol !== 'WETH' ? (
+                                <Link
+                                    href={resolveAddressOnEtherscan(ChainId.Mainnet, order.paymentToken)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={classes.tokenLink}>
+                                    {order.paymentTokenContract?.imageUrl && (
+                                        <img
+                                            src={order.paymentTokenContract.imageUrl}
+                                            className={classes.token}
+                                            alt={order.paymentTokenContract?.symbol}
+                                        />
+                                    )}
+                                </Link>
+                            ) : null}
                             {order.unitPrice}
                         </Typography>
                     </TableCell>
@@ -110,25 +113,28 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                 <>
                     <TableCell>
                         <Typography style={{ display: 'flex' }} className={classes.content}>
-                            <Link
-                                href={resolveAddressOnEtherscan(ChainId.Mainnet, order.paymentToken)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={classes.tokenLink}>
-                                {order.paymentTokenContract?.imageUrl && (
-                                    <img
-                                        src={order.paymentTokenContract.imageUrl}
-                                        className={classes.token}
-                                        alt={order.paymentTokenContract?.symbol}
-                                    />
-                                )}
-                            </Link>
+                            {order.paymentTokenContract?.symbol !== 'ETH' &&
+                            order.paymentTokenContract?.symbol !== 'WETH' ? (
+                                <Link
+                                    href={resolveAddressOnEtherscan(ChainId.Mainnet, order.paymentToken)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={classes.tokenLink}>
+                                    {order.paymentTokenContract?.imageUrl && (
+                                        <img
+                                            src={order.paymentTokenContract.imageUrl}
+                                            className={classes.token}
+                                            alt={order.paymentTokenContract?.symbol}
+                                        />
+                                    )}
+                                </Link>
+                            ) : null}
                             {order.unitPrice}
                         </Typography>
                     </TableCell>
                     <TableCell>
                         <Typography className={classes.content}>
-                            {new BigNumber(order.expirationTime).isZero() &&
+                            {!new BigNumber(order.expirationTime).isZero() &&
                                 formatDistanceToNow(
                                     new Date(new BigNumber(order.expirationTime).multipliedBy(1000).toNumber()),
                                     {

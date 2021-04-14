@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { head } from 'lodash-es'
+import { head, subtract } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import {
     makeStyles,
@@ -107,7 +107,7 @@ export function Collectible(props: CollectibleProps) {
             return new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber()
         })
 
-        return head(unitPrices.sort())
+        return head(unitPrices.sort(subtract))
     }, [asset.value])
 
     if (asset.loading) return <PluginSkeleton />
