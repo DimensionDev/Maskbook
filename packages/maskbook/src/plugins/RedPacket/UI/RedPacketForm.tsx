@@ -56,8 +56,7 @@ const useStyles = makeStyles((theme) =>
             color: theme.palette.text.secondary,
         },
         button: {
-            margin: theme.spacing(2, 0),
-            padding: 12,
+            marginTop: theme.spacing(1.5),
         },
         selectShrinkLabel: {
             transform: 'translate(17px, -10px) scale(0.75) !important',
@@ -331,6 +330,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     spender={RED_PACKET_ADDRESS}>
                     <ActionButton
                         variant="contained"
+                        size="large"
                         className={classes.button}
                         fullWidth
                         disabled={!!validationMessage}
