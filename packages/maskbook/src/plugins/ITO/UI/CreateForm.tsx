@@ -160,7 +160,6 @@ export function CreateForm(props: CreateFormProps) {
     )
 
     useEffect(() => {
-        console.log({ onChangePoolSettings })
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
         onChangePoolSettings({
