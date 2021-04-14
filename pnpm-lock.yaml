@@ -492,6 +492,7 @@ importers:
       async-call-rpc: ^5.0.0
       bignumber.js: ^9.0.1
       immer: ^9.0.1
+      jotai: ^0.16.0
       ts-results: ^3.1.1
       typeson: ^6.0.0
       typeson-registry: ^1.0.0-alpha.38
@@ -501,6 +502,7 @@ importers:
       async-call-rpc: 5.0.0
       bignumber.js: 9.0.1
       immer: 9.0.1
+      jotai: 0.16.0_immer@9.0.1
       ts-results: 3.1.1
       typeson: 6.0.0
       typeson-registry: 1.0.0-alpha.39
@@ -13917,6 +13919,28 @@ packages:
       - ts-node
       - utf-8-validate
     dev: true
+
+  /jotai/0.16.0_immer@9.0.1:
+    resolution: {integrity: sha512-1DjHUnTWIZD9Qh/cM+snmgJbI13AYccqfcDu0Vs8+sXHfzUi6zNyJUKfmJAjTH6vM4y81ljooTj8jSLyQauQuw==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      immer: '*'
+      optics-ts: '*'
+      react: '>=16.8'
+      react-query: '*'
+      xstate: '*'
+    peerDependenciesMeta:
+      immer:
+        optional: true
+      optics-ts:
+        optional: true
+      react-query:
+        optional: true
+      xstate:
+        optional: true
+    dependencies:
+      immer: 9.0.1
+    dev: false
 
   /js-combinatorics/0.5.5:
     resolution: {integrity: sha512-WglFY9EQvwndNhuJLxxyjnC16649lfZly/G3M3zgQMwcWlJDJ0Jn9niPWeYjnLXwWOEycYVxR2Tk98WLeFkrcw==}

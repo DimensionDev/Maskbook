@@ -3,4 +3,5 @@ export { IdentifierMap, ReadonlyIdentifierMap } from './Identifier/IdentifierMap
 export * from './Identifier/type'
 export * from './i18n/register-ns'
 export * from './react/createGlobalState'
+export * from './react/createAsync'
 export * from './ShadowRoot'
