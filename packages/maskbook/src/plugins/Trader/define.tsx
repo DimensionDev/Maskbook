@@ -9,6 +9,7 @@ import { makeTypedMessageCashTrending } from './messages/TypedMessageCashTrendin
 import { TagInspector } from './UI/trending/TagInspector'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { SettingsDialog } from './UI/trader/SettingsDialog'
+import { TraderDialog } from './UI/trader/TraderDialog'
 import { SearchResultInspector } from './UI/trending/SearchResultInspector'
 
 const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor =>
@@ -34,6 +35,7 @@ export const TraderPluginDefine: PluginConfig = {
             <>
                 <TagInspector />
                 <SettingsDialog />
+                <TraderDialog />
             </>
         )
     },
