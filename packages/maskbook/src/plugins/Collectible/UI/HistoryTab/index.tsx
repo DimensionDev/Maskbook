@@ -120,32 +120,18 @@ export function HistoryTab(props: HistoryTabProps) {
             <Table size="small" stickyHeader>
                 <TableHead>
                     <TableRow>
-                        <TableCell>
-                            <Typography>{t('plugin_collectible_event')}</Typography>
-                        </TableCell>
+                        <TableCell>{t('plugin_collectible_event')}</TableCell>
                         {isDifferenceToken ? (
                             <>
-                                <TableCell>
-                                    <Typography>{t('plugin_collectible_unit_price')}</Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography>{t('plugin_collectible_quantity')}</Typography>
-                                </TableCell>
+                                <TableCell>{t('plugin_collectible_unit_price')}</TableCell>
+                                <TableCell>{t('plugin_collectible_quantity')}</TableCell>
                             </>
                         ) : (
-                            <TableCell>
-                                <Typography>{t('plugin_collectible_price')}</Typography>
-                            </TableCell>
+                            <TableCell>{t('plugin_collectible_price')}</TableCell>
                         )}
-                        <TableCell>
-                            <Typography>{t('plugin_collectible_from')}</Typography>
-                        </TableCell>
-                        <TableCell>
-                            <Typography>{t('plugin_collectible_to')}</Typography>
-                        </TableCell>
-                        <TableCell>
-                            <Typography>{t('plugin_collectible_Date')}</Typography>
-                        </TableCell>
+                        <TableCell>{t('plugin_collectible_from')}</TableCell>
+                        <TableCell>{t('plugin_collectible_to')}</TableCell>
+                        <TableCell>{t('plugin_collectible_Date')}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -153,14 +139,16 @@ export function HistoryTab(props: HistoryTabProps) {
                         <Row key={order.node.id} event={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                <TableListPagination
-                    handlePrevClick={() => setPage((prev) => prev - 1)}
-                    handleNextClick={() => setPage((prev) => prev + 1)}
-                    prevDisabled={page === 0}
-                    nextDisabled={!events.value.pageInfo.hasNextPage}
-                    page={page}
-                    pageCount={10}
-                />
+                {events.value.edges.length ? (
+                    <TableListPagination
+                        handlePrevClick={() => setPage((prev) => prev - 1)}
+                        handleNextClick={() => setPage((prev) => prev + 1)}
+                        prevDisabled={page === 0}
+                        nextDisabled={!events.value.pageInfo.hasNextPage}
+                        page={page}
+                        pageCount={10}
+                    />
+                ) : null}
             </Table>
         </CollectibleTab>
     )

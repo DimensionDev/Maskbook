@@ -141,24 +141,24 @@ export function OfferTab() {
                 <TableHead>
                     <TableRow>
                         <TableCell>
-                            <Typography>{t('plugin_collectible_from')}</Typography>
+                            {t('plugin_collectible_from')}
                         </TableCell>
                         {isDifferenceToken ? (
                             <>
                                 <TableCell>
-                                    <Typography>{t('plugin_collectible_unit_price')}</Typography>
+                                    {t('plugin_collectible_unit_price')}
                                 </TableCell>
                                 <TableCell>
-                                    <Typography>{t('plugin_collectible_quantity')}</Typography>
+                                    {t('plugin_collectible_quantity')}
                                 </TableCell>
                             </>
                         ) : (
                             <>
                                 <TableCell>
-                                    <Typography>{t('plugin_collectible_price')}</Typography>
+                                    {t('plugin_collectible_price')}
                                 </TableCell>
                                 <TableCell>
-                                    <Typography>{t('plugin_collectible_expiration')}</Typography>
+                                    {t('plugin_collectible_expiration')}
                                 </TableCell>
                             </>
                         )}
@@ -169,14 +169,16 @@ export function OfferTab() {
                         <OrderRow key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                <TableListPagination
-                    handlePrevClick={() => setPage((prev) => prev - 1)}
-                    handleNextClick={() => setPage((prev) => prev + 1)}
-                    prevDisabled={page === 0}
-                    nextDisabled={dataSource.length < 10}
-                    page={page}
-                    pageCount={10}
-                />
+                {dataSource.length ? (
+                    <TableListPagination
+                        handlePrevClick={() => setPage((prev) => prev - 1)}
+                        handleNextClick={() => setPage((prev) => prev + 1)}
+                        prevDisabled={page === 0}
+                        nextDisabled={dataSource.length < 10}
+                        page={page}
+                        pageCount={10}
+                    />
+                ) : null}
             </Table>
         </CollectibleTab>
     )
