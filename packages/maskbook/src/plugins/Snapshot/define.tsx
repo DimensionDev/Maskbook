@@ -23,8 +23,11 @@ const isSnaphotURL = (x: string): boolean =>
     /^https:\/\/(?:www.)?snapshot.(org|page)\/#\/(.*?)\/proposal\/[A-Za-z0-9]+$/.test(x)
 
 export const SnapShotPluginDefine: PluginConfig = {
+    id: SNAPSHOT_PLUGIN_ID,
     pluginName: SNAPSHOT_PLUGIN_NAME,
     identifier: SNAPSHOT_PLUGIN_ID,
+    pluginIcon: '',
+    pluginDescription: 'A plugin for https://snapshot.org/',
     stage: PluginStage.Production,
     scope: PluginScope.Public,
     successDecryptionInspector: function Component(props): JSX.Element | null {
