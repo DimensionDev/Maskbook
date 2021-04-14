@@ -59,9 +59,10 @@ export function VotingCard() {
             <Button
                 className={classes.button}
                 variant="contained"
+                disabled={choice === 0}
                 onClick={() => {
                     console.log('setBuyDialogOpen')
-                    setBuyDialogOpen({ open: true })
+                    setBuyDialogOpen({ open: true, choice, choiceText: choices[choice - 1] })
                 }}>
                 {t('plugin_snapshot_vote')}
             </Button>
