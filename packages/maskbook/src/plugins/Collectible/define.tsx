@@ -9,7 +9,10 @@ import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import { uniq } from 'lodash-es'
 
 export const CollectiblesPluginDefine: PluginConfig = {
+    id: PLUGIN_IDENTIFIER,
+    pluginIcon: '🖼️',
     pluginName: PLUGIN_NAME,
+    pluginDescription: 'An NFT collectible viewer.',
     identifier: PLUGIN_IDENTIFIER,
     stage: PluginStage.Production,
     scope: PluginScope.Public,
