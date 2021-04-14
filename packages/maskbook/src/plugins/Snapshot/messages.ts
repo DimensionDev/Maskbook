@@ -5,6 +5,8 @@ import { SNAPSHOT_PLUGIN_ID } from './constants'
 type VoteConfirmDialogEvent =
     | {
           open: true
+          choice: number
+          choiceText: string
       }
     | {
           open: false

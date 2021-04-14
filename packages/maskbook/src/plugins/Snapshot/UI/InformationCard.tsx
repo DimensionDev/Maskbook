@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-function InfoField(props: InfoFieldProps) {
+export function InfoField(props: InfoFieldProps) {
     const classes = useStyles()
 
     return (
