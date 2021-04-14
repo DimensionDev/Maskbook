@@ -2,14 +2,8 @@ import { makeStyles, Typography, MenuItem } from '@material-ui/core'
 import { MaskbookSharpIconOfSize } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
-import { BreakdownDialog } from './BreakdownDialog'
 import { useMenu } from '../../utils/hooks/useMenu'
-import { useChainId } from '../../web3/hooks/useChainState'
-import { useConstant } from '../../web3/hooks/useConstant'
-import { CONSTANTS } from '../../web3/constants'
-import { createERC20Token } from '../../web3/helpers'
-import { useERC20TokenBalance } from '../../web3/hooks/useERC20TokenBalance'
-import { useMemo, useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import { MaskMessage } from '../../utils/messages'
 import { RedPacketCompositionEntry } from '../../plugins/RedPacket/define'
 import { FileServiceCompositionEntry } from '../../plugins/FileService/UI-define'
@@ -88,33 +82,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
 
-    //#region Airdrop
-    const chainId = useChainId()
-    const MASK_ADDRESS = useConstant(CONSTANTS, 'MASK_ADDRESS')
-    const maskToken = useMemo(() => createERC20Token(chainId, MASK_ADDRESS, 18, 'Mask Network', 'MASK'), [
-        chainId,
-        MASK_ADDRESS,
-    ])
-
-    const {
-        value: maskBalance = '0',
-        error: maskBalanceError,
-        loading: maskBalanceLoading,
-        retry: maskBalanceRetry,
-    } = useERC20TokenBalance(MASK_ADDRESS)
-
-    const [breakdownDialogOpen, setBreakdownDialogOpen] = useState(false)
-
-    const openAirdrop = useCallback(() => {
-        if (maskBalanceError) maskBalanceRetry()
-        setBreakdownDialogOpen(true)
-    }, [maskBalanceError, maskBalanceRetry])
-
-    const onBreakdownDialogClose = useCallback(() => {
-        setBreakdownDialogOpen(false)
-    }, [])
-    //#endregion
-
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
         () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'timeline', open: true }),
@@ -185,12 +152,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
                 </MenuItem>
             ) : null,
-            Flags.airdrop_enabled ? (
-                <MenuItem onClick={openAirdrop} className={classes.menuItem}>
-                    <Image src={ToolIconURLs.airdrop.image} width={19} height={19} />
-                    <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
-                </MenuItem>
-            ) : null,
         ],
         false,
         {
@@ -212,15 +173,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
                 </div>
             </div>
             {menu}
-            {maskToken ? (
-                <BreakdownDialog
-                    open={breakdownDialogOpen}
-                    token={maskToken}
-                    balance={maskBalance}
-                    onUpdateBalance={maskBalanceRetry}
-                    onClose={onBreakdownDialogClose}
-                />
-            ) : null}
         </>
     )
 }
