@@ -17,9 +17,6 @@ import ReactRefreshTypeScriptTransformer from 'react-refresh-typescript'
 import WatchMissingModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin'
 import NotifierPlugin from 'webpack-notifier'
 //#endregion
-//#region Production plugins
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
-//#endregion
 //#region Other plugins
 import CopyPlugin from 'copy-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
@@ -57,12 +54,15 @@ function config(opts: {
     target: Target
     mode: Configuration['mode']
     dist: string
+    isProfile: boolean
     disableHMR?: boolean
     disableReactHMR?: boolean
     hmrPort?: number
     noEval?: boolean
 }) {
-    const { disableReactHMR, mode, target, name, noEval, dist, hmrPort } = opts
+    // https://github.com/facebook/react/issues/20377 React-devtools conflicts with react-refresh
+    const disableReactHMR = opts.isProfile || opts.disableReactHMR
+    const { mode, target, name, noEval, dist, hmrPort, isProfile } = opts
     let { disableHMR } = opts
     const isManifestV3 = target.runtimeEnv.manifest === 3
     if (mode === 'production') disableHMR = true
@@ -86,7 +86,6 @@ function config(opts: {
         resolve: {
             extensions: ['.js', '.ts', '.tsx'],
             alias: {
-                // If anyone need profiling React please checkout: https://github.com/facebook/create-react-app/blob/396892/packages/react-scripts/config/webpack.config.js#L338
                 'async-call-rpc$': 'async-call-rpc/full',
                 lodash: 'lodash-es',
                 // Strange...
@@ -158,7 +157,6 @@ function config(opts: {
                 'process.stderr': '/* stdin */ null',
             }),
             ...getHotModuleReloadPlugin(),
-            target.isProfile && new BundleAnalyzerPlugin(),
         ].filter(nonNullable),
         optimization: {
             minimize: false,
@@ -217,6 +215,10 @@ function config(opts: {
             https: true,
         } as DevServerConfiguration,
     }
+    if (isProfile) {
+        config.resolve!.alias!['react-dom$'] = 'react-dom/profiling'
+        config.resolve!.alias!['scheduler/tracing'] = 'scheduler/tracing-profiling'
+    }
     return config
     function getHotModuleReloadPlugin() {
         if (disableHMR) return []
@@ -239,7 +241,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     const disableHMR = Boolean(process.env.NO_HMR)
     const isManifestV3 = target.runtimeEnv.manifest === 3
 
-    const shared = { mode, target, dist }
+    const shared = { mode, target, dist, isProfile: target.isProfile }
     const main = config({ ...shared, disableHMR, name: 'main' })
     const manifestV3 = config({ ...shared, disableHMR: true, name: 'background-worker', hmrPort: 35938 })
     const injectedScript = config({
@@ -304,7 +306,9 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     function withReactDevTools(...x: string[]) {
         // ! Use Firefox Nightly or enable network.websocket.allowInsecureFromHTTPS in about:config, then remove this line (but don't commit)
         if (target.FirefoxEngine) return x
-        if (mode === 'development') return [src('./miscs/package-overrides/react-devtools'), ...x]
+        // if (mode === 'development' || target.isProfile)
+        // https://github.com/facebook/react/issues/20377 React-devtools conflicts with react-refresh
+        if (target.isProfile) return [src('./miscs/package-overrides/react-devtools'), ...x]
         return x
     }
     function iOSWebExtensionShimHack(...path: string[]) {

@@ -78,16 +78,6 @@ It's important to select the correct context when you're debugging,
 otherwise you cannot access all the global variables,
 _save as temp variables_ also fails.
 
-#### "WebSocket connection to 'ws://localhost:8097/' failed"
-
-You may see continuous growing errors saying
-
-```plain
-WebSocket connection to 'ws://localhost:8097/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
-```
-
-If that annoys you, you can filter thoes out with `-WebSocket` in the devtools message filter.
-
 #### Use React Devtools
 
 React devtools is also an browser extension so unfortunately it doesn't work with Mask Network out of the box.
