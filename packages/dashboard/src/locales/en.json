@@ -40,5 +40,7 @@
     "wallets_balance_Send": "Send",
     "wallets_balance_Buy": "Buy",
     "wallets_balance_Swap": "Swap",
-    "wallets_balance_Receive": "Receive"
+    "wallets_balance_Receive": "Receive",
+    "personas_setup_connect_tips": "Please connect to your {{type}} account.",
+    "personas_setup_connect": "Connect"
 }

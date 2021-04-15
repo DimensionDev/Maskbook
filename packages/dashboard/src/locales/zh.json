@@ -40,5 +40,7 @@
     "wallets_balance_Send": "發送",
     "wallets_balance_Buy": "購買",
     "wallets_balance_Swap": "交換",
-    "wallets_balance_Receive": "接收"
+    "wallets_balance_Receive": "接收",
+    "personas_setup_connect_tips": "",
+    "personas_setup_connect": ""
 }

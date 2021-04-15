@@ -100,10 +100,9 @@ const PageTitle = styled(Grid)(({ theme }) => ({
 }))
 
 const Containment = styled(Grid)(({ theme }) => ({
-    overflow: 'auto',
     contain: 'strict',
     [theme.breakpoints.down('lg')]: {
-        minHeight: '100vh',
+        minHeight: `calc(100vh - 64px)`,
     },
 }))
 
@@ -124,16 +123,15 @@ const NavigationDrawerBackdrop = styled(Backdrop)(({ theme }) => ({
 
 const ShapeHelper = styled('div')(({ theme }) => ({
     height: '100%',
-    padding: theme.spacing(2),
+    padding: theme.spacing(3),
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
     backgroundColor: theme.palette.background.default,
-    paddingBottom: 0,
+    overflow: 'auto',
 }))
 
 const ShapeContainer = styled('div')(({ theme }) => ({
     height: '100%',
-    padding: theme.spacing(2),
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
     backgroundColor: theme.palette.background.paper,
