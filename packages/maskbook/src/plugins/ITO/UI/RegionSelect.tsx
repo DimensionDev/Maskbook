@@ -15,6 +15,7 @@ import {
     FilledInput,
 } from '@material-ui/core'
 
+import { Flags } from '../../../utils/flags'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useRegionList } from '../hooks/useRegion'
 import type { RegionCode } from '../hooks/useRegion'
@@ -199,6 +200,9 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
 
 // ISO 3166-1 alpha-2
 function countryToFlag(isoCode: string) {
+    if (!Flags.using_emoji_flag) {
+        return ''
+    }
     return typeof String.fromCodePoint !== 'undefined'
         ? isoCode.toUpperCase().replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397))
         : isoCode
