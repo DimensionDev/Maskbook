@@ -26,9 +26,3 @@ async function Suspender(id: string) {
     proposal.authorAvatar = profiles[0]?.image
     return { proposal, message }
 }
-
-// function testDelay(t: number) {
-//     return new Promise<void>(function (resolve) {
-//         setTimeout(() => resolve(), t)
-//     })
-// }
