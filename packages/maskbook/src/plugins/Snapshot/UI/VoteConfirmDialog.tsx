@@ -7,6 +7,7 @@ import {
     Link,
     DialogContent,
     DialogActions,
+    CircularProgress,
     createStyles,
     makeStyles,
 } from '@material-ui/core'
@@ -45,20 +46,24 @@ const useStyles = makeStyles((theme) =>
             marginLeft: theme.spacing(1),
             textDecoration: 'none !important',
         },
+        loading: {
+            color: theme.palette.text.primary,
+        },
     }),
 )
 
 interface VoteConfirmDialogProps {
     open: boolean
+    loading: boolean
     message: ProposalMessage
     onClose: () => void
-    onConfirm: () => void
+    onVoteConfirm: () => void
     choiceText: string
     power: number | undefined
 }
 
 export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
-    const { open, onClose, onConfirm, choiceText, message, power = 0 } = props
+    const { open, onClose, onVoteConfirm, choiceText, message, power = 0, loading } = props
     const { t } = useI18N()
     const classes = useStyles()
 
@@ -101,14 +106,19 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
             <DialogActions>
                 <EthereumWalletConnectedBoundary
                     connectWalletButtonStyle={classes.button}
-                    unlockMetamaskButtonStyle={classes.button}>
+                    unlockMetamaskButtonStyle={classes.button}
+                    offChain={true}>
                     <Button
                         classes={{ root: classes.button }}
                         color="primary"
                         variant="contained"
                         fullWidth
-                        onClick={onConfirm}>
-                        {t('plugin_snapshot_vote')}
+                        onClick={onVoteConfirm}>
+                        {loading ? (
+                            <CircularProgress size={16} className={classes.loading} />
+                        ) : (
+                            t('plugin_snapshot_vote')
+                        )}
                     </Button>
                 </EthereumWalletConnectedBoundary>
             </DialogActions>

@@ -90,3 +90,7 @@ export interface Profile3Box {
     image: string | null
     name: string | null
 }
+
+export interface VoteSuccess {
+    ipfsHash: string
+}

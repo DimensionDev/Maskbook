@@ -1,14 +1,17 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
+import { PluginSnapshotRPC } from '../messages'
 import classNames from 'classnames'
 import { Button } from '@material-ui/core'
 import { SnapshotContext } from '../context'
 import { createStyles, makeStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { useAccount } from '../../../web3/hooks/useAccount'
 import { SnapshotCard } from './SnapshotCard'
 import { useProposal } from '../hooks/useProposal'
 import { usePower } from '../hooks/usePower'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { VoteConfirmDialog } from './VoteConfirmDialog'
+import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -38,11 +41,31 @@ export function VotingCard() {
     const {
         payload: { message },
     } = useProposal(identifier.id)
-
+    const account = useAccount()
     const { value: power } = usePower(identifier)
     const choices = message.payload.choices
     const [choice, setChoice] = useState(0)
     const [open, setOpen] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    const onVoteConfirm = useSnackbarCallback(
+        () => {
+            setLoading(true)
+            return PluginSnapshotRPC.vote(identifier, choice, account)
+        },
+        [choice, identifier],
+        () => {
+            setLoading(false)
+            setOpen(false)
+        },
+        (_err: Error) => setLoading(false),
+        void 0,
+        t('plugin_snapshot_vote_success'),
+    )
+
+    useEffect(() => {
+        setOpen(false)
+    }, [account, power, setOpen])
 
     return (
         <SnapshotCard title={t('plugin_snapshot_vote_title')}>
@@ -60,22 +83,24 @@ export function VotingCard() {
             ))}
             <EthereumWalletConnectedBoundary
                 connectWalletButtonStyle={classes.button}
-                unlockMetamaskButtonStyle={classes.button}>
+                unlockMetamaskButtonStyle={classes.button}
+                offChain={true}>
                 <Button
                     className={classes.button}
                     variant="contained"
-                    disabled={choice === 0}
+                    disabled={choice === 0 || !Boolean(account) || !Boolean(power)}
                     onClick={() => setOpen(true)}>
-                    {t('plugin_snapshot_vote')}
+                    {Boolean(power) && Boolean(account) ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
                 </Button>
             </EthereumWalletConnectedBoundary>
             <VoteConfirmDialog
                 open={open}
+                loading={loading}
                 onClose={() => setOpen(false)}
                 choiceText={choices[choice - 1]}
                 message={message}
                 power={power}
-                onConfirm={() => {}}
+                onVoteConfirm={onVoteConfirm}
             />
         </SnapshotCard>
     )

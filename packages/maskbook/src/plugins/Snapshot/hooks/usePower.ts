@@ -8,7 +8,7 @@ import { ChainId } from '../../../web3/types'
 
 export function usePower(identifier: ProposalIdentifier) {
     const {
-        payload: { proposal, message },
+        payload: { message },
     } = useProposal(identifier.id)
 
     const blockNumber = useBlockNumber(ChainId.Mainnet)

@@ -25,10 +25,11 @@ export interface EthereumWalletConnectedBoundaryProps {
     children?: React.ReactNode
     connectWalletButtonStyle?: string
     unlockMetamaskButtonStyle?: string
+    offChain?: boolean
 }
 
 export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
-    const { children = null, connectWalletButtonStyle, unlockMetamaskButtonStyle } = props
+    const { children = null, connectWalletButtonStyle, unlockMetamaskButtonStyle, offChain = false } = props
 
     const { t } = useI18N()
     const classes = useStyles()
@@ -84,7 +85,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    if (new BigNumber(etherBalance).isZero())
+    if (new BigNumber(etherBalance).isZero() && !offChain)
         return (
             <Grid container>
                 <ActionButton

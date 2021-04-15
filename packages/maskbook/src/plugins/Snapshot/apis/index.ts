@@ -1,6 +1,7 @@
 import ss from '@snapshot-labs/snapshot.js'
 import { ChainId } from '../../../web3/types'
-import type { Votes, Proposal, Profile3Box, ProposalMessage } from '../types'
+import type { Votes, Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess } from '../types'
+import Services from '../../../extension/service'
 
 export async function fetchProposal(id: string) {
     const response = await fetch(`https://ipfs.io/ipfs/${id}`, {
@@ -50,4 +51,36 @@ export async function getScores(message: ProposalMessage, voters: string[], bloc
         blockTag,
     )
     return scores
+}
+
+export async function vote(identifier: ProposalIdentifier, choice: number, account: string) {
+    const msg = JSON.stringify({
+        version: '0.1.3',
+        timestamp: (Date.now() / 1e3).toFixed(),
+        space: identifier.space,
+        type: 'vote',
+        payload: {
+            proposal: identifier.id,
+            choice,
+            metadata: {},
+        },
+    })
+
+    const sig = await Services.Ethereum.sign(msg, account, ChainId.Mainnet)
+
+    const response = await fetch(`https://hub.snapshot.page/api/message`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            msg,
+            sig,
+            address: account,
+        }),
+    })
+
+    const result: VoteSuccess = await response.json()
+    return result
 }
