@@ -143,7 +143,7 @@ function hijackPersonal(personal: Personal) {
 // Wrap promise as PromiEvent because WalletConnect returns transaction hash only
 // docs: https://docs.walletconnect.org/client-api
 export function createWeb3() {
-    const web3 = Maskbook.createWeb3(currentWalletConnectChainIdSettings.value)
+    const web3 = Maskbook.createWeb3()
     return Object.assign(web3, {
         eth: hijackETH(web3.eth),
         currentProvider: hijackCurrentProvider(web3.currentProvider as HttpProvider | null),

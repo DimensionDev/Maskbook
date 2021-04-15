@@ -22,6 +22,7 @@ import { getOrderUnitPrice } from '../utils'
 import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
@@ -37,6 +38,9 @@ const useStyles = makeStyles((theme) => {
             justifyContent: 'center',
             height: '100%',
             padding: theme.spacing(6, 0),
+        },
+        button: {
+            marginLeft: theme.spacing(1),
         },
     })
 })
@@ -170,6 +174,13 @@ export function ListingTab() {
                     />
                 ) : null}
             </Table>
+            <Box sx={{ padding: 2 }} display="flex" justifyContent="flex-end">
+                {/* <ActionButton className={classes.button} variant="outlined">Cancel Listing</ActionButton>
+                <ActionButton className={classes.button} color="primary" variant="contained">Price Drop</ActionButton> */}
+                <ActionButton className={classes.button} color="primary" variant="contained">
+                    Sell
+                </ActionButton>
+            </Box>
         </CollectibleTab>
     )
 }
