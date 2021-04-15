@@ -6,6 +6,6 @@ export interface PostInspectorProps {
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    const { token } = props.payload
-    return <Collectible tokenId={token.tokenId} tokenAddress={token.address} />
+    const { token_id, address } = props.payload
+    return <Collectible tokenId={token_id} tokenAddress={address} />
 }
