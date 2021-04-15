@@ -53,13 +53,13 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface TraderProps extends withClasses<never> {
-    coin: Coin
+    coin?: Coin
     tokenDetailed?: ERC20TokenDetailed | EtherTokenDetailed
 }
 
 export function Trader(props: TraderProps) {
     const { coin, tokenDetailed } = props
-    const { decimals } = tokenDetailed ?? coin
+    const { decimals } = tokenDetailed ?? coin ?? {}
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -75,12 +75,12 @@ export function Trader(props: TraderProps) {
     useEffect(() => {
         dispatchTradeStore({
             type: TradeActionType.UPDATE_INPUT_TOKEN,
-            token: chainId === ChainId.Mainnet && coin.is_mirrored ? UST : createEtherToken(chainId),
+            token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST : createEtherToken(chainId),
         })
         dispatchTradeStore({
             type: TradeActionType.UPDATE_OUTPUT_TOKEN,
-            token: coin.eth_address
-                ? createERC20Token(chainId, coin.eth_address!, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
+            token: coin?.eth_address
+                ? createERC20Token(chainId, coin.eth_address, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
                 : undefined,
         })
     }, [coin, chainId, decimals])
