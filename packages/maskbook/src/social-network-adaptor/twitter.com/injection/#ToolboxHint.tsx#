@@ -11,13 +11,20 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal) {
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ToolboxHintAtTwitter />)
 }
 
-const useStyles = makeStyles((theme) => ({
-    wrapper: {
-        paddingTop: 4,
-        paddingBottom: 4,
-        cursor: 'pointer',
+<<<<<<< HEAD
         [theme.breakpoints.down('lg')]: {
             transform: 'translateX(0px)',
+=======
+const useStyles = makeStyles((theme) =>
+    createStyles<string, { color?: string }>({
+        wrapper: {
+            paddingTop: 4,
+            paddingBottom: 4,
+            cursor: 'pointer',
+            [theme.breakpoints.down('lg')]: {
+                transform: 'translateX(0px)',
+            },
+>>>>>>> be94fddfe (fix: the color of primary text is dimmer than the original text color (#2854))
         },
     },
     menuItem: {
@@ -40,11 +47,36 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             backgroundColor: theme.palette.mode === 'dark' ? 'rgb(7, 15, 25)' : 'rgb(233, 246, 253)',
         },
+<<<<<<< HEAD
         '&:active': {
             backgroundColor: theme.palette.mode === 'dark' ? 'rgb(13, 29, 48)' : 'rgb(212,237,252)',
         },
     },
 }))
+=======
+        title: {
+            color: (props) => (props.color ? props.color : 'rgb(217, 217, 217)'),
+        },
+        text: {
+            marginLeft: 12,
+            fontSize: 15,
+            color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
+            paddingRight: theme.spacing(2),
+        },
+        icon: {
+            color: (props) => (props.color ? props.color : 'rgb(217, 217, 217)'),
+        },
+        button: {
+            '&:hover': {
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgb(7, 15, 25)' : 'rgb(233, 246, 253)',
+            },
+            '&:active': {
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgb(13, 29, 48)' : 'rgb(212,237,252)',
+            },
+        },
+    }),
+)
+>>>>>>> be94fddfe (fix: the color of primary text is dimmer than the original text color (#2854))
 
 function GetColor() {
     const ele = document
