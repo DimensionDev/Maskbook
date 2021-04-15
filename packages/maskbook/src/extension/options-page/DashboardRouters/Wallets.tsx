@@ -96,15 +96,8 @@ export default function DashboardWalletsRouter() {
 
     const selectedWallet = useWallet()
 
-    //#region create or import wallet
-    const [, setOpenCreateWalletDialog] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
-
-    const onCreate = useCallback(() => setOpenCreateWalletDialog({ open: true }), [])
+    //#region import wallet
     const onImport = useCallback(() => openWalletImport(), [])
-
-    const onCreateOrImportWallet = useCallback(() => {
-        onImport()
-    }, [onImport])
     //#endregion
 
     //#region open dialogs externally
@@ -162,7 +155,7 @@ export default function DashboardWalletsRouter() {
                 <EthereumStatusBar disableEther BoxProps={{ sx: { justifyContent: 'flex-end' } }} />,
                 <Button
                     variant="contained"
-                    onClick={onCreateOrImportWallet}
+                    onClick={onImport}
                     endIcon={<AddCircleIcon />}
                     data-testid="create_button">
                     {t('plugin_wallet_on_create')}
