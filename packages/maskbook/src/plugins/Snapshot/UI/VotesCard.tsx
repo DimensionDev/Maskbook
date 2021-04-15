@@ -18,8 +18,12 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             flexDirection: 'column',
             maxHeight: 'var(--contentHeight)',
-            overflow: 'scroll',
+            overflow: 'auto',
             paddingTop: 0,
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         listItem: {
             display: 'flex',

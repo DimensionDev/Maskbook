@@ -25,7 +25,10 @@ const useStyles = makeStyles((theme) => {
             flexDirection: 'column',
             boxSizing: 'border-box',
         },
-        title: {},
+        title: {
+            display: 'flex',
+            alignItems: 'center',
+        },
     })
 })
 
