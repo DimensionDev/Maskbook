@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback } from 'react'
+import { useState, useContext } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -13,12 +13,10 @@ import {
     Paper,
 } from '@material-ui/core'
 import { SnapshotContext } from '../context'
-import { useProposal, proposalErrorRetry } from '../hooks/useProposal'
+import { useProposal } from '../hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
-import { votesErrorRetry } from '../hooks/useVotes'
-import { resultsErrorRetry } from '../hooks/useResults'
-import { useUpdate } from 'react-use'
+import { useRetry } from '../hooks/useRetry'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -71,18 +69,13 @@ export function Snapshot() {
     const {
         payload: { proposal, message },
     } = useProposal(identifier.id)
-    const forceUpdate = useUpdate()
+
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
         <Tab className={classes.tab} key="proposal" label="Proposal" />,
         <Tab className={classes.tab} key="progress" label="Progress" />,
     ]
-    const retry = useCallback(() => {
-        proposalErrorRetry()
-        votesErrorRetry()
-        resultsErrorRetry()
-        forceUpdate()
-    }, [])
+    const retry = useRetry()
 
     return (
         <Card className={classes.root} elevation={0}>
