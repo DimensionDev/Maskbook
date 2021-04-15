@@ -153,15 +153,10 @@ const useWalletImportDialogStyle = makeStyles((theme: Theme) =>
             fontSize: 12,
             fontWeight: 500,
             textAlign: 'center',
-            backgroundColor: '#EFF5FF',
-            color: 'black',
+            backgroundColor: theme.palette.mode === 'dark' ? '#17191D' : '#EFF5FF',
             padding: '8px 22px',
-            margin: '8px 0 0',
-            [theme.breakpoints.down('sm')]: {
-                margin: '8px 0 0',
-            },
-            position: 'relative',
-            zIndex: 1,
+            margin: theme.spacing(1, 0, 0),
+            borderRadius: '4px',
         },
         notificationIcon: {
             width: 16,
