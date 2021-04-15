@@ -10,6 +10,7 @@ import { useVotes } from '../hooks/useVotes'
 import { SnapshotCard } from './SnapshotCard'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
 import { useChainId } from '../../../web3/hooks/useChainState'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -59,6 +60,7 @@ export function VotesCard() {
     const identifier = useContext(SnapshotContext)
     const { payload: votes } = useVotes(identifier)
     const classes = useStyles()
+    const { t } = useI18N()
     const voteEntries = Object.entries(votes)
 
     return (
@@ -69,7 +71,7 @@ export function VotesCard() {
                     classes={{ anchorOriginTopRightRectangular: classes.anchorTopRight }}
                     badgeContent={voteEntries.length}
                     color="primary">
-                    Votes
+                    {t('plugin_snapshot_votes_title')}
                 </Badge>
             }>
             <List className={classes.list}>

@@ -53,7 +53,7 @@ export async function getScores(message: ProposalMessage, voters: string[], bloc
     return scores
 }
 
-export async function vote(identifier: ProposalIdentifier, choice: number, account: string) {
+export async function vote(identifier: ProposalIdentifier, choice: number, address: string) {
     const msg = JSON.stringify({
         version: '0.1.3',
         timestamp: (Date.now() / 1e3).toFixed(),
@@ -66,7 +66,7 @@ export async function vote(identifier: ProposalIdentifier, choice: number, accou
         },
     })
 
-    const sig = await Services.Ethereum.sign(msg, account, ChainId.Mainnet)
+    const sig = await Services.Ethereum.sign(msg, address, ChainId.Mainnet)
 
     const response = await fetch(`https://hub.snapshot.page/api/message`, {
         method: 'POST',
@@ -74,11 +74,7 @@ export async function vote(identifier: ProposalIdentifier, choice: number, accou
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            msg,
-            sig,
-            address: account,
-        }),
+        body: JSON.stringify({ msg, sig, address }),
     })
 
     const result: VoteSuccess = await response.json()
