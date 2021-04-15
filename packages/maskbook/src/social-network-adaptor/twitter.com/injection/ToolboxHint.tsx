@@ -1,4 +1,4 @@
-import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { ToolboxHint } from '../../../components/InjectedComponents/ToolboxHint'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { toolBoxInSideBarSelector } from '../utils/selector'
@@ -47,13 +47,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function GetColor() {
-    const ele = document
-        .getElementsByTagName('header')[0]
-        .getElementsByTagName('nav')[0]
-        .getElementsByTagName('a')[1]
-        .getElementsByTagName('div')[0]
-        .getElementsByTagName('div')[1]
-    const style = window.getComputedStyle(ele, null)
+    const ele = new LiveSelector()
+        .querySelector<HTMLDivElement>('[data-testid="AppTabBar_More_Menu"]')
+        .querySelector<HTMLDivElement>('div')
+        .querySelectorAll<HTMLDivElement>('div')
+    const style = window.getComputedStyle(ele.evaluate()[1], null)
     return style.color
 }
 function ToolboxHintAtTwitter() {
