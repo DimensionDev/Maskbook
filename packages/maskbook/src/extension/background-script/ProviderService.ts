@@ -4,5 +4,5 @@ import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 assertEnvironment(Environment.ManifestBackground)
 
 export function requestConnectWallet() {
-    return openOptionsPage(DashboardRoute.Wallets, 'error=nowallet')
+    return openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
 }
