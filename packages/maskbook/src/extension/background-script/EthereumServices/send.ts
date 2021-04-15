@@ -32,7 +32,7 @@ export async function send(
 
     // sign the transaction before send it to the provider
     if (
-        payload.method === 'sendTransaction' &&
+        payload.method === 'eth_sendTransaction' &&
         currentSelectedWalletProviderSettings.value !== ProviderType.WalletConnect
     ) {
         if (!payload.id) throw new Error('unknown payload id')

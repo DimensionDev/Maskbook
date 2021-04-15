@@ -19,7 +19,6 @@ export async function sign(data: string, address: string) {
         case ProviderType.Maskbook:
             return web3.eth.sign(data, address)
         case ProviderType.MetaMask:
-            return web3.eth.personal.sign(data, address, '')
         case ProviderType.WalletConnect:
             return web3.eth.personal.sign(data, address, '')
         default:
