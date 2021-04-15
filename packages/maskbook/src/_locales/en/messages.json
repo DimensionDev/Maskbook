@@ -520,7 +520,6 @@
     "plugin_snapshot_vote_confirm_dialog_title": "Confirm Vote",
     "plugin_snapshot_vote_confirm_dialog_choice": "Are you sure you want to vote \"{{ choiceText }}\"?",
     "plugin_snapshot_vote_confirm_dialog_warning": "This action cannot be undone.",
-    "plugin_snapshot_readme_title": "Readme",
     "plugin_snapshot_current_result_title": "Current results",
     "plugin_snapshot_download_report": "Download report",
     "wallet_status_title": "Account",
