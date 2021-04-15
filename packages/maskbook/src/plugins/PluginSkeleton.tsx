@@ -19,6 +19,7 @@ export function PluginSkeleton() {
             {new Array(2).fill(0).map((_, i) => (
                 <Skeleton
                     className={classes.skeleton}
+                    key={i}
                     animation="wave"
                     variant="rectangular"
                     width={i === 0 ? '80%' : '60%'}

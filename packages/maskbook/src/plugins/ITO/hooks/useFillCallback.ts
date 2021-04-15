@@ -168,7 +168,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         // error: unable to sign password
         let signedPassword = ''
         try {
-            signedPassword = await Services.Ethereum.sign(password, account, chainId)
+            signedPassword = await Services.Ethereum.sign(password, account)
         } catch (e) {
             signedPassword = ''
         }

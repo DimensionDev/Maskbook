@@ -111,7 +111,7 @@ export function Collectible(props: CollectibleProps) {
     }, [asset.value])
 
     if (asset.loading) return <PluginSkeleton />
-    if (!asset.value) return null
+    if (!asset.value) return <Typography color="textPrimary">Failed to load your collectible.</Typography>
 
     const tabs = [
         <Tab className={classes.tab} key="article" label={t('plugin_collectible_article')} />,

@@ -22,6 +22,10 @@ import { OrderRow } from './OrderRow'
 import BigNumber from 'bignumber.js'
 import { TableListPagination } from './Pagination'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useCallback } from 'react'
+import { PluginCollectibleRPC } from '../messages'
+import { useAccount } from '../../../web3/hooks/useAccount'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -39,6 +43,12 @@ const useStyles = makeStyles((theme) => {
             height: '100%',
             padding: theme.spacing(6, 0),
         },
+        emptyCell: {
+            borderStyle: 'none',
+        },
+        button: {
+            marginLeft: theme.spacing(1),
+        },
     })
 })
 
@@ -46,7 +56,8 @@ export function OfferTab() {
     const { t } = useI18N()
     const classes = useStyles()
     const [page, setPage] = useState(0)
-    const { token } = CollectibleState.useContainer()
+    const account = useAccount()
+    const { asset, token } = CollectibleState.useContainer()
     const offers = useOrders(token, OrderSide.Buy, page)
 
     const isDifferenceToken = useMemo(
@@ -82,6 +93,26 @@ export function OfferTab() {
             })
     }, [offers.value])
 
+    const onMakeOffer = useCallback(async () => {
+        console.log(asset)
+        console.log(token)
+
+        if (!token) return
+        if (!asset.value) return
+
+        try {
+            const response = await PluginCollectibleRPC.createBuyOrder(
+                token.contractAddress,
+                token.tokenId,
+                asset.value.assetContract.schemaName,
+                account,
+            )
+            console.log(response)
+        } catch (e) {
+            console.log(e)
+        }
+    }, [account, asset, token])
+
     if (offers.loading)
         return (
             <Table size="small">
@@ -113,27 +144,38 @@ export function OfferTab() {
 
     if (!offers.value || offers.error || !dataSource.length)
         return (
-            <Table size="small">
-                <Box className={classes.empty}>
-                    <Typography color="textSecondary">{t('plugin_collectible_no_offers')}</Typography>
-                    <Button
-                        sx={{
-                            marginTop: 1,
-                        }}
-                        variant="text"
-                        onClick={() => offers.retry()}>
-                        Retry
-                    </Button>
+            <>
+                <Table size="small">
+                    <TableBody className={classes.empty}>
+                        <TableRow>
+                            <TableCell className={classes.emptyCell}>
+                                <Typography color="textSecondary">{t('plugin_collectible_no_offers')}</Typography>
+                                <Button
+                                    sx={{
+                                        marginTop: 1,
+                                    }}
+                                    variant="text"
+                                    onClick={() => offers.retry()}>
+                                    Retry
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                    <TableListPagination
+                        handlePrevClick={() => setPage((prev) => prev - 1)}
+                        handleNextClick={() => setPage((prev) => prev + 1)}
+                        prevDisabled={page === 0}
+                        nextDisabled={dataSource.length < 10}
+                        page={page}
+                        pageCount={10}
+                    />
+                </Table>
+                <Box sx={{ padding: 2 }} display="flex" justifyContent="flex-end">
+                    <ActionButton className={classes.button} color="primary" variant="contained" onClick={onMakeOffer}>
+                        Make an Offer
+                    </ActionButton>
                 </Box>
-                <TableListPagination
-                    handlePrevClick={() => setPage((prev) => prev - 1)}
-                    handleNextClick={() => setPage((prev) => prev + 1)}
-                    prevDisabled={page === 0}
-                    nextDisabled={dataSource.length < 10}
-                    page={page}
-                    pageCount={10}
-                />
-            </Table>
+            </>
         )
 
     return (
@@ -171,6 +213,11 @@ export function OfferTab() {
                     />
                 ) : null}
             </Table>
+            <Box sx={{ padding: 2 }} display="flex" justifyContent="flex-end">
+                <ActionButton className={classes.button} color="primary" variant="contained" onClick={onMakeOffer}>
+                    Make an Offer
+                </ActionButton>
+            </Box>
         </CollectibleTab>
     )
 }

@@ -80,11 +80,11 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
 
         // FIXME:
         // __provider_url__ only used by useEtherTransferCallback
-        const web3 = Maskbook.createWeb3(
-            await getChainId(from),
-            [privateKey],
-            (config as { __provider_url__?: string }).__provider_url__,
-        )
+        const web3 = Maskbook.createWeb3({
+            privKeys: [privateKey],
+            url: (config as { __provider_url__?: string }).__provider_url__,
+            chainId: await getChainId(from),
+        })
         const [nonce, gas, gasPrice] = await Promise.all([
             config.nonce ?? getNonce(from),
             config.gas ??
@@ -156,5 +156,5 @@ export async function sendSignedTransaction(from: string, config: TransactionCon
  */
 
 export async function callTransaction(config: TransactionConfig) {
-    return Maskbook.createWeb3(await getChainId()).eth.call(config)
+    return Maskbook.createWeb3().eth.call(config)
 }

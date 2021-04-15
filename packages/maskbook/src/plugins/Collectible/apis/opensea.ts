@@ -3,11 +3,13 @@ import type { OrderSide, WyvernSchemaName } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
 import { getChainId } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
-import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
+import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaRinkebyBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
 import { Flags } from '../../../utils/flags'
 import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../UI/types'
 import { OpenSeaEventHistoryQuery } from '../queries/OpenSea'
 import { send } from '../../../extension/background-script/EthereumServices/send'
+import { ChainId } from '../../../web3/types'
+import { resolveChainName } from '../../../web3/pipes'
 
 function createExternalProvider() {
     return {
@@ -15,8 +17,14 @@ function createExternalProvider() {
         isStatus: true,
         host: '',
         path: '',
-        sendAsync: send,
-        send: send,
+        sendAsync: (...args: any[]) => {
+            // @ts-ignore
+            send(...args)
+        },
+        send: (...args: any[]) => {
+            // @ts-ignore
+            send(...args)
+        },
         request() {
             throw new Error('The request method is not implemented.')
         },
@@ -31,10 +39,17 @@ async function createOpenSeaPort() {
     })
 }
 
+async function createOpenSeaAPI() {
+    const chainId = await getChainId()
+    if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId))
+        throw new Error(`${resolveChainName(chainId)} is not supported.`)
+    return chainId === ChainId.Mainnet ? OpenSeaBaseURL : OpenSeaRinkebyBaseURL
+}
+
 export async function getAsset(tokenAddress: string, tokenId: string) {
     const sdkResponse = await (await createOpenSeaPort()).api.getAsset({ tokenAddress, tokenId })
     const fetchResponse = await (
-        await fetch(`${OpenSeaBaseURL}asset/${tokenAddress}/${tokenId}`, {
+        await fetch(`${await createOpenSeaAPI()}asset/${tokenAddress}/${tokenId}`, {
             cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : undefined,
             mode: 'cors',
             headers: {
@@ -76,7 +91,6 @@ export async function getEvents(asset_contract_address: string, token_id: string
         body: stringify(query),
     })
     const { data } = await response.json()
-
     return data.assetEvents as OpenSeaAssetEventResponse
 }
 
@@ -111,5 +125,24 @@ export async function createBuyOrder(
         referrerAddress: ReferrerAddress,
         paymentTokenAddress: '',
         startAmount: 0.0001,
+    })
+}
+
+export async function createSellOrder(
+    asset_contract_address: string,
+    token_id: string,
+    schema: WyvernSchemaName,
+    account: string,
+) {
+    return (await createOpenSeaPort()).createSellOrder({
+        asset: {
+            tokenId: token_id,
+            tokenAddress: asset_contract_address,
+            schemaName: schema,
+        },
+        accountAddress: account,
+        startAmount: 3,
+        endAmount: 0.1,
+        expirationTime: Math.round(Date.now() / 1000 + 60 * 60 * 24),
     })
 }

@@ -1,6 +1,6 @@
 import { parseURL } from '../../utils/utils'
 import {
-    openseaHostname,
+    openseaHostnames,
     openseaPathnameRegexMatcher,
     raribleHostnames,
     rariblePathnameRegexMatcher,
@@ -14,7 +14,7 @@ export function checkUrl(url: string): boolean {
     const _url = new URL(url.startsWith(protocol) ? url : protocol + url)
 
     return (
-        (_url.hostname === openseaHostname && openseaPathnameRegexMatcher.test(_url.pathname)) ||
+        (openseaHostnames.includes(_url.hostname) && openseaPathnameRegexMatcher.test(_url.pathname)) ||
         (raribleHostnames.includes(_url.hostname) && rariblePathnameRegexMatcher.test(_url.pathname))
     )
 }
