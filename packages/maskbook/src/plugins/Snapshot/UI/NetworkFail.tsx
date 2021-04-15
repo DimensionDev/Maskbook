@@ -1,8 +1,8 @@
 import { Component } from 'react'
 import { SnapshotCard } from './SnapshotCard'
-import { Typography } from '@material-ui/core'
+import { Typography, Button } from '@material-ui/core'
 
-export class NetworkFail extends Component<{ title: string }> {
+export class NetworkFail extends Component<{ title: string; retry: () => void }> {
     static getDerivedStateFromError(error: unknown) {
         return { error }
     }
@@ -11,7 +11,16 @@ export class NetworkFail extends Component<{ title: string }> {
         if (this.state.error) {
             return (
                 <SnapshotCard title={this.props.title}>
-                    <Typography>Loading fail due to api service error</Typography>
+                    <Typography>Loading fail due to Snapshot api service breakdown.</Typography>
+                    <Button
+                        style={{ width: 100, marginTop: 16 }}
+                        variant="outlined"
+                        onClick={() => {
+                            this.setState({ error: null })
+                            this.props.retry()
+                        }}>
+                        Retry
+                    </Button>
                 </SnapshotCard>
             )
         }
