@@ -14,6 +14,11 @@ import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
+import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
+import { ProviderIcon } from '../shared/ProviderIcon'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
+import { WalletMessages } from '../../plugins/Wallet/messages'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -75,18 +80,40 @@ const useStyles = makeStyles((theme) => ({
     icon: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
     },
+    providerIcon: {
+        fontSize: 19,
+        width: 19,
+        height: 19,
+    },
 }))
 
 interface ToolboxHintProps extends withClasses<never> {}
 export function ToolboxHint(props: ToolboxHintProps) {
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
-
+    const selectedWallet = useWallet()
+    const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
         () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'timeline', open: true }),
         [],
     )
+    //#endregion
+
+    //#region Wallet
+    const [, setSelectWalletDialogOpen] = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
+    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const openWallet = useCallback(() => {
+        if (selectedWallet) {
+            setSelectWalletDialogOpen({
+                open: true,
+            })
+        } else {
+            setSelectProviderDialogOpen({
+                open: true,
+            })
+        }
+    }, [])
     //#endregion
 
     //#region Red packet
@@ -130,6 +157,18 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     const [menu, openMenu] = useMenu(
         [
+            <MenuItem onClick={openWallet} className={classes.menuItem}>
+                {selectedWallet ? (
+                    <ProviderIcon
+                        classes={{ icon: classes.providerIcon }}
+                        size={18}
+                        providerType={selectedWalletProvider}
+                    />
+                ) : (
+                    <Image src={ToolIconURLs.wallet.image} width={19} height={19} />
+                )}
+                <Typography className={classes.text}>{selectedWallet?.name ?? ToolIconURLs.wallet.text}</Typography>
+            </MenuItem>,
             <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
                 <Image src={ToolIconURLs.encryptedmsg.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
