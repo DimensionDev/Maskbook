@@ -1,13 +1,13 @@
 import type snapshot from '@snapshot-labs/snapshot.js'
 
-/**
- * @param space ENS domain name of space.
- * Space is a set of proposals by which specific entity can raise for its purpose.
- * https://docs.snapshot.org/spaces
- * @param id the identifier of proposal
- */
 export interface ProposalIdentifier {
+    /**
+     * ENS domain name of space.
+     * Space is a set of proposals by which specific entity can raise for its purpose.
+     * https://docs.snapshot.org/spaces
+     */
     space: string
+    /** the identifier of proposal */
     id: string
 }
 
@@ -59,16 +59,15 @@ export interface ProposalMessage {
 
 /**
  * Payload of a vote
- *
- * @param balance the voting power of one voter
- * @param scores the consist detail of voting power
  */
 export interface Vote {
     choice: string
     address: string
     authorIpfsHash: string
     relayerIpfsHash: string
+    /** the voting power of one voter */
     balance: number
+    /** the consist detail of voting power */
     scores: number[]
     sig: string
     authorName: string | null

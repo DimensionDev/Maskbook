@@ -20,8 +20,6 @@ const useStyles = makeStyles((theme) =>
         button: {
             marginTop: theme.spacing(1.5),
         },
-        connectWallet: {},
-        unlockMetaMask: {},
     }),
 )
 
