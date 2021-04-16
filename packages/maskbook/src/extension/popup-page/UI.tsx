@@ -18,6 +18,7 @@ import { MaskbookUIRoot } from '../../UIRoot'
 import { create } from 'jss'
 import { useMyIdentities } from '../../components/DataSource/useActivatedUI'
 import { Flags } from '../../utils/flags'
+import { hasSNSAdaptorPermission, requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
 
 const GlobalCss = withStyles({
     '@global': {
@@ -78,7 +79,9 @@ function PopupUI() {
     const ui = activatedSocialNetworkUI
     const identities = useMyIdentities()
 
-    const { value: hasPermission = true, retry: checkPermission } = useAsyncRetry(ui.permission.has)
+    const { value: hasPermission = true, retry: checkPermission } = useAsyncRetry(
+        hasSNSAdaptorPermission.bind(null, ui),
+    )
 
     const onEnter = useCallback((event: React.MouseEvent) => {
         if (event.shiftKey) {
@@ -125,7 +128,7 @@ function PopupUI() {
                         size="small"
                         onClick={() => {
                             if (Flags.no_web_extension_dynamic_permission_request) return
-                            ui.permission.request().then(checkPermission)
+                            requestSNSAdaptorPermission(ui).then(checkPermission)
                         }}>
                         {t('popup_request_permission')}
                     </Button>
