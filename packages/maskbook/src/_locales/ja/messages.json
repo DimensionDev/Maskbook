@@ -144,6 +144,8 @@
     "personas": "ペルソナ",
     "popup_missing_permission": "Mask は権限がないため動作しません。",
     "popup_request_permission": "修正します",
+    "popup_notifications": "",
+    "popup_notifications_description": "",
     "popup_current_persona": "現在のペルソナアカウント",
     "popup_enter_dashboard": "ダッシュボードに入る",
     "popup_connect_wallet": "現在のウォレット",
