@@ -25,9 +25,8 @@ import { formatAmount, formatBalance } from '../../Wallet/formatter'
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { useRegionSelect, encodeRegionCode } from '../hooks/useRegion'
-import type { RegionCode } from '../hooks/useRegion'
-import { RegionSelect } from './RegionSelect'
+import { AdvanceSetting } from './AdvanceSetting'
+import type { AdvanceSettingData } from './AdvanceSetting'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -170,12 +169,6 @@ export function CreateForm(props: CreateFormProps) {
     // qualificationAddress
     const [qualificationAddress, setQualificationAddress] = useState('')
     const { value: qualification, loading: loadingQualification } = useQualificationVerify(qualificationAddress)
-
-    const [regions, setRegions] = useRegionSelect()
-    const handleRegionChange = (codes: RegionCode[]) => {
-        setRegions(codes)
-        console.log(encodeRegionCode(codes))
-    }
 
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
@@ -321,6 +314,10 @@ export function CreateForm(props: CreateFormProps) {
         </LocalizationProvider>
     )
 
+    const handleAdvanceSettingChange = (data: AdvanceSettingData) => {
+        console.log(data)
+    }
+
     return (
         <>
             <Box className={classes.line} style={{ display: 'block' }}>
@@ -402,24 +399,7 @@ export function CreateForm(props: CreateFormProps) {
                 </Box>
             ) : null}
             <Box className={classes.date}>{UnlockTime}</Box>
-            <Box className={classes.line}>
-                <TextField
-                    className={classes.input}
-                    label={t('plugin_ito_region_label')}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    InputProps={{
-                        // FIXME how to resolve the Type check error
-                        // @ts-ignore
-                        inputComponent: RegionSelect,
-                        inputProps: {
-                            value: regions,
-                            onRegionChange: handleRegionChange,
-                        },
-                    }}
-                />
-            </Box>
+            <AdvanceSetting onSettingChange={handleAdvanceSettingChange} />
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
