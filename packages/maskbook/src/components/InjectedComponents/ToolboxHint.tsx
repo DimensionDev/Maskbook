@@ -51,9 +51,6 @@ const useStyles = makeStyles((theme) => ({
             '& $title': {
                 color: theme.palette.primary.main,
             },
-            '& $balance': {
-                color: theme.palette.primary.main,
-            },
             '& $icon': {
                 color: theme.palette.primary.main,
             },
@@ -71,6 +68,8 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     title: {
+        display: 'flex',
+        alignItems: 'center',
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
         fontWeight: 700,
         fontSize: 20,

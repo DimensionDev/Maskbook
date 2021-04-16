@@ -1,6 +1,5 @@
-export type ToolIconTypes = 'airdrop' | 'encryptedmsg' | 'files' | 'markets' | 'redpacket' | 'swap' | 'token' | 'wallet'
+export type ToolIconTypes = 'airdrop' | 'encryptedmsg' | 'files' | 'markets' | 'redpacket' | 'swap' | 'token'
 export const ToolIconURLs: Readonly<Record<ToolIconTypes, { image: string; text: string }>> = {
-    wallet: { image: new URL('./mask.png', import.meta.url).toString(), text: 'Wallet' },
     airdrop: { image: new URL('./airdrop.png', import.meta.url).toString(), text: 'Airdrop' },
     encryptedmsg: { image: new URL('./encryptedmsg.png', import.meta.url).toString(), text: 'Encrypted message' },
     files: { image: new URL('./files.png', import.meta.url).toString(), text: 'File Service' },
