@@ -1,8 +1,14 @@
 import type snapshot from '@snapshot-labs/snapshot.js'
 
+/**
+ * @param space ENS domain name of space.
+ * Space is a set of proposals by which specific entity can raise for its purpose.
+ * https://docs.snapshot.org/spaces
+ * @param id the identifier of proposal
+ */
 export interface ProposalIdentifier {
-    id: string
     space: string
+    id: string
 }
 
 export interface Proposal {
@@ -17,6 +23,10 @@ export interface Proposal {
     authorAvatar: string | null
 }
 
+/**
+ * Strategy is the way to calculate voting power.
+ * https://docs.snapshot.org/strategies
+ */
 export interface Strategy {
     name: keyof typeof snapshot.strategies
     params: {
@@ -47,6 +57,12 @@ export interface ProposalMessage {
     space: string
 }
 
+/**
+ * Payload of a vote
+ *
+ * @param balance the voting power of one voter
+ * @param scores the consist detail of voting power
+ */
 export interface Vote {
     choice: string
     address: string
@@ -85,12 +101,19 @@ export interface ProposalResult {
     percentage: number
 }
 
+/**
+ * Off-chain solution to bind personal information e.g. avatar name with EOA.
+ * https://3boxlabs.com/
+ */
 export interface Profile3Box {
     eth_address: string
     image: string | null
     name: string | null
 }
 
+/**
+ * Full-filled response of voting request.
+ */
 export interface VoteSuccess {
     ipfsHash: string
 }

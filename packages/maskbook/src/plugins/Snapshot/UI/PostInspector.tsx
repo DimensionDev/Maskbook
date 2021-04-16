@@ -1,5 +1,5 @@
 import { SnapshotContext } from '../context'
-import { useProposalIdentifier } from '../hooks/useProposalIdentifier'
+import { getProposalIdentifier } from '../helpers'
 import { Snapshot } from './Snapshot'
 import { NetworkFail } from './NetworkFail'
 import { useRetry } from '../hooks/useRetry'
@@ -9,7 +9,7 @@ export interface PostInspectorProps {
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    const identifier = useProposalIdentifier(props.url)
+    const identifier = getProposalIdentifier(props.url)
     const retry = useRetry()
     return (
         <SnapshotContext.Provider value={identifier}>

@@ -50,12 +50,12 @@ export function InfoField(props: InfoFieldProps) {
     const classes = useStyles()
 
     return (
-        <Box className={classes.field}>
-            <Box>
+        <div className={classes.field}>
+            <div>
                 <Typography>{props.title}</Typography>
-            </Box>
-            <Box>{props.children}</Box>
-        </Box>
+            </div>
+            <div>{props.children}</div>
+        </div>
     )
 }
 
@@ -94,13 +94,13 @@ export function InformationCard(props: InformationCardProps) {
                         target="_blank"
                         rel="noopener"
                         href={resolveAddressLinkOnEtherscan(chainId, proposal.address)}>
-                        <Box className={classes.avatarWrapper}>
+                        <div className={classes.avatarWrapper}>
                             {proposal.authorAvatar ? (
                                 <Avatar src={resolveIPFSLink(proposal.authorAvatar)} className={classes.avatar} />
                             ) : (
                                 <EthereumBlockie address={proposal.address} />
                             )}
-                        </Box>
+                        </div>
                         {proposal.authorName ?? formatEthereumAddress(proposal.address, 4)}
                     </Link>
                 </InfoField>
