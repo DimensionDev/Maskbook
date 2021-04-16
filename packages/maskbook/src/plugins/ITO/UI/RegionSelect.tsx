@@ -21,7 +21,7 @@ import { useRegionList } from '../hooks/useRegion'
 import type { RegionCode } from '../hooks/useRegion'
 import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
 
-export interface RegionSelectProps<> {
+export interface RegionSelectProps {
     value: RegionCode[]
     // onChange: React.ChangeEvent<{ value: RegionCode[] }> // TODO how to implement the ChangeEvent interface?
     onRegionChange: (codes: RegionCode[]) => void
@@ -42,6 +42,12 @@ const useStyles = makeStyles((theme) =>
         inputControl: {
             display: 'flex',
         },
+        inputRoot: {
+            backgroundColor: 'rgba(0, 0, 0, 0.04)',
+            '&:before': {
+                borderColor: 'rgba(0, 0, 0, 0.01)',
+            },
+        },
         input: {
             padding: `${theme.spacing(2)}`,
         },
@@ -49,7 +55,6 @@ const useStyles = makeStyles((theme) =>
             paddingLeft: theme.spacing(2),
         },
         options: {
-            width: '520px', // TODO avoid to hardcode width? maybe get width from anchor by js?
             maxHeight: 140,
             overflow: 'auto',
         },
@@ -62,6 +67,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
+// TODO fix TextField focus style
 export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }: RegionSelectProps, ref) => {
     const { t } = useI18N()
     const classes = useStyles()
@@ -70,13 +76,25 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
     const isAll = value.length === allRegions.length
     const valueMap = new Map(value.map((code) => [code, true]))
 
-    const displayRef = useRef()
-    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
+    const displayRef = useRef<HTMLElement | null>()
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [open, setOpen] = useState(false)
     const handleDisplayRef = useCallback((node) => {
         displayRef.current = node
         if (node) setAnchorEl(node)
     }, [])
+    const [minPopoverWidth, setMinPopoverWidth] = useState(0)
+
+    useImperativeHandle(ref, () => ({
+        focus: () => {
+            displayRef.current?.focus()
+        },
+    }))
+
+    const handleOpenChange = (toOpen: boolean, event: React.SyntheticEvent) => {
+        if (toOpen && anchorEl) setMinPopoverWidth(anchorEl.clientWidth)
+        setOpen(toOpen)
+    }
 
     const handleMouseDown = (event: React.MouseEvent) => {
         // Ignore everything but left-click
@@ -85,17 +103,12 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
         }
         // Hijack the default focus behavior.
         event.preventDefault()
-        setOpen(true)
+        handleOpenChange(true, event)
     }
 
-    const handlePopoverClose = () => {
-        setOpen(false)
+    const handlePopoverClose = (event: React.SyntheticEvent) => {
+        handleOpenChange(false, event)
     }
-    useImperativeHandle(ref, () => ({
-        focus: () => {
-            setOpen(true)
-        },
-    }))
 
     const handleToggle = (code: RegionCode) => () => {
         const isSelected = valueMap.get(code)
@@ -140,6 +153,9 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
                     container={container}
                     open={open}
                     anchorEl={anchorEl}
+                    PaperProps={{
+                        style: { minWidth: `${minPopoverWidth}px` },
+                    }}
                     anchorOrigin={{
                         vertical: 'bottom',
                         horizontal: 'left',
@@ -152,6 +168,7 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
                     disableRestoreFocus>
                     <FormControl className={classes.inputControl} variant="filled">
                         <FilledInput
+                            className={classes.inputRoot}
                             placeholder={t('plugin_ito_region_search')}
                             onChange={handleFilter}
                             inputProps={{
@@ -159,6 +176,7 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
                             }}
                             startAdornment={
                                 <Checkbox
+                                    color="primary"
                                     className={classes.allToggle}
                                     checked={isAllFiltered}
                                     onChange={handleToggleAllFiltered}
@@ -176,13 +194,14 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
                         {/* TODO  resolve options performance problem */}
                         {filteredRegions.map((region) => {
                             return (
-                                <ListItem
-                                    key={region.code}
-                                    button
-                                    className={classes.item}
-                                    onClick={handleToggle(region.code)}>
+                                <ListItem key={region.code} className={classes.item}>
                                     <ListItemIcon>
-                                        <Checkbox edge="start" checked={valueMap.has(region.code)} disableRipple />
+                                        <Checkbox
+                                            edge="start"
+                                            color="primary"
+                                            checked={valueMap.has(region.code)}
+                                            disableRipple
+                                        />
                                     </ListItemIcon>
                                     <ListItemText>
                                         <span>{countryToFlag(region.code)}</span>

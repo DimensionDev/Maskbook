@@ -2,7 +2,6 @@ import { useState, ChangeEvent } from 'react'
 import {
     createStyles,
     makeStyles,
-    Box,
     TextField,
     FormGroup,
     FormControl,
@@ -37,22 +36,18 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
         },
         label: {
-            padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
+            padding: `${theme.spacing(1)} ${theme.spacing(1)}`,
         },
         group: {
             flexFlow: 'wrap',
             justifyContent: 'space-between',
-            padding: `0 ${theme.spacing(2)}`,
+            padding: `0 ${theme.spacing(1)}`,
             marginBottom: theme.spacing(1),
         },
-        line: {
-            margin: theme.spacing(1),
-            paddingBottom: theme.spacing(2),
-            display: 'flex',
-        },
-        input: {
-            padding: theme.spacing(1),
+        field: {
             flex: 1,
+            padding: theme.spacing(1),
+            marginTop: theme.spacing(1),
         },
     }),
 )
@@ -90,6 +85,7 @@ export function AdvanceSetting({ onSettingChange }: AdvanceSettingProps) {
                     <FormControlLabel
                         control={
                             <Checkbox
+                                color="primary"
                                 checked={!!enabled.IPRegion}
                                 onChange={handleAdvanceSettingToggle}
                                 name={SettingField.IPRegion}
@@ -100,6 +96,7 @@ export function AdvanceSetting({ onSettingChange }: AdvanceSettingProps) {
                     <FormControlLabel
                         control={
                             <Checkbox
+                                color="primary"
                                 checked={!!enabled.delayUnlocking}
                                 onChange={handleAdvanceSettingToggle}
                                 name={SettingField.delayUnlocking}
@@ -110,6 +107,7 @@ export function AdvanceSetting({ onSettingChange }: AdvanceSettingProps) {
                     <FormControlLabel
                         control={
                             <Checkbox
+                                color="primary"
                                 checked={!!enabled.contract}
                                 onChange={handleAdvanceSettingToggle}
                                 name={SettingField.contract}
@@ -119,24 +117,22 @@ export function AdvanceSetting({ onSettingChange }: AdvanceSettingProps) {
                     />
                 </FormGroup>
                 {enabled.IPRegion ? (
-                    <Box className={classes.line} key={SettingField.IPRegion}>
-                        <TextField
-                            className={classes.input}
-                            label={t('plugin_ito_region_label')}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            InputProps={{
-                                // FIXME how to resolve the Type check error
-                                // @ts-ignore
-                                inputComponent: RegionSelect,
-                                inputProps: {
-                                    value: regions,
-                                    onRegionChange: handleRegionChange,
-                                },
-                            }}
-                        />
-                    </Box>
+                    <TextField
+                        className={classes.field}
+                        label={t('plugin_ito_region_label')}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            // FIXME how to resolve the Type check error
+                            // @ts-ignore
+                            inputComponent: RegionSelect,
+                            inputProps: {
+                                value: regions,
+                                onRegionChange: handleRegionChange,
+                            },
+                        }}
+                    />
                 ) : null}
             </FormControl>
         </>

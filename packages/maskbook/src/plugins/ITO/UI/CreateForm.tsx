@@ -399,7 +399,9 @@ export function CreateForm(props: CreateFormProps) {
                 </Box>
             ) : null}
             <Box className={classes.date}>{UnlockTime}</Box>
-            <AdvanceSetting onSettingChange={handleAdvanceSettingChange} />
+            <Box className={classes.line}>
+                <AdvanceSetting onSettingChange={handleAdvanceSettingChange} />
+            </Box>
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
