@@ -25,7 +25,7 @@ export namespace SocialNetwork {
     }
 
     export interface Utils {
-        /** @returns the homepage url. e.g.: https://www.twitter.com/ */
+        /** @returns the homepage url. e.g.: https://twitter.com/ */
         getHomePage?(): string
         /** @returns post URL from PostIdentifier */
         getPostURL?(post: PostIdentifier<Identifier>): URL | null

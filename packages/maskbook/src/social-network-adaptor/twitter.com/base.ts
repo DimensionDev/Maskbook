@@ -1,7 +1,7 @@
 import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
 
 const id = 'twitter.com'
-const origins = ['https://www.twitter.com/*', 'https://twitter.com/*']
+const origins = ['https://mobile.twitter.com/*', 'https://twitter.com/*']
 export const twitterBase: SocialNetwork.Base = {
     networkIdentifier: id,
     declarativePermissions: { origins },
