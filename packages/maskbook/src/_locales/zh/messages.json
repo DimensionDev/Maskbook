@@ -144,6 +144,8 @@
     "personas": "角色",
     "popup_missing_permission": "Mask 缺少一些必須的權限",
     "popup_request_permission": "修復",
+    "popup_notifications": "",
+    "popup_notifications_description": "",
     "popup_current_persona": "當前角色",
     "popup_enter_dashboard": "進入儀表盘",
     "popup_connect_wallet": "",
