@@ -20,8 +20,6 @@ import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 import { extendsTheme } from '../../../utils/theme'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessages } from '../../../plugins/Wallet/messages'
 
 //#region theme
 const walletsTheme = extendsTheme((theme) => ({
@@ -96,15 +94,8 @@ export default function DashboardWalletsRouter() {
 
     const selectedWallet = useWallet()
 
-    //#region create or import wallet
-    const [, setOpenCreateWalletDialog] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
-
-    const onCreate = useCallback(() => setOpenCreateWalletDialog({ open: true }), [])
+    //#region import wallet
     const onImport = useCallback(() => openWalletImport(), [])
-
-    const onCreateOrImportWallet = useCallback(() => {
-        onImport()
-    }, [onImport])
     //#endregion
 
     //#region open dialogs externally
@@ -160,11 +151,7 @@ export default function DashboardWalletsRouter() {
             title={t('my_wallets')}
             actions={[
                 <EthereumStatusBar disableEther BoxProps={{ sx: { justifyContent: 'flex-end' } }} />,
-                <Button
-                    variant="contained"
-                    onClick={onCreateOrImportWallet}
-                    endIcon={<AddCircleIcon />}
-                    data-testid="create_button">
+                <Button variant="contained" onClick={onImport} endIcon={<AddCircleIcon />} data-testid="create_button">
                     {t('plugin_wallet_on_create')}
                 </Button>,
             ]}
