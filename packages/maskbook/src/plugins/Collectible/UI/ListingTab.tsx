@@ -4,11 +4,9 @@ import {
     Button,
     createStyles,
     makeStyles,
-    Skeleton,
     Table,
     TableBody,
     TableCell,
-    TableFooter,
     TableHead,
     TableRow,
     Typography,
@@ -20,6 +18,7 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { getOrderUnitPrice } from '../utils'
 import { OrderRow } from './OrderRow'
+import { loadingTable } from './shared'
 import { TableListPagination } from './Pagination'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -104,34 +103,7 @@ export function ListingTab() {
         }
     }, [account, asset])
 
-    if (listings.loading)
-        return (
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>
-                            <Skeleton animation="wave" variant="rectangular" width="100%" height={22} />
-                        </TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {new Array(5).fill(0).map((_, i) => (
-                        <TableRow key={i}>
-                            <TableCell>
-                                <Skeleton animation="wave" variant="rectangular" width="100%" height={14} />
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TableCell>
-                            <Skeleton animation="wave" variant="rectangular" width="100%" height={28} />
-                        </TableCell>
-                    </TableRow>
-                </TableFooter>
-            </Table>
-        )
+    if (listings.loading) return loadingTable
 
     if (!listings.value || listings.error || !dataSource.length)
         return (

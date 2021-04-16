@@ -7,10 +7,8 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Skeleton,
     Box,
     TableHead,
-    TableFooter,
 } from '@material-ui/core'
 import { OrderSide } from 'opensea-js/lib/types'
 import { CollectibleState } from '../hooks/useCollectibleState'
@@ -19,9 +17,11 @@ import { CollectibleTab } from './CollectibleTab'
 import { useMemo, useState } from 'react'
 import { getOrderUnitPrice } from '../utils'
 import { OrderRow } from './OrderRow'
+import { loadingTable } from './shared'
 import BigNumber from 'bignumber.js'
 import { TableListPagination } from './Pagination'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { useControlledAcceptOfferDialog } from './AcceptOfferDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useCallback } from 'react'
 import { PluginCollectibleRPC } from '../messages'
@@ -113,34 +113,9 @@ export function OfferTab() {
         }
     }, [account, asset, token])
 
-    if (offers.loading)
-        return (
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>
-                            <Skeleton animation="wave" variant="rectangular" width="100%" height={22} />
-                        </TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {new Array(5).fill(0).map((_, i) => (
-                        <TableRow key={i}>
-                            <TableCell>
-                                <Skeleton animation="wave" variant="rectangular" width="100%" height={14} />
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TableCell>
-                            <Skeleton animation="wave" variant="rectangular" width="100%" height={28} />
-                        </TableCell>
-                    </TableRow>
-                </TableFooter>
-            </Table>
-        )
+    const { onOpen: onOpenAcceptOfferDialog } = useControlledAcceptOfferDialog()
+
+    if (offers.loading) return loadingTable
 
     if (!offers.value || offers.error || !dataSource.length)
         return (
@@ -173,6 +148,13 @@ export function OfferTab() {
                 <Box sx={{ padding: 2 }} display="flex" justifyContent="flex-end">
                     <ActionButton className={classes.button} color="primary" variant="contained" onClick={onMakeOffer}>
                         Make an Offer
+                    </ActionButton>
+                    <ActionButton
+                        className={classes.button}
+                        color="primary"
+                        variant="contained"
+                        onClick={onOpenAcceptOfferDialog}>
+                        Open Accept Offer Dialog
                     </ActionButton>
                 </Box>
             </>

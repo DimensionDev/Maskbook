@@ -1,5 +1,5 @@
 import type { Order } from 'opensea-js/lib/types'
-import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Avatar, Button, createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import type { OpenSeaCustomAccount } from './types'
 import { formatDistanceToNow } from 'date-fns'
 import { formatBalance } from '../../Wallet/formatter'
@@ -52,9 +52,10 @@ interface CustomOrder extends Order {
 interface IRowProps {
     order: CustomOrder
     isDifferenceToken?: boolean
+    acceptable?: boolean
 }
 
-export function OrderRow({ order, isDifferenceToken }: IRowProps) {
+export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
     const classes = useStyles()
 
     return (
@@ -145,6 +146,9 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                     </TableCell>
                 </>
             )}
+            <TableCell>
+                <Button size="small">Accept Offer</Button>
+            </TableCell>
         </TableRow>
     )
 }
