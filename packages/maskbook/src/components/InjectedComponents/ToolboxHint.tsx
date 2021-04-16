@@ -1,5 +1,5 @@
 import { makeStyles, Typography, MenuItem } from '@material-ui/core'
-import { MaskbookSharpIconOfSize } from '../../resources/MaskbookIcon'
+import { MaskbookSharpIconOfSize, WalletSharp, WalletSharp } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
 import { useMenu } from '../../utils/hooks/useMenu'
@@ -19,9 +19,11 @@ import { ProviderIcon } from '../shared/ProviderIcon'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { useEtherTokenBalance } from '../../web3/hooks/useEtherTokenBalance'
-import { AccountBalanceWallet } from '@material-ui/icons'
 import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
+import { useChainId } from '../../web3/hooks/useChainState'
+import { ChainId } from '../../web3/types'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import { resolveChainColor } from '../../web3/pipes'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -89,6 +91,12 @@ const useStyles = makeStyles((theme) => ({
         height: 24,
         fontSize: 24,
     },
+    chainIcon: {
+        fontSize: 18,
+        width: 18,
+        height: 18,
+        marginLeft: theme.spacing(0.5),
+    },
 }))
 
 interface ToolboxHintProps extends withClasses<never> {}
@@ -96,8 +104,9 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
     const selectedWallet = useWallet()
+    const chainId = useChainId()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
-    const { value: balance = '0' } = useEtherTokenBalance(account)
+
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
         () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'timeline', open: true }),
@@ -215,11 +224,19 @@ export function ToolboxHint(props: ToolboxHintProps) {
                             providerType={selectedWalletProvider}
                         />
                     ) : (
-                        <AccountBalanceWallet classes={{ root: classes.icon }} />
+                        <WalletSharp classes={{ root: classes.icon }} size={24} />
                     )}
 
                     <Typography className={classes.title}>
-                        {account ? formatEthereumAddress(account, 4) : 'Wallet'}
+                        {account ? formatEthereumAddress(account, 4) : 'Connect Wallet'}
+                        {chainId !== ChainId.Mainnet && selectedWallet ? (
+                            <FiberManualRecordIcon
+                                className={classes.chainIcon}
+                                style={{
+                                    color: resolveChainColor(chainId),
+                                }}
+                            />
+                        ) : null}
                     </Typography>
                 </div>
             </div>
