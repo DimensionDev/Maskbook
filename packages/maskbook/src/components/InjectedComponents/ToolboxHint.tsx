@@ -90,6 +90,12 @@ const useStyles = makeStyles((theme) => ({
         height: 24,
         fontSize: 24,
     },
+    mask: {
+        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
+        width: 22,
+        height: 22,
+        fontSize: 22,
+    },
     chainIcon: {
         fontSize: 18,
         width: 18,
@@ -208,7 +214,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
         <>
             <div className={classes.wrapper} onClick={openMenu}>
                 <div className={classes.button}>
-                    <MaskbookSharpIconOfSize classes={{ root: classes.icon }} size={24} />
+                    <MaskbookSharpIconOfSize classes={{ root: classes.icon }} size={22} />
                     <Typography className={classes.title}>Mask Network</Typography>
                 </div>
             </div>
