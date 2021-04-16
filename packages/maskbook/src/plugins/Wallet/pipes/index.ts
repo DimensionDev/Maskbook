@@ -16,7 +16,8 @@ export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
 export function resolveCollectibleProviderLink(chainId: ChainId, provider: CollectibleProvider) {
     switch (provider) {
         case CollectibleProvider.OPENSEAN:
-            return `https://${chainId === ChainId.Rinkeby ? 'testnets' : ''}opensea.io/`
+            if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io`
+            return `https://opensea.io`
         default:
             unreachable(provider)
     }
