@@ -19,6 +19,9 @@ import { ProviderIcon } from '../shared/ProviderIcon'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
 import { WalletMessages } from '../../plugins/Wallet/messages'
+import { useEtherTokenBalance } from '../../web3/hooks/useEtherTokenBalance'
+import { formatBalance } from '../../plugins/Wallet/formatter'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -93,6 +96,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const account = useAccount()
     const selectedWallet = useWallet()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
+    const { value: balance = '0' } = useEtherTokenBalance(account)
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
         () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'timeline', open: true }),
@@ -168,6 +172,11 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     <Image src={ToolIconURLs.wallet.image} width={19} height={19} />
                 )}
                 <Typography className={classes.text}>{selectedWallet?.name ?? ToolIconURLs.wallet.text}</Typography>
+                {balance !== '0' ? (
+                    <Typography className={classes.text}>
+                        balance: {formatBalance(new BigNumber(balance), 18, 4)}
+                    </Typography>
+                ) : null}
             </MenuItem>,
             <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
                 <Image src={ToolIconURLs.encryptedmsg.image} width={19} height={19} />
