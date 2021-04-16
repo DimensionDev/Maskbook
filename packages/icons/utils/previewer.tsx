@@ -1,6 +1,3 @@
-import type {} from 'react/experimental'
-import {} from 'react'
-
 /** @internal */
 export interface IconPreviewProps {
     icons: Record<string, React.ComponentType<any>>

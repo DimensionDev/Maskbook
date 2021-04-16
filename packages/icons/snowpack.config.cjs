@@ -6,9 +6,9 @@ module.exports = {
     mount: {},
     plugins: [],
     packageOptions: {
-        external: ['@material-ui/core/OverridableComponent'],
+        external: ['@material-ui/core/SvgIcon', 'react', 'react-dom'],
     },
     devOptions: {},
     buildOptions: {},
-    exclude: ['**/node_modules/**/*', './dist/**/*'],
+    exclude: ['**/node_modules/**/*', './dist/**/*', './utils/ssr.tsx'],
 }
