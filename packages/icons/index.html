@@ -5,6 +5,15 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Icons preview</title>
+        <script type="importmap">
+            {
+                "imports": {
+                    "react": "https://cdn.skypack.dev/react",
+                    "react-dom": "https://cdn.skypack.dev/react-dom",
+                    "@material-ui/core/SvgIcon": "https://cdn.skypack.dev/@material-ui/core/SvgIcon"
+                }
+            }
+        </script>
         <style>
             body {
                 font-family: system-ui;
@@ -25,18 +34,6 @@
             import React from 'react'
             window.React = React
         </script>
-        <script type="module">
-            import { createElement as $ } from 'react'
-            import ReactDOM from 'react-dom'
-            import { IconPreview } from './utils/preview.tsx'
-            async function render(id, Icons, name) {
-                Icons = await Icons
-                ReactDOM.unstable_createRoot(document.querySelector(id)).render(
-                    $(IconPreview, { icons: Icons, title: name }),
-                )
-            }
-            render('#brands', import('./brands/'), 'brand icons (./brands)')
-            render('#general', import('./general'), 'general icons (./general)')
-        </script>
+        <script type="module" src="./utils/dev.js"></script>
     </body>
 </html>
