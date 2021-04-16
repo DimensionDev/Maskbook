@@ -146,7 +146,7 @@
     "person_or_group_in_list_many_no_preview": "{{count}} in total",
     "personas": "Personas",
     "popup_missing_permission": "Mask is lacking permission to work.",
-    "popup_request_permission": "Fix it",
+    "popup_request_permission": "Grant",
     "popup_current_persona": "Current Persona",
     "popup_enter_dashboard": "Enter Dashboard",
     "popup_connect_wallet": "Connect Wallet",
