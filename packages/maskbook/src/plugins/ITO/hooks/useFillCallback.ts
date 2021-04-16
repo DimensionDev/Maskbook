@@ -19,6 +19,7 @@ export interface PoolSettings {
     password: string
     startTime: Date
     endTime: Date
+    unlockTime: Date
     title: string
     name: string
     limit: string

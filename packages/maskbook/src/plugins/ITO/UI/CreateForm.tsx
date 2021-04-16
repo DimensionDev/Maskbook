@@ -13,8 +13,8 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { useERC165 } from '../../../web3/hooks/useERC165'
-import { ITO_CONSTANTS, QUALIFICATION_INTERFACE_ID } from '../constants'
+import { useQualificationVerify } from '../hooks/useQualificationVerify'
+import { ITO_CONSTANTS } from '../constants'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
@@ -132,6 +132,7 @@ export function CreateForm(props: CreateFormProps) {
 
     const [startTime, setStartTime] = useState(origin?.startTime || new Date())
     const [endTime, setEndTime] = useState(origin?.endTime || new Date())
+    const [unlockTime, setUnlockTime] = useState(origin?.unlockTime || new Date())
 
     const GMT = (new Date().getTimezoneOffset() / 60) * -1
 
@@ -142,7 +143,7 @@ export function CreateForm(props: CreateFormProps) {
     )
 
     // balance
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
+    const { value: tokenBalance = '0' } = useTokenBalance(
         tokenAndAmount?.token?.type ?? EthereumTokenType.Ether,
         tokenAndAmount?.token?.address ?? '',
     )
@@ -157,11 +158,8 @@ export function CreateForm(props: CreateFormProps) {
 
     // qualification
     const [qualification, setQualification] = useState('')
-    const { value: isQualification, loading: loadingQualification } = useERC165(
-        qualification,
-        QUALIFICATION_INTERFACE_ID,
-    )
-
+    const { value, loading: loadingQualification } = useQualificationVerify(qualification)
+    console.log({ value, loadingQualification })
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
@@ -177,8 +175,9 @@ export function CreateForm(props: CreateFormProps) {
                 formatAmount(new BigNumber(item.amount || '0'), item?.token?.decimals ?? 0),
             ),
             exchangeTokens: rest.map((item) => item.token!),
-            startTime: startTime,
-            endTime: endTime,
+            startTime,
+            endTime,
+            unlockTime,
         })
     }, [
         senderName,
@@ -189,6 +188,7 @@ export function CreateForm(props: CreateFormProps) {
         setTokenAndAmount,
         startTime,
         endTime,
+        unlockTime,
         account,
         onChangePoolSettings,
     ])
@@ -214,9 +214,12 @@ export function CreateForm(props: CreateFormProps) {
 
         if (startTime >= endTime) return t('plugin_ito_error_exchange_time')
 
+        if (endTime >= unlockTime) return t('plugin_ito_error_unlock_time')
+
         return ''
     }, [
         endTime,
+        unlockTime,
         startTime,
         t,
         tokenAndAmount?.amount,
@@ -236,6 +239,16 @@ export function CreateForm(props: CreateFormProps) {
             const now = Date.now()
             if (time < now) return
             if (time > startTime.getTime()) setEndTime(date)
+        },
+        [startTime],
+    )
+
+    const handleUnlockTime = useCallback(
+        (date: Date) => {
+            const time = date.getTime()
+            const now = Date.now()
+            if (time < now) return
+            if (time > endTime.getTime()) setUnlockTime(date)
         },
         [startTime],
     )
@@ -263,6 +276,20 @@ export function CreateForm(props: CreateFormProps) {
                 onChange={(date: Date | null) => handleEndTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
                 value={endTime}
+                DialogProps={props.dateDialogProps}
+            />
+        </LocalizationProvider>
+    )
+
+    const UnlockTime = (
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <MobileDateTimePicker
+                showTodayButton
+                ampm={false}
+                label={t('plugin_ito_unlock_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
+                onChange={(date: Date | null) => handleUnlockTime(date!)}
+                renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
+                value={unlockTime}
                 DialogProps={props.dateDialogProps}
             />
         </LocalizationProvider>
@@ -324,21 +351,23 @@ export function CreateForm(props: CreateFormProps) {
                             shrink: true,
                         }}
                         InputProps={{
-                            endAdornment: isQualification ? (
-                                <Box className={classNames(classes.iconWrapper, classes.success)}>
-                                    <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
-                                </Box>
-                            ) : loadingQualification ? (
-                                <CircularProgress size={16} />
-                            ) : (
-                                <Box className={classNames(classes.iconWrapper, classes.fail)}>
-                                    <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
-                                </Box>
-                            ),
+                            endAdornment:
+                                value && value.isQualification ? (
+                                    <Box className={classNames(classes.iconWrapper, classes.success)}>
+                                        <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
+                                    </Box>
+                                ) : (value && value.loadingERC165) || loadingQualification ? (
+                                    <CircularProgress size={16} />
+                                ) : (
+                                    <Box className={classNames(classes.iconWrapper, classes.fail)}>
+                                        <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
+                                    </Box>
+                                ),
                         }}
                     />
                 </Box>
             ) : null}
+            <Box className={classes.date}>{UnlockTime}</Box>
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
