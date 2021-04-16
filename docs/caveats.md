@@ -55,7 +55,6 @@ it is an interactive CLI tool to help you to learn out how to compose the build 
 ### Hot Module Reload
 
 This project supports Hot Module Reload which fasten the development process.
-Every time you find HMR not working please open <https://localhost:8080> and ignore the HTTPs certificate error.
 
 To disable HMR, set an environment variable `NO_HMR` to _true_.
 
