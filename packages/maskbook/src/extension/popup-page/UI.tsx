@@ -139,10 +139,13 @@ function PopupUI() {
                         sx={{
                             display: 'flex',
                         }}>
-                        <Button className={classes.button} variant="text" onClick={() => {
-                            if (Flags.no_web_extension_dynamic_permission_request) return
-                            requestSNSAdaptorPermission(ui).then(checkPermission)
-                        }}>
+                        <Button
+                            className={classes.button}
+                            variant="text"
+                            onClick={() => {
+                                if (Flags.no_web_extension_dynamic_permission_request) return
+                                requestSNSAdaptorPermission(ui).then(checkPermission)
+                            }}>
                             {t('popup_request_permission')}
                         </Button>
                     </Box>
