@@ -27,18 +27,9 @@ import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 import { globalUIState } from '../../social-network'
 import { unreachable } from '../../utils/utils'
 
-const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*', 'https://facebook.com/*']
 const facebookUI: SocialNetworkUI.Definition = {
     ...facebookBase,
     ...facebookShared,
-    permission: {
-        has() {
-            return browser.permissions.contains({ origins })
-        },
-        request() {
-            return browser.permissions.request({ origins })
-        },
-    },
     automation: {
         redirect: {
             profilePage(profile) {

@@ -33,6 +33,7 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     shouldActivate: () => false,
     utils: {},
     notReadyForProduction: true,
+    declarativePermissions: { origins: [] },
 }
 export let globalUIState: Readonly<SocialNetworkUI.State> = {} as any
 

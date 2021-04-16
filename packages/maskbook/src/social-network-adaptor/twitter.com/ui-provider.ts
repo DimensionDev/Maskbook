@@ -32,18 +32,9 @@ import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { ProfileIdentifier } from '../../database/type'
 import { unreachable } from '../../utils/utils'
 
-const origins = ['https://www.twitter.com/*', 'https://m.twitter.com/*', 'https://twitter.com/*']
 const twitterUI: SocialNetworkUI.Definition = {
     ...twitterBase,
     ...twitterShared,
-    permission: {
-        has() {
-            return browser.permissions.contains({ origins })
-        },
-        request() {
-            return browser.permissions.request({ origins })
-        },
-    },
     automation: {
         maskCompositionDialog: {
             open: openComposeBoxTwitter,
