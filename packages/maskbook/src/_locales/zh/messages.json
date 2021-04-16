@@ -145,7 +145,6 @@
     "person_or_group_in_list_many": "{{people}} 等，共 {{count}} 人",
     "person_or_group_in_list_many_no_preview": "共 {{count}} 人",
     "personas": "角色",
-    "popup_missing_permission": "Mask 缺少一些必須的權限",
     "popup_request_permission": "修復",
     "popup_notifications": "",
     "popup_notifications_description": "",

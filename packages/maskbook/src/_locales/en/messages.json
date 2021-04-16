@@ -145,7 +145,6 @@
     "person_or_group_in_list_many": "{{people}}… {{count}} in total",
     "person_or_group_in_list_many_no_preview": "{{count}} in total",
     "personas": "Personas",
-    "popup_missing_permission": "Mask is lacking permission to work.",
     "popup_request_permission": "Grant Permission",
     "popup_notifications": "Notifications",
     "popup_notifications_description": "Mask needs permission to access content on {{sns}}.",
