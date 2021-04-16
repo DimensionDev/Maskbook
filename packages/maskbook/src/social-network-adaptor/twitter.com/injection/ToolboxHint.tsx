@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) =>
         title: {
             color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
         },
+        balance: {
+            color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
+        },
         text: {
             marginLeft: 12,
             fontSize: 15,
@@ -60,6 +63,7 @@ function ToolboxHintAtTwitter() {
                 text: classes.text,
                 button: classes.button,
                 icon: classes.icon,
+                balance: classes.balance,
             }}
         />
     )

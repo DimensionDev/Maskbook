@@ -22,6 +22,7 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useEtherTokenBalance } from '../../web3/hooks/useEtherTokenBalance'
 import { formatBalance } from '../../plugins/Wallet/formatter'
 import BigNumber from 'bignumber.js'
+import { AccountBalanceWallet } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -47,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
         },
         '&:hover': {
             '& $title': {
+                color: theme.palette.primary.main,
+            },
+            '& $balance': {
                 color: theme.palette.primary.main,
             },
             '& $icon': {
@@ -75,6 +79,16 @@ const useStyles = makeStyles((theme) => ({
             display: 'none',
         },
     },
+    balance: {
+        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
+        fontWeight: 700,
+        fontSize: 16,
+        marginLeft: 22,
+        lineHeight: 1.35,
+        [theme.breakpoints.down('lg')]: {
+            display: 'none',
+        },
+    },
     menuItem: {},
     text: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
@@ -82,11 +96,12 @@ const useStyles = makeStyles((theme) => ({
     },
     icon: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
+        width: 24,
+        height: 24,
+        fontSize: 24,
     },
-    providerIcon: {
-        fontSize: 19,
-        width: 19,
-        height: 19,
+    wallet: {
+        display: 'block',
     },
 }))
 
@@ -161,23 +176,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     const [menu, openMenu] = useMenu(
         [
-            <MenuItem onClick={openWallet} className={classes.menuItem}>
-                {selectedWallet ? (
-                    <ProviderIcon
-                        classes={{ icon: classes.providerIcon }}
-                        size={18}
-                        providerType={selectedWalletProvider}
-                    />
-                ) : (
-                    <Image src={ToolIconURLs.wallet.image} width={19} height={19} />
-                )}
-                <Typography className={classes.text}>{selectedWallet?.name ?? ToolIconURLs.wallet.text}</Typography>
-                {balance !== '0' ? (
-                    <Typography className={classes.text}>
-                        balance: {formatBalance(new BigNumber(balance), 18, 4)}
-                    </Typography>
-                ) : null}
-            </MenuItem>,
             <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
                 <Image src={ToolIconURLs.encryptedmsg.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
@@ -221,6 +219,28 @@ export function ToolboxHint(props: ToolboxHintProps) {
                 </div>
             </div>
             {menu}
+
+            <div className={classes.wrapper} onClick={openWallet}>
+                <div className={classes.button}>
+                    {selectedWallet ? (
+                        <ProviderIcon
+                            classes={{ icon: classes.icon }}
+                            size={24}
+                            providerType={selectedWalletProvider}
+                        />
+                    ) : (
+                        <AccountBalanceWallet classes={{ root: classes.icon }} />
+                    )}
+                    <div className={classes.wallet}>
+                        <Typography className={classes.title}>{selectedWallet?.name ?? 'Wallet'}</Typography>
+                        {balance !== '0' ? (
+                            <Typography className={classes.balance}>
+                                balance: {formatBalance(new BigNumber(balance), 18, 4)}
+                            </Typography>
+                        ) : null}
+                    </div>
+                </div>
+            </div>
         </>
     )
 }
