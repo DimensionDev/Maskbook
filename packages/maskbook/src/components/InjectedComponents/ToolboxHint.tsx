@@ -20,9 +20,8 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useEtherTokenBalance } from '../../web3/hooks/useEtherTokenBalance'
-import { formatBalance } from '../../plugins/Wallet/formatter'
-import BigNumber from 'bignumber.js'
 import { AccountBalanceWallet } from '@material-ui/icons'
+import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -79,16 +78,6 @@ const useStyles = makeStyles((theme) => ({
             display: 'none',
         },
     },
-    balance: {
-        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
-        fontWeight: 700,
-        fontSize: 16,
-        marginLeft: 22,
-        lineHeight: 1.35,
-        [theme.breakpoints.down('lg')]: {
-            display: 'none',
-        },
-    },
     menuItem: {},
     text: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
@@ -99,9 +88,6 @@ const useStyles = makeStyles((theme) => ({
         width: 24,
         height: 24,
         fontSize: 24,
-    },
-    wallet: {
-        display: 'block',
     },
 }))
 
@@ -231,14 +217,10 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     ) : (
                         <AccountBalanceWallet classes={{ root: classes.icon }} />
                     )}
-                    <div className={classes.wallet}>
-                        <Typography className={classes.title}>{selectedWallet?.name ?? 'Wallet'}</Typography>
-                        {balance !== '0' ? (
-                            <Typography className={classes.balance}>
-                                balance: {formatBalance(new BigNumber(balance), 18, 4)}
-                            </Typography>
-                        ) : null}
-                    </div>
+
+                    <Typography className={classes.title}>
+                        {account ? formatEthereumAddress(account, 4) : 'Wallet'}
+                    </Typography>
                 </div>
             </div>
         </>
