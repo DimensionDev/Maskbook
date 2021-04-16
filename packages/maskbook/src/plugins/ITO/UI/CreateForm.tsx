@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Box, TextField, DialogProps, CircularProgress } from '@material-ui/core'
+import { createStyles, makeStyles, Box, TextField, DialogProps, CircularProgress, Typography } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
 import UnCheckIcon from '@material-ui/icons/Close'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) =>
             margin: theme.spacing(1),
             paddingBottom: theme.spacing(2),
             display: 'flex',
+        },
+        column: {
+            flexDirection: 'column',
         },
         flow: {
             margin: theme.spacing(1),
@@ -72,6 +75,10 @@ const useStyles = makeStyles((theme) =>
         },
         fail: {
             backgroundColor: 'rgba(255, 78, 89, 0.2)',
+        },
+        qualStartTime: {
+            padding: '0 16px',
+            opacity: 0.8,
         },
     }),
 )
@@ -156,10 +163,10 @@ export function CreateForm(props: CreateFormProps) {
         }
     }, [])
 
-    // qualification
-    const [qualification, setQualification] = useState('')
-    const { value, loading: loadingQualification } = useQualificationVerify(qualification)
-    console.log({ value, loadingQualification })
+    // qualificationAddress
+    const [qualificationAddress, setQualificationAddress] = useState('')
+    const { value: qualification, loading: loadingQualification } = useQualificationVerify(qualificationAddress)
+    console.log({ qualification, loadingQualification, endTime })
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
@@ -215,6 +222,11 @@ export function CreateForm(props: CreateFormProps) {
         if (startTime >= endTime) return t('plugin_ito_error_exchange_time')
 
         if (endTime >= unlockTime) return t('plugin_ito_error_unlock_time')
+
+        if (qualification && qualification.startTime) {
+            if (new Date(Number(qualification.startTime) * 1000) >= endTime)
+                return t('plugin_ito_error_qualification_start_time')
+        }
 
         return ''
     }, [
@@ -341,22 +353,22 @@ export function CreateForm(props: CreateFormProps) {
                 {StartTime} {EndTime}
             </Box>
             {account ? (
-                <Box className={classes.line}>
+                <Box className={classNames(classes.line, classes.column)}>
                     <TextField
                         className={classes.input}
                         label={t('plugin_ito_qualification_label')}
-                        onChange={(e) => setQualification(e.currentTarget.value)}
-                        value={qualification}
+                        onChange={(e) => setQualificationAddress(e.currentTarget.value)}
+                        value={qualificationAddress}
                         InputLabelProps={{
                             shrink: true,
                         }}
                         InputProps={{
                             endAdornment:
-                                value && value.isQualification ? (
+                                qualification && qualification.isQualification ? (
                                     <Box className={classNames(classes.iconWrapper, classes.success)}>
                                         <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
                                     </Box>
-                                ) : (value && value.loadingERC165) || loadingQualification ? (
+                                ) : (qualification && qualification.loadingERC165) || loadingQualification ? (
                                     <CircularProgress size={16} />
                                 ) : (
                                     <Box className={classNames(classes.iconWrapper, classes.fail)}>
@@ -365,6 +377,12 @@ export function CreateForm(props: CreateFormProps) {
                                 ),
                         }}
                     />
+                    {qualification && qualification.startTime ? (
+                        <div className={classes.qualStartTime}>
+                            <Typography>{t('plugin_ito_qualification_start_time')}</Typography>
+                            <Typography>{new Date(Number(qualification.startTime) * 1000).toString()}</Typography>
+                        </div>
+                    ) : null}
                 </Box>
             ) : null}
             <Box className={classes.date}>{UnlockTime}</Box>

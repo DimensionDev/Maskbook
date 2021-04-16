@@ -453,6 +453,8 @@
     "plugin_ito_sell_total_amount": "入力",
     "plugin_ito_allocation_per_wallet": "スワップ上限 {{limit}} {{token}}",
     "plugin_ito_begin_time": "開始時刻 {{zone}}",
+    "plugin_ito_qualification_start_time": "",
+    "plugin_ito_error_qualification_start_time": "",
     "plugin_ito_end_time": "終了時刻 {{zone}}",
     "plugin_ito_unlock_time": "",
     "plugin_ito_swap_ration_label": "スワップ比率",
