@@ -18,10 +18,10 @@ const define: SocialNetworkUI.Definition = {
     injection: {},
     permission: {
         async has() {
-            return false
+            return true
         },
         async request() {
-            return false
+            return true
         },
     },
     utils: {},
@@ -40,6 +40,7 @@ const define: SocialNetworkUI.Definition = {
                 // TODO: heck, this is not what we expected.
                 this.networkIdentifier = ui.networkIdentifier
                 this.permission = _.permission
+                this.declarativePermissions = _.declarativePermissions
                 this.utils = _.utils
                 return _.init(signal)
             }
