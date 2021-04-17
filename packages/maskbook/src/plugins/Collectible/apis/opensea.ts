@@ -5,7 +5,7 @@ import { getChainId } from '../../../extension/background-script/EthereumService
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaRinkebyBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
 import { Flags } from '../../../utils/flags'
-import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../UI/types'
+import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../types'
 import { OpenSeaEventHistoryQuery } from '../queries/OpenSea'
 import { send } from '../../../extension/background-script/EthereumServices/send'
 import { ChainId } from '../../../web3/types'

@@ -1,5 +1,5 @@
 import { createContainer } from 'unstated-next'
-import type { CollectibleToken } from '../UI/types'
+import type { CollectibleToken } from '../types'
 import { useAsset } from './useAsset'
 
 function useCollectibleState(token?: CollectibleToken) {

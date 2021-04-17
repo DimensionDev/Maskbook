@@ -1,6 +1,6 @@
 import type { Order } from 'opensea-js/lib/types'
-import { Avatar, Button, createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
-import type { OpenSeaCustomAccount } from './types'
+import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography, Button } from '@material-ui/core'
+import type { OpenSeaCustomAccount } from '../types'
 import { formatDistanceToNow } from 'date-fns'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'

@@ -1,7 +1,7 @@
 import { Network } from 'opensea-js'
 import { ChainId } from '../../../web3/types'
 import { NullAddress } from '../constants'
-import { OpenSeaAssetEventAccount, OpenSeaAssetEventType } from '../UI/types'
+import { OpenSeaAssetEventAccount, OpenSeaAssetEventType } from '../types'
 
 export function resolveAssetEventType(eventType: OpenSeaAssetEventType, from?: OpenSeaAssetEventAccount) {
     switch (eventType) {

@@ -4,7 +4,7 @@ import { formatBalance, formatElapsed } from '../../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { resolveAssetEventType } from '../../pipes'
-import { OpenSeaAssetEvent, OpenSeaAssetEventType } from '../types'
+import { OpenSeaAssetEvent, OpenSeaAssetEventType } from '../../types'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({

@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { CollectibleToken } from '../UI/types'
+import type { CollectibleToken } from '../types'
 import { PluginCollectibleRPC } from '../messages'
 
 export function useEvents(token?: CollectibleToken, cursor?: string) {
