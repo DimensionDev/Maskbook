@@ -2,6 +2,7 @@ import { useState } from 'react'
 import {
     Box,
     Button,
+    Chip,
     IconButton,
     createStyles,
     makeStyles,
@@ -63,6 +64,9 @@ const useStyles = makeStyles((theme: Theme) =>
             marginLeft: theme.spacing(1),
             fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
         },
+        chain: {
+            marginLeft: theme.spacing(1),
+        },
         price: {
             fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
         },
@@ -85,21 +89,24 @@ interface ViewDetailedProps extends WalletAssetsTableProps {
 }
 
 function ViewDetailed(props: ViewDetailedProps) {
-    const { wallet, asset: x } = props
+    const { wallet, asset } = props
 
     const isMobile = useMatchXS()
     const classes = useStylesExtends(useStyles({ isMobile }), props)
     const stableTokens = useStableTokensDebank()
 
+    console.log(asset)
+
     return (
-        <TableRow className={classes.cell} key={x.token.address}>
+        <TableRow className={classes.cell} key={asset.token.address}>
             {[
                 <Box
                     sx={{
                         display: 'flex',
                     }}>
-                    <TokenIcon classes={{ icon: classes.coin }} name={x.token.name} address={x.token.address} />
-                    <Typography className={classes.name}>{x.token.symbol}</Typography>
+                    <TokenIcon classes={{ icon: classes.coin }} name={asset.token.name} address={asset.token.address} />
+                    <Typography className={classes.name}>{asset.token.symbol}</Typography>
+                    {asset.chain !== 'eth' ? <Chip className={classes.chain} label={asset.chain} size="small" /> : null}
                 </Box>,
                 <Box
                     sx={{
@@ -107,8 +114,8 @@ function ViewDetailed(props: ViewDetailedProps) {
                         justifyContent: 'flex-end',
                     }}>
                     <Typography className={classes.price} color="textPrimary" component="span">
-                        {x.price?.[CurrencyType.USD]
-                            ? formatCurrency(Number.parseFloat(x.price[CurrencyType.USD]), '$')
+                        {asset.price?.[CurrencyType.USD]
+                            ? formatCurrency(Number.parseFloat(asset.price[CurrencyType.USD]), '$')
                             : '-'}
                     </Typography>
                 </Box>,
@@ -119,9 +126,13 @@ function ViewDetailed(props: ViewDetailedProps) {
                     }}>
                     <Typography className={classes.name} color="textPrimary" component="span">
                         {new BigNumber(
-                            formatBalance(new BigNumber(x.balance), x.token.decimals ?? 0, x.token.decimals ?? 0),
+                            formatBalance(
+                                new BigNumber(asset.balance),
+                                asset.token.decimals ?? 0,
+                                asset.token.decimals ?? 0,
+                            ),
                         ).toFixed(
-                            stableTokens.some((y: ERC20TokenDetailed) => isSameAddress(y.address, x.token.address))
+                            stableTokens.some((y: ERC20TokenDetailed) => isSameAddress(y.address, asset.token.address))
                                 ? 2
                                 : 6,
                         )}
@@ -133,7 +144,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                         justifyContent: 'flex-end',
                     }}>
                     <Typography className={classes.price} color="textPrimary" component="span">
-                        {formatCurrency(Number(getTokenUSDValue(x).toFixed(2)), '$')}
+                        {formatCurrency(Number(getTokenUSDValue(asset).toFixed(2)), '$')}
                     </Typography>
                 </Box>,
                 ...(isMobile
@@ -144,7 +155,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                                   display: 'flex',
                                   justifyContent: 'flex-end',
                               }}>
-                              <ActionsBarFT chain={x.chain} wallet={wallet} token={x.token} />
+                              <ActionsBarFT chain={asset.chain} wallet={wallet} token={asset.token} />
                           </Box>,
                       ]),
             ]
