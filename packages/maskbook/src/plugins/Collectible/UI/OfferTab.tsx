@@ -26,6 +26,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useCallback } from 'react'
 import { PluginCollectibleRPC } from '../messages'
 import { useAccount } from '../../../web3/hooks/useAccount'
+import { toAsset } from '../helpers'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -101,12 +102,11 @@ export function OfferTab() {
         if (!asset.value) return
 
         try {
-            const response = await PluginCollectibleRPC.createBuyOrder(
-                token.contractAddress,
-                token.tokenId,
-                asset.value.assetContract.schemaName,
-                account,
-            )
+            const response = await PluginCollectibleRPC.createBuyOrder({
+                asset: toAsset(asset.value),
+                accountAddress: account,
+                startAmount: 0.1,
+            })
             console.log(response)
         } catch (e) {
             console.log(e)

@@ -1,5 +1,5 @@
 import { OpenSeaPort } from 'opensea-js'
-import type { OrderSide, WyvernSchemaName } from 'opensea-js/lib/types'
+import type { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
 import { getChainId } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
@@ -17,14 +17,8 @@ function createExternalProvider() {
         isStatus: true,
         host: '',
         path: '',
-        sendAsync: (...args: any[]) => {
-            // @ts-ignore
-            send(...args)
-        },
-        send: (...args: any[]) => {
-            // @ts-ignore
-            send(...args)
-        },
+        sendAsync: send,
+        send,
         request() {
             throw new Error('The request method is not implemented.')
         },
@@ -33,10 +27,14 @@ function createExternalProvider() {
 
 async function createOpenSeaPort() {
     const chainId = await getChainId()
-    return new OpenSeaPort(createExternalProvider(), {
-        networkName: resolveOpenSeaNetwork(chainId),
-        apiKey: OpenSeaAPI_Key,
-    })
+    return new OpenSeaPort(
+        createExternalProvider(),
+        {
+            networkName: resolveOpenSeaNetwork(chainId),
+            apiKey: OpenSeaAPI_Key,
+        },
+        console.log,
+    )
 }
 
 async function createOpenSeaAPI() {
@@ -109,40 +107,20 @@ export async function getOrders(
     })
 }
 
-export async function createBuyOrder(
-    asset_contract_address: string,
-    token_id: string,
-    schema: WyvernSchemaName,
-    account: string,
-) {
+export async function createBuyOrder(payload: Parameters<OpenSeaPort['createBuyOrder']>[0]) {
     return (await createOpenSeaPort()).createBuyOrder({
-        asset: {
-            tokenId: token_id,
-            tokenAddress: asset_contract_address,
-            schemaName: schema,
-        },
-        accountAddress: account,
         referrerAddress: ReferrerAddress,
-        paymentTokenAddress: '',
-        startAmount: 0.0001,
+        ...payload,
     })
 }
 
-export async function createSellOrder(
-    asset_contract_address: string,
-    token_id: string,
-    schema: WyvernSchemaName,
-    account: string,
-) {
-    return (await createOpenSeaPort()).createSellOrder({
-        asset: {
-            tokenId: token_id,
-            tokenAddress: asset_contract_address,
-            schemaName: schema,
-        },
-        accountAddress: account,
-        startAmount: 3,
-        endAmount: 0.1,
-        expirationTime: Math.round(Date.now() / 1000 + 60 * 60 * 24),
+export async function createSellOrder(payload: Parameters<OpenSeaPort['createSellOrder']>[0]) {
+    return (await createOpenSeaPort()).createSellOrder(payload)
+}
+
+export async function fulfillOrder(payload: Parameters<OpenSeaPort['fulfillOrder']>[0]) {
+    return (await createOpenSeaPort()).fulfillOrder({
+        referrerAddress: ReferrerAddress,
+        ...payload,
     })
 }

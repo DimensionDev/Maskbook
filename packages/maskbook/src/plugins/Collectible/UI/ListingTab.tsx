@@ -1,3 +1,4 @@
+import { useMemo, useState, useCallback } from 'react'
 import {
     Box,
     Button,
@@ -14,7 +15,6 @@ import {
 } from '@material-ui/core'
 import { useOrders } from '../hooks/useOrders'
 import { OrderSide } from 'opensea-js/lib/types'
-import { useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
@@ -23,6 +23,9 @@ import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { PluginCollectibleRPC } from '../messages'
+import { toAsset } from '../helpers'
+import { useAccount } from '../../../web3/hooks/useAccount'
 const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
@@ -49,7 +52,8 @@ export function ListingTab() {
     const { t } = useI18N()
     const classes = useStyles()
     const [page, setPage] = useState(0)
-    const { token } = CollectibleState.useContainer()
+    const account = useAccount()
+    const { token, asset } = CollectibleState.useContainer()
     const listings = useOrders(token, OrderSide.Sell, page)
 
     const isDifferenceToken = useMemo(
@@ -84,6 +88,21 @@ export function ListingTab() {
                 return 0
             })
     }, [listings.value])
+
+    const onMakeListing = useCallback(async () => {
+        if (!token) return
+        if (!asset.value) return
+        try {
+            const response = await PluginCollectibleRPC.createBuyOrder({
+                asset: toAsset(asset.value),
+                accountAddress: account,
+                startAmount: 0.1,
+            })
+            console.log(response)
+        } catch (e) {
+            console.log(e)
+        }
+    }, [account, asset])
 
     if (listings.loading)
         return (
@@ -177,7 +196,7 @@ export function ListingTab() {
             <Box sx={{ padding: 2 }} display="flex" justifyContent="flex-end">
                 {/* <ActionButton className={classes.button} variant="outlined">Cancel Listing</ActionButton>
                 <ActionButton className={classes.button} color="primary" variant="contained">Price Drop</ActionButton> */}
-                <ActionButton className={classes.button} color="primary" variant="contained">
+                <ActionButton className={classes.button} color="primary" variant="contained" onClick={onMakeListing}>
                     Sell
                 </ActionButton>
             </Box>
