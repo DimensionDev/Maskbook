@@ -195,7 +195,10 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
                         {/* TODO  resolve options performance problem */}
                         {filteredRegions.map((region) => {
                             return (
-                                <ListItem key={region.code} className={classes.item}>
+                                <ListItem
+                                    key={region.code}
+                                    className={classes.item}
+                                    onClick={handleToggle(region.code)}>
                                     <ListItemIcon>
                                         <Checkbox
                                             edge="start"
