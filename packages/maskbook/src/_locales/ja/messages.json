@@ -142,7 +142,6 @@
     "person_or_group_in_list_many": "{{people}}… 全部で{{count}}",
     "person_or_group_in_list_many_no_preview": "全部で{{count}}",
     "personas": "ペルソナ",
-    "popup_missing_permission": "Mask は権限がないため動作しません。",
     "popup_request_permission": "修正します",
     "popup_notifications": "",
     "popup_notifications_description": "",
