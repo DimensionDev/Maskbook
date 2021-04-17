@@ -124,8 +124,6 @@ export function AdvanceSetting({ onSettingChange }: AdvanceSettingProps) {
                             shrink: true,
                         }}
                         InputProps={{
-                            // FIXME how to resolve the Type check error
-                            // @ts-ignore
                             inputComponent: RegionSelect,
                             inputProps: {
                                 value: regions,

@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { useState, useRef, useCallback, forwardRef, useImperativeHandle } from 'react'
+import type { InputBaseComponentProps } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { useDebounce } from 'react-use'
 import {
@@ -21,7 +22,7 @@ import { useRegionList } from '../hooks/useRegion'
 import type { RegionCode } from '../hooks/useRegion'
 import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
 
-export interface RegionSelectProps {
+export interface RegionSelectProps extends InputBaseComponentProps {
     value: RegionCode[]
     // onChange: React.ChangeEvent<{ value: RegionCode[] }> // TODO how to implement the ChangeEvent interface?
     onRegionChange: (codes: RegionCode[]) => void
