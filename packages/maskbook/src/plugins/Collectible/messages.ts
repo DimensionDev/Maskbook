@@ -6,9 +6,14 @@ interface AcceptOfferDialogEvent {
     open: boolean
 }
 
+interface MakeOfferDialogEvent {
+    open: boolean
+}
+
 interface CollectibleMessage {
     rpc: unknown
     acceptOfferDialogEvent: AcceptOfferDialogEvent
+    makeOfferDialogEvent: MakeOfferDialogEvent
 }
 
 if (module.hot) module.hot.accept()

@@ -22,6 +22,7 @@ import BigNumber from 'bignumber.js'
 import { TableListPagination } from './Pagination'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useControlledAcceptOfferDialog } from './AcceptOfferDialog'
+import { useControlledMakeOfferDialog } from './MakeOfferDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useCallback } from 'react'
 import { PluginCollectibleRPC } from '../messages'
@@ -94,9 +95,14 @@ export function OfferTab() {
             })
     }, [offers.value])
 
+    const { onOpen: onOpenAcceptOfferDialog } = useControlledAcceptOfferDialog()
+    const { onOpen: onOpenMakeOfferDialog } = useControlledMakeOfferDialog()
+
     const onMakeOffer = useCallback(async () => {
         console.log(asset)
         console.log(token)
+
+        onOpenMakeOfferDialog()
 
         if (!token) return
         if (!asset.value) return
@@ -112,8 +118,6 @@ export function OfferTab() {
             console.log(e)
         }
     }, [account, asset, token])
-
-    const { onOpen: onOpenAcceptOfferDialog } = useControlledAcceptOfferDialog()
 
     if (offers.loading) return loadingTable
 
@@ -146,7 +150,11 @@ export function OfferTab() {
                     />
                 </Table>
                 <Box sx={{ padding: 2 }} display="flex" justifyContent="flex-end">
-                    <ActionButton className={classes.button} color="primary" variant="contained" onClick={onMakeOffer}>
+                    <ActionButton
+                        className={classes.button}
+                        color="primary"
+                        variant="contained"
+                        onClick={onOpenMakeOfferDialog}>
                         Make an Offer
                     </ActionButton>
                     <ActionButton
@@ -154,7 +162,7 @@ export function OfferTab() {
                         color="primary"
                         variant="contained"
                         onClick={onOpenAcceptOfferDialog}>
-                        Open Accept Offer Dialog
+                        Offer Dialog
                     </ActionButton>
                 </Box>
             </>

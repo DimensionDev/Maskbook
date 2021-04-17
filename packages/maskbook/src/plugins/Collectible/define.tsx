@@ -2,6 +2,7 @@ import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { PLUGIN_NAME, PLUGIN_IDENTIFIER } from './constants'
 import { PostInspector } from './UI/PostInspector'
 import { AcceptOfferDialog } from './UI/AcceptOfferDialog'
+import { MakeOfferDialog } from './UI/MakeOfferDialog'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import type { CollectibleJSON_Payload } from './UI/types'
 import { getRelevantUrl, checkUrl, getAssetInfoFromURL } from './utils'
@@ -36,6 +37,7 @@ export const CollectiblesPluginDefine: PluginConfig = {
         return (
             <>
                 <AcceptOfferDialog />
+                <MakeOfferDialog />
             </>
         )
     },
