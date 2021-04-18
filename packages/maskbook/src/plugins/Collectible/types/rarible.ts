@@ -1,3 +1,5 @@
+import type { WyvernSchemaName } from 'opensea-js/lib/types'
+
 export interface RaribleTransferItem {
     date: string
     owner: string
@@ -65,8 +67,7 @@ export interface RaribleNFTItemMetaResponse {
 export interface RaribleCollectionResponse {
     id: string
     /** Enum: "ERC721" "ERC1155" **/
-    /** TODO: Probably should have a common enum with OpenSea and other data sources **/
-    type: string
+    type: WyvernSchemaName
     owner?: string
     name: string
     symbol: string

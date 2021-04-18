@@ -16,11 +16,11 @@ async function fetchFromRarible<T>(subPath: string) {
 export async function getNFTItem(tokenAddress: string, tokenId: string) {
     const itemResponse = await fetchFromRarible<RaribleNFTItemResponse>(`nft/items/${tokenAddress}:${tokenId}`)
     const metaResponse = await fetchFromRarible<RaribleNFTItemMetaResponse>(`nft/items/${tokenAddress}:${tokenId}/meta`)
-    const collectionResponse = await fetchFromRarible<RaribleCollectionResponse>(`/nft/collections/${tokenAddress}`)
+    const collectionResponse = await fetchFromRarible<RaribleCollectionResponse>(`nft/collections/${tokenAddress}`)
 
     return {
         ...itemResponse,
         ...metaResponse,
-        ...collectionResponse,
+        assetContract: collectionResponse,
     }
 }

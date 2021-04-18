@@ -109,7 +109,11 @@ export function OfferTab() {
 
         try {
             const response = await PluginCollectibleRPC.createBuyOrder({
-                asset: toAsset(asset.value),
+                asset: toAsset({
+                    tokenId: token.tokenId,
+                    tokenAddress: token.contractAddress,
+                    schemaName: asset.value?.assetContract?.schemaName,
+                }),
                 accountAddress: account,
                 startAmount: 0.1,
             })

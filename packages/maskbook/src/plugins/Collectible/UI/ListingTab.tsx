@@ -93,7 +93,11 @@ export function ListingTab() {
         if (!asset.value) return
         try {
             const response = await PluginCollectibleRPC.createBuyOrder({
-                asset: toAsset(asset.value),
+                asset: toAsset({
+                    tokenId: token.tokenId,
+                    tokenAddress: token.contractAddress,
+                    schemaName: asset.value?.assetContract?.schemaName,
+                }),
                 accountAddress: account,
                 startAmount: 0.1,
             })
@@ -101,7 +105,7 @@ export function ListingTab() {
         } catch (e) {
             console.log(e)
         }
-    }, [account, asset])
+    }, [account, asset, token])
 
     if (listings.loading) return loadingTable
 

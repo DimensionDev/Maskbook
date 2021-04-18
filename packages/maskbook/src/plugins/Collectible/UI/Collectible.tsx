@@ -1,6 +1,4 @@
-import { useMemo, useState } from 'react'
-import { head, subtract } from 'lodash-es'
-import BigNumber from 'bignumber.js'
+import { useState } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -24,7 +22,6 @@ import { HistoryTab } from './HistoryTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
-import { getOrderUnitPrice } from '../utils'
 import { PluginSkeleton } from '../../PluginSkeleton'
 
 const useStyles = makeStyles((theme) => {
@@ -101,14 +98,14 @@ export function Collectible(props: CollectibleProps) {
     const [tabIndex, setTabIndex] = useState(0)
 
     //#region The current price needs to be found from the listing list to find the lowest price
-    const currentPrice = useMemo(() => {
-        if (!asset.value || !asset.value.sellOrders || !asset.value.sellOrders.length) return null
-        const unitPrices = asset.value.sellOrders.map((order) => {
-            return new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber()
-        })
-
-        return head(unitPrices.sort(subtract))
-    }, [asset.value])
+    // const currentPrice = useMemo(() => {
+    //     if (!asset.value || !asset.value.sellOrders || !asset.value.sellOrders.length) return null
+    //     const unitPrices = asset.value.sellOrders.map((order) => {
+    //         return new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber()
+    //     })
+    //
+    //     return head(unitPrices.sort(subtract))
+    // }, [asset.value])
 
     if (asset.loading) return <PluginSkeleton />
     if (!asset.value) return <Typography color="textPrimary">Failed to load your collectible.</Typography>
@@ -133,13 +130,13 @@ export function Collectible(props: CollectibleProps) {
                             title={asset.value.owner?.user?.username ?? asset.value.owner?.address ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Avatar src={asset.value.owner?.profile_img_url} />
+                            <Avatar src={asset.value.owner?.profile_img_url ?? ''} />
                         </Link>
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
                             {asset.value.name ?? ''}
-                            {asset.value.collection.safelist_request_status === 'verified' ? (
+                            {asset.value.safelist_request_status === 'verified' ? (
                                 <VerifiedUserIcon color="primary" fontSize="small" sx={{ marginLeft: 0.5 }} />
                             ) : null}
                         </Typography>
@@ -154,13 +151,13 @@ export function Collectible(props: CollectibleProps) {
                                 </Box>
                             ) : null}
 
-                            {currentPrice ? (
+                            {asset.value?.currentPrice ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
                                     <Typography className={classes.description} component="span">
                                         <Trans
                                             i18nKey="plugin_collectible_description"
                                             values={{
-                                                price: currentPrice,
+                                                price: asset.value?.currentPrice,
                                             }}
                                         />
                                     </Typography>

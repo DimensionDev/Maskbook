@@ -64,7 +64,7 @@ export function TokenTab(props: TokenTabProps) {
                                 href={`https://opensea.io/accounts/${
                                     asset.value.creator.user?.username ?? asset.value.creator.address
                                 }`}>
-                                {asset.value.creator.user?.username ?? asset.value.creator.address.slice(2, 8)}
+                                {asset.value.creator.user?.username ?? asset.value.creator.address?.slice(2, 8)}
                             </Link>
                         </Typography>
                     ) : (
@@ -74,7 +74,7 @@ export function TokenTab(props: TokenTabProps) {
                                 href={`https://opensea.io/accounts/${
                                     asset.value.owner?.user?.username ?? asset.value.owner?.address ?? ''
                                 }`}>
-                                {asset.value.owner?.user?.username ?? asset.value.owner?.address.slice(2, 8) ?? ''}
+                                {asset.value.owner?.user?.username ?? asset.value.owner?.address?.slice(2, 8) ?? ''}
                             </Link>
                         </Typography>
                     )}
@@ -99,13 +99,13 @@ export function TokenTab(props: TokenTabProps) {
                 </Box>
             ) : null}
 
-            {asset.value.assetContract.name && asset.value.assetContract.description ? (
+            {asset.value.assetContract.name && asset.value.assetContract?.description ? (
                 <Box className={classes.container}>
                     <Typography variant="h6">
                         {t('plugin_collectible_about')} {asset.value.assetContract.name}
                     </Typography>
 
-                    <Typography className={classes.description}>{asset.value.assetContract.description}</Typography>
+                    <Typography className={classes.description}>{asset.value.assetContract?.description}</Typography>
                 </Box>
             ) : null}
 

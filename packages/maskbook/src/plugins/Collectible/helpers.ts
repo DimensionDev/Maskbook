@@ -1,4 +1,4 @@
-import type { Asset, OpenSeaAsset } from 'opensea-js/lib/types'
+import type { Asset, WyvernSchemaName } from 'opensea-js/lib/types'
 import { createTypedMessageMetadataReader, createRenderWithMetadata } from '../../protocols/typed-message/metadata'
 import { PLUGIN_META_KEY } from './constants'
 import type { CollectibleJSON_Payload } from './types'
@@ -10,11 +10,11 @@ export const CollectibleMetadataReader = createTypedMessageMetadataReader<Collec
 )
 export const renderWithCollectibleMetadata = createRenderWithMetadata(CollectibleMetadataReader)
 
-export function toAsset(asset: OpenSeaAsset): Asset {
+export function toAsset(asset: { tokenId: string; tokenAddress: string; schemaName?: WyvernSchemaName }): Asset {
     return {
         tokenId: asset.tokenId,
         tokenAddress: asset.tokenAddress,
-        schemaName: asset.assetContract.schemaName,
+        schemaName: asset.schemaName,
     }
 }
 
