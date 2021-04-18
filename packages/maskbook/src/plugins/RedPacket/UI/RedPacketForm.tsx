@@ -222,7 +222,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
             open: true,
             state: createState,
             summary: `Creating red packet with ${formatBalance(
-                new BigNumber(totalAmount),
+                totalAmount,
                 token.decimals ?? 0,
                 token.decimals ?? 0,
             )} ${token.symbol}`,

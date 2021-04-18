@@ -17,8 +17,9 @@ export function formatAmount(amount: BigNumber, decimals: number) {
     return amount.multipliedBy(new BigNumber(10).pow(decimals)).toFixed()
 }
 
-export function formatBalance(balance: BigNumber, decimals: number, significant: number = decimals) {
-    if (!BigNumber.isBigNumber(balance)) return '0'
+export function formatBalance(rawValue: BigNumber.Value, decimals: number, significant = decimals) {
+    let balance = new BigNumber(rawValue)
+    if (balance.isNaN()) return '0'
     const negative = balance.isNegative() // balance < 0n
     const base = new BigNumber(10).pow(decimals) // 10n ** decimals
 
@@ -40,7 +41,7 @@ export function formatBalance(balance: BigNumber, decimals: number, significant:
     const value = `${whole}${fraction === '' ? '' : `.${fraction}`}`
 
     const raw = negative ? `-${value}` : value
-    return raw.indexOf('.') > -1 ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
+    return raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
 }
 
 export function formatCurrency(balance: number, sign: string = '$') {
