@@ -292,6 +292,12 @@ export function ITO(props: ITO_Props) {
     }, [shareSuccessLink])
     //#endregion
 
+    const retryITOCard = useCallback(() => {
+        retryPoolPayload()
+        retryPoolTradeInfo()
+        retryAvailability()
+    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
+
     //#region claim
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(pid)
     const onClaimButtonClick = useCallback(() => {
@@ -302,7 +308,7 @@ export function ITO(props: ITO_Props) {
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-            if (destructState.type !== TransactionStateType.CONFIRMED) return
+            if (claimState.type !== TransactionStateType.CONFIRMED) return
             resetClaimCallback()
             retryITOCard()
         },
@@ -341,12 +347,6 @@ export function ITO(props: ITO_Props) {
         setClaimDialogStatus(ClaimStatus.Remind)
         setOpenClaimDialog(true)
     }, [])
-
-    const retryITOCard = useCallback(() => {
-        retryPoolPayload()
-        retryPoolTradeInfo()
-        retryAvailability()
-    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
 
     //#region withdraw
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
