@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => {
             alignItems: 'center',
             justifyContent: 'center',
             height: '100%',
-            padding: theme.spacing(6, 0),
+            padding: theme.spacing(8, 0, 6),
         },
         button: {
             marginLeft: theme.spacing(1),
