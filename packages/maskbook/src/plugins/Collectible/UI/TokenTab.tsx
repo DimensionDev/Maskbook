@@ -52,7 +52,7 @@ export function TokenTab(props: TokenTabProps) {
     if (!asset.value) return null
 
     return (
-        <CollectibleTab>
+        <CollectibleTab CardProps={{ variant: 'outlined' }}>
             <Box className={classes.container}>
                 <Typography variant="h6">{t('plugin_collectible_base')}</Typography>
 

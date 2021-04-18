@@ -23,7 +23,7 @@ export function ArticleTab(props: ArticleTabProps) {
     const { asset } = CollectibleState.useContainer()
 
     return (
-        <CollectibleTab>
+        <CollectibleTab CardProps={{ variant: 'outlined' }}>
             <div className={classes.body}>
                 {asset.value?.animation_url ? (
                     <Link href={asset.value?.animation_url} target="_blank" rel="noopener noreferrer">

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -6,6 +6,7 @@ import {
     Box,
     CardHeader,
     CardContent,
+    CardActions,
     Link,
     Paper,
     Tab,
@@ -14,6 +15,7 @@ import {
 } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
@@ -22,7 +24,15 @@ import { HistoryTab } from './HistoryTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
+import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { PluginSkeleton } from '../../PluginSkeleton'
+import { getEnumAsArray } from '../../../utils/enum'
+import { CollectibleProvider } from '../types'
+import { currentCollectibleProviderSettings } from '../settings'
+import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/UI/trader/FootnoteMenu'
+import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
+import { findIndex } from 'lodash-es'
+import { resolveCollectibleProviderName } from '../pipes'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -47,6 +57,9 @@ const useStyles = makeStyles((theme) => {
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
+        },
+        footer: {
+            justifyContent: 'space-between',
         },
         tabs: {
             height: 'var(--tabHeight)',
@@ -73,16 +86,27 @@ const useStyles = makeStyles((theme) => {
             },
         },
         footnote: {
-            margin: theme.spacing(1, 0, 0),
+            marginRight: theme.spacing(1),
         },
-        countdown: {
-            fontSize: 12,
-            borderRadius: 8,
-            display: 'block',
-            white: '100%',
-            color: theme.palette.common.white,
-            backgroundColor: '#eb5757',
-            padding: theme.spacing(0.5, 2),
+        footLink: {
+            cursor: 'pointer',
+            marginRight: theme.spacing(0.5),
+            '&:last-child': {
+                marginRight: 0,
+            },
+        },
+        footMenu: {
+            color: theme.palette.text.secondary,
+            fontSize: 10,
+            display: 'flex',
+            alignItems: 'center',
+        },
+        footName: {
+            marginLeft: theme.spacing(0.5),
+        },
+        maskbook: {
+            width: 40,
+            height: 10,
         },
     })
 })
@@ -93,9 +117,16 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const { asset } = CollectibleState.useContainer()
+    const { asset, provider } = CollectibleState.useContainer()
 
     const [tabIndex, setTabIndex] = useState(0)
+
+    //#region sync with settings
+    const collectibleProviderOptions = getEnumAsArray(CollectibleProvider)
+    const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
+        currentCollectibleProviderSettings.value = option.value as CollectibleProvider
+    }, [])
+    //#endregion
 
     if (asset.loading) return <PluginSkeleton />
     if (!asset.value) return <Typography color="textPrimary">Failed to load your collectible.</Typography>
@@ -176,6 +207,38 @@ export function Collectible(props: CollectibleProps) {
                         {tabIndex === 4 ? <HistoryTab /> : null}
                     </Paper>
                 </CardContent>
+                <CardActions className={classes.footer}>
+                    <Typography className={classes.footnote} variant="subtitle2">
+                        <span>Powered by </span>
+                        <Link
+                            className={classes.footLink}
+                            color="textSecondary"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Mask"
+                            href="https://mask.io">
+                            <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
+                        </Link>
+                    </Typography>
+                    <div className={classes.footMenu}>
+                        <FootnoteMenu
+                            options={collectibleProviderOptions.map((x) => ({
+                                name: (
+                                    <>
+                                        <CollectibleProviderIcon provider={x.value} />
+                                        <span className={classes.footName}>
+                                            {resolveCollectibleProviderName(x.value)}
+                                        </span>
+                                    </>
+                                ),
+                                value: x.value,
+                            }))}
+                            selectedIndex={findIndex(collectibleProviderOptions, (x) => x.value === provider)}
+                            onChange={onDataProviderChange}
+                        />
+                        <ArrowDropDownIcon />
+                    </div>
+                </CardActions>
             </CollectibleCard>
         </>
     )
