@@ -30,7 +30,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                 return {
                     imageUrl: response.imageUrl,
                     assetContract: response.assetContract,
-                    currentPrice: currentPrice,
+                    currentPrice,
                     owner: {
                         ...response.owner,
                         link: `${OpenSeaAccountURL}${response.owner?.user?.username ?? response.owner.address ?? ''}`,
@@ -76,6 +76,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     description: result.properties.description,
                     name: result.properties.name,
                     animation_url: result.properties.animationUrl,
+                    currentPrice: result.item.offer?.buyPriceEth,
                 }
             default:
                 unreachable(provider)

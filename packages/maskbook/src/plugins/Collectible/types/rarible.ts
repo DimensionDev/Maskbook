@@ -74,6 +74,7 @@ export interface RaribleNFTItemMapResponse {
         sellers: number
         ownership: Ownership
         totalStock: number
+        offer?: RaribleOfferResponse
     }
     properties: {
         name: string

@@ -507,8 +507,6 @@
     "plugin_collectible_sell": "Sell",
     "plugin_collectible_make_offer": "Make Offer",
     "plugin_collectible_post_listing": "Post Listing",
-    "plugin_collectible_expiration_date": "Expiration Date {{zone}}",
-    "plugin_collectible_schedule_date": "Schedule Date {{zone}}",
     "plugin_collectible_description": "Current price is <strong>{{price}} ETH</strong>.",
     "plugin_collectible_article": "Article",
     "plugin_collectible_details": "Details",
