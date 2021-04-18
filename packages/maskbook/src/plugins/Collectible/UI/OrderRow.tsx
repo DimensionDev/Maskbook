@@ -1,11 +1,11 @@
-import type { Order } from 'opensea-js/lib/types'
 import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
-import { CollectibleProvider, NFTOrder, OpenSeaCustomAccount } from '../types'
+import { CollectibleProvider, NFTOrder } from '../types'
 import { formatDistanceToNow } from 'date-fns'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { resolveAddressOnEtherscan } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'
+import { CollectibleState } from '../hooks/useCollectibleState'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -51,11 +51,9 @@ interface IRowProps {
     acceptable?: boolean
 }
 
-//TODO: use global settings to switch dataSource
-let provider = CollectibleProvider.OPENSEA
-
 export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
     const classes = useStyles()
+    const { provider } = CollectibleState.useContainer()
 
     return (
         <TableRow>

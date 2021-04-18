@@ -10,7 +10,7 @@ import { unreachable } from '../../../utils/utils'
 import { toRaribleImage } from '../helpers'
 import { OpenSeaAccountURL, RaribleUserURL } from '../constants'
 
-export function useAsset(token?: CollectibleToken, provider = CollectibleProvider.RARIBLE) {
+export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
     const chainId = useChainId()
 
     return useAsyncRetry(async () => {

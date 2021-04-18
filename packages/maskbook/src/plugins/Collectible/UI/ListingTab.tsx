@@ -25,6 +25,7 @@ import { toAsset } from '../helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { CollectibleProvider } from '../types'
 import { ListingTabActionBar } from './ListingTabActionBar'
+
 const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
@@ -47,16 +48,14 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-//TODO: use global settings to switch dataSource
-let provider = CollectibleProvider.OPENSEA
-
 export function ListingTab() {
     const { t } = useI18N()
     const classes = useStyles()
-    const [page, setPage] = useState(0)
+
     const account = useAccount()
-    const { token, asset } = CollectibleState.useContainer()
-    const listings = useOrders(token, provider, OrderSide.Sell, page)
+    const [page, setPage] = useState(0)
+    const { token, asset, provider } = CollectibleState.useContainer()
+    const listings = useOrders(OrderSide.Sell, page)
 
     const isDifferenceToken = useMemo(() => {
         if (provider === CollectibleProvider.OPENSEA) {
@@ -69,7 +68,7 @@ export function ListingTab() {
         } else {
             return false
         }
-    }, [listings.value])
+    }, [provider, listings.value])
 
     const dataSource = useMemo(() => {
         if (!listings.value || !listings.value?.length) return []

@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { OrderSide } from 'opensea-js/lib/types'
-import type { CollectibleToken, NFTOrder, OpenSeaCustomAccount } from '../types'
+import type { NFTOrder, OpenSeaCustomAccount } from '../types'
 import { CollectibleProvider } from '../types'
 import { PluginCollectibleRPC } from '../messages'
 import { unreachable } from '../../../utils/utils'
@@ -9,13 +9,8 @@ import { getOrderUnitPrice } from '../utils'
 import { OpenSeaAccountURL } from '../constants'
 import { CollectibleState } from './useCollectibleState'
 
-export function useOrders(
-    token?: CollectibleToken,
-    provider = CollectibleProvider.OPENSEA,
-    side = OrderSide.Buy,
-    pageNum = 1,
-) {
-    const { asset } = CollectibleState.useContainer()
+export function useOrders(side = OrderSide.Buy, pageNum = 1) {
+    const { asset, token, provider } = CollectibleState.useContainer()
 
     return useAsyncRetry<NFTOrder[]>(async () => {
         if (!token) return []
@@ -53,9 +48,8 @@ export function useOrders(
                 })
             case CollectibleProvider.RARIBLE:
                 return PluginCollectibleRPC.getOrderFromRarbile(token.contractAddress, token.tokenId, side)
-
             default:
                 unreachable(provider)
         }
-    }, [token, pageNum, provider, asset])
+    }, [asset, token, pageNum, provider])
 }

@@ -1,3 +1,5 @@
+import { useMemo, useState } from 'react'
+import BigNumber from 'bignumber.js'
 import {
     Button,
     createStyles,
@@ -10,20 +12,15 @@ import {
     Typography,
 } from '@material-ui/core'
 import { OrderSide } from 'opensea-js/lib/types'
-import BigNumber from 'bignumber.js'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { useOrders } from '../hooks/useOrders'
 import { CollectibleTab } from './CollectibleTab'
-import { useMemo, useState } from 'react'
 import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CollectibleProvider } from '../types'
 import { OfferTabActionBar } from './OfferTabActionBar'
 import { LoadingTable } from './LoadingTable'
-
-//TODO: use global settings to switch dataSource
-let provider = CollectibleProvider.OPENSEA
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -53,10 +50,11 @@ const useStyles = makeStyles((theme) => {
 export function OfferTab() {
     const { t } = useI18N()
     const classes = useStyles()
-    const [page, setPage] = useState(0)
 
-    const { asset, token } = CollectibleState.useContainer()
-    const offers = useOrders(token, provider, OrderSide.Buy, page)
+    const { asset, token, provider } = CollectibleState.useContainer()
+
+    const [page, setPage] = useState(0)
+    const offers = useOrders(OrderSide.Buy, page)
 
     const isDifferenceToken = useMemo(() => {
         if (provider === CollectibleProvider.OPENSEA) {
@@ -69,7 +67,7 @@ export function OfferTab() {
         } else {
             return false
         }
-    }, [offers.value])
+    }, [provider, offers.value])
 
     const dataSource = useMemo(() => {
         if (!offers.value || !offers.value?.length) return []
