@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => {
             },
         },
         footer: {
+            borderTop: `solid 1px ${theme.palette.divider}`,
             justifyContent: 'space-between',
         },
         tabs: {

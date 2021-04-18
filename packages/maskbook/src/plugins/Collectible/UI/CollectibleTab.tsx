@@ -7,8 +7,6 @@ const useStyles = makeStyles((theme) => {
             width: '100%',
             height: '100%',
             borderRadius: 0,
-            borderStyle: 'none',
-            borderBottomStyle: 'solid',
         },
         content: {},
     })
@@ -23,7 +21,7 @@ export function CollectibleTab(props: CollectibleTabProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     return (
-        <Card className={classes.root} elevation={0} variant="outlined" {...props.CardProps}>
+        <Card className={classes.root} elevation={0} {...props.CardProps}>
             <CardContent className={classes.content}>{props.children}</CardContent>
         </Card>
     )

@@ -17,7 +17,6 @@ import BigNumber from 'bignumber.js'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
-import { loadingTable } from './shared'
 import { TableListPagination } from './Pagination'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { PluginCollectibleRPC } from '../messages'
@@ -25,6 +24,7 @@ import { toAsset } from '../helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { CollectibleProvider } from '../types'
 import { ListingTabActionBar } from './ListingTabActionBar'
+import { LoadingTable } from './LoadingTable'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -100,8 +100,7 @@ export function ListingTab() {
         }
     }, [account, asset, token])
 
-    if (listings.loading) return loadingTable
-
+    if (listings.loading) return <LoadingTable />
     if (!listings.value || listings.error || !dataSource.length)
         return (
             <>

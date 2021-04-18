@@ -1,31 +1,36 @@
-import { Skeleton, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@material-ui/core'
+import { Box, Skeleton, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@material-ui/core'
 
 export function LoadingTable() {
     return (
-        <Table size="small">
-            <TableHead>
-                <TableRow>
-                    <TableCell>
-                        <Skeleton animation="wave" variant="rectangular" width="100%" height={22} />
-                    </TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {new Array(5).fill(0).map((_, i) => (
-                    <TableRow key={i}>
+        <>
+            <Table size="small">
+                <TableHead>
+                    <TableRow>
                         <TableCell>
-                            <Skeleton animation="wave" variant="rectangular" width="100%" height={14} />
+                            <Skeleton animation="wave" variant="rectangular" width="100%" height={22} />
                         </TableCell>
                     </TableRow>
-                ))}
-            </TableBody>
-            <TableFooter>
-                <TableRow>
-                    <TableCell>
-                        <Skeleton animation="wave" variant="rectangular" width="100%" height={28} />
-                    </TableCell>
-                </TableRow>
-            </TableFooter>
-        </Table>
+                </TableHead>
+                <TableBody>
+                    {new Array(5).fill(0).map((_, i) => (
+                        <TableRow key={i}>
+                            <TableCell>
+                                <Skeleton animation="wave" variant="rectangular" width="100%" height={14} />
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TableCell>
+                            <Skeleton animation="wave" variant="rectangular" width="100%" height={28} />
+                        </TableCell>
+                    </TableRow>
+                </TableFooter>
+            </Table>
+            <Box display="flex" alignItems="center" justifyContent="flex-end">
+                <Skeleton animation="wave" variant="text" width={80} height={61} style={{ marginRight: 16 }} />
+            </Box>
+        </>
     )
 }

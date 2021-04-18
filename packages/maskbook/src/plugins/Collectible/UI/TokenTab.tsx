@@ -50,9 +50,8 @@ export function TokenTab(props: TokenTabProps) {
     const { token, asset } = CollectibleState.useContainer()
 
     if (!asset.value) return null
-
     return (
-        <CollectibleTab CardProps={{ variant: 'outlined' }}>
+        <CollectibleTab>
             <Box className={classes.container}>
                 <Typography variant="h6">{t('plugin_collectible_base')}</Typography>
 
