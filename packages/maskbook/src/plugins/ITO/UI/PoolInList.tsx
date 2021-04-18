@@ -24,6 +24,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../Wallet/formatter'
 import { dateTimeFormat } from '../assets/formatDate'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
+import { MSG_DELIMITER } from '../constants'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -118,7 +119,7 @@ export function PoolInList(props: PoolInListProps) {
         loading: loadingAvailability,
     } = useAvailabilityComputed(pool)
     const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)
-
+    const title = pool.message.split(MSG_DELIMITER)[1] ?? pool.message
     const noRemain = new BigNumber(pool.total_remaining).isZero()
     const { listOfStatus } = availabilityComputed
 
@@ -161,7 +162,7 @@ export function PoolInList(props: PoolInListProps) {
                     <Box className={classes.header}>
                         <Box className={classes.title}>
                             <Typography variant="body1" color="textPrimary">
-                                {pool.message}
+                                {title}
                             </Typography>
                             <Typography className={classes.date} variant="body2" color="textSecondary">
                                 {t('plugin_ito_list_start_date', {

@@ -107,10 +107,6 @@
             "type": "string",
             "title": "qualification_address"
         },
-        "qualification_start_time": {
-            "type": "number",
-            "title": "qualification_start_time"
-        },
         "creation_time": {
             "type": "number",
             "title": "creation_time"

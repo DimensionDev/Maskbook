@@ -187,7 +187,6 @@ export interface ITO_Props {
         name: string
         address: string
     }
-    qualification_start_time: number
 }
 
 export function ITO(props: ITO_Props) {
@@ -203,7 +202,7 @@ export function ITO(props: ITO_Props) {
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid, password, qualification_start_time } = props
+    const { pid, password } = props
 
     const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
 
@@ -211,7 +210,6 @@ export function ITO(props: ITO_Props) {
     const payload: JSON_PayloadInMask = {
         ...payload_,
         password: payload_.password || password,
-        qualification_start_time,
     }
     const {
         token,
@@ -230,7 +228,6 @@ export function ITO(props: ITO_Props) {
             ? formatEthereumAddress(payload.seller.address, 4)
             : message.split(MSG_DELIMITER)[0]
     const title = message.split(MSG_DELIMITER)[1] ?? message
-
     const classes = useStyles({ titleLength: getTextUILength(title), tokenNumber: exchange_tokens.length })
 
     const total = new BigNumber(payload_total)
@@ -441,14 +438,14 @@ export function ITO(props: ITO_Props) {
         tradeInfo?.buyInfo?.token.decimals,
         tradeInfo?.buyInfo?.token.symbol,
     ])
-    console.log(availability?.swapped, 'availability?.swapped')
+
     const footerStartTime = useMemo(() => {
         return (
             <Typography variant="body1">
                 {t('plugin_ito_list_start_date', { date: formatDateTime(new Date(startTime), true) })}
             </Typography>
         )
-    }, [qualification_start_time, startTime, t])
+    }, [startTime, t])
 
     const footerEndTime = useMemo(
         () => (

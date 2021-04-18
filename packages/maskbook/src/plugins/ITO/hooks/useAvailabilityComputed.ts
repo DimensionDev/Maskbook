@@ -2,29 +2,21 @@ import { compact } from 'lodash-es'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { useAvailability } from './useAvailability'
+import { useQualification } from './useQualification'
 import { ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
 
-/**
- * Fetch the red packet info from the chain
- * @param payload
- */
 export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
     const chainId = useChainId()
     const asyncResult = useAvailability(payload?.pid)
-
+    const { value: qualification_start_time } = useQualification(payload.qualification_address)
     const { value: availability } = asyncResult
 
-    const startTime =
-        payload.qualification_start_time > payload.start_time * 1000
-            ? payload.qualification_start_time
-            : payload.start_time * 1000
-
-    if (!availability)
+    if (!availability || qualification_start_time === undefined)
         return {
             ...asyncResult,
             payload,
             computed: {
-                startTime,
+                startTime: payload.start_time * 1000,
                 canFetch: false,
                 canSwap: false,
                 canShare: false,
@@ -35,6 +27,9 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
                 listOfStatus: [] as ITO_Status[],
             },
         }
+
+    const startTime =
+        qualification_start_time > payload.start_time * 1000 ? qualification_start_time : payload.start_time * 1000
 
     const isStarted = startTime < new Date().getTime()
     const isExpired = availability.expired

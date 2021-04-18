@@ -21,7 +21,6 @@ export interface JSON_PayloadInMask {
     end_time: number
     unlock_time: number
     qualification_address: string
-    qualification_start_time: number
     creation_time: number
     token: EtherTokenDetailed | ERC20TokenDetailed
     exchange_amounts: string[]

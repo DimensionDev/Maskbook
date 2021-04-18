@@ -106,7 +106,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 end_time: fillSettings.endTime.getTime(),
                 unlock_time: fillSettings.unlockTime?.getTime() ?? 0,
                 qualification_address: fillSettings.qualificationAddress,
-                qualification_start_time: fillSettings.qualificationStartTime,
                 creation_time: Number.parseInt(FillSuccess.creation_time, 10) * 1000,
                 token: fillSettings.token,
                 exchange_amounts: fillSettings.exchangeAmounts,
