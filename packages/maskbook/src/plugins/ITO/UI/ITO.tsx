@@ -30,6 +30,7 @@ import { EthereumMessages } from '../../Ethereum/messages'
 import { usePoolPayload } from '../hooks/usePoolPayload'
 import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { useClaimCallback } from '../hooks/useClaimCallback'
 
 export interface IconProps {
     size?: number
@@ -221,7 +222,7 @@ export function ITO(props: ITO_Props) {
         end_time,
         message,
     } = payload
-    console.log({ payload })
+
     const { t } = useI18N()
     const classes = useStyles({ titleLength: getTextUILength(message), tokenNumber: exchange_tokens.length })
 
@@ -238,7 +239,7 @@ export function ITO(props: ITO_Props) {
     } = useAvailabilityComputed(payload)
     //#ednregion
 
-    const { listOfStatus, startTime, unlockTime, isUnlocked } = availabilityComputed
+    const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime } = availabilityComputed
 
     const isAccountSeller =
         payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
@@ -285,6 +286,35 @@ export function ITO(props: ITO_Props) {
     const onShareSuccess = useCallback(async () => {
         window.open(shareSuccessLink, '_blank', 'noopener noreferrer')
     }, [shareSuccessLink])
+    //#endregion
+
+    //#region claim
+    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(pid)
+    const onClaimButtonClick = useCallback(() => {
+        claimCallback()
+    }, [claimCallback])
+
+    const [_open, setClaimTransactionDialogOpen] = useRemoteControlledDialog(
+        EthereumMessages.events.transactionDialogUpdated,
+        (ev) => {
+            if (ev.open) return
+            if (destructState.type !== TransactionStateType.CONFIRMED) return
+            resetClaimCallback()
+            retryITOCard()
+        },
+    )
+
+    useEffect(() => {
+        if (claimState.type === TransactionStateType.UNKNOWN) return
+        setClaimTransactionDialogOpen({
+            open: true,
+            state: claimState,
+            summary: `Claiming ${formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals)} ${
+                token?.symbol ?? 'Token'
+            }.`,
+        })
+    }, [claimState /* update tx dialog only if state changed */])
+
     //#endregion
 
     const shareLink = activatedSocialNetworkUI.utils
@@ -381,7 +411,7 @@ export function ITO(props: ITO_Props) {
             return t('plugin_ito_out_of_stock_hit')
         }
 
-        const _text = t('plugin_ito_your_claimed_amount', {
+        const _text = t('plugin_ito_your_swapped_amount', {
             amount: formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals),
             symbol: token.symbol,
         })
@@ -404,7 +434,7 @@ export function ITO(props: ITO_Props) {
         tradeInfo?.buyInfo?.token.decimals,
         tradeInfo?.buyInfo?.token.symbol,
     ])
-
+    console.log(availability?.swapped, 'availability?.swapped')
     const footerStartTime = useMemo(() => {
         return (
             <Typography variant="body1">
@@ -557,20 +587,42 @@ export function ITO(props: ITO_Props) {
                     </ActionButton>
                 ) : isBuyer ? (
                     <Grid container spacing={2}>
-                        {isUnlocked ? (
+                        {hasLockTime ? (
                             <Grid item xs={6}>
-                                <ActionButton
-                                    onClick={onShareSuccess}
-                                    variant="contained"
-                                    size="large"
-                                    className={classes.actionButton}>
-                                    {t('plugin_ito_wait_unlock_time', {
-                                        unlockTime: formatDateTime(new Date(unlockTime!), true),
-                                    })}
-                                </ActionButton>
+                                {isUnlocked ? (
+                                    Number(availability?.swapped) > 0 ? (
+                                        <ActionButton
+                                            onClick={onClaimButtonClick}
+                                            variant="contained"
+                                            size="large"
+                                            className={classes.actionButton}>
+                                            {t('plugin_ito_claim')}
+                                        </ActionButton>
+                                    ) : (
+                                        <ActionButton
+                                            onClick={() => undefined}
+                                            disabled={true}
+                                            variant="contained"
+                                            size="large"
+                                            className={classes.actionButton}>
+                                            {t('plugin_ito_claimed')}
+                                        </ActionButton>
+                                    )
+                                ) : (
+                                    <ActionButton
+                                        onClick={() => undefined}
+                                        variant="contained"
+                                        disabled={true}
+                                        size="large"
+                                        className={classes.actionButton}>
+                                        {t('plugin_ito_wait_unlock_time', {
+                                            unlockTime: formatDateTime(new Date(unlockTime!), true),
+                                        })}
+                                    </ActionButton>
+                                )}
                             </Grid>
                         ) : null}
-                        <Grid item xs={isUnlocked ? 6 : 12}>
+                        <Grid item xs={hasLockTime ? 6 : 12}>
                             <ActionButton
                                 onClick={onShareSuccess}
                                 variant="contained"
