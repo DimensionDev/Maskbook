@@ -97,16 +97,6 @@ export function Collectible(props: CollectibleProps) {
 
     const [tabIndex, setTabIndex] = useState(0)
 
-    //#region The current price needs to be found from the listing list to find the lowest price
-    // const currentPrice = useMemo(() => {
-    //     if (!asset.value || !asset.value.sellOrders || !asset.value.sellOrders.length) return null
-    //     const unitPrices = asset.value.sellOrders.map((order) => {
-    //         return new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber()
-    //     })
-    //
-    //     return head(unitPrices.sort(subtract))
-    // }, [asset.value])
-
     if (asset.loading) return <PluginSkeleton />
     if (!asset.value) return <Typography color="textPrimary">Failed to load your collectible.</Typography>
 
@@ -124,9 +114,7 @@ export function Collectible(props: CollectibleProps) {
                 <CardHeader
                     avatar={
                         <Link
-                            href={`https://opensea.io/accounts/${
-                                asset.value.owner?.user?.username ?? asset.value.owner?.address ?? ''
-                            }`}
+                            href={asset.value.owner?.link}
                             title={asset.value.owner?.user?.username ?? asset.value.owner?.address ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">

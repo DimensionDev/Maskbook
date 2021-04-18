@@ -1,4 +1,4 @@
-import type { WyvernSchemaName } from 'opensea-js/lib/types'
+import type { OpenSeaFungibleToken, WyvernSchemaName } from 'opensea-js/lib/types'
 
 export * from './opensea'
 export * from './rarible'
@@ -45,4 +45,21 @@ export interface NFTAsset {
     description: string
     name?: string
     animation_url?: string
+}
+
+export interface NFTOrder {
+    unitPrice: number
+    makerAccount: {
+        user?: {
+            username?: string
+        }
+        address?: string
+        profile_img_url: string
+        link: string
+    }
+    hash?: string
+    quantity?: number
+    expirationTime?: string
+    paymentTokenContract?: OpenSeaFungibleToken
+    paymentToken?: string
 }

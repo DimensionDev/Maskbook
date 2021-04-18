@@ -11,10 +11,13 @@ export const rariblePathnameRegexMatcher = /^\/token\/(0x[0-9a-fA-F]{40})\:(\d+)
 export const OpenSeaBaseURL = 'https://api.opensea.io/api/v1/'
 export const OpenSeaRinkebyBaseURL = 'https://rinkeby-api.opensea.io/api/v1/'
 export const OpenSeaGraphQLURL = 'https://opensea-agent.r2d2.to/graphql/'
+export const OpenSeaAccountURL = 'https://opensea.io/accounts/'
 export const NullAddress = 'NullAddress'
 
 export const ReferrerAddress = ''
 
 export const OpenSeaAPI_Key = 'c38fe2446ee34f919436c32db480a2e3'
 
-export const RaribleBaseURL = 'https://api.rarible.com/protocol/v0.1/ethereum/'
+export const RaribleBaseURL = 'https://api-mainnet.rarible.com/'
+export const RaribleIPFSURL = 'https://ipfs.rarible.com/ipfs/'
+export const RaribleUserURL = 'https://rarible.com/user/'

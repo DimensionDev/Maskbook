@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import {
     Box,
     Button,
@@ -16,7 +16,6 @@ import { OrderSide } from 'opensea-js/lib/types'
 import BigNumber from 'bignumber.js'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
-import { getOrderUnitPrice } from '../utils'
 import { OrderRow } from './OrderRow'
 import { loadingTable } from './shared'
 import { TableListPagination } from './Pagination'
@@ -25,6 +24,8 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset } from '../helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
+import { CollectibleProvider } from '../types'
+
 const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
@@ -47,45 +48,42 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
+//TODO: use global settings to switch dataSource
+let provider = CollectibleProvider.OPENSEA
+
 export function ListingTab() {
     const { t } = useI18N()
     const classes = useStyles()
     const [page, setPage] = useState(0)
     const account = useAccount()
     const { token, asset } = CollectibleState.useContainer()
-    const listings = useOrders(token, OrderSide.Sell, page)
+    const listings = useOrders(token, provider, OrderSide.Sell, page)
 
-    const isDifferenceToken = useMemo(
-        () =>
-            listings.value?.orders.some(
+    const isDifferenceToken = useMemo(() => {
+        if (provider === CollectibleProvider.OPENSEA) {
+            return listings.value?.some(
                 (item) =>
                     (item.paymentTokenContract?.symbol !== 'WETH' && item.paymentTokenContract?.symbol !== 'ETH') ||
-                    new BigNumber(item.quantity).toString() !== '1' ||
-                    new BigNumber(item.expirationTime).isZero(),
-            ),
-        [listings.value],
-    )
+                    (item.quantity && new BigNumber(item.quantity).toString() !== '1') ||
+                    (item.expirationTime && new BigNumber(item.expirationTime).isZero()),
+            )
+        } else {
+            return false
+        }
+    }, [listings.value])
 
     const dataSource = useMemo(() => {
-        if (!listings.value || !listings.value?.orders || !listings.value?.orders.length) return []
-        return listings.value.orders
-            .map((order) => {
-                const unitPrice = new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber()
-                return {
-                    ...order,
-                    unitPrice,
-                }
-            })
-            .sort((a, b) => {
-                const current = new BigNumber(a.unitPrice)
-                const next = new BigNumber(b.unitPrice)
-                if (current.isLessThan(next)) {
-                    return -1
-                } else if (current.isGreaterThan(next)) {
-                    return 1
-                }
-                return 0
-            })
+        if (!listings.value || !listings.value?.length) return []
+        return listings.value.sort((a, b) => {
+            const current = new BigNumber(a.unitPrice)
+            const next = new BigNumber(b.unitPrice)
+            if (current.isLessThan(next)) {
+                return -1
+            } else if (current.isGreaterThan(next)) {
+                return 1
+            }
+            return 0
+        })
     }, [listings.value])
 
     const onMakeListing = useCallback(async () => {

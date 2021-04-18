@@ -1,21 +1,20 @@
 import {
-    makeStyles,
-    createStyles,
+    Box,
     Button,
-    Typography,
+    createStyles,
+    makeStyles,
     Table,
     TableBody,
-    TableRow,
     TableCell,
-    Box,
     TableHead,
+    TableRow,
+    Typography,
 } from '@material-ui/core'
 import { OrderSide } from 'opensea-js/lib/types'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { useOrders } from '../hooks/useOrders'
 import { CollectibleTab } from './CollectibleTab'
-import { useMemo, useState } from 'react'
-import { getOrderUnitPrice } from '../utils'
+import { useCallback, useMemo, useState } from 'react'
 import { OrderRow } from './OrderRow'
 import { loadingTable } from './shared'
 import BigNumber from 'bignumber.js'
@@ -24,10 +23,13 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useControlledAcceptOfferDialog } from './AcceptOfferDialog'
 import { useControlledMakeOfferDialog } from './MakeOfferDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useCallback } from 'react'
 import { PluginCollectibleRPC } from '../messages'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { toAsset } from '../helpers'
+import { CollectibleProvider } from '../types'
+
+//TODO: use global settings to switch dataSource
+let provider = CollectibleProvider.OPENSEA
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -60,39 +62,33 @@ export function OfferTab() {
     const [page, setPage] = useState(0)
     const account = useAccount()
     const { asset, token } = CollectibleState.useContainer()
-    const offers = useOrders(token, OrderSide.Buy, page)
+    const offers = useOrders(token, provider, OrderSide.Buy, page)
 
-    const isDifferenceToken = useMemo(
-        () =>
-            offers.value?.orders.some(
+    const isDifferenceToken = useMemo(() => {
+        if (provider === CollectibleProvider.OPENSEA) {
+            return offers.value?.some(
                 (item) =>
                     (item.paymentTokenContract?.symbol !== 'WETH' && item.paymentTokenContract?.symbol !== 'ETH') ||
-                    new BigNumber(item.quantity).toString() !== '1' ||
-                    new BigNumber(item.expirationTime).isZero(),
-            ),
-        [offers.value],
-    )
-
+                    (item.quantity && new BigNumber(item.quantity).toString() !== '1') ||
+                    (item.expirationTime && new BigNumber(item.expirationTime).isZero()),
+            )
+        } else {
+            return false
+        }
+    }, [offers.value])
+    console.log(offers)
     const dataSource = useMemo(() => {
-        if (!offers.value || !offers.value?.orders || !offers.value?.orders.length) return []
-        return offers.value.orders
-            .map((order) => {
-                const unitPrice = new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber()
-                return {
-                    ...order,
-                    unitPrice,
-                }
-            })
-            .sort((a, b) => {
-                const current = new BigNumber(a.unitPrice)
-                const next = new BigNumber(b.unitPrice)
-                if (current.isLessThan(next)) {
-                    return 1
-                } else if (current.isGreaterThan(next)) {
-                    return -1
-                }
-                return 0
-            })
+        if (!offers.value || !offers.value?.length) return []
+        return offers.value.sort((a, b) => {
+            const current = new BigNumber(a.unitPrice)
+            const next = new BigNumber(b.unitPrice)
+            if (current.isLessThan(next)) {
+                return 1
+            } else if (current.isGreaterThan(next)) {
+                return -1
+            }
+            return 0
+        })
     }, [offers.value])
 
     const { onOpen: onOpenAcceptOfferDialog } = useControlledAcceptOfferDialog()

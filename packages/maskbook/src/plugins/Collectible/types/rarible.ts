@@ -10,6 +10,21 @@ export interface RaribleTransferItem {
     type: string
 }
 
+export interface Royalty {
+    recipient: string
+    value: number
+}
+
+export interface Attribute {
+    key: string
+    value: string
+}
+
+export interface Salt {
+    value: string
+    type: string
+}
+
 export enum RARIBLEFEATURES {
     APPROVE_FOR_ALL = 'APPROVE_FOR_ALL',
     SET_URI_PREFIX = 'SET_URI_PREFIX',
@@ -18,37 +33,56 @@ export enum RARIBLEFEATURES {
     SECONDARY_SALE_FEES = 'SECONDARY_SALE_FEES',
 }
 
-export interface RaribleNFTItemResponse {
-    /** Item identifier, has format "token:tokenId" **/
+export interface Ownership {
     id: string
     token: string
     tokenId: string
-    /** Was item locked **/
-    unlockable: boolean
+    owner: string
+    value: number
+    date: Date
+    price: number
+    priceEth: number
+    buyToken: string
+    buyTokenId: string
+    status: string
+    selling: number
+    sold: number
+    stock: number
+    signature: string
+    pending: RaribleTransferItem[]
+    blacklisted: boolean
     creator: string
-    /** Sum of items were emitted and left lazy ones **/
-    supply: number
-    /** Left lazy items **/
-    lazySupply: number
-    /** Owners of the target items **/
-    owners: string[]
-    /** List of royalties **/
-    royalties: { account: string; value: number }[]
-    pending?: RaribleTransferItem[]
+    verified: boolean
+    categories: string[]
+    likes: number
 }
 
-export interface RaribleNFTItemMetaResponse {
+export interface RaribleNFTItemMapResponse {
+    item: {
+        id: string
+        token: string
+        tokenId: string
+        unlockable: boolean
+        creator: string
+        blacklisted: boolean
+        supply: number
+        royalties: Royalty[]
+        likes: number
+        categories: string[]
+        verified: boolean
+        owners: string[]
+        sellers: number
+        ownership: Ownership
+        totalStock: number
+    }
     properties: {
-        /** Identifies the asset to which this NFT represents **/
         name: string
-        /** Describes the asset to which this NFT represents **/
         description: string
-        /** A URI pointing to a resource with mime type image/* representing the asset to which this NFT represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive. **/
         image: string
         imagePreview: string
         imageBig: string
-        animation_url: string
-        attributes: { key: string; value: string }[]
+        animationUrl?: string
+        attributes: Attribute[]
     }
     meta: {
         imageMeta: {
@@ -56,20 +90,85 @@ export interface RaribleNFTItemMetaResponse {
             width: number
             height: number
         }
-        animationMeta: {
-            type: string
-            width: number
-            height: number
-        }
     }
+    id: string
 }
 
-export interface RaribleCollectionResponse {
+export interface RaribleNFTOwnershipResponse extends RaribleNFTItemMapResponse {
+    ownership: Ownership
+}
+
+export interface Tag {
+    name: string
+    source: string
+}
+
+export interface RaribleCollectibleResponse {
+    ['@class']: string
     id: string
-    /** Enum: "ERC721" "ERC1155" **/
-    type: WyvernSchemaName
-    owner?: string
     name: string
     symbol: string
+    status: string
     features: RARIBLEFEATURES[]
+    standard: WyvernSchemaName
+    startBlockNumber: number
+    pic: string
+    cover: string
+    indexable: boolean
+    volume: number
+    editors: any[]
+    tags: Tag[]
+    version: number
+    description?: string
+}
+
+export enum RaribleProfileType {
+    USER = 'USER',
+    COLLECTION = 'COLLECTION',
+}
+
+export interface RaribleProfileResponse {
+    blacklisted: boolean
+    cover: string
+    followers: number
+    followings: number
+    has3Box: boolean
+    id: string
+    image: string
+    name?: string
+    description?: string
+    type: RaribleProfileType
+}
+
+export interface RaribleOfferResponse {
+    token: string
+    tokenId: string
+    assetType: string
+    owner: string
+    salt: Salt
+    buyValue: number
+    buyToken: string
+    buyTokenId: string
+    buyAssetType: string
+    value: number
+    signature: string
+    updateDate: Date
+    importantUpdateDate: Date
+    updateStateDate: Date
+    contractVersion: number
+    fee: number
+    sold: number
+    canceled: boolean
+    pending: RaribleTransferItem[]
+    buyPriceEth: number
+    version: number
+    id: string
+    active: boolean
+    buyPrice: number
+    sellPrice: number
+    buyStock: number
+}
+
+export interface RaribleOrder extends RaribleOfferResponse {
+    ownerInfo: RaribleProfileResponse
 }

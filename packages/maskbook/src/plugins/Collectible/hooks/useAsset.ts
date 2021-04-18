@@ -7,8 +7,10 @@ import { head, subtract } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { getOrderUnitPrice } from '../utils'
 import { unreachable } from '../../../utils/utils'
+import { toRaribleImage } from '../helpers'
+import { OpenSeaAccountURL, RaribleUserURL } from '../constants'
 
-export function useAsset(token?: CollectibleToken, provider = CollectibleProvider.OPENSEA) {
+export function useAsset(token?: CollectibleToken, provider = CollectibleProvider.RARIBLE) {
     const chainId = useChainId()
 
     return useAsyncRetry(async () => {
@@ -29,8 +31,16 @@ export function useAsset(token?: CollectibleToken, provider = CollectibleProvide
                     imageUrl: response.imageUrl,
                     assetContract: response.assetContract,
                     currentPrice: currentPrice,
-                    owner: response.owner,
-                    creator: response.creator,
+                    owner: {
+                        ...response.owner,
+                        link: `${OpenSeaAccountURL}${response.owner?.user?.username ?? response.owner.address ?? ''}`,
+                    },
+                    creator: {
+                        ...response.creator,
+                        link: `${OpenSeaAccountURL}${
+                            response.creator?.user?.username ?? response.creator?.address ?? ''
+                        }`,
+                    },
                     traits: response.traits,
                     safelist_request_status: response.collection?.safelist_request_status ?? '',
                     description: response.description,
@@ -40,28 +50,32 @@ export function useAsset(token?: CollectibleToken, provider = CollectibleProvide
             case CollectibleProvider.RARIBLE:
                 const result = await PluginCollectibleRPC.getNFTItem(token.contractAddress, token.tokenId)
                 return {
-                    imageUrl: `https://ipfs.rarible.com/${result.properties.image.replace('ipfs://', '')}`,
+                    imageUrl: toRaribleImage(result.properties.image),
                     assetContract: {
                         ...result.assetContract,
-                        schemaName: result.assetContract.type,
-                        description: null,
+                        schemaName: result.assetContract.standard,
+                        description: result.assetContract.description,
                     },
-                    owner: {
-                        address: head(result.owners),
-                        user: null,
-                        profile_img_url: null,
-                    },
-                    creator: {
-                        address: head(result.creator),
-                        user: null,
-                        profile_img_url: null,
-                    },
+                    owner: result.owner
+                        ? {
+                              address: result.owner.id,
+                              profile_img_url: toRaribleImage(result.owner.image),
+                              user: { username: result.owner.name },
+                              link: `${RaribleUserURL}${result.owner.id ?? ''}`,
+                          }
+                        : null,
+                    creator: result.creator
+                        ? {
+                              address: result.creator.id,
+                              profile_img_url: toRaribleImage(result.creator.image),
+                              user: { username: result.creator.name },
+                              link: `${RaribleUserURL}${result.creator.id ?? ''}`,
+                          }
+                        : null,
                     traits: result.properties.attributes.map(({ key, value }) => ({ trait_type: key, value })),
                     description: result.properties.description,
                     name: result.properties.name,
-                    animation_url: result.properties.animation_url
-                        ? `https://ipfs.rarible.com/${result.properties.animation_url.replace('ipfs://', '')}`
-                        : null,
+                    animation_url: result.properties.animationUrl,
                 }
             default:
                 unreachable(provider)

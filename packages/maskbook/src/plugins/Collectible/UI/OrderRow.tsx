@@ -1,6 +1,6 @@
-import type { Order } from 'opensea-js/lib/types'
-import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography, Button } from '@material-ui/core'
-import type { OpenSeaCustomAccount } from '../types'
+import { Avatar, Button, createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import type { NFTOrder } from '../types'
+import { CollectibleProvider } from '../types'
 import { formatDistanceToNow } from 'date-fns'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
@@ -45,15 +45,14 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-interface CustomOrder extends Order {
-    unitPrice: number
-}
-
 interface IRowProps {
-    order: CustomOrder
+    order: NFTOrder
     isDifferenceToken?: boolean
     acceptable?: boolean
 }
+
+//TODO: use global settings to switch dataSource
+let provider = CollectibleProvider.OPENSEA
 
 export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
     const classes = useStyles()
@@ -69,10 +68,7 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                     target="_blank"
                     className={classes.account}
                     rel="noopener noreferrer">
-                    <Avatar
-                        src={(order.makerAccount as OpenSeaCustomAccount)?.profile_img_url}
-                        className={classes.avatar}
-                    />
+                    <Avatar src={order.makerAccount?.profile_img_url} className={classes.avatar} />
                     <Typography className={classes.accountName}>
                         {order.makerAccount?.user?.username ?? order.makerAccount?.address?.slice(2, 8) ?? ''}
                     </Typography>
@@ -83,9 +79,10 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                     <TableCell>
                         <Typography className={classes.content}>
                             {order.paymentTokenContract?.symbol !== 'ETH' &&
-                            order.paymentTokenContract?.symbol !== 'WETH' ? (
+                            order.paymentTokenContract?.symbol !== 'WETH' &&
+                            provider === CollectibleProvider.OPENSEA ? (
                                 <Link
-                                    href={resolveAddressOnEtherscan(ChainId.Mainnet, order.paymentToken)}
+                                    href={resolveAddressOnEtherscan(ChainId.Mainnet, order.paymentToken!)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={classes.tokenLink}>
@@ -104,8 +101,8 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                     <TableCell>
                         <Typography className={classes.content}>
                             {formatBalance(
-                                new BigNumber(order.quantity),
-                                new BigNumber(order.quantity).toString() !== '1' ? 8 : 0,
+                                new BigNumber(order.quantity ?? 0),
+                                new BigNumber(order.quantity ?? 0).toString() !== '1' ? 8 : 0,
                             )}
                         </Typography>
                     </TableCell>
@@ -115,9 +112,10 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                     <TableCell>
                         <Typography style={{ display: 'flex' }} className={classes.content}>
                             {order.paymentTokenContract?.symbol !== 'ETH' &&
-                            order.paymentTokenContract?.symbol !== 'WETH' ? (
+                            order.paymentTokenContract?.symbol !== 'WETH' &&
+                            provider === CollectibleProvider.OPENSEA ? (
                                 <Link
-                                    href={resolveAddressOnEtherscan(ChainId.Mainnet, order.paymentToken)}
+                                    href={resolveAddressOnEtherscan(ChainId.Mainnet, order.paymentToken!)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={classes.tokenLink}>
@@ -135,9 +133,10 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                     </TableCell>
                     <TableCell>
                         <Typography className={classes.content}>
-                            {!new BigNumber(order.expirationTime).isZero() &&
+                            {order.expirationTime &&
+                                !new BigNumber(order.expirationTime).isZero() &&
                                 formatDistanceToNow(
-                                    new Date(new BigNumber(order.expirationTime).multipliedBy(1000).toNumber()),
+                                    new Date(new BigNumber(order.expirationTime ?? 0).multipliedBy(1000).toNumber()),
                                     {
                                         addSuffix: true,
                                     },
