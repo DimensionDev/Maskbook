@@ -7,8 +7,9 @@ import { getRelevantUrl, checkUrl, getAssetInfoFromURL } from './utils'
 import { getTypedMessageContent } from '../../protocols/typed-message'
 import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import { uniq } from 'lodash-es'
-import { MakeAnOfferTab } from './UI/MakeAnOfferDialog'
+import { MakeOfferDialog } from './UI/MakeOfferDialog'
 import { ChainState } from '../../web3/state/useChainState'
+import { PostListingDialog } from './UI/PostListingDialog'
 
 export const CollectiblesPluginDefine: PluginConfig = {
     id: PLUGIN_IDENTIFIER,
@@ -36,7 +37,8 @@ export const CollectiblesPluginDefine: PluginConfig = {
     PageComponent() {
         return (
             <ChainState.Provider>
-                <MakeAnOfferTab />
+                <MakeOfferDialog />
+                <PostListingDialog />
                 {/* <MakeOfferDialog />
                 <PlaceBidDialog /> */}
             </ChainState.Provider>

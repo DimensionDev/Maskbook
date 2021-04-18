@@ -52,10 +52,11 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface TokenAmountPanelProps extends withClasses<never> {
+export interface TokenAmountPanelProps extends withClasses<'root'> {
     amount: string
     maxAmount?: string
     balance: string
+    disableToken?: boolean
     disableBalance?: boolean
     label: string
     token?: EtherTokenDetailed | ERC20TokenDetailed | null
@@ -68,7 +69,17 @@ export interface TokenAmountPanelProps extends withClasses<never> {
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
-    const { amount, maxAmount, balance, token, onAmountChange, label, disableBalance = false, MaxChipProps } = props
+    const {
+        amount,
+        maxAmount,
+        balance,
+        token,
+        onAmountChange,
+        label,
+        disableToken = false,
+        disableBalance = false,
+        MaxChipProps,
+    } = props
 
     const classes = useStylesExtends(useStyles(), props)
 
@@ -112,7 +123,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                     spellCheck: false,
                     className: classes.input,
                 },
-                endAdornment: token ? (
+                endAdornment: disableToken ? null : token ? (
                     <Box
                         className={classes.token}
                         sx={{

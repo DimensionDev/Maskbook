@@ -1,248 +1,150 @@
-import { FC, useCallback, useState } from 'react'
+import { ChangeEvent, useState, useCallback, useMemo } from 'react'
 import {
-    Box,
-    Checkbox,
-    DialogContent,
-    DialogActions,
-    FormControlLabel,
-    Link,
     createStyles,
     makeStyles,
-    TextField,
-    Input,
-    NativeSelect,
+    DialogContent,
+    Box,
+    Checkbox,
+    Card,
+    CardContent,
+    CardActions,
+    FormControlLabel,
     Typography,
+    Link,
 } from '@material-ui/core'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { UnreviewedWarning } from './UnreviewedWarning'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { ChainState } from '../../../web3/state/useChainState'
+import { useTokenWatched } from '../../../web3/hooks/useTokenWatched'
+import { useRemoteControlledDialogEvent } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginCollectibleMessage } from '../messages'
+import BigNumber from 'bignumber.js'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        itemInfo: {
+const useStyles = makeStyles((theme) => {
+    return createStyles({
+        content: {
+            padding: 0,
+        },
+        footer: {
             display: 'flex',
-            alignItems: 'center',
+            justifyContent: 'flex-end',
+            padding: theme.spacing(0, 2, 2),
         },
-        texts: {
-            marginLeft: theme.spacing(1),
-        },
-        form: {
-            marginBottom: theme.spacing(1),
-        },
-        field: {
-            marginBottom: theme.spacing(1),
-        },
-        checkItem: {
-            display: 'flex',
-            alignItems: 'flex-start',
-        },
-        checkLabel: {
-            fontSize: 14,
-            lineHeight: 1.75,
-            [theme.breakpoints.down('sm')]: {
-                fontSize: 12,
-            },
-        },
-        selectBox: {},
-        startAdornment: {
-            borderRight: `1px solid`,
-        },
-        endAdornment: {
-            borderLeft: `1px solid`,
-        },
-        datetimeInput: {
-            '&::-webkit-calendar-picker-indicator': {
-                filter: 'invert(1)',
-            },
-        },
-        timeInput: {
-            '&::-webkit-calendar-picker-indicator': {
-                filter: 'invert(1)',
-            },
-        },
-    }),
-)
 
-export function useControlledMakeOfferDialog() {
-    const [open, setOpen] = useRemoteControlledDialog(PluginCollectibleMessage.events.makeOfferDialogEvent)
-    const onClose = useCallback(() => {
-        setOpen({
-            open: false,
-        })
-    }, [])
-    const onOpen = useCallback(() => {
-        setOpen({
-            open: true,
-        })
-    }, [])
-    return {
-        open,
-        onClose,
-        onOpen,
-    }
-}
+        label: {},
+        button: {
+            marginTop: theme.spacing(1.5),
+        },
+    })
+})
 
-const paymentOptions = [
-    {
-        value: 'DAI',
-        label: 'DAI',
-    },
-    {
-        value: 'WETH',
-        label: 'WETH',
-    },
-    {
-        value: 'USDC',
-        label: 'USDC',
-    },
-    {
-        value: 'DHC',
-        label: 'DHC',
-    },
-]
+export interface MakeOfferDialogProps {}
 
-const expirationOptions = [
-    {
-        value: 'in_3_days',
-        label: 'In 3 days',
-    },
-    {
-        value: 'in_7_days',
-        label: 'In 7 days',
-    },
-    {
-        value: 'in_1_month',
-        label: 'In a month',
-    },
-    {
-        value: 'custom_date',
-        label: 'Custom date',
-    },
-]
-
-export const MakeOfferDialog: FC = () => {
+export function MakeOfferDialog(props: MakeOfferDialogProps) {
+    const { t } = useI18N()
     const classes = useStyles()
-    const [price, setPrice] = useState('1')
-    const [amount, setAmount] = useState<number | ''>('')
-    const [expiration, setExpiration] = useState('')
-    const [confirmed, setConfirmed] = useState(false)
-    const { open, onClose } = useControlledMakeOfferDialog()
-    const [payment, setPayment] = useState(paymentOptions[0].value)
-    const [expirationType, setExpirationType] = useState(expirationOptions[0].value)
-    const isCustomDate = expirationType === 'custom_date'
 
-    const onMakeOffer = useCallback(() => {}, [])
+    const { chainId } = ChainState.useContainer()
+
+    const { open, onClose } = useRemoteControlledDialogEvent(PluginCollectibleMessage.events.makeOfferDialogEvent)
+
+    const [unreviewedChecked, setUnreviewedChecked] = useState(false)
+    const [ToS_Checked, setToS_Checked] = useState(false)
+
+    const { amount, token, balance, setAmount, setToken } = useTokenWatched()
+
+    const onMakeOffer = useCallback(async () => {}, [])
+
+    const validationMessage = useMemo(() => {
+        if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
+        return ''
+    }, [amount])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title="Make an Offer">
-            <DialogContent>
-                <details>
-                    <summary>This item has not been reviewed by Maskbook</summary>
-                    <div>
-                        You should proceed with extra caution. Anyone can create a digital item on a blockchain with any
-                        name, including fake versions of existing items. Please take extra caution and do your research
-                        when interacting with this item to ensure it's what it claims to be.
-                    </div>
-                </details>
-                <div className={classes.form}>
-                    <div className={classes.field}>
-                        <TextField
-                            label="price"
-                            value={amount}
-                            fullWidth
-                            onChange={(evt) => {
-                                const { value } = evt.currentTarget
-                                setAmount(value ? parseInt(value, 10) : '')
-                            }}
-                            InputProps={{
-                                startAdornment: (
-                                    <Box className={classes.selectBox}>
-                                        <NativeSelect value={payment} onChange={(evt) => setPayment(evt.target.value)}>
-                                            {paymentOptions.map((option) => (
-                                                <option value={option.value}>{option.label}</option>
-                                            ))}
-                                        </NativeSelect>
-                                    </Box>
-                                ),
-                                endAdornment: (
-                                    <Box>
-                                        <Typography>$100,10.00</Typography>
-                                    </Box>
-                                ),
+        <InjectedDialog title="Make an Offer" open={open} onClose={onClose} DialogProps={{ maxWidth: 'md' }}>
+            <DialogContent className={classes.content}>
+                <Card elevation={0}>
+                    <CardContent>
+                        <Box sx={{ marginBottom: 2 }}>
+                            <UnreviewedWarning />
+                        </Box>
+                        <SelectTokenAmountPanel
+                            amount={amount}
+                            balance={balance.value ?? '0'}
+                            onAmountChange={setAmount}
+                            token={token as EtherTokenDetailed | ERC20TokenDetailed}
+                            onTokenChange={setToken}
+                            TokenAmountPanelProps={{
+                                label: 'Price',
                             }}
                         />
-                    </div>
-                    <div className={classes.field}>
-                        <TextField
-                            label="Offer Expiration"
-                            value={expiration}
-                            fullWidth
-                            onChange={(evt) => {
-                                setExpiration(evt.target.value)
-                            }}
-                            InputProps={{
-                                type: isCustomDate ? 'date' : 'time',
-                                className: classes.datetimeInput,
-                                startAdornment: (
-                                    <Box>
-                                        <NativeSelect
-                                            value={expirationType}
-                                            onChange={(evt) => setExpirationType(evt.target.value)}>
-                                            {expirationOptions.map((option) => (
-                                                <option value={option.value}>{option.label}</option>
-                                            ))}
-                                        </NativeSelect>
-                                    </Box>
-                                ),
-                                endAdornment: isCustomDate ? (
-                                    <Box>
-                                        <Input className={classes.timeInput} type="time" />
-                                    </Box>
-                                ) : null,
-                            }}
-                        />
-                    </div>
-                    <Box>
-                        <FormControlLabel
-                            className={classes.checkItem}
-                            control={
-                                <Checkbox
-                                    checked={confirmed}
-                                    onChange={() => setConfirmed((confirmed) => !confirmed)}
-                                />
-                            }
-                            label={
-                                <Typography className={classes.checkLabel} variant="body2">
-                                    By checking this box, I acknowledge that this item has not been reviewed or approved
-                                    by Maskbook
-                                </Typography>
-                            }
-                        />
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={confirmed}
-                                    onChange={() => setConfirmed((confirmed) => !confirmed)}
-                                />
-                            }
-                            label={
-                                <Typography className={classes.checkLabel} variant="body2">
-                                    By checking this box, I agree Maskbook's
-                                    <Link href="https://mask.io" target="_blank">
-                                        Terms of Service
-                                    </Link>
-                                </Typography>
-                            }
-                        />
-                    </Box>
-                </div>
+                        <Box sx={{ padding: 2, paddingBottom: 0 }}>
+                            <FormControlLabel
+                                className={classes.label}
+                                control={
+                                    <Checkbox
+                                        color="primary"
+                                        checked={unreviewedChecked}
+                                        onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                                            setUnreviewedChecked(ev.target.checked)
+                                        }
+                                    />
+                                }
+                                label={
+                                    <Typography variant="body2">
+                                        By checking this box, I acknowledge that this item has not been reviewd or
+                                        approved by OpenSea.
+                                    </Typography>
+                                }
+                            />
+                            <FormControlLabel
+                                className={classes.label}
+                                control={
+                                    <Checkbox
+                                        color="primary"
+                                        checked={ToS_Checked}
+                                        onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                                            setToS_Checked(ev.target.checked)
+                                        }
+                                    />
+                                }
+                                label={
+                                    <Typography variant="body2">
+                                        By checking this box, I agree to OpenSea's{' '}
+                                        <Link color="primary" target="_blank" rel="noopener noreferrer">
+                                            Terms of Service
+                                        </Link>
+                                        .
+                                    </Typography>
+                                }
+                            />
+                        </Box>
+                    </CardContent>
+                    <CardActions className={classes.footer}>
+                        <EthereumWalletConnectedBoundary>
+                            <ActionButtonPromise
+                                className={classes.button}
+                                variant="contained"
+                                disabled={!!validationMessage || !unreviewedChecked || !ToS_Checked}
+                                fullWidth
+                                size="large"
+                                init={validationMessage || t('plugin_collectible_make_offer')}
+                                waiting={t('plugin_collectible_make_offer')}
+                                complete={t('plugin_collectible_done')}
+                                failed={t('plugin_collectible_retry')}
+                                executor={onMakeOffer}
+                                completeOnClick={() => setAmount('')}
+                                failedOnClick="use executor"
+                            />
+                        </EthereumWalletConnectedBoundary>
+                    </CardActions>
+                </Card>
             </DialogContent>
-            <DialogActions>
-                <ActionButton fullWidth variant="contained" size="large" onClick={onMakeOffer}>
-                    Make Offer
-                </ActionButton>
-            </DialogActions>
         </InjectedDialog>
     )
 }

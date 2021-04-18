@@ -1,6 +1,6 @@
-import { Avatar, Button, createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
-import type { NFTOrder } from '../types'
-import { CollectibleProvider } from '../types'
+import type { Order } from 'opensea-js/lib/types'
+import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { CollectibleProvider, NFTOrder, OpenSeaCustomAccount } from '../types'
 import { formatDistanceToNow } from 'date-fns'
 import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
@@ -145,9 +145,6 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                     </TableCell>
                 </>
             )}
-            <TableCell>
-                <Button size="small">Accept Offer</Button>
-            </TableCell>
         </TableRow>
     )
 }

@@ -14,11 +14,16 @@ interface PlaceBidDialogEvent {
     open: boolean
 }
 
+interface PostListingDialogEvent {
+    open: boolean
+}
+
 interface CollectibleMessage {
     rpc: unknown
     acceptOfferDialogEvent: AcceptOfferDialogEvent
     makeOfferDialogEvent: MakeOfferDialogEvent
     placeBidDialogEvent: PlaceBidDialogEvent
+    postListingDialogEvent: PostListingDialogEvent
 }
 
 if (module.hot) module.hot.accept()
