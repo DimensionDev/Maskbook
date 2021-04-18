@@ -99,7 +99,7 @@ export function useSwapCallback(
         const swapParams = [
             id,
             Web3Utils.soliditySha3(
-                Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 6))}`),
+                Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 5))}`),
                 account,
             )!,
             Web3Utils.sha3(account)!,

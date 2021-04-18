@@ -47,6 +47,10 @@
                 "address": {
                     "type": "string",
                     "title": "address"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "name"
                 }
             },
             "required": ["address"],

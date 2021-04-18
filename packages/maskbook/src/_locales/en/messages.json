@@ -453,6 +453,7 @@
     "plugin_ito_sell_total_amount": "Input",
     "plugin_ito_allocation_per_wallet": "Swap limit {{limit}} {{token}}",
     "plugin_ito_begin_time": "Start Time {{zone}}",
+    "plugin_ito_wait_unlock_time": "Claim in {{unlockTime}}",
     "plugin_ito_qualification_start_time": "Qualification Start Time:",
     "plugin_ito_error_qualification_start_time": "Invalid: Qualification start time should be earlier than ITO end time",
     "plugin_ito_end_time": "End Time {{zone}}",

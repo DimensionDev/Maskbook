@@ -453,6 +453,7 @@
     "plugin_ito_sell_total_amount": "",
     "plugin_ito_allocation_per_wallet": "",
     "plugin_ito_begin_time": "",
+    "plugin_ito_wait_unlock_time": "",
     "plugin_ito_qualification_start_time": "",
     "plugin_ito_error_qualification_start_time": "",
     "plugin_ito_end_time": "",

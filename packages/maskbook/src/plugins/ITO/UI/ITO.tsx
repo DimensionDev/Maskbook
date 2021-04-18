@@ -181,6 +181,11 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 export interface ITO_Props {
     pid: string
     password: string
+    seller: {
+        name: string
+        address: string
+    }
+    qualification_start_time: number
 }
 
 export function ITO(props: ITO_Props) {
@@ -196,28 +201,27 @@ export function ITO(props: ITO_Props) {
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid, password } = props
+    const { pid, password, seller, qualification_start_time } = props
+
     const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
 
     // append the password from the outcoming pool
     const payload: JSON_PayloadInMask = {
         ...payload_,
         password: payload_.password || password,
+        qualification_start_time,
     }
-    console.log({ payload })
     const {
         token,
         total: payload_total,
-        seller,
         total_remaining: payload_total_remaining,
         exchange_amounts,
         exchange_tokens,
         limit,
-        start_time,
         end_time,
         message,
     } = payload
-
+    console.log({ payload })
     const { t } = useI18N()
     const classes = useStyles({ titleLength: getTextUILength(message), tokenNumber: exchange_tokens.length })
 
@@ -234,7 +238,7 @@ export function ITO(props: ITO_Props) {
     } = useAvailabilityComputed(payload)
     //#ednregion
 
-    const { listOfStatus } = availabilityComputed
+    const { listOfStatus, startTime, unlockTime, isUnlocked } = availabilityComputed
 
     const isAccountSeller =
         payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
@@ -263,7 +267,6 @@ export function ITO(props: ITO_Props) {
             }),
         )
         .toString()
-    console.log({ loadingTradeInfo })
     const canWithdraw = useMemo(
         () => isAccountSeller && !tradeInfo?.destructInfo && (listOfStatus.includes(ITO_Status.expired) || noRemain),
         [tradeInfo, listOfStatus, isAccountSeller, noRemain],
@@ -332,7 +335,7 @@ export function ITO(props: ITO_Props) {
         }, timeToExpired + TIME_WAIT_BLOCKCHAIN)
 
         return () => clearTimeout(timer)
-    }, [listOfStatus, setOpenClaimDialog, end_time, retryITOCard])
+    }, [])
 
     useEffect(() => {
         if (destructState.type === TransactionStateType.UNKNOWN) return
@@ -402,14 +405,13 @@ export function ITO(props: ITO_Props) {
         tradeInfo?.buyInfo?.token.symbol,
     ])
 
-    const footerStartTime = useMemo(
-        () => (
+    const footerStartTime = useMemo(() => {
+        return (
             <Typography variant="body1">
-                {t('plugin_ito_list_start_date', { date: formatDateTime(new Date(start_time * 1000), true) })}
+                {t('plugin_ito_list_start_date', { date: formatDateTime(new Date(startTime), true) })}
             </Typography>
-        ),
-        [start_time, t],
-    )
+        )
+    }, [qualification_start_time, startTime, t])
 
     const footerEndTime = useMemo(
         () => (
@@ -554,13 +556,30 @@ export function ITO(props: ITO_Props) {
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : isBuyer ? (
-                    <ActionButton
-                        onClick={onShareSuccess}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_share')}
-                    </ActionButton>
+                    <Grid container spacing={2}>
+                        {isUnlocked ? (
+                            <Grid item xs={6}>
+                                <ActionButton
+                                    onClick={onShareSuccess}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_wait_unlock_time', {
+                                        unlockTime: formatDateTime(new Date(unlockTime!), true),
+                                    })}
+                                </ActionButton>
+                            </Grid>
+                        ) : null}
+                        <Grid item xs={isUnlocked ? 6 : 12}>
+                            <ActionButton
+                                onClick={onShareSuccess}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {t('plugin_ito_share')}
+                            </ActionButton>
+                        </Grid>
+                    </Grid>
                 ) : listOfStatus.includes(ITO_Status.expired) ? (
                     <ActionButton
                         disabled

@@ -220,7 +220,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             to: ITO_Contract.options.address,
             value: '0',
         }
-
+        console.log('Web3Utils.sha3(signedPassword)!', Web3Utils.sha3(signedPassword)!)
         let params = [
             Web3Utils.sha3(signedPassword)!,
             startTime_,
