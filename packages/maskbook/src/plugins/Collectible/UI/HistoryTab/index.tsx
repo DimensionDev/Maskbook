@@ -131,7 +131,7 @@ export function HistoryTab(props: HistoryTabProps) {
                         )}
                         <TableCell>{t('plugin_collectible_from')}</TableCell>
                         <TableCell>{t('plugin_collectible_to')}</TableCell>
-                        <TableCell>{t('plugin_collectible_Date')}</TableCell>
+                        <TableCell>{t('plugin_collectible_date')}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

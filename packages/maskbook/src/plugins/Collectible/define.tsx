@@ -1,15 +1,14 @@
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { PLUGIN_NAME, PLUGIN_IDENTIFIER } from './constants'
 import { PostInspector } from './UI/PostInspector'
-import { AcceptOfferDialog } from './UI/AcceptOfferDialog'
-import { MakeOfferDialog } from './UI/MakeOfferDialog'
-import { PlaceBidDialog } from './UI/PlaceBidDialog'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import type { CollectibleJSON_Payload } from './types'
 import { getRelevantUrl, checkUrl, getAssetInfoFromURL } from './utils'
 import { getTypedMessageContent } from '../../protocols/typed-message'
 import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import { uniq } from 'lodash-es'
+import { MakeAnOfferTab } from './UI/MakeAnOfferDialog'
+import { ChainState } from '../../web3/state/useChainState'
 
 export const CollectiblesPluginDefine: PluginConfig = {
     id: PLUGIN_IDENTIFIER,
@@ -36,11 +35,11 @@ export const CollectiblesPluginDefine: PluginConfig = {
     },
     PageComponent() {
         return (
-            <>
-                <AcceptOfferDialog />
-                <MakeOfferDialog />
-                <PlaceBidDialog />
-            </>
+            <ChainState.Provider>
+                <MakeAnOfferTab />
+                {/* <MakeOfferDialog />
+                <PlaceBidDialog /> */}
+            </ChainState.Provider>
         )
     },
 }

@@ -11,7 +11,7 @@ import { CONSTANTS } from '../constants'
 import { useConstant } from '../hooks/useConstant'
 import { useERC20TokenBalance } from '../hooks/useERC20TokenBalance'
 import { createERC20Token } from '../helpers'
-import { useChainId } from '../hooks/useChainState'
+import { useChainId } from '../hooks/useBlockNumber'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({

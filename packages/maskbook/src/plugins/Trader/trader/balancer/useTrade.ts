@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { CONSTANTS } from '../../../../web3/constants'
-import { useBlockNumber, useChainId } from '../../../../web3/hooks/useChainState'
+import { useBlockNumber, useChainId } from '../../../../web3/hooks/useBlockNumber'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 import { BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'

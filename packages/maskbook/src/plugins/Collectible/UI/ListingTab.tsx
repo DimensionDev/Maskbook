@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import {
     Box,
     Button,
@@ -20,12 +20,11 @@ import { OrderRow } from './OrderRow'
 import { loadingTable } from './shared'
 import { TableListPagination } from './Pagination'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset } from '../helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { CollectibleProvider } from '../types'
-
+import { ListingTabActionBar } from './ListingTabActionBar'
 const useStyles = makeStyles((theme) => {
     return createStyles({
         root: {
@@ -77,11 +76,8 @@ export function ListingTab() {
         return listings.value.sort((a, b) => {
             const current = new BigNumber(a.unitPrice)
             const next = new BigNumber(b.unitPrice)
-            if (current.isLessThan(next)) {
-                return -1
-            } else if (current.isGreaterThan(next)) {
-                return 1
-            }
+            if (current.isLessThan(next)) return -1
+            else if (current.isGreaterThan(next)) return 1
             return 0
         })
     }, [listings.value])
@@ -109,27 +105,30 @@ export function ListingTab() {
 
     if (!listings.value || listings.error || !dataSource.length)
         return (
-            <Table size="small" stickyHeader>
-                <Box className={classes.empty}>
-                    <Typography color="textSecondary">No Listings</Typography>
-                    <Button
-                        sx={{
-                            marginTop: 1,
-                        }}
-                        variant="text"
-                        onClick={() => listings.retry()}>
-                        Retry
-                    </Button>
-                </Box>
-                <TableListPagination
-                    handlePrevClick={() => setPage((prev) => prev - 1)}
-                    handleNextClick={() => setPage((prev) => prev + 1)}
-                    prevDisabled={page === 0}
-                    nextDisabled={dataSource.length < 10}
-                    page={page}
-                    pageCount={10}
-                />
-            </Table>
+            <>
+                <Table size="small" stickyHeader>
+                    <Box className={classes.empty}>
+                        <Typography color="textSecondary">No Listings</Typography>
+                        <Button
+                            sx={{
+                                marginTop: 1,
+                            }}
+                            variant="text"
+                            onClick={() => listings.retry()}>
+                            Retry
+                        </Button>
+                    </Box>
+                    <TableListPagination
+                        handlePrevClick={() => setPage((prev) => prev - 1)}
+                        handleNextClick={() => setPage((prev) => prev + 1)}
+                        prevDisabled={page === 0}
+                        nextDisabled={dataSource.length < 10}
+                        page={page}
+                        pageCount={10}
+                    />
+                </Table>
+                <ListingTabActionBar />
+            </>
         )
 
     return (
@@ -167,13 +166,7 @@ export function ListingTab() {
                     />
                 ) : null}
             </Table>
-            <Box sx={{ padding: 2 }} display="flex" justifyContent="flex-end">
-                {/* <ActionButton className={classes.button} variant="outlined">Cancel Listing</ActionButton>
-                <ActionButton className={classes.button} color="primary" variant="contained">Price Drop</ActionButton> */}
-                <ActionButton className={classes.button} color="primary" variant="contained" onClick={onMakeListing}>
-                    Sell
-                </ActionButton>
-            </Box>
+            <ListingTabActionBar />
         </CollectibleTab>
     )
 }

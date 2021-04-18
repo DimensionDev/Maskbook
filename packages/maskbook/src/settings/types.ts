@@ -9,7 +9,7 @@ export enum Appearance {
     dark = 'dark',
 }
 
-export interface ChainState {
+export interface ChainBlockNumber {
     chainId: ChainId
     blockNumber: number
 }

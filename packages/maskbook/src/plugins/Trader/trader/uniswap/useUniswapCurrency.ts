@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useChainId } from '../../../../web3/hooks/useChainState'
+import { useChainId } from '../../../../web3/hooks/useBlockNumber'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 import { toUniswapCurrency } from '../../helpers'
 

@@ -1,5 +1,4 @@
 import {
-    Box,
     Button,
     createStyles,
     makeStyles,
@@ -11,22 +10,22 @@ import {
     Typography,
 } from '@material-ui/core'
 import { OrderSide } from 'opensea-js/lib/types'
+import BigNumber from 'bignumber.js'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { useOrders } from '../hooks/useOrders'
 import { CollectibleTab } from './CollectibleTab'
 import { useCallback, useMemo, useState } from 'react'
 import { OrderRow } from './OrderRow'
-import { loadingTable } from './shared'
-import BigNumber from 'bignumber.js'
 import { TableListPagination } from './Pagination'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useControlledAcceptOfferDialog } from './AcceptOfferDialog'
 import { useControlledMakeOfferDialog } from './MakeOfferDialog'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { PluginCollectibleRPC } from '../messages'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { toAsset } from '../helpers'
 import { CollectibleProvider } from '../types'
+import { OfferTabActionBar } from './OfferTabActionBar'
+import { LoadingTable } from './LoadingTable'
 
 //TODO: use global settings to switch dataSource
 let provider = CollectibleProvider.OPENSEA
@@ -76,7 +75,7 @@ export function OfferTab() {
             return false
         }
     }, [offers.value])
-    console.log(offers)
+
     const dataSource = useMemo(() => {
         if (!offers.value || !offers.value?.length) return []
         return offers.value.sort((a, b) => {
@@ -119,7 +118,7 @@ export function OfferTab() {
         }
     }, [account, asset, token])
 
-    if (offers.loading) return loadingTable
+    if (offers.loading) return <LoadingTable />
 
     if (!offers.value || offers.error || !dataSource.length)
         return (
@@ -135,7 +134,7 @@ export function OfferTab() {
                                     }}
                                     variant="text"
                                     onClick={() => offers.retry()}>
-                                    Retry
+                                    {t('plugin_collectible_retry')}
                                 </Button>
                             </TableCell>
                         </TableRow>
@@ -149,22 +148,7 @@ export function OfferTab() {
                         pageCount={10}
                     />
                 </Table>
-                <Box sx={{ padding: 2 }} display="flex" justifyContent="flex-end">
-                    <ActionButton
-                        className={classes.button}
-                        color="primary"
-                        variant="contained"
-                        onClick={onOpenMakeOfferDialog}>
-                        Make an Offer
-                    </ActionButton>
-                    <ActionButton
-                        className={classes.button}
-                        color="primary"
-                        variant="contained"
-                        onClick={onOpenAcceptOfferDialog}>
-                        Offer Dialog
-                    </ActionButton>
-                </Box>
+                <OfferTabActionBar />
             </>
         )
 
@@ -203,11 +187,7 @@ export function OfferTab() {
                     />
                 ) : null}
             </Table>
-            <Box sx={{ padding: 2 }} display="flex" justifyContent="flex-end">
-                <ActionButton className={classes.button} color="primary" variant="contained" onClick={onMakeOffer}>
-                    Make an Offer
-                </ActionButton>
-            </Box>
+            <OfferTabActionBar />
         </CollectibleTab>
     )
 }

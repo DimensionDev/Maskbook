@@ -12,7 +12,7 @@ import { gcd, sortTokens } from '../helpers'
 import { ITO_CONSTANTS, ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import Services from '../../../extension/service'
-import { useChainId } from '../../../web3/hooks/useChainState'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
 
 export interface PoolSettings {

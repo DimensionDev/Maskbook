@@ -1,6 +1,6 @@
 import { useAccount } from './useAccount'
 import { useAsyncRetry } from 'react-use'
-import { useChainId } from './useChainState'
+import { useChainId } from './useBlockNumber'
 import Services from '../../extension/service'
 
 /**

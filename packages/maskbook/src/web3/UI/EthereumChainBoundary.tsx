@@ -1,5 +1,5 @@
 import { Typography } from '@material-ui/core'
-import { useChainId } from '../hooks/useChainState'
+import { useChainId } from '../hooks/useBlockNumber'
 import { resolveChainName } from '../pipes'
 import type { ChainId } from '../types'
 
