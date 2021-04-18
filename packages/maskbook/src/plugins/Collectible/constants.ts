@@ -13,7 +13,7 @@ export const OpenSeaRinkebyBaseURL = 'https://rinkeby-api.opensea.io/api/v1/'
 export const OpenSeaGraphQLURL = 'https://opensea-agent.r2d2.to/graphql/'
 export const OpenSeaAccountURL = 'https://opensea.io/accounts/'
 export const NullAddress = 'NullAddress'
-
+export const NullContractAddress = '0x0000000000000000000000000000000000000000'
 export const ReferrerAddress = ''
 
 export const OpenSeaAPI_Key = 'c38fe2446ee34f919436c32db480a2e3'

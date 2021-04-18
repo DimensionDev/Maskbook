@@ -1,24 +1,25 @@
 import { useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import {
-    makeStyles,
-    createStyles,
-    Typography,
-    Table,
-    TableBody,
-    TableRow,
-    TableCell,
-    Skeleton,
     Box,
     Button,
-    TableHead,
+    createStyles,
+    makeStyles,
+    Skeleton,
+    Table,
+    TableBody,
+    TableCell,
     TableFooter,
+    TableHead,
+    TableRow,
+    Typography,
 } from '@material-ui/core'
 import { CollectibleTab } from '../CollectibleTab'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { Row } from './Row'
 import { useEvents } from '../../hooks/useEvents'
 import { useI18N } from '../../../../utils/i18n-next-ui'
+import { CollectibleProvider } from '../../types'
 import { TableListPagination } from '../Pagination'
 
 const useStyles = makeStyles((theme) => {
@@ -48,18 +49,18 @@ export interface HistoryTabProps {}
 export function HistoryTab(props: HistoryTabProps) {
     const { t } = useI18N()
     const classes = useStyles()
-
     const cursors = useRef<string[]>([])
     const [page, setPage] = useState(0)
 
-    const { token } = CollectibleState.useContainer()
-    const events = useEvents(token, cursors.current[page - 1])
+    const { provider } = CollectibleState.useContainer()
+    const events = useEvents(cursors.current[page - 1])
 
     //#region If there is a different asset, the unit price and quantity should be displayed
-    const isDifferenceToken = useMemo(
-        () => events.value?.edges.some((item) => item.node.price?.asset.symbol !== 'ETH'),
-        [events.value],
-    )
+    const isDifferenceToken = useMemo(() => {
+        if (provider === CollectibleProvider.OPENSEA)
+            return events.value?.data.some((item) => item.price?.asset?.symbol !== 'ETH')
+        else return false
+    }, [events.value, provider])
 
     useUpdateEffect(() => {
         if (
@@ -135,11 +136,11 @@ export function HistoryTab(props: HistoryTabProps) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {events.value.edges.map((order) => (
-                        <Row key={order.node.id} event={order} isDifferenceToken={isDifferenceToken} />
+                    {events.value.data.map((order) => (
+                        <Row key={order.id} event={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {events.value.edges.length || page > 0 ? (
+                {(provider === CollectibleProvider.OPENSEA && events.value.data.length) || page > 0 ? (
                     <TableListPagination
                         handlePrevClick={() => setPage((prev) => prev - 1)}
                         handleNextClick={() => setPage((prev) => prev + 1)}

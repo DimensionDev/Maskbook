@@ -3,12 +3,13 @@ import { Flags } from '../../../utils/flags'
 import stringify from 'json-stable-stringify'
 import type {
     RaribleCollectibleResponse,
+    RaribleHistory,
     RaribleNFTItemMapResponse,
     RaribleNFTOwnershipResponse,
     RaribleOfferResponse,
     RaribleProfileResponse,
 } from '../types'
-import { head } from 'lodash-es'
+import { compact, head } from 'lodash-es'
 import { OrderSide } from 'opensea-js/lib/types'
 import { toRaribleImage } from '../helpers'
 
@@ -24,6 +25,16 @@ async function fetchFromRarible<T>(subPath: string, config = {} as RequestInit) 
     return response as T
 }
 
+export async function getProfilesFromRarible(addresses: (string | undefined)[]) {
+    return fetchFromRarible<RaribleProfileResponse[]>('profiles/list', {
+        method: 'POST',
+        body: stringify(addresses),
+        headers: {
+            'content-type': 'application/json',
+        },
+    })
+}
+
 export async function getNFTItem(tokenAddress: string, tokenId: string) {
     const assetResponse = head(
         await fetchFromRarible<RaribleNFTItemMapResponse[]>('items/map', {
@@ -37,13 +48,7 @@ export async function getNFTItem(tokenAddress: string, tokenId: string) {
     const collectionResponse = await fetchFromRarible<RaribleCollectibleResponse>(`collections/${tokenAddress}`)
 
     if (!assetResponse) throw new Error('fetch failed!')
-    const profilesResponse = await fetchFromRarible<RaribleProfileResponse[]>('profiles/list', {
-        method: 'POST',
-        body: stringify([assetResponse.item.creator, head(assetResponse.item.owners)]),
-        headers: {
-            'content-type': 'application/json',
-        },
-    })
+    const profilesResponse = await getProfilesFromRarible([assetResponse.item.creator, head(assetResponse.item.owners)])
 
     const creator = profilesResponse.find((item) => item.id === assetResponse.item.creator)
     const owner = profilesResponse.find((item) => item.id === head(assetResponse.item.owners))
@@ -57,13 +62,7 @@ export async function getNFTItem(tokenAddress: string, tokenId: string) {
 
 export async function getOffersFromRarible(tokenAddress: string, tokenId: string) {
     const orders = await fetchFromRarible<RaribleOfferResponse[]>(`items/${tokenAddress}:${tokenId}/offers`)
-    const profiles = await fetchFromRarible<RaribleProfileResponse[]>('profiles/list', {
-        method: 'POST',
-        body: stringify(orders.map((item) => item.owner)),
-        headers: {
-            'content-type': 'application/json',
-        },
-    })
+    const profiles = await getProfilesFromRarible(orders.map((item) => item.owner))
 
     return orders.map((order) => {
         const ownerInfo = profiles.find((owner) => owner.id === order.owner)
@@ -90,13 +89,7 @@ export async function getListingsFromRarible(tokenAddress: string, tokenId: stri
             'content-type': 'application/json',
         },
     })
-    const profiles = await fetchFromRarible<RaribleProfileResponse[]>('profiles/list', {
-        method: 'POST',
-        body: stringify(owners),
-        headers: {
-            'content-type': 'application/json',
-        },
-    })
+    const profiles = await getProfilesFromRarible(owners)
 
     return assets
         .map((asset) => {
@@ -135,4 +128,25 @@ export async function getOrderFromRarbile(tokenAddress: string, tokenId: string,
         default:
             return []
     }
+}
+
+export async function getHistoryFromRarible(tokenAddress: string, tokenId: string) {
+    const histories = await fetchFromRarible<RaribleHistory[]>(`items/${tokenAddress}:${tokenId}/history`)
+    const profiles = await getProfilesFromRarible(
+        compact([
+            ...histories.map((history) => history.owner),
+            ...histories.map((history) => history.buyer),
+            ...histories.map((history) => history.from),
+        ]),
+    )
+
+    return histories.map((history) => {
+        const ownerInfo = profiles.find((profile) => profile.id === history.owner)
+        const fromInfo = profiles.find((profile) => profile.id === history.buyer || profile.id === history.from)
+        return {
+            ...history,
+            ownerInfo,
+            fromInfo,
+        }
+    })
 }

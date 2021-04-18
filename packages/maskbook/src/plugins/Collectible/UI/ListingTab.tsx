@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import {
     Box,
     Button,
@@ -153,7 +153,7 @@ export function ListingTab() {
                         <OrderRow key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {dataSource.length || page > 0 ? (
+                {(provider === CollectibleProvider.OPENSEA && dataSource.length) || page > 0 ? (
                     <TableListPagination
                         handlePrevClick={() => setPage((prev) => prev - 1)}
                         handleNextClick={() => setPage((prev) => prev + 1)}

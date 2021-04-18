@@ -172,3 +172,24 @@ export interface RaribleOfferResponse {
 export interface RaribleOrder extends RaribleOfferResponse {
     ownerInfo: RaribleProfileResponse
 }
+
+export enum RaribleEventType {
+    ORDER = 'order',
+    BUY = 'BUY',
+    TRANSFER = 'transfer',
+    OFFER = 'OFFER',
+}
+
+export interface RaribleHistory {
+    '@type': RaribleEventType
+    owner: string
+    value: number
+    price: number
+    buyToken: string
+    buyTokenId: string
+    buyer?: string
+    from?: string
+    date: Date
+    transactionHash: string
+    salt: string
+}

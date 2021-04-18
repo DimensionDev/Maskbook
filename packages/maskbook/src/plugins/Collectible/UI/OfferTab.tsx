@@ -51,7 +51,7 @@ export function OfferTab() {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const { asset, token, provider } = CollectibleState.useContainer()
+    const { provider } = CollectibleState.useContainer()
 
     const [page, setPage] = useState(0)
     const offers = useOrders(OrderSide.Buy, page)
@@ -140,7 +140,7 @@ export function OfferTab() {
                         <OrderRow key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {dataSource.length || page > 0 ? (
+                {(provider === CollectibleProvider.OPENSEA && dataSource.length) || page > 0 ? (
                     <TableListPagination
                         handlePrevClick={() => setPage((prev) => prev - 1)}
                         handleNextClick={() => setPage((prev) => prev + 1)}

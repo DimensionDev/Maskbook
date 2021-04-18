@@ -1,4 +1,6 @@
 import type { OpenSeaFungibleToken, WyvernSchemaName } from 'opensea-js/lib/types'
+import type { OpenSeaAssetEventType } from './opensea'
+import type { RaribleEventType } from './rarible'
 
 export * from './opensea'
 export * from './rarible'
@@ -62,4 +64,46 @@ export interface NFTOrder {
     expirationTime?: string
     paymentTokenContract?: OpenSeaFungibleToken
     paymentToken?: string
+}
+
+export interface NFTHistory {
+    id: string
+    accountPair: {
+        from?: {
+            username?: string
+            address?: string
+            imageUrl?: string
+            link: string
+        }
+        to?: {
+            username?: string
+            address?: string
+            imageUrl?: string
+            link: string
+        }
+    }
+    price?: {
+        quantity: string
+        asset?: {
+            decimals: number
+            imageUrl: string
+            symbol: string
+            usdSpotPrice: number
+            assetContract: {
+                blockExplorerLink: string
+                id: string
+            }
+        }
+    }
+    assetQuantity?: {
+        asset: {
+            decimals?: number
+            id: string
+        }
+        quantity: string
+        id: string
+    }
+    eventType: OpenSeaAssetEventType | RaribleEventType
+    transactionBlockExplorerLink?: string
+    timestamp: number
 }

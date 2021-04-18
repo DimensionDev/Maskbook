@@ -10,7 +10,7 @@ import { OpenSeaAccountURL } from '../constants'
 import { CollectibleState } from './useCollectibleState'
 
 export function useOrders(side = OrderSide.Buy, pageNum = 1) {
-    const { asset, token, provider } = CollectibleState.useContainer()
+    const { token, provider } = CollectibleState.useContainer()
 
     return useAsyncRetry<NFTOrder[]>(async () => {
         if (!token) return []
@@ -51,5 +51,5 @@ export function useOrders(side = OrderSide.Buy, pageNum = 1) {
             default:
                 unreachable(provider)
         }
-    }, [asset, token, pageNum, provider])
+    }, [token, pageNum, provider])
 }

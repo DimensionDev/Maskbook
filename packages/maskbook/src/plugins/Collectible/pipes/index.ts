@@ -2,12 +2,12 @@ import { Network } from 'opensea-js'
 import { unreachable } from '../../../utils/utils'
 import { ChainId } from '../../../web3/types'
 import { NullAddress } from '../constants'
-import { CollectibleProvider, OpenSeaAssetEventAccount, OpenSeaAssetEventType } from '../types'
+import { CollectibleProvider, OpenSeaAssetEventType, RaribleEventType } from '../types'
 
-export function resolveAssetEventType(eventType: OpenSeaAssetEventType, from?: OpenSeaAssetEventAccount) {
+export function resolveOpenSeaAssetEventType(eventType: OpenSeaAssetEventType, fromUserName?: string) {
     switch (eventType) {
         case OpenSeaAssetEventType.CREATED:
-            return from?.user?.publicUsername === NullAddress ? 'Created' : 'List'
+            return fromUserName === NullAddress ? 'Created' : 'List'
         case OpenSeaAssetEventType.SUCCESSFUL:
             return 'Sale'
         case OpenSeaAssetEventType.CANCELLED:
@@ -17,9 +17,24 @@ export function resolveAssetEventType(eventType: OpenSeaAssetEventType, from?: O
         case OpenSeaAssetEventType.BID_ENTERED:
             return 'Bid'
         case OpenSeaAssetEventType.TRANSFER:
-            return from?.user?.publicUsername === NullAddress ? 'Created' : 'Transfer'
+            return fromUserName === NullAddress ? 'Created' : 'Transfer'
         case OpenSeaAssetEventType.OFFER_ENTERED:
             return 'Offer'
+        default:
+            return eventType
+    }
+}
+
+export function resolveRaribleAssetEventType(eventType: RaribleEventType) {
+    switch (eventType) {
+        case RaribleEventType.BUY:
+            return 'Buy'
+        case RaribleEventType.OFFER:
+            return 'Offer'
+        case RaribleEventType.ORDER:
+            return 'Order'
+        case RaribleEventType.TRANSFER:
+            return 'Transfer'
         default:
             return eventType
     }
