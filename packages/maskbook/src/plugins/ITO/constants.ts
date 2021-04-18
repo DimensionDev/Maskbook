@@ -127,3 +127,5 @@ export const TIME_WAIT_BLOCKCHAIN = 30000
 
 export const QUALIFICATION_INTERFACE_ID = '0xa497ab4b'
 export const QUALIFICATION_HAS_START_TIME_INTERFACE_ID = '0xdf29dfc4'
+
+export const MSG_DELIMITER = '2c1aca02'

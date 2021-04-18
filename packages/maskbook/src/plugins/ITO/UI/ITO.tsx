@@ -22,7 +22,7 @@ import { ClaimGuide, ClaimStatus } from './ClaimGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { sortTokens } from '../helpers'
-import { ITO_EXCHANGE_RATION_MAX, TIME_WAIT_BLOCKCHAIN } from '../constants'
+import { ITO_EXCHANGE_RATION_MAX, TIME_WAIT_BLOCKCHAIN, MSG_DELIMITER } from '../constants'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
@@ -31,6 +31,7 @@ import { usePoolPayload } from '../hooks/usePoolPayload'
 import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useClaimCallback } from '../hooks/useClaimCallback'
+import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 
 export interface IconProps {
     size?: number
@@ -202,7 +203,7 @@ export function ITO(props: ITO_Props) {
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid, password, seller, qualification_start_time } = props
+    const { pid, password, qualification_start_time } = props
 
     const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
 
@@ -224,7 +225,13 @@ export function ITO(props: ITO_Props) {
     } = payload
 
     const { t } = useI18N()
-    const classes = useStyles({ titleLength: getTextUILength(message), tokenNumber: exchange_tokens.length })
+    const sellerName =
+        message.split(MSG_DELIMITER)[0] === message
+            ? formatEthereumAddress(payload.seller.address, 4)
+            : message.split(MSG_DELIMITER)[0]
+    const title = message.split(MSG_DELIMITER)[1] ?? message
+
+    const classes = useStyles({ titleLength: getTextUILength(title), tokenNumber: exchange_tokens.length })
 
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(payload_total_remaining)
@@ -262,7 +269,7 @@ export function ITO(props: ITO_Props) {
     const shareSuccessLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             t('plugin_ito_claim_success_share', {
-                user: seller.name,
+                user: sellerName,
                 link: postLink,
                 symbol: token.symbol,
             }),
@@ -489,7 +496,7 @@ export function ITO(props: ITO_Props) {
             <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${PoolBackground})` }}>
                 <Box className={classes.header}>
                     <Typography variant="h5" className={classes.title}>
-                        {message}
+                        {title}
                     </Typography>
                     {swapStatusText ? (
                         <Typography variant="body2" className={classes.status}>
@@ -549,7 +556,7 @@ export function ITO(props: ITO_Props) {
                             : footerNormal}
                     </div>
                     <Typography variant="body1" className={classes.fromText}>
-                        {`From: @${seller.name}`}
+                        {`From: @${sellerName}`}
                     </Typography>
                 </Box>
             </Card>

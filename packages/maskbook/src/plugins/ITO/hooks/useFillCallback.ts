@@ -9,7 +9,7 @@ import { EtherTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '..
 import type { Tx } from '@dimensiondev/contracts/types/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { gcd, sortTokens } from '../helpers'
-import { ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
+import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../constants'
 import Services from '../../../extension/service'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
@@ -52,6 +52,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             startTime,
             endTime,
             title,
+            name,
             token,
             total,
             limit,
@@ -220,12 +221,12 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             to: ITO_Contract.options.address,
             value: '0',
         }
-        console.log('Web3Utils.sha3(signedPassword)!', Web3Utils.sha3(signedPassword)!)
+
         let params = [
             Web3Utils.sha3(signedPassword)!,
             startTime_,
             endTime_,
-            title.split('').map((v) => formatBytes32String(v)),
+            `${name}${MSG_DELIMITER}${title}`.split('').map((v) => formatBytes32String(v)),
             exchangeTokens.map((x) => x.address),
             exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
             unlockTime_,
