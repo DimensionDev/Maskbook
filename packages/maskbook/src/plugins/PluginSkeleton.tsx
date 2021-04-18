@@ -1,4 +1,3 @@
-import { useMemo, Suspense } from 'react'
 import { Skeleton, makeStyles, createStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => {
