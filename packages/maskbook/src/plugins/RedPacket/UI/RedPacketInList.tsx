@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import { Skeleton } from '@material-ui/core'
 import { createStyles, ListItem, ListItemText, makeStyles, Theme, Typography } from '@material-ui/core'
 import type { RedPacketJSONPayload } from '../types'
@@ -67,7 +66,7 @@ export function RedPacketInList(props: RedPacketInListProps) {
                     {t('plugin_red_packet_description_failover', {
                         name: payload.sender.name,
                         shares: payload.shares,
-                        total: formatBalance(new BigNumber(payload.total), token.decimals ?? 0, token.decimals ?? 0),
+                        total: formatBalance(payload.total, token.decimals ?? 0, token.decimals ?? 0),
                         symbol: token.symbol,
                     })}
                 </Typography>

@@ -35,7 +35,7 @@ function SwapItem(props: SwapItemProps) {
     const classes = useSwapItemStyles()
     const { t } = useI18N()
 
-    const amount_ = formatBalance(new BigNumber(swapAmount || '0'), swap?.decimals ?? 0)
+    const amount_ = formatBalance(swapAmount || '0', swap?.decimals ?? 0)
 
     return (
         <div className={classes.root}>
@@ -140,10 +140,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 <Grid item xs={6}>
                     <Paper className={classes.data}>
                         <Typography>
-                            {formatBalance(
-                                new BigNumber(poolSettings?.total ?? '0'),
-                                poolSettings?.token?.decimals ?? 0,
-                            )}{' '}
+                            {formatBalance(poolSettings?.total ?? '0', poolSettings?.token?.decimals ?? 0)}{' '}
                             {poolSettings?.token?.symbol}
                         </Typography>
                     </Paper>
@@ -180,10 +177,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 <Grid item xs={6}>
                     <Paper className={classes.data}>
                         <Typography>
-                            {formatBalance(
-                                new BigNumber(poolSettings?.limit ?? '0'),
-                                poolSettings?.token?.decimals ?? 0,
-                            )}{' '}
+                            {formatBalance(poolSettings?.limit ?? '0', poolSettings?.token?.decimals ?? 0)}{' '}
                             {poolSettings?.token?.symbol}
                         </Typography>
                     </Paper>

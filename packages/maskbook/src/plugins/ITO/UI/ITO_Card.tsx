@@ -1,6 +1,5 @@
 import { Alert, Typography, Skeleton, Box, createStyles } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import BigNumber from 'bignumber.js'
 import { useCallback, useEffect } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
@@ -79,7 +78,7 @@ export function ITO_Card(props: ITO_CardProps) {
         .getShareLinkURL?.(
             [
                 `I just claimed ${cashTag}${token?.symbol} with ${formatBalance(
-                    new BigNumber(packet?.claimable ?? '0'),
+                    packet?.claimable ?? '0',
                     18,
                     6,
                 )}. Follow @realMaskbook (mask.io) to claim airdrop.`,
@@ -108,7 +107,7 @@ export function ITO_Card(props: ITO_CardProps) {
             open: true,
             shareLink,
             state: claimState,
-            summary: `Claiming ${formatBalance(new BigNumber(packet.claimable), 18, 6)} ${token?.symbol ?? 'Token'}.`,
+            summary: `Claiming ${formatBalance(packet.claimable, 18, 6)} ${token?.symbol ?? 'Token'}.`,
         })
     }, [claimState /* update tx dialog only if state changed */])
     //#endregion
@@ -156,7 +155,7 @@ export function ITO_Card(props: ITO_CardProps) {
                     <Typography>ITO locked:</Typography>
                     <Typography className={classes.amount}>
                         {packet && packet.claimable !== '0'
-                            ? formatBalance(new BigNumber(packet.claimable), token.decimals, 6)
+                            ? formatBalance(packet.claimable, token.decimals, 6)
                             : '0.00'}
                     </Typography>
                 </Box>

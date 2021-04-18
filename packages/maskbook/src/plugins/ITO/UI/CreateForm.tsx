@@ -80,21 +80,21 @@ export function CreateForm(props: CreateFormProps) {
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
         new BigNumber(origin?.limit || '0').isZero()
             ? ''
-            : formatBalance(new BigNumber(origin?.limit || '0'), origin?.token?.decimals ?? 0),
+            : formatBalance(origin?.limit || '0', origin?.token?.decimals ?? 0),
     )
     const [tokenAndAmount, setTokenAndAmount] = useState<ExchangeTokenAndAmountState>()
     const TAS: ExchangeTokenAndAmountState[] = []
     if (origin?.token && origin?.total) {
         TAS.push({
             token: origin?.token,
-            amount: formatBalance(new BigNumber(origin?.total || '0'), origin?.token.decimals ?? 0),
+            amount: formatBalance(origin?.total || '0', origin?.token.decimals ?? 0),
             key: uuid(),
         })
     }
     if (origin?.exchangeTokens && origin?.exchangeAmounts) {
         origin?.exchangeTokens.map((i, x) =>
             TAS.push({
-                amount: formatBalance(new BigNumber(origin?.exchangeAmounts[x] || '0'), i?.decimals ?? 0),
+                amount: formatBalance(origin?.exchangeAmounts[x] || '0', i?.decimals ?? 0),
                 token: i,
                 key: uuid(),
             }),

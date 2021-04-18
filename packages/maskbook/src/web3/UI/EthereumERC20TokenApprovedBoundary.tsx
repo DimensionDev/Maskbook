@@ -1,5 +1,4 @@
 import { createStyles, Grid, makeStyles } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
 import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect } from 'react'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
@@ -113,11 +112,9 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         size="large"
                         onClick={() => onApprove(true)}>
                         <span className={classes.buttonLabel}>{t('plugin_wallet_token_unlock')}</span>
-                        <span className={classes.buttonAmount}>{`${formatBalance(
-                            new BigNumber(amount),
-                            token.decimals,
-                            2,
-                        )} ${token?.symbol ?? 'Token'}`}</span>
+                        <span className={classes.buttonAmount}>{`${formatBalance(amount, token.decimals, 2)} ${
+                            token?.symbol ?? 'Token'
+                        }`}</span>
                     </ActionButton>
                 </Grid>
                 <Grid item xs={6}>

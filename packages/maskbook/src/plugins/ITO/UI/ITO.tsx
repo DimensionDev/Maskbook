@@ -343,10 +343,7 @@ export function ITO(props: ITO_Props) {
             const comma = noRemain && i === 0 ? ' ' : ', '
             if (token) {
                 summary +=
-                    comma +
-                    formatBalance(new BigNumber(availability?.exchanged_tokens[i]), token.decimals ?? 0) +
-                    ' ' +
-                    token.symbol
+                    comma + formatBalance(availability?.exchanged_tokens[i], token.decimals ?? 0) + ' ' + token.symbol
             }
         })
         setTransactionDialogOpen({
@@ -377,7 +374,7 @@ export function ITO(props: ITO_Props) {
         }
 
         const _text = t('plugin_ito_your_claimed_amount', {
-            amount: formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals),
+            amount: formatBalance(availability?.swapped ?? 0, token.decimals),
             symbol: token.symbol,
         })
 
@@ -435,7 +432,7 @@ export function ITO(props: ITO_Props) {
             <>
                 <Typography variant="body1">
                     {t('plugin_ito_allocation_per_wallet', {
-                        limit: `: ${formatBalance(new BigNumber(limit), token.decimals)}`,
+                        limit: `: ${formatBalance(limit, token.decimals)}`,
                         token: token.symbol,
                     })}
                 </Typography>

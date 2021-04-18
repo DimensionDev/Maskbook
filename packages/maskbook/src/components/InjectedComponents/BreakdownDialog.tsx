@@ -83,7 +83,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
                 <Typography className={classes.balance}>
                     <span>Balance:</span>
                     <span>
-                        {formatBalance(new BigNumber(balance), 18, 2)} {token.symbol}
+                        {formatBalance(balance, 18, 2)} {token.symbol}
                     </span>
                 </Typography>
                 <ITO_Card token={token} onUpdateAmount={setITO_Amount} onUpdateBalance={onUpdateBalance} />
