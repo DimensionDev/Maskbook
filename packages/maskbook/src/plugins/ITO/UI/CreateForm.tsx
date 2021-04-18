@@ -167,7 +167,6 @@ export function CreateForm(props: CreateFormProps) {
     // qualificationAddress
     const [qualificationAddress, setQualificationAddress] = useState('')
     const { value: qualification, loading: loadingQualification } = useQualificationVerify(qualificationAddress)
-    console.log({ qualification, loadingQualification, endTime })
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)

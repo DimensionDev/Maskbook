@@ -117,7 +117,6 @@ export async function getTradeInfo(pid: string, trader: string) {
             }[]
         }
     }
-    console.log({ data })
     if (!data.pool) throw new Error('Failed to load trade info.')
     return {
         buyInfo: first(data.buyInfos),
@@ -148,7 +147,6 @@ export async function getPool(pid: string) {
         }
     }
 
-    console.log({ data, pid })
     if (!data.pool) throw new Error('Failed to load payload.')
     return payloadIntoMask(data.pool)
 }
