@@ -14,15 +14,10 @@ import BigNumber from 'bignumber.js'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { useOrders } from '../hooks/useOrders'
 import { CollectibleTab } from './CollectibleTab'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useControlledAcceptOfferDialog } from './AcceptOfferDialog'
-import { useControlledMakeOfferDialog } from './MakeOfferDialog'
-import { PluginCollectibleRPC } from '../messages'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { toAsset } from '../helpers'
 import { CollectibleProvider } from '../types'
 import { OfferTabActionBar } from './OfferTabActionBar'
 import { LoadingTable } from './LoadingTable'
@@ -59,7 +54,7 @@ export function OfferTab() {
     const { t } = useI18N()
     const classes = useStyles()
     const [page, setPage] = useState(0)
-    const account = useAccount()
+
     const { asset, token } = CollectibleState.useContainer()
     const offers = useOrders(token, provider, OrderSide.Buy, page)
 
@@ -90,36 +85,7 @@ export function OfferTab() {
         })
     }, [offers.value])
 
-    const { onOpen: onOpenAcceptOfferDialog } = useControlledAcceptOfferDialog()
-    const { onOpen: onOpenMakeOfferDialog } = useControlledMakeOfferDialog()
-
-    const onMakeOffer = useCallback(async () => {
-        console.log(asset)
-        console.log(token)
-
-        onOpenMakeOfferDialog()
-
-        if (!token) return
-        if (!asset.value) return
-
-        try {
-            const response = await PluginCollectibleRPC.createBuyOrder({
-                asset: toAsset({
-                    tokenId: token.tokenId,
-                    tokenAddress: token.contractAddress,
-                    schemaName: asset.value?.assetContract?.schemaName,
-                }),
-                accountAddress: account,
-                startAmount: 0.1,
-            })
-            console.log(response)
-        } catch (e) {
-            console.log(e)
-        }
-    }, [account, asset, token])
-
     if (offers.loading) return <LoadingTable />
-
     if (!offers.value || offers.error || !dataSource.length)
         return (
             <>
