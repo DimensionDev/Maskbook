@@ -9,7 +9,7 @@ import { addGasMargin } from '../../../web3/helpers'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
 
-export function useClaimCallback() {
+export function useMaskClaimCallback() {
     const account = useAccount()
     const chainId = useChainId()
     const MaskITO_Contract = useMaskITO_Contract()

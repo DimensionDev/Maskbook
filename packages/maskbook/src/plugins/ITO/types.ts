@@ -19,14 +19,13 @@ export interface JSON_PayloadInMask {
     chain_id: ChainId
     start_time: number
     end_time: number
+    unlock_time: number
+    qualification_address: string
+    qualification_start_time: number
     creation_time: number
     token: EtherTokenDetailed | ERC20TokenDetailed
     exchange_amounts: string[]
     exchange_tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
-    // @deprecated
-    is_mask?: boolean
-    // @deprecated
-    test_nums?: number[]
 }
 
 type TokenOutMask = Omit<JSON_PayloadInMask['token'], 'chainId'> & {

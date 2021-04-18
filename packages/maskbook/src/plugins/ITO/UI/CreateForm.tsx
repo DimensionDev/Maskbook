@@ -97,6 +97,7 @@ export function CreateForm(props: CreateFormProps) {
 
     const account = useAccount()
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const DEFAULT_QUALIFICATION_ADDRESS = useConstant(ITO_CONSTANTS, 'DEFAULT_QUALIFICATION_ADDRESS')
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
@@ -183,8 +184,10 @@ export function CreateForm(props: CreateFormProps) {
             ),
             exchangeTokens: rest.map((item) => item.token!),
             startTime,
+            qualificationAddress: qualification?.isQualification ? qualificationAddress : DEFAULT_QUALIFICATION_ADDRESS,
             endTime,
-            unlockTime,
+            unlockTime: unlockTime > endTime ? unlockTime : undefined,
+            qualificationStartTime: qualification?.startTime ? Number(qualification?.startTime) * 1000 : 0,
         })
     }, [
         senderName,
@@ -196,6 +199,8 @@ export function CreateForm(props: CreateFormProps) {
         startTime,
         endTime,
         unlockTime,
+        qualification,
+        qualificationAddress,
         account,
         onChangePoolSettings,
     ])
@@ -377,7 +382,9 @@ export function CreateForm(props: CreateFormProps) {
                                 ),
                         }}
                     />
-                    {qualification && qualification.startTime ? (
+                    {qualification &&
+                    qualification.startTime &&
+                    new Date(Number(qualification.startTime) * 1000) > startTime ? (
                         <div className={classes.qualStartTime}>
                             <Typography>{t('plugin_ito_qualification_start_time')}</Typography>
                             <Typography>{new Date(Number(qualification.startTime) * 1000).toString()}</Typography>

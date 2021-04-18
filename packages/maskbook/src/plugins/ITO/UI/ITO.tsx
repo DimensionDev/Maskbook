@@ -204,6 +204,7 @@ export function ITO(props: ITO_Props) {
         ...payload_,
         password: payload_.password || password,
     }
+    console.log({ payload })
     const {
         token,
         total: payload_total,
@@ -262,6 +263,7 @@ export function ITO(props: ITO_Props) {
             }),
         )
         .toString()
+    console.log({ loadingTradeInfo })
     const canWithdraw = useMemo(
         () => isAccountSeller && !tradeInfo?.destructInfo && (listOfStatus.includes(ITO_Status.expired) || noRemain),
         [tradeInfo, listOfStatus, isAccountSeller, noRemain],

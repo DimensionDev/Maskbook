@@ -42,3 +42,4 @@ export function useQualificationVerify(address: string) {
 // not qualification: 0xdd607c126a2ce3e78d3035b07674a6ab715cf77e
 // qualification: 0x12d13b8a15368087c8c1fe9f9670c4c5c93387aa
 // qualification with start time: 0x95828e478a27f5f9c714edceea8fec0bc8a1b5e3 timestamp: 1620565336 Sun May 09 2021 21:02:16 GMT+0800
+// default qualification: 0x570ef715f4c8d95f2024eceb32d9fa8b0fba9f20

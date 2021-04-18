@@ -102,7 +102,6 @@ export function useSwapCallback(
                 Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 6))}`),
                 account,
             )!,
-            account,
             Web3Utils.sha3(account)!,
             swapTokenAt,
             total,

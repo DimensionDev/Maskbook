@@ -6,7 +6,7 @@ import { ERC165_INTERFACE_ID } from '../constants'
 export function useERC165<T extends Contract>(contract: T | null, address: string, interfaceId: string) {
     const account = useAccount()
 
-    return useAsyncRetry(async () => {
+    return useAsyncRetry<boolean>(async () => {
         if (!contract) return false
         try {
             const isERC165 = await contract.methods.supportsInterface(ERC165_INTERFACE_ID).call({ from: account })

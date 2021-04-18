@@ -9,21 +9,23 @@ import { EtherTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '..
 import type { Tx } from '@dimensiondev/contracts/types/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { gcd, sortTokens } from '../helpers'
-import { ITO_CONSTANTS, ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
-import { useConstant } from '../../../web3/hooks/useConstant'
+import { ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
 import Services from '../../../extension/service'
 import { useChainId } from '../../../web3/hooks/useChainState'
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
+import { formatBytes32String } from '@ethersproject/strings'
 
 export interface PoolSettings {
     password: string
     startTime: Date
     endTime: Date
-    unlockTime: Date
+    unlockTime?: Date
     title: string
     name: string
     limit: string
     total: string
+    qualificationAddress: string
+    qualificationStartTime: number
     exchangeAmounts: string[]
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     token?: ERC20TokenDetailed
@@ -33,7 +35,6 @@ export function useFillCallback(poolSettings?: PoolSettings) {
     const account = useAccount()
     const chainId = useChainId()
     const ITO_Contract = useITO_Contract()
-    const DEFAULT_QUALIFICATION_ADDRESS = useConstant(ITO_CONSTANTS, 'DEFAULT_QUALIFICATION_ADDRESS')
 
     const [fillState, setFillState] = useTransactionState()
     const [fillSettings, setFillSettings] = useState(poolSettings)
@@ -50,11 +51,12 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             password,
             startTime,
             endTime,
-            name,
             title,
             token,
             total,
             limit,
+            qualificationAddress,
+            unlockTime,
             exchangeAmounts: exchangeAmountsUnsorted,
             exchangeTokens: exchangeTokensUnsorted,
         } = poolSettings
@@ -80,6 +82,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         const BASE_TIMESTAMP = ITO_CONTRACT_BASE_TIMESTAMP
         const startTime_ = Math.floor((startTime.getTime() - BASE_TIMESTAMP) / 1000)
         const endTime_ = Math.floor((endTime.getTime() - BASE_TIMESTAMP) / 1000)
+        const unlockTime_ = unlockTime ? Math.floor((unlockTime.getTime() - BASE_TIMESTAMP) / 1000) : 0
         const now_ = Math.floor((Date.now() - BASE_TIMESTAMP) / 1000)
 
         // error: the start time before BASE TIMESTAMP
@@ -100,6 +103,15 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             return
         }
 
+        // error: the unlock time before BASE TIMESTAMP
+        if (unlockTime_ < 0) {
+            setFillState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Invalid unlock time.'),
+            })
+            return
+        }
+
         // error: the start time after the end time
         if (startTime_ >= endTime_) {
             setFillState({
@@ -114,6 +126,15 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             setFillState({
                 type: TransactionStateType.FAILED,
                 error: new Error('The end date should be a future date.'),
+            })
+            return
+        }
+
+        // error: unlock time before end time
+        if (endTime_ >= unlockTime_ && unlockTime_ !== 0) {
+            setFillState({
+                type: TransactionStateType.FAILED,
+                error: new Error('The unlock date should be later than end date.'),
             })
             return
         }
@@ -199,18 +220,19 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             to: ITO_Contract.options.address,
             value: '0',
         }
+
         let params = [
             Web3Utils.sha3(signedPassword)!,
             startTime_,
             endTime_,
-            name,
-            title,
+            title.split('').map((v) => formatBytes32String(v)),
             exchangeTokens.map((x) => x.address),
             exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
+            unlockTime_,
             token.address,
             total,
             limit,
-            DEFAULT_QUALIFICATION_ADDRESS,
+            qualificationAddress,
         ] as Parameters<ITO['methods']['fill_pool']>
 
         // step 1: estimate gas
@@ -254,7 +276,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                 reject(error)
             })
         })
-    }, [account, chainId, ITO_Contract, DEFAULT_QUALIFICATION_ADDRESS, poolSettings])
+    }, [account, chainId, ITO_Contract, poolSettings])
 
     const resetCallback = useCallback(() => {
         setFillState({
