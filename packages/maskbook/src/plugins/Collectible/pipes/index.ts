@@ -1,7 +1,7 @@
 import { Network } from 'opensea-js'
 import { unreachable } from '../../../utils/utils'
 import { ChainId } from '../../../web3/types'
-import { NullAddress } from '../constants'
+import { NullAddress, RaribleRopstenUserURL, RaribleUserURL } from '../constants'
 import { CollectibleProvider, OpenSeaAssetEventType, RaribleEventType } from '../types'
 
 export function resolveOpenSeaAssetEventType(eventType: OpenSeaAssetEventType, fromUserName?: string) {
@@ -59,5 +59,16 @@ export function resolveCollectibleProviderName(provider: CollectibleProvider) {
             return 'Rarible'
         default:
             unreachable(provider)
+    }
+}
+
+export function resolveRaribleUserNetwork(chainId: ChainId) {
+    switch (chainId) {
+        case ChainId.Mainnet:
+            return RaribleUserURL
+        case ChainId.Ropsten:
+            return RaribleRopstenUserURL
+        default:
+            throw new Error(`The chain id ${chainId} is not supported.`)
     }
 }

@@ -2,11 +2,14 @@ import { useAsyncRetry } from 'react-use'
 import type { NFTHistory } from '../types'
 import { CollectibleProvider, OpenSeaAssetEventType } from '../types'
 import { PluginCollectibleRPC } from '../messages'
-import { NullAddress, NullContractAddress, OpenSeaAccountURL, RaribleUserURL } from '../constants'
+import { NullAddress, NullContractAddress, OpenSeaAccountURL } from '../constants'
 import { CollectibleState } from './useCollectibleState'
 import { toRaribleImage } from '../helpers'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { resolveRaribleUserNetwork } from '../pipes'
 
 export function useEvents(cursor?: string) {
+    const chainId = useChainId()
     const { token, provider } = CollectibleState.useContainer()
     return useAsyncRetry<{ data: NFTHistory[]; pageInfo: { hasNextPage: boolean; endCursor?: string } }>(async () => {
         if (!token)
@@ -94,7 +97,7 @@ export function useEvents(cursor?: string) {
                                                   : event.fromInfo?.name,
                                           address: event.fromInfo?.id,
                                           imageUrl: toRaribleImage(event.fromInfo?.image),
-                                          link: `${RaribleUserURL}${event.fromInfo?.id ?? ''}`,
+                                          link: `${resolveRaribleUserNetwork(chainId)}${event.fromInfo?.id ?? ''}`,
                                       }
                                     : null,
                                 to: event.ownerInfo
@@ -102,7 +105,7 @@ export function useEvents(cursor?: string) {
                                           username: event.ownerInfo?.name,
                                           address: event.ownerInfo?.id,
                                           imageUrl: toRaribleImage(event.ownerInfo?.image),
-                                          link: `${RaribleUserURL}${event.ownerInfo?.id ?? ''}`,
+                                          link: `${resolveRaribleUserNetwork(chainId)}${event.ownerInfo?.id ?? ''}`,
                                       }
                                     : null,
                             },
@@ -120,5 +123,5 @@ export function useEvents(cursor?: string) {
                     },
                 }
         }
-    }, [token, cursor, provider])
+    }, [chainId, token, cursor, provider])
 }

@@ -18,6 +18,8 @@ export const ReferrerAddress = ''
 
 export const OpenSeaAPI_Key = 'c38fe2446ee34f919436c32db480a2e3'
 
-export const RaribleBaseURL = 'https://api-mainnet.rarible.com/'
+export const RaribleMainetURL = 'https://api-mainnet.rarible.com/'
+export const RaribleRopstenURL = 'https://api-ropsten.rarible.com/'
 export const RaribleIPFSURL = 'https://ipfs.rarible.com/ipfs/'
 export const RaribleUserURL = 'https://rarible.com/user/'
+export const RaribleRopstenUserURL = 'https://ropsten.rarible.com/user/'

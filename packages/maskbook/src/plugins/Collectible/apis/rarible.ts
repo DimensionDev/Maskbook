@@ -1,4 +1,4 @@
-import { RaribleBaseURL, RaribleUserURL } from '../constants'
+import { RaribleMainetURL, RaribleRopstenURL } from '../constants'
 import { Flags } from '../../../utils/flags'
 import stringify from 'json-stable-stringify'
 import type {
@@ -12,10 +12,21 @@ import type {
 import { compact, head } from 'lodash-es'
 import { OrderSide } from 'opensea-js/lib/types'
 import { toRaribleImage } from '../helpers'
+import { getChainId } from '../../../extension/background-script/EthereumServices/chainState'
+import { ChainId } from '../../../web3/types'
+import { resolveChainName } from '../../../web3/pipes'
+import { resolveRaribleUserNetwork } from '../pipes'
+
+async function createRaribleApi() {
+    const chainId = await getChainId()
+    if (![ChainId.Mainnet, ChainId.Ropsten].includes(chainId))
+        throw new Error(`${resolveChainName(chainId)} is not supported.`)
+    return chainId === ChainId.Mainnet ? RaribleMainetURL : RaribleRopstenURL
+}
 
 async function fetchFromRarible<T>(subPath: string, config = {} as RequestInit) {
     const response = await (
-        await fetch(`${RaribleBaseURL}${subPath}`, {
+        await fetch(`${await createRaribleApi()}${subPath}`, {
             cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : undefined,
             mode: 'cors',
             ...config,
@@ -63,7 +74,7 @@ export async function getNFTItem(tokenAddress: string, tokenId: string) {
 export async function getOffersFromRarible(tokenAddress: string, tokenId: string) {
     const orders = await fetchFromRarible<RaribleOfferResponse[]>(`items/${tokenAddress}:${tokenId}/offers`)
     const profiles = await getProfilesFromRarible(orders.map((item) => item.owner))
-
+    const chainId = await getChainId()
     return orders.map((order) => {
         const ownerInfo = profiles.find((owner) => owner.id === order.owner)
         return {
@@ -75,7 +86,7 @@ export async function getOffersFromRarible(tokenAddress: string, tokenId: string
                 },
                 address: ownerInfo?.id,
                 profile_img_url: toRaribleImage(ownerInfo?.image),
-                link: `${RaribleUserURL}${ownerInfo?.id ?? ''}`,
+                link: `${resolveRaribleUserNetwork(chainId)}${ownerInfo?.id ?? ''}`,
             },
         }
     })
@@ -90,7 +101,7 @@ export async function getListingsFromRarible(tokenAddress: string, tokenId: stri
         },
     })
     const profiles = await getProfilesFromRarible(owners)
-
+    const chainId = await getChainId()
     return assets
         .map((asset) => {
             const ownerInfo = profiles.find((owner) => owner.id === asset.ownership.owner)
@@ -103,7 +114,7 @@ export async function getListingsFromRarible(tokenAddress: string, tokenId: stri
                     },
                     address: ownerInfo?.id,
                     profile_img_url: toRaribleImage(ownerInfo?.image),
-                    link: `${RaribleUserURL}${ownerInfo?.id ?? ''}`,
+                    link: `${resolveRaribleUserNetwork(chainId)}${ownerInfo?.id ?? ''}`,
                 },
             }
         })

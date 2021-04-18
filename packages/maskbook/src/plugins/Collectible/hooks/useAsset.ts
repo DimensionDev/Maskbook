@@ -8,7 +8,8 @@ import BigNumber from 'bignumber.js'
 import { getOrderUnitPrice } from '../utils'
 import { unreachable } from '../../../utils/utils'
 import { toRaribleImage } from '../helpers'
-import { OpenSeaAccountURL, RaribleUserURL } from '../constants'
+import { OpenSeaAccountURL } from '../constants'
+import { resolveRaribleUserNetwork } from '../pipes'
 
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
     const chainId = useChainId()
@@ -61,7 +62,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                               address: result.owner.id,
                               profile_img_url: toRaribleImage(result.owner.image),
                               user: { username: result.owner.name },
-                              link: `${RaribleUserURL}${result.owner.id ?? ''}`,
+                              link: `${resolveRaribleUserNetwork(chainId)}${result.owner.id ?? ''}`,
                           }
                         : null,
                     creator: result.creator
@@ -69,7 +70,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                               address: result.creator.id,
                               profile_img_url: toRaribleImage(result.creator.image),
                               user: { username: result.creator.name },
-                              link: `${RaribleUserURL}${result.creator.id ?? ''}`,
+                              link: `${resolveRaribleUserNetwork(chainId)}${result.creator.id ?? ''}`,
                           }
                         : null,
                     traits: result.properties.attributes.map(({ key, value }) => ({ trait_type: key, value })),
