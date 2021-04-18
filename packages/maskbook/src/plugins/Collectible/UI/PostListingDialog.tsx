@@ -3,10 +3,9 @@ import { createStyles, makeStyles, DialogContent, Tab, Tabs } from '@material-ui
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ChainState } from '../../../web3/state/useChainState'
-import { useRemoteControlledDialogEvent } from '../../../utils/hooks/useRemoteControlledDialog'
-import { PluginCollectibleMessage } from '../messages'
 import { ListingByPriceCard } from './ListingByPriceCard'
 import { ListingByHighestBidCard } from './ListingByHighestBidCard'
+import type { useAsset } from '../hooks/useAsset'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -26,15 +25,19 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface PostListingDialogProps {}
+export interface PostListingDialogProps {
+    asset?: ReturnType<typeof useAsset>
+    open: boolean
+    onClose: () => void
+}
 
 export function PostListingDialog(props: PostListingDialogProps) {
+    const { asset, open, onClose } = props
+
     const { t } = useI18N()
     const classes = useStyles()
 
     const { chainId } = ChainState.useContainer()
-
-    const { open, onClose } = useRemoteControlledDialogEvent(PluginCollectibleMessage.events.postListingDialogEvent)
 
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [<Tab key="price" label="Set Price" />, <Tab key="bid" label="Highest Bid" />]

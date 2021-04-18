@@ -19,7 +19,7 @@ export function useTokenWatched(initialToken?: { type: EthereumTokenType; addres
     )
     return {
         amount,
-        token,
+        token: detailed,
         balance,
         assetDetailed,
 

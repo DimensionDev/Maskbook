@@ -42,6 +42,8 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                             response.creator?.user?.username ?? response.creator?.address ?? ''
                         }`,
                     },
+                    token_id: response.tokenId,
+                    token_address: response.tokenAddress,
                     traits: response.traits,
                     safelist_request_status: response.collection?.safelist_request_status ?? '',
                     description: response.description,

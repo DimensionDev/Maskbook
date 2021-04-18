@@ -3,6 +3,7 @@ import { createTypedMessageMetadataReader, createRenderWithMetadata } from '../.
 import { PLUGIN_META_KEY, RaribleIPFSURL } from './constants'
 import type { CollectibleJSON_Payload } from './types'
 import schema from './schema.json'
+import BigNumber from 'bignumber.js'
 
 export const CollectibleMetadataReader = createTypedMessageMetadataReader<CollectibleJSON_Payload>(
     PLUGIN_META_KEY,
@@ -18,7 +19,13 @@ export function toAsset(asset: { tokenId: string; tokenAddress: string; schemaNa
     }
 }
 
-export function toDecimalAmount(weiAmount: string) {}
+export function toDecimalAmount(weiAmount: string, decimals: number) {
+    return new BigNumber(weiAmount).dividedBy(new BigNumber(10).pow(decimals)).toNumber()
+}
+
+export function toUnixTimestamp(date: Date) {
+    return Math.round(date.getTime() / 1000)
+}
 
 export function toRaribleImage(url?: string) {
     if (!url) return ''

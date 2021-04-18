@@ -21,6 +21,8 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { CollectibleProvider } from '../types'
 import { OfferTabActionBar } from './OfferTabActionBar'
 import { LoadingTable } from './LoadingTable'
+import { isSameAddress } from '../../../web3/helpers'
+import { ChainState } from '../../../web3/state/useChainState'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -36,7 +38,7 @@ const useStyles = makeStyles((theme) => {
             alignItems: 'center',
             justifyContent: 'center',
             height: '100%',
-            padding: theme.spacing(8, 0, 6),
+            padding: theme.spacing(8, 0),
         },
         emptyCell: {
             borderStyle: 'none',
@@ -51,7 +53,8 @@ export function OfferTab() {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const { provider } = CollectibleState.useContainer()
+    const { account } = ChainState.useContainer()
+    const { asset, token, provider } = CollectibleState.useContainer()
 
     const [page, setPage] = useState(0)
     const offers = useOrders(OrderSide.Buy, page)
@@ -103,16 +106,10 @@ export function OfferTab() {
                             </TableCell>
                         </TableRow>
                     </TableBody>
-                    <TableListPagination
-                        handlePrevClick={() => setPage((prev) => prev - 1)}
-                        handleNextClick={() => setPage((prev) => prev + 1)}
-                        prevDisabled={page === 0}
-                        nextDisabled={dataSource.length < 10}
-                        page={page}
-                        pageCount={10}
-                    />
                 </Table>
-                <OfferTabActionBar />
+                {asset.value?.owner?.address && !isSameAddress(asset.value.owner.address, account) ? (
+                    <OfferTabActionBar />
+                ) : null}
             </>
         )
 
@@ -151,7 +148,9 @@ export function OfferTab() {
                     />
                 ) : null}
             </Table>
-            <OfferTabActionBar />
+            {asset.value?.owner?.address && !isSameAddress(asset.value.owner.address, account) ? (
+                <OfferTabActionBar />
+            ) : null}
         </CollectibleTab>
     )
 }

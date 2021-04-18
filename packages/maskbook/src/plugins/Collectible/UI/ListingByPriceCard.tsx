@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => {
         label: {
             marginTop: theme.spacing(1.5),
         },
+        caption: {
+            fontSize: 11,
+        },
         button: {
             marginTop: theme.spacing(1.5),
         },
@@ -70,7 +73,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     onAmountChange={setAmount}
-                    token={token as EtherTokenDetailed | ERC20TokenDetailed}
+                    token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
                         label: endingPriceChecked ? 'Starting Price' : 'Price',
@@ -89,7 +92,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         amount={amount}
                         balance={balance.value ?? '0'}
                         onAmountChange={setAmount}
-                        token={token as EtherTokenDetailed | ERC20TokenDetailed}
+                        token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
                         onTokenChange={setToken}
                         TokenAmountPanelProps={{
                             label: 'Ending Price',
@@ -122,7 +125,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         fullWidth
                         variant="outlined"
                         label="Buyer Address"
-                        placeholder="Enther the buyer's address."
+                        placeholder="Enter the buyer's address."
                         helperText="Only the buyer is allowed to buy it."
                         InputLabelProps={{
                             shrink: true,
@@ -144,7 +147,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         label={
                             <>
                                 <Typography>Include ending price</Typography>
-                                <Typography color="textSecondary" variant="body2">
+                                <Typography className={classes.caption} color="textSecondary" variant="body2">
                                     Adding an ending price will allow this listing to expire, or for the price to be
                                     reduced until a buyer is found.
                                 </Typography>
@@ -165,7 +168,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         label={
                             <>
                                 <Typography>Schedule for a future time</Typography>
-                                <Typography color="textSecondary" variant="body2">
+                                <Typography className={classes.caption} color="textSecondary" variant="body2">
                                     You can schedule this listing to only be buyable at a future data.
                                 </Typography>
                             </>
@@ -183,7 +186,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         label={
                             <>
                                 <Typography>Privacy</Typography>
-                                <Typography color="textSecondary" variant="body2">
+                                <Typography className={classes.caption} color="textSecondary" variant="body2">
                                     You can keep your listing public, or you can specify one address that's allowed to
                                     buy it.
                                 </Typography>

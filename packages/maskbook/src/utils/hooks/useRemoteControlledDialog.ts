@@ -65,6 +65,7 @@ export function useRemoteControlledDialogEvent(event: UnboundedRegistry<{ open: 
     }, [])
     return {
         open,
+        setOpen,
         onClose,
         onOpen,
     }

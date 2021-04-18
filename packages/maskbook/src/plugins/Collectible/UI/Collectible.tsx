@@ -7,6 +7,7 @@ import {
     CardHeader,
     CardContent,
     CardActions,
+    Divider,
     Link,
     Paper,
     Tab,
@@ -59,7 +60,6 @@ const useStyles = makeStyles((theme) => {
             },
         },
         footer: {
-            borderTop: `solid 1px ${theme.palette.divider}`,
             justifyContent: 'space-between',
         },
         tabs: {
@@ -207,6 +207,7 @@ export function Collectible(props: CollectibleProps) {
                         {tabIndex === 3 ? <ListingTab /> : null}
                         {tabIndex === 4 ? <HistoryTab /> : null}
                     </Paper>
+                    <Divider />
                 </CardContent>
                 <CardActions className={classes.footer}>
                     <Typography className={classes.footnote} variant="subtitle2">

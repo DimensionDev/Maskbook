@@ -21,10 +21,11 @@ import { TableListPagination } from './Pagination'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset } from '../helpers'
-import { useAccount } from '../../../web3/hooks/useAccount'
 import { CollectibleProvider } from '../types'
 import { ListingTabActionBar } from './ListingTabActionBar'
 import { LoadingTable } from './LoadingTable'
+import { ChainState } from '../../../web3/state/useChainState'
+import { isSameAddress } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => {
             alignItems: 'center',
             justifyContent: 'center',
             height: '100%',
-            padding: theme.spacing(8, 0, 6),
+            padding: theme.spacing(8, 0),
         },
         button: {
             marginLeft: theme.spacing(1),
@@ -52,9 +53,10 @@ export function ListingTab() {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const account = useAccount()
-    const [page, setPage] = useState(0)
+    const { account } = ChainState.useContainer()
     const { token, asset, provider } = CollectibleState.useContainer()
+
+    const [page, setPage] = useState(0)
     const listings = useOrders(OrderSide.Sell, page)
 
     const isDifferenceToken = useMemo(() => {
@@ -100,6 +102,10 @@ export function ListingTab() {
         }
     }, [account, asset, token])
 
+    console.log({
+        asset: asset.value,
+    })
+
     if (listings.loading) return <LoadingTable />
     if (!listings.value || listings.error || !dataSource.length)
         return (
@@ -116,16 +122,10 @@ export function ListingTab() {
                             Retry
                         </Button>
                     </Box>
-                    <TableListPagination
-                        handlePrevClick={() => setPage((prev) => prev - 1)}
-                        handleNextClick={() => setPage((prev) => prev + 1)}
-                        prevDisabled={page === 0}
-                        nextDisabled={dataSource.length < 10}
-                        page={page}
-                        pageCount={10}
-                    />
                 </Table>
-                <ListingTabActionBar />
+                {asset.value?.owner?.address && isSameAddress(asset.value.owner.address, account) ? (
+                    <ListingTabActionBar />
+                ) : null}
             </>
         )
 
@@ -164,7 +164,9 @@ export function ListingTab() {
                     />
                 ) : null}
             </Table>
-            <ListingTabActionBar />
+            {asset.value?.owner?.address && isSameAddress(asset.value.owner.address, account) ? (
+                <ListingTabActionBar />
+            ) : null}
         </CollectibleTab>
     )
 }

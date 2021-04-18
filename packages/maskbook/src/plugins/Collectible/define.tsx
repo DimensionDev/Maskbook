@@ -1,3 +1,4 @@
+import { uniq } from 'lodash-es'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { PLUGIN_NAME, PLUGIN_IDENTIFIER } from './constants'
 import { PostInspector } from './UI/PostInspector'
@@ -6,10 +7,6 @@ import type { CollectibleJSON_Payload } from './types'
 import { getRelevantUrl, checkUrl, getAssetInfoFromURL } from './utils'
 import { getTypedMessageContent } from '../../protocols/typed-message'
 import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
-import { uniq } from 'lodash-es'
-import { MakeOfferDialog } from './UI/MakeOfferDialog'
-import { ChainState } from '../../web3/state/useChainState'
-import { PostListingDialog } from './UI/PostListingDialog'
 
 export const CollectiblesPluginDefine: PluginConfig = {
     id: PLUGIN_IDENTIFIER,
@@ -33,16 +30,6 @@ export const CollectiblesPluginDefine: PluginConfig = {
         const asset = getAssetInfoFromURL(link)
 
         return asset ? renderPostInspector(asset) : null
-    },
-    PageComponent() {
-        return (
-            <ChainState.Provider>
-                <MakeOfferDialog />
-                <PostListingDialog />
-                {/* <MakeOfferDialog />
-                <PlaceBidDialog /> */}
-            </ChainState.Provider>
-        )
     },
 }
 

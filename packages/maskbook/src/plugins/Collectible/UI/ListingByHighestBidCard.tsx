@@ -53,7 +53,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     onAmountChange={setAmount}
-                    token={token as EtherTokenDetailed | ERC20TokenDetailed}
+                    token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
                         classes: {
@@ -69,7 +69,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     onAmountChange={setAmount}
-                    token={token as EtherTokenDetailed | ERC20TokenDetailed}
+                    token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
                         classes: {
