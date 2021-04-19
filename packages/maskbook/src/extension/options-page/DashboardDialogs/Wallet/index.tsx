@@ -1,4 +1,3 @@
-import './types'
 export { DashboardWalletAddERC20TokenDialog } from './AddERC20Token'
 export { DashboardWalletAddERC721TokenDialog } from './AddERC721Token'
 export { DashboardWalletBackupDialog } from './Backup'
