@@ -127,7 +127,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         }
 
         // error: exceed the max available total supply
-        if (new BigNumber(total).isGreaterThan(new BigNumber('2e128'))) {
+        if (new BigNumber(total).isGreaterThan('2e128')) {
             setFillState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Exceed the max available total supply'),
