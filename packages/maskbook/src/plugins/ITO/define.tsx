@@ -4,7 +4,7 @@ import { ITO_Loading } from './UI/ITO'
 import { PostInspector } from './UI/PostInspector'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { formatBalance } from '../Wallet/formatter'
-import { ITO_MetaKey, ITO_PluginID, MSG_DELIMITER } from './constants'
+import { ITO_MetaKey, ITO_PluginID } from './constants'
 import type { JSON_PayloadOutMask } from './types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
@@ -68,8 +68,7 @@ export const ITO_PluginDefine: PluginConfig = {
         [
             ITO_MetaKey,
             (payload: JSON_PayloadOutMask) => {
-                const sellerName =
-                    payload.message.split(MSG_DELIMITER)[0] ?? formatEthereumAddress(payload.seller.address, 4)
+                const sellerName = payload.seller.name ?? formatEthereumAddress(payload.seller.address, 4)
                 return (
                     <LabelWrapper
                         iconSize={14}
