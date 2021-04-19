@@ -61,11 +61,12 @@ export function OfferTab() {
 
     const isDifferenceToken = useMemo(() => {
         if (provider === CollectibleProvider.OPENSEA) {
-            return offers.value?.some(
-                (item) =>
-                    (item.paymentTokenContract?.symbol !== 'WETH' && item.paymentTokenContract?.symbol !== 'ETH') ||
-                    (item.quantity && new BigNumber(item.quantity).toString() !== '1') ||
-                    (item.expirationTime && new BigNumber(item.expirationTime).isZero()),
+            return (
+                offers.value?.some(
+                    (item) =>
+                        (item.paymentTokenContract?.symbol !== 'WETH' && item.paymentTokenContract?.symbol !== 'ETH') ||
+                        (item.quantity && new BigNumber(item.quantity).toString() !== '1'),
+                ) && offers.value.filter((item) => new BigNumber(item.expirationTime ?? 0).isZero()).length === 0
             )
         } else {
             return false

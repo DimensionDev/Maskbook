@@ -10,6 +10,7 @@ import { OpenSeaEventHistoryQuery } from '../queries/OpenSea'
 import { send } from '../../../extension/background-script/EthereumServices/send'
 import { ChainId } from '../../../web3/types'
 import { resolveChainName } from '../../../web3/pipes'
+import { head } from 'lodash-es'
 
 function createExternalProvider() {
     return {
@@ -55,12 +56,19 @@ export async function getAsset(tokenAddress: string, tokenId: string) {
             },
         })
     ).json()
+
+    const endTime = head<{ closing_date: Date }>(
+        fetchResponse.orders.filter(
+            (item: { side: number; closing_extendable: boolean }) => item.side === 1 && item.closing_extendable,
+        ),
+    )?.closing_date
     return {
         ...sdkResponse,
         ...fetchResponse,
         owner: fetchResponse.owner,
         orders: sdkResponse.orders,
         assetContract: sdkResponse.assetContract,
+        endTime,
     } as OpenSeaResponse
 }
 

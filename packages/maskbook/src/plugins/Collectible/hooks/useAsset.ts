@@ -49,6 +49,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     description: response.description,
                     name: response.name,
                     animation_url: response.animation_url,
+                    endTime: response.endTime,
                 }
             case CollectibleProvider.RARIBLE:
                 const result = await PluginCollectibleRPC.getNFTItem(token.contractAddress, token.tokenId)
@@ -80,6 +81,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     name: result.properties.name,
                     animation_url: result.properties.animationUrl,
                     currentPrice: result.item.offer?.buyPriceEth,
+                    endTime: null,
                 }
             default:
                 unreachable(provider)

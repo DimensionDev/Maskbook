@@ -94,6 +94,7 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                                 </Link>
                             ) : null}
                             {order.unitPrice}
+                            {order.paymentTokenContract?.symbol}
                         </Typography>
                     </TableCell>
                     <TableCell>
@@ -127,6 +128,7 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                                 </Link>
                             ) : null}
                             {order.unitPrice}
+                            {order.paymentTokenContract?.symbol}
                         </Typography>
                     </TableCell>
                     <TableCell>

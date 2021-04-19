@@ -91,6 +91,7 @@ export function Row({ event, isDifferenceToken }: Props) {
                                 </Link>
                             )}
                             {unitPrice}
+                            {event.price?.asset?.symbol}
                         </Typography>
                     </TableCell>
                     <TableCell>

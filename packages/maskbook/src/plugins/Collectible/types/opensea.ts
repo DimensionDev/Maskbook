@@ -19,6 +19,7 @@ export interface OpenSeaResponse extends OpenSeaAsset {
     collection: OpenSeaCustomCollection
     creator?: OpenSeaCustomAccount
     traits: OpenSeaCustomTrait[]
+    endTime?: Date
 }
 
 export interface OpenSeaAssetEventAccount {

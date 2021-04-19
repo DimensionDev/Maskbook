@@ -34,6 +34,7 @@ import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/UI/trader/Footnot
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { findIndex } from 'lodash-es'
 import { resolveCollectibleProviderName } from '../pipes'
+import { format } from 'date-fns'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -109,6 +110,15 @@ const useStyles = makeStyles((theme) => {
             width: 40,
             height: 10,
         },
+        countdown: {
+            fontSize: 12,
+            borderRadius: 8,
+            display: 'block',
+            white: '100%',
+            color: theme.palette.common.white,
+            backgroundColor: '#eb5757',
+            padding: theme.spacing(0.5, 2),
+        },
     })
 })
 
@@ -139,7 +149,7 @@ export function Collectible(props: CollectibleProps) {
         <Tab className={classes.tab} key="listing" label={t('plugin_collectible_listing')} />,
         <Tab className={classes.tab} key="history" label={t('plugin_collectible_history')} />,
     ]
-
+    console.log(asset)
     return (
         <>
             <CollectibleCard classes={classes}>
@@ -242,6 +252,13 @@ export function Collectible(props: CollectibleProps) {
                     </div>
                 </CardActions>
             </CollectibleCard>
+            {asset.value?.endTime && (
+                <Box className={classes.footnote}>
+                    <Typography className={classes.countdown}>
+                        Sale ends in {format(new Date(asset.value.endTime), 'yyyy-MM-dd HH:mm:ss')}.
+                    </Typography>
+                </Box>
+            )}
         </>
     )
 }

@@ -29,7 +29,7 @@ export function useOrders(side = OrderSide.Buy, pageNum = 1) {
                     const unitPrice = new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber()
                     return {
                         quantity: new BigNumber(order.quantity).toNumber(),
-                        expirationTIme: order.expirationTime,
+                        expirationTime: order.expirationTime,
                         paymentTokenContract: order.paymentTokenContract,
                         hash: order.hash,
                         unitPrice,
