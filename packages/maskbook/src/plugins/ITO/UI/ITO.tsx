@@ -565,7 +565,7 @@ export function ITO(props: ITO_Props) {
             </Card>
 
             <Box className={classes.actionFooter}>
-                {!isRegionAllow && !loadingRegion ? (
+                {loadingRegion && isRegionRestrict ? null : !isRegionAllow ? (
                     <ActionButton
                         disabled
                         onClick={() => undefined}
