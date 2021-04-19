@@ -4,13 +4,14 @@ import { ITO_Loading } from './UI/ITO'
 import { PostInspector } from './UI/PostInspector'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { formatBalance } from '../Wallet/formatter'
-import { ITO_MetaKey, ITO_PluginID } from './constants'
+import { ITO_MetaKey, ITO_PluginID, MSG_DELIMITER } from './constants'
 import type { JSON_PayloadOutMask } from './types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import { CompositionDialog } from './UI/CompositionDialog'
 import { ItoLabelIcon } from './assets/ItoLabelIcon'
+import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
 
 interface LabelWrapperProps {
     iconSize: number
@@ -67,13 +68,15 @@ export const ITO_PluginDefine: PluginConfig = {
         [
             ITO_MetaKey,
             (payload: JSON_PayloadOutMask) => {
+                const sellerName =
+                    payload.message.split(MSG_DELIMITER)[0] ?? formatEthereumAddress(payload.seller.address, 4)
                 return (
                     <LabelWrapper
                         iconSize={14}
                         labelText={`A ITO with
                         ${formatBalance(payload.total, payload.token?.decimals)} $${
                             payload.token?.symbol ?? payload.token?.name ?? 'Token'
-                        } from ${payload.seller.name}`}
+                        } from ${sellerName}`}
                     />
                 )
             },

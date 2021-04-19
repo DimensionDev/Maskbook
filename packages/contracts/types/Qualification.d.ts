@@ -18,17 +18,23 @@ export class Qualification extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
     clone(): Qualification
     methods: {
-        ifQualified(testee: string): TransactionObject<boolean>
+        get_creation_time(): TransactionObject<string>
 
-        logQualified(testee: string): TransactionObject<boolean>
+        get_name(): TransactionObject<string>
+
+        get_start_time(): TransactionObject<string>
+
+        ifQualified(arg0: string): TransactionObject<boolean>
+
+        logQualified(account: string): TransactionObject<boolean>
 
         supportsInterface(interfaceId: string | number[]): TransactionObject<boolean>
     }
     events: {
         Qualification: ContractEvent<{
-            testee: string
+            account: string
             qualified: boolean
-            number: string
+            blockNumber: string
             timestamp: string
             0: string
             1: boolean
