@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import type { Tx } from '@dimensiondev/contracts/types/types'
@@ -88,7 +87,7 @@ export function useClaimCallback(packet?: AirdropPacket) {
                 reject(error)
             }
             const promiEvent = AirdropContract.methods.claim(...claimParams).send({
-                gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
             })
 

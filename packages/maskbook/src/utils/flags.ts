@@ -43,6 +43,7 @@ export const Flags = {
     mask_ito_enabled: betaOrInsiderOnly,
     airdrop_enabled: webOnly,
     airdrop_composition_dialog_enabled: false,
+    snapshot_enabled: webOnly,
     metamask_support_enabled: webOnly,
     toolbar_enabled: webOnly,
     toolbox_enabled: webOnly,

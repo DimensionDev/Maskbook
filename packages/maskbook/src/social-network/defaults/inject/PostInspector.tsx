@@ -19,14 +19,7 @@ export function injectPostInspectorDefault<T extends string>(
         const { onDecrypted, zipPost } = props
         const classes = useCustomStyles()
         const additionalProps = additionalPropsToPostInspector(classes)
-        return (
-            <PostInspector
-                onDecrypted={onDecrypted}
-                needZip={zipPost}
-                AddToKeyStoreProps={{ failedComponent: null }}
-                {...additionalProps}
-            />
-        )
+        return <PostInspector onDecrypted={onDecrypted} needZip={zipPost} {...additionalProps} />
     })
 
     const { zipPost } = config

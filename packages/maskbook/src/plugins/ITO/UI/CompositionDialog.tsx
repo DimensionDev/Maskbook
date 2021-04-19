@@ -20,7 +20,6 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { EthereumMessages } from '../../Ethereum/messages'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { formatBalance } from '../../Wallet/formatter'
-import BigNumber from 'bignumber.js'
 import { useConstant } from '../../../web3/hooks/useConstant'
 
 export enum ITOCreateFormPageStep {
@@ -168,11 +167,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             open: true,
             state: fillState,
             summary: t('plugin_ito_transaction_dialog_summary', {
-                amount: formatBalance(
-                    new BigNumber(poolSettings?.total),
-                    poolSettings?.token.decimals ?? 0,
-                    poolSettings?.token.decimals ?? 0,
-                ),
+                amount: formatBalance(poolSettings?.total, poolSettings?.token.decimals),
                 symbol: poolSettings.token.symbol,
             }),
         })

@@ -127,7 +127,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         }
 
         // error: exceed the max available total supply
-        if (new BigNumber(total).isGreaterThan(new BigNumber('2e128'))) {
+        if (new BigNumber(total).isGreaterThan('2e128')) {
             setFillState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Exceed the max available total supply'),
@@ -227,7 +227,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         // step 2: blocking
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = ITO_Contract.methods.fill_pool(...params).send({
-                gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {

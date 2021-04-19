@@ -2,7 +2,6 @@ import { useCallback, useEffect } from 'react'
 import { makeStyles, createStyles, Card, Typography, Box } from '@material-ui/core'
 import { Skeleton } from '@material-ui/core'
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
 import type { RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -213,11 +212,9 @@ export function RedPacket(props: RedPacketProps) {
             summary: canClaim
                 ? `Claiming red packet from ${payload.sender.name}`
                 : canRefund
-                ? `Refunding red packet for ${formatBalance(
-                      new BigNumber(availability.balance),
-                      tokenDetailed.decimals ?? 0,
-                      tokenDetailed.decimals ?? 0,
-                  )} ${tokenDetailed.symbol}`
+                ? `Refunding red packet for ${formatBalance(availability.balance, tokenDetailed.decimals)} ${
+                      tokenDetailed.symbol
+                  }`
                 : '',
         })
     }, [claimState, refundState /* update tx dialog only if state changed */])
@@ -281,11 +278,7 @@ export function RedPacket(props: RedPacketProps) {
                         {(() => {
                             if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
                                 return t('plugin_red_packet_description_refund', {
-                                    balance: formatBalance(
-                                        new BigNumber(availability.balance),
-                                        tokenDetailed.decimals ?? 0,
-                                        tokenDetailed.decimals ?? 0,
-                                    ),
+                                    balance: formatBalance(availability.balance, tokenDetailed.decimals),
                                     symbol: tokenDetailed.symbol,
                                 })
                             if (listOfStatus.includes(RedPacketStatus.claimed))
@@ -298,11 +291,7 @@ export function RedPacket(props: RedPacketProps) {
                                 return t('plugin_red_packet_description_empty')
                             if (!payload.password) return t('plugin_red_packet_description_broken')
                             return t('plugin_red_packet_description_failover', {
-                                total: formatBalance(
-                                    new BigNumber(payload.total),
-                                    tokenDetailed.decimals ?? 0,
-                                    tokenDetailed.decimals ?? 0,
-                                ),
+                                total: formatBalance(payload.total, tokenDetailed.decimals),
                                 symbol: tokenDetailed.symbol,
                                 name: payload.sender.name ?? '-',
                                 shares: payload.shares ?? '-',

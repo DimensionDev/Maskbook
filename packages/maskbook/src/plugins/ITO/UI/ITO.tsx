@@ -336,17 +336,13 @@ export function ITO(props: ITO_Props) {
         if (destructState.type === TransactionStateType.UNKNOWN) return
         let summary = t('plugin_ito_withdraw')
         if (!noRemain) {
-            summary += ' ' + formatBalance(total_remaining, token.decimals ?? 0) + ' ' + token.symbol
+            summary += ' ' + formatBalance(total_remaining, token.decimals) + ' ' + token.symbol
         }
         availability?.exchange_addrs.forEach((addr, i) => {
             const token = exchange_tokens.find((t) => t.address.toLowerCase() === addr.toLowerCase())
             const comma = noRemain && i === 0 ? ' ' : ', '
             if (token) {
-                summary +=
-                    comma +
-                    formatBalance(new BigNumber(availability?.exchanged_tokens[i]), token.decimals ?? 0) +
-                    ' ' +
-                    token.symbol
+                summary += comma + formatBalance(availability?.exchanged_tokens[i], token.decimals) + ' ' + token.symbol
             }
         })
         setTransactionDialogOpen({
@@ -377,7 +373,7 @@ export function ITO(props: ITO_Props) {
         }
 
         const _text = t('plugin_ito_your_claimed_amount', {
-            amount: formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals),
+            amount: formatBalance(availability?.swapped ?? 0, token.decimals),
             symbol: token.symbol,
         })
 
@@ -435,7 +431,7 @@ export function ITO(props: ITO_Props) {
             <>
                 <Typography variant="body1">
                     {t('plugin_ito_allocation_per_wallet', {
-                        limit: `: ${formatBalance(new BigNumber(limit), token.decimals)}`,
+                        limit: `: ${formatBalance(limit, token.decimals)}`,
                         token: token.symbol,
                     })}
                 </Typography>

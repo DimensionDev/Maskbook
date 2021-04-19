@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import type { Tx } from '@dimensiondev/contracts/types/types'
 import { addGasMargin } from '../../../web3/helpers'
@@ -62,7 +61,7 @@ export function useDestructCallback() {
                     reject(error)
                 }
                 const promiEvent = ITO_Contract.methods.destruct(id).send({
-                    gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                    gas: addGasMargin(estimatedGas).toFixed(),
                     ...config,
                 })
 

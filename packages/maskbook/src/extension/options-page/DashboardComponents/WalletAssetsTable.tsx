@@ -125,13 +125,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                         justifyContent: 'flex-end',
                     }}>
                     <Typography className={classes.name} color="textPrimary" component="span">
-                        {new BigNumber(
-                            formatBalance(
-                                new BigNumber(asset.balance),
-                                asset.token.decimals ?? 0,
-                                asset.token.decimals ?? 0,
-                            ),
-                        ).toFixed(
+                        {new BigNumber(formatBalance(asset.balance, asset.token.decimals)).toFixed(
                             stableTokens.some((y: ERC20TokenDetailed) => isSameAddress(y.address, asset.token.address))
                                 ? 2
                                 : 6,

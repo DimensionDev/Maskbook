@@ -90,7 +90,16 @@ function config(opts: {
                 lodash: 'lodash-es',
                 // Strange...
                 '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
+                // It's a node impl for xhr which is unnecessary
                 'xhr2-cookies': require.resolve('./miscs/package-overrides/xhr2-cookies'),
+                // Monorepo building speed optimization
+                // Those packages are also installed as dependencies so they appears in node_modules
+                // By aliasing them to the original position, we can speed up the compile (cause no need to wait for tsc)
+                '@dimensiondev/dashboard': require.resolve('../dashboard/src/entry.tsx'),
+                '@dimensiondev/icons': require.resolve('../icons/index.ts'),
+                '@dimensiondev/maskbook-shared': require.resolve('../shared/src/index.ts'),
+                '@dimensiondev/maskbook-theme': require.resolve('../theme/src/theme.ts'),
+                '@dimensiondev/shared': require.resolve('../shared/src/index.ts'),
             },
             // Polyfill those Node built-ins
             fallback: {
@@ -112,9 +121,10 @@ function config(opts: {
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
                 // TypeScript
                 {
-                    test: /\.(ts|tsx)$/,
+                    test: /\.tsx?$/,
                     parser: { worker: ['OnDemandWorker', '...'] },
-                    include: src('./src'),
+                    // Compile all ts files in the workspace
+                    include: src('../'),
                     loader: require.resolve('ts-loader'),
                     options: {
                         transpileOnly: true,
@@ -211,8 +221,7 @@ function config(opts: {
                 // We're doing CORS request for HMR
                 'Access-Control-Allow-Origin': '*',
             },
-            // If the content script runs in https, webpack will connect https://localhost:HMR_PORT
-            https: true,
+            transportMode: 'ws',
         } as DevServerConfiguration,
     }
     if (isProfile) {
@@ -297,9 +306,9 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
         injectedScript.optimization!.splitChunks = false
     }
     if (mode === 'production') return [main, isManifestV3 && manifestV3, injectedScript].filter(nonNullable)
-    // TODO: multiple config seems doesn't work well therefore we start the watch mode webpack compiler manually.
+    // @ts-ignore
     delete injectedScript.devServer
-    // TODO: ignore the message currently
+    // TODO: multiple config seems doesn't work well therefore we start the watch mode webpack compiler manually, ignore the build message currently
     webpack(injectedScript, () => {}).watch({}, () => {})
     return main
 

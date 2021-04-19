@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -65,7 +64,7 @@ export function useClaimCallback(from: string, id?: string, password?: string) {
             }
             redPacketContract.methods.claim(...params).send(
                 {
-                    gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                    gas: addGasMargin(estimatedGas).toFixed(),
                     ...config,
                 },
                 async (error, hash) => {

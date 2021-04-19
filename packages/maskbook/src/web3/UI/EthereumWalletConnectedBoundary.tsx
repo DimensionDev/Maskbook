@@ -1,4 +1,5 @@
 import { createStyles, Grid, makeStyles } from '@material-ui/core'
+import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
@@ -12,6 +13,7 @@ import { useAccount } from '../hooks/useAccount'
 import { useChainIdValid } from '../hooks/useChainState'
 import { useEtherTokenBalance } from '../hooks/useEtherTokenBalance'
 import { ProviderType } from '../types'
+import { useStylesExtends } from '../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -21,15 +23,16 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface EthereumWalletConnectedBoundaryProps {
+export interface EthereumWalletConnectedBoundaryProps extends withClasses<'connectWallet' | 'unlockMetaMask'> {
     children?: React.ReactNode
+    offChain?: boolean
 }
 
 export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
-    const { children = null } = props
+    const { children = null, offChain = false } = props
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
     const chainIdValid = useChainIdValid()
@@ -57,7 +60,12 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     if (!account)
         return (
             <Grid container>
-                <ActionButton className={classes.button} fullWidth variant="contained" size="large" onClick={onConnect}>
+                <ActionButton
+                    className={classNames(classes.button, classes.connectWallet)}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    onClick={onConnect}>
                     {t('plugin_wallet_connect_a_wallet')}
                 </ActionButton>
             </Grid>
@@ -67,7 +75,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
         return (
             <Grid container>
                 <ActionButton
-                    className={classes.button}
+                    className={classNames(classes.button, classes.unlockMetaMask)}
                     fullWidth
                     variant="contained"
                     size="large"
@@ -77,7 +85,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    if (new BigNumber(etherBalance).isZero())
+    if (new BigNumber(etherBalance).isZero() && !offChain)
         return (
             <Grid container>
                 <ActionButton
