@@ -107,6 +107,10 @@
             "type": "string",
             "title": "qualification_address"
         },
+        "regions": {
+            "type": "string",
+            "title": "regions"
+        },
         "creation_time": {
             "type": "number",
             "title": "creation_time"

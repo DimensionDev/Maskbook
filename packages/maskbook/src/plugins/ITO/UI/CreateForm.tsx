@@ -27,6 +27,8 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { AdvanceSetting } from './AdvanceSetting'
 import type { AdvanceSettingData } from './AdvanceSetting'
+import { useRegionSelect, regionCodes, encodeRegionCode } from '../hooks/useRegion'
+import { RegionSelect } from './RegionSelect'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -81,6 +83,11 @@ const useStyles = makeStyles((theme) =>
         qualStartTime: {
             padding: '0 16px',
             opacity: 0.8,
+        },
+        field: {
+            flex: 1,
+            padding: theme.spacing(1),
+            marginTop: theme.spacing(1),
         },
     }),
 )
@@ -167,6 +174,18 @@ export function CreateForm(props: CreateFormProps) {
     const [qualificationAddress, setQualificationAddress] = useState('')
     const { value: qualification, loading: loadingQualification } = useQualificationVerify(qualificationAddress)
 
+    // advance settings
+    const [advanceSettingData, setAdvanceSettingData] = useState<AdvanceSettingData>({})
+
+    // restrict regions
+    const [regions, setRegions] = useRegionSelect()
+
+    useEffect(() => {
+        if (!advanceSettingData.contract) setQualificationAddress('')
+        if (!advanceSettingData.delayUnlocking) setUnlockTime(new Date())
+        if (!advanceSettingData.IPRegion) setRegions(regionCodes)
+    }, [advanceSettingData])
+
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
@@ -181,10 +200,13 @@ export function CreateForm(props: CreateFormProps) {
             exchangeAmounts: rest.map((item) => formatAmount(item.amount || '0', item?.token?.decimals)),
             exchangeTokens: rest.map((item) => item.token!),
             startTime,
-            qualificationAddress: qualification?.isQualification ? qualificationAddress : DEFAULT_QUALIFICATION_ADDRESS,
+            qualificationAddress:
+                qualification?.isQualification && advanceSettingData.contract
+                    ? qualificationAddress
+                    : DEFAULT_QUALIFICATION_ADDRESS,
             endTime,
-            unlockTime: unlockTime > endTime ? unlockTime : undefined,
-            qualificationStartTime: qualification?.startTime ? Number(qualification?.startTime) * 1000 : 0,
+            unlockTime: unlockTime > endTime && advanceSettingData.delayUnlocking ? unlockTime : undefined,
+            regions: encodeRegionCode(regions),
         })
     }, [
         senderName,
@@ -197,6 +219,7 @@ export function CreateForm(props: CreateFormProps) {
         endTime,
         unlockTime,
         qualification,
+        regions,
         qualificationAddress,
         account,
         onChangePoolSettings,
@@ -223,7 +246,7 @@ export function CreateForm(props: CreateFormProps) {
 
         if (startTime >= endTime) return t('plugin_ito_error_exchange_time')
 
-        if (endTime >= unlockTime) return t('plugin_ito_error_unlock_time')
+        if (endTime >= unlockTime && advanceSettingData.delayUnlocking) return t('plugin_ito_error_unlock_time')
 
         if (qualification && qualification.startTime) {
             if (new Date(Number(qualification.startTime) * 1000) >= endTime)
@@ -234,6 +257,8 @@ export function CreateForm(props: CreateFormProps) {
     }, [
         endTime,
         unlockTime,
+        advanceSettingData,
+        qualification,
         startTime,
         t,
         tokenAndAmount?.amount,
@@ -309,10 +334,6 @@ export function CreateForm(props: CreateFormProps) {
         </LocalizationProvider>
     )
 
-    const handleAdvanceSettingChange = (data: AdvanceSettingData) => {
-        console.log(data)
-    }
-
     return (
         <>
             <Box className={classes.line} style={{ display: 'block' }}>
@@ -358,7 +379,29 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.date}>
                 {StartTime} {EndTime}
             </Box>
-            {account ? (
+            <Box className={classes.line}>
+                <AdvanceSetting advanceSettingData={advanceSettingData} setAdvanceSettingData={setAdvanceSettingData} />
+            </Box>
+            {advanceSettingData.IPRegion ? (
+                <Box className={classes.line}>
+                    <TextField
+                        className={classes.input}
+                        label={t('plugin_ito_region_label')}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            inputComponent: RegionSelect,
+                            inputProps: {
+                                value: regions,
+                                onRegionChange: setRegions,
+                            },
+                        }}
+                    />
+                </Box>
+            ) : null}
+            {advanceSettingData.delayUnlocking ? <Box className={classes.date}>{UnlockTime}</Box> : null}
+            {account && advanceSettingData.contract ? (
                 <Box className={classNames(classes.line, classes.column)}>
                     <TextField
                         className={classes.input}
@@ -393,10 +436,6 @@ export function CreateForm(props: CreateFormProps) {
                     ) : null}
                 </Box>
             ) : null}
-            <Box className={classes.date}>{UnlockTime}</Box>
-            <Box className={classes.line}>
-                <AdvanceSetting onSettingChange={handleAdvanceSettingChange} />
-            </Box>
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary

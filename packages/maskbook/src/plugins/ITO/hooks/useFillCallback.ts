@@ -20,12 +20,12 @@ export interface PoolSettings {
     startTime: Date
     endTime: Date
     unlockTime?: Date
+    regions: string
     title: string
     name: string
     limit: string
     total: string
     qualificationAddress: string
-    qualificationStartTime: number
     exchangeAmounts: string[]
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     token?: ERC20TokenDetailed

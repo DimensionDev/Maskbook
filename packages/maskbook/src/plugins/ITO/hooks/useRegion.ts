@@ -261,7 +261,7 @@ enum RegionEnum {
 export type RegionCode = keyof typeof RegionEnum
 
 const regionNameMap = new Map(regions.map((r) => [r.code, r.name])) as Map<RegionCode, string>
-const regionCodes = regions.map((r) => r.code as RegionCode)
+export const regionCodes = regions.map((r) => r.code as RegionCode)
 
 type Region = {
     code: RegionCode
