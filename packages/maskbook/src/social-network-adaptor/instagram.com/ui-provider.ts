@@ -8,7 +8,6 @@ import { dispatchCustomEvents } from '../../utils/utils'
 import { injectPostInspectorInstagram } from './injection/post-inspector'
 import { newPostCompositionInstagram } from './injection/newPostComposition'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
-const origins = ['https://www.instagram.com/*', 'https://m.instagram.com/*', 'https://instagram.com/*']
 const define: SocialNetworkUI.Definition = {
     ...instagramShared,
     ...instagramBase,
@@ -45,10 +44,6 @@ const define: SocialNetworkUI.Definition = {
             supportedInputTypes: { text: true, image: true },
             supportedOutputTypes: { text: false, image: true },
         },
-    },
-    permission: {
-        request: () => browser.permissions.request({ origins }),
-        has: () => browser.permissions.contains({ origins }),
     },
 }
 export default define

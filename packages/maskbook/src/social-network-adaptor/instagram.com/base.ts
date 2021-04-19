@@ -1,8 +1,10 @@
 import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
 
 const id = 'instagram.com'
+const origins = ['https://www.instagram.com/*', 'https://m.instagram.com/*', 'https://instagram.com/*']
 export const instagramBase: SocialNetwork.Base = {
     networkIdentifier: id,
+    declarativePermissions: { origins },
     shouldActivate(location) {
         return location.host.endsWith(id)
     },

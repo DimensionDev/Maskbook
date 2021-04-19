@@ -4,7 +4,7 @@ import '../../setup.ui'
 import { useCallback, memo } from 'react'
 import { noop } from 'lodash-es'
 import { ThemeProvider, makeStyles, Theme, withStyles, StylesProvider, jssPreset } from '@material-ui/core/styles'
-import { Button, Paper, Divider, Typography, Box } from '@material-ui/core'
+import { Button, Paper, Typography, Box } from '@material-ui/core'
 import { useMaskbookTheme } from '../../utils/theme'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -18,6 +18,7 @@ import { MaskbookUIRoot } from '../../UIRoot'
 import { create } from 'jss'
 import { useMyIdentities } from '../../components/DataSource/useActivatedUI'
 import { Flags } from '../../utils/flags'
+import { hasSNSAdaptorPermission, requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
 
 const GlobalCss = withStyles({
     '@global': {
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         },
     },
     header: {
-        margin: theme.spacing(2, 0),
+        margin: theme.spacing(2, 0, 1),
         '&:first-child': {
             marginTop: 0,
         },
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         fontSize: 16,
         fontWeight: 500,
     },
+    description: {},
     divider: {
         marginBottom: theme.spacing(2),
     },
@@ -78,7 +80,9 @@ function PopupUI() {
     const ui = activatedSocialNetworkUI
     const identities = useMyIdentities()
 
-    const { value: hasPermission = true, retry: checkPermission } = useAsyncRetry(ui.permission.has)
+    const { value: hasPermission = true, retry: checkPermission } = useAsyncRetry(
+        hasSNSAdaptorPermission.bind(null, ui),
+    )
 
     const onEnter = useCallback((event: React.MouseEvent) => {
         if (event.shiftKey) {
@@ -117,19 +121,35 @@ function PopupUI() {
         <Paper className={classes.container} elevation={0}>
             <Trademark />
             {hasPermission === false ? (
-                <Alert severity="error" variant="outlined" action={null}>
-                    <Typography>{t('popup_missing_permission')}</Typography>
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        size="small"
-                        onClick={() => {
-                            if (Flags.no_web_extension_dynamic_permission_request) return
-                            ui.permission.request().then(checkPermission)
+                <>
+                    <Box
+                        className={classes.header}
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
                         }}>
-                        {t('popup_request_permission')}
-                    </Button>
-                </Alert>
+                        <Typography className={classes.title}>{t('popup_notifications')}</Typography>
+                    </Box>
+                    <Typography className={classes.description} color="textSecondary" variant="body2">
+                        {t('popup_notifications_description', {
+                            sns: ui.networkIdentifier,
+                        })}
+                    </Typography>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                        }}>
+                        <Button
+                            className={classes.button}
+                            variant="text"
+                            onClick={() => {
+                                if (Flags.no_web_extension_dynamic_permission_request) return
+                                requestSNSAdaptorPermission(ui).then(checkPermission)
+                            }}>
+                            {t('popup_request_permission')}
+                        </Button>
+                    </Box>
+                </>
             ) : null}
             {ui.networkIdentifier === 'localhost' || identities.length === 0 ? null : (
                 <>
@@ -143,9 +163,6 @@ function PopupUI() {
                     </Box>
                     <ChooseIdentity identities={identities} />
                 </>
-            )}
-            {ui.networkIdentifier === 'localhost' || identities.length === 0 ? null : (
-                <Divider className={classes.divider} />
             )}
             <Box
                 sx={{
