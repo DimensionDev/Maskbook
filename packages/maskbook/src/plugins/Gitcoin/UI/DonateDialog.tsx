@@ -141,11 +141,9 @@ export function DonateDialog(props: DonateDialogProps) {
         .getShareLinkURL?.(
             token
                 ? [
-                      `I just donated ${title} with ${formatBalance(
-                          amount,
-                          token.decimals ?? 0,
-                          token.decimals ?? 0,
-                      )} ${cashTag}${token.symbol}. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
+                      `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${
+                          token.symbol
+                      }. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
                       '#mask_io',
                       postLink,
                   ].join('\n')
@@ -171,9 +169,7 @@ export function DonateDialog(props: DonateDialogProps) {
             open: true,
             shareLink,
             state: donateState,
-            summary: `Donating ${formatBalance(amount, token.decimals ?? 0, token.decimals ?? 0)} ${
-                token.symbol
-            } for ${title}.`,
+            summary: `Donating ${formatBalance(amount, token.decimals)} ${token.symbol} for ${title}.`,
         })
     }, [donateState /* update tx dialog only if state changed */])
     //#endregion

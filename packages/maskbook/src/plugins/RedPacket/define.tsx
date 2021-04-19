@@ -46,11 +46,9 @@ export const RedPacketPluginDefine: PluginConfig = {
         [
             RedPacketMetaKey,
             (payload: RedPacketJSONPayload) => {
-                return `A Red Packet with ${formatBalance(
-                    payload.total,
-                    payload.token?.decimals ?? 0,
-                    payload.token?.decimals ?? 0,
-                )} $${payload.token?.name || 'ETH'} from ${payload.sender.name}`
+                return `A Red Packet with ${formatBalance(payload.total, payload.token?.decimals)} $${
+                    payload.token?.name || 'ETH'
+                } from ${payload.sender.name}`
             },
         ],
     ]),

@@ -150,7 +150,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 setClaimToken(ev.token)
                 setTokenAmount(initAmount)
                 setClaimAmount(initAmount.multipliedBy(ratio))
-                setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals ?? 0))
+                setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals))
             },
             [
                 id,
@@ -230,7 +230,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
         setTransactionDialogOpen({
             open: true,
             state: claimState,
-            summary: `${t('plugin_trader_swap')} ${formatBalance(tokenAmount, token.decimals ?? 0)} ${token.symbol}`,
+            summary: `${t('plugin_trader_swap')} ${formatBalance(tokenAmount, token.decimals)} ${token.symbol}`,
         })
     }, [claimState])
     //#endregion
@@ -261,12 +261,12 @@ export function ClaimDialog(props: ClaimDialogProps) {
                     }}
                 />
                 <Typography variant="body1" className={classes.swapLimitText}>
-                    {formatBalance(maxSwapAmount, token.decimals ?? 0)} {token.symbol}
+                    {formatBalance(maxSwapAmount, token.decimals)} {token.symbol}
                 </Typography>
             </section>
             <Typography className={classes.exchangeText} variant="body1" color="textSecondary">
                 {t('plugin_ito_dialog_claim_swap_exchange')}{' '}
-                <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals ?? 0)}</span>{' '}
+                <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals)}</span>{' '}
                 {token.symbol}
                 {'.'}
             </Typography>

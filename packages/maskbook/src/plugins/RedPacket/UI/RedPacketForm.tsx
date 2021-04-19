@@ -221,11 +221,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         setTransactionDialogOpen({
             open: true,
             state: createState,
-            summary: `Creating red packet with ${formatBalance(
-                totalAmount,
-                token.decimals ?? 0,
-                token.decimals ?? 0,
-            )} ${token.symbol}`,
+            summary: `Creating red packet with ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`,
         })
     }, [createState /* update tx dialog only if state changed */])
     //#endregion

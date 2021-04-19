@@ -195,7 +195,7 @@ export function PoolInList(props: PoolInListProps) {
                             <Typography variant="body2" color="textPrimary" component="span">
                                 {formatBalance(
                                     exchange_out_volumes.reduce((acculator, x) => acculator.plus(x), new BigNumber(0)),
-                                    pool.token.decimals ?? 0,
+                                    pool.token.decimals,
                                 )}
                             </Typography>{' '}
                             {pool.token.symbol}
@@ -203,7 +203,7 @@ export function PoolInList(props: PoolInListProps) {
                         <Typography variant="body2" color="textSecondary" component="span">
                             {t('plugin_ito_list_total')}
                             <Typography variant="body2" color="textPrimary" component="span">
-                                {formatBalance(pool.total, pool.token.decimals ?? 0)}
+                                {formatBalance(pool.total, pool.token.decimals)}
                             </Typography>{' '}
                             {pool.token.symbol}
                         </Typography>
