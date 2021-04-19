@@ -32,6 +32,7 @@ import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
+import { useIPRegion, decodeRegionCode, checkRegionRestrict } from '../hooks/useRegion'
 
 export interface IconProps {
     size?: number
@@ -183,10 +184,7 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 export interface ITO_Props {
     pid: string
     password: string
-    seller: {
-        name: string
-        address: string
-    }
+    regions: string
 }
 
 export function ITO(props: ITO_Props) {
@@ -202,7 +200,7 @@ export function ITO(props: ITO_Props) {
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid, password } = props
+    const { pid, password, regions } = props
 
     const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
 
@@ -233,6 +231,11 @@ export function ITO(props: ITO_Props) {
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(payload_total_remaining)
     const sold = total.minus(total_remaining)
+
+    const { value: currentRegion, loading: loadingRegion } = useIPRegion()
+    const allowRegions = decodeRegionCode(regions)
+    const isRegionRestrict = checkRegionRestrict(allowRegions)
+    const isRegionAllow = !isRegionRestrict || (!loadingRegion && allowRegions.includes(currentRegion!.code))
 
     //#region token detailed
     const {
@@ -555,7 +558,16 @@ export function ITO(props: ITO_Props) {
             </Card>
 
             <Box className={classes.actionFooter}>
-                {total_remaining.isZero() && !isBuyer && !canWithdraw ? (
+                {!isRegionAllow && !loadingRegion ? (
+                    <ActionButton
+                        disabled
+                        onClick={() => undefined}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
+                        {t('plugin_ito_region_ban')}
+                    </ActionButton>
+                ) : total_remaining.isZero() && !isBuyer && !canWithdraw ? (
                     <ActionButton
                         disabled
                         onClick={() => undefined}

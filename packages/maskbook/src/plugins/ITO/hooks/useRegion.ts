@@ -330,3 +330,7 @@ export function decodeRegionCode(str: string): RegionCode[] {
     }
     return codes
 }
+
+export function checkRegionRestrict(regions: RegionCode[]): boolean {
+    return regions.length !== regionCodes.length
+}
