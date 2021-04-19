@@ -91,35 +91,10 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
         },
     }))
 
-    const handleOpenChange = (toOpen: boolean, event: React.SyntheticEvent) => {
-        if (toOpen && anchorEl) setMinPopoverWidth(anchorEl.clientWidth)
-        setOpen(toOpen)
-    }
-
-    const handleMouseDown = (event: React.MouseEvent) => {
-        // Ignore everything but left-click
-        if (event.button !== 0) {
-            return
-        }
-        // Hijack the default focus behavior.
-        event.preventDefault()
-        handleOpenChange(true, event)
-    }
-
-    const handlePopoverClose = (event: React.SyntheticEvent) => {
-        handleOpenChange(false, event)
-    }
-
-    const handleToggle = (code: RegionCode) => () => {
-        const isSelected = valueMap.get(code)
-        isSelected ? valueMap.delete(code) : valueMap.set(code, true)
-        onRegionChange(Array.from(valueMap.keys()))
-    }
-
     const [filterText, setFilterText] = React.useState('')
     const [filteredRegions, setFilteredRegions] = useState(allRegions)
 
-    const [, cancel] = useDebounce(
+    const [, cancelFilterDebounce] = useDebounce(
         () => {
             const reg = new RegExp(filterText, 'i')
             setFilteredRegions(allRegions.filter((region) => reg.test(region.name) || reg.test(region.code)))
@@ -139,6 +114,35 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
             isAllFiltered ? valueMap.delete(r.code) : valueMap.set(r.code, true)
         })
         onRegionChange(Array.from(valueMap.keys()))
+    }
+
+    const handleOpenChange = (toOpen: boolean, event: React.SyntheticEvent) => {
+        if (toOpen && anchorEl) setMinPopoverWidth(anchorEl.clientWidth)
+        if (!toOpen) {
+            setFilterText('')
+            cancelFilterDebounce()
+        }
+        setOpen(toOpen)
+    }
+
+    const handleToggle = (code: RegionCode) => () => {
+        const isSelected = valueMap.get(code)
+        isSelected ? valueMap.delete(code) : valueMap.set(code, true)
+        onRegionChange(Array.from(valueMap.keys()))
+    }
+
+    const handleMouseDown = (event: React.MouseEvent) => {
+        // Ignore everything but left-click
+        if (event.button !== 0) {
+            return
+        }
+        // Hijack the default focus behavior.
+        event.preventDefault()
+        handleOpenChange(true, event)
+    }
+
+    const handlePopoverClose = (event: React.SyntheticEvent) => {
+        handleOpenChange(false, event)
     }
 
     return (
