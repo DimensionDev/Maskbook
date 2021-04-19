@@ -141,11 +141,9 @@ export function DonateDialog(props: DonateDialogProps) {
         .getShareLinkURL?.(
             token
                 ? [
-                      `I just donated ${title} with ${formatBalance(
-                          amount,
-                          token.decimals ?? 0,
-                          token.decimals ?? 0,
-                      )} ${cashTag}${token.symbol}. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
+                      `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${
+                          token.symbol
+                      }. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
                       '#mask_io',
                       postLink,
                   ].join('\n')
@@ -171,9 +169,7 @@ export function DonateDialog(props: DonateDialogProps) {
             open: true,
             shareLink,
             state: donateState,
-            summary: `Donating ${formatBalance(amount, token.decimals ?? 0, token.decimals ?? 0)} ${
-                token.symbol
-            } for ${title}.`,
+            summary: `Donating ${formatBalance(amount, token.decimals)} ${token.symbol} for ${title}.`,
         })
     }, [donateState /* update tx dialog only if state changed */])
     //#endregion
@@ -186,7 +182,7 @@ export function DonateDialog(props: DonateDialogProps) {
         if (Flags.wallet_network_strict_mode_enabled && chainId !== ChainId.Mainnet)
             return t('plugin_wallet_wrong_network')
         if (!amount || amount.isZero()) return t('plugin_gitcoin_enter_an_amount')
-        if (amount.isGreaterThan(new BigNumber(tokenBalance)))
+        if (amount.isGreaterThan(tokenBalance))
             return t('plugin_gitcoin_insufficient_balance', {
                 symbol: token.symbol,
             })

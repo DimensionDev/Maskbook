@@ -95,3 +95,15 @@ export function resolveTokenLinkOnEtherscan(token: EtherToken | ERC20Token | ERC
 export function resolveAddressOnEtherscan(chainId: ChainId, address: string) {
     return `${resolveLinkOnEtherscan(chainId)}/address/${address}`
 }
+
+export function resolveAddressLinkOnEtherscan(chainId: ChainId, address: string): string {
+    return `${resolveLinkOnEtherscan(chainId)}/address/${address}`
+}
+
+export function resolveBlockLinkOnEtherscan(chainId: ChainId, block: string): string {
+    return `${resolveLinkOnEtherscan(chainId)}/block/${block}`
+}
+
+export function resolveIPFSLink(ipfs: string): string {
+    return `https://ipfs.fleek.co/ipfs/${ipfs}`
+}

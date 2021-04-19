@@ -975,7 +975,7 @@ function TransferTab(props: TransferTabProps) {
         setTransactionDialogOpen({
             open: true,
             state: transferState,
-            summary: `Transfer ${formatBalance(transferAmount, token.decimals ?? 0)} ${
+            summary: `Transfer ${formatBalance(transferAmount, token.decimals)} ${
                 token.symbol
             } to ${formatEthereumAddress(address, 4)}.`,
         })
@@ -985,7 +985,7 @@ function TransferTab(props: TransferTabProps) {
     //#region validation
     const validationMessage = useMemo(() => {
         if (!transferAmount || new BigNumber(transferAmount).isZero()) return t('wallet_transfer_error_amount_absence')
-        if (new BigNumber(transferAmount).isGreaterThan(new BigNumber(tokenBalance)))
+        if (new BigNumber(transferAmount).isGreaterThan(tokenBalance))
             return t('wallet_transfer_error_insufficent_balance', {
                 token: token.symbol,
             })

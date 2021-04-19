@@ -80,21 +80,21 @@ export function CreateForm(props: CreateFormProps) {
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
         new BigNumber(origin?.limit || '0').isZero()
             ? ''
-            : formatBalance(new BigNumber(origin?.limit || '0'), origin?.token?.decimals ?? 0),
+            : formatBalance(origin?.limit || '0', origin?.token?.decimals),
     )
     const [tokenAndAmount, setTokenAndAmount] = useState<ExchangeTokenAndAmountState>()
     const TAS: ExchangeTokenAndAmountState[] = []
     if (origin?.token && origin?.total) {
         TAS.push({
             token: origin?.token,
-            amount: formatBalance(new BigNumber(origin?.total || '0'), origin?.token.decimals ?? 0),
+            amount: formatBalance(origin?.total || '0', origin?.token.decimals),
             key: uuid(),
         })
     }
     if (origin?.exchangeTokens && origin?.exchangeAmounts) {
         origin?.exchangeTokens.map((i, x) =>
             TAS.push({
-                amount: formatBalance(new BigNumber(origin?.exchangeAmounts[x] || '0'), i?.decimals ?? 0),
+                amount: formatBalance(origin?.exchangeAmounts[x] || '0', i?.decimals),
                 token: i,
                 key: uuid(),
             }),
@@ -118,10 +118,7 @@ export function CreateForm(props: CreateFormProps) {
     const GMT = (new Date().getTimezoneOffset() / 60) * -1
 
     // amount for displaying
-    const inputTokenAmount = formatAmount(
-        new BigNumber(tokenAndAmount?.amount || '0'),
-        tokenAndAmount?.token?.decimals ?? 0,
-    )
+    const inputTokenAmount = formatAmount(tokenAndAmount?.amount || '0', tokenAndAmount?.token?.decimals)
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
@@ -145,12 +142,10 @@ export function CreateForm(props: CreateFormProps) {
             password: Web3Utils.sha3(`${message}`) ?? '',
             name: senderName,
             title: message,
-            limit: formatAmount(new BigNumber(totalOfPerWallet || '0'), first?.token?.decimals ?? 0),
+            limit: formatAmount(totalOfPerWallet || '0', first?.token?.decimals),
             token: first?.token as ERC20TokenDetailed,
-            total: formatAmount(new BigNumber(first?.amount || '0'), first?.token?.decimals ?? 0),
-            exchangeAmounts: rest.map((item) =>
-                formatAmount(new BigNumber(item.amount || '0'), item?.token?.decimals ?? 0),
-            ),
+            total: formatAmount(first?.amount || '0', first?.token?.decimals),
+            exchangeAmounts: rest.map((item) => formatAmount(item.amount || '0', item?.token?.decimals)),
             exchangeTokens: rest.map((item) => item.token!),
             startTime: startTime,
             endTime: endTime,
@@ -176,7 +171,7 @@ export function CreateForm(props: CreateFormProps) {
             if (new BigNumber(amount).isZero()) return t('plugin_ito_error_enter_amount')
         }
 
-        if (new BigNumber(tokenAndAmount?.amount ?? '0').isGreaterThan(new BigNumber(tokenBalance)))
+        if (new BigNumber(tokenAndAmount?.amount ?? '0').isGreaterThan(tokenBalance))
             return t('plugin_ito_error_balance', {
                 symbol: tokenAndAmount?.token?.symbol,
             })

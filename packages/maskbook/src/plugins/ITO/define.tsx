@@ -1,5 +1,4 @@
 import { Suspense } from 'react'
-import BigNumber from 'bignumber.js'
 import { makeStyles, createStyles } from '@material-ui/core'
 import { ITO_Loading } from './UI/ITO'
 import { PostInspector } from './UI/PostInspector'
@@ -72,11 +71,9 @@ export const ITO_PluginDefine: PluginConfig = {
                     <LabelWrapper
                         iconSize={14}
                         labelText={`A ITO with
-                        ${formatBalance(
-                            new BigNumber(payload.total),
-                            payload.token?.decimals ?? 0,
-                            payload.token?.decimals ?? 0,
-                        )} $${payload.token?.symbol ?? payload.token?.name ?? 'Token'} from ${payload.seller.name}`}
+                        ${formatBalance(payload.total, payload.token?.decimals)} $${
+                            payload.token?.symbol ?? payload.token?.name ?? 'Token'
+                        } from ${payload.seller.name}`}
                     />
                 )
             },

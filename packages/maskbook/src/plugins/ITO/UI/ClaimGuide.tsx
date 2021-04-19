@@ -57,7 +57,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
     )
     const initAmount = new BigNumber(0)
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
-    const [actualSwapAmount, setActualSwapAmount] = useState<BigNumber>(new BigNumber(0))
+    const [actualSwapAmount, setActualSwapAmount] = useState<BigNumber.Value>(0)
     const chainId = useChainId()
     const account = useAccount()
 

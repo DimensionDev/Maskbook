@@ -86,7 +86,7 @@ export interface ClaimDialogProps extends withClasses<'root'> {
     tokenAmount: BigNumber
     maxSwapAmount: BigNumber
     setTokenAmount: React.Dispatch<React.SetStateAction<BigNumber>>
-    setActualSwapAmount: React.Dispatch<React.SetStateAction<BigNumber>>
+    setActualSwapAmount: React.Dispatch<React.SetStateAction<BigNumber.Value>>
     setStatus: (status: ClaimStatus) => void
     chainId: ChainId
     account: string
@@ -150,7 +150,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 setClaimToken(ev.token)
                 setTokenAmount(initAmount)
                 setClaimAmount(initAmount.multipliedBy(ratio))
-                setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals ?? 0))
+                setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals))
             },
             [
                 id,
@@ -219,7 +219,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 return
             const { receipt } = claimState
             const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as { to_value: string }
-            setActualSwapAmount(new BigNumber(to_value))
+            setActualSwapAmount(to_value)
             setStatus(ClaimStatus.Share)
             resetClaimCallback()
         },
@@ -230,15 +230,14 @@ export function ClaimDialog(props: ClaimDialogProps) {
         setTransactionDialogOpen({
             open: true,
             state: claimState,
-            summary: `${t('plugin_trader_swap')} ${formatBalance(tokenAmount, token.decimals ?? 0)} ${token.symbol}`,
+            summary: `${t('plugin_trader_swap')} ${formatBalance(tokenAmount, token.decimals)} ${token.symbol}`,
         })
     }, [claimState])
     //#endregion
 
     const validationMessage = useMemo(() => {
         if (claimAmount.isEqualTo(0)) return t('plugin_ito_error_enter_amount')
-        if (claimAmount.isGreaterThan(new BigNumber(tokenBalance)))
-            return t('plugin_ito_error_balance', { symbol: claimToken.symbol })
+        if (claimAmount.isGreaterThan(tokenBalance)) return t('plugin_ito_error_balance', { symbol: claimToken.symbol })
         if (tokenAmount.isGreaterThan(maxSwapAmount)) return t('plugin_ito_dialog_claim_swap_exceed_wallet_limit')
         return ''
     }, [claimAmount, tokenBalance, maxSwapAmount, claimToken, ratio])
@@ -261,12 +260,12 @@ export function ClaimDialog(props: ClaimDialogProps) {
                     }}
                 />
                 <Typography variant="body1" className={classes.swapLimitText}>
-                    {formatBalance(maxSwapAmount, token.decimals ?? 0)} {token.symbol}
+                    {formatBalance(maxSwapAmount, token.decimals)} {token.symbol}
                 </Typography>
             </section>
             <Typography className={classes.exchangeText} variant="body1" color="textSecondary">
                 {t('plugin_ito_dialog_claim_swap_exchange')}{' '}
-                <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals ?? 0)}</span>{' '}
+                <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals)}</span>{' '}
                 {token.symbol}
                 {'.'}
             </Typography>
@@ -280,7 +279,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                         value === ''
                             ? new BigNumber(0)
                             : new BigNumber(value).multipliedBy(new BigNumber(10).pow(claimToken.decimals))
-                    const isMax = value === formatBalance(new BigNumber(maxAmount), claimToken.decimals)
+                    const isMax = value === formatBalance(maxAmount, claimToken.decimals)
                     const tokenAmount = isMax ? maxSwapAmount : val.dividedBy(ratio)
                     const swapAmount = isMax ? tokenAmount.multipliedBy(ratio) : val.dp(0)
                     setInputAmountForUI(
