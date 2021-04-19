@@ -1,12 +1,13 @@
 const path = require('path')
 
 module.exports = {
-    testRegex: ['/__tests__/.*\\.[jt]sx?$'],
+    testRegex: ['/__tests__/.*\\.[jt]sx?$', '.*\\.test\\.[jt]sx?$'],
     preset: 'ts-jest',
     testEnvironment: 'jest-environment-jsdom-fourteen',
     globals: {
         'ts-jest': {
             isolatedModules: true,
+            tsconfig: '<rootDir>/tsconfig.json',
         },
     },
     globalTeardown: path.join(__dirname, './scripts/jest-global-teardown'),
@@ -16,7 +17,7 @@ module.exports = {
         path.join(__dirname, './scripts/jest-setup.js'),
     ],
     // skip packages other than 'holoflows/kit'
-    transformIgnorePatterns: [],
+    transformIgnorePatterns: ['node_modules'],
     transform: {
         'node_modules.+(holoflows).+.js$': 'jest-esm-transformer',
     },
