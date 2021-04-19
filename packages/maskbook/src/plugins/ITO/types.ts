@@ -26,6 +26,10 @@ export interface JSON_PayloadInMask {
     exchange_amounts: string[]
     exchange_tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     regions: string
+    // @deprecated
+    is_mask?: boolean
+    // @deprecated
+    test_nums?: number[]
 }
 
 type TokenOutMask = Omit<JSON_PayloadInMask['token'], 'chainId'> & {

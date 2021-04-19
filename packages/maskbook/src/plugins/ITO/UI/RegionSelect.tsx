@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useState, useRef, useCallback, forwardRef, useImperativeHandle } from 'react'
 import type { InputBaseComponentProps } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
@@ -91,7 +90,7 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
         },
     }))
 
-    const [filterText, setFilterText] = React.useState('')
+    const [filterText, setFilterText] = useState('')
     const [filteredRegions, setFilteredRegions] = useState(allRegions)
 
     const [, cancelFilterDebounce] = useDebounce(

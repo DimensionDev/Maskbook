@@ -248,7 +248,7 @@ export function CreateForm(props: CreateFormProps) {
 
         if (endTime >= unlockTime && advanceSettingData.delayUnlocking) return t('plugin_ito_error_unlock_time')
 
-        if (qualification && qualification.startTime) {
+        if (qualification?.startTime) {
             if (new Date(Number(qualification.startTime) * 1000) >= endTime)
                 return t('plugin_ito_error_qualification_start_time')
         }
@@ -412,18 +412,17 @@ export function CreateForm(props: CreateFormProps) {
                             shrink: true,
                         }}
                         InputProps={{
-                            endAdornment:
-                                qualification && qualification.isQualification ? (
-                                    <Box className={classNames(classes.iconWrapper, classes.success)}>
-                                        <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
-                                    </Box>
-                                ) : (qualification && qualification.loadingERC165) || loadingQualification ? (
-                                    <CircularProgress size={16} />
-                                ) : (
-                                    <Box className={classNames(classes.iconWrapper, classes.fail)}>
-                                        <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
-                                    </Box>
-                                ),
+                            endAdornment: qualification?.isQualification ? (
+                                <Box className={classNames(classes.iconWrapper, classes.success)}>
+                                    <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
+                                </Box>
+                            ) : qualification?.loadingERC165 || loadingQualification ? (
+                                <CircularProgress size={16} />
+                            ) : (
+                                <Box className={classNames(classes.iconWrapper, classes.fail)}>
+                                    <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
+                                </Box>
+                            ),
                         }}
                     />
                     {qualification &&
