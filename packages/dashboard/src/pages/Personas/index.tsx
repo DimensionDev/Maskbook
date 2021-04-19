@@ -1,4 +1,4 @@
-import { Button, Tab, Tabs, createStyles, Box } from '@material-ui/core'
+import { Tab, Tabs, createStyles, Box } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
 import { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
@@ -7,6 +7,8 @@ import { TabContext, TabPanel } from '@material-ui/lab'
 import { PersonaSetup } from './components/PersonaSetup'
 import { useDefinedSocialNetworkUIs } from './api'
 import { useConnectSocialNetwork } from './hooks/useConnectSocialNetwork'
+import { AuthorIcon } from '@dimensiondev/icons'
+import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -51,7 +53,7 @@ export default function Personas() {
     const [connectState, onConnect] = useConnectSocialNetwork()
 
     return (
-        <PageFrame title="Personas" primaryAction={<Button>Create a new wallet</Button>}>
+        <PageFrame title="Personas" primaryAction={<AuthorIcon style={{ fill: MaskColorVar.secondaryBackground }} />}>
             <Box className={classes.container}>
                 <TabContext value={activeTab}>
                     <Tabs value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
