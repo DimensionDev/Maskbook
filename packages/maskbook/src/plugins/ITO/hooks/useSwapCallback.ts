@@ -138,7 +138,7 @@ export function useSwapCallback(
                 reject(error)
             }
             const promiEvent = ITO_Contract.methods.swap(...swapParams).send({
-                gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
             })
 

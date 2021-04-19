@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { Tx } from '@dimensiondev/contracts/types/types'
@@ -44,7 +43,7 @@ export function useRefundCallback(from: string, id?: string) {
         return new Promise<string>((resolve, reject) => {
             redPacketContract.methods.refund(...params).send(
                 {
-                    gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                    gas: addGasMargin(estimatedGas).toFixed(),
                     ...config,
                 },
                 (error, hash) => {
