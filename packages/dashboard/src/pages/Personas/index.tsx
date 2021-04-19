@@ -2,9 +2,11 @@ import { Button, Tab, Tabs, createStyles, Box } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
 import { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { capitalize } from 'lodash-es'
+import { capitalize, compact } from 'lodash-es'
 import { TabContext, TabPanel } from '@material-ui/lab'
-import { ConnectSNSAccount } from './components/ConnectSNAccount'
+import { PersonaSetup } from './components/PersonaSetup'
+import { useDefinedSocialNetworkUIs } from './api'
+import { useConnectSocialNetwork } from './hooks/useConnectSocialNetwork'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -23,17 +25,30 @@ const useStyles = makeStyles(() =>
     }),
 )
 
-const personasTabs = ['twitter', 'facebook']
-type TabType = typeof personasTabs[number]
-
 export default function Personas() {
     const classes = useStyles()
 
+    const definedSocialNetworkUIs = useDefinedSocialNetworkUIs()
+    const providers = compact(
+        [...definedSocialNetworkUIs.values()].map((item) => {
+            if (item.networkIdentifier === 'localhost') return null!
+            return {
+                tabName: item.networkIdentifier.replace('.com', ''),
+                internalName: item.networkIdentifier,
+                network: item.networkIdentifier,
+                connected: false,
+            }
+        }),
+    )
+
+    const personasTabs = providers.map(({ tabName }) => tabName)
     const [activeTab, setActiveTab] = useState(personasTabs[0])
-    const personasTabsLabel: Record<TabType, string> = {
-        twitter: 'twitter',
-        facebook: 'facebook',
-    }
+    const personasTabsLabel: Record<typeof personasTabs[number], string> = personasTabs.reduce(
+        (acc, tabName) => ({ ...acc, [tabName]: tabName }),
+        {},
+    )
+
+    const [connectState, onConnect] = useConnectSocialNetwork()
 
     return (
         <PageFrame title="Personas" primaryAction={<Button>Create a new wallet</Button>}>
@@ -49,12 +64,11 @@ export default function Personas() {
                             />
                         ))}
                     </Tabs>
-                    <TabPanel key="twitter" value="twitter" className={classes.tabPanel}>
-                        <ConnectSNSAccount type="twitter" />
-                    </TabPanel>
-                    <TabPanel key="facebook" value="facebook" className={classes.tabPanel}>
-                        <ConnectSNSAccount type="facebook" />
-                    </TabPanel>
+                    {providers.map((provider) => (
+                        <TabPanel key={provider.tabName} value={provider.tabName} className={classes.tabPanel}>
+                            <PersonaSetup provider={provider} onConnect={onConnect} />
+                        </TabPanel>
+                    ))}
                 </TabContext>
             </Box>
         </PageFrame>

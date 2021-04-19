@@ -3,6 +3,7 @@ import { Button, createStyles, makeStyles, Typography } from '@material-ui/core'
 import { LinkIcon } from '@dimensiondev/icons'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { useDashboardI18N } from '../../../../locales'
+import type { SocialNetworkProvider } from '../../hooks/useConnectSocialNetwork'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -29,10 +30,16 @@ const useStyles = makeStyles((theme) =>
         },
     }),
 )
-interface ConnectSNSAccountProps {
-    type: string
+export interface PersonaSetupProps {
+    provider: {
+        tabName: string
+        internalName: string
+        network: string
+        connected: boolean
+    }
+    onConnect: (provider: SocialNetworkProvider) => void
 }
-export const ConnectSNSAccount = memo(({ type }: ConnectSNSAccountProps) => {
+export const PersonaSetup = memo(({ provider, onConnect }: PersonaSetupProps) => {
     const classes = useStyles()
     const t = useDashboardI18N()
     return (
@@ -41,9 +48,11 @@ export const ConnectSNSAccount = memo(({ type }: ConnectSNSAccountProps) => {
                 <LinkIcon color="primary" fontSize="inherit" style={{ fill: 'none' }} viewBox="0 0 36 36" />
             </div>
             <Typography variant="body2" sx={{ marginTop: 2.5, marginBottom: 2.5 }}>
-                {t.personas_setup_connect_tips({ type })}
+                {t.personas_setup_connect_tips({ type: provider.tabName })}
             </Typography>
-            <Button className={classes.button}>{t.personas_setup_connect()}</Button>
+            <Button className={classes.button} onClick={() => onConnect(provider)}>
+                {t.personas_setup_connect()}
+            </Button>
         </div>
     )
 })
