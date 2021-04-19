@@ -1,11 +1,27 @@
 [
     {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "_name",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_start_time",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
         "anonymous": false,
         "inputs": [
             {
                 "indexed": false,
                 "internalType": "address",
-                "name": "testee",
+                "name": "account",
                 "type": "address"
             },
             {
@@ -17,7 +33,7 @@
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "number",
+                "name": "blockNumber",
                 "type": "uint256"
             },
             {
@@ -31,19 +47,39 @@
         "type": "event"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "testee",
-                "type": "address"
-            }
-        ],
-        "name": "ifQualified",
+        "inputs": [],
+        "name": "get_creation_time",
         "outputs": [
             {
-                "internalType": "bool",
+                "internalType": "uint256",
                 "name": "",
-                "type": "bool"
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "get_name",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "get_start_time",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -53,7 +89,26 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "testee",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "ifQualified",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "qualified",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
                 "type": "address"
             }
         ],
@@ -61,7 +116,7 @@
         "outputs": [
             {
                 "internalType": "bool",
-                "name": "",
+                "name": "qualified",
                 "type": "bool"
             }
         ],

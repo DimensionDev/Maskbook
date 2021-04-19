@@ -22,7 +22,7 @@ import { ClaimGuide, ClaimStatus } from './ClaimGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { sortTokens } from '../helpers'
-import { ITO_EXCHANGE_RATION_MAX, TIME_WAIT_BLOCKCHAIN } from '../constants'
+import { ITO_EXCHANGE_RATION_MAX, TIME_WAIT_BLOCKCHAIN, MSG_DELIMITER } from '../constants'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
@@ -30,6 +30,8 @@ import { EthereumMessages } from '../../Ethereum/messages'
 import { usePoolPayload } from '../hooks/usePoolPayload'
 import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { useClaimCallback } from '../hooks/useClaimCallback'
+import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 
 export interface IconProps {
     size?: number
@@ -181,6 +183,10 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 export interface ITO_Props {
     pid: string
     password: string
+    seller: {
+        name: string
+        address: string
+    }
 }
 
 export function ITO(props: ITO_Props) {
@@ -197,6 +203,7 @@ export function ITO(props: ITO_Props) {
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
     const { pid, password } = props
+
     const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
 
     // append the password from the outcoming pool
@@ -207,18 +214,21 @@ export function ITO(props: ITO_Props) {
     const {
         token,
         total: payload_total,
-        seller,
         total_remaining: payload_total_remaining,
         exchange_amounts,
         exchange_tokens,
         limit,
-        start_time,
         end_time,
         message,
     } = payload
 
     const { t } = useI18N()
-    const classes = useStyles({ titleLength: getTextUILength(message), tokenNumber: exchange_tokens.length })
+    const sellerName =
+        message.split(MSG_DELIMITER)[0] === message
+            ? formatEthereumAddress(payload.seller.address, 4)
+            : message.split(MSG_DELIMITER)[0]
+    const title = message.split(MSG_DELIMITER)[1] ?? message
+    const classes = useStyles({ titleLength: getTextUILength(title), tokenNumber: exchange_tokens.length })
 
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(payload_total_remaining)
@@ -233,7 +243,7 @@ export function ITO(props: ITO_Props) {
     } = useAvailabilityComputed(payload)
     //#ednregion
 
-    const { listOfStatus } = availabilityComputed
+    const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime } = availabilityComputed
 
     const isAccountSeller =
         payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
@@ -256,7 +266,7 @@ export function ITO(props: ITO_Props) {
     const shareSuccessLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             t('plugin_ito_claim_success_share', {
-                user: seller.name,
+                user: sellerName,
                 link: postLink,
                 symbol: token.symbol,
             }),
@@ -282,6 +292,41 @@ export function ITO(props: ITO_Props) {
     }, [shareSuccessLink])
     //#endregion
 
+    const retryITOCard = useCallback(() => {
+        retryPoolPayload()
+        retryPoolTradeInfo()
+        retryAvailability()
+    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
+
+    //#region claim
+    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(pid)
+    const onClaimButtonClick = useCallback(() => {
+        claimCallback()
+    }, [claimCallback])
+
+    const [_open, setClaimTransactionDialogOpen] = useRemoteControlledDialog(
+        EthereumMessages.events.transactionDialogUpdated,
+        (ev) => {
+            if (ev.open) return
+            if (claimState.type !== TransactionStateType.CONFIRMED) return
+            resetClaimCallback()
+            retryITOCard()
+        },
+    )
+
+    useEffect(() => {
+        if (claimState.type === TransactionStateType.UNKNOWN) return
+        setClaimTransactionDialogOpen({
+            open: true,
+            state: claimState,
+            summary: `Claiming ${formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals)} ${
+                token?.symbol ?? 'Token'
+            }.`,
+        })
+    }, [claimState /* update tx dialog only if state changed */])
+
+    //#endregion
+
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             t('plugin_ito_claim_foreshow_share', {
@@ -302,12 +347,6 @@ export function ITO(props: ITO_Props) {
         setClaimDialogStatus(ClaimStatus.Remind)
         setOpenClaimDialog(true)
     }, [])
-
-    const retryITOCard = useCallback(() => {
-        retryPoolPayload()
-        retryPoolTradeInfo()
-        retryAvailability()
-    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
 
     //#region withdraw
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
@@ -330,7 +369,7 @@ export function ITO(props: ITO_Props) {
         }, timeToExpired + TIME_WAIT_BLOCKCHAIN)
 
         return () => clearTimeout(timer)
-    }, [listOfStatus, setOpenClaimDialog, end_time, retryITOCard])
+    }, [])
 
     useEffect(() => {
         if (destructState.type === TransactionStateType.UNKNOWN) return
@@ -373,7 +412,7 @@ export function ITO(props: ITO_Props) {
             return t('plugin_ito_out_of_stock_hit')
         }
 
-        const _text = t('plugin_ito_your_claimed_amount', {
+        const _text = t('plugin_ito_your_swapped_amount', {
             amount: formatBalance(availability?.swapped ?? 0, token.decimals),
             symbol: token.symbol,
         })
@@ -397,14 +436,13 @@ export function ITO(props: ITO_Props) {
         tradeInfo?.buyInfo?.token.symbol,
     ])
 
-    const footerStartTime = useMemo(
-        () => (
+    const footerStartTime = useMemo(() => {
+        return (
             <Typography variant="body1">
-                {t('plugin_ito_list_start_date', { date: formatDateTime(new Date(start_time * 1000), true) })}
+                {t('plugin_ito_list_start_date', { date: formatDateTime(new Date(startTime), true) })}
             </Typography>
-        ),
-        [start_time, t],
-    )
+        )
+    }, [startTime, t])
 
     const footerEndTime = useMemo(
         () => (
@@ -452,7 +490,7 @@ export function ITO(props: ITO_Props) {
             <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${PoolBackground})` }}>
                 <Box className={classes.header}>
                     <Typography variant="h5" className={classes.title}>
-                        {message}
+                        {title}
                     </Typography>
                     {swapStatusText ? (
                         <Typography variant="body2" className={classes.status}>
@@ -512,7 +550,7 @@ export function ITO(props: ITO_Props) {
                             : footerNormal}
                     </div>
                     <Typography variant="body1" className={classes.fromText}>
-                        {`From: @${seller.name}`}
+                        {`From: @${sellerName}`}
                     </Typography>
                 </Box>
             </Card>
@@ -549,13 +587,52 @@ export function ITO(props: ITO_Props) {
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : isBuyer ? (
-                    <ActionButton
-                        onClick={onShareSuccess}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_share')}
-                    </ActionButton>
+                    <Grid container spacing={2}>
+                        {hasLockTime ? (
+                            <Grid item xs={6}>
+                                {isUnlocked ? (
+                                    Number(availability?.swapped) > 0 ? (
+                                        <ActionButton
+                                            onClick={onClaimButtonClick}
+                                            variant="contained"
+                                            size="large"
+                                            className={classes.actionButton}>
+                                            {t('plugin_ito_claim')}
+                                        </ActionButton>
+                                    ) : (
+                                        <ActionButton
+                                            onClick={() => undefined}
+                                            disabled={true}
+                                            variant="contained"
+                                            size="large"
+                                            className={classes.actionButton}>
+                                            {t('plugin_ito_claimed')}
+                                        </ActionButton>
+                                    )
+                                ) : (
+                                    <ActionButton
+                                        onClick={() => undefined}
+                                        variant="contained"
+                                        disabled={true}
+                                        size="large"
+                                        className={classes.actionButton}>
+                                        {t('plugin_ito_wait_unlock_time', {
+                                            unlockTime: formatDateTime(new Date(unlockTime!), true),
+                                        })}
+                                    </ActionButton>
+                                )}
+                            </Grid>
+                        ) : null}
+                        <Grid item xs={hasLockTime ? 6 : 12}>
+                            <ActionButton
+                                onClick={onShareSuccess}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {t('plugin_ito_share')}
+                            </ActionButton>
+                        </Grid>
+                    </Grid>
                 ) : listOfStatus.includes(ITO_Status.expired) ? (
                     <ActionButton
                         disabled
