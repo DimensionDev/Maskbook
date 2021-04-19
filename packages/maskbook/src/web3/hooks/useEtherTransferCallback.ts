@@ -38,7 +38,7 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
         // error: insufficent balance
         const balance = await Services.Ethereum.getBalance(account, chainId)
 
-        if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) {
+        if (new BigNumber(amount).isGreaterThan(balance)) {
             setTransferState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Insufficent balance'),

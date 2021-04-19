@@ -47,7 +47,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
         if (!amount || !spender) return ApproveStateType.UNKNOWN
         if (loadingBalance || loadingAllowance) return ApproveStateType.UPDATING
         if (errorBalance || errorAllowance) return ApproveStateType.FAILED
-        if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) return ApproveStateType.INSUFFICIENT_BALANCE
+        if (new BigNumber(amount).isGreaterThan(balance)) return ApproveStateType.INSUFFICIENT_BALANCE
         if (transactionState.type === TransactionStateType.WAIT_FOR_CONFIRMING) return ApproveStateType.PENDING
         return new BigNumber(allowance).isLessThan(amount) ? ApproveStateType.NOT_APPROVED : ApproveStateType.APPROVED
     }, [
