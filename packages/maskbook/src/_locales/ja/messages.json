@@ -498,6 +498,7 @@
     "plugin_ito_withdraw": "取り消す",
     "plugin_ito_withdrawn": "取り消しました",
     "plugin_ito_your_swapped_amount": "あなたは {{amount}} {{symbol}} を獲得しました",
+    "plugin_ito_your_claimed_amount": "",
     "plugin_ito_your_refund_amount": "{{amount}} {{symbol}} を戻す",
     "plugin_ito_unlock_in_advance": "事前にアンロックする",
     "plugin_ito_swapped_status": "{{remain}} / {{total}} {{token}} をスワップしました",

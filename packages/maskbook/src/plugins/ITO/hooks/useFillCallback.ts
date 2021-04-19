@@ -58,6 +58,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             limit,
             qualificationAddress,
             unlockTime,
+            regions,
             exchangeAmounts: exchangeAmountsUnsorted,
             exchangeTokens: exchangeTokensUnsorted,
         } = poolSettings
@@ -226,7 +227,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             Web3Utils.sha3(signedPassword)!,
             startTime_,
             endTime_,
-            `${name}${MSG_DELIMITER}${title}`.split('').map((v) => formatBytes32String(v)),
+            `${name}${MSG_DELIMITER}${title}${MSG_DELIMITER}${regions}`.split('').map((v) => formatBytes32String(v)),
             exchangeTokens.map((x) => x.address),
             exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
             unlockTime_,
