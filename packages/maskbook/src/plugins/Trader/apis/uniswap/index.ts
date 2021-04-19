@@ -121,16 +121,7 @@ export async function getAllCoinsByKeyword(keyword: string) {
         ]
     }
     if (keyword_ === 'token') {
-        return [
-            {
-                decimals: 18,
-                address: '0x3B73c1B2ea59835cbfcADade5462b6aB630D9890',
-                id: '0x3B73c1B2ea59835cbfcADade5462b6aB630D9890',
-                name: 'ChainSwap.com Governance Token',
-                symbol: 'TOKEN',
-                eth_address: '0x3B73c1B2ea59835cbfcADade5462b6aB630D9890',
-            } as Coin,
-        ]
+        return []
     }
 
     const tokens = await fetchTokensByKeyword(keyword)
