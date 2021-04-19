@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Box, TextField, DialogProps, CircularProgress } from '@material-ui/core'
+import { createStyles, makeStyles, Box, TextField, DialogProps, CircularProgress, Typography } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
 import UnCheckIcon from '@material-ui/icons/Close'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
@@ -13,8 +13,8 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { useERC165 } from '../../../web3/hooks/useERC165'
-import { ITO_CONSTANTS, QUALIFICATION_INTERFACE_ID } from '../constants'
+import { useQualificationVerify } from '../hooks/useQualificationVerify'
+import { ITO_CONSTANTS } from '../constants'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) =>
             margin: theme.spacing(1),
             paddingBottom: theme.spacing(2),
             display: 'flex',
+        },
+        column: {
+            flexDirection: 'column',
         },
         flow: {
             margin: theme.spacing(1),
@@ -73,6 +76,10 @@ const useStyles = makeStyles((theme) =>
         fail: {
             backgroundColor: 'rgba(255, 78, 89, 0.2)',
         },
+        qualStartTime: {
+            padding: '0 16px',
+            opacity: 0.8,
+        },
     }),
 )
 
@@ -90,6 +97,7 @@ export function CreateForm(props: CreateFormProps) {
 
     const account = useAccount()
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const DEFAULT_QUALIFICATION_ADDRESS = useConstant(ITO_CONSTANTS, 'DEFAULT_QUALIFICATION_ADDRESS')
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
@@ -132,6 +140,7 @@ export function CreateForm(props: CreateFormProps) {
 
     const [startTime, setStartTime] = useState(origin?.startTime || new Date())
     const [endTime, setEndTime] = useState(origin?.endTime || new Date())
+    const [unlockTime, setUnlockTime] = useState(origin?.unlockTime || new Date())
 
     const GMT = (new Date().getTimezoneOffset() / 60) * -1
 
@@ -139,7 +148,7 @@ export function CreateForm(props: CreateFormProps) {
     const inputTokenAmount = formatAmount(tokenAndAmount?.amount || '0', tokenAndAmount?.token?.decimals)
 
     // balance
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
+    const { value: tokenBalance = '0' } = useTokenBalance(
         tokenAndAmount?.token?.type ?? EthereumTokenType.Ether,
         tokenAndAmount?.token?.address ?? '',
     )
@@ -152,13 +161,9 @@ export function CreateForm(props: CreateFormProps) {
         }
     }, [])
 
-    // qualification
-    const [qualification, setQualification] = useState('')
-    const { value: isQualification, loading: loadingQualification } = useERC165(
-        qualification,
-        QUALIFICATION_INTERFACE_ID,
-    )
-
+    // qualificationAddress
+    const [qualificationAddress, setQualificationAddress] = useState('')
+    const { value: qualification, loading: loadingQualification } = useQualificationVerify(qualificationAddress)
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
@@ -172,8 +177,11 @@ export function CreateForm(props: CreateFormProps) {
             total: formatAmount(first?.amount || '0', first?.token?.decimals),
             exchangeAmounts: rest.map((item) => formatAmount(item.amount || '0', item?.token?.decimals)),
             exchangeTokens: rest.map((item) => item.token!),
-            startTime: startTime,
-            endTime: endTime,
+            startTime,
+            qualificationAddress: qualification?.isQualification ? qualificationAddress : DEFAULT_QUALIFICATION_ADDRESS,
+            endTime,
+            unlockTime: unlockTime > endTime ? unlockTime : undefined,
+            qualificationStartTime: qualification?.startTime ? Number(qualification?.startTime) * 1000 : 0,
         })
     }, [
         senderName,
@@ -184,6 +192,9 @@ export function CreateForm(props: CreateFormProps) {
         setTokenAndAmount,
         startTime,
         endTime,
+        unlockTime,
+        qualification,
+        qualificationAddress,
         account,
         onChangePoolSettings,
     ])
@@ -209,9 +220,17 @@ export function CreateForm(props: CreateFormProps) {
 
         if (startTime >= endTime) return t('plugin_ito_error_exchange_time')
 
+        if (endTime >= unlockTime) return t('plugin_ito_error_unlock_time')
+
+        if (qualification && qualification.startTime) {
+            if (new Date(Number(qualification.startTime) * 1000) >= endTime)
+                return t('plugin_ito_error_qualification_start_time')
+        }
+
         return ''
     }, [
         endTime,
+        unlockTime,
         startTime,
         t,
         tokenAndAmount?.amount,
@@ -231,6 +250,16 @@ export function CreateForm(props: CreateFormProps) {
             const now = Date.now()
             if (time < now) return
             if (time > startTime.getTime()) setEndTime(date)
+        },
+        [startTime],
+    )
+
+    const handleUnlockTime = useCallback(
+        (date: Date) => {
+            const time = date.getTime()
+            const now = Date.now()
+            if (time < now) return
+            if (time > endTime.getTime()) setUnlockTime(date)
         },
         [startTime],
     )
@@ -258,6 +287,20 @@ export function CreateForm(props: CreateFormProps) {
                 onChange={(date: Date | null) => handleEndTime(date!)}
                 renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
                 value={endTime}
+                DialogProps={props.dateDialogProps}
+            />
+        </LocalizationProvider>
+    )
+
+    const UnlockTime = (
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <MobileDateTimePicker
+                showTodayButton
+                ampm={false}
+                label={t('plugin_ito_unlock_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
+                onChange={(date: Date | null) => handleUnlockTime(date!)}
+                renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
+                value={unlockTime}
                 DialogProps={props.dateDialogProps}
             />
         </LocalizationProvider>
@@ -309,31 +352,41 @@ export function CreateForm(props: CreateFormProps) {
                 {StartTime} {EndTime}
             </Box>
             {account ? (
-                <Box className={classes.line}>
+                <Box className={classNames(classes.line, classes.column)}>
                     <TextField
                         className={classes.input}
                         label={t('plugin_ito_qualification_label')}
-                        onChange={(e) => setQualification(e.currentTarget.value)}
-                        value={qualification}
+                        onChange={(e) => setQualificationAddress(e.currentTarget.value)}
+                        value={qualificationAddress}
                         InputLabelProps={{
                             shrink: true,
                         }}
                         InputProps={{
-                            endAdornment: isQualification ? (
-                                <Box className={classNames(classes.iconWrapper, classes.success)}>
-                                    <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
-                                </Box>
-                            ) : loadingQualification ? (
-                                <CircularProgress size={16} />
-                            ) : (
-                                <Box className={classNames(classes.iconWrapper, classes.fail)}>
-                                    <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
-                                </Box>
-                            ),
+                            endAdornment:
+                                qualification && qualification.isQualification ? (
+                                    <Box className={classNames(classes.iconWrapper, classes.success)}>
+                                        <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
+                                    </Box>
+                                ) : (qualification && qualification.loadingERC165) || loadingQualification ? (
+                                    <CircularProgress size={16} />
+                                ) : (
+                                    <Box className={classNames(classes.iconWrapper, classes.fail)}>
+                                        <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
+                                    </Box>
+                                ),
                         }}
                     />
+                    {qualification &&
+                    qualification.startTime &&
+                    new Date(Number(qualification.startTime) * 1000) > startTime ? (
+                        <div className={classes.qualStartTime}>
+                            <Typography>{t('plugin_ito_qualification_start_time')}</Typography>
+                            <Typography>{new Date(Number(qualification.startTime) * 1000).toString()}</Typography>
+                        </div>
+                    ) : null}
                 </Box>
             ) : null}
+            <Box className={classes.date}>{UnlockTime}</Box>
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
