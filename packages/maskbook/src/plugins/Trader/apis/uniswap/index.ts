@@ -107,7 +107,8 @@ export function getAllCoins() {
 }
 
 export async function getAllCoinsByKeyword(keyword: string) {
-    if (keyword.toLocaleLowerCase() === 'mask') {
+    const keyword_ = keyword.toLocaleLowerCase()
+    if (keyword_ === 'mask') {
         return [
             {
                 decimals: 18,
@@ -116,6 +117,18 @@ export async function getAllCoinsByKeyword(keyword: string) {
                 name: 'Mask Network',
                 symbol: 'MASK',
                 eth_address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
+            } as Coin,
+        ]
+    }
+    if (keyword_ === 'token') {
+        return [
+            {
+                decimals: 18,
+                address: '0x3B73c1B2ea59835cbfcADade5462b6aB630D9890',
+                id: '0x3B73c1B2ea59835cbfcADade5462b6aB630D9890',
+                name: 'ChainSwap.com Governance Token',
+                symbol: 'TOKEN',
+                eth_address: '0x3B73c1B2ea59835cbfcADade5462b6aB630D9890',
             } as Coin,
         ]
     }
