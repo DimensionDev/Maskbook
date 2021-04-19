@@ -227,7 +227,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         // step 2: blocking
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = ITO_Contract.methods.fill_pool(...params).send({
-                gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {

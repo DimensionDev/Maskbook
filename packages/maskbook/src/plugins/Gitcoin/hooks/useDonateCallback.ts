@@ -75,7 +75,7 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
         return new Promise<string>((resolve, reject) => {
             bulkCheckoutContract.methods.donate(donations).send(
                 {
-                    gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                    gas: addGasMargin(estimatedGas).toFixed(),
                     ...config,
                 },
                 (error, hash) => {
