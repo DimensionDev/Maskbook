@@ -114,6 +114,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
             // output the redpacket as JSON payload
             onCreateOrSelect(payload)
+            onBack()
         },
     )
 

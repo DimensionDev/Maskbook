@@ -471,6 +471,7 @@
     "plugin_ito_region_list": "{{ select }} / {{ all }} regions",
     "plugin_ito_region_all": "All regions",
     "plugin_ito_region_search": " Type region name to search",
+    "plugin_ito_region_ban": "This Pool is banned by its creator at your region",
     "plugin_ito_next": "Next",
     "plugin_ito_back": "Back",
     "plugin_ito_transaction_dialog_summary": "Create an ITO with {{amount}} {{symbol}}.",
