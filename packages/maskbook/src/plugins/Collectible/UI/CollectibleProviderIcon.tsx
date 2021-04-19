@@ -1,6 +1,6 @@
 import { createStyles, makeStyles } from '@material-ui/core'
-import { CoinGeckoIcon } from '../../../resources/CoinGeckoIcon'
-import { CoinMarketCapIcon } from '../../../resources/CoinMarketCapIcon'
+import { OpenSeaIcon } from '../../../resources/OpenSeaIcon'
+import { RaribleIcon } from '../../../resources/RaribleIcon'
 import { unreachable } from '../../../utils/utils'
 import { CollectibleProvider } from '../types'
 
@@ -28,9 +28,9 @@ export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
 
     switch (props.provider) {
         case CollectibleProvider.OPENSEA:
-            return <CoinGeckoIcon classes={{ root: classes.opensea }} viewBox="0 0 16 16" />
+            return <OpenSeaIcon classes={{ root: classes.opensea }} viewBox="0 0 16 16" />
         case CollectibleProvider.RARIBLE:
-            return <CoinMarketCapIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+            return <RaribleIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
         default:
             unreachable(props.provider)
     }
