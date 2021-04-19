@@ -425,9 +425,7 @@ export function CreateForm(props: CreateFormProps) {
                             ),
                         }}
                     />
-                    {qualification &&
-                    qualification.startTime &&
-                    new Date(Number(qualification.startTime) * 1000) > startTime ? (
+                    {qualification?.startTime && new Date(Number(qualification.startTime) * 1000) > startTime ? (
                         <div className={classes.qualStartTime}>
                             <Typography>{t('plugin_ito_qualification_start_time')}</Typography>
                             <Typography>{new Date(Number(qualification.startTime) * 1000).toString()}</Typography>
