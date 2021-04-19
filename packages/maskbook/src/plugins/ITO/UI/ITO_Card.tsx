@@ -78,7 +78,7 @@ export function ITO_Card(props: ITO_CardProps) {
         .getShareLinkURL?.(
             [
                 `I just claimed ${cashTag}${token?.symbol} with ${formatBalance(
-                    packet?.claimable ?? '0',
+                    packet?.claimable,
                     18,
                     6,
                 )}. Follow @realMaskbook (mask.io) to claim airdrop.`,

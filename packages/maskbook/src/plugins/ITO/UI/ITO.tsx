@@ -336,14 +336,13 @@ export function ITO(props: ITO_Props) {
         if (destructState.type === TransactionStateType.UNKNOWN) return
         let summary = t('plugin_ito_withdraw')
         if (!noRemain) {
-            summary += ' ' + formatBalance(total_remaining, token.decimals ?? 0) + ' ' + token.symbol
+            summary += ' ' + formatBalance(total_remaining, token.decimals) + ' ' + token.symbol
         }
         availability?.exchange_addrs.forEach((addr, i) => {
             const token = exchange_tokens.find((t) => t.address.toLowerCase() === addr.toLowerCase())
             const comma = noRemain && i === 0 ? ' ' : ', '
             if (token) {
-                summary +=
-                    comma + formatBalance(availability?.exchanged_tokens[i], token.decimals ?? 0) + ' ' + token.symbol
+                summary += comma + formatBalance(availability?.exchanged_tokens[i], token.decimals) + ' ' + token.symbol
             }
         })
         setTransactionDialogOpen({

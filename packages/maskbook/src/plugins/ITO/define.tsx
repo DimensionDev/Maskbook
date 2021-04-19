@@ -71,7 +71,7 @@ export const ITO_PluginDefine: PluginConfig = {
                     <LabelWrapper
                         iconSize={14}
                         labelText={`A ITO with
-                        ${formatBalance(payload.total, payload.token?.decimals ?? 0, payload.token?.decimals ?? 0)} $${
+                        ${formatBalance(payload.total, payload.token?.decimals)} $${
                             payload.token?.symbol ?? payload.token?.name ?? 'Token'
                         } from ${payload.seller.name}`}
                     />

@@ -66,7 +66,7 @@ export function RedPacketInList(props: RedPacketInListProps) {
                     {t('plugin_red_packet_description_failover', {
                         name: payload.sender.name,
                         shares: payload.shares,
-                        total: formatBalance(payload.total, token.decimals ?? 0, token.decimals ?? 0),
+                        total: formatBalance(payload.total, token.decimals),
                         symbol: token.symbol,
                     })}
                 </Typography>

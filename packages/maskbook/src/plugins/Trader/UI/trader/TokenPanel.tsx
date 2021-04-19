@@ -46,9 +46,7 @@ export function TokenPanel(props: TokenPanelProps) {
             }}>
             <Typography className={classes.primary} component="div">
                 <TokenIcon classes={{ icon: classes.icon }} address={token.address} name={token.name} />
-                <span className={classes.amount}>
-                    {formatBalance(amount, token.decimals ?? 0, token.decimals ?? 0)}
-                </span>
+                <span className={classes.amount}>{formatBalance(amount, token.decimals)}</span>
             </Typography>
             <Typography className={classes.symbol}>{token.symbol}</Typography>
         </Box>

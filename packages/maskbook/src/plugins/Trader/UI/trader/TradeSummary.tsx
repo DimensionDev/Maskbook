@@ -232,10 +232,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                         )
                         .sort((a, z) => (new BigNumber(a.proportion).isGreaterThan(z.proportion) ? -1 : 1))
                         .slice(0, 3)
-                        .map(
-                            (y) =>
-                                `${resolveZrxTradePoolName(y.name)} (${formatPercentage(new BigNumber(y.proportion))})`,
-                        )
+                        .map((y) => `${resolveZrxTradePoolName(y.name)} (${formatPercentage(y.proportion)})`)
                         .join(' + ')}
                 </Typography>
             ),
