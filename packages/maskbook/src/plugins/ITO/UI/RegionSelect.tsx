@@ -9,7 +9,6 @@ import {
     List,
     ListItem,
     ListItemText,
-    ListItemIcon,
     Checkbox,
     FormControl,
     InputAdornment,
@@ -199,14 +198,12 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
                                     key={region.code}
                                     className={classes.item}
                                     onClick={handleToggle(region.code)}>
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            color="primary"
-                                            checked={valueMap.has(region.code)}
-                                            disableRipple
-                                        />
-                                    </ListItemIcon>
+                                    <Checkbox
+                                        edge="start"
+                                        color="primary"
+                                        checked={valueMap.has(region.code)}
+                                        disableRipple
+                                    />
                                     <ListItemText>
                                         <span>{countryToFlag(region.code)}</span>
                                         <span className={classes.span}>{region.name}</span>
