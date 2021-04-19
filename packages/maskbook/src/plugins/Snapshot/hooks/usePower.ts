@@ -3,7 +3,7 @@ import { PluginSnapshotRPC } from '../messages'
 import type { ProposalIdentifier } from '../types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useProposal } from './useProposal'
-import { useBlockNumber } from '../../../web3/hooks/useChainState'
+import { useBlockNumber } from '../../../web3/hooks/useBlockNumber'
 import { ChainId } from '../../../web3/types'
 
 export function usePower(identifier: ProposalIdentifier) {

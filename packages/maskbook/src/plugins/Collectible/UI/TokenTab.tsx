@@ -3,7 +3,7 @@ import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatEthereumAddress } from '../../Wallet/formatter'
-import { resolveAddressOnEtherscan } from '../../../web3/pipes'
+import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) => {
@@ -108,7 +108,7 @@ export function TokenTab(props: TokenTabProps) {
                 <Box className={classes.chain_row}>
                     <Typography>{t('plugin_collectible_contract_address')}</Typography>
                     <Link
-                        href={resolveAddressOnEtherscan(ChainId.Mainnet, token?.contractAddress ?? '')}
+                        href={resolveAddressLinkOnEtherscan(ChainId.Mainnet, token?.contractAddress ?? '')}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Typography>{formatEthereumAddress(token?.contractAddress ?? '', 4)}</Typography>

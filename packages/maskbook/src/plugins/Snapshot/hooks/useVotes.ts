@@ -2,7 +2,7 @@ import { PluginSnapshotRPC } from '../messages'
 import type { Votes, ProposalIdentifier, Vote } from '../types'
 import { useSuspense } from '../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
-import { useBlockNumber } from '../../../web3/hooks/useChainState'
+import { useBlockNumber } from '../../../web3/hooks/useBlockNumber'
 import { ChainId } from '../../../web3/types'
 
 const cache = new Map<string, [0, Promise<void>] | [1, Votes] | [2, Error]>()

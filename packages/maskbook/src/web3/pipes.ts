@@ -92,9 +92,6 @@ export function resolveTransactionLinkOnEtherscan(chainId: ChainId, tx: string) 
 export function resolveTokenLinkOnEtherscan(token: EtherToken | ERC20Token | ERC721Token) {
     return `${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`
 }
-export function resolveAddressOnEtherscan(chainId: ChainId, address: string) {
-    return `${resolveLinkOnEtherscan(chainId)}/address/${address}`
-}
 
 export function resolveAddressLinkOnEtherscan(chainId: ChainId, address: string): string {
     return `${resolveLinkOnEtherscan(chainId)}/address/${address}`

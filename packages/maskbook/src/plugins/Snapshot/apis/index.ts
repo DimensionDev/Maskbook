@@ -66,7 +66,7 @@ export async function vote(identifier: ProposalIdentifier, choice: number, addre
         },
     })
 
-    const sig = await Services.Ethereum.sign(msg, address, ChainId.Mainnet)
+    const sig = await Services.Ethereum.sign(msg, address)
 
     const response = await fetch(`https://hub.snapshot.page/api/message`, {
         method: 'POST',
