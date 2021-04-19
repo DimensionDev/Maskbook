@@ -228,10 +228,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             startTime_,
             endTime_,
             // TODO: store message as bitmap, since regions may be very large.
-            [name, title, regions]
-                .join(MSG_DELIMITER)
-                .split('')
-                .map((v) => formatBytes32String(v)),
+            [name, title, regions].join(MSG_DELIMITER).split('').map(formatBytes32String),
             exchangeTokens.map((x) => x.address),
             exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
             unlockTime_,
