@@ -7,7 +7,7 @@ import type {
     ZerionAssetResponseBody,
 } from '../types'
 
-const ZERION_API = 'wss://zerion-api-v4-agent.r2d2.to'
+const ZERION_API = 'wss://api-v4.zerion.io'
 
 //TODO: get token from ci env
 const ZERION_TOKEN = 'Mask.yEUEfDnoxgLBwNEcYPVussxxjdrGwapj'
