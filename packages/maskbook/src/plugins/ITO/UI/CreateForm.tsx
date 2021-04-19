@@ -25,6 +25,8 @@ import { formatAmount, formatBalance } from '../../Wallet/formatter'
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { AdvanceSetting } from './AdvanceSetting'
+import type { AdvanceSettingData } from './AdvanceSetting'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -164,6 +166,7 @@ export function CreateForm(props: CreateFormProps) {
     // qualificationAddress
     const [qualificationAddress, setQualificationAddress] = useState('')
     const { value: qualification, loading: loadingQualification } = useQualificationVerify(qualificationAddress)
+
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
         setTokenAndAmount(first)
@@ -306,6 +309,10 @@ export function CreateForm(props: CreateFormProps) {
         </LocalizationProvider>
     )
 
+    const handleAdvanceSettingChange = (data: AdvanceSettingData) => {
+        console.log(data)
+    }
+
     return (
         <>
             <Box className={classes.line} style={{ display: 'block' }}>
@@ -387,6 +394,9 @@ export function CreateForm(props: CreateFormProps) {
                 </Box>
             ) : null}
             <Box className={classes.date}>{UnlockTime}</Box>
+            <Box className={classes.line}>
+                <AdvanceSetting onSettingChange={handleAdvanceSettingChange} />
+            </Box>
             <Box className={classes.line}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
