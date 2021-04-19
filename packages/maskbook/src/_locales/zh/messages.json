@@ -500,6 +500,7 @@
     "plugin_ito_withdraw": "",
     "plugin_ito_withdrawn": "",
     "plugin_ito_your_swapped_amount": "",
+    "plugin_ito_your_claimed_amount": "",
     "plugin_ito_your_refund_amount": "",
     "plugin_ito_unlock_in_advance": "",
     "plugin_ito_swapped_status": "",

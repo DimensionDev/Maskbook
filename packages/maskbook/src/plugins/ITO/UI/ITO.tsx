@@ -200,7 +200,7 @@ export function ITO(props: ITO_Props) {
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid, password, regions } = props
+    const { pid, password, regions: defaultRegions = '-' } = props
 
     const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
 
@@ -226,6 +226,7 @@ export function ITO(props: ITO_Props) {
             ? formatEthereumAddress(payload.seller.address, 4)
             : message.split(MSG_DELIMITER)[0]
     const title = message.split(MSG_DELIMITER)[1] ?? message
+    const regions = message.split(MSG_DELIMITER)[2] ?? defaultRegions
     const classes = useStyles({ titleLength: getTextUILength(title), tokenNumber: exchange_tokens.length })
 
     const total = new BigNumber(payload_total)
@@ -414,10 +415,16 @@ export function ITO(props: ITO_Props) {
             return t('plugin_ito_out_of_stock_hit')
         }
 
-        const _text = t('plugin_ito_your_swapped_amount', {
-            amount: formatBalance(availability?.swapped ?? 0, token.decimals),
-            symbol: token.symbol,
-        })
+        const _text =
+            Number(availability?.swapped) > 0
+                ? t('plugin_ito_your_swapped_amount', {
+                      amount: formatBalance(availability?.swapped ?? 0, token.decimals),
+                      symbol: token.symbol,
+                  })
+                : t('plugin_ito_your_claimed_amount', {
+                      amount: formatBalance(tradeInfo?.buyInfo?.amount_bought ?? 0, token.decimals),
+                      symbol: token.symbol,
+                  })
 
         if (refundAmount.isZero() || refundAmount.isLessThan(0)) {
             return `${_text}.`
