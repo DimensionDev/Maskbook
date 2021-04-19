@@ -149,6 +149,8 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     showDataProviderIcon?: boolean
     showTradeProviderIcon?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
+    dataProviders: DataProvider[]
+    tradeProviders: TradeProvider[]
 }
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
@@ -163,6 +165,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         showDataProviderIcon = false,
         showTradeProviderIcon = false,
         TrendingCardProps,
+        dataProviders = [],
+        tradeProviders = [],
     } = props
     const { coin, market } = trending
 
@@ -204,8 +208,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     )
     //#endregion
 
-    const dataProviderOptions = getEnumAsArray(DataProvider)
-    const tradeProviderOptions = getEnumAsArray(TradeProvider)
+    const dataProviderOptions = getEnumAsArray(DataProvider).filter((x) => dataProviders.includes(x.value))
+    const tradeProviderOptions = getEnumAsArray(TradeProvider).filter((x) => tradeProviders.includes(x.value))
     const { approvedTokens, onApprove } = useApprovedTokens(trending.coin.eth_address)
     return (
         <TrendingCard {...TrendingCardProps}>
