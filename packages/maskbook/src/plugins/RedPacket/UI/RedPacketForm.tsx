@@ -241,8 +241,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         if (new BigNumber(shares || '0').isZero()) return 'Enter shares'
         if (new BigNumber(shares || '0').isGreaterThan(255)) return 'At most 255 recipients'
         if (new BigNumber(amount).isZero()) return 'Enter an amount'
-        if (new BigNumber(totalAmount).isGreaterThan(new BigNumber(tokenBalance)))
-            return `Insufficient ${token.symbol} balance`
+        if (new BigNumber(totalAmount).isGreaterThan(tokenBalance)) return `Insufficient ${token.symbol} balance`
         return ''
     }, [account, amount, totalAmount, shares, token, tokenBalance])
 

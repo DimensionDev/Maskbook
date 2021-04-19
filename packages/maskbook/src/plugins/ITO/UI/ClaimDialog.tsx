@@ -86,7 +86,7 @@ export interface ClaimDialogProps extends withClasses<'root'> {
     tokenAmount: BigNumber
     maxSwapAmount: BigNumber
     setTokenAmount: React.Dispatch<React.SetStateAction<BigNumber>>
-    setActualSwapAmount: React.Dispatch<React.SetStateAction<BigNumber>>
+    setActualSwapAmount: React.Dispatch<React.SetStateAction<BigNumber.Value>>
     setStatus: (status: ClaimStatus) => void
     chainId: ChainId
     account: string
@@ -219,7 +219,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 return
             const { receipt } = claimState
             const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as { to_value: string }
-            setActualSwapAmount(new BigNumber(to_value))
+            setActualSwapAmount(to_value)
             setStatus(ClaimStatus.Share)
             resetClaimCallback()
         },
@@ -237,8 +237,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
 
     const validationMessage = useMemo(() => {
         if (claimAmount.isEqualTo(0)) return t('plugin_ito_error_enter_amount')
-        if (claimAmount.isGreaterThan(new BigNumber(tokenBalance)))
-            return t('plugin_ito_error_balance', { symbol: claimToken.symbol })
+        if (claimAmount.isGreaterThan(tokenBalance)) return t('plugin_ito_error_balance', { symbol: claimToken.symbol })
         if (tokenAmount.isGreaterThan(maxSwapAmount)) return t('plugin_ito_dialog_claim_swap_exceed_wallet_limit')
         return ''
     }, [claimAmount, tokenBalance, maxSwapAmount, claimToken, ratio])

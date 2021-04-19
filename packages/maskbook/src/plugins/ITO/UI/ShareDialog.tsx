@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) =>
 export interface ShareDialogProps extends withClasses<'root'> {
     shareSuccessLink: string | undefined
     token: EtherTokenDetailed | ERC20TokenDetailed
-    actualSwapAmount: BigNumber
+    actualSwapAmount: BigNumber.Value
     poolName: string
     onClose: () => void
 }
@@ -86,7 +86,9 @@ export function ShareDialog(props: ShareDialogProps) {
                         {token.symbol}
                     </Typography>
                     <Typography variant="body1" className={classes.shareText}>
-                        {actualSwapAmount.isZero() ? t('plugin_ito_out_of_stock_hit') : t('plugin_ito_congratulations')}
+                        {new BigNumber(actualSwapAmount).isZero()
+                            ? t('plugin_ito_out_of_stock_hit')
+                            : t('plugin_ito_congratulations')}
                     </Typography>
                     {shareSuccessLink ? (
                         <ActionButton

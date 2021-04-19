@@ -182,7 +182,7 @@ export function DonateDialog(props: DonateDialogProps) {
         if (Flags.wallet_network_strict_mode_enabled && chainId !== ChainId.Mainnet)
             return t('plugin_wallet_wrong_network')
         if (!amount || amount.isZero()) return t('plugin_gitcoin_enter_an_amount')
-        if (amount.isGreaterThan(new BigNumber(tokenBalance)))
+        if (amount.isGreaterThan(tokenBalance))
             return t('plugin_gitcoin_insufficient_balance', {
                 symbol: token.symbol,
             })

@@ -29,9 +29,7 @@ export function isETH(address: string) {
 }
 
 export function addGasMargin(value: BigNumber.Value, scale = 1000) {
-    return new BigNumber(value)
-        .multipliedBy(new BigNumber(10000).plus(new BigNumber(scale)))
-        .dividedToIntegerBy(new BigNumber(10000))
+    return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
 }
 
 //#region constants
