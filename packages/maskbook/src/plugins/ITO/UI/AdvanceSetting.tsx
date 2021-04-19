@@ -34,6 +34,13 @@ const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             display: 'flex',
+            border: 0,
+            margin: 0,
+            padding: 0,
+            position: 'relative',
+            minWidth: 0,
+            flexDirection: 'column',
+            verticalAlign: 'top',
         },
         label: {
             padding: `${theme.spacing(1)} ${theme.spacing(1)}`,
@@ -77,7 +84,7 @@ export function AdvanceSetting({ onSettingChange }: AdvanceSettingProps) {
 
     return (
         <>
-            <FormControl component="fieldset" className={classes.root}>
+            <fieldset className={classes.root}>
                 <FormLabel component="legend" className={classes.label}>
                     {t('plugin_ito_advanced')}
                 </FormLabel>
@@ -132,7 +139,7 @@ export function AdvanceSetting({ onSettingChange }: AdvanceSettingProps) {
                         }}
                     />
                 ) : null}
-            </FormControl>
+            </fieldset>
         </>
     )
 }
