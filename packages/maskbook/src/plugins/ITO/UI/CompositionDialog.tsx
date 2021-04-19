@@ -109,6 +109,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 token: fillSettings.token,
                 exchange_amounts: fillSettings.exchangeAmounts,
                 exchange_tokens: fillSettings.exchangeTokens,
+                regions: fillSettings.regions,
             }
 
             // output the redpacket as JSON payload

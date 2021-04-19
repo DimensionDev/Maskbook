@@ -1,19 +1,6 @@
-import { useState, ChangeEvent } from 'react'
-import {
-    createStyles,
-    makeStyles,
-    TextField,
-    FormGroup,
-    FormControl,
-    FormLabel,
-    FormControlLabel,
-    Checkbox,
-} from '@material-ui/core'
+import type { ChangeEvent } from 'react'
+import { createStyles, makeStyles, FormGroup, FormLabel, FormControlLabel, Checkbox } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
-
-import { useRegionSelect, encodeRegionCode } from '../hooks/useRegion'
-import type { RegionCode } from '../hooks/useRegion'
-import { RegionSelect } from './RegionSelect'
 
 export enum SettingField {
     IPRegion = 'IPRegion',
@@ -22,12 +9,12 @@ export enum SettingField {
 }
 
 export type AdvanceSettingData = {
-    enabled: { [Property in keyof typeof SettingField]?: boolean }
-    IPRegion: string
+    [Property in keyof typeof SettingField]?: boolean
 }
 
 export interface AdvanceSettingProps {
-    onSettingChange: (data: AdvanceSettingData) => void
+    advanceSettingData: AdvanceSettingData
+    setAdvanceSettingData: React.Dispatch<React.SetStateAction<AdvanceSettingData>>
 }
 
 const useStyles = makeStyles((theme) =>
@@ -51,35 +38,16 @@ const useStyles = makeStyles((theme) =>
             padding: `0 ${theme.spacing(1)}`,
             marginBottom: theme.spacing(1),
         },
-        field: {
-            flex: 1,
-            padding: theme.spacing(1),
-            marginTop: theme.spacing(1),
-        },
     }),
 )
 
-export function AdvanceSetting({ onSettingChange }: AdvanceSettingProps) {
+export function AdvanceSetting({ advanceSettingData, setAdvanceSettingData }: AdvanceSettingProps) {
     const classes = useStyles()
     const { t } = useI18N()
 
-    const [data, setData] = useState<AdvanceSettingData>({ enabled: {}, IPRegion: '' })
-    const { enabled } = data
-
-    const updateData = (newData: AdvanceSettingData) => {
-        setData(newData)
-        onSettingChange(newData)
-    }
-
     const handleAdvanceSettingToggle = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.target
-        updateData({ ...data, enabled: { ...enabled, [name]: checked } })
-    }
-
-    const [regions, setRegions] = useRegionSelect()
-    const handleRegionChange = (codes: RegionCode[]) => {
-        setRegions(codes)
-        updateData({ ...data, IPRegion: encodeRegionCode(codes) })
+        setAdvanceSettingData({ ...advanceSettingData, [name]: checked })
     }
 
     return (
@@ -93,7 +61,7 @@ export function AdvanceSetting({ onSettingChange }: AdvanceSettingProps) {
                         control={
                             <Checkbox
                                 color="primary"
-                                checked={!!enabled.IPRegion}
+                                checked={!!advanceSettingData.IPRegion}
                                 onChange={handleAdvanceSettingToggle}
                                 name={SettingField.IPRegion}
                             />
@@ -104,7 +72,7 @@ export function AdvanceSetting({ onSettingChange }: AdvanceSettingProps) {
                         control={
                             <Checkbox
                                 color="primary"
-                                checked={!!enabled.delayUnlocking}
+                                checked={!!advanceSettingData.delayUnlocking}
                                 onChange={handleAdvanceSettingToggle}
                                 name={SettingField.delayUnlocking}
                             />
@@ -115,7 +83,7 @@ export function AdvanceSetting({ onSettingChange }: AdvanceSettingProps) {
                         control={
                             <Checkbox
                                 color="primary"
-                                checked={!!enabled.contract}
+                                checked={!!advanceSettingData.contract}
                                 onChange={handleAdvanceSettingToggle}
                                 name={SettingField.contract}
                             />
@@ -123,22 +91,6 @@ export function AdvanceSetting({ onSettingChange }: AdvanceSettingProps) {
                         label={t('plugin_ito_advanced_contract')}
                     />
                 </FormGroup>
-                {enabled.IPRegion ? (
-                    <TextField
-                        className={classes.field}
-                        label={t('plugin_ito_region_label')}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        InputProps={{
-                            inputComponent: RegionSelect,
-                            inputProps: {
-                                value: regions,
-                                onRegionChange: handleRegionChange,
-                            },
-                        }}
-                    />
-                ) : null}
             </fieldset>
         </>
     )
