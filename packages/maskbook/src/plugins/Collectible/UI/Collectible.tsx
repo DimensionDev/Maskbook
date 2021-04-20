@@ -34,9 +34,8 @@ import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/UI/trader/Footnot
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { findIndex } from 'lodash-es'
 import { resolveCollectibleProviderName } from '../pipes'
-import { unreachable } from '../../../utils/utils'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { format } from 'date-fns'
+import { useSettingsSwticher } from '../../../utils/hooks/useSettingSwitcher'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -142,18 +141,13 @@ export function Collectible(props: CollectibleProps) {
     }, [])
     //#endregion
 
-    const onSwitch = useCallback(() => {
-        switch (provider) {
-            case CollectibleProvider.OPENSEA:
-                currentCollectibleProviderSettings.value = CollectibleProvider.RARIBLE
-                break
-            case CollectibleProvider.RARIBLE:
-                currentCollectibleProviderSettings.value = CollectibleProvider.OPENSEA
-                break
-            default:
-                unreachable(provider)
-        }
-    }, [provider])
+    //#region provider switcher
+    const CollectibleProviderSwitcher = useSettingsSwticher(
+        currentCollectibleProviderSettings,
+        getEnumAsArray(CollectibleProvider).map((x) => x.value),
+        resolveCollectibleProviderName,
+    )
+    //#endregion
 
     if (asset.loading) return <PluginSkeleton />
     if (!asset.value)
@@ -163,14 +157,7 @@ export function Collectible(props: CollectibleProps) {
                     Failed to load your collectible on {resolveCollectibleProviderName(provider)}. Try to switch to
                     another provider.
                 </Typography>
-                <ActionButton
-                    sx={{ marginTop: 1 }}
-                    color="primary"
-                    variant="contained"
-                    fullWidth={false}
-                    onClick={onSwitch}>
-                    Switch
-                </ActionButton>
+                {CollectibleProviderSwitcher}
             </Box>
         )
 
