@@ -26,10 +26,18 @@ export function useTradeComputed(
     outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
 ) {
     return useMemo((): TradeComputed<EtherWrapper> | null => {
+        console.log('DEBUG: useTradeComputed')
+        console.log({
+            isEtherWrapper,
+            inputAmount,
+            outputAmount,
+        })
+
         if (!isEtherWrapper) return null
 
         // the trade amount follows trade strategy
         const tradeAmount = new BigNumber(strategy === TradeStrategy.ExactIn ? inputAmount || '0' : outputAmount || '0')
+
         // skip to render 0s
         if (tradeAmount.isZero()) return null
 
@@ -47,7 +55,9 @@ export function useTradeComputed(
             priceImpactWithoutFee: ZERO,
             fee: ZERO,
             trade_: {
-                isWrap: strategy === TradeStrategy.ExactIn && inputToken?.type === EthereumTokenType.Ether,
+                isWrap:
+                    (strategy === TradeStrategy.ExactIn && inputToken?.type === EthereumTokenType.Ether) ||
+                    (strategy === TradeStrategy.ExactOut && outputToken?.type === EthereumTokenType.Ether),
                 isEtherWrapper,
             },
         }

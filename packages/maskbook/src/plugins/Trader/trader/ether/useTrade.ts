@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import { useAsyncRetry } from 'react-use'
 import { CONSTANTS } from '../../../../web3/constants'
 import { isSameAddress } from '../../../../web3/helpers'

@@ -195,7 +195,6 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region UI logic
-
     // validate form return a message if an error exists
     const validationMessage = useMemo(() => {
         if (inputTokenTradeAmount.isZero() && outputTokenTradeAmount.isZero())
@@ -252,7 +251,11 @@ export function TradeForm(props: TradeFormProps) {
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={approveAmount.toFixed()}
-                        token={approveToken?.type === EthereumTokenType.ERC20 ? approveToken : undefined}
+                        token={
+                            !isEtherWrapper(trade) && approveToken?.type === EthereumTokenType.ERC20
+                                ? approveToken
+                                : undefined
+                        }
                         spender={approveAddress}>
                         <ActionButton
                             className={classes.button}

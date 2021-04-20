@@ -282,7 +282,7 @@ export function Trader(props: TraderProps) {
     //#region swap callback
     const onSwap = useCallback(() => {
         // no need to open the confirmation dialog if it (un)wraps ether
-        if (trade && isEtherWrapper(trade)) onConfirmDialogConfirm()
+        if (trade && isEtherWrapper(trade)) tradeCallback()
         else setOpenConfirmDialog(true)
     }, [trade])
     //#endregion
