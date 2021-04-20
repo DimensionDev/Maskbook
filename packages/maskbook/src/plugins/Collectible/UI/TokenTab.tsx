@@ -79,7 +79,7 @@ export function TokenTab(props: TokenTabProps) {
                         </Link>
                     </Typography>
                 ) : null}
-                <Typography className={classes.description} dangerouslySetInnerHTML={{ __html: description }} />
+                <Typography className={classes.description} variant="body2" dangerouslySetInnerHTML={{ __html: description }} />
             </Box>
 
             {asset.value.traits && asset.value.traits.length ? (
