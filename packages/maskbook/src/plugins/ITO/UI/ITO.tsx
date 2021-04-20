@@ -74,6 +74,10 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) =>
             fontWeight: 'bold',
             marginBottom: 4,
             marginRight: 4,
+            width: '80%',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
         },
         status: {
             background: 'rgba(20, 23, 26, 0.6)',

@@ -101,6 +101,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const classes = useStyles()
     const { t } = useI18N()
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
+    console.log('poolSettings?.unlockTime', poolSettings?.unlockTime)
     return (
         <Card elevation={0}>
             <Grid container spacing={0}>
@@ -204,6 +205,21 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Typography>{dateTimeFormat(poolSettings?.endTime!)}</Typography>
                     </Paper>
                 </Grid>
+
+                {poolSettings?.unlockTime ? (
+                    <Grid item xs={6}>
+                        <Paper className={classes.label}>
+                            <Typography>{t('plugin_ito_unlock_time')}</Typography>
+                        </Paper>
+                    </Grid>
+                ) : null}
+                {poolSettings?.unlockTime ? (
+                    <Grid item xs={6}>
+                        <Paper className={classes.data}>
+                            <Typography>{dateTimeFormat(poolSettings?.unlockTime!)}</Typography>
+                        </Paper>
+                    </Grid>
+                ) : null}
                 <Grid item xs={12}>
                     <Typography variant="h5" className={classes.title} component="p">
                         {t('plugin_ito_send_tip')}

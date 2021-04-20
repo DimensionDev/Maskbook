@@ -253,6 +253,9 @@ export function CreateForm(props: CreateFormProps) {
                 return t('plugin_ito_error_qualification_start_time')
         }
 
+        if (!qualification?.isQualification && advanceSettingData.contract && qualificationAddress.length > 0) {
+            return t('plugin_ito_error_invalid_qualification')
+        }
         return ''
     }, [
         endTime,
@@ -418,11 +421,11 @@ export function CreateForm(props: CreateFormProps) {
                                 </Box>
                             ) : qualification?.loadingERC165 || loadingQualification ? (
                                 <CircularProgress size={16} />
-                            ) : (
+                            ) : qualificationAddress.length > 0 ? (
                                 <Box className={classNames(classes.iconWrapper, classes.fail)}>
                                     <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
                                 </Box>
-                            ),
+                            ) : null,
                         }}
                     />
                     {qualification?.startTime && new Date(Number(qualification.startTime) * 1000) > startTime ? (
