@@ -97,15 +97,10 @@ export function ListingTab() {
                 accountAddress: account,
                 startAmount: 0.1,
             })
-            console.log(response)
         } catch (e) {
             console.log(e)
         }
     }, [account, asset, token])
-
-    console.log({
-        asset: asset.value,
-    })
 
     if (listings.loading) return <LoadingTable />
     if (!listings.value || listings.error || !dataSource.length)
