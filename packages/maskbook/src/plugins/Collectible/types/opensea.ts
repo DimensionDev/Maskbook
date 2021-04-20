@@ -1,4 +1,7 @@
+import type { OpenSeaPort } from 'opensea-js'
 import type { OpenSeaAccount, OpenSeaAsset, OpenSeaCollection } from 'opensea-js/lib/types'
+
+export type CreateSellOrderPayload = Parameters<OpenSeaPort['createSellOrder']>[0]
 
 export interface OpenSeaCustomTrait {
     trait_type: string

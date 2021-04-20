@@ -63,6 +63,10 @@ const useStyles = makeStyles((theme) => {
             },
         },
         footer: {
+            marginTop: -1, // merge duplicate borders
+            zIndex: 1,
+            position: 'relative',
+            borderTop: `solid 1px ${theme.palette.divider}`,
             justifyContent: 'space-between',
         },
         tabs: {
@@ -252,7 +256,6 @@ export function Collectible(props: CollectibleProps) {
                         {tabIndex === 3 ? <ListingTab /> : null}
                         {tabIndex === 4 ? <HistoryTab /> : null}
                     </Paper>
-                    <Divider />
                 </CardContent>
                 <CardActions className={classes.footer}>
                     <Typography className={classes.footnote} variant="subtitle2">
@@ -288,7 +291,7 @@ export function Collectible(props: CollectibleProps) {
                 </CardActions>
             </CollectibleCard>
             {asset.value?.endTime && (
-                <Box className={classes.footnote}>
+                <Box className={classes.footnote} sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
                         Sale ends in {format(new Date(asset.value.endTime), 'yyyy-MM-dd HH:mm:ss')}.
                     </Typography>

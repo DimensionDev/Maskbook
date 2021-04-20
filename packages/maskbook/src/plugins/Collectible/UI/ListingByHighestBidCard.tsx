@@ -5,9 +5,10 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { useTokenWatched } from '../../../web3/hooks/useTokenWatched'
+import type { TokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
+import type { useAsset } from '../hooks/useAsset'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -31,15 +32,18 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface ListingByHighestBidCardProps {
-    onChange: () => void
+    asset?: ReturnType<typeof useAsset>
+    tokenWatched: TokenWatched
 }
 
 export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
+    const { asset, tokenWatched } = props
+    const { amount, token, balance, setAmount, setToken } = tokenWatched
+
     const { t } = useI18N()
     const classes = useStyles()
 
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
-    const { amount, token, balance, setAmount, setToken } = useTokenWatched()
 
     const validationMessage = useMemo(() => {
         if (new BigNumber(amount || '0').isZero()) return 'Enter a price'

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { createStyles, makeStyles, DialogContent, Tab, Tabs } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -6,6 +6,9 @@ import { ChainState } from '../../../web3/state/useChainState'
 import { ListingByPriceCard } from './ListingByPriceCard'
 import { ListingByHighestBidCard } from './ListingByHighestBidCard'
 import type { useAsset } from '../hooks/useAsset'
+import { PluginCollectibleRPC } from '../messages'
+import { useTokenWatched } from '../../../web3/hooks/useTokenWatched'
+import type { CreateSellOrderPayload } from '../types'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -38,6 +41,7 @@ export function PostListingDialog(props: PostListingDialogProps) {
     const classes = useStyles()
 
     const { chainId } = ChainState.useContainer()
+    const tokenWatched = useTokenWatched()
 
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [<Tab key="price" label="Set Price" />, <Tab key="bid" label="Highest Bid" />]
@@ -57,8 +61,8 @@ export function PostListingDialog(props: PostListingDialogProps) {
                     }}>
                     {tabs}
                 </Tabs>
-                {tabIndex === 0 ? <ListingByPriceCard onChange={() => {}} /> : null}
-                {tabIndex === 1 ? <ListingByHighestBidCard onChange={() => {}} /> : null}
+                {tabIndex === 0 ? <ListingByPriceCard asset={asset} tokenWatched={tokenWatched} /> : null}
+                {tabIndex === 1 ? <ListingByHighestBidCard asset={asset} tokenWatched={tokenWatched} /> : null}
             </DialogContent>
         </InjectedDialog>
     )

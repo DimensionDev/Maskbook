@@ -87,7 +87,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             expirationTime: toUnixTimestamp(expirationDateTime),
             paymentTokenAddress: token.value.type === EthereumTokenType.Ether ? undefined : token.value.address,
         })
-    }, [asset?.value, token, account])
+    }, [asset?.value, token, account, amount, expirationDateTime])
 
     const validationMessage = useMemo(() => {
         if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
@@ -145,8 +145,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                         }
                                         label={
                                             <Typography variant="body2">
-                                                By checking this box, I acknowledge that this item has not been reviewd or
-                                                approved by OpenSea.
+                                                By checking this box, I acknowledge that this item has not been reviewd
+                                                or approved by OpenSea.
                                             </Typography>
                                         }
                                     />
@@ -164,7 +164,11 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                         label={
                                             <Typography variant="body2">
                                                 By checking this box, I agree to OpenSea's{' '}
-                                                <Link color="primary" target="_blank" rel="noopener noreferrer" href="https://opensea.io/tos">
+                                                <Link
+                                                    color="primary"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    href="https://opensea.io/tos">
                                                     Terms of Service
                                                 </Link>
                                                 .

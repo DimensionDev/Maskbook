@@ -123,6 +123,14 @@ export function ListingTab() {
                             Retry
                         </Button>
                     </Box>
+                    <TableListPagination
+                        handlePrevClick={() => setPage((prev) => prev - 1)}
+                        handleNextClick={() => setPage((prev) => prev + 1)}
+                        prevDisabled={page === 0}
+                        nextDisabled={dataSource.length < 10}
+                        page={page}
+                        pageCount={10}
+                    />
                 </Table>
                 {asset.value?.owner?.address && isSameAddress(asset.value.owner.address, account) ? (
                     <ListingTabActionBar />
