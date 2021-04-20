@@ -91,7 +91,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const validationMessage = useMemo(() => {
         if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
-        if (expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid Expiration Date'
+        if (expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid expiration date'
         if (!isVerified && !unreviewedChecked) return 'Please ensure unreviewed item'
         if (!isVerified && !ToS_Checked) return 'Please check ToS document'
         return ''

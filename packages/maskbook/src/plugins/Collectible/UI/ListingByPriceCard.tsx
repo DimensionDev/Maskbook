@@ -76,9 +76,9 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const validationMessage = useMemo(() => {
         if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
         if (endingPriceChecked && endingAmount && !new BigNumber(amount || '0').isGreaterThan(endingAmount || '0'))
-            return 'Invalid Ending Price'
-        if (futureTimeChecked && scheduleDateTime.getTime() - Date.now() <= 0) return 'Invalid Schedule Date'
-        if (privacyChecked && buyerAddress && !EthereumAddress.isValid(buyerAddress)) return 'Invalid Buyer Address'
+            return 'Invalid ending price'
+        if (futureTimeChecked && scheduleDateTime.getTime() - Date.now() <= 0) return 'Invalid schedule date'
+        if (privacyChecked && buyerAddress && !EthereumAddress.isValid(buyerAddress)) return 'Invalid buyer address'
         return ''
     }, [amount, endingPriceChecked, endingAmount, futureTimeChecked, scheduleDateTime, privacyChecked, buyerAddress])
 
