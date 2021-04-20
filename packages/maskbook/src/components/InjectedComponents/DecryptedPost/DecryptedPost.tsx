@@ -99,8 +99,10 @@ export function DecryptPost(props: DecryptPostProps) {
     // decrypt post content and image attachments
     const decryptedPayloadForImageAlpha38 = decryptedPayloadForImage?.version === -38 ? decryptedPayloadForImage : null
     const sharedPublic =
-        deconstructedPayload.andThen((x) => (x.version === -38 ? Ok(!!x.sharedPublic) : Err.EMPTY)).unwrapOr(false) ||
-        decryptedPayloadForImageAlpha38?.sharedPublic
+        deconstructedPayload
+            .mapErr(() => false)
+            .andThen((x) => (x.version === -38 ? Ok(!!x.sharedPublic) : Ok(false)))
+            .unwrap() || decryptedPayloadForImageAlpha38?.sharedPublic
 
     useEffect(() => {
         const signal = new AbortController()

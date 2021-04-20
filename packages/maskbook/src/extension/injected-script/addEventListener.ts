@@ -83,9 +83,9 @@ function dispatchEventRaw<T extends Event>(target: Node | Document | null, event
         return new un_xray_Proxy(
             event,
             clone_into({
-                get(target: T, key: keyof T) {
+                get(target, key) {
                     if (key === 'currentTarget') return un_xray_DOM(currentTarget())
-                    return source[key] ?? un_xray_DOM(target)[key]
+                    return (source as any)[key] ?? (un_xray_DOM(target) as any)[key]
                 },
             }),
         )

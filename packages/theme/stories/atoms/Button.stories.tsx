@@ -13,7 +13,7 @@ export default meta({
     },
 })
 
-export const Button = of({
+export const Button: unknown = of({
     args: {
         children: 'A button?',
     },
