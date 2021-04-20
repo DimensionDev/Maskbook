@@ -101,7 +101,6 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const classes = useStyles()
     const { t } = useI18N()
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
-    console.log('poolSettings?.unlockTime', poolSettings?.unlockTime)
     return (
         <Card elevation={0}>
             <Grid container spacing={0}>
