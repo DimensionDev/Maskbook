@@ -25,7 +25,7 @@ export function useTradeComputed(
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
 
     // ETH-WETH pair
-    const ether_ = useEtherTrade(inputAmount_, outputAmount_, inputToken, outputToken)
+    const ether_ = useEtherTrade(inputToken, outputToken)
     const ether = useEtherTradeComputed(
         ether_.value ?? false,
         strategy,
@@ -76,7 +76,7 @@ export function useTradeComputed(
         outputToken,
     )
 
-    if (ether_)
+    if (ether_.value)
         return {
             ...ether_,
             value: ether,

@@ -28,9 +28,11 @@ export function useTradeComputed(
     return useMemo((): TradeComputed<EtherWrapper> | null => {
         if (!isEtherWrapper) return null
 
-        const inputAmount_ = new BigNumber(inputAmount || '0')
-        const outputAmount_ = new BigNumber(outputAmount || '0')
-        const tradeAmount = inputAmount_.isGreaterThan(0) ? inputAmount_ : outputAmount_
+        // the trade amount follows trade strategy
+        const tradeAmount = new BigNumber(strategy === TradeStrategy.ExactIn ? inputAmount || '0' : outputAmount || '0')
+        // skip to render 0s
+        if (tradeAmount.isZero()) return null
+
         return {
             strategy,
             inputToken,
