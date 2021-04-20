@@ -1,4 +1,6 @@
-import { ChangeEvent, useState, useMemo } from 'react'
+import { ChangeEvent, useState, useMemo, useCallback } from 'react'
+import BigNumber from 'bignumber.js'
+import { EthereumAddress } from 'wallet.ts'
 import {
     createStyles,
     makeStyles,
@@ -14,11 +16,14 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { useTokenWatched } from '../../../web3/hooks/useTokenWatched'
-import BigNumber from 'bignumber.js'
+import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import type { TokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
+import { PluginCollectibleRPC } from '../messages'
+import { ChainState } from '../../../web3/state/useChainState'
+import { toAsset, toUnixTimestamp } from '../helpers'
+import type { useAsset } from '../hooks/useAsset'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -47,15 +52,22 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface ListingByPriceCardProps {
-    onChange: () => void
+    asset?: ReturnType<typeof useAsset>
+    tokenWatched: TokenWatched
 }
 
 export function ListingByPriceCard(props: ListingByPriceCardProps) {
+    const { asset, tokenWatched } = props
+    const { amount, token, balance, setAmount, setToken } = tokenWatched
+
     const { t } = useI18N()
     const classes = useStyles()
 
+    const { account } = ChainState.useContainer()
+
     const [scheduleDateTime, setScheduleDateTime] = useState(new Date())
-    const { amount, token, balance, setAmount, setToken } = useTokenWatched()
+    const [buyerAddress, setBuyerAddress] = useState('')
+    const [endingAmount, setEndingAmount] = useState('')
 
     const [endingPriceChecked, setEndingPriceChecked] = useState(false)
     const [futureTimeChecked, setFutureTimeChecked] = useState(false)
@@ -63,8 +75,42 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
 
     const validationMessage = useMemo(() => {
         if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
+        if (endingPriceChecked && endingAmount && !new BigNumber(amount || '0').isGreaterThan(endingAmount || '0'))
+            return 'Invalid ending price'
+        if (futureTimeChecked && scheduleDateTime.getTime() - Date.now() <= 0) return 'Invalid schedule date'
+        if (privacyChecked && buyerAddress && !EthereumAddress.isValid(buyerAddress)) return 'Invalid buyer address'
         return ''
-    }, [amount])
+    }, [amount, endingPriceChecked, endingAmount, futureTimeChecked, scheduleDateTime, privacyChecked, buyerAddress])
+
+    const onPostListing = useCallback(async () => {
+        if (!asset?.value) return
+        if (!asset.value.token_id || !asset.value.token_address) return
+        if (!token?.value) return
+        if (token.value.type !== EthereumTokenType.Ether && token.value.type !== EthereumTokenType.ERC20) return
+        await PluginCollectibleRPC.createSellOrder({
+            asset: toAsset({
+                tokenId: asset.value.token_id,
+                tokenAddress: asset.value.token_address,
+                schemaName: asset.value.assetContract.schemaName,
+            }),
+            accountAddress: account,
+            startAmount: Number.parseFloat(amount),
+            endAmount: endingPriceChecked && endingAmount ? Number.parseFloat(endingAmount) : undefined,
+            listingTime: futureTimeChecked ? toUnixTimestamp(scheduleDateTime) : undefined,
+            buyerAddress: privacyChecked ? buyerAddress : undefined,
+        })
+    }, [
+        asset?.value,
+        token,
+        amount,
+        account,
+        endingAmount,
+        scheduleDateTime,
+        buyerAddress,
+        endingPriceChecked,
+        futureTimeChecked,
+        privacyChecked,
+    ])
 
     return (
         <Card elevation={0}>
@@ -89,9 +135,9 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 />
                 {endingPriceChecked ? (
                     <SelectTokenAmountPanel
-                        amount={amount}
+                        amount={endingAmount}
                         balance={balance.value ?? '0'}
-                        onAmountChange={setAmount}
+                        onAmountChange={setEndingAmount}
                         token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
                         onTokenChange={setToken}
                         TokenAmountPanelProps={{
@@ -123,10 +169,12 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                     <TextField
                         className={classes.panel}
                         fullWidth
+                        value={buyerAddress}
                         variant="outlined"
                         label="Buyer Address"
                         placeholder="Enter the buyer's address."
                         helperText="Only the buyer is allowed to buy it."
+                        onChange={(e) => setBuyerAddress(e.target.value)}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -207,7 +255,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         waiting={t('plugin_collectible_post_listing')}
                         complete={t('plugin_collectible_done')}
                         failed={t('plugin_collectible_retry')}
-                        executor={async () => {}}
+                        executor={onPostListing}
                         completeOnClick={() => setAmount('')}
                         failedOnClick="use executor"
                     />

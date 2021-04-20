@@ -27,3 +27,5 @@ export function useTokenWatched(initialToken?: { type: EthereumTokenType; addres
         setToken,
     }
 }
+
+export type TokenWatched = ReturnType<typeof useTokenWatched>

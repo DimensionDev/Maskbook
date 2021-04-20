@@ -1,13 +1,17 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { createStyles, makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { useTokenWatched } from '../../../web3/hooks/useTokenWatched'
+import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import type { TokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
+import type { useAsset } from '../hooks/useAsset'
+import { ChainState } from '../../../web3/state/useChainState'
+import { PluginCollectibleRPC } from '../messages'
+import { toAsset, toUnixTimestamp } from '../helpers'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -31,20 +35,46 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface ListingByHighestBidCardProps {
-    onChange: () => void
+    asset?: ReturnType<typeof useAsset>
+    tokenWatched: TokenWatched
 }
 
 export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
+    const { asset, tokenWatched } = props
+    const { amount, token, balance, setAmount, setToken } = tokenWatched
+
     const { t } = useI18N()
     const classes = useStyles()
 
+    const { account } = ChainState.useContainer()
+
+    const [reservePrice, setReservePrice] = useState('')
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
-    const { amount, token, balance, setAmount, setToken } = useTokenWatched()
 
     const validationMessage = useMemo(() => {
-        if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
+        if (new BigNumber(amount || '0').isZero()) return 'Enter minimum bid'
+        if (new BigNumber(reservePrice || '0').isZero()) return 'Ether reserve price'
+        if (expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid expiration date'
         return ''
     }, [amount])
+
+    const onPostListing = useCallback(async () => {
+        if (!asset?.value) return
+        if (!asset.value.token_id || !asset.value.token_address) return
+        if (!token?.value) return
+        if (token.value.type !== EthereumTokenType.Ether && token.value.type !== EthereumTokenType.ERC20) return
+        await PluginCollectibleRPC.createSellOrder({
+            asset: toAsset({
+                tokenId: asset.value.token_id,
+                tokenAddress: asset.value.token_address,
+                schemaName: asset.value.assetContract.schemaName,
+            }),
+            accountAddress: account,
+            startAmount: Number.parseFloat(amount),
+            expirationTime: toUnixTimestamp(expirationDateTime),
+            englishAuctionReservePrice: Number.parseFloat(reservePrice),
+        })
+    }, [asset?.value, token, amount, account, reservePrice, expirationDateTime])
 
     return (
         <Card elevation={0}>
@@ -68,7 +98,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                 <SelectTokenAmountPanel
                     amount={amount}
                     balance={balance.value ?? '0'}
-                    onAmountChange={setAmount}
+                    onAmountChange={setReservePrice}
                     token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
@@ -106,7 +136,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                         waiting={t('plugin_collectible_post_listing')}
                         complete={t('plugin_collectible_done')}
                         failed={t('plugin_collectible_retry')}
-                        executor={async () => {}}
+                        executor={onPostListing}
                         completeOnClick={() => setAmount('')}
                         failedOnClick="use executor"
                     />

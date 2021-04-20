@@ -7,7 +7,6 @@ import {
     CardHeader,
     CardContent,
     CardActions,
-    Divider,
     Link,
     Paper,
     Tab,
@@ -15,6 +14,8 @@ import {
     Typography,
 } from '@material-ui/core'
 import { Trans } from 'react-i18next'
+import { findIndex } from 'lodash-es'
+import { format } from 'date-fns'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { ArticleTab } from './ArticleTab'
@@ -32,11 +33,9 @@ import { CollectibleProvider } from '../types'
 import { currentCollectibleProviderSettings } from '../settings'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/UI/trader/FootnoteMenu'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
-import { findIndex } from 'lodash-es'
-import { resolveCollectibleProviderName } from '../pipes'
-import { unreachable } from '../../../utils/utils'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { format } from 'date-fns'
+import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
+import { useSettingsSwticher } from '../../../utils/hooks/useSettingSwitcher'
+import { ChainState } from '../../../web3/state/useChainState'
 import { useRemarkable } from '../../Snapshot/hooks/useRemarkable'
 
 const useStyles = makeStyles((theme) => {
@@ -64,6 +63,10 @@ const useStyles = makeStyles((theme) => {
             },
         },
         footer: {
+            marginTop: -1, // merge duplicate borders
+            zIndex: 1,
+            position: 'relative',
+            borderTop: `solid 1px ${theme.palette.divider}`,
             justifyContent: 'space-between',
         },
         tabs: {
@@ -132,6 +135,7 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
+    const { chainId } = ChainState.useContainer()
     const { asset, provider } = CollectibleState.useContainer()
 
     const [tabIndex, setTabIndex] = useState(0)
@@ -143,18 +147,13 @@ export function Collectible(props: CollectibleProps) {
     }, [])
     //#endregion
 
-    const onSwitch = useCallback(() => {
-        switch (provider) {
-            case CollectibleProvider.OPENSEA:
-                currentCollectibleProviderSettings.value = CollectibleProvider.RARIBLE
-                break
-            case CollectibleProvider.RARIBLE:
-                currentCollectibleProviderSettings.value = CollectibleProvider.OPENSEA
-                break
-            default:
-                unreachable(provider)
-        }
-    }, [provider])
+    //#region provider switcher
+    const CollectibleProviderSwitcher = useSettingsSwticher(
+        currentCollectibleProviderSettings,
+        getEnumAsArray(CollectibleProvider).map((x) => x.value),
+        resolveCollectibleProviderName,
+    )
+    //#endregion
 
     const description = useRemarkable(asset.value?.description ?? '')
 
@@ -163,17 +162,10 @@ export function Collectible(props: CollectibleProps) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color="textPrimary">
-                    Failed to load your collectible. Maybe it's not available on{' '}
-                    {resolveCollectibleProviderName(provider)}. Try to switch to another provider.
+                    Failed to load your collectible on {resolveCollectibleProviderName(provider)}. Try to switch to
+                    another provider.
                 </Typography>
-                <ActionButton
-                    sx={{ marginTop: 1 }}
-                    color="primary"
-                    variant="contained"
-                    fullWidth={false}
-                    onClick={onSwitch}>
-                    Switch
-                </ActionButton>
+                {CollectibleProviderSwitcher}
             </Box>
         )
 
@@ -200,7 +192,21 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            {asset.value.name ?? ''}
+                            {asset.value.token_address && asset.value.token_id ? (
+                                <Link
+                                    color="primary"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href={resolveAssetLinkOnOpenSea(
+                                        chainId,
+                                        asset.value.token_address,
+                                        asset.value.token_id,
+                                    )}>
+                                    {asset.value.name ?? ''}
+                                </Link>
+                            ) : (
+                                asset.value.name ?? ''
+                            )}
                             {asset.value.safelist_request_status === 'verified' ? (
                                 <VerifiedUserIcon color="primary" fontSize="small" sx={{ marginLeft: 0.5 }} />
                             ) : null}
@@ -254,7 +260,6 @@ export function Collectible(props: CollectibleProps) {
                         {tabIndex === 3 ? <ListingTab /> : null}
                         {tabIndex === 4 ? <HistoryTab /> : null}
                     </Paper>
-                    <Divider />
                 </CardContent>
                 <CardActions className={classes.footer}>
                     <Typography className={classes.footnote} variant="subtitle2">
@@ -290,7 +295,7 @@ export function Collectible(props: CollectibleProps) {
                 </CardActions>
             </CollectibleCard>
             {asset.value?.endTime && (
-                <Box className={classes.footnote}>
+                <Box className={classes.footnote} sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
                         Sale ends in {format(new Date(asset.value.endTime), 'yyyy-MM-dd HH:mm:ss')}.
                     </Typography>
