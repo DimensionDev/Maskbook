@@ -20,9 +20,9 @@ import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../..
 import type { TokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
-import { PluginCollectibleMessage, PluginCollectibleRPC } from '../messages'
+import { PluginCollectibleRPC } from '../messages'
 import { ChainState } from '../../../web3/state/useChainState'
-import { toAsset } from '../helpers'
+import { toAsset, toUnixTimestamp } from '../helpers'
 import type { useAsset } from '../hooks/useAsset'
 
 const useStyles = makeStyles((theme) => {
@@ -95,8 +95,22 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
+            endAmount: endingPriceChecked && endingAmount ? Number.parseFloat(endingAmount) : undefined,
+            listingTime: futureTimeChecked ? toUnixTimestamp(scheduleDateTime) : undefined,
+            buyerAddress: privacyChecked ? buyerAddress : undefined,
         })
-    }, [asset?.value, token, amount, account])
+    }, [
+        asset?.value,
+        token,
+        amount,
+        account,
+        endingAmount,
+        scheduleDateTime,
+        buyerAddress,
+        endingPriceChecked,
+        futureTimeChecked,
+        privacyChecked,
+    ])
 
     return (
         <Card elevation={0}>
