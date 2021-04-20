@@ -9,7 +9,7 @@ import { RedPacketCompositionEntry } from '../../plugins/RedPacket/define'
 import { FileServiceCompositionEntry } from '../../plugins/FileService/UI-define'
 import { ITO_CompositionEntry } from '../../plugins/ITO/define'
 import { useAccount } from '../../web3/hooks/useAccount'
-import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog, useRemoteControlledDialogEvent } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { Flags } from '../../utils/flags'
@@ -121,17 +121,18 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Wallet
-    const [, setSelectWalletDialogOpen] = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const { onOpen: onSelectWalletDialogOpen } = useRemoteControlledDialogEvent(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
+
+    const { onOpen: onSelectProviderDialogOpen } = useRemoteControlledDialogEvent(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     const openWallet = useCallback(() => {
         if (selectedWallet) {
-            setSelectWalletDialogOpen({
-                open: true,
-            })
+            onSelectWalletDialogOpen()
         } else {
-            setSelectProviderDialogOpen({
-                open: true,
-            })
+            onSelectProviderDialogOpen()
         }
     }, [])
     //#endregion
@@ -174,12 +175,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Swap
-    const [, setSwapDialogOpen] = useRemoteControlledDialog(PluginTraderMessages.events.SwapDialogUpdated)
-    const openSwapDialog = useCallback(() => {
-        setSwapDialogOpen({
-            open: true,
-        })
-    }, [])
+    const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.SwapDialogUpdated)
     //#endregion
 
     const [menu, openMenu] = useMenu(
