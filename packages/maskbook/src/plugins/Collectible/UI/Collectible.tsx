@@ -37,6 +37,7 @@ import { resolveCollectibleProviderName } from '../pipes'
 import { unreachable } from '../../../utils/utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { format } from 'date-fns'
+import { useRemarkable } from '../../Snapshot/hooks/useRemarkable'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -155,6 +156,8 @@ export function Collectible(props: CollectibleProps) {
         }
     }, [provider])
 
+    const description = useRemarkable(asset.value?.description ?? '')
+
     if (asset.loading) return <PluginSkeleton />
     if (!asset.value)
         return (
@@ -207,9 +210,11 @@ export function Collectible(props: CollectibleProps) {
                         <>
                             {asset.value.description ? (
                                 <Box display="flex" alignItems="center">
-                                    <Typography className={classes.subtitle} variant="body2">
-                                        {asset.value.description}
-                                    </Typography>
+                                    <Typography
+                                        className={classes.subtitle}
+                                        variant="body2"
+                                        dangerouslySetInnerHTML={{ __html: description }}
+                                    />
                                 </Box>
                             ) : null}
 

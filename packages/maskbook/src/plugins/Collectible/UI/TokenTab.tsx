@@ -5,6 +5,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatEthereumAddress } from '../../Wallet/formatter'
 import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'
+import { useRemarkable } from '../../Snapshot/hooks/useRemarkable'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -48,7 +49,7 @@ export function TokenTab(props: TokenTabProps) {
     const { t } = useI18N()
     const classes = useStyles()
     const { token, asset } = CollectibleState.useContainer()
-
+    const description = useRemarkable(asset.value?.description ?? '')
     if (!asset.value) return null
     return (
         <CollectibleTab>
@@ -71,7 +72,7 @@ export function TokenTab(props: TokenTabProps) {
                             </Link>
                         </Typography>
                     ) : null}
-                    <Typography className={classes.description}>{asset.value.description}</Typography>
+                    <Typography className={classes.description} dangerouslySetInnerHTML={{ __html: description }} />
                 </Typography>
             </Box>
 
