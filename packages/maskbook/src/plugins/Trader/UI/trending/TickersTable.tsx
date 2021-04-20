@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
             maxHeight: 266,
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

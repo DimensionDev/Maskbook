@@ -33,7 +33,7 @@ export async function claimRedPacket(
         redpacket_id: rpid,
         validation: sha3(from)!,
         // TODO: This is not working on MetaMask cause it require the private key.
-        signature: await Services.Ethereum.sign(verify, from, chainId),
+        signature: await Services.Ethereum.sign(verify, from),
     }
     const pay = await fetch(
         `${host}/please?payload=${jwt.sign(jwt_encoded, x, { algorithm: 'HS256' })}&network=${network}`,

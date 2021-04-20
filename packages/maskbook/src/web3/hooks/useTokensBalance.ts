@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { useBalanceCheckerContract } from '../contracts/useBalanceChecker'
 import { useAccount } from './useAccount'
-import { useChainId } from './useChainState'
+import { useChainId } from './useBlockNumber'
 
 /**
  * Fetch balance of multiple tokens from chain

@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { useAccount } from './useAccount'
-import { useChainId } from './useChainState'
+import { useChainId } from './useBlockNumber'
 
 export function useERC20TokenAllowance(address: string, spender?: string) {
     const account = useAccount()

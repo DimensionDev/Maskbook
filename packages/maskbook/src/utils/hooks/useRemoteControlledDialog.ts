@@ -50,3 +50,23 @@ export function useRemoteControlledDialog<T extends { open: boolean }>(
     )
     return [open, onUpdateByLocal] as const
 }
+
+export function useRemoteControlledDialogEvent(event: UnboundedRegistry<{ open: boolean }>) {
+    const [open, setOpen] = useRemoteControlledDialog(event)
+    const onOpen = useCallback(() => {
+        setOpen({
+            open: true,
+        })
+    }, [])
+    const onClose = useCallback(() => {
+        setOpen({
+            open: false,
+        })
+    }, [])
+    return {
+        open,
+        setOpen,
+        onClose,
+        onOpen,
+    }
+}

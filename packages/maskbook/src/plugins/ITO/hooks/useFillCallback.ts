@@ -12,7 +12,7 @@ import { gcd, sortTokens } from '../helpers'
 import { ITO_CONSTANTS, ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import Services from '../../../extension/service'
-import { useChainId } from '../../../web3/hooks/useChainState'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
 
 export interface PoolSettings {
@@ -168,7 +168,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         // error: unable to sign password
         let signedPassword = ''
         try {
-            signedPassword = await Services.Ethereum.sign(password, account, chainId)
+            signedPassword = await Services.Ethereum.sign(password, account)
         } catch (e) {
             signedPassword = ''
         }

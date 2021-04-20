@@ -12,7 +12,7 @@ import { payloadOutMask } from '../helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
 import Services from '../../../extension/service'
-import { useChainId } from '../../../web3/hooks/useChainState'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { PoolSettings, useFillCallback } from '../hooks/useFillCallback'
 import { ConfirmDialog } from './ConfirmDialog'
@@ -119,7 +119,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password)
-                payload.password = await Services.Ethereum.sign(Web3Utils.sha3(payload.message) ?? '', account, chainId)
+                payload.password = await Services.Ethereum.sign(Web3Utils.sha3(payload.message) ?? '', account)
             if (!payload.password) {
                 alert('Failed to sign the password.')
                 return

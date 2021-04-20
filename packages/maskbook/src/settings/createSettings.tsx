@@ -9,7 +9,7 @@ export interface SettingsTexts {
 }
 export const texts = new WeakMap<ValueRef<any>, SettingsTexts>()
 
-type InternalSettings<T> = ValueRef<T> & {
+export type InternalSettings<T> = ValueRef<T> & {
     readonly key: string
     readonly ready: boolean
     readonly readyPromise: Promise<T>

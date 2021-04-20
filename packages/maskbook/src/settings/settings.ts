@@ -40,7 +40,7 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
 //#endregion
 
 //#region chain state settings
-export const currentChainStateSettings = createGlobalSettings<string>('chain state', stringify([]), {
+export const currentBlockNumnberStateSettings = createGlobalSettings<string>('block number state', stringify([]), {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 //#endregion

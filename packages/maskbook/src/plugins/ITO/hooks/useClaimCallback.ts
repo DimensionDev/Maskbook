@@ -5,7 +5,7 @@ import { TransactionStateType, useTransactionState } from '../../../web3/hooks/u
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionEventType } from '../../../web3/types'
 import { addGasMargin } from '../../../web3/helpers'
-import { useChainId } from '../../../web3/hooks/useChainState'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
 
 export function useClaimCallback() {

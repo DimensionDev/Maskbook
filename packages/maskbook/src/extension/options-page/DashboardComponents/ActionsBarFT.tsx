@@ -11,7 +11,7 @@ import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainIdValid } from '../../../web3/hooks/useChainState'
+import { useChainIdValid } from '../../../web3/hooks/useBlockNumber'
 
 const useStyles = makeStyles((theme) => ({
     more: {
