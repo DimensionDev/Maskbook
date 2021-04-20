@@ -1,19 +1,19 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import type { Tx } from '@dimensiondev/contracts/types/types'
-import { useWrappedEtherContract } from '../contracts/useWrappedEtherContract'
+import { useEtherWrapperContract } from '../contracts/useWrappedEtherContract'
 import { addGasMargin } from '../helpers'
 import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 
-export function useWrappedEtherCallback() {
+export function useEtherWrapperCallback() {
     const account = useAccount()
-    const wrappedEtherContract = useWrappedEtherContract()
+    const wrapperContract = useEtherWrapperContract()
     const [transactionState, setTransactionState] = useTransactionState()
 
-    const depositCallback = useCallback(
+    const wrapCallback = useCallback(
         async (amount: string) => {
-            if (!wrappedEtherContract || !amount) {
+            if (!wrapperContract || !amount) {
                 setTransactionState({
                     type: TransactionStateType.UNKNOWN,
                 })
@@ -40,7 +40,7 @@ export function useWrappedEtherCallback() {
             }
 
             // step 2: estimate gas
-            const estimatedGas = await wrappedEtherContract.methods
+            const estimatedGas = await wrapperContract.methods
                 .deposit()
                 .estimateGas(config)
                 .catch((error) => {
@@ -52,7 +52,7 @@ export function useWrappedEtherCallback() {
                 })
 
             // step 3: blocking
-            wrappedEtherContract.methods.deposit().send(
+            wrapperContract.methods.deposit().send(
                 {
                     gas: addGasMargin(estimatedGas).toFixed(),
                     ...config,
@@ -72,12 +72,12 @@ export function useWrappedEtherCallback() {
                 },
             )
         },
-        [account, wrappedEtherContract],
+        [account, wrapperContract],
     )
 
-    const withdrawCallback = useCallback(
+    const unwrapCallback = useCallback(
         async (all = true, amount = '0') => {
-            if (!wrappedEtherContract || !amount) {
+            if (!wrapperContract || !amount) {
                 setTransactionState({
                     type: TransactionStateType.UNKNOWN,
                 })
@@ -85,7 +85,7 @@ export function useWrappedEtherCallback() {
             }
 
             // read balance
-            const wethBalance = await wrappedEtherContract.methods.balanceOf(account).call()
+            const wethBalance = await wrapperContract.methods.balanceOf(account).call()
 
             // error: invalid withdraw amount
             if (all === false && new BigNumber(amount).isZero()) {
@@ -116,7 +116,7 @@ export function useWrappedEtherCallback() {
             const withdrawAmount = all ? wethBalance : amount
 
             // step 2: estimate gas
-            const estimatedGas = await wrappedEtherContract.methods
+            const estimatedGas = await wrapperContract.methods
                 .withdraw(withdrawAmount)
                 .estimateGas(config)
                 .catch((error) => {
@@ -128,7 +128,7 @@ export function useWrappedEtherCallback() {
                 })
 
             // step 3: blocking
-            wrappedEtherContract.methods.withdraw(withdrawAmount).send(
+            wrapperContract.methods.withdraw(withdrawAmount).send(
                 {
                     gas: addGasMargin(estimatedGas).toFixed(),
                     ...config,
@@ -148,7 +148,7 @@ export function useWrappedEtherCallback() {
                 },
             )
         },
-        [account, wrappedEtherContract],
+        [account, wrapperContract],
     )
 
     const resetCallback = useCallback(() => {
@@ -157,5 +157,5 @@ export function useWrappedEtherCallback() {
         })
     }, [])
 
-    return [transactionState, depositCallback, withdrawCallback, resetCallback] as const
+    return [transactionState, wrapCallback, unwrapCallback, resetCallback] as const
 }
