@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: '0px 0px 3px 1px #ADADAD',
         marginRight: '10%',
         overflow: 'hidden',
+        transform: 'translateZ(1px)', // https://stackoverflow.com/a/63838447
     },
     topInfo: {
         display: 'flex',
