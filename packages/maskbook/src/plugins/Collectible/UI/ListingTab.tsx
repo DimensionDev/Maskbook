@@ -84,29 +84,6 @@ export function ListingTab() {
         })
     }, [listings.value])
 
-    const onMakeListing = useCallback(async () => {
-        if (!token) return
-        if (!asset.value) return
-        try {
-            const response = await PluginCollectibleRPC.createBuyOrder({
-                asset: toAsset({
-                    tokenId: token.tokenId,
-                    tokenAddress: token.contractAddress,
-                    schemaName: asset.value?.assetContract?.schemaName,
-                }),
-                accountAddress: account,
-                startAmount: 0.1,
-            })
-            console.log(response)
-        } catch (e) {
-            console.log(e)
-        }
-    }, [account, asset, token])
-
-    console.log({
-        asset: asset.value,
-    })
-
     if (listings.loading) return <LoadingTable />
     if (!listings.value || listings.error || !dataSource.length)
         return (
@@ -120,7 +97,7 @@ export function ListingTab() {
                             }}
                             variant="text"
                             onClick={() => listings.retry()}>
-                            Retry
+                            {t('plugin_collectible_retry')}
                         </Button>
                     </Box>
                     <TableListPagination
