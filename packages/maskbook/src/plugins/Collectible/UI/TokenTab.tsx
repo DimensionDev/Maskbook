@@ -64,26 +64,6 @@ export function TokenTab(props: TokenTabProps) {
                 <Typography variant="body1" sx={{ marginBottom: 1 }}>
                     {t('plugin_collectible_base')}
                 </Typography>
-
-                {asset.value.creator ? (
-                    <Typography variant="body2">
-                        {t('plugin_collectible_create_by')}{' '}
-                        <Link href={asset.value.creator.link} target="_blank" rel="noopener noreferrer">
-                            {asset.value.creator.user?.username ?? asset.value.creator.address?.slice(2, 8)}
-                        </Link>
-                    </Typography>
-                ) : asset.value.owner ? (
-                    <Typography variant="body2">
-                        {t('plugin_collectible_owned_by')}{' '}
-                        <Link href={asset.value.owner.link} target="_blank" rel="noopener noreferrer">
-                            {asset.value.owner?.user?.username ?? asset.value.owner?.address?.slice(2, 8) ?? ''}
-                        </Link>
-                    </Typography>
-                ) : null}
-                <Typography className={classes.description} variant="body2">
-                    {asset.value.description}
-                </Typography>
-
                 {asset.value.creator ? (
                     <Typography variant="body2">
                         {t('plugin_collectible_create_by')}{' '}
