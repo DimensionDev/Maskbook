@@ -391,6 +391,8 @@
     "plugin_file_service_error_102": "The file is too large; limit is {{limit}}.",
     "plugin_file_service_on_change_file": "Change File",
     "plugin_trader_swap": "Swap",
+    "plugin_trader_wrap": "Wrap",
+    "plugin_trader_unwrap": "Unwrap",
     "plugin_trader_buy": "Buy",
     "plugin_trader_no_data": "No Data",
     "plugin_trader_tab_market": "General",

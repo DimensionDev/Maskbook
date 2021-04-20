@@ -9,6 +9,7 @@ import { useRouterV2Contract as useUniswapRouterV2Contract } from '../contracts/
 import { useRouterV2Contract as useSushiSwapRouterV2Contract } from '../contracts/sushiswap/useRouterV2Contract'
 import { useRouterV2Contract as useSashimiSwapRouterV2Contract } from '../contracts/sashimiswap/useRouterV2Contract'
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract'
+import type { EtherWrapper } from './ether/useTradeComputed'
 
 export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeComputed<unknown> | null) {
     // create contract instances for uniswap and sushiswap
@@ -18,7 +19,7 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
     const exchangeProxyContract = useExchangeProxyContract()
 
     // create trade callbacks
-    const ether = useEtherCallback(tradeComputed as TradeComputed<{ isEtherWrapper: boolean }>)
+    const ether = useEtherCallback(tradeComputed as TradeComputed<EtherWrapper>)
     const uniswap = useUniswapCallback(
         provider === TradeProvider.UNISWAP ? (tradeComputed as TradeComputed<Trade>) : null,
         uniswapRouterV2Contract,
@@ -40,8 +41,8 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
     )
 
     // an ether wrapper trade is detected
-    const etherTradeComputed = tradeComputed?.trade_ as { isEtherWrapper: true }
-    if (etherTradeComputed.isEtherWrapper) return ether
+    const etherTradeComputed = tradeComputed?.trade_ as EtherWrapper | null
+    if (etherTradeComputed?.isEtherWrapper) return ether
 
     // trade with various provider
     switch (provider) {

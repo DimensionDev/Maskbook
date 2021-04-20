@@ -391,6 +391,8 @@
     "plugin_file_service_error_102": "ファイルが大きすぎます！最大容量は {{limit}} です。",
     "plugin_file_service_on_change_file": "ファイルの変更",
     "plugin_trader_swap": "スワップ",
+    "plugin_trader_wrap": "",
+    "plugin_trader_unwrap": "",
     "plugin_trader_buy": "購入",
     "plugin_trader_no_data": "データなし",
     "plugin_trader_tab_market": "一般",

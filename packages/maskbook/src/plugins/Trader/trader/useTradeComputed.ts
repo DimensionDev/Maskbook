@@ -25,12 +25,12 @@ export function useTradeComputed(
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
 
     // ether
-    const ether_ = useEtherTrade(inputToken, outputToken)
+    const ether_ = useEtherTrade(inputAmount_, outputAmount_, inputToken, outputToken)
     const ether = useEtherTradeComputed(
         ether_.value ?? false,
         strategy,
-        inputAmount,
-        outputAmount,
+        inputAmount_,
+        outputAmount_,
         inputToken,
         outputToken,
     )

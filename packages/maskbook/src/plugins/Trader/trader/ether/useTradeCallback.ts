@@ -1,12 +1,9 @@
 import { useEtherWrapperCallback } from '../../../../web3/hooks/useEtherWrapperCallback'
 import { EthereumTokenType } from '../../../../web3/types'
 import { TradeComputed, TradeStrategy } from '../../types'
+import type { EtherWrapper } from './useTradeComputed'
 
-export function useTradeCallback(
-    trade: TradeComputed<{
-        isEtherWrapper: boolean
-    }> | null,
-) {
+export function useTradeCallback(trade: TradeComputed<EtherWrapper> | null) {
     const [transactionState, wrapCallback, unwrapCallback, resetCallback] = useEtherWrapperCallback()
 
     return [
@@ -16,7 +13,7 @@ export function useTradeCallback(
             if (!trade.inputToken || !trade.outputToken) return
 
             // input amount and output amount are the same value
-            const tradeAmount = trade.inputAmount.isZero() ? trade.outputAmount.toFixed() : trade.inputAmount.toFixed()
+            const tradeAmount = trade.inputAmount.toFixed()
 
             if (
                 (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Ether) ||
