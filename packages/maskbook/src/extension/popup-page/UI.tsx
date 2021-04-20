@@ -95,16 +95,16 @@ function PopupUI() {
         }
     }, [])
 
-    const [, setSelectProviderDailogOpen] = useRemoteControlledDialog(
+    const { openDialog: openSelectProviderDailog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
         noop,
         'activated',
     )
     const onConnect = useCallback(async () => {
-        setSelectProviderDailogOpen({ open: true })
+        openSelectProviderDailog()
         await delay(200)
         window.close()
-    }, [setSelectProviderDailogOpen])
+    }, [openSelectProviderDailog])
 
     const Trademark = memo(() => {
         if (ui.networkIdentifier !== 'localhost') {

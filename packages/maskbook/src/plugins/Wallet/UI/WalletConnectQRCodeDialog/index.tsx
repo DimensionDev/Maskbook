@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../messages'
@@ -29,18 +29,17 @@ export const WalletConnectQRCodeDialog: React.FC = () => {
     const [uri, setURI] = useState('')
 
     //#region remote controlled dialog logic
-    const [open, setOpen] = useRemoteControlledDialog(
+    const { open, closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
         (ev) => ev.open && setURI(ev.uri),
     )
-    const onClose = useCallback(() => setOpen({ open: false }), [setOpen])
     //#endregion
 
     // connected
     useEffect(() => {
         if (!uri || !open) return
-        Services.Ethereum.connectWalletConnect().then(onClose, onClose)
-    }, [open, uri, onClose])
+        Services.Ethereum.connectWalletConnect().then(closeDialog, closeDialog)
+    }, [open, uri, closeDialog])
 
     let mode: QRCodeDialogProps['mode'] = 'qrcode'
     if (process.env.architecture === 'app' && process.env.target === 'firefox') {
@@ -48,7 +47,7 @@ export const WalletConnectQRCodeDialog: React.FC = () => {
     } else if (process.env.architecture === 'app' && process.env.target === 'safari') {
         mode = 'safari'
     }
-    return <QRCodeDialog uri={uri} open={open} mode={mode} onClose={onClose} />
+    return <QRCodeDialog uri={uri} open={open} mode={mode} onClose={closeDialog} />
 }
 
 interface QRCodeDialogProps {

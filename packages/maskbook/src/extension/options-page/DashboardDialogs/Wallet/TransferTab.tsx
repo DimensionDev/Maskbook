@@ -75,7 +75,7 @@ export function TransferTab(props: TransferTabProps) {
     //#endregion
 
     //#region remote controlled transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         useCallback(
             (ev) => {
@@ -92,7 +92,7 @@ export function TransferTab(props: TransferTabProps) {
     // open the transaction dialog
     useEffect(() => {
         if (transferState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             state: transferState,
             summary: `Transfer ${formatBalance(transferAmount, token.decimals ?? 0)} ${

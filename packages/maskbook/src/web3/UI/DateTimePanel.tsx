@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, TextField, TextFieldProps } from '@material-ui/core'
+import { makeStyles, TextField, TextFieldProps } from '@material-ui/core'
 import formatDateTime from 'date-fns/format'
 
 export interface DateTimePanelProps {
@@ -8,16 +8,14 @@ export interface DateTimePanelProps {
     TextFieldProps?: Partial<TextFieldProps>
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        datetime: {
-            '&::-webkit-calendar-picker-indicator': {
-                marginLeft: 0,
-                backgroundImage: `url(${new URL('./calendar.png', import.meta.url)})`,
-            },
+const useStyles = makeStyles((theme) => ({
+    datetime: {
+        '&::-webkit-calendar-picker-indicator': {
+            marginLeft: 0,
+            backgroundImage: `url(${new URL('./calendar.png', import.meta.url)})`,
         },
-    }),
-)
+    },
+}))
 
 export function DateTimePanel(props: DateTimePanelProps) {
     const { label, date, onChange, TextFieldProps } = props

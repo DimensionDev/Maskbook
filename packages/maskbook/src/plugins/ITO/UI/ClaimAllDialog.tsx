@@ -113,7 +113,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         claimCallback()
     }, [claimCallback])
 
-    const [_open, setClaimTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -142,7 +142,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             new Intl.ListFormat('en').format(
                 claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
             )
-        setClaimTransactionDialogOpen({
+        setClaimTransactionDialog({
             open: true,
             state: claimState,
             title: 'Claim Token',

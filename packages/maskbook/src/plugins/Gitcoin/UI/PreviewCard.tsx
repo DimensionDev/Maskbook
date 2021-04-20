@@ -77,15 +77,17 @@ export function PreviewCard(props: PreviewCardProps) {
     const { value: grant, error, loading } = useGrant(props.id)
 
     //#region the donation dialog
-    const [_, openDonationDialog] = useRemoteControlledDialog(PluginGitcoinMessages.events.donationDialogUpdated)
+    const { setDialog: setDonationDialog } = useRemoteControlledDialog(
+        PluginGitcoinMessages.events.donationDialogUpdated,
+    )
     const onDonate = useCallback(() => {
         if (!grant) return
-        openDonationDialog({
+        setDonationDialog({
             open: true,
             address: grant.admin_address,
             title: grant.title,
         })
-    }, [grant, openDonationDialog])
+    }, [grant, setDonationDialog])
     //#endregion
 
     if (loading) return <Typography>Loading...</Typography>
