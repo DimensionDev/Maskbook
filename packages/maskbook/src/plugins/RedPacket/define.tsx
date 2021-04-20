@@ -6,6 +6,7 @@ import { RedPacketMetaKey, RedPacketPluginID } from './constants'
 import type { RedPacketJSONPayload } from './types'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import RedPacketDialog from './UI/RedPacketDialog'
+import { EthereumTokenType } from '../../web3/types'
 
 export const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDialog('💰 Red Packet', (props) => (
     <RedPacketDialog open={props.open} onConfirm={props.onClose} onClose={props.onClose} />
@@ -27,7 +28,8 @@ export const RedPacketPluginDefine: PluginConfig = {
         [
             RedPacketMetaKey,
             (payload: RedPacketJSONPayload) => {
-                return `A Red Packet with ${formatBalance(payload.total, payload.token?.decimals)} $${
+                const decimals = payload.token_type === EthereumTokenType.Ether ? 18 : payload.token?.decimals
+                return `A Red Packet with ${formatBalance(payload.total, decimals)} $${
                     payload.token?.name || 'ETH'
                 } from ${payload.sender.name}`
             },
