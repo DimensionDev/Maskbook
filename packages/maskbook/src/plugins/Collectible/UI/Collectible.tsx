@@ -160,8 +160,8 @@ export function Collectible(props: CollectibleProps) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color="textPrimary">
-                    Failed to load your collectible. Maybe it's not available on{' '}
-                    {resolveCollectibleProviderName(provider)}. Try to switch to another provider.
+                    Failed to load your collectible on {resolveCollectibleProviderName(provider)}. Try to switch to
+                    another provider.
                 </Typography>
                 <ActionButton
                     sx={{ marginTop: 1 }}
