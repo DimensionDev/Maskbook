@@ -72,3 +72,16 @@ export function resolveRaribleUserNetwork(chainId: ChainId) {
             throw new Error(`The chain id ${chainId} is not supported.`)
     }
 }
+
+export function resolveLinkOnOpenSea(chainId: ChainId) {
+    switch (chainId) {
+        case ChainId.Rinkeby:
+            return 'https://testnets.opensea.io'
+        default:
+            return 'https://opensea.io'
+    }
+}
+
+export function resolveAssetLinkOnOpenSea(chainId: ChainId, address: string, id: string) {
+    return `${resolveLinkOnOpenSea(chainId)}/assets/${address}/${id}`
+}

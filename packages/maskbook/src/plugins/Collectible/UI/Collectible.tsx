@@ -15,6 +15,8 @@ import {
     Typography,
 } from '@material-ui/core'
 import { Trans } from 'react-i18next'
+import { findIndex } from 'lodash-es'
+import { format } from 'date-fns'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { ArticleTab } from './ArticleTab'
@@ -32,10 +34,9 @@ import { CollectibleProvider } from '../types'
 import { currentCollectibleProviderSettings } from '../settings'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/UI/trader/FootnoteMenu'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
-import { findIndex } from 'lodash-es'
-import { resolveCollectibleProviderName } from '../pipes'
-import { format } from 'date-fns'
+import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
 import { useSettingsSwticher } from '../../../utils/hooks/useSettingSwitcher'
+import { ChainState } from '../../../web3/state/useChainState'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -130,6 +131,7 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
+    const { chainId } = ChainState.useContainer()
     const { asset, provider } = CollectibleState.useContainer()
 
     const [tabIndex, setTabIndex] = useState(0)
@@ -184,7 +186,21 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            {asset.value.name ?? ''}
+                            {asset.value.token_address && asset.value.token_id ? (
+                                <Link
+                                    color="primary"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href={resolveAssetLinkOnOpenSea(
+                                        chainId,
+                                        asset.value.token_address,
+                                        asset.value.token_id,
+                                    )}>
+                                    {asset.value.name ?? ''}
+                                </Link>
+                            ) : (
+                                asset.value.name ?? ''
+                            )}
                             {asset.value.safelist_request_status === 'verified' ? (
                                 <VerifiedUserIcon color="primary" fontSize="small" sx={{ marginLeft: 0.5 }} />
                             ) : null}
