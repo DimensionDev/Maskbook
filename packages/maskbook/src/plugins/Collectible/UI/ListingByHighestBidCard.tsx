@@ -53,16 +53,17 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
 
     const validationMessage = useMemo(() => {
         if (new BigNumber(amount || '0').isZero()) return 'Enter minimum bid'
-        if (new BigNumber(reservePrice || '0').isZero()) return 'Ether reserve price'
+        if (new BigNumber(reservePrice || '0').isZero()) return 'Enter reserve price'
+        if (new BigNumber(reservePrice).isLessThan(amount)) return 'Invalid reserve price'
         if (expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid expiration date'
         return ''
-    }, [amount])
+    }, [amount, reservePrice, expirationDateTime])
 
     const onPostListing = useCallback(async () => {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.Ether && token.value.type !== EthereumTokenType.ERC20) return
+        if (token.value.type !== EthereumTokenType.ERC20) return
         await PluginCollectibleRPC.createSellOrder({
             asset: toAsset({
                 tokenId: asset.value.token_id,
@@ -73,6 +74,8 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
             startAmount: Number.parseFloat(amount),
             expirationTime: toUnixTimestamp(expirationDateTime),
             englishAuctionReservePrice: Number.parseFloat(reservePrice),
+            waitForHighestBid: true,
+            paymentTokenAddress: token.value.address, // english auction must be erc20 token
         })
     }, [asset?.value, token, amount, account, reservePrice, expirationDateTime])
 
@@ -96,7 +99,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     }}
                 />
                 <SelectTokenAmountPanel
-                    amount={amount}
+                    amount={reservePrice}
                     balance={balance.value ?? '0'}
                     onAmountChange={setReservePrice}
                     token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
@@ -109,7 +112,8 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                         disableBalance: true,
                         label: 'Reserve Price',
                         TextFieldProps: {
-                            helperText: 'Create a hidden limit by setting a reserve price.',
+                            helperText:
+                                'Create a hidden limit by setting a reserve price. Reserve price must be greater than or equal to the start amount.',
                         },
                     }}
                 />
