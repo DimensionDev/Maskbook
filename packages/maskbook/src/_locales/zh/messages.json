@@ -465,6 +465,7 @@
     "plugin_ito_qualification_start_time": "",
     "plugin_ito_error_qualification_start_time": "",
     "plugin_ito_end_time": "",
+    "plugin_ito_error_invalid_qualification": "",
     "plugin_ito_unlock_time": "",
     "plugin_ito_swap_ration_label": "",
     "plugin_ito_qualification_label": "",

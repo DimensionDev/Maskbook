@@ -26,7 +26,9 @@ export class Qualification extends Contract {
 
         ifQualified(arg0: string): TransactionObject<boolean>
 
-        logQualified(account: string): TransactionObject<boolean>
+        logQualified(account: string, ito_start_time: number | string): TransactionObject<boolean>
+
+        set_start_time(_start_time: number | string): TransactionObject<void>
 
         supportsInterface(interfaceId: string | number[]): TransactionObject<boolean>
     }

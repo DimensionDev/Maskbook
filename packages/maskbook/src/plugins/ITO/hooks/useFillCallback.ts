@@ -13,7 +13,6 @@ import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../constants'
 import Services from '../../../extension/service'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
-import { formatBytes32String } from '@ethersproject/strings'
 
 export interface PoolSettings {
     password: string
@@ -228,10 +227,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             startTime_,
             endTime_,
             // TODO: store message as bitmap, since regions may be very large.
-            [name, title, regions]
-                .join(MSG_DELIMITER)
-                .match(/.{1,31}/g)!
-                .map(formatBytes32String),
+            [name, title, regions].join(MSG_DELIMITER),
             exchangeTokens.map((x) => x.address),
             exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
             unlockTime_,

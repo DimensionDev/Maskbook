@@ -49,7 +49,7 @@ export class ITO extends Contract {
             _hash: string | number[],
             _start: number | string,
             _end: number | string,
-            message: (string | number[])[],
+            message: string,
             _exchange_addrs: string[],
             _ratios: (number | string)[],
             _unlock_time: number | string,
@@ -100,13 +100,13 @@ export class ITO extends Contract {
             creator: string
             creation_time: string
             token_address: string
-            message: string[]
+            message: string
             0: string
             1: string
             2: string
             3: string
             4: string
-            5: string[]
+            5: string
         }>
         SwapSuccess: ContractEvent<{
             id: string

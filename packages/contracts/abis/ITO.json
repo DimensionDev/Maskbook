@@ -107,9 +107,9 @@
             },
             {
                 "indexed": false,
-                "internalType": "bytes32[]",
+                "internalType": "string",
                 "name": "message",
-                "type": "bytes32[]"
+                "type": "string"
             }
         ],
         "name": "FillSuccess",
@@ -294,9 +294,9 @@
                 "type": "uint256"
             },
             {
-                "internalType": "bytes32[]",
+                "internalType": "string",
                 "name": "message",
-                "type": "bytes32[]"
+                "type": "string"
             },
             {
                 "internalType": "address[]",
