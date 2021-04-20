@@ -40,11 +40,11 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         exchangeProxyContract,
     )
 
-    // an ether wrapper trade is detected
+    // the trade is an ETH-WETH pair
     const etherTradeComputed = tradeComputed?.trade_ as EtherWrapper | null
     if (etherTradeComputed?.isEtherWrapper) return ether
 
-    // trade with various provider
+    // handle trades by various provider
     switch (provider) {
         case TradeProvider.UNISWAP:
             return uniswap

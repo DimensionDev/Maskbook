@@ -7,12 +7,12 @@ const ZERO = new BigNumber(0)
 
 export interface EtherWrapper {
     /**
-     * if trade wraps ether
+     * if the trade wraps ether
      */
     isWrap: boolean
 
     /**
-     * if the trade is an ether wrapper
+     * if the trade is an ETH-WETH pair
      */
     isEtherWrapper: boolean
 }
