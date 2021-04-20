@@ -83,7 +83,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     variant="contained"
                     size="large"
                     onClick={resetApproveCallback}>
-                    Failed to load {token.symbol ?? token.name ?? 'Token'}.
+                    Failed to load {token.symbol ?? token.name ?? 'Token'}. Click to retry.
                 </ActionButton>
             </Grid>
         )
