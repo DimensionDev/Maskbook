@@ -175,7 +175,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Swap
-    const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.SwapDialogUpdated)
+    const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
     //#endregion
 
     const [menu, openMenu] = useMenu(

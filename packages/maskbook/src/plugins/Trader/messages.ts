@@ -41,7 +41,7 @@ interface PluginTraderMessage {
     /**
      * Swap dialog
      */
-    SwapDialogUpdated: SwapDialogEvent
+    swapDialogUpdated: SwapDialogEvent
 
     rpc: unknown
 }

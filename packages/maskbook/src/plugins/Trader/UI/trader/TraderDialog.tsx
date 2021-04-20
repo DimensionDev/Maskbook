@@ -13,7 +13,7 @@ import { PluginTraderMessages } from '../../messages'
 import { Trader } from './Trader'
 
 export function TraderDialog() {
-    const { open, onClose } = useRemoteControlledDialogEvent(PluginTraderMessages.events.SwapDialogUpdated)
+    const { open, onClose } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
     const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {
         currentTradeProviderSettings.value = option.value as TradeProvider
     }, [])
