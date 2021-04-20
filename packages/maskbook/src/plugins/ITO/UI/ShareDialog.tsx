@@ -1,7 +1,7 @@
 import { createStyles, makeStyles, Typography, Box } from '@material-ui/core'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import type BigNumber from 'bignumber.js'
+import BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) =>
 export interface ShareDialogProps extends withClasses<'root'> {
     shareSuccessLink: string | undefined
     token: EtherTokenDetailed | ERC20TokenDetailed
-    actualSwapAmount: BigNumber
+    actualSwapAmount: BigNumber.Value
     poolName: string
     onClose: () => void
 }
@@ -68,7 +68,7 @@ export function ShareDialog(props: ShareDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const { token, actualSwapAmount, shareSuccessLink, onClose } = props
-    const amount = formatBalance(actualSwapAmount, token.decimals ?? 0)
+    const amount = formatBalance(actualSwapAmount, token.decimals)
 
     const onShareSuccess = useCallback(async () => {
         onClose()
@@ -86,7 +86,9 @@ export function ShareDialog(props: ShareDialogProps) {
                         {token.symbol}
                     </Typography>
                     <Typography variant="body1" className={classes.shareText}>
-                        {actualSwapAmount.isZero() ? t('plugin_ito_out_of_stock_hit') : t('plugin_ito_congratulations')}
+                        {new BigNumber(actualSwapAmount).isZero()
+                            ? t('plugin_ito_out_of_stock_hit')
+                            : t('plugin_ito_congratulations')}
                     </Typography>
                     {shareSuccessLink ? (
                         <ActionButton

@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { Fragment, memo, createElement } from 'react'
 import { Typography, Link, makeStyles } from '@material-ui/core'
 import anchorme from 'anchorme'
 import classNames from 'classnames'
@@ -201,7 +201,7 @@ function renderWithMetadata(props: TypedMessageRendererProps<TypedMessage>, jsx:
 }
 
 const RenderText = memo(function RenderText(props: { text: string; allowTextEnlarge: boolean }) {
-    return <>{parseText(props.text, props.allowTextEnlarge)}</>
+    return createElement(Fragment, {}, ...parseText(props.text, props.allowTextEnlarge))
 })
 
 interface ParseTextProps {

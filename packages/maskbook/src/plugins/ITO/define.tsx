@@ -1,7 +1,6 @@
 import { Suspense } from 'react'
-import { ITO_Loading } from './UI/ITO'
-import BigNumber from 'bignumber.js'
 import { makeStyles, createStyles } from '@material-ui/core'
+import { ITO_Loading } from './UI/ITO'
 import { PostInspector } from './UI/PostInspector'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { formatBalance } from '../Wallet/formatter'
@@ -46,7 +45,10 @@ export const [ITO_CompositionEntry, ITO_CompositionUI] = createCompositionDialog
 )
 
 export const ITO_PluginDefine: PluginConfig = {
+    id: ITO_PluginID,
+    pluginIcon: '🚀',
     pluginName: 'ITO',
+    pluginDescription: 'Participate in Public Offering on Twitter.',
     identifier: ITO_PluginID,
     stage: PluginStage.Production,
     scope: PluginScope.Public,
@@ -69,11 +71,9 @@ export const ITO_PluginDefine: PluginConfig = {
                     <LabelWrapper
                         iconSize={14}
                         labelText={`A ITO with
-                        ${formatBalance(
-                            new BigNumber(payload.total),
-                            payload.token?.decimals ?? 0,
-                            payload.token?.decimals ?? 0,
-                        )} $${payload.token?.symbol ?? payload.token?.name ?? 'Token'} from ${payload.seller.name}`}
+                        ${formatBalance(payload.total, payload.token?.decimals)} $${
+                            payload.token?.symbol ?? payload.token?.name ?? 'Token'
+                        } from ${payload.seller.name}`}
                     />
                 )
             },

@@ -81,6 +81,8 @@ export function DebugModeUI_PostHashDialog(props: { post: string; network: strin
         const ivID = new PostIVIdentifier(props.network, payload.val.iv)
         return Services.Crypto.debugShowAllPossibleHashForPost(ivID, payload.val.version)
     }, [props.post])
+    const shouldHide = payload.map((x) => x.version === -38 && !!x.sharedPublic).unwrapOr(true)
+    if (shouldHide) return null
     return (
         <>
             <Button variant="outlined" onClick={() => setOpen(true)}>

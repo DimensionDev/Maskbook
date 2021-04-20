@@ -15,7 +15,7 @@ export async function verifyOthersProve(bio: string | { raw: string }, others: P
             }
         })
         .filter((x) => x)[0]
-    if (!publicKey) throw new Error('No key was found')
+    if (!publicKey) return false
     // TODO: use json schema / other ways to verify the JWK
     // or
     // throw new Error(i18n.t('service_key_parse_failed'))

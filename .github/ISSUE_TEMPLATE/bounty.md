@@ -33,6 +33,6 @@ assignees:
 
 ## Part 2: Resources
 
-- [Mask Network Documentation](https://github.com/DimensionDev/Maskbook/tree/master/docs)
+- [Bounty Guide](https://github.com/DimensionDev/Maskbook/tree/master/docs/bounty-guide.md)
 
 ## Part 3: Contact and Support

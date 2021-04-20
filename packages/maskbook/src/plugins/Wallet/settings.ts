@@ -42,7 +42,7 @@ export const currentIsMetamaskLockedSettings = createGlobalSettings<boolean>(
  */
 export const currentPortfolioDataProviderSettings = createGlobalSettings<PortfolioProvider>(
     `${PLUGIN_IDENTIFIER}+portfolioProvider`,
-    PortfolioProvider.ZERION,
+    PortfolioProvider.DEBANK,
     {
         primary: () => i18n.t('plugin_wallet_settings_portfolio_data_source_primary'),
         secondary: () => i18n.t('plugin_wallet_settings_portfolio_data_source_secondary'),

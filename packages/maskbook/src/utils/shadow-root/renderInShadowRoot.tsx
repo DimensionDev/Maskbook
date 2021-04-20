@@ -10,7 +10,6 @@ import {
 import { untilDomLoaded } from '../dom'
 import { Flags } from '../flags'
 import { MaskInShadow } from './MaskInShadow'
-export { useCurrentShadowRootStyles as useSheetsRegistryStyles } from '@dimensiondev/maskbook-shared'
 if (process.env.NODE_ENV === 'development') disableJSSDisconnectedWarning()
 
 const captureEvents: (keyof HTMLElementEventMap)[] = [

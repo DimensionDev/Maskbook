@@ -107,7 +107,8 @@ export function getAllCoins() {
 }
 
 export async function getAllCoinsByKeyword(keyword: string) {
-    if (keyword.toLocaleLowerCase() === 'mask') {
+    const keyword_ = keyword.toLocaleLowerCase()
+    if (keyword_ === 'mask') {
         return [
             {
                 decimals: 18,
@@ -118,6 +119,9 @@ export async function getAllCoinsByKeyword(keyword: string) {
                 eth_address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
             } as Coin,
         ]
+    }
+    if (keyword_ === 'token') {
+        return []
     }
 
     const tokens = await fetchTokensByKeyword(keyword)

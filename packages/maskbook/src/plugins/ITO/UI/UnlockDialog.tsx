@@ -36,17 +36,15 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface UnlockDialogProps {
-    isMask: boolean
     tokens: ERC20TokenDetailed[]
 }
 
 export function UnlockDialog(props: UnlockDialogProps) {
-    const { isMask, tokens } = props
+    const { tokens } = props
     const { t } = useI18N()
     const classes = useStyles()
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
-    const MASK_ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'MASK_ITO_CONTRACT_ADDRESS')
-    const recipientAddress = isMask ? MASK_ITO_CONTRACT_ADDRESS : ITO_CONTRACT_ADDRESS
+    const recipientAddress = ITO_CONTRACT_ADDRESS
 
     const account = useAccount()
     const chainId = useChainId()
@@ -124,7 +122,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                                       symbol: token.symbol ?? 'Token',
                                   })
                                 : t('plugin_ito_amount_approved', {
-                                      amount: formatBalance(new BigNumber(allowance), token.decimals, 2),
+                                      amount: formatBalance(allowance, token.decimals, 2),
                                       symbol: token.symbol ?? 'Token',
                                   })}
                         </ActionButton>

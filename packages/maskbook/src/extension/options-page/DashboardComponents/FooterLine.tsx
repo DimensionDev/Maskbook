@@ -90,6 +90,7 @@ export default function FooterLine() {
                 </FooterLink>
                 <FooterLink href={t('dashboard_mobile_test_link')}>{t('dashboard_mobile_test')}</FooterLink>
                 <FooterLink href={t('dashboard_source_code_link')}>{t('dashboard_source_code')}</FooterLink>
+                <FooterLink href={t('dashboard_bounty_list_link')}>{t('dashboard_bounty_list')}</FooterLink>
                 <FooterLink href={t('privacy_policy_link')}>{t('privacy_policy')}</FooterLink>
             </Breadcrumbs>
             {aboutDialog}

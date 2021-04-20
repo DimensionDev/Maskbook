@@ -2,37 +2,32 @@ import { useAsyncRetry } from 'react-use'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { WalletRPC } from '../messages'
 import { currentPortfolioDataProviderSettings } from '../settings'
-import { useEffect, useRef } from 'react'
 import { PortfolioProvider, Transaction } from '../types'
 import { unreachable } from '../../../utils/utils'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
-export function useTransactions(address: string, page?: number) {
-    const values = useRef<Transaction[]>([])
+export function useTransactions(
+    address: string,
+    page?: number,
+): AsyncStateRetry<{ transactions: Transaction[]; hasNextPage: boolean }> {
     const provider = useValueRef(currentPortfolioDataProviderSettings)
 
-    useEffect(() => {
-        if (values.current.length) {
-            values.current = []
-        }
-    }, [address])
-
     return useAsyncRetry(async () => {
-        if (!address) return []
-        if (page === 1) values.current = []
+        if (!address)
+            return {
+                transactions: [],
+                hasNextPage: false,
+            }
 
         switch (provider) {
             case PortfolioProvider.DEBANK:
-                const result = await WalletRPC.getTransactionList(address.toLowerCase(), provider, page)
-                values.current.push(...result)
-                break
+                return WalletRPC.getTransactionList(address.toLowerCase(), provider, page)
+
             case PortfolioProvider.ZERION:
-                const response = await WalletRPC.getTransactionList(address.toLowerCase(), provider, page)
-                values.current.push(...response)
-                break
+                return await WalletRPC.getTransactionList(address.toLowerCase(), provider, page)
+
             default:
                 unreachable(provider)
         }
-
-        return values.current
     }, [address, provider, page])
 }

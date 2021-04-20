@@ -230,9 +230,9 @@ export function Trader(props: TraderProps) {
         .getShareLinkURL?.(
             trade && inputToken && outputToken
                 ? [
-                      `I just swapped ${formatBalance(trade.inputAmount, inputToken.decimals ?? 0, 6)} ${cashTag}${
+                      `I just swapped ${formatBalance(trade.inputAmount, inputToken.decimals, 6)} ${cashTag}${
                           inputToken.symbol
-                      } for ${formatBalance(trade.outputAmount, outputToken.decimals ?? 0, 6)} ${cashTag}${
+                      } for ${formatBalance(trade.outputAmount, outputToken.decimals, 6)} ${cashTag}${
                           outputToken.symbol
                       }. Follow @realMaskbook (mask.io) to swap cryptocurrencies on Twitter.`,
                       '#mask_io',
@@ -270,9 +270,9 @@ export function Trader(props: TraderProps) {
             state: tradeState,
             summary:
                 trade && inputToken && outputToken
-                    ? `Swapping ${formatBalance(trade.inputAmount, inputToken.decimals ?? 0, 6)} ${
+                    ? `Swapping ${formatBalance(trade.inputAmount, inputToken.decimals, 6)} ${
                           inputToken.symbol
-                      } for ${formatBalance(trade.outputAmount, outputToken.decimals ?? 0, 6)} ${outputToken.symbol}`
+                      } for ${formatBalance(trade.outputAmount, outputToken.decimals, 6)} ${outputToken.symbol}`
                     : '',
         })
     }, [tradeState /* update tx dialog only if state changed */])

@@ -181,7 +181,9 @@ export function PopperView(props: PopperViewProps) {
                 dataProvider={dataProvider}
                 tradeProvider={tradeProvider}
                 showDataProviderIcon={tabIndex < 3}
-                showTradeProviderIcon={tabIndex === 3}>
+                showTradeProviderIcon={tabIndex === 3}
+                dataProviders={dataProviders}
+                tradeProviders={tradeProviders}>
                 <Tabs
                     className={classes.tabs}
                     textColor="primary"

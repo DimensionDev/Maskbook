@@ -56,8 +56,7 @@ const useStyles = makeStyles((theme) =>
             color: theme.palette.text.secondary,
         },
         button: {
-            margin: theme.spacing(2, 0),
-            padding: 12,
+            marginTop: theme.spacing(1.5),
         },
         selectShrinkLabel: {
             transform: 'translate(17px, -10px) scale(0.75) !important',
@@ -222,11 +221,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         setTransactionDialogOpen({
             open: true,
             state: createState,
-            summary: `Creating red packet with ${formatBalance(
-                new BigNumber(totalAmount),
-                token.decimals ?? 0,
-                token.decimals ?? 0,
-            )} ${token.symbol}`,
+            summary: `Creating red packet with ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`,
         })
     }, [createState /* update tx dialog only if state changed */])
     //#endregion
@@ -246,8 +241,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         if (new BigNumber(shares || '0').isZero()) return 'Enter shares'
         if (new BigNumber(shares || '0').isGreaterThan(255)) return 'At most 255 recipients'
         if (new BigNumber(amount).isZero()) return 'Enter an amount'
-        if (new BigNumber(totalAmount).isGreaterThan(new BigNumber(tokenBalance)))
-            return `Insufficient ${token.symbol} balance`
+        if (new BigNumber(totalAmount).isGreaterThan(tokenBalance)) return `Insufficient ${token.symbol} balance`
         return ''
     }, [account, amount, totalAmount, shares, token, tokenBalance])
 
@@ -331,6 +325,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     spender={RED_PACKET_ADDRESS}>
                     <ActionButton
                         variant="contained"
+                        size="large"
                         className={classes.button}
                         fullWidth
                         disabled={!!validationMessage}

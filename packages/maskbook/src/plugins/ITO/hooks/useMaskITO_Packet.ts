@@ -1,17 +1,16 @@
 import { useAsyncRetry } from 'react-use'
-import type { MaskITO } from '@dimensiondev/contracts/types/MaskITO'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useITO_Contract } from '../contracts/useITO_Contract'
+import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
 
 export function useMaskITO_Packet() {
     const account = useAccount()
-    const ITO_CONTRACT = useITO_Contract(true) as MaskITO | null
+    const MaskITO_Contract = useMaskITO_Contract()
 
     return useAsyncRetry(async () => {
-        if (!ITO_CONTRACT) return
+        if (!MaskITO_Contract) return
         const [unlockTime, claimable = '0'] = await Promise.all([
-            ITO_CONTRACT.methods.getUnlockTime().call(),
-            ITO_CONTRACT.methods.check_claimable().call({
+            MaskITO_Contract.methods.getUnlockTime().call(),
+            MaskITO_Contract.methods.check_claimable().call({
                 from: account,
             }),
         ])
@@ -19,5 +18,5 @@ export function useMaskITO_Packet() {
             unlockTime,
             claimable,
         }
-    }, [account, ITO_CONTRACT])
+    }, [account, MaskITO_Contract])
 }

@@ -6,6 +6,7 @@ import { MaskMessage } from '../../utils/messages'
 
 const base: SocialNetwork.Base = {
     networkIdentifier: 'localhost',
+    declarativePermissions: { origins: [] },
     shouldActivate() {
         return isEnvironment(Environment.ManifestOptions)
     },

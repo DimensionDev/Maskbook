@@ -1,7 +1,5 @@
 import { createContext, useState } from 'react'
-import { FixedSizeGrid } from 'react-window'
-import AutoResize from 'react-virtualized-auto-sizer'
-import { Box, Button, CircularProgress, makeStyles, Skeleton, Typography } from '@material-ui/core'
+import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
 import { CollectibleCard } from './CollectibleCard'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
@@ -10,7 +8,7 @@ import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
-import { Flags } from '../../../../utils/flags'
+import { useUpdateEffect } from 'react-use'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -20,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexWrap: 'wrap',
+    },
+    container: {
+        height: 'calc(100% - 52px)',
+        overflow: 'auto',
     },
     card: {
         position: 'relative',
@@ -50,16 +52,22 @@ export function CollectibleList(props: CollectibleListProps) {
     const classes = useStyles()
     const account = useAccount()
 
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(0)
     const provider = useValueRef(currentCollectibleDataProviderSettings)
     const {
-        value: collectibles = [],
+        value = { collectibles: [], hasNextPage: false },
         loading: collectiblesLoading,
         retry: collectiblesRetry,
         error: collectiblesError,
     } = useCollectibles(account, provider, page)
 
-    if (collectiblesLoading && page === 1)
+    const { collectibles = [], hasNextPage } = value
+
+    useUpdateEffect(() => {
+        setPage(0)
+    }, [account, provider])
+
+    if (collectiblesLoading)
         return (
             <Box className={classes.root}>
                 {new Array(4).fill(0).map((_, i) => (
@@ -73,28 +81,6 @@ export function CollectibleList(props: CollectibleListProps) {
                             style={{ marginTop: 4 }}></Skeleton>
                     </Box>
                 ))}
-            </Box>
-        )
-
-    if (collectiblesError || collectibles.length === 0)
-        return (
-            <Box
-                className={classes.root}
-                sx={{
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%',
-                }}>
-                <Typography color="textSecondary">No collectible found.</Typography>
-                <Button
-                    sx={{
-                        marginTop: 1,
-                    }}
-                    variant="text"
-                    onClick={() => collectiblesRetry()}>
-                    Retry
-                </Button>
             </Box>
         )
 
@@ -112,73 +98,62 @@ export function CollectibleList(props: CollectibleListProps) {
 
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
-            {Flags.transactions_pagination ? (
-                <>
-                    <AutoResize>
-                        {({ width, height }) => {
-                            return (
-                                <FixedSizeGrid
-                                    columnWidth={176}
-                                    rowHeight={260}
-                                    columnCount={4}
-                                    height={height - 40}
-                                    onItemsRendered={({
-                                        overscanRowStopIndex,
-                                        overscanColumnStopIndex,
-                                        visibleRowStopIndex,
-                                        visibleColumnStopIndex,
-                                    }) => {
-                                        if (dataSource.length === 0 || collectiblesError || collectiblesLoading) return
-                                        if (
-                                            visibleColumnStopIndex === overscanColumnStopIndex &&
-                                            visibleRowStopIndex === overscanRowStopIndex &&
-                                            visibleRowStopIndex === Math.ceil(dataSource.length / 4) - 1
-                                        ) {
-                                            setPage((x) => x + 1)
-                                        }
-                                    }}
-                                    rowCount={Math.ceil(dataSource.length / 4)}
-                                    width={width}>
-                                    {({ columnIndex, rowIndex, style }) => {
-                                        const y = dataSource[rowIndex * 4 + columnIndex]
-                                        if (y) {
-                                            return (
-                                                <div className={classes.card} key={y.tokenId} style={style}>
-                                                    <CollectibleCard token={y} wallet={wallet} provider={provider} />
-                                                    <div className={classes.description}>
-                                                        <Typography color="textSecondary" variant="body2">
-                                                            {y.asset?.name ?? y.name}
-                                                        </Typography>
-                                                    </div>
-                                                </div>
-                                            )
-                                        }
-                                        return null
-                                    }}
-                                </FixedSizeGrid>
-                            )
-                        }}
-                    </AutoResize>
-                    {collectiblesLoading && (
-                        <Box className={classes.loading}>
-                            <CircularProgress size={25} />
-                        </Box>
-                    )}
-                </>
-            ) : (
-                <Box className={classes.root}>
-                    {dataSource.map((x) => (
-                        <div className={classes.card} key={x.tokenId}>
-                            <CollectibleCard token={x} provider={provider} wallet={wallet} />
-                            <div className={classes.description}>
-                                <Typography color="textSecondary" variant="body2">
-                                    {x.asset?.name ?? x.name}
-                                </Typography>
+            <Box className={classes.container}>
+                {collectiblesError || dataSource.length === 0 ? (
+                    <Box
+                        className={classes.root}
+                        sx={{
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            height: '100%',
+                        }}>
+                        <Typography color="textSecondary">No collectible found.</Typography>
+                        <Button
+                            sx={{
+                                marginTop: 1,
+                            }}
+                            variant="text"
+                            onClick={() => collectiblesRetry()}>
+                            Retry
+                        </Button>
+                    </Box>
+                ) : (
+                    <Box className={classes.root}>
+                        {dataSource.map((x) => (
+                            <div className={classes.card} key={x.tokenId}>
+                                <CollectibleCard token={x} provider={provider} wallet={wallet} />
+                                <div className={classes.description}>
+                                    <Typography color="textSecondary" variant="body2">
+                                        {x.asset?.name ?? x.name}
+                                    </Typography>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </Box>
-            )}
+                        ))}
+                    </Box>
+                )}
+            </Box>
+            {!(page === 0 && dataSource.length === 0) ? (
+                <TablePagination
+                    count={-1}
+                    component="div"
+                    onPageChange={() => {}}
+                    page={page}
+                    rowsPerPage={30}
+                    rowsPerPageOptions={[30]}
+                    labelDisplayedRows={() => null}
+                    backIconButtonProps={{
+                        onClick: () => setPage((prev) => prev - 1),
+                        size: 'small',
+                        disabled: page === 0,
+                    }}
+                    nextIconButtonProps={{
+                        onClick: () => setPage((prev) => prev + 1),
+                        disabled: !hasNextPage,
+                        size: 'small',
+                    }}
+                />
+            ) : null}
         </CollectibleContext.Provider>
     )
 }

@@ -10,6 +10,7 @@ import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined'
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
+import PowerIcon from '@material-ui/icons/Power'
 import { HashRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom'
 
 import { useI18N } from '../../utils/i18n-next-ui'
@@ -21,6 +22,7 @@ import Drawer from './DashboardComponents/Drawer'
 import DashboardPersonasRouter from './DashboardRouters/Personas'
 import DashboardWalletsRouter from './DashboardRouters/Wallets'
 import DashboardContactsRouter from './DashboardRouters/Contacts'
+import DashboardPluginsRouter from './DashboardRouters/Plugins'
 import DashboardSettingsRouter from './DashboardRouters/Settings'
 import { DashboardSetupRouter } from './DashboardRouters/Setup'
 import { DashboardRoute } from './Route'
@@ -121,6 +123,7 @@ function DashboardUI() {
         [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
         [t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />],
         [t('contacts'), DashboardRoute.Contacts, <BookmarkBorderOutlinedIcon />],
+        [t('plugins'), DashboardRoute.Plugins, <PowerIcon />],
         [t('settings'), DashboardRoute.Settings, <SettingsOutlinedIcon />],
     ] as const).filter((x) => x)
 
@@ -193,6 +196,7 @@ function DashboardUI() {
                 <Route path={DashboardRoute.Personas} component={withErrorBoundary(DashboardPersonasRouter)} />
                 <Route path={DashboardRoute.Wallets} component={withErrorBoundary(DashboardWalletsRouter)} />
                 <Route path={DashboardRoute.Contacts} component={withErrorBoundary(DashboardContactsRouter)} />
+                <Route path={DashboardRoute.Plugins} component={withErrorBoundary(DashboardPluginsRouter)} />
                 <Route path={DashboardRoute.Settings} component={withErrorBoundary(DashboardSettingsRouter)} />
                 <Route path={DashboardRoute.Setup} component={withErrorBoundary(DashboardSetupRouter)} />
                 {/* // TODO: this page should be boardless */}
