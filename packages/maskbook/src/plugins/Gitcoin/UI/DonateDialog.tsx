@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { makeStyles, createStyles, Typography, DialogContent, Link } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
+import { parseUnits } from '@ethersproject/units'
 import { Trans } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
 
@@ -114,7 +114,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0))
+    const amount = parseUnits(rawAmount || '0', token?.decimals)
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
         token?.type ?? EthereumTokenType.Ether,
         token?.address ?? '',
@@ -131,7 +131,11 @@ export function DonateDialog(props: DonateDialogProps) {
     //#endregion
 
     //#region blocking
-    const [donateState, donateCallback, resetDonateCallback] = useDonateCallback(address ?? '', amount.toFixed(), token)
+    const [donateState, donateCallback, resetDonateCallback] = useDonateCallback(
+        address ?? '',
+        amount.toString(),
+        token,
+    )
     //#endregion
 
     //#region transaction dialog
@@ -182,12 +186,12 @@ export function DonateDialog(props: DonateDialogProps) {
         if (Flags.wallet_network_strict_mode_enabled && chainId !== ChainId.Mainnet)
             return t('plugin_wallet_wrong_network')
         if (!amount || amount.isZero()) return t('plugin_gitcoin_enter_an_amount')
-        if (amount.isGreaterThan(tokenBalance))
+        if (amount.gt(tokenBalance))
             return t('plugin_gitcoin_insufficient_balance', {
                 symbol: token.symbol,
             })
         return ''
-    }, [account, address, amount.toFixed(), chainId, token, tokenBalance])
+    }, [account, address, amount.toString(), chainId, token, tokenBalance])
     //#endregion
 
     if (!token || !address) return null
@@ -227,7 +231,7 @@ export function DonateDialog(props: DonateDialogProps) {
                     </Typography>
                     <EthereumWalletConnectedBoundary>
                         <EthereumERC20TokenApprovedBoundary
-                            amount={amount.toFixed()}
+                            amount={amount.toString()}
                             spender={BULK_CHECKOUT_ADDRESS}
                             token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
                             <ActionButton

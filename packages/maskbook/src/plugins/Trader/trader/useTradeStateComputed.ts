@@ -13,6 +13,7 @@ export function useTradeStateComputed(provider: TradeProvider) {
     const { value: tradeComputed_ } = tradeComputed
     //#endregion
 
+    debugger
     return {
         tradeState: [
             {
@@ -21,13 +22,13 @@ export function useTradeStateComputed(provider: TradeProvider) {
                     strategy === TradeStrategy.ExactIn
                         ? inputAmount
                         : tradeComputed_
-                        ? formatBalance(tradeComputed_.inputAmount, inputToken?.decimals, 6)
+                        ? formatBalance(tradeComputed_.inputAmount.toFixed(), inputToken?.decimals)
                         : '',
                 outputAmount:
                     strategy === TradeStrategy.ExactOut
                         ? outputAmount
                         : tradeComputed_
-                        ? formatBalance(tradeComputed_.outputAmount, outputToken?.decimals, 6)
+                        ? formatBalance(tradeComputed_.outputAmount.toFixed(), outputToken?.decimals)
                         : '',
             },
             dispatchTradeStore,

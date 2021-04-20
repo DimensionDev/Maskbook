@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { useCallback, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { formatEthereumAddress } from '../../Wallet/formatter'
@@ -21,7 +21,7 @@ export type CheckState =
           packet: AirdropPacket
           start: number
           end: number
-          ratio: BigNumber
+          ratio: BigNumberish
           claimable: string
       }
     | {
@@ -83,7 +83,7 @@ export function useCheckCallback() {
                         start: 0,
                         end: new Date(2999, 1, 1).getTime(),
                         claimable: packet.amount,
-                        ratio: new BigNumber(1),
+                        ratio: BigNumber.from(1),
                     })
                     return
                 }
@@ -102,14 +102,14 @@ export function useCheckCallback() {
 
                 setCheckState({
                     type:
-                        available && new BigNumber(claimable).isGreaterThan(0) && isStart && !isEnd
+                        available && BigNumber.from(claimable).gt(0) && isStart && !isEnd
                             ? CheckStateType.YEP
                             : CheckStateType.NOPE,
                     packet,
                     start: start_,
                     end: end_,
-                    claimable: available && new BigNumber(claimable).isGreaterThan(0) && !isEnd ? claimable : '0',
-                    ratio: new BigNumber(claimable).div(amount),
+                    claimable: available && BigNumber.from(claimable).gt(0) && !isEnd ? claimable : '0',
+                    ratio: BigNumber.from(claimable).div(amount),
                 })
             } catch (error) {
                 if (error.message.includes('Already Claimed')) {

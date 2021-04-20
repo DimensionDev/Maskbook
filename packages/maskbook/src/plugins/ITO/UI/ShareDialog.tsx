@@ -68,7 +68,7 @@ export function ShareDialog(props: ShareDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const { token, actualSwapAmount, shareSuccessLink, onClose } = props
-    const amount = formatBalance(actualSwapAmount, token.decimals)
+    const amount = formatBalance(actualSwapAmount.toString(), token.decimals)
 
     const onShareSuccess = useCallback(async () => {
         onClose()

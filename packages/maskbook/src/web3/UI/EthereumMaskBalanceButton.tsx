@@ -76,7 +76,7 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
                 {process.env.architecture === 'web' && !maskBalanceLoading && !maskBalanceError ? (
                     <MaskbookIcon className={classes.icon} />
                 ) : null}
-                <Typography>{formatBalance(maskBalance, 18, 6)} MASK</Typography>
+                <Typography>{formatBalance(maskBalance, 18)} MASK</Typography>
             </ActionButton>
             {maskToken ? (
                 <BreakdownDialog

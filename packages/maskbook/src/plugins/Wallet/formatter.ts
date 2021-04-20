@@ -1,3 +1,5 @@
+import { BigNumber as BN, BigNumberish } from '@ethersproject/bignumber'
+import { formatUnits } from '@ethersproject/units'
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 import { i18n } from '../../utils/i18n-next'
@@ -18,31 +20,13 @@ export function formatAmount(amount: BigNumber.Value = '0', decimals = 0) {
     return new BigNumber(amount).multipliedBy(new BigNumber(10).pow(decimals)).toFixed()
 }
 
-export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, significant = decimals) {
-    let balance = new BigNumber(rawValue)
-    if (balance.isNaN()) return '0'
+export function formatBalance(rawValue: string | number | BigNumberish | undefined = '0', decimals = 0) {
+    let balance = BN.from(rawValue)
     const negative = balance.isNegative() // balance < 0n
-    const base = new BigNumber(10).pow(decimals) // 10n ** decimals
 
-    if (negative) balance = balance.absoluteValue() // balance * -1n
+    if (negative) balance = balance.abs() // balance * -1n
 
-    let fraction = balance.modulo(base).toString(10) // (balance % base).toString(10)
-
-    // add leading zeros
-    while (fraction.length < decimals) fraction = `0${fraction}`
-
-    // match significant digits
-    const matchSignificantDigits = new RegExp(`^0*[1-9]\\d{0,${significant > 0 ? significant - 1 : 0}}`)
-    fraction = fraction.match(matchSignificantDigits)?.[0] ?? ''
-
-    // trim tailing zeros
-    fraction = fraction.replace(/0+$/g, '')
-
-    const whole = balance.dividedToIntegerBy(base).toString(10) // (balance / base).toString(10)
-    const value = `${whole}${fraction === '' ? '' : `.${fraction}`}`
-
-    const raw = negative ? `-${value}` : value
-    return raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
+    return formatUnits(balance, decimals)
 }
 
 export function formatCurrency(balance: number, sign = '$') {

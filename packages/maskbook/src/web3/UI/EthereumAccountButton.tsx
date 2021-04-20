@@ -86,7 +86,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     return (
         <div className={props.disableEther ? '' : classes.root}>
             {!props.disableEther ? (
-                <Typography className={classes.balance}>{formatBalance(balance, 18, 4)} ETH</Typography>
+                <Typography className={classes.balance}>{formatBalance(balance, 18)} ETH</Typography>
             ) : null}
             <Button
                 className={classNames(classes.button, props.disableEther ? classes.buttonTransparent : '')}

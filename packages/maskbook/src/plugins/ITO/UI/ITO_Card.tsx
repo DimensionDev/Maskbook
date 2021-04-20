@@ -80,7 +80,6 @@ export function ITO_Card(props: ITO_CardProps) {
                 `I just claimed ${cashTag}${token?.symbol} with ${formatBalance(
                     packet?.claimable,
                     18,
-                    6,
                 )}. Follow @realMaskbook (mask.io) to claim airdrop.`,
                 '#mask_io',
                 postLink,
@@ -107,7 +106,7 @@ export function ITO_Card(props: ITO_CardProps) {
             open: true,
             shareLink,
             state: claimState,
-            summary: `Claiming ${formatBalance(packet.claimable, 18, 6)} ${token?.symbol ?? 'Token'}.`,
+            summary: `Claiming ${formatBalance(packet.claimable, 18)} ${token?.symbol ?? 'Token'}.`,
         })
     }, [claimState /* update tx dialog only if state changed */])
     //#endregion
@@ -154,9 +153,7 @@ export function ITO_Card(props: ITO_CardProps) {
                 <Box display="flex" flexDirection="column" justifyContent="space-between">
                     <Typography>ITO locked:</Typography>
                     <Typography className={classes.amount}>
-                        {packet && packet.claimable !== '0'
-                            ? formatBalance(packet.claimable, token.decimals, 6)
-                            : '0.00'}
+                        {packet && packet.claimable !== '0' ? formatBalance(packet.claimable, token.decimals) : '0.00'}
                     </Typography>
                 </Box>
                 {packet ? (

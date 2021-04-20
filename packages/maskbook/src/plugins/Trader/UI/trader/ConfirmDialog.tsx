@@ -91,7 +91,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                     <Typography
                         className={classes.tip}
                         color="textSecondary">{`Output is estimated. You will receive at least ${formatBalance(
-                        minimumReceived,
+                        minimumReceived.toFixed(),
                         outputToken.decimals,
                     )} ${outputToken.symbol ?? 'Token'} or the transaction will revert.`}</Typography>
                     <TradeSummary

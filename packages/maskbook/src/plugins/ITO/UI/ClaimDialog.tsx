@@ -120,7 +120,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     const [swapToken, setSwapToken] = useState<EtherTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
     const [swapAmount, setSwapAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
     const [inputAmountForUI, setInputAmountForUI] = useState(
-        swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken.decimals),
+        swapAmount.isZero() ? '' : formatBalance(swapAmount.toFixed(), swapToken.decimals),
     )
 
     //#region confirm swap dialog
@@ -153,7 +153,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 setSwapToken(ev.token)
                 setTokenAmount(initAmount)
                 setSwapAmount(initAmount.multipliedBy(ratio))
-                setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals))
+                setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio).toFixed(), ev.token.decimals))
             },
             [
                 id,
@@ -241,7 +241,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
             open: true,
             state: swapState,
             summary: t('plugin_ito_swapping', {
-                amount: formatBalance(tokenAmount, token.decimals),
+                amount: formatBalance(tokenAmount.toFixed(), token.decimals),
                 symbol: token.symbol,
             }),
         })
@@ -269,16 +269,18 @@ export function ClaimDialog(props: ClaimDialogProps) {
                         const swapAmount = tokenAmount.multipliedBy(ratio).dp(0)
                         setTokenAmount(tokenAmount.dp(0))
                         setSwapAmount(swapAmount)
-                        setInputAmountForUI(formatBalance(swapAmount, swapToken.decimals))
+                        setInputAmountForUI(formatBalance(swapAmount.toFixed(), swapToken.decimals))
                     }}
                 />
                 <Typography variant="body1" className={classes.swapLimitText}>
-                    {formatBalance(maxSwapAmount, token.decimals)} {token.symbol}
+                    {formatBalance(maxSwapAmount.toFixed(), token.decimals)} {token.symbol}
                 </Typography>
             </section>
             <Typography className={classes.exchangeText} variant="body1" color="textSecondary">
                 {t('plugin_ito_dialog_claim_swap_exchange')}{' '}
-                <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals)}</span>{' '}
+                <span className={classes.exchangeAmountText}>
+                    {formatBalance(tokenAmount.toFixed(), token.decimals)}
+                </span>{' '}
                 {token.symbol}
                 {'.'}
             </Typography>

@@ -331,7 +331,7 @@ export function ITO(props: ITO_Props) {
         setClaimTransactionDialogOpen({
             open: true,
             state: claimState,
-            summary: `Claiming ${formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals)} ${
+            summary: `Claiming ${formatBalance(availability?.swapped ?? 0, token.decimals)} ${
                 token?.symbol ?? 'Token'
             }.`,
         })
@@ -387,7 +387,7 @@ export function ITO(props: ITO_Props) {
         if (destructState.type === TransactionStateType.UNKNOWN) return
         let summary = t('plugin_ito_withdraw')
         if (!noRemain) {
-            summary += ' ' + formatBalance(total_remaining, token.decimals) + ' ' + token.symbol
+            summary += ' ' + formatBalance(total_remaining.toFixed(), token.decimals) + ' ' + token.symbol
         }
         availability?.exchange_addrs.forEach((addr, i) => {
             const token = exchange_tokens.find((t) => t.address.toLowerCase() === addr.toLowerCase())
@@ -439,7 +439,7 @@ export function ITO(props: ITO_Props) {
         }
 
         return `${_text}, ${t('plugin_ito_your_refund_amount', {
-            amount: formatBalance(refundAmount, tradeInfo?.buyInfo?.token.decimals ?? 0),
+            amount: formatBalance(refundAmount.toFixed(), tradeInfo?.buyInfo?.token.decimals ?? 0),
             symbol: tradeInfo?.buyInfo?.token.symbol,
         })}`
     }, [

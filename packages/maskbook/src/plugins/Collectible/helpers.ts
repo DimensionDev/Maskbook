@@ -1,9 +1,10 @@
 import type { Asset, OpenSeaFungibleToken, WyvernSchemaName } from 'opensea-js/lib/types'
+import { BigNumber } from '@ethersproject/bignumber'
+import { formatEther } from '@ethersproject/units'
 import { createTypedMessageMetadataReader, createRenderWithMetadata } from '../../protocols/typed-message'
 import { PLUGIN_META_KEY, RaribleIPFSURL } from './constants'
 import type { CollectibleJSON_Payload, CollectibleToken } from './types'
 import schema from './schema.json'
-import BigNumber from 'bignumber.js'
 import { createERC20Token, createEtherToken } from '../../web3/helpers'
 import type { ChainId } from '../../web3/types'
 
@@ -31,8 +32,8 @@ export function toTokenIdentifier(token?: CollectibleToken) {
     return `${token.contractAddress}_${token.tokenId}`
 }
 
-export function toDecimalAmount(weiAmount: string, decimals: number) {
-    return new BigNumber(weiAmount).dividedBy(new BigNumber(10).pow(decimals)).toNumber()
+export function toDecimalAmount(weiAmount: string) {
+    return formatEther(BigNumber.from(weiAmount))
 }
 
 export function toUnixTimestamp(date: Date) {

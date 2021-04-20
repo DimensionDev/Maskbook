@@ -11,6 +11,8 @@ import {
 } from '@material-ui/core'
 import { omit } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
+import { BigNumber as BN } from '@ethersproject/bignumber'
+import { parseUnits } from '@ethersproject/units'
 import BigNumber from 'bignumber.js'
 
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -132,8 +134,8 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     // amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0))
-    const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares || '0')
+    const amount = parseUnits(rawAmount || '0', token?.decimals ?? 0)
+    const totalAmount = isRandom ? amount : amount.mul(BN.from(shares))
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
@@ -151,7 +153,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         message,
         shares: shares || 0,
         token,
-        total: totalAmount.toFixed(),
+        total: totalAmount,
     })
     //#endregion
 
@@ -240,8 +242,8 @@ export function RedPacketForm(props: RedPacketFormProps) {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (new BigNumber(shares || '0').isZero()) return 'Enter shares'
         if (new BigNumber(shares || '0').isGreaterThan(255)) return 'At most 255 recipients'
-        if (new BigNumber(amount).isZero()) return 'Enter an amount'
-        if (new BigNumber(totalAmount).isGreaterThan(tokenBalance)) return `Insufficient ${token.symbol} balance`
+        if (amount.isZero()) return 'Enter an amount'
+        if (totalAmount.gt(BN.from(tokenBalance))) return `Insufficient ${token.symbol} balance`
         return ''
     }, [account, amount, totalAmount, shares, token, tokenBalance])
 
@@ -320,7 +322,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
             </div>
             <EthereumWalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
-                    amount={totalAmount.toFixed()}
+                    amount={totalAmount.toString()}
                     token={token?.type === EthereumTokenType.ERC20 ? token : undefined}
                     spender={RED_PACKET_ADDRESS}>
                     <ActionButton

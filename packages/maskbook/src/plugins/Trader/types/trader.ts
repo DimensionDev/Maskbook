@@ -1,4 +1,4 @@
-import type BigNumber from 'bignumber.js'
+import type { BigNumberish } from '@ethersproject/bignumber'
 import type { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 
 export enum TradeProvider {
@@ -49,15 +49,15 @@ export interface TradeComputed<T = unknown> {
     strategy: TradeStrategy
     inputToken?: EtherTokenDetailed | ERC20TokenDetailed
     outputToken?: EtherTokenDetailed | ERC20TokenDetailed
-    inputAmount: BigNumber
-    outputAmount: BigNumber
-    nextMidPrice: BigNumber
-    executionPrice: BigNumber
-    priceImpact: BigNumber
-    maximumSold: BigNumber
-    minimumReceived: BigNumber
-    priceImpactWithoutFee: BigNumber
-    fee: BigNumber
+    inputAmount: BigNumberish
+    outputAmount: BigNumberish
+    nextMidPrice: BigNumberish
+    executionPrice: BigNumberish
+    priceImpact: BigNumberish
+    maximumSold: BigNumberish
+    minimumReceived: BigNumberish
+    priceImpactWithoutFee: BigNumberish
+    fee: BigNumberish
     path?: (PartialRequired<EtherTokenDetailed, 'address'> | PartialRequired<ERC20TokenDetailed, 'address'>)[][]
     trade_?: T
 }

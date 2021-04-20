@@ -104,9 +104,8 @@ export function TradeSummary(props: TradeSummaryProps) {
                                                   new BigNumber(10).pow(inputToken.decimals - outputToken.decimals),
                                               )
                                               .multipliedBy(new BigNumber(10).pow(outputToken.decimals))
-                                              .integerValue(),
+                                              .toFixed(),
                                           outputToken.decimals,
-                                          6,
                                       )}
                                   </strong>
                                   {outputToken.symbol}
@@ -123,9 +122,8 @@ export function TradeSummary(props: TradeSummaryProps) {
                                                   new BigNumber(10).pow(outputToken.decimals - inputToken.decimals),
                                               )
                                               .multipliedBy(new BigNumber(10).pow(inputToken.decimals))
-                                              .integerValue(),
+                                              .toFixed(),
                                           inputToken.decimals,
-                                          6,
                                       )}
                                   </strong>
                                   {inputToken.symbol}
@@ -150,7 +148,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                   children: (
                       <Typography className={classes.title}>
                           <strong className={classes.emphasis}>
-                              {formatBalance(minimumReceived, outputToken.decimals, 6)}
+                              {formatBalance(minimumReceived.toFixed(), outputToken.decimals)}
                           </strong>{' '}
                           {outputToken.symbol}
                       </Typography>
@@ -163,7 +161,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                   children: (
                       <Typography className={classes.title}>
                           <strong className={classes.emphasis}>
-                              {formatBalance(maximumSold, inputToken.decimals, 6)}
+                              {formatBalance(maximumSold.toFixed(), inputToken.decimals)}
                           </strong>{' '}
                           {inputToken.symbol}
                       </Typography>
@@ -193,7 +191,7 @@ export function TradeSummary(props: TradeSummaryProps) {
             title: 'Liquidity Provider Fee',
             children: (
                 <Typography className={classes.title}>
-                    {formatBalance(fee, inputToken.decimals, 6)} {inputToken.symbol}
+                    {formatBalance(fee.toFixed(), inputToken.decimals)} {inputToken.symbol}
                 </Typography>
             ),
         },

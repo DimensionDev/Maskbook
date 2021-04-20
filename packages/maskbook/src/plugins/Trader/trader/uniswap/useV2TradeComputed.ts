@@ -1,5 +1,5 @@
 import { Trade, TradeType } from '@uniswap/sdk'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 import { uniswapCurrencyAmountTo, uniswapPercentTo, uniswapPriceTo, uniswapTokenTo } from '../../helpers'
 import { TradeComputed, TradeStrategy } from '../../types'
@@ -29,8 +29,8 @@ export function useV2TradeComputed(
         minimumReceived: uniswapCurrencyAmountTo(trade.minimumAmountOut(slippage)),
         priceImpactWithoutFee: breakdown?.priceImpactWithoutFee
             ? uniswapPercentTo(breakdown.priceImpactWithoutFee)
-            : new BigNumber(0),
-        fee: breakdown?.realizedLPFee ? uniswapCurrencyAmountTo(breakdown.realizedLPFee) : new BigNumber(0),
+            : BigNumber.from(0),
+        fee: breakdown?.realizedLPFee ? uniswapCurrencyAmountTo(breakdown.realizedLPFee) : BigNumber.from(0),
         trade_: trade,
     }
 }

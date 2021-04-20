@@ -137,7 +137,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                 color="textSecondary"
                                 variant="body2"
                                 component="span">
-                                Balance: {formatBalance(balance, token.decimals, 6)}
+                                Balance: {formatBalance(balance, token.decimals)}
                             </Typography>
                         ) : null}
                         <Box

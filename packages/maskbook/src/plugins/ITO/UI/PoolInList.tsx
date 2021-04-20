@@ -13,6 +13,7 @@ import {
     TableCell,
     TableBody,
 } from '@material-ui/core'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useAccount } from '../../../web3/hooks/useAccount'
@@ -195,7 +196,7 @@ export function PoolInList(props: PoolInListProps) {
                             {t('plugin_ito_list_sold_total')}
                             <Typography variant="body2" color="textPrimary" component="span">
                                 {formatBalance(
-                                    exchange_out_volumes.reduce((acculator, x) => acculator.plus(x), new BigNumber(0)),
+                                    exchange_out_volumes.reduce((acculator, x) => acculator.add(x), BN.from(0)),
                                     pool.token.decimals,
                                 )}
                             </Typography>{' '}
@@ -252,18 +253,17 @@ export function PoolInList(props: PoolInListProps) {
                                                         .multipliedBy(
                                                             new BigNumber(10).pow(pool.exchange_tokens[index].decimals),
                                                         )
-                                                        .integerValue(),
+                                                        .toFixed(),
                                                     token.decimals,
-                                                    6,
                                                 )}{' '}
                                                 {token.symbol} / {pool.token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
-                                                {formatBalance(exchange_out_volumes[index], pool.token.decimals, 6)}{' '}
+                                                {formatBalance(exchange_out_volumes[index], pool.token.decimals)}{' '}
                                                 {pool.token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
-                                                {formatBalance(exchange_in_volumes[index], token.decimals, 6)}{' '}
+                                                {formatBalance(exchange_in_volumes[index], token.decimals)}{' '}
                                                 {token.symbol}
                                             </TableCell>
                                         </TableRow>
