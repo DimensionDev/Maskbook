@@ -93,7 +93,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
         if (expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid Expiration Date'
         if (!isVerified && !unreviewedChecked) return 'Please ensure unreviewed item'
-        if (!ToS_Checked) return 'Please check ToS document'
+        if (!isVerified && !ToS_Checked) return 'Please check ToS document'
         return ''
     }, [amount, expirationDateTime, isVerified, unreviewedChecked, ToS_Checked])
 
@@ -131,46 +131,48 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         />
                         <Box sx={{ padding: 2, paddingBottom: 0 }}>
                             {isVerified ? null : (
-                                <FormControlLabel
-                                    className={classes.label}
-                                    control={
-                                        <Checkbox
-                                            color="primary"
-                                            checked={unreviewedChecked}
-                                            onChange={(ev: ChangeEvent<HTMLInputElement>) =>
-                                                setUnreviewedChecked(ev.target.checked)
-                                            }
-                                        />
-                                    }
-                                    label={
-                                        <Typography variant="body2">
-                                            By checking this box, I acknowledge that this item has not been reviewd or
-                                            approved by OpenSea.
-                                        </Typography>
-                                    }
-                                />
-                            )}
-                            <FormControlLabel
-                                className={classes.label}
-                                control={
-                                    <Checkbox
-                                        color="primary"
-                                        checked={ToS_Checked}
-                                        onChange={(ev: ChangeEvent<HTMLInputElement>) =>
-                                            setToS_Checked(ev.target.checked)
+                                <>
+                                    <FormControlLabel
+                                        className={classes.label}
+                                        control={
+                                            <Checkbox
+                                                color="primary"
+                                                checked={unreviewedChecked}
+                                                onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                                                    setUnreviewedChecked(ev.target.checked)
+                                                }
+                                            />
+                                        }
+                                        label={
+                                            <Typography variant="body2">
+                                                By checking this box, I acknowledge that this item has not been reviewd or
+                                                approved by OpenSea.
+                                            </Typography>
                                         }
                                     />
-                                }
-                                label={
-                                    <Typography variant="body2">
-                                        By checking this box, I agree to OpenSea's{' '}
-                                        <Link color="primary" target="_blank" rel="noopener noreferrer">
-                                            Terms of Service
-                                        </Link>
-                                        .
-                                    </Typography>
-                                }
-                            />
+                                    <FormControlLabel
+                                        className={classes.label}
+                                        control={
+                                            <Checkbox
+                                                color="primary"
+                                                checked={ToS_Checked}
+                                                onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                                                    setToS_Checked(ev.target.checked)
+                                                }
+                                            />
+                                        }
+                                        label={
+                                            <Typography variant="body2">
+                                                By checking this box, I agree to OpenSea's{' '}
+                                                <Link color="primary" target="_blank" rel="noopener noreferrer" href="https://opensea.io/tos">
+                                                    Terms of Service
+                                                </Link>
+                                                .
+                                            </Typography>
+                                        }
+                                    />
+                                </>
+                            )}
                         </Box>
                     </CardContent>
                     <CardActions className={classes.footer}>
