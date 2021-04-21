@@ -81,7 +81,11 @@ export default function LogoButton(props: LogoButtonProps) {
     return (
         <div className={classes.root}>
             <IconButton
-                onMouseEnter={() => setHover(true)}
+                onMouseEnter={() =>
+                    setTimeout(() => {
+                        setHover(true)
+                    }, 300)
+                }
                 onMouseLeave={() =>
                     setTimeout(() => {
                         setHover(false)
