@@ -100,6 +100,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
 
     useEffect(() => {
+        setAmount('')
         setExpirationDateTime(new Date())
     }, [open])
 

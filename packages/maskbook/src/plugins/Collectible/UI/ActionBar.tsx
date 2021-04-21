@@ -46,34 +46,33 @@ export function ActionBar(props: ActionBarProps) {
 
     return (
         <Box className={classes.root} sx={{ marginTop: 1 }} display="flex" justifyContent="center">
-            {!asset.value.is_owner ? (
-                asset.value.is_auction ? (
-                    <ActionButton
-                        className={classes.button}
-                        color="primary"
-                        fullWidth
-                        variant="contained"
-                        onClick={onOpenOfferDialog}>
-                        {t('plugin_collectible_place_bid')}
-                    </ActionButton>
-                ) : (
-                    <>
-                        <ActionButton
-                            className={classes.button}
-                            color="primary"
-                            variant="contained"
-                            onClick={onOpenCheckoutDialog}>
-                            {t('plugin_collectible_buy_now')}
-                        </ActionButton>
-                        <ActionButton
-                            className={classes.button}
-                            color="primary"
-                            variant="contained"
-                            onClick={onOpenOfferDialog}>
-                            {t('plugin_collectible_make_offer')}
-                        </ActionButton>
-                    </>
-                )
+            {!asset.value.is_owner && asset.value.is_auction ? (
+                <ActionButton
+                    className={classes.button}
+                    color="primary"
+                    fullWidth
+                    variant="contained"
+                    onClick={onOpenOfferDialog}>
+                    {t('plugin_collectible_place_bid')}
+                </ActionButton>
+            ) : null}
+            {!asset.value.is_owner && !asset.value.is_auction && asset.value?.order_ ? (
+                <ActionButton
+                    className={classes.button}
+                    color="primary"
+                    variant="contained"
+                    onClick={onOpenCheckoutDialog}>
+                    {t('plugin_collectible_buy_now')}
+                </ActionButton>
+            ) : null}
+            {!asset.value.is_owner && !asset.value.is_auction ? (
+                <ActionButton
+                    className={classes.button}
+                    color="primary"
+                    variant="contained"
+                    onClick={onOpenOfferDialog}>
+                    {t('plugin_collectible_make_offer')}
+                </ActionButton>
             ) : null}
             {asset.value.is_owner ? (
                 <ActionButton
