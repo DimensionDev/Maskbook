@@ -69,7 +69,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     collection_name: openSeaResponse.collection.name,
                     animation_url: openSeaResponse.animation_url,
                     end_time: desktopOrder
-                        ? toDate(Number.parseInt((desktopOrder.expirationTime as unknown) as string))
+                        ? toDate(Number.parseInt((desktopOrder.listingTime as unknown) as string))
                         : null,
                     order_payment_token: desktopOrder?.paymentTokenContract
                         ? toTokenDetailed(chainId, desktopOrder.paymentTokenContract)

@@ -3,9 +3,10 @@ import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatEthereumAddress } from '../../Wallet/formatter'
-import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveAddressLinkOnEtherscan, resolveChainName } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'
 import { Markdown } from '../../Snapshot/UI/Markdown'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -55,6 +56,8 @@ export interface TokenTabProps {}
 export function TokenTab(props: TokenTabProps) {
     const { t } = useI18N()
     const classes = useStyles()
+
+    const chainId = useChainId()
     const { token, asset } = CollectibleState.useContainer()
 
     if (!asset.value) return null
@@ -138,7 +141,7 @@ export function TokenTab(props: TokenTabProps) {
                 </Box>
                 <Box className={classes.chain_row}>
                     <Typography variant="body2">{t('plugin_collectible_block_chain')}</Typography>
-                    <Typography variant="body2">Ethereum</Typography>
+                    <Typography variant="body2">{resolveChainName(chainId)}</Typography>
                 </Box>
             </Box>
         </CollectibleTab>

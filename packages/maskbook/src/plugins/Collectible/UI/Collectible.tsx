@@ -4,6 +4,7 @@ import {
     createStyles,
     Avatar,
     Box,
+    Button,
     CardHeader,
     CardContent,
     CardActions,
@@ -158,10 +159,18 @@ export function Collectible(props: CollectibleProps) {
     if (!asset.value)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                <Typography color="textPrimary">
+                <Typography color="textPrimary" sx={{ marginTop: 8, marginBottom: 8 }}>
                     Failed to load your collectible on {resolveCollectibleProviderName(provider)}.
                 </Typography>
                 {CollectibleProviderSwitcher}
+                <Button
+                    color="primary"
+                    size="small"
+                    variant="text"
+                    onClick={() => asset.retry()}
+                    sx={{ marginTop: 1.5 }}>
+                    Refresh
+                </Button>
             </Box>
         )
 
