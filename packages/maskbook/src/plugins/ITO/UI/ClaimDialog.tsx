@@ -17,6 +17,8 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import type { ChainId } from '../../../web3/types'
+import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO_CONSTANTS } from '../constants'
 import { ClaimStatus } from './ClaimGuide'
@@ -108,6 +110,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
         exchangeTokens,
     } = props
 
+    const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
 
@@ -212,8 +215,15 @@ export function ClaimDialog(props: ClaimDialogProps) {
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
+
+            if (swapState.type === TransactionStateType.HASH) {
+                const { hash } = swapState
+                window.open(resolveTransactionLinkOnEtherscan(chainId, hash), '_blank', 'noopener noreferrer')
+            }
+
             if (swapState.type !== TransactionStateType.CONFIRMED && swapState.type !== TransactionStateType.RECEIPT)
                 return
+
             const { receipt } = swapState
             const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as { to_value: string }
             setActualSwapAmount(to_value)
@@ -227,7 +237,10 @@ export function ClaimDialog(props: ClaimDialogProps) {
         setTransactionDialogOpen({
             open: true,
             state: swapState,
-            summary: `${t('plugin_trader_swap')} ${formatBalance(tokenAmount, token.decimals)} ${token.symbol}`,
+            summary: t('plugin_ito_swapping', {
+                amount: formatBalance(tokenAmount, token.decimals),
+                symbol: token.symbol,
+            }),
         })
     }, [swapState])
     //#endregion
