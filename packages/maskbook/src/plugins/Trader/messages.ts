@@ -18,6 +18,10 @@ interface SwapConfirmationEvent {
     open: boolean
 }
 
+interface SwapDialogEvent {
+    open: boolean
+}
+
 interface PluginTraderMessage {
     /**
      * View a cash tag
@@ -33,6 +37,11 @@ interface PluginTraderMessage {
      * Confirm swap dialog
      */
     swapConfirmationUpdated: SwapConfirmationEvent
+
+    /**
+     * Swap dialog
+     */
+    swapDialogUpdated: SwapDialogEvent
 
     rpc: unknown
 }

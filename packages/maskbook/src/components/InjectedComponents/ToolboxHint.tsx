@@ -9,8 +9,9 @@ import { RedPacketCompositionEntry } from '../../plugins/RedPacket/define'
 import { FileServiceCompositionEntry } from '../../plugins/FileService/UI-define'
 import { ITO_CompositionEntry } from '../../plugins/ITO/define'
 import { useAccount } from '../../web3/hooks/useAccount'
-import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog, useRemoteControlledDialogEvent } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
+import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
@@ -120,17 +121,18 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Wallet
-    const [, setSelectWalletDialogOpen] = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const { onOpen: onSelectWalletDialogOpen } = useRemoteControlledDialogEvent(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
+
+    const { onOpen: onSelectProviderDialogOpen } = useRemoteControlledDialogEvent(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     const openWallet = useCallback(() => {
         if (selectedWallet) {
-            setSelectWalletDialogOpen({
-                open: true,
-            })
+            onSelectWalletDialogOpen()
         } else {
-            setSelectProviderDialogOpen({
-                open: true,
-            })
+            onSelectProviderDialogOpen()
         }
     }, [])
     //#endregion
@@ -172,7 +174,9 @@ export function ToolboxHint(props: ToolboxHintProps) {
     }, [])
     //#endregion
 
-    // Todo: add a swap dialog
+    //#region Swap
+    const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
+    //#endregion
 
     const [menu, openMenu] = useMenu(
         [
@@ -198,6 +202,10 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
                 </MenuItem>
             ) : null,
+            <MenuItem onClick={openSwapDialog} className={classes.menuItem}>
+                <Image src={ToolIconURLs.swap.image} width={19} height={19} />
+                <Typography className={classes.text}>{ToolIconURLs.swap.text}</Typography>
+            </MenuItem>,
         ],
         false,
         {
