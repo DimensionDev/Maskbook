@@ -11,6 +11,7 @@ import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import { CompositionDialog } from './UI/CompositionDialog'
 import { ItoLabelIcon } from './assets/ItoLabelIcon'
+import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
 
 interface LabelWrapperProps {
     iconSize: number
@@ -67,13 +68,14 @@ export const ITO_PluginDefine: PluginConfig = {
         [
             ITO_MetaKey,
             (payload: JSON_PayloadOutMask) => {
+                const sellerName = payload.seller.name ?? formatEthereumAddress(payload.seller.address, 4)
                 return (
                     <LabelWrapper
                         iconSize={14}
                         labelText={`A ITO with
                         ${formatBalance(payload.total, payload.token?.decimals)} $${
                             payload.token?.symbol ?? payload.token?.name ?? 'Token'
-                        } from ${payload.seller.name}`}
+                        } from ${sellerName}`}
                     />
                 )
             },

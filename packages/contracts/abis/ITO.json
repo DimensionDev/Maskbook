@@ -16,6 +16,43 @@
             {
                 "indexed": false,
                 "internalType": "address",
+                "name": "claimer",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "to_value",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "token_address",
+                "type": "address"
+            }
+        ],
+        "name": "ClaimSuccess",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "id",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
                 "name": "token_address",
                 "type": "address"
             },
@@ -67,12 +104,6 @@
                 "internalType": "address",
                 "name": "token_address",
                 "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "name",
-                "type": "string"
             },
             {
                 "indexed": false,
@@ -183,6 +214,16 @@
                 "type": "bool"
             },
             {
+                "internalType": "bool",
+                "name": "unlocked",
+                "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "unlock_time",
+                "type": "uint256"
+            },
+            {
                 "internalType": "uint256",
                 "name": "swapped",
                 "type": "uint256"
@@ -194,6 +235,19 @@
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32[]",
+                "name": "ito_ids",
+                "type": "bytes32[]"
+            }
+        ],
+        "name": "claim",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -241,11 +295,6 @@
             },
             {
                 "internalType": "string",
-                "name": "name",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
                 "name": "message",
                 "type": "string"
             },
@@ -258,6 +307,11 @@
                 "internalType": "uint128[]",
                 "name": "_ratios",
                 "type": "uint128[]"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_unlock_time",
+                "type": "uint256"
             },
             {
                 "internalType": "address",
@@ -293,14 +347,27 @@
                 "type": "bytes32"
             },
             {
+                "internalType": "uint256",
+                "name": "_unlock_time",
+                "type": "uint256"
+            }
+        ],
+        "name": "setUnlockTime",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "bytes32",
-                "name": "verification",
+                "name": "id",
                 "type": "bytes32"
             },
             {
-                "internalType": "address",
-                "name": "_recipient",
-                "type": "address"
+                "internalType": "bytes32",
+                "name": "verification",
+                "type": "bytes32"
             },
             {
                 "internalType": "bytes32",

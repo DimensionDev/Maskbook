@@ -200,6 +200,7 @@ importers:
       '@ethersproject/networks': ^5.0.4
       '@ethersproject/providers': ^5.0.9
       '@ethersproject/solidity': ^5.0.4
+      '@ethersproject/strings': ^5.1.0
       '@msgpack/msgpack': ^2.3.0
       '@openzeppelin/contracts': ^3.2.0
       '@pmmmwh/react-refresh-webpack-plugin': ^0.4.3
@@ -359,6 +360,7 @@ importers:
       '@ethersproject/networks': 5.1.0
       '@ethersproject/providers': 5.1.0
       '@ethersproject/solidity': 5.1.0
+      '@ethersproject/strings': 5.1.0
       '@msgpack/msgpack': 2.5.1
       '@openzeppelin/contracts': 3.4.1
       '@popperjs/core': 2.9.1

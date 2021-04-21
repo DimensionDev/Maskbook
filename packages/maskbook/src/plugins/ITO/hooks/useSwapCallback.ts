@@ -99,10 +99,9 @@ export function useSwapCallback(
         const swapParams = [
             id,
             Web3Utils.soliditySha3(
-                Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 6))}`),
+                Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 5))}`),
                 account,
             )!,
-            account,
             Web3Utils.sha3(account)!,
             swapTokenAt,
             total,
@@ -137,11 +136,18 @@ export function useSwapCallback(
                 })
                 reject(error)
             }
+            const onHash = (hash: string) => {
+                setSwapState({
+                    type: TransactionStateType.HASH,
+                    hash,
+                })
+                resolve()
+            }
             const promiEvent = ITO_Contract.methods.swap(...swapParams).send({
                 gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
             })
-
+            promiEvent.on(TransactionEventType.TRANSACTION_HASH, onHash)
             promiEvent.on(TransactionEventType.ERROR, onFailed)
             promiEvent.on(TransactionEventType.CONFIRMATION, onSucceed)
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => onSucceed(0, receipt))

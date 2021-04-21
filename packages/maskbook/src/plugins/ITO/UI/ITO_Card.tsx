@@ -11,7 +11,7 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { ERC20TokenDetailed } from '../../../web3/types'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { formatBalance } from '../../Wallet/formatter'
-import { useClaimCallback } from '../hooks/useClaimCallback'
+import { useMaskClaimCallback } from '../hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from '../hooks/useMaskITO_Packet'
 
 const useStyles = makeStyles((theme) =>
@@ -65,7 +65,7 @@ export function ITO_Card(props: ITO_CardProps) {
     const { value: packet, loading: packetLoading, error: packetError, retry: packetRetry } = useMaskITO_Packet()
 
     //#region calim
-    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback()
+    const [claimState, claimCallback, resetClaimCallback] = useMaskClaimCallback()
     const onClaimButtonClick = useCallback(() => {
         claimCallback()
     }, [claimCallback])
