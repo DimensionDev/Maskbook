@@ -16,7 +16,7 @@ export default function PollsInPost(props: PollsInPostProps) {
     const [updatedPoll, setUpdatedPoll] = useState<PollMetaData | undefined>(undefined)
 
     const vote = (poll: PollGunDB, index: number) => {
-        if (new Date().getTime() <= poll.end_time) {
+        if (Date.now() <= poll.end_time) {
             setStatus(PollStatus.Voting)
             PluginPollRPC.vote({
                 poll,

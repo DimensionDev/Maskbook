@@ -173,8 +173,7 @@ async function updateCache(dataProvider: DataProvider, keyword?: string) {
 function isCacheExipred(dataProvider: DataProvider) {
     return (
         coinNamespace.has(dataProvider) &&
-        new Date().getTime() - (coinNamespace.get(dataProvider)?.lastUpdated.getTime() ?? 0) >
-            CRYPTOCURRENCY_MAP_EXPIRES_AT
+        Date.now() - (coinNamespace.get(dataProvider)?.lastUpdated.getTime() ?? 0) > CRYPTOCURRENCY_MAP_EXPIRES_AT
     )
 }
 

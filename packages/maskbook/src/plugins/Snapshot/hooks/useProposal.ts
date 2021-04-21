@@ -13,7 +13,7 @@ async function Suspender(id: string) {
     // await testDelay(1000)
     const proposal = await PluginSnapshotRPC.fetchProposal(id)
     const message: ProposalMessage = JSON.parse(proposal.msg)
-    const now = new Date().getTime()
+    const now = Date.now()
 
     //#region get 3box profile
     const profiles = await PluginSnapshotRPC.fetch3BoxProfiles([proposal.address])
