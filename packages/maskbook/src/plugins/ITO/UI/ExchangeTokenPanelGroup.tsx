@@ -62,6 +62,12 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
                 token,
                 key,
             })
+
+            dispatchExchangeTokenArray({
+                type: ExchangeTokenAndAmountActionType.UPDATE_AMOUNT,
+                amount: '',
+                key,
+            })
         },
         [dispatchExchangeTokenArray],
     )

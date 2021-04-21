@@ -25,15 +25,21 @@ export class ITO extends Contract {
             remaining: string
             started: boolean
             expired: boolean
+            unlocked: boolean
+            unlock_time: string
             swapped: string
             exchanged_tokens: string[]
             0: string[]
             1: string
             2: boolean
             3: boolean
-            4: string
-            5: string[]
+            4: boolean
+            5: string
+            6: string
+            7: string[]
         }>
+
+        claim(ito_ids: (string | number[])[]): TransactionObject<void>
 
         contract_creator(): TransactionObject<string>
 
@@ -43,20 +49,21 @@ export class ITO extends Contract {
             _hash: string | number[],
             _start: number | string,
             _end: number | string,
-            name: string,
             message: string,
             _exchange_addrs: string[],
             _ratios: (number | string)[],
+            _unlock_time: number | string,
             _token_addr: string,
             _total_tokens: number | string,
             _limit: number | string,
             _qualification: string,
         ): TransactionObject<void>
 
+        setUnlockTime(id: string | number[], _unlock_time: number | string): TransactionObject<void>
+
         swap(
             id: string | number[],
             verification: string | number[],
-            _recipient: string,
             validation: string | number[],
             exchange_addr_i: number | string,
             input_total: number | string,
@@ -65,6 +72,18 @@ export class ITO extends Contract {
         withdraw(id: string | number[], addr_i: number | string): TransactionObject<void>
     }
     events: {
+        ClaimSuccess: ContractEvent<{
+            id: string
+            claimer: string
+            timestamp: string
+            to_value: string
+            token_address: string
+            0: string
+            1: string
+            2: string
+            3: string
+            4: string
+        }>
         DestructSuccess: ContractEvent<{
             id: string
             token_address: string
@@ -81,7 +100,6 @@ export class ITO extends Contract {
             creator: string
             creation_time: string
             token_address: string
-            name: string
             message: string
             0: string
             1: string
@@ -89,7 +107,6 @@ export class ITO extends Contract {
             3: string
             4: string
             5: string
-            6: string
         }>
         SwapSuccess: ContractEvent<{
             id: string

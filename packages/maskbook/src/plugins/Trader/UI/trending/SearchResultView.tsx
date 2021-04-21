@@ -11,11 +11,13 @@ import { Days, PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
 import { useCurrentTradeProvider } from '../../trending/useCurrentTradeProvider'
 import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useSettingsSwticher } from '../../../../utils/hooks/useSettingSwitcher'
 import { TradeView } from '../trader/TradeView'
 import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewError } from './TrendingViewError'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton'
 import { TrendingViewDeck } from './TrendingViewDeck'
+import { currentTrendingDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
 import { EthereumTokenType } from '../../../../web3/types'
@@ -124,6 +126,14 @@ export function SearchResultView(props: SearchResultViewProps) {
     const tradeContext = useTradeContext(tradeProvider)
     //#endregion
 
+    //#region current data provider switcher
+    const DataProviderSwitcher = useSettingsSwticher(
+        currentTrendingDataProviderSettings,
+        dataProviders,
+        resolveDataProviderName,
+    )
+    //#endregion
+
     //#region no available providers
     if (dataProviders.length === 0) return null
     //#endregion
@@ -146,6 +156,7 @@ export function SearchResultView(props: SearchResultViewProps) {
                         .
                     </span>
                 }
+                reaction={DataProviderSwitcher}
                 TrendingCardProps={{ classes: { root: classes.root } }}
             />
         )
