@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) =>
         group: {
             flexFlow: 'wrap',
             justifyContent: 'space-between',
-            padding: `0 ${theme.spacing(1)}`,
+            padding: theme.spacing(0, 1),
             marginBottom: theme.spacing(1),
         },
     }),
@@ -51,47 +51,45 @@ export function AdvanceSetting({ advanceSettingData, setAdvanceSettingData }: Ad
     }
 
     return (
-        <>
-            <fieldset className={classes.root}>
-                <FormLabel component="legend" className={classes.label}>
-                    {t('plugin_ito_advanced')}
-                </FormLabel>
-                <FormGroup className={classes.group}>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                color="primary"
-                                checked={!!advanceSettingData.IPRegion}
-                                onChange={handleAdvanceSettingToggle}
-                                name={SettingField.IPRegion}
-                            />
-                        }
-                        label={t('plugin_ito_advanced_ip_region')}
-                    />
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                color="primary"
-                                checked={!!advanceSettingData.delayUnlocking}
-                                onChange={handleAdvanceSettingToggle}
-                                name={SettingField.delayUnlocking}
-                            />
-                        }
-                        label={t('plugin_ito_advanced_delay_unlocking')}
-                    />
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                color="primary"
-                                checked={!!advanceSettingData.contract}
-                                onChange={handleAdvanceSettingToggle}
-                                name={SettingField.contract}
-                            />
-                        }
-                        label={t('plugin_ito_advanced_contract')}
-                    />
-                </FormGroup>
-            </fieldset>
-        </>
+        <fieldset className={classes.root}>
+            <FormLabel component="legend" className={classes.label}>
+                {t('plugin_ito_advanced')}
+            </FormLabel>
+            <FormGroup className={classes.group}>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            color="primary"
+                            checked={!!advanceSettingData.IPRegion}
+                            onChange={handleAdvanceSettingToggle}
+                            name={SettingField.IPRegion}
+                        />
+                    }
+                    label={t('plugin_ito_advanced_ip_region')}
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            color="primary"
+                            checked={!!advanceSettingData.delayUnlocking}
+                            onChange={handleAdvanceSettingToggle}
+                            name={SettingField.delayUnlocking}
+                        />
+                    }
+                    label={t('plugin_ito_advanced_delay_unlocking')}
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            color="primary"
+                            checked={!!advanceSettingData.contract}
+                            onChange={handleAdvanceSettingToggle}
+                            name={SettingField.contract}
+                        />
+                    }
+                    label={t('plugin_ito_advanced_contract')}
+                />
+            </FormGroup>
+        </fieldset>
     )
 }
