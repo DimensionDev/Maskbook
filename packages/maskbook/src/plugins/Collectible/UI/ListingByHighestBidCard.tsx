@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
+import { useSnackbar } from 'notistack'
 import { createStyles, makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -49,6 +50,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
 
     const { t } = useI18N()
     const classes = useStyles()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { account } = ChainState.useContainer()
 
@@ -68,20 +70,28 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.ERC20) return
-        await PluginCollectibleRPC.createSellOrder({
-            asset: toAsset({
-                tokenId: asset.value.token_id,
-                tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract.schemaName,
-            }),
-            accountAddress: account,
-            startAmount: Number.parseFloat(amount),
-            expirationTime: toUnixTimestamp(expirationDateTime),
-            englishAuctionReservePrice: Number.parseFloat(reservePrice),
-            waitForHighestBid: true,
-            paymentTokenAddress: token.value.address, // english auction must be erc20 token
-        })
-    }, [asset?.value, token, amount, account, reservePrice, expirationDateTime])
+        try {
+            await PluginCollectibleRPC.createSellOrder({
+                asset: toAsset({
+                    tokenId: asset.value.token_id,
+                    tokenAddress: asset.value.token_address,
+                    schemaName: asset.value.asset_contract.schemaName,
+                }),
+                accountAddress: account,
+                startAmount: Number.parseFloat(amount),
+                expirationTime: toUnixTimestamp(expirationDateTime),
+                englishAuctionReservePrice: Number.parseFloat(reservePrice),
+                waitForHighestBid: true,
+                paymentTokenAddress: token.value.address, // english auction must be erc20 token
+            })
+        } catch (e) {
+            enqueueSnackbar(e.message, {
+                variant: 'error',
+                preventDuplicate: true,
+            })
+            throw e
+        }
+    }, [asset?.value, token, amount, account, reservePrice, expirationDateTime, enqueueSnackbar])
 
     useEffect(() => {
         setAmount('')

@@ -77,7 +77,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     offer_payment_tokens: uniqBy(
                         openSeaResponse.collection.payment_tokens.map((x) => toTokenDetailed(chainId, x)),
                         (x) => x.address.toLowerCase(),
-                    ).filter(x => x.type === EthereumTokenType.ERC20),
+                    ).filter((x) => x.type === EthereumTokenType.ERC20),
                     order_: desktopOrder,
                     response_: openSeaResponse,
                 }

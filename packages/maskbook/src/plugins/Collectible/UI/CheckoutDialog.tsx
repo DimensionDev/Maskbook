@@ -12,6 +12,7 @@ import {
     Typography,
     Link,
 } from '@material-ui/core'
+import { useSnackbar } from 'notistack'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -65,6 +66,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
 
     const { t } = useI18N()
     const classes = useStyles()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { account } = ChainState.useContainer()
 
@@ -75,12 +77,20 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!asset.value.order_) return
-        await PluginCollectibleRPC.fulfillOrder({
-            order: asset.value.order_,
-            accountAddress: account,
-            recipientAddress: account,
-        })
-    }, [asset?.value, account])
+        try {
+            await PluginCollectibleRPC.fulfillOrder({
+                order: asset.value.order_,
+                accountAddress: account,
+                recipientAddress: account,
+            })
+        } catch (e) {
+            enqueueSnackbar(e.message, {
+                variant: 'error',
+                preventDuplicate: true,
+            })
+            throw e
+        }
+    }, [asset?.value, account, enqueueSnackbar])
 
     const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
 
