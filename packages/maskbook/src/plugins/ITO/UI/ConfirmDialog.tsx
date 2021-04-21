@@ -208,7 +208,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Typography>{dateTimeFormat(poolSettings?.endTime!)}</Typography>
                     </Paper>
                 </Grid>
-                {poolSettings?.qualificationAddress ? (
+                {poolSettings?.qualificationAddress && poolSettings?.advanceSettingData.contract ? (
                     <>
                         <Grid item xs={6}>
                             <Paper className={classes.label}>
