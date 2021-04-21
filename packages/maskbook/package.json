@@ -161,7 +161,7 @@
     "source-map-loader": "^2.0.0",
     "ts-jest": "26.5.5",
     "ts-loader": "^9.0.0",
-    "type-coverage": "^2.17.2",
+    "type-coverage": "2.16",
     "web-ext": "^6.0.0",
     "webpack": "^5.31.2",
     "webpack-cli": "^4.3.0",
@@ -174,7 +174,7 @@
     "cache": true,
     "strict": true,
     "detail": true,
-    "atLeast": 96,
+    "atLeast": 99,
     "ignoreCatch": true,
     "ignoreFiles": [
       "**/__tests__/**",
