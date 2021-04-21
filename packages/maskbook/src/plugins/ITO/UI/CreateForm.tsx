@@ -27,7 +27,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { AdvanceSetting } from './AdvanceSetting'
 import type { AdvanceSettingData } from './AdvanceSetting'
-import { useRegionSelect, regionCodes, encodeRegionCode } from '../hooks/useRegion'
+import { useRegionSelect, regionCodes, encodeRegionCode, decodeRegionCode } from '../hooks/useRegion'
 import { RegionSelect } from './RegionSelect'
 
 const useStyles = makeStyles((theme) =>
@@ -171,14 +171,14 @@ export function CreateForm(props: CreateFormProps) {
     }, [])
 
     // qualificationAddress
-    const [qualificationAddress, setQualificationAddress] = useState('')
+    const [qualificationAddress, setQualificationAddress] = useState(origin?.qualificationAddress || '')
     const { value: qualification, loading: loadingQualification } = useQualificationVerify(qualificationAddress)
 
     // advance settings
-    const [advanceSettingData, setAdvanceSettingData] = useState<AdvanceSettingData>({})
+    const [advanceSettingData, setAdvanceSettingData] = useState<AdvanceSettingData>(origin?.advanceSettingData || {})
 
     // restrict regions
-    const [regions, setRegions] = useRegionSelect()
+    const [regions, setRegions] = useRegionSelect(decodeRegionCode(origin?.regions ?? '-'))
 
     useEffect(() => {
         if (!advanceSettingData.contract) setQualificationAddress('')
@@ -207,6 +207,7 @@ export function CreateForm(props: CreateFormProps) {
             endTime,
             unlockTime: unlockTime > endTime && advanceSettingData.delayUnlocking ? unlockTime : undefined,
             regions: encodeRegionCode(regions),
+            advanceSettingData,
         })
     }, [
         senderName,

@@ -12,6 +12,7 @@ import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../constants'
 import Services from '../../../extension/service'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import type { AdvanceSettingData } from '../UI/AdvanceSetting'
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
 
 export interface PoolSettings {
@@ -28,6 +29,7 @@ export interface PoolSettings {
     exchangeAmounts: string[]
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     token?: ERC20TokenDetailed
+    advanceSettingData: AdvanceSettingData
 }
 
 export function useFillCallback(poolSettings?: PoolSettings) {

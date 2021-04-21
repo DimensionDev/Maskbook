@@ -303,8 +303,8 @@ export function useRegionList(): Array<Region> {
     return regions as Array<Region>
 }
 
-export function useRegionSelect() {
-    return useState<RegionCode[]>([...regionCodes])
+export function useRegionSelect(initRegionCodes?: RegionCode[]) {
+    return useState<RegionCode[]>(initRegionCodes ? [...initRegionCodes] : [...regionCodes])
 }
 
 export function encodeRegionCode(codes: RegionCode[]) {

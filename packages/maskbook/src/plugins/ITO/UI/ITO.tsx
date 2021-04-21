@@ -162,6 +162,9 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) =>
             display: 'flex',
             justifyContent: 'center',
         },
+        textInOneLine: {
+            whiteSpace: 'nowrap',
+        },
     }),
 )
 
@@ -637,7 +640,7 @@ export function ITO(props: ITO_Props) {
                                         variant="contained"
                                         disabled={true}
                                         size="large"
-                                        className={classes.actionButton}>
+                                        className={classNames(classes.actionButton, classes.textInOneLine)}>
                                         {t('plugin_ito_wait_unlock_time', {
                                             unlockTime: formatDateTime(new Date(unlockTime!), true),
                                         })}
