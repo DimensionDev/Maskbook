@@ -1,17 +1,15 @@
 import { useAsyncRetry } from 'react-use'
 import { OrderSide } from 'opensea-js/lib/types'
-import type { NFTOrder, OpenSeaCustomAccount } from '../types'
+import type { CollectibleToken, NFTOrder, OpenSeaCustomAccount } from '../types'
 import { CollectibleProvider } from '../types'
 import { PluginCollectibleRPC } from '../messages'
 import { unreachable } from '../../../utils/utils'
 import BigNumber from 'bignumber.js'
 import { getOrderUnitPrice } from '../utils'
 import { OpenSeaAccountURL } from '../constants'
-import { CollectibleState } from './useCollectibleState'
+import { toTokenIdentifier } from '../helpers'
 
-export function useOrders(side = OrderSide.Buy, pageNum = 1) {
-    const { token, provider } = CollectibleState.useContainer()
-
+export function useOrders(provider: CollectibleProvider, token?: CollectibleToken, side = OrderSide.Buy, pageNum = 0) {
     return useAsyncRetry<NFTOrder[]>(async () => {
         if (!token) return []
         switch (provider) {
@@ -51,5 +49,5 @@ export function useOrders(side = OrderSide.Buy, pageNum = 1) {
             default:
                 unreachable(provider)
         }
-    }, [token, pageNum, provider])
+    }, [toTokenIdentifier(token), pageNum, provider])
 }

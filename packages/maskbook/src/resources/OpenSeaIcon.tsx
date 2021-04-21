@@ -4,7 +4,7 @@ const svg = (
     <svg width="16" height="16" viewBox="0 0 116 116" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="58" height="58" rx="29" transform="matrix(-2 0 0 2 116 0)" fill="#3291E9" />
         <rect width="58" height="58" rx="29" transform="matrix(-2 0 0 2 116 0)" fill="url(#paint0_linear)" />
-        <g opacity=".5" fill-rule="evenodd" clip-rule="evenodd">
+        <g opacity=".5" fillRule="evenodd" clipRule="evenodd">
             <path
                 d="M95.638 14.104c-2.25 2.361-5.024 4.67-8.356 6.89-11.163 7.437-20.071 18.062-20.32 39.29-.275 23.512 10.363 35.218 22.969 45.972C80.748 112.411 69.709 116 57.835 116 25.893 116 0 90.032 0 58S25.893 0 57.835 0C72.286 0 85.5 5.316 95.638 14.104z"
                 fill="#3291E9"
@@ -15,7 +15,7 @@ const svg = (
                 transform="scale(2)"
             />
         </g>
-        <g opacity=".5" fill-rule="evenodd" clip-rule="evenodd">
+        <g opacity=".5" fillRule="evenodd" clipRule="evenodd">
             <path
                 d="M72.303 1.83c-1.548 4.205-4.233 8.651-8.207 13.24-8.789 10.147-14.558 22.765-9.178 43.292C61.72 84.313 78.152 91.65 95.669 99.47l1.775.793C87.094 110.021 73.16 116 57.834 116 25.895 116 0 90.032 0 58S25.893 0 57.835 0c4.996 0 9.844.635 14.468 1.83z"
                 fill="#3291E9"
@@ -26,7 +26,7 @@ const svg = (
                 transform="scale(2)"
             />
         </g>
-        <g opacity=".3" fill-rule="evenodd" clip-rule="evenodd">
+        <g opacity=".3" fillRule="evenodd" clipRule="evenodd">
             <path
                 d="M4.093 36.527c.185.757.39 1.526.614 2.304 7.44 25.773 28.19 31.897 50.307 38.425 15.465 4.565 31.598 9.327 44.321 21.14C88.825 109.255 74.115 116 57.835 116 25.893 116 0 90.032 0 58a57.99 57.99 0 014.093-21.473z"
                 fill="#3291E9"
@@ -71,34 +71,34 @@ const svg = (
                 x2="1"
                 gradientUnits="userSpaceOnUse"
                 gradientTransform="matrix(58 58 -545.75 88.5729 272.875 -44.286)">
-                <stop offset=".048" stop-color="#1F66A9" />
-                <stop offset=".685" stop-color="#3291E9" />
+                <stop offset=".048" stopColor="#1F66A9" />
+                <stop offset=".685" stopColor="#3291E9" />
             </linearGradient>
             <linearGradient
                 id="paint1_linear"
                 x2="1"
                 gradientUnits="userSpaceOnUse"
                 gradientTransform="matrix(-71.836 -7.39043 -1.87601 160.271 46.343 -3.102)">
-                <stop stop-color="#E9A332" stop-opacity="0" />
-                <stop offset="0" stop-color="#23DC7D" stop-opacity="0" />
-                <stop offset="1" stop-color="#23DC7D" />
+                <stop stopColor="#E9A332" stopOpacity="0" />
+                <stop offset="0" stopColor="#23DC7D" stopOpacity="0" />
+                <stop offset="1" stopColor="#23DC7D" />
             </linearGradient>
             <linearGradient
                 id="paint2_linear"
                 x2="1"
                 gradientUnits="userSpaceOnUse"
                 gradientTransform="matrix(-71.1866 12.0393 40.6313 155.011 24.39 -29.46)">
-                <stop stop-color="#E9A332" stop-opacity="0" />
-                <stop offset="0" stop-color="#23DC7D" stop-opacity="0" />
-                <stop offset="1" stop-color="#23DC7D" />
+                <stop stopColor="#E9A332" stopOpacity="0" />
+                <stop offset="0" stopColor="#23DC7D" stopOpacity="0" />
+                <stop offset="1" stopColor="#23DC7D" />
             </linearGradient>
             <linearGradient
                 id="paint3_linear"
                 x2="1"
                 gradientUnits="userSpaceOnUse"
                 gradientTransform="matrix(88.4485 40.5135 17.9137 -131.803 -26.388 98.367)">
-                <stop stop-color="#23DC7D" />
-                <stop offset="1" stop-color="#23DC7D" stop-opacity="0" />
+                <stop stopColor="#23DC7D" />
+                <stop offset="1" stopColor="#23DC7D" stopOpacity="0" />
             </linearGradient>
         </defs>
     </svg>

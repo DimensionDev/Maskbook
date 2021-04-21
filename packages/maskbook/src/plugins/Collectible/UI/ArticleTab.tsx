@@ -27,10 +27,10 @@ export function ArticleTab(props: ArticleTabProps) {
             <div className={classes.body}>
                 {asset.value.animation_url ? (
                     <Link href={asset.value.animation_url} target="_blank" rel="noopener noreferrer">
-                        <img src={asset.value.imageUrl} className={classes.img} alt={asset.value.name ?? ''} />
+                        <img src={asset.value.image_url} className={classes.img} alt={asset.value.name ?? ''} />
                     </Link>
                 ) : (
-                    <img src={asset.value.imageUrl} className={classes.img} alt={asset.value.name ?? ''} />
+                    <img src={asset.value.image_url} className={classes.img} alt={asset.value.name ?? ''} />
                 )}
             </div>
         </CollectibleTab>

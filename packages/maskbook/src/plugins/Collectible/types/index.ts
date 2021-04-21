@@ -10,6 +10,13 @@ export interface CollectibleJSON_Payload {
     token_id: string
 }
 
+export enum CollectibleTab {
+    ARTICLE,
+    TOKEN,
+    OFFER,
+    LISTING,
+    HISTORY,
+}
 export interface CollectibleToken {
     contractAddress: string
     tokenId: string

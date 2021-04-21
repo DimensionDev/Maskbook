@@ -1,16 +1,14 @@
 import { useAsyncRetry } from 'react-use'
-import type { NFTHistory } from '../types'
+import type { CollectibleToken, NFTHistory } from '../types'
 import { CollectibleProvider, OpenSeaAssetEventType } from '../types'
 import { PluginCollectibleRPC } from '../messages'
 import { NullAddress, NullContractAddress, OpenSeaAccountURL } from '../constants'
-import { CollectibleState } from './useCollectibleState'
-import { toRaribleImage } from '../helpers'
+import { toRaribleImage, toTokenIdentifier } from '../helpers'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { resolveRaribleUserNetwork } from '../pipes'
 
-export function useEvents(cursor?: string) {
+export function useEvents(provider: CollectibleProvider, token?: CollectibleToken, cursor?: string) {
     const chainId = useChainId()
-    const { token, provider } = CollectibleState.useContainer()
     return useAsyncRetry<{ data: NFTHistory[]; pageInfo: { hasNextPage: boolean; endCursor?: string } }>(async () => {
         if (!token)
             return {
@@ -123,5 +121,5 @@ export function useEvents(cursor?: string) {
                     },
                 }
         }
-    }, [chainId, token, cursor, provider])
+    }, [chainId, toTokenIdentifier(token), cursor, provider])
 }

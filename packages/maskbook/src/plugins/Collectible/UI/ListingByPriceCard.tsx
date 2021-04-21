@@ -91,7 +91,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
             asset: toAsset({
                 tokenId: asset.value.token_id,
                 tokenAddress: asset.value.token_address,
-                schemaName: asset.value.assetContract.schemaName,
+                schemaName: asset.value.asset_contract.schemaName,
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),

@@ -1,90 +1,129 @@
 import { useAsyncRetry } from 'react-use'
+import { head } from 'lodash-es'
+import BigNumber from 'bignumber.js'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { PluginCollectibleRPC } from '../messages'
 import type { CollectibleToken } from '../types'
 import { CollectibleProvider } from '../types'
-import { head, subtract } from 'lodash-es'
-import BigNumber from 'bignumber.js'
 import { getOrderUnitPrice } from '../utils'
 import { unreachable } from '../../../utils/utils'
-import { toRaribleImage } from '../helpers'
+import { toDate, toRaribleImage, toTokenDetailed, toTokenIdentifier } from '../helpers'
 import { OpenSeaAccountURL } from '../constants'
 import { resolveRaribleUserNetwork } from '../pipes'
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { useAccount } from '../../../web3/hooks/useAccount'
+import { isSameAddress } from '../../../web3/helpers'
+import { useConstant } from '../../../web3/hooks/useConstant'
+import { CONSTANTS } from '../../../web3/constants'
 
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
+    const account = useAccount()
     const chainId = useChainId()
+    const WETH_ADDRESS = useConstant(CONSTANTS, 'WETH_ADDRESS')
 
     return useAsyncRetry(async () => {
         if (!token) return
         switch (provider) {
             case CollectibleProvider.OPENSEA:
-                const response = await PluginCollectibleRPC.getAsset(token.contractAddress, token.tokenId)
-
-                const currentPrice =
-                    response.sellOrders && response.sellOrders.length
-                        ? head(
-                              response.sellOrders
-                                  .map((order) => new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber())
-                                  .sort(subtract),
-                          )
-                        : null
+                const openSeaResponse = await PluginCollectibleRPC.getAsset(token.contractAddress, token.tokenId)
+                const desktopOrder = head(
+                    (openSeaResponse.sellOrders ?? []).sort(
+                        (a, b) =>
+                            new BigNumber(getOrderUnitPrice(a) ?? 0).toNumber() -
+                            new BigNumber(getOrderUnitPrice(b) ?? 0).toNumber(),
+                    ),
+                )
                 return {
-                    imageUrl: response.imageUrl,
-                    assetContract: response.assetContract,
-                    currentPrice,
+                    is_verified: ['approved', 'verified'].includes(
+                        openSeaResponse.collection?.safelist_request_status ?? '',
+                    ),
+                    is_order_weth: isSameAddress(desktopOrder?.paymentToken ?? '', WETH_ADDRESS),
+                    is_collection_weth: openSeaResponse.collection.payment_tokens.some((x) =>
+                        isSameAddress(x.address, WETH_ADDRESS),
+                    ),
+                    is_owner: isSameAddress(openSeaResponse.owner.address, account),
+                    // it's an IOS string as my inspection
+                    is_auction: Date.parse(`${openSeaResponse.endTime ?? ''}Z`) > Date.now(),
+                    image_url: openSeaResponse.imageUrl,
+                    asset_contract: openSeaResponse.assetContract,
+                    current_price: desktopOrder ? new BigNumber(getOrderUnitPrice(desktopOrder) ?? 0).toNumber() : null,
+                    current_symbol: desktopOrder?.paymentTokenContract?.symbol ?? 'ETH',
                     owner: {
-                        ...response.owner,
-                        link: `${OpenSeaAccountURL}${response.owner?.user?.username ?? response.owner.address ?? ''}`,
-                    },
-                    creator: {
-                        ...response.creator,
+                        ...openSeaResponse.owner,
                         link: `${OpenSeaAccountURL}${
-                            response.creator?.user?.username ?? response.creator?.address ?? ''
+                            openSeaResponse.owner?.user?.username ?? openSeaResponse.owner.address ?? ''
                         }`,
                     },
-                    token_id: response.tokenId,
-                    token_address: response.tokenAddress,
-                    traits: response.traits,
-                    safelist_request_status: response.collection?.safelist_request_status ?? '',
-                    description: response.description,
-                    name: response.name,
-                    animation_url: response.animation_url,
-                    endTime: response.endTime,
+                    creator: {
+                        ...openSeaResponse.creator,
+                        link: `${OpenSeaAccountURL}${
+                            openSeaResponse.creator?.user?.username ?? openSeaResponse.creator?.address ?? ''
+                        }`,
+                    },
+                    token_id: openSeaResponse.tokenId,
+                    token_address: openSeaResponse.tokenAddress,
+                    traits: openSeaResponse.traits,
+                    safelist_request_status: openSeaResponse.collection?.safelist_request_status ?? '',
+                    description: openSeaResponse.description,
+                    name: openSeaResponse.name,
+                    collection_name: openSeaResponse.collection.name,
+                    animation_url: openSeaResponse.animation_url,
+                    end_time: desktopOrder
+                        ? toDate(Number.parseInt((desktopOrder.expirationTime as unknown) as string))
+                        : null,
+                    order_payment_token: desktopOrder?.paymentTokenContract
+                        ? toTokenDetailed(chainId, desktopOrder.paymentTokenContract)
+                        : null,
+                    offer_payment_tokens: openSeaResponse.collection.payment_tokens.map((x) =>
+                        toTokenDetailed(chainId, x),
+                    ),
+                    order_: desktopOrder,
+                    response_: openSeaResponse,
                 }
             case CollectibleProvider.RARIBLE:
-                const result = await PluginCollectibleRPC.getNFTItem(token.contractAddress, token.tokenId)
+                const raribleResponse = await PluginCollectibleRPC.getNFTItem(token.contractAddress, token.tokenId)
                 return {
-                    imageUrl: toRaribleImage(result.properties.image),
-                    assetContract: {
-                        ...result.assetContract,
-                        schemaName: result.assetContract.standard,
-                        description: result.assetContract.description,
+                    is_order_weth: false,
+                    is_collection_weth: false,
+                    is_verified: false,
+                    is_owner: false,
+                    is_auction: false,
+                    image_url: toRaribleImage(raribleResponse.properties.image),
+                    asset_contract: {
+                        ...raribleResponse.assetContract,
+                        schemaName: raribleResponse.assetContract.standard,
+                        description: raribleResponse.assetContract.description,
                     },
-                    owner: result.owner
+                    owner: raribleResponse.owner
                         ? {
-                              address: result.owner.id,
-                              profile_img_url: toRaribleImage(result.owner.image),
-                              user: { username: result.owner.name },
-                              link: `${resolveRaribleUserNetwork(chainId)}${result.owner.id ?? ''}`,
+                              address: raribleResponse.owner.id,
+                              profile_img_url: toRaribleImage(raribleResponse.owner.image),
+                              user: { username: raribleResponse.owner.name },
+                              link: `${resolveRaribleUserNetwork(chainId)}${raribleResponse.owner.id ?? ''}`,
                           }
                         : null,
-                    creator: result.creator
+                    creator: raribleResponse.creator
                         ? {
-                              address: result.creator.id,
-                              profile_img_url: toRaribleImage(result.creator.image),
-                              user: { username: result.creator.name },
-                              link: `${resolveRaribleUserNetwork(chainId)}${result.creator.id ?? ''}`,
+                              address: raribleResponse.creator.id,
+                              profile_img_url: toRaribleImage(raribleResponse.creator.image),
+                              user: { username: raribleResponse.creator.name },
+                              link: `${resolveRaribleUserNetwork(chainId)}${raribleResponse.creator.id ?? ''}`,
                           }
                         : null,
-                    traits: result.properties.attributes.map(({ key, value }) => ({ trait_type: key, value })),
-                    description: result.properties.description,
-                    name: result.properties.name,
-                    animation_url: result.properties.animationUrl,
-                    currentPrice: result.item.offer?.buyPriceEth,
-                    endTime: null,
+                    traits: raribleResponse.properties.attributes.map(({ key, value }) => ({ trait_type: key, value })),
+                    description: raribleResponse.properties.description,
+                    name: raribleResponse.properties.name,
+                    collection_name: '',
+                    animation_url: raribleResponse.properties.animationUrl,
+                    current_price: raribleResponse.item.offer?.buyPriceEth,
+                    current_symbol: 'ETH',
+                    end_time: null,
+                    offer_payment_tokens: [] as (EtherTokenDetailed | ERC20TokenDetailed)[],
+                    order_: null,
+                    response_: raribleResponse,
                 }
             default:
                 unreachable(provider)
         }
-    }, [chainId, provider])
+    }, [toTokenIdentifier(token), account, chainId, provider, WETH_ADDRESS])
 }
