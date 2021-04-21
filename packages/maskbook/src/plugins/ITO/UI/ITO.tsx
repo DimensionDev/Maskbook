@@ -371,7 +371,7 @@ export function ITO(props: ITO_Props) {
     )
 
     useEffect(() => {
-        const timeToExpired = end_time * 1000 - new Date().getTime()
+        const timeToExpired = end_time * 1000 - Date.now()
         if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired)) return
 
         const timer = setTimeout(() => {

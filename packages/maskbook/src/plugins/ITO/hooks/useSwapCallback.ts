@@ -38,7 +38,7 @@ export function useSwapCallback(
             return
         }
 
-        if (payload.end_time * 1000 < new Date().getTime()) {
+        if (payload.end_time * 1000 < Date.now()) {
             setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Pool has expired.'),
