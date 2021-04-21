@@ -29,6 +29,9 @@ export async function signTransaction(config: TransactionConfig) {
                     else resolve(signed.raw)
                 })
                 break
+            case ProviderType.CustomNetwork:
+                //TODO handle custom network
+                break
             default:
                 unreachable(providerType)
         }

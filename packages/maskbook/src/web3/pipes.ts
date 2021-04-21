@@ -9,6 +9,8 @@ export function resolveProviderName(providerType: ProviderType) {
             return 'MetaMask'
         case ProviderType.WalletConnect:
             return 'WalletConnect'
+        case ProviderType.CustomNetwork:
+            return 'CustomNetwork'
         default:
             safeUnreachable(providerType)
             return 'Unknown'

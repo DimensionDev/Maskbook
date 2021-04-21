@@ -21,6 +21,9 @@ export async function sign(data: string, address: string) {
         case ProviderType.MetaMask:
         case ProviderType.WalletConnect:
             return web3.eth.personal.sign(data, address, '')
+        case ProviderType.CustomNetwork:
+            // TODO handle customNetwork
+            return web3.eth.personal.sign(data, address, '')
         default:
             unreachable(providerType)
     }

@@ -6,6 +6,7 @@ import { SelectProviderDialog } from './UI/SelectProviderDialog'
 import { SelectWalletDialog } from './UI/SelectWalletDialog'
 import { WalletConnectQRCodeDialog } from './UI/WalletConnectQRCodeDialog'
 import { WalletStatusDialog } from './UI/WalletStatusDialog'
+import { AddNetworkDialog } from './UI/AddNetworkDialog'
 
 export const WalletPluginDefine: PluginConfig = {
     id: PLUGIN_IDENTIFIER,
@@ -24,6 +25,7 @@ export const WalletPluginDefine: PluginConfig = {
                 <CreateWalletDialog />
                 <WalletStatusDialog />
                 <WalletConnectQRCodeDialog />
+                <AddNetworkDialog />
             </>
         )
     },
@@ -36,6 +38,7 @@ export const WalletPluginDefine: PluginConfig = {
                 <CreateWalletDialog />
                 <WalletStatusDialog />
                 <WalletConnectQRCodeDialog />
+                <AddNetworkDialog />
             </>
         )
     },

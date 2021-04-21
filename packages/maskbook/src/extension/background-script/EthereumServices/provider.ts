@@ -49,6 +49,9 @@ export async function createWeb3() {
             return await MetaMask.createWeb3()
         case ProviderType.WalletConnect:
             return WalletConnect.createWeb3()
+        case ProviderType.CustomNetwork:
+            // TODO  connect customNetwork
+            return WalletConnect.createWeb3()
         default:
             unreachable(providerType)
     }
