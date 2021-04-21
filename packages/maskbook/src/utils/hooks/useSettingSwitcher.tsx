@@ -21,6 +21,8 @@ export function useSettingsSwticher<T extends number, S extends InternalSettings
         if (typeof nextOption !== 'undefined') settings.value = nextOption
     }, [nextOption])
 
+    if (options.length <= 1) return null
+
     if (typeof nextOption === 'undefined') return null
 
     return (
