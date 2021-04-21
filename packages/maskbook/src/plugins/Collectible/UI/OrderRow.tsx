@@ -126,7 +126,11 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                                     )}
                                 </Link>
                             ) : null}
-                            {`${order.unitPrice} ${order.paymentTokenContract?.symbol}`}
+                            {`${order.unitPrice} ${
+                                provider === CollectibleProvider.OPENSEA
+                                    ? order.paymentTokenContract?.symbol ?? ''
+                                    : 'ETH'
+                            }`}
                         </Typography>
                     </TableCell>
                     <TableCell>
