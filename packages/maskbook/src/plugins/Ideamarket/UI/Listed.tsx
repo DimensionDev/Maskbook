@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: '10%',
         overflow: 'hidden',
         transform: 'translateZ(1px)', // https://stackoverflow.com/a/63838447
+        zIndex: 1,
     },
     topInfo: {
         display: 'flex',
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1),
         marginRight: theme.spacing(1),
         marginLeft: theme.spacing(1),
-        color: theme.palette.text.primary,
+        color: '#2946ba',
     },
 
     topBox: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
         width: '50%',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: theme.palette.mode === 'light' ? 'white' : null,
+        backgroundColor: '#f7f7f7',
     },
 
     rankText: {

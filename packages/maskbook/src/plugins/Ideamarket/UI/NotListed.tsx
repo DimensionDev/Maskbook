@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'hidden',
     },
     topBox: {
-        backgroundColor: theme.palette.mode === 'light' ? 'white' : null,
+        backgroundColor: '#f7f7f7',
         overflow: 'hidden',
     },
     listButton: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     },
     topText: {
         margin: theme.spacing(1),
-        color: theme.palette.text.primary,
+        color: '#2946ba',
     },
     buttonText: {
         textTransform: 'none',
