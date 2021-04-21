@@ -11,7 +11,7 @@ import { CONSTANTS } from '../../../web3/constants'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { isSameAddress } from '../../../web3/helpers'
 import { TokenInList } from './TokenInList'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -67,14 +67,18 @@ export function FixedTokenList(props: FixedTokenListProps) {
     if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token...')
     if (!erc20TokensDetailed.length) return renderPlaceholder('No token found')
 
-    const MaskTokens = erc20TokensDetailed.filter((x) => isSameAddress(MASK_ADDRESS, x.address))
     const filteredTokens = erc20TokensDetailed.filter(
         (x) =>
             (!includeTokens.length || includeTokens.some((y) => isSameAddress(y, x.address))) &&
             (!excludeTokens.length || !excludeTokens.some((y) => isSameAddress(y, x.address))),
     )
-
-    const renderTokens = uniqBy([...MaskTokens, ...tokens, ...filteredTokens], (x) => x.address.toLowerCase())
+    const renderTokens = uniqBy([...tokens, ...filteredTokens], (x) => x.address.toLowerCase()).sort((a, z) => {
+        if (a.type === EthereumTokenType.Ether) return -1
+        if (z.type === EthereumTokenType.Ether) return 1
+        if (isSameAddress(a.address, MASK_ADDRESS)) return -1
+        if (isSameAddress(z.address, MASK_ADDRESS)) return 1
+        return 0
+    })
 
     return (
         <FixedSizeList

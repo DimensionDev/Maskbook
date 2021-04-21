@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { head } from 'lodash-es'
+import { head, uniqBy } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { PluginCollectibleRPC } from '../messages'
@@ -71,11 +71,12 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     end_time: desktopOrder
                         ? toDate(Number.parseInt((desktopOrder.listingTime as unknown) as string))
                         : null,
-                    order_payment_token: desktopOrder?.paymentTokenContract
-                        ? toTokenDetailed(chainId, desktopOrder.paymentTokenContract)
-                        : null,
-                    offer_payment_tokens: openSeaResponse.collection.payment_tokens.map((x) =>
-                        toTokenDetailed(chainId, x),
+                    order_payment_tokens: desktopOrder?.paymentTokenContract
+                        ? [toTokenDetailed(chainId, desktopOrder.paymentTokenContract)]
+                        : [],
+                    offer_payment_tokens: uniqBy(
+                        openSeaResponse.collection.payment_tokens.map((x) => toTokenDetailed(chainId, x)),
+                        (x) => x.address.toLowerCase(),
                     ),
                     order_: desktopOrder,
                     response_: openSeaResponse,
@@ -118,6 +119,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     current_price: raribleResponse.item.offer?.buyPriceEth,
                     current_symbol: 'ETH',
                     end_time: null,
+                    order_payment_tokens: [] as (EtherTokenDetailed | ERC20TokenDetailed)[],
                     offer_payment_tokens: [] as (EtherTokenDetailed | ERC20TokenDetailed)[],
                     order_: null,
                     response_: raribleResponse,

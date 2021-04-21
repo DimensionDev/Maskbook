@@ -86,6 +86,8 @@ const useStyles = makeStyles((theme) => {
         subtitle: {
             fontSize: 12,
             marginRight: theme.spacing(0.5),
+            maxHeight: '3.5rem',
+            overflow: 'hidden',
             wordBreak: 'break-word',
         },
         description: {
@@ -221,7 +223,7 @@ export function Collectible(props: CollectibleProps) {
                         <>
                             {asset.value.description ? (
                                 <Box display="flex" alignItems="center">
-                                    <Typography className={classes.subtitle} variant="body2">
+                                    <Typography className={classes.subtitle} component="div" variant="body2">
                                         <Markdown content={asset.value.description} />
                                     </Typography>
                                 </Box>
@@ -305,7 +307,7 @@ export function Collectible(props: CollectibleProps) {
                     </Typography>
                 </Box>
             )}
-            <ActionBar />
+            {provider === CollectibleProvider.OPENSEA ? <ActionBar /> : null}
         </>
     )
 }

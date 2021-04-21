@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { createStyles, makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -12,6 +12,7 @@ import type { useAsset } from '../hooks/useAsset'
 import { ChainState } from '../../../web3/state/useChainState'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
+import { isETH } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -39,10 +40,11 @@ export interface ListingByHighestBidCardProps {
     onClose: () => void
     asset?: ReturnType<typeof useAsset>
     tokenWatched: TokenWatched
+    paymentTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
 }
 
 export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
-    const { asset, tokenWatched, open, onClose } = props
+    const { asset, tokenWatched, paymentTokens, open, onClose } = props
     const { amount, token, balance, setAmount, setToken } = tokenWatched
 
     const { t } = useI18N()
@@ -81,14 +83,21 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
         })
     }, [asset?.value, token, amount, account, reservePrice, expirationDateTime])
 
+    useEffect(() => {
+        setAmount('')
+        setReservePrice('')
+        setExpirationDateTime(new Date())
+    }, [open])
+
     return (
         <Card elevation={0}>
             <CardContent>
                 <SelectTokenAmountPanel
                     amount={amount}
                     balance={balance.value ?? '0'}
-                    onAmountChange={setAmount}
                     token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
+                    disableEther={!paymentTokens.some((x) => isETH(x.address))}
+                    onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
                         classes: {
@@ -98,6 +107,11 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                         TextFieldProps: {
                             helperText: 'Set your starting bid price.',
                         },
+                    }}
+                    FixedTokenListProps={{
+                        selectedTokens: token.value ? [token.value.address] : [],
+                        tokens: paymentTokens,
+                        whitelist: paymentTokens.map((x) => x.address),
                     }}
                 />
                 <SelectTokenAmountPanel

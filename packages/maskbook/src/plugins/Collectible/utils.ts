@@ -27,7 +27,7 @@ export function getRelevantUrl(textContent: string) {
 export function getAssetInfoFromURL(url?: string) {
     if (!url) return null
     const _url = new URL(url)
-    const matches = _url.pathname.match(openseaPathnameRegexMatcher)
+    const matches = _url.pathname.match(openseaPathnameRegexMatcher) || _url.pathname.match(rariblePathnameRegexMatcher)
 
     return matches
         ? {

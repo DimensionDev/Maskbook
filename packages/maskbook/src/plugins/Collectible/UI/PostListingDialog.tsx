@@ -7,6 +7,7 @@ import { ListingByPriceCard } from './ListingByPriceCard'
 import { ListingByHighestBidCard } from './ListingByHighestBidCard'
 import type { useAsset } from '../hooks/useAsset'
 import { useTokenWatched } from '../../../web3/hooks/useTokenWatched'
+import { first } from 'lodash-es'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -34,12 +35,14 @@ export interface PostListingDialogProps {
 
 export function PostListingDialog(props: PostListingDialogProps) {
     const { asset, open, onClose } = props
+    const paymentTokens = asset?.value?.offer_payment_tokens ?? []
+    const selectedPaymentToken = first(paymentTokens)
 
     const { t } = useI18N()
     const classes = useStyles()
 
     const { chainId } = ChainState.useContainer()
-    const tokenWatched = useTokenWatched()
+    const tokenWatched = useTokenWatched(selectedPaymentToken)
 
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [<Tab key="price" label="Set Price" />, <Tab key="bid" label="Highest Bid" />]
@@ -60,10 +63,22 @@ export function PostListingDialog(props: PostListingDialogProps) {
                     {tabs}
                 </Tabs>
                 {tabIndex === 0 ? (
-                    <ListingByPriceCard asset={asset} tokenWatched={tokenWatched} open={open} onClose={onClose} />
+                    <ListingByPriceCard
+                        asset={asset}
+                        tokenWatched={tokenWatched}
+                        paymentTokens={paymentTokens}
+                        open={open}
+                        onClose={onClose}
+                    />
                 ) : null}
                 {tabIndex === 1 ? (
-                    <ListingByHighestBidCard asset={asset} tokenWatched={tokenWatched} open={open} onClose={onClose} />
+                    <ListingByHighestBidCard
+                        asset={asset}
+                        tokenWatched={tokenWatched}
+                        paymentTokens={paymentTokens}
+                        open={open}
+                        onClose={onClose}
+                    />
                 ) : null}
             </DialogContent>
         </InjectedDialog>

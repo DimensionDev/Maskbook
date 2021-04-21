@@ -28,6 +28,8 @@ import { ChainState } from '../../../web3/state/useChainState'
 import { toAsset, toUnixTimestamp } from '../helpers'
 import { useRemoteControlledDialogEvent } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
+import { first } from 'lodash-es'
+import { isETH } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -67,6 +69,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { asset, open, onClose } = props
     const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
+    const paymentTokens = (isAuction ? asset?.value?.order_payment_tokens : asset?.value?.offer_payment_tokens) ?? []
+    const selectedPaymentToken = first(paymentTokens)
 
     const { t } = useI18N()
     const classes = useStyles()
@@ -77,7 +81,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
 
-    const { amount, token, balance, setAmount, setToken } = useTokenWatched()
+    const { amount, token, balance, setAmount, setToken } = useTokenWatched(selectedPaymentToken)
 
     const onMakeOffer = useCallback(async () => {
         if (!asset?.value) return
@@ -92,10 +96,10 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
-            expirationTime: toUnixTimestamp(expirationDateTime),
+            expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
             paymentTokenAddress: token.value.type === EthereumTokenType.Ether ? undefined : token.value.address,
         })
-    }, [asset?.value, token, account, amount, expirationDateTime])
+    }, [asset?.value, token, account, amount, expirationDateTime, isAuction])
 
     const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
 
@@ -106,12 +110,13 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const validationMessage = useMemo(() => {
         if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
-        if (expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid expiration date'
+        if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid expiration date'
         if (!isVerified && !unreviewedChecked) return 'Please ensure unreviewed item'
         if (!isVerified && !ToS_Checked) return 'Please check ToS document'
         return ''
-    }, [amount, expirationDateTime, isVerified, unreviewedChecked, ToS_Checked])
+    }, [amount, expirationDateTime, isVerified, isAuction, unreviewedChecked, ToS_Checked])
 
+    if (!asset?.value) return null
     return (
         <InjectedDialog title={isAuction ? 'Place a Bid' : 'Make an Offer'} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
@@ -125,15 +130,17 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         <SelectTokenAmountPanel
                             amount={amount}
                             balance={balance.value ?? '0'}
-                            onAmountChange={setAmount}
                             token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
+                            disableEther={!paymentTokens.some((x) => isETH(x.address))}
+                            onAmountChange={setAmount}
                             onTokenChange={setToken}
                             TokenAmountPanelProps={{
                                 label: 'Price',
                             }}
                             FixedTokenListProps={{
-                                tokens: asset?.value?.offer_payment_tokens ?? [],
-                                whitelist: asset?.value?.offer_payment_tokens.map((x) => x.address),
+                                selectedTokens: selectedPaymentToken ? [selectedPaymentToken.address] : [],
+                                tokens: paymentTokens,
+                                whitelist: paymentTokens.map((x) => x.address),
                             }}
                         />
                         {!isAuction ? (
@@ -217,7 +224,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                     completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
-                                {(isAuction ? asset?.value?.is_collection_weth : asset?.value?.is_order_weth) ? (
+                                {(isAuction ? asset.value?.is_collection_weth : asset.value?.is_order_weth) ? (
                                     <ActionButton
                                         className={classes.button}
                                         variant="contained"

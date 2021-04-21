@@ -44,20 +44,6 @@ function useCollectibleState(token?: CollectibleToken) {
         }
     }, [events, cursors])
 
-    console.log('DEBUG: useCollectibleState')
-    console.log({
-        token,
-        asset,
-        provider,
-        tabIndex,
-        offers,
-        offerPage,
-        orders,
-        orderPage,
-        events,
-        eventPage,
-    })
-
     return {
         token,
         asset,
