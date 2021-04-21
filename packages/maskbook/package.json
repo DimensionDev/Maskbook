@@ -174,7 +174,7 @@
     "cache": true,
     "strict": true,
     "detail": true,
-    "atLeast": 98,
+    "atLeast": 96,
     "ignoreCatch": true,
     "ignoreFiles": [
       "**/__tests__/**",
