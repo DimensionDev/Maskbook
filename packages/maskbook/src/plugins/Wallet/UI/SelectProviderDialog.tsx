@@ -81,6 +81,10 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     )
     //#endregion
 
+    //#region add network dialog
+    const [, addNetworkDialogOpen] = useRemoteControlledDialog(WalletMessages.events.addNetworkDialogUpdated)
+    //#endregion
+
     const wallets = useWallets(ProviderType.Maskbook)
     const onConnect = useCallback(
         async (providerType: ProviderType) => {
@@ -104,6 +108,11 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     setWalletConnectDialogOpen({
                         open: true,
                         uri: await Services.Ethereum.createConnectionURI(),
+                    })
+                    break
+                case ProviderType.CustomNetwork:
+                    addNetworkDialogOpen({
+                        open: true,
                     })
                     break
                 default:
@@ -159,7 +168,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             }
                             name={t('plugin_wallet_connect_more')}
                             description={t('plugin_wallet_connect_more_description')}
-                            ButtonBaseProps={{ disabled: true }}
+                            onClick={() => onConnect(ProviderType.CustomNetwork)}
                         />
                     </ImageListItem>
                 </ImageList>
