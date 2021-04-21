@@ -71,8 +71,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     const filteredTokens = erc20TokensDetailed.filter(
         (x) =>
             (!includeTokens.length || includeTokens.some((y) => isSameAddress(y, x.address))) &&
-            (!excludeTokens.length || !excludeTokens.some((y) => isSameAddress(y, x.address))) &&
-            !isSameAddress(MASK_ADDRESS, x.address),
+            (!excludeTokens.length || !excludeTokens.some((y) => isSameAddress(y, x.address))),
     )
 
     const renderTokens = uniqBy([...MaskTokens, ...tokens, ...filteredTokens], (x) => x.address.toLowerCase())
