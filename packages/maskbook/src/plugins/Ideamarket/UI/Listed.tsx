@@ -63,6 +63,10 @@ const useStyles = makeStyles((theme) => ({
         fontSize: [12, '!important'],
         color: 'black',
     },
+    divider: {
+        borderColor: 'black',
+        height: 'auto',
+    },
 }))
 
 interface ListedProps {
@@ -94,7 +98,7 @@ export default function Listed(props: ListedProps) {
                     </Typography>
                     <Typography className={classes.rankText}>Rank</Typography>
                 </Box>
-                <Divider orientation="vertical" />
+                <Divider orientation="vertical" className={classes.divider} />
                 <Box className={classes.topBox}>
                     <Typography className={classes.topText}>
                         <b>${props.price}</b>
@@ -106,7 +110,7 @@ export default function Listed(props: ListedProps) {
                 </Box>
             </div>
 
-            <Divider />
+            <Divider className={classes.divider} />
             <Box display="flex" sx={{ backgroundColor: '#f7f7f7' }} justifyContent="center">
                 <Link
                     href={`https://ideamarket.io/i/twitter/${props.username}`}

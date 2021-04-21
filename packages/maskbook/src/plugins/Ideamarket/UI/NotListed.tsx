@@ -32,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
         fontSize: [12, '!important'],
         color: 'black',
     },
+    divider: {
+        borderColor: 'black',
+        height: 'auto',
+    },
 }))
 
 export default function NotListed(props: UIProps) {
@@ -51,7 +55,7 @@ export default function NotListed(props: UIProps) {
                     <b>Unlisted</b>
                 </Typography>
             </Box>
-            <Divider />
+            <Divider className={classes.divider} />
             <Box display="flex" bgcolor="#f7f7f7" justifyContent="center">
                 <Link href="https://ideamarket.io/" target="_blank" rel="noopener" style={{ textDecoration: 'none' }}>
                     <Button onClick="window.open('https://ideamarket.io/')" className={classes.listButton}>
