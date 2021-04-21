@@ -5,6 +5,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { ObservableMap, ObservableSet } from '../../utils/ObservableMapSet'
 import { useObservableValues } from '../../utils/hooks/useObservableMapSet'
 import { activatedSocialNetworkUI } from '../../social-network'
+import type { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 
 export const PostInfoContext = createContext(emptyPostInfo)
 export function usePostInfo() {
@@ -44,4 +45,20 @@ export function usePostInfoDetails<K extends ValidKeys>(
     // eslint-disable-next-line react-hooks/rules-of-hooks
     if (k instanceof ObservableSet) return useObservableValues(k)
     throw new Error()
+}
+
+export function usePostInfoSharedPublic(): boolean {
+    const info = usePostInfoDetails('postPayload')
+    if (info.err) return false
+    const payload = info.val
+    if (payload.version !== -38) return false
+    return !!payload.sharedPublic
+}
+
+export function usePostClaimedAuthor(): ProfileIdentifier | undefined {
+    const info = usePostInfoDetails('postPayload')
+    if (info.err) return undefined
+    const payload = info.val
+    if (payload.version !== -38) return undefined
+    return payload.authorUserID
 }
