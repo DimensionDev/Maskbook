@@ -31,6 +31,7 @@ import { useChainId } from '../../../../web3/hooks/useBlockNumber'
 import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
 import { PluginTraderRPC } from '../../messages'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
+import { isEtherWrapper } from '../../helpers'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -278,6 +279,14 @@ export function Trader(props: TraderProps) {
     }, [tradeState /* update tx dialog only if state changed */])
     //#endregion
 
+    //#region swap callback
+    const onSwap = useCallback(() => {
+        // no need to open the confirmation dialog if it (un)wraps ether
+        if (trade && isEtherWrapper(trade)) tradeCallback()
+        else setOpenConfirmDialog(true)
+    }, [trade])
+    //#endregion
+
     return (
         <div className={classes.root}>
             <TradeForm
@@ -296,9 +305,9 @@ export function Trader(props: TraderProps) {
                 onReverseClick={onReverseClick}
                 onRefreshClick={onRefreshClick}
                 onTokenChipClick={onTokenChipClick}
-                onSwap={() => setOpenConfirmDialog(true)}
+                onSwap={onSwap}
             />
-            {trade && inputToken && outputToken ? (
+            {trade && !isEtherWrapper(trade) && inputToken && outputToken ? (
                 <>
                     <ConfirmDialog
                         open={openConfirmDialog}

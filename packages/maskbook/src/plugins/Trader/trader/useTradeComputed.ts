@@ -1,6 +1,8 @@
 import BigNumber from 'bignumber.js'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { TradeProvider, TradeStrategy } from '../types'
+import { useTrade as useEtherTrade } from './ether/useTrade'
+import { useTradeComputed as useEtherTradeComputed } from './ether/useTradeComputed'
 import { useV2Trade as useUniswapTrade } from './uniswap/useV2Trade'
 import { useV2TradeComputed as useUniswapTradeComputed } from './uniswap/useV2TradeComputed'
 import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
@@ -21,6 +23,17 @@ export function useTradeComputed(
     const outputTokenProduct = new BigNumber(10).pow(outputToken?.decimals ?? 0)
     const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
+
+    // ETH-WETH pair
+    const ether_ = useEtherTrade(inputToken, outputToken)
+    const ether = useEtherTradeComputed(
+        ether_.value ?? false,
+        strategy,
+        inputAmount_,
+        outputAmount_,
+        inputToken,
+        outputToken,
+    )
 
     // uniswap like providers
     const uniswap_ = useUniswapTrade(
@@ -62,6 +75,12 @@ export function useTradeComputed(
         inputToken,
         outputToken,
     )
+
+    if (ether_.value)
+        return {
+            ...ether_,
+            value: ether,
+        }
 
     switch (provider) {
         case TradeProvider.UNISWAP:
