@@ -216,14 +216,8 @@ export function ClaimDialog(props: ClaimDialogProps) {
         (ev) => {
             if (ev.open) return
 
-            if (swapState.type === TransactionStateType.HASH) {
-                const { hash } = swapState
-                window.open(resolveTransactionLinkOnEtherscan(chainId, hash), '_blank', 'noopener noreferrer')
-            }
-
             if (swapState.type !== TransactionStateType.CONFIRMED && swapState.type !== TransactionStateType.RECEIPT)
                 return
-
             const { receipt } = swapState
             const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as { to_value: string }
             setActualSwapAmount(to_value)
@@ -234,6 +228,13 @@ export function ClaimDialog(props: ClaimDialogProps) {
 
     useEffect(() => {
         if (swapState.type === TransactionStateType.UNKNOWN) return
+
+        if (swapState.type === TransactionStateType.HASH) {
+            const { hash } = swapState
+            window.open(resolveTransactionLinkOnEtherscan(chainId, hash), '_blank', 'noopener noreferrer')
+            return
+        }
+
         setTransactionDialogOpen({
             open: true,
             state: swapState,
