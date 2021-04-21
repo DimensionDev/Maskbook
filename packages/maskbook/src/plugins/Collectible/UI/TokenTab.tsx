@@ -3,9 +3,10 @@ import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatEthereumAddress } from '../../Wallet/formatter'
-import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveAddressLinkOnEtherscan, resolveChainName } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'
-import { useRemarkable } from '../../Snapshot/hooks/useRemarkable'
+import { Markdown } from '../../Snapshot/UI/Markdown'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -55,8 +56,10 @@ export interface TokenTabProps {}
 export function TokenTab(props: TokenTabProps) {
     const { t } = useI18N()
     const classes = useStyles()
+
+    const chainId = useChainId()
     const { token, asset } = CollectibleState.useContainer()
-    const description = useRemarkable(asset.value?.description ?? '')
+
     if (!asset.value) return null
     return (
         <CollectibleTab classes={{ content: classes.content }}>
@@ -79,11 +82,7 @@ export function TokenTab(props: TokenTabProps) {
                         </Link>
                     </Typography>
                 ) : null}
-                <Typography
-                    className={classes.description}
-                    variant="body2"
-                    dangerouslySetInnerHTML={{ __html: description }}
-                />
+                <Markdown content={asset.value?.description ?? ''} />
             </Box>
 
             {asset.value.traits && asset.value.traits.length ? (
@@ -107,13 +106,13 @@ export function TokenTab(props: TokenTabProps) {
                 </Box>
             ) : null}
 
-            {asset.value.assetContract.name && asset.value.assetContract?.description ? (
+            {asset.value.asset_contract.name && asset.value.asset_contract?.description ? (
                 <Box className={classes.container}>
                     <Typography variant="body1" sx={{ marginBottom: 1 }}>
-                        {t('plugin_collectible_about')} {asset.value.assetContract.name}
+                        {t('plugin_collectible_about')} {asset.value.asset_contract.name}
                     </Typography>
                     <Typography className={classes.description} variant="body2">
-                        {asset.value.assetContract?.description}
+                        {asset.value.asset_contract?.description}
                     </Typography>
                 </Box>
             ) : null}
@@ -142,7 +141,7 @@ export function TokenTab(props: TokenTabProps) {
                 </Box>
                 <Box className={classes.chain_row}>
                     <Typography variant="body2">{t('plugin_collectible_block_chain')}</Typography>
-                    <Typography variant="body2">Ethereum</Typography>
+                    <Typography variant="body2">{resolveChainName(chainId)}</Typography>
                 </Box>
             </Box>
         </CollectibleTab>

@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, useCallback, useMemo, useEffect } from 'react'
+import { ChangeEvent, useState, useCallback, useMemo } from 'react'
 import {
     createStyles,
     makeStyles,
@@ -12,24 +12,17 @@ import {
     Typography,
     Link,
 } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
-import { useTokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
-import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { ChainState } from '../../../web3/state/useChainState'
-import { toAsset, toUnixTimestamp } from '../helpers'
 import { useRemoteControlledDialogEvent } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
-import { first } from 'lodash-es'
-import { isETH } from '../../../web3/helpers'
+import { CheckoutOrder } from './CheckoutOrder'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -59,66 +52,46 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface MakeOfferDialogProps {
+export interface CheckoutDialogProps {
     asset?: ReturnType<typeof useAsset>
     open: boolean
     onClose: () => void
 }
 
-export function MakeOfferDialog(props: MakeOfferDialogProps) {
+export function CheckoutDialog(props: CheckoutDialogProps) {
     const { asset, open, onClose } = props
     const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
-    const paymentTokens = (isAuction ? asset?.value?.order_payment_tokens : asset?.value?.offer_payment_tokens) ?? []
-    const selectedPaymentToken = first(paymentTokens)
 
     const { t } = useI18N()
     const classes = useStyles()
 
     const { account } = ChainState.useContainer()
 
-    const [expirationDateTime, setExpirationDateTime] = useState(new Date())
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
 
-    const { amount, token, balance, setAmount, setToken } = useTokenWatched(selectedPaymentToken)
-
-    const onMakeOffer = useCallback(async () => {
+    const onCheckout = useCallback(async () => {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
-        if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.Ether && token.value.type !== EthereumTokenType.ERC20) return
-        await PluginCollectibleRPC.createBuyOrder({
-            asset: toAsset({
-                tokenId: asset.value.token_id,
-                tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract.schemaName,
-            }),
+        if (!asset.value.order_) return
+        await PluginCollectibleRPC.fulfillOrder({
+            order: asset.value.order_,
             accountAddress: account,
-            startAmount: Number.parseFloat(amount),
-            expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
-            paymentTokenAddress: token.value.type === EthereumTokenType.Ether ? undefined : token.value.address,
+            recipientAddress: account,
         })
-    }, [asset?.value, token, account, amount, expirationDateTime, isAuction])
+    }, [asset?.value, account])
 
     const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
 
-    useEffect(() => {
-        setAmount('')
-        setExpirationDateTime(new Date())
-    }, [open])
-
     const validationMessage = useMemo(() => {
-        if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
-        if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid expiration date'
         if (!isVerified && !unreviewedChecked) return 'Please ensure unreviewed item'
         if (!isVerified && !ToS_Checked) return 'Please check ToS document'
         return ''
-    }, [amount, expirationDateTime, isVerified, isAuction, unreviewedChecked, ToS_Checked])
+    }, [isVerified, unreviewedChecked, ToS_Checked])
 
-    if (!asset?.value) return null
     return (
-        <InjectedDialog title={isAuction ? 'Place a Bid' : 'Make an Offer'} open={open} onClose={onClose}>
+        <InjectedDialog title="Checkout" open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Card elevation={0}>
                     <CardContent>
@@ -127,33 +100,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 <UnreviewedWarning />
                             </Box>
                         )}
-                        <SelectTokenAmountPanel
-                            amount={amount}
-                            balance={balance.value ?? '0'}
-                            token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
-                            disableEther={!paymentTokens.some((x) => isETH(x.address))}
-                            onAmountChange={setAmount}
-                            onTokenChange={setToken}
-                            TokenAmountPanelProps={{
-                                label: 'Price',
-                            }}
-                            FixedTokenListProps={{
-                                selectedTokens: selectedPaymentToken ? [selectedPaymentToken.address] : [],
-                                tokens: paymentTokens,
-                                whitelist: paymentTokens.map((x) => x.address),
-                            }}
-                        />
-                        {!isAuction ? (
-                            <DateTimePanel
-                                label="Expiration Date"
-                                date={expirationDateTime}
-                                onChange={setExpirationDateTime}
-                                TextFieldProps={{
-                                    className: classes.panel,
-                                }}
-                            />
-                        ) : null}
                         <Box sx={{ padding: 2, paddingBottom: 0 }}>
+                            <CheckoutOrder asset={asset} />
                             {isVerified ? null : (
                                 <>
                                     <FormControlLabel
@@ -211,20 +159,15 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                     variant="contained"
                                     disabled={!!validationMessage}
                                     size="large"
-                                    init={
-                                        validationMessage ||
-                                        t(isAuction ? 'plugin_collectible_place_bid' : 'plugin_collectible_make_offer')
-                                    }
-                                    waiting={t(
-                                        isAuction ? 'plugin_collectible_place_bid' : 'plugin_collectible_make_offer',
-                                    )}
+                                    init={validationMessage || t('plugin_collectible_checkout')}
+                                    waiting={t('plugin_collectible_checkout')}
                                     complete={t('plugin_collectible_done')}
                                     failed={t('plugin_collectible_retry')}
-                                    executor={onMakeOffer}
+                                    executor={onCheckout}
                                     completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
-                                {(isAuction ? asset.value?.is_collection_weth : asset.value?.is_order_weth) ? (
+                                {asset?.value?.is_order_weth ? (
                                     <ActionButton
                                         className={classes.button}
                                         variant="contained"

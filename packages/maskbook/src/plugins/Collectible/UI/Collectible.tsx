@@ -1,9 +1,10 @@
-import { useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import {
     makeStyles,
     createStyles,
     Avatar,
     Box,
+    Button,
     CardHeader,
     CardContent,
     CardActions,
@@ -29,14 +30,15 @@ import { CollectibleCard } from './CollectibleCard'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { PluginSkeleton } from '../../PluginSkeleton'
 import { getEnumAsArray } from '../../../utils/enum'
-import { CollectibleProvider } from '../types'
+import { CollectibleProvider, CollectibleTab } from '../types'
 import { currentCollectibleProviderSettings } from '../settings'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/UI/trader/FootnoteMenu'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
 import { useSettingsSwticher } from '../../../utils/hooks/useSettingSwitcher'
 import { ChainState } from '../../../web3/state/useChainState'
-import { useRemarkable } from '../../Snapshot/hooks/useRemarkable'
+import { Markdown } from '../../Snapshot/UI/Markdown'
+import { ActionBar } from './ActionBar'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -84,6 +86,8 @@ const useStyles = makeStyles((theme) => {
         subtitle: {
             fontSize: 12,
             marginRight: theme.spacing(0.5),
+            maxHeight: '3.5rem',
+            overflow: 'hidden',
             wordBreak: 'break-word',
         },
         description: {
@@ -136,9 +140,7 @@ export function Collectible(props: CollectibleProps) {
     const classes = useStyles()
 
     const { chainId } = ChainState.useContainer()
-    const { asset, provider } = CollectibleState.useContainer()
-
-    const [tabIndex, setTabIndex] = useState(0)
+    const { asset, provider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
     //#region sync with settings
     const collectibleProviderOptions = getEnumAsArray(CollectibleProvider)
@@ -155,17 +157,22 @@ export function Collectible(props: CollectibleProps) {
     )
     //#endregion
 
-    const description = useRemarkable(asset.value?.description ?? '')
-
     if (asset.loading) return <PluginSkeleton />
     if (!asset.value)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                <Typography color="textPrimary">
-                    Failed to load your collectible on {resolveCollectibleProviderName(provider)}. Try to switch to
-                    another provider.
+                <Typography color="textPrimary" sx={{ marginTop: 8, marginBottom: 8 }}>
+                    Failed to load your collectible on {resolveCollectibleProviderName(provider)}.
                 </Typography>
                 {CollectibleProviderSwitcher}
+                <Button
+                    color="primary"
+                    size="small"
+                    variant="text"
+                    onClick={() => asset.retry()}
+                    sx={{ marginTop: 1.5 }}>
+                    Refresh
+                </Button>
             </Box>
         )
 
@@ -216,21 +223,20 @@ export function Collectible(props: CollectibleProps) {
                         <>
                             {asset.value.description ? (
                                 <Box display="flex" alignItems="center">
-                                    <Typography
-                                        className={classes.subtitle}
-                                        variant="body2"
-                                        dangerouslySetInnerHTML={{ __html: description }}
-                                    />
+                                    <Typography className={classes.subtitle} component="div" variant="body2">
+                                        <Markdown content={asset.value.description} />
+                                    </Typography>
                                 </Box>
                             ) : null}
 
-                            {asset.value?.currentPrice ? (
+                            {asset.value?.current_price ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
                                     <Typography className={classes.description} component="span">
                                         <Trans
                                             i18nKey="plugin_collectible_description"
                                             values={{
-                                                price: asset.value?.currentPrice,
+                                                price: asset.value?.current_price,
+                                                symbol: asset.value?.current_symbol,
                                             }}
                                         />
                                     </Typography>
@@ -254,11 +260,11 @@ export function Collectible(props: CollectibleProps) {
                         {tabs}
                     </Tabs>
                     <Paper className={classes.body}>
-                        {tabIndex === 0 ? <ArticleTab /> : null}
-                        {tabIndex === 1 ? <TokenTab /> : null}
-                        {tabIndex === 2 ? <OfferTab /> : null}
-                        {tabIndex === 3 ? <ListingTab /> : null}
-                        {tabIndex === 4 ? <HistoryTab /> : null}
+                        {tabIndex === CollectibleTab.ARTICLE ? <ArticleTab /> : null}
+                        {tabIndex === CollectibleTab.TOKEN ? <TokenTab /> : null}
+                        {tabIndex === CollectibleTab.OFFER ? <OfferTab /> : null}
+                        {tabIndex === CollectibleTab.LISTING ? <ListingTab /> : null}
+                        {tabIndex === CollectibleTab.HISTORY ? <HistoryTab /> : null}
                     </Paper>
                 </CardContent>
                 <CardActions className={classes.footer}>
@@ -294,13 +300,14 @@ export function Collectible(props: CollectibleProps) {
                     </div>
                 </CardActions>
             </CollectibleCard>
-            {asset.value?.endTime && (
-                <Box className={classes.footnote} sx={{ marginTop: 1 }}>
+            {asset.value?.end_time && (
+                <Box sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
-                        Sale ends in {format(new Date(asset.value.endTime), 'yyyy-MM-dd HH:mm:ss')}.
+                        Sale ends in {format(new Date(asset.value.end_time), 'yyyy-MM-dd HH:mm:ss')}.
                     </Typography>
                 </Box>
             )}
+            {provider === CollectibleProvider.OPENSEA ? <ActionBar /> : null}
         </>
     )
 }

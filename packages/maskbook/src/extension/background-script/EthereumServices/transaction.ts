@@ -156,5 +156,7 @@ export async function sendSignedTransaction(from: string, config: TransactionCon
  */
 
 export async function callTransaction(config: TransactionConfig) {
-    return Maskbook.createWeb3().eth.call(config)
+    return Maskbook.createWeb3({
+        chainId: await getChainId(config.from as string | undefined),
+    }).eth.call(config)
 }

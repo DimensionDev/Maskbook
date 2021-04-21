@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import {
     Button,
@@ -11,17 +11,13 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core'
-import { OrderSide } from 'opensea-js/lib/types'
 import { CollectibleState } from '../hooks/useCollectibleState'
-import { useOrders } from '../hooks/useOrders'
 import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CollectibleProvider } from '../types'
-import { OfferTabActionBar } from './OfferTabActionBar'
 import { LoadingTable } from './LoadingTable'
-import { isSameAddress } from '../../../web3/helpers'
 import { ChainState } from '../../../web3/state/useChainState'
 
 const useStyles = makeStyles((theme) => {
@@ -54,10 +50,7 @@ export function OfferTab() {
     const classes = useStyles()
 
     const { account } = ChainState.useContainer()
-    const { asset, token, provider } = CollectibleState.useContainer()
-
-    const [page, setPage] = useState(0)
-    const offers = useOrders(OrderSide.Buy, page)
+    const { asset, token, provider, offers, offerPage, setOfferPage } = CollectibleState.useContainer()
 
     const isDifferenceToken = useMemo(() => {
         if (provider === CollectibleProvider.OPENSEA) {
@@ -90,28 +83,23 @@ export function OfferTab() {
     if (offers.loading) return <LoadingTable />
     if (!offers.value || offers.error || !dataSource.length)
         return (
-            <>
-                <Table size="small">
-                    <TableBody className={classes.empty}>
-                        <TableRow>
-                            <TableCell className={classes.emptyCell}>
-                                <Typography color="textSecondary">{t('plugin_collectible_no_offers')}</Typography>
-                                <Button
-                                    sx={{
-                                        marginTop: 1,
-                                    }}
-                                    variant="text"
-                                    onClick={() => offers.retry()}>
-                                    {t('plugin_collectible_retry')}
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-                {asset.value?.owner?.address && !isSameAddress(asset.value.owner.address, account) ? (
-                    <OfferTabActionBar />
-                ) : null}
-            </>
+            <Table size="small" stickyHeader>
+                <TableBody className={classes.empty}>
+                    <TableRow>
+                        <TableCell className={classes.emptyCell}>
+                            <Typography color="textSecondary">{t('plugin_collectible_no_offers')}</Typography>
+                            <Button
+                                sx={{
+                                    marginTop: 1,
+                                }}
+                                variant="text"
+                                onClick={() => offers.retry()}>
+                                {t('plugin_collectible_retry')}
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
         )
 
     return (
@@ -138,20 +126,17 @@ export function OfferTab() {
                         <OrderRow key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {(provider === CollectibleProvider.OPENSEA && dataSource.length) || page > 0 ? (
+                {(provider === CollectibleProvider.OPENSEA && dataSource.length) || offerPage > 0 ? (
                     <TableListPagination
-                        handlePrevClick={() => setPage((prev) => prev - 1)}
-                        handleNextClick={() => setPage((prev) => prev + 1)}
-                        prevDisabled={page === 0}
+                        handlePrevClick={() => setOfferPage((prev) => prev - 1)}
+                        handleNextClick={() => setOfferPage((prev) => prev + 1)}
+                        prevDisabled={offerPage === 0}
                         nextDisabled={dataSource.length < 10}
-                        page={page}
+                        page={offerPage}
                         pageCount={10}
                     />
                 ) : null}
             </Table>
-            {asset.value?.owner?.address && !isSameAddress(asset.value.owner.address, account) ? (
-                <OfferTabActionBar />
-            ) : null}
         </CollectibleTab>
     )
 }

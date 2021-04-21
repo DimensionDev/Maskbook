@@ -24,8 +24,8 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface EthereumWalletConnectedBoundaryProps extends withClasses<'connectWallet' | 'unlockMetaMask'> {
-    children?: React.ReactNode
     offChain?: boolean
+    children?: React.ReactNode
 }
 
 export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
@@ -36,9 +36,12 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     const account = useAccount()
     const chainIdValid = useChainIdValid()
-    const { value: etherBalance = '0', error: etherBalanceError, retry: retryEtherBalance } = useEtherTokenBalance(
-        account,
-    )
+    const {
+        value: etherBalance = '0',
+        loading: etherBalanceLoading,
+        error: etherBalanceError,
+        retry: retryEtherBalance,
+    } = useEtherTokenBalance(account)
 
     //#region remote controlled select provider dialog
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
@@ -99,6 +102,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                 </ActionButton>
             </Grid>
         )
+
     if (!chainIdValid)
         return (
             <Grid container>
