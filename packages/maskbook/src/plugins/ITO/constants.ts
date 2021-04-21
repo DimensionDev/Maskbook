@@ -121,7 +121,7 @@ export const ITO_CONSTANTS = {
     },
 }
 
-export const ITO_CONTRACT_BASE_TIMESTAMP = 1616976000000 // Mon Mar 29 2021 08:00:00 GMT+0800
+export const ITO_CONTRACT_BASE_TIMESTAMP = new Date('2021-03-29T00:00:00.000Z').getTime()
 
 export const TIME_WAIT_BLOCKCHAIN = 30000
 
