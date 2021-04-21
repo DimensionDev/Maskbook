@@ -17,6 +17,7 @@ export enum CollectibleTab {
     LISTING,
     HISTORY,
 }
+
 export interface CollectibleToken {
     contractAddress: string
     tokenId: string

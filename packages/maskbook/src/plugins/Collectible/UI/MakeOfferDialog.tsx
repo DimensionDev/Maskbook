@@ -28,7 +28,6 @@ import { ChainState } from '../../../web3/state/useChainState'
 import { toAsset, toUnixTimestamp } from '../helpers'
 import { useRemoteControlledDialogEvent } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
-import { delay } from '../../../utils/utils'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -97,12 +96,6 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             paymentTokenAddress: token.value.type === EthereumTokenType.Ether ? undefined : token.value.address,
         })
     }, [asset?.value, token, account, amount, expirationDateTime])
-
-    const onDoneOffer = useCallback(async () => {
-        onClose()
-        await delay(300)
-        setAmount('')
-    }, [onClose])
 
     const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
 
@@ -220,7 +213,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                     complete={t('plugin_collectible_done')}
                                     failed={t('plugin_collectible_retry')}
                                     executor={onMakeOffer}
-                                    completeOnClick={onDoneOffer}
+                                    completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
                                 {(isAuction ? asset?.value?.is_collection_weth : asset?.value?.is_order_weth) ? (

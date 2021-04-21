@@ -59,8 +59,12 @@ export function PostListingDialog(props: PostListingDialogProps) {
                     }}>
                     {tabs}
                 </Tabs>
-                {tabIndex === 0 ? <ListingByPriceCard asset={asset} tokenWatched={tokenWatched} /> : null}
-                {tabIndex === 1 ? <ListingByHighestBidCard asset={asset} tokenWatched={tokenWatched} /> : null}
+                {tabIndex === 0 ? (
+                    <ListingByPriceCard asset={asset} tokenWatched={tokenWatched} open={open} onClose={onClose} />
+                ) : null}
+                {tabIndex === 1 ? (
+                    <ListingByHighestBidCard asset={asset} tokenWatched={tokenWatched} open={open} onClose={onClose} />
+                ) : null}
             </DialogContent>
         </InjectedDialog>
     )

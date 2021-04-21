@@ -35,12 +35,14 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface ListingByHighestBidCardProps {
+    open: boolean
+    onClose: () => void
     asset?: ReturnType<typeof useAsset>
     tokenWatched: TokenWatched
 }
 
 export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
-    const { asset, tokenWatched } = props
+    const { asset, tokenWatched, open, onClose } = props
     const { amount, token, balance, setAmount, setToken } = tokenWatched
 
     const { t } = useI18N()
@@ -141,7 +143,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                         complete={t('plugin_collectible_done')}
                         failed={t('plugin_collectible_retry')}
                         executor={onPostListing}
-                        completeOnClick={() => setAmount('')}
+                        completeOnClick={onClose}
                         failedOnClick="use executor"
                     />
                 </EthereumWalletConnectedBoundary>
