@@ -119,12 +119,15 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     }, [open])
 
     const validationMessage = useMemo(() => {
-        if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
+        const amount_ = new BigNumber(amount || '0')
+        const balance_ = new BigNumber(balance.value ?? '0')
+        if (amount_.isZero()) return 'Enter a price'
+        if (balance_.isZero() || amount_.isGreaterThan(balance_)) return 'Insufficent balance'
         if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid expiration date'
         if (!isVerified && !unreviewedChecked) return 'Please ensure unreviewed item'
         if (!isVerified && !ToS_Checked) return 'Please check ToS document'
         return ''
-    }, [amount, expirationDateTime, isVerified, isAuction, unreviewedChecked, ToS_Checked])
+    }, [amount, balance.value, expirationDateTime, isVerified, isAuction, unreviewedChecked, ToS_Checked])
 
     if (!asset?.value) return null
     return (
