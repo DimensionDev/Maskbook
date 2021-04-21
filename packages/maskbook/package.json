@@ -3,7 +3,6 @@
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "lint:typecoverage": "type-coverage"
   },
   "dependencies": {
     "@balancer-labs/sor": "^1.0.0",
@@ -161,7 +160,6 @@
     "source-map-loader": "^2.0.0",
     "ts-jest": "26.5.5",
     "ts-loader": "^9.0.0",
-    "type-coverage": "^2.17.2",
     "web-ext": "^6.0.0",
     "webpack": "^5.31.2",
     "webpack-cli": "^4.3.0",
@@ -169,17 +167,5 @@
     "webpack-extension-manifest-plugin": "^0.7.0",
     "webpack-notifier": "^1.12.0",
     "webpack-target-webextension": "^0.4.0"
-  },
-  "typeCoverage": {
-    "cache": true,
-    "strict": true,
-    "detail": true,
-    "atLeast": 98,
-    "ignoreCatch": true,
-    "ignoreFiles": [
-      "**/__tests__/**",
-      "**\\__tests__\\**"
-    ],
-    "showRelativePath": true
   }
 }
