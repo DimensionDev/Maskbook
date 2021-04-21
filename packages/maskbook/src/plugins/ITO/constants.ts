@@ -85,7 +85,7 @@ const MSKE = createERC20Token(
 
 export const ITO_CONSTANTS = {
     ITO_CONTRACT_ADDRESS: {
-        [ChainId.Mainnet]: '0x7aEa34bE68171c6898164f3986Db03964CCa49B7',
+        [ChainId.Mainnet]: '0x198457da5e7f7b7fd916006837417dcf663f692d',
         [ChainId.Ropsten]: '0x9003aed6d33604617da90e084b081ec65f18e786',
         [ChainId.Rinkeby]: '0x7751b8c715d1Df74D181C86aE01801330211f370',
         [ChainId.Kovan]: '',
@@ -99,7 +99,7 @@ export const ITO_CONSTANTS = {
         [ChainId.Gorli]: '',
     },
     DEFAULT_QUALIFICATION_ADDRESS: {
-        [ChainId.Mainnet]: '0x919931df4c9e943612ef565b334791e26dc26b3f',
+        [ChainId.Mainnet]: '0x989252d4853db438235fbd9c946afc4cca6e21f1',
         [ChainId.Ropsten]: '0xbe3dd217479d93ed76457f01c98296c5235f3054',
         [ChainId.Rinkeby]: '0x88AA0AB3B7cDE263073e1cBa1D06473adeC1b38E',
         [ChainId.Kovan]: '',
