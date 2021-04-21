@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => {
         container: {
             padding: theme.spacing(1),
         },
+        markdown: {
+            margin: theme.spacing(1, 0),
+        },
         description: {
             fontSize: 14,
             wordBreak: 'break-all',
@@ -82,7 +85,7 @@ export function TokenTab(props: TokenTabProps) {
                         </Link>
                     </Typography>
                 ) : null}
-                <Markdown content={asset.value?.description ?? ''} />
+                <Markdown classes={{ root: classes.markdown }} content={asset.value?.description ?? ''} />
             </Box>
 
             {asset.value.traits && asset.value.traits.length ? (
