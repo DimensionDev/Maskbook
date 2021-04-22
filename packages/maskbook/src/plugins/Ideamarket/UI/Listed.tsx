@@ -1,4 +1,4 @@
-import { makeStyles, Typography, Button, Link, Divider, Box } from '@material-ui/core'
+import { makeStyles, Typography, Button, Divider, Box } from '@material-ui/core'
 import type { SetStateAction } from 'react'
 
 const useStyles = makeStyles((theme) => ({
@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
         color: 'white',
     },
     bottomText: {
-        fontSize: [12, '!important'],
+        fontSize: '12px !important',
         color: 'black',
     },
     divider: {
@@ -82,6 +82,11 @@ export default function Listed(props: ListedProps) {
     const classes = useStyles()
 
     const isPositive = props.dayChange >= 0
+
+    function clicked(e: MouseEvent) {
+        e.preventDefault()
+        window.open(`https://ideamarket.io/i/twitter/${props.username}`, '_blank', 'noopener')
+    }
 
     return (
         <div
@@ -104,15 +109,9 @@ export default function Listed(props: ListedProps) {
                 </Box>
                 <Divider orientation="vertical" className={classes.divider} />
                 <Box display="flex" sx={{ backgroundColor: '#f7f7f7' }} justifyContent="center">
-                    <Link
-                        href={`https://ideamarket.io/i/twitter/${props.username}`}
-                        target="_blank"
-                        rel="noopener"
-                        style={{ textDecoration: 'none' }}>
-                        <Button className={classes.listButton}>
-                            <Typography className={classes.buttonText}>Buy</Typography>
-                        </Button>
-                    </Link>
+                    <Button className={classes.listButton} onClick={clicked}>
+                        <Typography className={classes.buttonText}>Buy</Typography>
+                    </Button>
                 </Box>
             </div>
         </div>

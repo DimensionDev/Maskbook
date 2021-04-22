@@ -1,4 +1,4 @@
-import { makeStyles, Typography, Button, Link, Box } from '@material-ui/core'
+import { makeStyles, Typography, Button, Box } from '@material-ui/core'
 import type { UIProps } from '../types'
 
 const useStyles = makeStyles((theme) => ({
@@ -45,6 +45,11 @@ const useStyles = makeStyles((theme) => ({
 export default function NotListed(props: UIProps) {
     const classes = useStyles()
 
+    function clicked(e: MouseEvent) {
+        e.preventDefault()
+        window.open('https://app.ideamarket.io/', '_blank', 'noopener')
+    }
+
     return (
         <div
             className={classes.root}
@@ -55,11 +60,9 @@ export default function NotListed(props: UIProps) {
                 }, 200)
             }>
             <Box display="flex" bgcolor="#f7f7f7" justifyContent="center">
-                <Link href="https://ideamarket.io/" target="_blank" rel="noopener" style={{ textDecoration: 'none' }}>
-                    <Button onClick="window.open('https://ideamarket.io/')" className={classes.listButton}>
-                        <Typography className={classes.buttonText}>List</Typography>
-                    </Button>
-                </Link>
+                <Button onClick={clicked} className={classes.listButton}>
+                    <Typography className={classes.buttonText}>List</Typography>
+                </Button>
             </Box>
         </div>
     )
