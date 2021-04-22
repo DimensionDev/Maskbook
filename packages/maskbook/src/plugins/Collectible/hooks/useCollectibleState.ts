@@ -61,6 +61,17 @@ function useCollectibleState(token?: CollectibleToken) {
         })
     }
 
+    if (process.env.NODE_ENV === 'development') {
+        console.log('DEBUG: collectible')
+        console.log({
+            provider,
+            asset,
+            orders,
+            offers,
+            events,
+        })
+    }
+
     return {
         token,
         asset,
