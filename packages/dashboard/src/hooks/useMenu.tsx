@@ -1,6 +1,6 @@
-import { cloneElement, isValidElement, SyntheticEvent, useCallback, useRef, useState } from 'react'
+import { cloneElement, createElement, isValidElement, SyntheticEvent, useCallback, useRef, useState } from 'react'
 import { ShadowRootMenu } from '../../../maskbook/src/utils/shadow-root/ShadowRootComponents'
-import { createStyles, makeStyles, MenuListProps, PaperProps } from '@material-ui/core'
+import { createStyles, makeStyles, Menu, MenuListProps, PaperProps } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -24,23 +24,42 @@ interface MenuProps {
  * A util hooks for easier to use `<Menu>`s.
  * @param menus Material UI `<MenuItem />` elements
  */
-export function useMenu(elements: Array<JSX.Element | null>, anchorSibling = false, props?: MenuProps) {
+export function useMenu(
+    elements: Array<JSX.Element | null>,
+    anchorSibling = false,
+    useShadowMenu = true,
+    props?: MenuProps,
+) {
     const [open, setOpen] = useState(false)
     const anchorElRef = useRef<HTMLElement>()
     const close = () => setOpen(false)
     const classes = useStyles()
     return [
-        <ShadowRootMenu
-            PaperProps={props?.paperProps}
-            MenuListProps={props?.menuListProps}
-            open={open}
-            anchorEl={anchorElRef.current}
-            onClose={close}
-            onClick={close}>
-            {elements.map((element, key) =>
+        // <ShadowRootMenu
+        //     PaperProps={props?.paperProps}
+        //     MenuListProps={props?.menuListProps}
+        //     open={open}
+        //     anchorEl={anchorElRef.current}
+        //     onClose={close}
+        //     onClick={close}>
+        //     {elements.map((element, key) =>
+        //         isValidElement<object>(element) ? cloneElement(element, { ...element.props, key }) : element,
+        //     )}
+        // </ShadowRootMenu>,
+        createElement(
+            useShadowMenu ? ShadowRootMenu : Menu,
+            {
+                PaperProps: props?.paperProps,
+                MenuListProps: props?.menuListProps,
+                open: open,
+                anchorEl: anchorElRef.current,
+                onClose: close,
+                onClick: close,
+            },
+            elements.map((element, key) =>
                 isValidElement<object>(element) ? cloneElement(element, { ...element.props, key }) : element,
-            )}
-        </ShadowRootMenu>,
+            ),
+        ),
         useCallback((anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => {
             let element: HTMLElement
             if (anchorElOrEvent instanceof HTMLElement) {

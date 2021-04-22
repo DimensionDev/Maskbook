@@ -9,6 +9,8 @@ import { useDefinedSocialNetworkUIs } from './api'
 import { useConnectSocialNetwork } from './hooks/useConnectSocialNetwork'
 import { AuthorIcon } from '@dimensiondev/icons'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { PersonaDrawer } from './components/PersonaDrawer'
+import { PersonaDrawerState } from '../../hooks/usePersonaDrawerState'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -51,9 +53,11 @@ export default function Personas() {
     )
 
     const [connectState, onConnect] = useConnectSocialNetwork()
-
+    const { toggleDrawer } = PersonaDrawerState.useContainer()
     return (
-        <PageFrame title="Personas" primaryAction={<AuthorIcon style={{ fill: MaskColorVar.secondaryBackground }} />}>
+        <PageFrame
+            title="Personas"
+            primaryAction={<AuthorIcon onClick={toggleDrawer} style={{ fill: MaskColorVar.secondaryBackground }} />}>
             <Box className={classes.container}>
                 <TabContext value={activeTab}>
                     <Tabs value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
@@ -73,6 +77,7 @@ export default function Personas() {
                     ))}
                 </TabContext>
             </Box>
+            <PersonaDrawer>test</PersonaDrawer>
         </PageFrame>
     )
 }

@@ -1,11 +1,12 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { useDashboardI18N } from '../../../../locales'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import classNames from 'classnames'
 import { SettingsIcon } from '@dimensiondev/icons'
-import { IconButton, Link, MenuItem, Typography } from '@material-ui/core'
+import { IconButton, MenuItem, Typography } from '@material-ui/core'
 import { useMenu } from '../../../../hooks/useMenu'
+import { PersonaLine } from '../PersonaLine'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -14,6 +15,7 @@ const useStyles = makeStyles((theme) =>
             backgroundColor: MaskColorVar.secondaryBackground,
             display: 'flex',
             padding: theme.spacing(1.25),
+            minWidth: 320,
         },
         active: {
             backgroundColor: MaskColorVar.primaryBackground,
@@ -33,6 +35,7 @@ const useStyles = makeStyles((theme) =>
         },
         content: {
             marginTop: theme.spacing(1.25),
+            paddingRight: theme.spacing(1.25),
         },
         line: {
             display: 'flex',
@@ -46,17 +49,18 @@ const useStyles = makeStyles((theme) =>
 export interface PersonaCardProps {
     active: boolean
     nickName?: string
-    providers: { userId?: string; internalName: string; network: string; connected?: boolean; onAction?: () => void }[]
+    providers: { userId?: string; internalName: string; network: string; connected: boolean; onAction?: () => void }[]
 }
 
 export const PersonaCard = memo(({ active, nickName, providers }: PersonaCardProps) => {
     const classes = useStyles()
     const t = useDashboardI18N()
-
-    const [menu, openMenu] = useMenu([
-        <MenuItem>Edit</MenuItem>,
-        <MenuItem style={{ color: MaskColorVar.redMain }}>Delete</MenuItem>,
-    ])
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const [menu, openMenu] = useMenu(
+        [<MenuItem>Edit</MenuItem>, <MenuItem style={{ color: MaskColorVar.redMain }}>Delete</MenuItem>],
+        false,
+        false,
+    )
 
     return (
         <div className={classNames(classes.card, { [classes.active]: active })}>
@@ -70,18 +74,7 @@ export const PersonaCard = memo(({ active, nickName, providers }: PersonaCardPro
                 </div>
                 <div className={classes.content}>
                     {providers.map((provider) => {
-                        return (
-                            <div className={classes.line}>
-                                <Typography variant="caption">
-                                    {provider.userId ?? `Connect to ${provider.internalName}`}
-                                </Typography>
-                                {provider.connected && (
-                                    <Link component="button" variant="caption">
-                                        Disconnect
-                                    </Link>
-                                )}
-                            </div>
-                        )
+                        return <PersonaLine provider={provider} />
                     })}
                 </div>
             </div>

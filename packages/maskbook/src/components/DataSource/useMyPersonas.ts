@@ -8,7 +8,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { sideEffect } from '../../utils/side-effects'
 import { debounce } from 'lodash-es'
 
-const independentRef = {
+export const independentRef = {
     myPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),
     myUninitializedPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),
 }

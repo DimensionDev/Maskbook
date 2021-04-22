@@ -10,7 +10,6 @@ import {
     experimentalStyled as styled,
     Box,
     toolbarClasses,
-    Backdrop,
     paperClasses,
 } from '@material-ui/core'
 import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
@@ -117,9 +116,6 @@ const NavigationDrawer = styled(Drawer)(({ theme }) => ({
         backdropFilter: 'blur(4px)',
     },
 }))
-const NavigationDrawerBackdrop = styled(Backdrop)(({ theme }) => ({
-    top: theme.mixins.toolbar.minHeight,
-}))
 
 const ShapeHelper = styled('div')(({ theme }) => ({
     height: '100%',
@@ -170,10 +166,9 @@ export const PageFrame = memo((props: PageFrameProps) => {
                     <NavigationDrawer
                         open={drawerOpen}
                         onClose={toggleDrawer}
-                        BackdropComponent={NavigationDrawerBackdrop}
-                        BackdropProps={{ invisible: true }}
+                        hideBackdrop
                         variant="temporary"
-                        PaperProps={{ elevation: 0 }}>
+                        elevation={0}>
                         <Navigation />
                     </NavigationDrawer>
                 )}
