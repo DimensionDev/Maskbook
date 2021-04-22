@@ -10,7 +10,6 @@ export interface EthereumChainBoundaryProps {
 
 export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const chainId = useChainId()
-
-    if (chainId !== props.chainId) return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
+    if (chainId !== props.chainId) return <Typography color="textPrimary">Not available on {resolveChainName(chainId)}.</Typography>
     return <>{props.children}</>
 }
