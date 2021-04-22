@@ -16,10 +16,13 @@ const [PollCompositionEntry, PollCompositionUI] = createCompositionDialog('🗳�
     />
 ))
 export const PollsPluginDefine: PluginConfig = {
+    id: identifier,
+    pluginIcon: '📊',
     pluginName,
+    pluginDescription: 'Easily create a Poll for reciving public votes.',
     identifier,
     stage: PluginStage.Beta,
-    scope: PluginScope.Internal,
+    scope: PluginScope.Public,
     successDecryptionInspector: function Comp(props) {
         const metadata = PollMetadataReader(props.message.meta)
         if (!metadata.ok) return null

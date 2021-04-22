@@ -7,13 +7,16 @@ import { noop } from 'lodash'
 import { isLocked } from './process-lock'
 
 async function main() {
-    if (!isLocked()) await build().catch(noop)
-    dev()
     if (process.argv[2] === '--daemon') {
         console.log('Starting TypeScript compiler...')
-        // Never ends
-        return new Promise<never>(noop)
+        return dev()
     }
+
+    if (!isLocked()) {
+        console.log('Starting a full TypeScript build...')
+        await build().catch(noop)
+    }
+    dev()
     if (process.argv[2] === '--') {
         return spawn(process.argv[3], process.argv.slice(4), {
             stdio: 'inherit',

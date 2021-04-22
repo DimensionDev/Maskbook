@@ -10,6 +10,7 @@ import { DashboardPersonaUnlinkConfirmDialog } from '../DashboardDialogs/Persona
 import { delay } from '../../../utils/utils'
 import { SetupGuideStep } from '../../../components/InjectedComponents/SetupGuide'
 import { Flags } from '../../../utils/flags'
+import { requestSNSAdaptorPermission } from '../../../social-network/utils/permissions'
 
 interface ProfileBoxProps {
     persona: Persona | null
@@ -41,7 +42,7 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
         const home = ui.utils.getHomePage?.()
         if (!persona) return
         if (!Flags.no_web_extension_dynamic_permission_request) {
-            if (!(await ui.permission.request())) return
+            if (!(await requestSNSAdaptorPermission(ui))) return
         }
 
         // FIXME:

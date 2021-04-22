@@ -81,13 +81,13 @@ const useStyles = makeStyles((theme) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            height: 129,
-            padding: '40px 24px 40px 34px',
+            height: 110,
+            padding: theme.spacing(4, 3),
         },
         titleContent: {
             color: theme.palette.text.primary,
             fontWeight: 500,
-            fontSize: 40,
+            fontSize: 32,
             lineHeight: 1.2,
             [theme.breakpoints.down('sm')]: {
                 color: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.text.primary,
@@ -124,8 +124,7 @@ const useStyles = makeStyles((theme) => {
                 overflow: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
-                paddingLeft: 34,
-                paddingRight: 24,
+                padding: theme.spacing(0, 3),
                 scrollbarWidth: 'none',
                 '&::-webkit-scrollbar': {
                     display: 'none',
@@ -143,7 +142,7 @@ const useStyles = makeStyles((theme) => {
             },
         },
         dividerPadded: {
-            padding: '0 24px 0 34px',
+            padding: theme.spacing(0, 3),
             [theme.breakpoints.down('sm')]: {
                 padding: theme.spacing(0, 2),
             },

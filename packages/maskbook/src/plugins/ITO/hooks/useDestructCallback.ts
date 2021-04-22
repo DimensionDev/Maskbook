@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import type { Tx } from '@dimensiondev/contracts/types/types'
 import { addGasMargin } from '../../../web3/helpers'
@@ -8,9 +7,9 @@ import { TransactionStateType, useTransactionState } from '../../../web3/hooks/u
 import { TransactionEventType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 
-export function useDestructCallback(isMask: boolean) {
+export function useDestructCallback() {
     const account = useAccount()
-    const ITO_Contract = useITO_Contract(isMask)
+    const ITO_Contract = useITO_Contract()
     const [destructState, setDestructState] = useTransactionState()
 
     const destructCallback = useCallback(
@@ -62,7 +61,7 @@ export function useDestructCallback(isMask: boolean) {
                     reject(error)
                 }
                 const promiEvent = ITO_Contract.methods.destruct(id).send({
-                    gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                    gas: addGasMargin(estimatedGas).toFixed(),
                     ...config,
                 })
 

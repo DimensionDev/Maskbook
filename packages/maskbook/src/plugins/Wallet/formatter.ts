@@ -2,23 +2,25 @@ import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 import { i18n } from '../../utils/i18n-next'
 
-export function formatPercentage(value: BigNumber) {
-    return `${value
+export function formatPercentage(value: BigNumber.Value) {
+    const percentage = new BigNumber(value)
         .multipliedBy(100)
         .toFixed(2)
-        .replace(/\.?0+$/, '')}%`
+        .replace(/\.?0+$/, '')
+    return `${percentage}%`
 }
 
-export function formatPrice(price: BigNumber, decimalPlaces: number = 6) {
-    return price.decimalPlaces(decimalPlaces).toString()
+export function formatPrice(price: BigNumber.Value, decimalPlaces = 6) {
+    return new BigNumber(price).decimalPlaces(decimalPlaces).toString()
 }
 
-export function formatAmount(amount: BigNumber, decimals: number) {
-    return amount.multipliedBy(new BigNumber(10).pow(decimals)).toFixed()
+export function formatAmount(amount: BigNumber.Value = '0', decimals = 0) {
+    return new BigNumber(amount).multipliedBy(new BigNumber(10).pow(decimals)).toFixed()
 }
 
-export function formatBalance(balance: BigNumber, decimals: number, significant: number = decimals) {
-    if (!BigNumber.isBigNumber(balance)) return '0'
+export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, significant = decimals) {
+    let balance = new BigNumber(rawValue)
+    if (balance.isNaN()) return '0'
     const negative = balance.isNegative() // balance < 0n
     const base = new BigNumber(10).pow(decimals) // 10n ** decimals
 
@@ -40,10 +42,10 @@ export function formatBalance(balance: BigNumber, decimals: number, significant:
     const value = `${whole}${fraction === '' ? '' : `.${fraction}`}`
 
     const raw = negative ? `-${value}` : value
-    return raw.indexOf('.') > -1 ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
+    return raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
 }
 
-export function formatCurrency(balance: number, sign: string = '$') {
+export function formatCurrency(balance: number, sign = '$') {
     const fixedBalance = balance > 1 ? balance.toFixed(2) : balance.toPrecision(2)
     return `${sign}${fixedBalance.replace(/\d(?=(\d{3})+\.)/g, `${sign}&,`)}`
 }
@@ -108,12 +110,12 @@ export function formatElapsed(from: number) {
 }
 
 export function formatAmountPrecision(
-    amount: BigNumber,
+    amount?: BigNumber.Value,
     token_decimals?: number,
     decimalPlaces = 6,
     precision = 12,
 ): string {
-    const _amount = new BigNumber(formatBalance(amount, token_decimals ?? 0))
+    const _amount = new BigNumber(formatBalance(amount, token_decimals))
     const _decimalPlaces = decimalPlaces < 0 ? 6 : decimalPlaces
     const _precision = precision < 0 ? 12 : precision
 

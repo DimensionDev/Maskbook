@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) =>
             marginTop: theme.spacing(2),
         },
         caption: {
-            padding: theme.spacing(2, 0),
+            padding: theme.spacing(1.5, 0),
         },
         header: {
             borderBottom: `1px solid ${theme.palette.divider}`,

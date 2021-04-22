@@ -1,6 +1,5 @@
-import { makeStyles, Typography, Button, Link, Divider, Box } from '@material-ui/core'
+import { makeStyles, Typography, Button, Divider, Box } from '@material-ui/core'
 import type { SetStateAction } from 'react'
-const test = makeStyles({})
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -10,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: '0px 0px 3px 1px #ADADAD',
         marginRight: '10%',
         overflow: 'hidden',
+        zIndex: 1,
     },
     topInfo: {
         display: 'flex',
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1),
         marginRight: theme.spacing(1),
         marginLeft: theme.spacing(1),
-        color: theme.palette.text.primary,
+        color: '#2946ba',
     },
 
     topBox: {
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         width: '50%',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: theme.palette.mode === 'light' ? 'white' : null,
+        backgroundColor: '#f7f7f7',
     },
 
     rankText: {
@@ -51,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '10px',
         margin: theme.spacing(1),
         width: '53%',
+        '&:hover': {
+            backgroundColor: '#415bc3',
+        },
     },
 
     buttonText: {
@@ -58,8 +61,12 @@ const useStyles = makeStyles((theme) => ({
         color: 'white',
     },
     bottomText: {
-        fontSize: [12, '!important'],
+        fontSize: '12px !important',
         color: 'black',
+    },
+    divider: {
+        borderColor: '#ABABAB',
+        height: 'auto',
     },
 }))
 
@@ -76,6 +83,11 @@ export default function Listed(props: ListedProps) {
 
     const isPositive = props.dayChange >= 0
 
+    function clicked(e: MouseEvent) {
+        e.preventDefault()
+        window.open(`https://ideamarket.io/i/twitter/${props.username}`, '_blank', 'noopener')
+    }
+
     return (
         <div
             className={classes.root}
@@ -88,13 +100,6 @@ export default function Listed(props: ListedProps) {
             <div className={classes.topInfo}>
                 <Box className={classes.topBox}>
                     <Typography className={classes.topText}>
-                        <b>{props.rank}</b>
-                    </Typography>
-                    <Typography className={classes.rankText}>Rank</Typography>
-                </Box>
-                <Divider orientation="vertical" />
-                <Box className={classes.topBox}>
-                    <Typography className={classes.topText}>
                         <b>${props.price}</b>
                     </Typography>
                     <Typography className={classes.priceText} style={{ color: isPositive ? 'green' : 'red' }}>
@@ -102,20 +107,13 @@ export default function Listed(props: ListedProps) {
                         {props.dayChange}
                     </Typography>
                 </Box>
-            </div>
-
-            <Divider />
-            <Box display="flex" sx={{ backgroundColor: '#f7f7f7' }} justifyContent="center">
-                <Link
-                    href={`https://ideamarket.io/i/twitter/${props.username}`}
-                    target="_blank"
-                    rel="noopener"
-                    style={{ textDecoration: 'none' }}>
-                    <Button className={classes.listButton}>
+                <Divider orientation="vertical" className={classes.divider} />
+                <Box display="flex" sx={{ backgroundColor: '#f7f7f7' }} justifyContent="center">
+                    <Button className={classes.listButton} onClick={clicked}>
                         <Typography className={classes.buttonText}>Buy</Typography>
                     </Button>
-                </Link>
-            </Box>
+                </Box>
+            </div>
         </div>
     )
 }

@@ -7,10 +7,10 @@ import type {
     ZerionAssetResponseBody,
 } from '../types'
 
-const ZERION_API = 'wss://zerion-api-v4-agent.r2d2.to'
+const ZERION_API = 'wss://api-v4.zerion.io'
 
 //TODO: get token from ci env
-const ZERION_TOKEN = 'Demo.ukEVQp6L5vfgxcz4sBke7XvS873GMYHy'
+const ZERION_TOKEN = 'Mask.yEUEfDnoxgLBwNEcYPVussxxjdrGwapj'
 
 export const addressSocket = {
     namespace: 'address',
@@ -55,7 +55,7 @@ export async function getTransactionList(address: string, page?: number) {
             address,
             currency: 'usd',
             transactions_limit: 30,
-            transactions_offset: ((page ?? 1) - 1) * 30,
+            transactions_offset: (page ?? 0) * 30,
             transactions_search_query: '',
         },
     })) as ZerionTransactionResponseBody

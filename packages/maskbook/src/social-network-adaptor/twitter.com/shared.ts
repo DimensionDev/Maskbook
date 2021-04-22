@@ -7,7 +7,7 @@ import { usernameValidator } from './utils/user'
 export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
     ...twitterBase,
     utils: {
-        getHomePage: () => 'https://www.twitter.com',
+        getHomePage: () => 'https://twitter.com',
         isValidUsername: usernameValidator,
         publicKeyEncoding: {
             encoder(text) {

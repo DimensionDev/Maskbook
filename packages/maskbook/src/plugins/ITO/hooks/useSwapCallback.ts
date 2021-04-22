@@ -3,14 +3,13 @@ import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
 import type { TransactionReceipt } from 'web3-core'
 import type { Tx } from '@dimensiondev/contracts/types/types'
+import type { ITO } from '@dimensiondev/contracts/types/ITO'
 import { buf2hex, hex2buf } from '../../../utils/utils'
 import { addGasMargin, isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import type { ITO } from '@dimensiondev/contracts/types/ITO'
-import type { MaskITO } from '@dimensiondev/contracts/types/MaskITO'
 import { usePoolPayload } from './usePoolPayload'
 
 export function useSwapCallback(
@@ -18,11 +17,9 @@ export function useSwapCallback(
     password: string,
     total: string,
     token: PartialRequired<EtherTokenDetailed | ERC20TokenDetailed, 'address'>,
-    testNums?: number[],
-    isMask = false,
 ) {
     const account = useAccount()
-    const ITO_Contract = useITO_Contract(isMask)
+    const ITO_Contract = useITO_Contract()
     const { payload } = usePoolPayload(id)
     const [swapState, setSwapState] = useTransactionState()
     const swapCallback = useCallback(async () => {
@@ -99,44 +96,21 @@ export function useSwapCallback(
             return
         }
 
-        const swapParams =
-            isMask && testNums
-                ? ([
-                      id,
-                      Web3Utils.soliditySha3(
-                          Web3Utils.hexToNumber(
-                              `0x${buf2hex(
-                                  hex2buf(
-                                      Web3Utils.soliditySha3(Web3Utils.soliditySha3(...testNums) ?? '') ?? '',
-                                  ).slice(0, 5),
-                              )}`,
-                          ),
-                          account,
-                      )!,
-                      Web3Utils.soliditySha3(
-                          Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 5))}`),
-                          account,
-                      )!,
-                      Web3Utils.sha3(account)!,
-                      swapTokenAt,
-                      total,
-                  ] as Parameters<MaskITO['methods']['swap']>)
-                : ([
-                      id,
-                      Web3Utils.soliditySha3(
-                          Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 6))}`),
-                          account,
-                      )!,
-                      account,
-                      Web3Utils.sha3(account)!,
-                      swapTokenAt,
-                      total,
-                  ] as Parameters<ITO['methods']['swap']>)
-
-        const swap = isMask && testNums ? (ITO_Contract as MaskITO).methods.swap : (ITO_Contract as ITO).methods.swap
+        const swapParams = [
+            id,
+            Web3Utils.soliditySha3(
+                Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 6))}`),
+                account,
+            )!,
+            account,
+            Web3Utils.sha3(account)!,
+            swapTokenAt,
+            total,
+        ] as Parameters<ITO['methods']['swap']>
 
         // step 2-1: estimate gas
-        const estimatedGas = await swap(...swapParams)
+        const estimatedGas = await ITO_Contract.methods
+            .swap(...swapParams)
             .estimateGas(config)
             .catch((error: Error) => {
                 setSwapState({
@@ -163,8 +137,8 @@ export function useSwapCallback(
                 })
                 reject(error)
             }
-            const promiEvent = swap(...swapParams).send({
-                gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+            const promiEvent = ITO_Contract.methods.swap(...swapParams).send({
+                gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
             })
 

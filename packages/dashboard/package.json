@@ -5,7 +5,7 @@
   "scripts": {
     "storybook": "dev -- start-storybook -p 6006",
     "build-storybook": "build -- build-storybook",
-    "start": "dev -- snowpack dev --reload",
+    "start": "dev -- snowpack dev",
     "build": "build -- snowpack build"
   },
   "main": "./dist/src/entry.js",
@@ -23,15 +23,15 @@
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
+    "@babel/core": "^7.13.15",
     "@snowpack/plugin-dotenv": "^2.1.0",
     "@snowpack/plugin-react-refresh": "^2.4.2",
-    "@storybook/addon-actions": "^6.2.3",
-    "@storybook/addon-essentials": "^6.2.3",
-    "@storybook/addon-links": "^6.2.3",
-    "@storybook/addons": "^6.2.3",
-    "@storybook/react": "^6.2.3",
-    "@storybook/theming": "^6.2.3",
+    "@storybook/addon-actions": "^6.2.7",
+    "@storybook/addon-essentials": "^6.2.7",
+    "@storybook/addon-links": "^6.2.7",
+    "@storybook/addons": "^6.2.7",
+    "@storybook/react": "^6.2.7",
+    "@storybook/theming": "^6.2.7",
     "@types/snowpack-env": "^2.3.2",
     "babel-loader": "^8.2.2",
     "snowpack": "^3.2.2"

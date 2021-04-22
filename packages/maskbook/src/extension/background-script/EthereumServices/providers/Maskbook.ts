@@ -5,7 +5,7 @@ import { getConstant } from '../../../../web3/helpers'
 import { CONSTANTS } from '../../../../web3/constants'
 
 // 5 is the length of weights
-const SEED = Math.floor(Math.random() * 5)
+const SEED = Math.floor(Math.random() * 4)
 
 //#region providers
 const providerPool = new Map<string, HttpProvider>()

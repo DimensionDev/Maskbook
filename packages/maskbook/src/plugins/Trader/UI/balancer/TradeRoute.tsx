@@ -15,7 +15,6 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { SwapResponse, TradeComputed } from '../../types'
 import { formatPercentage } from '../../../Wallet/formatter'
-import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { TradeRouteHop } from './TradeRouteHop'
 
@@ -102,7 +101,7 @@ export function TradeRoute(props: TradeRouteProps) {
                                 </Breadcrumbs>
                             </TableCell>
                             <TableCell className={classes.cell} align="right">
-                                {formatPercentage(new BigNumber(route.share))}
+                                {formatPercentage(route.share)}
                             </TableCell>
                         </TableRow>
                     ))}

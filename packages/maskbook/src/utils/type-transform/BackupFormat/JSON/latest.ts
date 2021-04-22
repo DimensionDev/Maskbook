@@ -10,7 +10,7 @@ import {
     BackupJSONFileVersion2,
     isBackupJSONFileVersion2,
     upgradeFromBackupJSONFileVersion1,
-    upgradeFromBackupJSONFileVersion2,
+    patchNonBreakingUpgradeForBackupJSONFileVersion2,
 } from './version-2'
 
 /**
@@ -18,7 +18,7 @@ import {
  */
 export interface BackupJSONFileLatest extends BackupJSONFileVersion2 {}
 export function UpgradeBackupJSONFile(json: object, identity?: ProfileIdentifier): BackupJSONFileLatest | null {
-    if (isBackupJSONFileVersion2(json)) return upgradeFromBackupJSONFileVersion2(json)
+    if (isBackupJSONFileVersion2(json)) return patchNonBreakingUpgradeForBackupJSONFileVersion2(json)
     if (isBackupJSONFileVersion1(json))
         return upgradeFromBackupJSONFileVersion1(patchNonBreakingUpgradeForBackupJSONFileVersion1(json))
     if (isBackupJSONFileVersion0(json) && identity) {

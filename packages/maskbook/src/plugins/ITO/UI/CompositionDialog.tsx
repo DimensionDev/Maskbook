@@ -20,7 +20,6 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { EthereumMessages } from '../../Ethereum/messages'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { formatBalance } from '../../Wallet/formatter'
-import BigNumber from 'bignumber.js'
 import { useConstant } from '../../../web3/hooks/useConstant'
 
 export enum ITOCreateFormPageStep {
@@ -42,7 +41,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const chainId = useChainId()
 
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
-    const MASK_ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'MASK_ITO_CONTRACT_ADDRESS')
 
     //#region step
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
@@ -89,7 +87,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
             // assemble JSON payload
             const payload: JSON_PayloadInMask = {
-                contract_address: fillSettings.isMask ? MASK_ITO_CONTRACT_ADDRESS : ITO_CONTRACT_ADDRESS,
+                contract_address: ITO_CONTRACT_ADDRESS,
                 pid: FillSuccess.id,
                 password: fillSettings.password,
                 message: FillSuccess.message,
@@ -108,8 +106,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 token: fillSettings.token,
                 exchange_amounts: fillSettings.exchangeAmounts,
                 exchange_tokens: fillSettings.exchangeTokens,
-                is_mask: fillSettings.isMask,
-                test_nums: fillSettings.testNums,
             }
 
             // output the redpacket as JSON payload
@@ -171,11 +167,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             open: true,
             state: fillState,
             summary: t('plugin_ito_transaction_dialog_summary', {
-                amount: formatBalance(
-                    new BigNumber(poolSettings?.total),
-                    poolSettings?.token.decimals ?? 0,
-                    poolSettings?.token.decimals ?? 0,
-                ),
+                amount: formatBalance(poolSettings?.total, poolSettings?.token.decimals),
                 symbol: poolSettings.token.symbol,
             }),
         })

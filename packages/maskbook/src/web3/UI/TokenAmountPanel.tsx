@@ -11,7 +11,6 @@ import {
     TextFieldProps,
 } from '@material-ui/core'
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { formatBalance } from '../../plugins/Wallet/formatter'
 import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../constants'
@@ -127,7 +126,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                 color="textSecondary"
                                 variant="body2"
                                 component="span">
-                                Balance: {formatBalance(new BigNumber(balance), token.decimals, 6)}
+                                Balance: {formatBalance(balance, token.decimals, 6)}
                             </Typography>
                         ) : null}
                         <Box
@@ -148,9 +147,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     color="primary"
                                     variant="outlined"
                                     onClick={() => {
-                                        onAmountChange(
-                                            formatBalance(new BigNumber(maxAmount ?? balance), token.decimals),
-                                        )
+                                        onAmountChange(formatBalance(maxAmount ?? balance, token.decimals))
                                     }}
                                     {...MaxChipProps}
                                 />

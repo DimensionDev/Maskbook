@@ -1,7 +1,8 @@
 import { Component, useCallback, useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
-import { makeStyles, createStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
 import { BigNumber } from 'bignumber.js'
+import { makeStyles, createStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
@@ -11,7 +12,6 @@ import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
@@ -181,8 +181,6 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 export interface ITO_Props {
     pid: string
     password: string
-    isMask?: boolean
-    testNums?: Number[]
 }
 
 export function ITO(props: ITO_Props) {
@@ -191,22 +189,20 @@ export function ITO(props: ITO_Props) {
     const postLink = usePostLink()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(props.isMask ?? false)
+    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
     const [claimDialogStatus, setClaimDialogStatus] = useState(ClaimStatus.Remind)
 
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid, password, isMask, testNums } = props
+    const { pid, password } = props
     const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
 
     // append the password from the outcoming pool
     const payload: JSON_PayloadInMask = {
         ...payload_,
         password: payload_.password || password,
-        is_mask: isMask ?? false,
-        test_nums: (testNums as number[]) ?? undefined,
     }
     const {
         token,
@@ -237,7 +233,7 @@ export function ITO(props: ITO_Props) {
     } = useAvailabilityComputed(payload)
     //#ednregion
 
-    const { listOfStatus, canClaimMaskITO, unlockTime } = availabilityComputed
+    const { listOfStatus } = availabilityComputed
 
     const isAccountSeller =
         payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
@@ -340,17 +336,13 @@ export function ITO(props: ITO_Props) {
         if (destructState.type === TransactionStateType.UNKNOWN) return
         let summary = t('plugin_ito_withdraw')
         if (!noRemain) {
-            summary += ' ' + formatBalance(total_remaining, token.decimals ?? 0) + ' ' + token.symbol
+            summary += ' ' + formatBalance(total_remaining, token.decimals) + ' ' + token.symbol
         }
         availability?.exchange_addrs.forEach((addr, i) => {
             const token = exchange_tokens.find((t) => t.address.toLowerCase() === addr.toLowerCase())
             const comma = noRemain && i === 0 ? ' ' : ', '
             if (token) {
-                summary +=
-                    comma +
-                    formatBalance(new BigNumber(availability?.exchanged_tokens[i]), token.decimals ?? 0) +
-                    ' ' +
-                    token.symbol
+                summary += comma + formatBalance(availability?.exchanged_tokens[i], token.decimals) + ' ' + token.symbol
             }
         })
         setTransactionDialogOpen({
@@ -369,12 +361,9 @@ export function ITO(props: ITO_Props) {
         if (listOfStatus.includes(ITO_Status.waited)) return t('plugin_ito_status_no_start')
         if (listOfStatus.includes(ITO_Status.expired)) return t('plugin_ito_expired')
         if (listOfStatus.includes(ITO_Status.started)) {
-            if (total_remaining.isZero()) {
-                return t('plugin_ito_status_out_of_stock')
-            }
+            if (total_remaining.isZero()) return t('plugin_ito_status_out_of_stock')
             return t('plugin_ito_status_ongoing')
         }
-
         return ''
     }, [listOfStatus, t, total_remaining])
 
@@ -384,7 +373,7 @@ export function ITO(props: ITO_Props) {
         }
 
         const _text = t('plugin_ito_your_claimed_amount', {
-            amount: formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals),
+            amount: formatBalance(availability?.swapped ?? 0, token.decimals),
             symbol: token.symbol,
         })
 
@@ -442,7 +431,7 @@ export function ITO(props: ITO_Props) {
             <>
                 <Typography variant="body1">
                     {t('plugin_ito_allocation_per_wallet', {
-                        limit: `: ${formatBalance(new BigNumber(limit), token.decimals)}`,
+                        limit: `: ${formatBalance(limit, token.decimals)}`,
                         token: token.symbol,
                     })}
                 </Typography>
@@ -559,26 +548,13 @@ export function ITO(props: ITO_Props) {
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : isBuyer ? (
-                    canClaimMaskITO === false && isMask && unlockTime ? (
-                        <ActionButton
-                            onClick={() => undefined}
-                            variant="contained"
-                            size="large"
-                            disabled={true}
-                            className={classes.actionButton}>
-                            {t('plugin_ito_wait_unlock_time', {
-                                unlockTime: new Date(1000 * Number(unlockTime!)).toUTCString(),
-                            })}
-                        </ActionButton>
-                    ) : (
-                        <ActionButton
-                            onClick={onShareSuccess}
-                            variant="contained"
-                            size="large"
-                            className={classes.actionButton}>
-                            {t('plugin_ito_share')}
-                        </ActionButton>
-                    )
+                    <ActionButton
+                        onClick={onShareSuccess}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
+                        {t('plugin_ito_share')}
+                    </ActionButton>
                 ) : listOfStatus.includes(ITO_Status.expired) ? (
                     <ActionButton
                         disabled

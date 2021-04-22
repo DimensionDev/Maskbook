@@ -1,13 +1,19 @@
 import { createStyles, Grid, makeStyles } from '@material-ui/core'
+import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
+import Services from '../../extension/service'
 import { WalletMessages } from '../../plugins/Wallet/messages'
+import { currentIsMetamaskLockedSettings, currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
+import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useAccount } from '../hooks/useAccount'
 import { useChainIdValid } from '../hooks/useChainState'
 import { useEtherTokenBalance } from '../hooks/useEtherTokenBalance'
+import { ProviderType } from '../types'
+import { useStylesExtends } from '../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -17,15 +23,16 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface EthereumWalletConnectedBoundaryProps {
+export interface EthereumWalletConnectedBoundaryProps extends withClasses<'connectWallet' | 'unlockMetaMask'> {
     children?: React.ReactNode
+    offChain?: boolean
 }
 
 export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
-    const { children = null } = props
+    const { children = null, offChain = false } = props
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
     const chainIdValid = useChainIdValid()
@@ -42,15 +49,43 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     }, [setSelectProviderDialogOpen])
     //#endregion
 
+    //#region metamask
+    const currentSelectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
+    const currentIsMetamaskLocked = useValueRef(currentIsMetamaskLockedSettings)
+    const onConnectMetaMask = useCallback(async () => {
+        await Services.Ethereum.connectMetaMask()
+    }, [])
+    //#endregion
+
     if (!account)
         return (
             <Grid container>
-                <ActionButton className={classes.button} fullWidth variant="contained" size="large" onClick={onConnect}>
+                <ActionButton
+                    className={classNames(classes.button, classes.connectWallet)}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    onClick={onConnect}>
                     {t('plugin_wallet_connect_a_wallet')}
                 </ActionButton>
             </Grid>
         )
-    if (new BigNumber(etherBalance).isZero())
+
+    if (currentSelectedWalletProvider === ProviderType.MetaMask && currentIsMetamaskLocked)
+        return (
+            <Grid container>
+                <ActionButton
+                    className={classNames(classes.button, classes.unlockMetaMask)}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    onClick={onConnectMetaMask}>
+                    {t('plugin_wallet_unlock_metamask')}
+                </ActionButton>
+            </Grid>
+        )
+
+    if (new BigNumber(etherBalance).isZero() && !offChain)
         return (
             <Grid container>
                 <ActionButton

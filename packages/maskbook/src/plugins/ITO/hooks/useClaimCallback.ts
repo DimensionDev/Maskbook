@@ -1,19 +1,17 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import type { TransactionReceipt } from 'web3-core'
+import type { Tx } from '@dimensiondev/contracts/types/types'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionEventType } from '../../../web3/types'
-import type { Tx } from '@dimensiondev/contracts/types/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { useChainId } from '../../../web3/hooks/useChainState'
-import { useITO_Contract } from '../contracts/useITO_Contract'
-import type { MaskITO } from '@dimensiondev/contracts/types/MaskITO'
+import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
 
 export function useClaimCallback() {
     const account = useAccount()
     const chainId = useChainId()
-    const MaskITO_Contract = useITO_Contract(true) as MaskITO | null
+    const MaskITO_Contract = useMaskITO_Contract()
     const [claimState, setClaimState] = useTransactionState()
 
     const claimCallback = useCallback(async () => {
@@ -50,7 +48,7 @@ export function useClaimCallback() {
         // step 2: blocking
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = MaskITO_Contract.methods.claim().send({
-                gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {

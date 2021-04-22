@@ -81,7 +81,11 @@ export default function LogoButton(props: LogoButtonProps) {
     return (
         <div className={classes.root}>
             <IconButton
-                onMouseEnter={() => setHover(true)}
+                onMouseEnter={() =>
+                    setTimeout(() => {
+                        setHover(true)
+                    }, 300)
+                }
                 onMouseLeave={() =>
                     setTimeout(() => {
                         setHover(false)
@@ -92,10 +96,10 @@ export default function LogoButton(props: LogoButtonProps) {
                 {props.found ? (
                     <>
                         <Typography className={classes.rankText}>{props.rank}</Typography>
-                        <IdeaLogo height={25} width={25} />
+                        <IdeaLogo fontSize="small" />
                     </>
                 ) : (
-                    <IdeaLogoGray height={25} width={25} />
+                    <IdeaLogoGray fontSize="small" />
                 )}
             </IconButton>
 
