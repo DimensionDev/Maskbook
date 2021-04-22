@@ -131,7 +131,7 @@ export async function* sendTransaction(from: string, config: TransactionConfig) 
         }
         return
     } catch (err) {
-        if (err.message.includes('nonce too low')) {
+        if (/nonce\s+[\w\s]*low/i.test(err.message)) {
             resetNonce(from)
             throw new Error('Nonce too low. Please try again.')
         }
