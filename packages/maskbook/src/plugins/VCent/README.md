@@ -25,7 +25,6 @@ Tweet\
 |\
 +---icons\ (icons in SVG format)
 | ETH.tsx\
-| VCent.tsx\
 |\
 \---UI\
  TweetDialog.tsx (This displays the information in Twitter)

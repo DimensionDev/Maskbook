@@ -12,6 +12,7 @@ export const VCentPluginDefine: PluginConfig = {
     postInspector: function Component(): JSX.Element | null {
         const tweetAddress = usePostInfoDetails('postID')
         if (!tweetAddress) return null
+        if (window.location.href.includes('v.cent.co')) return null
         return <VCentDialog tweetAddress={tweetAddress} />
     },
 }

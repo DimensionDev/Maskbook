@@ -2,7 +2,6 @@ import { makeStyles, Button } from '@material-ui/core'
 import { isDarkTheme } from '../../../utils/theme-tools'
 import * as TweetAPI from '../apis/index'
 import { ETHIcon } from '../icons/ETH'
-import { VCentIconLight, VCentIconDark } from '../icons/VCent'
 import { VALUABLES_VCENT_URL } from '../constants'
 import { useAsync } from 'react-use'
 
@@ -16,7 +15,7 @@ const useStyle = makeStyles((theme) => ({
         height: 45,
         alignItems: 'center',
         borderRadius: 25,
-        justifyContent: 'space-between',
+        justifyContent: 'center',
     },
 
     VCent: {
@@ -86,7 +85,6 @@ export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) 
                     target="_blank"
                     href={VALUABLES_VCENT_URL + tweet.tweet_id}
                     style={isDarkTheme() ? { backgroundColor: '#1a2735' } : { backgroundColor: '#f3f3f3' }}>
-                    <div className={classes.VCent}>{isDarkTheme() ? <VCentIconDark /> : <VCentIconLight />}</div>
                     <div className={classes.bidInfo}>
                         <div className={classes.text}> LATEST OFFER at</div>
                         <div className={classes.textUSD}> ${tweet.amount_usd}</div>
