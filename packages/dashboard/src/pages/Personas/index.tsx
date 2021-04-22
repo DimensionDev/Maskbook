@@ -13,7 +13,7 @@ import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaState } from './hooks/usePersonaState'
 import { useMyPersonas } from '../../../../maskbook/src/components/DataSource/useMyPersonas'
 import { useValueRef } from '../../../../maskbook/src/utils/hooks/useValueRef'
-import { CurrentPersona, currentPersonaSettings } from './settings'
+import { currentPersonaSettings, PersonaInfo } from './settings'
 import stringify from 'json-stable-stringify'
 
 const useStyles = makeStyles(() =>
@@ -36,54 +36,64 @@ const useStyles = makeStyles(() =>
 export default function Personas() {
     const classes = useStyles()
 
+    const { toggleDrawer } = PersonaState.useContainer()
     const definedSocialNetworkUIs = useDefinedSocialNetworkUIs()
     const myPersonas = useMyPersonas()
     const currentPersona = useValueRef(currentPersonaSettings)
 
     const definedSocialNetworkProviders = [...definedSocialNetworkUIs.values()]
-    const personas = myPersonas
-        .sort((a, b) => {
-            if (a.updatedAt > b.updatedAt) return -1
-            if (a.updatedAt < b.updatedAt) return 1
-            return 0
-        })
-        .map((persona) => {
-            const profiles = persona ? [...persona.linkedProfiles] : []
-            const providers = compact(
-                definedSocialNetworkProviders.map((i) => {
-                    const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
-                    if (i.networkIdentifier === 'localhost') return null
-                    return {
-                        internalName: i.networkIdentifier,
-                        network: i.networkIdentifier,
-                        connected: !!profile,
-                        userId: profile?.[0].userId,
-                        identifier: profile?.[0],
-                    }
-                }),
-            )
+    const personas = useMemo(() => {
+        return myPersonas
+            .sort((a, b) => {
+                if (a.updatedAt > b.updatedAt) return -1
+                if (a.updatedAt < b.updatedAt) return 1
+                return 0
+            })
+            .map((persona) => {
+                const profiles = persona ? [...persona.linkedProfiles] : []
+                const providers = compact(
+                    definedSocialNetworkProviders.map((i) => {
+                        const profile = profiles.find(([key]) => key.network === i.networkIdentifier)
+                        if (i.networkIdentifier === 'localhost') return null
+                        return {
+                            internalName: i.networkIdentifier,
+                            network: i.networkIdentifier,
+                            connected: !!profile,
+                            userId: profile?.[0].userId,
+                            identifier: profile?.[0],
+                        }
+                    }),
+                )
 
-            return {
-                identifier: persona.identifier.toText(),
-                persona: persona,
-                providers: providers,
-            }
-        })
+                return {
+                    identifier: persona.identifier.toText(),
+                    persona: persona,
+                    providers: providers,
+                }
+            })
+    }, [myPersonas, definedSocialNetworkProviders])
 
-    useEffect(() => {
-        if (isEmpty(JSON.parse(currentPersona)) && personas.length) {
-            currentPersonaSettings.value = stringify(head(personas))
-        }
-    }, [currentPersona, personas])
-
-    const currentPersonaProviders = useMemo(() => {
-        const persona = JSON.parse(currentPersona) as CurrentPersona
-        return persona?.providers ?? []
+    const currentPersonaInfo = useMemo(() => {
+        return JSON.parse(currentPersona) as PersonaInfo
     }, [currentPersona])
 
-    const [activeTab, setActiveTab] = useState(currentPersonaProviders[0]?.internalName ?? '')
+    const [activeTab, setActiveTab] = useState(currentPersonaInfo?.providers?.[0]?.internalName ?? '')
+
     const [connectState, onConnect] = useConnectSocialNetwork()
-    const { toggleDrawer } = PersonaState.useContainer()
+
+    useEffect(() => {
+        if (personas.length) {
+            currentPersonaSettings.value = stringify(
+                isEmpty(currentPersonaInfo)
+                    ? head(personas)
+                    : personas.find((i) => i.identifier === currentPersonaInfo.identifier),
+            )
+        }
+    }, [currentPersonaInfo, personas])
+
+    useEffect(() => {
+        setActiveTab(currentPersonaInfo?.providers?.[0]?.internalName ?? '')
+    }, [currentPersonaInfo])
 
     return (
         <PageFrame
@@ -92,7 +102,7 @@ export default function Personas() {
             <Box className={classes.container}>
                 <TabContext value={activeTab}>
                     <Tabs value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
-                        {currentPersonaProviders.map(({ internalName }) => (
+                        {currentPersonaInfo?.providers?.map(({ internalName }) => (
                             <Tab
                                 key={internalName}
                                 value={internalName}
@@ -101,9 +111,16 @@ export default function Personas() {
                             />
                         ))}
                     </Tabs>
-                    {currentPersonaProviders.map((provider) => (
+                    {currentPersonaInfo?.providers?.map((provider) => (
                         <TabPanel key={provider.internalName} value={provider.internalName}>
-                            <PersonaSetup provider={provider} onConnect={onConnect} />
+                            <PersonaSetup
+                                provider={provider}
+                                onConnect={() => {
+                                    if (currentPersonaInfo.identifier) {
+                                        onConnect(currentPersonaInfo.identifier, provider)
+                                    }
+                                }}
+                            />
                         </TabPanel>
                     ))}
                 </TabContext>

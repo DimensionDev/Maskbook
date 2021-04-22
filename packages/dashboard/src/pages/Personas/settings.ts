@@ -10,7 +10,7 @@ export interface PersonaProvider {
     identifier?: ProfileIdentifier
 }
 
-export interface CurrentPersona {
+export interface PersonaInfo {
     identifier?: string
     persona?: Persona
     providers?: PersonaProvider[]

@@ -4,10 +4,11 @@ import { PersonaState } from '../../hooks/usePersonaState'
 import { PersonaCard } from '../PersonaCard'
 import type { Persona } from '../../../../../../maskbook/src/database'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
-import type { CurrentPersona, PersonaProvider } from '../../settings'
+import type { PersonaInfo, PersonaProvider } from '../../settings'
 import { useValueRef } from '../../../../../../maskbook/src/utils/hooks/useValueRef'
 import { currentPersonaSettings } from '../../settings'
 import stringify from 'json-stable-stringify'
+
 const useStyles = makeStyles((theme) => ({
     root: {
         top: `64px !important`,
@@ -19,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
         '& > *': {
             marginTop: theme.spacing(1.5),
         },
+    },
+    backdrop: {
+        background: 'none',
     },
 }))
 
@@ -35,7 +39,7 @@ export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
     const currentPersonaRef = useValueRef(currentPersonaSettings)
 
     const currentPersonIdentifier = useMemo(() => {
-        return (JSON.parse(currentPersonaRef) as CurrentPersona)?.identifier ?? ''
+        return (JSON.parse(currentPersonaRef) as PersonaInfo)?.identifier ?? ''
     }, [currentPersonaRef])
 
     const onPersonaCardClick = useCallback((persona) => {
@@ -48,9 +52,13 @@ export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
             open={drawerOpen}
             onClose={toggleDrawer}
             variant="temporary"
-            hideBackdrop
+            ModalProps={{
+                BackdropProps: {
+                    className: classes.backdrop,
+                },
+            }}
             elevation={0}
-            classes={classes}>
+            classes={{ root: classes.root, paper: classes.paper }}>
             {personas.map((item) => {
                 const { persona, providers } = item
                 return (

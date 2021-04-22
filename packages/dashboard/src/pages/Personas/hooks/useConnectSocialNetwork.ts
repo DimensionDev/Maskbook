@@ -8,7 +8,7 @@ export interface SocialNetworkProvider {
 }
 
 export function useConnectSocialNetwork() {
-    return useAsyncFn(async (provider: SocialNetworkProvider) => {
-        return Services.SocialNetwork.connectSocialNetwork(provider)
+    return useAsyncFn(async (identifier: string, provider: SocialNetworkProvider) => {
+        return Services.SocialNetwork.connectSocialNetwork(identifier, provider)
     })
 }
