@@ -1,6 +1,5 @@
 import { makeStyles, Typography, Button, Link, Divider, Box } from '@material-ui/core'
 import type { SetStateAction } from 'react'
-const test = makeStyles({})
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -10,7 +9,6 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: '0px 0px 3px 1px #ADADAD',
         marginRight: '10%',
         overflow: 'hidden',
-        transform: 'translateZ(1px)', // https://stackoverflow.com/a/63838447
         zIndex: 1,
     },
     topInfo: {

@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: '0px 0px 3px 1px #ADADAD',
         marginRight: '10%',
         overflow: 'hidden',
+        zIndex: 1,
     },
     topBox: {
         backgroundColor: '#f7f7f7',
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
         color: 'white',
     },
     bottomText: {
-        fontSize: [12, '!important'],
+        fontSize: '12 px !important',
         color: 'black',
     },
     divider: {
