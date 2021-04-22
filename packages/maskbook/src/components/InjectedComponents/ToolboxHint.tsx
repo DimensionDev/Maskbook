@@ -3,11 +3,12 @@ import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIc
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
 import { useMenu } from '../../utils/hooks/useMenu'
-import { useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import { MaskMessage } from '../../utils/messages'
 import { RedPacketCompositionEntry } from '../../plugins/RedPacket/define'
 import { FileServiceCompositionEntry } from '../../plugins/FileService/UI-define'
 import { ITO_CompositionEntry } from '../../plugins/ITO/define'
+import { useControlledDialog } from '../../plugins/Collectible/UI/useControlledDialog'
 import { useAccount } from '../../web3/hooks/useAccount'
 import { useRemoteControlledDialog, useRemoteControlledDialogEvent } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
@@ -181,9 +182,11 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Claim All ITO
-    const [isClaimAllDialogOpen, setClaimAllDialogOpen] = useState(false)
-    const onClaimAllDialogOpen = useCallback(() => setClaimAllDialogOpen(true), [setClaimAllDialogOpen])
-    const onClaimAllDialogClose = useCallback(() => setClaimAllDialogOpen(false), [setClaimAllDialogOpen])
+    const {
+        open: isClaimAllDialogOpen,
+        onOpen: onClaimAllDialogOpen,
+        onClose: onClaimAllDialogClose,
+    } = useControlledDialog()
     //#endregion
 
     const [menu, openMenu] = useMenu(

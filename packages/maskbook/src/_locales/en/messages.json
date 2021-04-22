@@ -499,7 +499,7 @@
     "plugin_ito_list_table_price": "Swap Ratio",
     "plugin_ito_list_table_claimable_total_amount": "Amount",
     "plugin_ito_list_table_claimable_token": "Claimable Token",
-    "plugin_ito_no_claimable_token": "You have no token claimable",
+    "plugin_ito_no_claimable_token": "You have no token claimable.",
     "plugin_ito_list_table_sold": "Swapped",
     "plugin_ito_list_table_got": "Balance",
     "plugin_ito_list_button_send": "Send",

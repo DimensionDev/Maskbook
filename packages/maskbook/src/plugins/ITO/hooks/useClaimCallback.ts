@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import stringify from 'json-stable-stringify'
 import type { TransactionReceipt } from 'web3-core'
 import type { Tx } from '@dimensiondev/contracts/types/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
@@ -81,7 +82,7 @@ export function useClaimCallback(pids: string[]) {
                 reject(error)
             })
         })
-    }, [account, chainId, ITO_Contract, pids])
+    }, [account, chainId, ITO_Contract, stringify(pids)])
 
     const resetCallback = useCallback(() => {
         setClaimState({
