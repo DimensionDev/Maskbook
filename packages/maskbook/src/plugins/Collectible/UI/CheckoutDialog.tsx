@@ -110,7 +110,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                                 <UnreviewedWarning />
                             </Box>
                         )}
-                        <Box sx={{ padding: 2, paddingBottom: 0 }}>
+                        <Box sx={{ padding: 2 }}>
                             <CheckoutOrder asset={asset} />
                             {isVerified ? null : (
                                 <>
