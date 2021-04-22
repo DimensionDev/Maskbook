@@ -10,7 +10,7 @@ import { unreachable } from '../../../utils/utils'
 import { toDate, toRaribleImage, toTokenDetailed, toTokenIdentifier } from '../helpers'
 import { OpenSeaAccountURL } from '../constants'
 import { resolveRaribleUserNetwork } from '../pipes'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { isSameAddress } from '../../../web3/helpers'
 import { useConstant } from '../../../web3/hooks/useConstant'
@@ -77,7 +77,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     offer_payment_tokens: uniqBy(
                         openSeaResponse.collection.payment_tokens.map((x) => toTokenDetailed(chainId, x)),
                         (x) => x.address.toLowerCase(),
-                    ),
+                    ).filter((x) => x.type === EthereumTokenType.ERC20),
                     order_: desktopOrder,
                     response_: openSeaResponse,
                 }

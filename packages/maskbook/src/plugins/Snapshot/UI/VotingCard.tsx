@@ -71,6 +71,7 @@ export function VotingCard() {
         <SnapshotCard title={t('plugin_snapshot_vote_title')}>
             {choices.map((choiceText, i) => (
                 <Button
+                    key={i}
                     onClick={() => setChoice(i + 1)}
                     className={classNames([
                         classes.button,

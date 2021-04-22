@@ -12,6 +12,8 @@ import {
     Typography,
     Link,
 } from '@material-ui/core'
+import { first } from 'lodash-es'
+import { useSnackbar } from 'notistack'
 import BigNumber from 'bignumber.js'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
@@ -28,7 +30,6 @@ import { ChainState } from '../../../web3/state/useChainState'
 import { toAsset, toUnixTimestamp } from '../helpers'
 import { useRemoteControlledDialogEvent } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
-import { first } from 'lodash-es'
 import { isETH } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
@@ -74,6 +75,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const { t } = useI18N()
     const classes = useStyles()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { account } = ChainState.useContainer()
 
@@ -88,18 +90,26 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.Ether && token.value.type !== EthereumTokenType.ERC20) return
-        await PluginCollectibleRPC.createBuyOrder({
-            asset: toAsset({
-                tokenId: asset.value.token_id,
-                tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract.schemaName,
-            }),
-            accountAddress: account,
-            startAmount: Number.parseFloat(amount),
-            expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
-            paymentTokenAddress: token.value.type === EthereumTokenType.Ether ? undefined : token.value.address,
-        })
-    }, [asset?.value, token, account, amount, expirationDateTime, isAuction])
+        try {
+            await PluginCollectibleRPC.createBuyOrder({
+                asset: toAsset({
+                    tokenId: asset.value.token_id,
+                    tokenAddress: asset.value.token_address,
+                    schemaName: asset.value.asset_contract.schemaName,
+                }),
+                accountAddress: account,
+                startAmount: Number.parseFloat(amount),
+                expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
+                paymentTokenAddress: token.value.type === EthereumTokenType.Ether ? undefined : token.value.address,
+            })
+        } catch (e) {
+            enqueueSnackbar(e.message, {
+                variant: 'error',
+                preventDuplicate: true,
+            })
+            throw e
+        }
+    }, [asset?.value, token, account, amount, expirationDateTime, isAuction, enqueueSnackbar])
 
     const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
 
@@ -109,12 +119,15 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     }, [open])
 
     const validationMessage = useMemo(() => {
-        if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
+        const amount_ = new BigNumber(amount || '0')
+        const balance_ = new BigNumber(balance.value ?? '0')
+        if (amount_.isZero()) return 'Enter a price'
+        if (balance_.isZero() || amount_.isGreaterThan(balance_)) return 'Insufficent balance'
         if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid expiration date'
         if (!isVerified && !unreviewedChecked) return 'Please ensure unreviewed item'
         if (!isVerified && !ToS_Checked) return 'Please check ToS document'
         return ''
-    }, [amount, expirationDateTime, isVerified, isAuction, unreviewedChecked, ToS_Checked])
+    }, [amount, balance.value, expirationDateTime, isVerified, isAuction, unreviewedChecked, ToS_Checked])
 
     if (!asset?.value) return null
     return (

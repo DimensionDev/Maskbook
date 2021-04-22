@@ -1,6 +1,7 @@
 import { ChangeEvent, useState, useMemo, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
+import { useSnackbar } from 'notistack'
 import {
     createStyles,
     makeStyles,
@@ -66,6 +67,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
 
     const { t } = useI18N()
     const classes = useStyles()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { account } = ChainState.useContainer()
 
@@ -91,18 +93,26 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.Ether && token.value.type !== EthereumTokenType.ERC20) return
-        await PluginCollectibleRPC.createSellOrder({
-            asset: toAsset({
-                tokenId: asset.value.token_id,
-                tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract.schemaName,
-            }),
-            accountAddress: account,
-            startAmount: Number.parseFloat(amount),
-            endAmount: endingPriceChecked && endingAmount ? Number.parseFloat(endingAmount) : undefined,
-            listingTime: futureTimeChecked ? toUnixTimestamp(scheduleDateTime) : undefined,
-            buyerAddress: privacyChecked ? buyerAddress : undefined,
-        })
+        try {
+            await PluginCollectibleRPC.createSellOrder({
+                asset: toAsset({
+                    tokenId: asset.value.token_id,
+                    tokenAddress: asset.value.token_address,
+                    schemaName: asset.value.asset_contract.schemaName,
+                }),
+                accountAddress: account,
+                startAmount: Number.parseFloat(amount),
+                endAmount: endingPriceChecked && endingAmount ? Number.parseFloat(endingAmount) : undefined,
+                listingTime: futureTimeChecked ? toUnixTimestamp(scheduleDateTime) : undefined,
+                buyerAddress: privacyChecked ? buyerAddress : undefined,
+            })
+        } catch (e) {
+            enqueueSnackbar(e.message, {
+                variant: 'error',
+                preventDuplicate: true,
+            })
+            throw e
+        }
     }, [
         asset?.value,
         token,
@@ -114,6 +124,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         endingPriceChecked,
         futureTimeChecked,
         privacyChecked,
+        enqueueSnackbar,
     ])
 
     useEffect(() => {

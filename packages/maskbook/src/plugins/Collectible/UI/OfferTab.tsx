@@ -99,6 +99,14 @@ export function OfferTab() {
                         </TableCell>
                     </TableRow>
                 </TableBody>
+                <TableListPagination
+                    handlePrevClick={() => setOfferPage((prev) => prev - 1)}
+                    handleNextClick={() => setOfferPage((prev) => prev + 1)}
+                    prevDisabled={offerPage === 0}
+                    nextDisabled={dataSource.length < 10}
+                    page={offerPage}
+                    pageCount={10}
+                />
             </Table>
         )
 
