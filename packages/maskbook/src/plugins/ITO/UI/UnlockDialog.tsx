@@ -86,7 +86,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     )
     //#endregion
 
-    if (!tokens.length) return null
+    if (!tokens.length) return <Typography>No need to unlock any token on this ITO.</Typography>
 
     return (
         <div className={classes.root}>
