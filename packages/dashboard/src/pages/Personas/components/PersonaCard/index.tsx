@@ -1,24 +1,21 @@
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { useDashboardI18N } from '../../../../locales'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
-import classNames from 'classnames'
 import { SettingsIcon } from '@dimensiondev/icons'
 import { IconButton, MenuItem, Typography } from '@material-ui/core'
-import { useMenu } from '../../../../hooks/useMenu'
+import { useMenu } from '../../../../../../maskbook/src/utils/hooks/useMenu'
 import { PersonaLine } from '../PersonaLine'
+import type { Persona } from '../../../../../../maskbook/src/database'
+import type { PersonaProvider } from '../../settings'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         card: {
             borderRadius: Number(theme.shape.borderRadius) * 3,
-            backgroundColor: MaskColorVar.secondaryBackground,
+            backgroundColor: MaskColorVar.primaryBackground,
             display: 'flex',
             padding: theme.spacing(1.25),
             minWidth: 320,
-        },
-        active: {
-            backgroundColor: MaskColorVar.primaryBackground,
         },
         status: {
             width: 10,
@@ -47,34 +44,35 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface PersonaCardProps {
-    active: boolean
-    nickName?: string
-    providers: { userId?: string; internalName: string; network: string; connected: boolean; onAction?: () => void }[]
+    persona: Persona
+    active?: boolean
+    providers: PersonaProvider[]
+    onClick(): void
 }
 
-export const PersonaCard = memo(({ active, nickName, providers }: PersonaCardProps) => {
+export const PersonaCard = memo(({ persona, providers, active = false, onClick }: PersonaCardProps) => {
     const classes = useStyles()
-    const t = useDashboardI18N()
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
     const [menu, openMenu] = useMenu(
         [<MenuItem>Edit</MenuItem>, <MenuItem style={{ color: MaskColorVar.redMain }}>Delete</MenuItem>],
         false,
-        false,
+        {},
+        true,
     )
 
     return (
-        <div className={classNames(classes.card, { [classes.active]: active })}>
+        <div className={classes.card} onClick={onClick}>
             <div className={classes.status} style={{ backgroundColor: active ? '#77E0B5' : '#A6A9B6' }} />
             <div style={{ flex: 1 }}>
                 <div className={classes.header}>
-                    <Typography style={{ fontSize: 14 }}>{nickName}</Typography>
+                    <Typography style={{ fontSize: 14 }}>{persona.nickname}</Typography>
                     <IconButton onClick={openMenu} style={{ fontSize: 12, padding: 0 }}>
                         <SettingsIcon fontSize="inherit" style={{ fill: MaskColorVar.textPrimary }} />
                     </IconButton>
                 </div>
                 <div className={classes.content}>
                     {providers.map((provider) => {
-                        return <PersonaLine provider={provider} />
+                        return <PersonaLine key={provider.internalName} provider={provider} />
                     })}
                 </div>
             </div>

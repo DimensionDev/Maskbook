@@ -10,7 +10,6 @@ export default meta({
 export const PersonaCard = of({
     args: {
         active: false,
-        nickName: 'Yisiliu',
         providers: [
             {
                 internalName: 'twitter.com',

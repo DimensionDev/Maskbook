@@ -2,7 +2,6 @@ import { useAsyncFn } from 'react-use'
 import { Services } from '../../../API'
 
 export interface SocialNetworkProvider {
-    tabName: string
     internalName: string
     network: string
     connected: boolean

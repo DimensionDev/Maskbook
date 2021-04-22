@@ -6,8 +6,3 @@ export const [
     revalidateSocialNetworkUIs,
     definedSocialNetworkUIs,
 ] = createGlobalState(Services.SocialNetwork.getDefinedSocialNetworkUIs, () => () => {})
-
-export const [useMyPersonas, revalidateMyPersonas] = createGlobalState(
-    Services.SocialNetwork.getMyPersonas,
-    () => () => {},
-)

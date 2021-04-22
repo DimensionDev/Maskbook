@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) =>
 )
 export interface PersonaSetupProps {
     provider: {
-        tabName: string
         internalName: string
         network: string
         connected: boolean
@@ -48,7 +47,7 @@ export const PersonaSetup = memo(({ provider, onConnect }: PersonaSetupProps) =>
                 <LinkIcon color="primary" fontSize="inherit" style={{ fill: 'none' }} viewBox="0 0 36 36" />
             </div>
             <Typography variant="body2" sx={{ marginTop: 2.5, marginBottom: 2.5 }}>
-                {t.personas_setup_connect_tips({ type: provider.tabName })}
+                {t.personas_setup_connect_tips({ type: provider.internalName.replace('.com', '') })}
             </Typography>
             <Button className={classes.button} onClick={() => onConnect(provider)}>
                 {t.personas_setup_connect()}

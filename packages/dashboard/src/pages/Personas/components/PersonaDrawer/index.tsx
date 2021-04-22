@@ -1,8 +1,13 @@
-import { memo, PropsWithChildren } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { Drawer, makeStyles } from '@material-ui/core'
 import { PersonaState } from '../../hooks/usePersonaState'
 import { PersonaCard } from '../PersonaCard'
-
+import type { Persona } from '../../../../../../maskbook/src/database'
+import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import type { CurrentPersona, PersonaProvider } from '../../settings'
+import { useValueRef } from '../../../../../../maskbook/src/utils/hooks/useValueRef'
+import { currentPersonaSettings } from '../../settings'
+import stringify from 'json-stable-stringify'
 const useStyles = makeStyles((theme) => ({
     root: {
         top: `64px !important`,
@@ -10,19 +15,33 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         top: `64px`,
         padding: theme.spacing(3.75, 3.75, 0, 3.75),
+        background: MaskColorVar.suspensionBackground,
         '& > *': {
             marginTop: theme.spacing(1.5),
         },
     },
 }))
 
-export interface PersonaDrawer extends PropsWithChildren<{}> {}
+export interface PersonaDrawer {
+    personas: {
+        persona: Persona
+        providers: PersonaProvider[]
+    }[]
+}
 
-export const PersonaDrawer = memo<PersonaDrawer>(({ children }) => {
+export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
     const classes = useStyles()
-    const { personas, drawerOpen, toggleDrawer } = PersonaState.useContainer()
+    const { drawerOpen, toggleDrawer } = PersonaState.useContainer()
+    const currentPersonaRef = useValueRef(currentPersonaSettings)
 
-    console.log(personas)
+    const currentPersonIdentifier = useMemo(() => {
+        return (JSON.parse(currentPersonaRef) as CurrentPersona)?.identifier ?? ''
+    }, [currentPersonaRef])
+
+    const onPersonaCardClick = useCallback((persona) => {
+        currentPersonaSettings.value = stringify(persona)
+    }, [])
+
     return (
         <Drawer
             anchor="right"
@@ -32,28 +51,18 @@ export const PersonaDrawer = memo<PersonaDrawer>(({ children }) => {
             hideBackdrop
             elevation={0}
             classes={classes}>
-            <PersonaCard
-                active={false}
-                nickName="Yisiliu"
-                providers={[
-                    {
-                        internalName: 'twitter.com',
-                        connected: false,
-                        network: 'twitter.com',
-                    },
-                ]}
-            />
-            <PersonaCard
-                active={true}
-                nickName="Yisiliu"
-                providers={[
-                    {
-                        internalName: 'twitter.com',
-                        connected: true,
-                        network: 'twitter.com',
-                    },
-                ]}
-            />
+            {personas.map((item) => {
+                const { persona, providers } = item
+                return (
+                    <PersonaCard
+                        active={persona.identifier.toText() === currentPersonIdentifier}
+                        key={persona.identifier.toText()}
+                        persona={persona}
+                        providers={providers}
+                        onClick={() => onPersonaCardClick(item)}
+                    />
+                )
+            })}
         </Drawer>
     )
 })
