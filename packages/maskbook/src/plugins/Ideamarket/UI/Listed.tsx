@@ -94,13 +94,6 @@ export default function Listed(props: ListedProps) {
             <div className={classes.topInfo}>
                 <Box className={classes.topBox}>
                     <Typography className={classes.topText}>
-                        <b>{props.rank}</b>
-                    </Typography>
-                    <Typography className={classes.rankText}>Rank</Typography>
-                </Box>
-                <Divider orientation="vertical" className={classes.divider} />
-                <Box className={classes.topBox}>
-                    <Typography className={classes.topText}>
                         <b>${props.price}</b>
                     </Typography>
                     <Typography className={classes.priceText} style={{ color: isPositive ? 'green' : 'red' }}>
@@ -108,20 +101,19 @@ export default function Listed(props: ListedProps) {
                         {props.dayChange}
                     </Typography>
                 </Box>
+                <Divider orientation="vertical" className={classes.divider} />
+                <Box display="flex" sx={{ backgroundColor: '#f7f7f7' }} justifyContent="center">
+                    <Link
+                        href={`https://ideamarket.io/i/twitter/${props.username}`}
+                        target="_blank"
+                        rel="noopener"
+                        style={{ textDecoration: 'none' }}>
+                        <Button className={classes.listButton}>
+                            <Typography className={classes.buttonText}>Buy</Typography>
+                        </Button>
+                    </Link>
+                </Box>
             </div>
-
-            <Divider className={classes.divider} />
-            <Box display="flex" sx={{ backgroundColor: '#f7f7f7' }} justifyContent="center">
-                <Link
-                    href={`https://ideamarket.io/i/twitter/${props.username}`}
-                    target="_blank"
-                    rel="noopener"
-                    style={{ textDecoration: 'none' }}>
-                    <Button className={classes.listButton}>
-                        <Typography className={classes.buttonText}>Buy</Typography>
-                    </Button>
-                </Link>
-            </Box>
         </div>
     )
 }

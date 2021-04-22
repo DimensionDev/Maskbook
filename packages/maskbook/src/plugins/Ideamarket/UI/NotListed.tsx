@@ -1,4 +1,4 @@
-import { makeStyles, Typography, Button, Link, Divider, Box } from '@material-ui/core'
+import { makeStyles, Typography, Button, Link, Box } from '@material-ui/core'
 import type { UIProps } from '../types'
 
 const useStyles = makeStyles((theme) => ({
@@ -50,12 +50,6 @@ export default function NotListed(props: UIProps) {
                     props.setExtendedHover(false)
                 }, 200)
             }>
-            <Box className={classes.topBox} display="flex" justifyContent="center">
-                <Typography className={classes.topText}>
-                    <b>Unlisted</b>
-                </Typography>
-            </Box>
-            <Divider className={classes.divider} />
             <Box display="flex" bgcolor="#f7f7f7" justifyContent="center">
                 <Link href="https://ideamarket.io/" target="_blank" rel="noopener" style={{ textDecoration: 'none' }}>
                     <Button onClick="window.open('https://ideamarket.io/')" className={classes.listButton}>
