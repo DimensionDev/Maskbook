@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '10px',
         margin: theme.spacing(1),
         width: '53%',
+        '&:hover': {
+            backgroundColor: '#415bc3',
+        },
     },
     topText: {
         margin: theme.spacing(1),
