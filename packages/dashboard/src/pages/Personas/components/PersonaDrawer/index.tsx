@@ -1,6 +1,6 @@
 import { memo, PropsWithChildren } from 'react'
 import { Drawer, makeStyles } from '@material-ui/core'
-import { PersonaDrawerState } from '../../../../hooks/usePersonaDrawerState'
+import { PersonaState } from '../../hooks/usePersonaState'
 import { PersonaCard } from '../PersonaCard'
 
 const useStyles = makeStyles((theme) => ({
@@ -20,11 +20,13 @@ export interface PersonaDrawer extends PropsWithChildren<{}> {}
 
 export const PersonaDrawer = memo<PersonaDrawer>(({ children }) => {
     const classes = useStyles()
-    const { open, toggleDrawer } = PersonaDrawerState.useContainer()
+    const { personas, drawerOpen, toggleDrawer } = PersonaState.useContainer()
+
+    console.log(personas)
     return (
         <Drawer
             anchor="right"
-            open={open}
+            open={drawerOpen}
             onClose={toggleDrawer}
             variant="temporary"
             hideBackdrop

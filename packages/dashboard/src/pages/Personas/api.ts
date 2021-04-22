@@ -11,5 +11,3 @@ export const [useMyPersonas, revalidateMyPersonas] = createGlobalState(
     Services.SocialNetwork.getMyPersonas,
     () => () => {},
 )
-
-// export const [connectSocialNetwork] = createGlobalState(Services.SocialNetwork.connectSocialNetwork, () => () => {})

@@ -10,7 +10,7 @@ export const getDefinedSocialNetworkUIs = async () => {
 }
 
 export const getMyPersonas = async () => {
-    return independentRef.myPersonasRef
+    return independentRef.myPersonasRef.value
 }
 
 interface SocialNetworkProvider {

@@ -5,12 +5,12 @@ import { makeStyles } from '@material-ui/core/styles'
 import { capitalize, compact } from 'lodash-es'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { PersonaSetup } from './components/PersonaSetup'
-import { useDefinedSocialNetworkUIs } from './api'
+import { useDefinedSocialNetworkUIs, useMyPersonas } from './api'
 import { useConnectSocialNetwork } from './hooks/useConnectSocialNetwork'
 import { AuthorIcon } from '@dimensiondev/icons'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { PersonaDrawer } from './components/PersonaDrawer'
-import { PersonaDrawerState } from '../../hooks/usePersonaDrawerState'
+import { PersonaState } from './hooks/usePersonaState'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -33,6 +33,8 @@ export default function Personas() {
     const classes = useStyles()
 
     const definedSocialNetworkUIs = useDefinedSocialNetworkUIs()
+    const myPersonas = useMyPersonas()
+
     const providers = compact(
         [...definedSocialNetworkUIs.values()].map((item) => {
             if (item.networkIdentifier === 'localhost') return null!
@@ -53,7 +55,7 @@ export default function Personas() {
     )
 
     const [connectState, onConnect] = useConnectSocialNetwork()
-    const { toggleDrawer } = PersonaDrawerState.useContainer()
+    const { toggleDrawer } = PersonaState.useContainer()
     return (
         <PageFrame
             title="Personas"

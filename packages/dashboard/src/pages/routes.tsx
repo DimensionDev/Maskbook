@@ -1,6 +1,6 @@
 import { Route, Switch, Redirect } from 'react-router'
 import React, { lazy, Suspense } from 'react'
-import { PersonaDrawerState } from '../hooks/usePersonaDrawerState'
+import { PersonaState } from './Personas/hooks/usePersonaState'
 import { DashboardFrame } from '../components/DashboardFrame'
 export enum Routes {
     Welcome = '/welcome',
@@ -26,7 +26,7 @@ export function Pages() {
                 <Route path={Routes.Welcome} children={<Welcome />} />
                 <Route
                     path={Routes.Personas}
-                    children={<PersonaDrawerState.Provider>{frame(<Personas />)}</PersonaDrawerState.Provider>}
+                    children={<PersonaState.Provider>{frame(<Personas />)}</PersonaState.Provider>}
                     exact
                 />
                 <Route path={Routes.Wallets} children={frame(<Wallets />)} />
