@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
         color: 'black',
     },
     divider: {
-        borderColor: 'black',
+        borderColor: '#ABABAB',
         height: 'auto',
     },
 }))
