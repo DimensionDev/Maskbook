@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
 import { createContainer } from 'unstated-next'
 import { OrderSide } from 'opensea-js/lib/types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
@@ -7,7 +8,6 @@ import { CollectibleTab, CollectibleToken } from '../types'
 import { useAsset } from './useAsset'
 import { useOrders } from './useOrders'
 import { useEvents } from './useEvents'
-import { useUpdateEffect } from 'react-use'
 
 function useCollectibleState(token?: CollectibleToken) {
     const [tabIndex, setTabIndex] = useState(CollectibleTab.ARTICLE)
@@ -15,9 +15,12 @@ function useCollectibleState(token?: CollectibleToken) {
     const provider = useValueRef(currentCollectibleProviderSettings)
     const asset = useAsset(provider, token)
 
+    //#region offers
     const [offerPage, setOfferPage] = useState(0)
     const offers = useOrders(provider, tabIndex === CollectibleTab.OFFER ? token : undefined, OrderSide.Buy, offerPage)
+    //#endregion
 
+    //#region orders
     const [orderPage, setOrderPage] = useState(0)
     const orders = useOrders(
         provider,
@@ -25,7 +28,9 @@ function useCollectibleState(token?: CollectibleToken) {
         OrderSide.Sell,
         orderPage,
     )
+    //#endregion
 
+    //#reguin events
     const [eventPage, setEventPage] = useState(0)
     const cursors = useRef<string[]>([])
     const events = useEvents(
@@ -43,6 +48,7 @@ function useCollectibleState(token?: CollectibleToken) {
             cursors.current.push(events.value.pageInfo.endCursor)
         }
     }, [events, cursors])
+    //#endregion
 
     if (process.env.NODE_ENV === 'development') {
         console.log('DEBUG: collectible')
