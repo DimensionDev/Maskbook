@@ -119,7 +119,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         setClaimTransactionDialogOpen({
             open: true,
             state: claimState,
-            summary: `Claiming all tokens.`,
+            summary: 'Claiming all tokens.',
         })
     }, [claimState /* update tx dialog only if state changed */])
 
