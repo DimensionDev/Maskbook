@@ -4,3 +4,5 @@ import './instagram.com'
 
 import './options-page'
 import './popup-page'
+
+export * from './utils'
