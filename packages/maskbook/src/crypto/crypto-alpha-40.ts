@@ -299,11 +299,11 @@ export async function encryptComment(
 ) {
     if (typeof postIV !== 'string') postIV = encodeArrayBuffer(postIV)
     if (typeof postContent !== 'string') postContent = decodeText(postContent)
-    const key = await getCommentKey(postIV, postContent)
+    const key = await getCommentKey(postIV as string, postContent as string)
     const x = await encryptWithAES({
         content: comment,
         aesKey: key,
-        iv: decodeArrayBuffer(postIV),
+        iv: decodeArrayBuffer(postIV as string),
     })
     return `🎶2/4|${encodeArrayBuffer(x.content)}:||`
 }
@@ -315,13 +315,13 @@ export async function decryptComment(
     if (typeof postIV !== 'string') postIV = encodeArrayBuffer(postIV)
     if (typeof postContent !== 'string') postContent = decodeText(postContent)
     if (typeof encryptComment !== 'string') encryptComment = decodeText(encryptComment)
-    const payload = extractCommentPayload(encryptComment)
+    const payload = extractCommentPayload(encryptComment as string)
     if (!payload) return null
-    const key = await getCommentKey(postIV, postContent)
+    const key = await getCommentKey(postIV as string, postContent as string)
     try {
         const x = await decryptWithAES({
             aesKey: key,
-            iv: decodeArrayBuffer(postIV),
+            iv: decodeArrayBuffer(postIV as string),
             encrypted: payload,
         })
         return decodeText(x)

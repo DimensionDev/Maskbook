@@ -1,11 +1,18 @@
 import { makeStyles } from '@material-ui/core'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemarkable } from '../hooks/useRemarkable'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        fontSize: 14,
-        color: theme.palette.text.primary,
+        color: 'inherit',
+        fontSize: 'inherit',
         fontFamily: 'sans-serif',
+        '& p': {
+            margin: 0,
+        },
+        '& p + p': {
+            marginTop: theme.spacing(0.5),
+        },
         '& h1, & h2, & h3, & h4, & h5, & h6': {
             fontSize: 14,
         },
@@ -18,12 +25,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface MarkdownProps {
+export interface MarkdownProps extends withClasses<'root'> {
     content: string
 }
 
 export function Markdown(props: MarkdownProps) {
-    const classes = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
     const html = useRemarkable(props.content)
     return <div dangerouslySetInnerHTML={{ __html: html }} className={classes.root}></div>
 }

@@ -8,11 +8,12 @@ export interface PostInspectorProps {
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    const { chain_id, pid, password } = props.payload
+    const { chain_id, pid, password, regions } = props.payload
+
     return (
         <EthereumChainBoundary chainId={chain_id}>
             <ITO_LoadingFail retryPoolPayload={poolPayloadErrorRetry}>
-                <ITO pid={pid} password={password} />
+                <ITO pid={pid} password={password} regions={regions} />
             </ITO_LoadingFail>
         </EthereumChainBoundary>
     )

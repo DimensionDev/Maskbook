@@ -27,10 +27,11 @@ import { EthereumMessages } from '../../../Ethereum/messages'
 import Services from '../../../../extension/service'
 import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
-import { useChainId } from '../../../../web3/hooks/useChainState'
+import { useChainId } from '../../../../web3/hooks/useBlockNumber'
 import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
 import { PluginTraderRPC } from '../../messages'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
+import { isEtherWrapper } from '../../helpers'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -53,13 +54,13 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface TraderProps extends withClasses<never> {
-    coin: Coin
-    tokenDetailed: ERC20TokenDetailed | EtherTokenDetailed | undefined
+    coin?: Coin
+    tokenDetailed?: ERC20TokenDetailed | EtherTokenDetailed
 }
 
 export function Trader(props: TraderProps) {
     const { coin, tokenDetailed } = props
-    const { decimals } = tokenDetailed ?? coin
+    const { decimals } = tokenDetailed ?? coin ?? {}
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -75,12 +76,12 @@ export function Trader(props: TraderProps) {
     useEffect(() => {
         dispatchTradeStore({
             type: TradeActionType.UPDATE_INPUT_TOKEN,
-            token: chainId === ChainId.Mainnet && coin.is_mirrored ? UST : createEtherToken(chainId),
+            token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST : createEtherToken(chainId),
         })
         dispatchTradeStore({
             type: TradeActionType.UPDATE_OUTPUT_TOKEN,
-            token: coin.eth_address
-                ? createERC20Token(chainId, coin.eth_address!, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
+            token: coin?.eth_address
+                ? createERC20Token(chainId, coin.eth_address, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
                 : undefined,
         })
     }, [coin, chainId, decimals])
@@ -278,6 +279,14 @@ export function Trader(props: TraderProps) {
     }, [tradeState /* update tx dialog only if state changed */])
     //#endregion
 
+    //#region swap callback
+    const onSwap = useCallback(() => {
+        // no need to open the confirmation dialog if it (un)wraps ether
+        if (trade && isEtherWrapper(trade)) tradeCallback()
+        else setOpenConfirmDialog(true)
+    }, [trade])
+    //#endregion
+
     return (
         <div className={classes.root}>
             <TradeForm
@@ -296,9 +305,9 @@ export function Trader(props: TraderProps) {
                 onReverseClick={onReverseClick}
                 onRefreshClick={onRefreshClick}
                 onTokenChipClick={onTokenChipClick}
-                onSwap={() => setOpenConfirmDialog(true)}
+                onSwap={onSwap}
             />
-            {trade && inputToken && outputToken ? (
+            {trade && !isEtherWrapper(trade) && inputToken && outputToken ? (
                 <>
                     <ConfirmDialog
                         open={openConfirmDialog}

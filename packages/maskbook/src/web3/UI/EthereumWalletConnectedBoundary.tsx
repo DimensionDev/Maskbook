@@ -10,7 +10,7 @@ import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlled
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useAccount } from '../hooks/useAccount'
-import { useChainIdValid } from '../hooks/useChainState'
+import { useChainIdValid } from '../hooks/useBlockNumber'
 import { useEtherTokenBalance } from '../hooks/useEtherTokenBalance'
 import { ProviderType } from '../types'
 import { useStylesExtends } from '../../components/custom-ui-helper'
@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface EthereumWalletConnectedBoundaryProps extends withClasses<'connectWallet' | 'unlockMetaMask'> {
+    offChain?: boolean
     children?: React.ReactNode
     offChain?: boolean
 }
@@ -36,9 +37,12 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     const account = useAccount()
     const chainIdValid = useChainIdValid()
-    const { value: etherBalance = '0', error: etherBalanceError, retry: retryEtherBalance } = useEtherTokenBalance(
-        account,
-    )
+    const {
+        value: etherBalance = '0',
+        loading: etherBalanceLoading,
+        error: etherBalanceError,
+        retry: retryEtherBalance,
+    } = useEtherTokenBalance(account)
 
     //#region remote controlled select provider dialog
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
@@ -99,6 +103,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                 </ActionButton>
             </Grid>
         )
+
     if (!chainIdValid)
         return (
             <Grid container>

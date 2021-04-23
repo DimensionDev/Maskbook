@@ -13,9 +13,8 @@ import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSucc
 import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwaiting'
 import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
-import { usePostInfoDetails } from '../../DataSource/usePostInfo'
+import { usePostClaimedAuthor, usePostInfoDetails, usePostInfoSharedPublic } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { Err, Ok } from 'ts-results'
 import { or } from '../../custom-ui-helper'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 import type { Payload } from '../../../utils/type-transform/Payload'
@@ -64,9 +63,7 @@ export interface DecryptPostProps {
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
     const deconstructedPayload = usePostInfoDetails('postPayload')
-    const authorInPayload = deconstructedPayload
-        .andThen((x) => (x.version === -38 ? Ok(x.authorUserID) : Err.EMPTY))
-        .unwrapOr(undefined)
+    const authorInPayload = usePostClaimedAuthor()
     const current = usePostInfo()
     const currentPostBy = usePostInfoDetails('postBy')
     const decryptedPayloadForImage = usePostInfoDetails('decryptedPayloadForImage')
@@ -98,9 +95,7 @@ export function DecryptPost(props: DecryptPostProps) {
     // pass 1:
     // decrypt post content and image attachments
     const decryptedPayloadForImageAlpha38 = decryptedPayloadForImage?.version === -38 ? decryptedPayloadForImage : null
-    const sharedPublic =
-        deconstructedPayload.andThen((x) => (x.version === -38 ? Ok(!!x.sharedPublic) : Err.EMPTY)).unwrapOr(false) ||
-        decryptedPayloadForImageAlpha38?.sharedPublic
+    const sharedPublic = usePostInfoSharedPublic() || decryptedPayloadForImageAlpha38?.sharedPublic
 
     useEffect(() => {
         const signal = new AbortController()

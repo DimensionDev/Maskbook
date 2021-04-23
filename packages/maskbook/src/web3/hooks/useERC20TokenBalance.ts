@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
-import { useChainId } from './useChainState'
+import { useChainId } from './useBlockNumber'
 
 /**
  * Fetch token balance from chain

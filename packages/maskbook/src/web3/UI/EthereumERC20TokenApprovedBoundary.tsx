@@ -83,21 +83,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     variant="contained"
                     size="large"
                     onClick={resetApproveCallback}>
-                    Failed to load {token.symbol ?? token.name ?? 'Token'}.
-                </ActionButton>
-            </Grid>
-        )
-    if (approveStateType === ApproveStateType.INSUFFICIENT_BALANCE)
-        return (
-            <Grid container>
-                <ActionButton
-                    className={classes.button}
-                    key="insufficent_balance"
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    disabled>
-                    {`Insufficent ${token.symbol ?? token.name ?? 'Token'} Balance`}
+                    Failed to load {token.symbol ?? token.name ?? 'Token'}. Click to retry.
                 </ActionButton>
             </Grid>
         )

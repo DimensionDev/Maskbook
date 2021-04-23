@@ -17,6 +17,8 @@ export const addressSocket = {
     socket: io(`${ZERION_API}/address`, {
         transports: ['websocket'],
         timeout: 60000,
+        reconnection: false,
+        reconnectionAttempts: 0,
         query: {
             api_token: ZERION_TOKEN,
         },

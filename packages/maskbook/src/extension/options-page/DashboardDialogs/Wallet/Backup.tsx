@@ -24,7 +24,7 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
         if (!wallet) return
         const { privateKeyInHex } = wallet._private_key_
             ? await WalletRPC.recoverWalletFromPrivateKey(wallet._private_key_)
-            : await WalletRPC.recoverWallet(wallet.mnemonic, wallet.passphrase)
+            : await WalletRPC.recoverWalletFromMnemonicWords(wallet.mnemonic, wallet.passphrase)
         return privateKeyInHex
     }, [wallet])
 

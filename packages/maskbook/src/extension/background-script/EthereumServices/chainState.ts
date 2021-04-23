@@ -8,7 +8,7 @@ import {
     currentSelectedWalletProviderSettings,
 } from '../../../plugins/Wallet/settings'
 import {
-    currentChainStateSettings,
+    currentBlockNumnberStateSettings,
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
     currentWalletConnectChainIdSettings,
@@ -27,7 +27,7 @@ export const updateChainState = debounce(
     async () => {
         const wallets = await getWallets()
         const chainIds = uniq(await Promise.all(wallets.map((x) => getChainId(x.address))))
-        currentChainStateSettings.value = stringify(
+        currentBlockNumnberStateSettings.value = stringify(
             await Promise.all(
                 chainIds.map(async (chainId) => ({
                     chainId,

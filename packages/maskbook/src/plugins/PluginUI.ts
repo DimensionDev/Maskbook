@@ -15,9 +15,9 @@ import { FileServicePluginDefine } from './FileService/UI-define'
 import { TraderPluginDefine } from './Trader/define'
 import { TransakPluginDefine } from './Transak/define'
 import { ITO_PluginDefine } from './ITO/define'
-import { NFT_PluginsDefine } from './NFT/define'
+// import { NFTPluginsDefine } from './NFT/define'
 import { AirdropPluginDefine } from './Airdrop/define'
-import { IdeamarketPluginDefine } from './Ideamarket/define'
+import { CollectiblesPluginDefine } from './Collectible/define'
 import { sideEffect } from '../utils/side-effects'
 import { VCentPluginDefine } from './VCent/define'
 import { SnapShotPluginDefine } from './Snapshot/define'
@@ -28,14 +28,14 @@ sideEffect.then(() => {
     plugins.add(RedPacketPluginDefine)
     plugins.add(FileServicePluginDefine)
     plugins.add(ITO_PluginDefine)
-    plugins.add(NFT_PluginsDefine)
+    // plugins.add(NFT_PluginsDefine)
     if (Flags.vcent_enabled) plugins.add(VCentPluginDefine)
     if (Flags.gitcoin_enabled) plugins.add(GitcoinPluginDefine)
     if (Flags.poll_enabled) plugins.add(PollsPluginDefine)
     if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
     if (Flags.transak_enabled) plugins.add(TransakPluginDefine)
     if (Flags.airdrop_enabled) plugins.add(AirdropPluginDefine)
-    if (Flags.ideamarket_enabled) plugins.add(IdeamarketPluginDefine)
     if (Flags.snapshot_enabled) plugins.add(SnapShotPluginDefine)
+    if (Flags.collectibles_enabled) plugins.add(CollectiblesPluginDefine)
     if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)
 })
