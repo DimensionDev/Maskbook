@@ -1,5 +1,3 @@
-import { createStyles, makeStyles } from '@material-ui/core'
-import type { FC } from 'react'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { Flags } from '../../../utils/flags'
@@ -14,36 +12,11 @@ function getShadowRoot(node: HTMLElement) {
     return dom
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        wrapper: {
-            paddingRight: 21,
-            paddingLeft: 21,
-            paddingBottom: 16,
-        },
-    }),
-)
-
-const ActivityContentWrapper: FC<any> = ({ children }) => {
-    const classes = useStyles()
-
-    return <div className={classes.wrapper}>{children}</div>
-}
-
 export function injectPostInspectorAtMinds(signal: AbortSignal, current: PostInfo) {
     return injectPostInspectorDefault({
-        zipPost(node) {
-            zipEncryptedPostContent(current.rootNodeProxy.current.parentElement!)
-        },
         render(jsx, postInfo) {
             const root = createReactRootShadowed(getShadowRoot(postInfo.postContentNode!), { signal })
-
-            // Do not put non encrypted messages in the wrapper. Maybe there's a better solution?
-            if (postInfo.postPayload.value.ok) {
-                root.render(<ActivityContentWrapper>{jsx}</ActivityContentWrapper>)
-            } else {
-                root.render(jsx)
-            }
+            root.render(jsx)
             return root.destory
         },
     })(current, signal)

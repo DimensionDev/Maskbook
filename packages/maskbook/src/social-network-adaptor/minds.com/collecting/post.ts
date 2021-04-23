@@ -29,6 +29,9 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
         new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
             const root = new LiveSelector().replace(() => [metadata.realCurrent]).closest('m-activity')
 
+            const messageWrapper = metadata.current.querySelector<HTMLDivElement>('m-activity__content .m-activityContent__messageWrapper')
+            const isImage = metadata.current.querySelector<HTMLDivElement>('m-activity__content .m-activityContent__media--image')
+            const descriptionWrapper = metadata.current.querySelector<HTMLDivElement>('m-activity__content .m-activityContent__mediaDescription .m-activityContent__descriptionWrapper')
             const postContentNode = metadata.current.querySelector<HTMLDivElement>('m-activity__content')
 
             // ? inject after comments
@@ -44,7 +47,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 commentsSelector = commentSelector
                 commentBoxSelector = commentBoxSelector
                 rootNodeProxy = metadata
-                postContentNode = postContentNode!
+                postContentNode = (isImage ? descriptionWrapper : messageWrapper) || postContentNode!
 
                 get rootNode() {
                     return root.evaluate()[0]! as HTMLElement
