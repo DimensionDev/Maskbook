@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) =>
 export interface EthereumWalletConnectedBoundaryProps extends withClasses<'connectWallet' | 'unlockMetaMask'> {
     offChain?: boolean
     children?: React.ReactNode
-    offChain?: boolean
 }
 
 export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
