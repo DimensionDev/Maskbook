@@ -1,4 +1,3 @@
-// Please make sure you have registered your plugin service (if it need one) at ./PluginService
 import type { PluginConfig } from './types'
 
 const plugins = new Set<PluginConfig>()
@@ -21,6 +20,7 @@ import { CollectiblesPluginDefine } from './Collectible/define'
 import { sideEffect } from '../utils/side-effects'
 import { VCentPluginDefine } from './VCent/define'
 import { SnapShotPluginDefine } from './Snapshot/define'
+import { IdeamarketPluginDefine } from './Ideamarket/define'
 
 sideEffect.then(() => {
     plugins.add(EthereumPluginDefine)
@@ -37,5 +37,6 @@ sideEffect.then(() => {
     if (Flags.airdrop_enabled) plugins.add(AirdropPluginDefine)
     if (Flags.snapshot_enabled) plugins.add(SnapShotPluginDefine)
     if (Flags.collectibles_enabled) plugins.add(CollectiblesPluginDefine)
+    if (Flags.ideamarket_enabled) plugins.add(IdeamarketPluginDefine)
     if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)
 })

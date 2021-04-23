@@ -1,74 +1,5 @@
-import { makeStyles, Typography, Button, Divider, Box } from '@material-ui/core'
-import type { SetStateAction } from 'react'
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'block',
-        width: '160px',
-        borderRadius: '10px',
-        boxShadow: '0px 0px 3px 1px #ADADAD',
-        marginRight: '10%',
-        overflow: 'hidden',
-        zIndex: 1,
-    },
-    topInfo: {
-        display: 'flex',
-    },
-
-    topText: {
-        marginTop: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        marginLeft: theme.spacing(1),
-        color: '#2946ba',
-    },
-
-    topBox: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '50%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#f7f7f7',
-    },
-
-    rankText: {
-        color: 'gray',
-        marginBottom: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        marginLeft: theme.spacing(1),
-        fontSize: 12,
-    },
-
-    priceText: {
-        marginBottom: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        marginLeft: theme.spacing(1),
-        fontSize: 13,
-    },
-
-    listButton: {
-        backgroundColor: '#2946ba',
-        borderRadius: '10px',
-        margin: theme.spacing(1),
-        width: '53%',
-        '&:hover': {
-            backgroundColor: '#415bc3',
-        },
-    },
-
-    buttonText: {
-        textTransform: 'none',
-        color: 'white',
-    },
-    bottomText: {
-        fontSize: '12px !important',
-        color: 'black',
-    },
-    divider: {
-        borderColor: '#ABABAB',
-        height: 'auto',
-    },
-}))
+import { Typography, Button, Box } from '@material-ui/core'
+import type { Dispatch, SetStateAction, SyntheticEvent } from 'react'
 
 interface ListedProps {
     username: string
@@ -79,41 +10,65 @@ interface ListedProps {
 }
 
 export default function Listed(props: ListedProps) {
-    const classes = useStyles()
-
-    const isPositive = props.dayChange >= 0
-
-    function clicked(e: MouseEvent) {
+    function clicked(e: SyntheticEvent<HTMLButtonElement>) {
         e.preventDefault()
         window.open(`https://ideamarket.io/i/twitter/${props.username}`, '_blank', 'noopener')
     }
 
     return (
-        <div
-            className={classes.root}
-            onMouseEnter={() => props.setExtendedHover(true)}
-            onMouseLeave={() =>
-                setTimeout(() => {
-                    props.setExtendedHover(false)
-                }, 200)
-            }>
-            <div className={classes.topInfo}>
-                <Box className={classes.topBox}>
-                    <Typography className={classes.topText}>
-                        <b>${props.price}</b>
-                    </Typography>
-                    <Typography className={classes.priceText} style={{ color: isPositive ? 'green' : 'red' }}>
-                        {isPositive ? '+' : null}
-                        {props.dayChange}
+        <Box
+            boxShadow="0px 0px 4px 1px rgba(0, 0, 0, 0.25)"
+            width={190}
+            height={59}
+            overflow="hidden"
+            zIndex={1}
+            boxSizing="border-box">
+            <Box
+                onMouseEnter={() => props.setExtendedHover(true)}
+                onMouseLeave={() =>
+                    setTimeout(() => {
+                        props.setExtendedHover(false)
+                    }, 200)
+                }
+                component="div"
+                boxSizing="border-box"
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                py={1.375}
+                px={3.25}
+                width="100%"
+                height="100%"
+                bgcolor="#F7F7F7"
+                borderRadius={0.8}
+                marginRight={'10%'}>
+                <Box
+                    component="div"
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    color="#58636B"
+                    width="50%">
+                    <Typography color="inherit" style={{ fontSize: '16px', lineHeight: '19px', fontFamily: 'Inter' }}>
+                        ${props.price}
                     </Typography>
                 </Box>
-                <Divider orientation="vertical" className={classes.divider} />
-                <Box display="flex" sx={{ backgroundColor: '#f7f7f7' }} justifyContent="center">
-                    <Button className={classes.listButton} onClick={clicked}>
-                        <Typography className={classes.buttonText}>Buy</Typography>
+                <Box component="div" display="flex" justifyContent="space-between" alignItems="center" width="50%">
+                    <Button
+                        style={{
+                            backgroundColor: '#3045B4',
+                            borderRadius: '12px',
+                            width: '70px',
+                            height: '37px',
+                        }}
+                        onClick={clicked}>
+                        <Typography
+                            style={{ color: '#EEEEEE', fontWeight: 'bold', fontSize: '16px', lineHeight: '19px' }}>
+                            Buy
+                        </Typography>
                     </Button>
                 </Box>
-            </div>
-        </div>
+            </Box>
+        </Box>
     )
 }
