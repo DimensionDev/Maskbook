@@ -273,7 +273,8 @@ export function ITO(props: ITO_Props) {
     const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
         chainId === payload.chain_id &&
-        payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase())
+        (payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase()) ||
+            tradeInfo?.buyInfo?.buyer.address.toLowerCase() === account.toLowerCase())
     const shareSuccessLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             t('plugin_ito_claim_success_share', {
