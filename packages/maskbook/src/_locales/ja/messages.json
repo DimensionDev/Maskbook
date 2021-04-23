@@ -610,6 +610,5 @@
     "wallet_import_json_keystore_password": "",
     "wallet_import_json_keystore_password_helper": "",
     "wallet_import_json_wallet_name": "",
-    "wallet_import_json_wallet_name_helper": "",
-    "wlalet_import_json_confirmation_hint": ""
+    "wallet_import_json_wallet_name_helper": ""
 }

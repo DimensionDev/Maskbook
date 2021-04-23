@@ -1,48 +1,66 @@
 import scrypt from 'scrypt-js'
-import * as crypto from 'crypto'
 import Web3Utils from 'web3-utils'
 
-export interface ScryptParams {
-    dklen: number
-    n: number
-    p: number
-    r: number
-    salt: string
-}
+export type KeyStore = KeyStore.Type
 
-export interface PDKDF2Params {
-    c: number
-    prf: string
-    dklen: number
-    salt: string
+declare namespace KeyStore {
+    type Type = AESCipher & KeyDerivation & { mac: string }
+
+    interface AESCipher {
+        cipher: 'aes-128-ctr' | 'aes-128-cbc'
+        cipherparams: AESCipherParams
+        ciphertext: string
+    }
+
+    interface AESCipherParams {
+        iv: string
+    }
+
+    type KeyDerivation = PBKDF2 | Scrypt
+
+    interface PBKDF2 {
+        kdf: 'pbkdf2'
+        kdfparams: PBKDF2Params
+    }
+
+    interface PBKDF2Params {
+        c: number
+        prf: 'hmac-sha256'
+        dklen: number
+        salt: string
+    }
+
+    interface Scrypt {
+        kdf: 'scrypt'
+        kdfparams: ScryptParams
+    }
+
+    interface ScryptParams {
+        n: number
+        p: number
+        r: number
+        dklen: number
+        salt: string
+    }
 }
 
 export interface V3Keystore {
-    crypto: {
-        cipher: string
-        ciphertext: string
-        cipherparams: {
-            iv: string
-        }
-        kdf: string
-        kdfparams: ScryptParams | PDKDF2Params
-        mac: string
-    }
+    crypto: KeyStore
     id: string
     version: number
     address: string
 }
 
 export async function fromV3Keystore(input: string | V3Keystore, password: string) {
-    const json: V3Keystore = typeof input === 'object' ? input : JSON.parse(input)
+    const json: V3Keystore = typeof input === 'object' ? input : (JSON.parse(input) as V3Keystore)
 
     if (json.version !== 3) {
         throw new Error('Not a V3 wallet')
     }
 
-    let derivedKey: Uint8Array, kdfparams: ScryptParams | PDKDF2Params
-    if (json.crypto.kdf.toLowerCase() === 'scrypt') {
-        kdfparams = json.crypto.kdfparams as ScryptParams
+    let derivedKey: Uint8Array, kdfparams: KeyStore.ScryptParams | KeyStore.PBKDF2Params
+    if (json.crypto.kdf === 'scrypt') {
+        kdfparams = json.crypto.kdfparams as KeyStore.ScryptParams
         derivedKey = scrypt.syncScrypt(
             Buffer.from(password),
             Buffer.from(kdfparams.salt, 'hex'),
@@ -51,17 +69,27 @@ export async function fromV3Keystore(input: string | V3Keystore, password: strin
             kdfparams.p,
             kdfparams.dklen,
         )
-    } else if (json.crypto.kdf.toLowerCase() === 'pbkdf2') {
-        kdfparams = json.crypto.kdfparams as PDKDF2Params
+    } else if (json.crypto.kdf === 'pbkdf2') {
+        kdfparams = json.crypto.kdfparams as KeyStore.PBKDF2Params
         if (kdfparams.prf !== 'hmac-sha256') {
             throw new Error('Unsupported parameters to PBKDF2')
         }
-        derivedKey = crypto.pbkdf2Sync(
-            Buffer.from(password),
-            Buffer.from(kdfparams.salt, 'hex'),
-            kdfparams.c,
-            kdfparams.dklen,
-            'sha256',
+
+        const key = await crypto.subtle.importKey('raw', Buffer.from(password), { name: 'PBKDF2' }, false, [
+            'deriveBits',
+        ])
+
+        derivedKey = Buffer.from(
+            await crypto.subtle.deriveBits(
+                {
+                    name: 'PBKDF2',
+                    salt: Buffer.from(kdfparams.salt, 'hex'),
+                    iterations: kdfparams.c,
+                    hash: 'SHA-256',
+                },
+                key,
+                256,
+            ),
         )
     } else {
         throw new Error('Unsupport key derivation scheme')
@@ -73,14 +101,43 @@ export async function fromV3Keystore(input: string | V3Keystore, password: strin
         throw new Error('Key derivation failed - possibly wrong passphrase')
     }
 
-    const decipher = crypto.createCipheriv(
+    const seed = await Decrypt(
         json.crypto.cipher,
-        derivedKey.slice(0, 16),
+        derivedKey,
+        Buffer.from(json.crypto.ciphertext, 'hex'),
         Buffer.from(json.crypto.cipherparams.iv, 'hex'),
     )
-    const seed = Buffer.concat([decipher.update(ciphertext), decipher.final()])
-    return { address: `0x${json.address}`, privateKey: `0x${seed.toString('hex')}` } as {
+    return { address: `0x${json.address}`, privateKey: `0x${seed}` } as {
         address: string
         privateKey: string
     }
+}
+
+async function Decrypt(cipher: string, derivedKey: Uint8Array, ciphertext: Uint8Array, iv: Uint8Array) {
+    const key = await crypto.subtle.importKey(
+        'raw',
+        derivedKey.slice(0, 16),
+        {
+            name: cipher === 'aes-128-ctr' ? 'AES-CTR' : 'AES-CBC',
+            length: 128,
+        },
+        false,
+        ['decrypt'],
+    )
+
+    const seed = await crypto.subtle.decrypt(
+        'aes-128-ctr'
+            ? {
+                  name: 'AES-CTR',
+                  counter: iv,
+                  length: 128,
+              }
+            : {
+                  name: 'AES-CBC',
+                  iv,
+              },
+        key,
+        ciphertext,
+    )
+    return Buffer.from(seed).toString('hex')
 }
