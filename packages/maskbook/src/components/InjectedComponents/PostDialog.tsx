@@ -463,6 +463,8 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
             sx={{
                 position: 'relative',
                 display: 'inline-flex',
+                marginLeft: 1,
+                marginRight: 1,
             }}>
             <CircularProgress
                 variant="determinate"

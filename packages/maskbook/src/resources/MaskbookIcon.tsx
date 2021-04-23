@@ -25,6 +25,24 @@ const MaskbookSmileFaceSharpSVG = ({ size = 20 }: { size?: number }) => (
     </svg>
 )
 
+const WalletSharpSVG = ({ size = 20 }: { size?: number }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="feather feather-alert-circle">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="14"></line>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+    </svg>
+)
+
 const MaskbookSmileFaceOutlinedSVG = (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 42 42">
         <path stroke="#fff" strokeWidth="3" d="M39.55 21a18.55 18.55 0 11-37.1 0 18.55 18.55 0 0137.1 0z" />
@@ -75,6 +93,17 @@ export function MaskbookSharpIconOfSize(props: MaskbookSharpIconOfSizeProps) {
     return (
         <SvgIcon {...props}>
             <MaskbookSmileFaceSharpSVG size={props.size} />
+        </SvgIcon>
+    )
+}
+
+interface WalletSharpProps extends SvgIconProps {
+    size: number
+}
+export function WalletSharp(props: WalletSharpProps) {
+    return (
+        <SvgIcon {...props}>
+            <WalletSharpSVG size={props.size} />
         </SvgIcon>
     )
 }

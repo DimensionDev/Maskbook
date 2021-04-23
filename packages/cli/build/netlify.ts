@@ -1,13 +1,16 @@
 import { spawn } from 'child_process'
-import { parallel, series } from 'gulp'
+import { parallel, series, src, dest } from 'gulp'
 import { relative, resolve } from 'path'
 import { build } from './typescript'
 import { NETLIFY_PATH, PKG_PATH } from '../utils'
+import { renameSync } from 'fs'
 
 const createBuildStorybook6 = (basePath: string, output: string, name: string) => {
     const fn = () => {
         const r = relative(basePath, output)
-        return spawn('npx', ['build-storybook', '-o', r, '-s', r, '--quiet'], {
+        const command = ['build-storybook', '-o', r]
+        console.log(basePath, '$', ...command)
+        return spawn('npx', command, {
             cwd: basePath,
             shell: true,
             stdio: 'inherit',
@@ -21,7 +24,9 @@ const createBuildStorybook6 = (basePath: string, output: string, name: string) =
 const createBuildSnowpack = (basePath: string, output: string, name: string) => {
     const fn = () => {
         const r = relative(basePath, output)
-        return spawn('npx', ['snowpack', 'build', '--buildOptions.out', r, '--quiet'], {
+        const command = ['snowpack', 'build', '--buildOptions.out', r]
+        console.log(basePath, '$', ...command)
+        return spawn('npx', command, {
             cwd: basePath,
             shell: true,
             stdio: 'inherit',
@@ -32,15 +37,9 @@ const createBuildSnowpack = (basePath: string, output: string, name: string) => 
     return fn
 }
 
-const SNOWPACK_PATH = relative(NETLIFY_PATH, 'snowpack')
+const SNOWPACK_PATH = resolve(NETLIFY_PATH, 'snowpack')
 const STATIC_PATH = resolve(NETLIFY_PATH, 'storybook-static')
 
-// prettier-ignore
-const iconsSnowpack = createBuildSnowpack(
-    resolve(PKG_PATH, 'icons'),
-    resolve(SNOWPACK_PATH, 'icons'),
-    'icons',
-)
 // prettier-ignore
 const dashboard = createBuildSnowpack(
     resolve(PKG_PATH, 'dashboard'),
@@ -60,4 +59,18 @@ const themeSB = createBuildStorybook6(
     'theme',
 )
 
-export const buildNetlify = parallel(iconsSnowpack, series(build, parallel(dashboardSB, themeSB, dashboard)))
+const icons = series(
+    function buildIcons() {
+        return spawn('npm', ['run', 'build'], {
+            cwd: resolve(PKG_PATH, 'icons'),
+            shell: true,
+            stdio: 'inherit',
+        })
+    },
+    function copyIcons() {
+        const from = src(resolve(PKG_PATH, 'icons', 'build.html'))
+        const to = dest(resolve(SNOWPACK_PATH, 'icons'))
+        return from.pipe(to)
+    },
+)
+export const buildNetlify = parallel(icons, series(build, parallel(dashboardSB, themeSB /* , dashboard */)))

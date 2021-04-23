@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import stringify from 'json-stable-stringify'
 import { omit, pick } from 'lodash-es'
 import { useCallback, useMemo, useState } from 'react'
@@ -7,7 +6,7 @@ import Services, { ServicesWithProgress } from '../../../../extension/service'
 import { StageType } from '../../../../utils/promiEvent'
 import { addGasMargin } from '../../../../web3/helpers'
 import { useAccount } from '../../../../web3/hooks/useAccount'
-import { useChainId } from '../../../../web3/hooks/useChainState'
+import { useChainId } from '../../../../web3/hooks/useBlockNumber'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import { ChainId } from '../../../../web3/types'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
@@ -47,7 +46,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             const gasEstimated = await Services.Ethereum.estimateGas(omit(config, ['gas']), chainId)
             const config_ = {
                 ...config,
-                gas: addGasMargin(new BigNumber(gasEstimated)).toFixed(),
+                gas: addGasMargin(gasEstimated).toFixed(),
             }
 
             // step 2: send tx

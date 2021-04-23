@@ -9,13 +9,17 @@ import { makeTypedMessageCashTrending } from './messages/TypedMessageCashTrendin
 import { TagInspector } from './UI/trending/TagInspector'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { SettingsDialog } from './UI/trader/SettingsDialog'
+import { TraderDialog } from './UI/trader/TraderDialog'
 import { SearchResultInspector } from './UI/trending/SearchResultInspector'
 
 const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor =>
     isTypedMessageAnchor(m) && ['cash', 'hash'].includes(m.category) && !/#[\w\d]+lbp$/i.test(m.content)
 
 export const TraderPluginDefine: PluginConfig = {
+    id: PLUGIN_IDENTIFIER,
+    pluginIcon: '💱',
     pluginName: 'Trader',
+    pluginDescription: 'View trending of cryptocurrencies, swap ERC20 tokens in various DEX markets.',
     identifier: PLUGIN_IDENTIFIER,
     stage: PluginStage.Production,
     scope: PluginScope.Public,
@@ -31,6 +35,7 @@ export const TraderPluginDefine: PluginConfig = {
             <>
                 <TagInspector />
                 <SettingsDialog />
+                <TraderDialog />
             </>
         )
     },

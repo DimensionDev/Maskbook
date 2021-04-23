@@ -148,10 +148,7 @@ export default function Drawer(props: DrawerProps) {
         <ThemeProvider theme={drawerTheme}>
             <nav className={classes.drawer}>
                 {xsMatched ? null : (
-                    <Box
-                        onClick={onDebugPage}
-                        className={classes.drawerHeader}
-                        style={{ backgroundColor: `var(--drawerBody)` }}>
+                    <Box onClick={onDebugPage} className={classes.drawerHeader}>
                         <Logo />
                     </Box>
                 )}

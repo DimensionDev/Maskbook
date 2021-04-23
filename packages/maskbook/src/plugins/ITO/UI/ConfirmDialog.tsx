@@ -6,10 +6,13 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import LaunchIcon from '@material-ui/icons/Launch'
 import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { dateTimeFormat } from '../assets/formatDate'
 import { isETH } from '../../../web3/helpers'
-import { resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveTokenLinkOnEtherscan, resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
+import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
 
 const useSwapItemStyles = makeStyles((theme) =>
@@ -35,7 +38,7 @@ function SwapItem(props: SwapItemProps) {
     const classes = useSwapItemStyles()
     const { t } = useI18N()
 
-    const amount_ = formatBalance(new BigNumber(swapAmount || '0'), swap?.decimals ?? 0)
+    const amount_ = formatBalance(swapAmount || '0', swap?.decimals)
 
     return (
         <div className={classes.root}>
@@ -100,6 +103,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const { poolSettings, onDone, onBack } = props
     const classes = useStyles()
     const { t } = useI18N()
+    const chainId = useChainId()
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
     return (
         <Card elevation={0}>
@@ -140,10 +144,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 <Grid item xs={6}>
                     <Paper className={classes.data}>
                         <Typography>
-                            {formatBalance(
-                                new BigNumber(poolSettings?.total ?? '0'),
-                                poolSettings?.token?.decimals ?? 0,
-                            )}{' '}
+                            {formatBalance(poolSettings?.total, poolSettings?.token?.decimals)}{' '}
                             {poolSettings?.token?.symbol}
                         </Typography>
                     </Paper>
@@ -180,10 +181,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 <Grid item xs={6}>
                     <Paper className={classes.data}>
                         <Typography>
-                            {formatBalance(
-                                new BigNumber(poolSettings?.limit ?? '0'),
-                                poolSettings?.token?.decimals ?? 0,
-                            )}{' '}
+                            {formatBalance(poolSettings?.limit, poolSettings?.token?.decimals)}{' '}
                             {poolSettings?.token?.symbol}
                         </Typography>
                     </Paper>
@@ -210,6 +208,57 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Typography>{dateTimeFormat(poolSettings?.endTime!)}</Typography>
                     </Paper>
                 </Grid>
+                {poolSettings?.qualificationAddress && poolSettings?.advanceSettingData.contract ? (
+                    <>
+                        <Grid item xs={6}>
+                            <Paper className={classes.label}>
+                                <Typography>{t('plugin_ito_qualification_label')}</Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Paper className={classes.data}>
+                                <Link
+                                    href={resolveAddressLinkOnEtherscan(chainId, poolSettings?.qualificationAddress!)}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Typography>
+                                        {formatEthereumAddress(poolSettings?.qualificationAddress!, 4)}
+                                    </Typography>
+                                </Link>
+                            </Paper>
+                        </Grid>
+                    </>
+                ) : null}
+                {poolSettings?.regions ? (
+                    <>
+                        <Grid item xs={6}>
+                            <Paper className={classes.label}>
+                                <Typography>{t('plugin_ito_region_comfirm_label')}</Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Paper className={classes.data}>
+                                <Typography>
+                                    {decodeRegionCode(poolSettings?.regions!).length}/{regionCodes.length}
+                                </Typography>
+                            </Paper>
+                        </Grid>
+                    </>
+                ) : null}
+                {poolSettings?.unlockTime ? (
+                    <>
+                        <Grid item xs={6}>
+                            <Paper className={classes.label}>
+                                <Typography>{t('plugin_ito_unlock_time')}</Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Paper className={classes.data}>
+                                <Typography>{dateTimeFormat(poolSettings?.unlockTime!)}</Typography>
+                            </Paper>
+                        </Grid>
+                    </>
+                ) : null}
                 <Grid item xs={12}>
                     <Typography variant="h5" className={classes.title} component="p">
                         {t('plugin_ito_send_tip')}
@@ -223,10 +272,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 <Grid item xs={6} className={classes.button}>
                     <ActionButton fullWidth variant="contained" onClick={onDone}>
                         {t('plugin_ito_send_text', {
-                            total: formatAmountPrecision(
-                                new BigNumber(poolSettings?.total ?? '0'),
-                                poolSettings?.token?.decimals,
-                            ),
+                            total: formatAmountPrecision(poolSettings?.total, poolSettings?.token?.decimals),
                             symbol: poolSettings?.token?.symbol,
                         })}
                     </ActionButton>

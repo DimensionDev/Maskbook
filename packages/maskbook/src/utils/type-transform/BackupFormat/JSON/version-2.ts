@@ -7,6 +7,8 @@ import type {
     EC_Public_JsonWebKey,
     EC_Private_JsonWebKey,
 } from '../../../../modules/CryptoAlgorithm/interfaces/utils'
+import { twitterBase } from '../../../../social-network-adaptor/twitter.com/base'
+import { facebookBase } from '../../../../social-network-adaptor/facebook.com/base'
 
 export type RecipientReasonJSON = (
     | { type: 'auto-share' }
@@ -177,7 +179,16 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
     }
 }
 
-export function upgradeFromBackupJSONFileVersion2(json: BackupJSONFileVersion2): BackupJSONFileVersion2 {
+export function patchNonBreakingUpgradeForBackupJSONFileVersion2(json: BackupJSONFileVersion2): BackupJSONFileVersion2 {
     json.wallets = json.wallets ?? []
+    const permissions = new Set<string>(json.grantedHostPermissions)
+    if (json.grantedHostPermissions.some((x) => x.includes('twitter.com'))) {
+        const a = twitterBase.declarativePermissions.origins
+        a.forEach((x) => permissions.add(x))
+    }
+    if (json.grantedHostPermissions.some((x) => x.includes('facebook.com'))) {
+        const a = facebookBase.declarativePermissions.origins
+        a.forEach((x) => permissions.add(x))
+    }
     return json
 }

@@ -8,7 +8,7 @@ import { RemindDialog } from './RemindDialog'
 import { ShareDialog } from './ShareDialog'
 import { ClaimDialog, ClaimDialogProps } from './ClaimDialog'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useChainState'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { UnlockDialog } from './UnlockDialog'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 
@@ -57,7 +57,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
     )
     const initAmount = new BigNumber(0)
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
-    const [actualSwapAmount, setActualSwapAmount] = useState<BigNumber>(new BigNumber(0))
+    const [actualSwapAmount, setActualSwapAmount] = useState<BigNumber.Value>(0)
     const chainId = useChainId()
     const account = useAccount()
 
@@ -82,18 +82,10 @@ export function ClaimGuide(props: ClaimGuideProps) {
                 {(() => {
                     switch (status) {
                         case ClaimStatus.Remind:
-                            return (
-                                <RemindDialog
-                                    isMask={payload.is_mask ?? false}
-                                    token={payload.token}
-                                    chainId={chainId}
-                                    setStatus={onUpdate}
-                                />
-                            )
+                            return <RemindDialog token={payload.token} chainId={chainId} setStatus={onUpdate} />
                         case ClaimStatus.Unlock:
                             return (
                                 <UnlockDialog
-                                    isMask={payload.is_mask ?? false}
                                     tokens={
                                         payload.exchange_tokens.filter(
                                             (x) => x.type === EthereumTokenType.ERC20,

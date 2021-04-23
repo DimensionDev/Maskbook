@@ -1,7 +1,7 @@
 import { useAsync } from 'react-use'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import type { ERC721Token } from '../types'
-import { useChainId } from './useChainState'
+import { useChainId } from './useBlockNumber'
 
 export function useERC721TokenByIndex(token?: ERC721Token, index: number = 0) {
     const chainId = useChainId()

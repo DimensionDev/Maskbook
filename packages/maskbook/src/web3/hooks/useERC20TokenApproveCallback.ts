@@ -15,7 +15,6 @@ const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffff
 
 export enum ApproveStateType {
     UNKNOWN,
-    INSUFFICIENT_BALANCE,
     NOT_APPROVED,
     UPDATING,
     PENDING,
@@ -47,7 +46,6 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
         if (!amount || !spender) return ApproveStateType.UNKNOWN
         if (loadingBalance || loadingAllowance) return ApproveStateType.UPDATING
         if (errorBalance || errorAllowance) return ApproveStateType.FAILED
-        if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) return ApproveStateType.INSUFFICIENT_BALANCE
         if (transactionState.type === TransactionStateType.WAIT_FOR_CONFIRMING) return ApproveStateType.PENDING
         return new BigNumber(allowance).isLessThan(amount) ? ApproveStateType.NOT_APPROVED : ApproveStateType.APPROVED
     }, [
@@ -63,7 +61,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
     ])
 
     const approveCallback = useCallback(
-        async (useExact: boolean = false) => {
+        async (useExact = false) => {
             if (approveStateType === ApproveStateType.UNKNOWN || !amount || !spender || !erc20Contract) {
                 setTransactionState({
                     type: TransactionStateType.UNKNOWN,
@@ -75,7 +73,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
             if (approveStateType !== ApproveStateType.NOT_APPROVED) {
                 setTransactionState({
                     type: TransactionStateType.FAILED,
-                    error: new Error('Failed to approve token'),
+                    error: new Error('Failed to approve token.'),
                 })
                 return
             }
@@ -108,7 +106,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
             // step 2: blocking
             return new Promise<void>(async (resolve, reject) => {
                 const promiEvent = erc20Contract.methods.approve(spender, useExact ? amount : MaxUint256).send({
-                    gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                    gas: addGasMargin(estimatedGas).toFixed(),
                     ...config,
                 })
                 const revalidate = once(() => {

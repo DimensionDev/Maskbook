@@ -29,7 +29,10 @@ export type BadgeConvertor<T = any> = (metadata: T) => string | React.ReactNode
 export type MessageProcessor = (message: TypedMessageCompound) => TypedMessageCompound
 
 export interface PluginConfig {
+    id: string
+    pluginIcon: string
     pluginName: string
+    pluginDescription: string
     identifier: string
     stage: PluginStage
     scope: PluginScope

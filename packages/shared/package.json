@@ -5,8 +5,8 @@
     "async-call-rpc": "^5.0.0",
     "bignumber.js": "^9.0.1",
     "immer": "^9.0.1",
-    "ts-results": "^3.1.1",
-    "typeson": "^6.0.0",
+    "ts-results": "^3.2.0",
+    "typeson": "^6.1.0",
     "typeson-registry": "^1.0.0-alpha.38",
     "use-subscription": "^1.5.1"
   },

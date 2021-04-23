@@ -3,6 +3,7 @@ import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { makeStyles, createStyles } from '@material-ui/core'
 import { renderWithRedPacketMetadata } from '../helpers'
 import { RedPacketInPost } from './RedPacketInPost'
+
 const useStyles = makeStyles((theme) =>
     createStyles({
         line: {

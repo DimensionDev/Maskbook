@@ -1,5 +1,4 @@
 import { useState, useCallback, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
 import { createStyles, makeStyles, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { useStylesExtends } from '../../components/custom-ui-helper'
@@ -11,7 +10,7 @@ import { CONSTANTS } from '../constants'
 import { useConstant } from '../hooks/useConstant'
 import { useERC20TokenBalance } from '../hooks/useERC20TokenBalance'
 import { createERC20Token } from '../helpers'
-import { useChainId } from '../hooks/useChainState'
+import { useChainId } from '../hooks/useBlockNumber'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -77,7 +76,7 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
                 {process.env.architecture === 'web' && !maskBalanceLoading && !maskBalanceError ? (
                     <MaskbookIcon className={classes.icon} />
                 ) : null}
-                <Typography>{formatBalance(new BigNumber(maskBalance), 18, 6)} MASK</Typography>
+                <Typography>{formatBalance(maskBalance, 18, 6)} MASK</Typography>
             </ActionButton>
             {maskToken ? (
                 <BreakdownDialog

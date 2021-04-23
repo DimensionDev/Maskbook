@@ -1,3 +1,4 @@
+import stringify from 'json-stable-stringify'
 import { first, omit } from 'lodash-es'
 import { getChainId } from '../../../extension/background-script/EthereumService'
 import { getConstant } from '../../../web3/helpers'
@@ -37,7 +38,6 @@ const POOL_FIELDS = `
     }
     seller {
         address
-        name
     }
     buyers {
         address
@@ -53,7 +53,7 @@ export async function getTradeInfo(pid: string, trader: string) {
     const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
         method: 'POST',
         mode: 'cors',
-        body: JSON.stringify({
+        body: stringify({
             query: `
             {
                 pool (id: "${pid.toLowerCase()}") {
@@ -72,13 +72,13 @@ export async function getTradeInfo(pid: string, trader: string) {
                 }
                 sellInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" }) {
                     seller {
-                        ${TRADER_FIELDS}
+                        address
                     }
                     amount
                 }
                 destructInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" }) {
                     seller {
-                        ${TRADER_FIELDS}
+                        address
                     }
                     amount
                 }
@@ -130,7 +130,7 @@ export async function getPool(pid: string) {
     const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
         method: 'POST',
         mode: 'cors',
-        body: JSON.stringify({
+        body: stringify({
             query: `
             {
                 pool (id: "${pid.toLowerCase()}") {
@@ -140,11 +140,13 @@ export async function getPool(pid: string) {
             `,
         }),
     })
+
     const { data } = (await response.json()) as {
         data: {
             pool: JSON_PayloadOutMask | null
         }
     }
+
     if (!data.pool) throw new Error('Failed to load payload.')
     return payloadIntoMask(data.pool)
 }
@@ -153,7 +155,7 @@ export async function getAllPoolsAsSeller(address: string) {
     const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
         method: 'POST',
         mode: 'cors',
-        body: JSON.stringify({
+        body: stringify({
             query: `
             {
                 sellInfos (where: { seller: "${address.toLowerCase()}" }) {
@@ -191,7 +193,7 @@ export async function getAllPoolsAsBuyer(address: string) {
     const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
         method: 'POST',
         mode: 'cors',
-        body: JSON.stringify({
+        body: stringify({
             query: `
             {
                 buyInfos (where: { buyer: "${address.toLowerCase()}" }) {

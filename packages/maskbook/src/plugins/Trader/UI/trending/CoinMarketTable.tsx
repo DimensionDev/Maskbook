@@ -92,10 +92,10 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
                             <>
                                 <TableCell className={classes.cell} align="center">
-                                    {formatCurrency(trending.market?.circulating_supply ?? 0, '$')} USD
+                                    {formatCurrency(trending.market?.circulating_supply ?? 0, '$')}
                                 </TableCell>
                                 <TableCell className={classes.cell} align="center">
-                                    {formatCurrency(trending.market?.total_supply ?? 0, '$')} USD
+                                    {formatCurrency(trending.market?.total_supply ?? 0, '$')}
                                 </TableCell>
                             </>
                         ) : null}

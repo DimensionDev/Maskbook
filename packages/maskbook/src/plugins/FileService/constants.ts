@@ -1,4 +1,6 @@
+export const pluginIcon = '📃'
 export const pluginName = 'File Service'
+export const pluginDescription = 'Upload and share files on top of Arweave network. Store data, permanently.'
 export const identifier = 'com.maskbook.fileservice'
 export const pluginId = 'maskbook.fileservice'
 export const META_KEY_1 = 'com.maskbook.fileservice:1'

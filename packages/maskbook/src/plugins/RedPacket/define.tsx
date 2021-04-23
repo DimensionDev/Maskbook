@@ -1,37 +1,22 @@
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { RedPacketInspector } from './UI/RedPacketInspector'
 import { formatBalance } from '../Wallet/formatter'
-import BigNumber from 'bignumber.js'
 import { RedPacketMetadataReader } from './helpers'
 import { RedPacketMetaKey, RedPacketPluginID } from './constants'
 import type { RedPacketJSONPayload } from './types'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import RedPacketDialog from './UI/RedPacketDialog'
-import Services from '../../extension/service'
-import { WalletRPC } from '../Wallet/messages'
+import { EthereumTokenType } from '../../web3/types'
 
-export const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDialog(
-    '💰 Red Packet',
-    (props) => (
-        <RedPacketDialog
-            // classes={classes}
-            // DialogProps={props.DialogProps}
-            open={props.open}
-            onConfirm={props.onClose}
-            onClose={props.onClose}
-        />
-    ),
-    async () => {
-        const wallets = await WalletRPC.getWallets()
-        if (wallets.length) return true
-        else {
-            Services.Provider.requestConnectWallet()
-            return false
-        }
-    },
-)
+export const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDialog('💰 Red Packet', (props) => (
+    <RedPacketDialog open={props.open} onConfirm={props.onClose} onClose={props.onClose} />
+))
 export const RedPacketPluginDefine: PluginConfig = {
+    id: RedPacketPluginID,
+    pluginIcon: '🧧',
     pluginName: 'Red Packet',
+    pluginDescription:
+        'Red Packet is a special feature in Mask Network which was launched in early 2020. Once users have installed the Chrome/ Firefox plugin, they can claim and give out cryptocurrencies on Twitter.',
     identifier: RedPacketPluginID,
     stage: PluginStage.Production,
     scope: PluginScope.Public,
@@ -43,11 +28,10 @@ export const RedPacketPluginDefine: PluginConfig = {
         [
             RedPacketMetaKey,
             (payload: RedPacketJSONPayload) => {
-                return `A Red Packet with ${formatBalance(
-                    new BigNumber(payload.total),
-                    payload.token?.decimals ?? 0,
-                    payload.token?.decimals ?? 0,
-                )} $${payload.token?.name || 'ETH'} from ${payload.sender.name}`
+                const decimals = payload.token_type === EthereumTokenType.Ether ? 18 : payload.token?.decimals
+                return `A Red Packet with ${formatBalance(payload.total, decimals)} $${
+                    payload.token?.name || 'ETH'
+                } from ${payload.sender.name}`
             },
         ],
     ]),

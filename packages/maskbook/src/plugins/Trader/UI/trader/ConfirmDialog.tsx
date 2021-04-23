@@ -8,7 +8,7 @@ import { TokenPanel } from './TokenPanel'
 import { PriceStaleWarnning } from './PriceStaleWarnning'
 import type { TradeComputed, TradeProvider } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { formatBalance, formatEthereumAddress } from '../../../Wallet/formatter'
+import { formatBalance } from '../../../Wallet/formatter'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 
 const useStyles = makeStyles((theme) =>
@@ -92,11 +92,8 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                         className={classes.tip}
                         color="textSecondary">{`Output is estimated. You will receive at least ${formatBalance(
                         minimumReceived,
-                        outputToken.decimals ?? 0,
-                        9,
-                    )} ${
-                        outputToken.symbol ?? formatEthereumAddress(outputToken.address, 2)
-                    } or the transaction will revert.`}</Typography>
+                        outputToken.decimals,
+                    )} ${outputToken.symbol ?? 'Token'} or the transaction will revert.`}</Typography>
                     <TradeSummary
                         classes={{ root: classes.summary }}
                         provider={provider}

@@ -36,25 +36,10 @@ Reason: This is the recommend way of writing way in @material-ui 4.
 
 #### Change style of MUI components
 
-🚫 DON'T ([reason](https://github.com/mui-org/material-ui/issues/25011#issuecomment-789105382))
-
-```js
-<Button classes={{ disabled: classes.disabled }} />
-```
-
 ✅ DO
 
 ```js
-import { buttonClasses } from '@material-ui/core'
-const useStyle = makeStyles(theme => ({
-    button: {
-      // way 1
-      ['&.' + buttonClasses.disabled]: {},
-      // way 2 (if applicable)
-      '&[disabled]': {}
-    }
-}))
-<Button className={classes.button} />
+<Button classes={{ disabled: classes.disabled }} />
 ```
 
 ## Guides on the `styled` style (let's call it `styled component`)

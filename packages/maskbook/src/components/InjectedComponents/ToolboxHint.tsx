@@ -1,29 +1,37 @@
 import { makeStyles, Typography, MenuItem } from '@material-ui/core'
-import { MaskbookSharpIconOfSize } from '../../resources/MaskbookIcon'
+import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
-import { BreakdownDialog } from './BreakdownDialog'
 import { useMenu } from '../../utils/hooks/useMenu'
-import { useChainId } from '../../web3/hooks/useChainState'
-import { useConstant } from '../../web3/hooks/useConstant'
-import { CONSTANTS } from '../../web3/constants'
-import { createERC20Token } from '../../web3/helpers'
-import { useERC20TokenBalance } from '../../web3/hooks/useERC20TokenBalance'
-import { useMemo, useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import { MaskMessage } from '../../utils/messages'
 import { RedPacketCompositionEntry } from '../../plugins/RedPacket/define'
 import { FileServiceCompositionEntry } from '../../plugins/FileService/UI-define'
 import { ITO_CompositionEntry } from '../../plugins/ITO/define'
+import { useControlledDialog } from '../../plugins/Collectible/UI/useControlledDialog'
 import { useAccount } from '../../web3/hooks/useAccount'
-import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog, useRemoteControlledDialogEvent } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
+import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
+import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
+import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
+import { ProviderIcon } from '../shared/ProviderIcon'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
+import { WalletMessages } from '../../plugins/Wallet/messages'
+import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
+import { useChainId } from '../../web3/hooks/useBlockNumber'
+import { ChainId } from '../../web3/types'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import { resolveChainColor } from '../../web3/pipes'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
         borderRadius: 4,
+        transform: 'translateY(-150px) !important',
         boxShadow: `${
             theme.palette.mode === 'dark'
                 ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
@@ -64,6 +72,8 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     title: {
+        display: 'flex',
+        alignItems: 'center',
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
         fontWeight: 700,
         fontSize: 20,
@@ -80,6 +90,21 @@ const useStyles = makeStyles((theme) => ({
     },
     icon: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
+        width: 24,
+        height: 24,
+        fontSize: 24,
+    },
+    mask: {
+        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
+        width: 22,
+        height: 22,
+        fontSize: 22,
+    },
+    chainIcon: {
+        fontSize: 18,
+        width: 18,
+        height: 18,
+        marginLeft: theme.spacing(0.5),
     },
 }))
 
@@ -87,39 +112,32 @@ interface ToolboxHintProps extends withClasses<never> {}
 export function ToolboxHint(props: ToolboxHintProps) {
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
-
-    //#region Airdrop
+    const selectedWallet = useWallet()
     const chainId = useChainId()
-    const MASK_ADDRESS = useConstant(CONSTANTS, 'MASK_ADDRESS')
-    const maskToken = useMemo(() => createERC20Token(chainId, MASK_ADDRESS, 18, 'Mask Network', 'MASK'), [
-        chainId,
-        MASK_ADDRESS,
-    ])
-
-    const {
-        value: maskBalance = '0',
-        error: maskBalanceError,
-        loading: maskBalanceLoading,
-        retry: maskBalanceRetry,
-    } = useERC20TokenBalance(MASK_ADDRESS)
-
-    const [breakdownDialogOpen, setBreakdownDialogOpen] = useState(false)
-
-    const openAirdrop = useCallback(() => {
-        if (maskBalanceError) maskBalanceRetry()
-        setBreakdownDialogOpen(true)
-    }, [maskBalanceError, maskBalanceRetry])
-
-    const onBreakdownDialogClose = useCallback(() => {
-        setBreakdownDialogOpen(false)
-    }, [])
-    //#endregion
+    const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
         () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'timeline', open: true }),
         [],
     )
+    //#endregion
+
+    //#region Wallet
+    const { onOpen: onSelectWalletDialogOpen } = useRemoteControlledDialogEvent(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
+
+    const { onOpen: onSelectProviderDialogOpen } = useRemoteControlledDialogEvent(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
+    const openWallet = useCallback(() => {
+        if (selectedWallet) {
+            onSelectWalletDialogOpen()
+        } else {
+            onSelectProviderDialogOpen()
+        }
+    }, [])
     //#endregion
 
     //#region Red packet
@@ -159,7 +177,17 @@ export function ToolboxHint(props: ToolboxHintProps) {
     }, [])
     //#endregion
 
-    // Todo: add a swap dialog
+    //#region Swap
+    const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
+    //#endregion
+
+    //#region Claim All ITO
+    const {
+        open: isClaimAllDialogOpen,
+        onOpen: onClaimAllDialogOpen,
+        onClose: onClaimAllDialogClose,
+    } = useControlledDialog()
+    //#endregion
 
     const [menu, openMenu] = useMenu(
         [
@@ -185,12 +213,14 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
                 </MenuItem>
             ) : null,
-            Flags.airdrop_enabled ? (
-                <MenuItem onClick={openAirdrop} className={classes.menuItem}>
-                    <Image src={ToolIconURLs.airdrop.image} width={19} height={19} />
-                    <Typography className={classes.text}>{ToolIconURLs.airdrop.text}</Typography>
-                </MenuItem>
-            ) : null,
+            <MenuItem onClick={openSwapDialog} className={classes.menuItem}>
+                <Image src={ToolIconURLs.swap.image} width={19} height={19} />
+                <Typography className={classes.text}>{ToolIconURLs.swap.text}</Typography>
+            </MenuItem>,
+            <MenuItem onClick={onClaimAllDialogOpen} className={classes.menuItem}>
+                <Image src={ToolIconURLs.claim.image} width={19} height={19} />
+                <Typography className={classes.text}>{ToolIconURLs.claim.text}</Typography>
+            </MenuItem>,
         ],
         false,
         {
@@ -207,19 +237,39 @@ export function ToolboxHint(props: ToolboxHintProps) {
         <>
             <div className={classes.wrapper} onClick={openMenu}>
                 <div className={classes.button}>
-                    <MaskbookSharpIconOfSize classes={{ root: classes.icon }} size={24} />
+                    <MaskbookSharpIconOfSize classes={{ root: classes.icon }} size={22} />
                     <Typography className={classes.title}>Mask Network</Typography>
                 </div>
             </div>
             {menu}
-            {maskToken ? (
-                <BreakdownDialog
-                    open={breakdownDialogOpen}
-                    token={maskToken}
-                    balance={maskBalance}
-                    onUpdateBalance={maskBalanceRetry}
-                    onClose={onBreakdownDialogClose}
-                />
+
+            <div className={classes.wrapper} onClick={openWallet}>
+                <div className={classes.button}>
+                    {selectedWallet ? (
+                        <ProviderIcon
+                            classes={{ icon: classes.icon }}
+                            size={24}
+                            providerType={selectedWalletProvider}
+                        />
+                    ) : (
+                        <WalletSharp classes={{ root: classes.icon }} size={24} />
+                    )}
+
+                    <Typography className={classes.title}>
+                        {account ? formatEthereumAddress(account, 4) : 'Connect Wallet'}
+                        {chainId !== ChainId.Mainnet && selectedWallet ? (
+                            <FiberManualRecordIcon
+                                className={classes.chainIcon}
+                                style={{
+                                    color: resolveChainColor(chainId),
+                                }}
+                            />
+                        ) : null}
+                    </Typography>
+                </div>
+            </div>
+            {isClaimAllDialogOpen ? (
+                <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
             ) : null}
         </>
     )

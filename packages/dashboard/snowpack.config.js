@@ -11,4 +11,5 @@ module.exports = {
     buildOptions: {
         baseUrl: '/snowpack/dashboard/',
     },
+    workspaceRoot: require('path').resolve(__dirname, '../'),
 }

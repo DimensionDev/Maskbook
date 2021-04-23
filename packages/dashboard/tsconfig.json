@@ -10,5 +10,8 @@
     { "path": "../maskbook/" },
     { "path": "../storybook-shared/" },
     { "path": "../icons/" }
-  ]
+  ],
+  "ts-node": {
+    "compilerOptions": { "module": "CommonJS" }
+  }
 }
