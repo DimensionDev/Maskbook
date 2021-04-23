@@ -25,7 +25,7 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 
 const useStyles = makeStyles((theme) =>

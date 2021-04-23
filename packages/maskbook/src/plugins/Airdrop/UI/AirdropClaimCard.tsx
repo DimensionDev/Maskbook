@@ -17,7 +17,7 @@ import { useClaimCallback } from '../hooks/useClaimCallback'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
 import { ClaimDialog } from './ClaimDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles((theme) =>

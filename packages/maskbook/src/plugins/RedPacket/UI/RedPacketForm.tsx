@@ -25,7 +25,7 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumTokenType, EthereumNetwork, ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useBlockNumber'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useCreateCallback } from '../hooks/useCreateCallback'

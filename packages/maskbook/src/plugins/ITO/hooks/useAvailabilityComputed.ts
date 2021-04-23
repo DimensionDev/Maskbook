@@ -1,5 +1,5 @@
 import { compact } from 'lodash-es'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { useAvailability } from './useAvailability'
 import { useQualification } from './useQualification'

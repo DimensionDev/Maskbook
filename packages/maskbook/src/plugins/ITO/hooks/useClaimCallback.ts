@@ -6,7 +6,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionEventType } from '../../../web3/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 
 export function useClaimCallback(pids: string[]) {

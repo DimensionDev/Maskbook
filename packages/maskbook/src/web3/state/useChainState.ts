@@ -1,6 +1,7 @@
 import { createContainer } from 'unstated-next'
 import { useAccount } from '../hooks/useAccount'
-import { useBlockNumber, useChainId, useChainIdValid } from '../hooks/useBlockNumber'
+import { useChainId, useChainIdValid } from '../hooks/useChainId'
+import { useBlockNumber } from '../hooks/useBlockNumber'
 import { useEtherTokenDetailed } from '../hooks/useEtherTokenDetailed'
 
 function useChainState() {

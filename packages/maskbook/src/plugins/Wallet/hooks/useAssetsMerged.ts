@@ -1,6 +1,6 @@
 import { uniqBy } from 'lodash-es'
 import { CONSTANTS } from '../../../web3/constants'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { formatChecksumAddress } from '../formatter'
 import { getTokenUSDValue } from '../helpers'

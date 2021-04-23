@@ -8,7 +8,7 @@ import { RemindDialog } from './RemindDialog'
 import { ShareDialog } from './ShareDialog'
 import { ClaimDialog, ClaimDialogProps } from './ClaimDialog'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { UnlockDialog } from './UnlockDialog'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 

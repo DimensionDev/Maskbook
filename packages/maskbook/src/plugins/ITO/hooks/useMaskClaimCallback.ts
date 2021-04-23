@@ -7,7 +7,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionEventType } from '../../../web3/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 
 export function useMaskClaimCallback() {
     const account = useAccount()

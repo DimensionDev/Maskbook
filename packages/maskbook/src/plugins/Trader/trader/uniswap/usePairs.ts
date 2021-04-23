@@ -1,7 +1,7 @@
 import { useContext, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Pair, Token as UniswapToken, TokenAmount } from '@uniswap/sdk'
-import { useChainId } from '../../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../../web3/hooks/useChainId'
 import { getPairAddress } from '../../helpers'
 import { TradeContext } from '../useTradeContext'
 import { usePairContracts } from '../../contracts/uniswap/usePairContract'

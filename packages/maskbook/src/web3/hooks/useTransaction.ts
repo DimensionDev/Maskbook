@@ -3,7 +3,8 @@ import { useAsync } from 'react-use'
 import type { Transaction, TransactionReceipt } from 'web3-core'
 import Services from '../../extension/service'
 import { useAccount } from './useAccount'
-import { useBlockNumber, useChainId } from './useBlockNumber'
+import { useChainId } from './useChainId'
+import { useBlockNumber } from './useBlockNumber'
 
 export function useTransaction(hash: string) {
     const account = useAccount()

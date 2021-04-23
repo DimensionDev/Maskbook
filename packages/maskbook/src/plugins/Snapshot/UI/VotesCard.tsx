@@ -9,7 +9,7 @@ import { SnapshotContext } from '../context'
 import { useVotes } from '../hooks/useVotes'
 import { SnapshotCard } from './SnapshotCard'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) => {

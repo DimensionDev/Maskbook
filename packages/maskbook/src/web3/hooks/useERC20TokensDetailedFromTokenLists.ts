@@ -4,7 +4,7 @@ import Services from '../../extension/service'
 import { useAsync } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { isSameAddress } from '../helpers'
-import { useChainId } from './useBlockNumber'
+import { useChainId } from './useChainId'
 import { EthereumTokenType } from '../types'
 import { useERC20TokenDetailed } from './useERC20TokenDetailed'
 

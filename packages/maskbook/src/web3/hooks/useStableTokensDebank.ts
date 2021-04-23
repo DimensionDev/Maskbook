@@ -1,7 +1,7 @@
 import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
 import { createERC20Token } from '../helpers'
 import { ChainId } from '../types'
-import { useChainId } from './useBlockNumber'
+import { useChainId } from './useChainId'
 import StableCoins from './stables_coins.json'
 
 export function useStableTokensDebank() {

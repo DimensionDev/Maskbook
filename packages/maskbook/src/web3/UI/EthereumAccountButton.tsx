@@ -10,7 +10,7 @@ import { formatBalance, formatEthereumAddress } from '../../plugins/Wallet/forma
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { useChainId } from '../hooks/useBlockNumber'
+import { useChainId } from '../hooks/useChainId'
 import { resolveChainColor } from '../pipes'
 import { ChainId } from '../types'
 import { useValueRef } from '../../utils/hooks/useValueRef'

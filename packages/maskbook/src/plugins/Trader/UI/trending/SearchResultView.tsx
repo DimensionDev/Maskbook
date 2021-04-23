@@ -26,7 +26,7 @@ import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { LBPPanel } from './LBPPanel'
 import { useLBP } from '../../LBP/useLBP'
 import { createERC20Token } from '../../../../web3/helpers'
-import { useChainId } from '../../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../../web3/hooks/useChainId'
 import { Flags } from '../../../../utils/flags'
 
 const useStyles = makeStyles((theme) => {

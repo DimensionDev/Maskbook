@@ -1,4 +1,4 @@
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { resolveChainName } from '../../../web3/pipes'
 import { ChainId, EthereumNetwork, EthereumTokenType } from '../../../web3/types'
 import { RED_PACKET_CONSTANTS, RED_PACKET_CONTRACT_VERSION } from '../constants'

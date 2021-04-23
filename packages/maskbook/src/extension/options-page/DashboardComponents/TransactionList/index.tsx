@@ -17,7 +17,7 @@ import { useAccount } from '../../../../web3/hooks/useAccount'
 import { Row } from './Row'
 import { useMemo, useState } from 'react'
 import { FilterTransactionType } from '../../../../plugins/Wallet/types'
-import { useChainId } from '../../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../../web3/hooks/useChainId'
 import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles(() =>

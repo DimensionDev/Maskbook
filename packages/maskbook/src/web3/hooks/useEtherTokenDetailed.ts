@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { CONSTANTS } from '../constants'
 import { NativeTokenDetailed, EthereumTokenType } from '../types'
-import { useChainId } from './useBlockNumber'
+import { useChainId } from './useChainId'
 import { useConstant } from './useConstant'
 
 export function useEtherTokenDetailed() {

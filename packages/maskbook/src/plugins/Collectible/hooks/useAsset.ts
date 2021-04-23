@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { head, uniqBy } from 'lodash-es'
 import BigNumber from 'bignumber.js'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { PluginCollectibleRPC } from '../messages'
 import type { CollectibleToken } from '../types'
 import { CollectibleProvider } from '../types'

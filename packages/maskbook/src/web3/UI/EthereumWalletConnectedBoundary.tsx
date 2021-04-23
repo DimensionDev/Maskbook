@@ -10,7 +10,7 @@ import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlled
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useAccount } from '../hooks/useAccount'
-import { useChainIdValid } from '../hooks/useBlockNumber'
+import { useChainIdValid } from '../hooks/useChainId'
 import { useEtherTokenBalance } from '../hooks/useEtherTokenBalance'
 import { ProviderType } from '../types'
 import { useStylesExtends } from '../../components/custom-ui-helper'

@@ -8,7 +8,7 @@ import { useMenu } from '../../../utils/hooks/useMenu'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ERC1155TokenDetailed, ERC721TokenDetailed, EthereumTokenType } from '../../../web3/types'
-import { useChainIdValid } from '../../../web3/hooks/useBlockNumber'
+import { useChainIdValid } from '../../../web3/hooks/useChainId'
 
 const useStyles = makeStyles((theme) => ({
     more: {

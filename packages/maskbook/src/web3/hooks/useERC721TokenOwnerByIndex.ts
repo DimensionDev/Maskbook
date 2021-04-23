@@ -2,7 +2,7 @@ import { useAsync } from 'react-use'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import type { ERC721Token } from '../types'
 import { useAccount } from './useAccount'
-import { useChainId } from './useBlockNumber'
+import { useChainId } from './useChainId'
 
 export function useERC721TokenOwnerByIndex(token?: ERC721Token, index: number = 0) {
     const account = useAccount()

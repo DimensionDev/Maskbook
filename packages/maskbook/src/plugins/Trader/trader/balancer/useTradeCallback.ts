@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import { useAccount } from '../../../../web3/hooks/useAccount'
-import { useChainId } from '../../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../../web3/hooks/useChainId'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import type { ExchangeProxy } from '@dimensiondev/contracts/types/ExchangeProxy'
