@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) =>
             position: 'absolute',
             top: '0',
             left: '0',
-            zIndex: 100,
+            zIndex: 1,
             backgroundColor: theme.palette.primary.main,
             opacity: 0.6,
             minWidth: theme.spacing(1),
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) =>
             borderRadius: theme.spacing(0.8),
         },
         text: {
-            zIndex: 101,
+            zIndex: 1,
             lineHeight: '28px',
             margin: '0 4px',
         },
