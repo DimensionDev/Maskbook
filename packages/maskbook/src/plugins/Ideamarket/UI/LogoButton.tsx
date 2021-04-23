@@ -15,9 +15,10 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         width: '2em',
         height: '2em',
+        marginRight: '12px',
     },
 
-    rankText: {
+    priceText: {
         fontSize: '12px',
         color: 'gray',
         marginRight: '4px',
@@ -95,7 +96,7 @@ export default function LogoButton(props: LogoButtonProps) {
                 className={classes.logoButton}>
                 {props.found ? (
                     <>
-                        <Typography className={classes.rankText}>{props.rank}</Typography>
+                        <Typography className={classes.priceText}>${Number(props.price).toFixed(2)}</Typography>
                         <IdeaLogo fontSize="small" />
                     </>
                 ) : (
