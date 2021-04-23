@@ -84,7 +84,11 @@ export async function deriveWalletFromPhrase(
     }
 
     for (let i = phrase.index; i < MAX_DERIVE_COUNT; i += 1) {
-        const derivedWallet = await wallet.recoverWallet(phrase.mnemonic, phrase.passphrase, `${path}/${i}`)
+        const derivedWallet = await wallet.recoverWalletFromMnemonicWords(
+            phrase.mnemonic,
+            phrase.passphrase,
+            `${path}/${i}`,
+        )
 
         // ensure the wallet had never created or derived before
         const walletRecord = await wallet.getWallet(derivedWallet.address)
