@@ -13,7 +13,7 @@ export function useTradeCallback(trade: TradeComputed<EtherWrapper> | null) {
             if (!trade.inputToken || !trade.outputToken) return
 
             // input amount and output amount are the same value
-            const tradeAmount = trade.inputAmount.toFixed()
+            const tradeAmount = trade.inputAmount.toString()
 
             if (
                 (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Ether) ||

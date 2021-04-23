@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
+import { parseUnits } from '@ethersproject/units'
 import Web3Utils from 'web3-utils'
 import type { TransactionReceipt } from 'web3-core'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
@@ -143,7 +144,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         }
 
         // error: limit greater than the total supply
-        if (new BigNumber(limit).isGreaterThan(total)) {
+        if (BN.from(limit).gt(total)) {
             setFillState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Limits should less than the total supply.'),
@@ -152,7 +153,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         }
 
         // error: exceed the max available total supply
-        if (new BigNumber(total).isGreaterThan('2e128')) {
+        if (BN.from(total).gt(BN.from(2).pow(128))) {
             setFillState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Exceed the max available total supply'),
@@ -170,15 +171,15 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         }
 
         // error: token amount is not enough for dividing into integral pieces
-        const ONE_TOKEN = new BigNumber(1).multipliedBy(new BigNumber(10).pow(token.decimals ?? 0))
-        const exchangeAmountsDivided = exchangeAmounts.map((x, i) => {
-            const amount = new BigNumber(x)
+        const ONE_TOKEN = parseUnits('1', token.decimals)
+        const exchangeAmountsDivided = exchangeAmounts.map((x) => {
+            const amount = BN.from(x)
             const divisor = gcd(ONE_TOKEN, amount)
-            return [amount.dividedToIntegerBy(divisor), ONE_TOKEN.dividedToIntegerBy(divisor)] as const
+            return [amount.div(divisor), ONE_TOKEN.div(divisor)] as const
         })
-        const totalAmount = new BigNumber(total)
+        const totalAmount = BN.from(total)
         const invalidTokenAt = exchangeAmountsDivided.findIndex(([tokenAmountA, tokenAmountB]) =>
-            totalAmount.multipliedBy(tokenAmountA).dividedToIntegerBy(tokenAmountB).isZero(),
+            totalAmount.mul(tokenAmountA).div(tokenAmountB).isZero(),
         )
         if (invalidTokenAt >= 0) {
             setFillState({
@@ -231,7 +232,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             // TODO: store message as bitmap, since regions may be very large.
             [name, title, regions].join(MSG_DELIMITER),
             exchangeTokens.map((x) => x.address),
-            exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
+            exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toString()),
             unlockTime_,
             token.address,
             total,
@@ -254,7 +255,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         // step 2: blocking
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = ITO_Contract.methods.fill_pool(...params).send({
-                gas: addGasMargin(estimatedGas).toFixed(),
+                gas: addGasMargin(estimatedGas).toString(),
                 ...config,
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {

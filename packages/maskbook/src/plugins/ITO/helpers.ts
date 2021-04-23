@@ -1,4 +1,4 @@
-import type BigNumber from 'bignumber.js'
+import type { BigNumber } from '@ethersproject/bignumber'
 import { createTypedMessageMetadataReader, createRenderWithMetadata } from '../../protocols/typed-message/metadata'
 import { ITO_MetaKey } from './constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from './types'
@@ -17,7 +17,7 @@ export const renderWithITO_Metadata = createRenderWithMetadata(ITO_MetadataReade
 export function gcd(a: BigNumber, b: BigNumber) {
     let a_ = a.abs()
     let b_ = b.abs()
-    if (b_.isGreaterThan(a_)) {
+    if (b_.gt(a_)) {
         const temp = b_
         b_ = a_
         a_ = temp

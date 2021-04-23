@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import { useMemo } from 'react'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 import type { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types'
@@ -12,9 +12,9 @@ export function useTradeComputed(
     return useMemo(() => {
         if (!trade) return null
         if (!inputToken || !outputToken) return null
-        const inputAmount = new BigNumber(trade.sellAmount)
-        const executionPrice = new BigNumber(trade.buyTokenToEthRate).dividedBy(new BigNumber(trade.sellTokenToEthRate))
-        const outputAmount = inputAmount.multipliedBy(executionPrice).dp(0)
+        const inputAmount = BN.from(trade.sellAmount)
+        const executionPrice = BN.from(trade.buyTokenToEthRate).div(BN.from(trade.sellTokenToEthRate))
+        const outputAmount = inputAmount.mul(BN.from(executionPrice))
         return {
             strategy,
             inputToken,
@@ -22,18 +22,18 @@ export function useTradeComputed(
             inputAmount,
             outputAmount,
             executionPrice,
-            fee: new BigNumber(trade.minimumProtocolFee),
-            maximumSold: new BigNumber(trade.sellAmount),
+            fee: BN.from(trade.minimumProtocolFee),
+            maximumSold: BN.from(trade.sellAmount),
             minimumReceived: outputAmount,
-            priceImpactWithoutFee: new BigNumber(0),
+            priceImpactWithoutFee: BN.from(0),
 
             // not supported fields
-            nextMidPrice: new BigNumber(0),
+            nextMidPrice: BN.from(0),
 
             // minimumProtocolFee
-            priceImpact: new BigNumber(0),
+            priceImpact: BN.from(0),
 
-            trade_: { ...trade, buyAmount: outputAmount.toFixed() },
+            trade_: { ...trade, buyAmount: outputAmount.toString() },
         } as TradeComputed<SwapQuoteResponse>
     }, [trade, strategy, inputToken, outputToken])
 }

@@ -58,14 +58,14 @@ export function useTradeCallback(
                       swap_,
                       inputTokenAddress,
                       outputTokenAddress,
-                      trade.inputAmount.toFixed(),
-                      tradeAmount.toFixed(),
+                      trade.inputAmount.toString(),
+                      tradeAmount.toString(),
                   )
                 : exchangeProxyContract.methods.multihopBatchSwapExactOut(
                       swap_,
                       inputTokenAddress,
                       outputTokenAddress,
-                      tradeAmount.toFixed(),
+                      tradeAmount.toString(),
                   )
 
         const config: Tx = {
@@ -76,9 +76,9 @@ export function useTradeCallback(
 
         // trade with ether
         if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Ether)
-            config.value = trade.inputAmount.toFixed()
+            config.value = trade.inputAmount.toString()
         else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === EthereumTokenType.Ether)
-            config.value = trade.outputAmount.toFixed()
+            config.value = trade.outputAmount.toString()
 
         // step 1: estimate gas
         const estimatedGas = await tx.estimateGas(config).catch((error: Error) => {
@@ -92,7 +92,7 @@ export function useTradeCallback(
         // step 2: blocking
         return new Promise<void>((resolve, reject) => {
             const promiEvent = tx.send({
-                gas: addGasMargin(estimatedGas).toFixed(),
+                gas: addGasMargin(estimatedGas).toString(),
                 ...config,
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {

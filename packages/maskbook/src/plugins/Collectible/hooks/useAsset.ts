@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { head, uniqBy } from 'lodash-es'
-import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { PluginCollectibleRPC } from '../messages'
 import type { CollectibleToken } from '../types'
@@ -27,11 +27,11 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
             case CollectibleProvider.OPENSEA:
                 const openSeaResponse = await PluginCollectibleRPC.getAsset(token.contractAddress, token.tokenId)
                 const desktopOrder = head(
-                    (openSeaResponse.sellOrders ?? []).sort(
-                        (a, b) =>
-                            new BigNumber(getOrderUnitPrice(a) ?? 0).toNumber() -
-                            new BigNumber(getOrderUnitPrice(b) ?? 0).toNumber(),
-                    ),
+                    (openSeaResponse.sellOrders ?? []).sort((a, b) => {
+                        const bna = BN.from(getOrderUnitPrice(a) ?? 0)
+                        const bnb = BN.from(getOrderUnitPrice(b) ?? 0)
+                        return bna.gt(bnb) ? 1 : bna.eq(bnb) ? 0 : -1
+                    }),
                 )
                 return {
                     is_verified: ['approved', 'verified'].includes(
@@ -46,7 +46,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     is_auction: Date.parse(`${openSeaResponse.endTime ?? ''}Z`) > Date.now(),
                     image_url: openSeaResponse.imageUrl,
                     asset_contract: openSeaResponse.assetContract,
-                    current_price: desktopOrder ? new BigNumber(getOrderUnitPrice(desktopOrder) ?? 0).toNumber() : null,
+                    current_price: desktopOrder ? BN.from(getOrderUnitPrice(desktopOrder) ?? 0).toNumber() : null,
                     current_symbol: desktopOrder?.paymentTokenContract?.symbol ?? 'ETH',
                     owner: {
                         ...openSeaResponse.owner,

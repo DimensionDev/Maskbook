@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
@@ -24,18 +24,18 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
     const [donateState, setDonateState] = useTransactionState()
 
     const donations = useMemo(() => {
-        const tipAmount = new BigNumber(GITCOIN_TIP_PERCENTAGE / 100).multipliedBy(amount)
-        const grantAmount = new BigNumber(amount).minus(tipAmount)
+        const tipAmount = BN.from(GITCOIN_TIP_PERCENTAGE).div(BN.from(100)).mul(amount)
+        const grantAmount = BN.from(amount).sub(tipAmount)
         if (!address || !token) return []
         return [
             {
                 token: token.type === EthereumTokenType.Ether ? GITCOIN_ETH_ADDRESS : token.address,
-                amount: tipAmount.toFixed(),
+                amount: tipAmount.toString(),
                 dest: address,
             },
             {
                 token: token.type === EthereumTokenType.Ether ? GITCOIN_ETH_ADDRESS : token.address,
-                amount: grantAmount.toFixed(),
+                amount: grantAmount.toString(),
                 dest: address,
             },
         ]
@@ -58,7 +58,7 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
         const config: Tx = {
             from: account,
             to: bulkCheckoutContract.options.address,
-            value: new BigNumber(token.type === EthereumTokenType.Ether ? amount : 0).toFixed(),
+            value: BN.from(token.type === EthereumTokenType.Ether ? amount : 0).toString(),
         }
         const estimatedGas = await bulkCheckoutContract.methods
             .donate(donations)
@@ -75,7 +75,7 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
         return new Promise<string>((resolve, reject) => {
             bulkCheckoutContract.methods.donate(donations).send(
                 {
-                    gas: addGasMargin(estimatedGas).toFixed(),
+                    gas: addGasMargin(estimatedGas).toString(),
                     ...config,
                 },
                 (error, hash) => {

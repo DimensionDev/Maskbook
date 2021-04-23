@@ -61,7 +61,7 @@ export function useDestructCallback() {
                     reject(error)
                 }
                 const promiEvent = ITO_Contract.methods.destruct(id).send({
-                    gas: addGasMargin(estimatedGas).toFixed(),
+                    gas: addGasMargin(estimatedGas).toString(),
                     ...config,
                 })
 

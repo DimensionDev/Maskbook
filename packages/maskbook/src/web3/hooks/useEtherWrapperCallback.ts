@@ -54,7 +54,7 @@ export function useEtherWrapperCallback() {
             // step 3: blocking
             wrapperContract.methods.deposit().send(
                 {
-                    gas: addGasMargin(estimatedGas).toFixed(),
+                    gas: addGasMargin(estimatedGas).toString(),
                     ...config,
                 },
                 (error, hash) => {
@@ -130,7 +130,7 @@ export function useEtherWrapperCallback() {
             // step 3: blocking
             wrapperContract.methods.withdraw(withdrawAmount).send(
                 {
-                    gas: addGasMargin(estimatedGas).toFixed(),
+                    gas: addGasMargin(estimatedGas).toString(),
                     ...config,
                 },
                 (error, hash) => {

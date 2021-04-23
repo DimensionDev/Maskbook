@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import type { TransactionReceipt } from 'web3-core'
 import type { Tx } from '@dimensiondev/contracts/types/types'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
@@ -49,7 +49,7 @@ export function useMaskClaimCallback() {
         // step 2: blocking
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = MaskITO_Contract.methods.claim().send({
-                gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                gas: addGasMargin(BN.from(estimatedGas)).toString(),
                 ...config,
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {

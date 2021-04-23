@@ -1,7 +1,7 @@
 import type Web3 from 'web3'
 import type { EventLog, TransactionReceipt } from 'web3-core'
 import Web3Utils, { AbiItem, AbiOutput } from 'web3-utils'
-import BigNumber from 'bignumber.js'
+import { BigNumber as BN, BigNumberish } from '@ethersproject/bignumber'
 import { CONSTANTS } from './constants'
 import {
     ChainId,
@@ -28,8 +28,8 @@ export function isETH(address: string) {
     return isSameAddress(address, getConstant(CONSTANTS, 'ETH_ADDRESS'))
 }
 
-export function addGasMargin(value: BigNumber.Value, scale = 1000) {
-    return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
+export function addGasMargin(value: BigNumberish, scale = 1000) {
+    return BN.from(value).mul(BN.from(10000).add(scale)).div(10000)
 }
 
 //#region constants

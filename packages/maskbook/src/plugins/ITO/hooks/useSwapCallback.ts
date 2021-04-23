@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
 import type { TransactionReceipt } from 'web3-core'
@@ -54,11 +54,11 @@ export function useSwapCallback(
         const config: Tx = {
             from: account,
             to: ITO_Contract.options.address,
-            value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
+            value: BN.from(token.type === EthereumTokenType.Ether ? total : '0').toString(),
         }
 
         // error: invalid swap amount
-        if (!new BigNumber(total).isPositive()) {
+        if (BN.from(total).isNegative()) {
             setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Invalid swap amount.'),
@@ -81,7 +81,7 @@ export function useSwapCallback(
             const availability = await ITO_Contract.methods.check_availability(id).call({
                 from: account,
             })
-            if (new BigNumber(availability.remaining).isZero()) {
+            if (BN.from(availability.remaining).isZero()) {
                 setSwapState({
                     type: TransactionStateType.FAILED,
                     error: new Error('Out of Stock'),
@@ -144,7 +144,7 @@ export function useSwapCallback(
                 resolve()
             }
             const promiEvent = ITO_Contract.methods.swap(...swapParams).send({
-                gas: addGasMargin(estimatedGas).toFixed(),
+                gas: addGasMargin(estimatedGas).toString(),
                 ...config,
             })
             promiEvent.on(TransactionEventType.TRANSACTION_HASH, onHash)

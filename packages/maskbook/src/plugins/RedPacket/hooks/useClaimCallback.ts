@@ -64,7 +64,7 @@ export function useClaimCallback(from: string, id?: string, password?: string) {
             }
             redPacketContract.methods.claim(...params).send(
                 {
-                    gas: addGasMargin(estimatedGas).toFixed(),
+                    gas: addGasMargin(estimatedGas).toString(),
                     ...config,
                 },
                 async (error, hash) => {

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import {
     makeStyles,
     createStyles,
@@ -89,7 +90,7 @@ export function TradeSummary(props: TradeSummaryProps) {
     const isExactIn = strategy === TradeStrategy.ExactIn
 
     const records: SummaryRecord[] = [
-        inputAmount.isGreaterThan('0') && outputAmount.isGreaterThan('0')
+        inputAmount.gt('0') && outputAmount.gt('0')
             ? {
                   title: 'Price',
                   children: (
@@ -99,12 +100,10 @@ export function TradeSummary(props: TradeSummaryProps) {
                                   <strong className={classes.emphasis}>
                                       {formatBalance(
                                           outputAmount
-                                              .dividedBy(inputAmount)
-                                              .multipliedBy(
-                                                  new BigNumber(10).pow(inputToken.decimals - outputToken.decimals),
-                                              )
-                                              .multipliedBy(new BigNumber(10).pow(outputToken.decimals))
-                                              .toFixed(),
+                                              .div(inputAmount)
+                                              .mul(BN.from(10).pow(inputToken.decimals - outputToken.decimals))
+                                              .mul(BN.from(10).pow(outputToken.decimals))
+                                              .toString(),
                                           outputToken.decimals,
                                       )}
                                   </strong>
@@ -117,12 +116,10 @@ export function TradeSummary(props: TradeSummaryProps) {
                                   <strong className={classes.emphasis}>
                                       {formatBalance(
                                           inputAmount
-                                              .dividedBy(outputAmount)
-                                              .multipliedBy(
-                                                  new BigNumber(10).pow(outputToken.decimals - inputToken.decimals),
-                                              )
-                                              .multipliedBy(new BigNumber(10).pow(inputToken.decimals))
-                                              .toFixed(),
+                                              .div(outputAmount)
+                                              .mul(BN.from(10).pow(outputToken.decimals - inputToken.decimals))
+                                              .mul(BN.from(10).pow(inputToken.decimals))
+                                              .toString(),
                                           inputToken.decimals,
                                       )}
                                   </strong>
@@ -148,7 +145,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                   children: (
                       <Typography className={classes.title}>
                           <strong className={classes.emphasis}>
-                              {formatBalance(minimumReceived.toFixed(), outputToken.decimals)}
+                              {formatBalance(minimumReceived.toString(), outputToken.decimals)}
                           </strong>{' '}
                           {outputToken.symbol}
                       </Typography>
@@ -161,7 +158,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                   children: (
                       <Typography className={classes.title}>
                           <strong className={classes.emphasis}>
-                              {formatBalance(maximumSold.toFixed(), inputToken.decimals)}
+                              {formatBalance(maximumSold.toString(), inputToken.decimals)}
                           </strong>{' '}
                           {inputToken.symbol}
                       </Typography>
@@ -179,8 +176,8 @@ export function TradeSummary(props: TradeSummaryProps) {
                     style={{
                         color: resolveUniswapWarningLevelColor(resolveUniswapWarningLevel(priceImpactWithoutFee)),
                     }}>
-                    {priceImpactWithoutFee.isGreaterThan('0')
-                        ? priceImpactWithoutFee?.isLessThan(ONE_BIPS)
+                    {priceImpactWithoutFee.gt('0')
+                        ? priceImpactWithoutFee?.lt(ONE_BIPS)
                             ? '<0.01%'
                             : `${formatPercentage(priceImpactWithoutFee)}`
                         : '-'}
@@ -191,7 +188,7 @@ export function TradeSummary(props: TradeSummaryProps) {
             title: 'Liquidity Provider Fee',
             children: (
                 <Typography className={classes.title}>
-                    {formatBalance(fee.toFixed(), inputToken.decimals)} {inputToken.symbol}
+                    {formatBalance(fee.toString(), inputToken.decimals)} {inputToken.symbol}
                 </Typography>
             ),
         },
@@ -206,8 +203,8 @@ export function TradeSummary(props: TradeSummaryProps) {
                     style={{
                         color: resolveUniswapWarningLevelColor(resolveUniswapWarningLevel(priceImpact)),
                     }}>
-                    {priceImpact.isGreaterThan('0')
-                        ? priceImpact?.isLessThan(ONE_BIPS)
+                    {priceImpact.gt('0')
+                        ? priceImpact?.gt(ONE_BIPS)
                             ? '<0.01%'
                             : `${formatPercentage(priceImpact)}`
                         : '-'}

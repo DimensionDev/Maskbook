@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
 import { OrderSide } from 'opensea-js/lib/types'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import type { CollectibleToken, NFTOrder, OpenSeaCustomAccount } from '../types'
 import { CollectibleProvider } from '../types'
 import { PluginCollectibleRPC } from '../messages'
 import { unreachable } from '../../../utils/utils'
-import BigNumber from 'bignumber.js'
 import { getOrderUnitPrice } from '../utils'
 import { OpenSeaAccountURL } from '../constants'
 import { toTokenIdentifier } from '../helpers'
@@ -24,9 +24,9 @@ export function useOrders(provider: CollectibleProvider, token?: CollectibleToke
                     },
                 )
                 return openseaResponse.orders.map((order) => {
-                    const unitPrice = new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber()
+                    const unitPrice = BN.from(getOrderUnitPrice(order) ?? 0).toNumber()
                     return {
-                        quantity: new BigNumber(order.quantity).toNumber(),
+                        quantity: BN.from(order.quantity).toNumber(),
                         expirationTime: order.expirationTime,
                         paymentTokenContract: order.paymentTokenContract,
                         hash: order.hash,

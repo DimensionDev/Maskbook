@@ -3,7 +3,6 @@ import Typeson from 'typeson'
 import type { Serialization } from 'async-call-rpc'
 import { Ok, Err } from 'ts-results'
 import { BigNumber } from 'bignumber.js'
-import { BigNumber as BN } from '@ethersproject/bignumber'
 
 /** @internal */
 export function serialize<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q) => T) {
@@ -50,7 +49,6 @@ typeson.register([blob, file, fileList, imageBitMap, num])
 serialize('Ok')(Ok)
 serialize('Err')(Err)
 serialize('BigNumber')(BigNumber)
-serialize('BN')(BN)
 export const serializer: Serialization = {
     serialization(from: unknown) {
         return typeson.encapsulate(from)

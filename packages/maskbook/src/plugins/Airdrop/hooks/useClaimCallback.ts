@@ -87,7 +87,7 @@ export function useClaimCallback(packet?: AirdropPacket) {
                 reject(error)
             }
             const promiEvent = AirdropContract.methods.claim(...claimParams).send({
-                gas: addGasMargin(estimatedGas).toFixed(),
+                gas: addGasMargin(estimatedGas).toString(),
                 ...config,
             })
 

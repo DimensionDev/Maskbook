@@ -43,7 +43,7 @@ export function useRefundCallback(from: string, id?: string) {
         return new Promise<string>((resolve, reject) => {
             redPacketContract.methods.refund(...params).send(
                 {
-                    gas: addGasMargin(estimatedGas).toFixed(),
+                    gas: addGasMargin(estimatedGas).toString(),
                     ...config,
                 },
                 (error, hash) => {

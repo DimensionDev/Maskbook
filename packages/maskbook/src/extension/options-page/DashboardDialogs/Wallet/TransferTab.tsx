@@ -1,5 +1,6 @@
 import { Button, createStyles, makeStyles, TextField } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
+import { parseUnits } from '@ethersproject/units'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
@@ -62,11 +63,11 @@ export function TransferTab(props: TransferTabProps) {
     }, [])
 
     //#region transfer tokens
-    const transferAmount = new BigNumber(amount || '0').multipliedBy(new BigNumber(10).pow(token.decimals))
+    const transferAmount = parseUnits(amount || '0', token.decimals)
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         token.type,
         token.address,
-        transferAmount.toFixed(),
+        transferAmount.toString(),
         address,
         memo,
     )
@@ -97,7 +98,7 @@ export function TransferTab(props: TransferTabProps) {
         setTransactionDialogOpen({
             open: true,
             state: transferState,
-            summary: `Transfer ${formatBalance(transferAmount.toFixed(), token.decimals ?? 0)} ${
+            summary: `Transfer ${formatBalance(transferAmount.toString(), token.decimals ?? 0)} ${
                 token.symbol
             } to ${formatEthereumAddress(address, 4)}.`,
         })
@@ -106,8 +107,8 @@ export function TransferTab(props: TransferTabProps) {
 
     //#region validation
     const validationMessage = useMemo(() => {
-        if (!transferAmount || new BigNumber(transferAmount).isZero()) return t('wallet_transfer_error_amount_absence')
-        if (new BigNumber(transferAmount).isGreaterThan(new BigNumber(tokenBalance)))
+        if (!transferAmount || transferAmount.isZero()) return t('wallet_transfer_error_amount_absence')
+        if (transferAmount.gt(BN.from(tokenBalance)))
             return t('wallet_transfer_error_insufficent_balance', {
                 token: token.symbol,
             })

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button, makeStyles, createStyles, DialogActions, DialogContent, Typography } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
-import type BigNumber from 'bignumber.js'
+import type { BigNumber as BN } from '@ethersproject/bignumber'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { TradeSummary, TradeSummaryProps } from '../trader/TradeSummary'
 import { TokenPanel } from './TokenPanel'
@@ -59,7 +59,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { inputAmount, outputAmount, minimumReceived } = trade
 
     //#region detect price changing
-    const [executionPrice, setExecutionPrice] = useState<BigNumber | undefined>(trade.executionPrice)
+    const [executionPrice, setExecutionPrice] = useState<BN | undefined>(trade.executionPrice)
     useEffect(() => {
         if (open) setExecutionPrice(undefined)
     }, [open])
@@ -68,7 +68,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     }, [trade, executionPrice])
     //#endregion
 
-    const staled = !!(executionPrice && !executionPrice.isEqualTo(trade.executionPrice))
+    const staled = !!(executionPrice && !executionPrice.eq(trade.executionPrice))
 
     return (
         <>
@@ -76,9 +76,9 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                 <DialogContent>
                     {inputToken && outputToken ? (
                         <>
-                            <TokenPanel amount={inputAmount.toFixed() ?? '0'} token={inputToken} />
+                            <TokenPanel amount={inputAmount.toString() ?? '0'} token={inputToken} />
                             <ArrowDownwardIcon className={classes.reverseIcon} />
-                            <TokenPanel amount={outputAmount.toFixed() ?? '0'} token={outputToken} />
+                            <TokenPanel amount={outputAmount.toString() ?? '0'} token={outputToken} />
                         </>
                     ) : null}
                     {staled ? (
@@ -91,7 +91,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                     <Typography
                         className={classes.tip}
                         color="textSecondary">{`Output is estimated. You will receive at least ${formatBalance(
-                        minimumReceived.toFixed(),
+                        minimumReceived.toString(),
                         outputToken.decimals,
                     )} ${outputToken.symbol ?? 'Token'} or the transaction will revert.`}</Typography>
                     <TradeSummary

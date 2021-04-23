@@ -1,3 +1,4 @@
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import BigNumber from 'bignumber.js'
 import type { Order } from 'opensea-js/lib/types'
 import { parseURL } from '../../utils/utils'
@@ -62,7 +63,7 @@ export function getAssetInfoFromURL(url?: string) {
 export function getOrderUnitPrice(order: Order) {
     if (!order.currentPrice || !order.paymentTokenContract?.decimals) return
     const price = formatBalance(order.currentPrice.toFixed(), order.paymentTokenContract.decimals)
-    const quantity = formatBalance(order.quantity.toFixed(), new BigNumber(order.quantity).toString() !== '1' ? 8 : 0)
+    const quantity = formatBalance(order.quantity.toFixed(), !BN.from(order.quantity).eq(BN.from(1)) ? 8 : 0)
 
     return new BigNumber(price).dividedBy(quantity).toFixed(4, 1).toString()
 }

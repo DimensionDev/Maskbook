@@ -106,7 +106,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
             // step 2: blocking
             return new Promise<void>(async (resolve, reject) => {
                 const promiEvent = erc20Contract.methods.approve(spender, useExact ? amount : MaxUint256).send({
-                    gas: addGasMargin(estimatedGas).toFixed(),
+                    gas: addGasMargin(estimatedGas).toString(),
                     ...config,
                 })
                 const revalidate = once(() => {

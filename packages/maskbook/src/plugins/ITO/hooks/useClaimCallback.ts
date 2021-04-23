@@ -48,7 +48,7 @@ export function useClaimCallback(pids: string[]) {
         // step 2: blocking
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = ITO_Contract.methods.claim(pids).send({
-                gas: addGasMargin(estimatedGas).toFixed(),
+                gas: addGasMargin(estimatedGas).toString(),
                 ...config,
             })
 

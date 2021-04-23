@@ -96,7 +96,7 @@ export function useTradeCallback(
             // @ts-ignore
             routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args).send(
                 {
-                    gas: addGasMargin(gasEstimated).toFixed(),
+                    gas: addGasMargin(gasEstimated).toString(),
                     ...config,
                 },
                 (error, hash) => {
