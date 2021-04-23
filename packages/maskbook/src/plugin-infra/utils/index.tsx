@@ -1,20 +1,20 @@
 import type { Plugin } from '../types'
 import { useEffect, useState, useRef } from 'react'
-import { usePostInfo } from '../../components/DataSource/usePostInfo'
 import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
-import { useActivatedPluginInstanceUI } from '../manager/ui'
-type InjectHook<T> = Plugin.UI.InjectHook<T>
-type RawHook<T> = Plugin.UI.RawInjectHook<T>
-type ReactHook<T> = Plugin.UI.ReactInjectHook<T>
+type Inject<T> = Plugin.InjectUI<T>
+type Raw<T> = Plugin.InjectUIRaw<T>
 
-export function createInjectHooksRenderer<T>(pick: (plugin: Plugin.UI.Definition) => undefined | InjectHook<T>) {
-    const picker = (plugin: Plugin.UI.Definition) => ({
+export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType>(
+    usePlugins: () => PluginDefinition[],
+    pickInjector: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
+) {
+    const picker = (plugin: PluginDefinition) => ({
         key: plugin.ID,
         name: plugin.name,
-        ui: pick(plugin),
+        ui: pickInjector(plugin),
     })
-    return function InjectHooksRenderer<T>(props: T) {
-        const all = useActivatedPluginInstanceUI()
+    return function InjectHooksRenderer(props: PropsType) {
+        const all = usePlugins()
             .map(picker)
             .filter((x) => x.ui)
             .map(({ key, name, ui }) => (
@@ -26,30 +26,26 @@ export function createInjectHooksRenderer<T>(pick: (plugin: Plugin.UI.Definition
     }
 }
 
-function Main<T>(props: { data: T; UI: InjectHook<any> }) {
+function Main<T>(props: { data: T; UI: Inject<any> }) {
     const { data, UI } = props
     if (isRawInjectHook(UI)) return <RawHookRender UI={UI} data={data} />
-    return <ReactHookRender UI={UI} data={data} />
+    return <UI {...data} />
 }
-function RawHookRender<T>({ UI, data }: { data: T; UI: RawHook<T> }) {
+function RawHookRender<T>({ UI, data }: { data: T; UI: Raw<T> }) {
     const [ref, setRef] = useState<HTMLDivElement | null>()
     const [f, setF] = useState<(props: T) => void>()
     const cancel = useRef<AbortController>()
-    const post = usePostInfo()
 
     useEffect(() => {
         if (!ref) return
         const sig = (cancel.current = new AbortController())
-        setF(UI.init(sig.signal, post, ref))
+        setF(UI.init(sig.signal, ref))
         return () => sig.abort()
-    }, [ref, UI.init, post])
+    }, [ref, UI.init])
     useEffect(() => void f?.(data), [f, data])
 
     return <div ref={(r) => ref === r || setRef(r)} />
 }
-function ReactHookRender<T>({ UI, data }: { data: T; UI: ReactHook<T> }) {
-    return null
-}
-function isRawInjectHook<T>(x: InjectHook<T>): x is RawHook<T> {
+function isRawInjectHook<T>(x: Inject<T>): x is Raw<T> {
     return 'type' in x && x.type === 'raw'
 }

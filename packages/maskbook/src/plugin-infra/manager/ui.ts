@@ -1,12 +1,18 @@
 import { getNetwork } from '../../social-network-adaptor'
-import type { Plugin } from '../types'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { Emitter } from '@servie/events'
 import { useSubscription, Subscription } from 'use-subscription'
-import type { ActivatedPluginInstance } from './shared'
+import { createManager } from './manage'
+import { getPluginDefine, registeredPluginIDs } from './store'
+import type { Plugin } from '../types'
 
-const subscription: Subscription<UI[]> = {
-    getCurrentValue: () => [...activatedPluginUI.values()].map((x) => x.instance),
+const { activatePlugin, stopPlugin, activated } = createManager({
+    getLoader: (plugin) => plugin.SNSAdaptor,
+})
+
+const events = new Emitter<{ onUpdate: [] }>()
+const subscription: Subscription<Plugin.SNSAdaptor.Definition[]> = {
+    getCurrentValue: () => [...activated.plugins],
     subscribe: (f) => {
         events.on('onUpdate', f)
         return () => events.off('onUpdate', f)
@@ -15,70 +21,31 @@ const subscription: Subscription<UI[]> = {
 export function useActivatedPluginInstanceUI() {
     return useSubscription(subscription)
 }
-/** If this check does not passes, the plugin will not registered. */
-function meetRegisterRequirement(def: Plugin.Config.Definition) {
-    // arch check
-    if (process.env.architecture === 'app' && !def.enableRequirement.architecture.app) return false
-    if (process.env.architecture === 'web' && !def.enableRequirement.architecture.web) return false
-
-    // build variant check
-    if (process.env.NODE_ENV === 'production') {
-        if (process.env.build === 'stable' && def.enableRequirement.target !== 'stable') {
-            return false
-        } else if (process.env.build === 'beta' && def.enableRequirement.target === 'insider') {
-            return false
-        }
-    }
-    return true
-}
-export function registerPluginUI(def: Plugin.DeferredDefinition) {
-    if (meetRegisterRequirement(def)) registeredPluginUI.set(def.ID, def)
-}
 /** Check if the plugin has met it's start requirement. */
 export function meetStartRequirement(id: string): boolean {
-    const def = registeredPluginUI.get(id)
-    if (!def) return false
-
-    // Dashboard plugins are always loaded.
-    if (isEnvironment(Environment.ManifestOptions)) return true
     if (!isEnvironment(Environment.ContentScript)) return false
-    // content script check
 
+    const def = getPluginDefine(id)
+    if (!def) return false
     // SNS adaptor
     const network = getNetwork()
     if (!network) return false
-    if (!def.enableRequirement.networks[network]) return false
+    // boolean | undefined
+    const status = def.enableRequirement.networks.networks[network]
+    if (def.enableRequirement.networks.type === 'opt-in' && status !== true) return false
+    if (def.enableRequirement.networks.type === 'opt-out' && status === true) return false
+    // TODO: blockchain check
     return true
 }
-/** Start a plugin (without check if the start requirement has met). */
-export async function startPluginUI(id: string) {
-    if (activatedPluginUI.has(id)) return
+export async function startSNSAdaptorPlugin(signal: AbortSignal) {
+    signal.addEventListener('abort', () => [...activated.id].forEach(stopPlugin))
 
-    const def = registeredPluginUI.get(id)
-    if (!def) return
-
-    const runningPlugin: ActivatedPluginInstance<Plugin.UI.Definition> = {
-        instance: (await def.load_ui()).default,
-        controller: new AbortController(),
+    // the current supported network won't change so no need to watch
+    __startPlugins()
+}
+function __startPlugins() {
+    for (const id of registeredPluginIDs) {
+        if (meetStartRequirement(id)) activatePlugin(id).catch(console.error)
+        else stopPlugin(id)
     }
-    const { controller, instance } = runningPlugin
-    await instance.init(controller.signal)
-    activatedPluginUI.set(def.ID, runningPlugin)
-    events.emit('onUpdate')
 }
-
-export async function stopPluginUI(id: string) {
-    const activated = activatedPluginUI.get(id)
-    if (!activated) return
-
-    activated.controller.abort()
-    activatedPluginUI.delete(id)
-    events.emit('onUpdate')
-}
-
-const events = new Emitter<{
-    onUpdate: []
-}>()
-type UI = Plugin.UI.Definition
-const activatedPluginUI = new Map<string, ActivatedPluginInstance<UI>>()
-const registeredPluginUI = new Map<string, Plugin.DeferredDefinition>()
