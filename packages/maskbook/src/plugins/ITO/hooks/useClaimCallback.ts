@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import stringify from 'json-stable-stringify'
 import type { TransactionReceipt } from 'web3-core'
 import type { Tx } from '@dimensiondev/contracts/types/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
@@ -8,14 +9,14 @@ import { TransactionStateType, useTransactionState } from '../../../web3/hooks/u
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 
-export function useClaimCallback(pid: string) {
+export function useClaimCallback(pids: string[]) {
     const account = useAccount()
     const chainId = useChainId()
     const ITO_Contract = useITO_Contract()
     const [claimState, setClaimState] = useTransactionState()
 
     const claimCallback = useCallback(async () => {
-        if (!ITO_Contract) {
+        if (!ITO_Contract || pids.length === 0) {
             setClaimState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -34,7 +35,7 @@ export function useClaimCallback(pid: string) {
 
         // step 1: estimate gas
         const estimatedGas = await ITO_Contract.methods
-            .claim([pid])
+            .claim(pids)
             .estimateGas(config)
             .catch((error: Error) => {
                 setClaimState({
@@ -46,10 +47,18 @@ export function useClaimCallback(pid: string) {
 
         // step 2: blocking
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = ITO_Contract.methods.claim([pid]).send({
+            const promiEvent = ITO_Contract.methods.claim(pids).send({
                 gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
             })
+
+            promiEvent.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
+                setClaimState({
+                    type: TransactionStateType.HASH,
+                    hash,
+                })
+            })
+
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                 setClaimState({
                     type: TransactionStateType.CONFIRMED,
@@ -73,7 +82,7 @@ export function useClaimCallback(pid: string) {
                 reject(error)
             })
         })
-    }, [account, chainId, ITO_Contract])
+    }, [account, chainId, ITO_Contract, stringify(pids)])
 
     const resetCallback = useCallback(() => {
         setClaimState({

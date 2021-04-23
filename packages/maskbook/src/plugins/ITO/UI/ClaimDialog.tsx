@@ -231,7 +231,9 @@ export function ClaimDialog(props: ClaimDialogProps) {
 
         if (swapState.type === TransactionStateType.HASH) {
             const { hash } = swapState
-            window.open(resolveTransactionLinkOnEtherscan(chainId, hash), '_blank', 'noopener noreferrer')
+            setTimeout(() => {
+                window.open(resolveTransactionLinkOnEtherscan(chainId, hash), '_blank', 'noopener noreferrer')
+            }, 2000)
             return
         }
 
