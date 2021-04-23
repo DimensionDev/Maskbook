@@ -98,7 +98,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         size="large"
                         onClick={() => onApprove(true)}>
                         <span className={classes.buttonLabel}>{t('plugin_wallet_token_unlock')}</span>
-                        <span className={classes.buttonAmount}>{`${formatBalance(amount, token.decimals, 2)} ${
+                        <span className={classes.buttonAmount}>{`${formatBalance(amount, token.decimals)} ${
                             token?.symbol ?? 'Token'
                         }`}</span>
                     </ActionButton>

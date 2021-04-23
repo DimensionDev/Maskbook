@@ -549,7 +549,7 @@ export function ITO(props: ITO_Props) {
                                                 new BigNumber(10).pow(token.decimals - exchange_tokens[i].decimals),
                                             )
                                             .multipliedBy(new BigNumber(10).pow(exchange_tokens[i].decimals))
-                                            .integerValue(),
+                                            .toFixed(),
                                         exchange_tokens[i].decimals,
                                     )}
                                     token={token}

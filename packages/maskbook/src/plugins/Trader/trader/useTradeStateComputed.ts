@@ -22,13 +22,13 @@ export function useTradeStateComputed(provider: TradeProvider) {
                     strategy === TradeStrategy.ExactIn
                         ? inputAmount
                         : tradeComputed_
-                        ? formatBalance(tradeComputed_.inputAmount.toFixed(), inputToken?.decimals)
+                        ? formatBalance(tradeComputed_.inputAmount, inputToken?.decimals)
                         : '',
                 outputAmount:
                     strategy === TradeStrategy.ExactOut
                         ? outputAmount
                         : tradeComputed_
-                        ? formatBalance(tradeComputed_.outputAmount.toFixed(), outputToken?.decimals)
+                        ? formatBalance(tradeComputed_.outputAmount, outputToken?.decimals)
                         : '',
             },
             dispatchTradeStore,

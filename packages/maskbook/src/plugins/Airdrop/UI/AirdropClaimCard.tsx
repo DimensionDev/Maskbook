@@ -115,7 +115,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
             [
                 `I just claimed ${cashTag}${token?.symbol} with ${
                     new BigNumber(packet?.amount ?? '0')
-                        .multipliedBy(checkState.type === CheckStateType.YEP ? checkState.ratio : 1)
+                        .multipliedBy(checkState.type === CheckStateType.YEP ? checkState.ratio.toString() : 1)
                         .dp(0)
                         .toFixed() + '.00'
                 }. Follow @realMaskbook (mask.io) to claim airdrop.`,
@@ -232,7 +232,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                 <Box display="flex">
                     <Box marginLeft={2.5}>
                         {checkState.type === CheckStateType.YEP ? (
-                            <Typography>Current Ratio: {formatPercentage(checkState.ratio)}</Typography>
+                            <Typography>Current Ratio: {formatPercentage(checkState.ratio.toString())}</Typography>
                         ) : null}
                         <Box display="flex" alignItems="center" justifyContent="flex-end" marginTop={1.5}>
                             <ActionButton

@@ -122,7 +122,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                                       symbol: token.symbol ?? 'Token',
                                   })
                                 : t('plugin_ito_amount_approved', {
-                                      amount: formatBalance(allowance, token.decimals, 2),
+                                      amount: formatBalance(allowance, token.decimals),
                                       symbol: token.symbol ?? 'Token',
                                   })}
                         </ActionButton>

@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 
-const MIN_VALUE = new BigNumber('1e-5')
+const MIN_VALUE = BN.from('100000')
 
 export function useTradeComputed(
     trade: SwapResponse | null,
@@ -29,18 +30,18 @@ export function useTradeComputed(
 
         return {
             strategy,
-            inputAmount: new BigNumber(isExactIn ? inputAmount : tradeAmount),
-            outputAmount: new BigNumber(!isExactIn ? outputAmount : tradeAmount),
+            inputAmount: BN.from(isExactIn ? inputAmount : tradeAmount.toFixed()),
+            outputAmount: BN.from(!isExactIn ? outputAmount : tradeAmount.toFixed()),
             inputToken,
             outputToken,
-            nextMidPrice: new BigNumber(spotPrice),
-            executionPrice: new BigNumber(spotPrice),
-            priceImpact: priceImpact.isNegative() ? MIN_VALUE : priceImpact,
-            priceImpactWithoutFee: priceImpact.isNegative() ? MIN_VALUE : priceImpact,
-            maximumSold: new BigNumber(tradeAmount),
-            minimumReceived: new BigNumber(tradeAmount),
+            nextMidPrice: BN.from(spotPrice.toFixed()),
+            executionPrice: BN.from(spotPrice.toFixed()),
+            priceImpact: priceImpact.isNegative() ? MIN_VALUE : BN.from(priceImpact.toFixed()),
+            priceImpactWithoutFee: priceImpact.isNegative() ? MIN_VALUE : BN.from(priceImpact.toFixed()),
+            maximumSold: BN.from(tradeAmount.toFixed()),
+            minimumReceived: BN.from(tradeAmount.toFixed()),
             path: [],
-            fee: new BigNumber(0),
+            fee: BN.from(0),
             trade_: trade,
         } as TradeComputed<SwapResponse>
     }, [trade, strategy, inputToken, outputToken])

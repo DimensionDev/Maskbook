@@ -99,7 +99,7 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                     <TableCell>
                         <Typography className={classes.content}>
                             {formatBalance(
-                                new BigNumber(order.quantity ?? 0),
+                                order.quantity ?? 0,
                                 new BigNumber(order.quantity ?? 0).toString() !== '1' ? 8 : 0,
                             )}
                         </Typography>

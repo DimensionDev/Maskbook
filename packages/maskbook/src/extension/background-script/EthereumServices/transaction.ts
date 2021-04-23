@@ -1,5 +1,5 @@
 import type { TransactionConfig, PromiEvent as PromiEventW3, TransactionReceipt } from 'web3-core'
-import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 
 import { enhancePromiEvent, promiEventToIterator, StageType } from '../../../utils/promiEvent'
 import { getWallets } from '../../../plugins/Wallet/services'
@@ -99,7 +99,7 @@ async function createTransactionEventCreator(from: string, config: TransactionCo
                 from,
                 nonce,
                 gas,
-                gasPrice: new BigNumber(gasPrice as string).toFixed(),
+                gasPrice: BN.from(gasPrice).toString(),
                 ...config,
             })
     }

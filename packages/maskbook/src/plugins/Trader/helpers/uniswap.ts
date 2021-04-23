@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import {
     Token as UniswapToken,
     ChainId as UniswapChainId,
@@ -81,11 +81,11 @@ export function uniswapChainIdTo(chainId: UniswapChainId) {
 }
 
 export function uniswapPercentTo(percent: UniswapPercent) {
-    return new BigNumber(percent.numerator.toString()).dividedBy(new BigNumber(percent.denominator.toString()))
+    return BN.from(percent.numerator.toString()).div(BN.from(percent.denominator.toString()))
 }
 
 export function uniswapPriceTo(price: UniswapPrice) {
-    return new BigNumber(price.scalar.numerator.toString()).dividedBy(price.scalar.denominator.toString())
+    return BN.from(price.scalar.numerator.toString()).div(BN.from(price.scalar.denominator.toString()))
 }
 
 export function uniswapTokenTo(token: UniswapToken) {
@@ -100,5 +100,5 @@ export function uniswapTokenTo(token: UniswapToken) {
 }
 
 export function uniswapCurrencyAmountTo(currencyAmount: UniswapCurrencyAmount) {
-    return new BigNumber(currencyAmount.raw.toString())
+    return BN.from(currencyAmount.raw.toString())
 }
