@@ -1,62 +1,55 @@
-import { useCallback } from 'react'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import { ListItem, ListItemText, Typography, ListItemIcon, Link } from '@material-ui/core'
+import { Link, ListItem, ListItemText, Typography } from '@material-ui/core'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import { TokenIcon } from './TokenIcon'
-import { useConstant } from '../../../web3/hooks/useConstant'
+import { useCallback } from 'react'
+import { formatBalance, formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import { CONSTANTS } from '../../../web3/constants'
-import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
+import { isSameAddress } from '../../../web3/helpers'
+import { useConstant } from '../../../web3/hooks/useConstant'
 import { resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { isSameAddress } from '../../../web3/helpers'
+import { TokenIcon } from './TokenIcon'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        root: {
+            display: 'flex',
+            padding: `${theme.spacing(1)} ${theme.spacing(1)}`,
+        },
         icon: {
             width: 28,
             height: 28,
         },
-        text: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
+        info: {
+            flex: '2 1 240px',
+            marginLeft: theme.spacing(2),
         },
         primary: {
-            flex: 1,
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
             overflow: 'hidden',
-            paddingRight: theme.spacing(1),
-        },
-        name: {
-            display: 'block',
         },
         secondary: {
-            lineHeight: 1,
-            paddingRight: theme.spacing(3),
-            position: 'relative',
-        },
-        link: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 'auto',
-            margin: 'auto',
-            position: 'absolute',
+            display: 'flex',
+            alignItems: 'center',
         },
         openIcon: {
-            fontSize: 16,
-            width: 16,
-            height: 16,
+            fontSize: 12,
+            width: 12,
+            height: 12,
             marginLeft: theme.spacing(0.5),
         },
         address: {
             color: theme.palette.text.disabled,
             fontSize: 12,
-            display: 'block',
-            marginTop: theme.spacing(0.25),
         },
-        symbol: {},
+        link: {
+            lineHeight: 0,
+            display: 'block',
+        },
+        balance: {
+            flex: '0 0 auto',
+        },
     }),
 )
 
@@ -67,6 +60,7 @@ export interface TokenInListProps {
         tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
         selected: string[]
         onSelect(address: string): void
+        balance?: number
     }
 }
 
@@ -78,35 +72,38 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
     const token = data.tokens[index]
     if (!token) return null
     const { address, name, symbol } = token
+    const balance = 0
     return (
         <ListItem
             button
+            className={classes.root}
             style={style}
             disabled={data.selected.some((x) => isSameAddress(x, address))}
             onClick={() => data.onSelect(address)}>
-            <ListItemIcon>
-                <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} />
-            </ListItemIcon>
-            <ListItemText classes={{ primary: classes.text }}>
-                <Typography className={classes.primary} color="textPrimary" component="span">
-                    <span className={classes.name}>{name}</span>
-                    <span className={classes.address}>
-                        {token.address !== ETH_ADDRESS ? formatEthereumAddress(token.address, 8) : null}
-                    </span>
-                </Typography>
-                <Typography className={classes.secondary} color="textSecondary" component="span">
-                    <span className={classes.symbol}>{symbol}</span>
-                    {token.address !== ETH_ADDRESS ? (
-                        <Link
-                            className={classes.link}
-                            href={resolveTokenLinkOnEtherscan(token)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={stop}>
-                            <OpenInNewIcon className={classes.openIcon} />
-                        </Link>
-                    ) : null}
-                </Typography>
+            <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} />
+            <ListItemText
+                classes={{ root: classes.info, primary: classes.primary, secondary: classes.secondary }}
+                primary={`${name}(${symbol})`}
+                secondary={
+                    <>
+                        <span className={classes.address}>
+                            {token.address !== ETH_ADDRESS ? formatEthereumAddress(token.address, 8) : null}
+                        </span>
+                        {token.address !== ETH_ADDRESS ? (
+                            <Link
+                                href={resolveTokenLinkOnEtherscan(token)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={classes.link}
+                                onClick={stop}>
+                                <OpenInNewIcon className={classes.openIcon} color="action" />
+                            </Link>
+                        ) : null}
+                    </>
+                }
+            />
+            <ListItemText className={classes.balance}>
+                <Typography>{balance ? formatBalance(balance) : ''}</Typography>
             </ListItemText>
         </ListItem>
     )
