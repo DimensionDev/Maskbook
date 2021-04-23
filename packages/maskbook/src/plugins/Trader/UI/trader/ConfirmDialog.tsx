@@ -9,7 +9,7 @@ import { PriceStaleWarnning } from './PriceStaleWarnning'
 import type { TradeComputed, TradeProvider } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { formatBalance } from '../../../Wallet/formatter'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -37,8 +37,8 @@ export interface ConfirmDialogUIProps extends withClasses<never> {
     open: boolean
     trade: TradeComputed
     provider: TradeProvider
-    inputToken: EtherTokenDetailed | ERC20TokenDetailed
-    outputToken: EtherTokenDetailed | ERC20TokenDetailed
+    inputToken: NativeTokenDetailed | ERC20TokenDetailed
+    outputToken: NativeTokenDetailed | ERC20TokenDetailed
     onConfirm: () => void
     onClose?: () => void
     TradeSummaryProps?: Partial<TradeSummaryProps>

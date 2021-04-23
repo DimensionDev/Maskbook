@@ -8,7 +8,7 @@ import { buf2hex, hex2buf } from '../../../utils/utils'
 import { addGasMargin, isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
+import { ERC20TokenDetailed, NativeTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { usePoolPayload } from './usePoolPayload'
 
@@ -16,7 +16,7 @@ export function useSwapCallback(
     id: string,
     password: string,
     total: string,
-    token: PartialRequired<EtherTokenDetailed | ERC20TokenDetailed, 'address'>,
+    token: PartialRequired<NativeTokenDetailed | ERC20TokenDetailed, 'address'>,
 ) {
     const account = useAccount()
     const ITO_Contract = useITO_Contract()
@@ -54,7 +54,7 @@ export function useSwapCallback(
         const config: Tx = {
             from: account,
             to: ITO_Contract.options.address,
-            value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
+            value: new BigNumber(token.type === EthereumTokenType.Native ? total : '0').toFixed(),
         }
 
         // error: invalid swap amount

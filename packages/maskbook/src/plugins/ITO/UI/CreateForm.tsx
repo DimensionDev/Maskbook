@@ -158,7 +158,7 @@ export function CreateForm(props: CreateFormProps) {
 
     // balance
     const { value: tokenBalance = '0' } = useTokenBalance(
-        tokenAndAmount?.token?.type ?? EthereumTokenType.Ether,
+        tokenAndAmount?.token?.type ?? EthereumTokenType.Native,
         tokenAndAmount?.token?.address ?? '',
     )
 

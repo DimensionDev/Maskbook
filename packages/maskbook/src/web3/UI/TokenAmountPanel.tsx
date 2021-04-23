@@ -15,7 +15,7 @@ import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { formatBalance } from '../../plugins/Wallet/formatter'
 import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../constants'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import type { EtherTokenDetailed, ERC20TokenDetailed } from '../types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../types'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -58,7 +58,7 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     disableToken?: boolean
     disableBalance?: boolean
     label: string
-    token?: EtherTokenDetailed | ERC20TokenDetailed | null
+    token?: NativeTokenDetailed | ERC20TokenDetailed | null
     onAmountChange: (amount: string) => void
     InputProps?: Partial<InputProps>
     MaxChipProps?: Partial<ChipProps>

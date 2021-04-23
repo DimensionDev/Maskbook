@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { Typography, Link, Checkbox, makeStyles, createStyles, FormControlLabel } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { formatEthereumAddress } from '../../Wallet/formatter'
@@ -115,7 +115,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface RemindDialogProps extends withClasses<'root'> {
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    token: NativeTokenDetailed | ERC20TokenDetailed
     chainId: ChainId
     setStatus: (status: ClaimStatus) => void
 }

@@ -1,5 +1,5 @@
 import type { TransactionState } from '../../web3/hooks/useTransactionState'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
@@ -13,7 +13,7 @@ type SelectTokenDialogEvent =
       }
     | {
           open: false
-          token?: EtherTokenDetailed | ERC20TokenDetailed
+          token?: NativeTokenDetailed | ERC20TokenDetailed
       }
 
 type UnlockERC20TokenDialogEvent =

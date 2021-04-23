@@ -8,7 +8,7 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useBlockNumber'
 import { useAccount } from '../../../web3/hooks/useAccount'
@@ -171,8 +171,8 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) =>
 //#region token item
 interface TokenItemProps {
     price: string
-    token: EtherTokenDetailed | ERC20TokenDetailed
-    exchangeToken: EtherTokenDetailed | ERC20TokenDetailed
+    token: NativeTokenDetailed | ERC20TokenDetailed
+    exchangeToken: NativeTokenDetailed | ERC20TokenDetailed
 }
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {

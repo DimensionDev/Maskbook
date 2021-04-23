@@ -7,7 +7,7 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../web3/constants'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import { resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import { isSameAddress } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -64,7 +64,7 @@ export interface TokenInListProps {
     index: number
     style: any
     data: {
-        tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
+        tokens: (NativeTokenDetailed | ERC20TokenDetailed)[]
         selected: string[]
         onSelect(address: string): void
     }

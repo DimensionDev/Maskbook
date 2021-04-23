@@ -1,5 +1,5 @@
 import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
@@ -54,7 +54,7 @@ export type SelectTokenDialogEvent =
           /**
            * The selected detailed token.
            */
-          token?: EtherTokenDetailed | ERC20TokenDetailed
+          token?: NativeTokenDetailed | ERC20TokenDetailed
       }
 
 interface WalletMessage {

@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { useChainId } from '../../../../web3/hooks/useBlockNumber'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
 import { toUniswapToken } from '../../helpers'
 
-export function useUniswapToken(token?: EtherTokenDetailed | ERC20TokenDetailed) {
+export function useUniswapToken(token?: NativeTokenDetailed | ERC20TokenDetailed) {
     const chainId = useChainId()
     return useMemo(() => {
         if (!token) return

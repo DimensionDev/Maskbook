@@ -7,7 +7,7 @@ import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogFT 
 import { useMenu } from '../../../utils/hooks/useMenu'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { useAccount } from '../../../web3/hooks/useAccount'
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 export interface ActionsBarFT_Props extends withClasses<'more'> {
     chain: 'eth' | string
     wallet: WalletRecord
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    token: NativeTokenDetailed | ERC20TokenDetailed
 }
 
 export function ActionsBarFT(props: ActionsBarFT_Props) {

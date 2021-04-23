@@ -7,7 +7,7 @@ import {
     ChainId,
     ERC20TokenDetailed,
     EthereumTokenType,
-    EtherTokenDetailed,
+    NativeTokenDetailed,
     ERC721TokenAssetDetailed,
     ERC1155TokenAssetDetailed,
 } from './types'
@@ -58,9 +58,9 @@ export function getAllConstants<T extends Web3Constants, K extends keyof T>(cons
 }
 //#endregion
 
-export function createEtherToken(chainId: ChainId): EtherTokenDetailed {
+export function createEtherToken(chainId: ChainId): NativeTokenDetailed {
     return {
-        type: EthereumTokenType.Ether,
+        type: EthereumTokenType.Native,
         chainId,
         address: getConstant(CONSTANTS, 'ETH_ADDRESS'),
         decimals: 18,

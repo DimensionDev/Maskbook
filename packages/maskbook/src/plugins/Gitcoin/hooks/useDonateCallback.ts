@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
 import { addGasMargin } from '../../../web3/helpers'
@@ -15,7 +15,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
  * @param amount
  * @param token
  */
-export function useDonateCallback(address: string, amount: string, token?: EtherTokenDetailed | ERC20TokenDetailed) {
+export function useDonateCallback(address: string, amount: string, token?: NativeTokenDetailed | ERC20TokenDetailed) {
     const GITCOIN_ETH_ADDRESS = useConstant(GITCOIN_CONSTANT, 'GITCOIN_ETH_ADDRESS')
     const GITCOIN_TIP_PERCENTAGE = useConstant(GITCOIN_CONSTANT, 'GITCOIN_TIP_PERCENTAGE')
     const bulkCheckoutContract = useBulkCheckoutContract()
@@ -29,12 +29,12 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
         if (!address || !token) return []
         return [
             {
-                token: token.type === EthereumTokenType.Ether ? GITCOIN_ETH_ADDRESS : token.address,
+                token: token.type === EthereumTokenType.Native ? GITCOIN_ETH_ADDRESS : token.address,
                 amount: tipAmount.toFixed(),
                 dest: address,
             },
             {
-                token: token.type === EthereumTokenType.Ether ? GITCOIN_ETH_ADDRESS : token.address,
+                token: token.type === EthereumTokenType.Native ? GITCOIN_ETH_ADDRESS : token.address,
                 amount: grantAmount.toFixed(),
                 dest: address,
             },
@@ -58,7 +58,7 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
         const config: Tx = {
             from: account,
             to: bulkCheckoutContract.options.address,
-            value: new BigNumber(token.type === EthereumTokenType.Ether ? amount : 0).toFixed(),
+            value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
         }
         const estimatedGas = await bulkCheckoutContract.methods
             .donate(donations)

@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid'
 import { sample } from 'lodash-es'
 
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { ERC20TokenDetailed, NativeTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface ClaimDialogProps extends withClasses<'root'> {
-    exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
+    exchangeTokens: (NativeTokenDetailed | ERC20TokenDetailed)[]
     payload: JSON_PayloadInMask
     initAmount: BigNumber
     tokenAmount: BigNumber
@@ -92,7 +92,7 @@ export interface ClaimDialogProps extends withClasses<'root'> {
     setStatus: (status: ClaimStatus) => void
     chainId: ChainId
     account: string
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    token: NativeTokenDetailed | ERC20TokenDetailed
 }
 
 export function ClaimDialog(props: ClaimDialogProps) {
@@ -117,7 +117,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(new BigNumber(payload.exchange_amounts[0 * 2 + 1])),
     )
-    const [swapToken, setSwapToken] = useState<EtherTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
+    const [swapToken, setSwapToken] = useState<NativeTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
     const [swapAmount, setSwapAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
     const [inputAmountForUI, setInputAmountForUI] = useState(
         swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken.decimals),

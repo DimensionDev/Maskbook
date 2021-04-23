@@ -1,4 +1,4 @@
-import { ChainId, ERC20Token, ERC721Token, EtherToken, ProviderType } from './types'
+import { ChainId, ERC20Token, ERC721Token, NativeToken, ProviderType } from './types'
 import { safeUnreachable } from '../utils/utils'
 
 export function resolveProviderName(providerType: ProviderType) {
@@ -9,7 +9,7 @@ export function resolveProviderName(providerType: ProviderType) {
             return 'MetaMask'
         case ProviderType.WalletConnect:
             return 'WalletConnect'
-        case ProviderType.CustomNetwork:
+        case ProviderType.UNKNOWN:
             return 'CustomNetwork'
         default:
             safeUnreachable(providerType)
@@ -91,7 +91,7 @@ export function resolveTransactionLinkOnEtherscan(chainId: ChainId, tx: string) 
     return `${resolveLinkOnEtherscan(chainId)}/tx/${tx}`
 }
 
-export function resolveTokenLinkOnEtherscan(token: EtherToken | ERC20Token | ERC721Token) {
+export function resolveTokenLinkOnEtherscan(token: NativeToken | ERC20Token | ERC721Token) {
     return `${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`
 }
 

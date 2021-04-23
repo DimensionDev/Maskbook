@@ -17,7 +17,7 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../web3/types'
 import type { TokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
@@ -58,7 +58,7 @@ export interface ListingByPriceCardProps {
     onClose: () => void
     asset?: ReturnType<typeof useAsset>
     tokenWatched: TokenWatched
-    paymentTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
+    paymentTokens: (NativeTokenDetailed | ERC20TokenDetailed)[]
 }
 
 export function ListingByPriceCard(props: ListingByPriceCardProps) {
@@ -92,7 +92,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.Ether && token.value.type !== EthereumTokenType.ERC20) return
+        if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
         try {
             await PluginCollectibleRPC.createSellOrder({
                 asset: toAsset({
@@ -140,7 +140,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 <SelectTokenAmountPanel
                     amount={amount}
                     balance={balance.value ?? '0'}
-                    token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
+                    token={token.value as NativeTokenDetailed | ERC20TokenDetailed}
                     disableEther={!paymentTokens.some((x) => isETH(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
@@ -166,7 +166,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         amount={endingAmount}
                         balance={balance.value ?? '0'}
                         onAmountChange={setEndingAmount}
-                        token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
+                        token={token.value as NativeTokenDetailed | ERC20TokenDetailed}
                         onTokenChange={setToken}
                         TokenAmountPanelProps={{
                             label: 'Ending Price',

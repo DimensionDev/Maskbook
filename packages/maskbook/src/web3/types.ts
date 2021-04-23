@@ -4,7 +4,7 @@ export enum ProviderType {
     Maskbook = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
-    CustomNetwork = 'CustomNetwork',
+    UNKNOWN = 'UNKNOWN',
 }
 
 export enum CurrencyType {
@@ -16,13 +16,13 @@ export interface MetaMaskInpageProvider extends UnboxPromise<ReturnType<typeof c
 }
 
 //#region Ether
-export interface EtherToken {
-    type: EthereumTokenType.Ether
+export interface NativeToken {
+    type: EthereumTokenType.Native
     address: string
     chainId: ChainId
 }
 
-export interface EtherTokenDetailed extends EtherToken {
+export interface NativeTokenDetailed extends NativeToken {
     name: 'Ether'
     symbol: 'ETH'
     decimals: 18
@@ -92,23 +92,23 @@ export interface ERC1155TokenAssetDetailed extends ERC1155TokenDetailed {
 }
 //#endregion
 
-interface TokenDetailedMap {
-    [EthereumTokenType.Ether]: EtherTokenDetailed
+interface EthereumTokenDetailedMap {
+    [EthereumTokenType.Native]: NativeTokenDetailed
     [EthereumTokenType.ERC20]: ERC20TokenDetailed
     [EthereumTokenType.ERC721]: ERC721TokenDetailed
     [EthereumTokenType.ERC1155]: ERC1155TokenDetailed
 }
 
-interface TokenAssetDetailedMap {
+interface EthereumTokenAssetDetailedMap {
     [EthereumTokenType.ERC721]: ERC721TokenAssetDetailed
     [EthereumTokenType.ERC1155]: ERC1155TokenAssetDetailed
 }
 
-export type TokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
+export type EthereumTokenDetailedType<T extends EthereumTokenType> = EthereumTokenDetailedMap[T]
 
-export type TokenAssetDetailedType<
+export type EthereumTokenAssetDetailedType<
     T extends EthereumTokenType.ERC721 | EthereumTokenType.ERC1155
-> = TokenAssetDetailedMap[T]
+> = EthereumTokenAssetDetailedMap[T]
 
 // Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
 export enum ChainId {
@@ -130,7 +130,7 @@ export enum EthereumNetwork {
 }
 
 export enum EthereumTokenType {
-    Ether = 0,
+    Native = 0,
     ERC20 = 1,
     ERC721 = 2,
     ERC1155 = 3,

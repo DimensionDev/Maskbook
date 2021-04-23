@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import { TradeProvider, TradeStrategy } from '../types'
 import { useTrade as useEtherTrade } from './ether/useTrade'
 import { useTradeComputed as useEtherTradeComputed } from './ether/useTradeComputed'
@@ -16,8 +16,8 @@ export function useTradeComputed(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed,
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
+    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
+    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
 ) {
     const inputTokenProduct = new BigNumber(10).pow(inputToken?.decimals ?? 0)
     const outputTokenProduct = new BigNumber(10).pow(outputToken?.decimals ?? 0)

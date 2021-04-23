@@ -4,10 +4,10 @@ import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsMerged } from './useAssetsMerged'
 import { useWallet } from './useWallet'
 import { formatChecksumAddress } from '../formatter'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 
-export function useAssets(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
+export function useAssets(tokens: (NativeTokenDetailed | ERC20TokenDetailed)[]) {
     const wallet = useWallet()
     const {
         value: etherTokenDetailed,

@@ -10,7 +10,7 @@ import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { useTokenTransferCallback } from '../../../../web3/hooks/useTokenTransferCallback'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
 import { EthereumTokenType } from '../../../../web3/types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 
@@ -35,7 +35,7 @@ const useTransferTabStyles = makeStyles((theme) =>
 
 interface TransferTabProps {
     wallet: WalletRecord
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    token: NativeTokenDetailed | ERC20TokenDetailed
     onClose: () => void
 }
 
@@ -51,7 +51,7 @@ export function TransferTab(props: TransferTabProps) {
 
     // balance
     const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useTokenBalance(
-        token?.type ?? EthereumTokenType.Ether,
+        token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',
     )
 

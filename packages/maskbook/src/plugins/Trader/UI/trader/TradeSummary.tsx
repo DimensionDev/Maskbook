@@ -16,7 +16,7 @@ import { ONE_BIPS } from '../../constants'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { SwapQuoteResponse, TradeComputed, TradeProvider, TradeStrategy } from '../../types'
 import { formatBalance, formatPercentage } from '../../../Wallet/formatter'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
 import { resolveUniswapWarningLevel, resolveUniswapWarningLevelColor, resolveZrxTradePoolName } from '../../pipes'
 
 type SummaryRecord = {
@@ -66,8 +66,8 @@ const useStyles = makeStyles((theme) =>
 export interface TradeSummaryProps extends withClasses<never> {
     trade: TradeComputed
     provider: TradeProvider
-    inputToken: EtherTokenDetailed | ERC20TokenDetailed
-    outputToken: EtherTokenDetailed | ERC20TokenDetailed
+    inputToken: NativeTokenDetailed | ERC20TokenDetailed
+    outputToken: NativeTokenDetailed | ERC20TokenDetailed
 }
 
 export function TradeSummary(props: TradeSummaryProps) {

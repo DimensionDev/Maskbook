@@ -8,7 +8,7 @@ import type {
     ERC1155TokenDetailed,
     ERC20TokenDetailed,
     ERC721TokenDetailed,
-    EtherTokenDetailed,
+    NativeTokenDetailed,
 } from '../../../../web3/types'
 import { EthereumTokenType } from '../../../../web3/types'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
@@ -18,7 +18,7 @@ import type { WalletProps } from './types'
 
 export function DashboardWalletHideTokenConfirmDialog(
     props: WrappedDialogProps<
-        WalletProps & { token: EtherTokenDetailed | ERC20TokenDetailed | ERC721TokenDetailed | ERC1155TokenDetailed }
+        WalletProps & { token: NativeTokenDetailed | ERC20TokenDetailed | ERC721TokenDetailed | ERC1155TokenDetailed }
     >,
 ) {
     const { wallet, token } = props.ComponentProps!
@@ -28,7 +28,7 @@ export function DashboardWalletHideTokenConfirmDialog(
         () => {
             const type = token.type
             switch (type) {
-                case EthereumTokenType.Ether:
+                case EthereumTokenType.Native:
                     throw new Error('Unable to hide Ether.')
                 case EthereumTokenType.ERC20:
                     return WalletRPC.blockERC20Token(wallet.address, token as ERC20TokenDetailed)

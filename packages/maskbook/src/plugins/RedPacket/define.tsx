@@ -28,7 +28,7 @@ export const RedPacketPluginDefine: PluginConfig = {
         [
             RedPacketMetaKey,
             (payload: RedPacketJSONPayload) => {
-                const decimals = payload.token_type === EthereumTokenType.Ether ? 18 : payload.token?.decimals
+                const decimals = payload.token_type === EthereumTokenType.Native ? 18 : payload.token?.decimals
                 return `A Red Packet with ${formatBalance(payload.total, decimals)} $${
                     payload.token?.name || 'ETH'
                 } from ${payload.sender.name}`

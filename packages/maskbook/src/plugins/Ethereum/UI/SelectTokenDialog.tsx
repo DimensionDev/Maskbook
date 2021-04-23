@@ -4,7 +4,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
@@ -57,7 +57,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
         setFixedTokenListProps(ev.FixedTokenListProps ?? null)
     })
     const onSubmit = useCallback(
-        async (token: EtherTokenDetailed | ERC20TokenDetailed) => {
+        async (token: NativeTokenDetailed | ERC20TokenDetailed) => {
             setOpen({
                 open: false,
                 uuid: id,

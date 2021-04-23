@@ -1,4 +1,4 @@
-import type { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
+import type { ChainId, ERC20TokenDetailed, NativeTokenDetailed } from '../../web3/types'
 
 export interface AirdropJSONPayload {
     contract_address: string
@@ -10,7 +10,7 @@ export interface AirdropJSONPayload {
     end_time: number
     creation_time: number
     chain_id: ChainId
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    token: NativeTokenDetailed | ERC20TokenDetailed
     host: {
         address: string
         name: string

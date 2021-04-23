@@ -222,7 +222,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const viewDetailedTokens = detailedTokens.filter(
         (x) =>
             new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(MIN_VALUE) ||
-            x.token.type === EthereumTokenType.Ether,
+            x.token.type === EthereumTokenType.Native,
     )
 
     return (

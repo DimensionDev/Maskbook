@@ -1,6 +1,6 @@
 import { createStyles, makeStyles, Typography, Box } from '@material-ui/core'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) =>
 
 export interface ShareDialogProps extends withClasses<'root'> {
     shareSuccessLink: string | undefined
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    token: NativeTokenDetailed | ERC20TokenDetailed
     actualSwapAmount: BigNumber.Value
     poolName: string
     onClose: () => void

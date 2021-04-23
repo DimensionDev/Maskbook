@@ -1,11 +1,11 @@
 import { Box, createStyles, makeStyles, Theme, Typography } from '@material-ui/core'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { formatBalance } from '../../../Wallet/formatter'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
 
 export interface TokenPanelProps {
     amount: string
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    token: NativeTokenDetailed | ERC20TokenDetailed
 }
 
 const useStyles = makeStyles((theme: Theme) =>

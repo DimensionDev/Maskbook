@@ -20,7 +20,7 @@ import { UnreviewedWarning } from './UnreviewedWarning'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../web3/types'
 import { useTokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
@@ -89,7 +89,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.Ether && token.value.type !== EthereumTokenType.ERC20) return
+        if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
         try {
             await PluginCollectibleRPC.createBuyOrder({
                 asset: toAsset({
@@ -100,7 +100,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                 accountAddress: account,
                 startAmount: Number.parseFloat(amount),
                 expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
-                paymentTokenAddress: token.value.type === EthereumTokenType.Ether ? undefined : token.value.address,
+                paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
             })
         } catch (e) {
             enqueueSnackbar(e.message, {
@@ -143,7 +143,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         <SelectTokenAmountPanel
                             amount={amount}
                             balance={balance.value ?? '0'}
-                            token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
+                            token={token.value as NativeTokenDetailed | ERC20TokenDetailed}
                             disableEther={!paymentTokens.some((x) => isETH(x.address))}
                             onAmountChange={setAmount}
                             onTokenChange={setToken}

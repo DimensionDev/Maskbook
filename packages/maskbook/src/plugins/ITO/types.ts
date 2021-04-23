@@ -1,4 +1,4 @@
-import type { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
+import type { ChainId, ERC20TokenDetailed, NativeTokenDetailed } from '../../web3/types'
 
 export interface JSON_PayloadInMask {
     contract_address: string
@@ -22,9 +22,9 @@ export interface JSON_PayloadInMask {
     unlock_time: number
     qualification_address: string
     creation_time: number
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    token: NativeTokenDetailed | ERC20TokenDetailed
     exchange_amounts: string[]
-    exchange_tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
+    exchange_tokens: (NativeTokenDetailed | ERC20TokenDetailed)[]
     regions: string
     // @deprecated
     is_mask?: boolean

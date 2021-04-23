@@ -2,7 +2,7 @@ import { Fragment, useCallback, useEffect, useState } from 'react'
 import { makeStyles, createStyles, InputAdornment } from '@material-ui/core'
 import { v4 as uuid } from 'uuid'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import {
     ExchangeTokenAndAmountState,
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface ExchangeTokenPanelGroupProps {
-    token: EtherTokenDetailed | ERC20TokenDetailed | undefined
+    token: NativeTokenDetailed | ERC20TokenDetailed | undefined
     origin: ExchangeTokenAndAmountState[]
     onTokenAmountChange: (data: ExchangeTokenAndAmountState[]) => void
 }
@@ -56,7 +56,7 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
     )
 
     const onTokenChange = useCallback(
-        (token: EtherTokenDetailed | ERC20TokenDetailed, key: string) => {
+        (token: NativeTokenDetailed | ERC20TokenDetailed, key: string) => {
             dispatchExchangeTokenArray({
                 type: ExchangeTokenAndAmountActionType.UPDATE_TOKEN,
                 token,

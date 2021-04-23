@@ -29,7 +29,7 @@ export async function signTransaction(config: TransactionConfig) {
                     else resolve(signed.raw)
                 })
                 break
-            case ProviderType.CustomNetwork:
+            case ProviderType.UNKNOWN:
                 //TODO handle custom network
                 break
             default:

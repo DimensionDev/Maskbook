@@ -2,12 +2,12 @@ import { useAsyncRetry } from 'react-use'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 
 export interface ClaimableAll {
     pids: string[]
     tokens: {
-        [key in string]: { token: EtherTokenDetailed | ERC20TokenDetailed; amount: number }
+        [key in string]: { token: NativeTokenDetailed | ERC20TokenDetailed; amount: number }
     }
 }
 
@@ -38,7 +38,7 @@ export function useClaimAll() {
                 acc: {
                     pids: string[]
                     tokens: {
-                        [key in string]: { token: EtherTokenDetailed | ERC20TokenDetailed; amount: number }
+                        [key in string]: { token: NativeTokenDetailed | ERC20TokenDetailed; amount: number }
                     }
                 },
                 cur,

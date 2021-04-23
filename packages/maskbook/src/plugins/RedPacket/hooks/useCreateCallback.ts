@@ -4,7 +4,7 @@ import Web3Utils from 'web3-utils'
 import type { TransactionReceipt } from 'web3-core'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed, TransactionEventType } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed, TransactionEventType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import type { Tx } from '@dimensiondev/contracts/types/types'
 import { addGasMargin } from '../../../web3/helpers'
@@ -17,7 +17,7 @@ export interface RedPacketSettings {
     total: string
     name: string
     message: string
-    token?: EtherTokenDetailed | ERC20TokenDetailed
+    token?: NativeTokenDetailed | ERC20TokenDetailed
 }
 
 export function useCreateCallback(redPacketSettings: RedPacketSettings) {
@@ -51,7 +51,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
             })
             return
         }
-        if (token.type !== EthereumTokenType.Ether && token.type !== EthereumTokenType.ERC20) {
+        if (token.type !== EthereumTokenType.Native && token.type !== EthereumTokenType.ERC20) {
             setCreateState({
                 type: TransactionStateType.FAILED,
                 error: Error('Token not supported'),
@@ -68,7 +68,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
         const config: Tx = {
             from: account,
             to: redPacketContract.options.address,
-            value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
+            value: new BigNumber(token.type === EthereumTokenType.Native ? total : '0').toFixed(),
         }
         const params: Parameters<typeof redPacketContract['methods']['create_red_packet']> = [
             Web3Utils.sha3(password)!,
@@ -78,8 +78,8 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
             Web3Utils.sha3(seed)!,
             message,
             name,
-            token.type === EthereumTokenType.Ether ? 0 : 1,
-            token.type === EthereumTokenType.Ether ? account : token.address, // this field must be a valid address
+            token.type === EthereumTokenType.Native ? 0 : 1,
+            token.type === EthereumTokenType.Native ? account : token.address, // this field must be a valid address
             total,
         ]
 

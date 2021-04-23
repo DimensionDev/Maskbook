@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { createERC20Token } from '../../../web3/helpers'
 import { SwapQuoteResponse, TradeComputed, TradeProvider } from '../types'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { TRADE_CONSTANTS } from '../constants'
 import { safeUnreachable } from '../../../utils/utils'
@@ -11,7 +11,7 @@ import BigNumber from 'bignumber.js'
 export function useTradeApproveComputed(
     trade: TradeComputed<unknown> | null,
     provider: TradeProvider,
-    token?: EtherTokenDetailed | ERC20TokenDetailed,
+    token?: NativeTokenDetailed | ERC20TokenDetailed,
 ) {
     const chainId = useChainId()
     const UNISWAP_V2_ROUTER_ADDRESS = useConstant(TRADE_CONSTANTS, 'UNISWAP_V2_ROUTER_ADDRESS')

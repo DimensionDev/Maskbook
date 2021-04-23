@@ -3,7 +3,7 @@ import { createTypedMessageMetadataReader, createRenderWithMetadata } from '../.
 import { ITO_MetaKey } from './constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from './types'
 import schema from './schema.json'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../web3/types'
 import { omit } from 'lodash-es'
 import { getConstant, isSameAddress } from '../../web3/helpers'
 import { CONSTANTS } from '../../web3/constants'
@@ -43,10 +43,10 @@ export function tokenIntoMask(token: JSON_PayloadOutMask['token']) {
     return ({
         ...omit(token, 'chain_id'),
         chainId: token.chain_id,
-    } as unknown) as EtherTokenDetailed | ERC20TokenDetailed
+    } as unknown) as NativeTokenDetailed | ERC20TokenDetailed
 }
 
-export function tokenOutMask(token: EtherTokenDetailed | ERC20TokenDetailed) {
+export function tokenOutMask(token: NativeTokenDetailed | ERC20TokenDetailed) {
     return {
         ...omit(token, 'chainId'),
         chain_id: token.chainId,
