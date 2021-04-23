@@ -52,6 +52,9 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     const [confirmed, setConfirmed] = useState(false)
     const [showNotification, setShowNotification] = useState(false)
 
+    const [keyStore, setKeystore] = useState('')
+    const [keyStorePwd, setKeystorePwd] = useState('')
+
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -115,6 +118,41 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                             <Typography className={classes.notification}>{t('wallet_notification')}</Typography>
                         ) : null}
                     </>
+                ),
+            },
+            {
+                label: t('wallet_import_json'),
+                children: (
+                    <div>
+                        <TextField
+                            required
+                            autoFocus
+                            variant="outlined"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            label={t('wallet_import_json_wallet_name')}
+                            placeholder={t('wallet_import_json_wallet_name_helper')}
+                        />
+                        <TextField
+                            required
+                            value={keyStore}
+                            onChange={(e) => setKeystore(e.target.value)}
+                            multiline={true}
+                            rows={6}
+                            variant="outlined"
+                            label={t('wallet_import_json_keystore')}
+                            placeholder={t('wallet_import_json_keystore_content')}
+                        />
+                        <TextField
+                            required
+                            type="password"
+                            variant="outlined"
+                            value={keyStorePwd}
+                            onChange={(e) => setKeystorePwd(e.target.value)}
+                            label={t('wallet_import_json_keystore_password')}
+                            placeholder={t('wallet_import_json_keystore_password_helper')}
+                        />
+                    </div>
                 ),
             },
             {
@@ -207,6 +245,15 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                     await WalletRPC.deriveWalletFromPhrase(name, hdWallet.mnemonic, hdWallet.passphrase)
                     break
                 case 1:
+                    const { address: addr, privateKey } = await WalletRPC.fromV3Keystore(keyStore, keyStorePwd)
+                    await WalletRPC.importNewWallet({
+                        name,
+                        address: addr,
+                        _private_key_: privateKey,
+                    })
+                    break
+
+                case 2:
                     const words = mnemonic.split(' ')
                     await WalletRPC.importNewWallet({
                         name,
@@ -220,7 +267,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                         passphrase: '',
                     })
                     break
-                case 2:
+                case 3:
                     const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privKey)
                     if (!privateKeyValid) throw new Error(t('import_failed'))
                     await WalletRPC.importNewWallet({
@@ -251,13 +298,20 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                 icon={<CreditCardIcon />}
                 iconColor="#4EE0BC"
                 primary={t(state[0] === 0 ? 'plugin_wallet_on_create' : 'import_wallet')}
-                content={<AbstractTab {...tabProps}></AbstractTab>}
+                content={
+                    <AbstractTab
+                        {...tabProps}
+                        height="auto"
+                        TabsProps={{ variant: 'scrollable', scrollButtons: false }}
+                        TabProps={{ style: { minWidth: 140 } }}></AbstractTab>
+                }
                 footer={
                     <DebounceButton
                         variant="contained"
                         onClick={onSubmit}
                         disabled={
                             (!(state[0] === 0 && name && confirmed) &&
+                                !(state[0] === 1 && name && keyStore && keyStorePwd) &&
                                 !(state[0] === 1 && name && mnemonic) &&
                                 !(state[0] === 2 && name && privKey)) ||
                             checkInputLengthExceed(name)
