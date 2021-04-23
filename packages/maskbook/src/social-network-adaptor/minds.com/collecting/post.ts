@@ -15,16 +15,16 @@ import { mindsBase } from '../base'
 import { mindsShared } from '../shared'
 import { postParser } from '../utils/fetch'
 
-const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('m-activity')
+const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('m-activity, m-activity__modal')
 
 export const PostProviderMinds: Next.CollectingCapabilities.PostsProvider = {
     posts: creator.PostProviderStore(),
     start(signal) {
-        collectPostsFacebookInner(this.posts, signal)
+        collectPostsMindsInner(this.posts, signal)
     },
 }
 
-function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvider['posts'], signal: AbortSignal) {
+function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider['posts'], signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
             const root = new LiveSelector().replace(() => [metadata.realCurrent]).closest('m-activity')
