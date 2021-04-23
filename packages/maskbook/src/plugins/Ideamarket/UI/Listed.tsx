@@ -1,5 +1,25 @@
-import { Typography, Button, Box } from '@material-ui/core'
+import { Typography, Button, Box, makeStyles } from '@material-ui/core'
 import type { Dispatch, SetStateAction, SyntheticEvent } from 'react'
+
+const useStyles = makeStyles((theme) => ({
+    priceText: {
+        fontSize: '16px',
+        lineHeight: '19px',
+        fontFamily: 'Inter',
+    },
+    button: {
+        backgroundColor: '#3045B4',
+        borderRadius: '12px',
+        width: '70px',
+        height: '37px',
+    },
+    buttonText: {
+        color: '#EEEEEE',
+        fontWeight: 'bold',
+        fontSize: '16px',
+        lineHeight: '19px',
+    },
+}))
 
 interface ListedProps {
     username: string
@@ -10,6 +30,7 @@ interface ListedProps {
 }
 
 export default function Listed(props: ListedProps) {
+    const classes = useStyles()
     function clicked(e: SyntheticEvent<HTMLButtonElement>) {
         e.preventDefault()
         window.open(`https://ideamarket.io/i/twitter/${props.username}`, '_blank', 'noopener')
@@ -49,23 +70,13 @@ export default function Listed(props: ListedProps) {
                     alignItems="center"
                     color="#58636B"
                     width="50%">
-                    <Typography color="inherit" style={{ fontSize: '16px', lineHeight: '19px', fontFamily: 'Inter' }}>
+                    <Typography color="inherit" className={classes.priceText}>
                         ${props.price}
                     </Typography>
                 </Box>
                 <Box component="div" display="flex" justifyContent="space-between" alignItems="center" width="50%">
-                    <Button
-                        style={{
-                            backgroundColor: '#3045B4',
-                            borderRadius: '12px',
-                            width: '70px',
-                            height: '37px',
-                        }}
-                        onClick={clicked}>
-                        <Typography
-                            style={{ color: '#EEEEEE', fontWeight: 'bold', fontSize: '16px', lineHeight: '19px' }}>
-                            Buy
-                        </Typography>
+                    <Button className={classes.button} onClick={clicked}>
+                        <Typography className={classes.buttonText}>Buy</Typography>
                     </Button>
                 </Box>
             </Box>
