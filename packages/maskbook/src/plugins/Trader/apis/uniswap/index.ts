@@ -120,9 +120,6 @@ export async function getAllCoinsByKeyword(keyword: string) {
             } as Coin,
         ]
     }
-    if (keyword_ === 'token') {
-        return []
-    }
 
     const tokens = await fetchTokensByKeyword(keyword)
 
