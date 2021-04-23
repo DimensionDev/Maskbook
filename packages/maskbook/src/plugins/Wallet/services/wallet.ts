@@ -64,7 +64,7 @@ export async function getWallets(provider?: ProviderType) {
         if (!record._private_key_ && !record.mnemonic.length) return ''
         const { privateKey } = record._private_key_
             ? await recoverWalletFromPrivateKey(record._private_key_)
-            : await recoverWallet(record.mnemonic, record.passphrase)
+            : await recoverWalletFromMnemonicWords(record.mnemonic, record.passphrase, record.path)
         return `0x${buf2hex(privateKey)}`
     }
 }
@@ -179,7 +179,7 @@ export async function importNewWallet(
             const recover = await recoverWalletFromPrivateKey(rec._private_key_)
             return recover.privateKeyValid ? recover.address : ''
         }
-        if (mnemonic.length) return (await recoverWallet(mnemonic, passphrase, path)).address
+        if (mnemonic.length) return (await recoverWalletFromMnemonicWords(mnemonic, passphrase, path)).address
         return
     }
 }
@@ -207,7 +207,7 @@ export async function removeWallet(address: string) {
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
-export async function recoverWallet(
+export async function recoverWalletFromMnemonicWords(
     mnemonic: string[],
     passphrase: string,
     path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
