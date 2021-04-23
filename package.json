@@ -40,7 +40,7 @@
     "jss": "10.5.1",
     "react": "=0.0.0-experimental-553440bd1",
     "react-dom": "=0.0.0-experimental-553440bd1",
-    "react-i18next": "^11.8.7"
+    "react-i18next": "^11.8.13"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.1",
@@ -51,10 +51,10 @@
     "@material-ui/codemod": "^5.0.0-alpha.24",
     "@nice-labs/git-rev": "^3.5.0",
     "eslint": "^7.24.0",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-prettier": "^8.2.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-lodash": "^7.1.0",
-    "eslint-plugin-prettier": "^3.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-unused-imports": "^1.0.0",
     "esm": "^3.2.25",
