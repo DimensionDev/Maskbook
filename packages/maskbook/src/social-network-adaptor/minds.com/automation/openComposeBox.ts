@@ -25,7 +25,6 @@ export async function openComposeBoxMinds(
     const composeButton = composeButtonSelector().evaluate()
     if (composeTextarea) composeTextarea.focus()
     if (composeButton) composeButton.click()
-    debugger
     await delay(800)
 
     // the indicator only available when compose dialog opened successfully
