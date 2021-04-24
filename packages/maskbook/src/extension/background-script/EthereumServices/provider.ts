@@ -2,6 +2,7 @@ import { first } from 'lodash-es'
 import * as Maskbook from './providers/Maskbook'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
+import * as CustomNetwork from './providers/CustomNetwork'
 import { getWallet, getWallets } from '../../../plugins/Wallet/services'
 import { ProviderType } from '../../../web3/types'
 import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
@@ -20,19 +21,23 @@ export async function connectWalletConnect() {
     const connector = await WalletConnect.createConnectorIfNeeded()
     if (connector.connected) return connector.accounts[0]
     const accounts = await WalletConnect.requestAccounts()
-    return accounts[0]
+    return first(accounts)
 }
 //#endregion
 
 export async function connectMetaMask() {
     const accounts = await MetaMask.requestAccounts()
-    return accounts[0]
+    return first(accounts)
 }
 
 export async function connectMaskbook() {
     const wallets = await getWallets(ProviderType.Maskbook)
-    // return the first managed wallet
     return first(wallets)
+}
+
+export async function connectCustomNetwork() {
+    const accounts = await CustomNetwork.requestAccounts()
+    return first(accounts)
 }
 
 export async function createWeb3() {
@@ -49,9 +54,8 @@ export async function createWeb3() {
             return await MetaMask.createWeb3()
         case ProviderType.WalletConnect:
             return WalletConnect.createWeb3()
-        case ProviderType.UNKNOWN:
-            // TODO  connect customNetwork
-            return WalletConnect.createWeb3()
+        case ProviderType.CustomNetwork:
+            return CustomNetwork.createWeb3()
         default:
             unreachable(providerType)
     }

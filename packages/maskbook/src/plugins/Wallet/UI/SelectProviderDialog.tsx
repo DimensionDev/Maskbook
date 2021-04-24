@@ -110,7 +110,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                         uri: await Services.Ethereum.createConnectionURI(),
                     })
                     break
-                case ProviderType.UNKNOWN:
+                case ProviderType.CustomNetwork:
                     addNetworkDialogOpen({
                         open: true,
                     })
@@ -168,7 +168,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             }
                             name={t('plugin_wallet_connect_more')}
                             description={t('plugin_wallet_connect_more_description')}
-                            onClick={() => onConnect(ProviderType.UNKNOWN)}
+                            onClick={() => onConnect(ProviderType.CustomNetwork)}
                         />
                     </ImageListItem>
                 </ImageList>
