@@ -7,14 +7,12 @@ import { useConstant } from './useConstant'
 export function useEtherTokenDetailed() {
     const chainId = useChainId()
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-    return useAsyncRetry(async () => {
-        return {
-            type: EthereumTokenType.Native,
-            address: ETH_ADDRESS,
-            chainId,
-            name: 'Ether',
-            symbol: 'ETH',
-            decimals: 18,
-        } as NativeTokenDetailed
-    }, [chainId, ETH_ADDRESS])
+    return useAsyncRetry(async (): Promise<NativeTokenDetailed> => ({
+        type: EthereumTokenType.Native,
+        address: ETH_ADDRESS,
+        chainId,
+        name: 'Ether',
+        symbol: 'ETH',
+        decimals: 18,
+    }), [chainId, ETH_ADDRESS])
 }
