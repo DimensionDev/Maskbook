@@ -195,7 +195,7 @@ export const CONSTANTS = {
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },
-    ETH_ADDRESS: {
+    NATIVE_TOKEN_ADDRESS: {
         [ChainId.Mainnet]: '0x0000000000000000000000000000000000000000',
         [ChainId.Ropsten]: '0x0000000000000000000000000000000000000000',
         [ChainId.Rinkeby]: '0x0000000000000000000000000000000000000000',

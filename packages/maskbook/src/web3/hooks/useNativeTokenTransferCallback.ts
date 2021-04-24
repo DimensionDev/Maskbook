@@ -12,7 +12,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { useConstant } from './useConstant'
 import { CONSTANTS } from '../constants'
 
-export function useEtherTransferCallback(amount?: string, recipient?: string, memo?: string) {
+export function useNativeTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const account = useAccount()
     const chainId = useChainId()
     const [transferState, setTransferState] = useTransactionState()

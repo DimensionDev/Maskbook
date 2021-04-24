@@ -4,7 +4,7 @@ import { isNil } from 'lodash-es'
 import { createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import { Record } from './Record'
 import type { Transaction } from '../../../../plugins/Wallet/types'
-import { resolveLinkOnEtherscan } from '../../../../web3/pipes'
+import { resolveLinkOnExplorer } from '../../../../web3/pipes'
 import type { ChainId } from '../../../../web3/types'
 
 interface Props {
@@ -76,7 +76,7 @@ interface AddressProps {
 }
 
 const Address: FC<AddressProps> = ({ id, mode, chainId }) => {
-    const href = `${resolveLinkOnEtherscan(chainId)}/${mode}/${id}`
+    const href = `${resolveLinkOnExplorer(chainId)}/${mode}/${id}`
     return id ? (
         <Link target={id} href={href}>
             <span>{id?.slice(0, 5)}</span>

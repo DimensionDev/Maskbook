@@ -8,8 +8,8 @@ import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { dateTimeFormat } from '../assets/formatDate'
-import { isETH } from '../../../web3/helpers'
-import { resolveTokenLinkOnEtherscan, resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
+import { isNative } from '../../../web3/helpers'
+import { resolveTokenLinkOnEtherscan, resolveAddressLinkOnExplorer } from '../../../web3/pipes'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
@@ -123,7 +123,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Typography variant="body1" component="span">
                             {poolSettings?.token?.symbol}
                         </Typography>
-                        {isETH(poolSettings?.token?.address!) ? null : (
+                        {isNative(poolSettings?.token?.address!) ? null : (
                             <Link
                                 className={classes.link}
                                 href={resolveTokenLinkOnEtherscan(poolSettings?.token!)}
@@ -218,7 +218,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Grid item xs={6}>
                             <Paper className={classes.data}>
                                 <Link
-                                    href={resolveAddressLinkOnEtherscan(chainId, poolSettings?.qualificationAddress!)}
+                                    href={resolveAddressLinkOnExplorer(chainId, poolSettings?.qualificationAddress!)}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Typography>

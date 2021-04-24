@@ -7,7 +7,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { SnapshotCard } from './SnapshotCard'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
-import { resolveAddressLinkOnEtherscan, resolveBlockLinkOnEtherscan, resolveIPFSLink } from '../../../web3/pipes'
+import { resolveAddressLinkOnExplorer, resolveBlockLinkOnExplorer, resolveIPFSLink } from '../../../web3/pipes'
 import { formatEthereumAddress } from '../../Wallet/formatter'
 import { useChainId } from '../../../web3/hooks/useChainId'
 
@@ -82,7 +82,7 @@ export function InformationCard(props: InformationCardProps) {
                                 className={classes.link}
                                 target="_blank"
                                 rel="noopener"
-                                href={resolveAddressLinkOnEtherscan(chainId, strategy.params.address)}>
+                                href={resolveAddressLinkOnExplorer(chainId, strategy.params.address)}>
                                 <TokenIcon address={strategy.params.address} />
                             </Link>
                         ))}
@@ -93,7 +93,7 @@ export function InformationCard(props: InformationCardProps) {
                         className={classes.link}
                         target="_blank"
                         rel="noopener"
-                        href={resolveAddressLinkOnEtherscan(chainId, proposal.address)}>
+                        href={resolveAddressLinkOnExplorer(chainId, proposal.address)}>
                         <div className={classes.avatarWrapper}>
                             {proposal.authorAvatar ? (
                                 <Avatar src={resolveIPFSLink(proposal.authorAvatar)} className={classes.avatar} />
@@ -121,7 +121,7 @@ export function InformationCard(props: InformationCardProps) {
                         className={classes.link}
                         target="_blank"
                         rel="noopener"
-                        href={resolveBlockLinkOnEtherscan(chainId, snapshot)}>
+                        href={resolveBlockLinkOnExplorer(chainId, snapshot)}>
                         {snapshot}
                         <OpenInNew fontSize="small" />
                     </Link>

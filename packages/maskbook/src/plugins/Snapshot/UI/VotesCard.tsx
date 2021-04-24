@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import type { Vote } from '../types'
 import millify from 'millify'
 import { Avatar, List, createStyles, makeStyles, Typography, ListItem, Badge, Box, Link } from '@material-ui/core'
-import { resolveIPFSLink, resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveIPFSLink, resolveAddressLinkOnExplorer } from '../../../web3/pipes'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import { SnapshotContext } from '../context'
 import { useVotes } from '../hooks/useVotes'
@@ -86,7 +86,7 @@ export function VotesCard() {
                                 className={classNames(classes.link, classes.ellipsisText)}
                                 target="_blank"
                                 rel="noopener"
-                                href={resolveAddressLinkOnEtherscan(chainId, voteEntry[0])}>
+                                href={resolveAddressLinkOnExplorer(chainId, voteEntry[0])}>
                                 <Box className={classes.avatarWrapper}>
                                     {voteEntry[1].authorAvatar ? (
                                         <Avatar

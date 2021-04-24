@@ -19,7 +19,7 @@ export function useTrade(
     inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
     outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
 ) {
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
+    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     const chainId = useChainId()
     const blockNumber = useBlockNumber(chainId)
 
@@ -30,8 +30,8 @@ export function useTrade(
         const isExactIn = strategy === TradeStrategy.ExactIn
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
-        const sellToken = inputToken.address === ETH_ADDRESS ? 'ETH' : inputToken.address
-        const buyToken = outputToken.address === ETH_ADDRESS ? 'ETH' : outputToken.address
+        const sellToken = inputToken.address === NATIVE_TOKEN_ADDRESS ? 'ETH' : inputToken.address
+        const buyToken = outputToken.address === NATIVE_TOKEN_ADDRESS ? 'ETH' : outputToken.address
         return PluginTraderRPC.swapQuote({
             sellToken,
             buyToken,
@@ -45,7 +45,7 @@ export function useTrade(
             affiliateAddress: ZRX_AFFILIATE_ADDRESS,
         })
     }, [
-        ETH_ADDRESS,
+        NATIVE_TOKEN_ADDRESS,
         strategy,
         inputAmount,
         outputAmount,

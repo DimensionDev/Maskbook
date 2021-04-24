@@ -13,7 +13,7 @@ import {
 import { WETH } from '../constants'
 import { ChainId, ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
-import { isETH } from '../../../web3/helpers'
+import { isNative } from '../../../web3/helpers'
 import { formatEthereumAddress } from '../../Wallet/formatter'
 
 export function toUniswapChainId(chainId: ChainId): UniswapChainId {
@@ -38,12 +38,12 @@ export function toUniswapPercent(numerator: number, denominator: number) {
 }
 
 export function toUniswapCurrency(chainId: ChainId, token: NativeTokenDetailed | ERC20TokenDetailed): UniswapCurrency {
-    if (isETH(token.address)) return ETHER
+    if (isNative(token.address)) return ETHER
     return toUniswapToken(chainId, token)
 }
 
 export function toUniswapToken(chainId: ChainId, token: NativeTokenDetailed | ERC20TokenDetailed): UniswapToken {
-    if (isETH(token.address)) return toUniswapToken(chainId, WETH[chainId])
+    if (isNative(token.address)) return toUniswapToken(chainId, WETH[chainId])
     return new UniswapToken(
         toUniswapChainId(chainId),
         formatEthereumAddress(token.address),
@@ -58,7 +58,7 @@ export function toUniswapCurrencyAmount(
     token: NativeTokenDetailed | ERC20TokenDetailed,
     amount: string,
 ) {
-    return isETH(token.address)
+    return isNative(token.address)
         ? UniswapCurrencyAmount.ether(JSBI.BigInt(amount))
         : new TokenAmount(toUniswapToken(chainId, token), JSBI.BigInt(amount))
 }

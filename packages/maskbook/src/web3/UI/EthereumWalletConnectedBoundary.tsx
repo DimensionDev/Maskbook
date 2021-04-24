@@ -11,7 +11,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useAccount } from '../hooks/useAccount'
 import { useChainIdValid } from '../hooks/useChainId'
-import { useEtherTokenBalance } from '../hooks/useEtherTokenBalance'
+import { useNativeTokenBalance } from '../hooks/useNativeTokenBalance'
 import { ProviderType } from '../types'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 
@@ -41,7 +41,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
         loading: etherBalanceLoading,
         error: etherBalanceError,
         retry: retryEtherBalance,
-    } = useEtherTokenBalance(account)
+    } = useNativeTokenBalance(account)
 
     //#region remote controlled select provider dialog
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)

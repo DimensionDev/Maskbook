@@ -7,7 +7,7 @@ import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/type
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { formatEthereumAddress } from '../../Wallet/formatter'
-import { resolveLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveLinkOnExplorer } from '../../../web3/pipes'
 import type { ChainId } from '../../../web3/types'
 import { ClaimStatus } from './ClaimGuide'
 
@@ -154,7 +154,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         target="_blank"
                         className={classes.tokenLink}
                         rel="noopener noreferrer"
-                        href={`${resolveLinkOnEtherscan(chainId)}/token/${token.address}`}>
+                        href={`${resolveLinkOnExplorer(chainId)}/token/${token.address}`}>
                         <Typography variant="body2">
                             {formatEthereumAddress(token.address, 4)}(View on Etherscan)
                         </Typography>

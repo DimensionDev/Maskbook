@@ -5,7 +5,7 @@ import { useAssetsMerged } from './useAssetsMerged'
 import { useWallet } from './useWallet'
 import { formatChecksumAddress } from '../formatter'
 import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
-import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
+import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
 
 export function useAssets(tokens: (NativeTokenDetailed | ERC20TokenDetailed)[]) {
     const wallet = useWallet()
@@ -14,7 +14,7 @@ export function useAssets(tokens: (NativeTokenDetailed | ERC20TokenDetailed)[]) 
         loading: etherTokenDetailedLoading,
         error: etherTokenDetailedError,
         retry: retryEtherTokenDetailed,
-    } = useEtherTokenDetailed()
+    } = useNativeTokenDetailed()
     const {
         value: assetsDetailedChain = [],
         loading: assetsDetailedChainLoading,

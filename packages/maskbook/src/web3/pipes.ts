@@ -65,11 +65,11 @@ export function resolveChainColor(chainId: ChainId) {
         case ChainId.Gorli:
             return 'rgb(48, 153, 242)'
         default:
-            return 'silver'
+            return 'rgb(214, 217, 220)'
     }
 }
 
-export function resolveLinkOnEtherscan(chainId: ChainId) {
+export function resolveLinkOnExplorer(chainId: ChainId) {
     switch (chainId) {
         case ChainId.Mainnet:
             return 'https://etherscan.io'
@@ -87,20 +87,20 @@ export function resolveLinkOnEtherscan(chainId: ChainId) {
     }
 }
 
-export function resolveTransactionLinkOnEtherscan(chainId: ChainId, tx: string) {
-    return `${resolveLinkOnEtherscan(chainId)}/tx/${tx}`
+export function resolveTransactionLinkOnExplorer(chainId: ChainId, tx: string) {
+    return `${resolveLinkOnExplorer(chainId)}/tx/${tx}`
 }
 
 export function resolveTokenLinkOnEtherscan(token: NativeToken | ERC20Token | ERC721Token) {
-    return `${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`
+    return `${resolveLinkOnExplorer(token.chainId)}/token/${token.address}`
 }
 
-export function resolveAddressLinkOnEtherscan(chainId: ChainId, address: string): string {
-    return `${resolveLinkOnEtherscan(chainId)}/address/${address}`
+export function resolveAddressLinkOnExplorer(chainId: ChainId, address: string): string {
+    return `${resolveLinkOnExplorer(chainId)}/address/${address}`
 }
 
-export function resolveBlockLinkOnEtherscan(chainId: ChainId, block: string): string {
-    return `${resolveLinkOnEtherscan(chainId)}/block/${block}`
+export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): string {
+    return `${resolveLinkOnExplorer(chainId)}/block/${block}`
 }
 
 export function resolveIPFSLink(ipfs: string): string {

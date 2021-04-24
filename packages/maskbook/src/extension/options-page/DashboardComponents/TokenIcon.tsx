@@ -7,7 +7,7 @@ import { formatChecksumAddress } from '../../../plugins/Wallet/formatter'
 import { useImageFailover } from '../../../utils/hooks/useImageFailover'
 
 //#region fix icon image
-const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS')
+const NATIVE_TOKEN_ADDRESS = getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
 
 const iconSourceList = [
     'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum',
@@ -17,7 +17,7 @@ const IMG_SUFFIX = '/info/logo.png'
 
 function resolveTokenIconURL(address: string, trustWalletAssets: string) {
     const iconMap = {
-        [ETH_ADDRESS]: `${trustWalletAssets}/info/logo.png`,
+        [NATIVE_TOKEN_ADDRESS]: `${trustWalletAssets}/info/logo.png`,
         '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074':
             'https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg', // MASK
         '0x32a7C02e79c4ea1008dD6564b35F131428673c41': 'https://s2.coinmarketcap.com/static/img/coins/64x64/6747.png', // CRUST
@@ -27,7 +27,7 @@ function resolveTokenIconURL(address: string, trustWalletAssets: string) {
             'https://raw.githubusercontent.com/chainswap/chainswap-assets/main/logo_white_256.png', // TOKEN
     }
     const checksummedAddress = formatChecksumAddress(address)
-    if (isSameAddress(checksummedAddress, getConstant(CONSTANTS, 'ETH_ADDRESS')))
+    if (isSameAddress(checksummedAddress, getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')))
         return 'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png'
     if (iconMap[checksummedAddress]) return iconMap[checksummedAddress]
     return `${trustWalletAssets}/assets/${checksummedAddress}/logo.png`

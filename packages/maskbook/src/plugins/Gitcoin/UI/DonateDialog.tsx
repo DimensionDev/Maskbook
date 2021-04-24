@@ -19,7 +19,7 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { Flags } from '../../../utils/flags'
-import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
+import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { PluginGitcoinMessages } from '../messages'
 import { EthereumMessages } from '../../Ethereum/messages'
@@ -87,7 +87,7 @@ export function DonateDialog(props: DonateDialogProps) {
     //#endregion
 
     //#region select token
-    const { value: etherTokenDetailed } = useEtherTokenDetailed()
+    const { value: etherTokenDetailed } = useNativeTokenDetailed()
     const [token = etherTokenDetailed, setToken] = useState<NativeTokenDetailed | ERC20TokenDetailed | undefined>()
     const [id] = useState(uuid())
     const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(

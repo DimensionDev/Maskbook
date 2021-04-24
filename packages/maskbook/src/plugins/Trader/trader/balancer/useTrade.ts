@@ -17,7 +17,7 @@ export function useTrade(
 ) {
     const chainId = useChainId()
     const blockNumber = useBlockNumber(chainId)
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
+    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     const WETH_ADDRESS = useConstant(CONSTANTS, 'WETH_ADDRESS')
     const BALANCER_ETH_ADDRESS = useConstant(TRADE_CONSTANTS, 'BALANCER_ETH_ADDRESS')
 
@@ -27,8 +27,8 @@ export function useTrade(
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
         // the WETH address is used for looking for available pools
-        const sellToken = inputToken.address === ETH_ADDRESS ? WETH_ADDRESS : inputToken.address
-        const buyToken = outputToken.address === ETH_ADDRESS ? WETH_ADDRESS : outputToken.address
+        const sellToken = inputToken.address === NATIVE_TOKEN_ADDRESS ? WETH_ADDRESS : inputToken.address
+        const buyToken = outputToken.address === NATIVE_TOKEN_ADDRESS ? WETH_ADDRESS : outputToken.address
         const { swaps, routes } = await PluginTraderRPC.getSwaps(
             sellToken,
             buyToken,
@@ -39,7 +39,7 @@ export function useTrade(
         if (!swaps[0].length) return null
         return { swaps, routes } as SwapResponse
     }, [
-        ETH_ADDRESS,
+        NATIVE_TOKEN_ADDRESS,
         WETH_ADDRESS,
         BALANCER_ETH_ADDRESS,
         strategy,

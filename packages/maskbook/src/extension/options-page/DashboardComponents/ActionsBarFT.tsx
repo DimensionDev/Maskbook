@@ -1,6 +1,6 @@
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { isETH } from '../../../web3/helpers'
+import { isNative } from '../../../web3/helpers'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogFT } from '../DashboardDialogs/Wallet'
@@ -56,7 +56,7 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
                 {t('transfer')}
             </MenuItem>,
             <MenuItem
-                style={{ display: isETH(token.address) ? 'none' : 'initial' }}
+                style={{ display: isNative(token.address) ? 'none' : 'initial' }}
                 onClick={() => openHideTokenConfirmDialog({ wallet, token })}>
                 {t('hide')}
             </MenuItem>,

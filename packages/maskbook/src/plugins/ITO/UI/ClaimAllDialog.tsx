@@ -24,7 +24,7 @@ import { useClaimCallback } from '../hooks/useClaimCallback'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveTransactionLinkOnExplorer } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 
@@ -111,7 +111,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         if (claimState.type === TransactionStateType.HASH) {
             const { hash } = claimState
             setTimeout(() => {
-                window.open(resolveTransactionLinkOnEtherscan(chainId, hash), '_blank', 'noopener noreferrer')
+                window.open(resolveTransactionLinkOnExplorer(chainId, hash), '_blank', 'noopener noreferrer')
             }, 2000)
             return
         }

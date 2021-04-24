@@ -13,7 +13,7 @@ import type { Asset } from '../types'
  */
 export function useAssetsMerged(...listOfTokens: Asset[][]) {
     const chainId = useChainId()
-    const ETH_ADDRSS = useConstant(CONSTANTS, 'ETH_ADDRESS')
+    const ETH_ADDRSS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     return uniqBy(
         listOfTokens.flatMap((x) => x),
         (x) => formatChecksumAddress(x.token.address),

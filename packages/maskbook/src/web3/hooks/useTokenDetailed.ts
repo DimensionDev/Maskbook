@@ -3,14 +3,14 @@ import { unreachable } from '../../utils/utils'
 import { ERC20TokenDetailed, ERC721TokenDetailed, EthereumTokenType, EthereumTokenDetailedType } from '../types'
 import { useERC20TokenDetailed } from './useERC20TokenDetailed'
 import { useERC721TokenDetailed } from './useERC721TokenDetailed'
-import { useEtherTokenDetailed } from './useEtherTokenDetailed'
+import { useNativeTokenDetailed } from './useNativeTokenDetailed'
 
 export function useTokenDetailed<P extends EthereumTokenType, Q extends EthereumTokenDetailedType<P>>(
     type: P,
     address: string,
     token?: Partial<Q>,
 ): AsyncStateRetry<Q | undefined> {
-    const r1 = useEtherTokenDetailed()
+    const r1 = useNativeTokenDetailed()
     const r2 = useERC20TokenDetailed(
         type === EthereumTokenType.ERC20 ? address : '',
         (token as unknown) as ERC20TokenDetailed,

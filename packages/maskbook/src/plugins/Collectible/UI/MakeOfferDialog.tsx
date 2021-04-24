@@ -30,7 +30,7 @@ import { ChainState } from '../../../web3/state/useChainState'
 import { toAsset, toUnixTimestamp } from '../helpers'
 import { useRemoteControlledDialogEvent } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
-import { isETH } from '../../../web3/helpers'
+import { isNative } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -144,7 +144,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             amount={amount}
                             balance={balance.value ?? '0'}
                             token={token.value as NativeTokenDetailed | ERC20TokenDetailed}
-                            disableEther={!paymentTokens.some((x) => isETH(x.address))}
+                            disableEther={!paymentTokens.some((x) => isNative(x.address))}
                             onAmountChange={setAmount}
                             onTokenChange={setToken}
                             TokenAmountPanelProps={{

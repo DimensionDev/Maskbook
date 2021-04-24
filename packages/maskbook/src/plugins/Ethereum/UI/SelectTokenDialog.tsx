@@ -7,7 +7,7 @@ import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-
 import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
-import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
+import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
 import { delay } from '../../../utils/utils'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -41,7 +41,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const [keyword, setKeyword] = useState('')
 
     //#region ether token
-    const { value: etherTokenDetailed } = useEtherTokenDetailed()
+    const { value: etherTokenDetailed } = useNativeTokenDetailed()
     //#endregion
 
     //#region remote controlled dialog

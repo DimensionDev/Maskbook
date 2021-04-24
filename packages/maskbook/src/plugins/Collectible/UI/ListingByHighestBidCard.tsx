@@ -13,7 +13,7 @@ import type { useAsset } from '../hooks/useAsset'
 import { ChainState } from '../../../web3/state/useChainState'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
-import { isETH } from '../../../web3/helpers'
+import { isNative } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -106,7 +106,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     token={token.value as NativeTokenDetailed | ERC20TokenDetailed}
-                    disableEther={!paymentTokens.some((x) => isETH(x.address))}
+                    disableEther={!paymentTokens.some((x) => isNative(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
