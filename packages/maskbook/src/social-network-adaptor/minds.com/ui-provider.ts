@@ -2,12 +2,12 @@ import { ProfileIdentifier } from '../../database/type'
 import { currentSelectedIdentity } from '../../settings/settings'
 import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-network'
 import { injectPostCommentsDefault } from '../../social-network/defaults'
-import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
 import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
 import { unreachable } from '../../utils/utils'
+import { pasteImageToCompositionMinds } from './automation/AttachImageToComposition'
 import { gotoNewsFeedPageMinds } from './automation/gotoNewsFeedPage'
 import { gotoProfilePageMinds } from './automation/gotoProfilePage'
 import { openComposeBoxMinds } from './automation/openComposeBox'
@@ -16,10 +16,7 @@ import { mindsBase } from './base'
 import { IdentityProviderMinds } from './collecting/identity'
 import { PostProviderMinds } from './collecting/post'
 import { profilesCollectorMinds } from './collecting/profiles'
-import {
-    PaletteModeProviderMinds,
-    useThemeMindsVariant,
-} from './customization/custom'
+import { PaletteModeProviderMinds, useThemeMindsVariant } from './customization/custom'
 import injectCommentBoxAtMinds from './injection/CommentBox'
 import { injectPostBoxComposed } from './injection/inject'
 import { injectMaskUserBadgeAtMinds } from './injection/MaskbookIcon'
@@ -39,7 +36,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         nativeCompositionDialog: {
             appendText: pasteTextToCompositionMinds,
             // TODO: make a better way to detect
-            attachImage: pasteImageToCompositionDefault(() => false),
+            attachImage: pasteImageToCompositionMinds(() => false),
         },
         redirect: {
             newsFeed: gotoNewsFeedPageMinds,
