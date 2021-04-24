@@ -60,7 +60,7 @@ export function DonateDialog(props: DonateDialogProps) {
     const [address, setAddress] = useState('')
 
     // context
-    const { account, chainId, chainTokenDetailed } = ChainState.useContainer()
+    const { account, chainId, nativeTokenDetailed } = ChainState.useContainer()
     const BULK_CHECKOUT_ADDRESS = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
 
     //#region remote controlled dialog
@@ -75,9 +75,9 @@ export function DonateDialog(props: DonateDialogProps) {
     //#endregion
 
     //#region the selected token
-    const [token = chainTokenDetailed.value, setToken] = useState<NativeTokenDetailed | ERC20TokenDetailed | undefined>(
-        chainTokenDetailed.value,
-    )
+    const [token = nativeTokenDetailed.value, setToken] = useState<
+        NativeTokenDetailed | ERC20TokenDetailed | undefined
+    >(nativeTokenDetailed.value)
     const tokenBalance = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     //#endregion
 

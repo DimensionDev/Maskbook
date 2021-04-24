@@ -30,7 +30,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const { account, chainIdValid, chainTokenBalance } = ChainState.useContainer()
+    const { account, chainIdValid, nativeTokenBalance } = ChainState.useContainer()
 
     //#region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -74,12 +74,12 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    if (new BigNumber(chainTokenBalance.value ?? '0').isZero() && !offChain)
+    if (new BigNumber(nativeTokenBalance.value ?? '0').isZero() && !offChain)
         return (
             <Grid container>
                 <ActionButton
                     className={classes.button}
-                    disabled={!chainTokenBalance.error}
+                    disabled={!nativeTokenBalance.error}
                     fullWidth
                     variant="contained"
                     size="large"

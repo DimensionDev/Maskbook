@@ -13,7 +13,7 @@ import {
 import millify from 'millify'
 import OpenInNew from '@material-ui/icons/OpenInNew'
 import type { ProposalMessage } from '../types'
-import { resolveBlockLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveBlockLinkOnExplorer } from '../../../web3/pipes'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ChainId } from '../../../web3/types'
@@ -88,7 +88,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                                     className={classes.link}
                                     target="_blank"
                                     rel="noopener"
-                                    href={resolveBlockLinkOnEtherscan(ChainId.Mainnet, message.payload.snapshot)}>
+                                    href={resolveBlockLinkOnExplorer(ChainId.Mainnet, message.payload.snapshot)}>
                                     {message.payload.snapshot}
                                     <OpenInNew fontSize="small" />
                                 </Link>

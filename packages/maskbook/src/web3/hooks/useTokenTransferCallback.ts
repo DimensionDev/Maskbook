@@ -2,7 +2,7 @@ import { unreachable } from '../../utils/utils'
 import { EthereumTokenType } from '../types'
 import { useERC20TokenTransferCallback } from './useERC20TokenTransferCallback'
 import { useERC721TokenTransferCallback } from './useERC721TokenTransferCallback'
-import { useEtherTransferCallback } from './useEtherTransferCallback'
+import { useNativeTransferCallback } from './useNativeTokenTransferCallback'
 
 export function useTokenTransferCallback(
     type: EthereumTokenType,
@@ -11,7 +11,7 @@ export function useTokenTransferCallback(
     recipient: string,
     memo?: string,
 ) {
-    const r1 = useEtherTransferCallback(type === EthereumTokenType.Native ? amountOrTokenId : '', recipient, memo)
+    const r1 = useNativeTransferCallback(type === EthereumTokenType.Native ? amountOrTokenId : '', recipient, memo)
     const r2 = useERC20TokenTransferCallback(
         address,
         type === EthereumTokenType.ERC20 ? amountOrTokenId : '',

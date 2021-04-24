@@ -9,7 +9,7 @@ import { WalletMessages } from '../../Wallet/messages'
 import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
-import { resolveLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveLinkOnExplorer } from '../../../web3/pipes'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { StyledLinearProgress } from './StyledLinearProgress'
@@ -506,7 +506,7 @@ export function ITO(props: ITO_Props) {
                     })}
                     <Link
                         className={classes.tokenLink}
-                        href={`${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`}
+                        href={`${resolveLinkOnExplorer(token.chainId)}/token/${token.address}`}
                         target="_blank"
                         rel="noopener noreferrer">
                         <OpenInNewIcon fontSize="small" className={classes.totalIcon} />

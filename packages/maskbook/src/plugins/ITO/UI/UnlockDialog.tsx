@@ -9,7 +9,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import { resolveLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveAddressLinkOnExplorer, resolveLinkOnExplorer } from '../../../web3/pipes'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -106,7 +106,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                 <Link
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${resolveLinkOnEtherscan(chainId)}/address/${recipientAddress}`}>
+                    href={resolveAddressLinkOnExplorer(chainId, recipientAddress)}>
                     <FormattedAddress address={recipientAddress} size={4} />
                 </Link>{' '}
                 to use your {token.symbol ?? 'Token'} tokens when a new ITO round starts later.

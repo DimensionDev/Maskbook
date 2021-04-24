@@ -2,10 +2,10 @@ import { unreachable } from '../../utils/utils'
 import { EthereumTokenType } from '../types'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { useERC721TokenBalance } from './useERC721TokenBalance'
-import { useEtherTokenBalance } from './useEtherTokenBalance'
+import { useNativeTokenBalance } from './useNativeTokenBalance'
 
 export function useTokenBalance(type: EthereumTokenType, address: string) {
-    const r1 = useEtherTokenBalance(type === EthereumTokenType.Native ? address : '')
+    const r1 = useNativeTokenBalance(type === EthereumTokenType.Native ? address : '')
     const r2 = useERC20TokenBalance(type === EthereumTokenType.ERC20 ? address : '')
     const r3 = useERC721TokenBalance(type === EthereumTokenType.ERC721 ? address : '')
     const type_ = type

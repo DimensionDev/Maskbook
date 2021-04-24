@@ -3,11 +3,11 @@ import { ERC1155TokenDetailed, ERC721TokenDetailed, EthereumTokenType } from '..
 import { useTokenBalance } from './useTokenBalance'
 import { useTokenDetailed } from './useTokenDetailed'
 import { useTokenAssetDetailed } from './useTokenAssetDetailed'
-import { useEtherTokenDetailed } from './useEtherTokenDetailed'
+import { useNativeTokenDetailed } from './useNativeTokenDetailed'
 
 export function useTokenWatched(initialToken?: { type: EthereumTokenType; address: string }) {
-    const chainToken = useEtherTokenDetailed()
-    const [token = chainToken.value, setToken] = useState(initialToken)
+    const nativeToken = useNativeTokenDetailed()
+    const [token = nativeToken.value, setToken] = useState(initialToken)
 
     const [amount, setAmount] = useState('')
     const balance = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')

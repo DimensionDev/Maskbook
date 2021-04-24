@@ -3,7 +3,7 @@ import { Trash2 as TrashIcon } from 'react-feather'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { unreachable } from '../../../../utils/utils'
-import { isETH } from '../../../../web3/helpers'
+import { isNative } from '../../../../web3/helpers'
 import type {
     ERC1155TokenDetailed,
     ERC20TokenDetailed,
@@ -44,7 +44,7 @@ export function DashboardWalletHideTokenConfirmDialog(
         props.onClose,
     )
 
-    if (isETH(token.address)) return null
+    if (isNative(token.address)) return null
     return (
         <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper

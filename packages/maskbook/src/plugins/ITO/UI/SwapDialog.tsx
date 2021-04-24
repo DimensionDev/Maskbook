@@ -16,12 +16,12 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import type { ChainId } from '../../../web3/types'
-import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveTransactionLinkOnExplorer } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO_CONSTANTS } from '../constants'
 import { SwapStatus } from './SwapGuide'
-import { isETH, isSameAddress } from '../../../web3/helpers'
+import { isNative, isSameAddress } from '../../../web3/helpers'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -158,10 +158,10 @@ export function SwapDialog(props: SwapDialogProps) {
         setSelectTokenDialog({
             open: true,
             uuid: id,
-            disableEther: !exchangeTokens.some((x) => isETH(x.address)),
+            disableEther: !exchangeTokens.some((x) => isNative(x.address)),
             disableSearchBar: true,
             FixedTokenListProps: {
-                tokens: exchangeTokens.filter((x) => !isETH(x.address)) as ERC20TokenDetailed[],
+                tokens: exchangeTokens.filter((x) => !isNative(x.address)) as ERC20TokenDetailed[],
                 whitelist: exchangeTokens.map((x) => x.address),
             },
         })
@@ -223,7 +223,7 @@ export function SwapDialog(props: SwapDialogProps) {
         if (swapState.type === TransactionStateType.HASH) {
             const { hash } = swapState
             setTimeout(() => {
-                window.open(resolveTransactionLinkOnEtherscan(chainId, hash), '_blank', 'noopener noreferrer')
+                window.open(resolveTransactionLinkOnExplorer(chainId, hash), '_blank', 'noopener noreferrer')
             }, 2000)
             return
         }

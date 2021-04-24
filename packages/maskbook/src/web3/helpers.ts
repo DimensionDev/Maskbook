@@ -23,8 +23,8 @@ export function isOKB(address: string) {
     return isSameAddress(address, getConstant(CONSTANTS, 'OBK_ADDRESS'))
 }
 
-export function isETH(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'ETH_ADDRESS'))
+export function isNative(address: string) {
+    return isSameAddress(address, getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'))
 }
 
 export function addGasMargin(value: BigNumber.Value, scale = 1000) {
@@ -61,7 +61,7 @@ export function createEtherToken(chainId: ChainId): NativeTokenDetailed {
     return {
         type: EthereumTokenType.Native,
         chainId,
-        address: getConstant(CONSTANTS, 'ETH_ADDRESS'),
+        address: getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'),
         decimals: 18,
         name: 'Ether',
         symbol: 'ETH',

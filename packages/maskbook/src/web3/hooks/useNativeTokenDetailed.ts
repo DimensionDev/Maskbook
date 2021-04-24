@@ -4,17 +4,18 @@ import { NativeTokenDetailed, EthereumTokenType } from '../types'
 import { useChainId } from './useChainId'
 import { useConstant } from './useConstant'
 
-export function useEtherTokenDetailed() {
+export function useNativeTokenDetailed() {
     const chainId = useChainId()
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-    return useAsyncRetry(async () => {
-        return {
+    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    return useAsyncRetry(
+        async (): Promise<NativeTokenDetailed> => ({
             type: EthereumTokenType.Native,
-            address: ETH_ADDRESS,
+            address: NATIVE_TOKEN_ADDRESS,
             chainId,
             name: 'Ether',
             symbol: 'ETH',
             decimals: 18,
-        } as NativeTokenDetailed
-    }, [chainId, ETH_ADDRESS])
+        }),
+        [chainId, NATIVE_TOKEN_ADDRESS],
+    )
 }

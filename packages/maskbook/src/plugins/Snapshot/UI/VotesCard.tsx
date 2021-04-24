@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import type { VoteItem } from '../types'
 import millify from 'millify'
 import { Avatar, List, makeStyles, Typography, ListItem, Badge, Box, Link } from '@material-ui/core'
-import { resolveIPFSLink, resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveIPFSLink, resolveAddressLinkOnExplorer } from '../../../web3/pipes'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { SnapshotContext } from '../context'
 import { useVotes } from '../hooks/useVotes'
@@ -89,7 +89,7 @@ function Content() {
                                 className={classNames(classes.link, classes.ellipsisText)}
                                 target="_blank"
                                 rel="noopener"
-                                href={resolveAddressLinkOnEtherscan(chainId, voteEntry[0])}>
+                                href={resolveAddressLinkOnExplorer(chainId, voteEntry[0])}>
                                 <Box className={classes.avatarWrapper}>
                                     {voteEntry[1].authorAvatar ? (
                                         <Avatar

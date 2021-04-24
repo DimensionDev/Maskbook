@@ -10,7 +10,7 @@ import { useConstant } from './useConstant'
 import { CONSTANTS } from '../constants'
 import { nonFunctionalWeb3 } from '../web3'
 
-export function useEtherTransferCallback(amount?: string, recipient?: string, memo?: string) {
+export function useNativeTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const account = useAccount()
     const chainId = useChainId()
     const [transferState, setTransferState] = useTransactionState()

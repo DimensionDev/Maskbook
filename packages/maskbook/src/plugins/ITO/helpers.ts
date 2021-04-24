@@ -31,11 +31,11 @@ export function gcd(a: BigNumber, b: BigNumber) {
 }
 
 export function sortTokens(tokenA: { address: string }, tokenB: { address: string }) {
-    const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS')
+    const NATIVE_TOKEN_ADDRESS = getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     const addressA = tokenA.address.toLowerCase()
     const addressB = tokenB.address.toLowerCase()
-    if (isSameAddress(addressA, ETH_ADDRESS)) return -1
-    if (isSameAddress(addressB, ETH_ADDRESS)) return 1
+    if (isSameAddress(addressA, NATIVE_TOKEN_ADDRESS)) return -1
+    if (isSameAddress(addressB, NATIVE_TOKEN_ADDRESS)) return 1
     return addressA < addressB ? -1 : 1
 }
 

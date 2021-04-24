@@ -4,10 +4,10 @@ import { useBlockNumber, useChainId } from './useBlockNumber'
 import Services from '../../extension/service'
 
 /**
- * Fetch token balance from chain
- * @param token
+ * Fetch native token balance from chain
+ * @param address
  */
-export function useEtherTokenBalance(address: string) {
+export function useNativeTokenBalance(address: string) {
     const account = useAccount()
     const chainId = useChainId()
     const blockNumber = useBlockNumber()

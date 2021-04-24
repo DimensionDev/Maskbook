@@ -6,7 +6,7 @@ import { TokenIcon } from './TokenIcon'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../web3/constants'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { resolveTokenLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveTokenLinkOnExplorer } from '../../../web3/pipes'
 import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import { isSameAddress } from '../../../web3/helpers'
 
@@ -70,7 +70,7 @@ export interface TokenInListProps {
 
 export function TokenInList({ data, index, style }: TokenInListProps) {
     const classes = useStyles()
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
+    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
 
     const token = data.tokens[index]
@@ -89,15 +89,15 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
                 <Typography className={classes.primary} color="textPrimary" component="span">
                     <span className={classes.name}>{name}</span>
                     <span className={classes.address}>
-                        {token.address !== ETH_ADDRESS ? formatEthereumAddress(token.address, 8) : null}
+                        {token.address !== NATIVE_TOKEN_ADDRESS ? formatEthereumAddress(token.address, 8) : null}
                     </span>
                 </Typography>
                 <Typography className={classes.secondary} color="textSecondary" component="span">
                     <span className={classes.symbol}>{symbol}</span>
-                    {token.address !== ETH_ADDRESS ? (
+                    {token.address !== NATIVE_TOKEN_ADDRESS ? (
                         <Link
                             className={classes.link}
-                            href={resolveTokenLinkOnEtherscan(token)}
+                            href={resolveTokenLinkOnExplorer(token)}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={stop}>
