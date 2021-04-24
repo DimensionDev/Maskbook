@@ -320,7 +320,7 @@ importers:
       ts-jest: 26.5.5
       ts-loader: ^9.1.0
       ts-results: ^3.2.0
-      type-coverage: '2.16'
+      type-coverage: ~2.17.3
       unstated-next: ^1.1.0
       use-subscription: ^1.5.1
       uuid: ^8.3.2
@@ -497,7 +497,7 @@ importers:
       source-map-loader: 2.0.1_webpack@5.35.0
       ts-jest: 26.5.5_jest@26.6.3
       ts-loader: 9.1.0_webpack@5.35.0
-      type-coverage: 2.16.3
+      type-coverage: 2.17.3
       web-ext: 6.0.0
       webpack: 5.35.0_webpack-cli@4.6.0
       webpack-cli: 4.6.0_66846cbaca9dc7de430d1cef305cccfa
@@ -22038,23 +22038,24 @@ packages:
       prelude-ls: 1.2.1
     dev: true
 
-  /type-coverage-core/2.16.3:
-    resolution: {integrity: sha512-gOkogkvCALgINVPGY4hLW5qCCj1B8Jiih/Y1geNcMwAhS/Sbt+b0N5r1D6tOhmAPC9rTpxhL8cqJA2v+Ngonxw==}
+  /type-coverage-core/2.17.3:
+    resolution: {integrity: sha512-ip5i02FPSCBdjB02dse6AdHJ67jHtP2GVGu33LjxNQsqpBCNQeSBjV1lkZnchdjZCv3XzNdQ9Cn9Cel/JIuBGA==}
     peerDependencies:
       typescript: 2 || 3 || 4
     dependencies:
-      glob: 7.1.6
+      fast-glob: 3.2.5
       minimatch: 3.0.4
+      normalize-path: 3.0.0
       tslib: 2.2.0
       tsutils: 3.21.0
     dev: true
 
-  /type-coverage/2.16.3:
-    resolution: {integrity: sha512-sRT+bWDWqh4FD0tQBvGAedNIteRYC+qLL51nfCEcyAwfIrTR0hm50YoP48Ri2zVFyJwmAQF92Smu4ody2k36sw==}
+  /type-coverage/2.17.3:
+    resolution: {integrity: sha512-S+7+YZRkuf8xMeEBbgNthFuEiXjap0DE4now0NEFx/Ak7+AGdLvksWm0fEABUoz4cnMdCWQksXa6G/QXf+BqIA==}
     hasBin: true
     dependencies:
       minimist: 1.2.5
-      type-coverage-core: 2.16.3
+      type-coverage-core: 2.17.3
     transitivePeerDependencies:
       - typescript
     dev: true
