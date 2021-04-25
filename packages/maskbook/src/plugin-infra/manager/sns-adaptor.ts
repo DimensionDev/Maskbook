@@ -18,11 +18,11 @@ const subscription: Subscription<Plugin.SNSAdaptor.Definition[]> = {
         return () => events.off('onUpdate', f)
     },
 }
-export function useActivatedPluginInstanceUI() {
+export function useActivatedPluginsSNSAdaptor() {
     return useSubscription(subscription)
 }
 /** Check if the plugin has met it's start requirement. */
-export function meetStartRequirement(id: string): boolean {
+function meetStartRequirement(id: string): boolean {
     if (!isEnvironment(Environment.ContentScript)) return false
 
     const def = getPluginDefine(id)
@@ -37,10 +37,11 @@ export function meetStartRequirement(id: string): boolean {
     // TODO: blockchain check
     return true
 }
-export async function startSNSAdaptorPlugin(signal: AbortSignal) {
+export function startPluginSNSAdaptor(signal: AbortSignal) {
     signal.addEventListener('abort', () => [...activated.id].forEach(stopPlugin))
 
     // the current supported network won't change so no need to watch
+    // TODO: listen eth chain changes
     __startPlugins()
 }
 function __startPlugins() {
