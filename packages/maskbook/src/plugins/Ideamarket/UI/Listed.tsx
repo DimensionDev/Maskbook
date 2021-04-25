@@ -56,8 +56,8 @@ export default function Listed(props: ListedProps) {
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
-                py={1.375}
-                px={3.25}
+                paddingY={1.375}
+                paddingX={3.25}
                 width="100%"
                 height="100%"
                 bgcolor="#F7F7F7"
