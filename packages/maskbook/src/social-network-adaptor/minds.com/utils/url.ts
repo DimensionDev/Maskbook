@@ -13,5 +13,5 @@ export const getPostUrlAtMinds = (post: PostIdentifier<ProfileIdentifier>, isMob
 }
 
 export const getProfileUrlAtMinds = (self: ProfileIdentifier, isMobile: boolean = false) => {
-    return isMobile ? `${mindsUrl.hostLeadingUrl}/account` : `${mindsUrl.hostLeadingUrl}/${self.userId}`
+    return `${mindsUrl.hostLeadingUrl}/${self.userId}`
 }

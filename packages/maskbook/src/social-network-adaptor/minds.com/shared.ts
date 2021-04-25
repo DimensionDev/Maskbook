@@ -12,9 +12,5 @@ export const mindsShared: SocialNetwork.Shared & SocialNetwork.Base = {
         getPostURL(post) {
             return new URL(`https://minds.com/newsfeed/${post.postId}`)
         },
-        getShareLinkURL(message) {
-            // TODO
-            return new URL('https://minds.com')
-        },
     },
 }

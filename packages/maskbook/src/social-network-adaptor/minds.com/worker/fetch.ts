@@ -3,8 +3,6 @@ import tasks from '../../../extension/content-script/tasks'
 import type { SocialNetworkUI } from '../../../social-network'
 import { getPostUrlAtMinds, getProfileUrlAtMinds } from '../utils/url'
 
-// TODO: Is this file necessary?
-
 export function fetchPostContent(post: PostIdentifier<ProfileIdentifier>): Promise<string> {
     return tasks(getPostUrlAtMinds(post)).getPostContent()
 }
