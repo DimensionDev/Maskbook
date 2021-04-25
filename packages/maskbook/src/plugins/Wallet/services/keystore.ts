@@ -1,5 +1,6 @@
 import scrypt from 'scrypt-js'
 import Web3Utils from 'web3-utils'
+import { Buffer } from 'buffer'
 
 export type KeyStore = KeyStore.Type
 
@@ -126,7 +127,7 @@ async function Decrypt(cipher: string, derivedKey: Uint8Array, ciphertext: Uint8
     )
 
     const seed = await crypto.subtle.decrypt(
-        'aes-128-ctr'
+        cipher === 'aes-128-ctr'
             ? {
                   name: 'AES-CTR',
                   counter: iv,
