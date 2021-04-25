@@ -8,5 +8,5 @@ export const usernameValidator: NonNullable<SocialNetwork.Utils['isValidUsername
         }
     }
 
-    return name.length >= 4;
+    return name.length >= 4
 }

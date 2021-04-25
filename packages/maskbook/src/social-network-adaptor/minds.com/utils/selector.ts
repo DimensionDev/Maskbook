@@ -54,4 +54,6 @@ export const composeDialogIndicatorSelector = () =>
     new LiveSelector().querySelector<HTMLDivElement>('m-composer__modal')
 
 export const mindsTextareaSelector = () =>
-    new LiveSelector().querySelector<HTMLDivElement>('m-composer__modal m-composer__textArea .m-composer__textArea').enableSingleMode()
+    new LiveSelector()
+        .querySelector<HTMLDivElement>('m-composer__modal m-composer__textArea .m-composer__textArea')
+        .enableSingleMode()

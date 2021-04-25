@@ -4,11 +4,7 @@ import { untilDocumentReady } from '../../../utils/dom'
 import { i18n } from '../../../utils/i18n-next'
 import { MaskMessage } from '../../../utils/messages'
 import { delay } from '../../../utils/utils'
-import {
-    composeButtonSelector,
-    composeDialogIndicatorSelector,
-    composeTextareaSelector,
-} from '../utils/selector'
+import { composeButtonSelector, composeDialogIndicatorSelector, composeTextareaSelector } from '../utils/selector'
 
 export async function openComposeBoxMinds(
     content: string | TypedMessage,
