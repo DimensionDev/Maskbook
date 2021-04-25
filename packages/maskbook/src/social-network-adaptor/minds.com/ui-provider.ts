@@ -19,7 +19,6 @@ import { profilesCollectorMinds } from './collecting/profiles'
 import { PaletteModeProviderMinds, useThemeMindsVariant } from './customization/custom'
 import injectCommentBoxAtMinds from './injection/CommentBox'
 import { injectPostBoxComposed } from './injection/inject'
-import { injectMaskUserBadgeAtMinds } from './injection/MaskbookIcon'
 import { injectPostInspectorAtMinds } from './injection/PostInspector'
 import { injectSetupPromptAtMinds } from './injection/SetupPrompt'
 import { injectToolboxHintAtMinds } from './injection/ToolboxHint'
@@ -61,7 +60,6 @@ const mindsUI: SocialNetworkUI.Definition = {
     },
     injection: {
         toolBoxInNavBar: injectToolboxHintAtMinds,
-        searchResult: undefined,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtMinds,
         setupPrompt: injectSetupPromptAtMinds,
@@ -77,11 +75,15 @@ const mindsUI: SocialNetworkUI.Definition = {
             },
         },
         setupWizard: createTaskStartSetupGuideDefault('minds.com'),
-        userBadge: injectMaskUserBadgeAtMinds,
         commentComposition: {
             compositionBox: injectPostCommentsDefault(),
             commentInspector: injectCommentBoxAtMinds(),
         },
+        // NOT SUPPORTED YET
+        toolbar: undefined,
+        enhancedPostRenderer: undefined,
+        userBadge: undefined,
+        searchResult: undefined,
     },
     configuration: {
         steganography: {
