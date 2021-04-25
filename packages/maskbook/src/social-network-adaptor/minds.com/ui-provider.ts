@@ -15,7 +15,6 @@ import { pasteTextToCompositionMinds } from './automation/pasteTextToComposition
 import { mindsBase } from './base'
 import { IdentityProviderMinds } from './collecting/identity'
 import { PostProviderMinds } from './collecting/post'
-import { profilesCollectorMinds } from './collecting/profiles'
 import { PaletteModeProviderMinds, useThemeMindsVariant } from './customization/custom'
 import injectCommentBoxAtMinds from './injection/CommentBox'
 import { injectPostBoxComposed } from './injection/inject'
@@ -45,7 +44,7 @@ const mindsUI: SocialNetworkUI.Definition = {
     collecting: {
         identityProvider: IdentityProviderMinds,
         postsProvider: PostProviderMinds,
-        profilesCollector: profilesCollectorMinds,
+        profilesCollector: undefined,
     },
     customization: {
         paletteMode: PaletteModeProviderMinds,
