@@ -34,9 +34,8 @@ interface ListedProps {
 
 export default function Listed(props: ListedProps) {
     const classes = useStyles()
-    function clicked(e: SyntheticEvent<HTMLButtonElement>) {
-        e.preventDefault()
-        window.open(`https://ideamarket.io/i/twitter/${props.username}`, '_blank', 'noopener')
+    function clicked(e: SyntheticEvent) {
+        e.stopPropagation()
     }
 
     return (
@@ -78,7 +77,12 @@ export default function Listed(props: ListedProps) {
                     </Typography>
                 </Box>
                 <Box component="div" display="flex" justifyContent="space-between" alignItems="center" width="50%">
-                    <Button className={classes.button} onClick={clicked}>
+                    <Button
+                        className={classes.button}
+                        onClick={clicked}
+                        href={`https://ideamarket.io/i/twitter/${props.username}`}
+                        target="_blank"
+                        rel="noopener">
                         <Typography className={classes.buttonText}>Buy</Typography>
                     </Button>
                 </Box>
