@@ -5,25 +5,32 @@ import {
     ListItemIcon,
     Collapse,
     Theme,
-    ListItemProps,
     useMediaQuery,
     experimentalStyled as styled,
     listItemClasses,
     listItemIconClasses,
 } from '@material-ui/core'
 import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@material-ui/icons'
-import { useContext } from 'react'
+import { forwardRef, useContext, useMemo } from 'react'
 import { useMatch } from 'react-router'
 import { Link, LinkProps } from 'react-router-dom'
 import { RoutePaths } from '../../pages/routes'
 import { DashboardContext } from './context'
 import { MaskNotSquareIcon } from '@dimensiondev/icons'
 import { useDashboardI18N } from '../../locales'
+import type { Omit } from '@material-ui/system'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 
-function ListItemLinkUnStyled({ nested, ...props }: LinkProps & ListItemProps & { nested?: boolean; to: string }) {
-    // @ts-ignore
-    return <MuiListItem button component={Link} selected={!!useMatch(props.to)} {...props} />
+const ListItemLinkUnStyled = ({ to, ...props }: { to: string; nested?: boolean }) => {
+    const renderLink = useMemo(
+        () =>
+            forwardRef<HTMLAnchorElement | null, Omit<LinkProps, 'to'>>((linkProps, ref) => (
+                <Link to={to} ref={ref} {...linkProps} />
+            )),
+        [to],
+    )
+
+    return <MuiListItem component={renderLink} selected={!!useMatch(to)} {...props} />
 }
 
 const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
