@@ -24,7 +24,7 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
                 isUnlocked: false,
                 hasLockTime: false,
                 unlockTime: 0,
-                listOfStatus: [] as ITO_Status[],
+                listOfStatus: compact([availability?.expired ? ITO_Status.expired : undefined]) as ITO_Status[],
             },
         }
 
