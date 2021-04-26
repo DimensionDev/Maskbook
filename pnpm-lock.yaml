@@ -206,7 +206,7 @@ importers:
       '@openzeppelin/contracts': ^3.2.0
       '@pmmmwh/react-refresh-webpack-plugin': ^0.4.3
       '@popperjs/core': '*'
-      '@servie/events': ^1.0.0
+      '@servie/events': ^3.0.0
       '@sinonjs/text-encoding': ^0.7.1
       '@snapshot-labs/snapshot.js': ^0.1.8
       '@testing-library/react-hooks': ^5.1.2
@@ -366,7 +366,7 @@ importers:
       '@msgpack/msgpack': 2.6.0
       '@openzeppelin/contracts': 3.4.1
       '@popperjs/core': 2.9.2
-      '@servie/events': 1.0.0
+      '@servie/events': 3.0.0
       '@snapshot-labs/snapshot.js': 0.1.8
       '@types/bn.js': 4.11.6
       '@types/classnames': 2.3.1
@@ -598,7 +598,7 @@ packages:
       bintrees: 1.0.2
       bn.js: 4.12.0
       compare-versions: 3.6.0
-      ethereumjs-abi: 0.6.8
+      ethereumjs-abi: 0.6.6
       ethereumjs-blockstream: 2.0.7
       ethereumjs-util: 5.2.1
       find-versions: 2.0.0
@@ -10381,7 +10381,7 @@ packages:
     dependencies:
       is-arguments: 1.1.0
       is-date-object: 1.0.2
-      is-regex: 1.1.2
+      is-regex: 1.0.5
       object-is: 1.1.5
       object-keys: 1.1.1
       regexp.prototype.flags: 1.3.1
@@ -11743,11 +11743,11 @@ packages:
       secp256k1: 4.0.2
       setimmediate: 1.0.5
 
-  /ethereumjs-abi/0.6.8:
-    resolution: {integrity: sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==}
+  /ethereumjs-abi/0.6.6:
+    resolution: {integrity: sha512-w8KubDsA/+OAuqtIR9RGsMcoZ5nhM8vxwjJAJvEIY+clhxA3BHoLG3+ClYQaQhD0n3mlDt3U5rBrmSVJvI3c8A==}
     dependencies:
       bn.js: 4.12.0
-      ethereumjs-util: 6.2.1
+      ethereumjs-util: 5.2.1
     dev: false
 
   /ethereumjs-account/2.0.5:
@@ -14480,7 +14480,6 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       has: 1.0.3
-    dev: false
 
   /is-regex/1.1.2:
     resolution: {integrity: sha512-axvdhb5pdhEVThqJzYXwMlVuZwC+FF2DpcOhTS+y/8jVq4trxyPgfcwIxIKiyeuLlSQYKkmUaPQJ8ZE4yNKXDg==}

@@ -27,7 +27,7 @@
     "@msgpack/msgpack": "^2.6.0",
     "@openzeppelin/contracts": "^3.2.0",
     "@popperjs/core": "*",
-    "@servie/events": "^1.0.0",
+    "@servie/events": "^3.0.0",
     "@snapshot-labs/snapshot.js": "^0.1.8",
     "@types/bn.js": "^4.11.6",
     "@types/classnames": "^2.3.1",
