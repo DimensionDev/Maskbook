@@ -37,12 +37,9 @@ export function useClaimCallback(pids: string[]) {
         // step 1: check if already claimed
         try {
             const availabilityList = await Promise.all(
-                pids.map(async (pid) => {
-                    const availability = await ITO_Contract.methods.check_availability(pid).call({
-                        from: account,
-                    })
-                    return availability
-                }),
+                pids.map((pid) => ITO_Contract.methods.check_availability(pid).call({
+                    from: account,
+                })),
             )
 
             const isClaimed = availabilityList.some((availability) => new BigNumber(availability.swapped).isZero())
