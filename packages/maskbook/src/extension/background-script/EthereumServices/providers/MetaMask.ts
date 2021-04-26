@@ -4,10 +4,10 @@ import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
 import { ChainId } from '../../../../web3/types'
-import { currentMetaMaskChainIdSettings } from '../../../../settings/settings'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import { ProviderType, MetaMaskInpageProvider } from '../../../../web3/types'
 import {
+    currentMetaMaskChainIdSettings,
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
     currentIsMetamaskLockedSettings,

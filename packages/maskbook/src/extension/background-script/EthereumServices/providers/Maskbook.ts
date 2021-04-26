@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { currentMaskbookChainIdSettings } from '../../../../settings/settings'
+import { currentMaskbookChainIdSettings } from '../../../../plugins/Wallet/settings'
 import { getConstant } from '../../../../web3/helpers'
 import { CONSTANTS } from '../../../../web3/constants'
 import type { ChainId } from '../../../../web3/types'
