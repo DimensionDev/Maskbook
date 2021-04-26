@@ -45,7 +45,7 @@ export function useClaimCallback(pids: string[]) {
                         return new BigNumber(availability.swapped).isZero()
                     }),
                 )
-            ).some((claimed) => claimed)
+            ).some(Boolean)
 
             if (isClaimed) {
                 setClaimState({
