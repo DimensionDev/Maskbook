@@ -9,7 +9,7 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
 
             if (content) {
                 for (const a of content.querySelectorAll('a')) {
-                    if (twitterEncoding.payloadDecoder(a.title)) hideDOM(a)
+                    if (twitterEncoding.payloadDecoder(a.title).length) hideDOM(a)
                     if (/^https?:\/\/mask(\.io|book\.com)$/i.test(a.title)) hideDOM(a)
                 }
                 for (const span of content.querySelectorAll('span')) {
