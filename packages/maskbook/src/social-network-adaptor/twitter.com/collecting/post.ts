@@ -1,7 +1,7 @@
 import { postsContentSelector } from '../utils/selector'
 import { IntervalWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
-import { PostInfo } from '../../../social-network/PostInfo'
+import { PostInfo } from '@dimensiondev/mask-plugin-infra'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { postIdParser } from '../utils/fetch'
 import { memoize } from 'lodash-es'

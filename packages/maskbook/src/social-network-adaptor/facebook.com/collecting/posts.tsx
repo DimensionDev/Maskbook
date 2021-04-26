@@ -1,8 +1,8 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import type { SocialNetworkUI as Next } from '../../../social-network/types'
-import { creator } from '../../../social-network/utils'
-import { PostInfo } from '../../../social-network/PostInfo'
+import { creator } from '../../../social-network'
+import { PostInfo } from '@dimensiondev/mask-plugin-infra'
 import { isMobileFacebook } from '../utils/isMobile'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier'
 import {
