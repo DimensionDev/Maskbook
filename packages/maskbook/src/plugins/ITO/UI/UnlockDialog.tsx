@@ -118,10 +118,10 @@ export function UnlockDialog(props: UnlockDialogProps) {
                     {(allowance: string) => (
                         <ActionButton className={classes.button} size="large" fullWidth disabled variant="contained">
                             {isMoreThanMillion(allowance, token.decimals)
-                                ? t('plugin_ito_amount_approved_infinity', {
+                                ? t('plugin_ito_amount_unlocked_infinity', {
                                       symbol: token.symbol ?? 'Token',
                                   })
-                                : t('plugin_ito_amount_approved', {
+                                : t('plugin_ito_amount_unlocked', {
                                       amount: formatBalance(allowance, token.decimals, 2),
                                       symbol: token.symbol ?? 'Token',
                                   })}
