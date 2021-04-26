@@ -1,4 +1,3 @@
-import { BigNumber } from 'bignumber.js'
 import type { BigNumber as BN } from '@ethersproject/bignumber'
 import type { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 
@@ -54,10 +53,12 @@ export interface TradeComputed<T = unknown> {
     outputAmount: BN
     nextMidPrice: BN
     executionPrice: BN
-    priceImpact: BigNumber
+    priceImpact: BN
+    priceImpactPercent: string
     maximumSold: BN
     minimumReceived: BN
-    priceImpactWithoutFee: BigNumber
+    priceImpactWithoutFee: BN
+    priceImpactWithoutFeePercent: string
     fee: BN
     path?: (PartialRequired<EtherTokenDetailed, 'address'> | PartialRequired<ERC20TokenDetailed, 'address'>)[][]
     trade_?: T

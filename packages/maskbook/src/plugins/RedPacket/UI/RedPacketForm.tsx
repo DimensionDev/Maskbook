@@ -153,7 +153,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         message,
         shares: shares || 0,
         token,
-        total: totalAmount,
+        total: totalAmount.toString(),
     })
     //#endregion
 

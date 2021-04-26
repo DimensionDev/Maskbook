@@ -24,7 +24,7 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
     const [donateState, setDonateState] = useTransactionState()
 
     const donations = useMemo(() => {
-        const tipAmount = BN.from(GITCOIN_TIP_PERCENTAGE).div(BN.from(100)).mul(amount)
+        const tipAmount = BN.from(GITCOIN_TIP_PERCENTAGE).mul(amount).div(100)
         const grantAmount = BN.from(amount).sub(tipAmount)
         if (!address || !token) return []
         return [

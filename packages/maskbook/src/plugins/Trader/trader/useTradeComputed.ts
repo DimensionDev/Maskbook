@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { parseUnits } from '@ethersproject/units'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { TradeProvider, TradeStrategy } from '../types'
 import { useTrade as useEtherTrade } from './ether/useTrade'
@@ -19,10 +19,8 @@ export function useTradeComputed(
     inputToken?: EtherTokenDetailed | ERC20TokenDetailed,
     outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
 ) {
-    const inputTokenProduct = new BigNumber(10).pow(inputToken?.decimals ?? 0)
-    const outputTokenProduct = new BigNumber(10).pow(outputToken?.decimals ?? 0)
-    const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
-    const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
+    const inputAmount_ = parseUnits(inputAmount || '0', inputToken?.decimals).toString()
+    const outputAmount_ = parseUnits(outputAmount || '0', outputToken?.decimals).toString()
 
     // ETH-WETH pair
     const ether_ = useEtherTrade(inputToken, outputToken)

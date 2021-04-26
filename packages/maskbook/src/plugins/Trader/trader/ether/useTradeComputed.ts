@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../../web3/types'
 import { TradeComputed, TradeStrategy } from '../../types'
 
+const BN_ZERO = BN.from(0)
 const ZERO = new BigNumber(0)
 
 export interface EtherWrapper {
@@ -36,7 +38,7 @@ export function useTradeComputed(
         if (!isEtherWrapper) return null
 
         // the trade amount follows trade strategy
-        const tradeAmount = new BigNumber(strategy === TradeStrategy.ExactIn ? inputAmount || '0' : outputAmount || '0')
+        const tradeAmount = BN.from(strategy === TradeStrategy.ExactIn ? inputAmount || '0' : outputAmount || '0')
 
         // skip to render 0s
         if (tradeAmount.isZero()) return null
@@ -47,13 +49,13 @@ export function useTradeComputed(
             outputToken,
             inputAmount: tradeAmount,
             outputAmount: tradeAmount,
-            executionPrice: ZERO,
-            maximumSold: ZERO,
+            executionPrice: BN_ZERO,
+            maximumSold: BN_ZERO,
             minimumReceived: tradeAmount,
-            nextMidPrice: ZERO,
-            priceImpact: ZERO,
-            priceImpactWithoutFee: ZERO,
-            fee: ZERO,
+            nextMidPrice: BN_ZERO,
+            priceImpact: BN_ZERO,
+            priceImpactWithoutFee: BN_ZERO,
+            fee: BN_ZERO,
             trade_: {
                 isWrap:
                     (strategy === TradeStrategy.ExactIn && inputToken?.type === EthereumTokenType.Ether) ||

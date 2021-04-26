@@ -13,7 +13,6 @@ import {
     IconButton,
 } from '@material-ui/core'
 import LoopIcon from '@material-ui/icons/Loop'
-import { ONE_BIPS } from '../../constants'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { SwapQuoteResponse, TradeComputed, TradeProvider, TradeStrategy } from '../../types'
 import { formatBalance, formatPercentage } from '../../../Wallet/formatter'
@@ -84,7 +83,9 @@ export function TradeSummary(props: TradeSummaryProps) {
         maximumSold,
         minimumReceived,
         priceImpact,
+        priceImpactPercent,
         priceImpactWithoutFee,
+        priceImpactWithoutFeePercent,
         fee,
     } = trade
     const isExactIn = strategy === TradeStrategy.ExactIn
@@ -176,11 +177,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                     style={{
                         color: resolveUniswapWarningLevelColor(resolveUniswapWarningLevel(priceImpactWithoutFee)),
                     }}>
-                    {priceImpactWithoutFee.gt('0')
-                        ? priceImpactWithoutFee?.lt(ONE_BIPS)
-                            ? '<0.01%'
-                            : `${formatPercentage(priceImpactWithoutFee)}`
-                        : '-'}
+                    {priceImpactWithoutFeePercent}
                 </Typography>
             ),
         },
@@ -188,7 +185,7 @@ export function TradeSummary(props: TradeSummaryProps) {
             title: 'Liquidity Provider Fee',
             children: (
                 <Typography className={classes.title}>
-                    {formatBalance(fee.toString(), inputToken.decimals)} {inputToken.symbol}
+                    {formatBalance(fee, inputToken.decimals)} {inputToken.symbol}
                 </Typography>
             ),
         },
@@ -203,11 +200,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                     style={{
                         color: resolveUniswapWarningLevelColor(resolveUniswapWarningLevel(priceImpact)),
                     }}>
-                    {priceImpact.gt('0')
-                        ? priceImpact?.gt(ONE_BIPS)
-                            ? '<0.01%'
-                            : `${formatPercentage(priceImpact)}`
-                        : '-'}
+                    {priceImpactPercent}
                 </Typography>
             ),
         },

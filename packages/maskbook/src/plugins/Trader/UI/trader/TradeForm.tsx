@@ -250,7 +250,7 @@ export function TradeForm(props: TradeFormProps) {
             <div className={classes.section}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
-                        amount={approveAmount.toFixed()}
+                        amount={approveAmount.toString()}
                         token={
                             !isEtherWrapper(trade) && approveToken?.type === EthereumTokenType.ERC20
                                 ? approveToken

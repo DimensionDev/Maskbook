@@ -1,3 +1,4 @@
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import BigNumber from 'bignumber.js'
 import { CONSTANTS } from '../../../web3/constants'
 import { createERC20Token, getConstant } from '../../../web3/helpers'
@@ -206,8 +207,8 @@ export const MSKC = createERC20Token(
     'MSKC',
 )
 
-export const BIPS_BASE = new BigNumber(10000)
-export const ONE_BIPS = new BigNumber(1).dividedBy(BIPS_BASE)
+export const BIPS_BASE = BN.from(10000)
+export const ONE_BIPS = BN.from(10000)
 
 export const SLIPPAGE_TOLERANCE_MIN = 10 // bips
 export const SLIPPAGE_TOLERANCE_DEFAULT = 50 // bips

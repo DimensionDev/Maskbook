@@ -1,5 +1,5 @@
 import type { Swap } from '@balancer-labs/sor/dist/types'
-import type BigNumber from 'bignumber.js'
+import type { BigNumber as BN } from '@ethersproject/bignumber'
 
 export interface Route {
     share: number
@@ -22,6 +22,6 @@ export interface Asset {
 }
 
 export type SwapResponse = {
-    swaps: [Swap[][], BigNumber, BigNumber]
+    swaps: [Swap[][], BN, BN]
     routes: Route[]
 }

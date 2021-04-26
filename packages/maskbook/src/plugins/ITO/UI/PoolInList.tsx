@@ -13,8 +13,9 @@ import {
     TableCell,
     TableBody,
 } from '@material-ui/core'
-import { BigNumber as BN } from '@ethersproject/bignumber'
 import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
+import { formatUnits } from '@ethersproject/units'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
@@ -129,9 +130,7 @@ export function PoolInList(props: PoolInListProps) {
     const canWithdraw = !isWithdrawn && (listOfStatus.includes(ITO_Status.expired) || noRemain)
 
     const canSend = !listOfStatus.includes(ITO_Status.expired) && !noRemain
-    const progress =
-        100 *
-        Number(new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)).div(new BigNumber(pool.total)))
+    const progress = Number(formatUnits(BN.from(pool.total).sub(pool.total_remaining).mul(100).div(pool.total), 2))
 
     const StatusButton = () => {
         return (

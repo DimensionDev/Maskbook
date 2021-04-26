@@ -1,10 +1,10 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import { BIPS_BASE } from '../constants'
 import type { EtherWrapper } from '../trader/ether/useTradeComputed'
 import type { TradeComputed } from '../types'
 
 export function toBips(bips: number) {
-    return new BigNumber(bips).dividedBy(BIPS_BASE)
+    return BN.from(bips).div(BIPS_BASE)
 }
 
 export function isEtherWrapper(trade: TradeComputed<unknown> | null): trade is TradeComputed<EtherWrapper> {

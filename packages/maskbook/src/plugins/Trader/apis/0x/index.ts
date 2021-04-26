@@ -15,7 +15,10 @@ export async function swapQuote(request: SwapQuoteRequest) {
         if (typeof value === 'string') params.set(key, value)
     })
     if (request.slippagePercentage)
-        params.set('slippagePercentage', new BigNumber(request.slippagePercentage).dividedBy(BIPS_BASE).toFixed())
+        params.set(
+            'slippagePercentage',
+            new BigNumber(request.slippagePercentage).dividedBy(BIPS_BASE.toNumber()).toFixed(),
+        )
     if (request.buyTokenPercentageFee)
         params.set('buyTokenPercentageFee', new BigNumber(request.buyTokenPercentageFee).dividedBy(100).toFixed())
     if (request.includedSources) params.set('includedSources', request.includedSources.join())

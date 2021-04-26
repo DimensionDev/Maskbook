@@ -99,7 +99,7 @@ export function formatAmountPrecision(
     decimalPlaces = 6,
     precision = 12,
 ): string {
-    const _amount = new BigNumber(formatBalance(amount, token_decimals))
+    const _amount = new BigNumber(formatBalance(new BigNumber(amount ?? '0').toFixed(), token_decimals))
     const _decimalPlaces = decimalPlaces < 0 ? 6 : decimalPlaces
     const _precision = precision < 0 ? 12 : precision
 

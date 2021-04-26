@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import { first, memoize } from 'lodash-es'
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
@@ -115,7 +116,7 @@ export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALA
     }) as Route[]
 
     return {
-        swaps: [swaps, tradeAmount, spotPrice] as const,
+        swaps: [swaps, BN.from(tradeAmount.toFixed()), BN.from(spotPrice.toFixed())] as const,
         routes,
     }
 }

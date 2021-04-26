@@ -1,8 +1,7 @@
-import type BigNumber from 'bignumber.js'
+import type { BigNumber as BN } from '@ethersproject/bignumber'
 import { Currency, DataProvider, TradeProvider, WarningLevel, ZrxTradePool } from './types'
 import { unreachable } from '../../utils/utils'
 import {
-    BIPS_BASE,
     PRICE_IMPACT_HIGH,
     PRICE_IMPACT_LOW,
     PRICE_IMPACT_MEDIUM,
@@ -103,13 +102,12 @@ export function resolveDaysName(days: number) {
     return `${days}d`
 }
 
-export function resolveUniswapWarningLevel(priceImpact: BigNumber) {
-    const priceImpact_ = priceImpact.multipliedBy(BIPS_BASE)
-    if (priceImpact_.isGreaterThan(PRICE_IMPACT_NON_EXPERT_BLOCKED)) return WarningLevel.BLOCKED
-    if (priceImpact_.isGreaterThan(PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN)) return WarningLevel.CONFIRMATION_REQUIRED
-    if (priceImpact_.isGreaterThan(PRICE_IMPACT_HIGH)) return WarningLevel.HIGH
-    if (priceImpact_.isGreaterThan(PRICE_IMPACT_MEDIUM)) return WarningLevel.MEDIUM
-    if (priceImpact_.isGreaterThan(PRICE_IMPACT_LOW)) return WarningLevel.LOW
+export function resolveUniswapWarningLevel(priceImpact: BN) {
+    if (priceImpact.gt(PRICE_IMPACT_NON_EXPERT_BLOCKED)) return WarningLevel.BLOCKED
+    if (priceImpact.gt(PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN)) return WarningLevel.CONFIRMATION_REQUIRED
+    if (priceImpact.gt(PRICE_IMPACT_HIGH)) return WarningLevel.HIGH
+    if (priceImpact.gt(PRICE_IMPACT_MEDIUM)) return WarningLevel.MEDIUM
+    if (priceImpact.gt(PRICE_IMPACT_LOW)) return WarningLevel.LOW
     return
 }
 

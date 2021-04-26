@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { DialogContent, createStyles, Typography, DialogProps } from '@material-ui/core'
+import { BigNumber as BN } from '@ethersproject/bignumber'
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { makeStyles } from '@material-ui/core/styles'
 import { useStylesExtends } from '../custom-ui-helper'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { formatBalance } from '../../plugins/Wallet/formatter'
-import BigNumber from 'bignumber.js'
 import { ITO_Card } from '../../plugins/ITO/UI/ITO_Card'
 import type { ERC20TokenDetailed } from '../../web3/types'
 
@@ -78,12 +78,12 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
             <DialogContent className={classes.content}>
                 <MaskbookIcon classes={{ root: classes.logo }} />
                 <Typography className={classes.amount}>
-                    {formatBalance(new BigNumber(amount).plus(balance), token.decimals, 2)} {token.symbol}
+                    {formatBalance(BN.from(amount).add(balance), token.decimals)} {token.symbol}
                 </Typography>
                 <Typography className={classes.balance}>
                     <span>Balance:</span>
                     <span>
-                        {formatBalance(balance, 18, 2)} {token.symbol}
+                        {formatBalance(balance, 18)} {token.symbol}
                     </span>
                 </Typography>
                 <ITO_Card token={token} onUpdateAmount={setAmount} onUpdateBalance={onUpdateBalance} />

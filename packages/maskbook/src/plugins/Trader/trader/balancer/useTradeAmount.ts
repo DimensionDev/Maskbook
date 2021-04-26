@@ -1,5 +1,4 @@
 import { BigNumber as BN } from '@ethersproject/bignumber'
-import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { ONE_BIPS, SLIPPAGE_TOLERANCE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
@@ -12,12 +11,8 @@ export function useTradeAmount(
         if (!trade) return BN.from(0)
         const result =
             trade.strategy === TradeStrategy.ExactIn
-                ? new BigNumber(trade.outputAmount.toString())
-                      .div(ONE_BIPS.multipliedBy(allowedSlippage).plus(1))
-                      .integerValue(BigNumber.ROUND_DOWN)
-                : new BigNumber(trade.inputAmount.toString()).times(
-                      ONE_BIPS.multipliedBy(allowedSlippage).plus(1).integerValue(BigNumber.ROUND_DOWN),
-                  )
-        return BN.from(result.toFixed())
+                ? trade.outputAmount.mul(ONE_BIPS).div(BN.from(allowedSlippage).add(1))
+                : trade.inputAmount.mul(ONE_BIPS).mul(BN.from(allowedSlippage).add(1))
+        return result
     }, [trade])
 }
