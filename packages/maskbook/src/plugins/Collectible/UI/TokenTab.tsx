@@ -7,6 +7,7 @@ import { resolveAddressLinkOnEtherscan, resolveChainName } from '../../../web3/p
 import { ChainId } from '../../../web3/types'
 import { Markdown } from '../../Snapshot/UI/Markdown'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { Account } from './Account'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -74,14 +75,20 @@ export function TokenTab(props: TokenTabProps) {
                     <Typography variant="body2">
                         {t('plugin_collectible_create_by')}{' '}
                         <Link href={asset.value.creator.link} target="_blank" rel="noopener noreferrer">
-                            {asset.value.creator.user?.username ?? asset.value.creator.address?.slice(2, 8)}
+                            <Account
+                                address={asset.value.creator.address}
+                                username={asset.value.creator.user?.username}
+                            />
                         </Link>
                     </Typography>
                 ) : asset.value.owner ? (
                     <Typography variant="body2">
                         {t('plugin_collectible_owned_by')}{' '}
                         <Link href={asset.value.owner.link} target="_blank" rel="noopener noreferrer">
-                            {asset.value.owner?.user?.username ?? asset.value.owner?.address?.slice(2, 8) ?? ''}
+                            <Account
+                                address={asset.value.owner?.user?.username}
+                                username={asset.value.owner?.address}
+                            />
                         </Link>
                     </Typography>
                 ) : null}
