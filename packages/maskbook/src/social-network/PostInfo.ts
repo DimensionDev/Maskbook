@@ -1,12 +1,8 @@
 import { DOMProxy, LiveSelector, ValueRef } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier, PostIdentifier, Identifier } from '../database/type'
 import type { Payload } from '../utils/type-transform/Payload'
-import {
-    TypedMessage,
-    makeTypedMessageCompound,
-    isTypedMessageEqual,
-    TypedMessageCompound,
-} from '../protocols/typed-message'
+import { isTypedMessageEqual } from '../protocols/typed-message'
+import { TypedMessage, makeTypedMessageTuple, TypedMessageTuple } from '@dimensiondev/maskbook-shared'
 import { Result, Err } from 'ts-results'
 import { ObservableSet, ObservableMap } from '../utils/ObservableMapSet'
 import { parseURL } from '../utils/utils'
@@ -42,7 +38,7 @@ export abstract class PostInfo {
      * The un-decrypted post content.
      * It MUST be the original result (but can be updated by the original parser).
      */
-    readonly postMessage = new ValueRef<TypedMessageCompound>(makeTypedMessageCompound([]), isTypedMessageEqual)
+    readonly postMessage = new ValueRef<TypedMessageTuple>(makeTypedMessageTuple([]), isTypedMessageEqual)
     /** @deprecated It should appear in the transformedPostContent */
     readonly postPayload = new ValueRef<Result<Payload, Error>>(Err(new Error('Empty')))
     readonly decryptedPayloadForImage = new ValueRef<Payload | null>(null)
@@ -51,7 +47,7 @@ export abstract class PostInfo {
     /**
      * The un-decrypted post content after transformation.
      */
-    readonly transformedPostContent = new ValueRef<TypedMessage>(makeTypedMessageCompound([]), isTypedMessageEqual)
+    readonly transformedPostContent = new ValueRef<TypedMessage>(makeTypedMessageTuple([]), isTypedMessageEqual)
     /** @deprecated It should appear in the transformedPostContent */
     readonly decryptedPostContent = new ValueRef<TypedMessage | null>(null)
     /** @deprecated It should appear in the transformedPostContent */

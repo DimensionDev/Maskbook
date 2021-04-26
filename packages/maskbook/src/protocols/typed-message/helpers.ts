@@ -1,10 +1,10 @@
 import {
     TypedMessage,
     isTypedMessageText,
-    isTypedMessageCompound,
-    TypedMessageCompound,
+    isTypedMessageTuple,
+    TypedMessageTuple,
     isTypedMessageAnchor,
-} from './types'
+} from '@dimensiondev/maskbook-shared'
 import { Result, Ok, Err } from 'ts-results'
 import { eq } from 'lodash-es'
 /**
@@ -15,7 +15,7 @@ export function extractTextFromTypedMessage(message: TypedMessage | null): Resul
     if (message === null) return Err.EMPTY
     if (isTypedMessageText(message)) return Ok(message.content)
     if (isTypedMessageAnchor(message)) return Ok(message.content)
-    if (isTypedMessageCompound(message)) {
+    if (isTypedMessageTuple(message)) {
         const str: string[] = []
         for (const item of message.items) {
             const text = extractTextFromTypedMessage(item)
@@ -33,21 +33,11 @@ export function extractTextFromTypedMessage(message: TypedMessage | null): Resul
 export function isTypedMessageEqual(message1: TypedMessage, message2: TypedMessage): boolean {
     if (message1.type !== message2.type) return false
     if (message1.meta !== message2.meta) return false
-    if (message1.version !== message1.version) return false
-    switch (message1.type) {
-        case 'compound': {
-            const msg1 = message1 as TypedMessageCompound
-            const msg2 = message2 as TypedMessageCompound
-            if (msg1.items.length !== msg2.items.length) return false
-            return msg1.items.every((item, index) => isTypedMessageEqual(item, msg2.items[index]))
-        }
-        case 'image':
-        case 'text':
-        case 'anchor':
-        case 'unknown':
-        case 'empty':
-        case 'suspended':
-        default:
-            return eq(message1, message2)
+    if (isTypedMessageTuple(message1)) {
+        const msg1 = message1 as TypedMessageTuple
+        const msg2 = message2 as TypedMessageTuple
+        if (msg1.items.length !== msg2.items.length) return false
+        return msg1.items.every((item, index) => isTypedMessageEqual(item, msg2.items[index]))
     }
+    return eq(message1, message2)
 }
