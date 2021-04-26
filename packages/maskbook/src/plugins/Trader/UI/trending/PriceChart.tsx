@@ -79,6 +79,7 @@ export function PriceChart(props: PriceChartProps) {
         width: responsiveWidth,
         height: responsiveHeight,
     }
+
     useDimension(svgRef, dimension)
     usePriceLineChart(
         svgRef,
