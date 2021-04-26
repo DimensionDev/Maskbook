@@ -6,6 +6,7 @@ import { useMemo } from 'react'
 import { CollectibleProvider, NFTHistory, OpenSeaAssetEventType, RaribleEventType } from '../../types'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { resolveOpenSeaAssetEventType, resolveRaribleAssetEventType } from '../../pipes'
+import { Account } from '../Account'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -117,7 +118,10 @@ export function Row({ event, isDifferenceToken }: Props) {
                         rel="noopener noreferrer">
                         <Avatar src={event.accountPair.from.imageUrl} className={classes.avatar} />
                         <Typography className={classes.accountName} variant="body2">
-                            {event.accountPair.from.username ?? event.accountPair.from.address?.slice(2, 8)}
+                            <Account
+                                username={event.accountPair.from.username}
+                                address={event.accountPair.from.address?.slice(2, 8)}
+                            />
                         </Typography>
                     </Link>
                 )}
@@ -132,7 +136,7 @@ export function Row({ event, isDifferenceToken }: Props) {
                         rel="noopener noreferrer">
                         <Avatar src={event.accountPair.to.imageUrl} className={classes.avatar} />
                         <Typography className={classes.accountName} variant="body2">
-                            {event.accountPair.to.username?.slice(0, 20) ?? event.accountPair.to.address?.slice(2, 8)}
+                            <Account username={event.accountPair.to.username} address={event.accountPair.to.address} />
                         </Typography>
                     </Link>
                 )}
