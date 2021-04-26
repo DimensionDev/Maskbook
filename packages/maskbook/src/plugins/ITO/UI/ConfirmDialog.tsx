@@ -212,7 +212,6 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </Paper>
                 </Grid>
                 {poolSettings?.advanceSettingData.contract &&
-                poolSettings?.qualificationAddress &&
                 poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION_ADDRESS ? (
                     <>
                         <Grid item xs={6}>
