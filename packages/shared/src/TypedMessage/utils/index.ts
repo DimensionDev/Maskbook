@@ -22,7 +22,7 @@ export function normalizeTypedMessage(x: TypedMessage): TypedMessage {
 }
 
 /**
- * This is a tree diff algorithm, may need to find a more efficient one from NPM
+ * This is a tree compare algorithm, may need to find a more efficient one from NPM
  */
 export function isTypedMessageEqual(message1: TypedMessage, message2: TypedMessage): boolean {
     if (message1.type !== message2.type) return false
