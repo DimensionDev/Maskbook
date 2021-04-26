@@ -1,7 +1,7 @@
 import { Network } from 'opensea-js'
 import { unreachable } from '../../../utils/utils'
 import { ChainId } from '../../../web3/types'
-import { NullAddress, RaribleRopstenUserURL, RaribleUserURL } from '../constants'
+import { NullAddress, OpenSeaTraitURL, RaribleRopstenUserURL, RaribleUserURL } from '../constants'
 import { CollectibleProvider, OpenSeaAssetEventType, RaribleEventType } from '../types'
 
 export function resolveOpenSeaAssetEventType(eventType: OpenSeaAssetEventType, fromUserName?: string) {
@@ -79,6 +79,15 @@ export function resolveLinkOnOpenSea(chainId: ChainId) {
             return 'https://testnets.opensea.io'
         default:
             return 'https://opensea.io'
+    }
+}
+
+export function resolveTraitLinkOnOpenSea(chainId: ChainId, search: string) {
+    switch (chainId) {
+        case ChainId.Rinkeby:
+            return `https://testnets.opensea.io${OpenSeaTraitURL}${search}`
+        default:
+            return `https://opensea.io${OpenSeaTraitURL}${search}`
     }
 }
 

@@ -8,6 +8,7 @@ import { ChainId } from '../../../web3/types'
 import { Markdown } from '../../Snapshot/UI/Markdown'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { Account } from './Account'
+import { resolveTraitLinkOnOpenSea } from '../pipes'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -104,12 +105,19 @@ export function TokenTab(props: TokenTabProps) {
                     <Box className={classes.trait_content}>
                         {asset.value.traits.map(({ trait_type, value }) => {
                             return (
-                                <Paper className={classes.trait} key={trait_type + value} variant="outlined">
-                                    <Typography variant="body2" color="primary">
-                                        {trait_type}
-                                    </Typography>
-                                    <Typography variant="body2">{value}</Typography>
-                                </Paper>
+                                <Link
+                                    underline="none"
+                                    key={trait_type + value}
+                                    href={resolveTraitLinkOnOpenSea(chainId, trait_type)}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Paper className={classes.trait} variant="outlined">
+                                        <Typography variant="body2" color="primary">
+                                            {trait_type}
+                                        </Typography>
+                                        <Typography variant="body2">{value}</Typography>
+                                    </Paper>
+                                </Link>
                             )
                         })}
                     </Box>
