@@ -199,11 +199,8 @@ export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
     return c
 }
 
-import anchorme from 'anchorme'
 import Services from '../extension/service'
-export function parseURL(string: string) {
-    return anchorme.list(string).map((x) => x.string)
-}
+export { parseURL } from '@dimensiondev/maskbook-shared'
 /**
  * !!!! Please use the Promise constructor if possible
  * If you don't understand https://groups.google.com/forum/#!topic/bluebird-js/mUiX2-vXW2s

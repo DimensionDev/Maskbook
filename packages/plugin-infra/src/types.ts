@@ -1,7 +1,7 @@
 // Don't define values in namespaces
 import type { TypedMessage, ChainId } from '@dimensiondev/maskbook-shared'
+import type { PostInfo } from './PostInfo'
 
-type PostInfo = unknown
 export enum CurrentSNSNetwork {
     Unknown = 0,
     Facebook,

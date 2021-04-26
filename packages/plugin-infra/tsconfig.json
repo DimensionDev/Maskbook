@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist/",
-    "stripInternal": true
+    "stripInternal": true,
+    "rootDir": "./src/"
   },
   "include": ["./src/**/*"],
   "references": [{ "path": "../shared/" }, { "path": "../theme/" }],
