@@ -32,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(0.5),
         maxWidth: 160,
     },
+    name: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+    },
     loading: {
         position: 'absolute',
         bottom: 6,
@@ -124,7 +129,7 @@ export function CollectibleList(props: CollectibleListProps) {
                             <div className={classes.card} key={x.tokenId}>
                                 <CollectibleCard token={x} provider={provider} wallet={wallet} />
                                 <div className={classes.description}>
-                                    <Typography color="textSecondary" variant="body2">
+                                    <Typography className={classes.name} color="textSecondary" variant="body2">
                                         {x.asset?.name ?? x.name}
                                     </Typography>
                                 </div>
