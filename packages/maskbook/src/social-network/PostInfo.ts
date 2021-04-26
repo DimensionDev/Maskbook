@@ -2,9 +2,14 @@ import { DOMProxy, LiveSelector, ValueRef } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier, PostIdentifier, Identifier } from '../database/type'
 import type { Payload } from '../utils/type-transform/Payload'
 import { isTypedMessageEqual } from '../protocols/typed-message'
-import { TypedMessage, makeTypedMessageTuple, TypedMessageTuple } from '@dimensiondev/maskbook-shared'
+import {
+    TypedMessage,
+    makeTypedMessageTuple,
+    TypedMessageTuple,
+    ObservableSet,
+    ObservableMap,
+} from '@dimensiondev/maskbook-shared'
 import { Result, Err } from 'ts-results'
-import { ObservableSet, ObservableMap } from '@dimensiondev/maskbook-shared'
 import { parseURL } from '../utils/utils'
 export abstract class PostInfo {
     constructor() {
