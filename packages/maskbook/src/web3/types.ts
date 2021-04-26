@@ -109,14 +109,8 @@ export type TokenAssetDetailedType<
     T extends EthereumTokenType.ERC721 | EthereumTokenType.ERC1155
 > = TokenAssetDetailedMap[T]
 
-// Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
-export enum ChainId {
-    Mainnet = 1,
-    Ropsten = 3,
-    Rinkeby = 4,
-    Gorli = 5,
-    Kovan = 42,
-}
+import type { ChainId } from '@dimensiondev/maskbook-shared'
+export { ChainId } from '@dimensiondev/maskbook-shared'
 
 // Please don't use this enum but use ChainId instead
 // this exists for back backward compatible
