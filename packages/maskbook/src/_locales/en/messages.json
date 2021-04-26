@@ -469,7 +469,7 @@
     "plugin_ito_error_invalid_qualification": "Invalid Qualification Address",
     "plugin_ito_unlock_time": "Unlock Time {{zone}}",
     "plugin_ito_swap_ration_label": "Swap Ratio",
-    "plugin_ito_qualification_label": "Qualification Contract",
+    "plugin_ito_qualification_label": "Plugin Contract",
     "plugin_item_message_label": "Title",
     "plugin_ito_region_label": "IP Region Selection",
     "plugin_ito_region_comfirm_label": "IP Region",
