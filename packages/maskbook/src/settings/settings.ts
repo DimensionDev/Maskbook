@@ -1,15 +1,10 @@
 import stringify from 'json-stable-stringify'
 import { createGlobalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
-import { sideEffect, startEffects } from '../utils/side-effects'
-import { ChainId, ProviderType } from '../web3/types'
+import { sideEffect } from '../utils/side-effects'
+import { ChainId } from '../web3/types'
 import { Appearance, Language, LaunchPage } from './types'
-import type { EthStatusReporter } from '@dimensiondev/mask-plugin-infra/src'
-import { currentSelectedWalletProviderSettings } from '../plugins/Wallet/settings'
-import { safeUnreachable } from '../utils/utils'
-import { Emitter } from '@servie/events'
 
-const effect = startEffects(module.hot)
 /**
  * Does the debug mode on
  */
@@ -51,29 +46,6 @@ export const currentBlockNumnberStateSettings = createGlobalSettings<string>('bl
 //#endregion
 
 //#region provider chain id
-export const ethStatusReporter: EthStatusReporter = {
-    current() {
-        const val = currentSelectedWalletProviderSettings.value
-        switch (val) {
-            case ProviderType.Maskbook:
-                return currentMaskbookChainIdSettings.value
-            case ProviderType.MetaMask:
-                return currentMetaMaskChainIdSettings.value
-            case ProviderType.WalletConnect:
-                return currentWalletConnectChainIdSettings.value
-            default:
-                safeUnreachable(val)
-                return ChainId.Mainnet
-        }
-    },
-    events: new Emitter(),
-}
-function report() {
-    ethStatusReporter.events.emit('change')
-}
-effect(() => currentMaskbookChainIdSettings.addListener(report))
-effect(() => currentMetaMaskChainIdSettings.addListener(report))
-effect(() => currentWalletConnectChainIdSettings.addListener(report))
 export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>('maskbook chain id', ChainId.Mainnet, {
     primary: () => i18n.t('settings_choose_eth_network'),
     secondary: () => 'This only affects the built-in wallet.',

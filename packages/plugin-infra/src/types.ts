@@ -141,7 +141,16 @@ export interface I18NStringField {
     i18nKey?: string
     fallback: string
 }
+export interface PluginHost {
+    eth: EthStatusReporter
+    enabled: EnabledStatusReporter
+    signal?: AbortSignal
+}
 export interface EthStatusReporter {
     current(): ChainId
     events: Emitter<{ change: [] }>
+}
+export interface EnabledStatusReporter {
+    isEnabled(id: string): boolean
+    events: Emitter<{ enabled: [id: string]; disabled: [id: string] }>
 }

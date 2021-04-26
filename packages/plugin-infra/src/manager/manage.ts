@@ -1,5 +1,8 @@
-import type { Plugin } from '../types'
-import { getPluginDefine } from './store'
+import type { Plugin, PluginHost } from '../types'
+import { __meetEthChainRequirement } from '../utils/internal'
+import { getPluginDefine, registeredPluginIDs } from './store'
+import { Emitter } from '@servie/events'
+import { ALL_EVENTS } from '@dimensiondev/maskbook-shared'
 
 interface ActivatedPluginInstance<U extends Plugin.Shared.DefinitionWithInit> {
     instance: U
@@ -7,23 +10,26 @@ interface ActivatedPluginInstance<U extends Plugin.Shared.DefinitionWithInit> {
 }
 export interface CreateManagerOptions<T extends Plugin.Shared.DefinitionWithInit> {
     getLoader(deferred: Plugin.DeferredDefinition): undefined | Plugin.Loader<T>
-    onActivated?(id: string): void
-    onStop?(id: string): void
 }
 // Plugin state machine
 // not-loaded => loaded
 // loaded => activated (activatePlugin)
 // activated => loaded (stopPlugin)
 export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: CreateManagerOptions<T>) {
-    const { getLoader, onActivated, onStop } = _
+    const { getLoader } = _
 
     const resolved = new Map<string, T>()
     const activated = new Map<string, ActivatedPluginInstance<T>>()
+    const events = new Emitter<{
+        activated: [id: string]
+        stopped: [id: string]
+    }>()
 
     return {
         activatePlugin,
         stopPlugin,
         isActivated,
+        startDaemon,
         activated: {
             id: { [Symbol.iterator]: () => activated.keys() } as Iterable<string>,
             plugins: {
@@ -32,6 +38,30 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
                 },
             } as Iterable<T>,
         },
+        events,
+    }
+
+    function startDaemon({ enabled, eth, signal }: PluginHost, extraCheck?: (id: string) => boolean) {
+        const off = eth.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
+        const off2 = enabled.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
+
+        signal?.addEventListener('abort', () => [...activated.keys()].forEach(stopPlugin))
+        signal?.addEventListener('abort', off)
+        signal?.addEventListener('abort', off2)
+
+        checkRequirementAndStartOrStop()
+        function checkRequirementAndStartOrStop() {
+            for (const id of registeredPluginIDs) {
+                if (meetRequirement(id)) activatePlugin(id).catch(console.error)
+                else stopPlugin(id)
+            }
+        }
+
+        function meetRequirement(id: string) {
+            if (!enabled.isEnabled(id)) return false
+            if (extraCheck && !extraCheck(id)) return false
+            return __meetEthChainRequirement(id, eth)
+        }
     }
 
     async function activatePlugin(id: string) {
@@ -45,7 +75,7 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
         }
         activated.set(id, activatedPlugin)
         await definition.init(activatedPlugin.controller.signal)
-        onActivated?.(id)
+        events.emit('activated', id)
     }
 
     function stopPlugin(id: string) {
@@ -53,7 +83,7 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
         if (!instance) return
         instance.controller.abort()
         activated.delete(id)
-        onStop?.(id)
+        events.emit('stopped', id)
     }
 
     function isActivated(id: string) {

@@ -9,12 +9,12 @@ import Services from '../service'
 import { WalletRPC, WalletMessages } from '../../plugins/Wallet/messages'
 import { MaskMessage } from '../../utils/messages'
 import { startPluginDashboard } from '@dimensiondev/mask-plugin-infra/src'
-import { ethStatusReporter } from '../../settings/settings'
+import { createPluginHost } from '../../plugin-infra/host'
 setService(Services)
 setMessages(MaskMessage)
 setPluginServices({ Wallet: WalletRPC })
 setPluginMessages({ Wallet: WalletMessages })
-startPluginDashboard(ethStatusReporter)
+startPluginDashboard(createPluginHost())
 
 const root = document.createElement('div')
 document.body.insertBefore(root, document.body.children[0])

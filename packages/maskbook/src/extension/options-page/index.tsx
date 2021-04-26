@@ -43,7 +43,7 @@ import { PluginUI } from '../../plugins/PluginUI'
 import { ErrorBoundary, withErrorBoundary } from '../../components/shared/ErrorBoundary'
 import { MaskbookUIRoot } from '../../UIRoot'
 import { startPluginDashboard } from '@dimensiondev/mask-plugin-infra/src'
-import { ethStatusReporter } from '../../settings/settings'
+import { createPluginHost } from '../../plugin-infra/host'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.mode === 'dark'
@@ -251,4 +251,4 @@ export function Dashboard() {
 }
 
 export default SSRRenderer(<Dashboard />)
-startPluginDashboard(ethStatusReporter)
+startPluginDashboard(createPluginHost())
