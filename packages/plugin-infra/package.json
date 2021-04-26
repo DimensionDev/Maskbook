@@ -1,0 +1,11 @@
+{
+  "name": "@dimensiondev/mask-plugin-infra",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "scripts": {},
+  "dependencies": {
+    "@servie/events": "^3.0.0",
+    "@dimensiondev/maskbook-shared": "workspace",
+    "@dimensiondev/maskbook-theme": "workspace"
+  }
+}

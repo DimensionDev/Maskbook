@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "stripInternal": true
+  },
+  "include": ["./src/**/*"],
+  "references": [{ "path": "../shared/" }, { "path": "../theme/" }],
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": { "module": "CommonJS" }
+  }
+}

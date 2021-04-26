@@ -506,6 +506,16 @@ importers:
       webpack-notifier: 1.13.0
       webpack-target-webextension: 0.4.0_webpack@5.35.0
 
+  packages/plugin-infra:
+    specifiers:
+      '@dimensiondev/maskbook-shared': workspace
+      '@dimensiondev/maskbook-theme': workspace
+      '@servie/events': ^3.0.0
+    dependencies:
+      '@dimensiondev/maskbook-shared': link:../shared
+      '@dimensiondev/maskbook-theme': link:../theme
+      '@servie/events': 3.0.0
+
   packages/shared:
     specifiers:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
@@ -2519,7 +2529,7 @@ packages:
       jsx-jsonml-devtools-renderer: 1.4.3
       lodash-es: 4.17.21
       memorize-decorator: 0.2.4
-      tslib: 2.1.0
+      tslib: 2.2.0
     dev: false
 
   /@dimensiondev/holoflows-kit/0.8.0-20210317064617-6c4792c_webextension-polyfill@0.8.0:
@@ -2533,7 +2543,7 @@ packages:
       jsx-jsonml-devtools-renderer: 1.4.3
       lodash-es: 4.17.21
       memorize-decorator: 0.2.4
-      tslib: 2.1.0
+      tslib: 2.2.0
       webextension-polyfill: 0.8.0
     dev: false
 
@@ -9995,6 +10005,10 @@ packages:
   /csstype/3.0.7:
     resolution: {integrity: sha512-KxnUB0ZMlnUWCsx2Z8MUsr6qV6ja1w9ArPErJaJaF8a5SOWoHLIszeCTKGRGRgtLgYrs1E8CHkNSP1VZTTPc9g==}
 
+  /csstype/3.0.8:
+    resolution: {integrity: sha512-jXKhWqXPmlUeoQnF/EhTtTl4C9SnrxSH/jZUih3jmO6lBKr99rP3/+FmrMj4EFpOXzMtXHAZkd3x0E6h6Fgflw==}
+    dev: false
+
   /cwd/0.10.0:
     resolution: {integrity: sha1-FyQAaUBXwioTsM8WFix+S3p/5Wc=}
     engines: {node: '>=0.8'}
@@ -15705,7 +15719,7 @@ packages:
   /jsx-jsonml-devtools-renderer/1.4.3:
     resolution: {integrity: sha512-U1Ayx2VUF6plTLrQkNnJAg8UInToPseWqugxYTKEyaWG8G83Vqpx8BpyW9MObK1kPHdtMkevKfLi+PVwqp5Rtw==}
     dependencies:
-      csstype: 3.0.7
+      csstype: 3.0.8
     dev: false
 
   /jszip/3.6.0:
@@ -21944,7 +21958,6 @@ packages:
 
   /tslib/2.2.0:
     resolution: {integrity: sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==}
-    dev: true
 
   /tslint-eslint-rules/4.1.1_tslint@5.20.1+typescript@2.9.2:
     resolution: {integrity: sha1-fDDniC8mvCdr/5HSOEl1xp2viLo=}
