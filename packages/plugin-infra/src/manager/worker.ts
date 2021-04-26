@@ -1,24 +1,20 @@
+import type { EthStatusReporter } from '..'
+import { __meetEthChainRequirement } from '../utils/internal'
 import { createManager } from './manage'
-import { getPluginDefine, registeredPluginIDs } from './store'
+import { registeredPluginIDs } from './store'
 
 const { activatePlugin, stopPlugin } = createManager({
     getLoader: (plugin) => plugin.Worker,
 })
 
-/** Check if the plugin has met it's start requirement. */
-function meetStartRequirement(id: string): boolean {
-    const def = getPluginDefine(id)
-    if (!def) return false
-    // TODO: blockchain check
-    return true
-}
-export function startPluginWorker() {
-    // TODO: listen to blockchain id
-    __startPlugins()
-}
-function __startPlugins() {
-    for (const id of registeredPluginIDs) {
-        if (meetStartRequirement(id)) activatePlugin(id).catch(console.error)
-        else stopPlugin(id)
+export function startPluginWorker(ethReporter: EthStatusReporter) {
+    ethReporter.events.on('change', checkRequirementAndStartOrStop)
+    checkRequirementAndStartOrStop()
+
+    function checkRequirementAndStartOrStop() {
+        for (const id of registeredPluginIDs) {
+            if (__meetEthChainRequirement(id, ethReporter)) activatePlugin(id).catch(console.error)
+            else stopPlugin(id)
+        }
     }
 }

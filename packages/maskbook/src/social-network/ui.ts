@@ -5,10 +5,12 @@ import i18nNextInstance from '../utils/i18n-next'
 import type { SocialNetworkUI } from './types'
 import { managedStateCreator } from './utils'
 import { delay } from '../utils/utils'
-import { currentSetupGuideStatus } from '../settings/settings'
+import { currentSetupGuideStatus, ethStatusReporter } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
 import { ECKeyIdentifier, Identifier } from '@dimensiondev/maskbook-shared'
 import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
+import { startPluginSNSAdaptor } from '@dimensiondev/mask-plugin-infra/src'
+import { getCurrentSNSNetwork } from '../social-network-adaptor'
 
 const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
 export const definedSocialNetworkUIs: ReadonlyMap<
@@ -80,6 +82,8 @@ export async function activateSocialNetworkUI(): Promise<void> {
     ui.injection.newPostComposition?.start?.(signal)
     ui.injection.searchResult?.(signal)
     ui.injection.userBadge?.(signal)
+
+    startPluginSNSAdaptor(signal, getCurrentSNSNetwork(), ethStatusReporter)
 
     function i18nOverwrite() {
         const i18n = ui.customization.i18nOverwrite || {}

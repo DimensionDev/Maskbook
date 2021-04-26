@@ -1,7 +1,7 @@
 // Don't define values in namespaces
 import type { TypedMessage, ChainId } from '@dimensiondev/maskbook-shared'
 import type { PostInfo } from './PostInfo'
-
+import type { Emitter } from '@servie/events'
 export enum CurrentSNSNetwork {
     Unknown = 0,
     Facebook,
@@ -140,4 +140,8 @@ export namespace Plugin {
 export interface I18NStringField {
     i18nKey?: string
     fallback: string
+}
+export interface EthStatusReporter {
+    current(): ChainId
+    events: Emitter<{ change: [] }>
 }
