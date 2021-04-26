@@ -1,7 +1,8 @@
-import { Link, ListItem, ListItemText, Typography } from '@material-ui/core'
+import { CircularProgress, Link, ListItem, ListItemText, Typography } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { useCallback } from 'react'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { formatBalance, formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import { CONSTANTS } from '../../../web3/constants'
 import { isSameAddress } from '../../../web3/helpers'
@@ -60,7 +61,7 @@ export interface TokenInListProps {
         tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
         selected: string[]
         onSelect(address: string): void
-        balance?: number
+        balance?: AsyncStateRetry<Map<string, string>>
     }
 }
 
@@ -72,7 +73,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
     const token = data.tokens[index]
     if (!token) return null
     const { address, name, symbol } = token
-    const balance = 0
+
     return (
         <ListItem
             button
@@ -102,9 +103,23 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
                     </>
                 }
             />
-            <ListItemText className={classes.balance}>
-                <Typography>{balance ? formatBalance(balance) : ''}</Typography>
-            </ListItemText>
+            <BalanceValue className={classes.balance} balance={data.balance} address={address} />
         </ListItem>
+    )
+}
+
+interface BalanceValueProps extends React.HTMLAttributes<HTMLDivElement> {
+    balance?: AsyncStateRetry<Map<string, string>>
+    address: string
+}
+
+function BalanceValue({ balance, address, ...props }: BalanceValueProps) {
+    if (!balance) return null
+    if (balance.loading) return <CircularProgress style={{ width: 20, height: 20 }} />
+    if (balance.error || !balance.value) return null
+    return (
+        <ListItemText {...props}>
+            <Typography>{formatBalance(balance.value.get(address))}</Typography>
+        </ListItemText>
     )
 }

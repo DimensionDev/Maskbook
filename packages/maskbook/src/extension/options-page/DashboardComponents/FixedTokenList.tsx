@@ -1,17 +1,18 @@
-import { useState } from 'react'
+import { createStyles, makeStyles, Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
+import { useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
-import { makeStyles, createStyles, Typography } from '@material-ui/core'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { CONSTANTS } from '../../../web3/constants'
+import { isSameAddress } from '../../../web3/helpers'
+import { useConstant } from '../../../web3/hooks/useConstant'
 import {
     TokenListsState,
     useERC20TokensDetailedFromTokenLists,
 } from '../../../web3/hooks/useERC20TokensDetailedFromTokenLists'
-import { useConstant } from '../../../web3/hooks/useConstant'
-import { CONSTANTS } from '../../../web3/constants'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { isSameAddress } from '../../../web3/helpers'
-import { TokenInList } from './TokenInList'
+import { useTokensBalanceMap } from '../../../web3/hooks/useTokensBalance'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import { TokenInList } from './TokenInList'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -45,7 +46,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     //#region search tokens
     const ERC20_TOKEN_LISTS = useConstant(CONSTANTS, 'ERC20_TOKEN_LISTS')
     const [address, setAddress] = useState('')
-    const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(
+    const { state, tokensDetailed: erc20TokensDetailed, allTokens } = useERC20TokensDetailedFromTokenLists(
         ERC20_TOKEN_LISTS,
         keyword,
     )
@@ -63,10 +64,6 @@ export function FixedTokenList(props: FixedTokenListProps) {
     )
     //#endregion
 
-    if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
-    if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token...')
-    if (!erc20TokensDetailed.length) return renderPlaceholder('No token found')
-
     const filteredTokens = erc20TokensDetailed.filter(
         (x) =>
             (!includeTokens.length || includeTokens.some((y) => isSameAddress(y, x.address))) &&
@@ -80,6 +77,15 @@ export function FixedTokenList(props: FixedTokenListProps) {
         return 0
     })
 
+    const allAddress = useMemo(() => {
+        return allTokens.map((t) => t.address)
+    }, [allTokens])
+    const balance = useTokensBalanceMap(allAddress)
+
+    if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
+    if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token...')
+    if (!erc20TokensDetailed.length) return renderPlaceholder('No token found')
+
     return (
         <FixedSizeList
             className={classes.list}
@@ -90,6 +96,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
             itemData={{
                 tokens: renderTokens,
                 selected: [address, ...selectedTokens],
+                balance,
                 onSelect(address: string) {
                     const token = renderTokens.find((token) => isSameAddress(token.address, address))
                     if (!token) return

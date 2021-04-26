@@ -20,3 +20,18 @@ export function useTokensBalance(listOfAddress: string[]) {
         })
     }, [account, chainId, listOfAddress.join(), balanceCheckerContract])
 }
+
+export function useTokensBalanceMap(listOfAddress: string[]) {
+    const account = useAccount()
+    const chainId = useChainId()
+    const balanceCheckerContract = useBalanceCheckerContract()
+    return useAsyncRetry(async () => {
+        if (!account || !balanceCheckerContract) return []
+        const balances = await balanceCheckerContract.methods.balances([account], listOfAddress).call({
+            // cannot check the sender's balance in the same contract
+            from: undefined,
+        })
+
+        return new Map(listOfAddress.map((ad, i) => [ad, balances[i]]))
+    }, [account, chainId, listOfAddress.join(), balanceCheckerContract])
+}

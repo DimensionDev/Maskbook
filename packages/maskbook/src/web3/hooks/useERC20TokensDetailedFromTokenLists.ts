@@ -69,5 +69,6 @@ export function useERC20TokensDetailedFromTokenLists(lists: string[], keyword: s
             ? TokenListsState.LOADING_SEARCHED_TOKEN
             : TokenListsState.READY,
         tokensDetailed: searchedTokens.length ? searchedTokens : searchedToken ? [searchedToken] : [],
+        allTokens,
     }
 }
