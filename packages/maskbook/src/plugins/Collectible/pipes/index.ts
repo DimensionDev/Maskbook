@@ -83,12 +83,11 @@ export function resolveLinkOnOpenSea(chainId: ChainId) {
 }
 
 export function resolveTraitLinkOnOpenSea(chainId: ChainId, search: string) {
-    switch (chainId) {
-        case ChainId.Rinkeby:
-            return `https://testnets.opensea.io${OpenSeaTraitURL}${search}`
-        default:
-            return `https://opensea.io${OpenSeaTraitURL}${search}`
+    if (chainId === ChainId.Rinkeby) {
+        return `https://testnets.opensea.io${OpenSeaTraitURL}${search}`
     }
+
+    return `https://opensea.io${OpenSeaTraitURL}${search}`
 }
 
 export function resolveAssetLinkOnOpenSea(chainId: ChainId, address: string, id: string) {
