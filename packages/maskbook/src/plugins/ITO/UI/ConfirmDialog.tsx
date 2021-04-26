@@ -5,6 +5,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useI18N } from '../../../utils/i18n-next-ui'
 import LaunchIcon from '@material-ui/icons/Launch'
 import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
+import { useConstant } from '../../../web3/hooks/useConstant'
 import BigNumber from 'bignumber.js'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { dateTimeFormat } from '../assets/formatDate'
@@ -14,6 +15,7 @@ import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
+import { ITO_CONSTANTS } from '../constants'
 
 const useSwapItemStyles = makeStyles((theme) =>
     createStyles({
@@ -104,6 +106,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const classes = useStyles()
     const { t } = useI18N()
     const chainId = useChainId()
+    const DEFAULT_QUALIFICATION_ADDRESS = useConstant(ITO_CONSTANTS, 'DEFAULT_QUALIFICATION_ADDRESS')
+    const showQualification =
+        poolSettings?.advanceSettingData.contract &&
+        poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION_ADDRESS
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
     return (
         <Card elevation={0}>
@@ -208,7 +214,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Typography>{dateTimeFormat(poolSettings?.endTime!)}</Typography>
                     </Paper>
                 </Grid>
-                {poolSettings?.qualificationAddress && poolSettings?.advanceSettingData.contract ? (
+                {showQualification ? (
                     <>
                         <Grid item xs={6}>
                             <Paper className={classes.label}>
