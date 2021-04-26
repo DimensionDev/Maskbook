@@ -8,7 +8,7 @@ import {
     TypedMessageCompound,
 } from '../protocols/typed-message'
 import { Result, Err } from 'ts-results'
-import { ObservableSet, ObservableMap } from '../utils/ObservableMapSet'
+import { ObservableSet, ObservableMap } from '@dimensiondev/maskbook-shared'
 import { parseURL } from '../utils/utils'
 export abstract class PostInfo {
     constructor() {

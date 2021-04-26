@@ -2,10 +2,9 @@ import { emptyPostInfo, PostInfo } from '../../social-network/PostInfo'
 import { createContext, useContext } from 'react'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { ObservableMap, ObservableSet } from '../../utils/ObservableMapSet'
 import { useObservableValues } from '../../utils/hooks/useObservableMapSet'
 import { activatedSocialNetworkUI } from '../../social-network'
-import type { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { ProfileIdentifier, ObservableMap, ObservableSet } from '@dimensiondev/maskbook-shared'
 
 export const PostInfoContext = createContext(emptyPostInfo)
 export function usePostInfo() {
