@@ -107,6 +107,9 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const { t } = useI18N()
     const chainId = useChainId()
     const DEFAULT_QUALIFICATION_ADDRESS = useConstant(ITO_CONSTANTS, 'DEFAULT_QUALIFICATION_ADDRESS')
+    const showQualification =
+        poolSettings?.advanceSettingData.contract &&
+        poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION_ADDRESS
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
     return (
         <Card elevation={0}>
@@ -211,8 +214,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Typography>{dateTimeFormat(poolSettings?.endTime!)}</Typography>
                     </Paper>
                 </Grid>
-                {poolSettings?.advanceSettingData.contract &&
-                poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION_ADDRESS ? (
+                {showQualification ? (
                     <>
                         <Grid item xs={6}>
                             <Paper className={classes.label}>
