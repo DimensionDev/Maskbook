@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { ChainId, ProviderType } from '../types'
 import {
-    currentBlockNumnberStateSettings,
+    currentBlockNumnberSettings,
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
     currentWalletConnectChainIdSettings,
-} from '../../settings/settings'
+} from '../../plugins/Wallet/settings'
 import type { ChainBlockNumber } from '../../settings/types'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { Flags } from '../../utils/flags'
@@ -81,7 +81,7 @@ const DEFAULT_CHAIN_STATE = {
 }
 
 function useBlockNumberState(chainId: ChainId) {
-    const chainState = useValueRef(currentBlockNumnberStateSettings)
+    const chainState = useValueRef(currentBlockNumnberSettings)
     try {
         const parsedChainState = JSON.parse(chainState) as ChainBlockNumber[]
         return parsedChainState.find((x) => x.chainId === chainId) ?? DEFAULT_CHAIN_STATE
