@@ -23,13 +23,13 @@ export function CoinMetadataTags(props: CoinMetadataTagsProps) {
     const { tags } = props
     const [open, setOpen] = useState(false)
 
-    const OpenDialog = useCallback(() => {
+    const onClick = useCallback(() => {
         setOpen(!open)
-    }, [])
+    }, [open, setOpen])
 
     const onClose = useCallback(() => {
         setOpen(false)
-    }, [])
+    }, [setOpen])
     return (
         <>
             {tags?.map((x, i) =>
@@ -42,7 +42,7 @@ export function CoinMetadataTags(props: CoinMetadataTagsProps) {
             {tags?.length! > 4 ? (
                 <>
                     <Linking key={tags?.length! + 1} href={'View all'} LinkProps={{ className: classes.tag }}>
-                        <Chip label="View all" color="primary" onClick={OpenDialog} />
+                        <Chip label="View all" color="primary" onClick={onClick} />
                     </Linking>
                     <TagsDialog open={open} onClose={onClose} tags={tags} />
                 </>
