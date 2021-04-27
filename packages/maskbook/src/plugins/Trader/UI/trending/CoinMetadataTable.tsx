@@ -78,10 +78,6 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
         ['Community', trending.coin.community_urls],
     ] as [string, string[] | undefined][]
 
-    console.log('-------')
-    console.log(trending.coin.tags)
-    console.log('=====')
-
     return (
         <TableContainer className={classes.container} component={Paper} elevation={0}>
             <Table className={classes.table} size="small">
