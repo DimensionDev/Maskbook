@@ -41,7 +41,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     is_collection_weth: openSeaResponse.collection.payment_tokens.some((x) =>
                         isSameAddress(x.address, WETH_ADDRESS),
                     ),
-                    is_owner: isSameAddress(openSeaResponse.owner.address, account),
+                    is_owner: openSeaResponse.top_ownerships.some((item) => isSameAddress(item.owner.address, account)),
                     // it's an IOS string as my inspection
                     is_auction: Date.parse(`${openSeaResponse.endTime ?? ''}Z`) > Date.now(),
                     image_url: openSeaResponse.imageUrl,
