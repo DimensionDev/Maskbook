@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { createERC20Token } from '../../../web3/helpers'
 import { SwapQuoteResponse, TradeComputed, TradeProvider } from '../types'
 import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../web3/types'

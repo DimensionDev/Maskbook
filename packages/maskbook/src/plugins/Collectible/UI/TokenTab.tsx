@@ -6,9 +6,9 @@ import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 import { resolveAddressLinkOnEtherscan, resolveChainName } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'
 import { Markdown } from '../../Snapshot/UI/Markdown'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea } from '../pipes'
+import { useChainId } from '../../../web3/hooks/useChainId'
 
 const useStyles = makeStyles((theme) => {
     return {

@@ -6,7 +6,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'

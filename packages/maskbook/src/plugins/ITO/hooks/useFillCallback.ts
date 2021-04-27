@@ -10,7 +10,7 @@ import { NativeTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '.
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../constants'
 import Services from '../../../extension/service'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import type { AdvanceSettingData } from '../UI/AdvanceSetting'
 
 export interface PoolSettings {
