@@ -103,7 +103,7 @@ export async function fromV3Keystore(input: string | V3Keystore, password: strin
         throw new Error('Key derivation failed - possibly wrong passphrase')
     }
 
-    const seed = await Decrypt(
+    const seed = await decrypt(
         json.crypto.cipher,
         derivedKey,
         Buffer.from(json.crypto.ciphertext, 'hex'),
