@@ -77,9 +77,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
         return 0
     })
 
-    const allAddress = useMemo(() => {
-        return allTokens.map((t) => t.address)
-    }, [allTokens])
+    const allAddress = useMemo(() => allTokens.map((t) => t.address), [allTokens])
     const balance = useTokensBalanceMap(allAddress)
 
     if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
