@@ -12,7 +12,7 @@ import { ProviderType } from '../../../web3/types'
 
 export async function send(
     payload: JsonRpcPayload,
-    callback: (error: Error | null, payload?: JsonRpcResponse) => void,
+    callback: (error: Error | null, response?: JsonRpcResponse) => void,
 ) {
     if (process.env.NODE_ENV === 'development') {
         console.log('DEUBG: send')
