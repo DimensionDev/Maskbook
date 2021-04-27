@@ -2,10 +2,9 @@ import { useMemo } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import type { Contract } from 'web3-eth-contract'
 import type { AbiItem } from 'web3-utils'
-import { useAccount } from './useAccount'
 import { nonFunctionalWeb3 } from '../web3'
 
-export function createContract<T extends Contract>(from: string, address: string, ABI: AbiItem[]) {
+function createContract<T extends Contract>(address: string, ABI: AbiItem[]) {
     if (!address || !EthereumAddress.isValid(address)) return null
     return (new nonFunctionalWeb3.eth.Contract(ABI, address) as unknown) as T
 }
@@ -17,8 +16,7 @@ export function createContract<T extends Contract>(from: string, address: string
  * @param ABI
  */
 export function useContract<T extends Contract>(address: string, ABI: AbiItem[]) {
-    const account = useAccount()
-    return useMemo(() => createContract<T>(account, address, ABI), [account, address, ABI])
+    return useMemo(() => createContract<T>(address, ABI), [address, ABI])
 }
 
 /**
@@ -27,9 +25,7 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
  * @param ABI
  */
 export function useContracts<T extends Contract>(listOfAddress: string[], ABI: AbiItem[]) {
-    const account = useAccount()
-    const contracts = useMemo(() => listOfAddress.map((address) => createContract<T>(account, address, ABI)), [
-        account,
+    const contracts = useMemo(() => listOfAddress.map((address) => createContract<T>(address, ABI)), [
         listOfAddress,
         ABI,
     ])

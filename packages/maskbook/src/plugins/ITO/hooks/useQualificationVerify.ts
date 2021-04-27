@@ -1,25 +1,25 @@
 import { useAsyncRetry } from 'react-use'
-import { useERC165 } from '../../../web3/hooks/useERC165'
-import { useAccount } from '../../../web3/hooks/useAccount'
+import type { AbiItem } from 'web3-utils'
 import type { Qualification } from '@dimensiondev/contracts/types/Qualification'
 import QualificationABI from '@dimensiondev/contracts/abis/Qualification.json'
-import { createContract } from '../../../web3/hooks/useContract'
-import type { AbiItem } from 'web3-utils'
+import { useERC165 } from '../../../web3/hooks/useERC165'
+import { useAccount } from '../../../web3/hooks/useAccount'
+import { useContract } from '../../../web3/hooks/useContract'
 
 import { QUALIFICATION_INTERFACE_ID, QUALIFICATION_HAS_START_TIME_INTERFACE_ID } from '../constants'
 
 export function useQualificationVerify(address: string) {
     const account = useAccount()
-    const contract = createContract<Qualification>(account, address, QualificationABI as AbiItem[])
+    const qualificationContract = useContract<Qualification>(address, QualificationABI as AbiItem[])
 
     const { value: isQualification, loading: loadingQualification } = useERC165<Qualification>(
-        contract,
+        qualificationContract,
         address,
         QUALIFICATION_INTERFACE_ID,
     )
 
     const { value: qualificationHasStartTime, loading: loadingQualificationHasStartTime } = useERC165<Qualification>(
-        contract,
+        qualificationContract,
         address,
         QUALIFICATION_HAS_START_TIME_INTERFACE_ID,
     )
@@ -27,7 +27,7 @@ export function useQualificationVerify(address: string) {
     return useAsyncRetry(async () => {
         let startTime
         if (qualificationHasStartTime) {
-            startTime = await contract!.methods.get_start_time().call({ from: account })
+            startTime = await qualificationContract!.methods.get_start_time().call({ from: account })
         }
 
         return {
@@ -35,5 +35,12 @@ export function useQualificationVerify(address: string) {
             isQualification,
             startTime,
         }
-    }, [address, isQualification, qualificationHasStartTime, loadingQualification, loadingQualificationHasStartTime])
+    }, [
+        address,
+        qualificationContract,
+        isQualification,
+        qualificationHasStartTime,
+        loadingQualification,
+        loadingQualificationHasStartTime,
+    ])
 }
