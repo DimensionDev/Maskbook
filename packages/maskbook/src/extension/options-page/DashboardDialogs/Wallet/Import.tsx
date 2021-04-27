@@ -35,18 +35,16 @@ const useWalletImportDialogStyle = makeStyles((theme: Theme) =>
             fontSize: 12,
             fontWeight: 500,
             textAlign: 'center',
-            backgroundColor: '#FFD5B3',
-            color: 'black',
+            backgroundColor: theme.palette.mode === 'dark' ? '#17191D' : '#EFF5FF',
+
             padding: '8px 22px',
-            margin: '24px -36px 0',
-            [theme.breakpoints.down('sm')]: {
-                margin: '24px -16px 0',
-            },
+            margin: theme.spacing(1, 0, 0),
+            borderRadius: '4px',
         },
         notificationIcon: {
             width: 16,
             height: 16,
-            color: '#FF9138',
+            color: theme.palette.primary.main,
         },
     }),
 )
@@ -94,11 +92,11 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center',
                             }}>
                             <FormControlLabel
                                 control={
                                     <Checkbox
+                                        color="primary"
                                         checked={confirmed}
                                         onChange={() => setConfirmed((confirmed) => !confirmed)}
                                     />
@@ -195,7 +193,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
             },
         ],
         state,
-        height: 112,
+        height: 'auto',
     }
 
     const [, setCreateWalletDialogOpen] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
