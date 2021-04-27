@@ -29,7 +29,7 @@ export function Linking(props: LinkingProps) {
                     children
                 ) : (
                     <Typography variant="body2" component="span" {...TypographyProps}>
-                        {href}
+                        {(href ?? '').replace(/-/g, ' ')}
                     </Typography>
                 )}
             </span>

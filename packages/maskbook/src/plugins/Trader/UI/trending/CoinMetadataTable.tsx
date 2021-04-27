@@ -16,6 +16,7 @@ import type { DataProvider, Trending } from '../../types'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import { Linking } from './Linking'
 import { formatEthereumAddress } from '../../../Wallet/formatter'
+import { CoinMetadataTags } from './CoinMetadataTags'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -46,11 +47,8 @@ const useStyles = makeStyles((theme) =>
                 paddingRight: 0,
             },
         },
-        tag: {
-            paddingRight: theme.spacing(2),
-            '&:last-child': {
-                paddingRight: 0,
-            },
+        tagCell: {
+            display: 'flex',
         },
     }),
 )
@@ -79,6 +77,10 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
         ['Source Code', trending.coin.source_code_urls],
         ['Community', trending.coin.community_urls],
     ] as [string, string[] | undefined][]
+
+    console.log('-------')
+    console.log(trending.coin.tags)
+    console.log('=====')
 
     return (
         <TableContainer className={classes.container} component={Paper} elevation={0}>
@@ -135,10 +137,8 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                     Tags
                                 </Typography>
                             </TableCell>
-                            <TableCell>
-                                {trending.coin.tags.map((x, i) => (
-                                    <Linking key={i} href={x} TypographyProps={{ className: classes.tag }} />
-                                ))}
+                            <TableCell className={classes.tagCell}>
+                                <CoinMetadataTags tags={trending.coin.tags} />
                             </TableCell>
                         </TableRow>
                     ) : null}
