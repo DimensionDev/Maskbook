@@ -59,7 +59,8 @@ export async function fromV3Keystore(input: string | V3Keystore, password: strin
         throw new Error('Not a V3 wallet')
     }
 
-    let derivedKey: Uint8Array, kdfparams: KeyStore.ScryptParams | KeyStore.PBKDF2Params
+    let derivedKey: Uint8Array
+    let kdfparams: KeyStore.KeyDerivation["kdfparams"]
     if (json.crypto.kdf === 'scrypt') {
         kdfparams = json.crypto.kdfparams as KeyStore.ScryptParams
         derivedKey = scrypt.syncScrypt(
