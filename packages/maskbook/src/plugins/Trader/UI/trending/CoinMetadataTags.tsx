@@ -1,5 +1,4 @@
-import { createStyles, DialogContent, makeStyles, Typography } from '@material-ui/core'
-import classNames from 'classnames'
+import { Chip, createStyles, DialogContent, makeStyles } from '@material-ui/core'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { Linking } from './Linking'
@@ -7,22 +6,10 @@ import { Linking } from './Linking'
 const useStyles = makeStyles((theme) =>
     createStyles({
         tag: {
-            borderRadius: theme.shape.borderRadius,
-            backgroundColor: theme.palette.grey[200],
-            color: theme.palette.text.secondary,
-            paddingLeft: theme.spacing(1),
-            paddingRight: theme.spacing(1),
-            whiteSpace: 'nowrap',
             marginRight: theme.spacing(1),
         },
-
-        seaAll: {
-            cursor: 'pointer',
-            color: theme.palette.text.primary,
-        },
-
-        content: {
-            wordBreak: 'break-all',
+        chip: {
+            margin: theme.spacing(1),
         },
     }),
 )
@@ -34,32 +21,32 @@ export interface CoinMetadataTagsProps {
 export function CoinMetadataTags(props: CoinMetadataTagsProps) {
     const classes = useStyles()
     const { tags } = props
-    const [openSeaAll, setOpenSeaAll] = useState(false)
+    const [open, setOpen] = useState(false)
 
-    const OpenSeaAllDialog = useCallback(() => {
-        setOpenSeaAll(!openSeaAll)
-    }, [openSeaAll])
+    const OpenDialog = useCallback(() => {
+        setOpen(!open)
+    }, [])
 
     const onClose = useCallback(() => {
-        setOpenSeaAll(false)
+        setOpen(false)
     }, [])
     return (
         <>
             {tags?.map((x, i) =>
-                i < 4 ? <Linking key={i} href={x} TypographyProps={{ className: classes.tag }} /> : null,
+                i < 4 ? (
+                    <Linking key={i} href={x} LinkProps={{ className: classes.tag }}>
+                        <Chip label={x.replace(/-/g, ' ')} />
+                    </Linking>
+                ) : null,
             )}
             {tags?.length! > 4 ? (
-                <Typography
-                    variant="body2"
-                    color="primary"
-                    component="span"
-                    className={classNames(classes.tag, classes.seaAll)}
-                    onClick={OpenSeaAllDialog}>
-                    View all
-                </Typography>
+                <>
+                    <Linking key={tags?.length! + 1} href={'View all'} LinkProps={{ className: classes.tag }}>
+                        <Chip label="View all" color="primary" onClick={OpenDialog} />
+                    </Linking>
+                    <TagsDialog open={open} onClose={onClose} tags={tags} />
+                </>
             ) : null}
-
-            <TagsDialog open={openSeaAll} onClose={onClose} tags={tags} />
         </>
     )
 }
@@ -74,12 +61,18 @@ function TagsDialog(props: TagsDialogProps) {
     const { open, tags, onClose } = props
     const classes = useStyles()
     return (
-        <InjectedDialog open={open} title="Tags" onClose={onClose}>
-            <DialogContent className={classes.content}>
-                {tags?.map((x, i) => (
-                    <Linking key={i} href={x} TypographyProps={{ className: classes.tag }} />
-                ))}
-            </DialogContent>
-        </InjectedDialog>
+        <>
+            {tags ? (
+                <InjectedDialog open={open} title="Tags" onClose={onClose}>
+                    <DialogContent>
+                        {tags?.map((x, i) => (
+                            <Linking key={i} href={x}>
+                                <Chip label={x.replace(/-/g, ' ')} className={classes.chip} />
+                            </Linking>
+                        ))}
+                    </DialogContent>
+                </InjectedDialog>
+            ) : null}
+        </>
     )
 }
