@@ -115,7 +115,7 @@ export async function fromV3Keystore(input: string | V3Keystore, password: strin
     }
 }
 
-async function Decrypt(cipher: string, derivedKey: Uint8Array, ciphertext: Uint8Array, iv: Uint8Array) {
+async function decrypt(cipher: string, derivedKey: Uint8Array, ciphertext: Uint8Array, iv: Uint8Array) {
     const key = await crypto.subtle.importKey(
         'raw',
         derivedKey.slice(0, 16),
