@@ -10,6 +10,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     // PostInspector: HelloWorld,
     // SearchBoxComponent: HelloWorld,
     // DecryptedInspector: HelloWorld,
+    // GlobalInjection: GlobalComponent,
 }
 function HelloWorld(props: any) {
     console.log(props)
