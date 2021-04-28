@@ -7,7 +7,7 @@ registerPlugin({
         load: () => import('./SNSAdaptor'),
         hotModuleReload: (hot) => {
             if (module.hot) {
-                module.hot.accept('./SNSAdaptor/index', () => hot(import('./SNSAdaptor')))
+                module.hot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor')))
             }
         },
     },
