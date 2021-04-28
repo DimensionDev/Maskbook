@@ -172,8 +172,8 @@ export function CreateForm(props: CreateFormProps) {
 
     // qualificationAddress
     const [qualificationAddress, setQualificationAddress] = useState(
-        origin?.qualificationAddress && origin?.qualificationAddress !== DEFAULT_QUALIFICATION_ADDRESS
-            ? origin?.qualificationAddress
+        origin?.qualificationAddress && origin.qualificationAddress !== DEFAULT_QUALIFICATION_ADDRESS
+            ? origin.qualificationAddress
             : '',
     )
     const { value: qualification, loading: loadingQualification } = useQualificationVerify(qualificationAddress)
