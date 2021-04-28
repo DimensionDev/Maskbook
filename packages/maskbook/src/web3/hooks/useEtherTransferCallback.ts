@@ -11,12 +11,15 @@ import { TransactionStateType, useTransactionState } from './useTransactionState
 import { EthereumAddress } from 'wallet.ts'
 import { useConstant } from './useConstant'
 import { CONSTANTS } from '../constants'
+import { useTokenDetailed } from './useTokenDetailed'
+import { EthereumTokenType } from '../types'
 
 export function useEtherTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const account = useAccount()
     const chainId = useChainId()
     const [transferState, setTransferState] = useTransactionState()
     const PROVIDER_ADDRESS_LIST = useConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST')
+    const { value: token } = useTokenDetailed(EthereumTokenType.Ether, recipient ?? '')
 
     const transferCallback = useCallback(async () => {
         if (!account || !recipient || !amount || new BigNumber(amount).isZero()) {
@@ -67,10 +70,18 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
 
         // step 1: estimate gas
         const estimatedGas = await Services.Ethereum.estimateGas(config, chainId)
+        const gas = addGasMargin(estimatedGas, 2000)
+            .div(1e9)
+            .multipliedBy(new BigNumber(10).pow(token?.decimals || 18))
+        if (new BigNumber(balance).isLessThan(new BigNumber(amount).plus(gas))) {
+            amount = new BigNumber(balance).minus(gas).toFixed()
+        }
+
         const iterator = ServicesWithProgress.sendTransaction(account, {
             // the esitmated gas limit is too low with arbitrary message to be encoded as data (increase 20% gas limit)
             gas: addGasMargin(estimatedGas, 2000).toFixed(),
             ...config,
+            value: amount,
         })
 
         // step 2: blocking
