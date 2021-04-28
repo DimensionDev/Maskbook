@@ -1,6 +1,5 @@
 // Don't define values in namespaces
 import type { TypedMessage, ChainId } from '@dimensiondev/maskbook-shared'
-import type { PostInfo } from './PostInfo'
 import type { Emitter } from '@servie/events'
 export enum CurrentSNSNetwork {
     Unknown = 0,
@@ -95,7 +94,7 @@ export namespace Plugin.SNSAdaptor {
         /** This hook will be called if there is a new post found. */
         PostInspector?: InjectUI<{}>
         /** This hook will be called if there is a new decrypted post appears. */
-        DecryptedInspector?: InjectUI<{ post: PostInfo; message: TypedMessage }>
+        DecryptedInspector?: InjectUI<{ message: TypedMessage }>
         SearchBoxComponent?: InjectUI<{}>
         /** This hook will inject things in to the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
