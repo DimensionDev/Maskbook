@@ -16,6 +16,9 @@ import { usePostInfoDetails, usePostInfo } from '../DataSource/usePostInfo'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
 import type { PayloadAlpha40_Or_Alpha39, PayloadAlpha38 } from '../../utils/type-transform/Payload'
 import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
+import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
+
+const PluginHooksRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (plugin) => plugin.PostInspector)
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessage, raw: string): void
@@ -28,6 +31,7 @@ export interface PostInspectorProps {
     slotPosition?: 'before' | 'after'
 }
 export function PostInspector(props: PostInspectorProps) {
+    const postInfo = usePostInfo()
     const postBy = usePostInfoDetails('postBy')
     const postContent = usePostInfoDetails('postContent')
     const encryptedPost = usePostInfoDetails('postPayload')
@@ -115,14 +119,15 @@ export function PostInspector(props: PostInspectorProps) {
             <>
                 {props.slotPosition !== 'after' && slot}
                 {x}
-                <PluginPostInspector />
+                <PluginHooksRenderer />
+                <OldPluginPostInspector />
                 {debugInfo}
                 {props.slotPosition !== 'before' && slot}
             </>
         )
     }
 }
-function PluginPostInspector() {
+function OldPluginPostInspector() {
     return (
         <>
             {[...PluginUI.values()].map((x) => (

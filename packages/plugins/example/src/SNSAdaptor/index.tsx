@@ -7,5 +7,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         console.debug('Example plugin has been loaded.')
         signal.addEventListener('abort', () => console.debug('Example plugin has been terminated'))
     },
+    // PostInspector: HelloWorld,
+}
+function HelloWorld() {
+    return <h1 style={{ background: 'white', color: 'black' }}>Hello, World</h1>
 }
 export default sns

@@ -93,7 +93,7 @@ export namespace Plugin.Utils {
 export namespace Plugin.SNSAdaptor {
     export interface Definition extends Shared.DefinitionWithInit {
         /** This hook will be called if there is a new post found. */
-        PostInspector?: InjectUI<{ post: PostInfo }>
+        PostInspector?: InjectUI<{}>
         /** This hook will be called if there is a new decrypted post appears. */
         DecryptedInspector?: InjectUI<{ post: PostInfo; message: TypedMessage }>
         SearchBoxComponent?: InjectUI<{}>
