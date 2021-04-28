@@ -10,7 +10,6 @@ export default meta({
 export const PersonaSetup = of({
     args: {
         provider: {
-            tabName: 'twitter',
             internalName: 'twitter.com',
             network: 'twitter.com',
             connected: false,
