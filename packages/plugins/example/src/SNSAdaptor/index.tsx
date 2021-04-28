@@ -8,6 +8,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         signal.addEventListener('abort', () => console.debug('Example plugin has been terminated'))
     },
     // PostInspector: HelloWorld,
+    // SearchBoxComponent: HelloWorld,
 }
 function HelloWorld() {
     return <h1 style={{ background: 'white', color: 'black' }}>Hello, World</h1>
