@@ -3,12 +3,12 @@ import './register'
 
 import type { EthStatusReporter, PluginHost } from '@dimensiondev/mask-plugin-infra'
 import { Emitter } from '@servie/events'
-import { currentSelectedWalletProviderSettings } from '../plugins/Wallet/settings'
 import {
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
+    currentSelectedWalletProviderSettings,
     currentWalletConnectChainIdSettings,
-} from '../settings/settings'
+} from '../plugins/Wallet/settings'
 import { startEffects } from '../utils/side-effects'
 import { safeUnreachable } from '../utils/utils'
 import { ChainId, ProviderType } from '../web3/types'
