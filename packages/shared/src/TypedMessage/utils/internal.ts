@@ -3,7 +3,7 @@ import type { SerializableTypedMessage, TypedMessage } from '../base'
 /** @internal */
 export function createIsType<T extends TypedMessage>(x: string, version?: number) {
     return (y: TypedMessage): y is T => {
-        if (version !== undefined && (y as SerializableTypedMessage<number>).version === version) return false
+        if (version !== undefined && (y as SerializableTypedMessage<number>).version !== version) return false
         return y.type === x
     }
 }
