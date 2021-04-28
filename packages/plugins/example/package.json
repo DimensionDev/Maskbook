@@ -1,0 +1,9 @@
+{
+  "name": "@dimensiondev/plugin-example",
+  "private": true,
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "dependencies": {
+    "@dimensiondev/mask-plugin-infra": "workspace:*"
+  }
+}

@@ -8,7 +8,7 @@ import { Dashboard, setService, setPluginMessages, setMessages, setPluginService
 import Services from '../service'
 import { WalletRPC, WalletMessages } from '../../plugins/Wallet/messages'
 import { MaskMessage } from '../../utils/messages'
-import { startPluginDashboard } from '@dimensiondev/mask-plugin-infra/src'
+import { startPluginDashboard } from '@dimensiondev/mask-plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
 setService(Services)
 setMessages(MaskMessage)

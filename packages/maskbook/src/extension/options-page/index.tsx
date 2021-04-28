@@ -42,7 +42,7 @@ import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/PluginUI'
 import { ErrorBoundary, withErrorBoundary } from '../../components/shared/ErrorBoundary'
 import { MaskbookUIRoot } from '../../UIRoot'
-import { startPluginDashboard } from '@dimensiondev/mask-plugin-infra/src'
+import { startPluginDashboard } from '@dimensiondev/mask-plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
 
 const useStyles = makeStyles((theme) => {

@@ -9,7 +9,7 @@ import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
 import { ECKeyIdentifier, Identifier } from '@dimensiondev/maskbook-shared'
 import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
-import { startPluginSNSAdaptor } from '@dimensiondev/mask-plugin-infra/src'
+import { startPluginSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 

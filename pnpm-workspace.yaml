@@ -1,3 +1,5 @@
+# If you need to speedup webpack build, please also add the new package builds into
+# webpack config.resolve.alias
 packages:
   - 'packages/cli'
   - 'packages/dashboard'
@@ -8,3 +10,4 @@ packages:
   - 'packages/icons'
   - 'packages/contracts'
   - 'packages/plugin-infra'
+  - 'packages/plugins/example'

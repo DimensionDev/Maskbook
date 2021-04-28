@@ -1,3 +1,6 @@
+// All plugin manager need to call createPluginHost so let's register plugins implicitly.
+import './register'
+
 import type { EthStatusReporter, PluginHost } from '@dimensiondev/mask-plugin-infra'
 import { Emitter } from '@servie/events'
 import { currentSelectedWalletProviderSettings } from '../plugins/Wallet/settings'
