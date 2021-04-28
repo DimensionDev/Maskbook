@@ -12,7 +12,7 @@ export function __meetEthChainRequirement(id: string, reporter: EthStatusReporte
 
     // boolean | undefined
     const status = Boolean(expectation.chains[current])
-    if (expectation.type === 'opt-in' && status !== true) return false
-    if (expectation.type === 'opt-out' && status === true) return false
+    if (expectation.type === 'opt-in' && !status) return false
+    if (expectation.type === 'opt-out' && status) return false
     return true
 }
