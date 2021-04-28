@@ -11,9 +11,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
     // SearchBoxComponent: HelloWorld,
     // DecryptedInspector: HelloWorld,
     // GlobalInjection: GlobalComponent,
+    // CompositionDialogEntry: {
+    //     label: '🤔 Example',
+    //     onClick: () => alert('It works ™!'),
+    // },
+    // CompositionDialogEntry: {
+    //     label: '🤣 Example Dialog',
+    //     dialog: PluginDialog,
+    // },
 }
-function HelloWorld(props: any) {
-    console.log(props)
-    return <h1 style={{ background: 'white', color: 'black' }}>Hello, World</h1>
-}
+
 export default sns

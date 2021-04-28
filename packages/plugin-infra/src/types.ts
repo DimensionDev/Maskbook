@@ -98,17 +98,23 @@ export namespace Plugin.SNSAdaptor {
         SearchBoxComponent?: InjectUI<{}>
         /** This hook will inject things in to the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
-        /** This hook will inject things in to the global scope of the dashboard. */
-        PostDialogEntry?: PostDialogEntry
+        /** This hook will inject things in to the composition dialog of Mask. */
+        CompositionDialogEntry?: CompositionDialogEntry
     }
-    export type PostDialogEntry = PostDialogEntryCustom | CompositionDialogEntryDialog
-    export interface PostDialogEntryCustom {
+    export type CompositionDialogEntry = CompositionDialogEntryCustom | CompositionDialogEntryDialog
+    export interface CompositionDialogEntryCustom {
         label: I18NStringField | React.ReactNode
         onClick(): void
     }
     export interface CompositionDialogEntryDialog {
         label: I18NStringField | React.ReactNode
         dialog: React.ComponentType<CompositionDialogEntry_DialogProps>
+        /**
+         * If this option is true, the dialog will be always mounted even if the dialog is not opening.
+         *
+         * @default false
+         */
+        keepMounted?: boolean
     }
     export interface CompositionDialogEntry_DialogProps {
         open: boolean
