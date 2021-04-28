@@ -7,7 +7,7 @@ type Raw<T> = Plugin.InjectUIRaw<T>
 export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType>(
     usePlugins: () => PluginDefinition[],
     pickInjector: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
-) {
+): React.ComponentType<PropsType> {
     const picker = (plugin: PluginDefinition) => ({
         key: plugin.ID,
         name: plugin.name,

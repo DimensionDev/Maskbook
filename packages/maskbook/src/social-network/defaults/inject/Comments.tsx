@@ -4,7 +4,7 @@ import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostComment, PostCommentProps } from '../../../components/InjectedComponents/PostComments'
 import { makeStyles } from '@material-ui/core'
-import { PostInfoContext } from '../../../components/DataSource/usePostInfo'
+import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-es'
 import { collectNodeText } from '../../../social-network-adaptor/facebook.com/collecting/posts'
 import { startWatch } from '../../../utils/watcher'
@@ -40,9 +40,9 @@ export function injectPostCommentsDefault<T extends string>(
                     })
                 const root = createReactRootShadowed(meta.afterShadow, { signal })
                 root.render(
-                    <PostInfoContext.Provider value={current}>
+                    <PostInfoProvider post={current}>
                         <PostCommentDefault needZip={needZipF} comment={commentRef} {...current} />
-                    </PostInfoContext.Provider>,
+                    </PostInfoProvider>,
                 )
                 return {
                     onNodeMutation() {
