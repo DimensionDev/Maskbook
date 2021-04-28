@@ -47,10 +47,6 @@ const useStyles = makeStyles((theme) =>
                 paddingRight: 0,
             },
         },
-        tagCell: {
-            display: 'flex',
-            marginBottom: -1,
-        },
     }),
 )
 
@@ -134,7 +130,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                     Tags
                                 </Typography>
                             </TableCell>
-                            <TableCell className={classes.tagCell}>
+                            <TableCell>
                                 <CoinMetadataTags tags={trending.coin.tags} />
                             </TableCell>
                         </TableRow>
