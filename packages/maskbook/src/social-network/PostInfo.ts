@@ -1,5 +1,5 @@
 import { PostInfo } from '@dimensiondev/mask-plugin-infra'
-export { PostInfo } from '@dimensiondev/mask-plugin-infra'
+export { PostInfo }
 
 export const emptyPostInfo: PostInfo = new (class extends PostInfo {
     commentBoxSelector = undefined
