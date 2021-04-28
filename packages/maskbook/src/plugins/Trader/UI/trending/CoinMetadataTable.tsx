@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme) =>
         },
         tagCell: {
             display: 'flex',
+            marginBottom: -1,
         },
     }),
 )

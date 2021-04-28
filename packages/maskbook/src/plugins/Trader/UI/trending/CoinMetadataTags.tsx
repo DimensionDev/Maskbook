@@ -35,14 +35,14 @@ export function CoinMetadataTags(props: CoinMetadataTagsProps) {
             {tags?.map((x, i) =>
                 i < 4 ? (
                     <Linking key={i} href={x} LinkProps={{ className: classes.tag }}>
-                        <Chip label={x.replace(/-/g, ' ')} />
+                        <Chip label={x.replace(/-/g, ' ')} size="small" />
                     </Linking>
                 ) : null,
             )}
             {tags?.length! > 4 ? (
                 <>
                     <Linking key={tags?.length! + 1} href={'View all'} LinkProps={{ className: classes.tag }}>
-                        <Chip label="View all" color="primary" onClick={onClick} />
+                        <Chip label="View all" color="primary" onClick={onClick} size="small" />
                     </Linking>
                     <TagsDialog open={open} onClose={onClose} tags={tags} />
                 </>
