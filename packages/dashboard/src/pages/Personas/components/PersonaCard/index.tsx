@@ -57,7 +57,7 @@ export const PersonaCard = memo(({ persona, providers, active = false, onClick }
         [<MenuItem>Edit</MenuItem>, <MenuItem style={{ color: MaskColorVar.redMain }}>Delete</MenuItem>],
         false,
         {},
-        true,
+        false,
     )
 
     return (
