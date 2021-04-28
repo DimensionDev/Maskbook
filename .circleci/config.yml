@@ -25,7 +25,7 @@ jobs:
             - v3-maskbook-cache-pnpm-{{ checksum "pnpm-lock.yaml" }}
       - run:
           name: Install Dependencies
-          command: npx pnpm install --frozen-lockfile --store-dir ~/.pnpm/
+          command: npx pnpm@6.2.1 install --frozen-lockfile --store-dir ~/.pnpm/
       - save_cache:
           name: Save PNPM Package Cache
           key: v3-maskbook-cache-pnpm-{{ checksum "pnpm-lock.yaml" }}
