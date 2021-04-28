@@ -5,10 +5,10 @@ registerPlugin({
     ...base,
     SNSAdaptor: {
         load: () => import('./SNSAdaptor'),
-        hotModuleReload: (hot) => {
-            if (module.hot) {
-                module.hot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor')))
-            }
-        },
+        hotModuleReload: (hot) => module.hot && module.hot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor'))),
+    },
+    Dashboard: {
+        load: () => import('./Dashboard'),
+        hotModuleReload: (hot) => module.hot && module.hot.accept('./Dashboard', () => hot(import('./Dashboard'))),
     },
 })

@@ -1,0 +1,1 @@
+import '@dimensiondev/plugin-example'

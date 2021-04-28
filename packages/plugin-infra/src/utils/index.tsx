@@ -13,7 +13,7 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         name: plugin.name,
         ui: pickInjector(plugin),
     })
-    return function InjectHooksRenderer(props: PropsType) {
+    function InjectHooksRenderer(props: PropsType) {
         const all = usePlugins()
             .map(picker)
             .filter((x) => x.ui)
@@ -23,6 +23,13 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
                 </ErrorBoundary>
             ))
         return <>{all}</>
+    }
+    return function (props: PropsType) {
+        return (
+            <ErrorBoundary>
+                <InjectHooksRenderer {...props} />
+            </ErrorBoundary>
+        )
     }
 }
 

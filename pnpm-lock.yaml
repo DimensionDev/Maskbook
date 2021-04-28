@@ -131,9 +131,12 @@ importers:
       '@babel/core': ^7.13.16
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/icons': workspace:*
+      '@dimensiondev/mask-plugin-infra': workspace:*
       '@dimensiondev/maskbook-shared': workspace:*
       '@dimensiondev/maskbook-storybook-shared': workspace:*
       '@dimensiondev/maskbook-theme': workspace:*
+      '@dimensiondev/plugin-example': workspace:*
+      '@servie/events': ^3.0.0
       '@snowpack/plugin-dotenv': ^2.1.0
       '@snowpack/plugin-react-refresh': ^2.4.2
       '@storybook/addon-actions': ^6.2.9
@@ -153,9 +156,12 @@ importers:
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/icons': link:../icons
+      '@dimensiondev/mask-plugin-infra': link:../plugin-infra
       '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
       '@dimensiondev/maskbook-theme': link:../theme
+      '@dimensiondev/plugin-example': link:../plugins/example
+      '@servie/events': 3.0.0
       '@types/color': 3.0.1
       async-call-rpc: 5.0.0
       color: 3.1.3
@@ -12578,6 +12584,18 @@ packages:
       debug:
         optional: true
 
+  /follow-redirects/1.13.3_debug@4.3.1:
+    resolution: {integrity: sha512-DUgl6+HDzB0iEptNQEXLx/KhTmDb8tZUHSeLqpnjpknR70H0nC2t9N73BK6fN4hOvJ84pKlIQVQ4k5FFlBedKA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dependencies:
+      debug: 4.3.1_supports-color@6.1.0
+    dev: true
+
   /follow-redirects/1.14.0:
     resolution: {integrity: sha512-0vRwd7RKQBTt+mgu87mtYeofLFZpTas2S9zY+jIeuLJMNvudIgF52nr19q40HOwH5RrhWIPuj9puybzSJiRrVg==}
     engines: {node: '>=4.0'}
@@ -13818,7 +13836,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.13.3
+      follow-redirects: 1.13.3_debug@4.3.1
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
