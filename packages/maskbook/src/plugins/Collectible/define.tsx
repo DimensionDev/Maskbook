@@ -17,8 +17,6 @@ export const CollectiblesPluginDefine: PluginConfig = {
     stage: PluginStage.Production,
     scope: PluginScope.Public,
     successDecryptionInspector: function Component(props) {
-        // const payload = CollectibleMetadataReader(props.message.meta)
-        // if (!payload.ok) return null
         const collectibleUrl = getRelevantUrl(getTypedMessageContent(props.message))
         const asset = getAssetInfoFromURL(collectibleUrl)
         return asset ? renderPostInspector(asset) : null

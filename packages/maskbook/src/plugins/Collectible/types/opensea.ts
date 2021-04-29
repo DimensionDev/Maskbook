@@ -1,5 +1,5 @@
 import type { OpenSeaPort } from 'opensea-js'
-import type { OpenSeaAccount, OpenSeaAsset, OpenSeaCollection } from 'opensea-js/lib/types'
+import type { OpenSeaAccount, OpenSeaAsset, OpenSeaCollection, OpenSeaFungibleToken } from 'opensea-js/lib/types'
 
 export type CreateSellOrderPayload = Parameters<OpenSeaPort['createSellOrder']>[0]
 
@@ -14,6 +14,7 @@ export interface OpenSeaCustomAccount extends OpenSeaAccount {
 
 export interface OpenSeaCustomCollection extends OpenSeaCollection {
     safelist_request_status: string
+    payment_tokens: OpenSeaFungibleToken[]
 }
 
 export interface OpenSeaResponse extends OpenSeaAsset {
@@ -22,7 +23,11 @@ export interface OpenSeaResponse extends OpenSeaAsset {
     collection: OpenSeaCustomCollection
     creator?: OpenSeaCustomAccount
     traits: OpenSeaCustomTrait[]
-    endTime?: Date
+    endTime?: string
+    top_ownerships: {
+        owner: OpenSeaCustomAccount
+        quantity: string
+    }[]
 }
 
 export interface OpenSeaAssetEventAccount {

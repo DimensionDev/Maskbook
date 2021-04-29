@@ -44,7 +44,6 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { enqueueSnackbar } = useSnackbar()
     const [, copy] = useCopyToClipboard()
     const isMobile = useMatchXS()
-    // @ts-expect-error Remove this comment after lib.dom.d.ts contains 'clipboard-write'
     const permission = useQueryNavigatorPermission(true, 'clipboard-write')
     const fileName = `maskbook-encrypted-${formatDateTime(new Date()).replace(/:/g, '-')}.png`
 

@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js'
 import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'
 import { CollectibleState } from '../hooks/useCollectibleState'
+import { Account } from './Account'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -68,7 +69,7 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                     rel="noopener noreferrer">
                     <Avatar src={order.makerAccount?.profile_img_url} className={classes.avatar} />
                     <Typography className={classes.accountName}>
-                        {order.makerAccount?.user?.username ?? order.makerAccount?.address?.slice(2, 8) ?? ''}
+                        <Account address={order.makerAccount?.address} username={order.makerAccount?.user?.username} />
                     </Typography>
                 </Link>
             </TableCell>
@@ -126,7 +127,11 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                                     )}
                                 </Link>
                             ) : null}
-                            {`${order.unitPrice} ${order.paymentTokenContract?.symbol}`}
+                            {`${order.unitPrice} ${
+                                provider === CollectibleProvider.OPENSEA
+                                    ? order.paymentTokenContract?.symbol ?? ''
+                                    : 'ETH'
+                            }`}
                         </Typography>
                     </TableCell>
                     <TableCell>

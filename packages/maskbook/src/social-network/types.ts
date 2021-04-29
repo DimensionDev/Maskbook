@@ -5,14 +5,14 @@ import type {
     PostIdentifier,
     ProfileIdentifier,
     ReadonlyIdentifierMap,
+    ObservableWeakMap,
 } from '@dimensiondev/maskbook-shared'
 import type { PaletteMode, Theme } from '@material-ui/core'
 import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
-import type { TypedMessage } from '../protocols/typed-message'
 import type { PostInfo } from './PostInfo'
-import type { ObservableWeakMap } from '../utils/ObservableMapSet'
 import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
+import type { TypedMessage } from '../protocols/typed-message'
 
 // Don't define values in namespaces
 export namespace SocialNetwork {

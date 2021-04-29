@@ -1,27 +1,28 @@
+import { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
+import stringify from 'json-stable-stringify'
 import type { TransactionReceipt } from 'web3-core'
 import type { Tx } from '@dimensiondev/contracts/types/types'
-import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionEventType } from '../../../web3/types'
 import { addGasMargin } from '../../../web3/helpers'
+import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
-import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
+import { useITO_Contract } from '../contracts/useITO_Contract'
 
-export function useClaimCallback() {
+export function useClaimCallback(pids: string[]) {
     const account = useAccount()
     const chainId = useChainId()
-    const MaskITO_Contract = useMaskITO_Contract()
+    const ITO_Contract = useITO_Contract()
     const [claimState, setClaimState] = useTransactionState()
 
     const claimCallback = useCallback(async () => {
-        if (!MaskITO_Contract) {
+        if (!ITO_Contract || pids.length === 0) {
             setClaimState({
                 type: TransactionStateType.UNKNOWN,
             })
             return
         }
-
         // pre-step: start waiting for provider to confirm tx
         setClaimState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
@@ -29,13 +30,40 @@ export function useClaimCallback() {
 
         const config: Tx = {
             from: account,
-            to: MaskITO_Contract.options.address,
+            to: ITO_Contract.options.address,
             value: '0',
         }
 
-        // step 1: estimate gas
-        const estimatedGas = await MaskITO_Contract.methods
-            .claim()
+        // step 1: check if already claimed
+        try {
+            const availabilityList = await Promise.all(
+                pids.map((pid) =>
+                    ITO_Contract.methods.check_availability(pid).call({
+                        from: account,
+                    }),
+                ),
+            )
+
+            const isClaimed = availabilityList.some((availability) => new BigNumber(availability.swapped).isZero())
+
+            if (isClaimed) {
+                setClaimState({
+                    type: TransactionStateType.FAILED,
+                    error: new Error('Already Claimed'),
+                })
+                return
+            }
+        } catch (e) {
+            setClaimState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Failed to check availability.'),
+            })
+            return
+        }
+
+        // step 2: estimate gas
+        const estimatedGas = await ITO_Contract.methods
+            .claim(pids)
             .estimateGas(config)
             .catch((error: Error) => {
                 setClaimState({
@@ -45,12 +73,20 @@ export function useClaimCallback() {
                 throw error
             })
 
-        // step 2: blocking
+        // step 3: blocking
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = MaskITO_Contract.methods.claim().send({
+            const promiEvent = ITO_Contract.methods.claim(pids).send({
                 gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
             })
+
+            promiEvent.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
+                setClaimState({
+                    type: TransactionStateType.HASH,
+                    hash,
+                })
+            })
+
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                 setClaimState({
                     type: TransactionStateType.CONFIRMED,
@@ -74,7 +110,7 @@ export function useClaimCallback() {
                 reject(error)
             })
         })
-    }, [account, chainId, MaskITO_Contract])
+    }, [account, chainId, ITO_Contract, stringify(pids)])
 
     const resetCallback = useCallback(() => {
         setClaimState({

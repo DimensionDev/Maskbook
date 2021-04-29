@@ -110,11 +110,9 @@ export function usePriceLineChart(
                 )
 
             const textBBox = (text.node() as SVGTextElement)?.getBBox()
-
             if (textBBox) {
                 const { x, y, width: w, height: h } = textBBox
-
-                text.attr('transform', `translate(${-w / 2},${15 - y})`)
+                text.attr('transform', `translate(${x},${15 - y})`)
                 path.attr('d', `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`)
             }
         }
@@ -129,7 +127,7 @@ export function usePriceLineChart(
 
             const { date, value } = bisect(d3.mouse(this)[0])
 
-            tooltip.attr('transform', `translate(${x(date)},${y(value)})`).call(
+            tooltip.attr('transform', `translate(${Number(x(date)) - 18},${y(value)})`).call(
                 callout,
                 `${value.toLocaleString('en', {
                     style: 'currency',

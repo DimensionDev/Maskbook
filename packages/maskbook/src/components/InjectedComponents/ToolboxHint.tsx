@@ -8,6 +8,7 @@ import { MaskMessage } from '../../utils/messages'
 import { RedPacketCompositionEntry } from '../../plugins/RedPacket/define'
 import { FileServiceCompositionEntry } from '../../plugins/FileService/UI-define'
 import { ITO_CompositionEntry } from '../../plugins/ITO/define'
+import { useControlledDialog } from '../../plugins/Collectible/UI/useControlledDialog'
 import { useAccount } from '../../web3/hooks/useAccount'
 import { useRemoteControlledDialog, useRemoteControlledDialogEvent } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
@@ -16,6 +17,7 @@ import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
+import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
 import { ProviderIcon } from '../shared/ProviderIcon'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
@@ -179,6 +181,14 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
     //#endregion
 
+    //#region Claim All ITO
+    const {
+        open: isClaimAllDialogOpen,
+        onOpen: onClaimAllDialogOpen,
+        onClose: onClaimAllDialogClose,
+    } = useControlledDialog()
+    //#endregion
+
     const [menu, openMenu] = useMenu(
         [
             <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
@@ -206,6 +216,10 @@ export function ToolboxHint(props: ToolboxHintProps) {
             <MenuItem onClick={openSwapDialog} className={classes.menuItem}>
                 <Image src={ToolIconURLs.swap.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.swap.text}</Typography>
+            </MenuItem>,
+            <MenuItem onClick={onClaimAllDialogOpen} className={classes.menuItem}>
+                <Image src={ToolIconURLs.claim.image} width={19} height={19} />
+                <Typography className={classes.text}>{ToolIconURLs.claim.text}</Typography>
             </MenuItem>,
         ],
         false,
@@ -254,6 +268,9 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     </Typography>
                 </div>
             </div>
+            {isClaimAllDialogOpen ? (
+                <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
+            ) : null}
         </>
     )
 }

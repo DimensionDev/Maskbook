@@ -9,6 +9,9 @@ import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
 import { ECKeyIdentifier, Identifier } from '@dimensiondev/maskbook-shared'
 import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
+import { startPluginSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
+import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
+import { createPluginHost } from '../plugin-infra/host'
 
 const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
 export const definedSocialNetworkUIs: ReadonlyMap<
@@ -80,6 +83,8 @@ export async function activateSocialNetworkUI(): Promise<void> {
     ui.injection.newPostComposition?.start?.(signal)
     ui.injection.searchResult?.(signal)
     ui.injection.userBadge?.(signal)
+
+    startPluginSNSAdaptor(getCurrentSNSNetwork(ui.networkIdentifier), createPluginHost(signal))
 
     function i18nOverwrite() {
         const i18n = ui.customization.i18nOverwrite || {}

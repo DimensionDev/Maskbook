@@ -3,9 +3,12 @@ import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatEthereumAddress } from '../../Wallet/formatter'
-import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveAddressLinkOnEtherscan, resolveChainName } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'
-import { useRemarkable } from '../../Snapshot/hooks/useRemarkable'
+import { Markdown } from '../../Snapshot/UI/Markdown'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { Account } from './Account'
+import { resolveTraitLinkOnOpenSea } from '../pipes'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -15,6 +18,9 @@ const useStyles = makeStyles((theme) => {
         },
         container: {
             padding: theme.spacing(1),
+        },
+        markdown: {
+            margin: theme.spacing(1, 0),
         },
         description: {
             fontSize: 14,
@@ -55,8 +61,10 @@ export interface TokenTabProps {}
 export function TokenTab(props: TokenTabProps) {
     const { t } = useI18N()
     const classes = useStyles()
+
+    const chainId = useChainId()
     const { token, asset } = CollectibleState.useContainer()
-    const description = useRemarkable(asset.value?.description ?? '')
+
     if (!asset.value) return null
     return (
         <CollectibleTab classes={{ content: classes.content }}>
@@ -68,22 +76,24 @@ export function TokenTab(props: TokenTabProps) {
                     <Typography variant="body2">
                         {t('plugin_collectible_create_by')}{' '}
                         <Link href={asset.value.creator.link} target="_blank" rel="noopener noreferrer">
-                            {asset.value.creator.user?.username ?? asset.value.creator.address?.slice(2, 8)}
+                            <Account
+                                address={asset.value.creator.address}
+                                username={asset.value.creator.user?.username}
+                            />
                         </Link>
                     </Typography>
                 ) : asset.value.owner ? (
                     <Typography variant="body2">
                         {t('plugin_collectible_owned_by')}{' '}
                         <Link href={asset.value.owner.link} target="_blank" rel="noopener noreferrer">
-                            {asset.value.owner?.user?.username ?? asset.value.owner?.address?.slice(2, 8) ?? ''}
+                            <Account
+                                address={asset.value.owner?.user?.username}
+                                username={asset.value.owner?.address}
+                            />
                         </Link>
                     </Typography>
                 ) : null}
-                <Typography
-                    className={classes.description}
-                    variant="body2"
-                    dangerouslySetInnerHTML={{ __html: description }}
-                />
+                <Markdown classes={{ root: classes.markdown }} content={asset.value?.description ?? ''} />
             </Box>
 
             {asset.value.traits && asset.value.traits.length ? (
@@ -95,25 +105,32 @@ export function TokenTab(props: TokenTabProps) {
                     <Box className={classes.trait_content}>
                         {asset.value.traits.map(({ trait_type, value }) => {
                             return (
-                                <Paper className={classes.trait} key={trait_type + value} variant="outlined">
-                                    <Typography variant="body2" color="primary">
-                                        {trait_type}
-                                    </Typography>
-                                    <Typography variant="body2">{value}</Typography>
-                                </Paper>
+                                <Link
+                                    underline="none"
+                                    key={trait_type + value}
+                                    href={resolveTraitLinkOnOpenSea(chainId, trait_type)}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Paper className={classes.trait} variant="outlined">
+                                        <Typography variant="body2" color="primary">
+                                            {trait_type}
+                                        </Typography>
+                                        <Typography variant="body2">{value}</Typography>
+                                    </Paper>
+                                </Link>
                             )
                         })}
                     </Box>
                 </Box>
             ) : null}
 
-            {asset.value.assetContract.name && asset.value.assetContract?.description ? (
+            {asset.value.asset_contract.name && asset.value.asset_contract?.description ? (
                 <Box className={classes.container}>
                     <Typography variant="body1" sx={{ marginBottom: 1 }}>
-                        {t('plugin_collectible_about')} {asset.value.assetContract.name}
+                        {t('plugin_collectible_about')} {asset.value.asset_contract.name}
                     </Typography>
                     <Typography className={classes.description} variant="body2">
-                        {asset.value.assetContract?.description}
+                        {asset.value.asset_contract?.description}
                     </Typography>
                 </Box>
             ) : null}
@@ -142,7 +159,7 @@ export function TokenTab(props: TokenTabProps) {
                 </Box>
                 <Box className={classes.chain_row}>
                     <Typography variant="body2">{t('plugin_collectible_block_chain')}</Typography>
-                    <Typography variant="body2">Ethereum</Typography>
+                    <Typography variant="body2">{resolveChainName(chainId)}</Typography>
                 </Box>
             </Box>
         </CollectibleTab>

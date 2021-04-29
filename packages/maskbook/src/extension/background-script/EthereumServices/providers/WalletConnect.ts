@@ -9,12 +9,12 @@ import type { IJsonRpcRequest } from '@walletconnect/types'
 import type { ITxData } from '@walletconnect/types'
 import * as Maskbook from '../providers/Maskbook'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
-import { currentWalletConnectChainIdSettings } from '../../../../settings/settings'
 import {
+    currentWalletConnectChainIdSettings,
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
 } from '../../../../plugins/Wallet/settings'
-import { TransactionEventType } from '../../../../web3/types'
+import { ChainId, TransactionEventType } from '../../../../web3/types'
 import { ProviderType } from '../../../../web3/types'
 
 let connector: WalletConnect | null = null
@@ -143,7 +143,9 @@ function hijackPersonal(personal: Personal) {
 // Wrap promise as PromiEvent because WalletConnect returns transaction hash only
 // docs: https://docs.walletconnect.org/client-api
 export function createWeb3() {
-    const web3 = Maskbook.createWeb3()
+    const web3 = Maskbook.createWeb3({
+        chainId: currentWalletConnectChainIdSettings.value,
+    })
     return Object.assign(web3, {
         eth: hijackETH(web3.eth),
         currentProvider: hijackCurrentProvider(web3.currentProvider as HttpProvider | null),
@@ -170,7 +172,7 @@ export async function requestAccounts() {
 
 const onConnect = async () => {
     if (!connector?.accounts.length) return
-    currentWalletConnectChainIdSettings.value = connector.chainId
+    currentWalletConnectChainIdSettings.value = connector.chainId || ChainId.Mainnet
     await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, true)
 }
 

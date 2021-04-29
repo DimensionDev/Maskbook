@@ -21,6 +21,7 @@ import { EthereumMessages } from '../../Ethereum/messages'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { formatBalance } from '../../Wallet/formatter'
 import { useConstant } from '../../../web3/hooks/useConstant'
+import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
 
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',
@@ -96,20 +97,24 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 total_remaining: FillSuccess.total,
                 seller: {
                     address: FillSuccess.creator,
-                    name: FillSuccess.name,
+                    name: fillSettings.name,
                 },
                 buyers: [],
                 chain_id: chainId,
                 start_time: fillSettings.startTime.getTime(),
                 end_time: fillSettings.endTime.getTime(),
+                unlock_time: fillSettings.unlockTime?.getTime() ?? 0,
+                qualification_address: fillSettings.qualificationAddress,
                 creation_time: Number.parseInt(FillSuccess.creation_time, 10) * 1000,
                 token: fillSettings.token,
                 exchange_amounts: fillSettings.exchangeAmounts,
                 exchange_tokens: fillSettings.exchangeTokens,
+                regions: fillSettings.regions,
             }
 
             // output the redpacket as JSON payload
             onCreateOrSelect(payload)
+            onBack()
         },
     )
 
@@ -141,7 +146,14 @@ export function CompositionDialog(props: CompositionDialogProps) {
         tabs: [
             {
                 label: t('plugin_ito_create_new'),
-                children: <CreateForm onNext={onNext} origin={poolSettings} onChangePoolSettings={setPoolSettings} />,
+                children: usePortalShadowRoot((container) => (
+                    <CreateForm
+                        onNext={onNext}
+                        origin={poolSettings}
+                        onChangePoolSettings={setPoolSettings}
+                        dateDialogProps={{ container }}
+                    />
+                )),
                 sx: { p: 0 },
             },
             {

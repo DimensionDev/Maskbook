@@ -41,7 +41,7 @@ export const Flags = {
     COTM_enabled: webOnly,
     COTM_composition_dialog_enabled: false,
     mask_ito_enabled: betaOrInsiderOnly,
-    collectibles_enabled: betaOrInsiderOnly,
+    collectibles_enabled: webOnly,
     airdrop_enabled: webOnly,
     airdrop_composition_dialog_enabled: false,
     snapshot_enabled: webOnly,
@@ -65,6 +65,7 @@ export const Flags = {
     no_web_extension_dynamic_permission_request: is_iOSApp || process.env.target === 'E2E',
     has_no_WebRTC: process.env.target === 'safari' || !globalThis?.navigator?.permissions?.query,
     //#endregion
+    using_emoji_flag: true,
 } as const
 
 if (process.env.NODE_ENV === 'development') {

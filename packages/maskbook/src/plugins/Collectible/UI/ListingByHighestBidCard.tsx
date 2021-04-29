@@ -1,5 +1,6 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
+import { useSnackbar } from 'notistack'
 import { createStyles, makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -12,6 +13,7 @@ import type { useAsset } from '../hooks/useAsset'
 import { ChainState } from '../../../web3/state/useChainState'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
+import { isETH } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -35,16 +37,20 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface ListingByHighestBidCardProps {
+    open: boolean
+    onClose: () => void
     asset?: ReturnType<typeof useAsset>
     tokenWatched: TokenWatched
+    paymentTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
 }
 
 export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
-    const { asset, tokenWatched } = props
+    const { asset, tokenWatched, paymentTokens, open, onClose } = props
     const { amount, token, balance, setAmount, setToken } = tokenWatched
 
     const { t } = useI18N()
     const classes = useStyles()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { account } = ChainState.useContainer()
 
@@ -53,28 +59,45 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
 
     const validationMessage = useMemo(() => {
         if (new BigNumber(amount || '0').isZero()) return 'Enter minimum bid'
-        if (new BigNumber(reservePrice || '0').isZero()) return 'Ether reserve price'
+        if (new BigNumber(reservePrice || '0').isZero()) return 'Enter reserve price'
+        if (new BigNumber(reservePrice).isLessThan(amount)) return 'Invalid reserve price'
         if (expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid expiration date'
         return ''
-    }, [amount])
+    }, [amount, reservePrice, expirationDateTime])
 
     const onPostListing = useCallback(async () => {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.Ether && token.value.type !== EthereumTokenType.ERC20) return
-        await PluginCollectibleRPC.createSellOrder({
-            asset: toAsset({
-                tokenId: asset.value.token_id,
-                tokenAddress: asset.value.token_address,
-                schemaName: asset.value.assetContract.schemaName,
-            }),
-            accountAddress: account,
-            startAmount: Number.parseFloat(amount),
-            expirationTime: toUnixTimestamp(expirationDateTime),
-            englishAuctionReservePrice: Number.parseFloat(reservePrice),
-        })
-    }, [asset?.value, token, amount, account, reservePrice, expirationDateTime])
+        if (token.value.type !== EthereumTokenType.ERC20) return
+        try {
+            await PluginCollectibleRPC.createSellOrder({
+                asset: toAsset({
+                    tokenId: asset.value.token_id,
+                    tokenAddress: asset.value.token_address,
+                    schemaName: asset.value.asset_contract.schemaName,
+                }),
+                accountAddress: account,
+                startAmount: Number.parseFloat(amount),
+                expirationTime: toUnixTimestamp(expirationDateTime),
+                englishAuctionReservePrice: Number.parseFloat(reservePrice),
+                waitForHighestBid: true,
+                paymentTokenAddress: token.value.address, // english auction must be erc20 token
+            })
+        } catch (e) {
+            enqueueSnackbar(e.message, {
+                variant: 'error',
+                preventDuplicate: true,
+            })
+            throw e
+        }
+    }, [asset?.value, token, amount, account, reservePrice, expirationDateTime, enqueueSnackbar])
+
+    useEffect(() => {
+        setAmount('')
+        setReservePrice('')
+        setExpirationDateTime(new Date())
+    }, [open])
 
     return (
         <Card elevation={0}>
@@ -82,8 +105,9 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                 <SelectTokenAmountPanel
                     amount={amount}
                     balance={balance.value ?? '0'}
-                    onAmountChange={setAmount}
                     token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
+                    disableEther={!paymentTokens.some((x) => isETH(x.address))}
+                    onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
                         classes: {
@@ -94,9 +118,14 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                             helperText: 'Set your starting bid price.',
                         },
                     }}
+                    FixedTokenListProps={{
+                        selectedTokens: token.value ? [token.value.address] : [],
+                        tokens: paymentTokens,
+                        whitelist: paymentTokens.map((x) => x.address),
+                    }}
                 />
                 <SelectTokenAmountPanel
-                    amount={amount}
+                    amount={reservePrice}
                     balance={balance.value ?? '0'}
                     onAmountChange={setReservePrice}
                     token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
@@ -109,7 +138,8 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                         disableBalance: true,
                         label: 'Reserve Price',
                         TextFieldProps: {
-                            helperText: 'Create a hidden limit by setting a reserve price.',
+                            helperText:
+                                'Create a hidden limit by setting a reserve price. Reserve price must be greater than or equal to the start amount.',
                         },
                     }}
                 />
@@ -137,7 +167,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                         complete={t('plugin_collectible_done')}
                         failed={t('plugin_collectible_retry')}
                         executor={onPostListing}
-                        completeOnClick={() => setAmount('')}
+                        completeOnClick={onClose}
                         failedOnClick="use executor"
                     />
                 </EthereumWalletConnectedBoundary>

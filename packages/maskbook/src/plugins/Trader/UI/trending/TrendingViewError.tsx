@@ -23,12 +23,13 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 export interface TrendingViewErrorProps {
+    reaction?: React.ReactNode
     message: React.ReactNode
     TrendingCardProps?: Partial<TrendingCardProps>
 }
 
 export function TrendingViewError(props: TrendingViewErrorProps) {
-    const { message, TrendingCardProps } = props
+    const { message, reaction, TrendingCardProps } = props
     const classes = useStyles()
     return (
         <TrendingCard {...TrendingCardProps}>
@@ -45,6 +46,7 @@ export function TrendingViewError(props: TrendingViewErrorProps) {
                     <Typography className={classes.message} color="textSecondary">
                         {message}
                     </Typography>
+                    {!!reaction && <Box>{reaction}</Box>}
                 </Box>
             </CardContent>
         </TrendingCard>

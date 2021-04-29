@@ -2,7 +2,7 @@ import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/h
 import type { SocialNetworkUI } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
 import { PostInfo } from '../../../social-network/PostInfo'
-import { TypedMessage, makeTypedMessageImage, makeTypedMessageCompound } from '../../../protocols/typed-message'
+import { TypedMessage, makeTypedMessageImage, makeTypedMessageTuple } from '../../../protocols/typed-message'
 import { startWatch } from '../../../utils/watcher'
 import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 import { instagramBase } from '../base'
@@ -41,11 +41,11 @@ function collectPostsInstagramInner(
                 info.postID.value = getPostID(metadata)
                 const img = node.querySelectorAll('img')[1]
                 if (img) {
-                    nextTypedMessage.push(makeTypedMessageImage(img.src, { height: img.height, width: img.width }))
+                    nextTypedMessage.push(makeTypedMessageImage(img.src, img))
                     info.postMetadataImages.add(img.src)
                 } else nextTypedMessage.push(makeTypedMessageImage(''))
                 info.postContent.value = ''
-                info.postMessage.value = makeTypedMessageCompound(nextTypedMessage)
+                info.postMessage.value = makeTypedMessageTuple(nextTypedMessage)
             }
             collectPostInfo()
             return {

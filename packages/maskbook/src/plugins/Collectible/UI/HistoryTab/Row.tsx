@@ -6,13 +6,13 @@ import { useMemo } from 'react'
 import { CollectibleProvider, NFTHistory, OpenSeaAssetEventType, RaribleEventType } from '../../types'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { resolveOpenSeaAssetEventType, resolveRaribleAssetEventType } from '../../pipes'
+import { Account } from '../Account'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
         account: {
             display: 'flex',
             alignItems: 'center',
-            lineHeight: 1,
         },
         avatar: {
             width: 18,
@@ -20,8 +20,6 @@ const useStyles = makeStyles((theme) => {
         },
         accountName: {
             marginLeft: theme.spacing(0.5),
-            fontSize: 14,
-            lineHeight: 1,
         },
         relativeTime: {
             whiteSpace: 'nowrap',
@@ -35,8 +33,6 @@ const useStyles = makeStyles((theme) => {
         content: {
             display: 'flex',
             alignItems: 'center',
-            fontSize: 14,
-            lineHeight: 1,
         },
     })
 })
@@ -65,7 +61,7 @@ export function Row({ event, isDifferenceToken }: Props) {
     return (
         <TableRow>
             <TableCell>
-                <Typography className={classes.content}>
+                <Typography className={classes.content} variant="body2">
                     {provider === CollectibleProvider.OPENSEA
                         ? resolveOpenSeaAssetEventType(
                               event.eventType as OpenSeaAssetEventType,
@@ -77,7 +73,7 @@ export function Row({ event, isDifferenceToken }: Props) {
             {isDifferenceToken ? (
                 <>
                     <TableCell>
-                        <Typography className={classes.content}>
+                        <Typography className={classes.content} variant="body2">
                             {event.price?.asset?.imageUrl && (
                                 <Link
                                     href={event.price.asset.assetContract.blockExplorerLink}
@@ -95,7 +91,7 @@ export function Row({ event, isDifferenceToken }: Props) {
                         </Typography>
                     </TableCell>
                     <TableCell>
-                        <Typography className={classes.content}>
+                        <Typography className={classes.content} variant="body2">
                             {formatBalance(
                                 new BigNumber(event.assetQuantity?.quantity ?? 0),
                                 event.assetQuantity?.asset.decimals ?? 0,
@@ -105,7 +101,7 @@ export function Row({ event, isDifferenceToken }: Props) {
                 </>
             ) : (
                 <TableCell>
-                    <Typography className={classes.content}>
+                    <Typography className={classes.content} variant="body2">
                         {event.price && provider === CollectibleProvider.OPENSEA
                             ? formatBalance(new BigNumber(event.price.quantity), event.price?.asset?.decimals ?? 0)
                             : event.price?.quantity ?? ''}
@@ -121,8 +117,11 @@ export function Row({ event, isDifferenceToken }: Props) {
                         className={classes.account}
                         rel="noopener noreferrer">
                         <Avatar src={event.accountPair.from.imageUrl} className={classes.avatar} />
-                        <Typography className={classes.accountName}>
-                            {event.accountPair.from.username ?? event.accountPair.from.address?.slice(2, 8)}
+                        <Typography className={classes.accountName} variant="body2">
+                            <Account
+                                username={event.accountPair.from.username}
+                                address={event.accountPair.from.address?.slice(2, 8)}
+                            />
                         </Typography>
                     </Link>
                 )}
@@ -136,8 +135,8 @@ export function Row({ event, isDifferenceToken }: Props) {
                         className={classes.account}
                         rel="noopener noreferrer">
                         <Avatar src={event.accountPair.to.imageUrl} className={classes.avatar} />
-                        <Typography className={classes.accountName}>
-                            {event.accountPair.to.username?.slice(0, 20) ?? event.accountPair.to.address?.slice(2, 8)}
+                        <Typography className={classes.accountName} variant="body2">
+                            <Account username={event.accountPair.to.username} address={event.accountPair.to.address} />
                         </Typography>
                     </Link>
                 )}
@@ -145,13 +144,13 @@ export function Row({ event, isDifferenceToken }: Props) {
             <TableCell className={classes.relativeTime}>
                 {event.transactionBlockExplorerLink ? (
                     <Link href={event.transactionBlockExplorerLink} target="_blank" rel="noopener noreferrer">
-                        <Typography className={classes.content}>
+                        <Typography className={classes.content} variant="body2">
                             {formatElapsed(event.timestamp)}
                             <LinkIcon fontSize="inherit" />
                         </Typography>
                     </Link>
                 ) : (
-                    <Typography className={classes.content} sx={{ color: 'rgb(29,161,242)' }}>
+                    <Typography className={classes.content} color="primary" variant="body2">
                         {formatElapsed(event.timestamp)}
                     </Typography>
                 )}

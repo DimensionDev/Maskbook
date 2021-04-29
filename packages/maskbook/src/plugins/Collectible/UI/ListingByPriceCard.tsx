@@ -1,6 +1,7 @@
-import { ChangeEvent, useState, useMemo, useCallback } from 'react'
+import { ChangeEvent, useState, useMemo, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
+import { useSnackbar } from 'notistack'
 import {
     createStyles,
     makeStyles,
@@ -24,6 +25,7 @@ import { PluginCollectibleRPC } from '../messages'
 import { ChainState } from '../../../web3/state/useChainState'
 import { toAsset, toUnixTimestamp } from '../helpers'
 import type { useAsset } from '../hooks/useAsset'
+import { isETH } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -52,16 +54,20 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface ListingByPriceCardProps {
+    open: boolean
+    onClose: () => void
     asset?: ReturnType<typeof useAsset>
     tokenWatched: TokenWatched
+    paymentTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
 }
 
 export function ListingByPriceCard(props: ListingByPriceCardProps) {
-    const { asset, tokenWatched } = props
+    const { asset, tokenWatched, paymentTokens, open, onClose } = props
     const { amount, token, balance, setAmount, setToken } = tokenWatched
 
     const { t } = useI18N()
     const classes = useStyles()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { account } = ChainState.useContainer()
 
@@ -87,18 +93,26 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.Ether && token.value.type !== EthereumTokenType.ERC20) return
-        await PluginCollectibleRPC.createSellOrder({
-            asset: toAsset({
-                tokenId: asset.value.token_id,
-                tokenAddress: asset.value.token_address,
-                schemaName: asset.value.assetContract.schemaName,
-            }),
-            accountAddress: account,
-            startAmount: Number.parseFloat(amount),
-            endAmount: endingPriceChecked && endingAmount ? Number.parseFloat(endingAmount) : undefined,
-            listingTime: futureTimeChecked ? toUnixTimestamp(scheduleDateTime) : undefined,
-            buyerAddress: privacyChecked ? buyerAddress : undefined,
-        })
+        try {
+            await PluginCollectibleRPC.createSellOrder({
+                asset: toAsset({
+                    tokenId: asset.value.token_id,
+                    tokenAddress: asset.value.token_address,
+                    schemaName: asset.value.asset_contract.schemaName,
+                }),
+                accountAddress: account,
+                startAmount: Number.parseFloat(amount),
+                endAmount: endingPriceChecked && endingAmount ? Number.parseFloat(endingAmount) : undefined,
+                listingTime: futureTimeChecked ? toUnixTimestamp(scheduleDateTime) : undefined,
+                buyerAddress: privacyChecked ? buyerAddress : undefined,
+            })
+        } catch (e) {
+            enqueueSnackbar(e.message, {
+                variant: 'error',
+                preventDuplicate: true,
+            })
+            throw e
+        }
     }, [
         asset?.value,
         token,
@@ -110,7 +124,15 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         endingPriceChecked,
         futureTimeChecked,
         privacyChecked,
+        enqueueSnackbar,
     ])
+
+    useEffect(() => {
+        setAmount('')
+        setScheduleDateTime(new Date())
+        setBuyerAddress('')
+        setEndingAmount('')
+    }, [open])
 
     return (
         <Card elevation={0}>
@@ -118,8 +140,9 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 <SelectTokenAmountPanel
                     amount={amount}
                     balance={balance.value ?? '0'}
-                    onAmountChange={setAmount}
                     token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
+                    disableEther={!paymentTokens.some((x) => isETH(x.address))}
+                    onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
                         label: endingPriceChecked ? 'Starting Price' : 'Price',
@@ -131,6 +154,11 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                                 ? 'Set an initial price.'
                                 : 'Will be on sale until you transfer this item or cancel it.',
                         },
+                    }}
+                    FixedTokenListProps={{
+                        selectedTokens: token.value ? [token.value.address] : [],
+                        tokens: paymentTokens,
+                        whitelist: paymentTokens.map((x) => x.address),
                     }}
                 />
                 {endingPriceChecked ? (
@@ -256,7 +284,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         complete={t('plugin_collectible_done')}
                         failed={t('plugin_collectible_retry')}
                         executor={onPostListing}
-                        completeOnClick={() => setAmount('')}
+                        completeOnClick={onClose}
                         failedOnClick="use executor"
                     />
                 </EthereumWalletConnectedBoundary>

@@ -1,15 +1,11 @@
-import { useMemo, useRef, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
+import { useMemo } from 'react'
 import {
-    Box,
     Button,
     createStyles,
     makeStyles,
-    Skeleton,
     Table,
     TableBody,
     TableCell,
-    TableFooter,
     TableHead,
     TableRow,
     Typography,
@@ -17,10 +13,10 @@ import {
 import { CollectibleTab } from '../CollectibleTab'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { Row } from './Row'
-import { useEvents } from '../../hooks/useEvents'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { CollectibleProvider } from '../../types'
 import { TableListPagination } from '../Pagination'
+import { LoadingTable } from '../LoadingTable'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -41,6 +37,9 @@ const useStyles = makeStyles((theme) => {
             height: '100%',
             padding: theme.spacing(8, 0),
         },
+        emptyCell: {
+            borderStyle: 'none',
+        },
     })
 })
 
@@ -49,11 +48,8 @@ export interface HistoryTabProps {}
 export function HistoryTab(props: HistoryTabProps) {
     const { t } = useI18N()
     const classes = useStyles()
-    const cursors = useRef<string[]>([])
-    const [page, setPage] = useState(0)
 
-    const { provider } = CollectibleState.useContainer()
-    const events = useEvents(cursors.current[page - 1])
+    const { provider, events, eventPage, setEventPage } = CollectibleState.useContainer()
 
     //#region If there is a different asset, the unit price and quantity should be displayed
     const isDifferenceToken = useMemo(() => {
@@ -61,59 +57,36 @@ export function HistoryTab(props: HistoryTabProps) {
             return events.value?.data.some((item) => item.price?.asset?.symbol !== 'ETH')
         else return false
     }, [events.value, provider])
+    //#endregion
 
-    useUpdateEffect(() => {
-        if (
-            events.value &&
-            events.value.pageInfo.endCursor &&
-            !cursors.current.some((item) => events.value && item === events.value.pageInfo.endCursor)
-        ) {
-            cursors.current.push(events.value.pageInfo.endCursor)
-        }
-    }, [events, cursors])
-
-    if (events.loading)
+    if (events.loading) return <LoadingTable />
+    if (!events.value || events.error || !events.value?.data.length)
         return (
-            <Table size="small">
-                <TableHead>
+            <Table size="small" stickyHeader>
+                <TableBody className={classes.empty}>
                     <TableRow>
-                        <TableCell>
-                            <Skeleton animation="wave" variant="rectangular" width="100%" height={22} />
+                        <TableCell className={classes.emptyCell}>
+                            <Typography color="textSecondary">{t('plugin_collectible_no_history')}</Typography>
+                            <Button
+                                sx={{
+                                    marginTop: 1,
+                                }}
+                                variant="text"
+                                onClick={() => events.retry()}>
+                                {t('plugin_collectible_retry')}
+                            </Button>
                         </TableCell>
                     </TableRow>
-                </TableHead>
-                <TableBody>
-                    {new Array(5).fill(0).map((_, i) => (
-                        <TableRow key={i}>
-                            <TableCell>
-                                <Skeleton animation="wave" variant="rectangular" width="100%" height={14} />
-                            </TableCell>
-                        </TableRow>
-                    ))}
                 </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TableCell>
-                            <Skeleton animation="wave" variant="rectangular" width="100%" height={28} />
-                        </TableCell>
-                    </TableRow>
-                </TableFooter>
+                <TableListPagination
+                    handlePrevClick={() => setEventPage((prev) => prev - 1)}
+                    handleNextClick={() => setEventPage((prev) => prev + 1)}
+                    prevDisabled={eventPage === 0}
+                    nextDisabled={!events.value?.pageInfo.hasNextPage}
+                    page={eventPage}
+                    pageCount={10}
+                />
             </Table>
-        )
-
-    if (!events.value || events.error)
-        return (
-            <Box className={classes.empty}>
-                <Typography color="textSecondary">{t('plugin_collectible_no_history')}</Typography>
-                <Button
-                    sx={{
-                        marginTop: 1,
-                    }}
-                    variant="text"
-                    onClick={() => events.retry()}>
-                    Retry
-                </Button>
-            </Box>
         )
 
     return (
@@ -140,13 +113,13 @@ export function HistoryTab(props: HistoryTabProps) {
                         <Row key={order.id} event={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {(provider === CollectibleProvider.OPENSEA && events.value.data.length) || page > 0 ? (
+                {(provider === CollectibleProvider.OPENSEA && events.value.data.length) || eventPage > 0 ? (
                     <TableListPagination
-                        handlePrevClick={() => setPage((prev) => prev - 1)}
-                        handleNextClick={() => setPage((prev) => prev + 1)}
-                        prevDisabled={page === 0}
+                        handlePrevClick={() => setEventPage((prev) => prev - 1)}
+                        handleNextClick={() => setEventPage((prev) => prev + 1)}
+                        prevDisabled={eventPage === 0}
                         nextDisabled={!events.value.pageInfo.hasNextPage}
-                        page={page}
+                        page={eventPage}
                         pageCount={10}
                     />
                 ) : null}
