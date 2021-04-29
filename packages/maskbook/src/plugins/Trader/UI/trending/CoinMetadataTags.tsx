@@ -24,24 +24,24 @@ export function CoinMetadataTags(props: CoinMetadataTagsProps) {
     const [open, setOpen] = useState(false)
 
     const onClick = useCallback(() => {
-        setOpen(!open)
-    }, [open, setOpen])
+        setOpen((open) => !open)
+    }, [])
 
     const onClose = useCallback(() => {
         setOpen(false)
-    }, [setOpen])
+    }, [])
+
+    if (!tags) return null
     return (
         <>
-            {tags?.map((x, i) =>
-                i < 4 ? (
-                    <Linking key={i} href={x} LinkProps={{ className: classes.tag }}>
-                        <Chip label={x.replace(/-/g, ' ')} size="small" />
-                    </Linking>
-                ) : null,
-            )}
-            {tags?.length! > 4 ? (
+            {tags.slice(0, 4).map((x, i) => (
+                <Linking key={i} href={x} LinkProps={{ className: classes.tag }}>
+                    <Chip label={x.replace(/-/g, ' ')} size="small" />
+                </Linking>
+            ))}
+            {tags.length > 4 ? (
                 <>
-                    <Linking key={tags?.length! + 1} href={'View all'} LinkProps={{ className: classes.tag }}>
+                    <Linking key={tags.length + 1} href={'View all'} LinkProps={{ className: classes.tag }}>
                         <Chip label="View all" color="primary" onClick={onClick} size="small" />
                     </Linking>
                     <TagsDialog open={open} onClose={onClose} tags={tags} />
