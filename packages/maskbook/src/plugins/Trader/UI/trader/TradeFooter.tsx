@@ -1,6 +1,7 @@
 import type { FC } from 'react'
 import { CardActions, createStyles, Link, makeStyles, Typography } from '@material-ui/core'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
+import classNames from 'classnames'
 import { MaskbookTextIcon } from '../../../../resources/MaskbookIcon'
 import { getEnumAsArray } from '../../../../utils/enum'
 import { DataProvider, TradeProvider } from '../../types'
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface TradeFooterProps {
+    className?: string
     showDataProviderIcon?: boolean
     showTradeProviderIcon?: boolean
     dataProvider?: DataProvider
@@ -55,6 +57,7 @@ export interface TradeFooterProps {
 }
 
 export const TradeFooter: FC<TradeFooterProps> = ({
+    className,
     showDataProviderIcon = false,
     showTradeProviderIcon = false,
     dataProvider,
@@ -72,7 +75,7 @@ export const TradeFooter: FC<TradeFooterProps> = ({
         ? getEnumAsArray(TradeProvider).filter((x) => tradeProviders.includes(x.value))
         : []
     return (
-        <CardActions className={classes.footer}>
+        <CardActions className={classNames(classes.footer, className)}>
             <Typography className={classes.footnote} variant="subtitle2">
                 <span>Powered by </span>
                 <Link
