@@ -112,10 +112,7 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
 }
 
 function getMetadataImages(node: DOMProxy): string[] {
-    const parent = node.current.parentElement
-
-    if (!parent) return []
-    const imgNodes = parent?.querySelectorAll<HTMLImageElement>('.m-activityContent__media--image img') || []
+    const imgNodes = node.current?.querySelectorAll<HTMLImageElement>('.m-activityContent__media--image img') || []
 
     if (!imgNodes.length) return []
     const imgUrls = Array.from(imgNodes)
