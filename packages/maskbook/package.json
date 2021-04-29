@@ -17,6 +17,7 @@
     "@dimensiondev/maskbook-shared": "workspace:*",
     "@dimensiondev/maskbook-theme": "workspace:*",
     "@dimensiondev/metamask-extension-provider": "3.0.2-20210215121518-716d309",
+    "@dimensiondev/plugin-example": "workspace:*",
     "@dimensiondev/stego-js": "=0.11.1-20201027083223-8ab41be",
     "@ethersproject/address": "^5.0.4",
     "@ethersproject/contracts": "^5.0.4",

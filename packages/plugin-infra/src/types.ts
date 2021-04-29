@@ -1,7 +1,6 @@
 // Don't define values in namespaces
 import type { TypedMessage, ChainId } from '@dimensiondev/maskbook-shared'
-import type { PostInfo } from './PostInfo'
-
+import type { Emitter } from '@servie/events'
 export enum CurrentSNSNetwork {
     Unknown = 0,
     Facebook,
@@ -93,23 +92,29 @@ export namespace Plugin.Utils {
 export namespace Plugin.SNSAdaptor {
     export interface Definition extends Shared.DefinitionWithInit {
         /** This hook will be called if there is a new post found. */
-        PostInspector?: InjectUI<{ post: PostInfo }>
+        PostInspector?: InjectUI<{}>
         /** This hook will be called if there is a new decrypted post appears. */
-        DecryptedInspector?: InjectUI<{ post: PostInfo; message: TypedMessage }>
+        DecryptedInspector?: InjectUI<{ message: TypedMessage }>
         SearchBoxComponent?: InjectUI<{}>
         /** This hook will inject things in to the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
-        /** This hook will inject things in to the global scope of the dashboard. */
-        PostDialogEntry?: PostDialogEntry
+        /** This hook will inject things in to the composition dialog of Mask. */
+        CompositionDialogEntry?: CompositionDialogEntry
     }
-    export type PostDialogEntry = PostDialogEntryCustom | CompositionDialogEntryDialog
-    export interface PostDialogEntryCustom {
+    export type CompositionDialogEntry = CompositionDialogEntryCustom | CompositionDialogEntryDialog
+    export interface CompositionDialogEntryCustom {
         label: I18NStringField | React.ReactNode
         onClick(): void
     }
     export interface CompositionDialogEntryDialog {
         label: I18NStringField | React.ReactNode
         dialog: React.ComponentType<CompositionDialogEntry_DialogProps>
+        /**
+         * If this option is true, the dialog will be always mounted even if the dialog is not opening.
+         *
+         * @default false
+         */
+        keepMounted?: boolean
     }
     export interface CompositionDialogEntry_DialogProps {
         open: boolean
@@ -140,4 +145,17 @@ export namespace Plugin {
 export interface I18NStringField {
     i18nKey?: string
     fallback: string
+}
+export interface PluginHost {
+    eth: EthStatusReporter
+    enabled: EnabledStatusReporter
+    signal?: AbortSignal
+}
+export interface EthStatusReporter {
+    current(): ChainId
+    events: Emitter<{ change: [] }>
+}
+export interface EnabledStatusReporter {
+    isEnabled(id: string): boolean
+    events: Emitter<{ enabled: [id: string]; disabled: [id: string] }>
 }

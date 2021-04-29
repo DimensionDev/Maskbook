@@ -5,7 +5,7 @@ import { CommentBox, CommentBoxProps } from '../../../components/InjectedCompone
 import Services from '../../../extension/service'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { makeStyles } from '@material-ui/core'
-import { PostInfoContext, usePostInfoDetails, usePostInfo } from '../../../components/DataSource/usePostInfo'
+import { usePostInfoDetails, usePostInfo, PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-es'
 import { MaskMessage } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
@@ -52,9 +52,9 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         ).useForeach((node, key, meta) => {
             const root = createReactRootShadowed(meta.afterShadow, { signal })
             root.render(
-                <PostInfoContext.Provider value={current}>
+                <PostInfoProvider post={current}>
                     <CommentBoxUI {...{ ...current, dom: meta.realCurrent }} />
-                </PostInfoContext.Provider>,
+                </PostInfoProvider>,
             )
             return root.destory
         })

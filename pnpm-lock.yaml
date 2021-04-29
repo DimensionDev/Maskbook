@@ -131,9 +131,12 @@ importers:
       '@babel/core': ^7.13.16
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/icons': workspace:*
+      '@dimensiondev/mask-plugin-infra': workspace:*
       '@dimensiondev/maskbook-shared': workspace:*
       '@dimensiondev/maskbook-storybook-shared': workspace:*
       '@dimensiondev/maskbook-theme': workspace:*
+      '@dimensiondev/plugin-example': workspace:*
+      '@servie/events': ^3.0.0
       '@snowpack/plugin-dotenv': ^2.1.0
       '@snowpack/plugin-react-refresh': ^2.4.2
       '@storybook/addon-actions': ^6.2.9
@@ -153,9 +156,12 @@ importers:
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/icons': link:../icons
+      '@dimensiondev/mask-plugin-infra': link:../plugin-infra
       '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
       '@dimensiondev/maskbook-theme': link:../theme
+      '@dimensiondev/plugin-example': link:../plugins/example
+      '@servie/events': 3.0.0
       '@types/color': 3.0.1
       async-call-rpc: 5.0.0
       color: 3.1.3
@@ -194,6 +200,7 @@ importers:
       '@dimensiondev/maskbook-shared': workspace:*
       '@dimensiondev/maskbook-theme': workspace:*
       '@dimensiondev/metamask-extension-provider': 3.0.2-20210215121518-716d309
+      '@dimensiondev/plugin-example': workspace:*
       '@dimensiondev/stego-js': '=0.11.1-20201027083223-8ab41be'
       '@dimensiondev/webextension-shim': 0.0.3-20201120022530-b318b89
       '@ethersproject/address': ^5.0.4
@@ -356,6 +363,7 @@ importers:
       '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-theme': link:../theme
       '@dimensiondev/metamask-extension-provider': 3.0.2-20210215121518-716d309
+      '@dimensiondev/plugin-example': link:../plugins/example
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@ethersproject/address': 5.1.0
       '@ethersproject/contracts': 5.1.0
@@ -525,6 +533,12 @@ importers:
       '@types/use-subscription': 1.0.0
       ts-results: 3.2.1
       use-subscription: 1.5.1
+
+  packages/plugins/example:
+    specifiers:
+      '@dimensiondev/mask-plugin-infra': workspace:*
+    dependencies:
+      '@dimensiondev/mask-plugin-infra': link:../../plugin-infra
 
   packages/shared:
     specifiers:
@@ -11764,6 +11778,7 @@ packages:
 
   /ethereumjs-block/1.7.1:
     resolution: {integrity: sha512-B+sSdtqm78fmKkBq78/QLKJbu/4Ts4P2KFISdgcuZUPDm9x+N7qgBPIIFUGbaakQh8bzuquiRVbdmvPKqbILRg==}
+    deprecated: 'New package name format for new versions: @ethereumjs/block. Please update.'
     dependencies:
       async: 2.6.3
       ethereum-common: 0.2.0
@@ -11774,6 +11789,7 @@ packages:
 
   /ethereumjs-block/2.2.2:
     resolution: {integrity: sha512-2p49ifhek3h2zeg/+da6XpdFR3GlqY3BIEiqxGF8j9aSRIgkb7M1Ky+yULBKJOu8PAZxfhsYA+HxUk2aCQp3vg==}
+    deprecated: 'New package name format for new versions: @ethereumjs/block. Please update.'
     dependencies:
       async: 2.6.3
       ethereumjs-common: 1.5.2
@@ -11792,9 +11808,11 @@ packages:
 
   /ethereumjs-common/1.5.2:
     resolution: {integrity: sha512-hTfZjwGX52GS2jcVO6E2sx4YuFnf0Fhp5ylo4pEPhEffNln7vS59Hr5sLnp3/QCazFLluuBZ+FZ6J5HTp0EqCA==}
+    deprecated: 'New package name format for new versions: @ethereumjs/common. Please update.'
 
   /ethereumjs-tx/1.3.7:
     resolution: {integrity: sha512-wvLMxzt1RPhAQ9Yi3/HKZTn0FZYpnsmQdbKYfUUpi4j1SEIcbkd9tndVjcPrufY3V7j2IebOpC00Zp2P/Ay2kA==}
+    deprecated: 'New package name format for new versions: @ethereumjs/tx. Please update.'
     dependencies:
       ethereum-common: 0.0.18
       ethereumjs-util: 5.2.1
@@ -11802,6 +11820,7 @@ packages:
 
   /ethereumjs-tx/2.1.2:
     resolution: {integrity: sha512-zZEK1onCeiORb0wyCXUvg94Ve5It/K6GD1K+26KfFKodiBiS6d9lfCXlUKGBBdQ+bv7Day+JK0tj1K+BeNFRAw==}
+    deprecated: 'New package name format for new versions: @ethereumjs/tx. Please update.'
     dependencies:
       ethereumjs-common: 1.5.2
       ethereumjs-util: 6.2.1
@@ -11853,6 +11872,7 @@ packages:
 
   /ethereumjs-vm/2.6.0:
     resolution: {integrity: sha512-r/XIUik/ynGbxS3y+mvGnbOKnuLo40V5Mj1J25+HEO63aWYREIqvWeRO/hnROlMBE5WoniQmPmhiaN0ctiHaXw==}
+    deprecated: 'New package name format for new versions: @ethereumjs/vm. Please update.'
     dependencies:
       async: 2.6.3
       async-eventemitter: 0.2.4

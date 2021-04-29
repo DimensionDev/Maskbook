@@ -10,9 +10,11 @@ import {
     ProfileIdentifier,
     TypedMessage,
     TypedMessageTuple,
+    useValueRef,
 } from '@dimensiondev/maskbook-shared'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import { Result, Err } from 'ts-results'
+import { Context, createContext, createElement, memo, useContext, useRef } from 'react'
 export abstract class PostInfo {
     constructor() {
         const calc = () => {
@@ -75,4 +77,54 @@ export abstract class PostInfo {
      * TODO: move it somewhere else
      */
     readonly postMetadataMentionedLinks = new ObservableMap<HTMLAnchorElement, string>()
+}
+export const emptyPostInfo: PostInfo = new (class extends PostInfo {
+    commentBoxSelector = undefined
+    commentsSelector = undefined
+    rootNode = undefined!
+    rootNodeProxy = undefined!
+    postContentNode = undefined
+})()
+
+const Context = createContext<PostInfo>(emptyPostInfo)
+export const PostInfoProvider = memo((props: React.PropsWithChildren<{ post: PostInfo }>) => {
+    return createElement(Context.Provider, { value: props.post, children: props.children })
+})
+export function usePostInfo() {
+    return useContext(Context)
+}
+type ValidKeys = {
+    [key in keyof PostInfo]: PostInfo[key] extends ObservableMap<any, any> | ObservableSet<any> | ValueRef<any>
+        ? key
+        : never
+}[keyof PostInfo]
+export function usePostInfoDetails<K extends ValidKeys>(
+    key: K,
+): K extends keyof PostInfo
+    ? PostInfo[K] extends ValueRef<infer T>
+        ? T
+        : PostInfo[K] extends ObservableMap<any, infer T> | ObservableSet<infer T>
+        ? T[]
+        : never
+    : never {
+    const post = usePostInfo()
+    // @ts-expect-error
+    const k = post[useRef(key).current]
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    if (k instanceof ValueRef) return useValueRef(k)
+    // @ts-expect-error
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    if (k instanceof ObservableMap) return useObservableValues(k)
+    // @ts-expect-error
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    if (k instanceof ObservableSet) return useObservableValues(k)
+    throw new Error()
+}
+
+export function usePostInfoSharedPublic(): boolean {
+    const info = usePostInfoDetails('postPayload')
+    if (info.err) return false
+    const payload = info.val
+    if (payload.version !== -38) return false
+    return !!payload.sharedPublic
 }
