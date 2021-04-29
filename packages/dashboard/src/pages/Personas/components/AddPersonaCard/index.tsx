@@ -28,9 +28,9 @@ const NameInput = styled(InputBase)(({ theme }) => ({
         borderRadius: 4,
         position: 'relative',
         backgroundColor: MaskColorVar.normalBackground,
-        border: '1px solid #ced4da',
-        fontSize: 16,
-        padding: '10px 12px',
+        border: `1px solid ${MaskColorVar.border}`,
+        fontSize: theme.typography.subtitle1.fontSize,
+        padding: theme.spacing(1.2, 1.5),
         transition: theme.transitions.create(['border-color', 'background-color', 'box-shadow']),
         '&:focus': {
             boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
@@ -53,7 +53,7 @@ export const AddPersonaCard = memo(({ onConfirm, onCancel }: AddPersonaCardProps
             <NameInput inputRef={ref} />
             <div className={classes.buttons}>
                 <Button onClick={() => onConfirm(ref.current?.value)}>Confirm</Button>
-                <Button sx={{ background: MaskColorVar.blue, color: MaskColorVar.linkText }} onClick={onCancel}>
+                <Button color="secondary" onClick={onCancel}>
                     Cancel
                 </Button>
             </div>

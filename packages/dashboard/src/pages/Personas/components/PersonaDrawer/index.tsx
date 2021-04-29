@@ -90,6 +90,7 @@ export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
             )}
             <Box className={classes.buttons}>
                 <Button onClick={() => setShowAddPersonaCard(true)}>Add Persona</Button>
+                {/* TODO: replace className to color prop */}
                 <Button className={classes.backup}>Backups</Button>
             </Box>
         </Drawer>

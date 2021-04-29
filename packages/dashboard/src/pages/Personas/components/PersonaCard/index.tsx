@@ -8,6 +8,7 @@ import { PersonaLine } from '../PersonaLine'
 import type { Persona } from '../../../../../../maskbook/src/database'
 import type { PersonaProvider } from '../../settings'
 import { EditPersonaDialog } from '../EditPersonaDialog'
+import { DeletePersonaDialog } from '../DeletePersonaDialog'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -53,11 +54,14 @@ export interface PersonaCardProps {
 
 export const PersonaCard = memo(({ persona, providers, active = false, onClick }: PersonaCardProps) => {
     const classes = useStyles()
-    const [open, setOpen] = useState(false)
+    const [editDialogOpen, setEditDialogOpen] = useState(false)
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [menu, openMenu] = useMenu(
         [
-            <MenuItem onClick={() => setOpen(true)}>Edit</MenuItem>,
-            <MenuItem style={{ color: MaskColorVar.redMain }}>Delete</MenuItem>,
+            <MenuItem onClick={() => setEditDialogOpen(true)}>Edit</MenuItem>,
+            <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
+                Delete
+            </MenuItem>,
         ],
         false,
         {},
@@ -81,7 +85,13 @@ export const PersonaCard = memo(({ persona, providers, active = false, onClick }
                 </div>
             </div>
             {menu}
-            <EditPersonaDialog open={open} onClose={() => setOpen(false)} persona={persona} providers={providers} />
+            <EditPersonaDialog
+                open={editDialogOpen}
+                onClose={() => setEditDialogOpen(false)}
+                persona={persona}
+                providers={providers}
+            />
+            <DeletePersonaDialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)} persona={persona} />
         </div>
     )
 })

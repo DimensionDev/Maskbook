@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { createStyles, makeStyles, Typography } from '@material-ui/core'
+import { Button, createStyles, makeStyles, Typography } from '@material-ui/core'
 import { AuthorIcon, EditIcon } from '@dimensiondev/icons'
 import { MaskColorVar, MaskDialog } from '@dimensiondev/maskbook-theme'
 import type { PersonaProvider } from '../../settings'
@@ -15,6 +15,14 @@ const useStyles = makeStyles((theme) =>
             alignItems: 'center',
             padding: theme.spacing(7, 7, 4, 7),
         },
+        buttons: {
+            width: '100%',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2,24%)',
+            justifyContent: 'center',
+            gridColumnGap: theme.spacing(2),
+            marginTop: theme.spacing(5.5),
+        },
         name: {
             display: 'flex',
             alignItems: 'center',
@@ -23,6 +31,16 @@ const useStyles = makeStyles((theme) =>
         content: {
             width: '100%',
             marginTop: theme.spacing(7),
+        },
+        author: {
+            fontSize: 60,
+            fill: MaskColorVar.secondaryBackground,
+        },
+        edit: {
+            fontSize: theme.typography.subtitle1.fontSize,
+            fill: 'none',
+            marginLeft: theme.spacing(1.5),
+            cursor: 'pointer',
         },
     }),
 )
@@ -39,16 +57,19 @@ export const EditPersonaDialog = memo(({ open, onClose, persona, providers }: Ed
     return (
         <MaskDialog open={open} title="Edit Persona" onClose={onClose}>
             <div className={classes.container}>
-                <AuthorIcon sx={{ fontSize: 60, fill: MaskColorVar.secondaryBackground }} />
-
-                <Typography variant="caption" classes={{ root: classes.name }} sx={{ marginTop: 3 }}>
+                <AuthorIcon className={classes.author} />
+                <Typography variant="caption" classes={{ root: classes.name }}>
                     {persona.nickname}
-                    <EditIcon sx={{ fontSize: 16, fill: 'none', marginLeft: 1.5 }} />
+                    <EditIcon className={classes.edit} />
                 </Typography>
                 <div className={classes.content}>
                     {providers.map((provider) => {
                         return <PersonaLine key={provider.internalName} provider={provider} />
                     })}
+                </div>
+                <div className={classes.buttons}>
+                    <Button color="secondary">Cancel</Button>
+                    <Button>Confirm</Button>
                 </div>
             </div>
         </MaskDialog>
