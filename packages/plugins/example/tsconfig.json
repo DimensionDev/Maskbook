@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "stripInternal": true,
+    "rootDir": "./src/"
+  },
+  "include": ["./src/**/*"],
+  "references": [{ "path": "../../plugin-infra" }],
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": { "module": "CommonJS" }
+  }
+}

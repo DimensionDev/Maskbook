@@ -4,15 +4,13 @@ import { WalletMessages } from '../../../plugins/Wallet/messages'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { getWallets } from '../../../plugins/Wallet/services'
 import {
-    currentSelectedWalletAddressSettings,
-    currentSelectedWalletProviderSettings,
-} from '../../../plugins/Wallet/settings'
-import {
-    currentChainStateSettings,
+    currentBlockNumnberSettings,
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
     currentWalletConnectChainIdSettings,
-} from '../../../settings/settings'
+    currentSelectedWalletAddressSettings,
+    currentSelectedWalletProviderSettings,
+} from '../../../plugins/Wallet/settings'
 import { pollingTask, unreachable } from '../../../utils/utils'
 import { isSameAddress } from '../../../web3/helpers'
 import { ChainId, ProviderType } from '../../../web3/types'
@@ -27,7 +25,7 @@ export const updateChainState = debounce(
     async () => {
         const wallets = await getWallets()
         const chainIds = uniq(await Promise.all(wallets.map((x) => getChainId(x.address))))
-        currentChainStateSettings.value = stringify(
+        currentBlockNumnberSettings.value = stringify(
             await Promise.all(
                 chainIds.map(async (chainId) => ({
                     chainId,

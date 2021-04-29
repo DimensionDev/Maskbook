@@ -5,14 +5,14 @@ import type {
     PostIdentifier,
     ProfileIdentifier,
     ReadonlyIdentifierMap,
+    ObservableWeakMap,
 } from '@dimensiondev/maskbook-shared'
 import type { PaletteMode, Theme } from '@material-ui/core'
 import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
-import type { TypedMessage } from '../protocols/typed-message'
 import type { PostInfo } from './PostInfo'
-import type { ObservableWeakMap } from '../utils/ObservableMapSet'
 import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
+import type { TypedMessage } from '../protocols/typed-message'
 
 // Don't define values in namespaces
 export namespace SocialNetwork {
@@ -25,7 +25,7 @@ export namespace SocialNetwork {
     }
 
     export interface Utils {
-        /** @returns the homepage url. e.g.: https://www.twitter.com/ */
+        /** @returns the homepage url. e.g.: https://twitter.com/ */
         getHomePage?(): string
         /** @returns post URL from PostIdentifier */
         getPostURL?(post: PostIdentifier<Identifier>): URL | null
@@ -48,7 +48,10 @@ export namespace SocialNetwork {
          * !!! THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier !!!
          */
         networkIdentifier: string
-
+        /**
+         * This field _will_ be overwritten by SocialNetworkUI.permessions
+         */
+        declarativePermissions: SocialNetworkUI.DeclarativePermission
         /** Should this UI content script activate? */
         shouldActivate(location: Location | URL): boolean
         /** This provider is not ready for production, Mask will not use it in production */
@@ -71,7 +74,7 @@ export namespace SocialNetworkUI {
     export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared {
         /** @returns the states */
         init(signal: AbortSignal): Readonly<AutonomousState> | Promise<Readonly<AutonomousState>>
-        permission: RuntimePermission
+        permission?: RuntimePermission
         injection: InjectingCapabilities.Define
         automation: AutomationCapabilities.Define
         collecting: CollectingCapabilities.Define
@@ -92,6 +95,9 @@ export namespace SocialNetworkUI {
         has(): Promise<boolean>
         /** This function should request the related permission, e.g. `browser.permissions.request()` */
         request(): Promise<boolean>
+    }
+    export interface DeclarativePermission {
+        origins: readonly string[]
     }
     export namespace InjectingCapabilities {
         export interface Define {

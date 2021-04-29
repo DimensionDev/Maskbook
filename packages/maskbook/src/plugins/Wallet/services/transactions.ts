@@ -16,17 +16,29 @@ export async function getTransactionList(
     address: string,
     provider: PortfolioProvider,
     page?: number,
-): Promise<Transaction[]> {
+): Promise<{
+    transactions: Transaction[]
+    hasNextPage: boolean
+}> {
     if (provider === PortfolioProvider.DEBANK) {
         const { data, error_code } = await DeBankAPI.getTransactionList(address)
         if (error_code !== 0) throw new Error('Fail to load transactions.')
-        return fromDeBank(data)
+        return {
+            transactions: fromDeBank(data),
+            hasNextPage: false,
+        }
     } else if (provider === PortfolioProvider.ZERION) {
         const { payload, meta } = await ZerionApi.getTransactionList(address, page)
         if (meta.status !== 'ok') throw new Error('Fail to load transactions.')
-        return fromZerion(payload.transactions)
+        return {
+            transactions: fromZerion(payload.transactions),
+            hasNextPage: payload.transactions.length === 30,
+        }
     }
-    return []
+    return {
+        transactions: [],
+        hasNextPage: false,
+    }
 }
 
 function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['data']) {

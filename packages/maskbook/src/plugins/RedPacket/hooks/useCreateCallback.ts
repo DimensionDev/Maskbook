@@ -98,7 +98,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
         // step 2: blocking
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = redPacketContract.methods.create_red_packet(...params).send({
-                gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {

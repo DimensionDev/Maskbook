@@ -1,8 +1,6 @@
-import stringify from 'json-stable-stringify'
 import { createGlobalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
-import { ChainId } from '../web3/types'
 import { Appearance, Language, LaunchPage } from './types'
 
 /**
@@ -37,31 +35,6 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
     primary: () => i18n.t('settings_appearance'),
     secondary: () => i18n.t('settings_appearance_secondary'),
 })
-//#endregion
-
-//#region chain state settings
-export const currentChainStateSettings = createGlobalSettings<string>('chain state', stringify([]), {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-//#endregion
-
-//#region provider chain id
-export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>('maskbook chain id', ChainId.Mainnet, {
-    primary: () => i18n.t('settings_choose_eth_network'),
-    secondary: () => 'This only affects the built-in wallet.',
-})
-
-export const currentMetaMaskChainIdSettings = createGlobalSettings<ChainId>('metamask chain id', ChainId.Mainnet, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
-export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>(
-    'walletconnect chain id',
-    ChainId.Mainnet,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
 //#endregion
 
 //#region language

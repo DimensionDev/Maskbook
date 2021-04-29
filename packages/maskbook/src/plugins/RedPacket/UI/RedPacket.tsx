@@ -2,7 +2,6 @@ import { useCallback, useEffect } from 'react'
 import { makeStyles, createStyles, Card, Typography, Box } from '@material-ui/core'
 import { Skeleton } from '@material-ui/core'
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
 import type { RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -15,22 +14,23 @@ import { WalletMessages } from '../../Wallet/messages'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useBlockNumber'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { resolveChainName } from '../../../web3/pipes'
+import { resolveChainId } from '../../../web3/pipes'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import {
     currentIsMetamaskLockedSettings,
     currentSelectedWalletProviderSettings,
 } from '../../../plugins/Wallet/settings'
-import { ProviderType } from '../../../web3/types'
+import { ChainId, ProviderType } from '../../../web3/types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import Services from '../../../extension/service'
 import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -212,11 +212,9 @@ export function RedPacket(props: RedPacketProps) {
             summary: canClaim
                 ? `Claiming red packet from ${payload.sender.name}`
                 : canRefund
-                ? `Refunding red packet for ${formatBalance(
-                      new BigNumber(availability.balance),
-                      tokenDetailed.decimals ?? 0,
-                      tokenDetailed.decimals ?? 0,
-                  )} ${tokenDetailed.symbol}`
+                ? `Refunding red packet for ${formatBalance(availability.balance, tokenDetailed.decimals)} ${
+                      tokenDetailed.symbol
+                  }`
                 : '',
         })
     }, [claimState, refundState /* update tx dialog only if state changed */])
@@ -258,11 +256,8 @@ export function RedPacket(props: RedPacketProps) {
             </Card>
         )
 
-    // the chain id is not available
-    if (!canFetch && payload.network) return <Typography>Not available on {resolveChainName(chainId)}.</Typography>
-
     return (
-        <>
+        <EthereumChainBoundary chainId={resolveChainId(payload.network ?? '') ?? ChainId.Mainnet}>
             <Card className={classNames(classes.root)} component="article" elevation={0}>
                 <div className={classes.header}>
                     <Typography className={classes.from} variant="body1" color="inherit">
@@ -283,11 +278,7 @@ export function RedPacket(props: RedPacketProps) {
                         {(() => {
                             if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
                                 return t('plugin_red_packet_description_refund', {
-                                    balance: formatBalance(
-                                        new BigNumber(availability.balance),
-                                        tokenDetailed.decimals ?? 0,
-                                        tokenDetailed.decimals ?? 0,
-                                    ),
+                                    balance: formatBalance(availability.balance, tokenDetailed.decimals),
                                     symbol: tokenDetailed.symbol,
                                 })
                             if (listOfStatus.includes(RedPacketStatus.claimed))
@@ -300,11 +291,7 @@ export function RedPacket(props: RedPacketProps) {
                                 return t('plugin_red_packet_description_empty')
                             if (!payload.password) return t('plugin_red_packet_description_broken')
                             return t('plugin_red_packet_description_failover', {
-                                total: formatBalance(
-                                    new BigNumber(payload.total),
-                                    tokenDetailed.decimals ?? 0,
-                                    tokenDetailed.decimals ?? 0,
-                                ),
+                                total: formatBalance(payload.total, tokenDetailed.decimals),
                                 symbol: tokenDetailed.symbol,
                                 name: payload.sender.name ?? '-',
                                 shares: payload.shares ?? '-',
@@ -341,6 +328,6 @@ export function RedPacket(props: RedPacketProps) {
                     )}
                 </Box>
             ) : null}
-        </>
+        </EthereumChainBoundary>
     )
 }

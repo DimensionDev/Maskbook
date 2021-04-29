@@ -15,12 +15,13 @@ import { useI18N } from '../../../../utils/i18n-next-ui'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../../web3/types'
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
-import { toBips } from '../../helpers'
+import { isEtherWrapper, toBips } from '../../helpers'
 import { formatPercentage } from '../../../Wallet/formatter'
 import { resolveUniswapWarningLevel } from '../../pipes'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
+import { MINIMUM_AMOUNT } from '../../constants'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -194,11 +195,14 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region UI logic
-
     // validate form return a message if an error exists
     const validationMessage = useMemo(() => {
         if (inputTokenTradeAmount.isZero() && outputTokenTradeAmount.isZero())
             return t('plugin_trader_error_amount_absence')
+        if (new BigNumber(inputAmount).isLessThan(MINIMUM_AMOUNT))
+            return t('plugin_trade_error_input_amount_less_minimum_amount')
+        if (new BigNumber(outputAmount).isLessThan(MINIMUM_AMOUNT))
+            return t('plugin_trade_error_output_amount_less_minimum_amount')
         if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
         if (loading) return t('plugin_trader_finding_price')
         if (!trade) return t('plugin_trader_error_insufficient_lp')
@@ -247,7 +251,11 @@ export function TradeForm(props: TradeFormProps) {
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={approveAmount.toFixed()}
-                        token={approveToken?.type === EthereumTokenType.ERC20 ? approveToken : undefined}
+                        token={
+                            !isEtherWrapper(trade) && approveToken?.type === EthereumTokenType.ERC20
+                                ? approveToken
+                                : undefined
+                        }
                         spender={approveAddress}>
                         <ActionButton
                             className={classes.button}
@@ -256,7 +264,12 @@ export function TradeForm(props: TradeFormProps) {
                             size="large"
                             disabled={loading || !!validationMessage}
                             onClick={onSwap}>
-                            {validationMessage || t('plugin_trader_swap')}
+                            {validationMessage ||
+                                (isEtherWrapper(trade)
+                                    ? trade?.trade_?.isWrap
+                                        ? t('plugin_trader_wrap')
+                                        : t('plugin_trader_unwrap')
+                                    : t('plugin_trader_swap'))}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
                 </EthereumWalletConnectedBoundary>

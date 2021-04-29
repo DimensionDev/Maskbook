@@ -19,11 +19,16 @@ export interface JSON_PayloadInMask {
     chain_id: ChainId
     start_time: number
     end_time: number
+    unlock_time: number
+    qualification_address: string
     creation_time: number
     token: EtherTokenDetailed | ERC20TokenDetailed
     exchange_amounts: string[]
     exchange_tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
+    regions: string
+    // @deprecated
     is_mask?: boolean
+    // @deprecated
     test_nums?: number[]
 }
 

@@ -2,6 +2,7 @@ import * as AutoShareToFriends from './AutoShareToFriends'
 import * as IsolatedDashboardBridge from './IsolatedDashboardBridge'
 import * as InjectContentScripts from './InjectContentScripts'
 import * as NewInstalled from './NewInstalled'
+import * as PluginWorker from './StartPluginWorker'
 
 type CancelableJob = { default: () => () => void }
 const CancelableJobs: CancelableJob[] = [
@@ -9,6 +10,7 @@ const CancelableJobs: CancelableJob[] = [
     NewInstalled,
     AutoShareToFriends,
     IsolatedDashboardBridge,
+    PluginWorker,
 ]
 
 if (module.hot) {

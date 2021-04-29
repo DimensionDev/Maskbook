@@ -107,7 +107,8 @@ export function getAllCoins() {
 }
 
 export async function getAllCoinsByKeyword(keyword: string) {
-    if (keyword.toLocaleLowerCase() === 'mask') {
+    const keyword_ = keyword.toLocaleLowerCase()
+    if (keyword_ === 'mask') {
         return [
             {
                 decimals: 18,

@@ -1,6 +1,5 @@
 import { Box, createStyles, makeStyles, Theme, Typography } from '@material-ui/core'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
-import BigNumber from 'bignumber.js'
 import { formatBalance } from '../../../Wallet/formatter'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 
@@ -47,9 +46,7 @@ export function TokenPanel(props: TokenPanelProps) {
             }}>
             <Typography className={classes.primary} component="div">
                 <TokenIcon classes={{ icon: classes.icon }} address={token.address} name={token.name} />
-                <span className={classes.amount}>
-                    {formatBalance(new BigNumber(amount), token.decimals ?? 0, token.decimals ?? 0)}
-                </span>
+                <span className={classes.amount}>{formatBalance(amount, token.decimals)}</span>
             </Typography>
             <Typography className={classes.symbol}>{token.symbol}</Typography>
         </Box>

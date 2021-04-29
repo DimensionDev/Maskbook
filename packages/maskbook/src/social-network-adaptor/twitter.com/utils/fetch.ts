@@ -12,7 +12,7 @@ import {
     isTypedMessageEmpty,
     isTypedMessageText,
     TypedMessageText,
-} from '../../../protocols/typed-message'
+} from '@dimensiondev/maskbook-shared'
 
 /**
  * @example
@@ -124,8 +124,8 @@ export const postNameParser = (node: HTMLElement) => {
 
         // type 1:
         // normal tweet
-        const anchorElement = tweetElement.children[1]?.querySelector<HTMLAnchorElement>('a[data-focusable="true"]')
-        const nameInUniqueAnchorTweet = anchorElement ? serializeToText(anchorElement) : ''
+        const anchorElement = tweetElement.querySelectorAll<HTMLAnchorElement>('a[role="link"]')[1]
+        const nameInUniqueAnchorTweet = anchorElement?.innerText
 
         // type 2:
         const nameInDoubleAnchorsTweet = Array.from(

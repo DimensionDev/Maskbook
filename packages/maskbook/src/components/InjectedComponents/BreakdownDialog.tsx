@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { DialogContent, createStyles, Typography, DialogProps } from '@material-ui/core'
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { makeStyles } from '@material-ui/core/styles'
@@ -7,8 +8,6 @@ import { formatBalance } from '../../plugins/Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { ITO_Card } from '../../plugins/ITO/UI/ITO_Card'
 import type { ERC20TokenDetailed } from '../../web3/types'
-import { AirdropCard } from '../../plugins/Airdrop/UI/AirdropCard'
-import { useState } from 'react'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -66,9 +65,8 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
     const { token, balance, onUpdateBalance } = props
     const classes = useStylesExtends(useStyles(), props)
 
-    // the total amount to be claimed in wei
-    const [airdropAmount, setAirdropAmount] = useState('0')
-    const [ITO_Amount, setITO_Amount] = useState('0')
+    // the ito total amount to be claimed in wei
+    const [amount, setAmount] = useState('0')
 
     return (
         <InjectedDialog
@@ -80,17 +78,15 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
             <DialogContent className={classes.content}>
                 <MaskbookIcon classes={{ root: classes.logo }} />
                 <Typography className={classes.amount}>
-                    {formatBalance(new BigNumber(airdropAmount).plus(ITO_Amount).plus(balance), token.decimals, 2)}{' '}
-                    {token.symbol}
+                    {formatBalance(new BigNumber(amount).plus(balance), token.decimals, 2)} {token.symbol}
                 </Typography>
                 <Typography className={classes.balance}>
                     <span>Balance:</span>
                     <span>
-                        {formatBalance(new BigNumber(balance), 18, 2)} {token.symbol}
+                        {formatBalance(balance, 18, 2)} {token.symbol}
                     </span>
                 </Typography>
-                <AirdropCard token={token} onUpdateAmount={setAirdropAmount} onUpdateBalance={onUpdateBalance} />
-                <ITO_Card token={token} onUpdateAmount={setITO_Amount} onUpdateBalance={onUpdateBalance} />
+                <ITO_Card token={token} onUpdateAmount={setAmount} onUpdateBalance={onUpdateBalance} />
             </DialogContent>
         </InjectedDialog>
     )

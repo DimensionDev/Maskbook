@@ -1,4 +1,6 @@
 import type createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
+import type { ChainId } from '@dimensiondev/maskbook-shared'
+export { ChainId } from '@dimensiondev/maskbook-shared'
 
 export enum ProviderType {
     Maskbook = 'Maskbook',

@@ -24,7 +24,7 @@ import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { LBPPanel } from './LBPPanel'
 import { createERC20Token } from '../../../../web3/helpers'
 import { useLBP } from '../../LBP/useLBP'
-import { useChainId } from '../../../../web3/hooks/useChainState'
+import { useChainId } from '../../../../web3/hooks/useBlockNumber'
 import { Flags } from '../../../../utils/flags'
 
 const useStyles = makeStyles((theme) => {
@@ -181,7 +181,9 @@ export function PopperView(props: PopperViewProps) {
                 dataProvider={dataProvider}
                 tradeProvider={tradeProvider}
                 showDataProviderIcon={tabIndex < 3}
-                showTradeProviderIcon={tabIndex === 3}>
+                showTradeProviderIcon={tabIndex === 3}
+                dataProviders={dataProviders}
+                tradeProviders={tradeProviders}>
                 <Tabs
                     className={classes.tabs}
                     textColor="primary"

@@ -1,6 +1,6 @@
 import { makeStyles, Typography, TypographyProps } from '@material-ui/core'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { useBlockNumber, useChainId } from '../hooks/useChainState'
+import { useBlockNumber, useChainId } from '../hooks/useBlockNumber'
 
 const useStyles = makeStyles((theme) => ({
     root: {

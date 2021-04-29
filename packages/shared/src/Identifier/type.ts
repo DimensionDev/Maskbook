@@ -80,6 +80,15 @@ export abstract class Identifier {
 }
 @serialize('ProfileIdentifier')
 export class ProfileIdentifier extends Identifier {
+    static getUserName(x: string | ProfileIdentifier): string | null {
+        if (typeof x === 'string') {
+            if (['', '$unknown'].includes(x)) return null
+            return x
+        } else {
+            if (x.isUnknown) return null
+            return x.userId
+        }
+    }
     static readonly unknown = new ProfileIdentifier('localhost', '$unknown')
     get isUnknown() {
         return this.equals(ProfileIdentifier.unknown)

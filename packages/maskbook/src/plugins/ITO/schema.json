@@ -53,7 +53,7 @@
                     "title": "name"
                 }
             },
-            "required": ["address", "name"],
+            "required": ["address"],
             "title": "trader"
         }
     },
@@ -98,6 +98,18 @@
         "end_time": {
             "type": "number",
             "title": "end_time"
+        },
+        "unlock_time": {
+            "type": "number",
+            "title": "unlock_time"
+        },
+        "qualification_address": {
+            "type": "string",
+            "title": "qualification_address"
+        },
+        "regions": {
+            "type": "string",
+            "title": "regions"
         },
         "creation_time": {
             "type": "number",
@@ -145,24 +157,6 @@
                 "anyOf": [
                     {
                         "$ref": "#/definitions/token"
-                    }
-                ]
-            }
-        },
-        "isMask": {
-            "type": "boolean",
-            "title": "isMask"
-        },
-        "testNums": {
-            "type": "array",
-            "title": "testNums",
-            "description": "A list of test number",
-            "additionalItems": true,
-            "items": {
-                "anyOf": [
-                    {
-                        "type": "number",
-                        "title": "testNum"
                     }
                 ]
             }

@@ -1,9 +1,7 @@
-import * as Maskbook from './providers/Maskbook'
-import * as MetaMask from './providers/MetaMask'
-import * as WalletConnect from './providers/WalletConnect'
-import { ChainId, ProviderType } from '../../../web3/types'
-import { getWallet } from '../../../plugins/Wallet/services'
+import { ProviderType } from '../../../web3/types'
 import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
+import { createWeb3 } from './provider'
+import { unreachable } from '../../../utils/utils'
 
 /**
  * Sign a string
@@ -14,18 +12,16 @@ import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/s
  * @param address
  * @param chainId
  */
-export async function sign(data: string, address: string, chainId: ChainId) {
-    const wallet = await getWallet(address)
-    if (!wallet) throw new Error('cannot find given wallet')
-    switch (currentSelectedWalletProviderSettings.value) {
+export async function sign(data: string, address: string) {
+    const web3 = await createWeb3()
+    const providerType = currentSelectedWalletProviderSettings.value
+    switch (providerType) {
         case ProviderType.Maskbook:
-            if (!wallet._private_key_ || wallet._private_key_ === '0x') throw new Error('cannot sign with given wallet')
-            return Maskbook.createWeb3(chainId, [wallet._private_key_]).eth.sign(data, address)
+            return web3.eth.sign(data, address)
         case ProviderType.MetaMask:
-            return (await MetaMask.createWeb3()).eth.personal.sign(data, address, '')
         case ProviderType.WalletConnect:
-            return WalletConnect.createWeb3().eth.personal.sign(data, address, '')
+            return web3.eth.personal.sign(data, address, '')
         default:
-            throw new Error('cannot sign with given wallet')
+            unreachable(providerType)
     }
 }

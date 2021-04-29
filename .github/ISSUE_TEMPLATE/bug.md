@@ -6,56 +6,40 @@ labels: 'Type: Bug'
 assignees: Jack-Works, jk234ert
 ---
 
-## Bug Report
+## Bug Info
+
+### How to reproduce?
+
+1.
+2.
+3.
+
+### What happened?
+
+### What should happen?
 
 ## Environment
 
+### Mask Version:
+
+- [ ] (Browser) Installed from the extension store (version: )
+- [ ] (App) Installed from the app store (version: )
+- [ ] master branch
+- [ ] Build of version/commit hash:
+
+(Please write down build command/flags if there is anything special)
+
 ### System
 
-- [ ] Windows
-
-  - OS Version:
-
-- [ ] Mac OS X
-
-  - OS Version:
-
-- [ ] Linux
-
-  - Linux Distribution:
-  - OS Version:
+ <!-- Correct the version if it is not the case -->
+- [ ] Windows 10
+- [ ] Mac OS X Catalina
+- [ ] Linux: <!-- What distro? -->
 
 ### Platform/Browser
 
-- [ ] Chrome
-
-  - Mask Version:
-  - Browser Version:
-
-- [ ] Firefox
-
-  - Mask Version:
-  - Browser Version:
-
-- [ ] Android
-
-  - Mask Version:
-  - Android Version:
-
-- [ ] iOS
-  - Mask Version:
-  - iOS Version:
-
-### Build Variant
-
-- Where do you get Mask?
-  - [ ] Store
-  - [ ] ZIP
-  - [ ] Self-Compiled
-    - Build Commit: /_Optionally attach a Commit ID, if it is from an pre-release branch head_/
-
-## Bug Info
-
-### Actual Behavior
-
-/_What happened?_/
+ <!-- Correct the version if it is not the case -->
+- [ ] Latest Chrome (stable channel)
+- [ ] Latest Firefox (stable channel)
+- [ ] Android 11
+- [ ] iOS 14

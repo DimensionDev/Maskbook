@@ -1,5 +1,4 @@
 import { createStyles, Grid, makeStyles } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
 import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect } from 'react'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
@@ -84,21 +83,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     variant="contained"
                     size="large"
                     onClick={resetApproveCallback}>
-                    Failed to load {token.symbol ?? token.name ?? 'Token'}.
-                </ActionButton>
-            </Grid>
-        )
-    if (approveStateType === ApproveStateType.INSUFFICIENT_BALANCE)
-        return (
-            <Grid container>
-                <ActionButton
-                    className={classes.button}
-                    key="insufficent_balance"
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    disabled>
-                    {`Insufficent ${token.symbol ?? token.name ?? 'Token'} Balance`}
+                    Failed to load {token.symbol ?? token.name ?? 'Token'}. Click to retry.
                 </ActionButton>
             </Grid>
         )
@@ -113,11 +98,9 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         size="large"
                         onClick={() => onApprove(true)}>
                         <span className={classes.buttonLabel}>{t('plugin_wallet_token_unlock')}</span>
-                        <span className={classes.buttonAmount}>{`${formatBalance(
-                            new BigNumber(amount),
-                            token.decimals,
-                            2,
-                        )} ${token?.symbol ?? 'Token'}`}</span>
+                        <span className={classes.buttonAmount}>{`${formatBalance(amount, token.decimals, 2)} ${
+                            token?.symbol ?? 'Token'
+                        }`}</span>
                     </ActionButton>
                 </Grid>
                 <Grid item xs={6}>

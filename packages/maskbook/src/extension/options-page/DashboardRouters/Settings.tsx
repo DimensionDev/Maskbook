@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { Typography, Card, List, Paper } from '@material-ui/core'
+import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { makeStyles, createStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
 
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
@@ -9,7 +9,6 @@ import {
     languageSettings,
     allPostReplacementSettings,
     appearanceSettings,
-    currentMaskbookChainIdSettings,
     enableGroupSharingSettings,
     launchPageSettings,
     newDashboardConnection,
@@ -30,6 +29,7 @@ import PaletteIcon from '@material-ui/icons/Palette'
 import LanguageIcon from '@material-ui/icons/Language'
 import WifiIcon from '@material-ui/icons/Wifi'
 import LaunchIcon from '@material-ui/icons/Launch'
+import NewIcon from '@material-ui/icons/NewReleases'
 import DashboardRouterContainer from './Container'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useModal } from '../DashboardDialogs/Base'
@@ -45,7 +45,7 @@ import { ChainId } from '../../../web3/types'
 import { extendsTheme } from '../../../utils/theme'
 import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
 import { PortfolioProvider } from '../../../plugins/Wallet/types'
-import { currentPortfolioDataProviderSettings } from '../../../plugins/Wallet/settings'
+import { currentPortfolioDataProviderSettings, currentMaskbookChainIdSettings } from '../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -173,6 +173,15 @@ export default function DashboardSettingsRouter() {
                         </Typography>
                         <Card elevation={0}>
                             <List className={classes.list} disablePadding>
+                                {process.env.NODE_ENV === 'development' && (
+                                    <ListItem button onClick={() => (location.href = '/next.html')}>
+                                        <ListItemIcon children={<NewIcon />} />
+                                        <ListItemText
+                                            primary="Open new dashboard (integrated) (dev-only)"
+                                            secondary="/packages/dashboard/"
+                                        />
+                                    </ListItem>
+                                )}
                                 <SettingsUIEnum
                                     classes={listStyle}
                                     enumObject={Language}

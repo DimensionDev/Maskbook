@@ -5,7 +5,7 @@ import Services, { ServicesWithProgress } from '../../extension/service'
 import { toHex } from 'web3-utils'
 import { StageType } from '../../utils/promiEvent'
 import type { TransactionConfig } from 'web3-core'
-import { useChainId } from './useChainState'
+import { useChainId } from './useBlockNumber'
 import { addGasMargin } from '../helpers'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { EthereumAddress } from 'wallet.ts'
@@ -38,7 +38,7 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
         // error: insufficent balance
         const balance = await Services.Ethereum.getBalance(account, chainId)
 
-        if (new BigNumber(amount).isGreaterThan(new BigNumber(balance))) {
+        if (new BigNumber(amount).isGreaterThan(balance)) {
             setTransferState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Insufficent balance'),
@@ -69,7 +69,7 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
         const estimatedGas = await Services.Ethereum.estimateGas(config, chainId)
         const iterator = ServicesWithProgress.sendTransaction(account, {
             // the esitmated gas limit is too low with arbitrary message to be encoded as data (increase 20% gas limit)
-            gas: addGasMargin(new BigNumber(estimatedGas), 2000).toFixed(),
+            gas: addGasMargin(estimatedGas, 2000).toFixed(),
             ...config,
         })
 

@@ -23,19 +23,13 @@ import { injectPageInspectorDefault } from '../../social-network/defaults/inject
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
 import { currentSelectedIdentity } from '../../settings/settings'
+import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { globalUIState } from '../../social-network'
+import { unreachable } from '../../utils/utils'
 
-const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*', 'https://facebook.com/*']
 const facebookUI: SocialNetworkUI.Definition = {
     ...facebookBase,
     ...facebookShared,
-    permission: {
-        has() {
-            return browser.permissions.contains({ origins })
-        },
-        request() {
-            return browser.permissions.request({ origins })
-        },
-    },
     automation: {
         redirect: {
             profilePage(profile) {
@@ -111,7 +105,13 @@ const facebookUI: SocialNetworkUI.Definition = {
             grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
             password() {
                 // ! Change this might be a breaking change !
-                return currentSelectedIdentity[facebookBase.networkIdentifier].value
+                return new ProfileIdentifier(
+                    'facebook.com',
+                    ProfileIdentifier.getUserName(IdentityProviderFacebook.lastRecognized.value.identifier) ||
+                        ProfileIdentifier.getUserName(currentSelectedIdentity[facebookBase.networkIdentifier].value) ||
+                        ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
+                        unreachable('Cannot figure out password' as never),
+                ).toText()
             },
         },
     },

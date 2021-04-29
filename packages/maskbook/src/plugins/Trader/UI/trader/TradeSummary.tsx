@@ -225,17 +225,13 @@ export function TradeSummary(props: TradeSummaryProps) {
             children: (
                 <Typography className={classes.title}>
                     {(trade_?.sources ?? [])
-                        .filter(
-                            (x) =>
-                                x.proportion !== '0' &&
-                                new BigNumber(x.proportion).isGreaterThan(new BigNumber('0.00001')),
-                        )
+                        .filter((x) => {
+                            const proportion = new BigNumber(x.proportion)
+                            return !proportion.isZero() && proportion.isGreaterThan('1e-5')
+                        })
                         .sort((a, z) => (new BigNumber(a.proportion).isGreaterThan(z.proportion) ? -1 : 1))
                         .slice(0, 3)
-                        .map(
-                            (y) =>
-                                `${resolveZrxTradePoolName(y.name)} (${formatPercentage(new BigNumber(y.proportion))})`,
-                        )
+                        .map((y) => `${resolveZrxTradePoolName(y.name)} (${formatPercentage(y.proportion)})`)
                         .join(' + ')}
                 </Typography>
             ),

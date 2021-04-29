@@ -1,8 +1,7 @@
 import { useCallback, useState } from 'react'
 import type { TransactionReceipt } from 'web3-core'
-import BigNumber from 'bignumber.js'
 import { useAccount } from '../../../../web3/hooks/useAccount'
-import { useChainId } from '../../../../web3/hooks/useChainState'
+import { useChainId } from '../../../../web3/hooks/useBlockNumber'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import type { ExchangeProxy } from '@dimensiondev/contracts/types/ExchangeProxy'
@@ -93,7 +92,7 @@ export function useTradeCallback(
         // step 2: blocking
         return new Promise<void>((resolve, reject) => {
             const promiEvent = tx.send({
-                gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
+                gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {

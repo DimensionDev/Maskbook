@@ -1,0 +1,17 @@
+{
+  "name": "@dimensiondev/mask-plugin-infra",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "scripts": {},
+  "types": "./dist/",
+  "main": "./dist/index.js",
+  "dependencies": {
+    "@dimensiondev/holoflows-kit": "0.8.0-20210317064617-6c4792c",
+    "@dimensiondev/maskbook-shared": "workspace:*",
+    "@dimensiondev/maskbook-theme": "workspace:*",
+    "@servie/events": "^3.0.0",
+    "@types/use-subscription": "^1.0.0",
+    "ts-results": "^3.2.1",
+    "use-subscription": "^1.5.1"
+  }
+}

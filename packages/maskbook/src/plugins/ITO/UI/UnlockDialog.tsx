@@ -6,7 +6,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useChainState'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
@@ -36,17 +36,15 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface UnlockDialogProps {
-    isMask: boolean
     tokens: ERC20TokenDetailed[]
 }
 
 export function UnlockDialog(props: UnlockDialogProps) {
-    const { isMask, tokens } = props
+    const { tokens } = props
     const { t } = useI18N()
     const classes = useStyles()
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
-    const MASK_ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'MASK_ITO_CONTRACT_ADDRESS')
-    const recipientAddress = isMask ? MASK_ITO_CONTRACT_ADDRESS : ITO_CONTRACT_ADDRESS
+    const recipientAddress = ITO_CONTRACT_ADDRESS
 
     const account = useAccount()
     const chainId = useChainId()
@@ -88,7 +86,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     )
     //#endregion
 
-    if (!tokens.length) return null
+    if (!tokens.length) return <Typography>No need to unlock any token on this ITO.</Typography>
 
     return (
         <div className={classes.root}>
@@ -120,11 +118,11 @@ export function UnlockDialog(props: UnlockDialogProps) {
                     {(allowance: string) => (
                         <ActionButton className={classes.button} size="large" fullWidth disabled variant="contained">
                             {isMoreThanMillion(allowance, token.decimals)
-                                ? t('plugin_ito_amount_approved_infinity', {
+                                ? t('plugin_ito_amount_unlocked_infinity', {
                                       symbol: token.symbol ?? 'Token',
                                   })
-                                : t('plugin_ito_amount_approved', {
-                                      amount: formatBalance(new BigNumber(allowance), token.decimals, 2),
+                                : t('plugin_ito_amount_unlocked', {
+                                      amount: formatBalance(allowance, token.decimals, 2),
                                       symbol: token.symbol ?? 'Token',
                                   })}
                         </ActionButton>

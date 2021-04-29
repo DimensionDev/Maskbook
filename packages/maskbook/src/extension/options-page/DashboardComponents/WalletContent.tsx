@@ -23,7 +23,7 @@ import { WalletAssetsTable } from './WalletAssetsTable'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { Flags } from '../../../utils/flags'
-import { useChainIdValid } from '../../../web3/hooks/useChainState'
+import { useChainIdValid } from '../../../web3/hooks/useBlockNumber'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) =>
             marginTop: theme.spacing(2),
         },
         caption: {
-            padding: theme.spacing(2, 0),
+            padding: theme.spacing(1.5, 0),
         },
         header: {
             borderBottom: `1px solid ${theme.palette.divider}`,

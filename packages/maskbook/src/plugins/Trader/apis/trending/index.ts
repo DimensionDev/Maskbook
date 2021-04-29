@@ -6,11 +6,14 @@ import * as uniswapAPI from '../uniswap'
 import { Days } from '../../UI/trending/PriceChartDaysControl'
 import { getEnumAsArray } from '../../../../utils/enum'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
-import { resolveCoinId, resolveCoinAddress, resolveAlias } from './hotfix'
-import MIRRORED_TOKENS from './mirrored_tokens.json'
-import STOCKS_KEYWORDS from './stocks.json'
-import CASHTAG_KEYWORDS from './cashtag.json'
-import HASHTAG_KEYWORDS from './hashtag.json'
+import {
+    resolveCoinId,
+    resolveCoinAddress,
+    resolveAlias,
+    isBlockedId,
+    isBlockedKeyword,
+    isMirroredKeyword,
+} from './hotfix'
 import { unreachable } from '../../../../utils/utils'
 
 /**
@@ -83,38 +86,17 @@ export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<C
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
-            const cgCoins = await coinGeckoAPI.getAllCoins()
-            // reserve mask
-            return cgCoins.filter((x) => x.id !== 'nftx-hashmasks-index')
+            return coinGeckoAPI.getAllCoins()
         case DataProvider.COIN_MARKET_CAP:
             const { data: cmcCoins } = await coinMarketCapAPI.getAllCoins()
-            return (
-                cmcCoins
-                    // create mask
-                    .map((x) =>
-                        x.id === 8536
-                            ? {
-                                  ...x,
-                                  platform: {
-                                      id: 1027,
-                                      name: 'Ethereum',
-                                      symbol: 'ETH',
-                                      slug: 'ethereum',
-                                      token_address: '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074',
-                                  },
-                                  status: 'active',
-                              }
-                            : x,
-                    )
-                    // for cmc we should filter inactive coins out
-                    .filter((x) => x.status === 'active' && x.id !== 8410)
-                    .map((x) => ({
-                        id: String(x.id),
-                        name: x.name,
-                        symbol: x.symbol,
-                        eth_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
-                    }))
-            )
+            return cmcCoins
+                .filter((x) => x.status === 'active')
+                .map((x) => ({
+                    id: String(x.id),
+                    name: x.name,
+                    symbol: x.symbol,
+                    eth_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
+                }))
         case DataProvider.UNISWAP_INFO:
             // the uniswap has got huge tokens based (more than 2.2k) since we fetch coin info dynamically
             return []
@@ -148,7 +130,9 @@ async function updateCache(dataProvider: DataProvider, keyword?: string) {
                     lastUpdated: new Date(),
                 })
             const cache = coinNamespace.get(dataProvider)!
-            const coins = await uniswapAPI.getAllCoinsByKeyword(keyword)
+            const coins = (await uniswapAPI.getAllCoinsByKeyword(keyword)).filter(
+                (x) => !isBlockedId(x.id, dataProvider),
+            )
             if (coins.length) {
                 cache.supportedSymbolsSet.add(keyword.toLowerCase())
                 cache.supportedSymbolIdsMap.set(keyword.toLowerCase(), coins)
@@ -158,7 +142,7 @@ async function updateCache(dataProvider: DataProvider, keyword?: string) {
         }
 
         // other providers fetch all of supported coins
-        const coins = await getCoins(dataProvider)
+        const coins = (await getCoins(dataProvider)).filter((x) => !isBlockedId(x.id, dataProvider))
         const coinsGrouped = groupBy(coins, (x) => x.symbol.toLowerCase())
         coinNamespace.set(dataProvider, {
             supportedSymbolsSet: new Set<string>(Object.keys(coinsGrouped)),
@@ -171,21 +155,8 @@ async function updateCache(dataProvider: DataProvider, keyword?: string) {
 }
 
 function isCacheExipred(dataProvider: DataProvider) {
-    return (
-        coinNamespace.has(dataProvider) &&
-        new Date().getTime() - (coinNamespace.get(dataProvider)?.lastUpdated.getTime() ?? 0) >
-            CRYPTOCURRENCY_MAP_EXPIRES_AT
-    )
-}
-
-function isBlockedKeyword(type: TagType, keyword: string) {
-    if (type === TagType.HASH) return [...STOCKS_KEYWORDS, ...HASHTAG_KEYWORDS].includes(keyword.toUpperCase())
-    else if (type === TagType.CASH) return [...STOCKS_KEYWORDS, ...CASHTAG_KEYWORDS].includes(keyword.toUpperCase())
-    return true
-}
-
-function isMirroredKeyword(symbol: string) {
-    return MIRRORED_TOKENS.map((x) => x.symbol).some((x) => x.toUpperCase() === symbol.toUpperCase())
+    const lastUpdated = coinNamespace.get(dataProvider)?.lastUpdated.getTime() ?? 0
+    return Date.now() - lastUpdated > CRYPTOCURRENCY_MAP_EXPIRES_AT
 }
 
 export async function checkAvailabilityOnDataProvider(keyword: string, type: TagType, dataProvider: DataProvider) {
@@ -196,10 +167,8 @@ export async function checkAvailabilityOnDataProvider(keyword: string, type: Tag
     else if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
     // data fetched before update in nonblocking way
     else if (isCacheExipred(dataProvider)) updateCache(dataProvider)
-    return (
-        coinNamespace.get(dataProvider)?.supportedSymbolsSet.has(resolveAlias(keyword, dataProvider).toLowerCase()) ??
-        false
-    )
+    const symbols = coinNamespace.get(dataProvider)?.supportedSymbolsSet
+    return symbols?.has(resolveAlias(keyword, dataProvider).toLowerCase()) ?? false
 }
 
 export async function getAvailableDataProviders(type: TagType, keyword: string) {
@@ -217,10 +186,8 @@ export async function getAvailableDataProviders(type: TagType, keyword: string) 
 
 export async function getAvailableCoins(keyword: string, type: TagType, dataProvider: DataProvider) {
     if (!(await checkAvailabilityOnDataProvider(keyword, type, dataProvider))) return []
-    return (
-        coinNamespace.get(dataProvider)?.supportedSymbolIdsMap.get(resolveAlias(keyword, dataProvider).toLowerCase()) ??
-        []
-    )
+    const ids = coinNamespace.get(dataProvider)?.supportedSymbolIdsMap
+    return ids?.get(resolveAlias(keyword, dataProvider).toLowerCase()) ?? []
 }
 //#endregion
 

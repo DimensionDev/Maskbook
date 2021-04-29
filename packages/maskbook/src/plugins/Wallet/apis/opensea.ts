@@ -121,7 +121,7 @@ export async function getAssetsList(from: string, opts: { chainId?: ChainId; pag
     params.append('exclude_currencies', 'true')
     params.append('owner', from.toLowerCase())
     params.append('limit', String(size))
-    params.append('offset', String(size * (page - 1)))
+    params.append('offset', String(size * page))
 
     if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId))
         return {

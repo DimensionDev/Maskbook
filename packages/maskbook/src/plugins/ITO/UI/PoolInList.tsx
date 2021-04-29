@@ -24,6 +24,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../Wallet/formatter'
 import { dateTimeFormat } from '../assets/formatDate'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
+import { MSG_DELIMITER } from '../constants'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -118,7 +119,7 @@ export function PoolInList(props: PoolInListProps) {
         loading: loadingAvailability,
     } = useAvailabilityComputed(pool)
     const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)
-
+    const title = pool.message.split(MSG_DELIMITER)[1] ?? pool.message
     const noRemain = new BigNumber(pool.total_remaining).isZero()
     const { listOfStatus } = availabilityComputed
 
@@ -161,7 +162,7 @@ export function PoolInList(props: PoolInListProps) {
                     <Box className={classes.header}>
                         <Box className={classes.title}>
                             <Typography variant="body1" color="textPrimary">
-                                {pool.message}
+                                {title}
                             </Typography>
                             <Typography className={classes.date} variant="body2" color="textSecondary">
                                 {t('plugin_ito_list_start_date', {
@@ -195,7 +196,7 @@ export function PoolInList(props: PoolInListProps) {
                             <Typography variant="body2" color="textPrimary" component="span">
                                 {formatBalance(
                                     exchange_out_volumes.reduce((acculator, x) => acculator.plus(x), new BigNumber(0)),
-                                    pool.token.decimals ?? 0,
+                                    pool.token.decimals,
                                 )}
                             </Typography>{' '}
                             {pool.token.symbol}
@@ -203,7 +204,7 @@ export function PoolInList(props: PoolInListProps) {
                         <Typography variant="body2" color="textSecondary" component="span">
                             {t('plugin_ito_list_total')}
                             <Typography variant="body2" color="textPrimary" component="span">
-                                {formatBalance(new BigNumber(pool.total), pool.token.decimals ?? 0)}
+                                {formatBalance(pool.total, pool.token.decimals)}
                             </Typography>{' '}
                             {pool.token.symbol}
                         </Typography>
@@ -258,19 +259,11 @@ export function PoolInList(props: PoolInListProps) {
                                                 {token.symbol} / {pool.token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
-                                                {formatBalance(
-                                                    new BigNumber(exchange_out_volumes[index]),
-                                                    pool.token.decimals,
-                                                    6,
-                                                )}{' '}
+                                                {formatBalance(exchange_out_volumes[index], pool.token.decimals, 6)}{' '}
                                                 {pool.token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
-                                                {formatBalance(
-                                                    new BigNumber(exchange_in_volumes[index]),
-                                                    token.decimals,
-                                                    6,
-                                                )}{' '}
+                                                {formatBalance(exchange_in_volumes[index], token.decimals, 6)}{' '}
                                                 {token.symbol}
                                             </TableCell>
                                         </TableRow>

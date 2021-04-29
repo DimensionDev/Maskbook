@@ -1,11 +1,12 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { currentMaskbookChainIdSettings } from '../../../../settings/settings'
+import { currentMaskbookChainIdSettings } from '../../../../plugins/Wallet/settings'
 import { getConstant } from '../../../../web3/helpers'
 import { CONSTANTS } from '../../../../web3/constants'
+import type { ChainId } from '../../../../web3/types'
 
 // 5 is the length of weights
-const SEED = Math.floor(Math.random() * 5)
+const SEED = Math.floor(Math.random() * 4)
 
 //#region providers
 const providerPool = new Map<string, HttpProvider>()
@@ -44,7 +45,15 @@ function createWeb3Instance(provider: HttpProvider) {
     return web3
 }
 
-export function createWeb3(chainId = currentMaskbookChainIdSettings.value, privKeys: string[] = [], url?: string) {
+export function createWeb3({
+    chainId = currentMaskbookChainIdSettings.value,
+    privKeys = [],
+    url = '',
+}: {
+    privKeys?: string[]
+    url?: string
+    chainId?: ChainId
+} = {}) {
     // get the provider url by weights if needed
     if (!url) {
         const urls = getConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST', chainId)

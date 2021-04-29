@@ -17,9 +17,6 @@ import ReactRefreshTypeScriptTransformer from 'react-refresh-typescript'
 import WatchMissingModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin'
 import NotifierPlugin from 'webpack-notifier'
 //#endregion
-//#region Production plugins
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
-//#endregion
 //#region Other plugins
 import CopyPlugin from 'copy-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
@@ -57,12 +54,15 @@ function config(opts: {
     target: Target
     mode: Configuration['mode']
     dist: string
+    isProfile: boolean
     disableHMR?: boolean
     disableReactHMR?: boolean
     hmrPort?: number
     noEval?: boolean
 }) {
-    const { disableReactHMR, mode, target, name, noEval, dist, hmrPort } = opts
+    // https://github.com/facebook/react/issues/20377 React-devtools conflicts with react-refresh
+    const disableReactHMR = opts.isProfile || opts.disableReactHMR
+    const { mode, target, name, noEval, dist, hmrPort, isProfile } = opts
     let { disableHMR } = opts
     const isManifestV3 = target.runtimeEnv.manifest === 3
     if (mode === 'production') disableHMR = true
@@ -86,12 +86,21 @@ function config(opts: {
         resolve: {
             extensions: ['.js', '.ts', '.tsx'],
             alias: {
-                // If anyone need profiling React please checkout: https://github.com/facebook/create-react-app/blob/396892/packages/react-scripts/config/webpack.config.js#L338
                 'async-call-rpc$': 'async-call-rpc/full',
                 lodash: 'lodash-es',
                 // Strange...
                 '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
+                // It's a node impl for xhr which is unnecessary
                 'xhr2-cookies': require.resolve('./miscs/package-overrides/xhr2-cookies'),
+                // Monorepo building speed optimization
+                // Those packages are also installed as dependencies so they appears in node_modules
+                // By aliasing them to the original position, we can speed up the compile because there is no need to wait tsc build them to the dist folder.
+                '@dimensiondev/dashboard': require.resolve('../dashboard/src/entry.tsx'),
+                '@dimensiondev/maskbook-shared': require.resolve('../shared/src/index.ts'),
+                '@dimensiondev/maskbook-theme': require.resolve('../theme/src/theme.ts'),
+                '@dimensiondev/icons': require.resolve('../icons/index.ts'),
+                '@dimensiondev/mask-plugin-infra': require.resolve('../plugin-infra/src/index.ts'),
+                '@dimensiondev/plugin-example': require.resolve('../plugins/example/src/index.ts'),
             },
             // Polyfill those Node built-ins
             fallback: {
@@ -113,9 +122,10 @@ function config(opts: {
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
                 // TypeScript
                 {
-                    test: /\.(ts|tsx)$/,
+                    test: /\.tsx?$/,
                     parser: { worker: ['OnDemandWorker', '...'] },
-                    include: src('./src'),
+                    // Compile all ts files in the workspace
+                    include: src('../'),
                     loader: require.resolve('ts-loader'),
                     options: {
                         transpileOnly: true,
@@ -158,7 +168,6 @@ function config(opts: {
                 'process.stderr': '/* stdin */ null',
             }),
             ...getHotModuleReloadPlugin(),
-            target.isProfile && new BundleAnalyzerPlugin(),
         ].filter(nonNullable),
         optimization: {
             minimize: false,
@@ -213,9 +222,12 @@ function config(opts: {
                 // We're doing CORS request for HMR
                 'Access-Control-Allow-Origin': '*',
             },
-            // If the content script runs in https, webpack will connect https://localhost:HMR_PORT
-            https: true,
+            transportMode: 'ws',
         } as DevServerConfiguration,
+    }
+    if (isProfile) {
+        config.resolve!.alias!['react-dom$'] = 'react-dom/profiling'
+        config.resolve!.alias!['scheduler/tracing'] = 'scheduler/tracing-profiling'
     }
     return config
     function getHotModuleReloadPlugin() {
@@ -239,7 +251,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     const disableHMR = Boolean(process.env.NO_HMR)
     const isManifestV3 = target.runtimeEnv.manifest === 3
 
-    const shared = { mode, target, dist }
+    const shared = { mode, target, dist, isProfile: target.isProfile }
     const main = config({ ...shared, disableHMR, name: 'main' })
     const manifestV3 = config({ ...shared, disableHMR: true, name: 'background-worker', hmrPort: 35938 })
     const injectedScript = config({
@@ -295,16 +307,18 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
         injectedScript.optimization!.splitChunks = false
     }
     if (mode === 'production') return [main, isManifestV3 && manifestV3, injectedScript].filter(nonNullable)
-    // TODO: multiple config seems doesn't work well therefore we start the watch mode webpack compiler manually.
+    // @ts-ignore
     delete injectedScript.devServer
-    // TODO: ignore the message currently
+    // TODO: multiple config seems doesn't work well therefore we start the watch mode webpack compiler manually, ignore the build message currently
     webpack(injectedScript, () => {}).watch({}, () => {})
     return main
 
     function withReactDevTools(...x: string[]) {
         // ! Use Firefox Nightly or enable network.websocket.allowInsecureFromHTTPS in about:config, then remove this line (but don't commit)
         if (target.FirefoxEngine) return x
-        if (mode === 'development') return [src('./miscs/package-overrides/react-devtools'), ...x]
+        // if (mode === 'development' || target.isProfile)
+        // https://github.com/facebook/react/issues/20377 React-devtools conflicts with react-refresh
+        if (target.isProfile) return [src('./miscs/package-overrides/react-devtools'), ...x]
         return x
     }
     function iOSWebExtensionShimHack(...path: string[]) {

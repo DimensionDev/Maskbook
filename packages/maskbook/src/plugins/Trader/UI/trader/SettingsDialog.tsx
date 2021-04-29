@@ -34,28 +34,11 @@ import { useTradeProviderSettings } from '../../trader/useTradeSettings'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
-        root: {
-            overflow: 'auto',
-            backgroundColor: theme.palette.background.paper,
-            paddingBottom: theme.spacing(2),
-            position: 'absolute',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
         content: {},
         footer: {
             display: 'flex',
             justifyContent: 'flex-end',
             padding: theme.spacing(0, 2),
-        },
-        close: {
-            top: 0,
-            right: 0,
-            position: 'absolute',
-        },
-        caption: {
-            padding: theme.spacing(2, 1),
         },
         heading: {
             flex: 1,

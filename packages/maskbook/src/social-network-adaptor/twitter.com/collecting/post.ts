@@ -1,5 +1,5 @@
 import { postsContentSelector } from '../utils/selector'
-import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
+import { IntervalWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import { PostInfo } from '../../../social-network/PostInfo'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
@@ -7,17 +7,16 @@ import { postIdParser } from '../utils/fetch'
 import { memoize } from 'lodash-es'
 import Services from '../../../extension/service'
 import { injectMaskIconToPostTwitter } from '../injection/MaskbookIcon'
-import { startWatch } from '../../../utils/watcher'
 import { postsImageSelector } from '../utils/selector'
 import { ProfileIdentifier } from '../../../database/type'
 import { postParser, postImagesParser } from '../utils/fetch'
 import { untilElementAvailable } from '../../../utils/dom'
 import {
     makeTypedMessageImage,
-    makeTypedMessageFromList,
+    makeTypedMessageTupleFromList,
     makeTypedMessageEmpty,
-    makeTypedMessageSuspended,
-    makeTypedMessageCompound,
+    makeTypedMessagePromise,
+    makeTypedMessageTuple,
     extractTextFromTypedMessage,
 } from '../../../protocols/typed-message'
 import type { Result } from 'ts-results'
@@ -47,7 +46,7 @@ function registerPostCollectorInner(
         },
         (info: PostInfo) => info.postBy.value?.toText(),
     )
-    const watcher = new MutationObserverWatcher(postsContentSelector())
+    const watcher = new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
@@ -94,7 +93,8 @@ function registerPostCollectorInner(
                 ? `${isQuotedTweet ? 'QUOTED' : ''}${postIdParser(tweetNode)}${node.innerText.replace(/\s/gm, '')}`
                 : node.innerText
         })
-    startWatch(watcher, cancel)
+    watcher.startWatch(250)
+    cancel.addEventListener('abort', () => watcher.stopWatch())
 }
 
 export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
@@ -110,7 +110,7 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, cance
     const { pid, messages, handle, name, avatar } = postParser(tweetNode)
 
     if (!pid) return
-    const postBy = new ProfileIdentifier(twitterBase.networkIdentifier, handle)
+    const postBy = handle ? new ProfileIdentifier(twitterBase.networkIdentifier, handle) : ProfileIdentifier.unknown
     info.postID.value = pid
     info.postContent.value = messages
         .map((x) => {
@@ -129,12 +129,12 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, cance
         .then(() => postImagesParser(tweetNode))
         .then((urls) => {
             for (const url of urls) info.postMetadataImages.add(url)
-            if (urls.length) return makeTypedMessageFromList(...urls.map((x) => makeTypedMessageImage(x)))
+            if (urls.length) return makeTypedMessageTupleFromList(...urls.map((x) => makeTypedMessageImage(x)))
             return makeTypedMessageEmpty()
         })
         .catch(() => makeTypedMessageEmpty())
 
-    info.postMessage.value = makeTypedMessageCompound([...messages, makeTypedMessageSuspended(images)])
+    info.postMessage.value = makeTypedMessageTuple([...messages, makeTypedMessagePromise(images)])
 }
 
 function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo, cancel: AbortSignal) {

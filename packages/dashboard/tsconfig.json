@@ -9,6 +9,10 @@
     { "path": "../theme/" },
     { "path": "../maskbook/" },
     { "path": "../storybook-shared/" },
-    { "path": "../icons/" }
-  ]
+    { "path": "../icons/" },
+    { "path": "../plugin-infra" }
+  ],
+  "ts-node": {
+    "compilerOptions": { "module": "CommonJS" }
+  }
 }

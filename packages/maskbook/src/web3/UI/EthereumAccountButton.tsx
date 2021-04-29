@@ -3,7 +3,6 @@ import classNames from 'classnames'
 import { makeStyles, createStyles, Button, ButtonProps, Typography } from '@material-ui/core'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
-import BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { ProviderIcon } from '../../components/shared/ProviderIcon'
@@ -11,7 +10,7 @@ import { formatBalance, formatEthereumAddress } from '../../plugins/Wallet/forma
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { useChainId } from '../hooks/useChainState'
+import { useChainId } from '../hooks/useBlockNumber'
 import { resolveChainColor } from '../pipes'
 import { ChainId } from '../types'
 import { useValueRef } from '../../utils/hooks/useValueRef'
@@ -87,7 +86,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     return (
         <div className={props.disableEther ? '' : classes.root}>
             {!props.disableEther ? (
-                <Typography className={classes.balance}>{formatBalance(new BigNumber(balance), 18, 4)} ETH</Typography>
+                <Typography className={classes.balance}>{formatBalance(balance, 18, 4)} ETH</Typography>
             ) : null}
             <Button
                 className={classNames(classes.button, props.disableEther ? classes.buttonTransparent : '')}

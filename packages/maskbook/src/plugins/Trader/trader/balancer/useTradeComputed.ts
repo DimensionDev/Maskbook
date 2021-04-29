@@ -3,6 +3,8 @@ import BigNumber from 'bignumber.js'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 
+const MIN_VALUE = new BigNumber('1e-5')
+
 export function useTradeComputed(
     trade: SwapResponse | null,
     strategy: TradeStrategy,
@@ -18,20 +20,23 @@ export function useTradeComputed(
         const { swaps: swaps_, routes } = trade
         const [swaps, tradeAmount, spotPrice] = swaps_
         const isExactIn = strategy === TradeStrategy.ExactIn
-        const priceImpact = isExactIn
-            ? new BigNumber(inputAmount).div(tradeAmount).times('1e18').div(spotPrice).minus(1)
-            : new BigNumber(tradeAmount).div(outputAmount).times('1e18').div(spotPrice).minus(1)
+        // priceImpact = isExactIn ? inputAmount / tradeAmount : tradeAmount / outputAmount
+        let priceImpact = isExactIn
+            ? new BigNumber(inputAmount).div(tradeAmount)
+            : new BigNumber(tradeAmount).div(outputAmount)
+        // priceImpact = (priceImpact * 1e18) / spotPrice) - 1
+        priceImpact = priceImpact.times('1e18').div(spotPrice).minus(1)
 
         return {
             strategy,
-            inputAmount: isExactIn ? new BigNumber(inputAmount) : new BigNumber(tradeAmount),
-            outputAmount: !isExactIn ? new BigNumber(outputAmount) : new BigNumber(tradeAmount),
+            inputAmount: new BigNumber(isExactIn ? inputAmount : tradeAmount),
+            outputAmount: new BigNumber(!isExactIn ? outputAmount : tradeAmount),
             inputToken,
             outputToken,
             nextMidPrice: new BigNumber(spotPrice),
             executionPrice: new BigNumber(spotPrice),
-            priceImpact: priceImpact.isNegative() ? new BigNumber('0.00001') : priceImpact,
-            priceImpactWithoutFee: priceImpact.isNegative() ? new BigNumber('0.00001') : priceImpact,
+            priceImpact: priceImpact.isNegative() ? MIN_VALUE : priceImpact,
+            priceImpactWithoutFee: priceImpact.isNegative() ? MIN_VALUE : priceImpact,
             maximumSold: new BigNumber(tradeAmount),
             minimumReceived: new BigNumber(tradeAmount),
             path: [],
