@@ -1,4 +1,3 @@
-import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { makeTypedMessageText, TypedMessage } from '../../../protocols/typed-message'
 import { untilDocumentReady } from '../../../utils/dom'
 import { i18n } from '../../../utils/i18n-next'
