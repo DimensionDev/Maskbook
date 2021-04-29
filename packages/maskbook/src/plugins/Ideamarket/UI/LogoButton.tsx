@@ -41,29 +41,7 @@ export default function LogoButton(props: LogoButtonProps) {
     const classes = useStyles()
 
     const doWeRender = () => {
-        if (clicked) {
-            return (
-                <Listing
-                    username={props.username}
-                    setExtendedHover={setExtendedHover}
-                    found={props.found}
-                    rank={props.rank}
-                    dayChange={props.dayChange}
-                    price={props.price}
-                />
-            )
-        } else if (hover) {
-            return (
-                <Listing
-                    username={props.username}
-                    setExtendedHover={setExtendedHover}
-                    found={props.found}
-                    rank={props.rank}
-                    dayChange={props.dayChange}
-                    price={props.price}
-                />
-            )
-        } else if (extendedHover) {
+        if (clicked || hover || extendedHover) {
             return (
                 <Listing
                     username={props.username}
