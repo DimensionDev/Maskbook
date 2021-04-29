@@ -5,10 +5,16 @@ registerPlugin({
     ...base,
     SNSAdaptor: {
         load: () => import('./SNSAdaptor'),
-        hotModuleReload: (hot) => module.hot && module.hot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor'))),
+        hotModuleReload: (hot) =>
+            module.hot && module.hot.accept('./SNSAdaptor/index', () => hot(import('./SNSAdaptor'))),
     },
     Dashboard: {
         load: () => import('./Dashboard'),
-        hotModuleReload: (hot) => module.hot && module.hot.accept('./Dashboard', () => hot(import('./Dashboard'))),
+        hotModuleReload: (hot) =>
+            module.hot && module.hot.accept('./Dashboard/index', () => hot(import('./Dashboard'))),
+    },
+    Worker: {
+        load: () => import('./Worker'),
+        hotModuleReload: (hot) => module.hot && module.hot.accept('./Worker/index', () => hot(import('./Worker'))),
     },
 })
