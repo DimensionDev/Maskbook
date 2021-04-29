@@ -27,7 +27,7 @@ export function useOrders(provider: CollectibleProvider, token?: CollectibleToke
                     const unitPrice = new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber()
                     return {
                         quantity: new BigNumber(order.quantity).toNumber(),
-                        expirationTime: order.expirationTime,
+                        expirationTime: order.side === OrderSide.Sell ? order.listingTime : order.expirationTime,
                         paymentTokenContract: order.paymentTokenContract,
                         hash: order.hash,
                         unitPrice,
