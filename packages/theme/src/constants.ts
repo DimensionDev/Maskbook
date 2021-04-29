@@ -3,18 +3,18 @@ import { kebabCase } from 'lodash-es'
 import { merge } from 'lodash-es'
 export const LightColor = {
     primary: '#1c68f3',
-    primaryContrastText: 'white',
+    primaryContrastText: '#ffffff',
 
     secondary: '#e8f0fe',
     secondaryContrastText: '#1c68f3',
 
     primaryBackground: '#ffffff',
     secondaryBackground: '#f9fafa',
-    suspensionBackground: 'rgba(255,255,255, 0.8)',
+    suspensionBackground: 'rgba(249, 250, 250, 0.8)',
     normalBackground: '#F3F3F4',
     redMain: '#ff5f5f',
     redLight: '#ffafaf',
-    redContrastText: 'white',
+    redContrastText: '#ffffff',
 
     greenMain: '#77e0b5',
     greenLight: '#e6f6f0',
@@ -41,7 +41,7 @@ export const LightColor = {
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
-    primaryContrastText: 'white',
+    primaryContrastText: '#ffffff',
 
     secondary: '#242e57',
     secondaryContrastText: '#1c68f3',
@@ -52,7 +52,7 @@ export const DarkColor: typeof LightColor = {
     normalBackground: '#262947',
     redMain: '#ff5f5f',
     redLight: '#46304a',
-    redContrastText: 'white',
+    redContrastText: '#ffffff',
 
     greenMain: '#77e0b5',
     greenLight: '#314457',
@@ -67,7 +67,7 @@ export const DarkColor: typeof LightColor = {
     border: '#3E455E',
 
     // TODO: ?
-    textPrimary: 'white',
+    textPrimary: '#ffffff',
     // TODO: ?
     textSecondary: 'ghostwhite',
 

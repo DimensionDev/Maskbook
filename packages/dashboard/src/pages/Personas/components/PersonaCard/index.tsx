@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { SettingsIcon } from '@dimensiondev/icons'
@@ -7,6 +7,7 @@ import { useMenu } from '../../../../../../maskbook/src/utils/hooks/useMenu'
 import { PersonaLine } from '../PersonaLine'
 import type { Persona } from '../../../../../../maskbook/src/database'
 import type { PersonaProvider } from '../../settings'
+import { EditPersonaDialog } from '../EditPersonaDialog'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -52,9 +53,12 @@ export interface PersonaCardProps {
 
 export const PersonaCard = memo(({ persona, providers, active = false, onClick }: PersonaCardProps) => {
     const classes = useStyles()
-
+    const [open, setOpen] = useState(false)
     const [menu, openMenu] = useMenu(
-        [<MenuItem>Edit</MenuItem>, <MenuItem style={{ color: MaskColorVar.redMain }}>Delete</MenuItem>],
+        [
+            <MenuItem onClick={() => setOpen(true)}>Edit</MenuItem>,
+            <MenuItem style={{ color: MaskColorVar.redMain }}>Delete</MenuItem>,
+        ],
         false,
         {},
         false,
@@ -77,6 +81,7 @@ export const PersonaCard = memo(({ persona, providers, active = false, onClick }
                 </div>
             </div>
             {menu}
+            <EditPersonaDialog open={open} onClose={() => setOpen(false)} persona={persona} providers={providers} />
         </div>
     )
 })
