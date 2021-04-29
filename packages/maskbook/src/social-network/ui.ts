@@ -40,7 +40,12 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
 }
 export let globalUIState: Readonly<SocialNetworkUI.State> = {} as any
 
+globalThis.__socialNetworkUIActivated = false
 export async function activateSocialNetworkUI(): Promise<void> {
+    if (globalThis.__socialNetworkUIActivated) {
+        return
+    }
+    globalThis.__socialNetworkUIActivated = true
     assertNotEnvironment(Environment.ManifestBackground)
     const ui_deferred = [...definedSocialNetworkUIs.values()].find((x) => x.shouldActivate(location))
     if (!ui_deferred) return
