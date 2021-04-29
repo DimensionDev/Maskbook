@@ -25,12 +25,13 @@ const useStyles = makeStyles((theme) =>
             borderRadius: '50%',
             marginRight: theme.spacing(1.25),
             marginTop: theme.spacing(0.625),
+            color: (active) => (active ? MaskColorVar.greenMain : MaskColorVar.iconLight),
         },
         header: {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            fontSize: 12,
+            fontSize: theme.typography.caption.fontSize,
         },
         content: {
             marginTop: theme.spacing(1.25),
@@ -39,9 +40,12 @@ const useStyles = makeStyles((theme) =>
         line: {
             display: 'flex',
             justifyContent: 'space-between',
-            fontSize: 12,
+            fontSize: theme.typography.caption.fontSize,
         },
-        link: {},
+        setting: {
+            fontSize: theme.typography.caption.fontSize,
+            padding: 0,
+        },
     }),
 )
 
@@ -53,7 +57,7 @@ export interface PersonaCardProps {
 }
 
 export const PersonaCard = memo(({ persona, providers, active = false, onClick }: PersonaCardProps) => {
-    const classes = useStyles()
+    const classes = useStyles({ active })
     const [editDialogOpen, setEditDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [menu, openMenu] = useMenu(
@@ -70,11 +74,11 @@ export const PersonaCard = memo(({ persona, providers, active = false, onClick }
 
     return (
         <div className={classes.card} onClick={onClick}>
-            <div className={classes.status} style={{ backgroundColor: active ? '#77E0B5' : '#A6A9B6' }} />
+            <div className={classes.status} />
             <div style={{ flex: 1 }}>
                 <div className={classes.header}>
-                    <Typography style={{ fontSize: 14 }}>{persona.nickname}</Typography>
-                    <IconButton onClick={openMenu} style={{ fontSize: 12, padding: 0 }}>
+                    <Typography variant="subtitle2">{persona.nickname}</Typography>
+                    <IconButton onClick={openMenu} className={classes.setting}>
                         <SettingsIcon fontSize="inherit" style={{ fill: MaskColorVar.textPrimary }} />
                     </IconButton>
                 </div>
