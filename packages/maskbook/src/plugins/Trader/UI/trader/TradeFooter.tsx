@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { CardActions, createStyles, Link, makeStyles, Typography } from '@material-ui/core'
+import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
-import classNames from 'classnames'
 import { MaskbookTextIcon } from '../../../../resources/MaskbookIcon'
 import { getEnumAsArray } from '../../../../utils/enum'
 import { DataProvider, TradeProvider } from '../../types'
@@ -44,8 +44,7 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface TradeFooterProps {
-    className?: string
+export interface TradeFooterProps extends withClasses<'footer'> {
     showDataProviderIcon?: boolean
     showTradeProviderIcon?: boolean
     dataProvider?: DataProvider
@@ -56,18 +55,18 @@ export interface TradeFooterProps {
     onTradeProviderChange?: (option: FootnoteMenuOption) => void
 }
 
-export const TradeFooter: FC<TradeFooterProps> = ({
-    className,
-    showDataProviderIcon = false,
-    showTradeProviderIcon = false,
-    dataProvider,
-    tradeProvider,
-    dataProviders = [],
-    tradeProviders = [],
-    onDataProviderChange,
-    onTradeProviderChange,
-}) => {
-    const classes = useStyles()
+export const TradeFooter: FC<TradeFooterProps> = (props) => {
+    const {
+        showDataProviderIcon = false,
+        showTradeProviderIcon = false,
+        dataProvider,
+        tradeProvider,
+        dataProviders = [],
+        tradeProviders = [],
+        onDataProviderChange,
+        onTradeProviderChange,
+    } = props
+    const classes = useStylesExtends(useStyles(), props)
     const dataProviderOptions = showDataProviderIcon
         ? getEnumAsArray(DataProvider).filter((x) => dataProviders.includes(x.value))
         : []
@@ -75,7 +74,7 @@ export const TradeFooter: FC<TradeFooterProps> = ({
         ? getEnumAsArray(TradeProvider).filter((x) => tradeProviders.includes(x.value))
         : []
     return (
-        <CardActions className={classNames(classes.footer, className)}>
+        <CardActions className={classes.footer}>
             <Typography className={classes.footnote} variant="subtitle2">
                 <span>Powered by </span>
                 <Link

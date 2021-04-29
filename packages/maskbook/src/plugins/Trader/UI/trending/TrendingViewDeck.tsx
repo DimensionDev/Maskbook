@@ -270,7 +270,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             </CardContent>
 
             <TradeFooter
-                className={classes.footer}
+                classes={{
+                    footer: classes.footer,
+                }}
                 showDataProviderIcon={showDataProviderIcon}
                 showTradeProviderIcon={showTradeProviderIcon}
                 dataProvider={dataProvider}
