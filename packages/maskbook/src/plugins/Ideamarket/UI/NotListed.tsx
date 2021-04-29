@@ -47,7 +47,7 @@ export default function NotListed(props: UIProps) {
     const classes = useStyles()
 
     function clicked(e: SyntheticEvent) {
-        e.stopPropagation()
+        e.stopPropagation() // This is to prevent event bubbling. Without this, the tweet will also get clicked. 
     }
 
     return (
