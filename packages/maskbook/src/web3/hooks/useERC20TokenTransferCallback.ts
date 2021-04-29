@@ -38,7 +38,7 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setTransferState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
@@ -49,7 +49,7 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
             to: erc20Contract.options.address,
         })
 
-        // step 2: blocking
+        // send transaction and wait for hash
         return new Promise<string>(async (resolve, reject) => {
             erc20Contract.methods.transfer(recipient, amount).send(
                 {

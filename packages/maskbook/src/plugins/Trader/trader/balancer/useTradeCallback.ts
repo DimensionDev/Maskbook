@@ -34,7 +34,7 @@ export function useTradeCallback(
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setTradeState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
@@ -89,7 +89,7 @@ export function useTradeCallback(
             throw error
         })
 
-        // step 2: blocking
+        // send transaction and wait for hash
         return new Promise<void>((resolve, reject) => {
             const promiEvent = tx.send({
                 gas: addGasMargin(estimatedGas).toFixed(),

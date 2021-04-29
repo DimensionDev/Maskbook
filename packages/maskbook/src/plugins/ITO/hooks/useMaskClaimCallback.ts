@@ -23,7 +23,7 @@ export function useMaskClaimCallback() {
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setClaimState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
@@ -46,7 +46,7 @@ export function useMaskClaimCallback() {
                 throw error
             })
 
-        // step 2: blocking
+        // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = MaskITO_Contract.methods.claim().send({
                 gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),

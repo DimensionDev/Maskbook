@@ -59,7 +59,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setCreateState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
@@ -95,7 +95,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                 throw error
             })
 
-        // step 2: blocking
+        // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = redPacketContract.methods.create_red_packet(...params).send({
                 gas: addGasMargin(estimatedGas).toFixed(),

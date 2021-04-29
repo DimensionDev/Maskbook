@@ -29,7 +29,7 @@ export const updateChainState = debounce(
             await Promise.all(
                 chainIds.map(async (chainId) => ({
                     chainId,
-                    blockNumber: await getBlockNumber(chainId),
+                    blockNumber: await getBlockNumber(),
                 })),
             ),
         )

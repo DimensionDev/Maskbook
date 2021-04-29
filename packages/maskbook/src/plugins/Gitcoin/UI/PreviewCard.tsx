@@ -90,8 +90,8 @@ export function PreviewCard(props: PreviewCardProps) {
     }, [grant, openDonationDialog])
     //#endregion
 
-    if (loading) return <Typography>Loading...</Typography>
-    if (error) return <Typography>Something went wrong.</Typography>
+    if (loading) return <Typography color="textPrimary">Loading...</Typography>
+    if (error) return <Typography color="textPrimary">Something went wrong.</Typography>
     if (!grant) return null
 
     return (

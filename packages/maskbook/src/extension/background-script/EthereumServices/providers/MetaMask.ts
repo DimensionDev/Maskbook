@@ -72,6 +72,7 @@ export async function requestAccounts() {
 
     return accounts
 }
+
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {
     const provider_ = currentSelectedWalletProviderSettings.value
 

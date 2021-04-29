@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) =>
             padding: theme.spacing(2, 2, 0, 2),
         },
         button: {
-            margin: theme.spacing(2, 0),
+            margin: theme.spacing(1.5, 0, 0),
             padding: 12,
         },
     }),
@@ -233,6 +233,7 @@ export function DonateDialog(props: DonateDialogProps) {
                             <ActionButton
                                 className={classes.button}
                                 fullWidth
+                                size="large"
                                 disabled={!!validationMessage}
                                 onClick={donateCallback}
                                 variant="contained">

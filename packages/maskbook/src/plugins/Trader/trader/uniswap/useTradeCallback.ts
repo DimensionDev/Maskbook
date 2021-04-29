@@ -37,7 +37,7 @@ export function useTradeCallback(
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setTradeState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })

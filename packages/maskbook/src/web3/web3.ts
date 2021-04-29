@@ -8,15 +8,9 @@ function createExternalProvider() {
         isStatus: true,
         host: '',
         path: '',
-        // sendAsync: Services.Ethereum.send,
-        // send: Services.Ethereum.send,
-        sendAsync: (...args: any[]) => {
-            console.log(args)
-        },
-        send: (...args: any[]) => {
-            console.log(args)
-        },
-        request: Services.Ethereum.request as any,
+        sendAsync: Services.Ethereum.send,
+        send: Services.Ethereum.send,
+        request: Services.Ethereum.request,
     }
 }
 
@@ -27,7 +21,7 @@ export const nonFunctionalWeb3 = new Web3(createExternalProvider())
 
 async function main() {
     const blockNumber = await nonFunctionalWeb3.eth.getBlockNumber()
-    console.log(blockNumber)
+    console.log(`We have got the block number whose value is ${blockNumber}.`)
 }
 
 main()

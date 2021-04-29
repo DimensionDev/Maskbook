@@ -213,7 +213,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             password: signedPassword,
         })
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setFillState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
@@ -251,7 +251,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                 throw error
             })
 
-        // step 2: blocking
+        // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = ITO_Contract.methods.fill_pool(...params).send({
                 gas: addGasMargin(estimatedGas).toFixed(),

@@ -38,7 +38,7 @@ export function useERC721TokenTransferCallback(address: string, tokenId?: string
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setTransferState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
@@ -49,7 +49,7 @@ export function useERC721TokenTransferCallback(address: string, tokenId?: string
             to: erc721Contract.options.address,
         })
 
-        // step 2: blocking
+        // send transaction and wait for hash
         return new Promise<string>(async (resolve, reject) => {
             erc721Contract.methods.transferFrom(account, recipient, tokenId).send(
                 {

@@ -16,7 +16,7 @@ export function useRefundCallback(from: string, id?: string) {
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setRefundState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
@@ -39,7 +39,7 @@ export function useRefundCallback(from: string, id?: string) {
                 throw error
             })
 
-        // step 2: blocking
+        // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
             redPacketContract.methods.refund(...params).send(
                 {

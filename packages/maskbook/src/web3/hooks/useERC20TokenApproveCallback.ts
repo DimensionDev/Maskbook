@@ -78,7 +78,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                 return
             }
 
-            // pre-step: start waiting for provider to confirm tx
+            // start waiting for provider to confirm tx
             setTransactionState({
                 type: TransactionStateType.WAIT_FOR_CONFIRMING,
             })
@@ -103,7 +103,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                     })
                 })
 
-            // step 2: blocking
+            // send transaction and wait for hash
             return new Promise<void>(async (resolve, reject) => {
                 const promiEvent = erc20Contract.methods.approve(spender, useExact ? amount : MaxUint256).send({
                     gas: addGasMargin(estimatedGas).toFixed(),
