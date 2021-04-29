@@ -8,7 +8,18 @@ function resolveLastRecognizedIdentityInner(
     cancel: AbortSignal,
 ) {
     const handle = selfInfoSelectors().handle.evaluate()
+    const avatar = selfInfoSelectors().avatar.evaluate()
 
+    if (handle) {
+        // get handle and avatar from the user menu
+        ref.value = {
+            identifier: new ProfileIdentifier(mindsBase.networkIdentifier, handle),
+            nickname: undefined,
+            avatar,
+        }
+    }
+
+    // call the API to get the nickname
     fetch('/api/v1/channel/' + handle, { signal: cancel })
         .then((res) => res.json())
         .then(({ channel }) => {

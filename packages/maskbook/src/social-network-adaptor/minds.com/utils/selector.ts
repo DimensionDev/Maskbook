@@ -10,10 +10,6 @@ const querySelector = <T extends E, SingleMode extends boolean = true>(
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
 
-const querySelectorAll = <T extends E>(selector: string) => {
-    return new LiveSelector().querySelectorAll<T>(selector)
-}
-
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('m-app')
 
 export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
@@ -26,21 +22,21 @@ export const composerModalSelector: () => LiveSelector<E, true> = () => querySel
 
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('m-composer__modal m-composer__toolbar > div > *:nth-child(4)', true)
+
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('.m-sidebarNavigation__list li:nth-child(11)')
-
-export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('m-composer__toolbar > div > *:nth-child(4)')
 
 export const postEditorDraftContentSelector = () => {
     return querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea')
 }
 
-export const postsContentSelector = () => querySelectorAll('m-activity')
-
 export const selfInfoSelectors = () => ({
     handle: querySelector<HTMLScriptElement>('.m-user-menu ul li a:first-child').map((x) =>
-        x.innerText?.replace(/@/, '').trim(),
+        x.innerText.replace(/@/, '').trim(),
+    ),
+    avatar: querySelector<HTMLScriptElement>('.m-user-menu .minds-avatar').map((x) =>
+        // get everything between the parens (the url)
+        x.style.backgroundImage.match(/\((.*?)\)/)![1].replace(/('|")/g, ''),
     ),
 })
 
