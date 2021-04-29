@@ -12,8 +12,10 @@ const querySelector = <T extends E, SingleMode extends boolean = true>(
 
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('m-app')
 
-export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('m-composer__topbarbutton')
+export const themeListItemSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
+    querySelector<HTMLAnchorElement>(
+        'm-usermenu__v3 > div.m-user-menu.m-dropdown > ul > li:nth-child(5) .ng-star-inserted',
+    )
 
 export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
     querySelector<HTMLAnchorElement>('m-composer__topbarbutton .m-icon__assetsFile')

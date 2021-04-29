@@ -7,7 +7,7 @@ import type { SocialNetworkUI } from '../../../social-network'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { useMaskbookTheme } from '../../../utils/theme'
 import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme-tools'
-import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
+import { themeListItemSelector, composeAnchorTextSelector } from '../utils/selector'
 
 // TODO: get this from DOM. But currently Minds has a single primary color
 const primaryColorRef = new ValueRef(toRGB([68, 170, 255]))
@@ -29,7 +29,7 @@ export function startWatchThemeColor(signal: AbortSignal) {
         if (backgroundColor) backgroundColorRef.value = backgroundColor
     }
 
-    const watcher = new MutationObserverWatcher(composeAnchorSelector())
+    const watcher = new MutationObserverWatcher(themeListItemSelector())
         .addListener('onAdd', updateThemeColor)
         .addListener('onChange', updateThemeColor)
         .startWatch({
