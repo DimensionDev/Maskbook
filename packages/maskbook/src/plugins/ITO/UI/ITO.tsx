@@ -33,6 +33,7 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import { useIPRegion, decodeRegionCode, checkRegionRestrict } from '../hooks/useRegion'
+import { useIfQualified } from '../hooks/useIfQualified'
 
 export interface IconProps {
     size?: number
@@ -253,6 +254,15 @@ export function ITO(props: ITO_Props) {
         retry: retryAvailability,
     } = useAvailabilityComputed(payload)
     //#ednregion
+
+    //#region if qualified
+    const {
+        value: ifQualified = false,
+        loading: loadingIfQualified,
+        error: errorIfQualified,
+        retry: retryIfQualified,
+    } = useIfQualified(payload.qualification_address)
+    //#endregion
 
     const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime } = availabilityComputed
 
@@ -612,6 +622,10 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
+                ) : !ifQualified ? (
+                    <ActionButton disabled variant="contained" size="large" className={classes.actionButton}>
+                        {t('plugin_ito_qualification_failed')}
+                    </ActionButton>
                 ) : isBuyer ? (
                     <Grid container spacing={2}>
                         {hasLockTime ? (
@@ -628,7 +642,7 @@ export function ITO(props: ITO_Props) {
                                     ) : (
                                         <ActionButton
                                             onClick={() => undefined}
-                                            disabled={true}
+                                            disabled
                                             variant="contained"
                                             size="large"
                                             className={classes.actionButton}>
@@ -639,7 +653,7 @@ export function ITO(props: ITO_Props) {
                                     <ActionButton
                                         onClick={() => undefined}
                                         variant="contained"
-                                        disabled={true}
+                                        disabled
                                         size="large"
                                         className={classNames(classes.actionButton, classes.textInOneLine)}>
                                         {t('plugin_ito_wait_unlock_time', {
@@ -763,10 +777,7 @@ function ITO_LoadingFailUI({
 
 export function ITO_ConnectMetaMask() {
     return (
-        <ITO_LoadingFailUI
-            retryPoolPayload={async () => await Services.Ethereum.connectMetaMask()}
-            isConnectMetaMask={true}
-        />
+        <ITO_LoadingFailUI retryPoolPayload={async () => await Services.Ethereum.connectMetaMask()} isConnectMetaMask />
     )
 }
 
