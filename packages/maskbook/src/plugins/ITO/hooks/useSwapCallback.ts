@@ -11,6 +11,7 @@ import { TransactionStateType, useTransactionState } from '../../../web3/hooks/u
 import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { usePoolPayload } from './usePoolPayload'
+import { useQualificationContract } from '../contracts/useQualificationContract'
 
 export function useSwapCallback(
     id: string,
@@ -19,17 +20,19 @@ export function useSwapCallback(
     token: PartialRequired<EtherTokenDetailed | ERC20TokenDetailed, 'address'>,
 ) {
     const account = useAccount()
-    const ITO_Contract = useITO_Contract()
     const { payload } = usePoolPayload(id)
+    const ITO_Contract = useITO_Contract()
+    const qualificationContract = useQualificationContract(payload.qualification_address)
     const [swapState, setSwapState] = useTransactionState()
     const swapCallback = useCallback(async () => {
-        if (!ITO_Contract || !payload || !id) {
+        if (!ITO_Contract || !qualificationContract || !payload || !id) {
             setSwapState({
                 type: TransactionStateType.UNKNOWN,
             })
             return
         }
 
+        // error: cannot find password
         if (!password) {
             setSwapState({
                 type: TransactionStateType.FAILED,
@@ -38,23 +41,13 @@ export function useSwapCallback(
             return
         }
 
+        // error: poll has expired
         if (payload.end_time * 1000 < Date.now()) {
             setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Pool has expired.'),
             })
             return
-        }
-
-        // pre-step: start waiting for provider to confirm tx
-        setSwapState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
-
-        const config: Tx = {
-            from: account,
-            to: ITO_Contract.options.address,
-            value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
         }
 
         // error: invalid swap amount
@@ -74,6 +67,37 @@ export function useSwapCallback(
                 error: new Error(`Unknown ${token.symbol} token.`),
             })
             return
+        }
+
+        // error: not qualified
+        try {
+            const ifQualified = await qualificationContract.methods.ifQualified(account).call({
+                from: account,
+            })
+            if (!ifQualified) {
+                setSwapState({
+                    type: TransactionStateType.FAILED,
+                    error: new Error('Not Qualified.'),
+                })
+                return
+            }
+        } catch (e) {
+            setSwapState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Failed to read qualification.'),
+            })
+            return
+        }
+
+        // pre-step: start waiting for provider to confirm tx
+        setSwapState({
+            type: TransactionStateType.WAIT_FOR_CONFIRMING,
+        })
+
+        const config: Tx = {
+            from: account,
+            to: ITO_Contract.options.address,
+            value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
         }
 
         // step 1: check remaining
@@ -152,7 +176,7 @@ export function useSwapCallback(
             promiEvent.on(TransactionEventType.CONFIRMATION, onSucceed)
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => onSucceed(0, receipt))
         })
-    }, [ITO_Contract, id, password, account, payload, total, token.address])
+    }, [ITO_Contract, qualificationContract, id, password, account, payload, total, token.address])
 
     const resetCallback = useCallback(() => {
         setSwapState({
