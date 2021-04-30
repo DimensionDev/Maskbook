@@ -1,5 +1,13 @@
 import { memo, useRef } from 'react'
-import { createStyles, makeStyles, Button, alpha, experimentalStyled as styled, InputBase } from '@material-ui/core'
+import {
+    createStyles,
+    makeStyles,
+    Button,
+    alpha,
+    experimentalStyled as styled,
+    InputBase,
+    inputBaseClasses,
+} from '@material-ui/core'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 
 const useStyles = makeStyles((theme) =>
@@ -23,7 +31,7 @@ const NameInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
         marginTop: theme.spacing(3),
     },
-    '& .MuiInputBase-input': {
+    [`& ${inputBaseClasses.input}`]: {
         width: '100%',
         borderRadius: 4,
         position: 'relative',

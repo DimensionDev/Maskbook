@@ -1,27 +1,17 @@
-import { alpha, Button, InputBase, Link, makeStyles, Typography } from '@material-ui/core'
-import { createStyles, experimentalStyled as styled } from '@material-ui/core/styles'
-import type { Persona } from '../../../../../../maskbook/src/database'
+import {
+    alpha,
+    Button,
+    DialogActions,
+    DialogContent,
+    InputBase,
+    Link,
+    Typography,
+    inputBaseClasses,
+} from '@material-ui/core'
+import { experimentalStyled as styled } from '@material-ui/core/styles'
+import type { Persona } from '@dimensiondev/maskbook-shared'
 import { memo } from 'react'
-import { MaskColorVar, MaskDialog } from '../../../../../../theme'
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        container: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: theme.spacing(6, 4.5, 4, 4.5),
-        },
-        buttons: {
-            width: '100%',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2,22%)',
-            justifyContent: 'center',
-            gridColumnGap: theme.spacing(2),
-            marginTop: theme.spacing(6),
-        },
-    }),
-)
+import { MaskColorVar, MaskDialog } from '@dimensiondev/maskbook-theme'
 
 export interface DeletePersonaDialogProps {
     open: boolean
@@ -35,7 +25,7 @@ const PasswordInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
         marginTop: theme.spacing(3),
     },
-    '& .MuiInputBase-input': {
+    [`& ${inputBaseClasses.input}`]: {
         width: '100%',
         borderRadius: 4,
         position: 'relative',
@@ -52,20 +42,19 @@ const PasswordInput = styled(InputBase)(({ theme }) => ({
 }))
 
 export const DeletePersonaDialog = memo(({ open, onClose, persona }: DeletePersonaDialogProps) => {
-    const classes = useStyles()
     return (
         <MaskDialog open={open} title="Delete Persona" onClose={onClose}>
-            <div className={classes.container}>
+            <DialogContent>
                 <Typography variant="caption" sx={{ wordBreak: 'break-all' }}>
                     Please confirm that you have deleted persona <Link>{persona.nickname}</Link> and entered your
                     password.
                 </Typography>
                 <PasswordInput />
-                <div className={classes.buttons}>
-                    <Button color="secondary">Cancel</Button>
-                    <Button>Confirm</Button>
-                </div>
-            </div>
+            </DialogContent>
+            <DialogActions>
+                <Button color="secondary">Cancel</Button>
+                <Button>Confirm</Button>
+            </DialogActions>
         </MaskDialog>
     )
 })

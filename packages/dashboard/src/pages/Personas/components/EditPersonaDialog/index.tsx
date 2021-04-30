@@ -1,9 +1,9 @@
 import { memo } from 'react'
-import { Button, createStyles, makeStyles, Typography } from '@material-ui/core'
+import { Button, createStyles, DialogActions, DialogContent, makeStyles, Typography } from '@material-ui/core'
 import { AuthorIcon, EditIcon } from '@dimensiondev/icons'
 import { MaskColorVar, MaskDialog } from '@dimensiondev/maskbook-theme'
 import type { PersonaProvider } from '../../settings'
-import type { Persona } from '../../../../../../maskbook/src/database'
+import type { Persona } from '@dimensiondev/maskbook-shared'
 import { PersonaLine } from '../PersonaLine'
 
 const useStyles = makeStyles((theme) =>
@@ -56,7 +56,7 @@ export const EditPersonaDialog = memo(({ open, onClose, persona, providers }: Ed
     const classes = useStyles()
     return (
         <MaskDialog open={open} title="Edit Persona" onClose={onClose}>
-            <div className={classes.container}>
+            <DialogContent className={classes.container}>
                 <AuthorIcon className={classes.author} />
                 <Typography variant="caption" classes={{ root: classes.name }}>
                     {persona.nickname}
@@ -67,11 +67,11 @@ export const EditPersonaDialog = memo(({ open, onClose, persona, providers }: Ed
                         return <PersonaLine key={provider.internalName} provider={provider} />
                     })}
                 </div>
-                <div className={classes.buttons}>
-                    <Button color="secondary">Cancel</Button>
-                    <Button>Confirm</Button>
-                </div>
-            </div>
+            </DialogContent>
+            <DialogActions>
+                <Button color="secondary">Cancel</Button>
+                <Button>Confirm</Button>
+            </DialogActions>
         </MaskDialog>
     )
 })
