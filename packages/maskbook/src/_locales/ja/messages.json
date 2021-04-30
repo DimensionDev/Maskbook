@@ -585,7 +585,6 @@
     "plugin_snapshot_current_result_title": "",
     "plugin_snapshot_download_report": "",
     "wallet_status_title": "アカウント",
-    "wallet_status_connect_with": "{{provider}} で接続する",
     "wallet_status_button_change": "変更",
     "wallet_status_button_disconnect": "接続を外す",
     "wallet_status_button_copy_address": "アドレスをコピー",
