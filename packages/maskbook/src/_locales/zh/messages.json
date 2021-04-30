@@ -504,6 +504,8 @@
     "plugin_ito_list_table_got": "",
     "plugin_ito_list_button_send": "",
     "plugin_ito_withdraw": "",
+    "plugin_ito_qualification_loading": "",
+    "plugin_ito_qualification_failed": "",
     "plugin_ito_withdrawn": "",
     "plugin_ito_your_swapped_amount": "",
     "plugin_ito_your_claimed_amount": "",
