@@ -6,6 +6,7 @@
     "lint:typecoverage": "type-coverage"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.15",
     "@balancer-labs/sor": "^1.0.0",
     "@dimensiondev/common-protocols": "1.6.0-20201027083702-d0ae6e2",
     "@dimensiondev/contracts": "workspace:*",

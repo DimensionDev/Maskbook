@@ -1,51 +1,35 @@
-import { request, gql } from 'graphql-request'
 import { SUBGRAPH_URI } from './constants'
+import { HttpLink, gql, ApolloClient, InMemoryCache } from '@apollo/client'
 import type { GetListingData } from './types'
-import type { GetAllListingsData } from './types'
+
+const link = new HttpLink({ uri: SUBGRAPH_URI, useGETForQueries: true })
+
+const client = new ApolloClient({
+    cache: new InMemoryCache(),
+    link: link,
+})
 
 const createQuery = (name: string) => {
     const query = gql`
     {
-        ideaTokens(where: { name: "${name}" }) {
-            rank
-            dayChange
-	        latestPricePoint {
-	            price
-	        }
+        ideaMarkets(where:{name:"Twitter"}) {
+            tokens(where:{name:"${name}"}) {
+                rank
+                dayChange
+	            latestPricePoint {
+	                price
+	            }
+            }
         }
     }`
     return query
 }
 
 export async function getListing(username: string): Promise<GetListingData> {
-    const result = await request(SUBGRAPH_URI, createQuery(username))
-
+    const result = ((await client.query({ query: createQuery(username) })) as any).data.ideaMarkets[0]
     return {
-        rank: result!.ideaTokens[0]!.rank,
-        dayChange: result!.ideaTokens[0]!.dayChange,
-        price: result!.ideaTokens[0]!.latestPricePoint!.price,
+        rank: result!.tokens[0]!.rank,
+        dayChange: result!.tokens[0]!.dayChange,
+        price: result!.tokens[0]!.latestPricePoint!.price,
     }
-}
-
-const allListings = gql`
-    {
-        ideaTokens {
-            name
-            rank
-            dayChange
-            latestPricePoint {
-                price
-            }
-        }
-    }
-`
-
-interface ReturnedObject {
-    ideaTokens: GetAllListingsData[]
-}
-
-export async function getAllListings(): Promise<ReturnedObject> {
-    const result: ReturnedObject = await request(SUBGRAPH_URI, allListings)
-
-    return result
 }

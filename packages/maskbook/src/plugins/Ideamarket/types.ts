@@ -1,4 +1,3 @@
-
 export interface GetListingData {
     rank: number
     dayChange: number
