@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'hidden',
     },
     topBox: {
-        backgroundColor: theme.palette.mode === 'light' ? 'white' : null,
+        backgroundColor: theme.palette.mode === 'light' ? 'white' : undefined,
     },
     listButton: {
         backgroundColor: '#2946ba',
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
         color: 'white',
     },
     bottomText: {
-        fontSize: [12, '!important'],
+        fontSize: '12px !important',
     },
 }))
 

@@ -1,5 +1,6 @@
 import NotListed from './NotListed'
 import Listed from './Listed'
+import type { Dispatch, SetStateAction } from 'react'
 
 interface ListingProps {
     username: string

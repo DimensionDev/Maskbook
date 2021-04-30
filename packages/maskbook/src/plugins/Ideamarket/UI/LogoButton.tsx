@@ -3,7 +3,7 @@ import { makeStyles, IconButton, Typography } from '@material-ui/core'
 import Listing from './Listing'
 import { IdeaLogo, IdeaLogoGray } from './assets'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         display: 'flex',
         justifyContent: 'flex-end',

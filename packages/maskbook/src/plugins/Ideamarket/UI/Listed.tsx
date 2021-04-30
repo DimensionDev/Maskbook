@@ -2,25 +2,27 @@ import { Typography, Button, Box, makeStyles } from '@material-ui/core'
 import type { Dispatch, SetStateAction, SyntheticEvent } from 'react'
 
 const useStyles = makeStyles((theme) => ({
-    priceText: {
-        fontSize: '16px',
-        lineHeight: '19px',
-        fontFamily: 'Inter',
+    root: {
+        display: 'block',
+        width: '160px',
+        borderRadius: '10px',
+        boxShadow: '0px 0px 3px 1px #ADADAD',
+        marginRight: '10%',
+        overflow: 'hidden',
+        zIndex: 1,
     },
     button: {
-        backgroundColor: '#3045B4',
-        borderRadius: '12px',
-        width: '70px',
-        height: '37px',
+        backgroundColor: '#2946ba',
+        borderRadius: '10px',
+        margin: theme.spacing(1),
+        width: '53%',
         '&:hover': {
-            backgroundColor: '#4355b1',
+            backgroundColor: '#415bc3',
         },
     },
     buttonText: {
-        color: '#EEEEEE',
-        fontWeight: 'bold',
-        fontSize: '16px',
-        lineHeight: '19px',
+        textTransform: 'none',
+        color: 'white',
     },
 }))
 
@@ -39,54 +41,24 @@ export default function Listed(props: ListedProps) {
     }
 
     return (
-        <Box
-            boxShadow="0px 0px 4px 1px rgba(0, 0, 0, 0.25)"
-            width={190}
-            height={59}
-            overflow="hidden"
-            zIndex={1}
-            boxSizing="border-box">
-            <Box
-                onMouseEnter={() => props.setExtendedHover(true)}
-                onMouseLeave={() =>
-                    setTimeout(() => {
-                        props.setExtendedHover(false)
-                    }, 200)
-                }
-                component="div"
-                boxSizing="border-box"
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                paddingY={1.375}
-                paddingX={3.25}
-                width="100%"
-                height="100%"
-                bgcolor="#F7F7F7"
-                borderRadius={0.8}
-                marginRight={'10%'}>
-                <Box
-                    component="div"
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    color="#58636B"
-                    width="50%">
-                    <Typography color="inherit" className={classes.priceText}>
-                        ${props.price}
-                    </Typography>
-                </Box>
-                <Box component="div" display="flex" justifyContent="space-between" alignItems="center" width="50%">
-                    <Button
-                        className={classes.button}
-                        onClick={clicked}
-                        href={`https://ideamarket.io/i/twitter/${props.username}`}
-                        target="_blank"
-                        rel="noopener">
-                        <Typography className={classes.buttonText}>Buy</Typography>
-                    </Button>
-                </Box>
+        <div
+            className={classes.root}
+            onMouseEnter={() => props.setExtendedHover(true)}
+            onMouseLeave={() =>
+                setTimeout(() => {
+                    props.setExtendedHover(false)
+                }, 200)
+            }>
+            <Box display="flex" bgcolor="#f7f7f7" justifyContent="center">
+                <Button
+                    onClick={clicked}
+                    className={classes.button}
+                    href={`https://app.ideamarket.io/i/twitter/${props.username}`}
+                    target="_blank"
+                    rel="noopener">
+                    <Typography className={classes.buttonText}>Buy</Typography>
+                </Button>
             </Box>
-        </Box>
+        </div>
     )
 }

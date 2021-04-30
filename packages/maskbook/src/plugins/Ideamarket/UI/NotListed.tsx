@@ -12,10 +12,6 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'hidden',
         zIndex: 1,
     },
-    topBox: {
-        backgroundColor: '#f7f7f7',
-        overflow: 'hidden',
-    },
     listButton: {
         backgroundColor: '#2946ba',
         borderRadius: '10px',
@@ -25,21 +21,9 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: '#415bc3',
         },
     },
-    topText: {
-        margin: theme.spacing(1),
-        color: '#2946ba',
-    },
     buttonText: {
         textTransform: 'none',
         color: 'white',
-    },
-    bottomText: {
-        fontSize: '12 px !important',
-        color: 'black',
-    },
-    divider: {
-        borderColor: 'black',
-        height: 'auto',
     },
 }))
 
