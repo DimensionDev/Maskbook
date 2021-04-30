@@ -1,8 +1,8 @@
-import type { EthStatusReporter } from '../'
+import type { Plugin } from '../'
 import { getPluginDefine } from '../manager/store'
 
 /** @internal */
-export function __meetEthChainRequirement(id: string, reporter: EthStatusReporter): boolean {
+export function __meetEthChainRequirement(id: string, reporter: Plugin.__Host.EthStatusReporter): boolean {
     const plugin = getPluginDefine(id)
     if (!plugin) return false
 

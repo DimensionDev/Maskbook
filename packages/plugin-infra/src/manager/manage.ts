@@ -1,4 +1,4 @@
-import type { Plugin, PluginHost } from '../types'
+import type { Plugin } from '../types'
 import { __meetEthChainRequirement } from '../utils/internal'
 import { getPluginDefine, registeredPluginIDs } from './store'
 import { Emitter } from '@servie/events'
@@ -41,7 +41,7 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
         events,
     }
 
-    function startDaemon({ enabled, eth, signal }: PluginHost, extraCheck?: (id: string) => boolean) {
+    function startDaemon({ enabled, eth, signal }: Plugin.__Host.Host, extraCheck?: (id: string) => boolean) {
         const off = eth.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
         const off2 = enabled.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
 

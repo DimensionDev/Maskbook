@@ -1,7 +1,7 @@
 import { ALL_EVENTS } from '@servie/events'
 import { useSubscription, Subscription } from 'use-subscription'
 import { createManager } from './manage'
-import type { Plugin, PluginHost } from '../types'
+import type { Plugin } from '../types'
 
 const { activated, startDaemon, events } = createManager({
     getLoader: (plugin) => plugin.Dashboard,
@@ -14,6 +14,6 @@ const subscription: Subscription<Plugin.Dashboard.Definition[]> = {
 export function useActivatedPluginsDashboard() {
     return useSubscription(subscription)
 }
-export function startPluginDashboard(host: PluginHost) {
+export function startPluginDashboard(host: Plugin.__Host.Host) {
     startDaemon(host)
 }
