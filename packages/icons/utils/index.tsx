@@ -23,5 +23,5 @@ export function createIcon(
         return <SvgIcon viewBox={viewBox} {...props} ref={ref} children={svg} sx={style} />
     } as any
     Icon.displayName = `Icon (${name})`
-    return memo(forwardRef(Icon)) as typeof SvgIcon
+    return (memo(forwardRef(Icon)) as unknown) as typeof SvgIcon
 }
