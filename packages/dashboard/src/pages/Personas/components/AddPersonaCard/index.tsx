@@ -31,7 +31,7 @@ const NameInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
         marginTop: theme.spacing(3),
     },
-    [`& ${inputBaseClasses.input}`]: {
+    [`& .${inputBaseClasses.input}`]: {
         width: '100%',
         borderRadius: 4,
         position: 'relative',
