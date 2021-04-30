@@ -622,15 +622,6 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
-                ) : !ifQualified ? (
-                    <ActionButton
-                        onClick={retryIfQualified}
-                        loading={loadingIfQualified}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t(loadingIfQualified ? 'plugin_ito_qualification_loading' : 'plugin_ito_qualification_failed')}
-                    </ActionButton>
                 ) : isBuyer ? (
                     <Grid container spacing={2}>
                         {hasLockTime ? (
@@ -678,6 +669,15 @@ export function ITO(props: ITO_Props) {
                             </ActionButton>
                         </Grid>
                     </Grid>
+                ) : !ifQualified ? (
+                    <ActionButton
+                        onClick={retryIfQualified}
+                        loading={loadingIfQualified}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
+                        {t(loadingIfQualified ? 'plugin_ito_qualification_loading' : 'plugin_ito_qualification_failed')}
+                    </ActionButton>
                 ) : listOfStatus.includes(ITO_Status.expired) ? (
                     <ActionButton
                         disabled

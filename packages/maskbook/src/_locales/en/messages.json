@@ -504,7 +504,7 @@
     "plugin_ito_list_table_got": "Balance",
     "plugin_ito_list_button_send": "Send",
     "plugin_ito_withdraw": "Withdraw",
-    "plugin_ito_qualification_loading": "Verifying qualification…",
+    "plugin_ito_qualification_loading": "Verify qualification…",
     "plugin_ito_qualification_failed": "Not Qualified",
     "plugin_ito_withdrawn": "Withdrawn",
     "plugin_ito_your_swapped_amount": "You swapped {{amount}} {{symbol}}",
