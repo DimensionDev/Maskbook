@@ -11,7 +11,6 @@ export const PersonaSetup = of({
     args: {
         provider: {
             internalName: 'twitter.com',
-            network: 'twitter.com',
             connected: false,
         },
     },
