@@ -781,9 +781,7 @@ function ITO_LoadingFailUI({
 }
 
 export function ITO_ConnectMetaMask() {
-    return (
-        <ITO_LoadingFailUI retryPoolPayload={async () => await Services.Ethereum.connectMetaMask()} isConnectMetaMask />
-    )
+    return <ITO_LoadingFailUI retryPoolPayload={() => Services.Ethereum.connectMetaMask()} isConnectMetaMask />
 }
 
 export class ITO_LoadingFail extends Component<{ retryPoolPayload: () => void }> {
