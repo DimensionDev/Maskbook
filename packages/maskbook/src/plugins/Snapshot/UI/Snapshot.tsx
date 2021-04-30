@@ -103,6 +103,7 @@ export function Snapshot() {
             <CardContent className={classes.content}>
                 <Tabs
                     className={classes.tabs}
+                    indicatorColor="primary"
                     textColor="primary"
                     variant="fullWidth"
                     value={tabIndex}

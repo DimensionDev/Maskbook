@@ -40,7 +40,7 @@ export default function WalletLine(props: WalletLineProps) {
     return (
         <>
             <div className={classNames(classes.wrapper, { [classes.cursor]: !!onClick })} onClick={onClick}>
-                <FormControl className={classes.control}>
+                <FormControl variant="standard" className={classes.control}>
                     <Typography className={classes.text} variant={invert ? 'body1' : 'overline'}>
                         {line1}
                     </Typography>
