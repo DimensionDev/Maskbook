@@ -16,6 +16,7 @@ import type { DataProvider, Trending } from '../../types'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import { Linking } from './Linking'
 import { formatEthereumAddress } from '../../../Wallet/formatter'
+import { CoinMetadataTags } from './CoinMetadataTags'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -42,12 +43,6 @@ const useStyles = makeStyles((theme) =>
             display: 'inline-block',
             whiteSpace: 'nowrap',
             paddingRight: theme.spacing(1),
-            '&:last-child': {
-                paddingRight: 0,
-            },
-        },
-        tag: {
-            paddingRight: theme.spacing(2),
             '&:last-child': {
                 paddingRight: 0,
             },
@@ -136,9 +131,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                {trending.coin.tags.map((x, i) => (
-                                    <Linking key={i} href={x} TypographyProps={{ className: classes.tag }} />
-                                ))}
+                                <CoinMetadataTags tags={trending.coin.tags} />
                             </TableCell>
                         </TableRow>
                     ) : null}
