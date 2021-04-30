@@ -623,8 +623,13 @@ export function ITO(props: ITO_Props) {
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : !ifQualified ? (
-                    <ActionButton disabled variant="contained" size="large" className={classes.actionButton}>
-                        {t('plugin_ito_qualification_failed')}
+                    <ActionButton
+                        onClick={retryIfQualified}
+                        loading={loadingIfQualified}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
+                        {t(loadingIfQualified ? 'plugin_ito_qualification_loading' : 'plugin_ito_qualification_failed')}
                     </ActionButton>
                 ) : isBuyer ? (
                     <Grid container spacing={2}>
