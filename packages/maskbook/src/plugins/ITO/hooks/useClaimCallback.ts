@@ -1,3 +1,4 @@
+import { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
 import stringify from 'json-stable-stringify'
 import type { TransactionReceipt } from 'web3-core'
@@ -33,7 +34,34 @@ export function useClaimCallback(pids: string[]) {
             value: '0',
         }
 
-        // step 1: estimate gas
+        // step 1: check if already claimed
+        try {
+            const availabilityList = await Promise.all(
+                pids.map((pid) =>
+                    ITO_Contract.methods.check_availability(pid).call({
+                        from: account,
+                    }),
+                ),
+            )
+
+            const isClaimed = availabilityList.some((availability) => new BigNumber(availability.swapped).isZero())
+
+            if (isClaimed) {
+                setClaimState({
+                    type: TransactionStateType.FAILED,
+                    error: new Error('Already Claimed'),
+                })
+                return
+            }
+        } catch (e) {
+            setClaimState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Failed to check availability.'),
+            })
+            return
+        }
+
+        // step 2: estimate gas
         const estimatedGas = await ITO_Contract.methods
             .claim(pids)
             .estimateGas(config)
@@ -45,7 +73,7 @@ export function useClaimCallback(pids: string[]) {
                 throw error
             })
 
-        // step 2: blocking
+        // step 3: blocking
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = ITO_Contract.methods.claim(pids).send({
                 gas: addGasMargin(estimatedGas).toFixed(),

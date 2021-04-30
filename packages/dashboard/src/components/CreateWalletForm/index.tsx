@@ -45,7 +45,7 @@ export function CreateWalletForm(props: CreateWalletFormProps) {
 
     return (
         <Container>
-            <FormContainer>
+            <FormContainer variant="standard">
                 <Select
                     classes={{ filled: classes.filled }}
                     variant="filled"

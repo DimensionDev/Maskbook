@@ -1,5 +1,6 @@
 import type { FC } from 'react'
 import { CardActions, createStyles, Link, makeStyles, Typography } from '@material-ui/core'
+import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { MaskbookTextIcon } from '../../../../resources/MaskbookIcon'
 import { getEnumAsArray } from '../../../../utils/enum'
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => {
     })
 })
 
-export interface TradeFooterProps {
+export interface TradeFooterProps extends withClasses<'footer'> {
     showDataProviderIcon?: boolean
     showTradeProviderIcon?: boolean
     dataProvider?: DataProvider
@@ -54,17 +55,18 @@ export interface TradeFooterProps {
     onTradeProviderChange?: (option: FootnoteMenuOption) => void
 }
 
-export const TradeFooter: FC<TradeFooterProps> = ({
-    showDataProviderIcon = false,
-    showTradeProviderIcon = false,
-    dataProvider,
-    tradeProvider,
-    dataProviders = [],
-    tradeProviders = [],
-    onDataProviderChange,
-    onTradeProviderChange,
-}) => {
-    const classes = useStyles()
+export const TradeFooter: FC<TradeFooterProps> = (props) => {
+    const {
+        showDataProviderIcon = false,
+        showTradeProviderIcon = false,
+        dataProvider,
+        tradeProvider,
+        dataProviders = [],
+        tradeProviders = [],
+        onDataProviderChange,
+        onTradeProviderChange,
+    } = props
+    const classes = useStylesExtends(useStyles(), props)
     const dataProviderOptions = showDataProviderIcon
         ? getEnumAsArray(DataProvider).filter((x) => dataProviders.includes(x.value))
         : []

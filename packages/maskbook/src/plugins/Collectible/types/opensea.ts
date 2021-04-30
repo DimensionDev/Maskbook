@@ -24,6 +24,10 @@ export interface OpenSeaResponse extends OpenSeaAsset {
     creator?: OpenSeaCustomAccount
     traits: OpenSeaCustomTrait[]
     endTime?: string
+    top_ownerships: {
+        owner: OpenSeaCustomAccount
+        quantity: string
+    }[]
 }
 
 export interface OpenSeaAssetEventAccount {

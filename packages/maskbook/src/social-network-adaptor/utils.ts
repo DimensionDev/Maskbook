@@ -1,20 +1,15 @@
-import { activatedSocialNetworkUI } from '../social-network/ui'
 import { twitterBase } from './twitter.com/base'
 import { facebookBase } from './facebook.com/base'
 import { instagramBase } from './instagram.com/base'
+import { CurrentSNSNetwork } from '@dimensiondev/mask-plugin-infra'
+import type { SocialNetwork } from '../social-network/types'
 
-export enum SupportedNetworks {
-    Facebook = 1,
-    Twitter,
-    Instagram,
-}
-export function getNetwork() {
+export function getCurrentSNSNetwork(current: SocialNetwork.Base['networkIdentifier']) {
     const table = {
-        [twitterBase.networkIdentifier]: SupportedNetworks.Twitter,
-        [facebookBase.networkIdentifier]: SupportedNetworks.Facebook,
-        [instagramBase.networkIdentifier]: SupportedNetworks.Instagram,
+        [twitterBase.networkIdentifier]: CurrentSNSNetwork.Twitter,
+        [facebookBase.networkIdentifier]: CurrentSNSNetwork.Facebook,
+        [instagramBase.networkIdentifier]: CurrentSNSNetwork.Instagram,
     }
-    const current = activatedSocialNetworkUI.networkIdentifier
     if (current in table) return table[current]
-    return null
+    return CurrentSNSNetwork.Unknown
 }

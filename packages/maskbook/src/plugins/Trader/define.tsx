@@ -3,7 +3,7 @@ import {
     TypedMessage,
     isTypedMessageAnchor,
     TypedMessageAnchor,
-    TypedMessageCompound,
+    TypedMessageTuple,
 } from '../../protocols/typed-message'
 import { makeTypedMessageCashTrending } from './messages/TypedMessageCashTrending'
 import { TagInspector } from './UI/trending/TagInspector'
@@ -23,7 +23,7 @@ export const TraderPluginDefine: PluginConfig = {
     identifier: PLUGIN_IDENTIFIER,
     stage: PluginStage.Production,
     scope: PluginScope.Public,
-    messageProcessor(message: TypedMessageCompound) {
+    messageProcessor(message: TypedMessageTuple) {
         return {
             ...message,
             items: message.items.map((m: TypedMessage) => (isCashTagMessage(m) ? makeTypedMessageCashTrending(m) : m)),
