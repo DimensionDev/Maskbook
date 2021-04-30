@@ -1,5 +1,6 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
 import { EditPersonaDialog as C } from '../src/pages/Personas/components/EditPersonaDialog'
+import { action } from '@storybook/addon-actions'
 
 const { meta, of } = story(C)
 
@@ -21,6 +22,6 @@ export const EditPersonaDialog = of({
         ],
         nickname: 'nuanyang233@gmail.com',
         open: true,
-        onClose: () => console.log('close'),
+        onClose: () => action('onClose'),
     },
 })

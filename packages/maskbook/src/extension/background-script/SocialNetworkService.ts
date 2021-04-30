@@ -9,9 +9,7 @@ import { SetupGuideStep } from '../../components/InjectedComponents/SetupGuide'
 import { independentRef } from '../../components/DataSource/useMyPersonas'
 
 export const getDefinedSocialNetworkUIs = async () => {
-    const definedSocialNetworkUIsValue = definedSocialNetworkUIs.values()
-
-    return [...definedSocialNetworkUIsValue].map(({ networkIdentifier }) => {
+    return [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {
         return {
             networkIdentifier,
         }
