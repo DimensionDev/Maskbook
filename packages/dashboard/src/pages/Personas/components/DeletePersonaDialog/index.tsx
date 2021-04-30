@@ -9,14 +9,13 @@ import {
     inputBaseClasses,
 } from '@material-ui/core'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
-import type { Persona } from '@dimensiondev/maskbook-shared'
 import { memo } from 'react'
 import { MaskColorVar, MaskDialog } from '@dimensiondev/maskbook-theme'
 
 export interface DeletePersonaDialogProps {
     open: boolean
     onClose: () => void
-    persona: Persona
+    nickname?: string
 }
 
 const PasswordInput = styled(InputBase)(({ theme }) => ({
@@ -41,13 +40,12 @@ const PasswordInput = styled(InputBase)(({ theme }) => ({
     },
 }))
 
-export const DeletePersonaDialog = memo(({ open, onClose, persona }: DeletePersonaDialogProps) => {
+export const DeletePersonaDialog = memo(({ open, onClose, nickname }: DeletePersonaDialogProps) => {
     return (
         <MaskDialog open={open} title="Delete Persona" onClose={onClose}>
             <DialogContent>
                 <Typography variant="caption" sx={{ wordBreak: 'break-all' }}>
-                    Please confirm that you have deleted persona <Link>{persona.nickname}</Link> and entered your
-                    password.
+                    Please confirm that you have deleted persona <Link>{nickname}</Link> and entered your password.
                 </Typography>
                 <PasswordInput />
             </DialogContent>

@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) =>
 export interface PersonaSetupProps {
     provider: {
         internalName: string
-        network: string
         connected: boolean
     }
     onConnect: () => void

@@ -1,18 +1,16 @@
-import { Tab, Tabs, createStyles, Box } from '@material-ui/core'
+import { Tab, Tabs, createStyles, Box, makeStyles } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
 import { useEffect, useMemo, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import { capitalize, compact, head, isEmpty } from 'lodash-es'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { PersonaSetup } from './components/PersonaSetup'
-import { useDefinedSocialNetworkUIs } from './api'
+import { useDefinedSocialNetworkUIs, useMyPersonas } from './api'
 import { useConnectSocialNetwork } from './hooks/useConnectSocialNetwork'
 import { AuthorIcon } from '@dimensiondev/icons'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaState } from './hooks/usePersonaState'
-import { useMyPersonas } from '../../../../maskbook/src/components/DataSource/useMyPersonas'
-import { useValueRef } from '../../../../maskbook/src/utils/hooks/useValueRef'
+import { useValueRef } from '@dimensiondev/maskbook-shared'
 import { currentPersonaSettings, PersonaInfo } from './settings'
 import stringify from 'json-stable-stringify'
 
@@ -40,8 +38,6 @@ export default function Personas() {
     const definedSocialNetworkUIs = useDefinedSocialNetworkUIs()
     const myPersonas = useMyPersonas()
     const currentPersona = useValueRef(currentPersonaSettings)
-
-    const definedSocialNetworkProviders = [...definedSocialNetworkUIs.values()]
     const personas = useMemo(() => {
         return myPersonas
             .sort((a, b) => {
@@ -52,7 +48,7 @@ export default function Personas() {
             .map((persona) => {
                 const profiles = persona ? [...persona.linkedProfiles] : []
                 const providers = compact(
-                    definedSocialNetworkProviders.map((i) => {
+                    definedSocialNetworkUIs.map((i) => {
                         const profile = profiles.find(([key]) => key.network === i.networkIdentifier)
                         if (i.networkIdentifier === 'localhost') return null
                         return {
@@ -67,11 +63,11 @@ export default function Personas() {
 
                 return {
                     identifier: persona.identifier.toText(),
-                    persona: persona,
+                    nickname: persona.nickname,
                     providers: providers,
                 }
             })
-    }, [myPersonas, definedSocialNetworkProviders])
+    }, [myPersonas, definedSocialNetworkUIs])
 
     const currentPersonaInfo = useMemo(() => {
         return JSON.parse(currentPersona) as PersonaInfo
@@ -101,7 +97,7 @@ export default function Personas() {
             primaryAction={<AuthorIcon onClick={toggleDrawer} style={{ fill: MaskColorVar.secondaryBackground }} />}>
             <Box className={classes.container}>
                 <TabContext value={activeTab}>
-                    <Tabs value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
+                    <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
                         {currentPersonaInfo?.providers?.map(({ internalName }) => (
                             <Tab
                                 key={internalName}

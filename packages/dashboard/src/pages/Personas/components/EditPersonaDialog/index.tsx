@@ -3,7 +3,6 @@ import { Button, createStyles, DialogActions, DialogContent, makeStyles, Typogra
 import { AuthorIcon, EditIcon } from '@dimensiondev/icons'
 import { MaskColorVar, MaskDialog } from '@dimensiondev/maskbook-theme'
 import type { PersonaProvider } from '../../settings'
-import type { Persona } from '@dimensiondev/maskbook-shared'
 import { PersonaLine } from '../PersonaLine'
 
 const useStyles = makeStyles((theme) =>
@@ -48,23 +47,23 @@ const useStyles = makeStyles((theme) =>
 export interface EditPersonaDialogProps {
     open: boolean
     onClose: () => void
-    persona: Persona
     providers: PersonaProvider[]
+    nickname?: string
 }
 
-export const EditPersonaDialog = memo(({ open, onClose, persona, providers }: EditPersonaDialogProps) => {
+export const EditPersonaDialog = memo(({ open, onClose, nickname, providers }: EditPersonaDialogProps) => {
     const classes = useStyles()
     return (
         <MaskDialog open={open} title="Edit Persona" onClose={onClose}>
             <DialogContent className={classes.container}>
                 <AuthorIcon className={classes.author} />
                 <Typography variant="caption" classes={{ root: classes.name }}>
-                    {persona.nickname}
+                    {nickname}
                     <EditIcon className={classes.edit} />
                 </Typography>
                 <div className={classes.content}>
                     {providers.map((provider) => {
-                        return <PersonaLine key={provider.internalName} provider={provider} />
+                        return <PersonaLine key={provider.internalName} {...provider} />
                     })}
                 </div>
             </DialogContent>

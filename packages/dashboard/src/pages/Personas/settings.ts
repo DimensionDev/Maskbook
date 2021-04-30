@@ -1,5 +1,5 @@
+// TODO: Replace to new settings utils
 import { createInternalSettings } from '../../../../maskbook/src/settings/createSettings'
-import type { Persona } from '../../../../maskbook/src/database'
 import type { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 
 export interface PersonaProvider {
@@ -12,7 +12,6 @@ export interface PersonaProvider {
 
 export interface PersonaInfo {
     identifier?: string
-    persona?: Persona
     providers?: PersonaProvider[]
 }
 

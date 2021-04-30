@@ -3,14 +3,12 @@ import { Box, Link, Typography } from '@material-ui/core'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 
 export interface PersonaLineProps {
-    provider: {
-        internalName: string
-        connected: boolean
-        userId?: string
-    }
+    internalName: string
+    connected: boolean
+    userId?: string
 }
 
-export const PersonaLine = memo<PersonaLineProps>(({ provider: { userId, internalName, connected } }) => {
+export const PersonaLine = memo<PersonaLineProps>(({ userId, internalName, connected }) => {
     return (
         <Box display="flex" justifyContent="space-between">
             <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>

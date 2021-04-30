@@ -3,9 +3,9 @@ import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { SettingsIcon } from '@dimensiondev/icons'
 import { IconButton, MenuItem, Typography } from '@material-ui/core'
-import { useMenu } from '../../../../../../maskbook/src/utils/hooks/useMenu'
 import { PersonaLine } from '../PersonaLine'
-import type { Persona } from '../../../../../../maskbook/src/database'
+import { useMenu } from '@dimensiondev/maskbook-shared'
+//TODO: replace to new settings
 import type { PersonaProvider } from '../../settings'
 import { EditPersonaDialog } from '../EditPersonaDialog'
 import { DeletePersonaDialog } from '../DeletePersonaDialog'
@@ -50,13 +50,13 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface PersonaCardProps {
-    persona: Persona
+    nickname?: string
     active?: boolean
     providers: PersonaProvider[]
     onClick(): void
 }
 
-export const PersonaCard = memo(({ persona, providers, active = false, onClick }: PersonaCardProps) => {
+export const PersonaCard = memo(({ nickname, providers, active = false, onClick }: PersonaCardProps) => {
     const classes = useStyles({ active })
     const [editDialogOpen, setEditDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -77,14 +77,14 @@ export const PersonaCard = memo(({ persona, providers, active = false, onClick }
             <div className={classes.status} />
             <div style={{ flex: 1 }}>
                 <div className={classes.header}>
-                    <Typography variant="subtitle2">{persona.nickname}</Typography>
+                    <Typography variant="subtitle2">{nickname}</Typography>
                     <IconButton onClick={openMenu} className={classes.setting}>
                         <SettingsIcon fontSize="inherit" style={{ fill: MaskColorVar.textPrimary }} />
                     </IconButton>
                 </div>
                 <div className={classes.content}>
                     {providers.map((provider) => {
-                        return <PersonaLine key={provider.internalName} provider={provider} />
+                        return <PersonaLine key={provider.internalName} {...provider} />
                     })}
                 </div>
             </div>
@@ -92,10 +92,14 @@ export const PersonaCard = memo(({ persona, providers, active = false, onClick }
             <EditPersonaDialog
                 open={editDialogOpen}
                 onClose={() => setEditDialogOpen(false)}
-                persona={persona}
+                nickname={nickname}
                 providers={providers}
             />
-            <DeletePersonaDialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)} persona={persona} />
+            <DeletePersonaDialog
+                open={deleteDialogOpen}
+                onClose={() => setDeleteDialogOpen(false)}
+                nickname={nickname}
+            />
         </div>
     )
 })

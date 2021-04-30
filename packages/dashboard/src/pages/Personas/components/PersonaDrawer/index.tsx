@@ -2,9 +2,9 @@ import { memo, useCallback, useMemo, useState } from 'react'
 import { Box, Button, Drawer, makeStyles } from '@material-ui/core'
 import { PersonaState } from '../../hooks/usePersonaState'
 import { PersonaCard } from '../PersonaCard'
-import type { Persona } from '../../../../../../maskbook/src/database'
+//TODO: replace to new settings
 import type { PersonaInfo, PersonaProvider } from '../../settings'
-import { useValueRef } from '../../../../../../maskbook/src/utils/hooks/useValueRef'
+import { useValueRef } from '@dimensiondev/maskbook-shared'
 import { currentPersonaSettings } from '../../settings'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { AddPersonaCard } from '../AddPersonaCard'
@@ -41,8 +41,9 @@ const useStyles = makeStyles((theme) => ({
 
 export interface PersonaDrawer {
     personas: {
-        persona: Persona
+        identifier: string
         providers: PersonaProvider[]
+        nickname?: string
     }[]
 }
 
@@ -74,12 +75,12 @@ export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
             elevation={0}
             classes={{ root: classes.root, paper: classes.paper }}>
             {personas.map((item) => {
-                const { persona, providers } = item
+                const { identifier, nickname, providers } = item
                 return (
                     <PersonaCard
-                        active={persona.identifier.toText() === currentPersonIdentifier}
-                        key={persona.identifier.toText()}
-                        persona={persona}
+                        active={identifier === currentPersonIdentifier}
+                        key={identifier}
+                        nickname={nickname}
                         providers={providers}
                         onClick={() => onPersonaCardClick(item)}
                     />

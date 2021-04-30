@@ -6,12 +6,19 @@ import { delay } from '../../utils/utils'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
 import { SetupGuideStep } from '../../components/InjectedComponents/SetupGuide'
+import { independentRef } from '../../components/DataSource/useMyPersonas'
 
 export const getDefinedSocialNetworkUIs = async () => {
-    return definedSocialNetworkUIs
+    const definedSocialNetworkUIsValue = definedSocialNetworkUIs.values()
+
+    return [...definedSocialNetworkUIsValue].map(({ networkIdentifier }) => {
+        return {
+            networkIdentifier,
+        }
+    })
 }
 
-interface SocialNetworkProvider {
+export interface SocialNetworkProvider {
     internalName: string
     network: string
 }
@@ -28,4 +35,8 @@ export const connectSocialNetwork = async (identifier: string, provider: SocialN
     })
     await delay(100)
     home && browser.tabs.create({ active: true, url: home })
+}
+
+export const getMyPersonas = async () => {
+    return independentRef.myPersonasRef.value
 }
