@@ -51,6 +51,7 @@ export function PostListingDialog(props: PostListingDialogProps) {
         <InjectedDialog title="Post Listing" open={open} onClose={onClose} DialogProps={{ maxWidth: 'md' }}>
             <DialogContent className={classes.content}>
                 <Tabs
+                    indicatorColor="primary"
                     textColor="primary"
                     variant="fullWidth"
                     value={tabIndex}
