@@ -12,7 +12,7 @@ import {
     isTypedMessageEmpty,
     isTypedMessageText,
     TypedMessageText,
-} from '../../../protocols/typed-message'
+} from '@dimensiondev/maskbook-shared'
 
 /**
  * @example

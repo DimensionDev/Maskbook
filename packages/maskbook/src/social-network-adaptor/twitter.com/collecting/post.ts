@@ -13,10 +13,10 @@ import { postParser, postImagesParser } from '../utils/fetch'
 import { untilElementAvailable } from '../../../utils/dom'
 import {
     makeTypedMessageImage,
-    makeTypedMessageFromList,
+    makeTypedMessageTupleFromList,
     makeTypedMessageEmpty,
-    makeTypedMessageSuspended,
-    makeTypedMessageCompound,
+    makeTypedMessagePromise,
+    makeTypedMessageTuple,
     extractTextFromTypedMessage,
 } from '../../../protocols/typed-message'
 import type { Result } from 'ts-results'
@@ -129,12 +129,12 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, cance
         .then(() => postImagesParser(tweetNode))
         .then((urls) => {
             for (const url of urls) info.postMetadataImages.add(url)
-            if (urls.length) return makeTypedMessageFromList(...urls.map((x) => makeTypedMessageImage(x)))
+            if (urls.length) return makeTypedMessageTupleFromList(...urls.map((x) => makeTypedMessageImage(x)))
             return makeTypedMessageEmpty()
         })
         .catch(() => makeTypedMessageEmpty())
 
-    info.postMessage.value = makeTypedMessageCompound([...messages, makeTypedMessageSuspended(images)])
+    info.postMessage.value = makeTypedMessageTuple([...messages, makeTypedMessagePromise(images)])
 }
 
 function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo, cancel: AbortSignal) {

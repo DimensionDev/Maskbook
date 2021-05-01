@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
 import { PluginUI } from '../../plugins/PluginUI'
-import { makeTypedMessageCompound, isTypedMessageSuspended, isTypedMessageKnown } from '../../protocols/typed-message'
+import { makeTypedMessageTuple, isTypedMessagePromise, isWellKnownTypedMessages } from '@dimensiondev/maskbook-shared'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { allPostReplacementSettings } from '../../settings/settings'
 import { makeStyles, Theme } from '@material-ui/core'
@@ -38,7 +38,7 @@ export function PostReplacer(props: PostReplacerProps) {
         // replace all posts
         allPostReplacement ||
         // replace posts which enhanced by plugins
-        processedPostMessage.items.some((x) => !isTypedMessageKnown(x)) ||
+        processedPostMessage.items.some((x) => !isWellKnownTypedMessages(x)) ||
         // replace posts which encrypted by Mask
         postPayload.ok
 
@@ -51,9 +51,7 @@ export function PostReplacer(props: PostReplacerProps) {
     return shouldReplacePost ? (
         <span className={classes.root}>
             <DefaultTypedMessageRenderer
-                message={makeTypedMessageCompound(
-                    processedPostMessage.items.filter((x) => !isTypedMessageSuspended(x)),
-                )}
+                message={makeTypedMessageTuple(processedPostMessage.items.filter((x) => !isTypedMessagePromise(x)))}
             />
         </span>
     ) : null

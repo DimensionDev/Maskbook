@@ -7,9 +7,9 @@ import {
     TypedMessageText,
     TypedMessageAnchor,
     TypedMessageImage,
-    TypedMessageCompound,
+    TypedMessageTuple,
     TypedMessageUnknown,
-    TypedMessageSuspended,
+    TypedMessagePromise,
     registerTypedMessageRenderer,
     TypedMessageEmpty,
     makeTypedMessageText,
@@ -86,7 +86,7 @@ export const DefaultTypedMessageAnchorRenderer = memo(function DefaultTypedMessa
         </Typography>,
     )
 })
-registerTypedMessageRenderer('anchor', {
+registerTypedMessageRenderer('x-anchor', {
     component: DefaultTypedMessageAnchorRenderer,
     id: 'maskbook.anchor',
     priority: 0,
@@ -109,8 +109,8 @@ registerTypedMessageRenderer('image', {
     priority: 0,
 })
 
-export const DefaultTypedMessageCompoundRenderer = memo(function DefaultTypedMessageCompoundRenderer(
-    props: TypedMessageRendererProps<TypedMessageCompound>,
+export const DefaultTypedMessageTupleRenderer = memo(function DefaultTypedMessageTupleRenderer(
+    props: TypedMessageRendererProps<TypedMessageTuple>,
 ) {
     try {
         JSON.stringify(props.message.items)
@@ -131,8 +131,8 @@ export const DefaultTypedMessageCompoundRenderer = memo(function DefaultTypedMes
         </>
     )
 })
-registerTypedMessageRenderer('compound', {
-    component: DefaultTypedMessageCompoundRenderer,
+registerTypedMessageRenderer('tuple', {
+    component: DefaultTypedMessageTupleRenderer,
     id: 'maskbook.compound',
     priority: 0,
 })
@@ -160,7 +160,7 @@ registerTypedMessageRenderer('unknown', {
 })
 
 export const DefaultTypedMessageSuspendedRenderer = memo(function DefaultTypedMessageSuspendedRenderer(
-    props: TypedMessageRendererProps<TypedMessageSuspended>,
+    props: TypedMessageRendererProps<TypedMessagePromise>,
 ) {
     const { promise } = props.message
     const { loading, error, value } = useAsync(() => promise, [promise])
@@ -176,7 +176,7 @@ export const DefaultTypedMessageSuspendedRenderer = memo(function DefaultTypedMe
         ),
     )
 })
-registerTypedMessageRenderer('suspended', {
+registerTypedMessageRenderer('promise', {
     component: DefaultTypedMessageSuspendedRenderer,
     id: 'maskbook.suspended',
     priority: 0,

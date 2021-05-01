@@ -1,4 +1,5 @@
 import { Emitter } from '@servie/events'
+export { ALL_EVENTS } from '@servie/events'
 // Consider switch to libraries like Mobx if this file become too complex.
 export class ObservableWeakMap<K extends object, V> extends WeakMap<K, V> {
     declare __brand: 'Map'

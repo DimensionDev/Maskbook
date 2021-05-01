@@ -94,12 +94,13 @@ function config(opts: {
                 'xhr2-cookies': require.resolve('./miscs/package-overrides/xhr2-cookies'),
                 // Monorepo building speed optimization
                 // Those packages are also installed as dependencies so they appears in node_modules
-                // By aliasing them to the original position, we can speed up the compile (cause no need to wait for tsc)
+                // By aliasing them to the original position, we can speed up the compile because there is no need to wait tsc build them to the dist folder.
                 '@dimensiondev/dashboard': require.resolve('../dashboard/src/entry.tsx'),
-                '@dimensiondev/icons': require.resolve('../icons/index.ts'),
                 '@dimensiondev/maskbook-shared': require.resolve('../shared/src/index.ts'),
                 '@dimensiondev/maskbook-theme': require.resolve('../theme/src/theme.ts'),
-                '@dimensiondev/shared': require.resolve('../shared/src/index.ts'),
+                '@dimensiondev/icons': require.resolve('../icons/index.ts'),
+                '@dimensiondev/mask-plugin-infra': require.resolve('../plugin-infra/src/index.ts'),
+                '@dimensiondev/plugin-example': require.resolve('../plugins/example/src/index.ts'),
             },
             // Polyfill those Node built-ins
             fallback: {

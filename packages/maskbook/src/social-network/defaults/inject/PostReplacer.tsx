@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { PostInfoContext } from '../../../components/DataSource/usePostInfo'
+import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { PostReplacer, PostReplacerProps } from '../../../components/InjectedComponents/PostReplacer'
 import type { PostInfo } from '../../PostInfo'
 import { makeStyles } from '@material-ui/core'
@@ -30,13 +30,13 @@ export function injectPostReplacer<T extends string>(
             key: 'post-replacer',
             signal,
         }).render(
-            <PostInfoContext.Provider value={current}>
+            <PostInfoProvider post={current}>
                 <PostReplacerDefault
                     zipPost={() => zipPostF(current.rootNodeProxy)}
                     unZipPost={() => unzipPostF(current.rootNodeProxy)}
                     {...current}
                 />
-            </PostInfoContext.Provider>,
+            </PostInfoProvider>,
         )
     }
 }
