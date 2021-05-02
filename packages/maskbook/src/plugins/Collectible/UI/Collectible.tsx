@@ -248,6 +248,7 @@ export function Collectible(props: CollectibleProps) {
                 <CardContent className={classes.content}>
                     <Tabs
                         className={classes.tabs}
+                        indicatorColor="primary"
                         textColor="primary"
                         variant="fullWidth"
                         value={tabIndex}

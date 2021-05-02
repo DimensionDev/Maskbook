@@ -9,7 +9,7 @@ import {
     TypedMessage,
     makeTypedMessageText,
     makeTypedMessageImage,
-    makeTypedMessageCompound,
+    makeTypedMessageTuple,
 } from '../../../protocols/typed-message'
 import { clickSeeMore } from '../injection/PostInspector'
 import { startWatch } from '../../../utils/watcher'
@@ -93,7 +93,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                     nextTypedMessage.push(makeTypedMessageImage(url))
                 }
                 // parse post content
-                info.postMessage.value = makeTypedMessageCompound(nextTypedMessage)
+                info.postMessage.value = makeTypedMessageTuple(nextTypedMessage)
             }
             collectPostInfo()
             info.postPayload.value = deconstructPayload(
