@@ -7,7 +7,7 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
         zipPost(node) {
             const contentContainer = node.current.parentElement
             if (!contentContainer) return
-          
+
             const content = contentContainer.querySelector<HTMLDivElement>('[lang]')
             if (!content) return
 
