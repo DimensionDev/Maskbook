@@ -37,6 +37,7 @@
     "@material-ui/system": "5.0.0-alpha.34",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
+    "dhedge-sdk": "^0.0.10",
     "i18next": "^20.2.1",
     "jss": "10.5.1",
     "react": "=0.0.0-experimental-553440bd1",
