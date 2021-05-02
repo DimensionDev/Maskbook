@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "sideEffects": false,
   "devDependencies": {
-    "snowpack": "^3.2.2"
+    "snowpack": "^3.3.5"
   },
   "scripts": {
     "start": "snowpack dev",

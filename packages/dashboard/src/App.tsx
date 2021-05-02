@@ -6,6 +6,16 @@ import { StrictMode } from 'react'
 import i18n from 'i18next'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
 import { addDashboardI18N } from './locales'
+import './plugins'
+import {
+    startPluginDashboard,
+    createInjectHooksRenderer,
+    useActivatedPluginsDashboard,
+} from '@dimensiondev/mask-plugin-infra'
+import { ChainId } from '@dimensiondev/maskbook-shared'
+import { Emitter } from '@servie/events'
+
+const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 i18n.init({
     resources: {},
     keySeparator: false,
@@ -16,6 +26,12 @@ i18n.use(initReactI18next)
 addMaskThemeI18N(i18n)
 addDashboardI18N(i18n)
 applyMaskColorVars(document.body, 'light')
+// TODO:
+startPluginDashboard({
+    enabled: { events: new Emitter(), isEnabled: () => true },
+    eth: { current: () => ChainId.Mainnet, events: new Emitter() },
+})
+
 export function App() {
     return (
         <StrictMode>
@@ -27,6 +43,7 @@ export function App() {
                             <HashRouter>
                                 <Pages />
                             </HashRouter>
+                            <PluginRender />
                         </ErrorBoundary>
                     </MuiThemeProvider>
                 </StylesProvider>

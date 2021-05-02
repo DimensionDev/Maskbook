@@ -78,7 +78,7 @@ export function useThemeTwitterVariant() {
                         paddingLeft: 15,
                         paddingRight: 15,
                         boxShadow: 'none',
-                        [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                             '&': {
                                 height: '28px !important',
                                 minHeight: 'auto !important',
@@ -127,7 +127,7 @@ export const useInjectedDialogClassesOverwriteTwitter = makeStyles((theme) =>
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 display: 'block !important',
             },
         },
@@ -137,7 +137,7 @@ export const useInjectedDialogClassesOverwriteTwitter = makeStyles((theme) =>
         paper: {
             width: '600px !important',
             boxShadow: 'none',
-            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 '&': {
                     display: 'block !important',
                     borderRadius: '0 !important',
@@ -155,7 +155,7 @@ export const useInjectedDialogClassesOverwriteTwitter = makeStyles((theme) =>
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
             },
-            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 '&': {
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -166,7 +166,7 @@ export const useInjectedDialogClassesOverwriteTwitter = makeStyles((theme) =>
             },
         },
         dialogContent: {
-            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 display: 'flex',
                 flexDirection: 'column',
                 maxWidth: 600,
@@ -176,7 +176,7 @@ export const useInjectedDialogClassesOverwriteTwitter = makeStyles((theme) =>
         },
         dialogActions: {
             padding: '10px 15px',
-            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',

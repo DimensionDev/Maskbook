@@ -123,6 +123,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
 
         return usePortalShadowRoot((container) => (
             <Select
+                variant="standard"
                 MenuProps={{ container: props.DialogProps?.container ?? container }}
                 value={defaultIndex}
                 onChange={(e) => fn(e.target.value as number)}>
@@ -137,7 +138,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
 
     return (
         <>
-            <FormControl className={classes.line}>
+            <FormControl variant="standard" className={classes.line}>
                 <TextField
                     label={t('plugin_poll_question_hint')}
                     variant="filled"
@@ -149,7 +150,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
             <div className={classes.pollWrap}>
                 <div className={classes.optionsWrap}>
                     {options.map((option, index) => (
-                        <FormControl className={classes.line} key={index}>
+                        <FormControl variant="standard" className={classes.line} key={index}>
                             <TextField
                                 label={`${t('plugin_poll_options_hint')}${index + 1}`}
                                 variant="filled"

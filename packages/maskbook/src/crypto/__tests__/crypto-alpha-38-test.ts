@@ -1,5 +1,9 @@
 import * as c from '../crypto-alpha-38'
-import { makeTypedMessageText, TypedMessageCompound, TypedMessageUnknown } from '../../protocols/typed-message'
+import {
+    makeTypedMessageText,
+    makeTypedMessageTupleSerializable,
+    makeTypedMessageUnknown,
+} from '@dimensiondev/maskbook-shared'
 import { encodeText, encodeArrayBuffer, decodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { CryptoWorker } from '../../modules/workers'
@@ -52,10 +56,10 @@ test('Crypto alpha v38 Typed Message', () => {
     expect(c.typedMessageParse(text3)).toStrictEqual(textWith2Meta)
 
     // Test inputs that v38 refuse to resolve
-    const compound: TypedMessageCompound = { type: 'compound', items: [textWith2Meta], version: 1 }
+    const compound = makeTypedMessageTupleSerializable([textWith2Meta])
     expect(() => c.typedMessageStringify(compound)).toThrow()
 
-    const unk: TypedMessageUnknown = { type: 'unknown', version: 1 }
+    const unk = makeTypedMessageUnknown()
     expect(() => c.typedMessageStringify(unk)).toThrow()
 
     // Test bad style input

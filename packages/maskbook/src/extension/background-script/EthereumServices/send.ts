@@ -4,9 +4,11 @@ import * as Maskbook from './providers/Maskbook'
 import { sign } from './sign'
 import { createWeb3 } from './provider'
 import { signTransaction } from './signTransaction'
-import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
+import {
+    currentSelectedWalletProviderSettings,
+    currentWalletConnectChainIdSettings,
+} from '../../../plugins/Wallet/settings'
 import { ProviderType } from '../../../web3/types'
-import { currentWalletConnectChainIdSettings } from '../../../settings/settings'
 
 export async function send(
     payload: JsonRpcPayload,

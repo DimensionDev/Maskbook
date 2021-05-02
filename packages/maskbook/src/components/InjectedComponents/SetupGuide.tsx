@@ -418,6 +418,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                             <Hidden only="xs">
                                 <IconButton
                                     className={findUsernameClasses.button}
+                                    // @ts-expect-error https://github.com/mui-org/material-ui/pull/26064
                                     color={username ? 'primary' : 'default'}
                                     disabled={!username}>
                                     <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
