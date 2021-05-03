@@ -1,5 +1,5 @@
-import { useState, useCallback, useMemo, useEffect } from 'react'
-import { makeStyles, createStyles, Typography, DialogContent, Link } from '@material-ui/core'
+import React, { useState, useCallback, useMemo, useEffect } from 'react'
+import { makeStyles, createStyles, Typography, DialogContent, Link, Chip } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { Trans } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
@@ -10,16 +10,19 @@ import { ChainId, EthereumTokenType, EtherTokenDetailed, ERC20TokenDetailed } fr
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useDonateCallback } from '../hooks/useDonateCallback'
+import { useInvestCallback } from '../hooks/useInvestCallback'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import {
+    useRemoteControlledDialog,
+    useRemoteControlledDialogEvent,
+} from '../../../utils/hooks/useRemoteControlledDialog'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { Flags } from '../../../utils/flags'
-import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
+import { useERC20TokenDetailed } from '../../../web3/hooks/useERC20TokenDetailed'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { PluginDHedgeMessages } from '../messages'
 import { EthereumMessages } from '../../Ethereum/messages'
@@ -27,8 +30,9 @@ import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { GITCOIN_CONSTANT } from '../constants'
+import { DHEDGE_CONSTANT } from '../constants'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { PluginTraderMessages } from '../../Trader/messages'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -57,24 +61,25 @@ const useStyles = makeStyles((theme) =>
 
 export interface DonateDialogProps extends withClasses<never> {}
 
-export function DonateDialog(props: DonateDialogProps) {
+export function InvestDialog(props: DonateDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const [title, setTitle] = useState('')
+    const [name, setName] = useState('')
     const [address, setAddress] = useState('')
 
     // context
     const account = useAccount()
     const chainId = useChainId()
-    const BULK_CHECKOUT_ADDRESS = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
+    const BULK_CHECKOUT_ADDRESS = useConstant(DHEDGE_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
+    const TOKEN_LIST = useConstant(DHEDGE_CONSTANT, 'DHEDGE_TOKEN_ADDRESSES')
 
     //#region remote controlled dialog
     const [open, setDonationDialogOpen] = useRemoteControlledDialog(
-        PluginDHedgeMessages.events.donationDialogUpdated,
+        PluginDHedgeMessages.events.InvestDialogUpdated,
         (ev) => {
             if (ev.open) {
-                setTitle(ev.title)
+                setName(ev.name)
                 setAddress(ev.address)
             }
         },
@@ -87,7 +92,7 @@ export function DonateDialog(props: DonateDialogProps) {
     //#endregion
 
     //#region select token
-    const { value: etherTokenDetailed } = useEtherTokenDetailed()
+    const { value: etherTokenDetailed } = useERC20TokenDetailed(TOKEN_LIST[0])
     const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
     const [id] = useState(uuid())
     const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
@@ -104,9 +109,10 @@ export function DonateDialog(props: DonateDialogProps) {
         setSelectTokenDialogOpen({
             open: true,
             uuid: id,
-            disableEther: false,
+            disableEther: true,
             FixedTokenListProps: {
                 selectedTokens: token ? [token.address] : [],
+                whitelist: TOKEN_LIST,
             },
         })
     }, [id, token?.address])
@@ -131,7 +137,7 @@ export function DonateDialog(props: DonateDialogProps) {
     //#endregion
 
     //#region blocking
-    const [donateState, donateCallback, resetDonateCallback] = useDonateCallback(address ?? '', amount.toFixed(), token)
+    const [donateState, donateCallback, resetDonateCallback] = useInvestCallback(address ?? '', amount.toFixed(), token)
     //#endregion
 
     //#region transaction dialog
@@ -141,7 +147,7 @@ export function DonateDialog(props: DonateDialogProps) {
         .getShareLinkURL?.(
             token
                 ? [
-                      `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${
+                      `I just donated ${name} with ${formatBalance(amount, token.decimals)} ${cashTag}${
                           token.symbol
                       }. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
                       '#mask_io',
@@ -161,6 +167,10 @@ export function DonateDialog(props: DonateDialogProps) {
         },
     )
 
+    //#region Swap
+    const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
+    //#endregion
+
     // open the transaction dialog
     useEffect(() => {
         if (!token) return
@@ -169,7 +179,7 @@ export function DonateDialog(props: DonateDialogProps) {
             open: true,
             shareLink,
             state: donateState,
-            summary: `Donating ${formatBalance(amount, token.decimals)} ${token.symbol} for ${title}.`,
+            summary: `Donating ${formatBalance(amount, token.decimals)} ${token.symbol} for ${name}.`,
         })
     }, [donateState /* update tx dialog only if state changed */])
     //#endregion
@@ -194,7 +204,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     return (
         <div className={classes.root}>
-            <InjectedDialog open={open} onClose={onClose} title={title} DialogProps={{ maxWidth: 'xs' }}>
+            <InjectedDialog open={open} onClose={onClose} title={name} DialogProps={{ maxWidth: 'xs' }}>
                 <DialogContent>
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel
@@ -204,13 +214,25 @@ export function DonateDialog(props: DonateDialogProps) {
                             token={token}
                             onAmountChange={setRawAmount}
                             SelectTokenChip={{
-                                loading: loadingTokenBalance,
+                                // loading: loadingTokenBalance,
                                 ChipProps: {
                                     onClick: onSelectTokenChipClick,
                                 },
                             }}
                         />
                     </form>
+                    <Chip
+                        // classes={{
+                        //     root: classNames(classes.max, MaxChipProps?.classes?.root),
+                        //     ...MaxChipProps?.classes,
+                        // }}
+                        size="small"
+                        label="Get"
+                        clickable
+                        color="primary"
+                        variant="outlined"
+                        onClick={openSwapDialog}
+                    />
                     <Typography className={classes.tip} variant="body1">
                         <Trans
                             i18nKey="plugin_gitcoin_readme"
@@ -228,12 +250,12 @@ export function DonateDialog(props: DonateDialogProps) {
                     <EthereumWalletConnectedBoundary>
                         <EthereumERC20TokenApprovedBoundary
                             amount={amount.toFixed()}
-                            spender={BULK_CHECKOUT_ADDRESS}
+                            spender={address}
                             token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
                             <ActionButton
                                 className={classes.button}
                                 fullWidth
-                                disabled={!!validationMessage}
+                                // disabled={!!validationMessage}
                                 onClick={donateCallback}
                                 variant="contained">
                                 {validationMessage || t('plugin_gitcoin_donate')}

@@ -1,9 +1,11 @@
 import { useCallback } from 'react'
+import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
 import { makeStyles, createStyles, Card, Typography, Button, Grid } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePool } from '../hooks/usePool'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginDHedgeMessages } from '../messages'
+import { DHEDGE_POOL_URL } from '../constants'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -68,94 +70,73 @@ const useStyles = makeStyles((theme) =>
 )
 
 interface PreviewCardProps {
-    id: string
+    address: string
 }
 
 export function PreviewCard(props: PreviewCardProps) {
     const { t } = useI18N()
     const classes = useStyles()
-    const { value: grant, error, loading } = usePool(props.id)
-    console.log(grant, error, loading)
-    let body = `"{
-        "query": "query Fund($fundAddress: String!) {
-            fund(address: $fundAddress) {
-            address
-            name
-            isPrivate
-            managerAddress
-            managerName
-            balanceOfManager
-            poolDetails
-            totalSupply
-            totalValue
-            tokenPrice
-            performance
-            performanceMetrics {
-                day
-                week
-                month
-                quarter
-                halfyear
-            }
-            blockTime
-            score
-            riskFactor
-            managerFeeNumerator
-            leaderboardRank
-            sortinoRatio
-            downsideVolatility
-            badges {
-                name
-            }
-            fundComposition {
-                tokenName
-                amount
-                rate
-            }
-        }",
-        "variables": {"fundAddress":${props.id}}
-    }"`
+    const { value: pool, error, loading } = usePool(props.address)
+    console.log(pool, error, loading)
 
-    fetch('https://api.dhedge.org/graphql', {
-        body: body,
-        method: 'POST',
-        mode: 'cors',
-        credentials: 'omit',
-    })
-        .then(console.log)
-        .catch(console.log)
-
-    //#region the donation dialog
-    const [_, openDonationDialog] = useRemoteControlledDialog(PluginDHedgeMessages.events.donationDialogUpdated)
-    const onDonate = useCallback(() => {
-        if (!grant) return
-        openDonationDialog({
+    //#region the invest dialog
+    const [_, openInvestDialog] = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated)
+    const onInvest = useCallback(() => {
+        if (!pool) return
+        openInvestDialog({
             open: true,
-            address: 'asdasd', //grant.admin_address,
-            title: 'asdqweqwe', //grant.title,
+            address: props.address,
+            managerName: pool.managerName,
+            name: pool.name,
         })
-    }, [grant, openDonationDialog])
+    }, [pool, openInvestDialog])
     //#endregion
 
     if (loading) return <Typography>Loading...</Typography>
     if (error) return <Typography>Something went wrong.</Typography>
-    if (!grant) return null
+    if (!pool) return null
 
     return (
         <Card variant="outlined" className={classes.root} elevation={0}>
-            {/* <div className={classes.logo}>
-                <img src={grant.logo_url} />
-            </div> */}
-            {/* <div className={classes.title}>
+            <div className={classes.title}>
                 <Typography variant="h6" color="textPrimary">
-                    {grant.title}
+                    {pool.name}
                 </Typography>
-                {grant.verified ? <VerifiedUserIcon fontSize="small" color="primary" /> : null}
             </div>
             <div className={classes.description}>
                 <Typography variant="body2" color="textSecondary" className={classes.text}>
-                    {grant.description}
+                    Managed by {pool.managerName}
                 </Typography>
+            </div>
+            <div className={classes.description}>
+                <Typography variant="body2" color="textSecondary" className={classes.text}>
+                    {pool.poolDetails}
+                </Typography>
+            </div>
+
+            <div className={classes.data}>
+                <div className={classes.meta}>
+                    <QueryBuilderIcon fontSize="small" color="disabled" />
+                    <Typography variant="body2" color="textSecondary">
+                        Last update:
+                    </Typography>
+                </div>
+                <div className={classes.meta}>
+                    <Typography variant="body2" color="textSecondary">
+                        By
+                    </Typography>
+                    {/* <Avatar
+                        alt={grant.admin_profile.handle}
+                        src={grant.admin_profile.avatar_url}
+                        className={classes.avatar}
+                    /> */}
+                    {/* <Typography variant="body2" color="textSecondary">
+                        {grant.admin_profile.handle}
+                    </Typography> */}
+                </div>
+            </div>
+            {/* <div className={classes.logo}>
+                <img src={grant.logo_url} />
             </div>
             <div className={classes.data}>
                 <div className={classes.meta}>
@@ -179,20 +160,20 @@ export function PreviewCard(props: PreviewCardProps) {
                 </div>
             </div> */}
             <Grid container className={classes.buttons} spacing={2}>
-                {/* <Grid item xs={6}>
+                <Grid item xs={6}>
                     <Button
                         variant="outlined"
                         fullWidth
                         color="primary"
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={`https://gitcoin.co${grant.url}`}>
-                        View on Gitcoin
+                        href={DHEDGE_POOL_URL.concat(props.address)}>
+                        View on dHEDGE
                     </Button>
-                </Grid> */}
+                </Grid>
                 <Grid item xs={6}>
-                    <Button variant="contained" fullWidth color="primary" onClick={onDonate}>
-                        Donate
+                    <Button variant="contained" fullWidth color="primary" onClick={onInvest}>
+                        Invest
                     </Button>
                 </Grid>
             </Grid>

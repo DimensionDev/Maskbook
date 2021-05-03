@@ -1,4 +1,5 @@
 import { DHEDGE_API_URL } from '../constants'
+import type { DHedgeFund, DHedgePool } from '../types'
 
 export interface Metadata {}
 
@@ -14,64 +15,24 @@ export interface ManagerProfile {
     organizations: Metadata
 }
 
-export interface dHEDGEPool {
-    name: string
-    // managed_by:
-}
-
-export async function fetchPool(id: string) {
-    console.log('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ')
-
-    let body = `{
-        "query": "query Fund($fundAddress: String!) {
+export async function fetchPool(address: string) {
+    let body = {
+        query: `query Fund($fundAddress: String!) {
             fund(address: $fundAddress) {
-            address
-            name
-            isPrivate
-            managerAddress
-            managerName
-            balanceOfManager
-            poolDetails
-            totalSupply
-            totalValue
-            tokenPrice
-            performance
-            performanceMetrics {
-                day
-                week
-                month
-                quarter
-                halfyear
-            }
-            blockTime
-            score
-            riskFactor
-            managerFeeNumerator
-            leaderboardRank
-            sortinoRatio
-            downsideVolatility
-            badges {
                 name
+                managerName
+                poolDetails
             }
-            fundComposition {
-                tokenName
-                amount
-                rate
-            }
-        }",
-        "variables": {"fundAddress":${id}}
-    }`
+        }`,
+        variables: { fundAddress: address },
+    }
 
     const response = await fetch(DHEDGE_API_URL, {
-        body: body,
+        body: JSON.stringify(body),
         method: 'POST',
         mode: 'cors',
         credentials: 'omit',
     })
-    const { pool } = (await response.json()) as {
-        pool: dHEDGEPool
-        status: number
-    }
-
-    return pool
+    const res = (await response.json())?.data as DHedgeFund
+    return res.fund as DHedgePool
 }

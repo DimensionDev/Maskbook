@@ -20,7 +20,7 @@ export const CONSTANTS = {
         ],
         [ChainId.Ropsten]: ['https://dimensiondev.github.io/Mask-Token-List/mask.json'],
         [ChainId.Rinkeby]: ['https://dimensiondev.github.io/Mask-Token-List/mask.json'],
-        [ChainId.Kovan]: [],
+        [ChainId.Kovan]: ['https://irhonin.github.io/kovan-token-list/kovan-token-list.json'],
         [ChainId.Gorli]: [],
     },
 
@@ -210,7 +210,7 @@ export const CONSTANTS = {
                   [ChainId.Mainnet]: ['https://mainnet.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
                   [ChainId.Ropsten]: ['https://ropsten.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
                   [ChainId.Rinkeby]: ['https://rinkeby.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
-                  [ChainId.Kovan]: ['https://kovan.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
+                  [ChainId.Kovan]: ['https://kovan.infura.io/v3/027c19536991442f8362e1ea313199d8'],
                   [ChainId.Gorli]: ['https://goerli.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
               }
             : {

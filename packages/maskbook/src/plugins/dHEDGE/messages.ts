@@ -2,10 +2,11 @@ import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { DHEDGE_PLUGIN_ID } from './constants'
 
-type DonationDialogUpdated =
+type InvestDialogUpdated =
     | {
           open: true
-          title: string
+          name: string
+          managerName: string
           address: string
       }
     | {
@@ -14,9 +15,9 @@ type DonationDialogUpdated =
 
 interface DHedgeMessages {
     /**
-     * Open donation dialog
+     * Open invest dialog
      */
-    donationDialogUpdated: DonationDialogUpdated
+    InvestDialogUpdated: InvestDialogUpdated
 
     rpc: unknown
 }
