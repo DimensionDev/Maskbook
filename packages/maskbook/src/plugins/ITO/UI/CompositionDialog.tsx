@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { DialogContent, DialogProps } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { ITO_CONSTANTS, ITO_MetaKey } from '../constants'
+import { ITO_CONSTANTS, ITO_MetaKey, MSG_DELIMITER } from '../constants'
 import { DialogTabs, JSON_PayloadInMask } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CreateForm } from './CreateForm'
@@ -123,8 +123,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
-            if (!payload.password)
-                payload.password = await Services.Ethereum.sign(Web3Utils.sha3(payload.message) ?? '', account)
+            if (!payload.password) {
+                const [, title] = payload.message.split(MSG_DELIMITER)
+                payload.password = await Services.Ethereum.sign(Web3Utils.sha3(title) ?? '', account)
+            }
             if (!payload.password) {
                 alert('Failed to sign the password.')
                 return
