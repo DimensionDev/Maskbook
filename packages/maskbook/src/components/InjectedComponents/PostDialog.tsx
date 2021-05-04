@@ -47,6 +47,7 @@ import { Flags } from '../../utils/flags'
 import { editActivatedPostMetadata, globalTypedMessageMetadata } from '../../protocols/typed-message/global-state'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { SteganographyTextPayload } from './SteganographyTextPayload'
+import { Plugin, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
 
 const defaultTheme = {}
 
@@ -126,7 +127,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
             })
         }).unwrapOr(null),
     )
-    const pluginEntries = [...PluginUI].flatMap((plugin) =>
+    const oldPluginEntries = [...PluginUI].flatMap((plugin) =>
         Result.wrap(() => {
             const entries = plugin.postDialogEntries
             if (!entries) return null
@@ -176,7 +177,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 display: 'flex',
                                 flexWrap: 'wrap',
                             }}>
-                            {pluginEntries}
+                            <PluginRenderer />
+                            {oldPluginEntries}
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
@@ -493,4 +495,73 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
             ) : null}
         </Box>
     )
+}
+
+function PluginRenderer() {
+    const result = useActivatedPluginsSNSAdaptor().map((plugin) =>
+        Result.wrap(() => {
+            const entry = plugin.CompositionDialogEntry
+            if (!entry) return null
+            const unstable = plugin.enableRequirement.target !== 'stable'
+            return (
+                <ErrorBoundary subject={`Plugin "${plugin.name.fallback}"`} key={plugin.ID}>
+                    {'onClick' in entry ? (
+                        <PluginKindCustom {...entry} unstable={unstable} />
+                    ) : (
+                        <PluginKindDialog {...entry} unstable={unstable} />
+                    )}
+                </ErrorBoundary>
+            )
+        }).unwrapOr(null),
+    )
+    return <>{result}</>
+}
+function renderLabel(label: Plugin.SNSAdaptor.CompositionDialogEntry['label']): React.ReactNode {
+    if (!label) return null
+    if (typeof label === 'object' && 'fallback' in label) return label.fallback
+    return label
+}
+function PluginKindCustom(props: Plugin.SNSAdaptor.CompositionDialogEntryCustom & { unstable: boolean }) {
+    const classes = useStyles()
+    return (
+        <ClickableChip
+            label={
+                <>
+                    {renderLabel(props.label)}
+                    {props.unstable && <sup className={classes.sup}>(Beta)</sup>}
+                </>
+            }
+            onClick={props.onClick}
+        />
+    )
+}
+
+function PluginKindDialog(props: Plugin.SNSAdaptor.CompositionDialogEntryDialog & { unstable: boolean }) {
+    const classes = useStyles()
+    const { dialog: Dialog } = props
+    const [open, setOpen] = useState(false)
+    const opener = useCallback(() => setOpen(true), [])
+    const close = useCallback(() => setOpen(false), [])
+    const chip = (
+        <ClickableChip
+            label={
+                <>
+                    {renderLabel(props.label)}
+                    {props.unstable && <sup className={classes.sup}>(Beta)</sup>}
+                </>
+            }
+            onClick={opener}
+        />
+    )
+    if (props.keepMounted || open)
+        return (
+            <>
+                {chip}
+                <span style={{ display: 'none' }}>
+                    {/* Dialog should use portals to render. */}
+                    <Dialog open={open} onClose={close} />
+                </span>
+            </>
+        )
+    return chip
 }

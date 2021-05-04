@@ -42,6 +42,12 @@ import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/PluginUI'
 import { ErrorBoundary, withErrorBoundary } from '../../components/shared/ErrorBoundary'
 import { MaskbookUIRoot } from '../../UIRoot'
+import {
+    createInjectHooksRenderer,
+    startPluginDashboard,
+    useActivatedPluginsDashboard,
+} from '@dimensiondev/mask-plugin-infra'
+import { createPluginHost } from '../../plugin-infra/host'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.mode === 'dark'
@@ -217,7 +223,7 @@ function PluginDashboardInspectorForEach({ config }: { config: PluginConfig }) {
     return null
 }
 
-function DashboardPluginUI() {
+function OldPluginRender() {
     return (
         <ThemeProvider theme={useMaskbookTheme()}>
             {[...PluginUI.values()].map((x) => (
@@ -229,7 +235,7 @@ function DashboardPluginUI() {
     )
 }
 //#endregion
-
+const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 export function Dashboard() {
     return MaskbookUIRoot(
         <StylesProvider injectFirst>
@@ -239,7 +245,8 @@ export function Dashboard() {
                         <Router>
                             <CssBaseline />
                             <DashboardUI />
-                            <DashboardPluginUI />
+                            <PluginRender />
+                            <OldPluginRender />
                         </Router>
                     </NoSsr>
                 </DashboardSnackbarProvider>
@@ -249,3 +256,4 @@ export function Dashboard() {
 }
 
 export default SSRRenderer(<Dashboard />)
+startPluginDashboard(createPluginHost())

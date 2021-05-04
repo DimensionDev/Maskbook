@@ -20,16 +20,16 @@ function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T,
 
 function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {
     const rootRef = useRef<HTMLDivElement>(null)
-    const dialogProps =
-        props.reason === 'popup'
-            ? {
-                  disablePortal: true,
-                  container: () => rootRef.current,
-              }
-            : {}
+    const willRenderInPopup = props.reason === 'popup'
+    const dialogProps = willRenderInPopup
+        ? {
+              disablePortal: true,
+              container: () => rootRef.current,
+          }
+        : {}
     const dialog = <PostDialog DialogProps={dialogProps} reason={props.reason} />
 
     // ! Render dialog into native composition view instead of portal shadow
     // ! More https://github.com/DimensionDev/Maskbook/issues/837
-    return props.reason === 'popup' ? <div ref={rootRef}>{dialog}</div> : dialog
+    return willRenderInPopup ? <div ref={rootRef}>{dialog}</div> : dialog
 }

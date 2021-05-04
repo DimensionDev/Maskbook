@@ -9,7 +9,6 @@ import {
     languageSettings,
     allPostReplacementSettings,
     appearanceSettings,
-    currentMaskbookChainIdSettings,
     enableGroupSharingSettings,
     launchPageSettings,
     newDashboardConnection,
@@ -46,7 +45,7 @@ import { ChainId } from '../../../web3/types'
 import { extendsTheme } from '../../../utils/theme'
 import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
 import { PortfolioProvider } from '../../../plugins/Wallet/types'
-import { currentPortfolioDataProviderSettings } from '../../../plugins/Wallet/settings'
+import { currentPortfolioDataProviderSettings, currentMaskbookChainIdSettings } from '../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

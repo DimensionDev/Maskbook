@@ -206,6 +206,7 @@ export function SearchResultView(props: SearchResultViewProps) {
                 tradeProviders={tradeProviders}>
                 <Tabs
                     className={classes.tabs}
+                    indicatorColor="primary"
                     textColor="primary"
                     variant="fullWidth"
                     value={tabIndex}
