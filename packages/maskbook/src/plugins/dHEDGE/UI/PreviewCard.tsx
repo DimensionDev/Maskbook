@@ -93,9 +93,12 @@ export function PreviewCard(props: PreviewCardProps) {
     )
     console.log(perfHistory, errorHistory, loadingHistory)
     const currentPerformance = perfHistory?.slice(-1)[0]
-    console.log(currentPerformance)
 
     const poolUrl = useDHedgePoolURL(props.address)
+    const valueManaged = formatAmountPostfix(formatBalance(Number(pool?.totalValue), 18))
+    const lifeTimeReturn = Number((parseFloat(currentPerformance?.performance ?? '0') * 100).toFixed(2))
+    const riskFactor = pool && pool?.riskFactor != -1 ? pool?.riskFactor : '-'
+
     //#region the invest dialog
     const [_, openInvestDialog] = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated)
     const onInvest = useCallback(() => {
@@ -134,7 +137,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     </Grid>
                     <Grid item xs={6}>
                         <Typography variant="body2" color="textPrimary" className={classes.metaValue}>
-                            ${formatAmountPostfix(formatBalance(Number(pool.totalValue), 18))}
+                            {valueManaged}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -145,8 +148,17 @@ export function PreviewCard(props: PreviewCardProps) {
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography variant="body2" color={MaskColorVar.redMain} className={classes.metaValue}>
-                            {(parseFloat(currentPerformance?.performance ?? '0') * 100).toFixed(2)}%
+                        <Typography
+                            variant="body2"
+                            color={
+                                lifeTimeReturn > 0
+                                    ? MaskColorVar.greenMain
+                                    : lifeTimeReturn < 0
+                                    ? MaskColorVar.redMain
+                                    : 'textPrimary'
+                            }
+                            className={classes.metaValue}>
+                            {lifeTimeReturn}%
                         </Typography>
                     </Grid>
                 </Grid>
@@ -157,8 +169,17 @@ export function PreviewCard(props: PreviewCardProps) {
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography variant="body2" color="textPrimary" className={classes.metaValue}>
-                            {pool.riskFactor != -1 ? pool.riskFactor : '-'} / 5
+                        <Typography
+                            variant="body2"
+                            color={
+                                riskFactor === '-' || riskFactor === 3
+                                    ? 'textPrimary'
+                                    : riskFactor < 3
+                                    ? MaskColorVar.greenMain
+                                    : MaskColorVar.redMain
+                            }
+                            className={classes.metaValue}>
+                            {riskFactor} / 5
                         </Typography>
                     </Grid>
                 </Grid>
@@ -169,11 +190,11 @@ export function PreviewCard(props: PreviewCardProps) {
                 </div>
             </div>
             <Divider />
-            <div className={classes.description}>
+            {/* <div className={classes.description}>
                 <Typography variant="body2" color="textSecondary" className={classes.text}>
                     {pool.poolDetails}
                 </Typography>
-            </div>
+            </div> */}
             {/* <div className={classes.logo}>
                 <img src={grant.logo_url} />
             </div>
