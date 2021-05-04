@@ -5,7 +5,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePool } from '../hooks/usePool'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginDHedgeMessages } from '../messages'
-import { DHEDGE_POOL_URL } from '../constants'
+import { useDHedgePoolURL } from '../hooks/useDHedge'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -78,6 +78,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const classes = useStyles()
     const { value: pool, error, loading } = usePool(props.address)
     console.log(pool, error, loading)
+    const pool_url = useDHedgePoolURL(props.address)
 
     //#region the invest dialog
     const [_, openInvestDialog] = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated)
@@ -167,7 +168,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         color="primary"
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={DHEDGE_POOL_URL.concat(props.address)}>
+                        href={pool_url}>
                         View on dHEDGE
                     </Button>
                 </Grid>

@@ -8,11 +8,7 @@ import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import { DHEDGE_PLUGIN_ID } from './constants'
 import { InvestDialog } from './UI/InvestDialog'
 import { PreviewCard } from './UI/PreviewCard'
-
-// const DHEDGE_POOL_PATTERN = /^https:\/\/app.dhedge.org\/pool\/(\w+)/
-const DHEDGE_POOL_PATTERN = /^https:\/\/dh-1111.web.app\/pool\/(\w+)/
-
-const isDHEDGE = (x: string): boolean => DHEDGE_POOL_PATTERN.test(x)
+import { useDHedgePoolPattern, useIsDHedgePool } from './hooks/useDHedge'
 
 export const DHedgePluginDefine: PluginConfig = {
     id: DHEDGE_PLUGIN_ID,
@@ -23,6 +19,8 @@ export const DHedgePluginDefine: PluginConfig = {
     stage: PluginStage.Production,
     scope: PluginScope.Public,
     successDecryptionInspector: function Component(props): JSX.Element | null {
+        const DHEDGE_POOL_PATTERN = useDHedgePoolPattern()
+        const isDHEDGE = useIsDHedgePool()
         const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
         const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isDHEDGE)
         if (!text.ok) return null
@@ -30,6 +28,7 @@ export const DHedgePluginDefine: PluginConfig = {
         return <Renderer url={link} />
     },
     postInspector: function Component(): JSX.Element | null {
+        const isDHEDGE = useIsDHedgePool()
         const link = usePostInfoDetails('postMetadataMentionedLinks')
             .concat(usePostInfoDetails('postMentionedLinks'))
             .find(isDHEDGE)
@@ -53,6 +52,8 @@ export const DHedgePluginDefine: PluginConfig = {
 }
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
+    const DHEDGE_POOL_PATTERN = useDHedgePoolPattern()
+
     let address = ''
     const matches = props.url.match(DHEDGE_POOL_PATTERN)
     if (matches != null) address = matches[1]

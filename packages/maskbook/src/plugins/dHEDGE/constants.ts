@@ -1,9 +1,22 @@
 import { ChainId } from '../../web3/types'
 
-// export const GITCOIN_PLUGIN_ID = 'co.gitcoin'
 export const DHEDGE_PLUGIN_ID = 'co.dhedge'
 
 export const DHEDGE_CONSTANT = {
+    DHEDGE_URL: {
+        [ChainId.Mainnet]: 'https://app.dhedge.org',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: 'https://dh-1111.web.app',
+        [ChainId.Gorli]: '',
+    },
+    DHEDGE_API_URL: {
+        [ChainId.Mainnet]: 'https://api.dhedge.org/graphql',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: 'https://dev.dhedge.org/graphql',
+        [ChainId.Gorli]: '',
+    },
     DHEDGE_TOKEN_ADDRESSES: {
         [ChainId.Mainnet]: [
             '0x57Ab1ec28D129707052df4dF418D58a2D46d5f51', // sUSD
@@ -15,7 +28,6 @@ export const DHEDGE_CONSTANT = {
         [ChainId.Rinkeby]: [],
         [ChainId.Kovan]: [
             '0x57ab1ec28d129707052df4df418d58a2d46d5f51', // sUSD
-            '0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa', // DAI
         ],
         [ChainId.Gorli]: [],
     },
@@ -48,8 +60,3 @@ export const DHEDGE_CONSTANT = {
         [ChainId.Gorli]: 5,
     },
 }
-
-// proxy for: https://gitcoin.co/grants/v1/api/grant/
-export const GITCOIN_API_GRANTS_V1 = 'https://gitcoin-agent.r2d2.to/grants/v1/api/grant/'
-export const DHEDGE_API_URL = 'https://dev.dhedge.org/graphql'
-export const DHEDGE_POOL_URL = 'https://app.dhedge.org/pool/'

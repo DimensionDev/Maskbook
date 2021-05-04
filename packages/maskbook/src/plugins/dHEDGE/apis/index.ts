@@ -1,21 +1,6 @@
-import { DHEDGE_API_URL } from '../constants'
 import type { DHedgeFund, DHedgePool } from '../types'
 
-export interface Metadata {}
-
-export interface ManagerProfile {
-    id: number
-    url: string
-    handle: string
-    keywords: string[]
-    position: number
-    avatar_url: string
-    github_url: string
-    total_earned: number
-    organizations: Metadata
-}
-
-export async function fetchPool(address: string) {
+export async function fetchPool(address: string, url: string) {
     let body = {
         query: `query Fund($fundAddress: String!) {
             fund(address: $fundAddress) {
@@ -26,8 +11,7 @@ export async function fetchPool(address: string) {
         }`,
         variables: { fundAddress: address },
     }
-
-    const response = await fetch(DHEDGE_API_URL, {
+    const response = await fetch(url, {
         body: JSON.stringify(body),
         method: 'POST',
         mode: 'cors',
