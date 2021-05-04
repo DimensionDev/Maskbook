@@ -1,11 +1,14 @@
 import { useCallback } from 'react'
-import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
-import { makeStyles, createStyles, Card, Typography, Button, Grid } from '@material-ui/core'
+import { makeStyles, createStyles, Card, Typography, Button, Grid, Divider } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { usePool } from '../hooks/usePool'
+import { usePool, usePoolHistory } from '../hooks/usePool'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginDHedgeMessages } from '../messages'
 import { useDHedgePoolURL } from '../hooks/useDHedge'
+import { formatBalance } from '../../Wallet/formatter'
+import { formatAmountPostfix } from '../utils'
+import { Period } from '../types'
+import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -39,7 +42,7 @@ const useStyles = makeStyles((theme) =>
             justifyContent: 'space-between',
         },
         meta: {
-            fontSize: 10,
+            fontSize: 16,
             paddingTop: theme.spacing(1),
             paddingBottom: theme.spacing(1),
             display: 'flex',
@@ -47,6 +50,12 @@ const useStyles = makeStyles((theme) =>
             '& svg': {
                 marginRight: theme.spacing(0.5),
             },
+        },
+        metaTitle: {
+            fontSize: 16,
+        },
+        metaValue: {
+            fontSize: 32,
         },
         avatar: {
             width: theme.spacing(2),
@@ -77,9 +86,16 @@ export function PreviewCard(props: PreviewCardProps) {
     const { t } = useI18N()
     const classes = useStyles()
     const { value: pool, error, loading } = usePool(props.address)
-    console.log(pool, error, loading)
-    const pool_url = useDHedgePoolURL(props.address)
 
+    const { value: perfHistory, error: errorHistory, loading: loadingHistory } = usePoolHistory(
+        props.address,
+        Period.D1,
+    )
+    console.log(perfHistory, errorHistory, loadingHistory)
+    const currentPerformance = perfHistory?.slice(-1)[0]
+    console.log(currentPerformance)
+
+    const poolUrl = useDHedgePoolURL(props.address)
     //#region the invest dialog
     const [_, openInvestDialog] = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated)
     const onInvest = useCallback(() => {
@@ -87,14 +103,13 @@ export function PreviewCard(props: PreviewCardProps) {
         openInvestDialog({
             open: true,
             address: props.address,
-            managerName: pool.managerName,
             name: pool.name,
         })
     }, [pool, openInvestDialog])
     //#endregion
 
-    if (loading) return <Typography>Loading...</Typography>
-    if (error) return <Typography>Something went wrong.</Typography>
+    if (loading || loadingHistory) return <Typography>Loading...</Typography>
+    if (error || errorHistory) return <Typography>Something went wrong.</Typography>
     if (!pool) return null
 
     return (
@@ -109,32 +124,55 @@ export function PreviewCard(props: PreviewCardProps) {
                     Managed by {pool.managerName}
                 </Typography>
             </div>
-            <div className={classes.description}>
-                <Typography variant="body2" color="textSecondary" className={classes.text}>
-                    {pool.poolDetails}
-                </Typography>
-            </div>
-
-            <div className={classes.data}>
-                <div className={classes.meta}>
-                    <QueryBuilderIcon fontSize="small" color="disabled" />
-                    <Typography variant="body2" color="textSecondary">
-                        Last update:
-                    </Typography>
-                </div>
-                <div className={classes.meta}>
-                    <Typography variant="body2" color="textSecondary">
-                        By
-                    </Typography>
-                    {/* <Avatar
-                        alt={grant.admin_profile.handle}
-                        src={grant.admin_profile.avatar_url}
-                        className={classes.avatar}
-                    /> */}
+            <Divider />
+            <div className={classes.meta}>
+                <Grid container className={classes.meta} direction="column" spacing={0.5}>
+                    <Grid item xs={6}>
+                        <Typography variant="body2" color="textSecondary" className={classes.metaTitle}>
+                            VALUE MANAGED
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography variant="body2" color="textPrimary" className={classes.metaValue}>
+                            ${formatAmountPostfix(formatBalance(Number(pool.totalValue), 18))}
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <Grid container className={classes.meta} direction="column" spacing={1}>
+                    <Grid item xs={6}>
+                        <Typography variant="body2" color="textSecondary" className={classes.metaTitle}>
+                            LIFETIME RETURN
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography variant="body2" color={MaskColorVar.redMain} className={classes.metaValue}>
+                            {(parseFloat(currentPerformance?.performance ?? '0') * 100).toFixed(2)}%
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <Grid container className={classes.meta} direction="column" spacing={1}>
+                    <Grid item xs={6}>
+                        <Typography variant="body2" color="textSecondary" className={classes.metaTitle}>
+                            RISK FACTOR
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography variant="body2" color="textPrimary" className={classes.metaValue}>
+                            {pool.riskFactor != -1 ? pool.riskFactor : '-'} / 5
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <div className={classes.data}>
                     {/* <Typography variant="body2" color="textSecondary">
                         {grant.admin_profile.handle}
                     </Typography> */}
                 </div>
+            </div>
+            <Divider />
+            <div className={classes.description}>
+                <Typography variant="body2" color="textSecondary" className={classes.text}>
+                    {pool.poolDetails}
+                </Typography>
             </div>
             {/* <div className={classes.logo}>
                 <img src={grant.logo_url} />
@@ -168,7 +206,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         color="primary"
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={pool_url}>
+                        href={poolUrl}>
                         View on dHEDGE
                     </Button>
                 </Grid>

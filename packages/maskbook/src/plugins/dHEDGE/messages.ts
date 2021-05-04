@@ -6,7 +6,6 @@ type InvestDialogUpdated =
     | {
           open: true
           name: string
-          managerName: string
           address: string
       }
     | {
