@@ -1,14 +1,17 @@
 import { useCallback } from 'react'
-import { makeStyles, createStyles, Card, Typography, Button, Grid, Divider } from '@material-ui/core'
+import { makeStyles, createStyles, Card, Typography, Button, Grid, Divider, Link, Avatar } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePool, usePoolHistory } from '../hooks/usePool'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginDHedgeMessages } from '../messages'
-import { useDHedgePoolURL } from '../hooks/useDHedge'
+import { useAvatar, useDHedgePoolURL } from '../hooks/useDHedge'
 import { formatBalance } from '../../Wallet/formatter'
 import { formatAmountPostfix } from '../utils'
 import { Period } from '../types'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { Trans } from 'react-i18next'
+import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -58,8 +61,8 @@ const useStyles = makeStyles((theme) =>
             fontSize: 32,
         },
         avatar: {
-            width: theme.spacing(2),
-            height: theme.spacing(2),
+            width: theme.spacing(8),
+            height: theme.spacing(8),
             margin: theme.spacing(0, 1),
         },
         buttons: {
@@ -85,6 +88,8 @@ interface PreviewCardProps {
 export function PreviewCard(props: PreviewCardProps) {
     const { t } = useI18N()
     const classes = useStyles()
+
+    const chainId = useChainId()
     const { value: pool, error, loading } = usePool(props.address)
 
     const { value: perfHistory, error: errorHistory, loading: loadingHistory } = usePoolHistory(
@@ -92,9 +97,11 @@ export function PreviewCard(props: PreviewCardProps) {
         Period.D1,
     )
     console.log(perfHistory, errorHistory, loadingHistory)
-    const currentPerformance = perfHistory?.slice(-1)[0]
 
     const poolUrl = useDHedgePoolURL(props.address)
+    const blockie = useAvatar(pool?.managerAddress ?? '0x0')
+    const currentPerformance = perfHistory?.slice(-1)[0]
+
     const valueManaged = formatAmountPostfix(formatBalance(Number(pool?.totalValue), 18))
     const lifeTimeReturn = Number((parseFloat(currentPerformance?.performance ?? '0') * 100).toFixed(2))
     const riskFactor = pool && pool?.riskFactor != -1 ? pool?.riskFactor : '-'
@@ -117,16 +124,39 @@ export function PreviewCard(props: PreviewCardProps) {
 
     return (
         <Card variant="outlined" className={classes.root} elevation={0}>
-            <div className={classes.title}>
-                <Typography variant="h6" color="textPrimary">
-                    {pool.name}
-                </Typography>
-            </div>
-            <div className={classes.description}>
-                <Typography variant="body2" color="textSecondary" className={classes.text}>
-                    Managed by {pool.managerName}
-                </Typography>
-            </div>
+            <Grid container className={classes.meta} direction="row" spacing={0.5}>
+                <Grid item>
+                    <Avatar alt={''} src={blockie} className={classes.avatar} />
+                </Grid>
+                <Grid item>
+                    <div className={classes.title}>
+                        <Typography variant="h6" color="textPrimary">
+                            {pool.name}
+                        </Typography>
+                    </div>
+                    <div className={classes.description}>
+                        <Typography variant="body2" color="textSecondary" className={classes.text}>
+                            <Trans
+                                i18nKey="plugin_dhedge_managed_by"
+                                components={{
+                                    manager: (
+                                        <Link
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            href={resolveAddressLinkOnEtherscan(chainId, pool.managerAddress)}
+                                        />
+                                    ),
+                                }}
+                                values={{
+                                    managerName: pool.managerName,
+                                }}
+                            />
+
+                            <Link target="_blank" rel="noopener noreferrer" href={pool.managerName} />
+                        </Typography>
+                    </div>
+                </Grid>
+            </Grid>
             <Divider />
             <div className={classes.meta}>
                 <Grid container className={classes.meta} direction="column" spacing={0.5}>

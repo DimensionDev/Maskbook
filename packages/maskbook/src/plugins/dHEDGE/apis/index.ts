@@ -6,6 +6,7 @@ export async function fetchPool(address: string, url: string) {
             fund(address: $fundAddress) {
                 name
                 managerName
+                managerAddress
                 poolDetails
                 riskFactor
                 totalValue

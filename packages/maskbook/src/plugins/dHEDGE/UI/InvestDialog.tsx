@@ -71,7 +71,6 @@ export function InvestDialog(props: DonateDialogProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
-    const BULK_CHECKOUT_ADDRESS = useConstant(DHEDGE_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
     const TOKEN_LIST = useConstant(DHEDGE_CONSTANT, 'DHEDGE_TOKEN_ADDRESSES')
 
     //#region remote controlled dialog
