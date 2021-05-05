@@ -151,7 +151,6 @@ export function PreviewCard(props: PreviewCardProps) {
                                     managerName: pool.managerName,
                                 }}
                             />
-
                             <Link target="_blank" rel="noopener noreferrer" href={pool.managerName} />
                         </Typography>
                     </div>
@@ -162,7 +161,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 <Grid container className={classes.meta} direction="column" spacing={0.5}>
                     <Grid item xs={6}>
                         <Typography variant="body2" color="textSecondary" className={classes.metaTitle}>
-                            VALUE MANAGED
+                            <Trans i18nKey="plugin_dhedge_value_managed" />
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
@@ -174,7 +173,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 <Grid container className={classes.meta} direction="column" spacing={1}>
                     <Grid item xs={6}>
                         <Typography variant="body2" color="textSecondary" className={classes.metaTitle}>
-                            LIFETIME RETURN
+                            <Trans i18nKey="plugin_dhedge_lifetime_return" />
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
@@ -195,7 +194,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 <Grid container className={classes.meta} direction="column" spacing={1}>
                     <Grid item xs={6}>
                         <Typography variant="body2" color="textSecondary" className={classes.metaTitle}>
-                            RISK FACTOR
+                            <Trans i18nKey="plugin_dhedge_risk_factor" />
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
