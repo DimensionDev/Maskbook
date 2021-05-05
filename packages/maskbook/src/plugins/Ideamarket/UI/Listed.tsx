@@ -1,27 +1,57 @@
-import { Typography, Button, Box, makeStyles } from '@material-ui/core'
+import { makeStyles, Typography, Button } from '@material-ui/core'
 import type { Dispatch, SetStateAction, SyntheticEvent } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: 'block',
-        width: '160px',
-        borderRadius: '10px',
-        boxShadow: '0px 0px 3px 1px #ADADAD',
+        width: '147px',
+        height: '54px',
+        padding: '8px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.2)',
+        backgroundColor: '#ffffff',
         marginRight: '10%',
         overflow: 'hidden',
+        display: 'block',
         zIndex: 1,
     },
+    inner: {
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        borderRadius: '6px',
+    },
+    price: {
+        width: '50%',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    priceText: {
+        fontFamily: 'Inter',
+        fontSize: '14px',
+        fontWeight: 'bold',
+        color: '#373737',
+    },
     button: {
-        backgroundColor: '#2946ba',
-        borderRadius: '10px',
-        margin: theme.spacing(1),
-        width: '53%',
+        width: '50%',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#1534d9',
+        borderRadius: '6px',
         '&:hover': {
-            backgroundColor: '#415bc3',
+            backgroundColor: '#1534d9',
         },
     },
     buttonText: {
-        textTransform: 'none',
+        fontFamily: 'Inter',
+        fontWeight: 'bold',
+        fontSize: '14px',
         color: 'white',
     },
 }))
@@ -41,24 +71,29 @@ export default function Listed(props: ListedProps) {
     }
 
     return (
-        <div
-            className={classes.root}
-            onMouseEnter={() => props.setExtendedHover(true)}
-            onMouseLeave={() =>
-                setTimeout(() => {
-                    props.setExtendedHover(false)
-                }, 200)
-            }>
-            <Box display="flex" bgcolor="#f7f7f7" justifyContent="center">
-                <Button
-                    onClick={clicked}
-                    className={classes.button}
-                    href={`https://app.ideamarket.io/i/twitter/${props.username}`}
-                    target="_blank"
-                    rel="noopener">
-                    <Typography className={classes.buttonText}>Buy</Typography>
-                </Button>
-            </Box>
-        </div>
+        <>
+            <div
+                className={classes.root}
+                onMouseEnter={() => props.setExtendedHover(true)}
+                onMouseLeave={() =>
+                    setTimeout(() => {
+                        props.setExtendedHover(false)
+                    }, 200)
+                }>
+                <div className={classes.inner}>
+                    <div className={classes.price}>
+                        <Typography className={classes.priceText}>${props.price}</Typography>
+                    </div>
+                    <Button
+                        onClick={clicked}
+                        href={`https://app.ideamarket.io/i/twitter/${props.username}`}
+                        target="_blank"
+                        rel="noopener"
+                        className={classes.button}>
+                        <Typography className={classes.buttonText}>Buy</Typography>
+                    </Button>
+                </div>
+            </div>
+        </>
     )
 }
