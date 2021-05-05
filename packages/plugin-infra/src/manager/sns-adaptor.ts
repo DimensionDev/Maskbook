@@ -2,7 +2,7 @@ import { ALL_EVENTS } from '@servie/events'
 import { useSubscription, Subscription } from 'use-subscription'
 import { createManager } from './manage'
 import { getPluginDefine } from './store'
-import type { CurrentSNSNetwork, Plugin, PluginHost } from '../types'
+import type { CurrentSNSNetwork, Plugin } from '../types'
 
 const { events, activated, startDaemon } = createManager({
     getLoader: (plugin) => plugin.SNSAdaptor,
@@ -16,7 +16,7 @@ export function useActivatedPluginsSNSAdaptor() {
     return useSubscription(subscription)
 }
 
-export function startPluginSNSAdaptor(currentNetwork: CurrentSNSNetwork, host: PluginHost) {
+export function startPluginSNSAdaptor(currentNetwork: CurrentSNSNetwork, host: Plugin.__Host.Host) {
     startDaemon(host, (id) => {
         const def = getPluginDefine(id)
         if (!def) return false

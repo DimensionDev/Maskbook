@@ -82,6 +82,12 @@ const darkThemePatch: Partial<ThemeOptions> = {
             paper: grey[900],
         },
     },
+    components: {
+        MuiPaper: {
+            // https://github.com/mui-org/material-ui/pull/25522
+            styleOverrides: { root: { backgroundImage: 'unset' } },
+        },
+    },
 }
 
 const baseTheme = (theme: 'dark' | 'light') => {

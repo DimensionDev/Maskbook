@@ -1,7 +1,7 @@
 // All plugin manager need to call createPluginHost so let's register plugins implicitly.
 import './register'
 
-import type { EthStatusReporter, PluginHost } from '@dimensiondev/mask-plugin-infra'
+import type { Plugin } from '@dimensiondev/mask-plugin-infra'
 import { Emitter } from '@servie/events'
 import {
     currentMaskbookChainIdSettings,
@@ -14,7 +14,7 @@ import { safeUnreachable } from '../utils/utils'
 import { ChainId, ProviderType } from '../web3/types'
 
 const effect = startEffects(module.hot)
-export function createPluginHost(signal?: AbortSignal): PluginHost {
+export function createPluginHost(signal?: AbortSignal): Plugin.__Host.Host {
     return {
         eth: ethStatusReporter,
         signal,
@@ -26,7 +26,7 @@ export function createPluginHost(signal?: AbortSignal): PluginHost {
     }
 }
 
-const ethStatusReporter: EthStatusReporter = {
+const ethStatusReporter: Plugin.__Host.EthStatusReporter = {
     current() {
         const val = currentSelectedWalletProviderSettings.value
         switch (val) {
