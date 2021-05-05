@@ -1,10 +1,9 @@
 import { useCallback } from 'react'
 import { makeStyles, createStyles, Card, Typography, Button, Grid, Divider, Link, Avatar } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { usePool, usePoolHistory } from '../hooks/usePool'
+import { useFetchPool, useFetchPoolHistory } from '../hooks/usePool'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginDHedgeMessages } from '../messages'
-import { useAvatar, useDHedgePoolURL } from '../hooks/useDHedge'
 import { formatBalance } from '../../Wallet/formatter'
 import { formatAmountPostfix } from '../utils'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
@@ -13,6 +12,8 @@ import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { Period } from '../types'
 import { PerformanceChart } from './PerformanceChart'
+import { usePoolURL } from '../hooks/useUrl'
+import { useAvatar } from '../hooks/useManager'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -92,12 +93,12 @@ export function PreviewCard(props: PreviewCardProps) {
 
     const chainId = useChainId()
 
-    const { value: pool, error, loading } = usePool(props.address)
+    const { value: pool, error, loading } = useFetchPool(props.address)
 
-    const poolUrl = useDHedgePoolURL(props.address)
+    const poolUrl = usePoolURL(props.address)
     const blockie = useAvatar(pool?.managerAddress ?? '0x0')
 
-    const { value: perfHistory, error: errorHistory, loading: loadingHistory } = usePoolHistory(
+    const { value: perfHistory, error: errorHistory, loading: loadingHistory } = useFetchPoolHistory(
         props.address,
         Period.D1,
     )

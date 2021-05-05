@@ -6,9 +6,8 @@ import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { extractTextFromTypedMessage } from '../../protocols/typed-message'
 import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import { DHEDGE_PLUGIN_ID } from './constants'
-import { InvestDialog } from './UI/InvestDialog'
-import { PreviewCard } from './UI/PreviewCard'
-import { useDHedgePoolPattern, useIsDHedgePool } from './hooks/useDHedge'
+import { usePoolUrlPattern, useIsPoolUrl } from './hooks/useUrl'
+import { PoolView } from './UI/PoolView'
 
 export const DHedgePluginDefine: PluginConfig = {
     id: DHEDGE_PLUGIN_ID,
@@ -19,40 +18,39 @@ export const DHedgePluginDefine: PluginConfig = {
     stage: PluginStage.Production,
     scope: PluginScope.Public,
     successDecryptionInspector: function Component(props): JSX.Element | null {
-        const DHEDGE_POOL_PATTERN = useDHedgePoolPattern()
-        const isDHEDGE = useIsDHedgePool()
+        const isPoolUrl = useIsPoolUrl()
         const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isDHEDGE)
+        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isPoolUrl)
         if (!text.ok) return null
         if (!link) return null
         return <Renderer url={link} />
     },
     postInspector: function Component(): JSX.Element | null {
-        const isDHEDGE = useIsDHedgePool()
+        const isPoolUrl = useIsPoolUrl()
         const link = usePostInfoDetails('postMetadataMentionedLinks')
             .concat(usePostInfoDetails('postMentionedLinks'))
-            .find(isDHEDGE)
+            .find(isPoolUrl)
         if (!link) return null
         return <Renderer url={link} />
     },
     PageComponent() {
         return (
             <>
-                <InvestDialog />
+                <PoolView address="" />
             </>
         )
     },
     DashboardComponent() {
         return (
             <>
-                <InvestDialog />
+                <PoolView address="" />
             </>
         )
     },
 }
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
-    const DHEDGE_POOL_PATTERN = useDHedgePoolPattern()
+    const DHEDGE_POOL_PATTERN = usePoolUrlPattern()
 
     let address = ''
     const matches = props.url.match(DHEDGE_POOL_PATTERN)
@@ -61,7 +59,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     return (
         <MaskbookPluginWrapper pluginName="dHEDGE">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <PreviewCard address={address} />
+                <PoolView address={address} />
             </Suspense>
         </MaskbookPluginWrapper>
     )

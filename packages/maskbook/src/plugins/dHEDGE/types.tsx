@@ -1,15 +1,19 @@
-//#region dhedge
-export interface DHedgePool {
+//#region dhedge types
+export interface Pool {
+    address: string
     name: string
     managerName: string
     managerAddress: string
     poolDetails: string
     riskFactor: number
     totalValue: string
+    performance: string
+    balanceOfManager: string
+    totalSupply: string
 }
 
-export interface DHedgeFund {
-    fund: DHedgePool
+export interface Fund {
+    fund: Pool
 }
 
 export enum Period {
@@ -29,4 +33,4 @@ export interface PerformanceHistory {
     history: PoolHistory[]
 }
 
-//#endregion
+//#endregion dhedge types

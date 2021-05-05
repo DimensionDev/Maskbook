@@ -1,14 +1,18 @@
 import { useAsyncRetry } from 'react-use'
 import { PluginDHedgeRPC } from '../messages'
-import { useDHedgeApiURL } from './useDHedge'
+import { useApiURL } from './useUrl'
 import type { Period } from '../types'
 
-export function usePool(address: string) {
-    const DHEDGE_API_URL = useDHedgeApiURL()
-    return useAsyncRetry(() => PluginDHedgeRPC.fetchPool(address, DHEDGE_API_URL), [address])
+export function useFetchPool(address: string) {
+    const API_URL = useApiURL()
+    return useAsyncRetry(() => PluginDHedgeRPC.fetchPool(address, API_URL), [address])
 }
 
-export function usePoolHistory(address: string, period: Period) {
-    const DHEDGE_API_URL = useDHedgeApiURL()
-    return useAsyncRetry(() => PluginDHedgeRPC.fetchPoolPerformance(address, period, DHEDGE_API_URL), [address, period])
+export function useFetchPoolHistory(address: string, period: Period, sort = true) {
+    const API_URL = useApiURL()
+    return useAsyncRetry(() => PluginDHedgeRPC.fetchPoolPerformance(address, period, API_URL, sort), [
+        address,
+        period,
+        sort,
+    ])
 }

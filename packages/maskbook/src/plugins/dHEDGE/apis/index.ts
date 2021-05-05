@@ -1,15 +1,19 @@
-import type { DHedgeFund, DHedgePool, PerformanceHistory, Period } from '../types'
+import type { Fund, PerformanceHistory, Period, Pool } from '../types'
 
 export async function fetchPool(address: string, url: string) {
     let body = {
         query: `query Fund($fundAddress: String!) {
             fund(address: $fundAddress) {
+                address
                 name
                 managerName
                 managerAddress
                 poolDetails
                 riskFactor
                 totalValue
+                performance
+                balanceOfManager
+                totalSupply
             }
         }`,
         variables: { fundAddress: address },
@@ -20,8 +24,8 @@ export async function fetchPool(address: string, url: string) {
         mode: 'cors',
         credentials: 'omit',
     })
-    const res = (await response.json())?.data as DHedgeFund
-    return res.fund as DHedgePool
+    const res = (await response.json())?.data as Fund
+    return res.fund as Pool
 }
 
 export async function fetchPoolPerformance(address: string, period: Period, url: string, sort = true) {

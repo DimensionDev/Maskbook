@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Typography } from '@material-ui/core'
-import { usePoolHistory } from '../hooks/usePool'
+import { useFetchPoolHistory } from '../hooks/usePool'
 import { PriceChart } from '../../Trader/UI/trending/PriceChart'
 import { PriceChartPeriodControl } from './ChartControl'
 import type { Stat } from '../../Trader/types'
@@ -13,7 +13,7 @@ interface PerformanceChartProps {
 export function PerformanceChart(props: PerformanceChartProps) {
     const [period, setPeriod] = useState(Period.D1)
 
-    const { value: perfHistory, error: error, loading: loading, retry: retryStats } = usePoolHistory(
+    const { value: perfHistory, error: error, loading: loading, retry: retryStats } = useFetchPoolHistory(
         props.address,
         period,
     )

@@ -30,7 +30,7 @@ import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { DHEDGE_CONSTANT } from '../constants'
+import { CONSTANT } from '../constants'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { PluginTraderMessages } from '../../Trader/messages'
 
@@ -71,7 +71,7 @@ export function InvestDialog(props: DonateDialogProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
-    const TOKEN_LIST = useConstant(DHEDGE_CONSTANT, 'DHEDGE_TOKEN_ADDRESSES')
+    const TOKEN_LIST = useConstant(CONSTANT, 'ALLOWED_TOKEN_ADDRESSES')
 
     //#region remote controlled dialog
     const [open, setDonationDialogOpen] = useRemoteControlledDialog(
