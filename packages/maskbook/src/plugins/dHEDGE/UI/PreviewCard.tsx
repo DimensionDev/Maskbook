@@ -7,11 +7,12 @@ import { PluginDHedgeMessages } from '../messages'
 import { useAvatar, useDHedgePoolURL } from '../hooks/useDHedge'
 import { formatBalance } from '../../Wallet/formatter'
 import { formatAmountPostfix } from '../utils'
-import { Period } from '../types'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { Trans } from 'react-i18next'
 import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { Period } from '../types'
+import { PerformanceChart } from './PerformanceChart'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -90,16 +91,16 @@ export function PreviewCard(props: PreviewCardProps) {
     const classes = useStyles()
 
     const chainId = useChainId()
+
     const { value: pool, error, loading } = usePool(props.address)
+
+    const poolUrl = useDHedgePoolURL(props.address)
+    const blockie = useAvatar(pool?.managerAddress ?? '0x0')
 
     const { value: perfHistory, error: errorHistory, loading: loadingHistory } = usePoolHistory(
         props.address,
         Period.D1,
     )
-    console.log(perfHistory, errorHistory, loadingHistory)
-
-    const poolUrl = useDHedgePoolURL(props.address)
-    const blockie = useAvatar(pool?.managerAddress ?? '0x0')
     const currentPerformance = perfHistory?.slice(-1)[0]
 
     const valueManaged = formatAmountPostfix(formatBalance(Number(pool?.totalValue), 18))
@@ -212,42 +213,10 @@ export function PreviewCard(props: PreviewCardProps) {
                         </Typography>
                     </Grid>
                 </Grid>
-                <div className={classes.data}>
-                    {/* <Typography variant="body2" color="textSecondary">
-                        {grant.admin_profile.handle}
-                    </Typography> */}
-                </div>
             </div>
             <Divider />
-            {/* <div className={classes.description}>
-                <Typography variant="body2" color="textSecondary" className={classes.text}>
-                    {pool.poolDetails}
-                </Typography>
-            </div> */}
-            {/* <div className={classes.logo}>
-                <img src={grant.logo_url} />
-            </div>
-            <div className={classes.data}>
-                <div className={classes.meta}>
-                    <QueryBuilderIcon fontSize="small" color="disabled" />
-                    <Typography variant="body2" color="textSecondary">
-                        Last update: {grant.last_update_natural}
-                    </Typography>
-                </div>
-                <div className={classes.meta}>
-                    <Typography variant="body2" color="textSecondary">
-                        By
-                    </Typography>
-                    <Avatar
-                        alt={grant.admin_profile.handle}
-                        src={grant.admin_profile.avatar_url}
-                        className={classes.avatar}
-                    />
-                    <Typography variant="body2" color="textSecondary">
-                        {grant.admin_profile.handle}
-                    </Typography>
-                </div>
-            </div> */}
+            <div className={classes.data}></div>
+            <PerformanceChart address={props.address} />
             <Grid container className={classes.buttons} spacing={2}>
                 <Grid item xs={6}>
                     <Button
