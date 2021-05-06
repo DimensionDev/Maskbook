@@ -4,7 +4,7 @@ import { useSuspense } from '../../../utils/hooks/useSuspense'
 
 const cache = new Map<string, [0, Promise<void>] | [1, { proposal: Proposal; message: ProposalMessage }] | [2, Error]>()
 export function proposalRetry() {
-    cache.forEach(([_status], id) => cache.delete(id))
+    Array.from(cache.keys()).forEach((id) => cache.delete(id))
 }
 export function useProposal(id: string) {
     return useSuspense<{ proposal: Proposal; message: ProposalMessage }, [string]>(id, [id], cache, Suspender)
