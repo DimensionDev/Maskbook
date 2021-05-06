@@ -22,7 +22,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
-import { datetimeISOString } from '../assets/formatDate'
+import formatDateTime from 'date-fns/format'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 
 const useStyles = makeStyles((theme) =>
@@ -156,7 +156,8 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                         </Typography>
                                         {swappedToken.isClaimable ? null : (
                                             <Typography>
-                                                Unlock Time: {datetimeISOString(swappedToken.unlockTime)}
+                                                Unlock Time:{' '}
+                                                {formatDateTime(swappedToken.unlockTime, 'yyyy-MM-dd hh:mm:ss')}
                                             </Typography>
                                         )}
                                     </div>
