@@ -58,7 +58,7 @@ export function PoolViewDeck(props: PoolDeckDeckProps) {
     const blockie = useAvatar(pool.managerAddress)
     const poolUrl = usePoolURL(pool.address)
 
-    const managerShare = Math.round(((Number(pool.balanceOfManager) / Number(pool.totalSupply)) * 100) | 0)
+    const managerShare = Math.round((Number(pool.balanceOfManager) / Number(pool.totalSupply)) * 100 || 0)
 
     return (
         <Card variant="outlined" className={classes.root} elevation={0}>
@@ -95,7 +95,7 @@ export function PoolViewDeck(props: PoolDeckDeckProps) {
                             </Typography>
                         </Grid>
                         <Grid item>
-                            <Divider orientation="vertical" flexItem className={classes.text} />
+                            <Divider orientation="vertical" flexItem />
                         </Grid>
                         <Grid item>
                             <Typography variant="body2" color="textSecondary" className={classes.text}>

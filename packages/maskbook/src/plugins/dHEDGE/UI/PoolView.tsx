@@ -5,6 +5,7 @@ import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { useFetchPool } from '../hooks/usePool'
 import { PoolViewDeck } from './PoolViewDeck'
 import { PoolStats } from './PoolStats'
+import { PerformanceChart } from './PerformanceChart'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -171,6 +172,7 @@ export function PoolView(props: PoolViewProps) {
                 {tabs}
             </Tabs>
             {tabIndex === 0 ? <PoolStats pool={pool} /> : null}
+            {tabIndex === 2 ? <PerformanceChart pool={pool} /> : null}
 
             {/* // stats={stats}
             // coins={coins}

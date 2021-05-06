@@ -599,6 +599,7 @@
     "plugin_dhedge_strategy": "Strategy",
     "plugin_dhedge_see_less": "See less",
     "plugin_dhedge_see_more": "See more",
+    "plugin_dhedge_no_data": "No Data",
     "wallet_status_title": "Account",
     "wallet_status_connect_with": "Connected with {{provider}}",
     "wallet_status_button_change": "Change",

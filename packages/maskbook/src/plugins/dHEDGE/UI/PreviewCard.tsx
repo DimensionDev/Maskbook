@@ -11,7 +11,6 @@ import { Trans } from 'react-i18next'
 import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { Period } from '../types'
-import { PerformanceChart } from './PerformanceChart'
 import { usePoolURL } from '../hooks/useUrl'
 import { useAvatar } from '../hooks/useManager'
 
@@ -217,7 +216,7 @@ export function PreviewCard(props: PreviewCardProps) {
             </div>
             <Divider />
             <div className={classes.data}></div>
-            <PerformanceChart address={props.address} />
+            {/* <PerformanceChart address={props.address} /> */}
             <Grid container className={classes.buttons} spacing={2}>
                 <Grid item xs={6}>
                     <Button
