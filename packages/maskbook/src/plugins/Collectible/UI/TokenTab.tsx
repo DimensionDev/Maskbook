@@ -108,7 +108,11 @@ export function TokenTab(props: TokenTabProps) {
                                 <Link
                                     underline="none"
                                     key={trait_type + value}
-                                    href={resolveTraitLinkOnOpenSea(chainId, trait_type)}
+                                    href={
+                                        asset.value?.slug
+                                            ? resolveTraitLinkOnOpenSea(chainId, asset.value.slug, trait_type, value)
+                                            : ''
+                                    }
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Paper className={classes.trait} variant="outlined">
