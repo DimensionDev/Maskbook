@@ -58,10 +58,10 @@ export async function sign(dataToSign: string, address: string) {
     })
 }
 
-export async function personalSign(dataToSign: string, address: string, password = '') {
+export async function personalSign(dataToSign: string, address: string, password?: string) {
     return request<string>({
         method: 'personal_sign',
-        params: [dataToSign, address, password].filter(Boolean),
+        params: [dataToSign, address, password].filter((x) => typeof x !== 'undefined'),
     })
 }
 

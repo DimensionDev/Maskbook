@@ -1,11 +1,11 @@
 import { pickBy } from 'lodash-es'
 import type { TransactionConfig } from 'web3-core'
+import { toHex } from 'web3-utils'
 
 import { addGasMargin } from '../../../web3/helpers'
 import { getNonce } from './nonce'
 import { estimateGas, getGasPrice } from './network'
 import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
-import { toHex } from 'web3-utils'
 
 /**
  * Compose a common purpose transaction payload
@@ -33,7 +33,7 @@ export async function composeTransaction({
         from,
         value,
         nonce,
-        gas: addGasMargin(gas).toString(),
+        gas: addGasMargin(gas).toFixed(),
         gasPrice,
     })
 }

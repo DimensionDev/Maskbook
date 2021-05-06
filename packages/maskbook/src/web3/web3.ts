@@ -8,9 +8,9 @@ function createExternalProvider() {
         isStatus: true,
         host: '',
         path: '',
-        sendAsync: Services.Ethereum.send,
-        send: Services.Ethereum.send,
         request: Services.Ethereum.request,
+        send: Services.Ethereum.requestSend,
+        sendAsync: Services.Ethereum.requestSend,
     }
 }
 
