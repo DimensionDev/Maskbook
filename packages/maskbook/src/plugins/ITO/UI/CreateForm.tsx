@@ -6,8 +6,6 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
-import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
@@ -29,6 +27,7 @@ import { AdvanceSetting } from './AdvanceSetting'
 import type { AdvanceSettingData } from './AdvanceSetting'
 import { useRegionSelect, regionCodes, encodeRegionCode, decodeRegionCode } from '../hooks/useRegion'
 import { RegionSelect } from './RegionSelect'
+import { datetimeISOString } from '../assets/formatDate'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -88,6 +87,11 @@ const useStyles = makeStyles((theme) =>
             flex: 1,
             padding: theme.spacing(1),
             marginTop: theme.spacing(1),
+        },
+        datetime: {
+            '&::-webkit-calendar-picker-indicator': {
+                background: 'none',
+            },
         },
     }),
 )
@@ -276,12 +280,13 @@ export function CreateForm(props: CreateFormProps) {
         totalOfPerWallet,
     ])
 
-    const handleStartTime = useCallback((date: Date) => {
-        setStartTime(date)
+    const handleStartTime = useCallback((date: string) => {
+        setStartTime(new Date(date))
     }, [])
 
     const handleEndTime = useCallback(
-        (date: Date) => {
+        (dateString: string) => {
+            const date = new Date(dateString)
             const time = date.getTime()
             const now = Date.now()
             if (time < now) return
@@ -291,7 +296,8 @@ export function CreateForm(props: CreateFormProps) {
     )
 
     const handleUnlockTime = useCallback(
-        (date: Date) => {
+        (dateString: string) => {
+            const date = new Date(dateString)
             const time = date.getTime()
             const now = Date.now()
             if (time < now) return
@@ -301,45 +307,48 @@ export function CreateForm(props: CreateFormProps) {
     )
 
     const StartTime = (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MobileDateTimePicker
-                showTodayButton
-                ampm={false}
-                label={t('plugin_ito_begin_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
-                onChange={(date: Date | null) => handleStartTime(date!)}
-                renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
-                value={startTime}
-                DialogProps={props.dateDialogProps}
-            />
-        </LocalizationProvider>
+        <TextField
+            label={t('plugin_ito_begin_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
+            type="datetime-local"
+            value={datetimeISOString(startTime)}
+            onChange={(e) => handleStartTime(e.currentTarget.value)}
+            InputLabelProps={{
+                shrink: true,
+            }}
+            inputProps={{
+                className: classes.datetime,
+            }}
+        />
     )
 
     const EndTime = (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MobileDateTimePicker
-                showTodayButton
-                ampm={false}
-                label={t('plugin_ito_end_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
-                onChange={(date: Date | null) => handleEndTime(date!)}
-                renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
-                value={endTime}
-                DialogProps={props.dateDialogProps}
-            />
-        </LocalizationProvider>
+        <TextField
+            label={t('plugin_ito_end_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
+            type="datetime-local"
+            value={datetimeISOString(endTime)}
+            onChange={(e) => handleEndTime(e.currentTarget.value)}
+            InputLabelProps={{
+                shrink: true,
+            }}
+            inputProps={{
+                className: classes.datetime,
+            }}
+        />
     )
 
     const UnlockTime = (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MobileDateTimePicker
-                showTodayButton
-                ampm={false}
-                label={t('plugin_ito_unlock_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
-                onChange={(date: Date | null) => handleUnlockTime(date!)}
-                renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
-                value={unlockTime}
-                DialogProps={props.dateDialogProps}
-            />
-        </LocalizationProvider>
+        <TextField
+            label={t('plugin_ito_unlock_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
+            type="datetime-local"
+            value={datetimeISOString(unlockTime)}
+            onChange={(e) => handleUnlockTime(e.currentTarget.value)}
+            InputLabelProps={{
+                shrink: true,
+            }}
+            inputProps={{
+                className: classes.datetime,
+            }}
+        />
     )
 
     return (
