@@ -6,12 +6,10 @@ import { Emitter } from '@servie/events'
 import {
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
-    currentSelectedWalletProviderSettings,
     currentWalletConnectChainIdSettings,
 } from '../plugins/Wallet/settings'
 import { startEffects } from '../utils/side-effects'
-import { safeUnreachable } from '../utils/utils'
-import { ChainId, ProviderType } from '../web3/types'
+import { getUnsafeChainId } from '../extension/background-script/EthereumService'
 
 const effect = startEffects(module.hot)
 export function createPluginHost(signal?: AbortSignal): Plugin.__Host.Host {
@@ -27,20 +25,7 @@ export function createPluginHost(signal?: AbortSignal): Plugin.__Host.Host {
 }
 
 const ethStatusReporter: Plugin.__Host.EthStatusReporter = {
-    current() {
-        const val = currentSelectedWalletProviderSettings.value
-        switch (val) {
-            case ProviderType.Maskbook:
-                return currentMaskbookChainIdSettings.value
-            case ProviderType.MetaMask:
-                return currentMetaMaskChainIdSettings.value
-            case ProviderType.WalletConnect:
-                return currentWalletConnectChainIdSettings.value
-            default:
-                safeUnreachable(val)
-                return ChainId.Mainnet
-        }
-    },
+    current: getUnsafeChainId,
     events: new Emitter(),
 }
 function report() {

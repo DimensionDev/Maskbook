@@ -78,10 +78,9 @@ revalidateWallets()
 
 /**
  * Get the chain id which is using by the given (or default) wallet
- * It will always yield Mainnet in production mode
  * @param address
  */
-export async function getUnsafeChainId(address?: string) {
+export function getUnsafeChainId(address?: string) {
     const address_ = currentSelectedWalletAddressSettings.value
     const provider = currentSelectedWalletProviderSettings.value
     const wallet =
@@ -97,6 +96,7 @@ export async function getUnsafeChainId(address?: string) {
 
 /**
  * Get the chain id which is using by the given (or default) wallet
+ * It will always yield Mainnet in production mode
  * @param address
  */
 export async function getChainId(address?: string) {

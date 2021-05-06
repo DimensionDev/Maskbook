@@ -46,13 +46,13 @@ function createWeb3Instance(provider: HttpProvider) {
 }
 
 export function createWeb3({
+    url = '',
     chainId = currentMaskbookChainIdSettings.value,
     privKeys = [],
-    url = '',
 }: {
-    privKeys?: string[]
     url?: string
     chainId?: ChainId
+    privKeys?: string[]
 } = {}) {
     // get the provider url by weights if needed
     if (!url) {
