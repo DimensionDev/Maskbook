@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from 'react'
+import { uniq, flatten } from 'lodash-es'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import {
@@ -6,18 +7,12 @@ import {
     createStyles,
     DialogContent,
     CircularProgress,
-    Paper,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    Table,
     Typography,
     Link,
+    List,
+    ListItem,
 } from '@material-ui/core'
 import { useClaimAll } from '../hooks/useClaimAll'
-import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { useClaimCallback } from '../hooks/useClaimCallback'
@@ -27,32 +22,24 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
+import { datetimeISOString } from '../assets/formatDate'
+import { formatBalance } from '../../../plugins/Wallet/formatter'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
             padding: theme.spacing(4, 4, 2, 4),
         },
-        table: {
-            paddingBottom: theme.spacing(1),
-            borderRadius: 0,
-            marginBottom: 16,
-        },
-        head: {
-            border: '1px solid rgba(224, 224, 224, 1)',
-            color: theme.palette.text.secondary,
-            width: '50%',
-        },
-        cell: {
-            border: '1px solid rgba(224, 224, 224, 1)',
-            color: theme.palette.text.primary,
-            wordBreak: 'break-word',
-            width: '50%',
-        },
         actionButton: {
             margin: '0 auto',
             minHeight: 'auto',
-            width: '50%',
+            backgroundColor: '#1C68F3',
+            '&:hover': {
+                backgroundColor: '#1854c4',
+            },
+            width: '100%',
+            fontSize: 18,
+            fontWeight: 400,
         },
         footer: {
             marginTop: theme.spacing(2),
@@ -73,6 +60,35 @@ const useStyles = makeStyles((theme) =>
             width: 40,
             height: 10,
         },
+        tokenCardWrapper: {
+            width: '100%',
+            maxHeight: 450,
+            marginBottom: theme.spacing(1),
+            overflow: 'auto',
+            padding: theme.spacing(1, 0),
+        },
+        tokenCard: {
+            width: '100%',
+            height: 95,
+            background: 'linear-gradient(.25turn, #0ACFFE, 40%, #2b3ef0)',
+            marginBottom: theme.spacing(2),
+            borderRadius: 10,
+            flexDirection: 'column',
+            paddingTop: theme.spacing(2),
+            paddingBottom: theme.spacing(2.5),
+            alignItems: 'baseline',
+            justifyContent: 'space-between',
+        },
+        cardHeader: {
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            '-webkit-font-smoothing': 'antialiased',
+            fontSize: 14,
+        },
+        cardContent: {
+            fontSize: 18,
+        },
     }),
 )
 
@@ -84,11 +100,11 @@ interface ClaimAllDialogProps {
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
-    const { value: claimableAll, loading, retry } = useClaimAll()
+    const { value: swappedTokens, loading, retry } = useClaimAll()
     const classes = useStyles()
     const chainId = useChainId()
-
-    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(claimableAll?.pids ?? [])
+    const claimablePids = uniq(flatten(swappedTokens?.filter((t) => t.isClaimable).map((t) => t.pids)))
+    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(claimablePids)
 
     const onClaimButtonClick = useCallback(() => {
         claimCallback()
@@ -119,56 +135,46 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         setClaimTransactionDialogOpen({
             open: true,
             state: claimState,
-            summary: 'Claiming all tokens.',
+            summary: 'Claiming all claimable tokens at the moment.',
         })
     }, [claimState /* update tx dialog only if state changed */])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title="ITO Claim all tokens">
+        <InjectedDialog open={open} onClose={onClose} title="Claim Your Tokens">
             <DialogContent className={classes.wrapper}>
-                {loading || !claimableAll ? (
+                {loading || !swappedTokens ? (
                     <CircularProgress size={24} />
-                ) : claimableAll.pids.length > 0 ? (
+                ) : swappedTokens.length > 0 ? (
                     <>
-                        <TableContainer component={Paper} className={classes.table}>
-                            <Table size="small">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell className={classes.head} align="center" size="small">
-                                            {t('plugin_ito_list_table_claimable_token')}
-                                        </TableCell>
-                                        <TableCell className={classes.head} align="center" size="small">
-                                            {t('plugin_ito_list_table_claimable_total_amount')}
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {Object.values(claimableAll?.tokens!).map((t, index) => {
-                                        return (
-                                            <TableRow key={index}>
-                                                <TableCell className={classes.cell} align="center" size="small">
-                                                    {t.token.symbol}
-                                                </TableCell>
-                                                <TableCell
-                                                    className={classes.cell}
-                                                    align="center"
-                                                    size="small"
-                                                    style={{ whiteSpace: 'nowrap' }}>
-                                                    {formatBalance(t.amount, t.token.decimals)}
-                                                </TableCell>
-                                            </TableRow>
-                                        )
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                        <List className={classes.tokenCardWrapper}>
+                            {swappedTokens.map((swappedToken, i) => (
+                                <ListItem key={i} className={classes.tokenCard}>
+                                    <div className={classes.cardHeader}>
+                                        <Typography>
+                                            {swappedToken.token.symbol}{' '}
+                                            {swappedToken.isClaimable ? 'Unclaimed' : 'Locked'}:
+                                        </Typography>
+                                        {swappedToken.isClaimable ? null : (
+                                            <Typography>
+                                                Unlock Time: {datetimeISOString(swappedToken.unlockTime)}
+                                            </Typography>
+                                        )}
+                                    </div>
+                                    <Typography className={classes.cardContent}>
+                                        {formatBalance(swappedToken.amount, swappedToken.token.decimals)}{' '}
+                                        {swappedToken.token.symbol}
+                                    </Typography>
+                                </ListItem>
+                            ))}
+                        </List>
                         <EthereumWalletConnectedBoundary>
                             <ActionButton
                                 onClick={onClaimButtonClick}
                                 variant="contained"
+                                disabled={claimablePids!.length === 0}
                                 size="large"
                                 className={classes.actionButton}>
-                                {t('plugin_ito_claim')}
+                                {t('plugin_ito_claim_all')}
                             </ActionButton>
                         </EthereumWalletConnectedBoundary>
                     </>

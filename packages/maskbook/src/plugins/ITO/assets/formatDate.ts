@@ -15,7 +15,7 @@ export function datetimeISOString(value: Date): string {
         const pad = (value: number) => value.toString(10).padStart(2, '0')
         const date = [value.getFullYear(), value.getMonth() + 1, value.getDate()]
         const time = [value.getHours(), value.getMinutes(), value.getSeconds()]
-        return `${date.map(pad).join('-')}T${time.map(pad).join(':')}`
+        return `${date.map(pad).join('-')} ${time.map(pad).join(':')}`
     }
     return ''
 }

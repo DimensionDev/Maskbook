@@ -64,7 +64,7 @@ export function ITO_Card(props: ITO_CardProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { value: packet, loading: packetLoading, error: packetError, retry: packetRetry } = useMaskITO_Packet()
 
-    //#region calim
+    //#region claim
     const [claimState, claimCallback, resetClaimCallback] = useMaskClaimCallback()
     const onClaimButtonClick = useCallback(() => {
         claimCallback()
