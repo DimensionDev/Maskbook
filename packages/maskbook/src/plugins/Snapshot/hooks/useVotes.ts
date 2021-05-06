@@ -7,7 +7,9 @@ import { ChainId } from '../../../web3/types'
 
 const cache = new Map<string, [0, Promise<void>] | [1, Votes] | [2, Error]>()
 export function votesRetry() {
-    Array.from(cache.keys()).forEach((id) => cache.delete(id))
+    for (const key of cache.keys()) {
+        cache.delete(key)
+    }
 }
 export function useVotes(identifier: ProposalIdentifier) {
     return useSuspense<Votes, [ProposalIdentifier]>(identifier.id, [identifier], cache, Suspender)

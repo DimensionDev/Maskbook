@@ -8,7 +8,9 @@ const cache = new Map<
     [0, Promise<void>] | [1, { results: ProposalResult[]; totalPower: number }] | [2, Error]
 >()
 export function resultsRetry() {
-    Array.from(cache.keys()).forEach((id) => cache.delete(id))
+    for (const key of cache.keys()) {
+        cache.delete(key)
+    }
 }
 export function useResults(identifier: ProposalIdentifier) {
     return useSuspense<{ results: ProposalResult[]; totalPower: number }, [ProposalIdentifier]>(
