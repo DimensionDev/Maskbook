@@ -135,12 +135,12 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         setClaimTransactionDialogOpen({
             open: true,
             state: claimState,
-            summary: 'Claiming all claimable tokens at the moment.',
+            summary: t('plugin_ito_claim_all_tx_summary'),
         })
     }, [claimState /* update tx dialog only if state changed */])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title="Claim Your Tokens">
+        <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_status_unclaimed')}>
             <DialogContent className={classes.wrapper}>
                 {loading || !swappedTokens ? (
                     <CircularProgress size={24} />
@@ -152,11 +152,14 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     <div className={classes.cardHeader}>
                                         <Typography>
                                             {swappedToken.token.symbol}{' '}
-                                            {swappedToken.isClaimable ? 'Unclaimed' : 'Locked'}:
+                                            {swappedToken.isClaimable
+                                                ? t('plugin_ito_claim_all_status_unclaimed')
+                                                : t('plugin_ito_claim_all_status_locked')}
+                                            :
                                         </Typography>
                                         {swappedToken.isClaimable ? null : (
                                             <Typography>
-                                                Unlock Time:{' '}
+                                                {t('plugin_ito_claim_all_unlock_time')}:{' '}
                                                 {formatDateTime(swappedToken.unlockTime, 'yyyy-MM-dd hh:mm:ss')}
                                             </Typography>
                                         )}
