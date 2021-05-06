@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
                 ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
                 : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
         }`,
+        backgroundImage: 'none',
     },
     menu: {
         paddingTop: 0,
