@@ -21,6 +21,7 @@ export function LoadingCard(props: React.PropsWithChildren<{ title: string }>) {
                 <SnapshotCard title={props.title}>
                     {new Array(2).fill(0).map((_, i) => (
                         <Skeleton
+                            key={i}
                             className={classes.skeleton}
                             animation="wave"
                             variant="rectangular"
