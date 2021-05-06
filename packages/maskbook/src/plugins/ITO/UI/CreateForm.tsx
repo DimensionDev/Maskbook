@@ -27,7 +27,7 @@ import { AdvanceSetting } from './AdvanceSetting'
 import type { AdvanceSettingData } from './AdvanceSetting'
 import { useRegionSelect, regionCodes, encodeRegionCode, decodeRegionCode } from '../hooks/useRegion'
 import { RegionSelect } from './RegionSelect'
-import { datetimeISOString } from '../assets/formatDate'
+import { format } from 'date-fns'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -280,13 +280,13 @@ export function CreateForm(props: CreateFormProps) {
         totalOfPerWallet,
     ])
 
-    const handleStartTime = useCallback((date: string) => {
-        setStartTime(new Date(date))
+    const handleStartTime = useCallback((input: string) => {
+        setStartTime(new Date(input))
     }, [])
 
     const handleEndTime = useCallback(
-        (dateString: string) => {
-            const date = new Date(dateString)
+        (input: string) => {
+            const date = new Date(input)
             const time = date.getTime()
             const now = Date.now()
             if (time < now) return
@@ -296,8 +296,8 @@ export function CreateForm(props: CreateFormProps) {
     )
 
     const handleUnlockTime = useCallback(
-        (dateString: string) => {
-            const date = new Date(dateString)
+        (input: string) => {
+            const date = new Date(input)
             const time = date.getTime()
             const now = Date.now()
             if (time < now) return
@@ -310,14 +310,10 @@ export function CreateForm(props: CreateFormProps) {
         <TextField
             label={t('plugin_ito_begin_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
             type="datetime-local"
-            value={datetimeISOString(startTime)}
+            value={format(startTime, "yyyy-MM-dd'T'HH:mm")}
             onChange={(e) => handleStartTime(e.currentTarget.value)}
-            InputLabelProps={{
-                shrink: true,
-            }}
-            inputProps={{
-                className: classes.datetime,
-            }}
+            InputLabelProps={{ shrink: true }}
+            inputProps={{ className: classes.datetime }}
         />
     )
 
@@ -325,14 +321,10 @@ export function CreateForm(props: CreateFormProps) {
         <TextField
             label={t('plugin_ito_end_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
             type="datetime-local"
-            value={datetimeISOString(endTime)}
+            value={format(endTime, "yyyy-MM-dd'T'HH:mm")}
             onChange={(e) => handleEndTime(e.currentTarget.value)}
-            InputLabelProps={{
-                shrink: true,
-            }}
-            inputProps={{
-                className: classes.datetime,
-            }}
+            InputLabelProps={{ shrink: true }}
+            inputProps={{ className: classes.datetime }}
         />
     )
 
@@ -340,14 +332,10 @@ export function CreateForm(props: CreateFormProps) {
         <TextField
             label={t('plugin_ito_unlock_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
             type="datetime-local"
-            value={datetimeISOString(unlockTime)}
+            value={format(unlockTime, "yyyy-MM-dd'T'HH:mm")}
             onChange={(e) => handleUnlockTime(e.currentTarget.value)}
-            InputLabelProps={{
-                shrink: true,
-            }}
-            inputProps={{
-                className: classes.datetime,
-            }}
+            InputLabelProps={{ shrink: true }}
+            inputProps={{ className: classes.datetime }}
         />
     )
 
