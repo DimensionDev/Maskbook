@@ -186,9 +186,15 @@ function Loading(props: React.PropsWithChildren<{}>) {
 
 function Fail(props: React.PropsWithChildren<{}>) {
     const { t } = useI18N()
+    const identifier = useContext(SnapshotContext)
+    const {
+        payload: { proposal },
+    } = useProposal(identifier.id)
     const retry = useRetry()
     return (
-        <LoadingFailCard title={t('plugin_snapshot_result_title')} retry={retry}>
+        <LoadingFailCard
+            title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}
+            retry={retry}>
             {props.children}
         </LoadingFailCard>
     )
