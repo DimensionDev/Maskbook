@@ -79,6 +79,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                         (x) => x.address.toLowerCase(),
                     ).filter((x) => x.type === EthereumTokenType.ERC20),
                     order_: desktopOrder,
+                    slug: openSeaResponse.collection.slug,
                     response_: openSeaResponse,
                 }
             case CollectibleProvider.RARIBLE:
@@ -122,6 +123,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     order_payment_tokens: [] as (EtherTokenDetailed | ERC20TokenDetailed)[],
                     offer_payment_tokens: [] as (EtherTokenDetailed | ERC20TokenDetailed)[],
                     order_: null,
+                    slug: raribleResponse.assetContract.shortUrl,
                     response_: raribleResponse,
                 }
             default:
