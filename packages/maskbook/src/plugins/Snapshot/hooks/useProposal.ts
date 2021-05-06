@@ -3,8 +3,8 @@ import type { Proposal, ProposalMessage } from '../types'
 import { useSuspense } from '../../../utils/hooks/useSuspense'
 
 const cache = new Map<string, [0, Promise<void>] | [1, { proposal: Proposal; message: ProposalMessage }] | [2, Error]>()
-export function proposalErrorRetry() {
-    cache.forEach(([status], id) => status === 2 && cache.delete(id))
+export function proposalRetry() {
+    cache.forEach(([_status], id) => cache.delete(id))
 }
 export function useProposal(id: string) {
     return useSuspense<{ proposal: Proposal; message: ProposalMessage }, [string]>(id, [id], cache, Suspender)

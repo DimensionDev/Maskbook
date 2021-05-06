@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
 import { useUpdate } from 'react-use'
-import { proposalErrorRetry } from '../hooks/useProposal'
-import { votesErrorRetry } from '../hooks/useVotes'
-import { resultsErrorRetry } from '../hooks/useResults'
+import { proposalRetry } from '../hooks/useProposal'
+import { votesRetry } from '../hooks/useVotes'
+import { resultsRetry } from '../hooks/useResults'
 
 export function useRetry() {
     const forceUpdate = useUpdate()
     return useCallback(() => {
-        proposalErrorRetry()
-        votesErrorRetry()
-        resultsErrorRetry()
+        proposalRetry()
+        votesRetry()
+        resultsRetry()
         forceUpdate()
     }, [])
 }

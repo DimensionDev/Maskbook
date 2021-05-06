@@ -6,8 +6,8 @@ import { useBlockNumber } from '../../../web3/hooks/useBlockNumber'
 import { ChainId } from '../../../web3/types'
 
 const cache = new Map<string, [0, Promise<void>] | [1, Votes] | [2, Error]>()
-export function votesErrorRetry() {
-    cache.forEach(([status], id) => status === 2 && cache.delete(id))
+export function votesRetry() {
+    cache.forEach(([_status], id) => cache.delete(id))
 }
 export function useVotes(identifier: ProposalIdentifier) {
     return useSuspense<Votes, [ProposalIdentifier]>(identifier.id, [identifier], cache, Suspender)
