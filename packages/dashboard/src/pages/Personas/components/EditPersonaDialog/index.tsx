@@ -2,8 +2,11 @@ import { memo } from 'react'
 import { Button, createStyles, DialogActions, DialogContent, makeStyles, Typography } from '@material-ui/core'
 import { AuthorIcon, EditIcon } from '@dimensiondev/icons'
 import { MaskColorVar, MaskDialog } from '@dimensiondev/maskbook-theme'
-import type { PersonaProvider } from '../../settings'
+import type { PersonaProvider } from '../../type'
 import { PersonaLine } from '../PersonaLine'
+import { useConnectSocialNetwork } from '../../hooks/useConnectSocialNetwork'
+import type { ECKeyIdentifier } from '@dimensiondev/maskbook-shared'
+import { useDisConnectSocialNetwork } from '../../hooks/useDisConnectSocialNetwork'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -49,10 +52,13 @@ export interface EditPersonaDialogProps {
     onClose: () => void
     providers: PersonaProvider[]
     nickname?: string
+    identifier: ECKeyIdentifier
 }
 
-export const EditPersonaDialog = memo(({ open, onClose, nickname, providers }: EditPersonaDialogProps) => {
+export const EditPersonaDialog = memo(({ open, onClose, nickname, providers, identifier }: EditPersonaDialogProps) => {
     const classes = useStyles()
+    const [, onConnect] = useConnectSocialNetwork()
+    const [, onDisConnect] = useDisConnectSocialNetwork()
     return (
         <MaskDialog open={open} title="Edit Persona" onClose={onClose}>
             <DialogContent className={classes.container}>
@@ -63,7 +69,14 @@ export const EditPersonaDialog = memo(({ open, onClose, nickname, providers }: E
                 </Typography>
                 <div className={classes.content}>
                     {providers.map((provider) => {
-                        return <PersonaLine key={provider.internalName} {...provider} />
+                        return (
+                            <PersonaLine
+                                key={provider.internalName}
+                                onConnect={() => onConnect(identifier.toText(), provider)}
+                                onDisConnect={() => onDisConnect(provider?.identifier)}
+                                {...provider}
+                            />
+                        )
                     })}
                 </div>
             </DialogContent>

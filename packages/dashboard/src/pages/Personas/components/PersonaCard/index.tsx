@@ -4,11 +4,13 @@ import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { SettingsIcon } from '@dimensiondev/icons'
 import { IconButton, MenuItem, Typography } from '@material-ui/core'
 import { PersonaLine } from '../PersonaLine'
-import { useMenu } from '@dimensiondev/maskbook-shared'
+import { ECKeyIdentifier, useMenu } from '@dimensiondev/maskbook-shared'
 //TODO: replace to new settings
-import type { PersonaProvider } from '../../settings'
+import type { PersonaProvider } from '../../type'
 import { EditPersonaDialog } from '../EditPersonaDialog'
 import { DeletePersonaDialog } from '../DeletePersonaDialog'
+import { useConnectSocialNetwork } from '../../hooks/useConnectSocialNetwork'
+import { useDisConnectSocialNetwork } from '../../hooks/useDisConnectSocialNetwork'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -25,7 +27,8 @@ const useStyles = makeStyles((theme) =>
             borderRadius: '50%',
             marginRight: theme.spacing(1.25),
             marginTop: theme.spacing(0.625),
-            color: (active) => (active ? MaskColorVar.greenMain : MaskColorVar.iconLight),
+            backgroundColor: ({ active }: { active: boolean }) =>
+                active ? MaskColorVar.greenMain : MaskColorVar.iconLight,
         },
         header: {
             display: 'flex',
@@ -52,11 +55,12 @@ const useStyles = makeStyles((theme) =>
 export interface PersonaCardProps {
     nickname?: string
     active?: boolean
+    identifier: ECKeyIdentifier
     providers: PersonaProvider[]
     onClick(): void
 }
 
-export const PersonaCard = memo(({ nickname, providers, active = false, onClick }: PersonaCardProps) => {
+export const PersonaCard = memo<PersonaCardProps>(({ nickname, providers, active = false, onClick, identifier }) => {
     const classes = useStyles({ active })
     const [editDialogOpen, setEditDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -72,6 +76,9 @@ export const PersonaCard = memo(({ nickname, providers, active = false, onClick 
         false,
     )
 
+    const [, onConnect] = useConnectSocialNetwork()
+    const [, onDisconnect] = useDisConnectSocialNetwork()
+
     return (
         <div className={classes.card} onClick={onClick}>
             <div className={classes.status} />
@@ -84,7 +91,14 @@ export const PersonaCard = memo(({ nickname, providers, active = false, onClick 
                 </div>
                 <div className={classes.content}>
                     {providers.map((provider) => {
-                        return <PersonaLine key={provider.internalName} {...provider} />
+                        return (
+                            <PersonaLine
+                                key={provider.internalName}
+                                onConnect={() => onConnect(identifier.toText(), provider)}
+                                onDisConnect={() => onDisconnect(provider?.identifier)}
+                                {...provider}
+                            />
+                        )
                     })}
                 </div>
             </div>
@@ -94,6 +108,7 @@ export const PersonaCard = memo(({ nickname, providers, active = false, onClick 
                 onClose={() => setEditDialogOpen(false)}
                 nickname={nickname}
                 providers={providers}
+                identifier={identifier}
             />
             <DeletePersonaDialog
                 open={deleteDialogOpen}

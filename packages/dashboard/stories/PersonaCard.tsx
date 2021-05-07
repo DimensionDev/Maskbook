@@ -1,5 +1,6 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
 import { PersonaCard as C } from '../src/pages/Personas/components/PersonaCard'
+import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 
 const { meta, of } = story(C)
 
@@ -15,6 +16,7 @@ export const PersonaCard = of({
                 internalName: 'twitter.com',
                 connected: false,
                 network: 'twitter.com',
+                identifier: new ProfileIdentifier('twitter.com', ''),
             },
         ],
     },

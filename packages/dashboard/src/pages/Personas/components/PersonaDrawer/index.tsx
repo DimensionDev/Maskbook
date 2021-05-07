@@ -3,12 +3,13 @@ import { Box, Button, Drawer, makeStyles } from '@material-ui/core'
 import { PersonaState } from '../../hooks/usePersonaState'
 import { PersonaCard } from '../PersonaCard'
 //TODO: replace to new settings
-import type { PersonaInfo, PersonaProvider } from '../../settings'
-import { useValueRef } from '@dimensiondev/maskbook-shared'
+import type { PersonaInfo, PersonaProvider } from '../../type'
+import { ECKeyIdentifier, useValueRef } from '@dimensiondev/maskbook-shared'
 import { currentPersonaSettings } from '../../settings'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { AddPersonaCard } from '../AddPersonaCard'
 import stringify from 'json-stable-stringify'
+import { useCreatePersona } from '../../hooks/useCreatePersona'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 export interface PersonaDrawer {
     personas: {
-        identifier: string
+        identifier: ECKeyIdentifier
         providers: PersonaProvider[]
         nickname?: string
     }[]
@@ -58,9 +59,13 @@ export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
     }, [currentPersonaRef])
 
     const onPersonaCardClick = useCallback((persona) => {
-        currentPersonaSettings.value = stringify(persona)
+        currentPersonaSettings.value = stringify({
+            ...persona,
+            identifier: persona.identifier.toText(),
+        })
     }, [])
 
+    const [, onAddPersona] = useCreatePersona(() => setShowAddPersonaCard(false))
     return (
         <Drawer
             anchor="right"
@@ -78,8 +83,9 @@ export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
                 const { identifier, nickname, providers } = item
                 return (
                     <PersonaCard
-                        active={identifier === currentPersonIdentifier}
-                        key={identifier}
+                        identifier={identifier}
+                        active={identifier.toText() === currentPersonIdentifier}
+                        key={identifier.toText()}
                         nickname={nickname}
                         providers={providers}
                         onClick={() => onPersonaCardClick(item)}
@@ -87,7 +93,7 @@ export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
                 )
             })}
             {showAddPersonaCard && (
-                <AddPersonaCard onConfirm={(name) => console.log(name)} onCancel={() => setShowAddPersonaCard(false)} />
+                <AddPersonaCard onConfirm={onAddPersona} onCancel={() => setShowAddPersonaCard(false)} />
             )}
             <Box className={classes.buttons}>
                 <Button onClick={() => setShowAddPersonaCard(true)}>Add Persona</Button>

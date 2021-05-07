@@ -140,6 +140,20 @@ export async function setupPersona(id: PersonaIdentifier) {
     })
 }
 
+export async function createPersona(id: PersonaIdentifier) {
+    return consistentPersonaDBWriteAccess(async (t) => {
+        const d = await queryPersonaDB(id, t)
+        if (!d) throw new Error('cannot find persona')
+        if (d.uninitialized) {
+            await updatePersonaDB(
+                { identifier: id, uninitialized: false },
+                { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' },
+                t,
+            )
+        }
+    })
+}
+
 export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
 }

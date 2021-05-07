@@ -8,6 +8,6 @@ export const [
 ] = createGlobalState(Services.SocialNetwork.getDefinedSocialNetworkUIs, () => () => {})
 
 export const [useMyPersonas, revalidateMyPersonas, myPersonas] = createGlobalState(
-    Services.SocialNetwork.getMyPersonas,
+    Services.Identity.queryMyPersonas,
     Messages.events.personaChanged.on,
 )

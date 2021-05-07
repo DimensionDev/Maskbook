@@ -1,14 +1,8 @@
-import { memo, useRef } from 'react'
-import {
-    createStyles,
-    makeStyles,
-    Button,
-    alpha,
-    experimentalStyled as styled,
-    InputBase,
-    inputBaseClasses,
-} from '@material-ui/core'
+import { memo, useState } from 'react'
+import { createStyles, makeStyles, Button, TextField } from '@material-ui/core'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { checkInputLengthExceed } from '../../../../utils'
+import { PERSONA_NAME_MAX_LENGTH } from '../../../../constants'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -27,40 +21,34 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-const NameInput = styled(InputBase)(({ theme }) => ({
-    'label + &': {
-        marginTop: theme.spacing(3),
-    },
-    [`& .${inputBaseClasses.input}`]: {
-        width: '100%',
-        borderRadius: 4,
-        position: 'relative',
-        backgroundColor: MaskColorVar.normalBackground,
-        border: `1px solid ${MaskColorVar.border}`,
-        fontSize: theme.typography.subtitle1.fontSize,
-        padding: theme.spacing(1.2, 1.5),
-        transition: theme.transitions.create(['border-color', 'background-color', 'box-shadow']),
-        '&:focus': {
-            boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-            borderColor: theme.palette.primary.main,
-        },
-    },
-}))
-
 export interface AddPersonaCardProps {
     onConfirm: (name?: string) => void
     onCancel: () => void
 }
 
 export const AddPersonaCard = memo(({ onConfirm, onCancel }: AddPersonaCardProps) => {
-    const ref = useRef<HTMLInputElement>()
+    const [name, setName] = useState('')
     const classes = useStyles()
 
     return (
         <div className={classes.container}>
-            <NameInput inputRef={ref} />
+            {/*TODO: add color prop */}
+            <TextField
+                variant="filled"
+                error={checkInputLengthExceed(name, PERSONA_NAME_MAX_LENGTH)}
+                helperText={
+                    checkInputLengthExceed(name, PERSONA_NAME_MAX_LENGTH) ? 'Maximum length is 24 characters long.' : ''
+                }
+                InputProps={{ disableUnderline: true }}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+            />
             <div className={classes.buttons}>
-                <Button onClick={() => onConfirm(ref.current?.value)}>Confirm</Button>
+                <Button
+                    disabled={!name.length || checkInputLengthExceed(name, PERSONA_NAME_MAX_LENGTH)}
+                    onClick={() => onConfirm(name)}>
+                    Confirm
+                </Button>
                 <Button color="secondary" onClick={onCancel}>
                     Cancel
                 </Button>

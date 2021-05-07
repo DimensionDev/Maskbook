@@ -1,11 +1,6 @@
 import { useAsyncFn } from 'react-use'
 import { Services } from '../../../API'
-
-export interface SocialNetworkProvider {
-    internalName: string
-    network: string
-    connected: boolean
-}
+import type { SocialNetworkProvider } from '../type'
 
 export function useConnectSocialNetwork() {
     return useAsyncFn(async (identifier: string, provider: SocialNetworkProvider) => {

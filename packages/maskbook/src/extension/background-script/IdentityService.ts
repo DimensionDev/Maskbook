@@ -1,5 +1,10 @@
 import * as bip39 from 'bip39'
-import { queryProfilesWithQuery, personaRecordToPersona, storeAvatar, queryProfile } from '../../database'
+import {
+    queryProfilesWithQuery,
+    personaRecordToPersona,
+    storeAvatar,
+    queryProfile,
+} from '../../database'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import type { Profile, Persona } from '../../database/Persona/types'
 import {
@@ -117,7 +122,7 @@ export async function restoreFromBackup(backup: string): Promise<Persona | null>
 /**
  * Remove an identity.
  */
-export { setupPersona, deletePersona } from '../../database'
+export { setupPersona, deletePersona, createPersona } from '../../database'
 export async function attachProfile(
     source: ProfileIdentifier,
     target: ProfileIdentifier | PersonaIdentifier,

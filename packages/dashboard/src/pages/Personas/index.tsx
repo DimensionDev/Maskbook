@@ -11,7 +11,8 @@ import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaState } from './hooks/usePersonaState'
 import { useValueRef } from '@dimensiondev/maskbook-shared'
-import { currentPersonaSettings, PersonaInfo } from './settings'
+import { currentPersonaSettings } from './settings'
+import type { PersonaInfo } from './type'
 import stringify from 'json-stable-stringify'
 
 const useStyles = makeStyles(() =>
@@ -62,28 +63,31 @@ export default function Personas() {
                 )
 
                 return {
-                    identifier: persona.identifier.toText(),
+                    identifier: persona.identifier,
                     nickname: persona.nickname,
                     providers: providers,
                 }
             })
     }, [myPersonas, definedSocialNetworkUIs])
 
-    const currentPersonaInfo = useMemo(() => {
-        return JSON.parse(currentPersona) as PersonaInfo
+    const currentPersonaInfo = useMemo<PersonaInfo>(() => {
+        return JSON.parse(currentPersona)
     }, [currentPersona])
 
     const [activeTab, setActiveTab] = useState(currentPersonaInfo?.providers?.[0]?.internalName ?? '')
 
-    const [connectState, onConnect] = useConnectSocialNetwork()
+    const [, onConnect] = useConnectSocialNetwork()
 
     useEffect(() => {
         if (personas.length) {
-            currentPersonaSettings.value = stringify(
-                isEmpty(currentPersonaInfo)
-                    ? head(personas)
-                    : personas.find((i) => i.identifier === currentPersonaInfo.identifier),
-            )
+            //#region when the personas changed, update the currentPersona Info
+            const persona = isEmpty(currentPersonaInfo)
+                ? head(personas)
+                : personas.find((i) => i.identifier.toText() === currentPersonaInfo.identifier)
+            currentPersonaSettings.value = stringify({
+                ...persona,
+                identifier: persona!.identifier.toText(),
+            })
         }
     }, [currentPersonaInfo, personas])
 
