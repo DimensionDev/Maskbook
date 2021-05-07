@@ -1,10 +1,5 @@
 import * as bip39 from 'bip39'
-import {
-    queryProfilesWithQuery,
-    personaRecordToPersona,
-    storeAvatar,
-    queryProfile,
-} from '../../database'
+import { queryProfilesWithQuery, personaRecordToPersona, storeAvatar, queryProfile } from '../../database'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import type { Profile, Persona } from '../../database/Persona/types'
 import {
