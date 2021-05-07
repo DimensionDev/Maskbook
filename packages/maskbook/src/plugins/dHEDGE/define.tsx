@@ -1,5 +1,5 @@
 import { PluginConfig, PluginStage, PluginScope } from '../types'
-import { Suspense, useMemo } from 'react'
+import React, { Suspense, useMemo } from 'react'
 import { SnackbarContent } from '@material-ui/core'
 import { parseURL } from '../../utils/utils'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
@@ -8,6 +8,7 @@ import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import { DHEDGE_PLUGIN_ID } from './constants'
 import { usePoolUrlPattern, useIsPoolUrl } from './hooks/useUrl'
 import { PoolView } from './UI/PoolView'
+import { InvestDialog } from './UI/InvestDialog'
 
 export const DHedgePluginDefine: PluginConfig = {
     id: DHEDGE_PLUGIN_ID,
@@ -37,6 +38,7 @@ export const DHedgePluginDefine: PluginConfig = {
         return (
             <>
                 <PoolView address="" />
+                <InvestDialog />
             </>
         )
     },
@@ -44,6 +46,7 @@ export const DHedgePluginDefine: PluginConfig = {
         return (
             <>
                 <PoolView address="" />
+                <InvestDialog />
             </>
         )
     },

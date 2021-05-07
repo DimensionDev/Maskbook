@@ -1,29 +1,18 @@
-import {
-    makeStyles,
-    createStyles,
-    Card,
-    Typography,
-    Grid,
-    Link,
-    Avatar,
-    Button,
-    Chip,
-} from '@material-ui/core'
+import { makeStyles, createStyles, Card, Typography, Grid, Link, Avatar, Button, Chip } from '@material-ui/core'
 import type { Pool } from '../types'
 import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
 import { useAvatar } from '../hooks/useManager'
 import { Trans } from 'react-i18next'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { usePoolURL } from '../hooks/useUrl'
-import {
-    useRemoteControlledDialog,
-} from '../../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { useCallback } from 'react'
 import type { EtherTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { Coin } from '../../Trader/types'
+import { PluginDHedgeMessages } from '../messages'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -90,9 +79,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
     //#endregion
 
     //#region Swap
-    const [_, openSwapDialog] = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated, (ev) => {
-        console.log(ev)
-    })
+    const [, openSwapDialog] = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
     const openSwap = useCallback(() => {
         openSwapDialog({
             open: true,
@@ -107,7 +94,19 @@ export function PoolViewDeck(props: PoolDeckProps) {
             },
         })
     }, [openSwapDialog])
-    //#endregion    //#endregion
+    //#endregion
+
+    //#region the invest dialog
+    const [, openInvestDialog] = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated)
+    const onInvest = useCallback(() => {
+        if (!pool) return
+        openInvestDialog({
+            open: true,
+            pool: pool,
+            token: inputToken,
+        })
+    }, [pool, openInvestDialog])
+    //#endregion
 
     return (
         <Card variant="outlined" className={classes.root} elevation={0}>
@@ -159,7 +158,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
                     </Grid>
                 </Grid>
                 <Grid item alignSelf="right" xs={2}>
-                    <Button className={classes.button} variant="contained" fullWidth color="primary">
+                    <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
                         {t('plugin_dhedge_invest')}
                     </Button>
                     <Chip

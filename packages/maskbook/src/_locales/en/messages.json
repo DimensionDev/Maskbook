@@ -602,6 +602,8 @@
     "plugin_dhedge_loading_chart": "Loading",
     "plugin_dhedge_invest": "INVEST",
     "plugin_dhedge_buy_token": "GET {{symbol}}",
+    "plugin_dhedge_enter_an_amount": "Enter an amount",
+    "plugin_dhedge_insufficient_balance": "Insufficient {{symbol}} balance",
     "wallet_status_title": "Account",
     "wallet_status_connect_with": "Connected with {{provider}}",
     "wallet_status_button_change": "Change",

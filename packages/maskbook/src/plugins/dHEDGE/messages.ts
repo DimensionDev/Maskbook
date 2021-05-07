@@ -1,12 +1,14 @@
+import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { DHEDGE_PLUGIN_ID } from './constants'
+import type { Pool } from './types'
 
 type InvestDialogUpdated =
     | {
           open: true
-          name: string
-          address: string
+          pool: Pool
+          token: EtherTokenDetailed | ERC20TokenDetailed
       }
     | {
           open: false
