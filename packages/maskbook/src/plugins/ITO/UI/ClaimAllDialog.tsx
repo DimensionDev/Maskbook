@@ -183,8 +183,12 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                         </Typography>
                                         {swappedToken.isClaimable ? null : (
                                             <Typography>
-                                                {t('plugin_ito_claim_all_unlock_time')}:{' '}
-                                                {formatDateTime(swappedToken.unlockTime, 'yyyy-MM-dd HH:mm:ss')}
+                                                {t('plugin_ito_claim_all_unlock_time', {
+                                                    time: formatDateTime(
+                                                        swappedToken.unlockTime,
+                                                        'yyyy-MM-dd HH:mm:ss',
+                                                    ),
+                                                })}
                                             </Typography>
                                         )}
                                     </div>
