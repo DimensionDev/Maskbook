@@ -148,13 +148,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             return
         }
         const claimableTokens = swappedTokens!.filter((t) => t.isClaimable)
-        const summary = claimableTokens.reduce((acc, cur, i) => {
-            const text = formatBalance(cur.amount, cur.token.decimals) + ' ' + cur.token.symbol
-            if (i === 0) return acc + ' ' + text
-            if (i === claimableTokens.length - 1) return acc + ' And ' + text
-            return acc + '、' + text
-        }, 'Claim')
-
+        const summary =
+            'Claim ' +
+            new Intl.ListFormat('en').format(
+                claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
+            )
         setClaimTransactionDialogOpen({
             open: true,
             state: claimState,
