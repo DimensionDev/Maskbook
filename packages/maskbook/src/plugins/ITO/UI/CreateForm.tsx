@@ -90,6 +90,7 @@ const useStyles = makeStyles((theme) =>
         },
         datetime: {
             '&::-webkit-calendar-picker-indicator': {
+                marginLeft: 0,
                 backgroundImage: `url(${new URL('../assets/calendar.png', import.meta.url)})`,
             },
         },
