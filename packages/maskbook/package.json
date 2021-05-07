@@ -12,7 +12,7 @@
     "@dimensiondev/dashboard": "workspace:*",
     "@dimensiondev/icons": "workspace:*",
     "@dimensiondev/external-plugin-previewer": "workspace:*",
-    "@dimensiondev/holoflows-kit": "0.8.0-20210302070358-e90c55c",
+    "@dimensiondev/holoflows-kit": "0.8.0-20210317064617-6c4792c",
     "@dimensiondev/kit": "0.0.0-20210221102734-0b4a937",
     "@dimensiondev/mask-plugin-infra": "workspace:*",
     "@dimensiondev/maskbook-shared": "workspace:*",

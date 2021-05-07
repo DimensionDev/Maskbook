@@ -15,7 +15,9 @@ export const MaskCard: Component<MaskCardProps> = (props) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small">{String(props.button)}</Button>
+                <Button href={props.href} target="_blank" size="small">
+                    {String(props.button)}
+                </Button>
             </CardActions>
         </Card>
     )
@@ -25,4 +27,5 @@ export interface MaskCardProps {
     caption: string
     title: string
     button: string
+    href: string
 }

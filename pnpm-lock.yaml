@@ -205,7 +205,7 @@ importers:
       '@dimensiondev/contracts': workspace:*
       '@dimensiondev/dashboard': workspace:*
       '@dimensiondev/external-plugin-previewer': workspace:*
-      '@dimensiondev/holoflows-kit': 0.8.0-20210302070358-e90c55c
+      '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/icons': workspace:*
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
       '@dimensiondev/mask-plugin-infra': workspace:*
@@ -369,7 +369,7 @@ importers:
       '@dimensiondev/contracts': link:../contracts
       '@dimensiondev/dashboard': link:../dashboard
       '@dimensiondev/external-plugin-previewer': link:../external-plugin-previewer
-      '@dimensiondev/holoflows-kit': 0.8.0-20210302070358-e90c55c_webextension-polyfill@0.8.0
+      '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c_webextension-polyfill@0.8.0
       '@dimensiondev/icons': link:../icons
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
       '@dimensiondev/mask-plugin-infra': link:../plugin-infra
@@ -2565,21 +2565,6 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/holoflows-kit/0.8.0-20210302070358-e90c55c_webextension-polyfill@0.8.0:
-    resolution: {integrity: sha512-mu1/mgzFfZ2lJhW7m3oh4InOFCGUulgX8KXBrZ97B1KduBlJKP3CyUcxkIEYEKX9m/TwAbYKQ/co2SWj37CziA==, tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210302070358-e90c55c/53508fd749cc314d345050fa38cc0c233d6b1ce5a5b8aba2cf52a5a56a785c81}
-    peerDependencies:
-      webextension-polyfill: '*'
-    dependencies:
-      '@servie/events': 1.0.0
-      async-call-rpc: 4.2.1
-      event-iterator: 2.0.0
-      jsx-jsonml-devtools-renderer: 1.4.3
-      lodash-es: 4.17.21
-      memorize-decorator: 0.2.4
-      tslib: 2.2.0
-      webextension-polyfill: 0.8.0
-    dev: false
-
   /@dimensiondev/holoflows-kit/0.8.0-20210317064617-6c4792c:
     resolution: {integrity: sha512-zB121+yJ3pVCkByf3LEHBUHEMy5rc/r3e4T5E+92SNb+GH/VowvGubSFPygeM2p5lFMyrO+AlvJRPvWQ8ONJTA==, tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210317064617-6c4792c/0ad5efd95cb3cbb58a6e30983f6e0ad2a2216a1cf67d7903c9e0d935a7b1ae2a}
     peerDependencies:
@@ -2592,6 +2577,21 @@ packages:
       lodash-es: 4.17.21
       memorize-decorator: 0.2.4
       tslib: 2.2.0
+    dev: false
+
+  /@dimensiondev/holoflows-kit/0.8.0-20210317064617-6c4792c_webextension-polyfill@0.8.0:
+    resolution: {integrity: sha512-zB121+yJ3pVCkByf3LEHBUHEMy5rc/r3e4T5E+92SNb+GH/VowvGubSFPygeM2p5lFMyrO+AlvJRPvWQ8ONJTA==, tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210317064617-6c4792c/0ad5efd95cb3cbb58a6e30983f6e0ad2a2216a1cf67d7903c9e0d935a7b1ae2a}
+    peerDependencies:
+      webextension-polyfill: '*'
+    dependencies:
+      '@servie/events': 1.0.0
+      async-call-rpc: 4.2.1
+      event-iterator: 2.0.0
+      jsx-jsonml-devtools-renderer: 1.4.3
+      lodash-es: 4.17.21
+      memorize-decorator: 0.2.4
+      tslib: 2.2.0
+      webextension-polyfill: 0.8.0
     dev: false
 
   /@dimensiondev/kit/0.0.0-20210221102734-0b4a937:

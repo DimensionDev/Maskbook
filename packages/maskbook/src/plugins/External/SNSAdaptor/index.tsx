@@ -1,13 +1,13 @@
+import type { Plugin } from '@dimensiondev/mask-plugin-infra'
 import { Suspense } from 'react'
-import { PluginConfig, PluginScope, PluginStage } from '../types'
-import { ExternalPluginLoader } from './Container'
-import type { ExternalPluginLoadDetails } from './types'
-export const ExternalPluginDefine: PluginConfig = {
-    identifier: 'com.maskbook.external',
-    pluginName: 'External Plugin',
-    scope: PluginScope.Public,
-    stage: PluginStage.Production,
-    successDecryptionInspector: function Comp(props) {
+import { ExternalPluginLoader } from '../components/Container'
+import type { ExternalPluginLoadDetails } from '../types'
+import { base } from '../base'
+
+const sns: Plugin.SNSAdaptor.Definition = {
+    ...base,
+    init(signal) {},
+    DecryptedInspector: function Comp(props) {
         const tm = props.message
         if (!tm.meta) return null
         let JSX: ExternalPluginLoadDetails[] = []
@@ -24,6 +24,8 @@ export const ExternalPluginDefine: PluginConfig = {
         )
     },
 }
+
+export default sns
 // plugin:dimensiondev.github.io/Mask-Plugin-Example/@v1
 function parse(x: string) {
     let [address, ...key] = x.slice('plugin:'.length).split('@')
