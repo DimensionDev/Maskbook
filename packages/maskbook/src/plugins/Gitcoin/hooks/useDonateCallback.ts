@@ -1,10 +1,10 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
+import type { Tx } from '@dimensiondev/contracts/types/types'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import type { Tx } from '@dimensiondev/contracts/types/types'
 import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import Services from '../../../extension/service'
@@ -42,7 +42,7 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
     }, [address, amount, token])
 
     const donateCallback = useCallback(async () => {
-        if (!token || !bulkCheckoutContract || donations.length === 0) {
+        if (!token || !bulkCheckoutContract || !donations.length) {
             setDonateState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -54,7 +54,7 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        // step 1: estimate gas
+        // estimate gas
         const config = await Services.Ethereum.composeTransaction({
             from: account,
             to: bulkCheckoutContract.options.address,
