@@ -1,21 +1,9 @@
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type { TransactionState } from '../../web3/hooks/useTransactionState'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
+import type { ERC20TokenDetailed } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
-
-type SelectTokenDialogEvent =
-    | {
-          open: true
-          address?: string
-          lists?: string[]
-          excludeTokens?: string[]
-      }
-    | {
-          open: false
-          token?: EtherTokenDetailed | ERC20TokenDetailed
-      }
 
 type UnlockERC20TokenDialogEvent =
     | {
@@ -40,16 +28,6 @@ type TransactionDialogEvent =
           open: false
       }
 
-type ConfirmSwapDialogEvent =
-    | {
-          open: true
-          variableIndex: 1 | 2 | 3 | 'bypass'
-      }
-    | {
-          open: false
-          result: boolean
-      }
-
 interface EthereumMessage {
     /**
      * Unlock token dialog
@@ -60,11 +38,6 @@ interface EthereumMessage {
      * Transaction dialog
      */
     transactionDialogUpdated: TransactionDialogEvent
-
-    /**
-     * Confirm Swap
-     */
-    confirmSwapDialogUpdated: ConfirmSwapDialogEvent
 
     rpc: unknown
 }

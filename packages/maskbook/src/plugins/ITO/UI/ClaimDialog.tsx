@@ -2,7 +2,6 @@ import { useState, useMemo, useCallback, useEffect } from 'react'
 import { createStyles, makeStyles, Typography, Slider } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
-import { sample } from 'lodash-es'
 
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType } from '../../../web3/types'
@@ -123,21 +122,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
         swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken.decimals),
     )
 
-    //#region confirm swap dialog
-    const [, setConfirmSwapDialogOpen] = useRemoteControlledDialog(
-        EthereumMessages.events.confirmSwapDialogUpdated,
-        async (event) => {
-            if (event.open) return
-            if (!event.result) return
-            await swapCallback()
-            if (payload.token.type === EthereumTokenType.ERC20) {
-                await WalletRPC.addERC20Token(payload.token)
-                await WalletRPC.trustERC20Token(account, payload.token)
-            }
-        },
-    )
-    //#endregion
-
     //#region select token
     const [id] = useState(uuid())
     const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
@@ -205,17 +189,16 @@ export function ClaimDialog(props: ClaimDialogProps) {
         swapToken,
     )
     const onSwap = useCallback(async () => {
-        setConfirmSwapDialogOpen({
-            open: true,
-            variableIndex: sample([1, 2, 3]) ?? 'bypass',
-        })
-    }, [setConfirmSwapDialogOpen])
+        await swapCallback()
+        if (payload.token.type !== EthereumTokenType.ERC20) return
+        await WalletRPC.addERC20Token(payload.token)
+        await WalletRPC.trustERC20Token(account, payload.token)
+    }, [swapCallback, payload.token.address])
 
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-
             if (swapState.type !== TransactionStateType.CONFIRMED && swapState.type !== TransactionStateType.RECEIPT)
                 return
             const { receipt } = swapState
