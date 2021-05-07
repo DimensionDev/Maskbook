@@ -63,11 +63,42 @@ async function fetchTemplate(url: string | null) {
     if (!url) return
     const blob = await Services.Helper.fetch(url)
     const text = await blob.text()
-    const dom = new DOMParser().parseFromString(text, 'text/html')
-    const template = dom.querySelector('template')
+    const parser = new DOMParser()
+    const dom = parser.parseFromString(text, 'text/html').querySelector('template')?.innerHTML
+    if (!dom) return null
+    const template = parser.parseFromString(dom, 'text/html').querySelector('body')?.childNodes
     if (!template) return null
-    // @ts-ignore Property 'replaceAll' does not exist on type 'string'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2021' or later.ts(2550)
-    return template.innerHTML.replaceAll('&gt;', '>')
+    console.log(htmlToTemplate(template))
+    return htmlToTemplate(template)
+}
+
+const indentLevel = 2
+function htmlToTemplate(top: NodeListOf<ChildNode>) {
+    function* text(indent: number, text: Text) {
+        for (const line of text.textContent?.split('\n') || '') {
+            yield `${getIndent(indent)}. ${line}`
+        }
+    }
+    function* html(indent: number, node: HTMLElement): Generator<string> {
+        yield `${getIndent(indent)}>${node.tagName.toLowerCase()}`
+        for (const attr of node.attributes) {
+            yield `${getIndent(indent + indentLevel)}%${attr.name} = ${attr.value}`
+        }
+        yield* convertList(indent + indentLevel, node.childNodes)
+    }
+    function* convertList(indent: number, nodes: NodeListOf<ChildNode>): Generator<string> {
+        for (const node of nodes) {
+            if (isText(node)) yield* text(indent, node)
+            else if (node instanceof HTMLElement) yield* html(indent, node)
+        }
+    }
+    function getIndent(x: number) {
+        return ' '.repeat(x)
+    }
+    function isText(node: ChildNode): node is Text {
+        return node.nodeType === document.TEXT_NODE
+    }
+    return [...convertList(0, top)].join('\n')
 }
 
 async function fetchManifest(addr: string) {
