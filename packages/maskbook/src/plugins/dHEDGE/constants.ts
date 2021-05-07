@@ -24,18 +24,25 @@ export const CONSTANT = {
         [ChainId.Kovan]: 'https://dev.dhedge.org/graphql',
         [ChainId.Gorli]: '',
     },
+
     ALLOWED_TOKEN_ADDRESSES: {
         [ChainId.Mainnet]: [
-            '0x57Ab1ec28D129707052df4dF418D58a2D46d5f51', // sUSD
+            '0x57Ab1ec28D129707052df4dF418D58a2D46d5f51', // sUSD, dont change this
             '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
             '0x6B175474E89094C44Da98b954EedeAC495271d0F', // DAI
             '0xe2f2a5c287993345a840db3b0845fbc70f5935a5', // mSUD
         ],
-        [ChainId.Ropsten]: [],
-        [ChainId.Rinkeby]: [],
+        [ChainId.Ropsten]: [
+            '0x57Ab1ec28D129707052df4dF418D58a2D46d5f51', // sUSD
+        ],
+        [ChainId.Rinkeby]: [
+            '0x57Ab1ec28D129707052df4dF418D58a2D46d5f51', // sUSD
+        ],
         [ChainId.Kovan]: [
             '0x57ab1ec28d129707052df4df418d58a2d46d5f51', // sUSD
         ],
-        [ChainId.Gorli]: [],
+        [ChainId.Gorli]: [
+            '0x57Ab1ec28D129707052df4dF418D58a2D46d5f51', // sUSD
+        ],
     },
 }

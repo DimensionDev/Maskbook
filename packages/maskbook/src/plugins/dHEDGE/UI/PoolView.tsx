@@ -6,6 +6,9 @@ import { useFetchPool } from '../hooks/usePool'
 import { PoolViewDeck } from './PoolViewDeck'
 import { PoolStats } from './PoolStats'
 import { PerformanceChart } from './PerformanceChart'
+import { useConstant } from '../../../web3/hooks/useConstant'
+import { CONSTANT } from '../constants'
+import { useERC20TokenDetailed } from '../../../web3/hooks/useERC20TokenDetailed'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -57,8 +60,13 @@ export function PoolView(props: PoolViewProps) {
     const chainId = useChainId()
     const [tabIndex, setTabIndex] = useState(0)
 
+    //#region primary token
+    const TOKEN_LIST = useConstant(CONSTANT, 'ALLOWED_TOKEN_ADDRESSES')
+    const { value: primaryTokenDetailed } = useERC20TokenDetailed(TOKEN_LIST[0])
     //#region fetch pool
-    const { value: pool, error, loading } = useFetchPool(props.address)
+
+    //#region fetch pool
+    const { value: pool, error, loading } = useFetchPool(address)
     //#endregion
 
     // //#region merge trending
@@ -149,14 +157,14 @@ export function PoolView(props: PoolViewProps) {
     // const { coin, market, tickers } = trending
     const tabs = [
         <Tab className={classes.tab} key="stats" label={t('plugin_dhedge_tab_stats')} />,
-        <Tab className={classes.tab} key="buy" label={t('plugin_dhedge_tab_buy')} />,
         <Tab className={classes.tab} key="chart" label={t('plugin_dhedge_tab_chart')} />,
     ].filter(Boolean)
     //#endregion
-    if (!pool) return <Typography>Something went wrong.</Typography>
+    if (!pool || !primaryTokenDetailed) return <Typography>Something went wrong.</Typography>
+
     return (
-        <div>
-            <PoolViewDeck pool={pool} />
+        <>
+            <PoolViewDeck pool={pool} inputToken={primaryTokenDetailed} />
             <Tabs
                 className={classes.tabs}
                 indicatorColor="primary"
@@ -172,7 +180,7 @@ export function PoolView(props: PoolViewProps) {
                 {tabs}
             </Tabs>
             {tabIndex === 0 ? <PoolStats pool={pool} /> : null}
-            {tabIndex === 2 ? <PerformanceChart pool={pool} /> : null}
+            {tabIndex === 1 ? <PerformanceChart pool={pool} /> : null}
 
             {/* // stats={stats}
             // coins={coins}
@@ -209,6 +217,6 @@ export function PoolView(props: PoolViewProps) {
             //             )}
             //         />
             //     ) : null} */}
-        </div>
+        </>
     )
 }

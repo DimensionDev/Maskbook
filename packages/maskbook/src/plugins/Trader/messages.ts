@@ -2,6 +2,7 @@ import type { DataProvider, TagType } from './types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { createPluginRPC } from '../utils/createPluginRPC'
+import type { TraderProps } from './UI/trader/Trader'
 
 interface CashTagEvent {
     name: string
@@ -18,8 +19,9 @@ interface SwapConfirmationEvent {
     open: boolean
 }
 
-interface SwapDialogEvent {
+type SwapDialogEvent = {
     open: boolean
+    traderProps?: TraderProps
 }
 
 interface PluginTraderMessage {

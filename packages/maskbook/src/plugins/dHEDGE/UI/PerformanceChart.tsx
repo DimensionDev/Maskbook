@@ -124,7 +124,7 @@ export function PerformanceChart(props: PerformanceChartProps) {
                 </>
             ) : (
                 <Typography className={classes.placeholder} align="center" color="textSecondary">
-                    {t('plugin_dhedge_no_data')}
+                    {loading ? t('plugin_dhedge_loading_chart') : t('plugin_dhedge_no_data')}
                 </Typography>
             )}
         </div>
