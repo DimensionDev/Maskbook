@@ -8,8 +8,7 @@
     { "path": "./packages/storybook-shared/" },
     { "path": "./packages/icons/" },
     { "path": "./packages/plugin-infra" },
-    { "path": "./packages/plugins/" }
-    { "path": "./packages/icons/" },
+    { "path": "./packages/plugins/" },
     { "path": "./packages/external-plugin-previewer" }
   ],
   "compilerOptions": {
