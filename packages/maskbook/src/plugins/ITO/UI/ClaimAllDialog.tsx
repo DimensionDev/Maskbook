@@ -8,7 +8,6 @@ import {
     DialogContent,
     CircularProgress,
     Typography,
-    Link,
     List,
     ListItem,
 } from '@material-ui/core'
@@ -21,7 +20,6 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
-import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import formatDateTime from 'date-fns/format'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { useSnackbar, VariantType } from 'notistack'
@@ -29,7 +27,7 @@ import { useSnackbar, VariantType } from 'notistack'
 const useStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
-            padding: theme.spacing(4, 4, 2, 4),
+            padding: theme.spacing(4),
         },
         actionButton: {
             margin: '0 auto',
@@ -211,20 +209,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                 ) : swappedTokens.length === 0 ? (
                     <Typography>{t('plugin_ito_no_claimable_token')}</Typography>
                 ) : null}
-                <div className={classes.footer}>
-                    <Typography className={classes.footnote} variant="subtitle2">
-                        <span>Powered by </span>
-                        <Link
-                            className={classes.footLink}
-                            color="textSecondary"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="Mask"
-                            href="https://mask.io">
-                            <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
-                        </Link>
-                    </Typography>
-                </div>
             </DialogContent>
         </InjectedDialog>
     )
