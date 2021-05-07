@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
     },
     tokenCard: {
         width: '100%',
+        color: 'white',
         height: 95,
         background: 'linear-gradient(.25turn, #0ACFFE, 40%, #2b3ef0)',
         marginBottom: theme.spacing(2),
