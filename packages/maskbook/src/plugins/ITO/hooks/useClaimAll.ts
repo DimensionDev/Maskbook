@@ -4,67 +4,75 @@ import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 
-export interface ClaimableAll {
+export interface SwappedToken {
     pids: string[]
-    tokens: {
-        [key in string]: { token: EtherTokenDetailed | ERC20TokenDetailed; amount: number }
-    }
+    amount: number
+    token: EtherTokenDetailed | ERC20TokenDetailed
+    isClaimable: boolean
+    unlockTime: Date
 }
 
 export function useClaimAll() {
     const account = useAccount()
     const ITO_Contract = useITO_Contract()
-    const { value: pools = [] } = useAllPoolsAsBuyer(account)
+    const { value: pools = [], loading } = useAllPoolsAsBuyer(account)
 
-    return useAsyncRetry<ClaimableAll>(async () => {
-        if (pools.length === 0 || !ITO_Contract) {
-            return {
-                pids: [],
-                tokens: {},
-            }
-        }
+    return useAsyncRetry(async () => {
+        if (!ITO_Contract || loading) return undefined
+        if (pools.length === 0) return []
+
         const raws = await Promise.all(
             pools.map(async (value) => {
                 const availability = await ITO_Contract.methods.check_availability(value.pool.pid).call({
-                    // check availability is ok w/o account
                     from: account,
                 })
 
                 return { availability, ...value }
             }),
         )
-        return raws.reduce(
-            (
-                acc: {
-                    pids: string[]
-                    tokens: {
-                        [key in string]: { token: EtherTokenDetailed | ERC20TokenDetailed; amount: number }
-                    }
-                },
-                cur,
-            ) => {
-                if (!cur.availability.unlocked || cur.availability.swapped === '0') return acc
-
-                acc.pids.push(cur.pool.pid)
-
-                const token = cur.pool.token
-                const tokenAddress = token.address
-                const amount = Number(cur.availability.swapped)
-
-                if (!acc.tokens[tokenAddress]) {
-                    acc.tokens[tokenAddress] = {
-                        token,
-                        amount,
-                    }
+        const swappedTokens: SwappedToken[] = raws
+            .filter((raw) => raw.availability.swapped !== '0')
+            .map((raw) => {
+                return {
+                    pids: [raw.pool.pid],
+                    amount: Number(raw.availability.swapped),
+                    token: raw.pool.token,
+                    isClaimable: raw.availability.unlocked,
+                    unlockTime: new Date(Number(raw.availability.unlock_time) * 1000),
+                }
+            })
+            .reduce((acc: SwappedToken[], cur) => {
+                if (acc.some(checkClaimable(cur)) && cur.isClaimable) {
+                    // merge same claimable tokens to one
+                    const existToken = acc.find(checkClaimable(cur))
+                    const existTokenIndex = acc.findIndex(checkClaimable(cur))
+                    acc[existTokenIndex] = mergeTokens(existToken!, cur)
+                } else if (acc.some(checkUnlockTimeEqual(cur))) {
+                    // merge same unlock time tokens to one
+                    const existToken = acc.find(checkUnlockTimeEqual(cur))
+                    const existTokenIndex = acc.findIndex(checkUnlockTimeEqual(cur))
+                    acc[existTokenIndex] = mergeTokens(existToken!, cur)
                 } else {
-                    acc.tokens[tokenAddress].amount += amount
+                    acc.push(cur)
                 }
                 return acc
-            },
-            {
-                pids: [],
-                tokens: {},
-            },
-        )
+            }, [])
+            .sort((a, b) => b.unlockTime.getTime() - a.unlockTime.getTime())
+        return swappedTokens
     }, [pools, account])
+}
+
+function checkUnlockTimeEqual(cur: SwappedToken) {
+    return (t: SwappedToken) =>
+        t.token.address === cur.token.address && t.unlockTime.getTime() === cur.unlockTime.getTime()
+}
+
+function checkClaimable(cur: SwappedToken) {
+    return (t: SwappedToken) => t.token.address === cur.token.address && t.isClaimable
+}
+
+function mergeTokens(a: SwappedToken, b: SwappedToken) {
+    a.pids = a.pids.concat(b.pids)
+    a.amount += b.amount
+    return a
 }

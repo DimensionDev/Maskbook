@@ -60,11 +60,13 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
     const [state, setState] = useState<TransactionState | null>(null)
     const [shareLink, setShareLink] = useState('')
     const [summary, setSummary] = useState('')
+    const [title, setTitle] = useState('Transaction')
     const [open, setOpen] = useRemoteControlledDialog(EthereumMessages.events.transactionDialogUpdated, (ev) => {
         if (ev.open) {
             setState(ev.state)
             setSummary(ev.summary ?? '')
             setShareLink(ev.shareLink ?? '')
+            setTitle(ev.title ?? 'Transaction')
         } else {
             setSummary('')
             setShareLink('')
@@ -83,7 +85,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
 
     if (!state) return null
     return (
-        <InjectedDialog open={open} onClose={onClose} title="Transaction" DialogProps={{ maxWidth: 'xs' }}>
+        <InjectedDialog open={open} onClose={onClose} title={title} DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent className={classes.content}>
                 {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ? (
                     <>
