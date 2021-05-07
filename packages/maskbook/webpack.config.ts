@@ -101,6 +101,9 @@ function config(opts: {
                 '@dimensiondev/icons': require.resolve('../icons/index.ts'),
                 '@dimensiondev/mask-plugin-infra': require.resolve('../plugin-infra/src/index.ts'),
                 '@dimensiondev/plugin-example': require.resolve('../plugins/example/src/index.ts'),
+                '@dimensiondev/external-plugin-previewer': require.resolve(
+                    '../external-plugin-previewer/src/index.tsx',
+                ),
             },
             // Polyfill those Node built-ins
             fallback: {
