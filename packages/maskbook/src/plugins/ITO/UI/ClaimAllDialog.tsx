@@ -24,6 +24,7 @@ import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import formatDateTime from 'date-fns/format'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
+import { useSnackbar, VariantType } from 'notistack'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -102,6 +103,19 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { open, onClose } = props
     const { value: swappedTokens, loading, retry } = useClaimAll()
     const classes = useStyles()
+    const { enqueueSnackbar } = useSnackbar()
+    const popEnqueueSnackbar = useCallback(
+        (variant: VariantType) =>
+            enqueueSnackbar('Claim Token', {
+                variant,
+                preventDuplicate: true,
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            }),
+        [enqueueSnackbar],
+    )
     const chainId = useChainId()
     const claimablePids = uniq(flatten(swappedTokens?.filter((t) => t.isClaimable).map((t) => t.pids)))
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(claimablePids)
@@ -114,10 +128,12 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
+            if (claimState.type === TransactionStateType.FAILED) popEnqueueSnackbar('error')
             if (claimState.type !== TransactionStateType.CONFIRMED) return
             resetClaimCallback()
             retry()
             onClose()
+            popEnqueueSnackbar('success')
         },
     )
 
@@ -131,13 +147,21 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             }, 2000)
             return
         }
+        const claimableTokens = swappedTokens!.filter((t) => t.isClaimable)
+        const summary = claimableTokens.reduce((acc, cur, i) => {
+            const text = formatBalance(cur.amount, cur.token.decimals) + ' ' + cur.token.symbol
+            if (i === 0) return acc + ' ' + text
+            if (i === claimableTokens.length - 1) return acc + ' And ' + text
+            return acc + '、' + text
+        }, 'Claim')
 
         setClaimTransactionDialogOpen({
             open: true,
             state: claimState,
-            summary: t('plugin_ito_claim_all_tx_summary'),
+            title: 'Claim Token',
+            summary,
         })
-    }, [claimState /* update tx dialog only if state changed */])
+    }, [claimState, swappedTokens /* update tx dialog only if state changed */])
 
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_status_unclaimed')}>
@@ -160,7 +184,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                         {swappedToken.isClaimable ? null : (
                                             <Typography>
                                                 {t('plugin_ito_claim_all_unlock_time')}:{' '}
-                                                {formatDateTime(swappedToken.unlockTime, 'yyyy-MM-dd hh:mm:ss')}
+                                                {formatDateTime(swappedToken.unlockTime, 'yyyy-MM-dd HH:mm:ss')}
                                             </Typography>
                                         )}
                                     </div>
@@ -182,9 +206,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             </ActionButton>
                         </EthereumWalletConnectedBoundary>
                     </>
-                ) : (
+                ) : swappedTokens.length === 0 ? (
                     <Typography>{t('plugin_ito_no_claimable_token')}</Typography>
-                )}
+                ) : null}
                 <div className={classes.footer}>
                     <Typography className={classes.footnote} variant="subtitle2">
                         <span>Powered by </span>

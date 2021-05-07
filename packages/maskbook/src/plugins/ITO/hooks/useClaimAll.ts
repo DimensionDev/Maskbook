@@ -17,9 +17,9 @@ export function useClaimAll() {
     const ITO_Contract = useITO_Contract()
     const { value: pools = [] } = useAllPoolsAsBuyer(account)
 
-    return useAsyncRetry<SwappedToken[]>(async () => {
+    return useAsyncRetry(async () => {
         if (pools.length === 0 || !ITO_Contract) {
-            return []
+            return undefined
         }
         const raws = await Promise.all(
             pools.map(async (value) => {
@@ -43,8 +43,8 @@ export function useClaimAll() {
             })
             .reduce((acc: SwappedToken[], cur) => {
                 if (acc.some((t) => t.token.address === cur.token.address && t.isClaimable) && cur.isClaimable) {
-                    const existToken = acc.find((t) => t.token.address === cur.token.address)
-                    const existTokenIndex = acc.findIndex((t) => t.token.address === cur.token.address)
+                    const existToken = acc.find((t) => t.token.address === cur.token.address && t.isClaimable)
+                    const existTokenIndex = acc.findIndex((t) => t.token.address === cur.token.address && t.isClaimable)
                     existToken!.pids = existToken!.pids.concat(cur.pids)
                     existToken!.amount = existToken!.amount + cur.amount
                     acc[existTokenIndex] = existToken!

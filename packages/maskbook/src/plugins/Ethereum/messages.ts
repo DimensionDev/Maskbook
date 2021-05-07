@@ -1,3 +1,4 @@
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type { TransactionState } from '../../web3/hooks/useTransactionState'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'
@@ -33,6 +34,7 @@ type TransactionDialogEvent =
           state: TransactionState
           shareLink?: string
           summary?: string
+          title?: string
       }
     | {
           open: false
@@ -67,5 +69,7 @@ interface EthereumMessage {
     rpc: unknown
 }
 
-export const EthereumMessages = createPluginMessage<EthereumMessage>(PLUGIN_IDENTIFIER)
+export const EthereumMessages: WebExtensionMessage<EthereumMessage> = createPluginMessage<EthereumMessage>(
+    PLUGIN_IDENTIFIER,
+)
 export const EthereumRPC = createPluginRPC(PLUGIN_IDENTIFIER, () => import('./services'), EthereumMessages.events.rpc)
