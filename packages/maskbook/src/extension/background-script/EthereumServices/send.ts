@@ -1,10 +1,10 @@
-import { first } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { HttpProvider, TransactionConfig } from 'web3-core'
 import { personalSign } from './network'
 import { createWeb3 } from './web3'
 import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
 import { ProviderType } from '../../../web3/types'
+import { commitNonce, resetNonce } from './nonce'
 
 /**
  * This API is only used internally. Please use requestSend instead.
@@ -22,7 +22,7 @@ export async function UNSAFE_send(
 
     const web3 = await createWeb3()
     const provider = web3.currentProvider as HttpProvider | undefined
-    const providerType = await currentSelectedWalletProviderSettings.readyPromise
+    const providerType = currentSelectedWalletProviderSettings.value
 
     // unable to create provider
     if (!provider) {
@@ -54,7 +54,7 @@ export async function UNSAFE_send(
                 const [config] = payload.params as [TransactionConfig]
 
                 // get the signer
-                const signer = first(web3.eth.accounts.wallet)
+                const signer = web3.eth.accounts.wallet[0]
                 if (!signer) {
                     callback(new Error('failed to create signer'))
                     return
@@ -67,7 +67,14 @@ export async function UNSAFE_send(
                         method: 'eth_sendRawTransaction',
                         params: [(await signer.signTransaction(config)).rawTransaction],
                     },
-                    callback,
+                    (error, result) => {
+                        callback(error, result)
+
+                        // handle nonce
+                        const message = error?.message || result?.error
+                        if (/nonce\b.*\blow/im.test(message ?? '')) resetNonce(signer.address)
+                        else commitNonce(signer.address)
+                    },
                 )
             } else provider.send(payload, callback)
             break

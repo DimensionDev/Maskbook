@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { makeStyles, createStyles, Card, Typography, Button, Grid, Avatar } from '@material-ui/core'
+import { makeStyles, createStyles, Box, Card, Typography, Button, Grid, Avatar } from '@material-ui/core'
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -76,7 +76,7 @@ interface PreviewCardProps {
 export function PreviewCard(props: PreviewCardProps) {
     const { t } = useI18N()
     const classes = useStyles()
-    const { value: grant, error, loading } = useGrant(props.id)
+    const { value: grant, error, loading, retry } = useGrant(props.id)
 
     //#region the donation dialog
     const [_, openDonationDialog] = useRemoteControlledDialog(PluginGitcoinMessages.events.donationDialogUpdated)
@@ -91,7 +91,15 @@ export function PreviewCard(props: PreviewCardProps) {
     //#endregion
 
     if (loading) return <Typography color="textPrimary">Loading...</Typography>
-    if (error) return <Typography color="textPrimary">Something went wrong.</Typography>
+    if (error)
+        return (
+            <Box display="flex" flexDirection="column" alignItems="center">
+                <Typography color="textPrimary">Something went wrong.</Typography>
+                <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
+                    Retry
+                </Button>
+            </Box>
+        )
     if (!grant) return null
 
     return (

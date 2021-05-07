@@ -7,6 +7,7 @@ import type { RedPacketJSONPayload } from './types'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import RedPacketDialog from './UI/RedPacketDialog'
 import { EthereumTokenType } from '../../web3/types'
+import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 
 export const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDialog('💰 Red Packet', (props) => (
     <RedPacketDialog open={props.open} onConfirm={props.onClose} onClose={props.onClose} />
@@ -22,7 +23,11 @@ export const RedPacketPluginDefine: PluginConfig = {
     scope: PluginScope.Public,
     successDecryptionInspector: function Comp(props) {
         if (!RedPacketMetadataReader(props.message.meta).ok) return null
-        return <RedPacketInspector {...props} />
+        return (
+            <MaskbookPluginWrapper pluginName="Red Packet">
+                <RedPacketInspector {...props} />
+            </MaskbookPluginWrapper>
+        )
     },
     postDialogMetadataBadge: new Map([
         [

@@ -14,5 +14,5 @@ export function useERC721TokenBalance(address: string) {
     return useAsyncRetry(async () => {
         if (!account || !erc721TokenContract) return undefined
         return erc721TokenContract.methods.balanceOf(account).call()
-    }, [account, chainId /* re-calc when switch the chain */, address, erc721TokenContract])
+    }, [account, chainId, address, erc721TokenContract])
 }

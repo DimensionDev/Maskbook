@@ -37,12 +37,7 @@ export function createProvider(url: string) {
 const instancePool = new Map<string, Web3>()
 
 function createWeb3Instance(provider: HttpProvider) {
-    const web3 = instancePool.get(provider.host) ?? new Web3()
-    if (web3.currentProvider !== provider) web3.setProvider(provider)
-
-    // 24 confirmation blocks is not necessary
-    web3.eth.transactionConfirmationBlocks = 0
-    return web3
+    return instancePool.get(provider.host) ?? new Web3(provider)
 }
 
 export function createWeb3({

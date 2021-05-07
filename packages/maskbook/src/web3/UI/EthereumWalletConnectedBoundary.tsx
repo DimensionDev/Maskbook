@@ -9,11 +9,9 @@ import { currentIsMetamaskLockedSettings, currentSelectedWalletProviderSettings 
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { useAccount } from '../hooks/useAccount'
-import { useChainIdValid } from '../hooks/useBlockNumber'
-import { useEtherTokenBalance } from '../hooks/useEtherTokenBalance'
 import { ProviderType } from '../types'
 import { useStylesExtends } from '../../components/custom-ui-helper'
+import { ChainState } from '../state/useChainState'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -34,14 +32,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const account = useAccount()
-    const chainIdValid = useChainIdValid()
-    const {
-        value: etherBalance = '0',
-        loading: etherBalanceLoading,
-        error: etherBalanceError,
-        retry: retryEtherBalance,
-    } = useEtherTokenBalance(account)
+    const { account, chainIdValid, chainTokenBalance } = ChainState.useContainer()
 
     //#region remote controlled select provider dialog
     const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
@@ -88,16 +79,16 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    if (new BigNumber(etherBalance).isZero() && !offChain)
+    if (new BigNumber(chainTokenBalance.value ?? '0').isZero() && !offChain)
         return (
             <Grid container>
                 <ActionButton
                     className={classes.button}
-                    disabled={!etherBalanceError}
+                    disabled={!chainTokenBalance.error}
                     fullWidth
                     variant="contained"
                     size="large"
-                    onClick={retryEtherBalance}>
+                    onClick={chainTokenBalance.retry}>
                     {t('plugin_wallet_no_gas_fee')}
                 </ActionButton>
             </Grid>
