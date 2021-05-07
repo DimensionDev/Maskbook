@@ -56,13 +56,6 @@ const wizardTheme = extendsTheme((theme: Theme) => ({
                 },
             },
         },
-        MuiInputLabel: {
-            styleOverrides: {
-                outlined: {
-                    transform: 'translate(14px, 16px) scale(1)',
-                },
-            },
-        },
         MuiTextField: {
             defaultProps: {
                 fullWidth: true,
