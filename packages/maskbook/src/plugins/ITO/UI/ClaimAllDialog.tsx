@@ -164,7 +164,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     }, [claimState, swappedTokens /* update tx dialog only if state changed */])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_status_unclaimed')}>
+        <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_dialog_title')}>
             <DialogContent className={classes.wrapper}>
                 {loading || !swappedTokens ? (
                     <CircularProgress size={24} />

@@ -451,6 +451,7 @@
     "plugin_ito_claim_all_status_unclaimed": "Unclaimed",
     "plugin_ito_claim_all_status_locked": "Locked",
     "plugin_ito_claim_all_unlock_time": "Unlock Time",
+    "plugin_ito_claim_all_dialog_title": "Claim Your Tokens",
     "plugin_ito_swapping": "You will get {{amount}} {{symbol}} if you are lucky. Otherwise, you will receive a refund if the ITO out of stock hits.",
     "plugin_ito_advanced": "Advanced",
     "plugin_ito_advanced_ip_region": "IP Region Restrictions",
