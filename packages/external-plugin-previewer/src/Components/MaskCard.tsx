@@ -1,4 +1,5 @@
 import { Card, CardContent, Typography, CardActions, Button } from '@material-ui/core'
+import { hostConfig } from '../host'
 import type { Component } from './index'
 export const MaskCard: Component<MaskCardProps> = (props) => {
     return (
@@ -15,7 +16,7 @@ export const MaskCard: Component<MaskCardProps> = (props) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button href={props.href} target="_blank" size="small">
+                <Button onClick={() => hostConfig.permissionAwareOpen(props.href)} size="small">
                     {String(props.button)}
                 </Button>
             </CardActions>

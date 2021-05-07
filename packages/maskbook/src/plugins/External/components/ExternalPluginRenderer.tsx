@@ -2,7 +2,14 @@ import type { ExternalPluginLoadDetails, Manifest } from '../types'
 import { Card, CardHeader, CardContent, Typography, Link, Button } from '@material-ui/core'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
-import { MaskExternalPluginPreviewRenderer } from '@dimensiondev/external-plugin-previewer'
+import { MaskExternalPluginPreviewRenderer, setHostConfig } from '@dimensiondev/external-plugin-previewer'
+import { PermissionAwareRedirectOf } from '../../../extension/popups'
+
+setHostConfig({
+    permissionAwareOpen(url) {
+        Services.Helper.openDialogPopup(PermissionAwareRedirectOf(url))
+    },
+})
 
 export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
     const manifest = useExternalPluginManifest(props.url)

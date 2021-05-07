@@ -39,3 +39,12 @@ export function saveAsFileFromBuffer(file: BufferSource, mimeType: string, fileN
     const url = URL.createObjectURL(blob)
     saveAsFileFromUrl(url, fileName)
 }
+
+export function openDialogPopup(url: string) {
+    browser.windows.create({
+        type: 'popup',
+        width: 400,
+        height: 600,
+        url: browser.runtime.getURL('/popups.html#' + url),
+    })
+}

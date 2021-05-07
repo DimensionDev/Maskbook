@@ -1,3 +1,5 @@
+export { setHostConfig } from './host'
+export type { HostConfig } from './host'
 /// <reference path="./global.d.ts" />
 import { useEffect, useState } from 'react'
 import { create } from 'ef.js'
