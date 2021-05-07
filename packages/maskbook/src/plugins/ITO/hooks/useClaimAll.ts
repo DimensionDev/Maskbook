@@ -15,12 +15,12 @@ export interface SwappedToken {
 export function useClaimAll() {
     const account = useAccount()
     const ITO_Contract = useITO_Contract()
-    const { value: pools = [] } = useAllPoolsAsBuyer(account)
+    const { value: pools = [], loading } = useAllPoolsAsBuyer(account)
 
     return useAsyncRetry(async () => {
-        if (pools.length === 0 || !ITO_Contract) {
-            return undefined
-        }
+        if (!ITO_Contract || loading) return undefined
+        if (pools.length === 0) return []
+
         const raws = await Promise.all(
             pools.map(async (value) => {
                 const availability = await ITO_Contract.methods.check_availability(value.pool.pid).call({
