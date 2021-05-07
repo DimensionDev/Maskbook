@@ -197,9 +197,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             </ActionButton>
                         </EthereumWalletConnectedBoundary>
                     </>
-                ) : swappedTokens.length === 0 ? (
+                ) : (
                     <Typography>{t('plugin_ito_no_claimable_token')}</Typography>
-                ) : null}
+                )}
             </DialogContent>
         </InjectedDialog>
     )
