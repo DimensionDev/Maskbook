@@ -42,12 +42,16 @@ export function useClaimAll() {
                 }
             })
             .reduce((acc: SwappedToken[], cur) => {
-                if (acc.some((t) => t.token.address === cur.token.address && t.isClaimable) && cur.isClaimable) {
-                    const existToken = acc.find((t) => t.token.address === cur.token.address && t.isClaimable)
-                    const existTokenIndex = acc.findIndex((t) => t.token.address === cur.token.address && t.isClaimable)
-                    existToken!.pids = existToken!.pids.concat(cur.pids)
-                    existToken!.amount = existToken!.amount + cur.amount
-                    acc[existTokenIndex] = existToken!
+                if (acc.some(checkClaimable(cur)) && cur.isClaimable) {
+                    // merge same claimable tokens to one
+                    const existToken = acc.find(checkClaimable(cur))
+                    const existTokenIndex = acc.findIndex(checkClaimable(cur))
+                    acc[existTokenIndex] = mergeTokens(existToken!, cur)
+                } else if (acc.some(checkUnlockTimeEqual(cur))) {
+                    // merge same unlock time tokens to one
+                    const existToken = acc.find(checkUnlockTimeEqual(cur))
+                    const existTokenIndex = acc.findIndex(checkUnlockTimeEqual(cur))
+                    acc[existTokenIndex] = mergeTokens(existToken!, cur)
                 } else {
                     acc.push(cur)
                 }
@@ -56,4 +60,19 @@ export function useClaimAll() {
             .sort((a, b) => b.unlockTime.getTime() - a.unlockTime.getTime())
         return swappedTokens
     }, [pools, account])
+}
+
+function checkUnlockTimeEqual(cur: SwappedToken) {
+    return (t: SwappedToken) =>
+        t.token.address === cur.token.address && t.unlockTime.getTime() === cur.unlockTime.getTime()
+}
+
+function checkClaimable(cur: SwappedToken) {
+    return (t: SwappedToken) => t.token.address === cur.token.address && t.isClaimable
+}
+
+function mergeTokens(a: SwappedToken, b: SwappedToken) {
+    a.pids = a.pids.concat(b.pids)
+    a.amount += b.amount
+    return a
 }
