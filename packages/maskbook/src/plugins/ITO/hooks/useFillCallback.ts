@@ -7,7 +7,6 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { EtherTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '../../../web3/types'
 import type { Tx } from '@dimensiondev/contracts/types/types'
-import { addGasMargin } from '../../../web3/helpers'
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../constants'
 import Services from '../../../extension/service'
@@ -218,12 +217,6 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const config: Tx = {
-            from: account,
-            to: ITO_Contract.options.address,
-            value: '0',
-        }
-
         let params = [
             Web3Utils.sha3(signedPassword)!,
             startTime_,
@@ -239,46 +232,46 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             qualificationAddress,
         ] as Parameters<ITO['methods']['fill_pool']>
 
-        // step 1: estimate gas
-        const estimatedGas = await ITO_Contract.methods
-            .fill_pool(...params)
-            .estimateGas(config)
-            .catch((error: Error) => {
-                setFillState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
-                throw error
+        // estimate gas and compose transaction
+        const config = await Services.Ethereum.composeTransaction({
+            from: account,
+            to: ITO_Contract.options.address,
+            value: '0',
+            data: ITO_Contract.methods.fill_pool(...params).encodeABI(),
+        }).catch((error) => {
+            setFillState({
+                type: TransactionStateType.FAILED,
+                error,
             })
+            throw error
+        })
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = ITO_Contract.methods.fill_pool(...params).send({
-                gas: addGasMargin(estimatedGas).toFixed(),
-                ...config,
-            })
-            promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                setFillState({
-                    type: TransactionStateType.CONFIRMED,
-                    no: 0,
-                    receipt,
+            const promiEvent = ITO_Contract.methods.fill_pool(...params).send(config as Tx)
+            promiEvent
+                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                    setFillState({
+                        type: TransactionStateType.CONFIRMED,
+                        no: 0,
+                        receipt,
+                    })
                 })
-            })
-            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                setFillState({
-                    type: TransactionStateType.CONFIRMED,
-                    no,
-                    receipt,
+                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                    setFillState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                    resolve()
                 })
-                resolve()
-            })
-            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
-                setFillState({
-                    type: TransactionStateType.FAILED,
-                    error,
+                .on(TransactionEventType.ERROR, (error: Error) => {
+                    setFillState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
                 })
-                reject(error)
-            })
         })
     }, [account, chainId, ITO_Contract, poolSettings])
 

@@ -4,12 +4,12 @@ import { once } from 'lodash-es'
 import type { TransactionReceipt } from 'web3-eth'
 import type { Tx } from '@dimensiondev/contracts/types/types'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
-import { addGasMargin } from '../helpers'
 import { TransactionEventType } from '../types'
 import { useAccount } from './useAccount'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
+import Services from '../../extension/service'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
@@ -83,61 +83,66 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                 type: TransactionStateType.WAIT_FOR_CONFIRMING,
             })
 
-            const config: Tx = {
+            // estimate gas and compose transaction
+            const config = await Services.Ethereum.composeTransaction({
                 from: account,
                 to: erc20Contract.options.address,
-            }
 
-            // step 1: estimate gas
-            const estimatedGas = await erc20Contract.methods
                 // general fallback for tokens who restrict approval amounts
-                .approve(spender, useExact ? amount : MaxUint256)
-                .estimateGas(config)
-                .catch(() => {
-                    // if the current approve strategy is failed
-                    // then use oppsite strategy instead
+                data: erc20Contract.methods.approve(spender, useExact ? amount : MaxUint256).encodeABI(),
+            })
+                .catch((error) => {
                     useExact = !useExact
-                    return erc20Contract.methods.approve(spender, amount).estimateGas({
+                    return Services.Ethereum.composeTransaction({
                         from: account,
                         to: erc20Contract.options.address,
+                        // if the current approve strategy is failed then use oppsite strategy instead
+                        data: erc20Contract.methods.approve(spender, amount).encodeABI(),
                     })
                 })
-
-            // send transaction and wait for hash
-            return new Promise<void>(async (resolve, reject) => {
-                const promiEvent = erc20Contract.methods.approve(spender, useExact ? amount : MaxUint256).send({
-                    gas: addGasMargin(estimatedGas).toFixed(),
-                    ...config,
-                })
-                const revalidate = once(() => {
-                    revalidateBalance()
-                    revalidateAllowance()
-                })
-                promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                    setTransactionState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: 0,
-                        receipt,
-                    })
-                    revalidate()
-                })
-                promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                    setTransactionState({
-                        type: TransactionStateType.CONFIRMED,
-                        no,
-                        receipt,
-                    })
-                    revalidate()
-                    resolve()
-                })
-                promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
+                .catch((error) => {
                     setTransactionState({
                         type: TransactionStateType.FAILED,
                         error,
                     })
-                    revalidate()
-                    reject(error)
+                    throw error
                 })
+
+            // send transaction and wait for hash
+            return new Promise<void>(async (resolve, reject) => {
+                const promiEvent = erc20Contract.methods
+                    .approve(spender, useExact ? amount : MaxUint256)
+                    .send(config as Tx)
+                const revalidate = once(() => {
+                    revalidateBalance()
+                    revalidateAllowance()
+                })
+                promiEvent
+                    .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                        setTransactionState({
+                            type: TransactionStateType.CONFIRMED,
+                            no: 0,
+                            receipt,
+                        })
+                        revalidate()
+                    })
+                    .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                        setTransactionState({
+                            type: TransactionStateType.CONFIRMED,
+                            no,
+                            receipt,
+                        })
+                        revalidate()
+                        resolve()
+                    })
+                    .on(TransactionEventType.ERROR, (error: Error) => {
+                        setTransactionState({
+                            type: TransactionStateType.FAILED,
+                            error,
+                        })
+                        revalidate()
+                        reject(error)
+                    })
             })
         },
         [account, amount, balance, spender, loadingAllowance, loadingBalance, erc20Contract, approveStateType],

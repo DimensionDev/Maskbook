@@ -9,8 +9,8 @@ import { SLIPPAGE_TOLERANCE_DEFAULT, TRADE_CONSTANTS } from '../../constants'
 import { EthereumTokenType, TransactionEventType } from '../../../../web3/types'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import type { Tx } from '@dimensiondev/contracts/types/types'
-import { addGasMargin } from '../../../../web3/helpers'
 import { useTradeAmount } from './useTradeAmount'
+import Services from '../../../../extension/service'
 
 export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,
@@ -68,20 +68,20 @@ export function useTradeCallback(
                       tradeAmount.toFixed(),
                   )
 
-        const config: Tx = {
+        // trade with ether
+        let transactionValue = '0'
+        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Ether)
+            transactionValue = trade.inputAmount.toFixed()
+        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === EthereumTokenType.Ether)
+            transactionValue = trade.outputAmount.toFixed()
+
+        // send transaction and wait for hash
+        const config = await Services.Ethereum.composeTransaction({
             from: account,
             to: exchangeProxyContract.options.address,
-            value: '0',
-        }
-
-        // trade with ether
-        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Ether)
-            config.value = trade.inputAmount.toFixed()
-        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === EthereumTokenType.Ether)
-            config.value = trade.outputAmount.toFixed()
-
-        // step 1: estimate gas
-        const estimatedGas = await tx.estimateGas(config).catch((error: Error) => {
+            value: transactionValue,
+            data: tx.encodeABI(),
+        }).catch((error: Error) => {
             setTradeState({
                 type: TransactionStateType.FAILED,
                 error,
@@ -91,32 +91,30 @@ export function useTradeCallback(
 
         // send transaction and wait for hash
         return new Promise<void>((resolve, reject) => {
-            const promiEvent = tx.send({
-                gas: addGasMargin(estimatedGas).toFixed(),
-                ...config,
-            })
-            promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                setTradeState({
-                    type: TransactionStateType.CONFIRMED,
-                    no: 0,
-                    receipt,
+            const promiEvent = tx.send(config as Tx)
+            promiEvent
+                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                    setTradeState({
+                        type: TransactionStateType.CONFIRMED,
+                        no: 0,
+                        receipt,
+                    })
                 })
-            })
-            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                setTradeState({
-                    type: TransactionStateType.CONFIRMED,
-                    no,
-                    receipt,
+                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                    setTradeState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                    resolve()
                 })
-                resolve()
-            })
-            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
-                setTradeState({
-                    type: TransactionStateType.FAILED,
-                    error,
+                .on(TransactionEventType.ERROR, (error: Error) => {
+                    setTradeState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
                 })
-                reject(error)
-            })
         })
     }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS])
 

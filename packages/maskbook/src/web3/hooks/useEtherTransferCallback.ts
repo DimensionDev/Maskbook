@@ -1,12 +1,11 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
+import { toHex } from 'web3-utils'
+import { EthereumAddress } from 'wallet.ts'
 import { useAccount } from './useAccount'
 import Services from '../../extension/service'
-import { toHex } from 'web3-utils'
-import type { TransactionConfig } from 'web3-core'
 import { useChainId } from './useBlockNumber'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
-import { EthereumAddress } from 'wallet.ts'
 import { useConstant } from './useConstant'
 import { CONSTANTS } from '../constants'
 import { nonFunctionalWeb3 } from '../web3'
@@ -50,22 +49,13 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const config: TransactionConfig = {
+        // send transaction and wait for hash
+        const config = await Services.Ethereum.composeTransaction({
             from: account,
             to: recipient,
             value: amount,
-
-            // FIXME:
-            // the ether tx will be canceled by quicknode's holy-water provider.
-            // @ts-ignore
-            __provider_url__: PROVIDER_ADDRESS_LIST[1],
-        }
-
-        // encode memo as data
-        if (memo) config.data = toHex(memo)
-
-        // step 1: estimate gas
-        const config_ = await Services.Ethereum.composeTransaction(config).catch((error) => {
+            data: memo ? toHex(memo) : undefined,
+        }).catch((error) => {
             setTransferState({
                 type: TransactionStateType.FAILED,
                 error,
@@ -75,20 +65,20 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
-            nonFunctionalWeb3.eth.sendTransaction(config_, (error, hash) => {
+            nonFunctionalWeb3.eth.sendTransaction(config, (error, hash) => {
                 if (error) {
                     setTransferState({
                         type: TransactionStateType.FAILED,
                         error,
                     })
                     reject(error)
-                    return
+                } else {
+                    setTransferState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
                 }
-                setTransferState({
-                    type: TransactionStateType.HASH,
-                    hash,
-                })
-                resolve(hash)
             })
         })
     }, [account, amount, chainId, recipient, memo, PROVIDER_ADDRESS_LIST])

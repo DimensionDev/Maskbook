@@ -4,6 +4,8 @@ import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { isSameAddress } from '../helpers'
+import Services from '../../extension/service'
+import type { Tx } from '@dimensiondev/contracts/types/types'
 
 export function useERC721TokenTransferCallback(address: string, tokenId?: string, recipient?: string) {
     const account = useAccount()
@@ -43,36 +45,36 @@ export function useERC721TokenTransferCallback(address: string, tokenId?: string
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        // step 1: estimate gas
-        const estimatedGas = await erc721Contract.methods.transferFrom(account, recipient, tokenId).estimateGas({
+        // estimate gas and compose transaction
+        const config = await Services.Ethereum.composeTransaction({
             from: account,
             to: erc721Contract.options.address,
+            data: erc721Contract.methods.transferFrom(account, recipient, tokenId).encodeABI(),
+        }).catch((error) => {
+            setTransferState({
+                type: TransactionStateType.FAILED,
+                error,
+            })
+            throw error
         })
 
         // send transaction and wait for hash
         return new Promise<string>(async (resolve, reject) => {
-            erc721Contract.methods.transferFrom(account, recipient, tokenId).send(
-                {
-                    from: account,
-                    to: erc721Contract.options.address,
-                    gas: estimatedGas,
-                },
-                (error, hash) => {
-                    if (error) {
-                        setTransferState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
-                        reject(error)
-                    } else {
-                        setTransferState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
-                    }
-                },
-            )
+            erc721Contract.methods.transferFrom(account, recipient, tokenId).send(config as Tx, (error, hash) => {
+                if (error) {
+                    setTransferState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                } else {
+                    setTransferState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
+                }
+            })
         })
     }, [account, tokenId, recipient, erc721Contract])
 

@@ -54,7 +54,7 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        // estimate gas
+        // estimate gas and compose transaction
         const config = await Services.Ethereum.composeTransaction({
             from: account,
             to: bulkCheckoutContract.options.address,

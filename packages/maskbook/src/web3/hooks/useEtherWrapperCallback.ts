@@ -5,6 +5,7 @@ import { useEtherWrapperContract } from '../contracts/useWrappedEtherContract'
 import { addGasMargin } from '../helpers'
 import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
+import Services from '../../extension/service'
 
 export function useEtherWrapperCallback() {
     const account = useAccount()
@@ -29,48 +30,42 @@ export function useEtherWrapperCallback() {
                 return
             }
 
-            // step 1: start waiting for provider to confirm tx
+            // start waiting for provider to confirm tx
             setTransactionState({
                 type: TransactionStateType.WAIT_FOR_CONFIRMING,
             })
 
-            const config: Tx = {
+            // estimate gas and compose transaction
+            const config = await Services.Ethereum.composeTransaction({
                 from: account,
                 value: amount,
-            }
-
-            // step 2: estimate gas
-            const estimatedGas = await wrapperContract.methods
-                .deposit()
-                .estimateGas(config)
-                .catch((error) => {
-                    setTransactionState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    throw error
+                data: wrapperContract.methods.deposit().encodeABI(),
+            }).catch((error) => {
+                setTransactionState({
+                    type: TransactionStateType.FAILED,
+                    error,
                 })
+                throw error
+            })
 
-            // step 3: blocking
-            wrapperContract.methods.deposit().send(
-                {
-                    gas: addGasMargin(estimatedGas).toFixed(),
-                    ...config,
-                },
-                (error, hash) => {
+            // send transaction and wait for hash
+            return new Promise<string>((resolve, reject) => {
+                wrapperContract.methods.deposit().send(config as Tx, (error, hash) => {
                     if (error) {
                         setTransactionState({
                             type: TransactionStateType.FAILED,
                             error,
                         })
-                        return
+                        reject(error)
+                    } else {
+                        setTransactionState({
+                            type: TransactionStateType.HASH,
+                            hash,
+                        })
+                        resolve(hash)
                     }
-                    setTransactionState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                },
-            )
+                })
+            })
         },
         [account, wrapperContract],
     )
@@ -105,48 +100,40 @@ export function useEtherWrapperCallback() {
                 return
             }
 
-            // step 1: start waiting for provider to confirm tx
+            // start waiting for provider to confirm tx
             setTransactionState({
                 type: TransactionStateType.WAIT_FOR_CONFIRMING,
             })
 
-            const config: Tx = {
-                from: account,
-            }
             const withdrawAmount = all ? wethBalance : amount
-
-            // step 2: estimate gas
-            const estimatedGas = await wrapperContract.methods
-                .withdraw(withdrawAmount)
-                .estimateGas(config)
-                .catch((error) => {
-                    setTransactionState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    throw error
+            const config = await Services.Ethereum.composeTransaction({
+                from: account,
+                data: wrapperContract.methods.withdraw(withdrawAmount).encodeABI(),
+            }).catch((error) => {
+                setTransactionState({
+                    type: TransactionStateType.FAILED,
+                    error,
                 })
+            })
 
-            // step 3: blocking
-            wrapperContract.methods.withdraw(withdrawAmount).send(
-                {
-                    gas: addGasMargin(estimatedGas).toFixed(),
-                    ...config,
-                },
-                (error, hash) => {
+            // send transaction and wait for hash
+            return new Promise<string>((resolve, reject) => {
+                wrapperContract.methods.withdraw(withdrawAmount).send(config as Tx, (error, hash) => {
                     if (error) {
                         setTransactionState({
                             type: TransactionStateType.FAILED,
                             error,
                         })
-                        return
+                        reject(error)
+                    } else {
+                        setTransactionState({
+                            type: TransactionStateType.HASH,
+                            hash,
+                        })
+                        resolve(hash)
                     }
-                    setTransactionState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                },
-            )
+                })
+            })
         },
         [account, wrapperContract],
     )

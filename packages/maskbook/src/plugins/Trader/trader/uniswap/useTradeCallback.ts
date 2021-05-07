@@ -85,7 +85,7 @@ export function useTradeCallback(
             return
         }
 
-        // step 3: blocking
+        // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
             const {
                 gasEstimated,
