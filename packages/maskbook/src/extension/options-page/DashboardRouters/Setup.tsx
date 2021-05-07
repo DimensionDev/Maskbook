@@ -845,13 +845,6 @@ const setupTheme = extendsTheme((theme) => ({
                 },
             },
         },
-        MuiInputLabel: {
-            styleOverrides: {
-                outlined: {
-                    transform: 'translate(14px, 16px) scale(1)',
-                },
-            },
-        },
         MuiTextField: {
             styleOverrides: {
                 root: {

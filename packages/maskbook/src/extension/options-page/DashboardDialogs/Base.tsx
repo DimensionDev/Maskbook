@@ -178,13 +178,6 @@ const dialogTheme = extendsTheme((theme) => ({
                 },
             },
         },
-        MuiInputLabel: {
-            styleOverrides: {
-                outlined: {
-                    transform: 'translate(14px, 16px) scale(1)',
-                },
-            },
-        },
         MuiAutocomplete: {
             styleOverrides: {
                 root: {
