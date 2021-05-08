@@ -39,7 +39,7 @@ export type TransactionState =
       }
     | {
           type: TransactionStateType.FAILED
-          error: Error
+          error: Error & { code?: number }
       }
 
 export function useTransactionState() {
