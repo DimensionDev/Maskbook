@@ -4,6 +4,7 @@ type Args = browser.webNavigation.TransitionNavListener extends browser.webNavig
 export default function () {
     const injectedScript = fetchInjectedScript()
     const contentScripts = fetchInjectContentScript('/generated__content__script.html')
+    // const sdk = fetchInjectContentScript('/generated__content__script__sdk.html')
     async function onCommittedListener(arg: Args): Promise<void> {
         if (arg.url === 'about:blank') return
         if (!arg.url.startsWith('http')) return
