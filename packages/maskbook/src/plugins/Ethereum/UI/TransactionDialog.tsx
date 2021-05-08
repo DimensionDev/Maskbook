@@ -20,10 +20,7 @@ import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { EthereumMessages } from '../messages'
-
-// https://www.jsonrpc.org/specification#error_object
-const JSON_RPC_INTERNAL_ERR_CODE = -32603
-const JSON_RPC_SERVER_ERR_CODE_RANGE = [-32000, -32099]
+import { JSON_RPC_ErrorCode } from '../constants'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -142,10 +139,10 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         <Typography className={classes.primary} color="textPrimary">
                             {state.error.message.includes('User denied transaction signature.')
                                 ? t('plugin_wallet_transaction_rejected')
-                                : state.error.code === JSON_RPC_INTERNAL_ERR_CODE ||
+                                : state.error.code === JSON_RPC_ErrorCode.INTERNAL_ERROR ||
                                   (state.error.code &&
-                                      state.error.code <= JSON_RPC_SERVER_ERR_CODE_RANGE[0] &&
-                                      state.error.code >= JSON_RPC_SERVER_ERR_CODE_RANGE[1])
+                                      state.error.code <= JSON_RPC_ErrorCode.SERVER_ERROR_RANGE_START &&
+                                      state.error.code >= JSON_RPC_ErrorCode.SERVER_ERROR_RANGE_END)
                                 ? t('plugin_wallet_transaction_server_error')
                                 : state.error.message}
                         </Typography>
