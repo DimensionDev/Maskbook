@@ -27,7 +27,7 @@ import { AdvanceSetting } from './AdvanceSetting'
 import type { AdvanceSettingData } from './AdvanceSetting'
 import { useRegionSelect, regionCodes, encodeRegionCode, decodeRegionCode } from '../hooks/useRegion'
 import { RegionSelect } from './RegionSelect'
-import { format } from 'date-fns'
+import formatDateTime from 'date-fns/format'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -311,7 +311,7 @@ export function CreateForm(props: CreateFormProps) {
         <TextField
             label={t('plugin_ito_begin_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
             type="datetime-local"
-            value={format(startTime, "yyyy-MM-dd'T'HH:mm")}
+            value={formatDateTime(startTime, "yyyy-MM-dd'T'HH:mm")}
             onChange={(e) => handleStartTime(e.currentTarget.value)}
             InputLabelProps={{ shrink: true }}
             inputProps={{ className: classes.datetime }}
@@ -322,7 +322,7 @@ export function CreateForm(props: CreateFormProps) {
         <TextField
             label={t('plugin_ito_end_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
             type="datetime-local"
-            value={format(endTime, "yyyy-MM-dd'T'HH:mm")}
+            value={formatDateTime(endTime, "yyyy-MM-dd'T'HH:mm")}
             onChange={(e) => handleEndTime(e.currentTarget.value)}
             InputLabelProps={{ shrink: true }}
             inputProps={{ className: classes.datetime }}
@@ -333,7 +333,7 @@ export function CreateForm(props: CreateFormProps) {
         <TextField
             label={t('plugin_ito_unlock_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
             type="datetime-local"
-            value={format(unlockTime, "yyyy-MM-dd'T'HH:mm")}
+            value={formatDateTime(unlockTime, "yyyy-MM-dd'T'HH:mm")}
             onChange={(e) => handleUnlockTime(e.currentTarget.value)}
             InputLabelProps={{ shrink: true }}
             inputProps={{ className: classes.datetime }}
