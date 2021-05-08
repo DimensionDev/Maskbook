@@ -393,7 +393,6 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                         <TextField
                             label={t('username')}
                             value={username}
-                            disabled={!username}
                             InputProps={{
                                 classes: {
                                     focused: findUsernameClasses.inputFocus,
@@ -412,8 +411,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                                 <IconButton
                                     className={findUsernameClasses.button}
                                     // @ts-expect-error https://github.com/mui-org/material-ui/pull/26064
-                                    color={username ? 'primary' : 'default'}
-                                    disabled={!username}>
+                                    color={username ? 'primary' : 'default'}>
                                     <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
                                 </IconButton>
                             </Hidden>
