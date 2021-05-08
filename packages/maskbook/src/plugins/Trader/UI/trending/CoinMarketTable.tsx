@@ -95,7 +95,7 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                                     {formatToken(trending.market?.circulating_supply ?? 0)} {trending.coin.symbol}
                                 </TableCell>
                                 <TableCell className={classes.cell} align="center">
-                                    {formatToken(trending.market?.total_supply ?? 0)}
+                                    {formatToken(trending.market?.total_supply ?? 0)} {trending.coin.symbol}
                                 </TableCell>
                             </>
                         ) : null}
