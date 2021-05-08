@@ -135,7 +135,9 @@ export function SwapDialog(props: SwapDialogProps) {
                 setSwapToken(ev.token)
                 setTokenAmount(initAmount)
                 setSwapAmount(initAmount.multipliedBy(ratio))
-                setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals))
+                setInputAmountForUI(
+                    initAmount.isEqualTo(0) ? '' : formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals),
+                )
             },
             [
                 id,
