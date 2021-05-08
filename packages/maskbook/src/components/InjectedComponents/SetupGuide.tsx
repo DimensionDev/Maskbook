@@ -393,7 +393,6 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                         <TextField
                             label={t('username')}
                             value={username}
-                            disabled={!username}
                             InputProps={{
                                 classes: {
                                     focused: findUsernameClasses.inputFocus,
