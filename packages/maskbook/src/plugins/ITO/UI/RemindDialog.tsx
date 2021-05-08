@@ -9,7 +9,7 @@ import { TokenIcon } from '../../../extension/options-page/DashboardComponents/T
 import { formatEthereumAddress } from '../../Wallet/formatter'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import type { ChainId } from '../../../web3/types'
-import { ClaimStatus } from './ClaimGuide'
+import { SwapStatus } from './SwapGuide'
 
 const useStyles = makeStyles((theme) => ({
     reminderText: {
@@ -115,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
 export interface RemindDialogProps extends withClasses<'root'> {
     token: EtherTokenDetailed | ERC20TokenDetailed
     chainId: ChainId
-    setStatus: (status: ClaimStatus) => void
+    setStatus: (status: SwapStatus) => void
 }
 
 export function RemindDialog(props: RemindDialogProps) {
@@ -177,7 +177,7 @@ export function RemindDialog(props: RemindDialogProps) {
                 variant="contained"
                 color="primary"
                 className={classes.button}
-                onClick={() => setStatus(ClaimStatus.Swap)}
+                onClick={() => setStatus(SwapStatus.Swap)}
                 disabled={!agreeReminder}>
                 Continue
             </ActionButton>
