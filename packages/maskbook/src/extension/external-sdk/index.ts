@@ -1,5 +1,5 @@
 import { AsyncCall, JSONSerialization, EventBasedChannel } from 'async-call-rpc'
-import * as SDK from './sdk'
+import SDK from './hmr-sdk'
 
 console.log('SDK server started')
 const channel: EventBasedChannel = {
