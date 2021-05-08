@@ -27,7 +27,7 @@ import { AdvanceSetting } from './AdvanceSetting'
 import type { AdvanceSettingData } from './AdvanceSetting'
 import { useRegionSelect, regionCodes, encodeRegionCode, decodeRegionCode } from '../hooks/useRegion'
 import { RegionSelect } from './RegionSelect'
-import formatDateTime from 'date-fns/format'
+import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -87,12 +87,6 @@ const useStyles = makeStyles((theme) =>
             flex: 1,
             padding: theme.spacing(1),
             marginTop: theme.spacing(1),
-        },
-        datetime: {
-            '&::-webkit-calendar-picker-indicator': {
-                marginLeft: 0,
-                backgroundImage: `url(${new URL('../assets/calendar.png', import.meta.url)})`,
-            },
         },
     }),
 )
@@ -281,63 +275,36 @@ export function CreateForm(props: CreateFormProps) {
         totalOfPerWallet,
     ])
 
-    const handleStartTime = useCallback((input: string) => {
-        setStartTime(new Date(input))
+    const handleStartTime = useCallback((input: Date) => {
+        setStartTime(input)
     }, [])
 
     const handleEndTime = useCallback(
-        (input: string) => {
-            const date = new Date(input)
-            const time = date.getTime()
+        (input: Date) => {
+            const time = input.getTime()
             const now = Date.now()
             if (time < now) return
-            if (time > startTime.getTime()) setEndTime(date)
+            if (time > startTime.getTime()) setEndTime(input)
         },
         [startTime],
     )
 
     const handleUnlockTime = useCallback(
-        (input: string) => {
-            const date = new Date(input)
-            const time = date.getTime()
+        (input: Date) => {
+            const time = input.getTime()
             const now = Date.now()
             if (time < now) return
-            if (time > endTime.getTime()) setUnlockTime(date)
+            if (time > endTime.getTime()) setUnlockTime(input)
         },
         [startTime],
     )
 
-    const StartTime = (
-        <TextField
-            label={t('plugin_ito_begin_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
-            type="datetime-local"
-            value={formatDateTime(startTime, "yyyy-MM-dd'T'HH:mm")}
-            onChange={(e) => handleStartTime(e.currentTarget.value)}
-            InputLabelProps={{ shrink: true }}
-            inputProps={{ className: classes.datetime }}
-        />
-    )
+    const StartTime = <DateTimePanel label={t('plugin_ito_begin_time')} onChange={handleStartTime} date={startTime} />
 
-    const EndTime = (
-        <TextField
-            label={t('plugin_ito_end_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
-            type="datetime-local"
-            value={formatDateTime(endTime, "yyyy-MM-dd'T'HH:mm")}
-            onChange={(e) => handleEndTime(e.currentTarget.value)}
-            InputLabelProps={{ shrink: true }}
-            inputProps={{ className: classes.datetime }}
-        />
-    )
+    const EndTime = <DateTimePanel label={t('plugin_ito_end_time')} onChange={handleEndTime} date={endTime} />
 
     const UnlockTime = (
-        <TextField
-            label={t('plugin_ito_unlock_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
-            type="datetime-local"
-            value={formatDateTime(unlockTime, "yyyy-MM-dd'T'HH:mm")}
-            onChange={(e) => handleUnlockTime(e.currentTarget.value)}
-            InputLabelProps={{ shrink: true }}
-            inputProps={{ className: classes.datetime }}
-        />
+        <DateTimePanel label={t('plugin_ito_unlock_time')} onChange={handleUnlockTime} date={unlockTime} />
     )
 
     return (
