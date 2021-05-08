@@ -11,7 +11,7 @@ import {
     Typography,
 } from '@material-ui/core'
 import { DataProvider, Trending } from '../../types'
-import { formatCurrency } from '../../../Wallet/formatter'
+import { formatCurrency, formatToken } from '../../../Wallet/formatter'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -92,10 +92,10 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
                             <>
                                 <TableCell className={classes.cell} align="center">
-                                    {formatCurrency(trending.market?.circulating_supply ?? 0, '$')}
+                                    {formatToken(trending.market?.circulating_supply ?? 0)} {trending.coin.symbol}
                                 </TableCell>
                                 <TableCell className={classes.cell} align="center">
-                                    {formatCurrency(trending.market?.total_supply ?? 0, '$')}
+                                    {formatToken(trending.market?.total_supply ?? 0)} {trending.coin.symbol}
                                 </TableCell>
                             </>
                         ) : null}
