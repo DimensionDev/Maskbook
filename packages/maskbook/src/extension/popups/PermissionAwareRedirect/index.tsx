@@ -3,6 +3,7 @@ export { PermissionAwareRedirectUI } from './ui'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router'
 import { useAsyncRetry } from 'react-use'
+import Services from '../../service'
 import { MissingParameter } from '../MissingParameter'
 import { PermissionAwareRedirectUI } from './ui'
 import { getHostPermissionFieldFromURL, isValidURL } from './utils'
@@ -19,7 +20,7 @@ function Inner({ url }: { url: string }) {
     }, [url])
     useEffect(() => {
         if (hasPermission) {
-            location.href = url
+            Services.Helper.enableSDK(url).then(() => (location.href = url))
         }
     }, [hasPermission, url])
     return (

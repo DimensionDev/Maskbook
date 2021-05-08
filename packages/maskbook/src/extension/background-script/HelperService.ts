@@ -1,4 +1,5 @@
 import { memoizePromise } from '../../utils/memoize'
+import { getHostPermissionFieldFromURL } from '../popups/PermissionAwareRedirect/utils'
 
 const cache = new Map<string, string>()
 export const resolveTCOLink = memoizePromise(
@@ -47,4 +48,10 @@ export function openDialogPopup(url: string) {
         height: 600,
         url: browser.runtime.getURL('/popups.html#' + url),
     })
+}
+export async function enableSDK(url: string) {
+    sessionStorage.setItem('sdk:' + getHostPermissionFieldFromURL(url), '1')
+}
+export function isSDKEnabled(url: string) {
+    return !!sessionStorage.getItem('sdk:' + getHostPermissionFieldFromURL(url))
 }
