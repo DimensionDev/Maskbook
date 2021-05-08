@@ -271,10 +271,10 @@ export function SwapDialog(props: SwapDialogProps) {
                 token={swapToken}
                 onAmountChange={(value) => {
                     const val =
-                        value === ''
+                        value === '' || value === '0'
                             ? new BigNumber(0)
                             : new BigNumber(value).multipliedBy(new BigNumber(10).pow(swapToken.decimals))
-                    const isMax = value === formatBalance(maxAmount, swapToken.decimals)
+                    const isMax = value === formatBalance(maxAmount, swapToken.decimals) && !val.isEqualTo(0)
                     const tokenAmount = isMax ? maxSwapAmount : val.dividedBy(ratio)
                     const swapAmount = isMax ? tokenAmount.multipliedBy(ratio) : val.dp(0)
                     setInputAmountForUI(
