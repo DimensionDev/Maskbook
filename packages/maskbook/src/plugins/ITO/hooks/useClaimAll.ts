@@ -1,5 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { checkIfChainSupport } from '../../../web3/pipes'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'
 import { useITO_Contract } from '../contracts/useITO_Contract'
@@ -20,6 +21,7 @@ export function useClaimAll() {
     const { value: pools = [], loading } = useAllPoolsAsBuyer(account)
 
     return useAsyncRetry(async () => {
+        if (!checkIfChainSupport(chainId)) return []
         if (!ITO_Contract || loading) return undefined
         if (pools.length === 0) return []
 
