@@ -8,8 +8,8 @@ import { useDHedgePoolContract } from '../contracts/useDHedgePool'
 import { useAccount } from '../../../web3/hooks/useAccount'
 
 /**
- * A callback for donate gitcoin grant
- * @param address the donor address
+ * A callback for invest dhedge pool
+ * @param address the pool address
  * @param amount
  * @param token
  */
@@ -17,18 +17,18 @@ export function useInvestCallback(address: string, amount: string, token?: Ether
     const poolContract = useDHedgePoolContract(address)
 
     const account = useAccount()
-    const [donateState, setDonateState] = useTransactionState()
+    const [investState, setInvestState] = useTransactionState()
 
     const investCallback = useCallback(async () => {
         if (!token || !poolContract) {
-            setDonateState({
+            setInvestState({
                 type: TransactionStateType.UNKNOWN,
             })
             return
         }
 
         // pre-step: start waiting for provider to confirm tx
-        setDonateState({
+        setInvestState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
@@ -42,7 +42,7 @@ export function useInvestCallback(address: string, amount: string, token?: Ether
             .deposit(amount)
             .estimateGas(config)
             .catch((error) => {
-                setDonateState({
+                setInvestState({
                     type: TransactionStateType.FAILED,
                     error,
                 })
@@ -58,13 +58,13 @@ export function useInvestCallback(address: string, amount: string, token?: Ether
                 },
                 (error, hash) => {
                     if (error) {
-                        setDonateState({
+                        setInvestState({
                             type: TransactionStateType.FAILED,
                             error,
                         })
                         reject(error)
                     } else {
-                        setDonateState({
+                        setInvestState({
                             type: TransactionStateType.HASH,
                             hash,
                         })
@@ -76,10 +76,10 @@ export function useInvestCallback(address: string, amount: string, token?: Ether
     }, [address, account, amount, token])
 
     const resetCallback = useCallback(() => {
-        setDonateState({
+        setInvestState({
             type: TransactionStateType.UNKNOWN,
         })
     }, [])
 
-    return [donateState, investCallback, resetCallback] as const
+    return [investState, investCallback, resetCallback] as const
 }

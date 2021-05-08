@@ -1,22 +1,23 @@
 # Plugin: dHEDGE
 
+This plugin fetch and show [dHEDGE](dhedge.org) pools data and allow user to invest on that poll.
+
 ## Feature Set
 
-- [x] \[TODO\] Detect dHEDGE pool
-- [ ] \[TODO\] Show pool info
-- [ ] \[TODO\] Show trade tab
-- [ ] \[TODO\] Draw pool chart
-- [ ] \[TODO\] Investment
+- [x] Detect dHEDGE pool
+- [x] Show pool info
+- [x] Draw pool chart
+- [x] Investment
+- [x] Buy sUSD
 
 ## Related projects
 
 - <https://www.dhedge.org/>
-- <https://github.com/dhedge/dhedge-sdk>
 
 ## Related discussion
 
-- <https://gitcoin.co/issue/dhedge/dhedge-docs/1/100025616>
+- <https://github.com/dhedge/dhedge-docs/issues/1>
 
 ## Pull requests
 
-TODO
+<https://github.com/DimensionDev/Maskbook/pull/3119>

@@ -14,9 +14,7 @@ import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import {
-    useRemoteControlledDialog,
-} from '../../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { PluginDHedgeMessages } from '../messages'
@@ -54,9 +52,9 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface DonateDialogProps extends withClasses<never> {}
+export interface InvestDialogProps extends withClasses<never> {}
 
-export function InvestDialog(props: DonateDialogProps) {
+export function InvestDialog(props: InvestDialogProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
@@ -120,15 +118,6 @@ export function InvestDialog(props: DonateDialogProps) {
     )
     //#endregion
 
-    //#region connect wallet
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onConnect = useCallback(() => {
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setSelectProviderDialogOpen])
-    //#endregion
-
     //#region blocking
     const [investState, investCallback, resetInvestCallback] = useInvestCallback(
         pool?.address ?? '',
@@ -138,11 +127,17 @@ export function InvestDialog(props: DonateDialogProps) {
     //#endregion
 
     //#region Swap
-    const [, openSwapDialog] = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated, (ev) => {
-        if (!ev.open) {
-            retryLoadTokenBalance()
-        }
-    })
+    const [, openSwapDialog] = useRemoteControlledDialog(
+        PluginTraderMessages.events.swapDialogUpdated,
+        useCallback(
+            (ev) => {
+                if (!ev.open) {
+                    retryLoadTokenBalance()
+                }
+            },
+            [retryLoadTokenBalance],
+        ),
+    )
     const openSwap = useCallback(() => {
         if (!token) return
         openSwapDialog({
@@ -185,12 +180,12 @@ export function InvestDialog(props: DonateDialogProps) {
                 if (!ev.open) {
                     retryLoadTokenBalance()
                     openSwapDialog({ open: false })
-                    if (ev.uuid == id) onClose()
+                    if (investState.type === TransactionStateType.HASH) onClose()
                 }
                 if (investState.type === TransactionStateType.HASH) setRawAmount('')
                 resetInvestCallback()
             },
-            [id, openSwapDialog],
+            [id, investState, openSwapDialog, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
         ),
     )
 
@@ -220,6 +215,7 @@ export function InvestDialog(props: DonateDialogProps) {
     //#endregion
 
     if (!token || !pool) return null
+
     return (
         <div className={classes.root}>
             <InjectedDialog open={open} onClose={onClose} title={pool.name} DialogProps={{ maxWidth: 'xs' }}>

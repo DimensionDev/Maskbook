@@ -12,7 +12,7 @@ import { InvestDialog } from './UI/InvestDialog'
 
 export const DHedgePluginDefine: PluginConfig = {
     id: DHEDGE_PLUGIN_ID,
-    pluginIcon: '🔗',
+    pluginIcon: '',
     pluginName: 'dHEDGE',
     pluginDescription: 'Decentralized hedge funds on Ethereum.',
     identifier: DHEDGE_PLUGIN_ID,
