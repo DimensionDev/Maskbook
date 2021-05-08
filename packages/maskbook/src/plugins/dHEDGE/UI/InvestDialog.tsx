@@ -70,7 +70,6 @@ export function InvestDialog(props: InvestDialogProps) {
     const [open, setInvestingDialogOpen] = useRemoteControlledDialog(
         PluginDHedgeMessages.events.InvestDialogUpdated,
         (ev) => {
-            console.log(ev)
             if (ev.open) {
                 setPool(ev.pool)
                 setToken(ev.token)

@@ -1,19 +1,45 @@
-export function formatAmountPostfix(amount: any) {
-    let postfix = ''
-    let formatedAmount = Number(amount)
+import BigNumber from 'bignumber.js'
 
-    if (amount >= 1000 * 1000 * 1000 * 1000) {
+const ONE_THOUSAND = 1000
+const ONE_MILLION = ONE_THOUSAND * 1000
+const ONE_BILLION = ONE_MILLION * 1000
+const ONE_TRILLION = ONE_BILLION * 1000
+
+/**
+ * A helper function to format amount
+ * @param rawAmount raw amount
+ * @return {String} Postfixed formatted amount
+ * @example
+ * formatAmountPostfix(1.234);
+ * // returns 1.23
+ * @example
+ * formatAmountPostfix(12.34);
+ * // returns 12.3
+ * @example
+ * formatAmountPostfix(2000.123);
+ * // returns 2.12K
+ * @example
+ * formatAmountPostfix(20000.123);
+ * // returns 20.1K
+ **/
+export function formatAmountPostfix(rawAmount: BigNumber.Value) {
+    let postfix = ''
+    let amount = new BigNumber(rawAmount)
+
+    if (amount.isGreaterThanOrEqualTo(ONE_TRILLION)) {
         postfix = 'T'
-        formatedAmount = amount / (1000 * 1000 * 1000 * 1000)
-    } else if (amount >= 1000 * 1000 * 1000) {
+        amount = amount.dividedBy(ONE_TRILLION)
+    } else if (amount.isGreaterThanOrEqualTo(ONE_BILLION)) {
         postfix = 'B'
-        formatedAmount = amount / (1000 * 1000 * 1000)
-    } else if (amount >= 1000 * 1000) {
+        amount = amount.dividedBy(ONE_BILLION)
+    } else if (amount.isGreaterThanOrEqualTo(ONE_MILLION)) {
         postfix = 'M'
-        formatedAmount = amount / (1000 * 1000)
-    } else if (amount >= 1000) {
+        amount = amount.dividedBy(ONE_MILLION)
+    } else if (amount.isGreaterThanOrEqualTo(ONE_THOUSAND)) {
         postfix = 'K'
-        formatedAmount = amount / 1000
+        amount = amount.dividedBy(ONE_THOUSAND)
     }
-    return formatedAmount.toFixed(1).replace(/\.0$/, '') + postfix
+
+    const fixedAmount = amount.isLessThanOrEqualTo(10) ? amount.toFixed(2) : amount.toFixed(1)
+    return `${fixedAmount.replace(/\.0$/, '')}${postfix}`
 }

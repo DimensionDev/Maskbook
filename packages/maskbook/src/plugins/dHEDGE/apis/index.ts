@@ -50,7 +50,7 @@ export async function fetchPoolPerformance(address: string, period: Period, url:
         credentials: 'omit',
     })
     const history = ((await response.json())?.data.performanceHistory as PerformanceHistory).history
-    if (!history) return
+    if (!history) return []
     if (sort) history.sort((a, b) => parseInt(a.timestamp) - parseInt(b.timestamp))
     return history
 }

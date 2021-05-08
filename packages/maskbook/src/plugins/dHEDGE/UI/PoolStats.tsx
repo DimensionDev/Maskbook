@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import type { Pool } from '../types'
-import { makeStyles, createStyles, Card, Typography, Grid, Divider } from '@material-ui/core'
+import { makeStyles, createStyles, Typography, Grid, Divider } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 import { formatAmountPostfix } from '../utils'
 import { formatBalance } from '../../Wallet/formatter'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import DOMPurify from 'isomorphic-dompurify'
 import { POOL_DESCRIPTION_LIMIT } from '../constants'
+import BigNumber from 'bignumber.js'
+
+const DIGIT_LENGTH = 18
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -45,18 +48,21 @@ interface PoolStatsProps {
 export function PoolStats(props: PoolStatsProps) {
     const { pool } = props
     const classes = useStyles()
-    const [expanded, setExpanded] = useState(false)
 
     //#region process stats
-    const valueManaged = formatAmountPostfix(formatBalance(Number(pool?.totalValue), 18))
-    const lifeTimeReturn = Number(((parseFloat(formatBalance(Number(pool.performance), 18)) - 1) * 100).toFixed(2))
+    const valueManaged = formatAmountPostfix(formatBalance(new BigNumber(pool?.totalValue), DIGIT_LENGTH))
+    const lifeTimeReturn = new BigNumber(formatBalance(new BigNumber(pool.performance), DIGIT_LENGTH))
+        .minus(1)
+        .multipliedBy(100)
+
     const riskFactor = pool && pool?.riskFactor != -1 ? pool?.riskFactor : '-'
     // pool detail contains raw html and need to sanitize before use
     const cleanDescription = DOMPurify.sanitize(pool.poolDetails)
+    const [expanded, setExpanded] = useState(cleanDescription.length < POOL_DESCRIPTION_LIMIT)
     //#endregion
 
     return (
-        <Card variant="outlined" className={classes.root} elevation={0}>
+        <div className={classes.root}>
             <div className={classes.meta}>
                 <Grid container className={classes.meta} direction="column">
                     <Grid item xs={6}>
@@ -66,7 +72,7 @@ export function PoolStats(props: PoolStatsProps) {
                     </Grid>
                     <Grid item xs={6}>
                         <Typography variant="body2" color="textPrimary" className={classes.value}>
-                            {valueManaged}
+                            ${valueManaged}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -80,14 +86,14 @@ export function PoolStats(props: PoolStatsProps) {
                         <Typography
                             variant="body2"
                             color={
-                                lifeTimeReturn > 0
+                                lifeTimeReturn.isGreaterThan(0)
                                     ? MaskColorVar.greenMain
-                                    : lifeTimeReturn < 0
+                                    : lifeTimeReturn.isLessThan(0)
                                     ? MaskColorVar.redMain
                                     : 'textPrimary'
                             }
                             className={classes.value}>
-                            {lifeTimeReturn}%
+                            {lifeTimeReturn.toFixed(2)}%
                         </Typography>
                     </Grid>
                 </Grid>
@@ -138,6 +144,6 @@ export function PoolStats(props: PoolStatsProps) {
                     ) : null}
                 </div>
             ) : null}
-        </Card>
+        </div>
     )
 }

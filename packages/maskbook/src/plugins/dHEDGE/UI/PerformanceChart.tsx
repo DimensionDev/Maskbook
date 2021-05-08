@@ -102,7 +102,6 @@ export function PerformanceChart(props: PerformanceChartProps) {
     )
 
     if (error) return <Typography>Something went wrong.</Typography>
-
     return (
         <div className={classes.root} ref={rootRef}>
             {loading ? (

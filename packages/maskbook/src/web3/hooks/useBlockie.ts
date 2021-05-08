@@ -1,17 +1,16 @@
 import { BlockieOptions, create } from 'ethereum-blockies'
 import { useMemo } from 'react'
 
-export function useBlockie(address: string, options?: BlockieOptions) {
+export function useBlockie(address: string, options_?: BlockieOptions) {
     return useMemo(() => {
-        const defaultOptions = {
+        const options = {
             seed: address,
             color: '#dfe',
             bgcolor: '#aaa',
         }
-        if (options) Object.assign(defaultOptions, options)
-
+        if (options_) Object.assign(options, options_)
         try {
-            return create(defaultOptions).toDataURL()
+            return create(options).toDataURL()
         } catch (e) {
             return ''
         }

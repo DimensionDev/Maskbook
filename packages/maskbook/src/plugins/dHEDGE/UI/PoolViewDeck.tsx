@@ -1,4 +1,4 @@
-import { makeStyles, createStyles, Card, Typography, Grid, Link, Avatar, Button, Chip } from '@material-ui/core'
+import { makeStyles, createStyles, Typography, Grid, Link, Avatar, Button, Chip } from '@material-ui/core'
 import type { Pool } from '../types'
 import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
 import { useAvatar } from '../hooks/useManager'
@@ -9,10 +9,10 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { PluginTraderMessages } from '../../Trader/messages'
 import { useCallback } from 'react'
 import type { EtherTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
-import { useAccount } from '../../../web3/hooks/useAccount'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { Coin } from '../../Trader/types'
 import { PluginDHedgeMessages } from '../messages'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -69,13 +69,16 @@ export function PoolViewDeck(props: PoolDeckProps) {
     const classes = useStyles()
     const { t } = useI18N()
 
-    const account = useAccount()
     const blockie = useAvatar(pool.managerAddress)
     const chainId = useChainId()
     const poolUrl = usePoolURL(pool.address)
 
     //#region manager share
-    const managerShare = Math.round((Number(pool.balanceOfManager) / Number(pool.totalSupply)) * 100 || 0)
+    const managerShare = new BigNumber(pool.balanceOfManager)
+        .dividedBy(pool.totalSupply)
+        .multipliedBy(100)
+        .integerValue(BigNumber.ROUND_UP)
+
     //#endregion
 
     //#region Swap
@@ -109,68 +112,66 @@ export function PoolViewDeck(props: PoolDeckProps) {
     //#endregion
 
     return (
-        <Card variant="outlined" className={classes.root} elevation={0}>
-            <Grid container className={classes.meta} direction="row">
-                <Grid item alignSelf="center" xs={2}>
-                    <Link target="_blank" rel="noopener noreferrer" href={poolUrl}>
-                        <Avatar src={blockie} className={classes.avatar} />
+        <Grid container className={classes.meta} direction="row">
+            <Grid item alignSelf="center" xs={2}>
+                <Link target="_blank" rel="noopener noreferrer" href={poolUrl}>
+                    <Avatar src={blockie} className={classes.avatar} />
+                </Link>
+            </Grid>
+            <Grid item xs={8}>
+                <div className={classes.title}>
+                    <Link color="primary" target="_blank" rel="noopener noreferrer" href={poolUrl}>
+                        <Typography variant="h6">{pool.name.toUpperCase()}</Typography>
                     </Link>
-                </Grid>
-                <Grid item xs={8}>
-                    <div className={classes.title}>
-                        <Link color="primary" target="_blank" rel="noopener noreferrer" href={poolUrl}>
-                            <Typography variant="h6">{pool.name.toUpperCase()}</Typography>
-                        </Link>
-                    </div>
-                    <Grid container className={classes.meta} direction="column" spacing={0.5}>
-                        <Grid item>
-                            <Typography variant="body2" color="textPrimary" className={classes.text}>
-                                <Trans
-                                    i18nKey="plugin_dhedge_managed_by"
-                                    components={{
-                                        manager: (
-                                            <Link
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                href={resolveAddressLinkOnEtherscan(chainId, pool.managerAddress)}
-                                            />
-                                        ),
-                                    }}
-                                    values={{
-                                        managerName: pool.managerName,
-                                    }}
-                                />
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="body2" color="textSecondary" className={classes.text}>
-                                <Trans
-                                    i18nKey="plugin_dhedge_manager_share"
-                                    components={{
-                                        share: <span />,
-                                    }}
-                                    values={{
-                                        managerShare: managerShare,
-                                    }}
-                                />
-                            </Typography>
-                        </Grid>
+                </div>
+                <Grid container className={classes.meta} direction="column" spacing={0.5}>
+                    <Grid item>
+                        <Typography variant="body2" color="textPrimary" className={classes.text}>
+                            <Trans
+                                i18nKey="plugin_dhedge_managed_by"
+                                components={{
+                                    manager: (
+                                        <Link
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            href={resolveAddressLinkOnEtherscan(chainId, pool.managerAddress)}
+                                        />
+                                    ),
+                                }}
+                                values={{
+                                    managerName: pool.managerName,
+                                }}
+                            />
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="body2" color="textSecondary" className={classes.text}>
+                            <Trans
+                                i18nKey="plugin_dhedge_manager_share"
+                                components={{
+                                    share: <span />,
+                                }}
+                                values={{
+                                    managerShare: managerShare,
+                                }}
+                            />
+                        </Typography>
                     </Grid>
                 </Grid>
-                <Grid item alignSelf="right" xs={2}>
-                    <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
-                        {t('plugin_dhedge_invest')}
-                    </Button>
-                    <Chip
-                        className={classes.chip}
-                        label={t('plugin_dhedge_buy_token', { symbol: inputToken.symbol })}
-                        clickable
-                        color="primary"
-                        variant="outlined"
-                        onClick={openSwap}
-                    />
-                </Grid>
             </Grid>
-        </Card>
+            <Grid item alignSelf="right" xs={2}>
+                <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
+                    {t('plugin_dhedge_invest')}
+                </Button>
+                <Chip
+                    className={classes.chip}
+                    label={t('plugin_dhedge_buy_token', { symbol: inputToken.symbol })}
+                    clickable
+                    color="primary"
+                    variant="outlined"
+                    onClick={openSwap}
+                />
+            </Grid>
+        </Grid>
     )
 }

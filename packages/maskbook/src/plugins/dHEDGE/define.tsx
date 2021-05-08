@@ -54,15 +54,11 @@ export const DHedgePluginDefine: PluginConfig = {
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const DHEDGE_POOL_PATTERN = usePoolUrlPattern()
-
-    let address = ''
-    const matches = props.url.match(DHEDGE_POOL_PATTERN)
-    if (matches != null) address = matches[1]
-
+    const address = props.url.match(DHEDGE_POOL_PATTERN) || []
     return (
         <MaskbookPluginWrapper pluginName="dHEDGE">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <PoolView address={address} />
+                <PoolView address={address[1] ?? ''} />
             </Suspense>
         </MaskbookPluginWrapper>
     )
