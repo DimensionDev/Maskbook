@@ -58,13 +58,13 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
                         error,
                     })
                     reject(error)
-                    return
+                } else {
+                    setTradeState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
                 }
-                setTradeState({
-                    type: TransactionStateType.HASH,
-                    hash,
-                })
-                resolve(hash)
             })
         })
     }, [account, chainId, stringify(config)])

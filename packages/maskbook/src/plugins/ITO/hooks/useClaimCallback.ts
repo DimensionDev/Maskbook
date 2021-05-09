@@ -59,7 +59,6 @@ export function useClaimCallback(pids: string[]) {
         const config = await Services.Ethereum.composeTransaction({
             from: account,
             to: ITO_Contract.options.address,
-            value: '0',
             data: ITO_Contract.methods.claim(pids).encodeABI(),
         }).catch((error) => {
             setClaimState({

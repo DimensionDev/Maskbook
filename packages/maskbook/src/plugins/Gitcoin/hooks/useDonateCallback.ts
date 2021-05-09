@@ -77,13 +77,13 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
                         error,
                     })
                     reject(error)
-                    return
+                } else {
+                    setDonateState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
                 }
-                setDonateState({
-                    type: TransactionStateType.HASH,
-                    hash,
-                })
-                resolve(hash)
             })
         })
     }, [account, amount, token, donations])

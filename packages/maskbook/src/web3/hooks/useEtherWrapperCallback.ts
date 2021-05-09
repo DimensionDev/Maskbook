@@ -2,7 +2,6 @@ import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import type { Tx } from '@dimensiondev/contracts/types/types'
 import { useEtherWrapperContract } from '../contracts/useWrappedEtherContract'
-import { addGasMargin } from '../helpers'
 import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import Services from '../../extension/service'
@@ -114,6 +113,7 @@ export function useEtherWrapperCallback() {
                     type: TransactionStateType.FAILED,
                     error,
                 })
+                throw error
             })
 
             // send transaction and wait for hash

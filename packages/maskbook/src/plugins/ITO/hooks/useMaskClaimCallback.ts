@@ -31,7 +31,6 @@ export function useMaskClaimCallback() {
         const config = await Services.Ethereum.composeTransaction({
             from: account,
             to: MaskITO_Contract.options.address,
-            value: '0',
             data: MaskITO_Contract.methods.claim().encodeABI(),
         }).catch((error) => {
             setClaimState({

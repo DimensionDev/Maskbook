@@ -7,7 +7,7 @@ import { EthereumMethodType, ProviderType } from '../../../web3/types'
 import { commitNonce, resetNonce } from './nonce'
 
 /**
- * This API is only used internally. Please use requestSend instead.
+ * This API is only used internally. Please use requestSend instead in order to share the same payload id globally.
  * @param payload
  * @param callback
  */

@@ -236,7 +236,6 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         const config = await Services.Ethereum.composeTransaction({
             from: account,
             to: ITO_Contract.options.address,
-            value: '0',
             data: ITO_Contract.methods.fill_pool(...params).encodeABI(),
         }).catch((error) => {
             setFillState({
@@ -249,6 +248,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = ITO_Contract.methods.fill_pool(...params).send(config as Tx)
+
             promiEvent
                 .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                     setFillState({
