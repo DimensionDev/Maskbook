@@ -1,43 +1,44 @@
 import type { SignedTransaction, Transaction, TransactionConfig, TransactionReceipt } from 'web3-core'
+import { EthereumMethodType } from '../../../web3/types'
 import { request } from './request'
 
 export async function getGasPrice() {
     return request<string>({
-        method: 'eth_gasPrice',
+        method: EthereumMethodType.ETH_GAS_PRICE,
     })
 }
 
 export async function getBlockNumber() {
     const blockNumber = await request<string>({
-        method: 'eth_blockNumber',
+        method: EthereumMethodType.ETH_BLOCK_NUMBER,
     })
     return Number.parseInt(blockNumber, 16)
 }
 
 export async function getBalance(address: string) {
     return request<string>({
-        method: 'eth_getBalance',
+        method: EthereumMethodType.ETH_GET_BALANCE,
         params: [address, 'latest'],
     })
 }
 
 export async function getTransactionByHash(hash: string) {
     return request<Transaction>({
-        method: 'eth_getTransactionByHash',
+        method: EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
         params: [hash],
     })
 }
 
 export async function getTransactionReceipt(hash: string) {
     return request<TransactionReceipt>({
-        method: 'eth_getTransactionReceipt',
+        method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
         params: [hash],
     })
 }
 
 export async function getTransactionCount(address: string) {
     const count = await request<string>({
-        method: 'eth_getTransactionCount',
+        method: EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
         params: [address, 'latest'],
     })
     return Number.parseInt(count, 16)
@@ -45,7 +46,7 @@ export async function getTransactionCount(address: string) {
 
 export async function estimateGas(config: TransactionConfig) {
     const gas = await request<string>({
-        method: 'eth_estimateGas',
+        method: EthereumMethodType.ETH_ESTIMATE_GAS,
         params: [config],
     })
     return Number.parseInt(gas, 16)
@@ -53,21 +54,21 @@ export async function estimateGas(config: TransactionConfig) {
 
 export async function sign(dataToSign: string, address: string) {
     return request<string>({
-        method: 'eth_sign',
+        method: EthereumMethodType.ETH_SIGN,
         params: [dataToSign, address],
     })
 }
 
 export async function personalSign(dataToSign: string, address: string, password?: string) {
     return request<string>({
-        method: 'personal_sign',
+        method: EthereumMethodType.PERSONAL_SIGN,
         params: [dataToSign, address, password].filter((x) => typeof x !== 'undefined'),
     })
 }
 
 export async function signTransaction(config: TransactionConfig) {
     return request<SignedTransaction>({
-        method: 'eth_signTransaction',
+        method: EthereumMethodType.ETH_SIGN_TRANSACTION,
         params: [config],
     })
 }

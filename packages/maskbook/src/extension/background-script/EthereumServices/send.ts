@@ -3,7 +3,7 @@ import type { HttpProvider, TransactionConfig } from 'web3-core'
 import { personalSign } from './network'
 import { createWeb3 } from './web3'
 import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
-import { ProviderType } from '../../../web3/types'
+import { EthereumMethodType, ProviderType } from '../../../web3/types'
 import { commitNonce, resetNonce } from './nonce'
 
 /**
@@ -37,7 +37,7 @@ export async function UNSAFE_send(
     }
 
     switch (payload.method) {
-        case 'personal_sign':
+        case EthereumMethodType.PERSONAL_SIGN:
             const [data, address] = payload.params as [string, string]
             try {
                 callback(null, {
@@ -49,7 +49,7 @@ export async function UNSAFE_send(
                 callback(e)
             }
             break
-        case 'eth_sendTransaction':
+        case EthereumMethodType.ETH_SEND_TRANSACTION:
             if (providerType === ProviderType.Maskbook) {
                 const [config] = payload.params as [TransactionConfig]
 
@@ -64,7 +64,7 @@ export async function UNSAFE_send(
                 provider.send(
                     {
                         ...payload,
-                        method: 'eth_sendRawTransaction',
+                        method: EthereumMethodType.ETh_SEND_RAW_TRANSACTION,
                         params: [(await signer.signTransaction(config)).rawTransaction],
                     },
                     (error, result) => {
