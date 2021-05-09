@@ -312,6 +312,8 @@
     "plugin_wallet_create_import_choose": "",
     "plugin_wallet_create_a_new_wallet": "",
     "plugin_wallet_create_a_new_wallet_description": "",
+    "plugin_wallet_import_wallet": "",
+    "plugin_wallet_import_wallet_description": "",
     "plugin_wallet_setup_description_verify": "",
     "plugin_wallet_setup_back": "",
     "plugin_wallet_setup_create": "",

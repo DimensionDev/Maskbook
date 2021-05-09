@@ -312,6 +312,8 @@
     "plugin_wallet_create_import_choose": "Create Wallet & Import Wallet",
     "plugin_wallet_create_a_new_wallet": "Create a New Wallet",
     "plugin_wallet_create_a_new_wallet_description": "Mask network supports Eth and Polka networks ",
+    "plugin_wallet_import_wallet": "Import the Wallet",
+    "plugin_wallet_import_wallet_description": "Mask network supports Private Key、JSON.File and Mnemonic words.",
     "plugin_wallet_setup_description_verify": "Please fill each empty phrase in order to make sure it is correct.",
     "plugin_wallet_setup_back": "Back",
     "plugin_wallet_setup_create": "Create",
