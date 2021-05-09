@@ -7,7 +7,7 @@ const ONE_TRILLION = ONE_BILLION * 1000
 
 /**
  * A helper function to format amount
- * @param rawAmount raw amount
+ * @param input raw amount
  * @return {String} Postfixed formatted amount
  * @example
  * formatAmountPostfix(1.234);
@@ -22,9 +22,9 @@ const ONE_TRILLION = ONE_BILLION * 1000
  * formatAmountPostfix(20000.123);
  * // returns 20.1K
  **/
-export function formatAmountPostfix(rawAmount: BigNumber.Value) {
+export function formatAmountPostfix(input: BigNumber.Value) {
     let postfix = ''
-    let amount = new BigNumber(rawAmount)
+    let amount = new BigNumber(input)
 
     if (amount.isGreaterThanOrEqualTo(ONE_TRILLION)) {
         postfix = 'T'
