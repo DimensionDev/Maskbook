@@ -211,6 +211,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     useEffect(() => {
         if (swapState.type === TransactionStateType.UNKNOWN) return
 
+        // ses #2796
         if (swapState.type === TransactionStateType.HASH) return
 
         setTransactionDialogOpen({
