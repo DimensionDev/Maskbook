@@ -15,6 +15,7 @@ export interface PersonaProvider {
 }
 
 export interface PersonaInfo {
+    nickname: string
     identifier?: string
     providers?: PersonaProvider[]
 }

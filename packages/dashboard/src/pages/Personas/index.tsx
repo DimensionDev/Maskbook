@@ -1,4 +1,4 @@
-import { Tab, Tabs, createStyles, Box, makeStyles } from '@material-ui/core'
+import { Tab, Tabs, createStyles, Box, makeStyles, Typography, IconButton } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
 import { useEffect, useMemo, useState } from 'react'
 import { capitalize, compact, head, isEmpty } from 'lodash-es'
@@ -6,7 +6,7 @@ import { TabContext, TabPanel } from '@material-ui/lab'
 import { PersonaSetup } from './components/PersonaSetup'
 import { useDefinedSocialNetworkUIs, useMyPersonas } from './api'
 import { useConnectSocialNetwork } from './hooks/useConnectSocialNetwork'
-import { AuthorIcon } from '@dimensiondev/icons'
+import { AuthorIcon, ArrowDownRound, ArrowUpRound } from '@dimensiondev/icons'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaState } from './hooks/usePersonaState'
@@ -15,7 +15,7 @@ import { currentPersonaSettings } from './settings'
 import type { PersonaInfo } from './type'
 import stringify from 'json-stable-stringify'
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         container: {
             display: 'flex',
@@ -29,13 +29,36 @@ const useStyles = makeStyles(() =>
             padding: 0,
             flex: 1,
         },
+        author: {
+            fill: MaskColorVar.secondaryBackground,
+            width: 36,
+            height: 36,
+        },
+        iconButton: {
+            padding: 0,
+            fontSize: 16,
+            width: 28,
+            height: 28,
+            borderRadius: '50%',
+            border: `1px solid ${MaskColorVar.blue}`,
+        },
+        arrow: {
+            fill: 'none',
+            stroke: '#1C68F3',
+        },
+        label: {
+            width: 'auto',
+        },
+        nickname: {
+            margin: theme.spacing(0, 1.5),
+        },
     }),
 )
 
 export default function Personas() {
     const classes = useStyles()
 
-    const { toggleDrawer } = PersonaState.useContainer()
+    const { drawerOpen, toggleDrawer } = PersonaState.useContainer()
     const definedSocialNetworkUIs = useDefinedSocialNetworkUIs()
     const myPersonas = useMyPersonas()
     const currentPersona = useValueRef(currentPersonaSettings)
@@ -98,7 +121,19 @@ export default function Personas() {
     return (
         <PageFrame
             title="Personas"
-            primaryAction={<AuthorIcon onClick={toggleDrawer} style={{ fill: MaskColorVar.secondaryBackground }} />}>
+            primaryAction={
+                <Box display="flex" alignItems="center">
+                    <AuthorIcon onClick={toggleDrawer} className={classes.author} />
+                    <Typography className={classes.nickname}>{currentPersonaInfo.nickname}</Typography>
+                    <IconButton onClick={toggleDrawer} size="small" className={classes.iconButton}>
+                        {drawerOpen ? (
+                            <ArrowDownRound className={classes.arrow} fontSize="inherit" />
+                        ) : (
+                            <ArrowUpRound className={classes.arrow} fontSize="inherit" />
+                        )}
+                    </IconButton>
+                </Box>
+            }>
             <Box className={classes.container}>
                 <TabContext value={activeTab}>
                     <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>

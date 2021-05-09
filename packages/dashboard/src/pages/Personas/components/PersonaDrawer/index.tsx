@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
     backdrop: {
         background: 'none',
+        top: 64,
     },
     buttons: {
         display: 'grid',
@@ -98,7 +99,7 @@ export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
             <Box className={classes.buttons}>
                 <Button onClick={() => setShowAddPersonaCard(true)}>Add Persona</Button>
                 {/* TODO: replace className to color prop */}
-                <Button className={classes.backup}>Backups</Button>
+                <Button className={classes.backup}>Back up</Button>
             </Box>
         </Drawer>
     )
