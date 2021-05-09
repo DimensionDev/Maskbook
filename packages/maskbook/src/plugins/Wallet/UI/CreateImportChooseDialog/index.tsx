@@ -11,18 +11,35 @@ const useStyles = makeStyles((theme) =>
         content: {
             padding: theme.spacing(5, 4.5),
         },
+        walletOption: {
+            display: 'flex',
+            alignItems: 'center',
+            padding: 20,
+            border: `1px solid ${theme.palette.divider}`,
+            borderRadius: 12,
+            '& + &': {
+                marginTop: 20,
+            },
+        },
+        optionTexts: {
+            marginRight: 'auto',
+            marginLeft: theme.spacing(2),
+        },
         button: {
+            width: 90,
+            flexShink: 0,
             backgroundColor: '#1C68F3',
             color: '#ffffff',
             '&:hover': {
                 backgroundColor: '#1854c4',
             },
         },
-        walletOption: {
-            display: 'flex',
-        },
         optionName: {
             fontSize: 16,
+        },
+        optionDescription: {
+            fontSize: 12,
+            color: '#7B8192',
         },
         optionIcon: {
             height: 48,
@@ -56,11 +73,13 @@ export function CreateImportChooseDialog(props: CreateImportChooseDialogProps) {
             <DialogContent className={classes.content}>
                 <Box className={classes.walletOption}>
                     <Image src={new URL('./wallet.png', import.meta.url).toString()} className={classes.optionIcon} />
-                    <Box>
+                    <Box className={classes.optionTexts}>
                         <Typography variant="h2" component="h2" className={classes.optionName}>
                             {t('plugin_wallet_create_a_new_wallet')}
                         </Typography>
-                        <Typography variant="body1">{t('plugin_wallet_create_a_new_wallet_description')}</Typography>
+                        <Typography variant="body1" className={classes.optionDescription}>
+                            {t('plugin_wallet_create_a_new_wallet_description')}
+                        </Typography>
                     </Box>
                     <Button className={classes.button} size="small" onClick={openCreateWalletDialog}>
                         {t('plugin_wallet_setup_create')}
@@ -68,11 +87,13 @@ export function CreateImportChooseDialog(props: CreateImportChooseDialogProps) {
                 </Box>
                 <Box className={classes.walletOption}>
                     <Image src={new URL('./import.png', import.meta.url).toString()} className={classes.optionIcon} />
-                    <Box>
+                    <Box className={classes.optionTexts}>
                         <Typography variant="h2" component="h2" className={classes.optionName}>
-                            {t('plugin_wallet_create_a_new_wallet')}
+                            {t('plugin_wallet_import_wallet')}
                         </Typography>
-                        <Typography variant="body1">{t('plugin_wallet_create_a_new_wallet_description')}</Typography>
+                        <Typography variant="body1" className={classes.optionDescription}>
+                            {t('plugin_wallet_import_wallet_description')}
+                        </Typography>
                     </Box>
                     <Button className={classes.button} size="small">
                         {t('plugin_wallet_setup_create')}
