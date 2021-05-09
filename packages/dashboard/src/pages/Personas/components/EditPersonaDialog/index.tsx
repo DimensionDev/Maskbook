@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { Button, createStyles, DialogActions, DialogContent, makeStyles, Typography } from '@material-ui/core'
 import { AuthorIcon, EditIcon } from '@dimensiondev/icons'
 import { MaskColorVar, MaskDialog } from '@dimensiondev/maskbook-theme'
@@ -7,6 +7,8 @@ import { PersonaLine } from '../PersonaLine'
 import { useConnectSocialNetwork } from '../../hooks/useConnectSocialNetwork'
 import type { ECKeyIdentifier } from '@dimensiondev/maskbook-shared'
 import { useDisConnectSocialNetwork } from '../../hooks/useDisConnectSocialNetwork'
+import { RenameDialog } from '../RenameDialog'
+import { Services } from '../../../../API'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -57,33 +59,52 @@ export interface EditPersonaDialogProps {
 
 export const EditPersonaDialog = memo(({ open, onClose, nickname, providers, identifier }: EditPersonaDialogProps) => {
     const classes = useStyles()
+    const [renameOpen, setRenameOpen] = useState(false)
+
     const [, onConnect] = useConnectSocialNetwork()
     const [, onDisConnect] = useDisConnectSocialNetwork()
+
+    const onRename = useCallback(
+        async (target: string) => {
+            await Services.Identity.renamePersona(identifier, target)
+            setRenameOpen(false)
+        },
+        [identifier],
+    )
+
     return (
-        <MaskDialog open={open} title="Edit Persona" onClose={onClose}>
-            <DialogContent className={classes.container}>
-                <AuthorIcon className={classes.author} />
-                <Typography variant="caption" classes={{ root: classes.name }}>
-                    {nickname}
-                    <EditIcon className={classes.edit} />
-                </Typography>
-                <div className={classes.content}>
-                    {providers.map((provider) => {
-                        return (
-                            <PersonaLine
-                                key={provider.internalName}
-                                onConnect={() => onConnect(identifier.toText(), provider)}
-                                onDisConnect={() => onDisConnect(provider?.identifier)}
-                                {...provider}
-                            />
-                        )
-                    })}
-                </div>
-            </DialogContent>
-            <DialogActions>
-                <Button color="secondary">Cancel</Button>
-                <Button>Confirm</Button>
-            </DialogActions>
-        </MaskDialog>
+        <>
+            <MaskDialog open={open} title="Edit Persona" onClose={onClose}>
+                <DialogContent className={classes.container}>
+                    <AuthorIcon className={classes.author} />
+                    <Typography variant="caption" classes={{ root: classes.name }}>
+                        {nickname}
+                        <EditIcon className={classes.edit} onClick={() => setRenameOpen(true)} />
+                    </Typography>
+                    <div className={classes.content}>
+                        {providers.map((provider) => {
+                            return (
+                                <PersonaLine
+                                    key={provider.internalName}
+                                    onConnect={() => onConnect(identifier.toText(), provider)}
+                                    onDisConnect={() => onDisConnect(provider?.identifier)}
+                                    {...provider}
+                                />
+                            )
+                        })}
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button color="secondary">Cancel</Button>
+                    <Button>Confirm</Button>
+                </DialogActions>
+            </MaskDialog>
+            <RenameDialog
+                open={renameOpen}
+                nickname={nickname}
+                onClose={() => setRenameOpen(false)}
+                onConfirm={onRename}
+            />
+        </>
     )
 })

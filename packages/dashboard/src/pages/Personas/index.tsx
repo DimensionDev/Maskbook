@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme) =>
         },
         nickname: {
             margin: theme.spacing(0, 1.5),
+            lineHeight: 1.375,
         },
     }),
 )
