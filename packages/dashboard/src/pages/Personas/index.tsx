@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) =>
         },
         arrow: {
             fill: 'none',
-            stroke: '#1C68F3',
+            stroke: MaskColorVar.primary,
         },
         label: {
             width: 'auto',

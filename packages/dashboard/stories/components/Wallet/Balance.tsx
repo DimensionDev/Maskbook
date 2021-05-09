@@ -1,9 +1,9 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
-import { Balance as C } from '../src/components/Balance'
+import { Balance as C } from '../../../src/components/Balance'
 import { action } from '@storybook/addon-actions'
 const { meta, of } = story(C)
 
-export default meta({ title: 'Components/Balance' })
+export default meta({ title: 'Components/Wallet/Balance' })
 
 export const Balance = of({
     args: {

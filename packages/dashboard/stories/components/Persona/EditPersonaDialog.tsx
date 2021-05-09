@@ -1,12 +1,12 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
-import { EditPersonaDialog as C } from '../src/pages/Personas/components/EditPersonaDialog'
+import { EditPersonaDialog as C } from '../../../src/pages/Personas/components/EditPersonaDialog'
 import { action } from '@storybook/addon-actions'
 import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 
 const { meta, of } = story(C)
 
 export default meta({
-    title: 'Components/Edit Persona Dialog',
+    title: 'Components/Persona/Edit Persona Dialog',
 })
 
 export const EditPersonaDialog = of({

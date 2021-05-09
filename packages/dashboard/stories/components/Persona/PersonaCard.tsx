@@ -1,11 +1,11 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
-import { PersonaCard as C } from '../src/pages/Personas/components/PersonaCard'
+import { PersonaCard as C } from '../../../src/pages/Personas/components/PersonaCard'
 import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 
 const { meta, of } = story(C)
 
 export default meta({
-    title: 'Components/Persona Card',
+    title: 'Components/Persona/Persona Card',
 })
 
 export const PersonaCard = of({

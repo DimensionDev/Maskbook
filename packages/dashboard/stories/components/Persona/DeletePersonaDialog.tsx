@@ -1,11 +1,11 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
-import { DeletePersonaDialog as C } from '../src/pages/Personas/components/DeletePersonaDialog'
+import { DeletePersonaDialog as C } from '../../../src/pages/Personas/components/DeletePersonaDialog'
 import { action } from '@storybook/addon-actions'
 
 const { meta, of } = story(C)
 
 export default meta({
-    title: 'Components/Delete Persona Dialog',
+    title: 'Components/Persona/Delete Persona Dialog',
 })
 
 export const DeletePersonaDialog = of({
