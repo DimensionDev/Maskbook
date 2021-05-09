@@ -16,7 +16,6 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import type { ChainId } from '../../../web3/types'
-import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO_CONSTANTS } from '../constants'
@@ -212,13 +211,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     useEffect(() => {
         if (swapState.type === TransactionStateType.UNKNOWN) return
 
-        if (swapState.type === TransactionStateType.HASH) {
-            const { hash } = swapState
-            setTimeout(() => {
-                window.open(resolveTransactionLinkOnEtherscan(chainId, hash), '_blank', 'noopener noreferrer')
-            }, 2000)
-            return
-        }
+        if (swapState.type === TransactionStateType.HASH) return
 
         setTransactionDialogOpen({
             open: true,
