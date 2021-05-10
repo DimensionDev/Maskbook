@@ -20,7 +20,7 @@ import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { debugModeSetting } from '../../../settings/settings'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatBalance } from '../../Wallet/formatter'
+import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { dateTimeFormat } from '../assets/formatDate'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { MSG_DELIMITER } from '../constants'
@@ -191,17 +191,17 @@ export function PoolInList(props: PoolInListProps) {
                         <Typography variant="body2" color="textSecondary" component="span">
                             {t('plugin_ito_list_sold_total')}
                             <Typography variant="body2" color="textPrimary" component="span">
-                                {formatBalance(
-                                    exchange_out_volumes.reduce((acculator, x) => acculator.plus(x), new BigNumber(0)),
-                                    pool.token.decimals,
-                                )}
+                                <FormattedBalance
+                                    value={BigNumber.sum(...exchange_out_volumes)}
+                                    decimals={pool.token.decimals}
+                                />
                             </Typography>{' '}
                             {pool.token.symbol}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="span">
                             {t('plugin_ito_list_total')}
                             <Typography variant="body2" color="textPrimary" component="span">
-                                {formatBalance(pool.total, pool.token.decimals)}
+                                <FormattedBalance value={pool.total} decimals={pool.token.decimals} />
                             </Typography>{' '}
                             {pool.token.symbol}
                         </Typography>
@@ -256,12 +256,20 @@ export function PoolInList(props: PoolInListProps) {
                                                 {token.symbol} / {pool.token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
-                                                {formatBalance(exchange_out_volumes[index], pool.token.decimals, 6)}{' '}
-                                                {pool.token.symbol}
+                                                <FormattedBalance
+                                                    value={exchange_out_volumes[index]}
+                                                    decimals={pool.token.decimals}
+                                                    significant={6}
+                                                    symbol={pool.token.symbol}
+                                                />
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
-                                                {formatBalance(exchange_in_volumes[index], token.decimals, 6)}{' '}
-                                                {token.symbol}
+                                                <FormattedBalance
+                                                    value={exchange_in_volumes[index]}
+                                                    decimals={pool.token.decimals}
+                                                    significant={6}
+                                                    symbol={pool.token.symbol}
+                                                />
                                             </TableCell>
                                         </TableRow>
                                     ))}

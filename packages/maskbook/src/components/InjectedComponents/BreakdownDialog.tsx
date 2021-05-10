@@ -4,7 +4,7 @@ import { InjectedDialog } from '../shared/InjectedDialog'
 import { makeStyles } from '@material-ui/core/styles'
 import { useStylesExtends } from '../custom-ui-helper'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
-import { formatBalance } from '../../plugins/Wallet/formatter'
+import { FormattedBalance } from '@dimensiondev/maskbook-shared'
 import BigNumber from 'bignumber.js'
 import { ITO_Card } from '../../plugins/ITO/UI/ITO_Card'
 import type { ERC20TokenDetailed } from '../../web3/types'
@@ -76,12 +76,17 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
             <DialogContent className={classes.content}>
                 <MaskbookIcon classes={{ root: classes.logo }} />
                 <Typography className={classes.amount}>
-                    {formatBalance(new BigNumber(amount).plus(balance), token.decimals, 2)} {token.symbol}
+                    <FormattedBalance
+                        value={new BigNumber(amount).plus(balance)}
+                        decimals={token.decimals}
+                        significant={2}
+                        symbol={token.symbol}
+                    />
                 </Typography>
                 <Typography className={classes.balance}>
                     <span>Balance:</span>
                     <span>
-                        {formatBalance(balance, 18, 2)} {token.symbol}
+                        <FormattedBalance value={balance} decimals={18} significant={2} symbol={token.symbol} />
                     </span>
                 </Typography>
                 <ITO_Card token={token} onUpdateAmount={setAmount} onUpdateBalance={onUpdateBalance} />

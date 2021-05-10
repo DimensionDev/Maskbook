@@ -2,7 +2,8 @@ import { Skeleton } from '@material-ui/core'
 import { ListItem, ListItemText, makeStyles, Theme, Typography } from '@material-ui/core'
 import type { RedPacketJSONPayload } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatBalance, formatElapsed } from '../../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { formatElapsed } from '../../Wallet/formatter'
 import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
 
 const useStyles = makeStyles((theme: Theme) => ({

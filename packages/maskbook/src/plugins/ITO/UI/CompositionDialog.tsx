@@ -19,7 +19,7 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { formatBalance } from '../../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
 
