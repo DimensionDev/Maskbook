@@ -35,7 +35,7 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
     const chainIdValid = useChainIdValid()
 
     //#region remote controlled buy dialog
-    const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     //#endregion
 
     const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogFT)
@@ -44,7 +44,7 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
         [
             <MenuItem
                 onClick={() => {
-                    setBuyDialogOpen({
+                    setBuyDialog({
                         open: true,
                         code: token.symbol ?? token.name,
                         address: account,

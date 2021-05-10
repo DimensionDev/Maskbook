@@ -68,18 +68,16 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     const selectedWallet = useWallet()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
 
-    const [, setSelectWalletDialogOpen] = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     const onOpen = useCallback(() => {
-        if (selectedWallet)
-            setSelectWalletDialogOpen({
-                open: true,
-            })
-        else
-            setSelectProviderDialogOpen({
-                open: true,
-            })
-    }, [selectedWallet, setSelectWalletDialogOpen, setSelectProviderDialogOpen])
+        if (selectedWallet) openSelectWalletDialog()
+        else openSelectProviderDialog()
+    }, [selectedWallet, openSelectWalletDialog, openSelectProviderDialog])
 
     if (Flags.has_native_nav_bar) return <AccountBalanceWalletIcon onClick={onOpen} />
 
