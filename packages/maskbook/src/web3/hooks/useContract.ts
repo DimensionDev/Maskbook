@@ -6,7 +6,7 @@ import { nonFunctionalWeb3 } from '../web3'
 
 function createContract<T extends Contract>(address: string, ABI: AbiItem[]) {
     if (!address || !EthereumAddress.isValid(address)) return null
-    return (new nonFunctionalWeb3.eth.Contract(ABI, address) as unknown) as T
+    return new nonFunctionalWeb3.eth.Contract(ABI, address) as unknown as T
 }
 
 /**
@@ -25,9 +25,9 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
  * @param ABI
  */
 export function useContracts<T extends Contract>(listOfAddress: string[], ABI: AbiItem[]) {
-    const contracts = useMemo(() => listOfAddress.map((address) => createContract<T>(address, ABI)), [
-        listOfAddress,
-        ABI,
-    ])
+    const contracts = useMemo(
+        () => listOfAddress.map((address) => createContract<T>(address, ABI)),
+        [listOfAddress, ABI],
+    )
     return contracts.filter(Boolean) as T[]
 }
