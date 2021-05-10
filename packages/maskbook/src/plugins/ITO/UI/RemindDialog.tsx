@@ -154,7 +154,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         rel="noopener noreferrer"
                         href={`${resolveLinkOnEtherscan(chainId)}/token/${token.address}`}>
                         <Typography variant="body2">
-                            <FormattedAddress type="ethereum" address={token.address} size={4} />
+                            <FormattedAddress address={token.address} size={4} />
                             (View on Etherscan)
                         </Typography>
                     </Link>

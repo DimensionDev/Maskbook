@@ -234,7 +234,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     ) : null}
                                     <span>
                                         <FormattedCurrency
-                                            type="currency"
                                             value={
                                                 (dataProvider === DataProvider.COIN_MARKET_CAP
                                                     ? last(stats)?.[1] ?? market.current_price

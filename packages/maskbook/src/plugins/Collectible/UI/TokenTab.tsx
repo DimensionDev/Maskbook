@@ -151,7 +151,7 @@ export function TokenTab(props: TokenTabProps) {
                         target="_blank"
                         rel="noopener noreferrer">
                         <Typography variant="body2">
-                            <FormattedAddress type="ethereum" address={token?.contractAddress ?? ''} size={4} />
+                            <FormattedAddress address={token?.contractAddress ?? ''} size={4} />
                         </Typography>
                     </Link>
                 </Box>

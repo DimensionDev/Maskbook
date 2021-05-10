@@ -107,7 +107,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     href={`${resolveLinkOnEtherscan(chainId)}/address/${recipientAddress}`}>
-                    <FormattedAddress type="ethereum" address={recipientAddress} size={4} />
+                    <FormattedAddress address={recipientAddress} size={4} />
                 </Link>{' '}
                 to use your {token.symbol ?? 'Token'} tokens when a new ITO round starts later.
             </Typography>
