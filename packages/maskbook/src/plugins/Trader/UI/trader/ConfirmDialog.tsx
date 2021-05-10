@@ -8,7 +8,7 @@ import { TokenPanel } from './TokenPanel'
 import { PriceStaleWarnning } from './PriceStaleWarnning'
 import type { TradeComputed, TradeProvider } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { formatBalance } from '../../../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 
 const useStyles = makeStyles((theme) => ({

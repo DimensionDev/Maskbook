@@ -14,7 +14,7 @@ import { WETH } from '../constants'
 import { ChainId, ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
 import { isETH } from '../../../web3/helpers'
-import { formatEthereumAddress } from '../../Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 
 export function toUniswapChainId(chainId: ChainId): UniswapChainId {
     switch (chainId) {

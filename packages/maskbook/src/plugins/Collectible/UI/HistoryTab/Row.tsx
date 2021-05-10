@@ -1,6 +1,7 @@
 import { Avatar, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import LinkIcon from '@material-ui/icons/Link'
-import { formatBalance, formatElapsed } from '../../../Wallet/formatter'
+import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
+import { formatElapsed } from '../../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { CollectibleProvider, NFTHistory, OpenSeaAssetEventType, RaribleEventType } from '../../types'
@@ -92,10 +93,10 @@ export function Row({ event, isDifferenceToken }: Props) {
                     </TableCell>
                     <TableCell>
                         <Typography className={classes.content} variant="body2">
-                            {formatBalance(
-                                new BigNumber(event.assetQuantity?.quantity ?? 0),
-                                event.assetQuantity?.asset.decimals ?? 0,
-                            )}
+                            <FormattedBalance
+                                value={new BigNumber(event.assetQuantity?.quantity ?? 0)}
+                                decimals={event.assetQuantity?.asset.decimals ?? 0}
+                            />
                         </Typography>
                     </TableCell>
                 </>

@@ -14,7 +14,7 @@ import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { formatBalance, formatEthereumAddress } from '../../Wallet/formatter'
+import { formatBalance, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { ITO_CONSTANTS } from '../constants'
 

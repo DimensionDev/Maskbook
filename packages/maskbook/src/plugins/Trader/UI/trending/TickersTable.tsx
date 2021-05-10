@@ -11,7 +11,8 @@ import {
     Typography,
 } from '@material-ui/core'
 import { Ticker, DataProvider } from '../../types'
-import { formatCurrency, formatElapsed, formatEthereumAddress } from '../../../Wallet/formatter'
+import { formatCurrency, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatElapsed } from '../../../Wallet/formatter'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme: Theme) => ({

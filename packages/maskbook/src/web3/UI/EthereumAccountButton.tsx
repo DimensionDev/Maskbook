@@ -6,7 +6,7 @@ import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { ProviderIcon } from '../../components/shared/ProviderIcon'
-import { formatBalance, formatEthereumAddress } from '../../plugins/Wallet/formatter'
+import { formatEthereumAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
@@ -86,7 +86,9 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     return (
         <div className={props.disableEther ? '' : classes.root}>
             {!props.disableEther ? (
-                <Typography className={classes.balance}>{formatBalance(balance, 18, 4)} ETH</Typography>
+                <Typography className={classes.balance}>
+                    <FormattedBalance value={balance} decimals={18} significant={4} symbol="ETH" />
+                </Typography>
             ) : null}
             <Button
                 className={classNames(classes.button, props.disableEther ? classes.buttonTransparent : '')}

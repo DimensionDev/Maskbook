@@ -16,7 +16,7 @@ import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../..
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { isEtherWrapper, toBips } from '../../helpers'
-import { formatPercentage } from '../../../Wallet/formatter'
+import { formatPercentage } from '@dimensiondev/maskbook-shared'
 import { resolveUniswapWarningLevel } from '../../pipes'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'

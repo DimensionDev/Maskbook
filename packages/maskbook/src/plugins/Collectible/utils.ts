@@ -7,7 +7,7 @@ import {
     raribleHostnames,
     rariblePathnameRegexMatcher,
 } from './constants'
-import { formatBalance } from '../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { ChainId } from '../../web3/types'
 
 export function checkUrl(url: string): boolean {

@@ -10,7 +10,7 @@ import {
     Typography,
 } from '@material-ui/core'
 import { DataProvider, Trending } from '../../types'
-import { formatCurrency, formatToken } from '../../../Wallet/formatter'
+import { formatCurrency, formatToken } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {

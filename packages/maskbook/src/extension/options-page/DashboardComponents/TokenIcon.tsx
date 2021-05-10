@@ -3,7 +3,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { isSameAddress, getConstant } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
 import { useBlockie } from '../../../web3/hooks/useBlockie'
-import { formatChecksumAddress } from '../../../plugins/Wallet/formatter'
+import { formatChecksumAddress } from '@dimensiondev/maskbook-shared'
 import { useImageFailover } from '../../../utils/hooks/useImageFailover'
 
 //#region fix icon image

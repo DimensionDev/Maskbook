@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { EthereumTokenType, ERC20TokenDetailed } from '../types'
 import { useChainId } from './useBlockNumber'
-import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
+import { formatChecksumAddress } from '@dimensiondev/maskbook-shared'
 import { useSingleContractMultipleData } from './useMulticall'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 

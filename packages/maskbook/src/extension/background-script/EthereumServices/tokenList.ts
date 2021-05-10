@@ -1,5 +1,5 @@
 import { memoizePromise } from '@dimensiondev/kit'
-import { formatChecksumAddress } from '../../../plugins/Wallet/formatter'
+import { formatChecksumAddress } from '@dimensiondev/maskbook-shared'
 import { EthereumTokenType, ChainId, ERC20TokenDetailed } from '../../../web3/types'
 
 interface TokenList {

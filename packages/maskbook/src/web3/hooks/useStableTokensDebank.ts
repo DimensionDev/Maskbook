@@ -1,4 +1,4 @@
-import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
+import { formatChecksumAddress } from '@dimensiondev/maskbook-shared'
 import { createERC20Token } from '../helpers'
 import { ChainId } from '../types'
 import { useChainId } from './useBlockNumber'

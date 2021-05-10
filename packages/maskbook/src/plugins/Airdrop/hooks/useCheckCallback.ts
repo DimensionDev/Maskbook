@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { formatEthereumAddress } from '../../Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import type { AirdropPacket } from '../apis'
 import { useAirdropContract } from '../contracts/useAirdropContract'
 import { PluginAirdropRPC } from '../messages'

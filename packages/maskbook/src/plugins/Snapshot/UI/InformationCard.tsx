@@ -8,7 +8,7 @@ import { SnapshotCard } from './SnapshotCard'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
 import { resolveAddressLinkOnEtherscan, resolveBlockLinkOnEtherscan, resolveIPFSLink } from '../../../web3/pipes'
-import { formatEthereumAddress } from '../../Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 
 import { SnapshotContext } from '../context'
