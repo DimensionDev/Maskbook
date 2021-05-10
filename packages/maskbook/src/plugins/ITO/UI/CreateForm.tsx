@@ -6,8 +6,6 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
-import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
@@ -29,6 +27,7 @@ import { AdvanceSetting } from './AdvanceSetting'
 import type { AdvanceSettingData } from './AdvanceSetting'
 import { useRegionSelect, regionCodes, encodeRegionCode, decodeRegionCode } from '../hooks/useRegion'
 import { RegionSelect } from './RegionSelect'
+import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -276,70 +275,36 @@ export function CreateForm(props: CreateFormProps) {
         totalOfPerWallet,
     ])
 
-    const handleStartTime = useCallback((date: Date) => {
-        setStartTime(date)
+    const handleStartTime = useCallback((input: Date) => {
+        setStartTime(input)
     }, [])
 
     const handleEndTime = useCallback(
-        (date: Date) => {
-            const time = date.getTime()
+        (input: Date) => {
+            const time = input.getTime()
             const now = Date.now()
             if (time < now) return
-            if (time > startTime.getTime()) setEndTime(date)
+            if (time > startTime.getTime()) setEndTime(input)
         },
         [startTime],
     )
 
     const handleUnlockTime = useCallback(
-        (date: Date) => {
-            const time = date.getTime()
+        (input: Date) => {
+            const time = input.getTime()
             const now = Date.now()
             if (time < now) return
-            if (time > endTime.getTime()) setUnlockTime(date)
+            if (time > endTime.getTime()) setUnlockTime(input)
         },
         [startTime],
     )
 
-    const StartTime = (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MobileDateTimePicker
-                showTodayButton
-                ampm={false}
-                label={t('plugin_ito_begin_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
-                onChange={(date: Date | null) => handleStartTime(date!)}
-                renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
-                value={startTime}
-                DialogProps={props.dateDialogProps}
-            />
-        </LocalizationProvider>
-    )
+    const StartTime = <DateTimePanel label={t('plugin_ito_begin_time')} onChange={handleStartTime} date={startTime} />
 
-    const EndTime = (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MobileDateTimePicker
-                showTodayButton
-                ampm={false}
-                label={t('plugin_ito_end_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
-                onChange={(date: Date | null) => handleEndTime(date!)}
-                renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
-                value={endTime}
-                DialogProps={props.dateDialogProps}
-            />
-        </LocalizationProvider>
-    )
+    const EndTime = <DateTimePanel label={t('plugin_ito_end_time')} onChange={handleEndTime} date={endTime} />
 
     const UnlockTime = (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MobileDateTimePicker
-                showTodayButton
-                ampm={false}
-                label={t('plugin_ito_unlock_time', { zone: GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})` })}
-                onChange={(date: Date | null) => handleUnlockTime(date!)}
-                renderInput={(props) => <TextField {...props} style={{ width: '100%' }} />}
-                value={unlockTime}
-                DialogProps={props.dateDialogProps}
-            />
-        </LocalizationProvider>
+        <DateTimePanel label={t('plugin_ito_unlock_time')} onChange={handleUnlockTime} date={unlockTime} />
     )
 
     return (
