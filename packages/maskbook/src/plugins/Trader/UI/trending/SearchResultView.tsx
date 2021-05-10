@@ -101,7 +101,11 @@ export function SearchResultView(props: SearchResultViewProps) {
     //#endregion
 
     //#region swap
-    const { value: tokenDetailed, error: tokenDetailedError, loading: loadingTokenDetailed } = useTokenDetailed(
+    const {
+        value: tokenDetailed,
+        error: tokenDetailedError,
+        loading: loadingTokenDetailed,
+    } = useTokenDetailed(
         trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
         trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.eth_address ?? '',
     )
@@ -110,7 +114,11 @@ export function SearchResultView(props: SearchResultViewProps) {
 
     //#region stats
     const [days, setDays] = useState(Days.ONE_WEEK)
-    const { value: stats = [], loading: loadingStats, retry: retryStats } = usePriceStats({
+    const {
+        value: stats = [],
+        loading: loadingStats,
+        retry: retryStats,
+    } = usePriceStats({
         coinId: trending?.coin.id,
         dataProvider: trending?.dataProvider,
         currency: trending?.currency,

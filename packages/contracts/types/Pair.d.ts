@@ -30,9 +30,7 @@ export class Pair extends Contract {
 
         balanceOf(arg0: string): TransactionObject<string>
 
-        burn(
-            to: string,
-        ): TransactionObject<{
+        burn(to: string): TransactionObject<{
             amount0: string
             amount1: string
             0: string

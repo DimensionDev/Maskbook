@@ -318,7 +318,11 @@ export function ConnectNetwork() {
     const initializedPersonas = useMyPersonas()
     const uninitializedPersonas = useMyUninitializedPersonas()
     const { identifier } = useQueryParams(['identifier'])
-    const { value = null, loading, error } = useAsync(async () => {
+    const {
+        value = null,
+        loading,
+        error,
+    } = useAsync(async () => {
         const persona = initializedPersonas.find((x) => x.identifier.toText() === identifier)
         // auto-finished by setup guide
         if (persona?.linkedProfiles.size) {

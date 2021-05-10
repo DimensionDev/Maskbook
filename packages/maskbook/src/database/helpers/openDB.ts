@@ -63,7 +63,7 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
 export interface IDBPSafeObjectStore<
     DBTypes extends DBSchema,
     TxStores extends StoreNames<DBTypes>[] = StoreNames<DBTypes>[],
-    StoreName extends StoreNames<DBTypes> = StoreNames<DBTypes>
+    StoreName extends StoreNames<DBTypes> = StoreNames<DBTypes>,
 > extends Omit<
         IDBPObjectStore<DBTypes, TxStores, StoreName> /** createIndex is only available in versionchange transaction */,
         | 'createIndex'
@@ -76,7 +76,7 @@ export interface IDBPSafeObjectStore<
 export type IDBPSafeTransaction<
     DBTypes extends DBSchema,
     TxStores extends StoreNames<DBTypes>[],
-    Mode extends 'readonly' | 'readwrite'
+    Mode extends 'readonly' | 'readwrite',
 > = Omit<IDBPTransaction<DBTypes, TxStores>, 'objectStoreNames' | 'objectStore' | 'store'> & {
     __writable__?: Mode extends 'readwrite' ? true : boolean
     __stores__?: Record<

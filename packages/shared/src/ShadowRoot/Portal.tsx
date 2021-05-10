@@ -91,19 +91,19 @@ const IsolatedRender = ({ container, root, style, children, findMountingShadowRe
 }
 
 export function createShadowRootForwardedComponent<
-    T extends { container?: Element | (() => Element | null) | null | undefined; open: boolean }
+    T extends { container?: Element | (() => Element | null) | null | undefined; open: boolean },
 >(Component: React.ComponentType<T>) {
-    return (forwardRef((props: T, ref) => {
+    return forwardRef((props: T, ref) => {
         return usePortalShadowRoot((container) => <Component container={container} {...props} ref={ref} />)
-    }) as any) as typeof Component
+    }) as any as typeof Component
 }
 
 export function createShadowRootForwardedPopperComponent<T extends { PopperProps?: Partial<PopperProps> }>(
     Component: React.ComponentType<T>,
 ) {
-    return (forwardRef((props: T, ref) => {
+    return forwardRef((props: T, ref) => {
         return usePortalShadowRoot((container) => <Component PopperProps={{ container }} {...props} ref={ref} />)
-    }) as any) as typeof Component
+    }) as any as typeof Component
 }
 
 /**

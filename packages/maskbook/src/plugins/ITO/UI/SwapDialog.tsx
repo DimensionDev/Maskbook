@@ -176,11 +176,10 @@ export function SwapDialog(props: SwapDialogProps) {
     //#endregion
 
     //#region maxAmount for TokenAmountPanel
-    const maxAmount = useMemo(() => BigNumber.min(maxSwapAmount.multipliedBy(ratio).dp(0), tokenBalance).toFixed(), [
-        maxSwapAmount,
-        ratio,
-        tokenBalance,
-    ])
+    const maxAmount = useMemo(
+        () => BigNumber.min(maxSwapAmount.multipliedBy(ratio).dp(0), tokenBalance).toFixed(),
+        [maxSwapAmount, ratio, tokenBalance],
+    )
     //#endregion
 
     //#region swap

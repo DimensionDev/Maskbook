@@ -20,7 +20,7 @@ export function useRemoteControlledDialog<T extends { open: boolean }>(
     useEffect(
         () =>
             event.on((_ev: T) => {
-                const event = (_ev as unknown) as RemoteControlledDialogEvent
+                const event = _ev as unknown as RemoteControlledDialogEvent
 
                 // ignore the event from the same hook
                 if (event.hookId === HOOK_ID) return

@@ -74,11 +74,12 @@ export function LBPPanel(props: LBPPanelProps) {
 
     const USDC_ADDRESS = useConstant(CONSTANTS, 'USDC_ADDRESS')
     const { value: pools = [], loading: poolsLoading, error: poolsError } = usePools(token.address)
-    const { value: prices = [], loading: pricesLoading, error: pricesError, retry: pricesRetry } = usePoolTokenPrices(
-        token.address,
-        duration,
-        100,
-    )
+    const {
+        value: prices = [],
+        loading: pricesLoading,
+        error: pricesError,
+        retry: pricesRetry,
+    } = usePoolTokenPrices(token.address, duration, 100)
 
     if (!pools.length)
         return (

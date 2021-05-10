@@ -85,7 +85,7 @@ type UnboxTransactionObject<T> = T extends TransactionObject<infer R> ? R : T
 export function useMutlicallStateDecoded<
     T extends Contract,
     K extends keyof T['methods'],
-    R extends UnboxTransactionObject<ReturnType<T['methods'][K]>>
+    R extends UnboxTransactionObject<ReturnType<T['methods'][K]>>,
 >(contracts: T[], names: K[], state: MulticalState) {
     return useMemo(() => {
         if (state.type !== MulticalStateType.SUCCEED) return []

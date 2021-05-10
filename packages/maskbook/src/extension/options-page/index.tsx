@@ -125,13 +125,15 @@ function DashboardUI() {
     const classes = useStyles()
     const history = useHistory<unknown>()
     const xsMatched = useMatchXS()
-    const routers = ([
-        [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
-        [t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />],
-        [t('contacts'), DashboardRoute.Contacts, <BookmarkBorderOutlinedIcon />],
-        [t('plugins'), DashboardRoute.Plugins, <PowerIcon />],
-        [t('settings'), DashboardRoute.Settings, <SettingsOutlinedIcon />],
-    ] as const).filter((x) => x)
+    const routers = (
+        [
+            [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
+            [t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />],
+            [t('contacts'), DashboardRoute.Contacts, <BookmarkBorderOutlinedIcon />],
+            [t('plugins'), DashboardRoute.Plugins, <PowerIcon />],
+            [t('settings'), DashboardRoute.Settings, <SettingsOutlinedIcon />],
+        ] as const
+    ).filter((x) => x)
 
     // jump to persona if needed
     const [reloadSpy, setReloadSpy] = useState(false)

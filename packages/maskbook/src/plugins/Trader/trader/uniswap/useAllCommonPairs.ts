@@ -17,10 +17,10 @@ export function useAllCommonPairs(
     const uniswapTokenA = useUniswapToken(tokenA)
     const uniswapTokenB = useUniswapToken(tokenB)
 
-    const bases = useMemo(() => context?.AGAINST_TOKENS[chainId].map((t) => toUniswapToken(t.chainId, t)) ?? [], [
-        chainId,
-        context,
-    ])
+    const bases = useMemo(
+        () => context?.AGAINST_TOKENS[chainId].map((t) => toUniswapToken(t.chainId, t)) ?? [],
+        [chainId, context],
+    )
     const basePairs = useMemo(
         () =>
             flatMap(bases, (base) => bases.map((otherBase) => [base, otherBase] as TokenPair)).filter(

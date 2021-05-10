@@ -81,9 +81,10 @@ async function createBackupInfo<T>(obj: T) {
     const string = typeof obj === 'string' ? obj : JSON.stringify(obj)
     const buffer = encodeText(string)
     const date = new Date()
-    const today = `${date.getFullYear()}-${(date.getMonth() + 1)
+    const today = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
+        .getDate()
         .toString()
-        .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
+        .padStart(2, '0')}`
     const fileName = `maskbook-keystore-backup-${today}.json`
     const mimeType = 'application/json'
     return { buffer, mimeType, fileName }
