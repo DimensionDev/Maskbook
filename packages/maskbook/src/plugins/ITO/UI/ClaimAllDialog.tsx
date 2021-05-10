@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
     },
     tokenCard: {
         width: '100%',
+        color: 'white',
         height: 95,
         background: 'linear-gradient(.25turn, #0ACFFE, 40%, #2b3ef0)',
         marginBottom: theme.spacing(2),
@@ -196,9 +197,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             </ActionButton>
                         </EthereumWalletConnectedBoundary>
                     </>
-                ) : swappedTokens.length === 0 ? (
+                ) : (
                     <Typography>{t('plugin_ito_no_claimable_token')}</Typography>
-                ) : null}
+                )}
             </DialogContent>
         </InjectedDialog>
     )
