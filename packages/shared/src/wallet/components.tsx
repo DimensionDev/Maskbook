@@ -2,7 +2,7 @@ import type { BigNumber } from 'bignumber.js'
 import { FC, Fragment } from 'react'
 import { formatBalance, formatChecksumAddress, formatCurrency, formatEthereumAddress, formatToken } from './formatter'
 
-interface FormattedBalanceProps {
+export interface FormattedBalanceProps {
     value: BigNumber.Value | undefined
     decimals?: number
     significant?: number
@@ -10,21 +10,21 @@ interface FormattedBalanceProps {
 }
 
 export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
-    return (
-        <Fragment>
-            {formatBalance(props.value, props.decimals, props.significant)} {props.symbol}
-        </Fragment>
-    )
+    let formatted = formatBalance(props.value, props.decimals, props.significant)
+    if (props.symbol) {
+        formatted += ` ${props.symbol}`
+    }
+    return <Fragment>{formatted}</Fragment>
 }
 
-interface FormattedCurrencyProps {
+export interface FormattedCurrencyProps {
     type: 'currency'
     value: number
     sign?: string
     symbol?: string
 }
 
-interface FormattedTokenProps {
+export interface FormattedTokenProps {
     type: 'token'
     value: number
     symbol?: string
@@ -39,11 +39,10 @@ export const FormattedCurrency: FC<FormattedCurrencyProps | FormattedTokenProps>
     } else {
         throw new Error('unsupported currency type')
     }
-    return (
-        <Fragment>
-            {formatted} {props.symbol}
-        </Fragment>
-    )
+    if (props.symbol) {
+        formatted += ` ${props.symbol}`
+    }
+    return <Fragment>{formatted}</Fragment>
 }
 
 interface FormattedChecksumAddressProps {
