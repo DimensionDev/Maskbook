@@ -1,17 +1,5 @@
 import { useState, useContext } from 'react'
-import {
-    makeStyles,
-    createStyles,
-    Box,
-    Card,
-    CardHeader,
-    CardContent,
-    Typography,
-    Tab,
-    Tabs,
-    Chip,
-    Paper,
-} from '@material-ui/core'
+import { makeStyles, Box, Card, CardHeader, CardContent, Typography, Tab, Tabs, Chip, Paper } from '@material-ui/core'
 import { SnapshotContext } from '../context'
 import { useProposal } from '../hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
@@ -19,7 +7,7 @@ import { ProgressTab } from './ProgressTab'
 import { useRetry } from '../hooks/useRetry'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             '--contentHeight': '400px',
             '--tabHeight': '35px',
@@ -60,7 +48,7 @@ const useStyles = makeStyles((theme) => {
             fontSize: 12,
             marginRight: theme.spacing(0.5),
         },
-    })
+    }
 })
 
 export function Snapshot() {

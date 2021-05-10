@@ -1,14 +1,14 @@
-import { Skeleton, makeStyles, createStyles } from '@material-ui/core'
+import { Skeleton, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         skeleton: {
             margin: theme.spacing(2),
             '&:first-child': {
                 marginTop: theme.spacing(3),
             },
         },
-    })
+    }
 })
 
 export function PluginSkeleton() {

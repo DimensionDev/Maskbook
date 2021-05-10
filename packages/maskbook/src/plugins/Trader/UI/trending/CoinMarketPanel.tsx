@@ -1,15 +1,13 @@
-import { makeStyles, createStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import type { DataProvider, Trending } from '../../types'
 import { CoinMarketTable } from './CoinMarketTable'
 import { CoinMetadataTable } from './CoinMetadataTable'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(2),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+    },
+}))
 
 export interface CoinMarketPanelProps {
     trending: Trending

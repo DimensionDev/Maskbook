@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react'
 import {
     makeStyles,
     Theme,
-    createStyles,
     Typography,
     DialogContent,
     DialogActions,
@@ -22,32 +21,30 @@ import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControl
 import { EthereumMessages } from '../messages'
 import { JSON_RPC_ErrorCode } from '../constants'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        content: {
-            textAlign: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: theme.spacing(5, 3),
-        },
-        icon: {
-            fontSize: 64,
-            width: 64,
-            height: 64,
-        },
-        link: {
-            marginTop: theme.spacing(0.5),
-        },
-        primary: {
-            fontSize: 18,
-            marginTop: theme.spacing(1),
-        },
-        secondary: {
-            fontSize: 14,
-        },
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    content: {
+        textAlign: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: theme.spacing(5, 3),
+    },
+    icon: {
+        fontSize: 64,
+        width: 64,
+        height: 64,
+    },
+    link: {
+        marginTop: theme.spacing(0.5),
+    },
+    primary: {
+        fontSize: 18,
+        marginTop: theme.spacing(1),
+    },
+    secondary: {
+        fontSize: 14,
+    },
+}))
 
 interface TransactionDialogUIProps extends withClasses<never> {}
 

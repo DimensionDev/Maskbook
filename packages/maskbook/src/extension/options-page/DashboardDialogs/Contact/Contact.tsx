@@ -1,4 +1,4 @@
-import { Button, createStyles, makeStyles, TextField } from '@material-ui/core'
+import { Button, makeStyles, TextField } from '@material-ui/core'
 import { useState } from 'react'
 import { Avatar } from '../../../../utils/components/Avatar'
 import { useI18N } from '../../../../utils/i18n-next-ui'
@@ -8,14 +8,12 @@ import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
 import type { ContactProps } from './types'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        avatar: {
-            width: '64px',
-            height: '64px',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    avatar: {
+        width: '64px',
+        height: '64px',
+    },
+}))
 
 export function DashboardContactDialog(props: WrappedDialogProps<ContactProps & { onUpdated: () => void }>) {
     const { t } = useI18N()

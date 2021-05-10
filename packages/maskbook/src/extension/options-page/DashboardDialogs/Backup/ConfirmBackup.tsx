@@ -1,4 +1,4 @@
-import { Box, createStyles, makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
 import classNames from 'classnames'
 import { useSnackbar } from 'notistack'
@@ -12,8 +12,8 @@ import { DatabasePreviewCard, DatabaseRecordType } from '../../DashboardComponen
 import { DashboardDialogWrapper } from '../Base'
 import { useDatabaseStyles } from './style'
 
-const useConfirmBackupStyles = makeStyles((theme: Theme) =>
-    createStyles<string, { imported: boolean }>({
+const useConfirmBackupStyles = makeStyles<Theme, { imported: boolean }, 'dashboardPreviewCardTable' | 'doneButton'>(
+    (theme) => ({
         dashboardPreviewCardTable: {
             // keep dialogs vertical align when switching between them
             marginTop: (props) => (props.imported ? 2 : 26),

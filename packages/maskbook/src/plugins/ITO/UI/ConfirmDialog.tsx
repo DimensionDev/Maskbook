@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useState } from 'react'
-import { createStyles, makeStyles, Typography, Grid, Paper, Card, IconButton, Link } from '@material-ui/core'
+import { makeStyles, Typography, Grid, Paper, Card, IconButton, Link } from '@material-ui/core'
 import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -17,17 +17,15 @@ import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
 import { ITO_CONSTANTS } from '../constants'
 
-const useSwapItemStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-        },
-        icon: {},
-    }),
-)
+const useSwapItemStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    icon: {},
+}))
 interface SwapItemProps {
     token?: EtherTokenDetailed | ERC20TokenDetailed
     swapAmount?: string
@@ -60,41 +58,39 @@ function SwapItem(props: SwapItemProps) {
     )
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-        },
-        title: {
-            padding: theme.spacing(2),
-            textAlign: 'center',
-            color: theme.palette.text.secondary,
-            fontSize: 18,
-        },
-        line: {
-            display: 'flex',
-            padding: theme.spacing(1),
-        },
-        data: {
-            padding: theme.spacing(1),
-            textAlign: 'right',
-            color: theme.palette.text.primary,
-        },
-        label: {
-            padding: theme.spacing(1),
-            textAlign: 'left',
-            color: theme.palette.text.secondary,
-        },
-        button: {
-            padding: theme.spacing(2),
-        },
-        link: {
-            padding: 0,
-            marginLeft: theme.spacing(0.5),
-            marginTop: 2,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    title: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        fontSize: 18,
+    },
+    line: {
+        display: 'flex',
+        padding: theme.spacing(1),
+    },
+    data: {
+        padding: theme.spacing(1),
+        textAlign: 'right',
+        color: theme.palette.text.primary,
+    },
+    label: {
+        padding: theme.spacing(1),
+        textAlign: 'left',
+        color: theme.palette.text.secondary,
+    },
+    button: {
+        padding: theme.spacing(2),
+    },
+    link: {
+        padding: 0,
+        marginLeft: theme.spacing(0.5),
+        marginTop: 2,
+    },
+}))
 export interface ConfirmDialogProps {
     poolSettings?: PoolSettings
     onDone: () => void

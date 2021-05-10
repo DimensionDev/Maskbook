@@ -2,7 +2,7 @@ import { memo, useRef, useEffect } from 'react'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
 import { useShareMenu } from '../SelectPeopleDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { Link } from '@material-ui/core'
 import type { Profile } from '../../../database'
 import { useStylesExtends } from '../../custom-ui-helper'
@@ -30,12 +30,12 @@ export interface DecryptPostSuccessProps extends withClasses<never> {
 }
 
 const useSuccessStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         header: { display: 'flex', alignItems: 'center' },
         addRecipientsLink: { cursor: 'pointer', marginLeft: theme.spacing(1) },
         signatureVerifyPassed: { display: 'flex' },
         signatureVerifyFailed: { display: 'flex' },
-    })
+    }
 })
 
 export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {

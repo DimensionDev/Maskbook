@@ -1,64 +1,62 @@
-import { Box, createStyles, makeStyles, TextField, Typography } from '@material-ui/core'
+import { Box, makeStyles, TextField, Typography } from '@material-ui/core'
 import { useState, useCallback } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { ERC20TokenDetailed } from '../../../web3/types'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(2.5),
-            marginBottom: theme.spacing(1.5),
-            fontSize: 13,
-            color: '#fff',
-        },
-        textfield: {
-            flex: 1,
-            height: 56,
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2.5),
+        marginBottom: theme.spacing(1.5),
+        fontSize: 13,
+        color: '#fff',
+    },
+    textfield: {
+        flex: 1,
+        height: 56,
+        color: '#fff !important',
+        '& fieldset, & > div, & > div:hover, & > div:active': {
             color: '#fff !important',
-            '& fieldset, & > div, & > div:hover, & > div:active': {
-                color: '#fff !important',
-                borderColor: '#F3F3F4 !important',
-            },
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-            },
+            borderColor: '#F3F3F4 !important',
         },
-        helperText: {
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+        },
+    },
+    helperText: {
+        color: '#fff',
+        fontSize: 12,
+    },
+    buttonContainer: {
+        marginLeft: theme.spacing(2.5),
+        padding: theme.spacing(0.5, 0),
+        [theme.breakpoints.down('sm')]: {
+            marginLeft: 0,
+            marginTop: theme.spacing(1),
+            width: '100%',
+        },
+    },
+    button: {
+        //TODO: https://github.com/mui-org/material-ui/issues/25011
+        '&[disabled]': {
             color: '#fff',
-            fontSize: 12,
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            opacity: 0.5,
         },
-        buttonContainer: {
-            marginLeft: theme.spacing(2.5),
-            padding: theme.spacing(0.5, 0),
-            [theme.breakpoints.down('sm')]: {
-                marginLeft: 0,
-                marginTop: theme.spacing(1),
-                width: '100%',
-            },
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
         },
-        button: {
-            //TODO: https://github.com/mui-org/material-ui/issues/25011
-            '&[disabled]': {
-                color: '#fff',
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                opacity: 0.5,
-            },
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-            },
+    },
+    controller: {
+        display: 'flex',
+        alignItems: 'center',
+        marginTop: theme.spacing(1.2),
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column',
         },
-        controller: {
-            display: 'flex',
-            alignItems: 'center',
-            marginTop: theme.spacing(1.2),
-            [theme.breakpoints.down('sm')]: {
-                flexDirection: 'column',
-            },
-        },
-    }),
-)
+    },
+}))
 
 export interface AirdropCheckCardProps extends withClasses<never> {
     token?: ERC20TokenDetailed

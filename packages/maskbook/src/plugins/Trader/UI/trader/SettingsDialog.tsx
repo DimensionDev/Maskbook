@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 import {
     makeStyles,
-    createStyles,
     Accordion,
     AccordionSummary,
     Typography,
@@ -33,7 +32,7 @@ import stringify from 'json-stable-stringify'
 import { useTradeProviderSettings } from '../../trader/useTradeSettings'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         content: {},
         footer: {
             display: 'flex',
@@ -50,7 +49,7 @@ const useStyles = makeStyles((theme) => {
         details: {
             display: 'flex',
         },
-    })
+    }
 })
 
 export interface SettingsDialogProps extends withClasses<'root'> {}

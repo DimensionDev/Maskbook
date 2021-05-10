@@ -1,4 +1,4 @@
-import { Button, createStyles, makeStyles, TextField } from '@material-ui/core'
+import { Button, makeStyles, TextField } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
@@ -14,24 +14,22 @@ import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/ty
 import { EthereumTokenType } from '../../../../web3/types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 
-const useTransferTabStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(1),
-        },
-        button: {
-            marginTop: theme.spacing(3),
-        },
-        maxChipRoot: {
-            fontSize: 11,
-            height: 21,
-        },
-        maxChipLabel: {
-            paddingLeft: 6,
-            paddingRight: 6,
-        },
-    }),
-)
+const useTransferTabStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(1),
+    },
+    button: {
+        marginTop: theme.spacing(3),
+    },
+    maxChipRoot: {
+        fontSize: 11,
+        height: 21,
+    },
+    maxChipLabel: {
+        paddingLeft: 6,
+        paddingRight: 6,
+    },
+}))
 
 interface TransferTabProps {
     wallet: WalletRecord

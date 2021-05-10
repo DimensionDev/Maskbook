@@ -1,5 +1,4 @@
 import {
-    createStyles,
     makeStyles,
     Paper,
     Table,
@@ -13,29 +12,27 @@ import {
 import { DataProvider, Trending } from '../../types'
 import { formatCurrency, formatToken } from '../../../Wallet/formatter'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(2),
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+    },
+    container: {
+        borderRadius: 0,
+        boxSizing: 'border-box',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        container: {
-            borderRadius: 0,
-            boxSizing: 'border-box',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        table: {},
-        head: {
-            padding: 0,
-            border: 'none',
-        },
-        cell: {
-            whiteSpace: 'nowrap',
-            border: 'none',
-        },
-    }),
-)
+    },
+    table: {},
+    head: {
+        padding: 0,
+        border: 'none',
+    },
+    cell: {
+        whiteSpace: 'nowrap',
+        border: 'none',
+    },
+}))
 
 export interface CoinMarketTableProps {
     dataProvider: DataProvider

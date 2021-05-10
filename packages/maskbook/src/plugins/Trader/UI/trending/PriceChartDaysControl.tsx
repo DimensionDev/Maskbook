@@ -1,27 +1,25 @@
-import { makeStyles, Theme, createStyles, Link, Typography } from '@material-ui/core'
+import { makeStyles, Theme, Link, Typography } from '@material-ui/core'
 import { resolveDaysName } from '../../pipes'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            top: 0,
-            right: 0,
-            padding: theme.spacing(1, 2),
-            position: 'absolute',
+const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+        top: 0,
+        right: 0,
+        padding: theme.spacing(1, 2),
+        position: 'absolute',
+    },
+    link: {
+        cursor: 'pointer',
+        marginRight: theme.spacing(1),
+        '&:last-child': {
+            marginRight: 0,
         },
-        link: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(1),
-            '&:last-child': {
-                marginRight: 0,
-            },
-        },
-        text: {
-            fontSize: 10,
-            fontWeight: 300,
-        },
-    }),
-)
+    },
+    text: {
+        fontSize: 10,
+        fontWeight: 300,
+    },
+}))
 
 export enum Days {
     MAX = 0,

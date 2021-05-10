@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import classNames from 'classnames'
 import { noop } from 'lodash-es'
 import BigNumber from 'bignumber.js'
-import { makeStyles, createStyles, Typography, IconButton } from '@material-ui/core'
+import { makeStyles, Typography, IconButton } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import TuneIcon from '@material-ui/icons/Tune'
 import RefreshOutlined from '@material-ui/icons/RefreshOutlined'
@@ -24,7 +24,7 @@ import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { MINIMUM_AMOUNT } from '../../constants'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         form: {
             marginTop: theme.spacing(2),
             marginBottom: theme.spacing(2),
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => {
         ethereumAccountChip: {
             borderRadius: 12,
         },
-    })
+    }
 })
 
 export interface TradeFormProps extends withClasses<never> {

@@ -1,28 +1,26 @@
 import { FormControl, Typography, Theme, Divider } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        text: {
-            fontWeight: 500,
-        },
-        action: {},
-        control: {
-            textAlign: 'left',
-            flex: 1,
-            width: '100%',
-            margin: theme.spacing(1, 0),
-        },
-        wrapper: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        cursor: {
-            cursor: 'pointer',
-        },
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    text: {
+        fontWeight: 500,
+    },
+    action: {},
+    control: {
+        textAlign: 'left',
+        flex: 1,
+        width: '100%',
+        margin: theme.spacing(1, 0),
+    },
+    wrapper: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    cursor: {
+        cursor: 'pointer',
+    },
+}))
 
 interface WalletLineProps {
     line1?: JSX.Element | string

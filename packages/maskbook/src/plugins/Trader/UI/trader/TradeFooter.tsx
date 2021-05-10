@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { CardActions, createStyles, Link, makeStyles, Typography } from '@material-ui/core'
+import { CardActions, Link, makeStyles, Typography } from '@material-ui/core'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { MaskbookTextIcon } from '../../../../resources/MaskbookIcon'
@@ -12,7 +12,7 @@ import { TradeProviderIcon } from '../trader/TradeProviderIcon'
 import { FootnoteMenu, FootnoteMenuOption } from '../trader/FootnoteMenu'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         footer: {
             justifyContent: 'space-between',
         },
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => {
             width: 40,
             height: 10,
         },
-    })
+    }
 })
 
 export interface TradeFooterProps extends withClasses<'footer'> {

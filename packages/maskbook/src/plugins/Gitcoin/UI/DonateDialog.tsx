@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react'
-import { makeStyles, createStyles, Typography, DialogContent, Link } from '@material-ui/core'
+import { makeStyles, Typography, DialogContent, Link } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { Trans } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
@@ -30,30 +30,28 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        paper: {
-            width: '450px !important',
+const useStyles = makeStyles((theme) => ({
+    paper: {
+        width: '450px !important',
+    },
+    form: {
+        '& > *': {
+            margin: theme.spacing(1, 0),
         },
-        form: {
-            '& > *': {
-                margin: theme.spacing(1, 0),
-            },
-        },
-        root: {
-            margin: theme.spacing(2, 0),
-        },
-        tip: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-            padding: theme.spacing(2, 2, 0, 2),
-        },
-        button: {
-            margin: theme.spacing(2, 0),
-            padding: 12,
-        },
-    }),
-)
+    },
+    root: {
+        margin: theme.spacing(2, 0),
+    },
+    tip: {
+        fontSize: 12,
+        color: theme.palette.text.secondary,
+        padding: theme.spacing(2, 2, 0, 2),
+    },
+    button: {
+        margin: theme.spacing(2, 0),
+        padding: 12,
+    },
+}))
 
 export interface DonateDialogProps extends withClasses<never> {}
 

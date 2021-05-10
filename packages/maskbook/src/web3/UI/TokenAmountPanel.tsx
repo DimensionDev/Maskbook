@@ -1,15 +1,5 @@
 import { useCallback, ChangeEvent, useMemo } from 'react'
-import {
-    makeStyles,
-    createStyles,
-    TextField,
-    Typography,
-    Box,
-    Chip,
-    InputProps,
-    ChipProps,
-    TextFieldProps,
-} from '@material-ui/core'
+import { makeStyles, TextField, Typography, Box, Chip, InputProps, ChipProps, TextFieldProps } from '@material-ui/core'
 import classNames from 'classnames'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { formatBalance } from '../../plugins/Wallet/formatter'
@@ -18,7 +8,7 @@ import { useStylesExtends } from '../../components/custom-ui-helper'
 import type { EtherTokenDetailed, ERC20TokenDetailed } from '../types'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {},
         input: {
             '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
@@ -48,7 +38,7 @@ const useStyles = makeStyles((theme) => {
         inputShrinkLabel: {
             transform: 'translate(17px, -3px) scale(0.75) !important',
         },
-    })
+    }
 })
 
 export interface TokenAmountPanelProps extends withClasses<'root'> {

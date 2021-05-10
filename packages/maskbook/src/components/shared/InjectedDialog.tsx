@@ -1,5 +1,4 @@
 import {
-    createStyles,
     DialogActions,
     DialogClassKey,
     DialogContent,
@@ -21,19 +20,17 @@ import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
 import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
 import { activatedSocialNetworkUI } from '../../social-network'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        dialogTitle: {
-            padding: theme.spacing(1, 2),
-            borderBottom: `1px solid ${theme.palette.divider}`,
-        },
-        dialogTitleTypography: {
-            marginLeft: 6,
-            verticalAlign: 'middle',
-        },
-        dialogBackdropRoot: {},
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    dialogTitle: {
+        padding: theme.spacing(1, 2),
+        borderBottom: `1px solid ${theme.palette.divider}`,
+    },
+    dialogTitleTypography: {
+        marginLeft: 6,
+        verticalAlign: 'middle',
+    },
+    dialogBackdropRoot: {},
+}))
 
 export type InjectedDialogClassKey =
     | DialogClassKey

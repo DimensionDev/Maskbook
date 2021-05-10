@@ -1,4 +1,4 @@
-import { Box, ClickAwayListener, createStyles, makeStyles, Skeleton, Tooltip, Typography } from '@material-ui/core'
+import { Box, ClickAwayListener, makeStyles, Skeleton, Tooltip, Typography } from '@material-ui/core'
 import { Info as InfoIcon } from '@material-ui/icons'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useState } from 'react'
@@ -20,52 +20,50 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(2.5),
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2.5),
+        color: '#fff',
+        fontSize: 14,
+        position: 'relative',
+    },
+    title: {
+        zIndex: 1,
+        position: 'relative',
+    },
+    amount: {
+        fontSize: 18,
+        zIndex: 1,
+        position: 'relative',
+    },
+    icon: {
+        width: 70,
+        height: 79,
+        position: 'absolute',
+        left: '17%',
+        top: 5,
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
+        },
+    },
+    button: {
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        //TODO: https://github.com/mui-org/material-ui/issues/25011
+        '&[disabled]': {
             color: '#fff',
-            fontSize: 14,
-            position: 'relative',
-        },
-        title: {
-            zIndex: 1,
-            position: 'relative',
-        },
-        amount: {
-            fontSize: 18,
-            zIndex: 1,
-            position: 'relative',
-        },
-        icon: {
-            width: 70,
-            height: 79,
-            position: 'absolute',
-            left: '17%',
-            top: 5,
-            [theme.breakpoints.down('sm')]: {
-                display: 'none',
-            },
-        },
-        button: {
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            //TODO: https://github.com/mui-org/material-ui/issues/25011
-            '&[disabled]': {
-                color: '#fff',
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                opacity: 0.5,
-            },
+            opacity: 0.5,
         },
-        tooltipPopover: {
-            // Just meet design
-            width: 330,
-        },
-        tooltip: {
-            // Because disablePortal, the tooltip placement can't effect
-            marginTop: theme.spacing(-11),
-        },
-    }),
-)
+    },
+    tooltipPopover: {
+        // Just meet design
+        width: 330,
+    },
+    tooltip: {
+        // Because disablePortal, the tooltip placement can't effect
+        marginTop: theme.spacing(-11),
+    },
+}))
 
 export interface AirdropClaimCardProps extends withClasses<never> {
     token?: ERC20TokenDetailed

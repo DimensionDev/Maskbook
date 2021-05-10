@@ -1,16 +1,14 @@
 import type { TypedMessage } from '../../../protocols/typed-message'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
-import { makeStyles, createStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { renderWithRedPacketMetadata } from '../helpers'
 import { RedPacketInPost } from './RedPacketInPost'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        line: {
-            padding: theme.spacing(1, 0),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    line: {
+        padding: theme.spacing(1, 0),
+    },
+}))
 
 export interface RedPacketInspectorProps extends withClasses<never> {
     message: TypedMessage

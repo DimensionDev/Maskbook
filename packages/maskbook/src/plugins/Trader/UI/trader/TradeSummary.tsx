@@ -2,7 +2,6 @@ import { useState } from 'react'
 import BigNumber from 'bignumber.js'
 import {
     makeStyles,
-    createStyles,
     Paper,
     List,
     ListItem,
@@ -25,43 +24,41 @@ type SummaryRecord = {
     children?: React.ReactNode
 } | null
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            width: '100%',
-            boxSizing: 'border-box',
-            margin: theme.spacing(0, 'auto', 2),
-        },
-        iconButton: {
-            marginLeft: theme.spacing(0.5),
-        },
-        icon: {
-            fontSize: '0.75em !important',
-        },
-        list: {},
-        item: {
-            paddingTop: 0,
-            paddingBottom: 0,
-        },
-        title: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-            display: 'flex',
-            alignItems: 'center',
-        },
-        content: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-            paddingLeft: theme.spacing(15),
-            textAlign: 'right',
-        },
-        emphasis: {
-            color: theme.palette.text.primary,
-            fontWeight: 300,
-            margin: `0 ${theme.spacing(0.5)}`,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        boxSizing: 'border-box',
+        margin: theme.spacing(0, 'auto', 2),
+    },
+    iconButton: {
+        marginLeft: theme.spacing(0.5),
+    },
+    icon: {
+        fontSize: '0.75em !important',
+    },
+    list: {},
+    item: {
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
+    title: {
+        fontSize: 12,
+        color: theme.palette.text.secondary,
+        display: 'flex',
+        alignItems: 'center',
+    },
+    content: {
+        fontSize: 12,
+        color: theme.palette.text.secondary,
+        paddingLeft: theme.spacing(15),
+        textAlign: 'right',
+    },
+    emphasis: {
+        color: theme.palette.text.primary,
+        fontWeight: 300,
+        margin: `0 ${theme.spacing(0.5)}`,
+    },
+}))
 
 export interface TradeSummaryProps extends withClasses<never> {
     trade: TradeComputed

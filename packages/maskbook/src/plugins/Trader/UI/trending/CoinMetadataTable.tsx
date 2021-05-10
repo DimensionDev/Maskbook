@@ -1,7 +1,6 @@
 import { useCopyToClipboard } from 'react-use'
 import {
     makeStyles,
-    createStyles,
     TableContainer,
     Paper,
     Table,
@@ -18,37 +17,35 @@ import { Linking } from './Linking'
 import { formatEthereumAddress } from '../../../Wallet/formatter'
 import { CoinMetadataTags } from './CoinMetadataTags'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(2),
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+    },
+    container: {
+        borderRadius: 0,
+        boxSizing: 'border-box',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        container: {
-            borderRadius: 0,
-            boxSizing: 'border-box',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
+    },
+    table: {},
+    cell: {
+        whiteSpace: 'nowrap',
+        border: 'none',
+    },
+    label: {
+        color: theme.palette.text.secondary,
+        whiteSpace: 'nowrap',
+    },
+    link: {
+        display: 'inline-block',
+        whiteSpace: 'nowrap',
+        paddingRight: theme.spacing(1),
+        '&:last-child': {
+            paddingRight: 0,
         },
-        table: {},
-        cell: {
-            whiteSpace: 'nowrap',
-            border: 'none',
-        },
-        label: {
-            color: theme.palette.text.secondary,
-            whiteSpace: 'nowrap',
-        },
-        link: {
-            display: 'inline-block',
-            whiteSpace: 'nowrap',
-            paddingRight: theme.spacing(1),
-            '&:last-child': {
-                paddingRight: 0,
-            },
-        },
-    }),
-)
+    },
+}))
 
 export interface CoinMetadataTableProps {
     trending: Trending

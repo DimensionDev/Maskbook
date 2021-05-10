@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 import {
     makeStyles,
-    createStyles,
     Avatar,
     Box,
     Button,
@@ -41,7 +40,7 @@ import { Markdown } from '../../Snapshot/UI/Markdown'
 import { ActionBar } from './ActionBar'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             width: '100%',
             border: `solid 1px ${theme.palette.divider}`,
@@ -130,7 +129,7 @@ const useStyles = makeStyles((theme) => {
             backgroundColor: '#eb5757',
             padding: theme.spacing(0.5, 2),
         },
-    })
+    }
 })
 
 export interface CollectibleProps {}

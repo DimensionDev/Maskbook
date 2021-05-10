@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react'
 import { Button } from '@material-ui/core'
-import { makeStyles, createStyles, ThemeProvider } from '@material-ui/core/styles'
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import RestoreIcon from '@material-ui/icons/Restore'
@@ -51,35 +51,33 @@ const walletsTheme = extendsTheme((theme) => ({
 }))
 //#endregion
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexDirection: 'column',
-            flex: '0 0 100%',
-            height: '100%',
-        },
-        content: {
-            width: '100%',
-            overflow: 'auto',
-            flex: '1 1 auto',
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        wrapper: {
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-        },
-        caption: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        title: {
-            marginLeft: theme.spacing(1),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        flex: '0 0 100%',
+        height: '100%',
+    },
+    content: {
+        width: '100%',
+        overflow: 'auto',
+        flex: '1 1 auto',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    wrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+    },
+    caption: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    title: {
+        marginLeft: theme.spacing(1),
+    },
+}))
 
 export default function DashboardWalletsRouter() {
     const { t } = useI18N()

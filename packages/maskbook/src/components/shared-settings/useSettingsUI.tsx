@@ -12,30 +12,27 @@ import {
     makeStyles,
     ListItemIcon,
     SelectProps,
-    createStyles,
 } from '@material-ui/core'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { useStylesExtends } from '../custom-ui-helper'
 import { getEnumAsArray } from '../../utils/enum'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        container: { listStyleType: 'none', width: '100%' },
-        secondaryAction: { paddingLeft: theme.spacing(2) },
-        listItemText: {
-            fontWeight: 500,
-        },
-        listItemIcon: {
-            marginLeft: 0,
-        },
-        listItemActionMobile: {
-            maxWidth: '60%',
-        },
-        arrowIcon: {
-            color: theme.palette.text.primary,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    container: { listStyleType: 'none', width: '100%' },
+    secondaryAction: { paddingLeft: theme.spacing(2) },
+    listItemText: {
+        fontWeight: 500,
+    },
+    listItemIcon: {
+        marginLeft: 0,
+    },
+    listItemActionMobile: {
+        maxWidth: '60%',
+    },
+    arrowIcon: {
+        color: theme.palette.text.primary,
+    },
+}))
 
 function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     const { value, primary, secondary } = props

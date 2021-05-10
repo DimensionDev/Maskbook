@@ -1,15 +1,5 @@
 import { useMemo } from 'react'
-import {
-    Button,
-    createStyles,
-    makeStyles,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    Typography,
-} from '@material-ui/core'
+import { Button, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
@@ -21,7 +11,7 @@ import { LoadingTable } from './LoadingTable'
 import { ChainState } from '../../../web3/state/useChainState'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             overflow: 'auto',
         },
@@ -42,7 +32,7 @@ const useStyles = makeStyles((theme) => {
         button: {
             marginLeft: theme.spacing(1),
         },
-    })
+    }
 })
 
 export function ListingTab() {

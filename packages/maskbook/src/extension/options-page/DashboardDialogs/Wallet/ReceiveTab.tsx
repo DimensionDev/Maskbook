@@ -1,4 +1,4 @@
-import { createStyles, IconButton, InputAdornment, makeStyles, TextField, Theme } from '@material-ui/core'
+import { IconButton, InputAdornment, makeStyles, TextField, Theme } from '@material-ui/core'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import { useCopyToClipboard } from 'react-use'
 import { QRCode } from '../../../../components/shared/qrcode'
@@ -6,19 +6,17 @@ import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useSnackbarCallback } from '../Base'
 
-const useReceiveTabStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        qr: {
-            marginTop: theme.spacing(2),
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
-        form: {
-            padding: theme.spacing(1),
-        },
-    }),
-)
+const useReceiveTabStyles = makeStyles((theme: Theme) => ({
+    qr: {
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    form: {
+        padding: theme.spacing(1),
+    },
+}))
 
 interface ReceiveTabProps {
     wallet: WalletRecord

@@ -2,7 +2,6 @@ import { useMemo, useState, useEffect, useCallback } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import {
     makeStyles,
-    createStyles,
     Paper,
     Typography,
     TextField,
@@ -93,95 +92,93 @@ const wizardTheme = extendsTheme((theme: Theme) => ({
     },
 }))
 
-const useWizardDialogStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: '56px 20px 48px',
-            position: 'relative',
-            boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
-            border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
-            borderRadius: 12,
-            [theme.breakpoints.down('sm')]: {
-                padding: '35px 20px 16px',
-                position: 'fixed',
-                bottom: 0,
-                left: 0,
-                margin: 0,
-                alignSelf: 'center',
-                borderRadius: 0,
-                boxShadow: 'none',
-                border: `solid 1px ${theme.palette.divider}`,
-                width: '100%',
-            },
-            userSelect: 'none',
-            boxSizing: 'border-box',
-            width: 320,
-            overflow: 'hidden',
-        },
-        button: {
-            width: 200,
-            height: 40,
-            marginLeft: 0,
-            marginTop: 0,
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-                height: '45px !important',
-                marginTop: 20,
-                borderRadius: 0,
-            },
-            fontSize: 16,
-            wordBreak: 'keep-all',
-        },
-        back: {
-            color: theme.palette.text.primary,
-            position: 'absolute',
-            left: 10,
-            top: 10,
-        },
-        close: {
-            color: theme.palette.text.primary,
-            position: 'absolute',
-            right: 10,
-            top: 10,
-        },
-        primary: {
-            fontSize: 30,
-            fontWeight: 500,
-            lineHeight: '37px',
-        },
-        secondary: {
-            fontSize: 14,
-            fontWeight: 500,
-            lineHeight: 1.75,
-            marginTop: 2,
-        },
-        sandbox: {
-            marginTop: 16,
-        },
-        tip: {
-            fontSize: 16,
-            lineHeight: 1.75,
-            marginBottom: 24,
-        },
-        textButton: {
-            fontSize: 14,
-            marginTop: theme.spacing(1),
-            marginBottom: theme.spacing(-2),
-        },
-        header: {
-            marginBottom: 0,
-        },
-        content: {},
-        footer: {},
-        progress: {
-            left: 0,
-            right: 0,
+const useWizardDialogStyles = makeStyles((theme) => ({
+    root: {
+        padding: '56px 20px 48px',
+        position: 'relative',
+        boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
+        border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
+        borderRadius: 12,
+        [theme.breakpoints.down('sm')]: {
+            padding: '35px 20px 16px',
+            position: 'fixed',
             bottom: 0,
-            height: 8,
-            position: 'absolute',
+            left: 0,
+            margin: 0,
+            alignSelf: 'center',
+            borderRadius: 0,
+            boxShadow: 'none',
+            border: `solid 1px ${theme.palette.divider}`,
+            width: '100%',
         },
-    }),
-)
+        userSelect: 'none',
+        boxSizing: 'border-box',
+        width: 320,
+        overflow: 'hidden',
+    },
+    button: {
+        width: 200,
+        height: 40,
+        marginLeft: 0,
+        marginTop: 0,
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+            height: '45px !important',
+            marginTop: 20,
+            borderRadius: 0,
+        },
+        fontSize: 16,
+        wordBreak: 'keep-all',
+    },
+    back: {
+        color: theme.palette.text.primary,
+        position: 'absolute',
+        left: 10,
+        top: 10,
+    },
+    close: {
+        color: theme.palette.text.primary,
+        position: 'absolute',
+        right: 10,
+        top: 10,
+    },
+    primary: {
+        fontSize: 30,
+        fontWeight: 500,
+        lineHeight: '37px',
+    },
+    secondary: {
+        fontSize: 14,
+        fontWeight: 500,
+        lineHeight: 1.75,
+        marginTop: 2,
+    },
+    sandbox: {
+        marginTop: 16,
+    },
+    tip: {
+        fontSize: 16,
+        lineHeight: 1.75,
+        marginBottom: 24,
+    },
+    textButton: {
+        fontSize: 14,
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(-2),
+    },
+    header: {
+        marginBottom: 0,
+    },
+    content: {},
+    footer: {},
+    progress: {
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: 8,
+        position: 'absolute',
+    },
+}))
 
 const useStyles = makeStyles((theme: Theme) => {
     return {
@@ -328,25 +325,23 @@ function WizardDialog(props: WizardDialogProps) {
 //#endregion
 
 //#region find username
-const useFindUsernameStyles = makeStyles((theme) =>
-    createStyles({
-        input: {
-            marginTop: '45px !important',
-            marginBottom: 24,
+const useFindUsernameStyles = makeStyles((theme) => ({
+    input: {
+        marginTop: '45px !important',
+        marginBottom: 24,
+    },
+    inputFocus: {
+        '& svg': {
+            color: theme.palette.primary.main,
         },
-        inputFocus: {
-            '& svg': {
-                color: theme.palette.primary.main,
-            },
-        },
-        button: {
-            marginLeft: theme.spacing(1),
-        },
-        icon: {
-            color: 'inherit',
-        },
-    }),
-)
+    },
+    button: {
+        marginLeft: theme.spacing(1),
+    },
+    icon: {
+        color: 'inherit',
+    },
+}))
 
 interface FindUsernameProps extends Partial<WizardDialogProps> {
     username: string
@@ -450,18 +445,16 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
 //#endregion
 
 //#region say hello world
-const useSayHelloWorldStyles = makeStyles((theme) =>
-    createStyles({
-        primary: {
-            marginTop: 24,
-            marginBottom: 16,
-        },
-        secondary: {
-            color: theme.palette.text.secondary,
-            fontSize: 14,
-        },
-    }),
-)
+const useSayHelloWorldStyles = makeStyles((theme) => ({
+    primary: {
+        marginTop: 24,
+        marginBottom: 16,
+    },
+    secondary: {
+        color: theme.palette.text.secondary,
+        fontSize: 14,
+    },
+}))
 
 interface SayHelloWorldProps extends Partial<WizardDialogProps> {
     createStatus: boolean | 'undetermined'

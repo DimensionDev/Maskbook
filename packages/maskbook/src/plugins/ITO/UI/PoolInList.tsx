@@ -4,7 +4,6 @@ import {
     Paper,
     Card,
     Box,
-    createStyles,
     makeStyles,
     Typography,
     LinearProgress,
@@ -26,78 +25,76 @@ import { dateTimeFormat } from '../assets/formatDate'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { MSG_DELIMITER } from '../constants'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        top: {
-            width: '100%',
-            boxSizing: 'border-box',
-            padding: theme.spacing(1, 2, 1),
-        },
-        root: {
-            borderRadius: 10,
-            display: 'flex',
-            padding: theme.spacing(2),
-        },
-        iconbar: {
-            display: 'flex',
-            justifyContent: 'center',
-            paddingTop: theme.spacing(0.5),
-            paddingRight: theme.spacing(1),
-        },
-        icon: {
-            width: 32,
-            height: 32,
-        },
-        content: {
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        header: {
-            display: 'flex',
-            alignItems: 'center',
+const useStyles = makeStyles((theme) => ({
+    top: {
+        width: '100%',
+        boxSizing: 'border-box',
+        padding: theme.spacing(1, 2, 1),
+    },
+    root: {
+        borderRadius: 10,
+        display: 'flex',
+        padding: theme.spacing(2),
+    },
+    iconbar: {
+        display: 'flex',
+        justifyContent: 'center',
+        paddingTop: theme.spacing(0.5),
+        paddingRight: theme.spacing(1),
+    },
+    icon: {
+        width: 32,
+        height: 32,
+    },
+    content: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    header: {
+        display: 'flex',
+        alignItems: 'center',
+        paddingBottom: theme.spacing(1),
+    },
+    button: {
+        borderRadius: 50,
+    },
+    title: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        paddingBottom: theme.spacing(1),
+    },
+    date: {
+        fontSize: 12,
+    },
+    progress: {
+        paddingBottom: theme.spacing(1),
+    },
+    price: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        paddingBottom: theme.spacing(1),
+    },
+    deteils: {
+        '& > *': {
             paddingBottom: theme.spacing(1),
         },
-        button: {
-            borderRadius: 50,
-        },
-        title: {
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            paddingBottom: theme.spacing(1),
-        },
-        date: {
-            fontSize: 12,
-        },
-        progress: {
-            paddingBottom: theme.spacing(1),
-        },
-        price: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            paddingBottom: theme.spacing(1),
-        },
-        deteils: {
-            '& > *': {
-                paddingBottom: theme.spacing(1),
-            },
-        },
-        table: {
-            paddingBottom: theme.spacing(1),
-            borderRadius: 0,
-        },
-        cell: {
-            border: '1px solid rgba(224, 224, 224, 1)',
-            color: theme.palette.text.primary,
-            wordBreak: 'break-word',
-        },
-        head: {
-            border: '1px solid rgba(224, 224, 224, 1)',
-            color: theme.palette.text.secondary,
-        },
-    }),
-)
+    },
+    table: {
+        paddingBottom: theme.spacing(1),
+        borderRadius: 0,
+    },
+    cell: {
+        border: '1px solid rgba(224, 224, 224, 1)',
+        color: theme.palette.text.primary,
+        wordBreak: 'break-word',
+    },
+    head: {
+        border: '1px solid rgba(224, 224, 224, 1)',
+        color: theme.palette.text.secondary,
+    },
+}))
 
 export interface PoolInListProps {
     pool: JSON_PayloadInMask

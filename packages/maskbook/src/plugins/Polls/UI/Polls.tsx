@@ -1,4 +1,4 @@
-import { makeStyles, createStyles, Card, Typography, CircularProgress, List, ListItem } from '@material-ui/core'
+import { makeStyles, Card, Typography, CircularProgress, List, ListItem } from '@material-ui/core'
 import { isValid, formatDistance } from 'date-fns'
 import { zhTW, enUS, ja } from 'date-fns/locale'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -7,55 +7,53 @@ import { languageSettings } from '../../../settings/settings'
 import type { PollGunDB } from '../Services'
 import { PollStatus } from '../types'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        card: {
-            borderRadius: theme.spacing(1),
-            margin: theme.spacing(2, 0),
-            padding: theme.spacing(2),
-        },
-        line: {
-            display: 'flex',
-            justifyContent: 'space-between',
-        },
-        status: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        statusText: {
-            margin: '3px',
-            fontSize: '13px',
-            color: theme.palette.primary.main,
-        },
-        option: {
-            position: 'relative',
-            display: 'flex',
-            justifyContent: 'space-between',
-            margin: theme.spacing(1, 0),
-            padding: theme.spacing(0, 1),
-            height: '28px',
-        },
-        bar: {
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            zIndex: 100,
-            backgroundColor: theme.palette.primary.main,
-            opacity: 0.6,
-            minWidth: theme.spacing(1),
-            height: '28px',
-            borderRadius: theme.spacing(0.8),
-        },
-        text: {
-            zIndex: 101,
-            lineHeight: '28px',
-            margin: '0 4px',
-        },
-        deadline: {
-            color: '#657786',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    card: {
+        borderRadius: theme.spacing(1),
+        margin: theme.spacing(2, 0),
+        padding: theme.spacing(2),
+    },
+    line: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    status: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    statusText: {
+        margin: '3px',
+        fontSize: '13px',
+        color: theme.palette.primary.main,
+    },
+    option: {
+        position: 'relative',
+        display: 'flex',
+        justifyContent: 'space-between',
+        margin: theme.spacing(1, 0),
+        padding: theme.spacing(0, 1),
+        height: '28px',
+    },
+    bar: {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        zIndex: 100,
+        backgroundColor: theme.palette.primary.main,
+        opacity: 0.6,
+        minWidth: theme.spacing(1),
+        height: '28px',
+        borderRadius: theme.spacing(0.8),
+    },
+    text: {
+        zIndex: 101,
+        lineHeight: '28px',
+        margin: '0 4px',
+    },
+    deadline: {
+        color: '#657786',
+    },
+}))
 
 interface PollCardProps {
     poll: PollGunDB

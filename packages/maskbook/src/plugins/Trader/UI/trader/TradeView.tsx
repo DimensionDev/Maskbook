@@ -1,9 +1,9 @@
-import { makeStyles, createStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { Trader, TraderProps } from './Trader'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             width: '100%',
             maxWidth: 450,
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => {
             left: theme.spacing(3),
             position: 'absolute',
         },
-    })
+    }
 })
 
 export interface TradeViewProps extends withClasses<'root'> {

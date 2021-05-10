@@ -1,18 +1,16 @@
-import { Chip, createStyles, DialogContent, makeStyles } from '@material-ui/core'
+import { Chip, DialogContent, makeStyles } from '@material-ui/core'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { Linking } from './Linking'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        tag: {
-            marginRight: theme.spacing(1),
-        },
-        chip: {
-            margin: theme.spacing(1),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    tag: {
+        marginRight: theme.spacing(1),
+    },
+    chip: {
+        margin: theme.spacing(1),
+    },
+}))
 
 export interface CoinMetadataTagsProps {
     tags?: string[]

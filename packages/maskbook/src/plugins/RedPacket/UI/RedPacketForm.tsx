@@ -1,14 +1,5 @@
 import { useState, useCallback, useMemo, ChangeEvent, useEffect } from 'react'
-import {
-    makeStyles,
-    FormControl,
-    TextField,
-    createStyles,
-    InputLabel,
-    Select,
-    MenuItem,
-    MenuProps,
-} from '@material-ui/core'
+import { makeStyles, FormControl, TextField, InputLabel, Select, MenuItem, MenuProps } from '@material-ui/core'
 import { omit } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import BigNumber from 'bignumber.js'
@@ -41,31 +32,29 @@ import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        line: {
-            display: 'flex',
-            margin: theme.spacing(1),
-        },
-        input: {
-            flex: 1,
-            padding: theme.spacing(0.5),
-        },
-        tip: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-        },
-        button: {
-            marginTop: theme.spacing(1.5),
-        },
-        selectShrinkLabel: {
-            transform: 'translate(17px, -10px) scale(0.75) !important',
-        },
-        inputShrinkLabel: {
-            transform: 'translate(17px, -3px) scale(0.75) !important',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    line: {
+        display: 'flex',
+        margin: theme.spacing(1),
+    },
+    input: {
+        flex: 1,
+        padding: theme.spacing(0.5),
+    },
+    tip: {
+        fontSize: 12,
+        color: theme.palette.text.secondary,
+    },
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
+    selectShrinkLabel: {
+        transform: 'translate(17px, -10px) scale(0.75) !important',
+    },
+    inputShrinkLabel: {
+        transform: 'translate(17px, -3px) scale(0.75) !important',
+    },
+}))
 
 export interface RedPacketFormProps extends withClasses<never> {
     onCreate?(payload: RedPacketJSONPayload): void
