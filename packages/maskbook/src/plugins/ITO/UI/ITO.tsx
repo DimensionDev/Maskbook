@@ -297,13 +297,11 @@ export function ITO(props: ITO_Props) {
         [tradeInfo, listOfStatus, isAccountSeller, noRemain],
     )
 
-    const refundAmount = useMemo(
-        () =>
-            tradeInfo?.buyInfo
-                ? new BigNumber(tradeInfo?.buyInfo.amount).minus(tradeInfo?.buyInfo.amount_sold)
-                : new BigNumber(0),
-        [tradeInfo],
-    )
+    const refundAmount = useMemo(() => {
+        const buyInfo = tradeInfo?.buyInfo
+        if (!buyInfo) return new BigNumber(0)
+        return new BigNumber(buyInfo.amount).minus(buyInfo.amount_sold)
+    }, [tradeInfo])
     // out of stock
     const refundAllAmount = tradeInfo?.buyInfo && new BigNumber(tradeInfo?.buyInfo.amount_sold).isZero()
 
