@@ -8,6 +8,7 @@ import { AsyncCall } from 'async-call-rpc'
 import { serializer } from '@dimensiondev/maskbook-shared'
 import { StylesProvider } from '@material-ui/styles'
 import { UnboundedRegistry, WebExtensionMessage, Environment } from '@dimensiondev/holoflows-kit'
+import { StyledEngineProvider } from '@material-ui/core'
 
 if (import.meta.hot) {
     import.meta.hot.accept()
@@ -23,9 +24,11 @@ installService()
 installPluginService()
 
 ReactDOM.unstable_createRoot(document.getElementById('root')!).render(
-    <StylesProvider injectFirst>
-        <App />
-    </StylesProvider>,
+    <StyledEngineProvider injectFirst>
+        <StylesProvider>
+            <App />
+        </StylesProvider>
+    </StyledEngineProvider>,
 )
 
 function installService() {
