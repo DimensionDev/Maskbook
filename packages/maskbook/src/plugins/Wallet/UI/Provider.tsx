@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         padding: theme.spacing(4, 1),
+        backgroundColor: '#F7F9FA',
     },
     logo: {
         width: 45,
@@ -19,8 +20,9 @@ const useStyles = makeStyles((theme: Theme) => ({
         marginBottom: theme.spacing(2),
     },
     name: {
-        fontSize: 24,
-        fontWeight: 500,
+        fontSize: 16,
+        fontWeight: 'normal',
+        whiteSpace: 'nowrap',
         marginBottom: theme.spacing(1),
     },
     description: {
@@ -33,7 +35,7 @@ export interface ProviderProps
     extends withClasses<never | 'root' | 'dialog' | 'backdrop' | 'container' | 'paper' | 'content'> {
     logo: React.ReactNode
     name: React.ReactNode
-    description: React.ReactNode
+    description?: React.ReactNode
     onClick?: () => void
     ButtonBaseProps?: Partial<ButtonBaseProps>
 }
@@ -41,15 +43,17 @@ export interface ProviderProps
 export function Provider(props: ProviderProps) {
     const classes = useStylesExtends(useStyles(), props)
     return (
-        <Card className={classes.root} variant="outlined" onClick={props.onClick}>
+        <Card className={classes.root} onClick={props.onClick}>
             <ButtonBase className={classes.content} {...props.ButtonBaseProps}>
                 <div className={classes.logo}>{props.logo}</div>
                 <Typography className={classes.name} variant="h3">
                     {props.name}
                 </Typography>
-                <Typography className={classes.description} color="textSecondary" variant="body2">
-                    {props.description}
-                </Typography>
+                {props.description && (
+                    <Typography className={classes.description} color="textSecondary" variant="body2">
+                        {props.description}
+                    </Typography>
+                )}
             </ButtonBase>
         </Card>
     )
