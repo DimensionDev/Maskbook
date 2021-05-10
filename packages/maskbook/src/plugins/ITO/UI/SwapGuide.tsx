@@ -50,7 +50,7 @@ export function SwapGuide(props: SwapGuideProps) {
     }, [retryPayload, startTransition, onClose])
     const classes = useStyles()
     const maxSwapAmount = useMemo(
-        () => BigNumber.min(new BigNumber(payload.limit), new BigNumber(payload.total_remaining)),
+        () => BigNumber.min(payload.limit, payload.total_remaining),
         [payload.limit, payload.total_remaining],
     )
     const initAmount = new BigNumber(0)

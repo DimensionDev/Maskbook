@@ -112,7 +112,7 @@ export function SwapDialog(props: SwapDialogProps) {
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
 
     const [ratio, setRatio] = useState<BigNumber>(
-        new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(new BigNumber(payload.exchange_amounts[0 * 2 + 1])),
+        new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),
     )
     const [swapToken, setSwapToken] = useState<EtherTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
     const [swapAmount, setSwapAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
@@ -129,7 +129,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 if (ev.open || !ev.token || ev.uuid !== id) return
                 const at = exchangeTokens.findIndex((x) => isSameAddress(x.address, ev.token!.address))
                 const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(
-                    new BigNumber(payload.exchange_amounts[at * 2 + 1]),
+                    payload.exchange_amounts[at * 2 + 1],
                 )
                 setRatio(ratio)
                 setSwapToken(ev.token)
