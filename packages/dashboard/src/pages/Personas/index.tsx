@@ -127,9 +127,9 @@ export default function Personas() {
                     <Typography className={classes.nickname}>{currentPersonaInfo.nickname}</Typography>
                     <IconButton onClick={toggleDrawer} size="small" className={classes.iconButton}>
                         {drawerOpen ? (
-                            <ArrowDownRound className={classes.arrow} fontSize="inherit" />
-                        ) : (
                             <ArrowUpRound className={classes.arrow} fontSize="inherit" />
+                        ) : (
+                            <ArrowDownRound className={classes.arrow} fontSize="inherit" />
                         )}
                     </IconButton>
                 </Box>
