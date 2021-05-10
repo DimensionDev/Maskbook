@@ -14,7 +14,7 @@ import type {
     PhraseRecordInDatabase,
 } from '../database/types'
 import { resolveChainId } from '../../../web3/pipes'
-import { formatChecksumAddress } from '../formatter'
+import { formatChecksumAddress } from '@dimensiondev/maskbook-shared'
 import { ChainId } from '../../../web3/types'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {

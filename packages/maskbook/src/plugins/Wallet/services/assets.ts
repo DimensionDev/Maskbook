@@ -9,7 +9,7 @@ import { CurrencyType } from '../../../web3/types'
 import { ChainId, EthereumTokenType } from '../../../web3/types'
 import { unreachable } from '../../../utils/utils'
 import { createERC1155Token, createERC721Token, createEtherToken, getConstant } from '../../../web3/helpers'
-import { formatChecksumAddress } from '../formatter'
+import { formatChecksumAddress } from '@dimensiondev/maskbook-shared'
 import { CONSTANTS } from '../../../web3/constants'
 
 export async function getAssetsListNFT(

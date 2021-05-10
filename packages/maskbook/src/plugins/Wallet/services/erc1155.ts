@@ -2,7 +2,7 @@ import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
-import { formatChecksumAddress } from '../formatter'
+import { formatChecksumAddress } from '@dimensiondev/maskbook-shared'
 import { WalletRecordIntoDB, ERC1155TokenRecordIntoDB, getWalletByAddress } from './helpers'
 import type { ERC1155TokenDetailed } from '../../../web3/types'
 

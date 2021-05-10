@@ -3,7 +3,7 @@ import { useAssetsFromProvider } from './useAssetsFromProvider'
 import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsMerged } from './useAssetsMerged'
 import { useWallet } from './useWallet'
-import { formatChecksumAddress } from '../formatter'
+import { formatChecksumAddress } from '@dimensiondev/maskbook-shared'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 
