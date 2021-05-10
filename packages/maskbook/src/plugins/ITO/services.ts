@@ -3,6 +3,7 @@ import { PluginITO_Messages } from './messages'
 import * as subgraph from './apis'
 import * as database from './database'
 import { getChainId } from '../../extension/background-script/EthereumService'
+import { checkIfChainSupport } from '../../web3/pipes'
 
 export async function getTradeInfo(pid: string, trader: string) {
     const tradeInfo = await subgraph.getTradeInfo(pid, trader)
@@ -39,6 +40,7 @@ export async function getAllPoolsAsSeller(address: string) {
 
 export async function getAllPoolsAsBuyer(address: string) {
     const chainId = await getChainId()
+    if (!checkIfChainSupport(chainId)) return []
     const pools = await subgraph.getAllPoolsAsBuyer(address)
     return pools.filter((x) => x.pool.chain_id === chainId)
 }

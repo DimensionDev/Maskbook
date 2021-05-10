@@ -1,4 +1,6 @@
 import { useAsyncRetry } from 'react-use'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { checkIfChainSupport } from '../../../web3/pipes'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'
 import { useITO_Contract } from '../contracts/useITO_Contract'
@@ -14,10 +16,12 @@ export interface SwappedToken {
 
 export function useClaimAll() {
     const account = useAccount()
+    const chainId = useChainId()
     const ITO_Contract = useITO_Contract()
     const { value: pools = [], loading } = useAllPoolsAsBuyer(account)
 
     return useAsyncRetry(async () => {
+        if (!checkIfChainSupport(chainId)) return []
         if (!ITO_Contract || loading) return undefined
         if (pools.length === 0) return []
 
@@ -59,7 +63,7 @@ export function useClaimAll() {
             }, [])
             .sort((a, b) => b.unlockTime.getTime() - a.unlockTime.getTime())
         return swappedTokens
-    }, [pools, account])
+    }, [pools, account, chainId, loading])
 }
 
 function checkUnlockTimeEqual(cur: SwappedToken) {
