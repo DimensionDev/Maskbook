@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import {
     Box,
     makeStyles,
@@ -19,6 +19,7 @@ import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { Provider } from '../Provider'
 import { MetaMaskIcon } from '../../../../resources/MetaMaskIcon'
 import { MaskbookIcon } from '../../../../resources/MaskbookIcon'
+import { SuccessIcon } from '@dimensiondev/icons'
 import { WalletConnectIcon } from '../../../../resources/WalletConnectIcon'
 import Services from '../../../../extension/service'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
@@ -37,29 +38,41 @@ const useStyles = makeStyles((theme: Theme) => ({
         maxWidth: 'unset',
     },
     content: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
         padding: theme.spacing(4, 4.5, 2),
+    },
+    step: {
+        flexGrow: 1,
     },
     stepTitle: {
         fontSize: 16,
     },
     networkList: {
         display: 'flex',
+        gap: 32,
     },
     network: {
         position: 'relative',
         cursor: 'pointer',
+        width: 'auto',
+        padding: 0,
     },
     networkIcon: {
         height: 48,
         width: 48,
     },
+    checkedBadge: {
+        position: 'absolute',
+        right: 0,
+        bottom: 0,
+        width: 16,
+        height: 16,
+        background: '#fff',
+        borderRadius: '50%',
+        border: '2px solid #fff',
+    },
     grid: {
         width: '100%',
-        margin: 0,
+        margin: theme.spacing(2, 0, 0),
     },
     icon: {
         fontSize: 45,
@@ -69,10 +82,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
+const walletNetworks = [
+    {
+        id: 'Ethereum',
+        icon: new URL('./ethereum.png', import.meta.url).toString(),
+    },
+    {
+        id: 'binance',
+        icon: new URL('./binance.png', import.meta.url).toString(),
+    },
+]
+
 interface SelectProviderDialogUIProps extends withClasses<never> {}
 
 function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const { t } = useI18N()
+    const [selectedNetwork, setSelectedNetwork] = useState(walletNetworks[0].id)
     const classes = useStylesExtends(useStyles(), props)
     const history = useHistory()
 
@@ -125,39 +150,32 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
-                <Box>
+                <Box className={classes.step}>
                     <Typography className={classes.stepTitle} variant="h2" component="h2">
                         1.Choose Network
                     </Typography>
                     <List className={classes.networkList}>
-                        <ListItem className={classes.network}>
-                            <Image
-                                height={48}
-                                width={48}
-                                src={new URL('./ethereum.png', import.meta.url).toString()}
-                                className={classes.networkIcon}
-                            />
-                        </ListItem>
-                        <ListItem className={classes.network}>
-                            <Image
-                                height={48}
-                                width={48}
-                                src={new URL('./binance.png', import.meta.url).toString()}
-                                className={classes.networkIcon}
-                            />
-                        </ListItem>
+                        {walletNetworks.map((network) => (
+                            <ListItem
+                                className={classes.network}
+                                onClick={() => {
+                                    setSelectedNetwork(network.id)
+                                }}>
+                                <Image height={48} width={48} src={network.icon} className={classes.networkIcon} />
+                                {selectedNetwork === network.id && <SuccessIcon className={classes.checkedBadge} />}
+                            </ListItem>
+                        ))}
                     </List>
                 </Box>
-                <Box>
+                <Box className={classes.step}>
                     <Typography className={classes.stepTitle} variant="h2" component="h2">
                         2.Choose Wallet
                     </Typography>
-                    <ImageList className={classes.grid} gap={16} rowHeight={183}>
+                    <ImageList className={classes.grid} gap={16} cols={3} rowHeight={183}>
                         <ImageListItem>
                             <Provider
                                 logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
-                                name="Mask"
-                                description={t('plugin_wallet_connect_to_mask')}
+                                name="Mask Network"
                                 onClick={() => onConnect(ProviderType.Maskbook)}
                             />
                         </ImageListItem>
@@ -166,7 +184,6 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                 <Provider
                                     logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
                                     name="MetaMask"
-                                    description={t('plugin_wallet_connect_to_metamask')}
                                     onClick={() => onConnect(ProviderType.MetaMask)}
                                 />
                             </ImageListItem>
@@ -175,11 +192,6 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             <Provider
                                 logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
                                 name="WalletConnect"
-                                description={t(
-                                    process.env.architecture === 'web'
-                                        ? 'plugin_wallet_connect_to_walletconnect_on_web'
-                                        : 'plugin_wallet_connect_to_walletconnect_on_app',
-                                )}
                                 onClick={() => onConnect(ProviderType.WalletConnect)}
                             />
                         </ImageListItem>
