@@ -1,8 +1,8 @@
 import { memo } from 'react'
-import { createStyles, makeStyles, TableFooter, TablePagination, TableRow } from '@material-ui/core'
+import { makeStyles, TableFooter, TablePagination, TableRow } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         spacer: {
             flex: 0,
         },
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => {
         actions: {
             marginLeft: 0,
         },
-    })
+    }
 })
 
 export interface TableListPaginationProps {

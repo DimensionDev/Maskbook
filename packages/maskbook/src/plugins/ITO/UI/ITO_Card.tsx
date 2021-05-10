@@ -1,4 +1,4 @@
-import { Alert, Typography, Skeleton, Box, createStyles } from '@material-ui/core'
+import { Alert, Typography, Skeleton, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useCallback, useEffect } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -14,43 +14,41 @@ import { formatBalance } from '../../Wallet/formatter'
 import { useMaskClaimCallback } from '../hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from '../hooks/useMaskITO_Packet'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            borderRadius: 10,
-            width: '100%',
-            background: 'linear-gradient(90deg, #FE686F 0%, #F78CA0 100%);',
-            marginTop: theme.spacing(2.5),
-        },
-        amount: {
-            fontSize: 18,
-            zIndex: 1,
-            position: 'relative',
-        },
-        content: {
-            boxSizing: 'border-box',
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between',
-            padding: theme.spacing(2.5),
-        },
-        ITOAlertContainer: {
-            padding: theme.spacing(0, 2.5, 2.5, 2.5),
-        },
-        ITOAlert: {
-            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+const useStyles = makeStyles((theme) => ({
+    root: {
+        borderRadius: 10,
+        width: '100%',
+        background: 'linear-gradient(90deg, #FE686F 0%, #F78CA0 100%);',
+        marginTop: theme.spacing(2.5),
+    },
+    amount: {
+        fontSize: 18,
+        zIndex: 1,
+        position: 'relative',
+    },
+    content: {
+        boxSizing: 'border-box',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: theme.spacing(2.5),
+    },
+    ITOAlertContainer: {
+        padding: theme.spacing(0, 2.5, 2.5, 2.5),
+    },
+    ITOAlert: {
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        color: '#fff',
+    },
+    button: {
+        //TODO: https://github.com/mui-org/material-ui/issues/25011
+        '&[disabled]': {
+            opacity: 0.5,
             color: '#fff',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
         },
-        button: {
-            //TODO: https://github.com/mui-org/material-ui/issues/25011
-            '&[disabled]': {
-                opacity: 0.5,
-                color: '#fff',
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            },
-        },
-    }),
-)
+    },
+}))
 
 export interface ITO_CardProps extends withClasses<never> {
     token?: ERC20TokenDetailed

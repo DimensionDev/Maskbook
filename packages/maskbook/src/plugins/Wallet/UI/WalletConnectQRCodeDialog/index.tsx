@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Button, createStyles, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../messages'
 import Services from '../../../../extension/service'
@@ -9,23 +9,21 @@ import { FirefoxPlatform } from './FirefoxPlatform'
 import { QRCodeModel } from './QRCodeModel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        container: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        actions: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '30%',
-        },
-    }),
-)
+const useStyles = makeStyles(() => ({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    actions: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '30%',
+    },
+}))
 
 export const WalletConnectQRCodeDialog: React.FC = () => {
     const [uri, setURI] = useState('')

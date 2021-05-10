@@ -1,4 +1,4 @@
-import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Avatar, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import { CollectibleProvider, NFTOrder } from '../types'
 import { formatDistanceToNow } from 'date-fns'
 import { formatBalance } from '../../Wallet/formatter'
@@ -9,7 +9,7 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         account: {
             display: 'flex',
             alignItems: 'center',
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => {
             fontSize: 14,
             lineHeight: 1,
         },
-    })
+    }
 })
 
 interface IRowProps {

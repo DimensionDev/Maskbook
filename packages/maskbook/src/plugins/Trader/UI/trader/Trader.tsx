@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
-import { makeStyles, createStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/sdk'
 
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
@@ -34,7 +34,7 @@ import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { isEtherWrapper } from '../../helpers'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             display: 'flex',
             flexDirection: 'column',
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => {
         router: {
             marginTop: 0,
         },
-    })
+    }
 })
 
 export interface TraderProps extends withClasses<never> {

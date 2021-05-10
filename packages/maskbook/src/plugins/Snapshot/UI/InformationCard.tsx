@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Box, Link, createStyles, makeStyles, Typography, Avatar } from '@material-ui/core'
+import { Box, Link, makeStyles, Typography, Avatar } from '@material-ui/core'
 import { format } from 'date-fns'
 import OpenInNew from '@material-ui/icons/OpenInNew'
 
@@ -22,7 +22,7 @@ export interface InfoFieldProps {
 }
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         field: {
             display: 'flex',
             justifyContent: 'space-between',
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => {
         avatarWrapper: {
             marginRight: 8,
         },
-    })
+    }
 })
 
 export function InfoField(props: InfoFieldProps) {

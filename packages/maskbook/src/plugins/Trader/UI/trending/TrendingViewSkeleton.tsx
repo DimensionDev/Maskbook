@@ -1,9 +1,9 @@
-import { makeStyles, CardHeader, CardContent, CardActions, createStyles, Skeleton } from '@material-ui/core'
+import { makeStyles, CardHeader, CardContent, CardActions, Skeleton } from '@material-ui/core'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         content: {
             paddingTop: 0,
             paddingBottom: 0,
@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => {
         footer: {
             justifyContent: 'space-between',
         },
-    })
+    }
 })
 
 export interface TrendingViewSkeletonProps extends withClasses<'content' | 'footer'> {

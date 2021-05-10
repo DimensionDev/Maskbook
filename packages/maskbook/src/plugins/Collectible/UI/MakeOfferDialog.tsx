@@ -1,6 +1,5 @@
 import { ChangeEvent, useState, useCallback, useMemo, useEffect } from 'react'
 import {
-    createStyles,
     makeStyles,
     DialogContent,
     Box,
@@ -33,7 +32,7 @@ import { PluginTraderMessages } from '../../Trader/messages'
 import { isETH } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         content: {
             padding: 0,
         },
@@ -57,7 +56,7 @@ const useStyles = makeStyles((theme) => {
             flex: 1,
             margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
         },
-    })
+    }
 })
 
 export interface MakeOfferDialogProps {

@@ -1,9 +1,9 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { Card } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({})
+    return {}
 })
 
 export interface CollectibleCardProps extends withClasses<'root'> {

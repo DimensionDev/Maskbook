@@ -1,4 +1,4 @@
-import { makeStyles, createStyles, Chip } from '@material-ui/core'
+import { makeStyles, Chip } from '@material-ui/core'
 import { getEnumAsArray } from '../../../../utils/enum'
 import { TradeProvider } from '../../types'
 import { resolveTradeProviderName } from '../../pipes'
@@ -6,7 +6,7 @@ import { TradeProviderIcon } from './TradeProviderIcon'
 import { Flags } from '../../../../utils/flags'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {},
         chip: {
             marginRight: theme.spacing(1),
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => {
         chipLabel: {
             paddingLeft: theme.spacing(0.5),
         },
-    })
+    }
 })
 
 export interface SelectProviderPanelProps {

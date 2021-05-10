@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { makeStyles, Theme, createStyles, Chip, ChipProps, CircularProgress } from '@material-ui/core'
+import { makeStyles, Theme, Chip, ChipProps, CircularProgress } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ErrorIcon from '@material-ui/icons/Error'
 import { noop } from 'lodash-es'
@@ -7,7 +7,7 @@ import { TokenIcon } from '../../extension/options-page/DashboardComponents/Toke
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../types'
 
 const useStyles = makeStyles((theme: Theme) => {
-    return createStyles({
+    return {
         chip: {
             border: 'none',
             borderRadius: 8,
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => {
             color: theme.palette.text.primary,
             pointerEvents: 'none',
         },
-    })
+    }
 })
 
 export interface SelectTokenChipProps {

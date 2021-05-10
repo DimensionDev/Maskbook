@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import type { Persona } from '../../../database'
 import { MenuItem, Card, IconButton } from '@material-ui/core'
@@ -21,35 +21,33 @@ interface Props {
     persona: Persona
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        card: {
-            padding: theme.spacing(4, 3, 5, 3),
-            boxShadow:
-                theme.palette.mode === 'dark'
-                    ? 'none'
-                    : '0px 2px 4px rgba(96, 97, 112, 0.16), 0px 0px 1px rgba(40, 41, 61, 0.04)',
-        },
-        header: {
-            display: 'flex',
-            alignItems: 'center',
-            marginBottom: theme.spacing(3),
-        },
-        title: {
-            flex: '1 1 auto',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            wordBreak: 'break-all',
-            whiteSpace: 'nowrap',
-            fontWeight: 500,
-        },
-        menu: {
-            flex: '0 0 auto',
-            marginLeft: theme.spacing(1),
-            cursor: 'pointer',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    card: {
+        padding: theme.spacing(4, 3, 5, 3),
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? 'none'
+                : '0px 2px 4px rgba(96, 97, 112, 0.16), 0px 0px 1px rgba(40, 41, 61, 0.04)',
+    },
+    header: {
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: theme.spacing(3),
+    },
+    title: {
+        flex: '1 1 auto',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        wordBreak: 'break-all',
+        whiteSpace: 'nowrap',
+        fontWeight: 500,
+    },
+    menu: {
+        flex: '0 0 auto',
+        marginLeft: theme.spacing(1),
+        cursor: 'pointer',
+    },
+}))
 
 export default function PersonaCard({ persona }: Props) {
     const { t } = useI18N()

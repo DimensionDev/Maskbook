@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { makeStyles, createStyles, Link, Tab, Tabs } from '@material-ui/core'
+import { makeStyles, Link, Tab, Tabs } from '@material-ui/core'
 import { DataProvider, TagType, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
@@ -30,7 +30,7 @@ import { useChainId } from '../../../../web3/hooks/useBlockNumber'
 import { Flags } from '../../../../utils/flags'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             width: '100%',
             boxShadow: 'none',
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => {
             minHeight: 'unset',
             minWidth: 'unset',
         },
-    })
+    }
 })
 
 export interface SearchResultViewProps {

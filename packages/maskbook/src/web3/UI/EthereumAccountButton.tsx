@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
-import { makeStyles, createStyles, Button, ButtonProps, Typography } from '@material-ui/core'
+import { makeStyles, Button, ButtonProps, Typography } from '@material-ui/core'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import { useStylesExtends } from '../../components/custom-ui-helper'
@@ -20,7 +20,7 @@ import { useEtherTokenBalance } from '../hooks/useEtherTokenBalance'
 import { useAccount } from '../hooks/useAccount'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             display: 'inline-flex',
             alignItems: 'center',
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => {
             height: 18,
             marginLeft: theme.spacing(0.5),
         },
-    })
+    }
 })
 
 export interface EthereumAccountButtonProps extends withClasses<never> {

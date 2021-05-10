@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Button, createStyles, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -18,14 +18,12 @@ import { ProviderType } from '../../../web3/types'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { selectMaskbookWallet } from '../helpers'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        content: {
-            padding: 0,
-            minHeight: 300,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    content: {
+        padding: 0,
+        minHeight: 300,
+    },
+}))
 
 interface SelectWalletDialogUIProps extends withClasses<never> {}
 

@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import classNames from 'classnames'
 import type { Vote } from '../types'
 import millify from 'millify'
-import { Avatar, List, createStyles, makeStyles, Typography, ListItem, Badge, Box, Link } from '@material-ui/core'
+import { Avatar, List, makeStyles, Typography, ListItem, Badge, Box, Link } from '@material-ui/core'
 import { resolveIPFSLink, resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import { SnapshotContext } from '../context'
@@ -13,7 +13,7 @@ import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         list: {
             display: 'flex',
             flexDirection: 'column',
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => {
             textDecoration: 'none !important',
             marginRight: 16,
         },
-    })
+    }
 })
 
 export function VotesCard() {

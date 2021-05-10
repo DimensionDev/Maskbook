@@ -1,4 +1,4 @@
-import { makeStyles, createStyles, Avatar, Theme, AvatarProps } from '@material-ui/core'
+import { makeStyles, Avatar, Theme, AvatarProps } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { isSameAddress, getConstant } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
@@ -34,16 +34,14 @@ function resolveTokenIconURL(address: string, trustWalletAssets: string) {
 }
 //#endregion
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        icon: {
-            width: 16,
-            height: 16,
-            backgroundColor: theme.palette.common.white,
-            margin: 0,
-        },
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    icon: {
+        width: 16,
+        height: 16,
+        backgroundColor: theme.palette.common.white,
+        margin: 0,
+    },
+}))
 
 export interface TokenIconProps extends withClasses<never> {
     name?: string

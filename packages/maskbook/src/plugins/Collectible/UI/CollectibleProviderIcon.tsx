@@ -1,11 +1,11 @@
-import { createStyles, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { OpenSeaIcon } from '../../../resources/OpenSeaIcon'
 import { RaribleIcon } from '../../../resources/RaribleIcon'
 import { unreachable } from '../../../utils/utils'
 import { CollectibleProvider } from '../types'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         opensea: {
             width: 16,
             height: 16,
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => {
             height: 16,
             verticalAlign: 'bottom',
         },
-    })
+    }
 })
 
 export interface CollectibleProviderIconProps {

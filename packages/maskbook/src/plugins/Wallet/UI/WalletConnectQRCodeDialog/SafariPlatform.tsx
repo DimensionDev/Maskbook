@@ -1,17 +1,15 @@
-import { createStyles, ImageList, ImageListItem, makeStyles, SvgIconProps } from '@material-ui/core'
+import { ImageList, ImageListItem, makeStyles, SvgIconProps } from '@material-ui/core'
 import { map } from 'lodash-es'
 import { createElement } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { Provider } from '../Provider'
 import { IMTokenIcon, MetaMaskIcon, RainbowIcon, TrustIcon } from './Icons'
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        container: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' },
-        grid: { width: '100%' },
-        icon: { fontSize: 45 },
-    }),
-)
+const useStyles = makeStyles(() => ({
+    container: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' },
+    grid: { width: '100%' },
+    icon: { fontSize: 45 },
+}))
 
 interface WalletProvider {
     name: string

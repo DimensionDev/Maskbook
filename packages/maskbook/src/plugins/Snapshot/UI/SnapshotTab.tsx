@@ -1,7 +1,7 @@
-import { makeStyles, createStyles, Card, CardContent } from '@material-ui/core'
+import { makeStyles, Card, CardContent } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             width: '100%',
             borderTopLeftRadius: 0,
@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => {
         content: {
             padding: `${theme.spacing(2)} !important`,
         },
-    })
+    }
 })
 
 export interface SnapshotTabProps {
