@@ -61,11 +61,8 @@ export function getAssetInfoFromURL(url?: string) {
 
 export function getOrderUnitPrice(order: Order) {
     if (!order.currentPrice || !order.paymentTokenContract?.decimals) return
-    const price = formatBalance(new BigNumber(order.currentPrice), order.paymentTokenContract.decimals)
-    const quantity = formatBalance(
-        new BigNumber(order.quantity),
-        new BigNumber(order.quantity).toString() !== '1' ? 8 : 0,
-    )
+    const price = formatBalance(order.currentPrice, order.paymentTokenContract.decimals)
+    const quantity = formatBalance(order.quantity, new BigNumber(order.quantity).toString() !== '1' ? 8 : 0)
 
     return new BigNumber(price).dividedBy(quantity).toFixed(4, 1).toString()
 }

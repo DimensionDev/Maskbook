@@ -50,11 +50,8 @@ export function Row({ event, isDifferenceToken }: Props) {
 
     const unitPrice = useMemo(() => {
         if (provider === CollectibleProvider.RARIBLE || !isDifferenceToken || !event.price) return null
-        const price = formatBalance(new BigNumber(event.price.quantity), event.price.asset?.decimals ?? 0)
-        const quantity = formatBalance(
-            new BigNumber(event.assetQuantity?.quantity ?? 0),
-            event.assetQuantity?.asset.decimals ?? 0,
-        )
+        const price = formatBalance(event.price.quantity, event.price.asset?.decimals ?? 0)
+        const quantity = formatBalance(event.assetQuantity?.quantity ?? 0, event.assetQuantity?.asset.decimals ?? 0)
 
         return new BigNumber(price).dividedBy(quantity).toFixed(3, 1).toString()
     }, [event, isDifferenceToken, provider])
@@ -104,7 +101,7 @@ export function Row({ event, isDifferenceToken }: Props) {
                 <TableCell>
                     <Typography className={classes.content} variant="body2">
                         {event.price && provider === CollectibleProvider.OPENSEA
-                            ? formatBalance(new BigNumber(event.price.quantity), event.price?.asset?.decimals ?? 0)
+                            ? formatBalance(event.price.quantity, event.price?.asset?.decimals ?? 0)
                             : event.price?.quantity ?? ''}
                     </Typography>
                 </TableCell>
