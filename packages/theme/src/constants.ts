@@ -36,7 +36,7 @@ export const LightColor = {
 
     infoBackground: 'rgba(175, 195, 225, 0.15)',
     warning: '#FFB915',
-    blue: 'rgba(28, 104, 243, 0.1)',
+    blue: 'rgb(28, 104, 243)',
     linkText: '#1C68F3',
 }
 export const DarkColor: typeof LightColor = {
@@ -76,7 +76,7 @@ export const DarkColor: typeof LightColor = {
 
     infoBackground: 'rgba(175, 195, 225, 0.15)',
     warning: '#FFB915',
-    blue: 'rgba(28, 104, 243, 0.1)',
+    blue: 'rgb(28, 104, 243)',
     linkText: '#ffffff',
 }
 

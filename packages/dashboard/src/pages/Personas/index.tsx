@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
         width: 28,
         height: 28,
         borderRadius: '50%',
-        border: `1px solid ${MaskColorVar.blue}`,
+        border: `1px solid ${MaskColorVar.blue.alpha(0.1)}`,
     },
     arrow: {
         fill: 'none',
