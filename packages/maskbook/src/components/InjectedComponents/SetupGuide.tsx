@@ -12,7 +12,7 @@ import {
     unstable_createMuiStrictModeTheme,
     IconButton,
     Box,
-    Hidden,
+    useMediaQuery,
 } from '@material-ui/core'
 import classNames from 'classnames'
 import { ArrowRight } from 'react-feather'
@@ -211,7 +211,7 @@ interface ContentUIProps {
 function ContentUI(props: ContentUIProps) {
     const classes = useStyles(props)
     const xsMatch = useMatchXS()
-    const wizardClasses = useWizardDialogStyles()
+    const onlyXS = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
     switch (props.dialogType) {
         case SetupGuideStep.FindUsername:
             return (
@@ -224,14 +224,10 @@ function ContentUI(props: ContentUIProps) {
                             display: xsMatch ? 'flex' : 'block',
                         }}>
                         <main className={classes.content}>{props.content}</main>
-                        <Hidden only="xs">
-                            <div>{props.tip}</div>
-                        </Hidden>
+                        {onlyXS ? <div>{props.tip}</div> : null}
                         <footer className={classes.footer}>{props.footer}</footer>
                     </Box>
-                    <Hidden smUp>
-                        <div>{props.tip}</div>
-                    </Hidden>
+                    {!onlyXS ? <div>{props.tip}</div> : null}
                 </Box>
             )
 
@@ -265,6 +261,7 @@ function WizardDialog(props: WizardDialogProps) {
     const { t } = useI18N()
     const { title, dialogType, optional = false, completion, status, content, tip, footer, onBack, onClose } = props
     const classes = useWizardDialogStyles(props)
+    const onlyXS = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
 
     return (
         <ThemeProvider theme={wizardTheme}>
@@ -300,13 +297,14 @@ function WizardDialog(props: WizardDialogProps) {
                         ) : null}
                     </header>
                     <ContentUI dialogType={dialogType} content={content} tip={tip} footer={footer} />
-                    <Hidden only="xs">
+                    {onlyXS ? (
                         <LinearProgress
                             className={classes.progress}
                             color="secondary"
                             variant="determinate"
-                            value={completion}></LinearProgress>
-                    </Hidden>
+                            value={completion}
+                        />
+                    ) : null}
                     {onBack ? (
                         <IconButton className={classes.back} size="small" onClick={onBack}>
                             <ArrowBackIosOutlinedIcon cursor="pointer" />
@@ -363,6 +361,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
         e.preventDefault()
         onConnect()
     }
+    const xsOnly = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
 
     const onJump = useCallback(
         (ev: React.MouseEvent<SVGElement>) => {
@@ -401,16 +400,13 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                             onChange={(e) => onUsernameChange(e.target.value)}
                             onKeyDown={onKeyDown}
                             inputProps={{ 'data-testid': 'username_input' }}></TextField>
-                        {gotoProfilePageImpl ? (
-                            <Hidden only="xs">
-                                <IconButton
-                                    className={findUsernameClasses.button}
-                                    // @ts-expect-error https://github.com/mui-org/material-ui/pull/26064
-                                    color={username ? 'primary' : 'default'}
-                                    disabled={!username}>
-                                    <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
-                                </IconButton>
-                            </Hidden>
+                        {gotoProfilePageImpl && xsOnly ? (
+                            <IconButton
+                                className={findUsernameClasses.button}
+                                color={username ? 'primary' : 'default'}
+                                disabled={!username}>
+                                <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
+                            </IconButton>
                         ) : null}
                     </Box>
                 </form>
@@ -419,7 +415,8 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                 <Typography
                     className={classes.tip}
                     variant="body2"
-                    dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}></Typography>
+                    dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}
+                />
             }
             footer={
                 <ActionButtonPromise
@@ -466,6 +463,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
     const { t } = useI18N()
     const classes = useWizardDialogStyles()
     const sayHelloWorldClasses = useSayHelloWorldStyles()
+    const xsOnly = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
 
     return (
         <WizardDialog
@@ -500,7 +498,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                         failedOnClick="use executor"
                         data-testid="create_button"
                     />
-                    <Hidden only="xs">
+                    {xsOnly ? (
                         <ActionButton
                             className={classes.textButton}
                             color="inherit"
@@ -509,7 +507,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                             data-testid="skip_button">
                             {t('skip')}
                         </ActionButton>
-                    </Hidden>
+                    ) : null}
                 </>
             }
             onBack={onBack}
