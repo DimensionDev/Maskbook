@@ -1,6 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import { FC, Fragment } from 'react'
-import { formatBalance, formatChecksumAddress, formatCurrency, formatEthereumAddress, formatToken } from './formatter'
+import { formatBalance, formatCurrency, formatToken, formatEthereumAddress } from './formatter'
 
 export interface FormattedBalanceProps {
     value: BigNumber.Value | undefined
@@ -45,26 +45,12 @@ export const FormattedCurrency: FC<FormattedCurrencyProps | FormattedTokenProps>
     return <Fragment>{formatted}</Fragment>
 }
 
-interface FormattedChecksumAddressProps {
-    address: string
-    type: 'checksum'
-    size: number
-}
-
 interface FormattedEthereumAddressProps {
-    address: string
     type: 'ethereum'
-    size: number
+    address: string
+    size?: number
 }
 
-export const FormattedAddress: FC<FormattedChecksumAddressProps | FormattedEthereumAddressProps> = (props) => {
-    let formatted: string
-    if (props.type === 'checksum') {
-        formatted = formatChecksumAddress(props.address)
-    } else if (props.type === 'ethereum') {
-        formatted = formatEthereumAddress(props.address, props.size)
-    } else {
-        throw new Error('unsupported address type')
-    }
-    return <Fragment>{formatChecksumAddress(props.address)}</Fragment>
+export const FormattedAddress: FC<FormattedEthereumAddressProps> = (props) => {
+    return <Fragment>{formatEthereumAddress(props.address, props.size)}</Fragment>
 }

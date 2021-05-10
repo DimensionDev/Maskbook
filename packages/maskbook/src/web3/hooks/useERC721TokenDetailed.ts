@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { EthereumTokenType, ERC721TokenDetailed } from '../types'
 import { useChainId } from './useBlockNumber'
-import { formatChecksumAddress } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { useSingleContractMultipleData } from './useMulticall'
 
@@ -30,7 +30,7 @@ export function useERC721TokenDetailed(address: string, token?: Partial<ERC721To
         const [name, symbol, baseURI, tokenURI] = results.map((x) => (x.error ? undefined : x.value))
         return {
             type: EthereumTokenType.ERC721,
-            address: formatChecksumAddress(address),
+            address: formatEthereumAddress(address),
             chainId,
             name: name ?? token?.name ?? '',
             symbol: symbol ?? token?.symbol ?? '',

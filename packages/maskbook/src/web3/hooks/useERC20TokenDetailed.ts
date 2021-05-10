@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { EthereumTokenType, ERC20TokenDetailed } from '../types'
 import { useChainId } from './useBlockNumber'
-import { formatChecksumAddress } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useSingleContractMultipleData } from './useMulticall'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 
@@ -32,7 +32,7 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
         if (!name && !symbol && !decimals) return
         return {
             type: EthereumTokenType.ERC20,
-            address: formatChecksumAddress(address),
+            address: formatEthereumAddress(address),
             chainId,
             name: name ?? token?.name ?? '',
             symbol: symbol ?? token?.symbol ?? '',
