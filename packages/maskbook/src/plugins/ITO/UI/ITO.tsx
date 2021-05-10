@@ -18,7 +18,7 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatDateTime } from '../../../utils/date'
 import { getTextUILength } from '../../../utils/getTextUILength'
-import { ClaimGuide, ClaimStatus } from './ClaimGuide'
+import { SwapGuide, SwapStatus } from './SwapGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { sortTokens } from '../helpers'
@@ -203,7 +203,7 @@ export function ITO(props: ITO_Props) {
     const chainIdValid = useChainIdValid()
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
-    const [claimDialogStatus, setClaimDialogStatus] = useState(ClaimStatus.Remind)
+    const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)
 
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
@@ -362,11 +362,11 @@ export function ITO(props: ITO_Props) {
         window.open(shareLink, '_blank', 'noopener noreferrer')
     }, [shareLink])
     const onUnlock = useCallback(async () => {
-        setClaimDialogStatus(ClaimStatus.Unlock)
+        setClaimDialogStatus(SwapStatus.Unlock)
         setOpenClaimDialog(true)
     }, [])
     const onClaim = useCallback(async () => {
-        setClaimDialogStatus(ClaimStatus.Remind)
+        setClaimDialogStatus(SwapStatus.Remind)
         setOpenClaimDialog(true)
     }, [])
 
@@ -716,7 +716,7 @@ export function ITO(props: ITO_Props) {
                     </ActionButton>
                 ) : null}
             </Box>
-            <ClaimGuide
+            <SwapGuide
                 status={claimDialogStatus}
                 payload={payload}
                 shareSuccessLink={shareSuccessLink}

@@ -96,7 +96,7 @@ export function ShareDialog(props: ShareDialogProps) {
                             variant="contained"
                             color="primary"
                             className={classes.shareButton}>
-                            {t('plugin_ito_dialog_claim_share_title')}
+                            {t('plugin_ito_dialog_swap_share_title')}
                         </ActionButton>
                     ) : null}
                 </div>

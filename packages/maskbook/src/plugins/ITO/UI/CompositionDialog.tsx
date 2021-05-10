@@ -112,7 +112,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 regions: fillSettings.regions,
             }
 
-            // output the redpacket as JSON payload
+            setPoolSettings(undefined)
             onCreateOrSelect(payload)
             onBack()
         },

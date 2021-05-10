@@ -13,14 +13,14 @@ import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useSwapCallback } from '../hooks/useSwapCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatBalance } from '../../../plugins/Wallet/formatter'
+import { formatBalance } from '../../Wallet/formatter'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import type { ChainId } from '../../../web3/types'
 import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO_CONSTANTS } from '../constants'
-import { ClaimStatus } from './ClaimGuide'
+import { SwapStatus } from './SwapGuide'
 import { isETH, isSameAddress } from '../../../web3/helpers'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export interface ClaimDialogProps extends withClasses<'root'> {
+export interface SwapDialogProps extends withClasses<'root'> {
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
     payload: JSON_PayloadInMask
     initAmount: BigNumber
@@ -88,13 +88,13 @@ export interface ClaimDialogProps extends withClasses<'root'> {
     maxSwapAmount: BigNumber
     setTokenAmount: React.Dispatch<React.SetStateAction<BigNumber>>
     setActualSwapAmount: React.Dispatch<React.SetStateAction<BigNumber.Value>>
-    setStatus: (status: ClaimStatus) => void
+    setStatus: (status: SwapStatus) => void
     chainId: ChainId
     account: string
     token: EtherTokenDetailed | ERC20TokenDetailed
 }
 
-export function ClaimDialog(props: ClaimDialogProps) {
+export function SwapDialog(props: SwapDialogProps) {
     const { t } = useI18N()
     const {
         payload,
@@ -137,7 +137,9 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 setSwapToken(ev.token)
                 setTokenAmount(initAmount)
                 setSwapAmount(initAmount.multipliedBy(ratio))
-                setInputAmountForUI(formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals))
+                setInputAmountForUI(
+                    initAmount.isEqualTo(0) ? '' : formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals),
+                )
             },
             [
                 id,
@@ -204,7 +206,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
             const { receipt } = swapState
             const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as { to_value: string }
             setActualSwapAmount(to_value)
-            setStatus(ClaimStatus.Share)
+            setStatus(SwapStatus.Share)
             resetSwapCallback()
         },
     )
@@ -234,7 +236,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
     const validationMessage = useMemo(() => {
         if (swapAmount.isEqualTo(0)) return t('plugin_ito_error_enter_amount')
         if (swapAmount.isGreaterThan(tokenBalance)) return t('plugin_ito_error_balance', { symbol: swapToken.symbol })
-        if (tokenAmount.isGreaterThan(maxSwapAmount)) return t('plugin_ito_dialog_claim_swap_exceed_wallet_limit')
+        if (tokenAmount.isGreaterThan(maxSwapAmount)) return t('plugin_ito_dialog_swap_exceed_wallet_limit')
         return ''
     }, [swapAmount, tokenBalance, maxSwapAmount, swapToken, ratio])
 
@@ -260,7 +262,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 </Typography>
             </section>
             <Typography className={classes.exchangeText} variant="body1" color="textSecondary">
-                {t('plugin_ito_dialog_claim_swap_exchange')}{' '}
+                {t('plugin_ito_dialog_swap_exchange')}{' '}
                 <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals)}</span>{' '}
                 {token.symbol}
                 {'.'}
@@ -272,10 +274,10 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 token={swapToken}
                 onAmountChange={(value) => {
                     const val =
-                        value === ''
+                        value === '' || value === '0'
                             ? new BigNumber(0)
                             : new BigNumber(value).multipliedBy(new BigNumber(10).pow(swapToken.decimals))
-                    const isMax = value === formatBalance(maxAmount, swapToken.decimals)
+                    const isMax = value === formatBalance(maxAmount, swapToken.decimals) && !val.isEqualTo(0)
                     const tokenAmount = isMax ? maxSwapAmount : val.dividedBy(ratio)
                     const swapAmount = isMax ? tokenAmount.multipliedBy(ratio) : val.dp(0)
                     setInputAmountForUI(
@@ -289,7 +291,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                     setTokenAmount(tokenAmount.dp(0))
                     setSwapAmount(swapAmount)
                 }}
-                label={t('plugin_ito_dialog_claim_swap_panel_title')}
+                label={t('plugin_ito_dialog_swap_panel_title')}
                 SelectTokenChip={{
                     ChipProps: {
                         onClick: onSelectTokenChipClick,
@@ -297,7 +299,7 @@ export function ClaimDialog(props: ClaimDialogProps) {
                 }}
             />
             <Typography className={classes.remindText} variant="body1" color="textSecondary">
-                {t('plugin_ito_claim_only_once_remind')}
+                {t('plugin_ito_swap_only_once_remind')}
             </Typography>
             <section className={classes.swapButtonWrapper}>
                 <EthereumWalletConnectedBoundary>
