@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, forwardRef, useImperativeHandle } from 'react'
 import type { InputBaseComponentProps } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { useDebounce } from 'react-use'
 import {
     Typography,
@@ -26,45 +26,43 @@ export interface RegionSelectProps extends InputBaseComponentProps {
     onRegionChange: (codes: RegionCode[]) => void
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            width: '100%',
-            height: '54px',
-            alignItems: 'center',
-            paddingLeft: theme.spacing(2),
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        width: '100%',
+        height: '54px',
+        alignItems: 'center',
+        paddingLeft: theme.spacing(2),
+    },
+    allToggle: {
+        marginLeft: `-${theme.spacing(1)}`,
+    },
+    inputControl: {
+        display: 'flex',
+    },
+    inputRoot: {
+        backgroundColor: 'rgba(0, 0, 0, 0.04)',
+        '&:before': {
+            borderColor: 'rgba(0, 0, 0, 0.01)',
         },
-        allToggle: {
-            marginLeft: `-${theme.spacing(1)}`,
-        },
-        inputControl: {
-            display: 'flex',
-        },
-        inputRoot: {
-            backgroundColor: 'rgba(0, 0, 0, 0.04)',
-            '&:before': {
-                borderColor: 'rgba(0, 0, 0, 0.01)',
-            },
-        },
-        input: {
-            padding: `${theme.spacing(2)}`,
-        },
-        span: {
-            paddingLeft: theme.spacing(2),
-        },
-        options: {
-            maxHeight: 140,
-            overflow: 'auto',
-        },
-        display: {
-            padding: `${theme.spacing(0.5)} ${theme.spacing(2)}`,
-        },
-        item: {
-            padding: `0 ${theme.spacing(2)}`,
-        },
-    }),
-)
+    },
+    input: {
+        padding: `${theme.spacing(2)}`,
+    },
+    span: {
+        paddingLeft: theme.spacing(2),
+    },
+    options: {
+        maxHeight: 140,
+        overflow: 'auto',
+    },
+    display: {
+        padding: `${theme.spacing(0.5)} ${theme.spacing(2)}`,
+    },
+    item: {
+        padding: `0 ${theme.spacing(2)}`,
+    },
+}))
 
 // TODO fix TextField focus style
 export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }: RegionSelectProps, ref) => {

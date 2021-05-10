@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react'
-import { createStyles, makeStyles, Typography } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { BreakdownDialog } from '../../components/InjectedComponents/BreakdownDialog'
@@ -13,7 +13,7 @@ import { createERC20Token } from '../helpers'
 import { useChainId } from '../hooks/useBlockNumber'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             borderRadius: 16,
             fontWeight: 300,
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => {
             borderRadius: '50%',
             marginRight: theme.spacing(0.5),
         },
-    })
+    }
 })
 
 export interface EthereumMaskBalanceButtonProps extends withClasses<'root'> {}

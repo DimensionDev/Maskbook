@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { usePriceLineChart } from '../../../hooks/usePriceLineChart'
@@ -22,16 +22,14 @@ export interface PriceChartProps extends withClasses<'root'> {
     currency: Currency
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            position: 'relative',
-        },
-        svg: {
-            display: 'block',
-        },
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+        position: 'relative',
+    },
+    svg: {
+        display: 'block',
+    },
+}))
 
 export function LBPPriceChart(props: PriceChartProps) {
     const { data } = props

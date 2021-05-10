@@ -2,15 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { uniq, flatten } from 'lodash-es'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import {
-    makeStyles,
-    createStyles,
-    DialogContent,
-    CircularProgress,
-    Typography,
-    List,
-    ListItem,
-} from '@material-ui/core'
+import { makeStyles, DialogContent, CircularProgress, Typography, List, ListItem } from '@material-ui/core'
 import { useClaimAll } from '../hooks/useClaimAll'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumMessages } from '../../Ethereum/messages'
@@ -24,72 +16,70 @@ import formatDateTime from 'date-fns/format'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { useSnackbar, VariantType } from 'notistack'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        wrapper: {
-            padding: theme.spacing(4),
+const useStyles = makeStyles((theme) => ({
+    wrapper: {
+        padding: theme.spacing(4),
+    },
+    actionButton: {
+        margin: '0 auto',
+        minHeight: 'auto',
+        backgroundColor: '#1C68F3',
+        '&:hover': {
+            backgroundColor: '#1854c4',
         },
-        actionButton: {
-            margin: '0 auto',
-            minHeight: 'auto',
-            backgroundColor: '#1C68F3',
-            '&:hover': {
-                backgroundColor: '#1854c4',
-            },
-            width: '100%',
-            fontSize: 18,
-            fontWeight: 400,
+        width: '100%',
+        fontSize: 18,
+        fontWeight: 400,
+    },
+    footer: {
+        marginTop: theme.spacing(2),
+        zIndex: 1,
+    },
+    footnote: {
+        fontSize: 10,
+        marginRight: theme.spacing(1),
+    },
+    footLink: {
+        cursor: 'pointer',
+        marginRight: theme.spacing(0.5),
+        '&:last-child': {
+            marginRight: 0,
         },
-        footer: {
-            marginTop: theme.spacing(2),
-            zIndex: 1,
-        },
-        footnote: {
-            fontSize: 10,
-            marginRight: theme.spacing(1),
-        },
-        footLink: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(0.5),
-            '&:last-child': {
-                marginRight: 0,
-            },
-        },
-        maskbook: {
-            width: 40,
-            height: 10,
-        },
-        tokenCardWrapper: {
-            width: '100%',
-            maxHeight: 450,
-            marginBottom: theme.spacing(1),
-            overflow: 'auto',
-            padding: theme.spacing(1, 0),
-        },
-        tokenCard: {
-            width: '100%',
-            height: 95,
-            background: 'linear-gradient(.25turn, #0ACFFE, 40%, #2b3ef0)',
-            marginBottom: theme.spacing(2),
-            borderRadius: 10,
-            flexDirection: 'column',
-            paddingTop: theme.spacing(2),
-            paddingBottom: theme.spacing(2.5),
-            alignItems: 'baseline',
-            justifyContent: 'space-between',
-        },
-        cardHeader: {
-            display: 'flex',
-            width: '100%',
-            justifyContent: 'space-between',
-            '-webkit-font-smoothing': 'antialiased',
-            fontSize: 14,
-        },
-        cardContent: {
-            fontSize: 18,
-        },
-    }),
-)
+    },
+    maskbook: {
+        width: 40,
+        height: 10,
+    },
+    tokenCardWrapper: {
+        width: '100%',
+        maxHeight: 450,
+        marginBottom: theme.spacing(1),
+        overflow: 'auto',
+        padding: theme.spacing(1, 0),
+    },
+    tokenCard: {
+        width: '100%',
+        height: 95,
+        background: 'linear-gradient(.25turn, #0ACFFE, 40%, #2b3ef0)',
+        marginBottom: theme.spacing(2),
+        borderRadius: 10,
+        flexDirection: 'column',
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2.5),
+        alignItems: 'baseline',
+        justifyContent: 'space-between',
+    },
+    cardHeader: {
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'space-between',
+        '-webkit-font-smoothing': 'antialiased',
+        fontSize: 14,
+    },
+    cardContent: {
+        fontSize: 18,
+    },
+}))
 
 interface ClaimAllDialogProps {
     onClose: () => void

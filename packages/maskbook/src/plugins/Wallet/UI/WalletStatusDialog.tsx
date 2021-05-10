@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { Copy, ExternalLink } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import ErrorIcon from '@material-ui/icons/Error'
-import { Button, createStyles, DialogActions, DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ProviderIcon } from '../../../components/shared/ProviderIcon'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
@@ -19,57 +19,55 @@ import { useWallet } from '../hooks/useWallet'
 import { WalletMessages } from '../messages'
 import { currentSelectedWalletProviderSettings } from '../settings'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        content: {
-            padding: theme.spacing(2, 4, 3),
+const useStyles = makeStyles((theme) => ({
+    content: {
+        padding: theme.spacing(2, 4, 3),
+    },
+    footer: {
+        fontSize: 12,
+        textAlign: 'left',
+        padding: theme.spacing(2),
+        borderTop: `1px solid ${theme.palette.divider}`,
+        justifyContent: 'flex-start',
+    },
+    section: {
+        display: 'flex',
+        alignItems: 'center',
+        '&:last-child': {
+            paddingTop: theme.spacing(0.5),
         },
-        footer: {
-            fontSize: 12,
-            textAlign: 'left',
-            padding: theme.spacing(2),
-            borderTop: `1px solid ${theme.palette.divider}`,
-            justifyContent: 'flex-start',
-        },
-        section: {
-            display: 'flex',
-            alignItems: 'center',
-            '&:last-child': {
-                paddingTop: theme.spacing(0.5),
-            },
-        },
-        actions: {},
-        actionButton: {
-            fontSize: 12,
-            marginLeft: theme.spacing(1),
-        },
-        icon: {
-            fontSize: 24,
-            width: 24,
-            height: 24,
-            marginRight: theme.spacing(1),
-        },
-        tip: {
-            flex: 1,
-            fontSize: 14,
-        },
-        address: {
-            fontSize: 24,
-            padding: theme.spacing(1),
-            marginRight: theme.spacing(1),
-        },
-        link: {
-            display: 'flex',
-            alignItems: 'center',
-            color: theme.palette.text.secondary,
-            fontSize: 14,
-            marginRight: theme.spacing(2),
-        },
-        linkIcon: {
-            marginRight: theme.spacing(1),
-        },
-    }),
-)
+    },
+    actions: {},
+    actionButton: {
+        fontSize: 12,
+        marginLeft: theme.spacing(1),
+    },
+    icon: {
+        fontSize: 24,
+        width: 24,
+        height: 24,
+        marginRight: theme.spacing(1),
+    },
+    tip: {
+        flex: 1,
+        fontSize: 14,
+    },
+    address: {
+        fontSize: 24,
+        padding: theme.spacing(1),
+        marginRight: theme.spacing(1),
+    },
+    link: {
+        display: 'flex',
+        alignItems: 'center',
+        color: theme.palette.text.secondary,
+        fontSize: 14,
+        marginRight: theme.spacing(2),
+    },
+    linkIcon: {
+        marginRight: theme.spacing(1),
+    },
+}))
 
 export interface WalletStatusDialogProps {}
 

@@ -3,7 +3,7 @@ import { PluginSnapshotRPC } from '../messages'
 import classNames from 'classnames'
 import { Button } from '@material-ui/core'
 import { SnapshotContext } from '../context'
-import { createStyles, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { SnapshotCard } from './SnapshotCard'
@@ -14,7 +14,7 @@ import { VoteConfirmDialog } from './VoteConfirmDialog'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         button: {
             width: '80%',
             minHeight: 39,
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => {
             border: '2px solid rgb(29, 161, 242)',
             backgroundColor: 'transparent',
         },
-    })
+    }
 })
 
 export function VotingCard() {

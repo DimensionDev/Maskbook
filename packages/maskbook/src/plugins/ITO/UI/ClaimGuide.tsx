@@ -1,5 +1,5 @@
 import { unstable_useTransition } from 'react'
-import { createStyles, DialogContent, makeStyles, DialogProps } from '@material-ui/core'
+import { DialogContent, makeStyles, DialogProps } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -19,15 +19,13 @@ export enum ClaimStatus {
     Unlock,
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        content: {
-            display: 'flex',
-            flexDirection: 'column',
-            padding: theme.spacing(2, 3),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    content: {
+        display: 'flex',
+        flexDirection: 'column',
+        padding: theme.spacing(2, 3),
+    },
+}))
 
 interface ClaimGuideProps extends Pick<ClaimDialogProps, 'exchangeTokens' | 'payload'> {
     open: boolean

@@ -1,4 +1,4 @@
-import { createStyles, Link, makeStyles, Typography } from '@material-ui/core'
+import { Link, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -22,18 +22,16 @@ function isMoreThanMillion(allowance: string, decimals: number) {
     return new BigNumber(allowance).isGreaterThan(`100000000000e${decimals}`) // 100 billion
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {},
-        tip: {
-            margin: theme.spacing(1.5, 0, 1),
-            fontSize: 10,
-        },
-        button: {
-            marginTop: theme.spacing(1.5),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {},
+    tip: {
+        margin: theme.spacing(1.5, 0, 1),
+        fontSize: 10,
+    },
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
+}))
 
 export interface UnlockDialogProps {
     tokens: ERC20TokenDetailed[]

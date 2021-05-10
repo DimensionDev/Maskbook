@@ -1,7 +1,7 @@
 import { Component, useCallback, useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
 import { BigNumber } from 'bignumber.js'
-import { makeStyles, createStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
+import { makeStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -44,130 +44,128 @@ interface StyleProps {
     tokenNumber?: number
 }
 
-const useStyles = makeStyles<Theme, StyleProps>((theme) =>
-    createStyles({
-        root: {
-            position: 'relative',
-            color: theme.palette.common.white,
-            flexDirection: 'column',
-            height: (props: StyleProps) => (props.tokenNumber! > 4 ? 425 : 405),
-            minHeight: 405,
-            boxSizing: 'border-box',
-            backgroundAttachment: 'local',
-            backgroundPosition: '0 0',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            borderRadius: theme.spacing(1),
-            paddingLeft: theme.spacing(4),
-            paddingRight: theme.spacing(1),
-            paddingTop: theme.spacing(4),
-            paddingBottom: theme.spacing(2),
-        },
-        header: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'end',
-            width: '100%',
-            maxWidth: 470,
-        },
-        title: {
-            fontSize: (props: StyleProps) => (props.titleLength! > 31 ? '1.3rem' : '1.6rem'),
-            fontWeight: 'bold',
-            marginBottom: 4,
-            marginRight: 4,
-            width: '80%',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-        },
-        status: {
-            background: 'rgba(20, 23, 26, 0.6)',
-            padding: '5px 16px',
-            whiteSpace: 'nowrap',
-            borderRadius: 10,
-        },
-        totalText: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        tokenLink: {
-            display: 'flex',
-            alignItems: 'center',
-            color: '#fff',
-        },
-        tokenIcon: {
-            width: 24,
-            height: 24,
-        },
-        totalIcon: {
+const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
+    root: {
+        position: 'relative',
+        color: theme.palette.common.white,
+        flexDirection: 'column',
+        height: (props: StyleProps) => (props.tokenNumber! > 4 ? 425 : 405),
+        minHeight: 405,
+        boxSizing: 'border-box',
+        backgroundAttachment: 'local',
+        backgroundPosition: '0 0',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        borderRadius: theme.spacing(1),
+        paddingLeft: theme.spacing(4),
+        paddingRight: theme.spacing(1),
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(2),
+    },
+    header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'end',
+        width: '100%',
+        maxWidth: 470,
+    },
+    title: {
+        fontSize: (props: StyleProps) => (props.titleLength! > 31 ? '1.3rem' : '1.6rem'),
+        fontWeight: 'bold',
+        marginBottom: 4,
+        marginRight: 4,
+        width: '80%',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+    },
+    status: {
+        background: 'rgba(20, 23, 26, 0.6)',
+        padding: '5px 16px',
+        whiteSpace: 'nowrap',
+        borderRadius: 10,
+    },
+    totalText: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    tokenLink: {
+        display: 'flex',
+        alignItems: 'center',
+        color: '#fff',
+    },
+    tokenIcon: {
+        width: 24,
+        height: 24,
+    },
+    totalIcon: {
+        marginLeft: theme.spacing(1),
+        cursor: 'pointer',
+    },
+    progressWrap: {
+        width: 220,
+        marginBottom: theme.spacing(3),
+        marginTop: theme.spacing(1),
+    },
+    footer: {
+        position: 'absolute',
+        width: '90%',
+        maxWidth: 470,
+        bottom: theme.spacing(2),
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    fromText: {
+        opacity: 0.6,
+        transform: 'translateY(5px)',
+    },
+    rationWrap: {
+        marginBottom: theme.spacing(1),
+        display: 'flex',
+        alignItems: 'center',
+        '& > span': {
             marginLeft: theme.spacing(1),
-            cursor: 'pointer',
-        },
-        progressWrap: {
-            width: 220,
-            marginBottom: theme.spacing(3),
-            marginTop: theme.spacing(1),
-        },
-        footer: {
-            position: 'absolute',
-            width: '90%',
-            maxWidth: 470,
-            bottom: theme.spacing(2),
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-        },
-        fromText: {
-            opacity: 0.6,
-            transform: 'translateY(5px)',
-        },
-        rationWrap: {
-            marginBottom: theme.spacing(1),
-            display: 'flex',
-            alignItems: 'center',
-            '& > span': {
-                marginLeft: theme.spacing(1),
-                fontSize: 14,
-                '& > b': {
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                },
+            fontSize: 14,
+            '& > b': {
+                fontSize: 16,
+                fontWeight: 'bold',
             },
         },
-        actionFooter: {
-            marginTop: theme.spacing(1),
+    },
+    actionFooter: {
+        marginTop: theme.spacing(1),
+    },
+    actionButton: {
+        minHeight: 'auto',
+        width: '100%',
+    },
+    textProviderErr: {
+        color: '#EB5757',
+        marginTop: theme.spacing(1),
+    },
+    loadingITO: {
+        marginTop: 260,
+        textAlign: 'center',
+        fontSize: 24,
+    },
+    loadingITO_Button: {
+        color: '#fff',
+        borderColor: '#fff !important',
+        margin: theme.spacing(1, 'auto'),
+        minHeight: 35,
+        '&:hover': {
+            background: 'none',
         },
-        actionButton: {
-            minHeight: 'auto',
-            width: '100%',
-        },
-        textProviderErr: {
-            color: '#EB5757',
-            marginTop: theme.spacing(1),
-        },
-        loadingITO: {
-            marginTop: 260,
-            textAlign: 'center',
-            fontSize: 24,
-        },
-        loadingITO_Button: {
-            color: '#fff',
-            borderColor: '#fff !important',
-            margin: theme.spacing(1, 'auto'),
-            minHeight: 35,
-            '&:hover': {
-                background: 'none',
-            },
-        },
-        loadingWrap: {
-            display: 'flex',
-            justifyContent: 'center',
-        },
-        textInOneLine: {
-            whiteSpace: 'nowrap',
-        },
-    }),
-)
+    },
+    loadingWrap: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    textInOneLine: {
+        whiteSpace: 'nowrap',
+    },
+}))
 
 //#region token item
 interface TokenItemProps {

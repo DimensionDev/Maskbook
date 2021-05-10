@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
-import { makeStyles, createStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
+import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
 
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
 import {
@@ -47,54 +47,52 @@ import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
 import { PortfolioProvider } from '../../../plugins/Wallet/types'
 import { currentPortfolioDataProviderSettings, currentMaskbookChainIdSettings } from '../../../plugins/Wallet/settings'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            width: '100%',
-            maxWidth: 360,
-            backgroundColor: theme.palette.background.paper,
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper,
+    },
+    title: {
+        fontWeight: 'normal',
+        lineHeight: '30px',
+        marginBottom: theme.spacing(1.5),
+        [theme.breakpoints.down('sm')]: {
+            marginBottom: 0,
         },
-        title: {
-            fontWeight: 'normal',
-            lineHeight: '30px',
-            marginBottom: theme.spacing(1.5),
-            [theme.breakpoints.down('sm')]: {
-                marginBottom: 0,
-            },
+    },
+    section: {
+        padding: '26px 40px',
+        margin: theme.spacing(3, 0),
+        [theme.breakpoints.down('sm')]: {
+            padding: theme.spacing(2),
         },
-        section: {
-            padding: '26px 40px',
-            margin: theme.spacing(3, 0),
-            [theme.breakpoints.down('sm')]: {
-                padding: theme.spacing(2),
-            },
+    },
+    secondaryAction: {
+        paddingRight: 90,
+    },
+    list: {
+        [theme.breakpoints.down('sm')]: {
+            marginLeft: theme.spacing(-2),
+            marginRight: theme.spacing(-2),
         },
-        secondaryAction: {
-            paddingRight: 90,
+    },
+    listItemRoot: {
+        paddingTop: theme.spacing(1.5),
+        paddingBottom: theme.spacing(1.5),
+        borderBottom: `1px solid ${theme.palette.divider}`,
+    },
+    listItemIcon: {
+        color: theme.palette.text.primary,
+        justifyContent: 'flex-start',
+        minWidth: 'unset',
+        marginLeft: 0,
+        marginRight: theme.spacing(3),
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
         },
-        list: {
-            [theme.breakpoints.down('sm')]: {
-                marginLeft: theme.spacing(-2),
-                marginRight: theme.spacing(-2),
-            },
-        },
-        listItemRoot: {
-            paddingTop: theme.spacing(1.5),
-            paddingBottom: theme.spacing(1.5),
-            borderBottom: `1px solid ${theme.palette.divider}`,
-        },
-        listItemIcon: {
-            color: theme.palette.text.primary,
-            justifyContent: 'flex-start',
-            minWidth: 'unset',
-            marginLeft: 0,
-            marginRight: theme.spacing(3),
-            [theme.breakpoints.down('sm')]: {
-                display: 'none',
-            },
-        },
-    }),
-)
+    },
+}))
 
 const settingsTheme = extendsTheme((theme) => ({
     wrapper: {

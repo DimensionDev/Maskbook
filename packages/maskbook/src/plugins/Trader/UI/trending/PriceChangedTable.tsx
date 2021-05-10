@@ -1,33 +1,21 @@
-import {
-    TableContainer,
-    Table,
-    makeStyles,
-    Theme,
-    createStyles,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-} from '@material-ui/core'
+import { TableContainer, Table, makeStyles, Theme, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core'
 import type { Market } from '../../types'
 import { PriceChanged } from './PriceChanged'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        container: {
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
+const useStyles = makeStyles((theme: Theme) => ({
+    container: {
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        table: {},
-        cell: {
-            paddingLeft: theme.spacing(1),
-            paddingRight: theme.spacing(1.5),
-            textAlign: 'center',
-            whiteSpace: 'nowrap',
-        },
-    }),
-)
+    },
+    table: {},
+    cell: {
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1.5),
+        textAlign: 'center',
+        whiteSpace: 'nowrap',
+    },
+}))
 
 type Record = {
     name: string

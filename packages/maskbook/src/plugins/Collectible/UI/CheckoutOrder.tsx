@@ -1,31 +1,19 @@
-import {
-    createStyles,
-    makeStyles,
-    Table,
-    TableHead,
-    TableBody,
-    TableRow,
-    TableCell,
-    Typography,
-    Link,
-} from '@material-ui/core'
+import { makeStyles, Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@material-ui/core'
 import type { Order } from 'opensea-js/lib/types'
 import { Image } from '../../../components/shared/Image'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import type { useAsset } from '../hooks/useAsset'
 import { resolveAssetLinkOnOpenSea } from '../pipes'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        itemInfo: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        texts: {
-            marginLeft: theme.spacing(1),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    itemInfo: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    texts: {
+        marginLeft: theme.spacing(1),
+    },
+}))
 
 export interface CheckoutOrderProps {
     asset?: ReturnType<typeof useAsset>

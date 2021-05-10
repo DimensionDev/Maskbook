@@ -1,11 +1,11 @@
 import classNames from 'classnames'
 import { useColorStyles } from '../../../../utils/theme'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 
 const useStyles = makeStyles((theme: Theme) => {
-    return createStyles({
+    return {
         root: {
             fontSize: 'inherit',
             position: 'relative',
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => {
         value: {
             marginLeft: 20,
         },
-    })
+    }
 })
 
 export interface PriceChangedProps {

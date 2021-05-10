@@ -1,31 +1,29 @@
 import { Skeleton } from '@material-ui/core'
-import { createStyles, ListItem, ListItemText, makeStyles, Theme, Typography } from '@material-ui/core'
+import { ListItem, ListItemText, makeStyles, Theme, Typography } from '@material-ui/core'
 import type { RedPacketJSONPayload } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance, formatElapsed } from '../../Wallet/formatter'
 import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        primary: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        secondary: {
-            fontSize: 12,
-        },
-        message: {
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-        },
-        time: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-        },
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    primary: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    secondary: {
+        fontSize: 12,
+    },
+    message: {
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
+    time: {
+        fontSize: 12,
+        color: theme.palette.text.secondary,
+    },
+}))
 
 export interface RedPacketInListProps {
     index: number

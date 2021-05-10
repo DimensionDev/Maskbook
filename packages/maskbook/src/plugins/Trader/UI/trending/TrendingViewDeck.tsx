@@ -1,15 +1,5 @@
 import { useCallback } from 'react'
-import {
-    Avatar,
-    Button,
-    CardContent,
-    CardHeader,
-    createStyles,
-    IconButton,
-    makeStyles,
-    Paper,
-    Typography,
-} from '@material-ui/core'
+import { Avatar, Button, CardContent, CardHeader, IconButton, makeStyles, Paper, Typography } from '@material-ui/core'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import stringify from 'json-stable-stringify'
@@ -40,7 +30,7 @@ import { useApprovedTokens } from '../../trending/useApprovedTokens'
 import { CoinSaftyAlert } from './CoinSaftyAlert'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             width: '100%',
             boxShadow: 'none',
@@ -105,7 +95,7 @@ const useStyles = makeStyles((theme) => {
             width: 40,
             height: 10,
         },
-    })
+    }
 })
 
 export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content'> {

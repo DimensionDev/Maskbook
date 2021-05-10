@@ -1,4 +1,4 @@
-import { createStyles, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { CoinMarketCapIcon } from '../../../../resources/CoinMarketCapIcon'
 import { CoinGeckoIcon } from '../../../../resources/CoinGeckoIcon'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
@@ -6,7 +6,7 @@ import { unreachable } from '../../../../utils/utils'
 import { DataProvider } from '../../types'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         cmc: {
             width: 16,
             height: 16,
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => {
             height: 16,
             verticalAlign: 'bottom',
         },
-    })
+    }
 })
 
 export interface DataProviderIconProps {

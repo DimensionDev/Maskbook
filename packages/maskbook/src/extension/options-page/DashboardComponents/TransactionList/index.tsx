@@ -1,7 +1,6 @@
 import {
     Box,
     Button,
-    createStyles,
     makeStyles,
     Skeleton,
     Table,
@@ -20,11 +19,9 @@ import { FilterTransactionType } from '../../../../plugins/Wallet/types'
 import { useChainId } from '../../../../web3/hooks/useBlockNumber'
 import { useUpdateEffect } from 'react-use'
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        fixed: { height: 'calc(100% - 52px)' },
-    }),
-)
+const useStyles = makeStyles(() => ({
+    fixed: { height: 'calc(100% - 52px)' },
+}))
 
 export interface TransactionListProps {
     transactionType: FilterTransactionType

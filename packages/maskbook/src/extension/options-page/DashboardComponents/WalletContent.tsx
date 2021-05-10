@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useMemo, useState } from 'react'
 import { Alert, Box, Button, IconButton, MenuItem, Tab, Tabs } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
@@ -31,51 +31,49 @@ import { DashboardWalletRoute } from '../Route'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { FilterTransactionType } from '../../../plugins/Wallet/types'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            '&> *': {
-                flex: '0 0 auto',
-                overflow: 'auto',
-            },
+const useStyles = makeStyles((theme) => ({
+    root: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        '&> *': {
+            flex: '0 0 auto',
+            overflow: 'auto',
         },
-        alert: {
-            marginTop: theme.spacing(2),
-        },
-        caption: {
-            padding: theme.spacing(1.5, 0),
-        },
-        header: {
-            borderBottom: `1px solid ${theme.palette.divider}`,
-        },
-        content: {
-            flex: 1,
-        },
-        footer: {
-            margin: theme.spacing(1),
-        },
-        title: {
-            flex: 1,
-            paddingLeft: theme.spacing(1),
-        },
-        tabs: {},
-        addButton: {
-            color: theme.palette.primary.main,
-        },
-        moreButton: {
-            color: theme.palette.text.primary,
-        },
-        assetsTable: {
-            flex: 1,
-        },
-        checkIcon: {
-            marginLeft: theme.spacing(1),
-        },
-    }),
-)
+    },
+    alert: {
+        marginTop: theme.spacing(2),
+    },
+    caption: {
+        padding: theme.spacing(1.5, 0),
+    },
+    header: {
+        borderBottom: `1px solid ${theme.palette.divider}`,
+    },
+    content: {
+        flex: 1,
+    },
+    footer: {
+        margin: theme.spacing(1),
+    },
+    title: {
+        flex: 1,
+        paddingLeft: theme.spacing(1),
+    },
+    tabs: {},
+    addButton: {
+        color: theme.palette.primary.main,
+    },
+    moreButton: {
+        color: theme.palette.text.primary,
+    },
+    assetsTable: {
+        flex: 1,
+    },
+    checkIcon: {
+        marginLeft: theme.spacing(1),
+    },
+}))
 
 interface WalletContentProps {
     wallet: WalletRecord
