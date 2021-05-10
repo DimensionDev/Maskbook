@@ -1,4 +1,4 @@
-import { createMuiTheme, PaletteMode, ThemeOptions } from '@material-ui/core'
+import { createTheme, PaletteMode, ThemeOptions } from '@material-ui/core'
 import * as Changes from './changes'
 import * as Components from './component-changes'
 import { merge } from 'lodash-es'
@@ -24,7 +24,7 @@ function MaskTheme(mode: PaletteMode) {
         ...Object.values(Changes).map(applyColors),
         ...Object.values(Components).map(applyColors),
     )
-    return createMuiTheme(theme)
+    return createTheme(theme)
     function applyColors(x: any) {
         if (typeof x === 'function') return x(mode, colors)
         return x

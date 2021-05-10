@@ -1,6 +1,6 @@
 import { IconPreview } from './previewer'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { ServerStyleSheets } from '@material-ui/core'
+import { ServerStyleSheets } from '@material-ui/styles'
 import fs from 'fs'
 import { resolve } from 'path'
 
