@@ -60,7 +60,7 @@ export interface ProposalMessage {
 /**
  * Payload of a vote
  */
-export interface Vote {
+export interface VoteItem {
     choice: string
     address: string
     authorIpfsHash: string
@@ -85,8 +85,8 @@ export interface Vote {
     }
 }
 
-export type Votes = {
-    [key in string]: Vote
+export type VoteItemList = {
+    [key in string]: VoteItem
 }
 
 export interface ProposalResult {
