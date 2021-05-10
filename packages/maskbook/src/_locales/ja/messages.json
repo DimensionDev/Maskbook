@@ -318,6 +318,7 @@
     "plugin_wallet_setup_back": "",
     "plugin_wallet_setup_create": "",
     "plugin_wallet_setup_verify": "",
+    "plugin_wallet_setup_import": "",
     "plugin_wallet_select_provider_dialog_title": "ウォレットを接続",
     "plugin_wallet_qr_code_with_wallet_connect": "WalletConnect 対応の QR コードを読みこむ",
     "plugin_wallet_metamask_unlock": "MetaMask のロックを解除する",
