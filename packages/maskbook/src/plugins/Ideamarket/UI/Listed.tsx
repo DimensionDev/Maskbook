@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
     },
     priceText: {
-        fontFamily: 'Inter',
         fontSize: '14px',
         fontWeight: 'bold',
         color: '#373737',
@@ -49,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     buttonText: {
-        fontFamily: 'Inter',
         fontWeight: 'bold',
         fontSize: '14px',
         color: 'white',
