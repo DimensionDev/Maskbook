@@ -4,7 +4,7 @@ import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types
 import BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatBalance } from '../../../plugins/Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { useCallback } from 'react'
 

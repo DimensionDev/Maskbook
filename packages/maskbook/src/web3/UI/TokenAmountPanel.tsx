@@ -2,7 +2,7 @@ import { useCallback, ChangeEvent, useMemo } from 'react'
 import { makeStyles, TextField, Typography, Box, Chip, InputProps, ChipProps, TextFieldProps } from '@material-ui/core'
 import classNames from 'classnames'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
-import { formatBalance } from '../../plugins/Wallet/formatter'
+import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../constants'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import type { EtherTokenDetailed, ERC20TokenDetailed } from '../types'
@@ -127,7 +127,8 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                 color="textSecondary"
                                 variant="body2"
                                 component="span">
-                                Balance: {formatBalance(balance, token.decimals, 6)}
+                                Balance:
+                                <FormattedBalance value={balance} decimals={token.decimals} significant={6} />
                             </Typography>
                         ) : null}
                         <Box

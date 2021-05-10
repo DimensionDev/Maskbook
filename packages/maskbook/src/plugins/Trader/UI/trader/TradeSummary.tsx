@@ -14,7 +14,7 @@ import LoopIcon from '@material-ui/icons/Loop'
 import { ONE_BIPS } from '../../constants'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { SwapQuoteResponse, TradeComputed, TradeProvider, TradeStrategy } from '../../types'
-import { formatBalance, formatPercentage } from '../../../Wallet/formatter'
+import { formatBalance, formatPercentage } from '@dimensiondev/maskbook-shared'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 import { resolveUniswapWarningLevel, resolveUniswapWarningLevelColor, resolveZrxTradePoolName } from '../../pipes'
 

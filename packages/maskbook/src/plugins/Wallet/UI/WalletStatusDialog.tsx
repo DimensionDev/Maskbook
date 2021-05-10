@@ -14,10 +14,10 @@ import { useChainId, useChainIdValid } from '../../../web3/hooks/useBlockNumber'
 import { resolveLinkOnEtherscan, resolveProviderName } from '../../../web3/pipes'
 import { ChainId, ProviderType } from '../../../web3/types'
 import { EthereumChainChip } from '../../../web3/UI/EthereumChainChip'
-import { formatEthereumAddress } from '../formatter'
 import { useWallet } from '../hooks/useWallet'
 import { WalletMessages } from '../messages'
 import { currentSelectedWalletProviderSettings } from '../settings'
+import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -161,7 +161,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                 <section className={classes.section}>
                     <ProviderIcon classes={{ icon: classes.icon }} size={14} providerType={selectedWalletProvider} />
                     <Typography className={classes.address}>
-                        {formatEthereumAddress(selectedWallet.address, 4)}
+                        <FormattedAddress address={selectedWallet.address} size={4} />
                     </Typography>
                     {chainIdValid && chainId !== ChainId.Mainnet ? (
                         <EthereumChainChip chainId={chainId} ChipProps={{ variant: 'outlined' }} />

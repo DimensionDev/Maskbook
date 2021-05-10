@@ -11,7 +11,8 @@ import {
     Typography,
 } from '@material-ui/core'
 import { Ticker, DataProvider } from '../../types'
-import { formatCurrency, formatElapsed, formatEthereumAddress } from '../../../Wallet/formatter'
+import { formatEthereumAddress, FormattedCurrency } from '@dimensiondev/maskbook-shared'
+import { formatElapsed } from '../../../Wallet/formatter'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -74,8 +75,14 @@ export function TickersTable(props: TickersTableProps) {
                     )
                 })()}
             </TableCell>
-            {ticker.price ? <TableCell className={classes.cell}>{formatCurrency(ticker.price, '$')}</TableCell> : null}
-            <TableCell className={classes.cell}>{formatCurrency(ticker.volume, '$')}</TableCell>
+            {ticker.price ? (
+                <TableCell className={classes.cell}>
+                    <FormattedCurrency value={ticker.price} sign="$" />
+                </TableCell>
+            ) : null}
+            <TableCell className={classes.cell}>
+                <FormattedCurrency value={ticker.volume} sign="$" />
+            </TableCell>
             <TableCell className={classes.cell}>{formatElapsed(ticker.updated.getTime())}</TableCell>
         </TableRow>
     ))

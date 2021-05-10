@@ -13,7 +13,7 @@ import {
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { SwapResponse, TradeComputed } from '../../types'
-import { formatPercentage } from '../../../Wallet/formatter'
+import { formatPercentage } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { TradeRouteHop } from './TradeRouteHop'
 

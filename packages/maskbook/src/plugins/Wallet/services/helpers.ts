@@ -14,23 +14,23 @@ import type {
     PhraseRecordInDatabase,
 } from '../database/types'
 import { resolveChainId } from '../../../web3/pipes'
-import { formatChecksumAddress } from '../formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { ChainId } from '../../../web3/types'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
-    const record = await t.objectStore('Wallet').get(formatChecksumAddress(address))
+    const record = await t.objectStore('Wallet').get(formatEthereumAddress(address))
     return record ? WalletRecordOutDB(record) : null
 }
 
 export function WalletRecordIntoDB(x: WalletRecord) {
     const record = x as WalletRecordInDatabase
-    record.address = formatChecksumAddress(x.address)
+    record.address = formatEthereumAddress(x.address)
     return record
 }
 
 export function WalletRecordOutDB(x: WalletRecordInDatabase) {
     const record = x as WalletRecord
-    record.address = formatChecksumAddress(record.address)
+    record.address = formatEthereumAddress(record.address)
     record.erc20_token_whitelist = x.erc20_token_whitelist ?? new Set()
     record.erc20_token_blacklist = x.erc20_token_blacklist ?? new Set()
     record.erc721_token_whitelist = x.erc721_token_whitelist ?? new Set()
@@ -49,7 +49,7 @@ export function PhraseRecordOutDB(x: PhraseRecordInDatabase) {
 }
 
 export function ERC20TokenRecordIntoDB(x: ERC20TokenRecord) {
-    x.address = formatChecksumAddress(x.address)
+    x.address = formatEthereumAddress(x.address)
     return x as ERC20TokenRecordInDatabase
 }
 
@@ -60,7 +60,7 @@ export function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
         const record_ = record as any
         if (!record.chainId) record.chainId = resolveChainId(record_.network) ?? ChainId.Mainnet
     }
-    record.address = formatChecksumAddress(record.address)
+    record.address = formatEthereumAddress(record.address)
     return record
 }
 
@@ -68,7 +68,7 @@ export function ERC721TokenRecordIntoDB(x: ERC721TokenRecord) {
     const record: ERC721TokenRecordInDatabase = {
         ...x,
         // NFT cannot be divided and store each token separately
-        record_id: `${formatChecksumAddress(x.address)}_${x.tokenId}`,
+        record_id: `${formatEthereumAddress(x.address)}_${x.tokenId}`,
     }
     return record
 }
@@ -82,7 +82,7 @@ export function ERC1155TokenRecordIntoDB(x: ERC1155TokenRecord) {
     const record: ERC1155TokenRecordInDatabase = {
         ...x,
         // NFT cannot be divided and store each token separately
-        record_id: `${formatChecksumAddress(x.address)}_${x.tokenId}`,
+        record_id: `${formatEthereumAddress(x.address)}_${x.tokenId}`,
     }
     return record
 }

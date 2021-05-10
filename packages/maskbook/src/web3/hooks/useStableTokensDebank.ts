@@ -1,4 +1,4 @@
-import { formatChecksumAddress } from '../../plugins/Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { createERC20Token } from '../helpers'
 import { ChainId } from '../types'
 import { useChainId } from './useBlockNumber'
@@ -9,6 +9,6 @@ export function useStableTokensDebank() {
     if (chainId !== ChainId.Mainnet) return []
 
     return StableCoins.map((x: { id: string; decimals: number; name: string; symbol: string }) =>
-        createERC20Token(chainId, formatChecksumAddress(x.id), x.decimals, x.name, x.symbol),
+        createERC20Token(chainId, formatEthereumAddress(x.id), x.decimals, x.name, x.symbol),
     )
 }

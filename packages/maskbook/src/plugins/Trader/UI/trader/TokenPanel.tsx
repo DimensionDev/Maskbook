@@ -1,6 +1,6 @@
 import { Box, makeStyles, Theme, Typography } from '@material-ui/core'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
-import { formatBalance } from '../../../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 
 export interface TokenPanelProps {
