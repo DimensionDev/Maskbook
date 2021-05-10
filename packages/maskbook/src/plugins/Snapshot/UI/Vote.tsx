@@ -1,6 +1,6 @@
 import { Avatar, Box, makeStyles } from '@material-ui/core'
 import { useBlockie } from '../../../web3/hooks/useBlockie'
-import type { Vote as VoteType } from '../types'
+import type { VoteItem as VoteType } from '../types'
 
 const useStlyes = makeStyles(() => ({
     avatar: {
