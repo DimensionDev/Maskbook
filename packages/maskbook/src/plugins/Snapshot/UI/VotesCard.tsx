@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import classNames from 'classnames'
-import type { Vote } from '../types'
+import type { VoteItem } from '../types'
 import millify from 'millify'
 import { Avatar, List, makeStyles, Typography, ListItem, Badge, Box, Link } from '@material-ui/core'
 import { resolveIPFSLink, resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
@@ -82,7 +82,7 @@ function Content() {
                 </Badge>
             }>
             <List className={classes.list}>
-                {voteEntries.map((voteEntry: [string, Vote]) => {
+                {voteEntries.map((voteEntry: [string, VoteItem]) => {
                     return (
                         <ListItem className={classes.listItem} key={voteEntry[0]}>
                             <Link

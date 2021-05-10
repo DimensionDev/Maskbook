@@ -1,4 +1,4 @@
-import type { ProposalIdentifier, ProposalResult, Votes } from '../types'
+import type { ProposalIdentifier, ProposalResult, VoteItemList } from '../types'
 import { useSuspense } from '../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
 import { useVotes } from './useVotes'
@@ -52,6 +52,6 @@ async function Suspender(identifier: ProposalIdentifier) {
     return { results, totalPower }
 }
 
-function voteForChoice(votes: Votes, i: number) {
+function voteForChoice(votes: VoteItemList, i: number) {
     return Object.values(votes).filter((vote) => vote.msg.payload.choice === i + 1)
 }
