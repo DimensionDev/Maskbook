@@ -9,7 +9,7 @@ import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../../utils/constants'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { checkInputLengthExceed } from '../../../../utils/utils'
-import AbstractTab, { AbstractTabProps } from '../../DashboardComponents/AbstractTab'
+import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
 

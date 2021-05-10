@@ -27,7 +27,7 @@ import { useMyPersonas, useMyUninitializedPersonas } from '../../../components/D
 import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import { extraPermissions } from '../../../utils/permissions'
-import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
+import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { green } from '@material-ui/core/colors'
 import { DashboardRoute } from '../Route'
 import { useSnackbar } from 'notistack'

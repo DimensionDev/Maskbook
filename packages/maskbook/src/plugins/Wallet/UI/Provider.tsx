@@ -43,7 +43,7 @@ export interface ProviderProps
 export function Provider(props: ProviderProps) {
     const classes = useStylesExtends(useStyles(), props)
     return (
-        <Card className={classes.root} onClick={props.onClick}>
+        <Card className={classes.root} elevation={0} onClick={props.onClick}>
             <ButtonBase className={classes.content} {...props.ButtonBaseProps}>
                 <div className={classes.logo}>{props.logo}</div>
                 <Typography className={classes.name} variant="h3">

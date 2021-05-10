@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { DialogContent } from '@material-ui/core'
-import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
+import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import type { RedPacketJSONPayload } from '../types'
 import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { RedPacketMetaKey } from '../constants'
