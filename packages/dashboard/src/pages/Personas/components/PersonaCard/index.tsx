@@ -67,15 +67,10 @@ export const PersonaCard = memo<PersonaCardProps>(({ nickname, providers, active
     const [editDialogOpen, setEditDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [menu, openMenu] = useMenu(
-        [
-            <MenuItem onClick={() => setEditDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
-            <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
-                {t.personas_delete()}
-            </MenuItem>,
-        ],
-        false,
-        {},
-        false,
+        <MenuItem onClick={() => setEditDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
+        <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
+            {t.personas_delete()}
+        </MenuItem>,
     )
 
     const [, onConnect] = useConnectSocialNetwork()
