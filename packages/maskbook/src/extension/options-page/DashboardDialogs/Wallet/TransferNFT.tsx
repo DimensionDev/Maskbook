@@ -54,7 +54,7 @@ export function DashboardWalletTransferDialogNFT(
     //#endregion
 
     //#region remote controlled transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         useCallback(
             (ev) => {
@@ -71,7 +71,7 @@ export function DashboardWalletTransferDialogNFT(
     // open the transaction dialog
     useEffect(() => {
         if (transferState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             state: transferState,
             summary: `Transfer ${token.name} to ${formatEthereumAddress(address, 4)}.`,

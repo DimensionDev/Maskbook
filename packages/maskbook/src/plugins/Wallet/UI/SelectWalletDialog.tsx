@@ -36,47 +36,42 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
 
     //#region remote controlled dialog logic
-    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated)
-    const onClose = useCallback(() => {
-        setOpen({
-            open: false,
-        })
-    }, [setOpen])
+    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated)
     //#endregion
 
     const onSelect = useCallback(
         (wallet: WalletRecord) => {
-            onClose()
+            closeDialog()
             selectMaskbookWallet(wallet)
         },
-        [onClose],
+        [closeDialog],
     )
 
     //#region create new wallet
     const history = useHistory()
     const onCreate = useCallback(async () => {
-        onClose()
+        closeDialog()
         await delay(100)
         if (isEnvironment(Environment.ManifestOptions)) history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
         else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
-    }, [history, onClose])
+    }, [history, closeDialog])
     //#endregion
 
     //#region connect wallet
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     const onConnect = useCallback(async () => {
-        onClose()
+        closeDialog()
         await delay(100)
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [onClose, setSelectProviderDialogOpen])
+        openSelectProviderDialog()
+    }, [closeDialog, openSelectProviderDialog])
     //#endregion
 
     return (
         <InjectedDialog
             open={open}
-            onClose={onClose}
+            onClose={closeDialog}
             title={t('plugin_wallet_select_a_wallet')}
             DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent className={classes.content}>

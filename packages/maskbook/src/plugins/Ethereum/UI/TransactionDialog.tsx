@@ -59,7 +59,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
     const [shareLink, setShareLink] = useState('')
     const [summary, setSummary] = useState('')
     const [title, setTitle] = useState('Transaction')
-    const [open, setOpen] = useRemoteControlledDialog(EthereumMessages.events.transactionDialogUpdated, (ev) => {
+    const { open, closeDialog } = useRemoteControlledDialog(EthereumMessages.events.transactionDialogUpdated, (ev) => {
         if (ev.open) {
             setState(ev.state)
             setSummary(ev.summary ?? '')
@@ -70,20 +70,15 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
             setShareLink('')
         }
     })
-    const onClose = useCallback(() => {
-        setOpen({
-            open: false,
-        })
-    }, [setOpen])
     const onShare = useCallback(() => {
         if (shareLink) window.open(shareLink, '_blank', 'noopener noreferrer')
-        onClose()
-    }, [shareLink, onClose])
+        closeDialog()
+    }, [shareLink, closeDialog])
     //#endregion
 
     if (!state) return null
     return (
-        <InjectedDialog open={open} onClose={onClose} title={title} DialogProps={{ maxWidth: 'xs' }}>
+        <InjectedDialog open={open} onClose={closeDialog} title={title} DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent className={classes.content}>
                 {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ? (
                     <>
@@ -153,7 +148,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         size="large"
                         variant="contained"
                         fullWidth
-                        onClick={state.type === TransactionStateType.FAILED || !shareLink ? onClose : onShare}>
+                        onClick={state.type === TransactionStateType.FAILED || !shareLink ? closeDialog : onShare}>
                         {state.type === TransactionStateType.FAILED || !shareLink ? t('dismiss') : t('share')}
                     </Button>
                 </DialogActions>

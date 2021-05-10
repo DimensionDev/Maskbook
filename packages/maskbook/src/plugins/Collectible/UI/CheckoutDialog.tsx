@@ -20,7 +20,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
 import { ChainState } from '../../../web3/state/useChainState'
-import { useRemoteControlledDialogEvent } from '../../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
 
@@ -91,7 +91,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         }
     }, [asset?.value, account, enqueueSnackbar])
 
-    const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
 
     const validationMessage = useMemo(() => {
         if (!isVerified && !unreviewedChecked) return 'Please ensure unreviewed item'

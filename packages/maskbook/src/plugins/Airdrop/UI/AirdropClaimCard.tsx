@@ -123,7 +123,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
         .toString()
 
     // close the transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -137,7 +137,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
     useEffect(() => {
         if (checkState.type !== CheckStateType.YEP) return
         if (claimState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             shareLink,
             state: claimState,

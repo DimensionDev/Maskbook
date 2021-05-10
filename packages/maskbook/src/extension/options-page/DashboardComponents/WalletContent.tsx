@@ -139,7 +139,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     ])
 
     //#region remote controlled buy dialog
-    const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     //#endregion
 
     //#region tab
@@ -258,7 +258,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                     {!xsMatched && Flags.transak_enabled ? (
                         <Button
                             onClick={() => {
-                                setBuyDialogOpen({
+                                setBuyDialog({
                                     open: true,
                                     address: wallet.address,
                                 })

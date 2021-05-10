@@ -63,12 +63,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const { pools } = useTradeProviderSettings(provider)
 
     //#region remote controlled dialog
-    const [open, setOpen] = useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated)
-    const onClose = useCallback(() => {
-        setOpen({
-            open: false,
-        })
-    }, [setOpen])
+    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated)
     //#endregion
 
     const onReset = useCallback(() => {
@@ -81,7 +76,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
     }, [provider])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title="Swap Settings" DialogProps={{ maxWidth: 'xs' }}>
+        <InjectedDialog open={open} onClose={closeDialog} title="Swap Settings" DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent className={classes.content}>
                 <Paper component="section" elevation={0}>
                     <Card elevation={0}>
@@ -120,7 +115,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                             ) : null}
                         </CardContent>
                         <CardActions className={classes.footer}>
-                            <Button variant="text" onClick={onClose}>
+                            <Button variant="text" onClick={closeDialog}>
                                 {t('confirm')}
                             </Button>
                             <Button variant="text" onClick={onReset}>

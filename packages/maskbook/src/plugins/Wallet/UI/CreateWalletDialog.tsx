@@ -84,16 +84,14 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
     //#endregion
 
     //#region remote controlled dialog logic
-    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated, (ev) => {
+    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated, (ev) => {
         if (!ev.open) return
         if (!ev.name) return
         setName(ev.name)
         setStep(CreateWalletStep.Words)
     })
     const onClose = useCallback(async () => {
-        setOpen({
-            open: false,
-        })
+        closeDialog()
         await delay(300)
         setName('')
         setStep(CreateWalletStep.Name)

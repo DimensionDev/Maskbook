@@ -122,7 +122,7 @@ export function SwapDialog(props: SwapDialogProps) {
 
     //#region select token
     const [id] = useState(uuid())
-    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
@@ -151,7 +151,7 @@ export function SwapDialog(props: SwapDialogProps) {
         ),
     )
     const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialogOpen({
+        setSelectTokenDialog({
             open: true,
             uuid: id,
             disableEther: !exchangeTokens.some((x) => isETH(x.address)),
@@ -189,7 +189,7 @@ export function SwapDialog(props: SwapDialogProps) {
         await WalletRPC.trustERC20Token(account, payload.token)
     }, [swapCallback, payload.token.address])
 
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -214,7 +214,7 @@ export function SwapDialog(props: SwapDialogProps) {
             return
         }
 
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             state: swapState,
             summary: t('plugin_ito_swapping', {
