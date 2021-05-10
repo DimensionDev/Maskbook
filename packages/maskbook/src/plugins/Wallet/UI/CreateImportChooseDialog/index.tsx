@@ -1,4 +1,4 @@
-import { Button, Box, createStyles, DialogContent, makeStyles, Typography } from '@material-ui/core'
+import { Button, Box, DialogContent, makeStyles, Typography } from '@material-ui/core'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
@@ -6,47 +6,45 @@ import { WalletMessages } from '../../messages'
 import { Image } from '../../../../components/shared/Image'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        content: {
-            padding: theme.spacing(5, 4.5),
+const useStyles = makeStyles((theme) => ({
+    content: {
+        padding: theme.spacing(5, 4.5),
+    },
+    walletOption: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: 20,
+        border: `1px solid ${theme.palette.divider}`,
+        borderRadius: 12,
+        '& + &': {
+            marginTop: 20,
         },
-        walletOption: {
-            display: 'flex',
-            alignItems: 'center',
-            padding: 20,
-            border: `1px solid ${theme.palette.divider}`,
-            borderRadius: 12,
-            '& + &': {
-                marginTop: 20,
-            },
+    },
+    optionTexts: {
+        marginRight: 'auto',
+        marginLeft: theme.spacing(2),
+    },
+    button: {
+        width: 90,
+        flexShink: 0,
+        backgroundColor: '#1C68F3',
+        color: '#ffffff',
+        '&:hover': {
+            backgroundColor: '#1854c4',
         },
-        optionTexts: {
-            marginRight: 'auto',
-            marginLeft: theme.spacing(2),
-        },
-        button: {
-            width: 90,
-            flexShink: 0,
-            backgroundColor: '#1C68F3',
-            color: '#ffffff',
-            '&:hover': {
-                backgroundColor: '#1854c4',
-            },
-        },
-        optionName: {
-            fontSize: 16,
-        },
-        optionDescription: {
-            fontSize: 12,
-            color: '#7B8192',
-        },
-        optionIcon: {
-            height: 48,
-            width: 48,
-        },
-    }),
-)
+    },
+    optionName: {
+        fontSize: 16,
+    },
+    optionDescription: {
+        fontSize: 12,
+        color: '#7B8192',
+    },
+    optionIcon: {
+        height: 48,
+        width: 48,
+    },
+}))
 
 export interface CreateImportChooseDialogProps extends withClasses<never> {}
 
@@ -61,6 +59,7 @@ export function CreateImportChooseDialog(props: CreateImportChooseDialogProps) {
     //#endregion
 
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.createImportWalletDialogUpdated)
+    const { openDialog: openImportDialog } = useRemoteControlledDialog(WalletMessages.events.importWalletDialogUpdated)
 
     return (
         <InjectedDialog
@@ -95,8 +94,8 @@ export function CreateImportChooseDialog(props: CreateImportChooseDialogProps) {
                             {t('plugin_wallet_import_wallet_description')}
                         </Typography>
                     </Box>
-                    <Button className={classes.button} size="small">
-                        {t('plugin_wallet_setup_create')}
+                    <Button className={classes.button} size="small" onClick={openImportDialog}>
+                        {t('plugin_wallet_setup_import')}
                     </Button>
                 </Box>
             </DialogContent>

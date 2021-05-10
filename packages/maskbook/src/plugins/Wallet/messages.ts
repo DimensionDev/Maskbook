@@ -26,6 +26,11 @@ export type CreateWalletDialogEvent = {
     open: boolean
 }
 
+export type ImportWalletDialogEvent = {
+    name?: string
+    open: boolean
+}
+
 export type WalletStatusDialogEvent = {
     open: boolean
 }
@@ -72,6 +77,11 @@ interface WalletMessage {
      * Create wallet dialog
      */
     createWalletDialogUpdated: CreateWalletDialogEvent
+
+    /**
+     * import wallet dialog
+     */
+    importWalletDialogUpdated: ImportWalletDialogEvent
 
     /**
      * Select provider dialog
