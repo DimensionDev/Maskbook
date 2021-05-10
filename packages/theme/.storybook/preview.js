@@ -1,5 +1,6 @@
 import React from 'react'
-import { ThemeProvider, StylesProvider } from '@material-ui/core'
+import { ThemeProvider } from '@material-ui/core'
+import { StylesProvider } from '@material-ui/styles'
 import { MaskDarkTheme, MaskLightTheme, applyMaskColorVars } from '../src/theme'
 import { withMatrix } from 'storybook-addon-matrix'
 import { addMaskThemeI18N } from '../src/locales'

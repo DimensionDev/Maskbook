@@ -3,8 +3,9 @@ import '../../setup.ui'
 
 import { useState } from 'react'
 import { useAsync } from 'react-use'
-import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card, StylesProvider } from '@material-ui/core'
+import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card } from '@material-ui/core'
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
+import { StylesProvider } from '@material-ui/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
 import CreditCardIcon from '@material-ui/icons/CreditCard'

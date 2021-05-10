@@ -6,7 +6,7 @@ import { setService, setPluginServices, PluginMessages, setMessages, setPluginMe
 import { App } from './App'
 import { AsyncCall } from 'async-call-rpc'
 import { serializer } from '@dimensiondev/maskbook-shared'
-import { StylesProvider } from '@material-ui/core/styles'
+import { StylesProvider } from '@material-ui/styles'
 import { UnboundedRegistry, WebExtensionMessage, Environment } from '@dimensiondev/holoflows-kit'
 
 if (import.meta.hot) {
