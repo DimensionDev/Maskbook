@@ -42,5 +42,18 @@
     "wallets_balance_Swap": "交換",
     "wallets_balance_Receive": "接收",
     "personas_setup_connect_tips": "",
-    "personas_setup_connect": ""
+    "personas_setup_connect": "",
+    "personas_name_maximum_tips": "",
+    "personas_confirm": "",
+    "personas_cancel": "",
+    "personas_delete_confirm_tips": "",
+    "personas_delete_dialog_title": "",
+    "personas_edit_dialog_title": "",
+    "personas_edit": "",
+    "personas_delete": "",
+    "personas_add_persona": "",
+    "personas_back_up": "",
+    "personas_connect_to": "",
+    "personas_disconnect": "",
+    "personas_rename": ""
 }

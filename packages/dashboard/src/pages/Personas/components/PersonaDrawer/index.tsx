@@ -10,6 +10,7 @@ import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { AddPersonaCard } from '../AddPersonaCard'
 import stringify from 'json-stable-stringify'
 import { useCreatePersona } from '../../hooks/useCreatePersona'
+import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,6 +51,7 @@ export interface PersonaDrawer {
 }
 
 export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
+    const t = useDashboardI18N()
     const classes = useStyles()
     const [showAddPersonaCard, setShowAddPersonaCard] = useState(false)
     const { drawerOpen, toggleDrawer } = PersonaState.useContainer()
@@ -97,9 +99,9 @@ export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
                 <AddPersonaCard onConfirm={onAddPersona} onCancel={() => setShowAddPersonaCard(false)} />
             )}
             <Box className={classes.buttons}>
-                <Button onClick={() => setShowAddPersonaCard(true)}>Add Persona</Button>
+                <Button onClick={() => setShowAddPersonaCard(true)}>{t.personas_add_persona()}</Button>
                 {/* TODO: replace className to color prop */}
-                <Button className={classes.backup}>Back up</Button>
+                <Button className={classes.backup}>{t.personas_back_up()}</Button>
             </Box>
         </Drawer>
     )

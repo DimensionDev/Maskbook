@@ -1,6 +1,7 @@
 import { memo, MouseEvent } from 'react'
 import { Link, Typography } from '@material-ui/core'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { useDashboardI18N } from '../../../../locales'
 
 export interface PersonaLineProps {
     internalName: string
@@ -11,6 +12,7 @@ export interface PersonaLineProps {
 }
 
 export const PersonaLine = memo<PersonaLineProps>(({ userId, internalName, connected, onConnect, onDisConnect }) => {
+    const t = useDashboardI18N()
     return (
         <Link
             underline="none"
@@ -25,7 +27,7 @@ export const PersonaLine = memo<PersonaLineProps>(({ userId, internalName, conne
                 cursor: connected ? 'unset' : 'pointer',
             }}>
             <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>
-                {userId ?? `Connect to ${internalName}`}
+                {userId ?? t.personas_connect_to({ internalName })}
             </Typography>
             {connected && (
                 <Link
@@ -35,7 +37,7 @@ export const PersonaLine = memo<PersonaLineProps>(({ userId, internalName, conne
                         e.stopPropagation()
                         onDisConnect()
                     }}>
-                    Disconnect
+                    {t.personas_disconnect()}
                 </Link>
             )}
         </Link>

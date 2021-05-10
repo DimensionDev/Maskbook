@@ -3,6 +3,7 @@ import { MaskDialog } from '../../../../../../theme'
 import { Button, DialogActions, DialogContent, TextField } from '@material-ui/core'
 import { checkInputLengthExceed } from '../../../../utils'
 import { PERSONA_NAME_MAX_LENGTH } from '../../../../constants'
+import { useDashboardI18N } from '../../../../locales'
 
 export interface RenameDialogProps {
     open: boolean
@@ -12,13 +13,14 @@ export interface RenameDialogProps {
 }
 
 export const RenameDialog = memo<RenameDialogProps>(({ open, nickname, onClose, onConfirm }) => {
+    const t = useDashboardI18N()
     const [name, setName] = useState(nickname ?? '')
 
     useEffect(() => {
         setName(nickname ?? '')
     }, [open, nickname])
     return (
-        <MaskDialog open={open} title="Rename" onClose={onClose}>
+        <MaskDialog open={open} title={t.personas_rename()} onClose={onClose}>
             <DialogContent>
                 <TextField
                     style={{ width: '100%' }}
@@ -26,7 +28,7 @@ export const RenameDialog = memo<RenameDialogProps>(({ open, nickname, onClose, 
                     error={checkInputLengthExceed(name, PERSONA_NAME_MAX_LENGTH)}
                     helperText={
                         checkInputLengthExceed(name, PERSONA_NAME_MAX_LENGTH)
-                            ? 'Maximum length is 24 characters long.'
+                            ? t.personas_name_maximum_tips({ length: String(PERSONA_NAME_MAX_LENGTH) })
                             : ''
                     }
                     InputProps={{ disableUnderline: true }}
@@ -36,9 +38,9 @@ export const RenameDialog = memo<RenameDialogProps>(({ open, nickname, onClose, 
             </DialogContent>
             <DialogActions>
                 <Button color="secondary" onClick={onClose}>
-                    Cancel
+                    {t.personas_cancel()}
                 </Button>
-                <Button onClick={() => onConfirm(name)}>Confirm</Button>
+                <Button onClick={() => onConfirm(name)}>{t.personas_confirm()}</Button>
             </DialogActions>
         </MaskDialog>
     )

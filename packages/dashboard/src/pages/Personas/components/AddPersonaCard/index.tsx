@@ -3,6 +3,7 @@ import { createStyles, makeStyles, Button, TextField } from '@material-ui/core'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { checkInputLengthExceed } from '../../../../utils'
 import { PERSONA_NAME_MAX_LENGTH } from '../../../../constants'
+import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -27,6 +28,7 @@ export interface AddPersonaCardProps {
 }
 
 export const AddPersonaCard = memo(({ onConfirm, onCancel }: AddPersonaCardProps) => {
+    const t = useDashboardI18N()
     const [name, setName] = useState('')
     const classes = useStyles()
 
@@ -37,7 +39,9 @@ export const AddPersonaCard = memo(({ onConfirm, onCancel }: AddPersonaCardProps
                 variant="filled"
                 error={checkInputLengthExceed(name, PERSONA_NAME_MAX_LENGTH)}
                 helperText={
-                    checkInputLengthExceed(name, PERSONA_NAME_MAX_LENGTH) ? 'Maximum length is 24 characters long.' : ''
+                    checkInputLengthExceed(name, PERSONA_NAME_MAX_LENGTH)
+                        ? t.personas_name_maximum_tips({ length: String(PERSONA_NAME_MAX_LENGTH) })
+                        : ''
                 }
                 InputProps={{ disableUnderline: true }}
                 value={name}
@@ -47,10 +51,10 @@ export const AddPersonaCard = memo(({ onConfirm, onCancel }: AddPersonaCardProps
                 <Button
                     disabled={!name.length || checkInputLengthExceed(name, PERSONA_NAME_MAX_LENGTH)}
                     onClick={() => onConfirm(name)}>
-                    Confirm
+                    {t.personas_confirm()}
                 </Button>
                 <Button color="secondary" onClick={onCancel}>
-                    Cancel
+                    {t.personas_cancel()}
                 </Button>
             </div>
         </div>

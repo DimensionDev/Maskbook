@@ -9,6 +9,7 @@ import type { ECKeyIdentifier } from '@dimensiondev/maskbook-shared'
 import { useDisConnectSocialNetwork } from '../../hooks/useDisConnectSocialNetwork'
 import { RenameDialog } from '../RenameDialog'
 import { Services } from '../../../../API'
+import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -59,6 +60,7 @@ export interface EditPersonaDialogProps {
 
 export const EditPersonaDialog = memo(({ open, onClose, nickname, providers, identifier }: EditPersonaDialogProps) => {
     const classes = useStyles()
+    const t = useDashboardI18N()
     const [renameOpen, setRenameOpen] = useState(false)
 
     const [, onConnect] = useConnectSocialNetwork()
@@ -74,7 +76,7 @@ export const EditPersonaDialog = memo(({ open, onClose, nickname, providers, ide
 
     return (
         <>
-            <MaskDialog open={open} title="Edit Persona" onClose={onClose}>
+            <MaskDialog open={open} title={t.personas_edit_dialog_title()} onClose={onClose}>
                 <DialogContent className={classes.container}>
                     <AuthorIcon className={classes.author} />
                     <Typography variant="caption" classes={{ root: classes.name }}>
@@ -95,8 +97,8 @@ export const EditPersonaDialog = memo(({ open, onClose, nickname, providers, ide
                     </div>
                 </DialogContent>
                 <DialogActions>
-                    <Button color="secondary">Cancel</Button>
-                    <Button>Confirm</Button>
+                    <Button color="secondary">{t.personas_cancel()}</Button>
+                    <Button>{t.personas_confirm()}</Button>
                 </DialogActions>
             </MaskDialog>
             <RenameDialog

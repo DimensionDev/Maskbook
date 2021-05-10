@@ -14,6 +14,7 @@ import { useValueRef } from '@dimensiondev/maskbook-shared'
 import { currentPersonaSettings } from './settings'
 import type { PersonaInfo } from './type'
 import stringify from 'json-stable-stringify'
+import { useDashboardI18N } from '../../locales'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -58,7 +59,7 @@ const useStyles = makeStyles((theme) =>
 
 export default function Personas() {
     const classes = useStyles()
-
+    const t = useDashboardI18N()
     const { drawerOpen, toggleDrawer } = PersonaState.useContainer()
     const definedSocialNetworkUIs = useDefinedSocialNetworkUIs()
     const myPersonas = useMyPersonas()
@@ -121,7 +122,7 @@ export default function Personas() {
 
     return (
         <PageFrame
-            title="Personas"
+            title={t.personas()}
             primaryAction={
                 <Box display="flex" alignItems="center">
                     <AuthorIcon onClick={toggleDrawer} className={classes.author} />

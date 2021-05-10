@@ -11,6 +11,7 @@ import { EditPersonaDialog } from '../EditPersonaDialog'
 import { DeletePersonaDialog } from '../DeletePersonaDialog'
 import { useConnectSocialNetwork } from '../../hooks/useConnectSocialNetwork'
 import { useDisConnectSocialNetwork } from '../../hooks/useDisConnectSocialNetwork'
+import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -61,14 +62,15 @@ export interface PersonaCardProps {
 }
 
 export const PersonaCard = memo<PersonaCardProps>(({ nickname, providers, active = false, onClick, identifier }) => {
+    const t = useDashboardI18N()
     const classes = useStyles({ active })
     const [editDialogOpen, setEditDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [menu, openMenu] = useMenu(
         [
-            <MenuItem onClick={() => setEditDialogOpen(true)}>Edit</MenuItem>,
+            <MenuItem onClick={() => setEditDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
             <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
-                Delete
+                {t.personas_delete()}
             </MenuItem>,
         ],
         false,
