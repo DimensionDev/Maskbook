@@ -14,7 +14,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy'
 import type { DataProvider, Trending } from '../../types'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import { Linking } from './Linking'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 import { CoinMetadataTags } from './CoinMetadataTags'
 
 const useStyles = makeStyles((theme) => ({
@@ -112,7 +112,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                             </TableCell>
                             <TableCell>
                                 <Typography variant="body2" component="span">
-                                    {formatEthereumAddress(trending.coin.eth_address, 4)}
+                                    <FormattedAddress type="ethereum" address={trending.coin.eth_address} size={4} />
                                 </Typography>
                                 <IconButton color="primary" size="small" onClick={onCopyAddress}>
                                     <FileCopyIcon fontSize="small" />

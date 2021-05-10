@@ -10,7 +10,7 @@ import {
     Typography,
 } from '@material-ui/core'
 import { DataProvider, Trending } from '../../types'
-import { formatCurrency, formatToken } from '@dimensiondev/maskbook-shared'
+import { FormattedCurrency } from '@dimensiondev/maskbook-shared/src/wallet/components'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -80,19 +80,37 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                     <TableRow>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
                             <TableCell className={classes.cell} align="center">
-                                {formatCurrency(trending.market?.market_cap ?? 0, '$')} USD
+                                <FormattedCurrency
+                                    type="currency"
+                                    value={trending.market?.market_cap ?? 0}
+                                    sign="$"
+                                    symbol="USD"
+                                />
                             </TableCell>
                         ) : null}
                         <TableCell className={classes.cell} align="center">
-                            {formatCurrency(trending.market?.total_volume ?? 0, '$')} USD
+                            <FormattedCurrency
+                                type="currency"
+                                value={trending.market?.total_volume ?? 0}
+                                sign="$"
+                                symbol="USD"
+                            />
                         </TableCell>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
                             <>
                                 <TableCell className={classes.cell} align="center">
-                                    {formatToken(trending.market?.circulating_supply ?? 0)} {trending.coin.symbol}
+                                    <FormattedCurrency
+                                        type="token"
+                                        value={trending.market?.circulating_supply ?? 0}
+                                        symbol={trending.coin.symbol}
+                                    />
                                 </TableCell>
                                 <TableCell className={classes.cell} align="center">
-                                    {formatToken(trending.market?.total_supply ?? 0)} {trending.coin.symbol}
+                                    <FormattedCurrency
+                                        type="token"
+                                        value={trending.market?.total_supply ?? 0}
+                                        symbol={trending.coin.symbol}
+                                    />
                                 </TableCell>
                             </>
                         ) : null}

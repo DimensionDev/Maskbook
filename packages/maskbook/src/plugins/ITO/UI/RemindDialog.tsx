@@ -6,10 +6,10 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import type { ChainId } from '../../../web3/types'
 import { SwapStatus } from './SwapGuide'
+import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     reminderText: {
@@ -154,7 +154,8 @@ export function RemindDialog(props: RemindDialogProps) {
                         rel="noopener noreferrer"
                         href={`${resolveLinkOnEtherscan(chainId)}/token/${token.address}`}>
                         <Typography variant="body2">
-                            {formatEthereumAddress(token.address, 4)}(View on Etherscan)
+                            <FormattedAddress type="ethereum" address={token.address} size={4} />
+                            (View on Etherscan)
                         </Typography>
                     </Link>
                 </div>

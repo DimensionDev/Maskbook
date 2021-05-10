@@ -44,13 +44,14 @@ export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, sig
     return raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
 }
 
-export function formatCurrency(balance: number, sign = '$') {
-    const fixedBalance = balance > 1 ? balance.toFixed(2) : balance.toPrecision(2)
+export function formatCurrency(value: BigNumber.Value, sign = '$') {
+    const balance = new BigNumber(value)
+    const fixedBalance = balance.gt(1) ? balance.toFixed(2) : balance.toPrecision(2)
     return `${sign}${fixedBalance.replace(/\d(?=(\d{3})+\.)/g, `${sign}&,`)}`
 }
 
-export function formatToken(balance: number) {
-    return formatCurrency(balance).replace('$', '')
+export function formatToken(value: BigNumber.Value) {
+    return formatCurrency(value).replace('$', '')
 }
 
 export function formatEthereumAddress(address: string, size = 0) {

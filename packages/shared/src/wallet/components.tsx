@@ -19,14 +19,14 @@ export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
 
 export interface FormattedCurrencyProps {
     type: 'currency'
-    value: number
+    value: BigNumber.Value
     sign?: string
     symbol?: string
 }
 
 export interface FormattedTokenProps {
     type: 'token'
-    value: number
+    value: BigNumber.Value
     symbol?: string
 }
 

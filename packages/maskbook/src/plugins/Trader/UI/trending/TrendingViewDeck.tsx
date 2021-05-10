@@ -5,7 +5,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-es'
 import { Coin, Currency, DataProvider, Stat, TradeProvider, Trending } from '../../types'
-import { formatCurrency } from '@dimensiondev/maskbook-shared'
+import { FormattedCurrency } from '@dimensiondev/maskbook-shared'
 import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { useI18N } from '../../../../utils/i18n-next-ui'
@@ -233,12 +233,15 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         </span>
                                     ) : null}
                                     <span>
-                                        {formatCurrency(
-                                            (dataProvider === DataProvider.COIN_MARKET_CAP
-                                                ? last(stats)?.[1] ?? market.current_price
-                                                : market.current_price) ?? 0,
-                                            currency.symbol,
-                                        )}
+                                        <FormattedCurrency
+                                            type="currency"
+                                            value={
+                                                (dataProvider === DataProvider.COIN_MARKET_CAP
+                                                    ? last(stats)?.[1] ?? market.current_price
+                                                    : market.current_price) ?? 0
+                                            }
+                                            sign={currency.symbol}
+                                        />
                                     </span>
                                 </>
                             ) : (

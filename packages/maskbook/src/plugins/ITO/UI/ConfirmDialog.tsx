@@ -4,14 +4,13 @@ import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import LaunchIcon from '@material-ui/icons/Launch'
-import { formatAmountPrecision, formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
+import { formatAmountPrecision, formatBalance, FormattedAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import BigNumber from 'bignumber.js'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { dateTimeFormat } from '../assets/formatDate'
 import { isETH } from '../../../web3/helpers'
 import { resolveTokenLinkOnEtherscan, resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
@@ -230,7 +229,11 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Typography>
-                                        {formatEthereumAddress(poolSettings?.qualificationAddress!, 4)}
+                                        <FormattedAddress
+                                            type="ethereum"
+                                            address={poolSettings?.qualificationAddress!}
+                                            size={4}
+                                        />
                                     </Typography>
                                 </Link>
                             </Paper>
