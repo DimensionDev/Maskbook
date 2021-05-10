@@ -2,17 +2,23 @@ import { Button, makeStyles, TextField } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
+import type { TransactionConfig } from 'web3-core'
 import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { formatBalance, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../../utils/i18n-next-ui'
+import { CONSTANTS } from '../../../../web3/constants'
+import { useAccount } from '../../../../web3/hooks/useAccount'
+import { useChainId } from '../../../../web3/hooks/useBlockNumber'
+import { useConstant } from '../../../../web3/hooks/useConstant'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { useTokenTransferCallback } from '../../../../web3/hooks/useTokenTransferCallback'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import type { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 import { EthereumTokenType } from '../../../../web3/types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
+import Services from '../../../service'
 
 const useTransferTabStyles = makeStyles((theme) => ({
     root: {
@@ -37,10 +43,24 @@ interface TransferTabProps {
     onClose: () => void
 }
 
+async function getGas(chainId: ChainId, account: string, address: string, amount: string) {
+    const config: TransactionConfig = {
+        from: account,
+        to: address,
+        value: amount,
+    }
+    const estimatedGas = await Services.Ethereum.estimateGas(config, chainId)
+
+    return new BigNumber(estimatedGas).div(1e9)
+}
+
 export function TransferTab(props: TransferTabProps) {
     const { token, onClose } = props
 
     const { t } = useI18N()
+    const account = useAccount()
+    const chainId = useChainId()
+
     const classes = useTransferTabStyles()
 
     const [amount, setAmount] = useState('')
@@ -73,6 +93,14 @@ export function TransferTab(props: TransferTabProps) {
         await transferCallback()
     }, [transferCallback])
     //#endregion
+
+    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
+
+    const onClick = useCallback(async () => {
+        const gas = await getGas(chainId, account, ETH_ADDRESS, tokenBalance)
+        const balance = new BigNumber(formatBalance(new BigNumber(tokenBalance), token.decimals)).minus(gas).toFixed()
+        setAmount(balance)
+    }, [tokenBalance])
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -131,6 +159,7 @@ export function TransferTab(props: TransferTabProps) {
                         root: classes.maxChipRoot,
                         label: classes.maxChipLabel,
                     },
+                    onClick: onClick,
                 }}
             />
             <TextField

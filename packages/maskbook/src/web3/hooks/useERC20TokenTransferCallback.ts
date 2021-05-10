@@ -4,14 +4,11 @@ import { EthereumAddress } from 'wallet.ts'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
-import { useTokenDetailed } from './useTokenDetailed'
-import { EthereumTokenType } from '../types'
 
 export function useERC20TokenTransferCallback(address: string, amount?: string, recipient?: string) {
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(address)
     const [transferState, setTransferState] = useTransactionState()
-    const { value: token } = useTokenDetailed(EthereumTokenType.ERC20, recipient ?? '')
 
     const transferCallback = useCallback(async () => {
         if (!account || !recipient || !amount || new BigNumber(amount).isZero() || !erc20Contract) {
@@ -52,14 +49,9 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
             to: erc20Contract.options.address,
         })
 
-        const gas = new BigNumber(estimatedGas).div(1e9).multipliedBy(new BigNumber(10).pow(token?.decimals || 18))
-        if (new BigNumber(balance).isLessThan(new BigNumber(amount).plus(gas))) {
-            amount = new BigNumber(balance).minus(gas).toFixed()
-        }
-
         // step 2: blocking
         return new Promise<string>(async (resolve, reject) => {
-            erc20Contract.methods.transfer(recipient, amount ?? 0).send(
+            erc20Contract.methods.transfer(recipient, amount).send(
                 {
                     from: account,
                     to: erc20Contract.options.address,
