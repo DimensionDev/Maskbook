@@ -44,14 +44,10 @@ export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, sig
     return raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
 }
 
-export function formatCurrency(value: BigNumber.Value, sign = '$') {
+export function formatCurrency(value: BigNumber.Value, sign = '') {
     const balance = new BigNumber(value)
     const fixedBalance = balance.gt(1) ? balance.toFixed(2) : balance.toPrecision(2)
     return `${sign}${fixedBalance.replace(/\d(?=(\d{3})+\.)/g, `${sign}&,`)}`
-}
-
-export function formatToken(value: BigNumber.Value) {
-    return formatCurrency(value).replace('$', '')
 }
 
 export function formatEthereumAddress(address: string, size = 0) {
@@ -59,10 +55,6 @@ export function formatEthereumAddress(address: string, size = 0) {
     const address_ = EthereumAddress.checksumAddress(address)
     if (size === 0) return address_
     return `${address_.substr(0, 2 + size)}...${address_.substr(-size)}`
-}
-
-export function formatChecksumAddress(address: string) {
-    return address && EthereumAddress.isValid(address) ? EthereumAddress.checksumAddress(address) : address
 }
 
 export function formatKeccakHash(hash: string, size = 0) {

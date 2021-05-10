@@ -229,11 +229,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Typography>
-                                        <FormattedAddress
-                                            type="ethereum"
-                                            address={poolSettings?.qualificationAddress!}
-                                            size={4}
-                                        />
+                                        <FormattedAddress address={poolSettings?.qualificationAddress!} size={4} />
                                     </Typography>
                                 </Link>
                             </Paper>

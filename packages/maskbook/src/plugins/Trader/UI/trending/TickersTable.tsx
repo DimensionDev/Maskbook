@@ -77,11 +77,11 @@ export function TickersTable(props: TickersTableProps) {
             </TableCell>
             {ticker.price ? (
                 <TableCell className={classes.cell}>
-                    <FormattedCurrency type="currency" value={ticker.price} sign="$" />
+                    <FormattedCurrency value={ticker.price} sign="$" />
                 </TableCell>
             ) : null}
             <TableCell className={classes.cell}>
-                <FormattedCurrency type="currency" value={ticker.volume} sign="$" />
+                <FormattedCurrency value={ticker.volume} sign="$" />
             </TableCell>
             <TableCell className={classes.cell}>{formatElapsed(ticker.updated.getTime())}</TableCell>
         </TableRow>

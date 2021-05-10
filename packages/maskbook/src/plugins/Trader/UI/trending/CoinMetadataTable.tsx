@@ -112,7 +112,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                             </TableCell>
                             <TableCell>
                                 <Typography variant="body2" component="span">
-                                    <FormattedAddress type="ethereum" address={trending.coin.eth_address} size={4} />
+                                    <FormattedAddress address={trending.coin.eth_address} size={4} />
                                 </Typography>
                                 <IconButton color="primary" size="small" onClick={onCopyAddress}>
                                     <FileCopyIcon fontSize="small" />

@@ -166,7 +166,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                 <section className={classes.section}>
                     <ProviderIcon classes={{ icon: classes.icon }} size={14} providerType={selectedWalletProvider} />
                     <Typography className={classes.address}>
-                        <FormattedAddress type="ethereum" address={selectedWallet.address} size={4} />
+                        <FormattedAddress address={selectedWallet.address} size={4} />
                     </Typography>
                     {chainIdValid && chainId !== ChainId.Mainnet ? (
                         <EthereumChainChip chainId={chainId} ChipProps={{ variant: 'outlined' }} />
