@@ -81,7 +81,7 @@ export function uniswapChainIdTo(chainId: UniswapChainId) {
 }
 
 export function uniswapPercentTo(percent: UniswapPercent) {
-    return new BigNumber(percent.numerator.toString()).dividedBy(new BigNumber(percent.denominator.toString()))
+    return new BigNumber(percent.numerator.toString()).dividedBy(percent.denominator.toString())
 }
 
 export function uniswapPriceTo(price: UniswapPrice) {
