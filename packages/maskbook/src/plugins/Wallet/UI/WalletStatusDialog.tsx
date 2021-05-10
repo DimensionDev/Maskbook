@@ -24,6 +24,8 @@ const useStyles = makeStyles((theme) => ({
     currentAccount: {
         padding: theme.spacing(2, 3),
         display: 'flex',
+        backgroundColor: '#F7F9FA',
+        borderRadius: 8,
     },
     accountInfo: {
         fontSize: 16,
@@ -72,6 +74,16 @@ const useStyles = makeStyles((theme) => ({
     },
     linkIcon: {
         marginRight: theme.spacing(1),
+    },
+    sectionTitle: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    sectionTitleText: {
+        fontSize: '18px !important' as '18px',
+    },
+    clearAllButton: {
+        fontSize: 14,
     },
 }))
 
@@ -140,7 +152,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
             DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent className={classes.content}>
                 <section className={classes.currentAccount}>
-                    <ProviderIcon classes={{ icon: classes.icon }} size={14} providerType={selectedWalletProvider} />
+                    <ProviderIcon classes={{ icon: classes.icon }} size={48} providerType={selectedWalletProvider} />
                     <div className={classes.accountInfo}>
                         <div className={classes.infoRow}>
                             <Typography className={classes.accountName}>{selectedWallet.name}</Typography>
@@ -194,9 +206,13 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                     ) : null}
                 </section>
                 <section className={classes.section}>
-                    <div className="sectionTitle">
-                        <Typography variant="h2">Recent Transactions</Typography>
-                        <Button aria-label="Clear All">(Clear all)</Button>
+                    <div className={classes.sectionTitle}>
+                        <Typography variant="h2" className={classes.sectionTitleText}>
+                            Recent Transactions
+                        </Typography>
+                        <Button aria-label="Clear All" className={classes.clearAllButton}>
+                            (Clear all)
+                        </Button>
                     </div>
                     <List>
                         <ListItem>
