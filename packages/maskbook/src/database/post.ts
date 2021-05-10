@@ -93,7 +93,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                             foundAt: new Date(0),
                             recipientGroups: [],
                         }
-                        await cursor.update((next as Version3PostRecord) as any)
+                        await cursor.update(next as Version3PostRecord as any)
                     }
                 }
 

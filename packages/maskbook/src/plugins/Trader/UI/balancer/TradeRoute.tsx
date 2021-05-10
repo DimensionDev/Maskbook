@@ -2,7 +2,6 @@ import classNames from 'classnames'
 import {
     Breadcrumbs,
     makeStyles,
-    createStyles,
     Paper,
     TableContainer,
     Table,
@@ -18,52 +17,50 @@ import { formatPercentage } from '../../../Wallet/formatter'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { TradeRouteHop } from './TradeRouteHop'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-            width: '100%',
-            boxSizing: 'border-box',
-            padding: theme.spacing(1.5, 2),
-            margin: theme.spacing(0, 'auto', 2),
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        table: {},
-        head: {
-            fontWeight: 300,
-            color: theme.palette.text.secondary,
+        width: '100%',
+        boxSizing: 'border-box',
+        padding: theme.spacing(1.5, 2),
+        margin: theme.spacing(0, 'auto', 2),
+    },
+    table: {},
+    head: {
+        fontWeight: 300,
+        color: theme.palette.text.secondary,
+    },
+    cell: {
+        border: 'none',
+        padding: 0,
+    },
+    list: {
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+    },
+    item: {
+        display: 'flex',
+        padding: theme.spacing(0.25, 0),
+    },
+    button: {
+        display: 'flex',
+        borderRadius: 500,
+        padding: theme.spacing(0.25),
+        '&:hover': {
+            backgroundColor: theme.palette.background.default,
         },
-        cell: {
-            border: 'none',
-            padding: 0,
-        },
-        list: {
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-        },
-        item: {
-            display: 'flex',
-            padding: theme.spacing(0.25, 0),
-        },
-        button: {
-            display: 'flex',
-            borderRadius: 500,
-            padding: theme.spacing(0.25),
-            '&:hover': {
-                backgroundColor: theme.palette.background.default,
-            },
-        },
-        link: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        name: {
-            fontSize: 12,
-            marginLeft: theme.spacing(1),
-        },
-    }),
-)
+    },
+    link: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    name: {
+        fontSize: 12,
+        marginLeft: theme.spacing(1),
+    },
+}))
 
 export interface TradeRouteProps extends withClasses<'root'> {
     trade: TradeComputed<SwapResponse>

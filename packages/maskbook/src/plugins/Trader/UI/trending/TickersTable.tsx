@@ -3,7 +3,6 @@ import {
     Table,
     makeStyles,
     Theme,
-    createStyles,
     TableHead,
     TableRow,
     TableCell,
@@ -15,34 +14,32 @@ import { Ticker, DataProvider } from '../../types'
 import { formatCurrency, formatElapsed, formatEthereumAddress } from '../../../Wallet/formatter'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        container: {
-            maxHeight: 266,
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
+const useStyles = makeStyles((theme: Theme) => ({
+    container: {
+        maxHeight: 266,
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        table: {},
-        cell: {
-            paddingLeft: theme.spacing(1.5),
-            paddingRight: theme.spacing(1),
-            whiteSpace: 'nowrap',
-        },
-        logo: {
-            width: 18,
-            height: 18,
-            verticalAlign: 'bottom',
-            marginRight: theme.spacing(0.5),
-        },
-        placeholder: {
-            paddingTop: theme.spacing(10),
-            paddingBottom: theme.spacing(10),
-            borderStyle: 'none',
-        },
-    }),
-)
+    },
+    table: {},
+    cell: {
+        paddingLeft: theme.spacing(1.5),
+        paddingRight: theme.spacing(1),
+        whiteSpace: 'nowrap',
+    },
+    logo: {
+        width: 18,
+        height: 18,
+        verticalAlign: 'bottom',
+        marginRight: theme.spacing(0.5),
+    },
+    placeholder: {
+        paddingTop: theme.spacing(10),
+        paddingBottom: theme.spacing(10),
+        borderStyle: 'none',
+    },
+}))
 
 export interface TickersTableProps {
     dataProvider: DataProvider

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { makeStyles, createStyles, ThemeProvider } from '@material-ui/core/styles'
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
 import PluginCard from '../DashboardComponents/PluginCard'
 
 import DashboardRouterContainer from './Container'
@@ -8,28 +8,26 @@ import { extendsTheme } from '../../../utils/theme'
 import { PluginUI } from '../../../plugins/PluginUI'
 import { PluginScope } from '../../../plugins/types'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            width: '100%',
-            maxWidth: 360,
-            backgroundColor: theme.palette.background.paper,
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper,
+    },
+    pluginList: {
+        padding: theme.spacing(3, 0),
+        margin: 0,
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gridGap: theme.spacing(3),
+        [theme.breakpoints.down('sm')]: {
+            display: 'block',
         },
-        pluginList: {
-            padding: theme.spacing(3, 0),
-            margin: 0,
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gridGap: theme.spacing(3),
-            [theme.breakpoints.down('sm')]: {
-                display: 'block',
-            },
-        },
-        pluginItem: {
-            listStyle: 'none',
-        },
-    }),
-)
+    },
+    pluginItem: {
+        listStyle: 'none',
+    },
+}))
 
 const pluginsTheme = extendsTheme((theme) => ({}))
 

@@ -1,6 +1,5 @@
 import { ChangeEvent, useState, useCallback, useMemo } from 'react'
 import {
-    createStyles,
     makeStyles,
     DialogContent,
     Box,
@@ -26,7 +25,7 @@ import { PluginTraderMessages } from '../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         content: {
             padding: 0,
         },
@@ -50,7 +49,7 @@ const useStyles = makeStyles((theme) => {
             flex: 1,
             margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
         },
-    })
+    }
 })
 
 export interface CheckoutDialogProps {

@@ -1,4 +1,4 @@
-import { Box, Paper, createStyles, Link, makeStyles, Typography } from '@material-ui/core'
+import { Box, Paper, Link, makeStyles, Typography } from '@material-ui/core'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -11,7 +11,7 @@ import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea } from '../pipes'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         content: {
             paddingTop: 0,
             paddingBottom: '0 !important',
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
         },
-    })
+    }
 })
 
 export interface TokenTabProps {}

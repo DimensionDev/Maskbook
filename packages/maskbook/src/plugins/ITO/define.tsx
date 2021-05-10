@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { ITO_Loading } from './UI/ITO'
 import { PostInspector } from './UI/PostInspector'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
@@ -18,17 +18,15 @@ interface LabelWrapperProps {
     labelText: string
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        span: {
-            paddingLeft: theme.spacing(1),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    span: {
+        paddingLeft: theme.spacing(1),
+    },
+}))
 
 function LabelWrapper(props: LabelWrapperProps) {
     const classes = useStyles()

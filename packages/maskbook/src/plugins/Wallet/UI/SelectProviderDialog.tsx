@@ -3,7 +3,6 @@ import { MoreHorizontal } from 'react-feather'
 import {
     makeStyles,
     Theme,
-    createStyles,
     DialogContent,
     ImageList,
     ImageListItem,
@@ -29,31 +28,29 @@ import { Flags } from '../../../utils/flags'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useWallets } from '../hooks/useWallet'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        paper: {
-            width: '750px !important',
-            maxWidth: 'unset',
-        },
-        content: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-around',
-            overflow: 'hidden',
-            padding: theme.spacing(4, 4.5, 2),
-        },
-        grid: {
-            width: '100%',
-            margin: 0,
-        },
-        icon: {
-            fontSize: 45,
-        },
-        tip: {
-            fontSize: 12,
-        },
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    paper: {
+        width: '750px !important',
+        maxWidth: 'unset',
+    },
+    content: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        overflow: 'hidden',
+        padding: theme.spacing(4, 4.5, 2),
+    },
+    grid: {
+        width: '100%',
+        margin: 0,
+    },
+    icon: {
+        fontSize: 45,
+    },
+    tip: {
+        fontSize: 12,
+    },
+}))
 
 interface SelectProviderDialogUIProps extends withClasses<never> {}
 

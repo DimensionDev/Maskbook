@@ -1,37 +1,35 @@
 import { useRef } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { createStyles, Paper, Typography, makeStyles, TypographyProps } from '@material-ui/core'
+import { Paper, Typography, makeStyles, TypographyProps } from '@material-ui/core'
 import { selectElementContents } from '../../../utils/utils'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import { useSnackbar } from 'notistack'
 
-const useStyle = makeStyles((theme) =>
-    createStyles({
-        title: {
-            fontSize: 12,
-            lineHeight: 1.75,
-            marginTop: theme.spacing(2),
-        },
-        paper: {
-            height: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
-            backgroundColor: theme.palette.mode === 'light' ? '#FAFAFA' : '',
-            boxShadow: 'none',
-            padding: theme.spacing(2, 3),
-        },
-        scroller: {
-            userSelect: 'text',
-            height: '100%',
-            overflow: 'auto',
-            wordBreak: 'break-word',
-        },
-        tip: {
-            textAlign: 'right',
-            color: theme.palette.grey[500],
-        },
-    }),
-)
+const useStyle = makeStyles((theme) => ({
+    title: {
+        fontSize: 12,
+        lineHeight: 1.75,
+        marginTop: theme.spacing(2),
+    },
+    paper: {
+        height: '100%',
+        border: `solid 1px ${theme.palette.divider}`,
+        backgroundColor: theme.palette.mode === 'light' ? '#FAFAFA' : '',
+        boxShadow: 'none',
+        padding: theme.spacing(2, 3),
+    },
+    scroller: {
+        userSelect: 'text',
+        height: '100%',
+        overflow: 'auto',
+        wordBreak: 'break-word',
+    },
+    tip: {
+        textAlign: 'right',
+        color: theme.palette.grey[500],
+    },
+}))
 
 export interface ShowcaseBoxProps {
     title?: string

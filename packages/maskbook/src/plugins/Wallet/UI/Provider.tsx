@@ -1,35 +1,33 @@
-import { makeStyles, Theme, createStyles, Typography, Card, ButtonBase, ButtonBaseProps } from '@material-ui/core'
+import { makeStyles, Theme, Typography, Card, ButtonBase, ButtonBaseProps } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            textAlign: 'center',
-        },
-        content: {
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: theme.spacing(4, 1),
-        },
-        logo: {
-            width: 45,
-            height: 45,
-            marginBottom: theme.spacing(2),
-        },
-        name: {
-            fontSize: 24,
-            fontWeight: 500,
-            marginBottom: theme.spacing(1),
-        },
-        description: {
-            fontSize: 14,
-            fontWeight: 300,
-        },
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+        textAlign: 'center',
+    },
+    content: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: theme.spacing(4, 1),
+    },
+    logo: {
+        width: 45,
+        height: 45,
+        marginBottom: theme.spacing(2),
+    },
+    name: {
+        fontSize: 24,
+        fontWeight: 500,
+        marginBottom: theme.spacing(1),
+    },
+    description: {
+        fontSize: 14,
+        fontWeight: 300,
+    },
+}))
 
 export interface ProviderProps
     extends withClasses<never | 'root' | 'dialog' | 'backdrop' | 'container' | 'paper' | 'content'> {

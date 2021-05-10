@@ -1,6 +1,5 @@
 import {
     makeStyles,
-    createStyles,
     Theme,
     Button,
     Card,
@@ -13,13 +12,11 @@ import {
     DialogContent,
 } from '@material-ui/core'
 import { useLocation } from 'react-router-dom'
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            margin: theme.spacing(2, 2, 2, 2),
-        },
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+        margin: theme.spacing(2, 2, 2, 2),
+    },
+}))
 interface RequestPermissionProps {
     permission: browser.permissions.Permissions
     onRequestApprove(): void

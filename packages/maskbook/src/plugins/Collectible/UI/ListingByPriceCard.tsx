@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 import { useSnackbar } from 'notistack'
 import {
-    createStyles,
     makeStyles,
     Box,
     Checkbox,
@@ -28,7 +27,7 @@ import type { useAsset } from '../hooks/useAsset'
 import { isETH } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         content: {},
         footer: {
             display: 'flex',
@@ -50,7 +49,7 @@ const useStyles = makeStyles((theme) => {
         button: {
             marginTop: theme.spacing(1.5),
         },
-    })
+    }
 })
 
 export interface ListingByPriceCardProps {

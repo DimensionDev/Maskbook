@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react'
 import { TabContext, TabPanel } from '@material-ui/lab'
-import { Button, createStyles, Tab, experimentalStyled as styled, makeStyles, FilledInput } from '@material-ui/core'
+import { Button, Tab, experimentalStyled as styled, makeStyles, FilledInput } from '@material-ui/core'
 import { ButtonGroupTabList } from '@dimensiondev/maskbook-theme'
 import { DesktopMnemonicConfirm } from '../../components/Mnemonic'
 import { MaskAlert } from '../../components/MaskAlert'
@@ -54,19 +54,17 @@ const PasswordInput = styled(FilledInput)(
 `,
 )
 
-const useTabPanelStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: 0,
-            marginTop: theme.spacing(3),
-            /* TODO: mobile */
-            width: 582,
-        },
-    }),
-)
+const useTabPanelStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: 0,
+        marginTop: theme.spacing(3),
+        /* TODO: mobile */
+        width: 582,
+    },
+}))
 
 const walletTabs = ['mnemonic', 'jsonFile', 'privateKey'] as const
 type TabType = typeof walletTabs[number]

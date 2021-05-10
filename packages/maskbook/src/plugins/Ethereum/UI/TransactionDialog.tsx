@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react'
 import {
     makeStyles,
     Theme,
-    createStyles,
     Typography,
     DialogContent,
     DialogActions,
@@ -21,32 +20,30 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { EthereumMessages } from '../messages'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        content: {
-            textAlign: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: theme.spacing(5, 3),
-        },
-        icon: {
-            fontSize: 64,
-            width: 64,
-            height: 64,
-        },
-        link: {
-            marginTop: theme.spacing(0.5),
-        },
-        primary: {
-            fontSize: 18,
-            marginTop: theme.spacing(1),
-        },
-        secondary: {
-            fontSize: 14,
-        },
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    content: {
+        textAlign: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: theme.spacing(5, 3),
+    },
+    icon: {
+        fontSize: 64,
+        width: 64,
+        height: 64,
+    },
+    link: {
+        marginTop: theme.spacing(0.5),
+    },
+    primary: {
+        fontSize: 18,
+        marginTop: theme.spacing(1),
+    },
+    secondary: {
+        fontSize: 14,
+    },
+}))
 
 interface TransactionDialogUIProps extends withClasses<never> {}
 
@@ -60,11 +57,13 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
     const [state, setState] = useState<TransactionState | null>(null)
     const [shareLink, setShareLink] = useState('')
     const [summary, setSummary] = useState('')
+    const [title, setTitle] = useState('Transaction')
     const [open, setOpen] = useRemoteControlledDialog(EthereumMessages.events.transactionDialogUpdated, (ev) => {
         if (ev.open) {
             setState(ev.state)
             setSummary(ev.summary ?? '')
             setShareLink(ev.shareLink ?? '')
+            setTitle(ev.title ?? 'Transaction')
         } else {
             setSummary('')
             setShareLink('')
@@ -83,7 +82,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
 
     if (!state) return null
     return (
-        <InjectedDialog open={open} onClose={onClose} title="Transaction" DialogProps={{ maxWidth: 'xs' }}>
+        <InjectedDialog open={open} onClose={onClose} title={title} DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent className={classes.content}>
                 {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ? (
                     <>

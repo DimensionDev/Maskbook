@@ -82,7 +82,7 @@ function hijackETH(eth: Eth) {
                                     .forEach((y) => y.listener(e))
                             })
 
-                        return (promise as unknown) as PromiEventW3<string>
+                        return promise as unknown as PromiEventW3<string>
                     }
                 default:
                     return Reflect.get(target, name)

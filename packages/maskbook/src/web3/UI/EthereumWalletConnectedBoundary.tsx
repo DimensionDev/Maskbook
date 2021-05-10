@@ -1,4 +1,4 @@
-import { createStyles, Grid, makeStyles } from '@material-ui/core'
+import { Grid, makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
@@ -13,13 +13,11 @@ import { ProviderType } from '../types'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { ChainState } from '../state/useChainState'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        button: {
-            marginTop: theme.spacing(1.5),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
+}))
 
 export interface EthereumWalletConnectedBoundaryProps extends withClasses<'connectWallet' | 'unlockMetaMask'> {
     offChain?: boolean

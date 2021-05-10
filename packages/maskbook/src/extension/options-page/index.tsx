@@ -4,7 +4,7 @@ import '../../setup.ui'
 import { useState } from 'react'
 import { useAsync } from 'react-use'
 import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card, StylesProvider } from '@material-ui/core'
-import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'
+import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
@@ -51,7 +51,7 @@ import { createPluginHost } from '../../plugin-infra/host'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.mode === 'dark'
-    return createStyles({
+    return {
         root: {
             '--monospace': 'SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace',
             '--drawerHeader': dark ? '#121212' : theme.palette.primary.main,
@@ -117,7 +117,7 @@ const useStyles = makeStyles((theme) => {
             whiteSpace: 'pre-wrap',
             marginBottom: theme.spacing(3),
         },
-    })
+    }
 })
 
 function DashboardUI() {
@@ -125,13 +125,15 @@ function DashboardUI() {
     const classes = useStyles()
     const history = useHistory<unknown>()
     const xsMatched = useMatchXS()
-    const routers = ([
-        [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
-        [t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />],
-        [t('contacts'), DashboardRoute.Contacts, <BookmarkBorderOutlinedIcon />],
-        [t('plugins'), DashboardRoute.Plugins, <PowerIcon />],
-        [t('settings'), DashboardRoute.Settings, <SettingsOutlinedIcon />],
-    ] as const).filter((x) => x)
+    const routers = (
+        [
+            [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
+            [t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />],
+            [t('contacts'), DashboardRoute.Contacts, <BookmarkBorderOutlinedIcon />],
+            [t('plugins'), DashboardRoute.Plugins, <PowerIcon />],
+            [t('settings'), DashboardRoute.Settings, <SettingsOutlinedIcon />],
+        ] as const
+    ).filter((x) => x)
 
     // jump to persona if needed
     const [reloadSpy, setReloadSpy] = useState(false)

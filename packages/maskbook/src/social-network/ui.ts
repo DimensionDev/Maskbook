@@ -14,10 +14,8 @@ import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 
 const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
-export const definedSocialNetworkUIs: ReadonlyMap<
-    string,
-    SocialNetworkUI.DeferredDefinition
-> = definedSocialNetworkUIsLocal
+export const definedSocialNetworkUIs: ReadonlyMap<string, SocialNetworkUI.DeferredDefinition> =
+    definedSocialNetworkUIsLocal
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     automation: {},

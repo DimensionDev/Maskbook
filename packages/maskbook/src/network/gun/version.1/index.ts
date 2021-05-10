@@ -35,7 +35,7 @@ function typeHelper() {
     return new Gun<ApplicationStateInGunVersion1>()
 }
 /** @deprecated */
-export const gun1 = ((gun2 as any) as ReturnType<typeof typeHelper>).get('maskbook')
+export const gun1 = (gun2 as any as ReturnType<typeof typeHelper>).get('maskbook')
 /**
  * @param salt The salt of this post
  * @param myUsername My username of this post

@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Box, TextField, DialogProps, CircularProgress, Typography } from '@material-ui/core'
+import { makeStyles, Box, TextField, DialogProps, CircularProgress, Typography } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
 import UnCheckIcon from '@material-ui/icons/Close'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
@@ -30,67 +30,65 @@ import type { AdvanceSettingData } from './AdvanceSetting'
 import { useRegionSelect, regionCodes, encodeRegionCode, decodeRegionCode } from '../hooks/useRegion'
 import { RegionSelect } from './RegionSelect'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        line: {
-            margin: theme.spacing(1),
-            paddingBottom: theme.spacing(2),
-            display: 'flex',
-        },
-        column: {
-            flexDirection: 'column',
-        },
-        flow: {
-            margin: theme.spacing(1),
-            textAlign: 'center',
-        },
-        input: {
-            padding: theme.spacing(1),
-            flex: 1,
-        },
-        label: {
-            paddingLeft: theme.spacing(2),
-        },
-        tip: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-        },
-        button: {
-            marginTop: theme.spacing(1.5),
-        },
-        date: {
-            margin: theme.spacing(1),
-            display: 'flex',
-            '& > * ': {
-                flex: 1,
-                padding: theme.spacing(1),
-            },
-        },
-        iconWrapper: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: 26,
-            height: 24,
-            borderRadius: 500,
-        },
-        success: {
-            backgroundColor: 'rgba(119, 224, 181, 0.2)',
-        },
-        fail: {
-            backgroundColor: 'rgba(255, 78, 89, 0.2)',
-        },
-        qualStartTime: {
-            padding: '0 16px',
-            opacity: 0.8,
-        },
-        field: {
+const useStyles = makeStyles((theme) => ({
+    line: {
+        margin: theme.spacing(1),
+        paddingBottom: theme.spacing(2),
+        display: 'flex',
+    },
+    column: {
+        flexDirection: 'column',
+    },
+    flow: {
+        margin: theme.spacing(1),
+        textAlign: 'center',
+    },
+    input: {
+        padding: theme.spacing(1),
+        flex: 1,
+    },
+    label: {
+        paddingLeft: theme.spacing(2),
+    },
+    tip: {
+        fontSize: 12,
+        color: theme.palette.text.secondary,
+    },
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
+    date: {
+        margin: theme.spacing(1),
+        display: 'flex',
+        '& > * ': {
             flex: 1,
             padding: theme.spacing(1),
-            marginTop: theme.spacing(1),
         },
-    }),
-)
+    },
+    iconWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 26,
+        height: 24,
+        borderRadius: 500,
+    },
+    success: {
+        backgroundColor: 'rgba(119, 224, 181, 0.2)',
+    },
+    fail: {
+        backgroundColor: 'rgba(255, 78, 89, 0.2)',
+    },
+    qualStartTime: {
+        padding: '0 16px',
+        opacity: 0.8,
+    },
+    field: {
+        flex: 1,
+        padding: theme.spacing(1),
+        marginTop: theme.spacing(1),
+    },
+}))
 
 export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void

@@ -1,4 +1,4 @@
-import { Box, Chip, createStyles, makeStyles, Theme, Typography } from '@material-ui/core'
+import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
 import { useCallback } from 'react'
 import { useRedPacketFromDB } from '../../../../plugins/RedPacket/hooks/useRedPacket'
 import type { RedPacketJSONPayload } from '../../../../plugins/RedPacket/types'
@@ -10,23 +10,21 @@ import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from 
 import WalletLine from '../WalletLine'
 import type { WalletProps } from './types'
 
-const useRedPacketDetailDialogStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        sayThanks: {
-            display: 'block',
-            width: 200,
-            margin: `${theme.spacing(2)}px auto`,
-        },
-        link: {
-            display: 'block',
-            width: '100%',
-            wordBreak: 'break-all',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-        },
-    }),
-)
+const useRedPacketDetailDialogStyles = makeStyles((theme: Theme) => ({
+    sayThanks: {
+        display: 'block',
+        width: 200,
+        margin: `${theme.spacing(2)}px auto`,
+    },
+    link: {
+        display: 'block',
+        width: '100%',
+        wordBreak: 'break-all',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+    },
+}))
 
 export function DashboardWalletRedPacketDetailDialog(
     props: WrappedDialogProps<WalletProps & { payload: RedPacketJSONPayload }>,

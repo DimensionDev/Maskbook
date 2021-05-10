@@ -1,11 +1,11 @@
 import { useContext } from 'react'
-import { createStyles, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { Markdown } from './Markdown'
 import { useProposal } from '../hooks/useProposal'
 import { SnapshotContext } from '../context'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({})
+    return {}
 })
 
 export interface ReadMeCardProps {}

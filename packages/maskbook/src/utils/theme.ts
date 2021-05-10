@@ -1,5 +1,5 @@
 import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { orange, green, red, blue, grey } from '@material-ui/core/colors'
 import type { Theme, ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
 import { merge, cloneDeep } from 'lodash-es'
@@ -133,15 +133,16 @@ export function useMaskbookTheme(opt?: { appearance?: Appearance; language?: Lan
     const language = or(opt?.language, useValueRef(languageSettings))
     const appearance = or(opt?.appearance, useValueRef(appearanceSettings))
     const systemPreference = useMediaQuery('(prefers-color-scheme: dark)')
-    const paletteProvider = useRef(activatedSocialNetworkUI.customization.paletteMode?.current || new ValueRef('light'))
-        .current
+    const paletteProvider = useRef(
+        activatedSocialNetworkUI.customization.paletteMode?.current || new ValueRef('light'),
+    ).current
     const palette = useValueRef(paletteProvider)
     return useMemo(() => getMaskbookTheme({ appearance, language }), [language, appearance, systemPreference, palette])
 }
 
 export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
     const dark = theme.palette.mode === 'dark'
-    return createStyles({
+    return {
         error: {
             color: dark ? red[500] : red[900],
         },
@@ -151,12 +152,12 @@ export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
         info: {
             color: dark ? blue[500] : blue[800],
         },
-    })
+    }
 })
 
 export const useErrorStyles = makeStyles((theme) => {
     const dark = theme.palette.mode === 'dark'
-    return createStyles({
+    return {
         containedPrimary: {
             backgroundColor: dark ? red[500] : red[900],
             '&:hover': {
@@ -170,7 +171,7 @@ export const useErrorStyles = makeStyles((theme) => {
                 borderColor: dark ? red[900] : red[700],
             },
         },
-    })
+    }
 })
 export function extendsTheme(extend: (theme: Theme) => ThemeOptions) {
     return (theme: Theme) => merge(cloneDeep(theme), extend(theme))

@@ -14,7 +14,7 @@ export function restorePrototype<ActualType extends undefined | PrototypeLess<Wa
 
 export function restorePrototypeArray<
     ActualType extends undefined | PrototypeLess<WantedType>[],
-    WantedType extends object
+    WantedType extends object,
 >(obj: ActualType, prototype: WantedType): ActualType extends undefined ? undefined : WantedType[] {
     if (!obj) return obj as any
     obj.forEach((x) => Object.setPrototypeOf(x, prototype))

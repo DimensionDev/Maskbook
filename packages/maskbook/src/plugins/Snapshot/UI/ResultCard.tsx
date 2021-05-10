@@ -1,16 +1,6 @@
 import { useContext, useRef, useEffect, useState, useMemo } from 'react'
 import classNames from 'classnames'
-import {
-    createStyles,
-    makeStyles,
-    Box,
-    List,
-    ListItem,
-    Typography,
-    LinearProgress,
-    withStyles,
-    Button,
-} from '@material-ui/core'
+import { makeStyles, Box, List, ListItem, Typography, LinearProgress, withStyles, Button } from '@material-ui/core'
 import { ShadowRootTooltip } from '../../../utils/shadow-root/ShadowRootComponents'
 import millify from 'millify'
 import { SnapshotContext } from '../context'
@@ -24,7 +14,7 @@ import { parse } from 'json2csv'
 const choiceMaxWidth = 240
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         list: {
             display: 'flex',
             flexDirection: 'column',
@@ -59,7 +49,7 @@ const useStyles = makeStyles((theme) => {
             width: 200,
             margin: '0 auto',
         },
-    })
+    }
 })
 
 const StyledLinearProgress = withStyles({

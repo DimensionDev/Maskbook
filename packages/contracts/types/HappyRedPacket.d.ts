@@ -18,9 +18,7 @@ export class HappyRedPacket extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
     clone(): HappyRedPacket
     methods: {
-        check_availability(
-            id: string | number[],
-        ): TransactionObject<{
+        check_availability(id: string | number[]): TransactionObject<{
             token_address: string
             balance: string
             total: string

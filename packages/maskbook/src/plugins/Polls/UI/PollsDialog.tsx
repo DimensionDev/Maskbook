@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import {
     makeStyles,
-    createStyles,
     DialogContent,
     DialogProps,
     Typography,
@@ -30,44 +29,42 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { PluginPollRPC } from '../utils'
 
-const useNewPollStyles = makeStyles((theme) =>
-    createStyles({
-        line: {
-            display: 'flex',
-            margin: theme.spacing(1),
+const useNewPollStyles = makeStyles((theme) => ({
+    line: {
+        display: 'flex',
+        margin: theme.spacing(1),
+    },
+    item: {
+        flex: 1,
+        margin: theme.spacing(1),
+    },
+    pollWrap: {
+        border: '1px solid #ccd6dd',
+        borderRadius: '10px',
+        margin: theme.spacing(1),
+        padding: theme.spacing(1),
+    },
+    optionsWrap: {
+        position: 'relative',
+        '& >div': {
+            width: '80%',
+            margin: theme.spacing(2),
         },
-        item: {
-            flex: 1,
-            margin: theme.spacing(1),
-        },
-        pollWrap: {
-            border: '1px solid #ccd6dd',
-            borderRadius: '10px',
-            margin: theme.spacing(1),
-            padding: theme.spacing(1),
-        },
-        optionsWrap: {
-            position: 'relative',
-            '& >div': {
-                width: '80%',
-                margin: theme.spacing(2),
-            },
-        },
-        addButton: {
-            position: 'absolute',
-            bottom: '0',
-            right: '10px',
-        },
-        loading: {
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-        },
-        whiteColor: {
-            color: '#fff',
-        },
-    }),
-)
+    },
+    addButton: {
+        position: 'absolute',
+        bottom: '0',
+        right: '10px',
+    },
+    loading: {
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+    },
+    whiteColor: {
+        color: '#fff',
+    },
+}))
 
 interface NewPollProps {
     loading: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
@@ -237,7 +234,7 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
 }
 
 const useStyles = makeStyles((theme) => {
-    createStyles({
+    ;({
         title: {
             marginLeft: 6,
         },

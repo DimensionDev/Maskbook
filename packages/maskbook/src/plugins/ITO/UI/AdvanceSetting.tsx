@@ -1,5 +1,5 @@
 import type { ChangeEvent } from 'react'
-import { createStyles, makeStyles, FormGroup, FormLabel, FormControlLabel, Checkbox } from '@material-ui/core'
+import { makeStyles, FormGroup, FormLabel, FormControlLabel, Checkbox } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 export enum SettingField {
@@ -17,29 +17,27 @@ export interface AdvanceSettingProps {
     setAdvanceSettingData: React.Dispatch<React.SetStateAction<AdvanceSettingData>>
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            border: 0,
-            margin: 0,
-            padding: 0,
-            position: 'relative',
-            minWidth: 0,
-            flexDirection: 'column',
-            verticalAlign: 'top',
-        },
-        label: {
-            padding: `${theme.spacing(1)} ${theme.spacing(1)}`,
-        },
-        group: {
-            flexFlow: 'wrap',
-            justifyContent: 'space-between',
-            padding: theme.spacing(0, 1),
-            marginBottom: theme.spacing(1),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        border: 0,
+        margin: 0,
+        padding: 0,
+        position: 'relative',
+        minWidth: 0,
+        flexDirection: 'column',
+        verticalAlign: 'top',
+    },
+    label: {
+        padding: `${theme.spacing(1)} ${theme.spacing(1)}`,
+    },
+    group: {
+        flexFlow: 'wrap',
+        justifyContent: 'space-between',
+        padding: theme.spacing(0, 1),
+        marginBottom: theme.spacing(1),
+    },
+}))
 
 export function AdvanceSetting({ advanceSettingData, setAdvanceSettingData }: AdvanceSettingProps) {
     const classes = useStyles()

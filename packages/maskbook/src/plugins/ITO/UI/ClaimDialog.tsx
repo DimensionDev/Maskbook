@@ -1,8 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import { createStyles, makeStyles, Typography, Slider } from '@material-ui/core'
+import { makeStyles, Typography, Slider } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
-import { sample } from 'lodash-es'
 
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType } from '../../../web3/types'
@@ -27,59 +26,57 @@ import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        button: {
-            marginTop: theme.spacing(1.5),
+const useStyles = makeStyles((theme) => ({
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
+    providerBar: {},
+    swapLimitWrap: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: theme.spacing(2),
+    },
+    swapLimitText: {
+        color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
+        fontSize: 14,
+        width: 'fit-content',
+    },
+    swapLimitSlider: {
+        flexGrow: 1,
+        width: 'auto !important',
+        margin: theme.spacing(0, 3),
+        '& .MuiSlider-thumb': {
+            width: 28,
+            height: 28,
+            marginTop: -12,
+            background: theme.palette.mode === 'dark' ? '#fff' : '2CA4EF, 100%',
         },
-        providerBar: {},
-        swapLimitWrap: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: theme.spacing(2),
+        '& .MuiSlider-rail': {
+            height: 5,
         },
-        swapLimitText: {
-            color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
-            fontSize: 14,
-            width: 'fit-content',
+        '& .MuiSlider-track': {
+            height: 5,
         },
-        swapLimitSlider: {
-            flexGrow: 1,
-            width: 'auto !important',
-            margin: theme.spacing(0, 3),
-            '& .MuiSlider-thumb': {
-                width: 28,
-                height: 28,
-                marginTop: -12,
-                background: theme.palette.mode === 'dark' ? '#fff' : '2CA4EF, 100%',
-            },
-            '& .MuiSlider-rail': {
-                height: 5,
-            },
-            '& .MuiSlider-track': {
-                height: 5,
-            },
-        },
-        exchangeText: {
-            textAlign: 'right',
-            fontSize: 10,
-            margin: theme.spacing(1, 0, 3),
-        },
-        exchangeAmountText: {
-            color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
-        },
-        swapButtonWrapper: {
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: theme.spacing(2),
-        },
-        remindText: {
-            fontSize: 10,
-            marginTop: theme.spacing(1),
-        },
-    }),
-)
+    },
+    exchangeText: {
+        textAlign: 'right',
+        fontSize: 10,
+        margin: theme.spacing(1, 0, 3),
+    },
+    exchangeAmountText: {
+        color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
+    },
+    swapButtonWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        marginTop: theme.spacing(2),
+    },
+    remindText: {
+        fontSize: 10,
+        marginTop: theme.spacing(1),
+    },
+}))
 
 export interface ClaimDialogProps extends withClasses<'root'> {
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
@@ -122,21 +119,6 @@ export function ClaimDialog(props: ClaimDialogProps) {
     const [inputAmountForUI, setInputAmountForUI] = useState(
         swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken.decimals),
     )
-
-    //#region confirm swap dialog
-    const [, setConfirmSwapDialogOpen] = useRemoteControlledDialog(
-        EthereumMessages.events.confirmSwapDialogUpdated,
-        async (event) => {
-            if (event.open) return
-            if (!event.result) return
-            await swapCallback()
-            if (payload.token.type === EthereumTokenType.ERC20) {
-                await WalletRPC.addERC20Token(payload.token)
-                await WalletRPC.trustERC20Token(account, payload.token)
-            }
-        },
-    )
-    //#endregion
 
     //#region select token
     const [id] = useState(uuid())
@@ -190,11 +172,10 @@ export function ClaimDialog(props: ClaimDialogProps) {
     //#endregion
 
     //#region maxAmount for TokenAmountPanel
-    const maxAmount = useMemo(() => BigNumber.min(maxSwapAmount.multipliedBy(ratio).dp(0), tokenBalance).toFixed(), [
-        maxSwapAmount,
-        ratio,
-        tokenBalance,
-    ])
+    const maxAmount = useMemo(
+        () => BigNumber.min(maxSwapAmount.multipliedBy(ratio).dp(0), tokenBalance).toFixed(),
+        [maxSwapAmount, ratio, tokenBalance],
+    )
     //#endregion
 
     //#region swap
@@ -205,17 +186,16 @@ export function ClaimDialog(props: ClaimDialogProps) {
         swapToken,
     )
     const onSwap = useCallback(async () => {
-        setConfirmSwapDialogOpen({
-            open: true,
-            variableIndex: sample([1, 2, 3]) ?? 'bypass',
-        })
-    }, [setConfirmSwapDialogOpen])
+        await swapCallback()
+        if (payload.token.type !== EthereumTokenType.ERC20) return
+        await WalletRPC.addERC20Token(payload.token)
+        await WalletRPC.trustERC20Token(account, payload.token)
+    }, [swapCallback, payload.token.address])
 
     const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-
             if (swapState.type !== TransactionStateType.CONFIRMED && swapState.type !== TransactionStateType.RECEIPT)
                 return
             const { receipt } = swapState

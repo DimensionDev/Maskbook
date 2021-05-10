@@ -1,4 +1,4 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Switch from '@material-ui/core/Switch'
 import Typography from '@material-ui/core/Typography'
@@ -13,70 +13,68 @@ interface Props {
     plugin: PluginConfig
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        card: {
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-            padding: theme.spacing(2, 3),
-            boxShadow:
-                theme.palette.mode === 'dark'
-                    ? 'none'
-                    : '0px 2px 4px rgba(96, 97, 112, 0.16), 0px 0px 1px rgba(40, 41, 61, 0.04)',
+const useStyles = makeStyles((theme) => ({
+    card: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        padding: theme.spacing(2, 3),
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? 'none'
+                : '0px 2px 4px rgba(96, 97, 112, 0.16), 0px 0px 1px rgba(40, 41, 61, 0.04)',
 
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-                marginRight: 0,
-                marginBottom: theme.spacing(1),
-            },
-        },
-        info: {
-            flexGrow: 1,
-            display: 'flex',
-        },
-        actions: {
-            display: 'flex',
-            marginTop: theme.spacing(2),
-        },
-        logoWraper: {
-            alignSelf: 'flex-start',
-            flexShrink: 0,
-        },
-        logo: {
-            width: 36,
-            height: 36,
-            fontSize: 30,
-        },
-        metas: {
-            marginTop: 0,
-            marginBottom: 0,
-            marginLeft: theme.spacing(3),
-        },
-        meta: {
-            margin: 0,
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+            marginRight: 0,
             marginBottom: theme.spacing(1),
-            fontSize: 12,
-            color: theme.palette.text.secondary,
         },
-        header: {
-            display: 'flex',
-            alignItems: 'center',
-            marginBottom: theme.spacing(3),
-        },
-        title: {
-            flex: '1 1 auto',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            wordBreak: 'break-all',
-            whiteSpace: 'nowrap',
-            fontWeight: 500,
-        },
-        switch: {
-            marginLeft: 'auto',
-        },
-    }),
-)
+    },
+    info: {
+        flexGrow: 1,
+        display: 'flex',
+    },
+    actions: {
+        display: 'flex',
+        marginTop: theme.spacing(2),
+    },
+    logoWraper: {
+        alignSelf: 'flex-start',
+        flexShrink: 0,
+    },
+    logo: {
+        width: 36,
+        height: 36,
+        fontSize: 30,
+    },
+    metas: {
+        marginTop: 0,
+        marginBottom: 0,
+        marginLeft: theme.spacing(3),
+    },
+    meta: {
+        margin: 0,
+        marginBottom: theme.spacing(1),
+        fontSize: 12,
+        color: theme.palette.text.secondary,
+    },
+    header: {
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: theme.spacing(3),
+    },
+    title: {
+        flex: '1 1 auto',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        wordBreak: 'break-all',
+        whiteSpace: 'nowrap',
+        fontWeight: 500,
+    },
+    switch: {
+        marginLeft: 'auto',
+    },
+}))
 
 export default function PluginCard({ plugin }: Props) {
     const { t } = useI18N()

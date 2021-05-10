@@ -1,4 +1,4 @@
-import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Avatar, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import LinkIcon from '@material-ui/icons/Link'
 import { formatBalance, formatElapsed } from '../../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
@@ -9,7 +9,7 @@ import { resolveOpenSeaAssetEventType, resolveRaribleAssetEventType } from '../.
 import { Account } from '../Account'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         account: {
             display: 'flex',
             alignItems: 'center',
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             alignItems: 'center',
         },
-    })
+    }
 })
 
 interface Props {
