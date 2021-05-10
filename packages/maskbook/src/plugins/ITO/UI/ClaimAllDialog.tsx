@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
     },
     tokenCard: {
         width: '100%',
+        color: 'white',
         height: 95,
         background: 'linear-gradient(.25turn, #0ACFFE, 40%, #2b3ef0)',
         marginBottom: theme.spacing(2),
@@ -112,7 +113,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         claimCallback()
     }, [claimCallback])
 
-    const [_open, setClaimTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -141,7 +142,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             new Intl.ListFormat('en').format(
                 claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
             )
-        setClaimTransactionDialogOpen({
+        setClaimTransactionDialog({
             open: true,
             state: claimState,
             title: 'Claim Token',
@@ -196,9 +197,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             </ActionButton>
                         </EthereumWalletConnectedBoundary>
                     </>
-                ) : swappedTokens.length === 0 ? (
+                ) : (
                     <Typography>{t('plugin_ito_no_claimable_token')}</Typography>
-                ) : null}
+                )}
             </DialogContent>
         </InjectedDialog>
     )

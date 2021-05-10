@@ -42,6 +42,8 @@ const walletsTheme = extendsTheme((theme) => ({
         },
         MuiListItemSecondaryAction: {
             styleOverrides: {
+                // @ts-expect-error https://github.com/mui-org/material-ui/issues/26225
+                // Type 'CSSProperties' is not assignable to type 'CSSInterpolation'.
                 root: {
                     ...theme.typography.body1,
                 },

@@ -1,7 +1,7 @@
 import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { orange, green, red, blue, grey } from '@material-ui/core/colors'
-import type { Theme, ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
+import type { Theme, ThemeOptions } from '@material-ui/core/styles/createTheme'
 import { merge, cloneDeep } from 'lodash-es'
 import { appearanceSettings, languageSettings } from '../settings/settings'
 import { Appearance, Language } from '../settings/types'

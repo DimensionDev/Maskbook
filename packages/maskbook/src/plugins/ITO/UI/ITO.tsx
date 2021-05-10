@@ -18,7 +18,7 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatDateTime } from '../../../utils/date'
 import { getTextUILength } from '../../../utils/getTextUILength'
-import { ClaimGuide, ClaimStatus } from './ClaimGuide'
+import { SwapGuide, SwapStatus } from './SwapGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { sortTokens } from '../helpers'
@@ -201,7 +201,7 @@ export function ITO(props: ITO_Props) {
     const chainIdValid = useChainIdValid()
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
-    const [claimDialogStatus, setClaimDialogStatus] = useState(ClaimStatus.Remind)
+    const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)
 
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
@@ -269,12 +269,9 @@ export function ITO(props: ITO_Props) {
     const noRemain = total_remaining.isZero()
 
     //#region remote controlled select provider dialog
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onConnect = useCallback(() => {
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setSelectProviderDialogOpen])
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     //#endregion
 
     //#region buy info
@@ -324,7 +321,7 @@ export function ITO(props: ITO_Props) {
         claimCallback()
     }, [claimCallback])
 
-    const [_open, setClaimTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -336,7 +333,7 @@ export function ITO(props: ITO_Props) {
 
     useEffect(() => {
         if (claimState.type === TransactionStateType.UNKNOWN) return
-        setClaimTransactionDialogOpen({
+        setClaimTransactionDialog({
             open: true,
             state: claimState,
             summary: `Claiming ${formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals)} ${
@@ -360,16 +357,16 @@ export function ITO(props: ITO_Props) {
         window.open(shareLink, '_blank', 'noopener noreferrer')
     }, [shareLink])
     const onUnlock = useCallback(async () => {
-        setClaimDialogStatus(ClaimStatus.Unlock)
+        setClaimDialogStatus(SwapStatus.Unlock)
         setOpenClaimDialog(true)
     }, [])
     const onClaim = useCallback(async () => {
-        setClaimDialogStatus(ClaimStatus.Remind)
+        setClaimDialogStatus(SwapStatus.Remind)
         setOpenClaimDialog(true)
     }, [])
 
     //#region withdraw
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -404,7 +401,7 @@ export function ITO(props: ITO_Props) {
                 summary += comma + formatBalance(availability?.exchanged_tokens[i], token.decimals) + ' ' + token.symbol
             }
         })
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             state: destructState,
             summary,
@@ -609,7 +606,11 @@ export function ITO(props: ITO_Props) {
                         {t('plugin_ito_loading')}
                     </ActionButton>
                 ) : !account || !chainIdValid ? (
-                    <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
+                    <ActionButton
+                        onClick={openSelectProviderDialog}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
                 ) : canWithdraw ? (
@@ -714,7 +715,7 @@ export function ITO(props: ITO_Props) {
                     </ActionButton>
                 ) : null}
             </Box>
-            <ClaimGuide
+            <SwapGuide
                 status={claimDialogStatus}
                 payload={payload}
                 shareSuccessLink={shareSuccessLink}

@@ -185,17 +185,19 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
         height: 'auto',
     }
 
-    const [, setCreateWalletDialogOpen] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
+    const { setDialog: setCreateWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.createWalletDialogUpdated,
+    )
 
     const onCreate = useCallback(
         (name: string) => {
             if (hdWallet) return
-            setCreateWalletDialogOpen({
+            setCreateWalletDialog({
                 open: true,
                 name,
             })
         },
-        [hdWallet?.address, setCreateWalletDialogOpen],
+        [hdWallet?.address, setCreateWalletDialog],
     )
     const onDeriveOrImport = useSnackbarCallback(
         async () => {

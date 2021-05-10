@@ -77,7 +77,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const { value: etherTokenDetailed } = useEtherTokenDetailed()
     const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
     const [id] = useState(uuid())
-    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
@@ -88,7 +88,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         ),
     )
     const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialogOpen({
+        setSelectTokenDialog({
             open: true,
             uuid: id,
             disableEther: false,
@@ -145,7 +145,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#endregion
 
     //#region remote controlled transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -207,21 +207,12 @@ export function RedPacketForm(props: RedPacketFormProps) {
     // open the transaction dialog
     useEffect(() => {
         if (!token || createState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             state: createState,
             summary: `Creating red packet with ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`,
         })
     }, [createState /* update tx dialog only if state changed */])
-    //#endregion
-
-    //#region connect wallet
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onConnect = useCallback(() => {
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setSelectProviderDialogOpen])
     //#endregion
 
     const validationMessage = useMemo(() => {

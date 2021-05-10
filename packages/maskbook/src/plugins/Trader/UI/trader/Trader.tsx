@@ -159,7 +159,7 @@ export function Trader(props: TraderProps) {
     //#region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
     const [focusedTokenPanelType, setFocusedTokenPanelType] = useState(TokenPanelType.Input)
-    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
@@ -178,7 +178,7 @@ export function Trader(props: TraderProps) {
     const onTokenChipClick = useCallback(
         (type: TokenPanelType) => {
             setFocusedTokenPanelType(type)
-            setSelectTokenDialogOpen({
+            setSelectTokenDialog({
                 open: true,
                 uuid: String(type),
                 disableEther: false,
@@ -244,7 +244,7 @@ export function Trader(props: TraderProps) {
         .toString()
 
     // close the transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -266,7 +266,7 @@ export function Trader(props: TraderProps) {
     // open the transaction dialog
     useEffect(() => {
         if (tradeState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             shareLink,
             state: tradeState,

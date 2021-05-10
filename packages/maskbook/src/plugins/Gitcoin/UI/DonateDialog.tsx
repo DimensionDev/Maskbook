@@ -64,7 +64,7 @@ export function DonateDialog(props: DonateDialogProps) {
     const BULK_CHECKOUT_ADDRESS = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
 
     //#region remote controlled dialog
-    const [open, setDonationDialogOpen] = useRemoteControlledDialog(
+    const { open, closeDialog: closeDonationDialog } = useRemoteControlledDialog(
         PluginGitcoinMessages.events.donationDialogUpdated,
         (ev) => {
             if (!ev.open) return
@@ -72,11 +72,6 @@ export function DonateDialog(props: DonateDialogProps) {
             setAddress(ev.address)
         },
     )
-    const onClose = useCallback(() => {
-        setDonationDialogOpen({
-            open: false,
-        })
-    }, [setDonationDialogOpen])
     //#endregion
 
     //#region the selected token
@@ -88,7 +83,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region select token dialog
     const [id] = useState(uuid())
-    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
@@ -99,7 +94,7 @@ export function DonateDialog(props: DonateDialogProps) {
         ),
     )
     const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialogOpen({
+        setSelectTokenDialog({
             open: true,
             uuid: id,
             disableEther: false,
@@ -137,7 +132,7 @@ export function DonateDialog(props: DonateDialogProps) {
         .toString()
 
     // close the transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -150,7 +145,7 @@ export function DonateDialog(props: DonateDialogProps) {
     useEffect(() => {
         if (!token) return
         if (donateState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             shareLink,
             state: donateState,
@@ -177,7 +172,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     return (
         <div className={classes.root}>
-            <InjectedDialog open={open} onClose={onClose} title={title} DialogProps={{ maxWidth: 'xs' }}>
+            <InjectedDialog open={open} onClose={closeDonationDialog} title={title} DialogProps={{ maxWidth: 'xs' }}>
                 <DialogContent>
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel

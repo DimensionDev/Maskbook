@@ -47,7 +47,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const [disableSearchBar, setDisableSearchBar] = useState(false)
     const [FixedTokenListProps, setFixedTokenListProps] = useState<FixedTokenListProps | null>(null)
 
-    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, (ev) => {
+    const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, (ev) => {
         if (!ev.open) return
         setId(ev.uuid)
         setDisableEther(ev.disableEther ?? true)
@@ -56,7 +56,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     })
     const onSubmit = useCallback(
         async (token: EtherTokenDetailed | ERC20TokenDetailed) => {
-            setOpen({
+            setDialog({
                 open: false,
                 uuid: id,
                 token,
@@ -64,16 +64,16 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
             await delay(300)
             setKeyword('')
         },
-        [id, setOpen, setKeyword],
+        [id, setDialog, setKeyword],
     )
     const onClose = useCallback(async () => {
-        setOpen({
+        setDialog({
             open: false,
             uuid: id,
         })
         await delay(300)
         setKeyword('')
-    }, [id, setOpen])
+    }, [id, setDialog])
     //#endregion
 
     return (

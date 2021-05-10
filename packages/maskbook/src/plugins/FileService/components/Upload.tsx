@@ -89,12 +89,24 @@ export const Upload: React.FC = () => {
             </section>
             <section className={classes.checkItems}>
                 <FormControlLabel
-                    control={<Checkbox checked={encrypted} onChange={(event) => setEncrypted(event.target.checked)} />}
+                    control={
+                        <Checkbox
+                            color="secondary"
+                            checked={encrypted}
+                            onChange={(event) => setEncrypted(event.target.checked)}
+                        />
+                    }
                     className={classes.encrypted}
                     label={t('plugin_file_service_on_encrypt_it')}
                 />
                 <FormControlLabel
-                    control={<Checkbox checked={useCDN} onChange={(event) => setUseCDN(event.target.checked)} />}
+                    control={
+                        <Checkbox
+                            color="secondary"
+                            checked={useCDN}
+                            onChange={(event) => setUseCDN(event.target.checked)}
+                        />
+                    }
                     className={classes.usedCDN}
                     label={t('plugin_file_service_use_cdn')}
                 />

@@ -33,12 +33,9 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const { account, chainIdValid, chainTokenBalance } = ChainState.useContainer()
 
     //#region remote controlled select provider dialog
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onConnect = useCallback(() => {
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setSelectProviderDialogOpen])
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     //#endregion
 
     //#region metamask
@@ -57,7 +54,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                     fullWidth
                     variant="contained"
                     size="large"
-                    onClick={onConnect}>
+                    onClick={openSelectProviderDialog}>
                     {t('plugin_wallet_connect_a_wallet')}
                 </ActionButton>
             </Grid>

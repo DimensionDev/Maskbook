@@ -27,7 +27,7 @@ import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { ChainState } from '../../../web3/state/useChainState'
 import { toAsset, toUnixTimestamp } from '../helpers'
-import { useRemoteControlledDialogEvent } from '../../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { isETH } from '../../../web3/helpers'
 
@@ -110,7 +110,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         }
     }, [asset?.value, token, account, amount, expirationDateTime, isAuction, enqueueSnackbar])
 
-    const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
 
     useEffect(() => {
         setAmount('')
