@@ -276,13 +276,11 @@ export function ITO(props: ITO_Props) {
         [tradeInfo, listOfStatus, isAccountSeller, noRemain],
     )
 
-    const refundAmount = useMemo(
-        () =>
-            tradeInfo?.buyInfo
-                ? new BigNumber(tradeInfo?.buyInfo.amount).minus(new BigNumber(tradeInfo?.buyInfo.amount_sold))
-                : new BigNumber(0),
-        [tradeInfo],
-    )
+    const refundAmount = useMemo(() => {
+        const buyInfo = tradeInfo?.buyInfo
+        if (!buyInfo) return new BigNumber(0)
+        return new BigNumber(buyInfo.amount).minus(buyInfo.amount_sold)
+    }, [tradeInfo])
     // out of stock
     const refundAllAmount = tradeInfo?.buyInfo && new BigNumber(tradeInfo?.buyInfo.amount_sold).isZero()
 
@@ -317,7 +315,7 @@ export function ITO(props: ITO_Props) {
         setClaimTransactionDialog({
             open: true,
             state: claimState,
-            summary: `Claiming ${formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals)} ${
+            summary: `Claiming ${formatBalance(availability?.swapped ?? 0, token.decimals)} ${
                 token?.symbol ?? 'Token'
             }.`,
         })
@@ -529,7 +527,7 @@ export function ITO(props: ITO_Props) {
                                 <TokenItem
                                     price={formatBalance(
                                         new BigNumber(exchange_amounts[i * 2])
-                                            .dividedBy(new BigNumber(exchange_amounts[i * 2 + 1]))
+                                            .dividedBy(exchange_amounts[i * 2 + 1])
                                             .multipliedBy(
                                                 new BigNumber(10).pow(token.decimals - exchange_tokens[i].decimals),
                                             )

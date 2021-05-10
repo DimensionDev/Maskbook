@@ -125,9 +125,7 @@ export function PoolInList(props: PoolInListProps) {
     const canWithdraw = !isWithdrawn && (listOfStatus.includes(ITO_Status.expired) || noRemain)
 
     const canSend = !listOfStatus.includes(ITO_Status.expired) && !noRemain
-    const progress =
-        100 *
-        Number(new BigNumber(pool.total).minus(new BigNumber(pool.total_remaining)).div(new BigNumber(pool.total)))
+    const progress = 100 * Number(new BigNumber(pool.total).minus(pool.total_remaining).div(pool.total))
 
     const StatusButton = () => {
         return (
@@ -239,7 +237,7 @@ export function PoolInList(props: PoolInListProps) {
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 {formatBalance(
                                                     new BigNumber(pool.exchange_amounts[index * 2])
-                                                        .dividedBy(new BigNumber(pool.exchange_amounts[index * 2 + 1]))
+                                                        .dividedBy(pool.exchange_amounts[index * 2 + 1])
                                                         .multipliedBy(
                                                             new BigNumber(10).pow(
                                                                 pool.token.decimals -
