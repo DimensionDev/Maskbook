@@ -1,26 +1,24 @@
 import { memo, useState } from 'react'
-import { createStyles, makeStyles, Button, TextField } from '@material-ui/core'
+import { makeStyles, Button, TextField } from '@material-ui/core'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { checkInputLengthExceed } from '../../../../utils'
 import { PERSONA_NAME_MAX_LENGTH } from '../../../../constants'
 import { useDashboardI18N } from '../../../../locales'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        container: {
-            display: 'grid',
-            borderRadius: Number(theme.shape.borderRadius) * 2,
-            padding: theme.spacing(1.5),
-            gridRowGap: theme.spacing(1.25),
-            backgroundColor: MaskColorVar.primaryBackground,
-        },
-        buttons: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2,1fr)',
-            gridColumnGap: theme.spacing(3),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    container: {
+        display: 'grid',
+        borderRadius: Number(theme.shape.borderRadius) * 2,
+        padding: theme.spacing(1.5),
+        gridRowGap: theme.spacing(1.25),
+        backgroundColor: MaskColorVar.primaryBackground,
+    },
+    buttons: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2,1fr)',
+        gridColumnGap: theme.spacing(3),
+    },
+}))
 
 export interface AddPersonaCardProps {
     onConfirm: (name?: string) => void

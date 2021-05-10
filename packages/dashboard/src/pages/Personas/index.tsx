@@ -1,4 +1,4 @@
-import { Tab, Tabs, createStyles, Box, makeStyles, Typography, IconButton } from '@material-ui/core'
+import { Tab, Tabs, Box, makeStyles, Typography, IconButton } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
 import { useEffect, useMemo, useState } from 'react'
 import { capitalize, compact, head, isEmpty } from 'lodash-es'
@@ -16,46 +16,44 @@ import type { PersonaInfo } from './type'
 import stringify from 'json-stable-stringify'
 import { useDashboardI18N } from '../../locales'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        container: {
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-        },
-        wrapper: {
-            textTransform: 'none',
-        },
-        tabPanel: {
-            padding: 0,
-            flex: 1,
-        },
-        author: {
-            fill: MaskColorVar.secondaryBackground,
-            width: 36,
-            height: 36,
-        },
-        iconButton: {
-            padding: 0,
-            fontSize: 16,
-            width: 28,
-            height: 28,
-            borderRadius: '50%',
-            border: `1px solid ${MaskColorVar.blue}`,
-        },
-        arrow: {
-            fill: 'none',
-            stroke: MaskColorVar.primary,
-        },
-        label: {
-            width: 'auto',
-        },
-        nickname: {
-            margin: theme.spacing(0, 1.5),
-            lineHeight: 1.375,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+    },
+    wrapper: {
+        textTransform: 'none',
+    },
+    tabPanel: {
+        padding: 0,
+        flex: 1,
+    },
+    author: {
+        fill: MaskColorVar.secondaryBackground,
+        width: 36,
+        height: 36,
+    },
+    iconButton: {
+        padding: 0,
+        fontSize: 16,
+        width: 28,
+        height: 28,
+        borderRadius: '50%',
+        border: `1px solid ${MaskColorVar.blue}`,
+    },
+    arrow: {
+        fill: 'none',
+        stroke: MaskColorVar.primary,
+    },
+    label: {
+        width: 'auto',
+    },
+    nickname: {
+        margin: theme.spacing(0, 1.5),
+        lineHeight: 1.375,
+    },
+}))
 
 export default function Personas() {
     const classes = useStyles()

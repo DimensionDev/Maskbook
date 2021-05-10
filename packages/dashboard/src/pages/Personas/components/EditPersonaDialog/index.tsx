@@ -1,5 +1,5 @@
 import { memo, useCallback, useState } from 'react'
-import { Button, createStyles, DialogActions, DialogContent, makeStyles, Typography } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, makeStyles, Typography } from '@material-ui/core'
 import { AuthorIcon, EditIcon } from '@dimensiondev/icons'
 import { MaskColorVar, MaskDialog } from '@dimensiondev/maskbook-theme'
 import type { PersonaProvider } from '../../type'
@@ -11,44 +11,42 @@ import { RenameDialog } from '../RenameDialog'
 import { Services } from '../../../../API'
 import { useDashboardI18N } from '../../../../locales'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        container: {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: theme.spacing(7, 7, 4, 7),
-        },
-        buttons: {
-            width: '100%',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2,24%)',
-            justifyContent: 'center',
-            gridColumnGap: theme.spacing(2),
-            marginTop: theme.spacing(5.5),
-        },
-        name: {
-            display: 'flex',
-            alignItems: 'center',
-            marginTop: theme.spacing(3),
-        },
-        content: {
-            width: '100%',
-            marginTop: theme.spacing(7),
-        },
-        author: {
-            fontSize: 60,
-            fill: MaskColorVar.secondaryBackground,
-        },
-        edit: {
-            fontSize: theme.typography.subtitle1.fontSize,
-            fill: 'none',
-            marginLeft: theme.spacing(1.5),
-            cursor: 'pointer',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: theme.spacing(7, 7, 4, 7),
+    },
+    buttons: {
+        width: '100%',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2,24%)',
+        justifyContent: 'center',
+        gridColumnGap: theme.spacing(2),
+        marginTop: theme.spacing(5.5),
+    },
+    name: {
+        display: 'flex',
+        alignItems: 'center',
+        marginTop: theme.spacing(3),
+    },
+    content: {
+        width: '100%',
+        marginTop: theme.spacing(7),
+    },
+    author: {
+        fontSize: 60,
+        fill: MaskColorVar.secondaryBackground,
+    },
+    edit: {
+        fontSize: theme.typography.subtitle1.fontSize,
+        fill: 'none',
+        marginLeft: theme.spacing(1.5),
+        cursor: 'pointer',
+    },
+}))
 
 export interface EditPersonaDialogProps {
     open: boolean
