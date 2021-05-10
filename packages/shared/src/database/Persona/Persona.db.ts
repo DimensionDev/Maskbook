@@ -1,6 +1,6 @@
 import type { PersonaIdentifier, ProfileIdentifier } from '../../Identifier/type'
 import type { IdentifierMap } from '../../Identifier/IdentifierMap'
-import type { AESJsonWebKey, EC_Private_JsonWebKey, EC_Public_JsonWebKey } from '../../modules'
+import type { AESJsonWebKey, EC_Private_JsonWebKey, EC_Public_JsonWebKey } from '../../crypto/JWKType'
 
 export interface LinkedProfileDetails {
     connectionConfirmState: 'confirmed' | 'pending' | 'denied'
