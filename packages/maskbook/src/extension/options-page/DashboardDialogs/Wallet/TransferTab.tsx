@@ -98,7 +98,7 @@ export function TransferTab(props: TransferTabProps) {
 
     const onClick = useCallback(async () => {
         const gas = await getGas(chainId, account, ETH_ADDRESS, tokenBalance)
-        const balance = new BigNumber(formatBalance(new BigNumber(tokenBalance), token.decimals)).minus(gas).toFixed()
+        const balance = new BigNumber(formatBalance(tokenBalance, token.decimals)).minus(gas).toFixed()
         setAmount(balance)
     }, [tokenBalance])
 
@@ -159,7 +159,7 @@ export function TransferTab(props: TransferTabProps) {
                         root: classes.maxChipRoot,
                         label: classes.maxChipLabel,
                     },
-                    onClick: onClick,
+                    onClick,
                 }}
             />
             <TextField
