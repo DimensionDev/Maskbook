@@ -42,7 +42,6 @@ interface EthereumMessage {
     rpc: unknown
 }
 
-export const EthereumMessages: WebExtensionMessage<EthereumMessage> = createPluginMessage<EthereumMessage>(
-    PLUGIN_IDENTIFIER,
-)
+export const EthereumMessages: WebExtensionMessage<EthereumMessage> =
+    createPluginMessage<EthereumMessage>(PLUGIN_IDENTIFIER)
 export const EthereumRPC = createPluginRPC(PLUGIN_IDENTIFIER, () => import('./services'), EthereumMessages.events.rpc)

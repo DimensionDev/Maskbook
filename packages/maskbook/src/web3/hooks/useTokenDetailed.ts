@@ -13,11 +13,11 @@ export function useTokenDetailed<P extends EthereumTokenType, Q extends TokenDet
     const r1 = useEtherTokenDetailed()
     const r2 = useERC20TokenDetailed(
         type === EthereumTokenType.ERC20 ? address : '',
-        (token as unknown) as ERC20TokenDetailed,
+        token as unknown as ERC20TokenDetailed,
     )
     const r3 = useERC721TokenDetailed(
         type === EthereumTokenType.ERC721 ? address : '',
-        (token as unknown) as ERC721TokenDetailed,
+        token as unknown as ERC721TokenDetailed,
     )
 
     const type_ = type as EthereumTokenType

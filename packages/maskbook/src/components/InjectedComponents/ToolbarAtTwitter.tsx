@@ -126,14 +126,15 @@ export function ToolbarAtTwitter(props: ToolbarAtTwitterProps) {
     // There's an animation effect when click button which would keep showing after expanded or shrinked,
     //  so re-render IconButton immediately when isExpand changes.
     const IconButtonMemo = useMemo(
-        () => () => (
-            <IconButton
-                onClick={() => setExpand(!isExpand)}
-                color="primary"
-                className={classNames(classes.sizeButton, isExpand ? classes.rotate : '')}>
-                <DoubleArrowIcon />
-            </IconButton>
-        ),
+        () => () =>
+            (
+                <IconButton
+                    onClick={() => setExpand(!isExpand)}
+                    color="primary"
+                    className={classNames(classes.sizeButton, isExpand ? classes.rotate : '')}>
+                    <DoubleArrowIcon />
+                </IconButton>
+            ),
         [isExpand],
     )
 

@@ -20,9 +20,7 @@ export class Multicall extends Contract {
     methods: {
         getCurrentBlockTimestamp(): TransactionObject<string>
 
-        aggregate(
-            calls: { target: string; callData: string | number[] }[],
-        ): TransactionObject<{
+        aggregate(calls: { target: string; callData: string | number[] }[]): TransactionObject<{
             blockNumber: string
             returnData: string[]
             0: string

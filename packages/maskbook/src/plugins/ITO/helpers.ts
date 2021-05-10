@@ -40,10 +40,10 @@ export function sortTokens(tokenA: { address: string }, tokenB: { address: strin
 }
 
 export function tokenIntoMask(token: JSON_PayloadOutMask['token']) {
-    return ({
+    return {
         ...omit(token, 'chain_id'),
         chainId: token.chain_id,
-    } as unknown) as EtherTokenDetailed | ERC20TokenDetailed
+    } as unknown as EtherTokenDetailed | ERC20TokenDetailed
 }
 
 export function tokenOutMask(token: EtherTokenDetailed | ERC20TokenDetailed) {

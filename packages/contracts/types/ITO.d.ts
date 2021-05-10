@@ -18,9 +18,7 @@ export class ITO extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
     clone(): ITO
     methods: {
-        check_availability(
-            id: string | number[],
-        ): TransactionObject<{
+        check_availability(id: string | number[]): TransactionObject<{
             exchange_addrs: string[]
             remaining: string
             started: boolean

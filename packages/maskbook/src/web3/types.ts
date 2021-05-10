@@ -105,9 +105,8 @@ interface TokenAssetDetailedMap {
 
 export type TokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
 
-export type TokenAssetDetailedType<
-    T extends EthereumTokenType.ERC721 | EthereumTokenType.ERC1155
-> = TokenAssetDetailedMap[T]
+export type TokenAssetDetailedType<T extends EthereumTokenType.ERC721 | EthereumTokenType.ERC1155> =
+    TokenAssetDetailedMap[T]
 
 import type { ChainId } from '@dimensiondev/maskbook-shared'
 export { ChainId } from '@dimensiondev/maskbook-shared'

@@ -80,7 +80,9 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(plugin_i
          * @param type "type" field on the object
          */
         async *iterate_mutate<T extends Type>(type: T) {
-            const cursor = await (await c('rw'))
+            const cursor = await (
+                await c('rw')
+            )
                 .objectStore('PluginStore')
                 .index('type')
                 .openCursor(IDBKeyRange.only([plugin_id, type]))

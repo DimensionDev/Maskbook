@@ -65,7 +65,10 @@ export async function pasteTextToCompositionFacebook(
     await untilDocumentReady()
     // Save the scrolling position
     const scrolling = document.scrollingElement || document.documentElement
-    const scrollBack = ((top) => () => scrolling.scroll({ top }))(scrolling.scrollTop)
+    const scrollBack = (
+        (top) => () =>
+            scrolling.scroll({ top })
+    )(scrolling.scrollTop)
 
     const activated = new LiveSelector().querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
         isMobileFacebook ? 'form textarea' : '.notranslate[aria-describedby]',

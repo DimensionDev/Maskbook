@@ -133,8 +133,9 @@ export function useMaskbookTheme(opt?: { appearance?: Appearance; language?: Lan
     const language = or(opt?.language, useValueRef(languageSettings))
     const appearance = or(opt?.appearance, useValueRef(appearanceSettings))
     const systemPreference = useMediaQuery('(prefers-color-scheme: dark)')
-    const paletteProvider = useRef(activatedSocialNetworkUI.customization.paletteMode?.current || new ValueRef('light'))
-        .current
+    const paletteProvider = useRef(
+        activatedSocialNetworkUI.customization.paletteMode?.current || new ValueRef('light'),
+    ).current
     const palette = useValueRef(paletteProvider)
     return useMemo(() => getMaskbookTheme({ appearance, language }), [language, appearance, systemPreference, palette])
 }

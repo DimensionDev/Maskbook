@@ -80,7 +80,7 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
     const currentValue = useValueRef(value)
     switch (typeof currentValue) {
         case 'boolean': {
-            const ref = (value as unknown) as ValueRef<boolean>
+            const ref = value as unknown as ValueRef<boolean>
             const change = () => void (ref.value = !ref.value)
             const ui = <Switch color="primary" edge="end" checked={currentValue} onClick={change} />
             const { primary, secondary } = withDefaultText(props)

@@ -67,7 +67,7 @@ function dispatchEventRaw<T extends Event>(target: Node | Document | null, event
             currentTarget = currentTarget.parentNode
         }
         yield document
-        yield (window as unknown) as Node
+        yield window as unknown as Node
     }
     function getMockedEvent<T extends Event>(event: T, currentTarget: () => EventTarget, overwrites: Partial<T> = {}) {
         const target = un_xray_DOM(currentTarget())
