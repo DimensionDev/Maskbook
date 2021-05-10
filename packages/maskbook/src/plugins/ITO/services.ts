@@ -1,6 +1,6 @@
 import type { JSON_PayloadInMask, PoolRecord } from './types'
 import { PluginITO_Messages } from './messages'
-import * as subgraph from './apis/thegraph'
+import * as subgraph from './apis'
 import * as database from './database'
 import { getChainId } from '../../extension/background-script/EthereumService'
 import { checkIfChainSupport } from '../../web3/pipes'

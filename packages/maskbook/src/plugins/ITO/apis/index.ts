@@ -1,8 +1,8 @@
-import * as thegraph from './thegraph'
+import * as subgraph from './subgraph'
 import * as pastEvents from './pastEvents'
 
 export async function getPool(pid: string) {
-    const pool = await thegraph.getPool(pid)
+    const pool = await subgraph.getPool(pid)
     const pool_ = await pastEvents.getPool(pid)
 
     console.log('DEBUG: get pool')
@@ -15,4 +15,4 @@ export async function getPool(pid: string) {
     return pool
 }
 
-export { getTradeInfo,  getAllPoolsAsBuyer, getAllPoolsAsSeller, } from './thegraph'
+export { getTradeInfo, getAllPoolsAsBuyer, getAllPoolsAsSeller } from './subgraph'
