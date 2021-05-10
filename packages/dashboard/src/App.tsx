@@ -1,4 +1,4 @@
-import { CssBaseline, ThemeProvider } from '@material-ui/core'
+import { CssBaseline, ThemeProvider, StyledEngineProvider } from '@material-ui/core'
 import { StylesProvider } from '@material-ui/styles'
 import { MaskLightTheme, ErrorBoundary, addMaskThemeI18N, applyMaskColorVars } from '@dimensiondev/maskbook-theme'
 import { HashRouter } from 'react-router-dom'
@@ -37,17 +37,19 @@ export function App() {
     return (
         <StrictMode>
             <I18nextProvider i18n={i18n}>
-                <StylesProvider injectFirst>
-                    <ThemeProvider theme={MaskLightTheme}>
-                        <ErrorBoundary>
-                            <CssBaseline />
-                            <HashRouter>
-                                <Pages />
-                            </HashRouter>
-                            <PluginRender />
-                        </ErrorBoundary>
-                    </ThemeProvider>
-                </StylesProvider>
+                <StyledEngineProvider injectFirst>
+                    <StylesProvider>
+                        <ThemeProvider theme={MaskLightTheme}>
+                            <ErrorBoundary>
+                                <CssBaseline />
+                                <HashRouter>
+                                    <Pages />
+                                </HashRouter>
+                                <PluginRender />
+                            </ErrorBoundary>
+                        </ThemeProvider>
+                    </StylesProvider>
+                </StyledEngineProvider>
             </I18nextProvider>
         </StrictMode>
     )
