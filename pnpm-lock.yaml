@@ -595,13 +595,17 @@ importers:
       '@storybook/addons': ^6.2.9
       '@storybook/react': ^6.2.9
       '@storybook/theming': ^6.2.9
+      '@types/tinycolor2': ^1.4.2
       babel-loader: ^8.2.2
       lodash-es: ^4.17.20
       storybook-addon-matrix: ^1.6.0
+      tinycolor2: ^1.4.2
     dependencies:
       '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
+      '@types/tinycolor2': 1.4.2
       lodash-es: 4.17.21
+      tinycolor2: 1.4.2
     devDependencies:
       '@babel/core': 7.13.16
       '@storybook/addon-actions': 6.2.9
@@ -6110,6 +6114,10 @@ packages:
     resolution: {integrity: sha512-IW3dFGNyVkVLC1MCMogVWQaKH/ZtjPQdOW9c3X128o5lVpFYNsq/l3Qo1pV7sfTmvDzWEXR3QTxg1TMy1pyaAQ==}
     dependencies:
       '@types/node': 14.14.37
+    dev: false
+
+  /@types/tinycolor2/1.4.2:
+    resolution: {integrity: sha512-PeHg/AtdW6aaIO2a+98Xj7rWY4KC1E6yOy7AFknJQ7VXUGNrMlyxDFxJo7HqLtjQms/ZhhQX52mLVW/EX3JGOw==}
     dev: false
 
   /@types/uglify-js/3.13.0:
@@ -21680,6 +21688,10 @@ packages:
 
   /tiny-warning/1.0.3:
     resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
+    dev: false
+
+  /tinycolor2/1.4.2:
+    resolution: {integrity: sha512-vJhccZPs965sV/L2sU4oRQVAos0pQXwsvTLkWYdqJ+a8Q5kPFzJTuOFwy7UniPli44NKQGAglksjvOcpo95aZA==}
     dev: false
 
   /tmp/0.0.33:

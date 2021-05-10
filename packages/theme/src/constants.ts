@@ -1,6 +1,6 @@
-import { PaletteMode, Theme, ThemeOptions, useTheme } from '@material-ui/core'
+import { PaletteMode, Theme, useTheme } from '@material-ui/core'
 import { kebabCase } from 'lodash-es'
-import { merge } from 'lodash-es'
+import parseColor from 'tinycolor2'
 export const LightColor = {
     primary: '#1c68f3',
     primaryContrastText: '#ffffff',
@@ -80,17 +80,6 @@ export const DarkColor: typeof LightColor = {
     linkText: '#ffffff',
 }
 
-export const TypographyOptions: ThemeOptions['typography'] = {}
-export const LightTypographyOptions: ThemeOptions['typography'] = merge(
-    {},
-    TypographyOptions,
-    {} as ThemeOptions['typography'],
-)
-export const DarkTypographyOptions: ThemeOptions['typography'] = merge(
-    {},
-    TypographyOptions,
-    {} as ThemeOptions['typography'],
-)
 export type Color = typeof LightColor
 
 export function getMaskColor(theme: Theme) {
@@ -102,7 +91,7 @@ export function useMaskColor() {
 }
 
 export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
-    const ns = scheme === 'light' ? LightColor : DarkColor
+    const ns: Record<string, string> = scheme === 'light' ? LightColor : DarkColor
     if (node === document.body) {
         const id = '#mask-style-var'
         if (!document.getElementById(id)) {
@@ -115,33 +104,45 @@ export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
     } else if (node instanceof HTMLStyleElement) {
         let rule = ':root, :host {\n'
         for (const key in ns) {
-            rule += '    --mask-' + kebabCase(key) + ': ' + (ns as any)[key] + ';\n'
+            // --mask-name: val;
+            rule += `    --mask-${kebabCase(key)}: ${ns[key]};\n`
+            rule += `    --mask-${kebabCase(key)}-fragment: ${getRGBFragment(ns, key)};\n`
         }
         node.innerHTML = rule + '}'
     } else {
         for (const key in ns) {
-            node.style.setProperty('--mask-' + kebabCase(key), (ns as any)[key])
+            node.style.setProperty('--mask-' + kebabCase(key), ns[key])
+            node.style.setProperty('--mask-' + kebabCase(key) + '-fragment', getRGBFragment(ns, key))
         }
     }
 }
-export const MaskColorVar: Record<keyof typeof LightColor, string /* & ((defaultValue?: string) => {}) */> = new Proxy(
+// Fragment are in the form of "1, 2, 3"
+// which is used for rgba(var(--x), alpha)
+function getRGBFragment(x: Record<string, string>, key: string) {
+    const { r, g, b } = parseColor(x[key]).toRgb()
+    return [r, g, b].join(', ')
+}
+
+type MaskCSSVariableColor = string & {
+    /** Append alpha channel to the original color */
+    alpha(alpha: number): string
+} & ((defaultValue?: string) => string)
+
+export const MaskColorVar: Record<keyof typeof LightColor, MaskCSSVariableColor> = new Proxy(
     { __proto__: null } as any,
     {
         get(target, key) {
             if (target[key]) return target[key]
             if (typeof key !== 'string') throw new TypeError()
             const cssVar = kebabCase(key)
-            // ? It should always defined based on our API contract.
-            // ? So there is no need to be string & (string => string)
-            // ? Let's use the simpler way
-            target[key] = `var(--mask-${cssVar})`
-            // target[key] = (defaultValue?: string) => {
-            //     // it might be an object when used in styled components.
-            //     if (typeof defaultValue !== 'string') defaultValue = undefined
-            //     const x = `var(--mask-${cssVar}${defaultValue ? ', ' + defaultValue : ''})`
-            //     return x
-            // }
-            // target[key][Symbol.toPrimitive] = () => `var(--mask-${cssVar})`
+            target[key] = (defaultValue?: string) => {
+                // it might be an object when used in styled components.
+                if (typeof defaultValue !== 'string') defaultValue = undefined
+                const x = `var(--mask-${cssVar}${defaultValue ? ', ' + defaultValue : ''})`
+                return x
+            }
+            target[key][Symbol.toPrimitive] = () => `var(--mask-${cssVar})`
+            target[key].alpha = (alpha: number) => `rgba(var(--mask-${cssVar}-fragment), ${alpha})`
             return target[key]
         },
     },
