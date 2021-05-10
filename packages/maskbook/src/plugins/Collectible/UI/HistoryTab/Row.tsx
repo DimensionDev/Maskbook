@@ -94,7 +94,7 @@ export function Row({ event, isDifferenceToken }: Props) {
                     <TableCell>
                         <Typography className={classes.content} variant="body2">
                             <FormattedBalance
-                                value={new BigNumber(event.assetQuantity?.quantity ?? 0)}
+                                value={event.assetQuantity?.quantity ?? 0}
                                 decimals={event.assetQuantity?.asset.decimals ?? 0}
                             />
                         </Typography>

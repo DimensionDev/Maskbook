@@ -100,7 +100,7 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                     <TableCell>
                         <Typography className={classes.content}>
                             <FormattedBalance
-                                value={new BigNumber(order.quantity ?? 0)}
+                                value={order.quantity ?? 0}
                                 decimals={new BigNumber(order.quantity ?? 0).toString() !== '1' ? 8 : 0}
                             />
                         </Typography>
