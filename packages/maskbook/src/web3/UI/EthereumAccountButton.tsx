@@ -6,7 +6,7 @@ import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { ProviderIcon } from '../../components/shared/ProviderIcon'
-import { formatBalance, formatEthereumAddress } from '../../plugins/Wallet/formatter'
+import { formatEthereumAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
@@ -68,25 +68,25 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     const selectedWallet = useWallet()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
 
-    const [, setSelectWalletDialogOpen] = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     const onOpen = useCallback(() => {
-        if (selectedWallet)
-            setSelectWalletDialogOpen({
-                open: true,
-            })
-        else
-            setSelectProviderDialogOpen({
-                open: true,
-            })
-    }, [selectedWallet, setSelectWalletDialogOpen, setSelectProviderDialogOpen])
+        if (selectedWallet) openSelectWalletDialog()
+        else openSelectProviderDialog()
+    }, [selectedWallet, openSelectWalletDialog, openSelectProviderDialog])
 
     if (Flags.has_native_nav_bar) return <AccountBalanceWalletIcon onClick={onOpen} />
 
     return (
         <div className={props.disableEther ? '' : classes.root}>
             {!props.disableEther ? (
-                <Typography className={classes.balance}>{formatBalance(balance, 18, 4)} ETH</Typography>
+                <Typography className={classes.balance}>
+                    <FormattedBalance value={balance} decimals={18} significant={4} symbol="ETH" />
+                </Typography>
             ) : null}
             <Button
                 className={classNames(classes.button, props.disableEther ? classes.buttonTransparent : '')}

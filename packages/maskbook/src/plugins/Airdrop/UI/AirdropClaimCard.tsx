@@ -11,7 +11,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { ERC20TokenDetailed } from '../../../web3/types'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { formatPercentage } from '../../Wallet/formatter'
+import { formatPercentage } from '@dimensiondev/maskbook-shared'
 import { useAirdropPacket } from '../hooks/useAirdropPacket'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
@@ -123,7 +123,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
         .toString()
 
     // close the transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -137,7 +137,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
     useEffect(() => {
         if (checkState.type !== CheckStateType.YEP) return
         if (claimState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             shareLink,
             state: claimState,

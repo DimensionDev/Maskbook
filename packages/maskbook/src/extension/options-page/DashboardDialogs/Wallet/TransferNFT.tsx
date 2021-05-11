@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { Image } from '../../../../components/shared/Image'
 import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
-import { formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../../utils/i18n-next-ui'
@@ -54,7 +54,7 @@ export function DashboardWalletTransferDialogNFT(
     //#endregion
 
     //#region remote controlled transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         useCallback(
             (ev) => {
@@ -71,7 +71,7 @@ export function DashboardWalletTransferDialogNFT(
     // open the transaction dialog
     useEffect(() => {
         if (transferState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             state: transferState,
             summary: `Transfer ${token.name} to ${formatEthereumAddress(address, 4)}.`,

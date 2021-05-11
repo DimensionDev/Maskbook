@@ -14,10 +14,10 @@ import { useChainId, useChainIdValid } from '../../../web3/hooks/useBlockNumber'
 import { resolveLinkOnEtherscan, resolveProviderName } from '../../../web3/pipes'
 import { ChainId, ProviderType } from '../../../web3/types'
 import { EthereumChainChip } from '../../../web3/UI/EthereumChainChip'
-import { formatEthereumAddress } from '../formatter'
 import { useWallet } from '../hooks/useWallet'
 import { WalletMessages } from '../messages'
 import { currentSelectedWalletProviderSettings } from '../settings'
+import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -96,47 +96,42 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     //#endregion
 
     //#region remote controlled dialog logic
-    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
-    const onClose = useCallback(() => {
-        setOpen({
-            open: false,
-        })
-    }, [setOpen])
+    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
     //#endregion
 
     //#region change provider
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     //#endregion
 
     //#region walletconnect
-    const [, setWalletConnectDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
     )
     //#endregion
 
     const onDisconnect = useCallback(async () => {
         if (selectedWalletProvider !== ProviderType.WalletConnect) return
-        setOpen({
-            open: false,
-        })
-        setWalletConnectDialogOpen({
+        closeDialog()
+        setWalletConnectDialog({
             open: true,
             uri: await Services.Ethereum.createConnectionURI(),
         })
-    }, [selectedWalletProvider, setOpen, setWalletConnectDialogOpen])
+    }, [selectedWalletProvider, closeDialog, setWalletConnectDialog])
     const onChange = useCallback(() => {
-        setOpen({
-            open: false,
-        })
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setOpen, setSelectProviderDialogOpen])
+        closeDialog()
+        openSelectProviderDialog()
+    }, [closeDialog, openSelectProviderDialog])
 
     if (!selectedWallet) return null
 
     return (
-        <InjectedDialog title={t('wallet_status_title')} open={open} onClose={onClose} DialogProps={{ maxWidth: 'xs' }}>
+        <InjectedDialog
+            title={t('wallet_status_title')}
+            open={open}
+            onClose={closeDialog}
+            DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent className={classes.content}>
                 <section className={classes.section}>
                     <Typography className={classes.tip} color="textSecondary">
@@ -166,7 +161,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                 <section className={classes.section}>
                     <ProviderIcon classes={{ icon: classes.icon }} size={14} providerType={selectedWalletProvider} />
                     <Typography className={classes.address}>
-                        {formatEthereumAddress(selectedWallet.address, 4)}
+                        <FormattedAddress address={selectedWallet.address} size={4} />
                     </Typography>
                     {chainIdValid && chainId !== ChainId.Mainnet ? (
                         <EthereumChainChip chainId={chainId} ChipProps={{ variant: 'outlined' }} />

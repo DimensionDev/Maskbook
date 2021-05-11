@@ -12,7 +12,7 @@ import { resolveRedPacketStatus } from '../pipes'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
-import { formatBalance } from '../../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useBlockNumber'
 import { useAccount } from '../../../web3/hooks/useAccount'
@@ -161,12 +161,9 @@ export function RedPacket(props: RedPacketProps) {
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
 
     //#region remote controlled select provider dialog
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onConnect = useCallback(() => {
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setSelectProviderDialogOpen])
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     //#endregion
 
     //#region remote controlled transaction dialog
@@ -188,7 +185,7 @@ export function RedPacket(props: RedPacketProps) {
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(account, payload.rpid)
 
     // close the transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -203,7 +200,7 @@ export function RedPacket(props: RedPacketProps) {
         const state = canClaim ? claimState : refundState
         if (state.type === TransactionStateType.UNKNOWN) return
         if (!availability || !tokenDetailed) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             shareLink,
             state,
@@ -312,7 +309,7 @@ export function RedPacket(props: RedPacketProps) {
             {canClaim || canRefund ? (
                 <Box className={classes.footer}>
                     {!account ? (
-                        <ActionButton variant="contained" size="large" onClick={onConnect}>
+                        <ActionButton variant="contained" size="large" onClick={openSelectProviderDialog}>
                             {t('plugin_wallet_connect_a_wallet')}
                         </ActionButton>
                     ) : !chainIdValid ? (

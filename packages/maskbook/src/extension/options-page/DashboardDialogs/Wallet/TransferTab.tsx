@@ -4,7 +4,7 @@ import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
-import { formatBalance, formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
+import { formatBalance, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
@@ -75,7 +75,7 @@ export function TransferTab(props: TransferTabProps) {
     //#endregion
 
     //#region remote controlled transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         useCallback(
             (ev) => {
@@ -92,7 +92,7 @@ export function TransferTab(props: TransferTabProps) {
     // open the transaction dialog
     useEffect(() => {
         if (transferState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             state: transferState,
             summary: `Transfer ${formatBalance(transferAmount, token.decimals ?? 0)} ${
@@ -105,7 +105,7 @@ export function TransferTab(props: TransferTabProps) {
     //#region validation
     const validationMessage = useMemo(() => {
         if (!transferAmount || new BigNumber(transferAmount).isZero()) return t('wallet_transfer_error_amount_absence')
-        if (new BigNumber(transferAmount).isGreaterThan(new BigNumber(tokenBalance)))
+        if (new BigNumber(transferAmount).isGreaterThan(tokenBalance))
             return t('wallet_transfer_error_insufficent_balance', {
                 token: token.symbol,
             })

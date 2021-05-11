@@ -16,7 +16,7 @@ import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../..
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { isEtherWrapper, toBips } from '../../helpers'
-import { formatPercentage } from '../../../Wallet/formatter'
+import { formatPercentage } from '@dimensiondev/maskbook-shared'
 import { resolveUniswapWarningLevel } from '../../pipes'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -119,7 +119,7 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region remote controlled swap settings dialog
-    const [, setSwapSettingsDialogOpen] = useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated)
+    const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated)
     //#endregion
 
     //#region form controls
@@ -239,10 +239,7 @@ export function TradeForm(props: TradeFormProps) {
                     <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
                         <RefreshOutlined fontSize="small" />
                     </IconButton>
-                    <IconButton
-                        className={classes.icon}
-                        size="small"
-                        onClick={() => setSwapSettingsDialogOpen({ open: true })}>
+                    <IconButton className={classes.icon} size="small" onClick={openDialog}>
                         <TuneIcon fontSize="small" />
                     </IconButton>
                 </div>

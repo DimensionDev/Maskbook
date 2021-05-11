@@ -13,7 +13,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import formatDateTime from 'date-fns/format'
-import { formatBalance } from '../../../plugins/Wallet/formatter'
+import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { useSnackbar, VariantType } from 'notistack'
 
 const useStyles = makeStyles((theme) => ({
@@ -113,7 +113,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         claimCallback()
     }, [claimCallback])
 
-    const [_open, setClaimTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -142,7 +142,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             new Intl.ListFormat('en').format(
                 claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
             )
-        setClaimTransactionDialogOpen({
+        setClaimTransactionDialog({
             open: true,
             state: claimState,
             title: 'Claim Token',
@@ -180,8 +180,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                         )}
                                     </div>
                                     <Typography className={classes.cardContent}>
-                                        {formatBalance(swappedToken.amount, swappedToken.token.decimals)}{' '}
-                                        {swappedToken.token.symbol}
+                                        <FormattedBalance
+                                            value={swappedToken.amount}
+                                            decimals={swappedToken.token.decimals}
+                                            symbol={swappedToken.token.symbol}
+                                        />
                                     </Typography>
                                 </ListItem>
                             ))}

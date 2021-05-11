@@ -3,7 +3,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { isSameAddress, getConstant } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
 import { useBlockie } from '../../../web3/hooks/useBlockie'
-import { formatChecksumAddress } from '../../../plugins/Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useImageFailover } from '../../../utils/hooks/useImageFailover'
 
 //#region fix icon image
@@ -26,7 +26,7 @@ function resolveTokenIconURL(address: string, trustWalletAssets: string) {
         '0x3B73c1B2ea59835cbfcADade5462b6aB630D9890':
             'https://raw.githubusercontent.com/chainswap/chainswap-assets/main/logo_white_256.png', // TOKEN
     }
-    const checksummedAddress = formatChecksumAddress(address)
+    const checksummedAddress = formatEthereumAddress(address)
     if (isSameAddress(checksummedAddress, getConstant(CONSTANTS, 'ETH_ADDRESS')))
         return 'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png'
     if (iconMap[checksummedAddress]) return iconMap[checksummedAddress]
