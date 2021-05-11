@@ -16,6 +16,7 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
             ...asyncResult,
             payload,
             computed: {
+                remaining: '0',
                 startTime: payload.start_time,
                 canFetch: false,
                 canSwap: false,
@@ -39,6 +40,7 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
     return {
         ...asyncResult,
         computed: {
+            remaining: availability.remaining,
             startTime,
             unlockTime,
             hasLockTime,

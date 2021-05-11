@@ -1,4 +1,4 @@
-import { Component, useCallback, useState, useEffect, useMemo } from 'react'
+import { useCallback, useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
 import { BigNumber } from 'bignumber.js'
 import { makeStyles, createStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
@@ -27,8 +27,6 @@ import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { usePoolPayload } from '../hooks/usePoolPayload'
-import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
@@ -191,9 +189,7 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 
 export interface ITO_Props {
     pid: string
-    password: string
-    regions: string
-    payload?: JSON_PayloadInMask
+    payload: JSON_PayloadInMask
 }
 
 export function ITO(props: ITO_Props) {
@@ -209,31 +205,15 @@ export function ITO(props: ITO_Props) {
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid, password, regions: defaultRegions = '-' } = props
-
-    const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
+    const { pid, payload } = props
+    const { regions: defaultRegions = '-' } = props.payload
 
     console.log('DEBUG: ITO')
     console.log({
-        payload: props.payload,
-        payload_,
+        payload,
     })
 
-    // append the password from the outcoming pool
-    const payload: JSON_PayloadInMask = {
-        ...payload_,
-        password: payload_.password || password,
-    }
-    const {
-        token,
-        total: payload_total,
-        total_remaining: payload_total_remaining,
-        exchange_amounts,
-        exchange_tokens,
-        limit,
-        end_time,
-        message,
-    } = payload
+    const { token, total: payload_total, exchange_amounts, exchange_tokens, limit, end_time, message } = payload
 
     const { t } = useI18N()
     const sellerName =
@@ -244,15 +224,6 @@ export function ITO(props: ITO_Props) {
     const regions = message.split(MSG_DELIMITER)[2] ?? defaultRegions
     const classes = useStyles({ titleLength: getTextUILength(title), tokenNumber: exchange_tokens.length })
 
-    const total = new BigNumber(payload_total)
-    const total_remaining = new BigNumber(payload_total_remaining)
-    const sold = total.minus(total_remaining)
-
-    const { value: currentRegion, loading: loadingRegion } = useIPRegion()
-    const allowRegions = decodeRegionCode(regions)
-    const isRegionRestrict = checkRegionRestrict(allowRegions)
-    const isRegionAllow = !isRegionRestrict || (!loadingRegion && allowRegions.includes(currentRegion!.code))
-
     //#region token detailed
     const {
         value: availability,
@@ -261,6 +232,15 @@ export function ITO(props: ITO_Props) {
         retry: retryAvailability,
     } = useAvailabilityComputed(payload)
     //#ednregion
+
+    const total = new BigNumber(payload_total)
+    const total_remaining = new BigNumber(availability?.remaining ?? '0')
+    const sold = total.minus(total_remaining)
+
+    const { value: currentRegion, loading: loadingRegion } = useIPRegion()
+    const allowRegions = decodeRegionCode(regions)
+    const isRegionRestrict = checkRegionRestrict(allowRegions)
+    const isRegionAllow = !isRegionRestrict || (!loadingRegion && allowRegions.includes(currentRegion!.code))
 
     //#region if qualified
     const {
@@ -322,10 +302,9 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     const retryITOCard = useCallback(() => {
-        retryPoolPayload()
         retryPoolTradeInfo()
         retryAvailability()
-    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
+    }, [retryPoolTradeInfo, retryAvailability])
 
     //#region claim
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback([pid])
@@ -433,7 +412,7 @@ export function ITO(props: ITO_Props) {
             return t('plugin_ito_status_ongoing')
         }
         return ''
-    }, [listOfStatus, t, total_remaining])
+    }, [listOfStatus, total_remaining])
 
     const swapResultText = useMemo(() => {
         if (refundAllAmount) {
@@ -463,7 +442,6 @@ export function ITO(props: ITO_Props) {
         availability?.swapped,
         refundAllAmount,
         refundAmount,
-        t,
         token.decimals,
         token.symbol,
         tradeInfo?.buyInfo?.token.decimals,
@@ -757,7 +735,7 @@ export function ITO_Loading() {
     )
 }
 
-function ITO_LoadingFailUI({
+export function ITO_Error({
     retryPoolPayload,
     isConnectMetaMask = false,
 }: {
@@ -785,28 +763,4 @@ function ITO_LoadingFailUI({
             </ActionButton>
         </Card>
     )
-}
-
-export function ITO_ConnectMetaMask() {
-    return <ITO_LoadingFailUI retryPoolPayload={() => Services.Ethereum.connectMetaMask()} isConnectMetaMask />
-}
-
-export class ITO_LoadingFail extends Component<{ retryPoolPayload: () => void }> {
-    static getDerivedStateFromError(error: unknown) {
-        return { error }
-    }
-    state: { error: Error | null } = { error: null }
-    render() {
-        if (this.state.error) {
-            return (
-                <ITO_LoadingFailUI
-                    retryPoolPayload={() => {
-                        this.setState({ error: null })
-                        this.props.retryPoolPayload()
-                    }}
-                />
-            )
-        }
-        return this.props.children
-    }
 }

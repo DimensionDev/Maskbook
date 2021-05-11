@@ -183,12 +183,7 @@ export function SwapDialog(props: SwapDialogProps) {
     //#endregion
 
     //#region swap
-    const [swapState, swapCallback, resetSwapCallback] = useSwapCallback(
-        payload.pid,
-        payload.password,
-        swapAmount.toFixed(),
-        swapToken,
-    )
+    const [swapState, swapCallback, resetSwapCallback] = useSwapCallback(payload, swapAmount.toFixed(), swapToken)
     const onSwap = useCallback(async () => {
         await swapCallback()
         if (payload.token.type !== EthereumTokenType.ERC20) return

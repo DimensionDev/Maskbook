@@ -1,20 +1,17 @@
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { poolPayloadErrorRetry } from '../hooks/usePoolPayload'
 import type { JSON_PayloadInMask } from '../types'
-import { ITO, ITO_LoadingFail } from './ITO'
+import { ITO } from './ITO'
 
 export interface PostInspectorProps {
     payload: JSON_PayloadInMask
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    const { chain_id, pid, password, regions } = props.payload
+    const { chain_id, pid } = props.payload
 
     return (
         <EthereumChainBoundary chainId={chain_id}>
-            <ITO_LoadingFail retryPoolPayload={poolPayloadErrorRetry}>
-                <ITO pid={pid} payload={props.payload} password={password} regions={regions} />
-            </ITO_LoadingFail>
+            <ITO pid={pid} payload={props.payload} />
         </EthereumChainBoundary>
     )
 }

@@ -212,6 +212,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             endTime: new Date(Math.floor(endTime.getTime() / 1000) * 1000),
             unlockTime: unlockTime ? new Date(Math.floor(unlockTime.getTime() / 1000) * 1000) : undefined,
             password: signedPassword,
+            exchangeAmounts: exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
         })
 
         // pre-step: start waiting for provider to confirm tx
