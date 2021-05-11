@@ -7,8 +7,8 @@ This plugin fetch and show [dHEDGE](dhedge.org) pools data and allow user to inv
 - [x] Detect dHEDGE pool
 - [x] Show pool info
 - [x] Draw pool chart
-- [x] Investment
 - [x] Buy sUSD
+- [x] Investment
 
 ## Related projects
 
@@ -20,4 +20,4 @@ This plugin fetch and show [dHEDGE](dhedge.org) pools data and allow user to inv
 
 ## Pull requests
 
-<https://github.com/DimensionDev/Maskbook/pull/3119>
+- <https://github.com/DimensionDev/Maskbook/pull/3119>

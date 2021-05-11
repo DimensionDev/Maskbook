@@ -1,3 +1,4 @@
+import { escapeRegExp } from 'lodash-es'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANT } from '../constants'
 
@@ -15,8 +16,8 @@ export function usePoolURL(address: string) {
 }
 
 export function usePoolUrlPattern() {
-    const URL = useBaseUrl()
-    return RegExp(`${URL}/pool/(\\w+)`)
+    const baseURL = useBaseUrl()
+    return new RegExp(`${escapeRegExp(baseURL)}/pool/(\\w+)`)
 }
 
 export function useIsPoolUrl() {
