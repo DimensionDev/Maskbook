@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Copy, ExternalLink, XCircle, RotateCcw } from 'react-feather'
+import { Copy, ExternalLink, XCircle, RotateCcw, Edit3 } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import ErrorIcon from '@material-ui/icons/Error'
 import { Button, DialogActions, DialogContent, Link, makeStyles, Typography, List, ListItem } from '@material-ui/core'
@@ -85,6 +85,14 @@ const useStyles = makeStyles((theme) => ({
     clearAllButton: {
         fontSize: 14,
     },
+    transaction: {
+        fontSize: 14,
+        padding: 0,
+        marginTop: 6,
+    },
+    transactionButton: {
+        marginLeft: 'auto',
+    },
 }))
 
 export interface WalletStatusDialogProps {}
@@ -156,6 +164,9 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                     <div className={classes.accountInfo}>
                         <div className={classes.infoRow}>
                             <Typography className={classes.accountName}>{selectedWallet.name}</Typography>
+                            <Link component="button">
+                                <Edit3 color="currentcolor" />
+                            </Link>
                         </div>
                         <div className={classes.infoRow}>
                             <Typography className={classes.address}>
@@ -190,12 +201,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                                 {t('wallet_status_button_disconnect')}
                             </Button>
                         ) : null}
-                        <Button
-                            className={classes.actionButton}
-                            color="primary"
-                            size="small"
-                            variant="outlined"
-                            onClick={onChange}>
+                        <Button className={classes.actionButton} color="primary" size="small" onClick={onChange}>
                             {t('wallet_status_button_change')}
                         </Button>
                     </section>
@@ -208,26 +214,26 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                 <section className={classes.section}>
                     <div className={classes.sectionTitle}>
                         <Typography variant="h2" className={classes.sectionTitleText}>
-                            Recent Transactions
+                            {t('plugin_wallet_recent_transaction')}
                         </Typography>
                         <Button aria-label="Clear All" className={classes.clearAllButton}>
-                            (Clear all)
+                            ({t('plugin_wallet_clear_all')})
                         </Button>
                     </div>
                     <List>
-                        <ListItem>
+                        <ListItem className={classes.transaction}>
                             <Typography variant="body2">Add 2,000.00 USDT </Typography>
                             <ExternalLink className={classes.linkIcon} size={14} />
-                            <Button>
-                                <RotateCcw />
-                            </Button>
+                            <Link component="button" className={classes.transactionButton}>
+                                <RotateCcw size={12} />
+                            </Link>
                         </ListItem>
-                        <ListItem>
+                        <ListItem className={classes.transaction}>
                             <Typography variant="body2">Add 2,000.00 USDT </Typography>
                             <ExternalLink className={classes.linkIcon} size={14} />
-                            <Button>
-                                <XCircle color="red" />
-                            </Button>
+                            <Link component="button" className={classes.transactionButton}>
+                                <XCircle size={12} color="red" />
+                            </Link>
                         </ListItem>
                     </List>
                 </section>
