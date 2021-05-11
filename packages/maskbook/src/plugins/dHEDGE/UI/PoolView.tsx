@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import {
     makeStyles,
-    createStyles,
     Tab,
     Tabs,
     Typography,
@@ -22,86 +21,84 @@ import StableCoins from '../../../web3/hooks/stables_coins.json'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { RefreshIcon } from '@dimensiondev/icons'
 
-const useStyles = makeStyles((theme) => {
-    return createStyles({
-        root: {
-            width: '100%',
-            boxShadow: 'none',
-            border: `solid 1px ${theme.palette.divider}`,
-            padding: 0,
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        boxShadow: 'none',
+        border: `solid 1px ${theme.palette.divider}`,
+        padding: 0,
+    },
+    message: {
+        textAlign: 'center',
+    },
+    refresh: {
+        bottom: theme.spacing(1),
+        right: theme.spacing(1),
+        fontSize: 'inherit',
+    },
+    content: {
+        width: '100%',
+        height: 'var(--contentHeight)',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '0 !important',
+    },
+    body: {
+        flex: 1,
+        overflow: 'auto',
+        maxHeight: 350,
+        borderRadius: 0,
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        message: {
-            textAlign: 'center',
+    },
+    tabs: {
+        borderTop: `solid 1px ${theme.palette.divider}`,
+        borderBottom: `solid 1px ${theme.palette.divider}`,
+        width: '100%',
+        minHeight: 'unset',
+    },
+    tab: {
+        minHeight: 'unset',
+        minWidth: 'unset',
+    },
+    footer: {
+        marginTop: -1, // merge duplicate borders
+        zIndex: 1,
+        position: 'relative',
+        borderTop: `solid 1px ${theme.palette.divider}`,
+        justifyContent: 'space-between',
+    },
+    footnote: {
+        fontSize: 10,
+        marginRight: theme.spacing(1),
+    },
+    footLink: {
+        cursor: 'pointer',
+        marginRight: theme.spacing(0.5),
+        '&:last-child': {
+            marginRight: 0,
         },
-        refresh: {
-            bottom: theme.spacing(1),
-            right: theme.spacing(1),
-            fontSize: 'inherit',
-        },
-        content: {
-            width: '100%',
-            height: 'var(--contentHeight)',
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '0 !important',
-        },
-        body: {
-            flex: 1,
-            overflow: 'auto',
-            maxHeight: 350,
-            borderRadius: 0,
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        tabs: {
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            borderBottom: `solid 1px ${theme.palette.divider}`,
-            width: '100%',
-            minHeight: 'unset',
-        },
-        tab: {
-            minHeight: 'unset',
-            minWidth: 'unset',
-        },
-        footer: {
-            marginTop: -1, // merge duplicate borders
-            zIndex: 1,
-            position: 'relative',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            justifyContent: 'space-between',
-        },
-        footnote: {
-            fontSize: 10,
-            marginRight: theme.spacing(1),
-        },
-        footLink: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(0.5),
-            '&:last-child': {
-                marginRight: 0,
-            },
-        },
-        footMenu: {
-            color: theme.palette.text.secondary,
-            fontSize: 10,
-            display: 'flex',
-            alignItems: 'center',
-        },
-        footName: {
-            marginLeft: theme.spacing(0.5),
-        },
-        maskbook: {
-            width: 40,
-            height: 10,
-        },
-        dhedge: {
-            height: 10,
-            margin: theme.spacing(0, 0.5),
-        },
-    })
-})
+    },
+    footMenu: {
+        color: theme.palette.text.secondary,
+        fontSize: 10,
+        display: 'flex',
+        alignItems: 'center',
+    },
+    footName: {
+        marginLeft: theme.spacing(0.5),
+    },
+    maskbook: {
+        width: 40,
+        height: 10,
+    },
+    dhedge: {
+        height: 10,
+        margin: theme.spacing(0, 0.5),
+    },
+}))
 
 interface PoolViewProps {
     address: string
@@ -115,11 +112,16 @@ export function PoolView(props: PoolViewProps) {
 
     //#region susd token
     const SUSD = StableCoins.find((x) => x.symbol == 'sUSD')
-    const { value: susdTokenDetailed } = useERC20TokenDetailed(SUSD?.id ?? '')
+    const {
+        value: susdTokenDetailed,
+        loading: loadingToken,
+        retry: retryToken,
+        error: errorToken,
+    } = useERC20TokenDetailed(SUSD?.id ?? '')
     //#endregion
 
     //#region fetch pool
-    const { value: pool, error, loading, retry } = useFetchPool(address)
+    const { value: pool, error: errorPool, loading: loadingPool, retry: retryPool } = useFetchPool(address)
     //#endregion
 
     //#region tabs
@@ -130,7 +132,7 @@ export function PoolView(props: PoolViewProps) {
     ].filter(Boolean)
     //#endregion
 
-    if (loading)
+    if (loadingPool || loadingToken)
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_dhedge_loading')}
@@ -142,11 +144,11 @@ export function PoolView(props: PoolViewProps) {
                 {t('plugin_dhedge_pool_not_found')}
             </Typography>
         )
-    if (!susdTokenDetailed || error)
+    if (errorPool || errorToken || !susdTokenDetailed)
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_dhedge_smt_wrong')}
-                <RefreshIcon className={classes.refresh} color="primary" onClick={retry} />
+                <RefreshIcon className={classes.refresh} color="primary" onClick={errorPool ? retryPool : retryToken} />
             </Typography>
         )
     return (

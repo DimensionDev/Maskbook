@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { makeStyles, Theme, createStyles, CircularProgress, Typography } from '@material-ui/core'
+import { makeStyles, Theme, CircularProgress, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { useLineChart } from '../../hooks/useLineChart'
 import { Period, Pool } from '../types'
@@ -19,34 +19,32 @@ const DEFAULT_DIMENSION: Dimension = {
     height: 200,
 }
 
-const useStyles = makeStyles((theme: Theme) => {
-    return createStyles({
-        root: {
-            position: 'relative',
-            padding: theme.spacing(2),
-        },
-        svg: {
-            display: 'block',
-            color: '#fff',
-        },
-        progress: {
-            bottom: theme.spacing(1),
-            right: theme.spacing(1),
-            position: 'absolute',
-        },
-        refresh: {
-            bottom: theme.spacing(1),
-            right: theme.spacing(1),
-            position: 'absolute',
-            fontSize: 15,
-        },
-        placeholder: {
-            paddingTop: theme.spacing(10),
-            paddingBottom: theme.spacing(10),
-            borderStyle: 'none',
-        },
-    })
-})
+const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+        position: 'relative',
+        padding: theme.spacing(2),
+    },
+    svg: {
+        display: 'block',
+        color: '#fff',
+    },
+    progress: {
+        bottom: theme.spacing(1),
+        right: theme.spacing(1),
+        position: 'absolute',
+    },
+    refresh: {
+        bottom: theme.spacing(1),
+        right: theme.spacing(1),
+        position: 'absolute',
+        fontSize: 15,
+    },
+    placeholder: {
+        paddingTop: theme.spacing(10),
+        paddingBottom: theme.spacing(10),
+        borderStyle: 'none',
+    },
+}))
 
 interface PerformanceChartProps {
     pool: Pool

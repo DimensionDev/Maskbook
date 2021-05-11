@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react'
-import { makeStyles, createStyles, DialogContent } from '@material-ui/core'
+import { makeStyles, DialogContent } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 
@@ -26,34 +26,30 @@ import type { Pool } from '../types'
 import type { Coin } from '../../Trader/types'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        paper: {
-            width: '450px !important',
+const useStyles = makeStyles((theme) => ({
+    paper: {
+        width: '450px !important',
+    },
+    form: {
+        '& > *': {
+            margin: theme.spacing(1, 0),
         },
-        form: {
-            '& > *': {
-                margin: theme.spacing(1, 0),
-            },
-        },
-        root: {
-            margin: theme.spacing(2, 0),
-        },
-        tip: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-            padding: theme.spacing(2, 2, 0, 2),
-        },
-        button: {
-            margin: theme.spacing(1.5, 0, 0),
-            padding: 12,
-        },
-    }),
-)
+    },
+    root: {
+        margin: theme.spacing(2, 0),
+    },
+    tip: {
+        fontSize: 12,
+        color: theme.palette.text.secondary,
+        padding: theme.spacing(2, 2, 0, 2),
+    },
+    button: {
+        margin: theme.spacing(1.5, 0, 0),
+        padding: 12,
+    },
+}))
 
-export interface InvestDialogProps extends withClasses<never> {}
-
-export function InvestDialog(props: InvestDialogProps) {
+export function InvestDialog() {
     const { t } = useI18N()
     const classes = useStyles()
 

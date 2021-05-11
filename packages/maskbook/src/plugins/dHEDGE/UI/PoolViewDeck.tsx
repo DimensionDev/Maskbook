@@ -1,4 +1,4 @@
-import { makeStyles, createStyles, Typography, Grid, Link, Avatar, Button, Chip } from '@material-ui/core'
+import { makeStyles, Typography, Grid, Link, Avatar, Button, Chip } from '@material-ui/core'
 import type { Pool } from '../types'
 import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
 import { useAvatar } from '../hooks/useManager'
@@ -14,49 +14,47 @@ import type { Coin } from '../../Trader/types'
 import { PluginDHedgeMessages } from '../messages'
 import BigNumber from 'bignumber.js'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(2),
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+    },
+    title: {
+        padding: theme.spacing(1, 0),
+        display: 'flex',
+        alignItems: 'center',
+        '& > :last-child': {
+            marginTop: 4,
+            marginLeft: 4,
         },
-        title: {
-            padding: theme.spacing(1, 0),
-            display: 'flex',
-            alignItems: 'center',
-            '& > :last-child': {
-                marginTop: 4,
-                marginLeft: 4,
-            },
-        },
-        meta: {
-            fontSize: 14,
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(1),
-            display: 'flex',
-            alignItems: 'left',
-        },
-        avatar: {
-            width: theme.spacing(8),
-            height: theme.spacing(8),
-        },
-        text: {
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: '-webkit-box',
-            '-webkit-line-clamp': '4',
-            '-webkit-box-orient': 'vertical',
-        },
-        button: {
-            marginTop: theme.spacing(2),
-            marginBottom: theme.spacing(1),
-            fontWeight: 500,
-        },
-        chip: {
-            width: '100%',
-            fontSize: 'x-small',
-        },
-    }),
-)
+    },
+    meta: {
+        fontSize: 14,
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+        display: 'flex',
+        alignItems: 'left',
+    },
+    avatar: {
+        width: theme.spacing(8),
+        height: theme.spacing(8),
+    },
+    text: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        '-webkit-line-clamp': '4',
+        '-webkit-box-orient': 'vertical',
+    },
+    button: {
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(1),
+        fontWeight: 500,
+    },
+    chip: {
+        width: '100%',
+        fontSize: 'x-small',
+    },
+}))
 
 interface PoolDeckProps {
     pool: Pool

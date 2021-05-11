@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Pool } from '../types'
-import { makeStyles, createStyles, Typography, Grid, Divider } from '@material-ui/core'
+import { makeStyles, Typography, Grid, Divider } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 import { formatAmountPostfix } from '../utils'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
@@ -11,35 +11,33 @@ import { formatBalance } from '@dimensiondev/maskbook-shared'
 
 const DIGIT_LENGTH = 18
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(2),
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(1),
-            alignItems: 'center',
-            '& svg': {
-                marginRight: theme.spacing(0.5),
-            },
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+        alignItems: 'center',
+        '& svg': {
+            marginRight: theme.spacing(0.5),
         },
-        title: {
-            fontSize: 12,
-        },
-        value: {
-            fontSize: 32,
-        },
-        meta: {
-            display: 'flex',
-            alignItems: 'center',
-            padding: theme.spacing(1),
-        },
-        description: {
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(1),
-            maxWidth: '100%',
-        },
-    }),
-)
+    },
+    title: {
+        fontSize: 12,
+    },
+    value: {
+        fontSize: 32,
+    },
+    meta: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(1),
+    },
+    description: {
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+        maxWidth: '100%',
+    },
+}))
 
 interface PoolStatsProps {
     pool: Pool
