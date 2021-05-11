@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import classNames from 'classnames'
-import type { Vote } from '../types'
+import type { VoteItem } from '../types'
 import millify from 'millify'
 import { Avatar, List, makeStyles, Typography, ListItem, Badge, Box, Link } from '@material-ui/core'
 import { resolveIPFSLink, resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
@@ -11,6 +11,9 @@ import { SnapshotCard } from './SnapshotCard'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { useRetry } from '../hooks/useRetry'
+import { LoadingFailCard } from './LoadingFailCard'
+import { LoadingCard } from './LoadingCard'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -59,7 +62,7 @@ const useStyles = makeStyles((theme) => {
     }
 })
 
-export function VotesCard() {
+function Content() {
     const chainId = useChainId()
     const identifier = useContext(SnapshotContext)
     const { payload: votes } = useVotes(identifier)
@@ -79,7 +82,7 @@ export function VotesCard() {
                 </Badge>
             }>
             <List className={classes.list}>
-                {voteEntries.map((voteEntry: [string, Vote]) => {
+                {voteEntries.map((voteEntry: [string, VoteItem]) => {
                     return (
                         <ListItem className={classes.listItem} key={voteEntry[0]}>
                             <Link
@@ -112,5 +115,30 @@ export function VotesCard() {
                 })}
             </List>
         </SnapshotCard>
+    )
+}
+
+function Loading(props: React.PropsWithChildren<{}>) {
+    const { t } = useI18N()
+    return <LoadingCard title={t('plugin_snapshot_votes_title')}>{props.children}</LoadingCard>
+}
+
+function Fail(props: React.PropsWithChildren<{}>) {
+    const { t } = useI18N()
+    const retry = useRetry()
+    return (
+        <LoadingFailCard title={t('plugin_snapshot_votes_title')} retry={retry}>
+            {props.children}
+        </LoadingFailCard>
+    )
+}
+
+export function VotesCard() {
+    return (
+        <Loading>
+            <Fail>
+                <Content />
+            </Fail>
+        </Loading>
     )
 }

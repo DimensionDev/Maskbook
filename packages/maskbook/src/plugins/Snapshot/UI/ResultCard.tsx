@@ -10,6 +10,9 @@ import { useVotes } from '../hooks/useVotes'
 import { useResults } from '../hooks/useResults'
 import { SnapshotCard } from './SnapshotCard'
 import { parse } from 'json2csv'
+import { useRetry } from '../hooks/useRetry'
+import { LoadingFailCard } from './LoadingFailCard'
+import { LoadingCard } from './LoadingCard'
 
 const choiceMaxWidth = 240
 
@@ -62,10 +65,10 @@ const StyledLinearProgress = withStyles({
     },
 })(LinearProgress)
 
-export function ResultCard() {
+function Content() {
     const identifier = useContext(SnapshotContext)
     const {
-        payload: { proposal, message },
+        payload: { proposal },
     } = useProposal(identifier.id)
     const { payload: votes } = useVotes(identifier)
     const {
@@ -164,5 +167,45 @@ export function ResultCard() {
                 </Button>
             ) : null}
         </SnapshotCard>
+    )
+}
+
+function Loading(props: React.PropsWithChildren<{}>) {
+    const { t } = useI18N()
+    const identifier = useContext(SnapshotContext)
+    const {
+        payload: { proposal },
+    } = useProposal(identifier.id)
+    return (
+        <LoadingCard
+            title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}>
+            {props.children}
+        </LoadingCard>
+    )
+}
+
+function Fail(props: React.PropsWithChildren<{}>) {
+    const { t } = useI18N()
+    const identifier = useContext(SnapshotContext)
+    const {
+        payload: { proposal },
+    } = useProposal(identifier.id)
+    const retry = useRetry()
+    return (
+        <LoadingFailCard
+            title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}
+            retry={retry}>
+            {props.children}
+        </LoadingFailCard>
+    )
+}
+
+export function ResultCard() {
+    return (
+        <Loading>
+            <Fail>
+                <Content />
+            </Fail>
+        </Loading>
     )
 }
