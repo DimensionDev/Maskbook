@@ -102,3 +102,7 @@ export function payloadOutMaskCompact(payload: JSON_PayloadInMask) {
         exchange_tokens: [],
     } as JSON_PayloadOutMask
 }
+
+export function isCompactPaylaod(payload: JSON_PayloadInMask) {
+    return !payload.exchange_tokens.length
+}

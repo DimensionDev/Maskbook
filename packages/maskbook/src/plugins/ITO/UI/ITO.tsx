@@ -735,23 +735,17 @@ export function ITO_Loading() {
     )
 }
 
-export function ITO_Error({
-    retryPoolPayload,
-    isConnectMetaMask = false,
-}: {
-    retryPoolPayload: () => void
-    isConnectMetaMask?: boolean
-}) {
+export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }) {
     const { t } = useI18N()
-    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     const classes = useStyles({})
+    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     return (
         <Card
             className={classNames(classes.root, classes.loadingWrap)}
             elevation={0}
             style={{ backgroundImage: `url(${PoolBackground})` }}>
             <Typography variant="body1" className={classes.loadingITO}>
-                {isConnectMetaMask ? '' : t('plugin_ito_loading_failed')}
+                {t('plugin_ito_loading_failed')}
             </Typography>
             <ActionButton
                 onClick={retryPoolPayload}
@@ -759,7 +753,7 @@ export function ITO_Error({
                 size="large"
                 color="primary"
                 className={classes.loadingITO_Button}>
-                {isConnectMetaMask ? t('plugin_wallet_connect_to_metamask') : t('plugin_ito_loading_try_again')}
+                {t('plugin_ito_loading_try_again')}
             </ActionButton>
         </Card>
     )
