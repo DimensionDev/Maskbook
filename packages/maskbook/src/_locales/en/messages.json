@@ -440,7 +440,7 @@
     "plugin_ito_dialog_swap_panel_title": "Swap",
     "plugin_ito_dialog_swap_exceed_wallet_limit": "Exceeds single wallet limit",
     "plugin_ito_swap_ration_label": "Swap Ratio",
-    "plugin_ito_swap_unlucky_fail": "Not lucky enough to swap or the gas price is too high to swap, please check the reason from the below link, then try it again.",
+    "plugin_ito_swap_unlucky_fail": "Not lucky enough, please check the reason from the Etherscan link, then try it again.",
     "plugin_ito_swap_only_once_remind": "Each wallet can only participate once.",
     "plugin_ito_swap_title": "{{amount}} {{token}} per {{swap}} ",
     "plugin_ito_swap_end_date": "End in {{date}}.",
