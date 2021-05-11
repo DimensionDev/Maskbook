@@ -1,4 +1,6 @@
 import { makeStyles, Typography, MenuItem } from '@material-ui/core'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
@@ -24,7 +26,6 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
 import { useChainId } from '../../web3/hooks/useBlockNumber'
 import { ChainId } from '../../web3/types'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { resolveChainColor } from '../../web3/pipes'
 
 const useStyles = makeStyles((theme) => ({

@@ -46,9 +46,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface CreateImportChooseDialogProps extends withClasses<never> {}
+export interface ConnectWalletDialogProps extends withClasses<never> {}
 
-export function CreateImportChooseDialog(props: CreateImportChooseDialogProps) {
+export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -71,12 +71,7 @@ export function CreateImportChooseDialog(props: CreateImportChooseDialogProps) {
             }}>
             <DialogContent className={classes.content}>
                 <Box className={classes.walletOption}>
-                    <Image
-                        src={new URL('./wallet.png', import.meta.url).toString()}
-                        height={48}
-                        width={48}
-                        className={classes.optionIcon}
-                    />
+                    <Image src={new URL('./wallet.png', import.meta.url).toString()} className={classes.optionIcon} />
                     <Box className={classes.optionTexts}>
                         <Typography variant="h2" component="h2" className={classes.optionName}>
                             {t('plugin_wallet_create_a_new_wallet')}
@@ -90,12 +85,7 @@ export function CreateImportChooseDialog(props: CreateImportChooseDialogProps) {
                     </Button>
                 </Box>
                 <Box className={classes.walletOption}>
-                    <Image
-                        src={new URL('./import.png', import.meta.url).toString()}
-                        height={48}
-                        width={48}
-                        className={classes.optionIcon}
-                    />
+                    <Image src={new URL('./import.png', import.meta.url).toString()} className={classes.optionIcon} />
                     <Box className={classes.optionTexts}>
                         <Typography variant="h2" component="h2" className={classes.optionName}>
                             {t('plugin_wallet_import_wallet')}
