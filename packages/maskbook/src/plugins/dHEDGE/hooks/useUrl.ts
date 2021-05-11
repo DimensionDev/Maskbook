@@ -16,7 +16,7 @@ export function usePoolURL(address: string) {
 
 export function usePoolUrlPattern() {
     const URL = useBaseUrl()
-    return RegExp(URL + '/pool/(\\w+)')
+    return RegExp(`${URL}/pool/(\\w+)`)
 }
 
 export function useIsPoolUrl() {

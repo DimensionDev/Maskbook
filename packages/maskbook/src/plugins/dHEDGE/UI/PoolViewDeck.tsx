@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) =>
             paddingTop: theme.spacing(1),
             paddingBottom: theme.spacing(1),
             display: 'flex',
-            alignItems: 'ledt',
+            alignItems: 'left',
         },
         avatar: {
             width: theme.spacing(8),

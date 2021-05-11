@@ -20,6 +20,7 @@ import { PerformanceChart } from './PerformanceChart'
 import { useERC20TokenDetailed } from '../../../web3/hooks/useERC20TokenDetailed'
 import StableCoins from '../../../web3/hooks/stables_coins.json'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
+import { RefreshIcon } from '@dimensiondev/icons'
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -28,6 +29,14 @@ const useStyles = makeStyles((theme) => {
             boxShadow: 'none',
             border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
+        },
+        message: {
+            textAlign: 'center',
+        },
+        refresh: {
+            bottom: theme.spacing(1),
+            right: theme.spacing(1),
+            fontSize: 'inherit',
         },
         content: {
             width: '100%',
@@ -110,7 +119,7 @@ export function PoolView(props: PoolViewProps) {
     //#endregion
 
     //#region fetch pool
-    const { value: pool, error, loading } = useFetchPool(address)
+    const { value: pool, error, loading, retry } = useFetchPool(address)
     //#endregion
 
     //#region tabs
@@ -121,8 +130,25 @@ export function PoolView(props: PoolViewProps) {
     ].filter(Boolean)
     //#endregion
 
-    if (loading) return <Typography>Loading...</Typography>
-    if (!pool || !susdTokenDetailed || error) return <Typography>Something went wrong.</Typography>
+    if (loading)
+        return (
+            <Typography className={classes.message} color="textPrimary">
+                {t('plugin_dhedge_loading')}
+            </Typography>
+        )
+    if (!pool)
+        return (
+            <Typography className={classes.message} color="textPrimary">
+                {t('plugin_dhedge_pool_not_found')}
+            </Typography>
+        )
+    if (!susdTokenDetailed || error)
+        return (
+            <Typography className={classes.message} color="textPrimary">
+                {t('plugin_dhedge_smt_wrong')}
+                <RefreshIcon className={classes.refresh} color="primary" onClick={retry} />
+            </Typography>
+        )
     return (
         <Card className={classes.root} elevation={0}>
             <CardHeader subheader={<PoolViewDeck pool={pool} inputToken={susdTokenDetailed} />} />

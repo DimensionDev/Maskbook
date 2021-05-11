@@ -64,7 +64,7 @@ export function PerformanceChart(props: PerformanceChartProps) {
     const [period, setPeriod] = useState(Period.D1)
 
     //#region fetch pool history
-    const { value: perfHistory, error: error, loading: loading, retry } = useFetchPoolHistory(pool.address, period)
+    const { value: perfHistory, error, loading, retry } = useFetchPoolHistory(pool.address, period)
     const stats: Stat[] = perfHistory?.map((row) => [Number(row.timestamp), Number(row.performance)]) ?? []
     //#endregion
 
@@ -94,14 +94,13 @@ export function PerformanceChart(props: PerformanceChartProps) {
             value: price,
         })),
         dimension,
-        'x-trader-price-line-chart',
+        'x-dhedge-performance-line-chart',
         {
             tickFormat: '.0%',
             formatTooltip: (value: number) => `${(value * 100).toFixed(1)}%`,
         },
     )
 
-    if (error) return <Typography>Something went wrong.</Typography>
     return (
         <div className={classes.root} ref={rootRef}>
             {loading ? (
@@ -109,7 +108,7 @@ export function PerformanceChart(props: PerformanceChartProps) {
             ) : (
                 <RefreshIcon className={classes.refresh} color="primary" onClick={retry} />
             )}
-            {stats.length ? (
+            {stats.length && !error ? (
                 <>
                     <PriceChartPeriodControl period={period} onPeriodChange={setPeriod} />
                     <svg
@@ -123,7 +122,11 @@ export function PerformanceChart(props: PerformanceChartProps) {
                 </>
             ) : (
                 <Typography className={classes.placeholder} align="center" color="textSecondary">
-                    {loading ? t('plugin_dhedge_loading_chart') : t('plugin_dhedge_no_data')}
+                    {loading
+                        ? t('plugin_dhedge_loading_chart')
+                        : error
+                        ? t('plugin_dhedge_fetch_error')
+                        : t('plugin_dhedge_no_data')}
                 </Typography>
             )}
         </div>

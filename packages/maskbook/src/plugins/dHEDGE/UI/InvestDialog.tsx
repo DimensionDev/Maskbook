@@ -6,7 +6,6 @@ import { v4 as uuid } from 'uuid'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumTokenType, EtherTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useInvestCallback } from '../hooks/useInvestCallback'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -46,7 +45,7 @@ const useStyles = makeStyles((theme) =>
             padding: theme.spacing(2, 2, 0, 2),
         },
         button: {
-            margin: theme.spacing(2, 0),
+            margin: theme.spacing(1.5, 0, 0),
             padding: 12,
         },
     }),
@@ -64,7 +63,6 @@ export function InvestDialog(props: InvestDialogProps) {
 
     // context
     const account = useAccount()
-    const chainId = useChainId()
 
     //#region remote controlled dialog
     const [open, setInvestingDialogOpen] = useRemoteControlledDialog(
@@ -234,7 +232,7 @@ export function InvestDialog(props: InvestDialogProps) {
                             }}
                         />
                     </form>
-                    {tokenBalance === '0' ? (
+                    {new BigNumber(tokenBalance).isZero() ? (
                         <ActionButton
                             className={classes.button}
                             fullWidth
