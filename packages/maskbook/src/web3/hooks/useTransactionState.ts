@@ -15,6 +15,8 @@ export enum TransactionStateType {
     FAILED,
     /** Reject by external provider */
     REJECTED,
+    /** Workaround: ITO swapp fail due to unlucky*/
+    ITO_UNLUCKY,
 }
 
 export type TransactionState =
@@ -40,6 +42,11 @@ export type TransactionState =
     | {
           type: TransactionStateType.FAILED
           error: Error & { code?: number }
+      }
+    | {
+          type: TransactionStateType.ITO_UNLUCKY
+          no: number
+          receipt: TransactionReceipt
       }
 
 export function useTransactionState() {

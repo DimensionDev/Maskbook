@@ -17,6 +17,7 @@ export function useSwapCallback(
     payload: JSON_PayloadInMask,
     total: string,
     token: PartialRequired<EtherTokenDetailed | ERC20TokenDetailed, 'address'>,
+    isQualificationHasLucky = false,
 ) {
     const account = useAccount()
     const ITO_Contract = useITO_Contract()
@@ -132,25 +133,35 @@ export function useSwapCallback(
         ] as Parameters<ITO['methods']['swap']>
 
         // step 2-1: estimate gas
-        const estimatedGas = await ITO_Contract.methods
-            .swap(...swapParams)
-            .estimateGas(config)
-            .catch((error: Error) => {
-                setSwapState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
-                throw error
-            })
+        const estimatedGas = isQualificationHasLucky
+            ? null
+            : await ITO_Contract.methods
+                  .swap(...swapParams)
+                  .estimateGas(config)
+                  .catch((error: Error) => {
+                      setSwapState({
+                          type: TransactionStateType.FAILED,
+                          error,
+                      })
+                      throw error
+                  })
 
         // step 2-2: blocking
         return new Promise<void>((resolve, reject) => {
             const onSucceed = (no: number, receipt: TransactionReceipt) => {
-                setSwapState({
-                    type: TransactionStateType.CONFIRMED,
-                    no,
-                    receipt,
-                })
+                if (!receipt.events?.SwapSuccess) {
+                    setSwapState({
+                        type: TransactionStateType.ITO_UNLUCKY,
+                        no,
+                        receipt,
+                    })
+                } else {
+                    setSwapState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                }
                 resolve()
             }
             const onFailed = (error: Error) => {
@@ -168,7 +179,7 @@ export function useSwapCallback(
                 resolve()
             }
             const promiEvent = ITO_Contract.methods.swap(...swapParams).send({
-                gas: addGasMargin(estimatedGas).toFixed(),
+                gas: estimatedGas ? addGasMargin(estimatedGas).toFixed() : 200000,
                 ...config,
             })
             promiEvent.on(TransactionEventType.TRANSACTION_HASH, onHash)
@@ -176,7 +187,7 @@ export function useSwapCallback(
             promiEvent.on(TransactionEventType.CONFIRMATION, onSucceed)
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => onSucceed(0, receipt))
         })
-    }, [ITO_Contract, qualificationContract, account, payload, total, token.address])
+    }, [ITO_Contract, qualificationContract, account, payload, total, token.address, isQualificationHasLucky])
 
     const resetCallback = useCallback(() => {
         setSwapState({

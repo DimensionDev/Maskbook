@@ -440,6 +440,7 @@
     "plugin_ito_dialog_swap_panel_title": "スワップ",
     "plugin_ito_dialog_swap_exceed_wallet_limit": "一つのウォレットの限度を超えています",
     "plugin_ito_swap_ration_label": "スワップ比率",
+    "plugin_ito_swap_unlucky_fail": "",
     "plugin_ito_swap_only_once_remind": "各ウォレットは一度しか参加できません。",
     "plugin_ito_swap_title": "{{swap}} 分の {{amount}} {{token}} ",
     "plugin_ito_swap_end_date": "{{date}} に終了",
