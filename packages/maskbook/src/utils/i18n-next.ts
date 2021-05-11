@@ -4,6 +4,8 @@ import zh from '../_locales/zh/messages.json'
 import ja from '../_locales/ja/messages.json'
 import { addMaskThemeI18N } from '@dimensiondev/maskbook-theme'
 import type { I18NFunction } from './i18n-next-ui'
+// @ts-ignore in case circle dependency make typescript complains
+import { addDashboardI18N } from '@dimensiondev/dashboard'
 export type I18NStrings = typeof en
 
 function removeEmpty(lang: Record<string, string>) {
@@ -23,6 +25,7 @@ i18nNextInstance.init({
     fallbackLng: 'en',
 })
 addMaskThemeI18N(i18nNextInstance)
+addDashboardI18N(i18nNextInstance)
 i18nNextInstance.languages = ['en', 'zh', 'ja']
 
 if (module.hot) {

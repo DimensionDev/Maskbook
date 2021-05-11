@@ -1,7 +1,6 @@
 /// <reference types="react/experimental" />
 /// <reference types="react-dom/experimental" />
 import ReactDOM from 'react-dom'
-import { StylesProvider } from '@material-ui/styles'
 
 // @ts-ignore in case circle dependency make typescript complains
 import { Dashboard, setService, setPluginMessages, setMessages, setPluginServices } from '@dimensiondev/dashboard'
@@ -10,7 +9,6 @@ import { WalletRPC, WalletMessages } from '../../plugins/Wallet/messages'
 import { MaskMessage } from '../../utils/messages'
 import { startPluginDashboard } from '@dimensiondev/mask-plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
-import { StyledEngineProvider } from '@material-ui/core'
 setService(Services)
 setMessages(MaskMessage)
 setPluginServices({ Wallet: WalletRPC })
@@ -19,10 +17,4 @@ startPluginDashboard(createPluginHost())
 
 const root = document.createElement('div')
 document.body.insertBefore(root, document.body.children[0])
-ReactDOM.unstable_createRoot(root).render(
-    <StyledEngineProvider injectFirst>
-        <StylesProvider>
-            <Dashboard />
-        </StylesProvider>
-    </StyledEngineProvider>,
-)
+ReactDOM.unstable_createRoot(root).render(<Dashboard />)
