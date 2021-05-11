@@ -19,7 +19,7 @@ interface SwapConfirmationEvent {
     open: boolean
 }
 
-type SwapDialogEvent = {
+interface SwapDialogEvent {
     open: boolean
     traderProps?: TraderProps
 }

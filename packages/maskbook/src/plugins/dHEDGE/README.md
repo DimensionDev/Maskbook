@@ -1,6 +1,6 @@
 # Plugin: dHEDGE
 
-This plugin fetch and show [dHEDGE](dhedge.org) pools data and allow user to invest on that poll.
+This plugin fetch and show [dHEDGE](https://dhedge.org) pools data and allow user to invest on that poll.
 
 ## Feature Set
 
