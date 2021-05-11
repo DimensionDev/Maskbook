@@ -1,9 +1,8 @@
 import { memo, useEffect, useState } from 'react'
 import { MaskDialog } from '../../../../../../theme'
 import { Button, DialogActions, DialogContent, TextField } from '@material-ui/core'
-import { checkInputLengthExceed } from '../../../../utils'
-import { PERSONA_NAME_MAX_LENGTH } from '../../../../constants'
 import { useDashboardI18N } from '../../../../locales'
+import { isPersonaNameLengthValid, PERSONA_NAME_MAX_LENGTH } from '../../../../utils/checkLengthExceed'
 
 export interface RenameDialogProps {
     open: boolean
@@ -25,9 +24,9 @@ export const RenameDialog = memo<RenameDialogProps>(({ open, nickname, onClose, 
                 <TextField
                     style={{ width: '100%' }}
                     variant="filled"
-                    error={checkInputLengthExceed(name, PERSONA_NAME_MAX_LENGTH)}
+                    error={!isPersonaNameLengthValid(name)}
                     helperText={
-                        checkInputLengthExceed(name, PERSONA_NAME_MAX_LENGTH)
+                        !isPersonaNameLengthValid(name)
                             ? t.personas_name_maximum_tips({ length: String(PERSONA_NAME_MAX_LENGTH) })
                             : ''
                     }
