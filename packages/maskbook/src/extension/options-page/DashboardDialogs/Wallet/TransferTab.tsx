@@ -19,6 +19,7 @@ import type { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../../.
 import { EthereumTokenType } from '../../../../web3/types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import Services from '../../../service'
+import Web3Utils from 'web3-utils'
 
 const useTransferTabStyles = makeStyles((theme) => ({
     root: {
@@ -43,15 +44,16 @@ interface TransferTabProps {
     onClose: () => void
 }
 
-async function getGas(chainId: ChainId, account: string, address: string, amount: string) {
+async function getFee(chainId: ChainId, account: string, address: string, amount: string) {
     const config: TransactionConfig = {
         from: account,
         to: address,
         value: amount,
     }
     const estimatedGas = await Services.Ethereum.estimateGas(config, chainId)
+    const gasPrice = await Services.Ethereum.getGasPrice(chainId)
 
-    return new BigNumber(estimatedGas).div(1e9)
+    return new BigNumber(estimatedGas).multipliedBy(gasPrice)
 }
 
 export function TransferTab(props: TransferTabProps) {
@@ -97,9 +99,9 @@ export function TransferTab(props: TransferTabProps) {
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
 
     const onClick = useCallback(async () => {
-        const gas = await getGas(chainId, account, ETH_ADDRESS, tokenBalance)
-        const balance = new BigNumber(formatBalance(tokenBalance, token.decimals)).minus(gas).toFixed()
-        setAmount(balance)
+        const fee = await getFee(chainId, account, ETH_ADDRESS, tokenBalance)
+        const balance = new BigNumber(Web3Utils.toWei(formatBalance(tokenBalance, token.decimals), 'ether')).minus(fee)
+        setAmount(Web3Utils.fromWei(balance.toFixed()))
     }, [tokenBalance])
 
     //#region remote controlled transaction dialog
