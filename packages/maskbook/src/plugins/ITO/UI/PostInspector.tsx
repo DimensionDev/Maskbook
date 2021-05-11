@@ -13,7 +13,7 @@ export function PostInspector(props: PostInspectorProps) {
     return (
         <EthereumChainBoundary chainId={chain_id}>
             <ITO_LoadingFail retryPoolPayload={poolPayloadErrorRetry}>
-                <ITO pid={pid} password={password} regions={regions} />
+                <ITO pid={pid} payload={props.payload} password={password} regions={regions} />
             </ITO_LoadingFail>
         </EthereumChainBoundary>
     )

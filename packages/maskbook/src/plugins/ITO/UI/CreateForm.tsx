@@ -12,7 +12,7 @@ import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useQualificationVerify } from '../hooks/useQualificationVerify'
-import { ITO_CONSTANTS } from '../constants'
+import { ITO_CONSTANTS, ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
@@ -202,11 +202,11 @@ export function CreateForm(props: CreateFormProps) {
             total: formatAmount(first?.amount || '0', first?.token?.decimals),
             exchangeAmounts: rest.map((item) => formatAmount(item.amount || '0', item?.token?.decimals)),
             exchangeTokens: rest.map((item) => item.token!),
-            startTime,
             qualificationAddress:
                 qualification?.isQualification && advanceSettingData.contract
                     ? qualificationAddress
                     : DEFAULT_QUALIFICATION_ADDRESS,
+            startTime,
             endTime,
             unlockTime: unlockTime > endTime && advanceSettingData.delayUnlocking ? unlockTime : undefined,
             regions: encodeRegionCode(regions),
@@ -267,7 +267,6 @@ export function CreateForm(props: CreateFormProps) {
         advanceSettingData,
         qualification,
         startTime,
-        t,
         tokenAndAmount?.amount,
         tokenAndAmount?.token?.symbol,
         tokenAndAmounts,

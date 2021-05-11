@@ -16,7 +16,7 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
             ...asyncResult,
             payload,
             computed: {
-                startTime: payload.start_time * 1000,
+                startTime: payload.start_time,
                 canFetch: false,
                 canSwap: false,
                 canShare: false,
@@ -28,12 +28,11 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
             },
         }
 
-    const startTime =
-        qualification_start_time > payload.start_time * 1000 ? qualification_start_time : payload.start_time * 1000
+    const startTime = qualification_start_time > payload.start_time ? qualification_start_time : payload.start_time
 
     const isStarted = startTime < Date.now()
     const isExpired = availability.expired
-    const unlockTime = Number(availability.unlock_time) * 1000
+    const unlockTime = Number(availability.unlock_time)
     const hasLockTime = unlockTime !== ITO_CONTRACT_BASE_TIMESTAMP
     const isCompleted = Number(availability.swapped) > 0
 

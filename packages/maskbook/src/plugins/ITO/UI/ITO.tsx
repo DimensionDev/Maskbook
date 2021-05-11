@@ -193,6 +193,7 @@ export interface ITO_Props {
     pid: string
     password: string
     regions: string
+    payload?: JSON_PayloadInMask
 }
 
 export function ITO(props: ITO_Props) {
@@ -211,6 +212,12 @@ export function ITO(props: ITO_Props) {
     const { pid, password, regions: defaultRegions = '-' } = props
 
     const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
+
+    console.log('DEBUG: ITO')
+    console.log({
+        payload: props.payload,
+        payload_,
+    })
 
     // append the password from the outcoming pool
     const payload: JSON_PayloadInMask = {
@@ -469,13 +476,13 @@ export function ITO(props: ITO_Props) {
                 {t('plugin_ito_list_start_date', { date: formatDateTime(new Date(startTime), true) })}
             </Typography>
         )
-    }, [startTime, t])
+    }, [startTime])
 
     const footerEndTime = useMemo(
         () => (
             <Typography variant="body1">
                 {t('plugin_ito_swap_end_date', {
-                    date: formatDateTime(new Date(end_time * 1000), true),
+                    date: formatDateTime(new Date(end_time), true),
                 })}
             </Typography>
         ),
@@ -497,7 +504,7 @@ export function ITO(props: ITO_Props) {
             <>
                 <Typography variant="body1">
                     {t('plugin_ito_allocation_per_wallet', {
-                        limit: `: ${formatBalance(limit, token.decimals)}`,
+                        limit: formatBalance(limit, token.decimals),
                         token: token.symbol,
                     })}
                 </Typography>

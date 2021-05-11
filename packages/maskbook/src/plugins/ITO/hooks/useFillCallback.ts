@@ -208,8 +208,9 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         // the given settings is valid
         setFillSettings({
             ...poolSettings,
-            startTime: new Date(startTime_ * 1000),
-            endTime: new Date(endTime_ * 1000),
+            startTime: new Date(Math.floor(startTime.getTime() / 1000) * 1000),
+            endTime: new Date(Math.floor(endTime.getTime() / 1000) * 1000),
+            unlockTime: unlockTime ? new Date(Math.floor(unlockTime.getTime() / 1000) * 1000) : undefined,
             password: signedPassword,
         })
 
