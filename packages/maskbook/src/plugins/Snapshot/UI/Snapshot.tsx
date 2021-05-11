@@ -4,7 +4,6 @@ import { SnapshotContext } from '../context'
 import { useProposal } from '../hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
-import { useRetry } from '../hooks/useRetry'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -63,8 +62,6 @@ export function Snapshot() {
         <Tab className={classes.tab} key="proposal" label="Proposal" />,
         <Tab className={classes.tab} key="progress" label="Progress" />,
     ]
-    const retry = useRetry()
-
     return (
         <Card className={classes.root} elevation={0}>
             <CardHeader
@@ -105,7 +102,7 @@ export function Snapshot() {
                 </Tabs>
                 <Paper className={classes.body}>
                     {tabIndex === 0 ? <ProposalTab /> : null}
-                    {tabIndex === 1 ? <ProgressTab retry={retry} /> : null}
+                    {tabIndex === 1 ? <ProgressTab /> : null}
                 </Paper>
             </CardContent>
         </Card>

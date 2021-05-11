@@ -1,7 +1,7 @@
 import { SnapshotContext } from '../context'
 import { getProposalIdentifier } from '../helpers'
 import { Snapshot } from './Snapshot'
-import { NetworkFail } from './NetworkFail'
+import { LoadingFailCard } from './LoadingFailCard'
 import { useRetry } from '../hooks/useRetry'
 
 export interface PostInspectorProps {
@@ -13,9 +13,9 @@ export function PostInspector(props: PostInspectorProps) {
     const retry = useRetry()
     return (
         <SnapshotContext.Provider value={identifier}>
-            <NetworkFail title="" isFullPluginDown={true} retry={retry}>
+            <LoadingFailCard title="" isFullPluginDown={true} retry={retry}>
                 <Snapshot />
-            </NetworkFail>
+            </LoadingFailCard>
         </SnapshotContext.Provider>
     )
 }

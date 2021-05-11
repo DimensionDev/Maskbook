@@ -53,6 +53,7 @@ function Renderer({ url }: { url: string }) {
             <Suspense
                 fallback={new Array(2).fill(0).map((_, i) => (
                     <Skeleton
+                        key={i}
                         className={classes.skeleton}
                         animation="wave"
                         variant="rectangular"
