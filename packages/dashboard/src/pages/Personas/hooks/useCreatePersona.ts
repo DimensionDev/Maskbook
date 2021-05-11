@@ -1,6 +1,6 @@
 import { useAsyncFn } from 'react-use'
 import { Messages, Services } from '../../../API'
-import { delay } from '../../../utils'
+import { delay } from '@dimensiondev/maskbook-shared'
 
 export function useCreatePersona(callback: () => void) {
     return useAsyncFn(async (nickName?: string) => {

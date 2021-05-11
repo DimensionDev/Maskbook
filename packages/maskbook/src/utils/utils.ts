@@ -8,15 +8,6 @@ import type { CustomEvents } from '../extension/injected-script/CustomEvents'
 import { isNull, noop } from 'lodash-es'
 
 /**
- * Return a promise that resolved after `time` ms.
- * If `time` is `Infinity`, it will never resolve.
- * @param time - Time to sleep. In `ms`.
- */
-export function delay(time: number) {
-    return new Promise<void>((resolve) => (Number.isFinite(time) ? setTimeout(resolve, time) : void 0))
-}
-
-/**
  * Accept a promise and then set a timeout on it. After `time` ms, it will reject.
  * @param promise - The promise that you want to set time limit on.
  * @param time - Time before timeout. In `ms`.
@@ -200,7 +191,7 @@ export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
 }
 
 import Services from '../extension/service'
-export { parseURL } from '@dimensiondev/maskbook-shared'
+export { parseURL, delay } from '@dimensiondev/maskbook-shared'
 /**
  * !!!! Please use the Promise constructor if possible
  * If you don't understand https://groups.google.com/forum/#!topic/bluebird-js/mUiX2-vXW2s
