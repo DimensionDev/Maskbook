@@ -1,22 +1,22 @@
-const path = require('path')
+import type { Config } from '@jest/types'
+import { resolve } from 'path'
 
-module.exports = {
+const options: Config.InitialOptions = {
     testRegex: ['/__tests__/.*\\.[jt]sx?$'],
     preset: 'ts-jest',
     testEnvironment: 'jest-environment-jsdom-fourteen',
     globals: {
-        'ts-jest': {
-            isolatedModules: true,
-        },
+        'ts-jest': { isolatedModules: true },
     },
-    globalTeardown: path.join(__dirname, './scripts/jest-global-teardown'),
+    globalTeardown: resolve(__dirname, 'scripts', 'jest-global-teardown'),
     setupFiles: [
         require.resolve('jest-webextension-mock'),
         require.resolve('fake-indexeddb/auto'),
-        path.join(__dirname, './scripts/jest-setup.js'),
+        resolve(__dirname, 'scripts', 'jest-setup.js'),
     ],
-    // skip packages other than 'holoflows/kit'
-    transformIgnorePatterns: [],
+    transformIgnorePatterns: [
+        // skip packages other than 'holoflows/kit'
+    ],
     transform: {
         'node_modules.+(holoflows).+.js$': 'jest-esm-transformer',
     },
@@ -25,3 +25,5 @@ module.exports = {
         'idb/with-async-ittr-cjs': require.resolve('idb/with-async-ittr-cjs.js'),
     },
 }
+
+export default options
