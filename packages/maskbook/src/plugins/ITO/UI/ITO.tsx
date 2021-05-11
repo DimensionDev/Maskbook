@@ -207,12 +207,6 @@ export function ITO(props: ITO_Props) {
 
     const { pid, payload } = props
     const { regions: defaultRegions = '-' } = props.payload
-
-    console.log('DEBUG: ITO')
-    console.log({
-        payload,
-    })
-
     const { token, total: payload_total, exchange_amounts, exchange_tokens, limit, end_time, message } = payload
 
     const { t } = useI18N()
@@ -229,6 +223,7 @@ export function ITO(props: ITO_Props) {
         value: availability,
         computed: availabilityComputed,
         loading: loadingAvailability,
+        error: errorAvailability,
         retry: retryAvailability,
     } = useAvailabilityComputed(payload)
     //#ednregion
