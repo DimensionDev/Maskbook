@@ -1,3 +1,7 @@
+// This file includes the API bridge to the Mask Network extension
+// In isolated mode, set up at ./initialization/isolated_bridge
+// In intergrated mode, set up at /packages/maskbook/src/extension/dashboard/index
+
 import type { Services as ServiceType } from '../../maskbook/dist/src/extension/service'
 import type { MaskMessage } from '../../maskbook/dist/src/utils/messages'
 export let Services: typeof ServiceType = null!
