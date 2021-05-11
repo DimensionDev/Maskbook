@@ -39,7 +39,7 @@ const POOL_FIELDS = `
     seller {
         address
     }
-    buyers (first: 0) {
+    buyers (first: 1) {
         address
         name
     }

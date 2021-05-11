@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { useInterval } from 'react-use'
 import { compact } from 'lodash-es'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
@@ -9,6 +11,12 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
     const chainId = useChainId()
     const asyncResult = useAvailability(payload?.pid)
     const { value: qualification_start_time } = useQualification(payload.qualification_address)
+
+    //#region ticker
+    const [_, setTicker] = useState(0)
+    useInterval(() => setTicker((x) => x + 1), 1000)
+    //#endregion
+
     const { value: availability } = asyncResult
 
     if (!availability || qualification_start_time === undefined)
