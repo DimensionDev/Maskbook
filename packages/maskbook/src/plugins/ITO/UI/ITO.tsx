@@ -489,7 +489,7 @@ export function ITO(props: ITO_Props) {
                     : null}
             </>
         ),
-        [footerEndTime, footerStartTime, limit, listOfStatus, t, token.decimals, token.symbol],
+        [footerEndTime, footerStartTime, limit, listOfStatus, token.decimals, token.symbol],
     )
 
     return (
