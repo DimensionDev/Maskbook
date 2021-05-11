@@ -13,10 +13,13 @@ const useStyles = makeStyles(() => ({
 }))
 
 export const IdeamarketPluginDefine: PluginConfig = {
+    id: 'ideamarket.io',
     pluginName: 'Ideamarket',
     identifier: 'ideamarket.io',
     stage: PluginStage.Development,
     scope: PluginScope.Internal,
+    pluginDescription: '',
+    pluginIcon: '',
 
     postInspector: function Component(): JSX.Element | null {
         const user = usePostInfoDetails('postBy').userId
