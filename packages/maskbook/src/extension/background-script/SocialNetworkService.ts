@@ -7,7 +7,7 @@ import { currentSetupGuideStatus } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
 import { SetupGuideStep } from '../../components/InjectedComponents/SetupGuide'
 
-export const getDefinedSocialNetworkUIs = async () => {
+export async function getDefinedSocialNetworkUIs() {
     return [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {
         return {
             networkIdentifier,
@@ -16,12 +16,12 @@ export const getDefinedSocialNetworkUIs = async () => {
 }
 
 export interface SocialNetworkProvider {
-    internalName: string
+    networkIdentifier: string
     network: string
 }
 
 export const connectSocialNetwork = async (identifier: string, provider: SocialNetworkProvider) => {
-    const ui = await loadSocialNetworkUI(provider.internalName)
+    const ui = await loadSocialNetworkUI(provider.networkIdentifier)
     const home = ui.utils.getHomePage?.()
     if (!Flags.no_web_extension_dynamic_permission_request) {
         if (!(await requestSNSAdaptorPermission(ui))) return

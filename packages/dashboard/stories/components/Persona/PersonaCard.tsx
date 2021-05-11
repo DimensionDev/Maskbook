@@ -13,7 +13,7 @@ export const PersonaCard = of({
         active: false,
         providers: [
             {
-                internalName: 'twitter.com',
+                networkIdentifier: 'twitter.com',
                 connected: false,
                 network: 'twitter.com',
                 identifier: new ProfileIdentifier('twitter.com', ''),

@@ -76,7 +76,7 @@ export default function Personas() {
                         const profile = profiles.find(([key]) => key.network === i.networkIdentifier)
                         if (i.networkIdentifier === 'localhost') return null
                         return {
-                            internalName: i.networkIdentifier,
+                            networkIdentifier: i.networkIdentifier,
                             network: i.networkIdentifier,
                             connected: !!profile,
                             userId: profile?.[0].userId,
@@ -97,7 +97,7 @@ export default function Personas() {
         return JSON.parse(currentPersona)
     }, [currentPersona])
 
-    const [activeTab, setActiveTab] = useState(currentPersonaInfo?.providers?.[0]?.internalName ?? '')
+    const [activeTab, setActiveTab] = useState(currentPersonaInfo?.providers?.[0]?.networkIdentifier ?? '')
 
     const [, onConnect] = useConnectSocialNetwork()
 
@@ -115,7 +115,7 @@ export default function Personas() {
     }, [currentPersonaInfo, personas])
 
     useEffect(() => {
-        setActiveTab(currentPersonaInfo?.providers?.[0]?.internalName ?? '')
+        setActiveTab(currentPersonaInfo?.providers?.[0]?.networkIdentifier ?? '')
     }, [currentPersonaInfo])
 
     return (
@@ -137,7 +137,7 @@ export default function Personas() {
             <Box className={classes.container}>
                 <TabContext value={activeTab}>
                     <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
-                        {currentPersonaInfo?.providers?.map(({ internalName }) => (
+                        {currentPersonaInfo?.providers?.map(({ networkIdentifier: internalName }) => (
                             <Tab
                                 key={internalName}
                                 value={internalName}
@@ -147,7 +147,7 @@ export default function Personas() {
                         ))}
                     </Tabs>
                     {currentPersonaInfo?.providers?.map((provider) => (
-                        <TabPanel key={provider.internalName} value={provider.internalName}>
+                        <TabPanel key={provider.networkIdentifier} value={provider.networkIdentifier}>
                             <PersonaSetup
                                 provider={provider}
                                 onConnect={() => {

@@ -90,7 +90,7 @@ export const PersonaCard = memo<PersonaCardProps>(({ nickname, providers, active
                     {providers.map((provider) => {
                         return (
                             <PersonaLine
-                                key={provider.internalName}
+                                key={provider.networkIdentifier}
                                 onConnect={() => onConnect(identifier.toText(), provider)}
                                 onDisConnect={() => onDisconnect(provider?.identifier)}
                                 {...provider}

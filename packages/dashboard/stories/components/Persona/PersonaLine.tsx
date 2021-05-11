@@ -9,7 +9,7 @@ export default meta({
 
 export const PersonaLine = of({
     args: {
-        internalName: 'twitter',
+        networkIdentifier: 'twitter',
         connected: false,
     },
 })

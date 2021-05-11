@@ -1,13 +1,13 @@
 import type { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 
 export interface SocialNetworkProvider {
-    internalName: string
+    networkIdentifier: string
     network: string
     connected: boolean
 }
 
 export interface PersonaProvider {
-    internalName: string
+    networkIdentifier: string
     network: string
     connected: boolean
     userId?: string

@@ -85,7 +85,7 @@ export const EditPersonaDialog = memo(({ open, onClose, nickname, providers, ide
                         {providers.map((provider) => {
                             return (
                                 <PersonaLine
-                                    key={provider.internalName}
+                                    key={provider.networkIdentifier}
                                     onConnect={() => onConnect(identifier.toText(), provider)}
                                     onDisConnect={() => onDisConnect(provider?.identifier)}
                                     {...provider}

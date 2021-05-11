@@ -13,20 +13,20 @@ export const EditPersonaDialog = of({
     args: {
         providers: [
             {
-                internalName: 'facebook.com',
+                networkIdentifier: 'facebook.com',
                 network: 'facebook.com',
                 connected: false,
                 identifier: new ProfileIdentifier('facebook.com', ''),
             },
             {
-                internalName: 'twitter.com',
+                networkIdentifier: 'twitter.com',
                 network: 'twitter.com',
                 connected: true,
                 userId: '4ZQ2t09g5nY395N',
                 identifier: new ProfileIdentifier('twitter.com', ''),
             },
             {
-                internalName: 'instagram.com',
+                networkIdentifier: 'instagram.com',
                 network: 'instagram.com',
                 connected: false,
                 identifier: new ProfileIdentifier('instagram.com', ''),
