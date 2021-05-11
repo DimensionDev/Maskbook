@@ -2,14 +2,12 @@ import { memo, useCallback, useState } from 'react'
 import { Button, DialogActions, DialogContent, makeStyles, Typography } from '@material-ui/core'
 import { AuthorIcon, EditIcon } from '@dimensiondev/icons'
 import { MaskColorVar, MaskDialog } from '@dimensiondev/maskbook-theme'
-import type { PersonaProvider } from '../../type'
+import type { PersonaProvider, SocialNetworkProvider } from '../../type'
 import { PersonaLine } from '../PersonaLine'
-import { useConnectSocialNetwork } from '../../hooks/useConnectSocialNetwork'
-import type { ECKeyIdentifier } from '@dimensiondev/maskbook-shared'
-import { useDisConnectSocialNetwork } from '../../hooks/useDisConnectSocialNetwork'
+import type { PersonaIdentifier, ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 import { RenameDialog } from '../RenameDialog'
-import { Services } from '../../../../API'
 import { useDashboardI18N } from '../../../../locales'
+import { PersonaState } from '../../hooks/usePersonaState'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -53,58 +51,70 @@ export interface EditPersonaDialogProps {
     onClose: () => void
     providers: PersonaProvider[]
     nickname?: string
-    identifier: ECKeyIdentifier
+    identifier: PersonaIdentifier
 }
 
-export const EditPersonaDialog = memo(({ open, onClose, nickname, providers, identifier }: EditPersonaDialogProps) => {
-    const classes = useStyles()
-    const t = useDashboardI18N()
-    const [renameOpen, setRenameOpen] = useState(false)
+export const EditPersonaDialog = memo<EditPersonaDialogProps>((props) => {
+    const { onConnect, onDisConnect, onRename } = PersonaState.useContainer()
 
-    const [, onConnect] = useConnectSocialNetwork()
-    const [, onDisConnect] = useDisConnectSocialNetwork()
-
-    const onRename = useCallback(
-        async (target: string) => {
-            await Services.Identity.renamePersona(identifier, target)
-            setRenameOpen(false)
-        },
-        [identifier],
-    )
-
-    return (
-        <>
-            <MaskDialog open={open} title={t.personas_edit_dialog_title()} onClose={onClose}>
-                <DialogContent className={classes.container}>
-                    <AuthorIcon className={classes.author} />
-                    <Typography variant="caption" classes={{ root: classes.name }}>
-                        {nickname}
-                        <EditIcon className={classes.edit} onClick={() => setRenameOpen(true)} />
-                    </Typography>
-                    <div className={classes.content}>
-                        {providers.map((provider) => {
-                            return (
-                                <PersonaLine
-                                    key={provider.networkIdentifier}
-                                    onConnect={() => onConnect(identifier.toText(), provider)}
-                                    onDisConnect={() => onDisConnect(provider?.identifier)}
-                                    {...provider}
-                                />
-                            )
-                        })}
-                    </div>
-                </DialogContent>
-                <DialogActions>
-                    <Button color="secondary">{t.personas_cancel()}</Button>
-                    <Button>{t.personas_confirm()}</Button>
-                </DialogActions>
-            </MaskDialog>
-            <RenameDialog
-                open={renameOpen}
-                nickname={nickname}
-                onClose={() => setRenameOpen(false)}
-                onConfirm={onRename}
-            />
-        </>
-    )
+    return <EditPersonaDialogUI {...props} onConnect={onConnect} onDisConnect={onDisConnect} onRename={onRename} />
 })
+
+export interface EditPersonaDialogUIProps extends EditPersonaDialogProps {
+    onConnect: (identifier: PersonaIdentifier, provider: SocialNetworkProvider) => void
+    onDisConnect: (identifier?: ProfileIdentifier) => void
+    onRename: (target: string, identifier: PersonaIdentifier, callback?: () => void) => void
+}
+
+export const EditPersonaDialogUI = memo<EditPersonaDialogUIProps>(
+    ({ open, onClose, nickname, providers, identifier, onConnect, onDisConnect, onRename }) => {
+        const classes = useStyles()
+        const t = useDashboardI18N()
+
+        const [renameOpen, setRenameOpen] = useState(false)
+
+        const onConfirm = useCallback(
+            (name: string) => {
+                onRename(name, identifier)
+                setRenameOpen(false)
+            },
+            [onRename, identifier],
+        )
+
+        return (
+            <>
+                <MaskDialog open={open} title={t.personas_edit_dialog_title()} onClose={onClose}>
+                    <DialogContent className={classes.container}>
+                        <AuthorIcon className={classes.author} />
+                        <Typography variant="caption" classes={{ root: classes.name }}>
+                            {nickname}
+                            <EditIcon className={classes.edit} onClick={() => setRenameOpen(true)} />
+                        </Typography>
+                        <div className={classes.content}>
+                            {providers.map((provider) => {
+                                return (
+                                    <PersonaLine
+                                        key={provider.networkIdentifier}
+                                        onConnect={() => onConnect(identifier, provider)}
+                                        onDisConnect={() => onDisConnect(provider?.identifier)}
+                                        {...provider}
+                                    />
+                                )
+                            })}
+                        </div>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button color="secondary">{t.personas_cancel()}</Button>
+                        <Button>{t.personas_confirm()}</Button>
+                    </DialogActions>
+                </MaskDialog>
+                <RenameDialog
+                    open={renameOpen}
+                    nickname={nickname}
+                    onClose={() => setRenameOpen(false)}
+                    onConfirm={onConfirm}
+                />
+            </>
+        )
+    },
+)

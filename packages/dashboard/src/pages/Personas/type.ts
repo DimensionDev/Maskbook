@@ -1,4 +1,4 @@
-import type { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import type { PersonaIdentifier, ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 
 export interface SocialNetworkProvider {
     networkIdentifier: string
@@ -15,7 +15,7 @@ export interface PersonaProvider {
 }
 
 export interface PersonaInfo {
-    nickname: string
-    identifier?: string
-    providers?: PersonaProvider[]
+    nickname?: string
+    identifier: PersonaIdentifier
+    providers: PersonaProvider[]
 }

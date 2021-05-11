@@ -1,16 +1,13 @@
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useState } from 'react'
 import { Box, Button, Drawer, makeStyles } from '@material-ui/core'
 import { PersonaState } from '../../hooks/usePersonaState'
 import { PersonaCard } from '../PersonaCard'
 //TODO: replace to new settings
-import type { PersonaInfo, PersonaProvider } from '../../type'
-import { ECKeyIdentifier, useValueRef } from '@dimensiondev/maskbook-shared'
-import { currentPersonaSettings } from '../../settings'
+import type { PersonaInfo } from '../../type'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { AddPersonaCard } from '../AddPersonaCard'
-import stringify from 'json-stable-stringify'
-import { useCreatePersona } from '../../hooks/useCreatePersona'
 import { useDashboardI18N } from '../../../../locales'
+import type { PersonaIdentifier } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,66 +40,76 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export interface PersonaDrawer {
-    personas: {
-        identifier: ECKeyIdentifier
-        providers: PersonaProvider[]
-        nickname?: string
-    }[]
+    personas: PersonaInfo[]
 }
 
 export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
-    const t = useDashboardI18N()
-    const classes = useStyles()
-    const [showAddPersonaCard, setShowAddPersonaCard] = useState(false)
-    const { drawerOpen, toggleDrawer } = PersonaState.useContainer()
-    const currentPersonaRef = useValueRef(currentPersonaSettings)
+    const { drawerOpen, toggleDrawer, currentPersona, onAddPersona, onChangeCurrentPersona } =
+        PersonaState.useContainer()
 
-    const currentPersonIdentifier = useMemo(() => {
-        return (JSON.parse(currentPersonaRef) as PersonaInfo)?.identifier ?? ''
-    }, [currentPersonaRef])
-
-    const onPersonaCardClick = useCallback((persona) => {
-        currentPersonaSettings.value = stringify({
-            ...persona,
-            identifier: persona.identifier.toText(),
-        })
-    }, [])
-
-    const [, onAddPersona] = useCreatePersona(() => setShowAddPersonaCard(false))
     return (
-        <Drawer
-            anchor="right"
+        <PersonaDrawerUI
+            personas={personas}
+            currentPersonaIdentifier={currentPersona?.identifier}
             open={drawerOpen}
-            onClose={toggleDrawer}
-            variant="temporary"
-            ModalProps={{
-                BackdropProps: {
-                    className: classes.backdrop,
-                },
-            }}
-            elevation={0}
-            classes={{ root: classes.root, paper: classes.paper }}>
-            {personas.map((item) => {
-                const { identifier, nickname, providers } = item
-                return (
-                    <PersonaCard
-                        identifier={identifier}
-                        active={identifier.toText() === currentPersonIdentifier}
-                        key={identifier.toText()}
-                        nickname={nickname}
-                        providers={providers}
-                        onClick={() => onPersonaCardClick(item)}
-                    />
-                )
-            })}
-            {showAddPersonaCard && (
-                <AddPersonaCard onConfirm={onAddPersona} onCancel={() => setShowAddPersonaCard(false)} />
-            )}
-            <Box className={classes.buttons}>
-                <Button onClick={() => setShowAddPersonaCard(true)}>{t.personas_add_persona()}</Button>
-                {/* TODO: replace className to color prop */}
-                <Button className={classes.backup}>{t.personas_back_up()}</Button>
-            </Box>
-        </Drawer>
+            toggleDrawer={toggleDrawer}
+            onChangeCurrentPersona={onChangeCurrentPersona}
+            onAddPersona={onAddPersona}
+        />
     )
 })
+
+export interface PersonaDrawerUIProps extends PersonaDrawer {
+    open: boolean
+    currentPersonaIdentifier?: PersonaIdentifier
+    toggleDrawer: () => void
+    onChangeCurrentPersona: (persona: PersonaInfo) => void
+    onAddPersona: (nickname: string) => void
+}
+
+export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
+    ({ open, currentPersonaIdentifier, toggleDrawer, personas, onChangeCurrentPersona, onAddPersona }) => {
+        const classes = useStyles()
+
+        const t = useDashboardI18N()
+
+        const [showAddPersonaCard, setShowAddPersonaCard] = useState(false)
+
+        return (
+            <Drawer
+                anchor="right"
+                open={open}
+                onClose={toggleDrawer}
+                variant="temporary"
+                ModalProps={{
+                    BackdropProps: {
+                        className: classes.backdrop,
+                    },
+                }}
+                elevation={0}
+                classes={{ root: classes.root, paper: classes.paper }}>
+                {personas.map((item) => {
+                    const { identifier, nickname, providers } = item
+                    return (
+                        <PersonaCard
+                            identifier={identifier}
+                            active={identifier.equals(currentPersonaIdentifier)}
+                            key={identifier.toText()}
+                            nickname={nickname}
+                            providers={providers}
+                            onClick={() => onChangeCurrentPersona(item)}
+                        />
+                    )
+                })}
+                {showAddPersonaCard && (
+                    <AddPersonaCard onConfirm={onAddPersona} onCancel={() => setShowAddPersonaCard(false)} />
+                )}
+                <Box className={classes.buttons}>
+                    <Button onClick={() => setShowAddPersonaCard(true)}>{t.personas_add_persona()}</Button>
+                    {/* TODO: replace className to color prop */}
+                    <Button className={classes.backup}>{t.personas_back_up()}</Button>
+                </Box>
+            </Drawer>
+        )
+    },
+)

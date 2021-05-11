@@ -1,5 +1,6 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
 import { PersonaSetup as C } from '../../../src/pages/Personas/components/PersonaSetup'
+import { action } from '@storybook/addon-actions'
 
 const { meta, of } = story(C)
 
@@ -9,9 +10,8 @@ export default meta({
 
 export const PersonaSetup = of({
     args: {
-        provider: {
-            networkIdentifier: 'twitter.com',
-            connected: false,
-        },
+        connected: false,
+        networkIdentifier: 'twitter.com',
+        onConnect: action('onConnect'),
     },
 })

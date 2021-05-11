@@ -4,14 +4,13 @@ import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { SettingsIcon } from '@dimensiondev/icons'
 import { IconButton, MenuItem, Typography } from '@material-ui/core'
 import { PersonaLine } from '../PersonaLine'
-import { ECKeyIdentifier, useMenu } from '@dimensiondev/maskbook-shared'
+import { PersonaIdentifier, ProfileIdentifier, useMenu } from '@dimensiondev/maskbook-shared'
 //TODO: replace to new settings
 import type { PersonaProvider } from '../../type'
 import { EditPersonaDialog } from '../EditPersonaDialog'
 import { DeletePersonaDialog } from '../DeletePersonaDialog'
-import { useConnectSocialNetwork } from '../../hooks/useConnectSocialNetwork'
-import { useDisConnectSocialNetwork } from '../../hooks/useDisConnectSocialNetwork'
 import { useDashboardI18N } from '../../../../locales'
+import { PersonaState } from '../../hooks/usePersonaState'
 
 const useStyles = makeStyles<Theme, { active: boolean }, 'card' | 'status' | 'header' | 'content' | 'line' | 'setting'>(
     (theme) => ({
@@ -56,62 +55,78 @@ const useStyles = makeStyles<Theme, { active: boolean }, 'card' | 'status' | 'he
 export interface PersonaCardProps {
     nickname?: string
     active?: boolean
-    identifier: ECKeyIdentifier
+    identifier: PersonaIdentifier
     providers: PersonaProvider[]
     onClick(): void
 }
 
-export const PersonaCard = memo<PersonaCardProps>(({ nickname, providers, active = false, onClick, identifier }) => {
-    const t = useDashboardI18N()
-    const classes = useStyles({ active })
-    const [editDialogOpen, setEditDialogOpen] = useState(false)
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-    const [menu, openMenu] = useMenu(
-        <MenuItem onClick={() => setEditDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
-        <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
-            {t.personas_delete()}
-        </MenuItem>,
-    )
+export const PersonaCard = memo<PersonaCardProps>((props) => {
+    const { onConnect, onDisConnect } = PersonaState.useContainer()
 
-    const [, onConnect] = useConnectSocialNetwork()
-    const [, onDisconnect] = useDisConnectSocialNetwork()
-
-    return (
-        <div className={classes.card} onClick={onClick}>
-            <div className={classes.status} />
-            <div style={{ flex: 1 }}>
-                <div className={classes.header}>
-                    <Typography variant="subtitle2">{nickname}</Typography>
-                    <IconButton onClick={openMenu} className={classes.setting}>
-                        <SettingsIcon fontSize="inherit" style={{ fill: MaskColorVar.textPrimary }} />
-                    </IconButton>
-                </div>
-                <div className={classes.content}>
-                    {providers.map((provider) => {
-                        return (
-                            <PersonaLine
-                                key={provider.networkIdentifier}
-                                onConnect={() => onConnect(identifier.toText(), provider)}
-                                onDisConnect={() => onDisconnect(provider?.identifier)}
-                                {...provider}
-                            />
-                        )
-                    })}
-                </div>
-            </div>
-            {menu}
-            <EditPersonaDialog
-                open={editDialogOpen}
-                onClose={() => setEditDialogOpen(false)}
-                nickname={nickname}
-                providers={providers}
-                identifier={identifier}
-            />
-            <DeletePersonaDialog
-                open={deleteDialogOpen}
-                onClose={() => setDeleteDialogOpen(false)}
-                nickname={nickname}
-            />
-        </div>
-    )
+    return <PersonaCardUI {...props} onConnect={onConnect} onDisconnect={onDisConnect} />
 })
+
+export interface PersonaCardUIProps extends PersonaCardProps {
+    onConnect: (identifier: PersonaIdentifier, provider: PersonaProvider) => void
+    onDisconnect: (identifier?: ProfileIdentifier) => void
+}
+
+export const PersonaCardUI = memo<PersonaCardUIProps>(
+    ({ nickname, active = false, identifier, providers, onConnect, onDisconnect, onClick }) => {
+        const t = useDashboardI18N()
+        const classes = useStyles({ active })
+        const [editDialogOpen, setEditDialogOpen] = useState(false)
+        const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+        const [menu, openMenu] = useMenu(
+            <MenuItem onClick={() => setEditDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
+            <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
+                {t.personas_delete()}
+            </MenuItem>,
+        )
+        return (
+            <div className={classes.card}>
+                <div className={classes.status} />
+                <div style={{ flex: 1 }}>
+                    <div className={classes.header}>
+                        <Typography variant="subtitle2" sx={{ cursor: 'pointer' }} onClick={onClick}>
+                            {nickname}
+                        </Typography>
+                        <IconButton
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                openMenu(e)
+                            }}
+                            className={classes.setting}>
+                            <SettingsIcon fontSize="inherit" style={{ fill: MaskColorVar.textPrimary }} />
+                        </IconButton>
+                    </div>
+                    <div className={classes.content}>
+                        {providers.map((provider) => {
+                            return (
+                                <PersonaLine
+                                    key={provider.networkIdentifier}
+                                    onConnect={() => onConnect(identifier, provider)}
+                                    onDisConnect={() => onDisconnect(provider?.identifier)}
+                                    {...provider}
+                                />
+                            )
+                        })}
+                    </div>
+                </div>
+                {menu}
+                <EditPersonaDialog
+                    open={editDialogOpen}
+                    onClose={() => setEditDialogOpen(false)}
+                    nickname={nickname}
+                    providers={providers}
+                    identifier={identifier}
+                />
+                <DeletePersonaDialog
+                    open={deleteDialogOpen}
+                    onClose={() => setDeleteDialogOpen(false)}
+                    nickname={nickname}
+                />
+            </div>
+        )
+    },
+)

@@ -6,6 +6,7 @@ import { delay } from '../../utils/utils'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
 import { SetupGuideStep } from '../../components/InjectedComponents/SetupGuide'
+import type { PersonaIdentifier } from '@dimensiondev/maskbook-shared'
 
 export async function getDefinedSocialNetworkUIs() {
     return [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {
@@ -20,7 +21,7 @@ export interface SocialNetworkProvider {
     network: string
 }
 
-export const connectSocialNetwork = async (identifier: string, provider: SocialNetworkProvider) => {
+export const connectSocialNetwork = async (identifier: PersonaIdentifier, provider: SocialNetworkProvider) => {
     const ui = await loadSocialNetworkUI(provider.networkIdentifier)
     const home = ui.utils.getHomePage?.()
     if (!Flags.no_web_extension_dynamic_permission_request) {
@@ -28,7 +29,7 @@ export const connectSocialNetwork = async (identifier: string, provider: SocialN
     }
     currentSetupGuideStatus[provider.network].value = stringify({
         status: SetupGuideStep.FindUsername,
-        persona: identifier,
+        persona: identifier.toText(),
     })
     await delay(100)
     home && browser.tabs.create({ active: true, url: home })

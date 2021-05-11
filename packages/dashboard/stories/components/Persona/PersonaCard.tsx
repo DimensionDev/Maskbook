@@ -1,6 +1,7 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
-import { PersonaCard as C } from '../../../src/pages/Personas/components/PersonaCard'
-import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { PersonaCardUI as C } from '../../../src/pages/Personas/components/PersonaCard'
+import { ECKeyIdentifier, ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { action } from '@storybook/addon-actions'
 
 const { meta, of } = story(C)
 
@@ -19,5 +20,9 @@ export const PersonaCard = of({
                 identifier: new ProfileIdentifier('twitter.com', ''),
             },
         ],
+        identifier: new ECKeyIdentifier('secp256k1', ''),
+        onClick: action('onClick'),
+        onConnect: action('onConnect'),
+        onDisconnect: action('onDisConnect'),
     },
 })

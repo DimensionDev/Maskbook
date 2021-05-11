@@ -28,18 +28,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 export interface PersonaSetupProps {
-    provider: {
-        networkIdentifier: string
-        connected: boolean
-    }
+    connected: boolean
+    networkIdentifier: string
     onConnect: () => void
 }
-export const PersonaSetup = memo(({ provider, onConnect }: PersonaSetupProps) => {
+export const PersonaSetup = memo(({ connected, networkIdentifier, onConnect }: PersonaSetupProps) => {
     const classes = useStyles()
     const t = useDashboardI18N()
     return (
         <div className={classes.container}>
-            {provider.connected ? (
+            {connected ? (
                 <div>content placeholder</div>
             ) : (
                 <>
@@ -47,7 +45,7 @@ export const PersonaSetup = memo(({ provider, onConnect }: PersonaSetupProps) =>
                         <LinkIcon color="primary" fontSize="inherit" style={{ fill: 'none' }} viewBox="0 0 36 36" />
                     </div>
                     <Typography variant="body2" sx={{ marginTop: 2.5, marginBottom: 2.5 }}>
-                        {t.personas_setup_connect_tips({ type: provider.networkIdentifier.replace('.com', '') })}
+                        {t.personas_setup_connect_tips({ type: networkIdentifier.replace('.com', '') })}
                     </Typography>
                     <Button className={classes.button} onClick={onConnect}>
                         {t.personas_setup_connect()}

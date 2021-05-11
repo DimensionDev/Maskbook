@@ -14,7 +14,7 @@ export function useMenu(
 ): [
     menu: React.ReactElement,
     openDialog: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void,
-    closeDialog: () => void,
+    closeDialog: (event: SyntheticEvent<HTMLElement>) => void,
 ] {
     return useMenuConfig(elements, {})
 }
@@ -26,7 +26,7 @@ export function useMenuConfig(
 ): [
     menu: React.ReactElement,
     openDialog: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void,
-    closeDialog: () => void,
+    closeDialog: (event: SyntheticEvent<HTMLElement>) => void,
 ] {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>()
     const [status, setOpen] = useState(false)
@@ -40,7 +40,10 @@ export function useMenuConfig(
         setAnchorEl(element)
         setOpen(true)
     }, [])
-    const close = useCallback(() => setOpen(false), [])
+    const close = useCallback((event: SyntheticEvent<HTMLElement>) => {
+        event.stopPropagation()
+        setOpen(false)
+    }, [])
     const Menu = useContext(useMenuContext)
     return [
         <Menu open={status} onClose={close} onClick={close} anchorEl={anchorEl}>

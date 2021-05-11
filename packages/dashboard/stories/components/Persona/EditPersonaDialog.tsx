@@ -1,7 +1,7 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
-import { EditPersonaDialog as C } from '../../../src/pages/Personas/components/EditPersonaDialog'
+import { EditPersonaDialogUI as C } from '../../../src/pages/Personas/components/EditPersonaDialog'
 import { action } from '@storybook/addon-actions'
-import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { ProfileIdentifier, ECKeyIdentifier } from '@dimensiondev/maskbook-shared'
 
 const { meta, of } = story(C)
 
@@ -35,5 +35,9 @@ export const EditPersonaDialog = of({
         nickname: 'nuanyang233@gmail.com',
         open: true,
         onClose: () => action('onClose'),
+        identifier: new ECKeyIdentifier('secp256k1', ''),
+        onConnect: action('onConnect'),
+        onDisConnect: action('onDisConnect'),
+        onRename: action('onRename'),
     },
 })

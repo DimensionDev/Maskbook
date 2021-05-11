@@ -20,11 +20,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export interface AddPersonaCardProps {
-    onConfirm: (name?: string) => void
+    onConfirm: (name: string) => void
     onCancel: () => void
 }
 
-export const AddPersonaCard = memo(({ onConfirm, onCancel }: AddPersonaCardProps) => {
+export const AddPersonaCard = memo<AddPersonaCardProps>(({ onConfirm, onCancel }) => {
     const t = useDashboardI18N()
     const [name, setName] = useState('')
     const classes = useStyles()
