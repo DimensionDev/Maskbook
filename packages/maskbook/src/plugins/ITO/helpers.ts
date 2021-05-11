@@ -64,6 +64,14 @@ export function payloadIntoMask(payload: JSON_PayloadOutMask) {
 export function payloadOutMask(payload: JSON_PayloadInMask) {
     return {
         ...payload,
+        token: tokenOutMask(payload.token),
+        exchange_tokens: payload.exchange_tokens.map(tokenOutMask),
+    } as JSON_PayloadOutMask
+}
+
+export function payloadOutMaskCompact(payload: JSON_PayloadInMask) {
+    return {
+        ...payload,
 
         // HOTFIX of image payload for ITO
         // remove unnecessary chunks of data to reduce the size of payload
