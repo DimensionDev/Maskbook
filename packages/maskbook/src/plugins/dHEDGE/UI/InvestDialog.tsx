@@ -9,7 +9,6 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useInvestCallback } from '../hooks/useInvestCallback'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { formatBalance } from '../../Wallet/formatter'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
@@ -25,6 +24,7 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Pool } from '../types'
 import type { Coin } from '../../Trader/types'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -65,24 +65,19 @@ export function InvestDialog(props: InvestDialogProps) {
     const account = useAccount()
 
     //#region remote controlled dialog
-    const [open, setInvestingDialogOpen] = useRemoteControlledDialog(
-        PluginDHedgeMessages.events.InvestDialogUpdated,
-        (ev) => {
-            if (ev.open) {
-                setPool(ev.pool)
-                setToken(ev.token)
-            }
-        },
-    )
+    const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated, (ev) => {
+        if (ev.open) {
+            setPool(ev.pool)
+            setToken(ev.token)
+        }
+    })
     const onClose = useCallback(() => {
-        setInvestingDialogOpen({
-            open: false,
-        })
-    }, [setInvestingDialogOpen])
+        closeDialog()
+    }, [closeDialog])
     //#endregion
 
     //#region select token
-    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setSelectTokenDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
@@ -109,10 +104,11 @@ export function InvestDialog(props: InvestDialogProps) {
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
     const amount = new BigNumber(rawAmount || '0').multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0))
-    const { value: tokenBalance = '0', loading: loadingTokenBalance, retry: retryLoadTokenBalance } = useTokenBalance(
-        token?.type ?? EthereumTokenType.Ether,
-        token?.address ?? '',
-    )
+    const {
+        value: tokenBalance = '0',
+        loading: loadingTokenBalance,
+        retry: retryLoadTokenBalance,
+    } = useTokenBalance(token?.type ?? EthereumTokenType.Ether, token?.address ?? '')
     //#endregion
 
     //#region blocking
@@ -124,7 +120,7 @@ export function InvestDialog(props: InvestDialogProps) {
     //#endregion
 
     //#region Swap
-    const [, openSwapDialog] = useRemoteControlledDialog(
+    const { setDialog: openSwapDialog } = useRemoteControlledDialog(
         PluginTraderMessages.events.swapDialogUpdated,
         useCallback(
             (ev) => {
@@ -170,7 +166,7 @@ export function InvestDialog(props: InvestDialogProps) {
         .toString()
 
     // on close transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         useCallback(
             (ev) => {

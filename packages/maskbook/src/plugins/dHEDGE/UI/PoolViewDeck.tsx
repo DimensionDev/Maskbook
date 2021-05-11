@@ -82,7 +82,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
     //#endregion
 
     //#region Swap
-    const [, openSwapDialog] = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
+    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
     const openSwap = useCallback(() => {
         openSwapDialog({
             open: true,
@@ -100,7 +100,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
     //#endregion
 
     //#region the invest dialog
-    const [, openInvestDialog] = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated)
+    const { setDialog: openInvestDialog } = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated)
     const onInvest = useCallback(() => {
         if (!pool) return
         openInvestDialog({

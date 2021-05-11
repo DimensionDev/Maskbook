@@ -3,11 +3,11 @@ import type { Pool } from '../types'
 import { makeStyles, createStyles, Typography, Grid, Divider } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 import { formatAmountPostfix } from '../utils'
-import { formatBalance } from '../../Wallet/formatter'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import DOMPurify from 'isomorphic-dompurify'
 import { POOL_DESCRIPTION_LIMIT } from '../constants'
 import BigNumber from 'bignumber.js'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 
 const DIGIT_LENGTH = 18
 
