@@ -1,16 +1,16 @@
 import { Suspense } from 'react'
-import { createStyles, makeStyles, Skeleton } from '@material-ui/core'
+import { makeStyles, Skeleton } from '@material-ui/core'
 import { SnapshotCard } from './SnapshotCard'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         skeleton: {
             margin: theme.spacing(1),
             '&:first-child': {
                 marginTop: theme.spacing(2),
             },
         },
-    })
+    }
 })
 
 export function LoadingCard(props: React.PropsWithChildren<{ title: string }>) {
