@@ -1,9 +1,7 @@
 import { useCallback, memo } from 'react'
 import { noop } from 'lodash-es'
-import { ThemeProvider, makeStyles, Theme, withStyles } from '@material-ui/core/styles'
-import { StylesProvider } from '@material-ui/styles'
-import { Button, Paper, Typography, Box, StyledEngineProvider } from '@material-ui/core'
-import { useClassicMaskTheme } from '../../utils/theme'
+import { makeStyles, Theme, withStyles } from '@material-ui/core/styles'
+import { Button, Paper, Typography, Box } from '@material-ui/core'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils/i18n-next-ui'
@@ -11,7 +9,7 @@ import { delay } from '../../utils/utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { useAsyncRetry } from 'react-use'
-import { MaskbookUIRoot } from '../../UIRoot'
+import { MaskUIRoot } from '../../UIRoot'
 import { useMyIdentities } from '../../components/DataSource/useActivatedUI'
 import { Flags } from '../../utils/flags'
 import { hasSNSAdaptorPermission, requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
@@ -184,15 +182,10 @@ function PopupUI() {
 }
 
 export function Popup() {
-    return (
-        <StyledEngineProvider injectFirst>
-            <StylesProvider>
-                <Box />
-                <ThemeProvider theme={useClassicMaskTheme()}>
-                    <GlobalCss />
-                    {MaskbookUIRoot(<PopupUI />)}
-                </ThemeProvider>
-            </StylesProvider>
-        </StyledEngineProvider>
+    return MaskUIRoot(
+        <>
+            <GlobalCss />
+            <PopupUI />
+        </>,
     )
 }
