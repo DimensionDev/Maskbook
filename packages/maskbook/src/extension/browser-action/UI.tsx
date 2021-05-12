@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
-function PopupUI() {
+function BrowserActionUI() {
     const { t } = useI18N()
     const classes = useStyles()
 
@@ -122,10 +122,10 @@ function PopupUI() {
                             display: 'flex',
                             justifyContent: 'space-between',
                         }}>
-                        <Typography className={classes.title}>{t('popup_notifications')}</Typography>
+                        <Typography className={classes.title}>{t('browser_action_notifications')}</Typography>
                     </Box>
                     <Typography className={classes.description} color="textSecondary" variant="body2">
-                        {t('popup_notifications_description', {
+                        {t('browser_action_notifications_description', {
                             sns: ui.networkIdentifier,
                         })}
                     </Typography>
@@ -140,7 +140,7 @@ function PopupUI() {
                                 if (Flags.no_web_extension_dynamic_permission_request) return
                                 requestSNSAdaptorPermission(ui).then(checkPermission)
                             }}>
-                            {t('popup_request_permission')}
+                            {t('browser_action_request_permission')}
                         </Button>
                     </Box>
                 </>
@@ -153,7 +153,7 @@ function PopupUI() {
                             display: 'flex',
                             justifyContent: 'space-between',
                         }}>
-                        <Typography className={classes.title}>{t('popup_current_persona')}</Typography>
+                        <Typography className={classes.title}>{t('browser_action_current_persona')}</Typography>
                     </Box>
                     <ChooseIdentity identities={identities} />
                 </>
@@ -164,16 +164,16 @@ function PopupUI() {
                 }}>
                 {ui.networkIdentifier !== 'localhost' && identities.length === 0 ? (
                     <Button className={classes.button} variant="text" onClick={onEnter}>
-                        {t('popup_setup_first_persona')}
+                        {t('browser_action_setup_first_persona')}
                     </Button>
                 ) : (
                     <Button className={classes.button} variant="text" onClick={onEnter}>
-                        {t('popup_enter_dashboard')}
+                        {t('browser_action_enter_dashboard')}
                     </Button>
                 )}
                 {ui.networkIdentifier === 'localhost' ? null : (
                     <Button className={classes.button} variant="text" onClick={onConnect}>
-                        {t('popup_connect_wallet')}
+                        {t('browser_action_connect_wallet')}
                     </Button>
                 )}
             </Box>
@@ -181,11 +181,11 @@ function PopupUI() {
     )
 }
 
-export function Popup() {
+export function BrowserActionRoot() {
     return MaskUIRoot(
         <>
             <GlobalCss />
-            <PopupUI />
+            <BrowserActionUI />
         </>,
     )
 }

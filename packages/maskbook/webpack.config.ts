@@ -275,8 +275,9 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             'options-page': withBrowserPolyfill(...withReactDevTools(src('./src/extension/options-page/index.tsx'))),
             'dashboard-next': withBrowserPolyfill(...withReactDevTools(src('./src/extension/dashboard/index.tsx'))),
             'content-script': withBrowserPolyfill(...withReactDevTools(src('./src/content-script.ts'))),
-            // TODO: rename to browser_action
-            popup: withBrowserPolyfill(...withReactDevTools(src('./src/extension/popup-page/index.tsx'))),
+            'browser-action': withBrowserPolyfill(
+                ...withReactDevTools(src('./src/extension/browser-action/index.tsx')),
+            ),
             'background-service': withBrowserPolyfill(src('./src/background-service.ts')),
             debug: withBrowserPolyfill(src('./src/extension/debug-page')),
             popups: withBrowserPolyfill(src('./src/extension/popups/render.tsx')),
@@ -288,7 +289,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
         }
         main.plugins!.push(
             getHTMLPlugin({ chunks: ['options-page'], filename: 'index.html' }),
-            getHTMLPlugin({ chunks: ['popup'], filename: 'popup.html' }),
+            getHTMLPlugin({ chunks: ['browser-action'], filename: 'browser-action.html' }),
             getHTMLPlugin({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
             getHTMLPlugin({ chunks: ['debug'], filename: 'debug.html' }),
             getHTMLPlugin({ chunks: ['popups'], filename: 'popups.html' }),
