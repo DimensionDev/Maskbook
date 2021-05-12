@@ -151,20 +151,12 @@ export function useSwapCallback(
         // step 2-2: blocking
         return new Promise<void>((resolve, reject) => {
             const onSucceed = (no: number, receipt: TransactionReceipt) => {
-                if (!receipt.status) {
-                    setSwapState({
-                        type: TransactionStateType.REVERTED,
-                        no,
-                        receipt,
-                        reason: !receipt.events?.SwapSuccess ? t('plugin_ito_swap_unlucky_fail') : undefined,
-                    })
-                } else {
-                    setSwapState({
-                        type: TransactionStateType.CONFIRMED,
-                        no,
-                        receipt,
-                    })
-                }
+                setSwapState({
+                    type: TransactionStateType.CONFIRMED,
+                    no,
+                    receipt,
+                    reason: !receipt.events?.SwapSuccess ? t('plugin_ito_swap_unlucky_fail') : undefined,
+                })
                 resolve()
             }
             const onFailed = (error: Error) => {

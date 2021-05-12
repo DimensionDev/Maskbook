@@ -208,7 +208,7 @@ export function SwapDialog(props: SwapDialogProps) {
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-            if (swapState.type === TransactionStateType.REVERTED) resetSwapCallback()
+            if (swapState.type === TransactionStateType.CONFIRMED && !swapState.receipt.status) resetSwapCallback()
             if (swapState.type !== TransactionStateType.CONFIRMED && swapState.type !== TransactionStateType.RECEIPT)
                 return
             const { receipt } = swapState

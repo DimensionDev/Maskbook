@@ -9,10 +9,8 @@ export enum TransactionStateType {
     HASH,
     /** Receipt is available */
     RECEIPT,
-    /** Confirmed */
+    /** Confirmed or Reverted */
     CONFIRMED,
-    /** Confirmed but reverted  */
-    REVERTED,
     /** Fail to send */
     FAILED,
     /** Reject by external provider */
@@ -38,13 +36,8 @@ export type TransactionState =
           type: TransactionStateType.CONFIRMED
           no: number
           receipt: TransactionReceipt
+          reason?: string
       }
-    | {
-        type: TransactionStateType.REVERTED,
-        no: number
-        receipt: TransactionReceipt
-        reason?: string
-    }
     | {
           type: TransactionStateType.FAILED
           error: Error & { code?: number }
