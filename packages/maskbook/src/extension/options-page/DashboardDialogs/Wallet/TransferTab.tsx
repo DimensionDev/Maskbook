@@ -1,6 +1,6 @@
 import { Button, makeStyles, TextField } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import type { TransactionConfig } from 'web3-core'
 import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
@@ -68,6 +68,7 @@ export function TransferTab(props: TransferTabProps) {
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
+    const [insufficientBalance, setInsufficientBalance] = useState(false)
 
     // balance
     const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useTokenBalance(
@@ -75,10 +76,9 @@ export function TransferTab(props: TransferTabProps) {
         token?.address ?? '',
     )
 
-    const onChangeAmount = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
-        const _amount = ev.currentTarget.value
-        if (_amount === '') setAmount('')
-        if (/^\d+[\.]?\d*$/.test(_amount)) setAmount(_amount)
+    const onChangeAmount = useCallback((amount: string) => {
+        setInsufficientBalance(false)
+        setAmount(amount)
     }, [])
 
     //#region transfer tokens
@@ -101,6 +101,11 @@ export function TransferTab(props: TransferTabProps) {
     const onClick = useCallback(async () => {
         const fee = await getFee(chainId, account, ETH_ADDRESS, tokenBalance)
         const balance = new BigNumber(Web3Utils.toWei(formatBalance(tokenBalance, token.decimals), 'ether')).minus(fee)
+        if (balance.isLessThan(0)) {
+            setAmount('')
+            setInsufficientBalance(true)
+            return
+        }
         setAmount(Web3Utils.fromWei(balance.toFixed()))
     }, [tokenBalance])
 
@@ -134,6 +139,11 @@ export function TransferTab(props: TransferTabProps) {
 
     //#region validation
     const validationMessage = useMemo(() => {
+        if (insufficientBalance) {
+            return t('wallet_transfer_error_insufficent_balance', {
+                token: token.symbol,
+            })
+        }
         if (!transferAmount || new BigNumber(transferAmount).isZero()) return t('wallet_transfer_error_amount_absence')
         if (new BigNumber(transferAmount).isGreaterThan(tokenBalance))
             return t('wallet_transfer_error_insufficent_balance', {
@@ -142,7 +152,7 @@ export function TransferTab(props: TransferTabProps) {
         if (!address) return t('wallet_transfer_error_address_absence')
         if (!EthereumAddress.isValid(address)) return t('wallet_transfer_error_invalid_address')
         return ''
-    }, [transferAmount, address, tokenBalance, token])
+    }, [transferAmount, address, tokenBalance, token, insufficientBalance])
     //#endregion
 
     return (
@@ -152,7 +162,7 @@ export function TransferTab(props: TransferTabProps) {
                 balance={tokenBalance}
                 label={t('wallet_transfer_amount')}
                 token={token}
-                onAmountChange={setAmount}
+                onAmountChange={onChangeAmount}
                 SelectTokenChip={{
                     readonly: true,
                 }}
@@ -178,6 +188,7 @@ export function TransferTab(props: TransferTabProps) {
                 disabled={token.type === EthereumTokenType.ERC20}
                 onChange={(ev) => setMemo(ev.target.value)}
             />
+
             <Button
                 className={classes.button}
                 variant="contained"
