@@ -24,15 +24,34 @@ export class Qualification extends Contract {
 
         get_start_time(): TransactionObject<string>
 
-        ifQualified(arg0: string): TransactionObject<boolean>
+        ifQualified(account: string): TransactionObject<boolean>
+
+        isLucky(account: string): TransactionObject<boolean>
 
         logQualified(account: string, ito_start_time: number | string): TransactionObject<boolean>
 
+        lucky_factor(): TransactionObject<string>
+
+        max_gas_price(): TransactionObject<string>
+
+        min_token_amount(): TransactionObject<string>
+
+        set_lucky_factor(_lucky_factor: number | string): TransactionObject<void>
+
+        set_max_gas_price(_max_gas_price: number | string): TransactionObject<void>
+
+        set_min_token_amount(_min_token_amount: number | string): TransactionObject<void>
+
         set_start_time(_start_time: number | string): TransactionObject<void>
 
+        set_token_addr(_token_addr: string): TransactionObject<void>
+
         supportsInterface(interfaceId: string | number[]): TransactionObject<boolean>
+
+        token_addr(): TransactionObject<string>
     }
     events: {
+        GasPriceOver: ContractEvent<{}>
         Qualification: ContractEvent<{
             account: string
             qualified: boolean
@@ -43,6 +62,7 @@ export class Qualification extends Contract {
             2: string
             3: string
         }>
+        Unlucky: ContractEvent<{}>
         allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
     }
 }

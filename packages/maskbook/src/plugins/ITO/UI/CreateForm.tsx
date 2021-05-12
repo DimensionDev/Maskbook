@@ -200,11 +200,11 @@ export function CreateForm(props: CreateFormProps) {
             total: formatAmount(first?.amount || '0', first?.token?.decimals),
             exchangeAmounts: rest.map((item) => formatAmount(item.amount || '0', item?.token?.decimals)),
             exchangeTokens: rest.map((item) => item.token!),
-            startTime,
             qualificationAddress:
                 qualification?.isQualification && advanceSettingData.contract
                     ? qualificationAddress
                     : DEFAULT_QUALIFICATION_ADDRESS,
+            startTime,
             endTime,
             unlockTime: unlockTime > endTime && advanceSettingData.delayUnlocking ? unlockTime : undefined,
             regions: encodeRegionCode(regions),
@@ -265,7 +265,6 @@ export function CreateForm(props: CreateFormProps) {
         advanceSettingData,
         qualification,
         startTime,
-        t,
         tokenAndAmount?.amount,
         tokenAndAmount?.token?.symbol,
         tokenAndAmounts,

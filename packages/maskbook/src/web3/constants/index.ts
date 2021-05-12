@@ -228,7 +228,7 @@ export const CONSTANTS = {
         [ChainId.Mainnet]:
             process.env.NODE_ENV === 'development'
                 ? [0, 0, 0, 0] // 0 - 100%
-                : [0, 0, 1, 2], // 0 - 50%, 1 - 25%, 2 - 25%
+                : [0, 1, 1, 2], // 0 - 25%, 1 - 50%, 2 - 25%
         [ChainId.Ropsten]: [0, 0, 0, 0], // 0 - 100%
         [ChainId.Rinkeby]: [0, 0, 0, 0], // 0 - 100%
         [ChainId.Kovan]: [0, 0, 0, 0], // 0 - 100%

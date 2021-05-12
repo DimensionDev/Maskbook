@@ -7,8 +7,6 @@ import { checkIfChainSupport } from '../../web3/pipes'
 
 export async function getTradeInfo(pid: string, trader: string) {
     const tradeInfo = await subgraph.getTradeInfo(pid, trader)
-    const poolFromDB = await database.getPoolFromDB(pid)
-    if (tradeInfo && poolFromDB?.payload.password) tradeInfo.pool.password = poolFromDB.payload.password
     return tradeInfo
 }
 

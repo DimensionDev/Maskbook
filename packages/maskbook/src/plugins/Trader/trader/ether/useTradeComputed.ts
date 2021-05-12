@@ -26,13 +26,6 @@ export function useTradeComputed(
     outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
 ) {
     return useMemo((): TradeComputed<EtherWrapper> | null => {
-        console.log('DEBUG: useTradeComputed')
-        console.log({
-            isEtherWrapper,
-            inputAmount,
-            outputAmount,
-        })
-
         if (!isEtherWrapper) return null
 
         // the trade amount follows trade strategy
