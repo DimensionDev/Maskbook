@@ -15,7 +15,7 @@ import PowerIcon from '@material-ui/icons/Power'
 import { HashRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom'
 
 import { useI18N } from '../../utils/i18n-next-ui'
-import { useMaskbookTheme } from '../../utils/theme'
+import { useClassicMaskTheme } from '../../utils/theme'
 
 import FooterLine from './DashboardComponents/FooterLine'
 import Drawer from './DashboardComponents/Drawer'
@@ -228,7 +228,7 @@ function PluginDashboardInspectorForEach({ config }: { config: PluginConfig }) {
 
 function OldPluginRender() {
     return (
-        <ThemeProvider theme={useMaskbookTheme()}>
+        <ThemeProvider theme={useClassicMaskTheme()}>
             {[...PluginUI.values()].map((x) => (
                 <ErrorBoundary key={x.identifier} subject={`Plugin "${x.pluginName}"`}>
                     <PluginDashboardInspectorForEach config={x} />
@@ -244,7 +244,7 @@ export function Dashboard() {
     return MaskbookUIRoot(
         <StyledEngineProvider injectFirst>
             <StylesProvider>
-                <ThemeProvider theme={useMaskbookTheme()}>
+                <ThemeProvider theme={useClassicMaskTheme()}>
                     <DashboardSnackbarProvider>
                         <NoSsr>
                             <Router>

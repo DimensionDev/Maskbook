@@ -130,8 +130,8 @@ export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Lan
             return baseTheme
     }
 }
-
-export function useMaskbookTheme(opt?: { appearance?: Appearance; language?: Language }) {
+// We're developing a new theme in the theme/ package
+export function useClassicMaskTheme(opt?: { appearance?: Appearance; language?: Language }) {
     const language = or(opt?.language, useValueRef(languageSettings))
     const appearance = or(opt?.appearance, useValueRef(appearanceSettings))
     const systemPreference = useMediaQuery('(prefers-color-scheme: dark)')

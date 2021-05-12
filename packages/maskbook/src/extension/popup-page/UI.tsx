@@ -3,7 +3,7 @@ import { noop } from 'lodash-es'
 import { ThemeProvider, makeStyles, Theme, withStyles } from '@material-ui/core/styles'
 import { StylesProvider } from '@material-ui/styles'
 import { Button, Paper, Typography, Box, StyledEngineProvider } from '@material-ui/core'
-import { useMaskbookTheme } from '../../utils/theme'
+import { useClassicMaskTheme } from '../../utils/theme'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils/i18n-next-ui'
@@ -188,7 +188,7 @@ export function Popup() {
         <StyledEngineProvider injectFirst>
             <StylesProvider>
                 <Box />
-                <ThemeProvider theme={useMaskbookTheme()}>
+                <ThemeProvider theme={useClassicMaskTheme()}>
                     <GlobalCss />
                     {MaskbookUIRoot(<PopupUI />)}
                 </ThemeProvider>
