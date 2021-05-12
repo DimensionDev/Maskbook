@@ -7,5 +7,8 @@ import { PluginITO_RPC } from '../messages'
  * @param trader
  */
 export function usePoolTradeInfo(pid: string, trader: string) {
-    return useAsyncRetry(() => PluginITO_RPC.getTradeInfo(pid, trader), [pid, trader])
+    return useAsyncRetry(async () => {
+        if (!pid || !trader) return
+        return PluginITO_RPC.getTradeInfo(pid, trader)
+    }, [pid, trader])
 }

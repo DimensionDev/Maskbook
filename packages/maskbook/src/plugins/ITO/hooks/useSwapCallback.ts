@@ -10,27 +10,27 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import { usePoolPayload } from './usePoolPayload'
 import { useQualificationContract } from '../contracts/useQualificationContract'
+import type { JSON_PayloadInMask } from '../types'
 
 export function useSwapCallback(
-    id: string,
-    password: string,
+    payload: JSON_PayloadInMask,
     total: string,
     token: PartialRequired<EtherTokenDetailed | ERC20TokenDetailed, 'address'>,
 ) {
     const account = useAccount()
-    const { payload } = usePoolPayload(id)
     const ITO_Contract = useITO_Contract()
     const qualificationContract = useQualificationContract(payload.qualification_address)
     const [swapState, setSwapState] = useTransactionState()
     const swapCallback = useCallback(async () => {
-        if (!ITO_Contract || !qualificationContract || !payload || !id) {
+        if (!ITO_Contract || !qualificationContract || !payload) {
             setSwapState({
                 type: TransactionStateType.UNKNOWN,
             })
             return
         }
+
+        const { pid, password } = payload
 
         // error: cannot find password
         if (!password) {
@@ -102,7 +102,7 @@ export function useSwapCallback(
 
         // step 1: check remaining
         try {
-            const availability = await ITO_Contract.methods.check_availability(id).call({
+            const availability = await ITO_Contract.methods.check_availability(pid).call({
                 from: account,
             })
             if (new BigNumber(availability.remaining).isZero()) {
@@ -121,7 +121,7 @@ export function useSwapCallback(
         }
 
         const swapParams = [
-            id,
+            pid,
             Web3Utils.soliditySha3(
                 Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 5))}`),
                 account,
@@ -176,7 +176,7 @@ export function useSwapCallback(
             promiEvent.on(TransactionEventType.CONFIRMATION, onSucceed)
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => onSucceed(0, receipt))
         })
-    }, [ITO_Contract, qualificationContract, id, password, account, payload, total, token.address])
+    }, [ITO_Contract, qualificationContract, account, payload, total, token.address])
 
     const resetCallback = useCallback(() => {
         setSwapState({

@@ -464,7 +464,7 @@
     "plugin_ito_sell_token": "Token",
     "plugin_ito_sell_price": "Price",
     "plugin_ito_sell_total_amount": "Input",
-    "plugin_ito_allocation_per_wallet": "Swap limit {{limit}} {{token}}",
+    "plugin_ito_allocation_per_wallet": "Swap Limit {{limit}} {{token}}",
     "plugin_ito_begin_time": "Start Time {{zone}}",
     "plugin_ito_wait_unlock_time": "Claim in {{unlockTime}}",
     "plugin_ito_claim": "Claim",

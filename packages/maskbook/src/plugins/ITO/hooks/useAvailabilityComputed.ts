@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { useInterval } from 'react-use'
 import { compact } from 'lodash-es'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
@@ -9,6 +11,12 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
     const chainId = useChainId()
     const asyncResult = useAvailability(payload?.pid)
     const { value: qualification_start_time } = useQualification(payload.qualification_address)
+
+    //#region ticker
+    const [_, setTicker] = useState(0)
+    useInterval(() => setTicker((x) => x + 1), 1000)
+    //#endregion
+
     const { value: availability } = asyncResult
 
     if (!availability || qualification_start_time === undefined)
@@ -16,7 +24,8 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
             ...asyncResult,
             payload,
             computed: {
-                startTime: payload.start_time * 1000,
+                remaining: '0',
+                startTime: payload.start_time,
                 canFetch: false,
                 canSwap: false,
                 canShare: false,
@@ -28,18 +37,18 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
             },
         }
 
-    const startTime =
-        qualification_start_time > payload.start_time * 1000 ? qualification_start_time : payload.start_time * 1000
+    const startTime = qualification_start_time > payload.start_time ? qualification_start_time : payload.start_time
 
     const isStarted = startTime < Date.now()
     const isExpired = availability.expired
-    const unlockTime = Number(availability.unlock_time) * 1000
+    const unlockTime = Number(availability.unlock_time)
     const hasLockTime = unlockTime !== ITO_CONTRACT_BASE_TIMESTAMP
     const isCompleted = Number(availability.swapped) > 0
 
     return {
         ...asyncResult,
         computed: {
+            remaining: availability.remaining,
             startTime,
             unlockTime,
             hasLockTime,
