@@ -1,59 +1,57 @@
-import { createStyles, makeStyles, Typography, Box } from '@material-ui/core'
+import { makeStyles, Typography, Box } from '@material-ui/core'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatBalance } from '../../../plugins/Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { useCallback } from 'react'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        shareWrapper: {
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            margin: theme.spacing(2, 0),
-        },
-        shareAmount: {
-            fontSize: 36,
-            marginTop: 90,
-            color: '#fff',
-        },
-        shareToken: {
-            marginTop: 5,
-            fontSize: 24,
-            color: '#fff',
-        },
-        shareText: {
-            marginTop: 20,
-            fontSize: 24,
-            color: '#fff',
-        },
-        shareButton: {
-            width: 'fit-content',
-            backgroundColor: '#FBD363 !important',
-            padding: theme.spacing(0.5, 6),
-            marginTop: theme.spacing(2),
-            minHeight: 28,
-        },
-        shareImage: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            backgroundAttachment: 'local',
-            backgroundPosition: '0',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            width: 475,
-            height: 341,
-            backgroundColor: '#FF5238',
-            borderRadius: 10,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    shareWrapper: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        margin: theme.spacing(2, 0),
+    },
+    shareAmount: {
+        fontSize: 36,
+        marginTop: 90,
+        color: '#fff',
+    },
+    shareToken: {
+        marginTop: 5,
+        fontSize: 24,
+        color: '#fff',
+    },
+    shareText: {
+        marginTop: 20,
+        fontSize: 24,
+        color: '#fff',
+    },
+    shareButton: {
+        width: 'fit-content',
+        backgroundColor: '#FBD363 !important',
+        padding: theme.spacing(0.5, 6),
+        marginTop: theme.spacing(2),
+        minHeight: 28,
+    },
+    shareImage: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundAttachment: 'local',
+        backgroundPosition: '0',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        width: 475,
+        height: 341,
+        backgroundColor: '#FF5238',
+        borderRadius: 10,
+    },
+}))
 
 export interface ShareDialogProps extends withClasses<'root'> {
     shareSuccessLink: string | undefined

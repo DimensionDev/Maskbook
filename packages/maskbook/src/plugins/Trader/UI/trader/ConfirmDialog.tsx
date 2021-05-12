@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Button, makeStyles, createStyles, DialogActions, DialogContent, Typography } from '@material-ui/core'
+import { Button, makeStyles, DialogActions, DialogContent, Typography } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import type BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
@@ -8,30 +8,28 @@ import { TokenPanel } from './TokenPanel'
 import { PriceStaleWarnning } from './PriceStaleWarnning'
 import type { TradeComputed, TradeProvider } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { formatBalance } from '../../../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        reverseIcon: {
-            width: 16,
-            height: 16,
-            marginLeft: 5,
-        },
-        tip: {
-            fontSize: 11,
-            margin: theme.spacing(1, 0, 2),
-        },
-        summary: {
-            marginTop: theme.spacing(1),
-            marginBottom: 0,
-        },
-        button: {
-            paddingTop: 12,
-            paddingBottom: 12,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    reverseIcon: {
+        width: 16,
+        height: 16,
+        marginLeft: 5,
+    },
+    tip: {
+        fontSize: 11,
+        margin: theme.spacing(1, 0, 2),
+    },
+    summary: {
+        marginTop: theme.spacing(1),
+        marginBottom: 0,
+    },
+    button: {
+        paddingTop: 12,
+        paddingBottom: 12,
+    },
+}))
 
 export interface ConfirmDialogUIProps extends withClasses<never> {
     open: boolean

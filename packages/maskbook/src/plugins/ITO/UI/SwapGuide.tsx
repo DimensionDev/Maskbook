@@ -1,5 +1,5 @@
 import { unstable_useTransition } from 'react'
-import { createStyles, DialogContent, makeStyles, DialogProps } from '@material-ui/core'
+import { DialogContent, makeStyles, DialogProps } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -19,15 +19,13 @@ export enum SwapStatus {
     Unlock,
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        content: {
-            display: 'flex',
-            flexDirection: 'column',
-            padding: theme.spacing(2, 3),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    content: {
+        display: 'flex',
+        flexDirection: 'column',
+        padding: theme.spacing(2, 3),
+    },
+}))
 
 interface SwapGuideProps extends Pick<SwapDialogProps, 'exchangeTokens' | 'payload'> {
     open: boolean
@@ -52,7 +50,7 @@ export function SwapGuide(props: SwapGuideProps) {
     }, [retryPayload, startTransition, onClose])
     const classes = useStyles()
     const maxSwapAmount = useMemo(
-        () => BigNumber.min(new BigNumber(payload.limit), new BigNumber(payload.total_remaining)),
+        () => BigNumber.min(payload.limit, payload.total_remaining),
         [payload.limit, payload.total_remaining],
     )
     const initAmount = new BigNumber(0)

@@ -2,7 +2,7 @@ import { uniqBy } from 'lodash-es'
 import { CONSTANTS } from '../../../web3/constants'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { formatChecksumAddress } from '../formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { getTokenUSDValue } from '../helpers'
 import type { Asset } from '../types'
 
@@ -16,7 +16,7 @@ export function useAssetsMerged(...listOfTokens: Asset[][]) {
     const ETH_ADDRSS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     return uniqBy(
         listOfTokens.flatMap((x) => x),
-        (x) => formatChecksumAddress(x.token.address),
+        (x) => formatEthereumAddress(x.token.address),
     )
         .filter((x) => x.token.chainId === chainId)
         .sort((a, z) => {

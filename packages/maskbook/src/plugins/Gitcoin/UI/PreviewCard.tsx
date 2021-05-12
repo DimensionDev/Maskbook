@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { makeStyles, createStyles, Card, Typography, Button, Grid, Avatar } from '@material-ui/core'
+import { makeStyles, Card, Typography, Button, Grid, Avatar } from '@material-ui/core'
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -7,67 +7,65 @@ import { useGrant } from '../hooks/useGrant'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginGitcoinMessages } from '../messages'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(2),
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+    },
+    logo: {
+        textAlign: 'center',
+        '& > *': {
+            width: 'auto',
+            height: 100,
         },
-        logo: {
-            textAlign: 'center',
-            '& > *': {
-                width: 'auto',
-                height: 100,
-            },
+    },
+    title: {
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+        display: 'flex',
+        alignItems: 'center',
+        '& > :last-child': {
+            marginTop: 4,
+            marginLeft: 4,
         },
-        title: {
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(1),
-            display: 'flex',
-            alignItems: 'center',
-            '& > :last-child': {
-                marginTop: 4,
-                marginLeft: 4,
-            },
+    },
+    description: {
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+    },
+    data: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    meta: {
+        fontSize: 10,
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+        display: 'flex',
+        alignItems: 'center',
+        '& svg': {
+            marginRight: theme.spacing(0.5),
         },
-        description: {
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(1),
-        },
-        data: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        meta: {
-            fontSize: 10,
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(1),
-            display: 'flex',
-            alignItems: 'center',
-            '& svg': {
-                marginRight: theme.spacing(0.5),
-            },
-        },
-        avatar: {
-            width: theme.spacing(2),
-            height: theme.spacing(2),
-            margin: theme.spacing(0, 1),
-        },
-        buttons: {
-            padding: theme.spacing(4, 0, 0),
-        },
-        verified: {
-            borderRadius: 50,
-        },
-        text: {
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: '-webkit-box',
-            '-webkit-line-clamp': '4',
-            '-webkit-box-orient': 'vertical',
-        },
-    }),
-)
+    },
+    avatar: {
+        width: theme.spacing(2),
+        height: theme.spacing(2),
+        margin: theme.spacing(0, 1),
+    },
+    buttons: {
+        padding: theme.spacing(4, 0, 0),
+    },
+    verified: {
+        borderRadius: 50,
+    },
+    text: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        '-webkit-line-clamp': '4',
+        '-webkit-box-orient': 'vertical',
+    },
+}))
 
 interface PreviewCardProps {
     id: string
@@ -79,15 +77,17 @@ export function PreviewCard(props: PreviewCardProps) {
     const { value: grant, error, loading } = useGrant(props.id)
 
     //#region the donation dialog
-    const [_, openDonationDialog] = useRemoteControlledDialog(PluginGitcoinMessages.events.donationDialogUpdated)
+    const { setDialog: setDonationDialog } = useRemoteControlledDialog(
+        PluginGitcoinMessages.events.donationDialogUpdated,
+    )
     const onDonate = useCallback(() => {
         if (!grant) return
-        openDonationDialog({
+        setDonationDialog({
             open: true,
             address: grant.admin_address,
             title: grant.title,
         })
-    }, [grant, openDonationDialog])
+    }, [grant, setDonationDialog])
     //#endregion
 
     if (loading) return <Typography>Loading...</Typography>

@@ -1,13 +1,13 @@
 import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { orange, green, red, blue, grey } from '@material-ui/core/colors'
-import type { Theme, ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
+import type { Theme, ThemeOptions } from '@material-ui/core/styles/createTheme'
 import { merge, cloneDeep } from 'lodash-es'
 import { appearanceSettings, languageSettings } from '../settings/settings'
 import { Appearance, Language } from '../settings/types'
 import { useValueRef } from './hooks/useValueRef'
 import { useMemo, useRef } from 'react'
-import { zhTW, jaJP } from '@material-ui/core/locale/index'
+import { zhTW, koKR, jaJP } from '@material-ui/core/locale/index'
 import { safeUnreachable } from './utils'
 import { or } from '../components/custom-ui-helper'
 import { activatedSocialNetworkUI } from '../social-network'
@@ -121,6 +121,8 @@ export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Lan
             return baseTheme
         case Language.ja:
             return unstable_createMuiStrictModeTheme(baseTheme, jaJP)
+        case Language.ko:
+            return unstable_createMuiStrictModeTheme(baseTheme, koKR)
         case Language.zh:
             return unstable_createMuiStrictModeTheme(baseTheme, zhTW)
         default:
@@ -142,7 +144,7 @@ export function useMaskbookTheme(opt?: { appearance?: Appearance; language?: Lan
 
 export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
     const dark = theme.palette.mode === 'dark'
-    return createStyles({
+    return {
         error: {
             color: dark ? red[500] : red[900],
         },
@@ -152,12 +154,12 @@ export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
         info: {
             color: dark ? blue[500] : blue[800],
         },
-    })
+    }
 })
 
 export const useErrorStyles = makeStyles((theme) => {
     const dark = theme.palette.mode === 'dark'
-    return createStyles({
+    return {
         containedPrimary: {
             backgroundColor: dark ? red[500] : red[900],
             '&:hover': {
@@ -171,7 +173,7 @@ export const useErrorStyles = makeStyles((theme) => {
                 borderColor: dark ? red[900] : red[700],
             },
         },
-    })
+    }
 })
 export function extendsTheme(extend: (theme: Theme) => ThemeOptions) {
     return (theme: Theme) => merge(cloneDeep(theme), extend(theme))

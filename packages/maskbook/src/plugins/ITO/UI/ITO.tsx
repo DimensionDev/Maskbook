@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
 import { BigNumber } from 'bignumber.js'
-import { makeStyles, createStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
+import { makeStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -13,7 +13,7 @@ import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useBlockNumber'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
+import { formatAmountPrecision, formatBalance } from '@dimensiondev/maskbook-shared'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatDateTime } from '../../../utils/date'
@@ -29,7 +29,7 @@ import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useClaimCallback } from '../hooks/useClaimCallback'
-import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useIPRegion, decodeRegionCode, checkRegionRestrict } from '../hooks/useRegion'
 import { useIfQualified } from '../hooks/useIfQualified'
 
@@ -42,130 +42,128 @@ interface StyleProps {
     tokenNumber?: number
 }
 
-const useStyles = makeStyles<Theme, StyleProps>((theme) =>
-    createStyles({
-        root: {
-            position: 'relative',
-            color: theme.palette.common.white,
-            flexDirection: 'column',
-            height: (props: StyleProps) => (props.tokenNumber! > 4 ? 425 : 405),
-            minHeight: 405,
-            boxSizing: 'border-box',
-            backgroundAttachment: 'local',
-            backgroundPosition: '0 0',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            borderRadius: theme.spacing(1),
-            paddingLeft: theme.spacing(4),
-            paddingRight: theme.spacing(1),
-            paddingTop: theme.spacing(4),
-            paddingBottom: theme.spacing(2),
-        },
-        header: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'end',
-            width: '100%',
-            maxWidth: 470,
-        },
-        title: {
-            fontSize: (props: StyleProps) => (props.titleLength! > 31 ? '1.3rem' : '1.6rem'),
-            fontWeight: 'bold',
-            marginBottom: 4,
-            marginRight: 4,
-            width: '80%',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-        },
-        status: {
-            background: 'rgba(20, 23, 26, 0.6)',
-            padding: '5px 16px',
-            whiteSpace: 'nowrap',
-            borderRadius: 10,
-        },
-        totalText: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        tokenLink: {
-            display: 'flex',
-            alignItems: 'center',
-            color: '#fff',
-        },
-        tokenIcon: {
-            width: 24,
-            height: 24,
-        },
-        totalIcon: {
+const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
+    root: {
+        position: 'relative',
+        color: theme.palette.common.white,
+        flexDirection: 'column',
+        height: (props: StyleProps) => (props.tokenNumber! > 4 ? 425 : 405),
+        minHeight: 405,
+        boxSizing: 'border-box',
+        backgroundAttachment: 'local',
+        backgroundPosition: '0 0',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        borderRadius: theme.spacing(1),
+        paddingLeft: theme.spacing(4),
+        paddingRight: theme.spacing(1),
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(2),
+    },
+    header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'end',
+        width: '100%',
+        maxWidth: 470,
+    },
+    title: {
+        fontSize: (props: StyleProps) => (props.titleLength! > 31 ? '1.3rem' : '1.6rem'),
+        fontWeight: 'bold',
+        marginBottom: 4,
+        marginRight: 4,
+        width: '80%',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+    },
+    status: {
+        background: 'rgba(20, 23, 26, 0.6)',
+        padding: '5px 16px',
+        whiteSpace: 'nowrap',
+        borderRadius: 10,
+    },
+    totalText: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    tokenLink: {
+        display: 'flex',
+        alignItems: 'center',
+        color: '#fff',
+    },
+    tokenIcon: {
+        width: 24,
+        height: 24,
+    },
+    totalIcon: {
+        marginLeft: theme.spacing(1),
+        cursor: 'pointer',
+    },
+    progressWrap: {
+        width: 220,
+        marginBottom: theme.spacing(3),
+        marginTop: theme.spacing(1),
+    },
+    footer: {
+        position: 'absolute',
+        width: '90%',
+        maxWidth: 470,
+        bottom: theme.spacing(2),
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    fromText: {
+        opacity: 0.6,
+        transform: 'translateY(5px)',
+    },
+    rationWrap: {
+        marginBottom: theme.spacing(1),
+        display: 'flex',
+        alignItems: 'center',
+        '& > span': {
             marginLeft: theme.spacing(1),
-            cursor: 'pointer',
-        },
-        progressWrap: {
-            width: 220,
-            marginBottom: theme.spacing(3),
-            marginTop: theme.spacing(1),
-        },
-        footer: {
-            position: 'absolute',
-            width: '90%',
-            maxWidth: 470,
-            bottom: theme.spacing(2),
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-        },
-        fromText: {
-            opacity: 0.6,
-            transform: 'translateY(5px)',
-        },
-        rationWrap: {
-            marginBottom: theme.spacing(1),
-            display: 'flex',
-            alignItems: 'center',
-            '& > span': {
-                marginLeft: theme.spacing(1),
-                fontSize: 14,
-                '& > b': {
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                },
+            fontSize: 14,
+            '& > b': {
+                fontSize: 16,
+                fontWeight: 'bold',
             },
         },
-        actionFooter: {
-            marginTop: theme.spacing(1),
+    },
+    actionFooter: {
+        marginTop: theme.spacing(1),
+    },
+    actionButton: {
+        minHeight: 'auto',
+        width: '100%',
+    },
+    textProviderErr: {
+        color: '#EB5757',
+        marginTop: theme.spacing(1),
+    },
+    loadingITO: {
+        marginTop: 260,
+        textAlign: 'center',
+        fontSize: 24,
+    },
+    loadingITO_Button: {
+        color: '#fff',
+        borderColor: '#fff !important',
+        margin: theme.spacing(1, 'auto'),
+        minHeight: 35,
+        '&:hover': {
+            background: 'none',
         },
-        actionButton: {
-            minHeight: 'auto',
-            width: '100%',
-        },
-        textProviderErr: {
-            color: '#EB5757',
-            marginTop: theme.spacing(1),
-        },
-        loadingITO: {
-            marginTop: 260,
-            textAlign: 'center',
-            fontSize: 24,
-        },
-        loadingITO_Button: {
-            color: '#fff',
-            borderColor: '#fff !important',
-            margin: theme.spacing(1, 'auto'),
-            minHeight: 35,
-            '&:hover': {
-                background: 'none',
-            },
-        },
-        loadingWrap: {
-            display: 'flex',
-            justifyContent: 'center',
-        },
-        textInOneLine: {
-            whiteSpace: 'nowrap',
-        },
-    }),
-)
+    },
+    loadingWrap: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    textInOneLine: {
+        whiteSpace: 'nowrap',
+    },
+}))
 
 //#region token item
 interface TokenItemProps {
@@ -253,12 +251,9 @@ export function ITO(props: ITO_Props) {
     const noRemain = total_remaining.isZero()
 
     //#region remote controlled select provider dialog
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onConnect = useCallback(() => {
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setSelectProviderDialogOpen])
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     //#endregion
 
     //#region buy info
@@ -281,13 +276,11 @@ export function ITO(props: ITO_Props) {
         [tradeInfo, listOfStatus, isAccountSeller, noRemain],
     )
 
-    const refundAmount = useMemo(
-        () =>
-            tradeInfo?.buyInfo
-                ? new BigNumber(tradeInfo?.buyInfo.amount).minus(new BigNumber(tradeInfo?.buyInfo.amount_sold))
-                : new BigNumber(0),
-        [tradeInfo],
-    )
+    const refundAmount = useMemo(() => {
+        const buyInfo = tradeInfo?.buyInfo
+        if (!buyInfo) return new BigNumber(0)
+        return new BigNumber(buyInfo.amount).minus(buyInfo.amount_sold)
+    }, [tradeInfo])
     // out of stock
     const refundAllAmount = tradeInfo?.buyInfo && new BigNumber(tradeInfo?.buyInfo.amount_sold).isZero()
 
@@ -307,7 +300,7 @@ export function ITO(props: ITO_Props) {
         claimCallback()
     }, [claimCallback])
 
-    const [_open, setClaimTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -319,10 +312,10 @@ export function ITO(props: ITO_Props) {
 
     useEffect(() => {
         if (claimState.type === TransactionStateType.UNKNOWN) return
-        setClaimTransactionDialogOpen({
+        setClaimTransactionDialog({
             open: true,
             state: claimState,
-            summary: `Claiming ${formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals)} ${
+            summary: `Claiming ${formatBalance(availability?.swapped ?? 0, token.decimals)} ${
                 token?.symbol ?? 'Token'
             }.`,
         })
@@ -352,7 +345,7 @@ export function ITO(props: ITO_Props) {
     }, [])
 
     //#region withdraw
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -387,7 +380,7 @@ export function ITO(props: ITO_Props) {
                 summary += comma + formatBalance(availability?.exchanged_tokens[i], token.decimals) + ' ' + token.symbol
             }
         })
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             state: destructState,
             summary,
@@ -534,7 +527,7 @@ export function ITO(props: ITO_Props) {
                                 <TokenItem
                                     price={formatBalance(
                                         new BigNumber(exchange_amounts[i * 2])
-                                            .dividedBy(new BigNumber(exchange_amounts[i * 2 + 1]))
+                                            .dividedBy(exchange_amounts[i * 2 + 1])
                                             .multipliedBy(
                                                 new BigNumber(10).pow(token.decimals - exchange_tokens[i].decimals),
                                             )
@@ -591,7 +584,11 @@ export function ITO(props: ITO_Props) {
                         {t('plugin_ito_loading')}
                     </ActionButton>
                 ) : !account || !chainIdValid ? (
-                    <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
+                    <ActionButton
+                        onClick={openSelectProviderDialog}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
                 ) : canWithdraw ? (

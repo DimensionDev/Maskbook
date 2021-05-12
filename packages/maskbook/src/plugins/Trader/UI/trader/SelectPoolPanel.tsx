@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 import { difference } from 'lodash-es'
-import { makeStyles, createStyles, Checkbox, FormControlLabel } from '@material-ui/core'
+import { makeStyles, Checkbox, FormControlLabel } from '@material-ui/core'
 import { ZrxTradePool } from '../../types'
 import { getEnumAsArray } from '../../../../utils/enum'
 import { resolveZrxTradePoolName } from '../../pipes'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             display: 'flex',
             flexWrap: 'wrap',
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => {
             padding: `0 ${theme.spacing(1)}px`,
             marginRight: 0,
         },
-    })
+    }
 })
 
 export interface SelectPoolPanelProps {

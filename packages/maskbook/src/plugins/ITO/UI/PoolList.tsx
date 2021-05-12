@@ -1,4 +1,4 @@
-import { CircularProgress, createStyles, makeStyles, Typography, Box } from '@material-ui/core'
+import { CircularProgress, makeStyles, Typography, Box } from '@material-ui/core'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -7,25 +7,23 @@ import { useDestructCallback } from '../hooks/useDestructCallback'
 import type { JSON_PayloadInMask } from '../types'
 import { PoolInList } from './PoolInList'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            width: '100%',
-            height: '100%',
-            overflow: 'auto',
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        height: '100%',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        content: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-    }),
-)
+    },
+    content: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+}))
 export interface PoolListProps {
     onSend: (payload: JSON_PayloadInMask) => void
 }

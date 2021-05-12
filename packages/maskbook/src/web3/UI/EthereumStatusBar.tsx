@@ -1,20 +1,18 @@
-import { Box, makeStyles, createStyles, Theme, ButtonProps, BoxProps } from '@material-ui/core'
+import { Box, makeStyles, Theme, ButtonProps, BoxProps } from '@material-ui/core'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { EthereumAccountButton } from './EthereumAccountButton'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-        },
-        chainChip: {
-            margin: theme.spacing(0, 1),
-        },
-        accountChip: {},
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+    },
+    chainChip: {
+        margin: theme.spacing(0, 1),
+    },
+    accountChip: {},
+}))
 
 export interface EthereumStatusBarProps extends withClasses<never> {
     disableEther?: boolean

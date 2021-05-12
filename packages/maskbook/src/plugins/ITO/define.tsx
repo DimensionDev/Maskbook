@@ -1,7 +1,7 @@
 import { makeStyles, createStyles } from '@material-ui/core'
 import { PostInspector } from './UI/PostInspector'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
-import { formatBalance } from '../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { ITO_MetaKey, ITO_PluginID } from './constants'
 import type { JSON_PayloadOutMask } from './types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
@@ -9,24 +9,22 @@ import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import { CompositionDialog } from './UI/CompositionDialog'
 import { ItoLabelIcon } from './assets/ItoLabelIcon'
-import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 
 interface LabelWrapperProps {
     iconSize: number
     labelText: string
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        span: {
-            paddingLeft: theme.spacing(1),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    span: {
+        paddingLeft: theme.spacing(1),
+    },
+}))
 
 function LabelWrapper(props: LabelWrapperProps) {
     const classes = useStyles()

@@ -1,4 +1,4 @@
-import { createStyles, Grid, makeStyles } from '@material-ui/core'
+import { Grid, makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
@@ -15,13 +15,11 @@ import { useEtherTokenBalance } from '../hooks/useEtherTokenBalance'
 import { ProviderType } from '../types'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        button: {
-            marginTop: theme.spacing(1.5),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
+}))
 
 export interface EthereumWalletConnectedBoundaryProps extends withClasses<'connectWallet' | 'unlockMetaMask'> {
     offChain?: boolean
@@ -44,12 +42,9 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     } = useEtherTokenBalance(account)
 
     //#region remote controlled select provider dialog
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onConnect = useCallback(() => {
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setSelectProviderDialogOpen])
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     //#endregion
 
     //#region metamask
@@ -68,7 +63,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                     fullWidth
                     variant="contained"
                     size="large"
-                    onClick={onConnect}>
+                    onClick={openSelectProviderDialog}>
                     {t('plugin_wallet_connect_a_wallet')}
                 </ActionButton>
             </Grid>

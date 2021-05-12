@@ -8,7 +8,6 @@ import {
     DialogContent,
     DialogActions,
     CircularProgress,
-    createStyles,
     makeStyles,
 } from '@material-ui/core'
 import millify from 'millify'
@@ -21,36 +20,34 @@ import { ChainId } from '../../../web3/types'
 import { InfoField } from './InformationCard'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        card: {
-            padding: 0,
-            border: `solid 1px ${theme.palette.divider}`,
-            margin: `${theme.spacing(2)} auto`,
-        },
-        content: {
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            boxSizing: 'border-box',
-        },
-        button: {
-            width: '60%',
-            minHeight: 39,
-            margin: `${theme.spacing(1)} auto`,
-        },
-        link: {
-            display: 'flex',
-            color: 'inherit',
-            alignItems: 'center',
-            marginLeft: theme.spacing(1),
-            textDecoration: 'none !important',
-        },
-        loading: {
-            color: theme.palette.text.primary,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    card: {
+        padding: 0,
+        border: `solid 1px ${theme.palette.divider}`,
+        margin: `${theme.spacing(2)} auto`,
+    },
+    content: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        boxSizing: 'border-box',
+    },
+    button: {
+        width: '60%',
+        minHeight: 39,
+        margin: `${theme.spacing(1)} auto`,
+    },
+    link: {
+        display: 'flex',
+        color: 'inherit',
+        alignItems: 'center',
+        marginLeft: theme.spacing(1),
+        textDecoration: 'none !important',
+    },
+    loading: {
+        color: theme.palette.text.primary,
+    },
+}))
 
 interface VoteConfirmDialogProps {
     open: boolean

@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import classNames from 'classnames'
 import { isNil } from 'lodash-es'
-import { createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import { Record } from './Record'
 import type { Transaction } from '../../../../plugins/Wallet/types'
 import { resolveLinkOnEtherscan } from '../../../../web3/pipes'
@@ -12,21 +12,19 @@ interface Props {
     transaction: Transaction
 }
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        failed: { opacity: 0.3 },
-        hidden: { visibility: 'hidden' },
-        overflow: {
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-        },
-        row: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-        },
-    }),
-)
+const useStyles = makeStyles(() => ({
+    failed: { opacity: 0.3 },
+    hidden: { visibility: 'hidden' },
+    overflow: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+    },
+    row: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+    },
+}))
 
 export const Row: FC<Props> = ({ transaction, chainId }) => {
     const styles = useStyles()

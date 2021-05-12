@@ -1,4 +1,4 @@
-import type { ProposalIdentifier, ProposalResult, Votes } from '../types'
+import type { ProposalIdentifier, ProposalResult, VoteItemList } from '../types'
 import { useSuspense } from '../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
 import { useVotes } from './useVotes'
@@ -7,8 +7,10 @@ const cache = new Map<
     string,
     [0, Promise<void>] | [1, { results: ProposalResult[]; totalPower: number }] | [2, Error]
 >()
-export function resultsErrorRetry() {
-    cache.forEach(([status], id) => status === 2 && cache.delete(id))
+export function resultsRetry() {
+    for (const key of cache.keys()) {
+        cache.delete(key)
+    }
 }
 export function useResults(identifier: ProposalIdentifier) {
     return useSuspense<{ results: ProposalResult[]; totalPower: number }, [ProposalIdentifier]>(
@@ -50,6 +52,6 @@ async function Suspender(identifier: ProposalIdentifier) {
     return { results, totalPower }
 }
 
-function voteForChoice(votes: Votes, i: number) {
+function voteForChoice(votes: VoteItemList, i: number) {
     return Object.values(votes).filter((vote) => vote.msg.payload.choice === i + 1)
 }

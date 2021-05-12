@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Box, TextField, DialogProps, CircularProgress, Typography } from '@material-ui/core'
+import { makeStyles, Box, TextField, DialogProps, CircularProgress, Typography } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
 import UnCheckIcon from '@material-ui/icons/Close'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
@@ -19,7 +19,7 @@ import type { PoolSettings } from '../hooks/useFillCallback'
 import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { formatAmount, formatBalance } from '../../Wallet/formatter'
+import { formatAmount, formatBalance } from '@dimensiondev/maskbook-shared'
 import { sliceTextByUILength } from '../../../utils/getTextUILength'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -29,67 +29,65 @@ import { useRegionSelect, regionCodes, encodeRegionCode, decodeRegionCode } from
 import { RegionSelect } from './RegionSelect'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        line: {
-            margin: theme.spacing(1),
-            paddingBottom: theme.spacing(2),
-            display: 'flex',
-        },
-        column: {
-            flexDirection: 'column',
-        },
-        flow: {
-            margin: theme.spacing(1),
-            textAlign: 'center',
-        },
-        input: {
-            padding: theme.spacing(1),
-            flex: 1,
-        },
-        label: {
-            paddingLeft: theme.spacing(2),
-        },
-        tip: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-        },
-        button: {
-            marginTop: theme.spacing(1.5),
-        },
-        date: {
-            margin: theme.spacing(1),
-            display: 'flex',
-            '& > * ': {
-                flex: 1,
-                padding: theme.spacing(1),
-            },
-        },
-        iconWrapper: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: 26,
-            height: 24,
-            borderRadius: 500,
-        },
-        success: {
-            backgroundColor: 'rgba(119, 224, 181, 0.2)',
-        },
-        fail: {
-            backgroundColor: 'rgba(255, 78, 89, 0.2)',
-        },
-        qualStartTime: {
-            padding: '0 16px',
-            opacity: 0.8,
-        },
-        field: {
+const useStyles = makeStyles((theme) => ({
+    line: {
+        margin: theme.spacing(1),
+        paddingBottom: theme.spacing(2),
+        display: 'flex',
+    },
+    column: {
+        flexDirection: 'column',
+    },
+    flow: {
+        margin: theme.spacing(1),
+        textAlign: 'center',
+    },
+    input: {
+        padding: theme.spacing(1),
+        flex: 1,
+    },
+    label: {
+        paddingLeft: theme.spacing(2),
+    },
+    tip: {
+        fontSize: 12,
+        color: theme.palette.text.secondary,
+    },
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
+    date: {
+        margin: theme.spacing(1),
+        display: 'flex',
+        '& > * ': {
             flex: 1,
             padding: theme.spacing(1),
-            marginTop: theme.spacing(1),
         },
-    }),
-)
+    },
+    iconWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 26,
+        height: 24,
+        borderRadius: 500,
+    },
+    success: {
+        backgroundColor: 'rgba(119, 224, 181, 0.2)',
+    },
+    fail: {
+        backgroundColor: 'rgba(255, 78, 89, 0.2)',
+    },
+    qualStartTime: {
+        padding: '0 16px',
+        opacity: 0.8,
+    },
+    field: {
+        flex: 1,
+        padding: theme.spacing(1),
+        marginTop: theme.spacing(1),
+    },
+}))
 
 export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
@@ -245,7 +243,7 @@ export function CreateForm(props: CreateFormProps) {
         if (!totalOfPerWallet || new BigNumber(totalOfPerWallet).isZero())
             return t('plugin_ito_error_allocation_absence')
 
-        if (new BigNumber(totalOfPerWallet).isGreaterThan(new BigNumber(tokenAndAmount?.amount ?? '0')))
+        if (new BigNumber(totalOfPerWallet).isGreaterThan(tokenAndAmount?.amount ?? '0'))
             return t('plugin_ito_error_allocation_invalid')
 
         if (startTime >= endTime) return t('plugin_ito_error_exchange_time')

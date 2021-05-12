@@ -11,7 +11,9 @@
   "dependencies": {
     "@dimensiondev/maskbook-shared": "workspace:*",
     "@dimensiondev/maskbook-storybook-shared": "workspace:*",
-    "lodash-es": "^4.17.20"
+    "@types/tinycolor2": "^1.4.2",
+    "lodash-es": "^4.17.20",
+    "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",

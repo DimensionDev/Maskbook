@@ -1,4 +1,4 @@
-import { Box, createStyles, InputBase, makeStyles, Theme } from '@material-ui/core'
+import { Box, InputBase, makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
@@ -16,28 +16,26 @@ import { RestoreFromBackupBox } from '../../DashboardComponents/RestoreFromBacku
 import { DashboardDialogWrapper } from '../Base'
 import { useDatabaseStyles } from './style'
 
-const useSelectBackupStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            marginTop: theme.spacing(-3),
+const useSelectBackupStyles = makeStyles((theme: Theme) => ({
+    root: {
+        marginTop: theme.spacing(-3),
+    },
+    input: {
+        width: '100%',
+        boxSizing: 'border-box',
+        border: `solid 1px ${theme.palette.divider}`,
+        borderRadius: 4,
+        height: 176,
+        padding: theme.spacing(2, 3),
+        '& > textarea': {
+            overflow: 'auto !important',
+            height: '100% !important',
         },
-        input: {
-            width: '100%',
-            boxSizing: 'border-box',
-            border: `solid 1px ${theme.palette.divider}`,
-            borderRadius: 4,
-            height: 176,
-            padding: theme.spacing(2, 3),
-            '& > textarea': {
-                overflow: 'auto !important',
-                height: '100% !important',
-            },
-        },
-        button: {
-            marginTop: theme.spacing(3),
-        },
-    }),
-)
+    },
+    button: {
+        marginTop: theme.spacing(3),
+    },
+}))
 
 interface SelectBackupProps {
     onConfirm?: (uuid: string, data: BackupJSONFileLatest) => void

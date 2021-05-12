@@ -1,5 +1,6 @@
 import React from 'react'
-import { ThemeProvider, StylesProvider } from '@material-ui/core'
+import { ThemeProvider, StyledEngineProvider } from '@material-ui/core'
+import { StylesProvider } from '@material-ui/styles'
 import { MaskDarkTheme, MaskLightTheme, addMaskThemeI18N, applyMaskColorVars } from '@dimensiondev/maskbook-theme'
 import { withMatrix } from 'storybook-addon-matrix'
 import { addDashboardI18N } from '../src/locales'
@@ -20,13 +21,15 @@ export const parameters = {
 export const decorators = [
     withMatrix,
     (Story) => (
-        <StylesProvider injectFirst>
-            <ThemeProvider theme={MaskLightTheme}>
-                <I18nextProvider i18n={i18n}>
-                    <Story />
-                </I18nextProvider>
-            </ThemeProvider>
-        </StylesProvider>
+        <StyledEngineProvider injectFirst>
+            <StylesProvider>
+                <ThemeProvider theme={MaskLightTheme}>
+                    <I18nextProvider i18n={i18n}>
+                        <Story />
+                    </I18nextProvider>
+                </ThemeProvider>
+            </StylesProvider>
+        </StyledEngineProvider>
     ),
 ]
 applyMaskColorVars(document.body, 'light')

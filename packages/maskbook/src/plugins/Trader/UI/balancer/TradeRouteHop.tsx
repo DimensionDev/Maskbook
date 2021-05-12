@@ -1,24 +1,22 @@
-import { Box, makeStyles, createStyles, AvatarGroup, Link } from '@material-ui/core'
+import { Box, makeStyles, AvatarGroup, Link } from '@material-ui/core'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { Hop, TradeProvider } from '../../types'
 import { resolveTradePairLink } from '../../pipes'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            borderRadius: 500,
-            padding: theme.spacing(0.25),
-            '&:hover': {
-                backgroundColor: theme.palette.background.default,
-            },
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        borderRadius: 500,
+        padding: theme.spacing(0.25),
+        '&:hover': {
+            backgroundColor: theme.palette.background.default,
         },
-        link: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-    }),
-)
+    },
+    link: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+}))
 
 export interface TradeRouteHopProps {
     hop: Hop

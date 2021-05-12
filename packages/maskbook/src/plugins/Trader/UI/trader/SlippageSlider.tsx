@@ -1,5 +1,5 @@
 import { Slider } from '@material-ui/core'
-import { formatPercentage } from '../../../Wallet/formatter'
+import { formatPercentage } from '@dimensiondev/maskbook-shared'
 import { SLIPPAGE_TOLERANCE_DEFAULT, SLIPPAGE_TOLERANCE_MIN, SLIPPAGE_TOLERANCE_MAX } from '../../constants'
 import { toBips } from '../../helpers'
 

@@ -1,5 +1,4 @@
 import {
-    createStyles,
     makeStyles,
     Paper,
     Table,
@@ -11,31 +10,29 @@ import {
     Typography,
 } from '@material-ui/core'
 import { DataProvider, Trending } from '../../types'
-import { formatCurrency, formatToken } from '../../../Wallet/formatter'
+import { FormattedCurrency } from '@dimensiondev/maskbook-shared'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(2),
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+    },
+    container: {
+        borderRadius: 0,
+        boxSizing: 'border-box',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        container: {
-            borderRadius: 0,
-            boxSizing: 'border-box',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        table: {},
-        head: {
-            padding: 0,
-            border: 'none',
-        },
-        cell: {
-            whiteSpace: 'nowrap',
-            border: 'none',
-        },
-    }),
-)
+    },
+    table: {},
+    head: {
+        padding: 0,
+        border: 'none',
+    },
+    cell: {
+        whiteSpace: 'nowrap',
+        border: 'none',
+    },
+}))
 
 export interface CoinMarketTableProps {
     dataProvider: DataProvider
@@ -83,19 +80,25 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                     <TableRow>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
                             <TableCell className={classes.cell} align="center">
-                                {formatCurrency(trending.market?.market_cap ?? 0, '$')} USD
+                                <FormattedCurrency sign="$" symbol="USD" value={trending.market?.market_cap ?? 0} />
                             </TableCell>
                         ) : null}
                         <TableCell className={classes.cell} align="center">
-                            {formatCurrency(trending.market?.total_volume ?? 0, '$')} USD
+                            <FormattedCurrency sign="$" symbol="USD" value={trending.market?.total_volume ?? 0} />
                         </TableCell>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
                             <>
                                 <TableCell className={classes.cell} align="center">
-                                    {formatToken(trending.market?.circulating_supply ?? 0)} {trending.coin.symbol}
+                                    <FormattedCurrency
+                                        value={trending.market?.circulating_supply ?? 0}
+                                        symbol={trending.coin.symbol}
+                                    />
                                 </TableCell>
                                 <TableCell className={classes.cell} align="center">
-                                    {formatToken(trending.market?.total_supply ?? 0)} {trending.coin.symbol}
+                                    <FormattedCurrency
+                                        value={trending.market?.total_supply ?? 0}
+                                        symbol={trending.coin.symbol}
+                                    />
                                 </TableCell>
                             </>
                         ) : null}

@@ -1,6 +1,6 @@
-import '../../setup.ui'
-import { activateSocialNetworkUI } from '../../social-network'
+import '../../social-network-adaptor/popup-page'
+import { status } from '../../setup.ui'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 import { Popup } from './UI'
 
-activateSocialNetworkUI().then(() => SSRRenderer(<Popup />))
+status.then(() => SSRRenderer(<Popup />))

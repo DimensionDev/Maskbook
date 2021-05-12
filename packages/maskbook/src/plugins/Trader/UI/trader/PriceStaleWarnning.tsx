@@ -1,9 +1,9 @@
-import { Paper, Box, Typography, Button, makeStyles, createStyles, Theme } from '@material-ui/core'
+import { Paper, Box, Typography, Button, makeStyles, Theme } from '@material-ui/core'
 import WarningIcon from '@material-ui/icons/Warning'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme: Theme) => {
-    return createStyles({
+    return {
         root: {
             margin: theme.spacing(2, 'auto'),
             padding: theme.spacing(1),
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) => {
         type: {
             display: 'flex',
         },
-    })
+    }
 })
 
 export interface PriceStaleWarnningProps extends withClasses<never> {

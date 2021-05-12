@@ -1,21 +1,12 @@
 import { useState, useCallback, useMemo, ChangeEvent, useEffect } from 'react'
-import {
-    makeStyles,
-    FormControl,
-    TextField,
-    createStyles,
-    InputLabel,
-    Select,
-    MenuItem,
-    MenuProps,
-} from '@material-ui/core'
+import { makeStyles, FormControl, TextField, InputLabel, Select, MenuItem, MenuProps } from '@material-ui/core'
 import { omit } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import BigNumber from 'bignumber.js'
 
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import { formatBalance } from '../../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import {
     RED_PACKET_MIN_SHARES,
     RED_PACKET_MAX_SHARES,
@@ -41,31 +32,29 @@ import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        line: {
-            display: 'flex',
-            margin: theme.spacing(1),
-        },
-        input: {
-            flex: 1,
-            padding: theme.spacing(0.5),
-        },
-        tip: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-        },
-        button: {
-            marginTop: theme.spacing(1.5),
-        },
-        selectShrinkLabel: {
-            transform: 'translate(17px, -10px) scale(0.75) !important',
-        },
-        inputShrinkLabel: {
-            transform: 'translate(17px, -3px) scale(0.75) !important',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    line: {
+        display: 'flex',
+        margin: theme.spacing(1),
+    },
+    input: {
+        flex: 1,
+        padding: theme.spacing(0.5),
+    },
+    tip: {
+        fontSize: 12,
+        color: theme.palette.text.secondary,
+    },
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
+    selectShrinkLabel: {
+        transform: 'translate(17px, -10px) scale(0.75) !important',
+    },
+    inputShrinkLabel: {
+        transform: 'translate(17px, -3px) scale(0.75) !important',
+    },
+}))
 
 export interface RedPacketFormProps extends withClasses<never> {
     onCreate?(payload: RedPacketJSONPayload): void
@@ -88,7 +77,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const { value: etherTokenDetailed } = useEtherTokenDetailed()
     const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
     const [id] = useState(uuid())
-    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
@@ -99,7 +88,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         ),
     )
     const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialogOpen({
+        setSelectTokenDialog({
             open: true,
             uuid: id,
             disableEther: false,
@@ -156,7 +145,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#endregion
 
     //#region remote controlled transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -218,21 +207,12 @@ export function RedPacketForm(props: RedPacketFormProps) {
     // open the transaction dialog
     useEffect(() => {
         if (!token || createState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             state: createState,
             summary: `Creating red packet with ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`,
         })
     }, [createState /* update tx dialog only if state changed */])
-    //#endregion
-
-    //#region connect wallet
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onConnect = useCallback(() => {
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setSelectProviderDialogOpen])
     //#endregion
 
     const validationMessage = useMemo(() => {

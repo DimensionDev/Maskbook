@@ -1,4 +1,4 @@
-import { DialogTitle, IconButton, Typography, Box, styled } from '@material-ui/core'
+import { DialogTitle, IconButton, Typography, Box, experimentalStyled as styled } from '@material-ui/core'
 import { Close, ArrowBack } from '@material-ui/icons'
 import { memo } from 'react'
 

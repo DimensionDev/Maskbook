@@ -1,8 +1,8 @@
-import { Box, Paper, createStyles, Link, makeStyles, Typography } from '@material-ui/core'
+import { Box, Paper, Link, makeStyles, Typography } from '@material-ui/core'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatEthereumAddress } from '../../Wallet/formatter'
+import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 import { resolveAddressLinkOnEtherscan, resolveChainName } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'
 import { Markdown } from '../../Snapshot/UI/Markdown'
@@ -11,7 +11,7 @@ import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea } from '../pipes'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         content: {
             paddingTop: 0,
             paddingBottom: '0 !important',
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
         },
-    })
+    }
 })
 
 export interface TokenTabProps {}
@@ -151,7 +151,7 @@ export function TokenTab(props: TokenTabProps) {
                         target="_blank"
                         rel="noopener noreferrer">
                         <Typography variant="body2">
-                            {formatEthereumAddress(token?.contractAddress ?? '', 4)}
+                            <FormattedAddress address={token?.contractAddress ?? ''} size={4} />
                         </Typography>
                     </Link>
                 </Box>

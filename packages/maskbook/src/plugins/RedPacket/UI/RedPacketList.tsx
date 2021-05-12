@@ -1,4 +1,4 @@
-import { makeStyles, createStyles, Typography } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 import type { RedPacketJSONPayload } from '../types'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { RedPacketInList } from './RedPacketInList'
@@ -7,28 +7,26 @@ import { usePayloadsComputed } from '../hooks/usePayloadComputed'
 import { useChainIdValid } from '../../../web3/hooks/useBlockNumber'
 
 //#region red packet list UI
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            width: '100%',
-            height: '100%',
-            flexDirection: 'column',
-            margin: '0 auto',
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
+        margin: '0 auto',
+    },
+    list: {
+        width: '100%',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        list: {
-            width: '100%',
-            overflow: 'auto',
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        placeholder: {
-            textAlign: 'center',
-        },
-    }),
-)
+    },
+    placeholder: {
+        textAlign: 'center',
+    },
+}))
 
 interface RedPacketListProps {
     loading?: boolean

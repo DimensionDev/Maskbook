@@ -13,7 +13,7 @@ import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useSwapCallback } from '../hooks/useSwapCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatBalance } from '../../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import type { ChainId } from '../../../web3/types'
 import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
@@ -27,62 +27,60 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { useQualificationVerify } from '../hooks/useQualificationVerify'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        button: {
-            marginTop: theme.spacing(1.5),
+const useStyles = makeStyles((theme) => ({
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
+    providerBar: {},
+    swapLimitWrap: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: theme.spacing(2),
+    },
+    swapLimitText: {
+        color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
+        fontSize: 14,
+        width: 'fit-content',
+    },
+    swapLimitSlider: {
+        flexGrow: 1,
+        width: 'auto !important',
+        margin: theme.spacing(0, 3),
+        '& .MuiSlider-thumb': {
+            width: 28,
+            height: 28,
+            marginTop: -12,
+            background: theme.palette.mode === 'dark' ? '#fff' : '2CA4EF, 100%',
         },
-        providerBar: {},
-        swapLimitWrap: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: theme.spacing(2),
+        '& .MuiSlider-rail': {
+            height: 5,
         },
-        swapLimitText: {
-            color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
-            fontSize: 14,
-            width: 'fit-content',
+        '& .MuiSlider-track': {
+            height: 5,
         },
-        swapLimitSlider: {
-            flexGrow: 1,
-            width: 'auto !important',
-            margin: theme.spacing(0, 3),
-            '& .MuiSlider-thumb': {
-                width: 28,
-                height: 28,
-                marginTop: -12,
-                background: theme.palette.mode === 'dark' ? '#fff' : '2CA4EF, 100%',
-            },
-            '& .MuiSlider-rail': {
-                height: 5,
-            },
-            '& .MuiSlider-track': {
-                height: 5,
-            },
-        },
-        exchangeText: {
-            textAlign: 'right',
-            fontSize: 10,
-            margin: theme.spacing(1, 0, 3),
-        },
-        exchangeAmountText: {
-            color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
-        },
-        swapButtonWrapper: {
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: theme.spacing(2),
-        },
-        remindText: {
-            fontSize: 10,
-            marginTop: theme.spacing(1),
-        },
-        loading: {
-            color: theme.palette.text.primary,
-        },
-    }),
-)
+    },
+    exchangeText: {
+        textAlign: 'right',
+        fontSize: 10,
+        margin: theme.spacing(1, 0, 3),
+    },
+    exchangeAmountText: {
+        color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
+    },
+    swapButtonWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        marginTop: theme.spacing(2),
+    },
+    remindText: {
+        fontSize: 10,
+        marginTop: theme.spacing(1),
+    },
+    loading: {
+        color: theme.palette.text.primary,
+    },
+}))
 
 export interface SwapDialogProps extends withClasses<'root'> {
     exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
@@ -118,7 +116,7 @@ export function SwapDialog(props: SwapDialogProps) {
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
 
     const [ratio, setRatio] = useState<BigNumber>(
-        new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(new BigNumber(payload.exchange_amounts[0 * 2 + 1])),
+        new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),
     )
     const [swapToken, setSwapToken] = useState<EtherTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
     const [swapAmount, setSwapAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
@@ -128,14 +126,14 @@ export function SwapDialog(props: SwapDialogProps) {
 
     //#region select token
     const [id] = useState(uuid())
-    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return
                 const at = exchangeTokens.findIndex((x) => isSameAddress(x.address, ev.token!.address))
                 const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(
-                    new BigNumber(payload.exchange_amounts[at * 2 + 1]),
+                    payload.exchange_amounts[at * 2 + 1],
                 )
                 setRatio(ratio)
                 setSwapToken(ev.token)
@@ -157,7 +155,7 @@ export function SwapDialog(props: SwapDialogProps) {
         ),
     )
     const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialogOpen({
+        setSelectTokenDialog({
             open: true,
             uuid: id,
             disableEther: !exchangeTokens.some((x) => isETH(x.address)),
@@ -204,7 +202,7 @@ export function SwapDialog(props: SwapDialogProps) {
         await WalletRPC.trustERC20Token(account, payload.token)
     }, [swapCallback, payload.token.address])
 
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -230,7 +228,7 @@ export function SwapDialog(props: SwapDialogProps) {
             return
         }
 
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             state: swapState,
             summary: t('plugin_ito_swapping', {

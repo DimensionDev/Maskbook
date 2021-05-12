@@ -5,7 +5,7 @@ import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
-import { formatChecksumAddress } from '../formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { WalletRecordIntoDB, ERC721TokenRecordIntoDB, getWalletByAddress, ERC721TokenRecordOutDB } from './helpers'
 import type { ERC721TokenAssetDetailed, ERC721TokenDetailed } from '../../../web3/types'
 import type { ERC721TokenRecord } from '../database/types'
@@ -57,7 +57,7 @@ export async function addERC721Token(token: ERC721TokenAssetDetailed) {
 
 export async function removeERC721Token(token: PartialRequired<ERC721TokenDetailed, 'address'>) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC721Token', 'Wallet')
-    await t.objectStore('ERC721Token').delete(formatChecksumAddress(token.address))
+    await t.objectStore('ERC721Token').delete(formatEthereumAddress(token.address))
     WalletMessages.events.erc721TokensUpdated.sendToAll(undefined)
 }
 
@@ -66,10 +66,10 @@ export async function trustERC721Token(
     token: PartialRequired<ERC721TokenDetailed, 'address' | 'tokenId'>,
 ) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC721Token', 'Wallet')
-    const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
+    const wallet = await getWalletByAddress(t, formatEthereumAddress(address))
     assert(wallet)
     let updated = false
-    const key = `${formatChecksumAddress(token.address)}_${token.tokenId}`
+    const key = `${formatEthereumAddress(token.address)}_${token.tokenId}`
     if (!wallet.erc721_token_whitelist.has(key)) {
         wallet.erc721_token_whitelist.add(key)
         updated = true
@@ -89,10 +89,10 @@ export async function blockERC721Token(
     token: PartialRequired<ERC721TokenDetailed, 'address' | 'tokenId'>,
 ) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC721Token', 'Wallet')
-    const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
+    const wallet = await getWalletByAddress(t, formatEthereumAddress(address))
     assert(wallet)
     let updated = false
-    const key = `${formatChecksumAddress(token.address)}_${token.tokenId}`
+    const key = `${formatEthereumAddress(token.address)}_${token.tokenId}`
     if (wallet.erc721_token_whitelist.has(key)) {
         wallet.erc721_token_whitelist.delete(key)
         updated = true

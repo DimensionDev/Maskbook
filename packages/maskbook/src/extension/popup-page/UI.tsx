@@ -1,10 +1,8 @@
-import '../../social-network-adaptor/popup-page/index'
-import '../../setup.ui'
-
 import { useCallback, memo } from 'react'
 import { noop } from 'lodash-es'
-import { ThemeProvider, makeStyles, Theme, withStyles, StylesProvider, jssPreset } from '@material-ui/core/styles'
-import { Button, Paper, Typography, Box } from '@material-ui/core'
+import { ThemeProvider, makeStyles, Theme, withStyles } from '@material-ui/core/styles'
+import { StylesProvider } from '@material-ui/styles'
+import { Button, Paper, Typography, Box, StyledEngineProvider } from '@material-ui/core'
 import { useMaskbookTheme } from '../../utils/theme'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -14,7 +12,6 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { useAsyncRetry } from 'react-use'
 import { MaskbookUIRoot } from '../../UIRoot'
-import { create } from 'jss'
 import { useMyIdentities } from '../../components/DataSource/useActivatedUI'
 import { Flags } from '../../utils/flags'
 import { hasSNSAdaptorPermission, requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
@@ -94,16 +91,16 @@ function PopupUI() {
         }
     }, [])
 
-    const [, setSelectProviderDailogOpen] = useRemoteControlledDialog(
+    const { openDialog: openSelectProviderDailog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
         noop,
         'activated',
     )
     const onConnect = useCallback(async () => {
-        setSelectProviderDailogOpen({ open: true })
+        openSelectProviderDailog()
         await delay(200)
         window.close()
-    }, [setSelectProviderDailogOpen])
+    }, [openSelectProviderDailog])
 
     const Trademark = memo(() => {
         if (ui.networkIdentifier !== 'localhost') {
@@ -186,18 +183,16 @@ function PopupUI() {
     )
 }
 
-const jssContainer = document.body.appendChild(document.createElement('head'))
-const insertionPoint = jssContainer.appendChild(document.createElement('noscript'))
-const jss = create({ ...jssPreset(), insertionPoint })
 export function Popup() {
     return (
-        // injectFirst not working so use a custom entry point
-        <StylesProvider jss={jss}>
-            <Box />
-            <ThemeProvider theme={useMaskbookTheme()}>
-                <GlobalCss />
-                {MaskbookUIRoot(<PopupUI />)}
-            </ThemeProvider>
-        </StylesProvider>
+        <StyledEngineProvider injectFirst>
+            <StylesProvider>
+                <Box />
+                <ThemeProvider theme={useMaskbookTheme()}>
+                    <GlobalCss />
+                    {MaskbookUIRoot(<PopupUI />)}
+                </ThemeProvider>
+            </StylesProvider>
+        </StyledEngineProvider>
     )
 }

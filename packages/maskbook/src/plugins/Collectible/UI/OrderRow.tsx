@@ -1,15 +1,15 @@
-import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Avatar, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import { CollectibleProvider, NFTOrder } from '../types'
 import { formatDistanceToNow } from 'date-fns'
-import { formatBalance } from '../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
+import { FormattedBalance } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         account: {
             display: 'flex',
             alignItems: 'center',
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => {
             fontSize: 14,
             lineHeight: 1,
         },
-    })
+    }
 })
 
 interface IRowProps {
@@ -99,10 +99,10 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                     </TableCell>
                     <TableCell>
                         <Typography className={classes.content}>
-                            {formatBalance(
-                                new BigNumber(order.quantity ?? 0),
-                                new BigNumber(order.quantity ?? 0).toString() !== '1' ? 8 : 0,
-                            )}
+                            <FormattedBalance
+                                value={order.quantity ?? 0}
+                                decimals={new BigNumber(order.quantity ?? 0).toString() !== '1' ? 8 : 0}
+                            />
                         </Typography>
                     </TableCell>
                 </>

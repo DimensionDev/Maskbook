@@ -1,16 +1,14 @@
 import { makeStyles } from '@material-ui/core/styles'
-import { Theme, createStyles, Tabs, Tab, Box, BoxProps, Paper } from '@material-ui/core'
+import { Theme, Tabs, Tab, Box, BoxProps, Paper } from '@material-ui/core'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        tab: {
-            minWidth: 'unset',
-        },
-        tabPanel: {
-            marginTop: theme.spacing(3),
-        },
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    tab: {
+        minWidth: 'unset',
+    },
+    tabPanel: {
+        marginTop: theme.spacing(3),
+    },
+}))
 
 interface TabPanelProps extends BoxProps {
     id?: string
