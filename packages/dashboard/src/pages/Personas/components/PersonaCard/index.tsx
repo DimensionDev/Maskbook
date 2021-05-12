@@ -84,7 +84,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>(
                 {t.personas_delete()}
             </MenuItem>,
         )
-        console.log(nickname)
+
         return (
             <div className={classes.card}>
                 <div className={classes.status} />
