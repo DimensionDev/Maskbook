@@ -135,6 +135,7 @@ export default function DashboardSettingsRouter() {
     const langMapper = useRef((x: Language) => {
         if (x === Language.en) return t('language_en')
         if (x === Language.zh) return t('language_zh')
+        if (x === Language.ko) return t('language_ko')
         if (x === Language.ja) return t('language_ja')
         return x
     }).current

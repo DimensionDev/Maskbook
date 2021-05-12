@@ -17,6 +17,7 @@ export interface ChainBlockNumber {
 export enum Language {
     zh = 'zh',
     en = 'en',
+    ko = 'ko',
     ja = 'ja',
 }
 
