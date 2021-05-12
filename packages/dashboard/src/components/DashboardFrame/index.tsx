@@ -10,7 +10,6 @@ import {
     experimentalStyled as styled,
     Box,
     toolbarClasses,
-    Backdrop,
     paperClasses,
 } from '@material-ui/core'
 import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
@@ -100,10 +99,9 @@ const PageTitle = styled(Grid)(({ theme }) => ({
 }))
 
 const Containment = styled(Grid)(({ theme }) => ({
-    overflow: 'auto',
     contain: 'strict',
     [theme.breakpoints.down('lg')]: {
-        minHeight: '100vh',
+        minHeight: `calc(100vh - 64px)`,
     },
 }))
 
@@ -118,22 +116,18 @@ const NavigationDrawer = styled(Drawer)(({ theme }) => ({
         backdropFilter: 'blur(4px)',
     },
 }))
-const NavigationDrawerBackdrop = styled(Backdrop)(({ theme }) => ({
-    top: theme.mixins.toolbar.minHeight,
-}))
 
 const ShapeHelper = styled('div')(({ theme }) => ({
     height: '100%',
-    padding: theme.spacing(2),
+    padding: theme.spacing(3),
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
     backgroundColor: theme.palette.background.default,
-    paddingBottom: 0,
+    overflow: 'auto',
 }))
 
 const ShapeContainer = styled('div')(({ theme }) => ({
     height: '100%',
-    padding: theme.spacing(2),
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
     backgroundColor: theme.palette.background.paper,
@@ -172,10 +166,9 @@ export const PageFrame = memo((props: PageFrameProps) => {
                     <NavigationDrawer
                         open={drawerOpen}
                         onClose={toggleDrawer}
-                        BackdropComponent={NavigationDrawerBackdrop}
-                        BackdropProps={{ invisible: true }}
+                        hideBackdrop
                         variant="temporary"
-                        PaperProps={{ elevation: 0 }}>
+                        elevation={0}>
                         <Navigation />
                     </NavigationDrawer>
                 )}
