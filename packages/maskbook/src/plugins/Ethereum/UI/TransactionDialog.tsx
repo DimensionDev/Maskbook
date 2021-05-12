@@ -46,6 +46,9 @@ const useStyles = makeStyles((theme: Theme) =>
         secondary: {
             fontSize: 14,
         },
+        unlucky: {
+            marginBottom: theme.spacing(1),
+        },
     }),
 )
 
@@ -145,6 +148,21 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                                       state.error.code >= JSON_RPC_ErrorCode.SERVER_ERROR_RANGE_END)
                                 ? t('plugin_wallet_transaction_server_error')
                                 : state.error.message}
+                        </Typography>
+                    </>
+                ) : null}
+                {state.type === TransactionStateType.REVERTED ? (
+                    <>
+                        <WarningIcon className={classes.icon} />
+                        <Typography className={classes.unlucky}>{state.reason ?? t('plugin_wallet_transaction_reverted')}</Typography>
+                        <Typography>
+                            <Link
+                                className={classes.link}
+                                href={resolveTransactionLinkOnEtherscan(chainId, state.receipt.transactionHash)}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                {t('plugin_wallet_view_on_etherscan')}
+                            </Link>
                         </Typography>
                     </>
                 ) : null}
