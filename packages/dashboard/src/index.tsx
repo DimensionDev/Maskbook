@@ -7,8 +7,7 @@ import './initialization/esbuild_jsx_transform'
 import './initialization/isolated_bridge'
 import './initialization/i18n'
 import ReactDOM from 'react-dom'
-import { DashboardBase } from './initialization/Dashboard'
-import { Pages } from './pages/routes'
+import Dashboard from './initialization/Dashboard'
 
 if (import.meta.hot) {
     import.meta.hot.accept()
@@ -16,8 +15,4 @@ if (import.meta.hot) {
     document.getElementById('warning')?.remove()
 }
 
-ReactDOM.unstable_createRoot(document.getElementById('root')!).render(
-    <DashboardBase>
-        <Pages></Pages>
-    </DashboardBase>,
-)
+ReactDOM.unstable_createRoot(document.getElementById('root')!).render(<Dashboard />)

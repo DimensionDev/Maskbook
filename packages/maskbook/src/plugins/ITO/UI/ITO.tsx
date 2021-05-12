@@ -314,7 +314,7 @@ export function ITO(props: ITO_Props) {
     }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
 
     //#region claim
-    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback([pid])
+    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback([pid], payload.contract_address)
     const onClaimButtonClick = useCallback(() => {
         claimCallback()
     }, [claimCallback])

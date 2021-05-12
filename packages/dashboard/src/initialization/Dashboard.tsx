@@ -15,6 +15,7 @@ import {
     createInjectHooksRenderer,
     useActivatedPluginsDashboard,
 } from '@dimensiondev/mask-plugin-infra'
+import { Pages } from '../pages/routes'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -24,13 +25,7 @@ startPluginDashboard({
     enabled: { events: new Emitter(), isEnabled: () => true },
     eth: { current: () => ChainId.Mainnet, events: new Emitter() },
 })
-/**
- * For isolated version, its children should be <Pages /> (sync)
- * For intergrad version, its children should be <Suspense fallback="loading..."><Pages /></Suspense>
- *
- * The reason is the intergrated version might not be able to setup services synchronously
- */
-export function DashboardBase(props: React.PropsWithChildren<{}>) {
+export default function DashboardRoot() {
     return (
         <StrictMode>
             <I18nextProvider i18n={i18n}>
@@ -39,7 +34,9 @@ export function DashboardBase(props: React.PropsWithChildren<{}>) {
                         <ThemeProvider theme={MaskLightTheme}>
                             <ErrorBoundary>
                                 <CssBaseline />
-                                <HashRouter>{props.children}</HashRouter>
+                                <HashRouter>
+                                    <Pages />
+                                </HashRouter>
                                 <PluginRender />
                             </ErrorBoundary>
                         </ThemeProvider>

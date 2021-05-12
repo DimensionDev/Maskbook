@@ -1,13 +1,10 @@
 import { lazy, Suspense } from 'react'
-import { DashboardBase } from './initialization/Dashboard'
 
-const Pages = lazy(() => import('./pages/routes').then((x) => ({ default: x.Pages })))
+const Dashboard = lazy(() => import('./initialization/Dashboard'))
 export function IntergratedDashboard() {
     return (
-        <DashboardBase>
-            <Suspense fallback="">
-                <Pages />
-            </Suspense>
-        </DashboardBase>
+        <Suspense fallback="">
+            <Dashboard />
+        </Suspense>
     )
 }
