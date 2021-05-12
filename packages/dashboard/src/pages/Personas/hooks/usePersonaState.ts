@@ -1,15 +1,19 @@
 import { createContainer } from 'unstated-next'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { compact, head, isEmpty } from 'lodash-es'
+import { compact, head } from 'lodash-es'
 import { useConnectSocialNetwork } from './useConnectSocialNetwork'
 import { useDisConnectSocialNetwork } from './useDisConnectSocialNetwork'
-import { Messages, Services } from '../../../API'
+import { Services } from '../../../API'
 import type { PersonaIdentifier } from '@dimensiondev/maskbook-shared'
 import { useDefinedSocialNetworkUIs, useMyPersonas } from '../api'
 import type { PersonaInfo } from '../type'
 import { useCreatePersona } from './useCreatePersona'
+import { ECKeyIdentifier, useValueRef } from '@dimensiondev/maskbook-shared'
+import { currentPersonaIdentifier } from '../settings'
 
 function usePersonaState() {
+    const currentPersonaIdentifierRef = useValueRef(currentPersonaIdentifier)
+
     const [currentPersona, setCurrentPersona] = useState<PersonaInfo>()
 
     const [open, setOpen] = useState(false)
@@ -60,25 +64,24 @@ function usePersonaState() {
     }, [])
 
     const onChangeCurrentPersona = useCallback((persona: PersonaInfo) => {
+        currentPersonaIdentifier.value = persona.identifier.toText()
         setCurrentPersona(persona)
     }, [])
 
     useEffect(() => {
         if (personas.length) {
-            setCurrentPersona(head(personas))
-        }
-    }, [personas])
+            const persona = !currentPersonaIdentifierRef
+                ? head(personas)
+                : personas.find((i) =>
+                      i.identifier.equals(ECKeyIdentifier.fromString(currentPersonaIdentifierRef).unwrap()),
+                  )
 
-    //TODO: Maybe better way
-    useEffect(() =>
-        Messages.events.personaChanged.on((event) => {
-            // When current persona has changed, update the persona info
-            if (!isEmpty(currentPersona) && event.some((x) => x.of.equals(currentPersona?.identifier))) {
-                const persona = personas.find((i) => i.identifier.equals(currentPersona?.identifier))
-                if (persona) setCurrentPersona(persona)
+            if (persona) {
+                currentPersonaIdentifier.value = persona.identifier.toText()
+                setCurrentPersona(persona)
             }
-        }),
-    )
+        }
+    }, [personas, currentPersonaIdentifierRef])
 
     return {
         onConnect,

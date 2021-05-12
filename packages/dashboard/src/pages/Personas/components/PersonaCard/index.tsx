@@ -84,6 +84,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>(
                 {t.personas_delete()}
             </MenuItem>,
         )
+        console.log(nickname)
         return (
             <div className={classes.card}>
                 <div className={classes.status} />
@@ -117,8 +118,12 @@ export const PersonaCardUI = memo<PersonaCardUIProps>(
                 {menu}
                 <RenameDialog
                     open={renameDialogOpen}
+                    nickname={nickname}
                     onClose={() => setRenameDialogOpen(false)}
-                    onConfirm={(name) => onRename(name, identifier)}
+                    onConfirm={(name) => {
+                        onRename(name, identifier)
+                        setRenameDialogOpen(false)
+                    }}
                 />
                 <DeletePersonaDialog
                     open={deleteDialogOpen}

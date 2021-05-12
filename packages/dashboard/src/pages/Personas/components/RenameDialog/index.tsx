@@ -18,6 +18,7 @@ export const RenameDialog = memo<RenameDialogProps>(({ open, nickname, onClose, 
     useEffect(() => {
         setName(nickname ?? '')
     }, [open, nickname])
+
     return (
         <MaskDialog open={open} title={t.personas_rename()} onClose={onClose}>
             <DialogContent>
