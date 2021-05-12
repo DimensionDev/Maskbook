@@ -117,7 +117,7 @@ export async function restoreFromBackup(backup: string): Promise<Persona | null>
 /**
  * Remove an identity.
  */
-export { setupPersona, deletePersona, createPersona } from '../../database'
+export { setupPersona, deletePersona } from '../../database'
 export async function attachProfile(
     source: ProfileIdentifier,
     target: ProfileIdentifier | PersonaIdentifier,
