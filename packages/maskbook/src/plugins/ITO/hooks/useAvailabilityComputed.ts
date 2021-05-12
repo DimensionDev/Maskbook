@@ -41,7 +41,7 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
 
     const isStarted = startTime < Date.now()
     const isExpired = availability.expired
-    const unlockTime = Number(availability.unlock_time)
+    const unlockTime = Number(availability.unlock_time) * 1000
     const hasLockTime = unlockTime !== ITO_CONTRACT_BASE_TIMESTAMP
     const isCompleted = Number(availability.swapped) > 0
 
