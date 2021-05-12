@@ -46,7 +46,7 @@
     "personas_name_maximum_tips": "Maximum length is {{length}} characters long.",
     "personas_confirm": "Confirm",
     "personas_cancel": "Cancel",
-    "personas_delete_confirm_tips": "Please confirm that you have deleted persona <link>{nickname}</link> and entered your password.",
+    "personas_delete_confirm_tips": "Please confirm that you have deleted persona <i>{{nickname}}</i> and entered your password.",
     "personas_delete_dialog_title": "Delete Persona",
     "personas_edit_dialog_title": "Edit Persona",
     "personas_edit": "Edit",

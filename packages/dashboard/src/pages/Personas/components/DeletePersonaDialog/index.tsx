@@ -1,7 +1,7 @@
-import { Button, DialogActions, DialogContent, Link, Typography, TextField } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, Typography, TextField } from '@material-ui/core'
 import { memo } from 'react'
-import { MaskDialog } from '@dimensiondev/maskbook-theme'
-import { useDashboardI18N } from '../../../../locales'
+import { MaskColorVar, MaskDialog } from '@dimensiondev/maskbook-theme'
+import { useDashboardI18N, DashboardTrans } from '../../../../locales'
 
 export interface DeletePersonaDialogProps {
     open: boolean
@@ -15,8 +15,10 @@ export const DeletePersonaDialog = memo<DeletePersonaDialogProps>(({ open, onClo
         <MaskDialog open={open} title={t.personas_delete_dialog_title()} onClose={onClose}>
             <DialogContent>
                 <Typography variant="caption" sx={{ wordBreak: 'break-all' }}>
-                    {/*<Trans i18nKey="personas_delete_confirm_tips" components={{ link: Link }} values={{ nickname }} />*/}
-                    Please confirm that you have deleted persona <Link>{nickname}</Link> and entered your password.
+                    <DashboardTrans.personas_delete_confirm_tips
+                        components={{ i: <span style={{ color: MaskColorVar.primary }} /> }}
+                        values={{ nickname: nickname ?? '' }}
+                    />
                 </Typography>
                 <TextField
                     variant="filled"
