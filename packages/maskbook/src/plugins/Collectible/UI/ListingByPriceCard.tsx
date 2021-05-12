@@ -70,7 +70,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
 
     const { account } = ChainState.useContainer()
 
-    const [scheduleDateTime, setScheduleDateTime] = useState(new Date())
+    const [dateTime, setDateTime] = useState(new Date())
     const [buyerAddress, setBuyerAddress] = useState('')
     const [endingAmount, setEndingAmount] = useState('')
 
@@ -82,10 +82,10 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
         if (endingPriceChecked && endingAmount && !new BigNumber(amount || '0').isGreaterThan(endingAmount || '0'))
             return 'Invalid ending price'
-        if (futureTimeChecked && scheduleDateTime.getTime() - Date.now() <= 0) return 'Invalid schedule date'
+        if (futureTimeChecked && Date.now() >= dateTime.getTime()) return 'Invalid schedule date'
         if (privacyChecked && buyerAddress && !EthereumAddress.isValid(buyerAddress)) return 'Invalid buyer address'
         return ''
-    }, [amount, endingPriceChecked, endingAmount, futureTimeChecked, scheduleDateTime, privacyChecked, buyerAddress])
+    }, [amount, endingPriceChecked, endingAmount, futureTimeChecked, dateTime, privacyChecked, buyerAddress])
 
     const onPostListing = useCallback(async () => {
         if (!asset?.value) return
@@ -102,7 +102,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 accountAddress: account,
                 startAmount: Number.parseFloat(amount),
                 endAmount: endingPriceChecked && endingAmount ? Number.parseFloat(endingAmount) : undefined,
-                listingTime: futureTimeChecked ? toUnixTimestamp(scheduleDateTime) : undefined,
+                listingTime: futureTimeChecked ? toUnixTimestamp(dateTime) : undefined,
                 buyerAddress: privacyChecked ? buyerAddress : undefined,
             })
         } catch (e) {
@@ -118,7 +118,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         amount,
         account,
         endingAmount,
-        scheduleDateTime,
+        dateTime,
         buyerAddress,
         endingPriceChecked,
         futureTimeChecked,
@@ -128,7 +128,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
 
     useEffect(() => {
         setAmount('')
-        setScheduleDateTime(new Date())
+        setDateTime(new Date())
         setBuyerAddress('')
         setEndingAmount('')
     }, [open])
@@ -181,14 +181,16 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         }}
                     />
                 ) : null}
-                {futureTimeChecked ? (
+                {futureTimeChecked || endingPriceChecked ? (
                     <DateTimePanel
-                        label="Schedule Date"
-                        date={scheduleDateTime}
-                        onChange={setScheduleDateTime}
+                        label={endingPriceChecked ? 'Expiration date' : 'Schedule Date'}
+                        date={dateTime}
+                        onChange={setDateTime}
                         TextFieldProps={{
                             className: classes.panel,
-                            helperText: 'Schedule a future date.',
+                            helperText: endingPriceChecked
+                                ? 'Your listing will automatically end at this time. No need to cancel it!'
+                                : 'Schedule a future date.',
                         }}
                     />
                 ) : null}
