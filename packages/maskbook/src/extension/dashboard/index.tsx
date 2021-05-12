@@ -3,7 +3,9 @@
 import ReactDOM from 'react-dom'
 
 // @ts-ignore in case circle dependency make typescript complains
-import { Dashboard, setService, setPluginMessages, setMessages, setPluginServices } from '@dimensiondev/dashboard'
+import { IntergratedDashboard } from '@dimensiondev/dashboard'
+// @ts-ignore
+import { setService, setPluginMessages, setMessages, setPluginServices } from '@dimensiondev/dashboard'
 import Services from '../service'
 import { WalletRPC, WalletMessages } from '../../plugins/Wallet/messages'
 import { MaskMessage } from '../../utils/messages'
@@ -17,4 +19,4 @@ startPluginDashboard(createPluginHost())
 
 const root = document.createElement('div')
 document.body.insertBefore(root, document.body.children[0])
-ReactDOM.unstable_createRoot(root).render(<Dashboard />)
+ReactDOM.unstable_createRoot(root).render(<IntergratedDashboard />)
