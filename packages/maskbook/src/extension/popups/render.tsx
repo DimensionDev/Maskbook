@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom'
 import { MaskUIRoot } from '../../UIRoot'
 
 const root = document.createElement('div')
-document.body.insertBefore(root, document.body.children[0])
+document.body.insertBefore(root, document.body.children[0] || null)
 ReactDOM.unstable_createRoot(root).render(<Dialogs />)
 
 function Dialogs() {
