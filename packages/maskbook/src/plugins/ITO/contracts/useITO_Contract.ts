@@ -5,7 +5,7 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import { ITO_CONSTANTS } from '../constants'
 import { useContract } from '../../../web3/hooks/useContract'
 
-export function useITO_Contract() {
+export function useITO_Contract(contractAddress?: string) {
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
-    return useContract<ITO>(ITO_CONTRACT_ADDRESS, ITO_ABI as AbiItem[])
+    return useContract<ITO>(contractAddress ?? ITO_CONTRACT_ADDRESS, ITO_ABI as AbiItem[])
 }
