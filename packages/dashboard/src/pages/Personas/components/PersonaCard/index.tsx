@@ -7,10 +7,10 @@ import { PersonaLine } from '../PersonaLine'
 import { PersonaIdentifier, ProfileIdentifier, useMenu } from '@dimensiondev/maskbook-shared'
 //TODO: replace to new settings
 import type { PersonaProvider } from '../../type'
-import { EditPersonaDialog } from '../EditPersonaDialog'
 import { DeletePersonaDialog } from '../DeletePersonaDialog'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaState } from '../../hooks/usePersonaState'
+import { RenameDialog } from '../RenameDialog'
 
 const useStyles = makeStyles<Theme, { active: boolean }, 'card' | 'status' | 'header' | 'content' | 'line' | 'setting'>(
     (theme) => ({
@@ -61,24 +61,25 @@ export interface PersonaCardProps {
 }
 
 export const PersonaCard = memo<PersonaCardProps>((props) => {
-    const { onConnect, onDisConnect } = PersonaState.useContainer()
+    const { onConnect, onDisConnect, onRename } = PersonaState.useContainer()
 
-    return <PersonaCardUI {...props} onConnect={onConnect} onDisconnect={onDisConnect} />
+    return <PersonaCardUI {...props} onConnect={onConnect} onDisconnect={onDisConnect} onRename={onRename} />
 })
 
 export interface PersonaCardUIProps extends PersonaCardProps {
     onConnect: (identifier: PersonaIdentifier, provider: PersonaProvider) => void
     onDisconnect: (identifier?: ProfileIdentifier) => void
+    onRename: (target: string, identifier: PersonaIdentifier, callback?: () => void) => void
 }
 
 export const PersonaCardUI = memo<PersonaCardUIProps>(
-    ({ nickname, active = false, identifier, providers, onConnect, onDisconnect, onClick }) => {
+    ({ nickname, active = false, identifier, providers, onConnect, onDisconnect, onClick, onRename }) => {
         const t = useDashboardI18N()
         const classes = useStyles({ active })
-        const [editDialogOpen, setEditDialogOpen] = useState(false)
+        const [renameDialogOpen, setRenameDialogOpen] = useState(false)
         const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
         const [menu, openMenu] = useMenu(
-            <MenuItem onClick={() => setEditDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
+            <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
             <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
                 {t.personas_delete()}
             </MenuItem>,
@@ -114,12 +115,10 @@ export const PersonaCardUI = memo<PersonaCardUIProps>(
                     </div>
                 </div>
                 {menu}
-                <EditPersonaDialog
-                    open={editDialogOpen}
-                    onClose={() => setEditDialogOpen(false)}
-                    nickname={nickname}
-                    providers={providers}
-                    identifier={identifier}
+                <RenameDialog
+                    open={renameDialogOpen}
+                    onClose={() => setRenameDialogOpen(false)}
+                    onConfirm={(name) => onRename(name, identifier)}
                 />
                 <DeletePersonaDialog
                     open={deleteDialogOpen}
