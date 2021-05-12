@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import { makeStyles, Typography, Slider, CircularProgress } from '@material-ui/core'
+import { createStyles, makeStyles, Typography, Slider, CircularProgress } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 
@@ -208,7 +208,7 @@ export function SwapDialog(props: SwapDialogProps) {
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-            if (swapState.type === TransactionStateType.ITO_UNLUCKY) resetSwapCallback()
+            if (swapState.type === TransactionStateType.REVERTED) resetSwapCallback()
             if (swapState.type !== TransactionStateType.CONFIRMED && swapState.type !== TransactionStateType.RECEIPT)
                 return
             const { receipt } = swapState

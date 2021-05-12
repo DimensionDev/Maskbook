@@ -299,6 +299,7 @@
     "plugin_wallet_transaction_wait_for_confirmation": "等待交易確認…",
     "plugin_wallet_transaction_submitted": "您的交易已提交！",
     "plugin_wallet_transaction_confirmed": "您的交易已確認！",
+    "plugin_wallet_transaction_reverted": "",
     "plugin_wallet_transaction_rejected": "交易被拒絕！",
     "plugin_wallet_transaction_server_error": "",
     "plugin_wallet_view_on_etherscan": "在 Etherscan 上查看",

@@ -299,6 +299,7 @@
     "plugin_wallet_transaction_wait_for_confirmation": "Waiting for confirmation…",
     "plugin_wallet_transaction_submitted": "Your transaction was submitted!",
     "plugin_wallet_transaction_confirmed": "Your transaction was confirmed!",
+    "plugin_wallet_transaction_reverted": "Transaction was reverted!",
     "plugin_wallet_transaction_rejected": "Transaction was rejected!",
     "plugin_wallet_transaction_server_error": "Transaction was failed due to internal JSON-RPC server error.",
     "plugin_wallet_view_on_etherscan": "View on Etherscan",

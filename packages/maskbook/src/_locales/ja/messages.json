@@ -299,6 +299,7 @@
     "plugin_wallet_transaction_wait_for_confirmation": "確認を待っています",
     "plugin_wallet_transaction_submitted": "取引は送信されました。",
     "plugin_wallet_transaction_confirmed": "取引は成功しました。",
+    "plugin_wallet_transaction_reverted": "",
     "plugin_wallet_transaction_rejected": "取引は拒否されました。",
     "plugin_wallet_transaction_server_error": "",
     "plugin_wallet_view_on_etherscan": "Etherscan で見る",

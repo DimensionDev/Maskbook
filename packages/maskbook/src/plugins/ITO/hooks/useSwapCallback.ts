@@ -12,6 +12,7 @@ import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType, TransactionE
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { useQualificationContract } from '../contracts/useQualificationContract'
 import type { JSON_PayloadInMask } from '../types'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 export function useSwapCallback(
     payload: JSON_PayloadInMask,
@@ -19,6 +20,7 @@ export function useSwapCallback(
     token: PartialRequired<EtherTokenDetailed | ERC20TokenDetailed, 'address'>,
     isQualificationHasLucky = false,
 ) {
+    const { t } = useI18N()
     const account = useAccount()
     const ITO_Contract = useITO_Contract()
     const qualificationContract = useQualificationContract(payload.qualification_address)
@@ -149,11 +151,12 @@ export function useSwapCallback(
         // step 2-2: blocking
         return new Promise<void>((resolve, reject) => {
             const onSucceed = (no: number, receipt: TransactionReceipt) => {
-                if (!receipt.events?.SwapSuccess) {
+                if (!receipt.status) {
                     setSwapState({
-                        type: TransactionStateType.ITO_UNLUCKY,
+                        type: TransactionStateType.REVERTED,
                         no,
                         receipt,
+                        reason: !receipt.events?.SwapSuccess ? t('plugin_ito_swap_unlucky_fail') : undefined,
                     })
                 } else {
                     setSwapState({

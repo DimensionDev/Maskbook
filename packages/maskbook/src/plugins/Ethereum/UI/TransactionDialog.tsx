@@ -151,11 +151,11 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         </Typography>
                     </>
                 ) : null}
-                {state.type === TransactionStateType.ITO_UNLUCKY ? (
+                {state.type === TransactionStateType.REVERTED ? (
                     <>
                         <WarningIcon className={classes.icon} />
-                        <section>
-                            <Typography className={classes.unlucky}>{t('plugin_ito_swap_unlucky_fail')}</Typography>
+                        <Typography className={classes.unlucky}>{state.reason ?? t('plugin_wallet_transaction_reverted')}</Typography>
+                        <Typography>
                             <Link
                                 className={classes.link}
                                 href={resolveTransactionLinkOnEtherscan(chainId, state.receipt.transactionHash)}
@@ -163,7 +163,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                                 rel="noopener noreferrer">
                                 {t('plugin_wallet_view_on_etherscan')}
                             </Link>
-                        </section>
+                        </Typography>
                     </>
                 ) : null}
             </DialogContent>
