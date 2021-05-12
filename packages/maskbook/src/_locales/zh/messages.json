@@ -304,6 +304,7 @@
     "plugin_wallet_view_on_etherscan": "在 Etherscan 上查看",
     "plugin_wallet_wrong_network_tip": "",
     "plugin_wallet_recent_transaction": "",
+    "plugin_wallet_clear_all": "",
     "plugin_wallet_on_create": "創建錢包",
     "plugin_wallet_on_connect": "連接錢包",
     "plugin_wallet_setup_title_create": "",

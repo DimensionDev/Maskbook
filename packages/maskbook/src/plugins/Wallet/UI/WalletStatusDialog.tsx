@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { Copy, ExternalLink, XCircle, RotateCcw, Edit3 } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
+import classNames from 'classnames'
 import ErrorIcon from '@material-ui/icons/Error'
 import { Button, DialogActions, DialogContent, Link, makeStyles, Typography, List, ListItem } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -26,16 +27,22 @@ const useStyles = makeStyles((theme) => ({
     currentAccount: {
         padding: theme.spacing(2, 3),
         display: 'flex',
-        backgroundColor: '#F7F9FA',
+        backgroundColor: theme.palette.mode === 'dark' ? '#17191D' : '#F7F9FA',
         borderRadius: 8,
+        alignItems: 'center',
     },
     accountInfo: {
         fontSize: 16,
+        flexGrow: 1,
     },
     accountName: {
         fontSize: 16,
+        marginRight: 6,
     },
-    infoRow: {},
+    infoRow: {
+        display: 'flex',
+        alignItems: 'center',
+    },
     footer: {
         fontSize: 12,
         textAlign: 'left',
@@ -53,6 +60,14 @@ const useStyles = makeStyles((theme) => ({
     actionButton: {
         fontSize: 12,
         marginLeft: theme.spacing(1),
+    },
+    changeButton: {
+        backgroundColor: '#1C68F3',
+        borderRadius: 20,
+        color: '#FFFFFF',
+        '&:hover': {
+            backgroundColor: '#1854c4',
+        },
     },
     icon: {
         fontSize: 48,
@@ -76,16 +91,22 @@ const useStyles = makeStyles((theme) => ({
     },
     linkIcon: {
         marginRight: theme.spacing(1),
+        color: '#1C68F3',
     },
     sectionTitle: {
         display: 'flex',
         justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: theme.spacing(1),
     },
     sectionTitleText: {
-        fontSize: '18px !important' as '18px',
+        fontSize: '18px',
+        fontWeight: 500,
+        fontFamily: 'Helvetica',
     },
     clearAllButton: {
         fontSize: 14,
+        marginLeft: 'auto',
     },
     transaction: {
         fontSize: 14,
@@ -139,6 +160,8 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     )
     //#endregion
 
+    const { setDialog: setRenameDialog } = useRemoteControlledDialog(WalletMessages.events.walletRenameDialogUpdated)
+
     const onDisconnect = useCallback(async () => {
         if (selectedWalletProvider !== ProviderType.WalletConnect) return
         closeDialog()
@@ -159,19 +182,26 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
             title={t('wallet_status_title')}
             open={open}
             onClose={closeDialog}
-            DialogProps={{ maxWidth: 'xs' }}>
+            DialogProps={{ maxWidth: 'sm' }}>
             <DialogContent className={classes.content}>
                 <section className={classes.currentAccount}>
                     <ProviderIcon classes={{ icon: classes.icon }} size={48} providerType={selectedWalletProvider} />
                     <div className={classes.accountInfo}>
                         <div className={classes.infoRow}>
                             <Typography className={classes.accountName}>{selectedWallet.name}</Typography>
-                            <Link component="button">
-                                <Edit3 color="currentcolor" />
+                            <Link
+                                component="button"
+                                onClick={() => {
+                                    setRenameDialog({
+                                        open: true,
+                                        wallet: selectedWallet,
+                                    })
+                                }}>
+                                <Edit3 size={16} color="currentcolor" />
                             </Link>
                         </div>
                         <div className={classes.infoRow}>
-                            <Typography className={classes.address}>
+                            <Typography className={classes.address} variant="body2">
                                 <FormattedAddress address={selectedWallet.address} size={4}></FormattedAddress>
                             </Typography>
                             <Link
@@ -203,7 +233,11 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                                 {t('wallet_status_button_disconnect')}
                             </Button>
                         ) : null}
-                        <Button className={classes.actionButton} color="primary" size="small" onClick={onChange}>
+                        <Button
+                            className={classNames(classes.actionButton, classes.changeButton)}
+                            color="primary"
+                            size="small"
+                            onClick={onChange}>
                             {t('wallet_status_button_change')}
                         </Button>
                     </section>
@@ -218,23 +252,23 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                         <Typography variant="h2" className={classes.sectionTitleText}>
                             {t('plugin_wallet_recent_transaction')}
                         </Typography>
-                        <Button aria-label="Clear All" className={classes.clearAllButton}>
+                        <Link aria-label="Clear All" component="button" className={classes.clearAllButton}>
                             ({t('plugin_wallet_clear_all')})
-                        </Button>
+                        </Link>
                     </div>
                     <List>
                         <ListItem className={classes.transaction}>
                             <Typography variant="body2">Add 2,000.00 USDT </Typography>
                             <ExternalLink className={classes.linkIcon} size={14} />
                             <Link component="button" className={classes.transactionButton}>
-                                <RotateCcw size={12} />
+                                <RotateCcw size={14} />
                             </Link>
                         </ListItem>
                         <ListItem className={classes.transaction}>
                             <Typography variant="body2">Add 2,000.00 USDT </Typography>
                             <ExternalLink className={classes.linkIcon} size={14} />
                             <Link component="button" className={classes.transactionButton}>
-                                <XCircle size={12} color="red" />
+                                <XCircle size={14} color="red" />
                             </Link>
                         </ListItem>
                     </List>
