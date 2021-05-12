@@ -23,6 +23,6 @@ export const PersonaCard = of({
         identifier: new ECKeyIdentifier('secp256k1', ''),
         onClick: action('onClick'),
         onConnect: action('onConnect'),
-        onDisconnect: action('onDisConnect'),
+        onDisconnect: action('onDisconnect'),
     },
 })

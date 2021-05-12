@@ -55,7 +55,7 @@ function usePersonaState() {
 
     const [, onConnect] = useConnectSocialNetwork()
 
-    const [, onDisConnect] = useDisConnectSocialNetwork()
+    const [, onDisconnect] = useDisConnectSocialNetwork()
 
     const [, onAddPersona] = useCreatePersona()
 
@@ -85,7 +85,7 @@ function usePersonaState() {
 
     return {
         onConnect,
-        onDisConnect,
+        onDisconnect,
         onAddPersona,
         onRename,
         personas,

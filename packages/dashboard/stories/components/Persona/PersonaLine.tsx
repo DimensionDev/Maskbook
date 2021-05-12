@@ -13,7 +13,7 @@ export const PersonaLine = of({
         networkIdentifier: 'twitter',
         connected: false,
         onConnect: action('onConnect'),
-        onDisConnect: action('onDisConnect'),
+        onDisconnect: action('onDisconnect'),
         userId: '',
     },
 })

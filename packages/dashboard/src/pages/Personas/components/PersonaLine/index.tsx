@@ -7,12 +7,12 @@ export interface PersonaLineProps {
     networkIdentifier: string
     connected: boolean
     onConnect: () => void
-    onDisConnect: () => void
+    onDisconnect: () => void
     userId?: string
 }
 
 export const PersonaLine = memo<PersonaLineProps>(
-    ({ userId, networkIdentifier, connected, onConnect, onDisConnect }) => {
+    ({ userId, networkIdentifier, connected, onConnect, onDisconnect }) => {
         const t = useDashboardI18N()
         return (
             <Link
@@ -36,7 +36,7 @@ export const PersonaLine = memo<PersonaLineProps>(
                         variant="caption"
                         onClick={(e: MouseEvent) => {
                             e.stopPropagation()
-                            onDisConnect()
+                            onDisconnect()
                         }}>
                         {t.personas_disconnect()}
                     </Link>

@@ -61,9 +61,9 @@ export interface PersonaCardProps {
 }
 
 export const PersonaCard = memo<PersonaCardProps>((props) => {
-    const { onConnect, onDisConnect, onRename } = PersonaState.useContainer()
+    const { onConnect, onDisconnect, onRename } = PersonaState.useContainer()
 
-    return <PersonaCardUI {...props} onConnect={onConnect} onDisconnect={onDisConnect} onRename={onRename} />
+    return <PersonaCardUI {...props} onConnect={onConnect} onDisconnect={onDisconnect} onRename={onRename} />
 })
 
 export interface PersonaCardUIProps extends PersonaCardProps {
@@ -108,7 +108,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>(
                                 <PersonaLine
                                     key={provider.networkIdentifier}
                                     onConnect={() => onConnect(identifier, provider)}
-                                    onDisConnect={() => onDisconnect(provider?.identifier)}
+                                    onDisconnect={() => onDisconnect(provider?.identifier)}
                                     {...provider}
                                 />
                             )

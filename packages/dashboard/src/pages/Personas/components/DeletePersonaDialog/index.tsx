@@ -22,8 +22,11 @@ export const DeletePersonaDialog = memo<DeletePersonaDialogProps>(({ open, onClo
                 </Typography>
                 <TextField
                     variant="filled"
+                    label="Password"
+                    type="password"
                     InputProps={{ disableUnderline: true }}
-                    sx={{ width: '100%', marginTop: 2.75 }}
+                    fullWidth
+                    sx={{ marginTop: 2.75 }}
                 />
             </DialogContent>
             <DialogActions>
