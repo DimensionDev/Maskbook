@@ -45,7 +45,7 @@ export function useSwapCallback(
         }
 
         // error: poll has expired
-        if (payload.end_time * 1000 < Date.now()) {
+        if (payload.end_time < Date.now()) {
             setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Pool has expired.'),

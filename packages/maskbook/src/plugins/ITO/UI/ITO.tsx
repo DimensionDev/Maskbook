@@ -363,7 +363,7 @@ export function ITO(props: ITO_Props) {
     )
 
     useEffect(() => {
-        const timeToExpired = end_time * 1000 - Date.now()
+        const timeToExpired = end_time - Date.now()
         if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired)) return
 
         const timer = setTimeout(() => {
@@ -372,7 +372,7 @@ export function ITO(props: ITO_Props) {
         }, timeToExpired + TIME_WAIT_BLOCKCHAIN)
 
         return () => clearTimeout(timer)
-    }, [])
+    }, [end_time, listOfStatus])
 
     useEffect(() => {
         if (destructState.type === TransactionStateType.UNKNOWN) return
