@@ -13,13 +13,12 @@ export function PostInspector(props: PostInspectorProps) {
     const isCompactPayload_ = isCompactPayload(props.payload)
     const { value: payload, error, loading, retry } = usePoolPayload(isCompactPayload_ ? pid : '')
 
-    if (isCompactPayload_) {
-        if (loading) return <ITO_Loading />
-        if (error) return <ITO_Error retryPoolPayload={retry} />
+    const Content = () => {
+        if (isCompactPayload_) {
+            if (loading) return <ITO_Loading />
+            if (error) return <ITO_Error retryPoolPayload={retry} />
+        }
+        return <ITO pid={pid} payload={payload ?? props.payload} />
     }
-    return (
-        <EthereumChainBoundary chainId={chain_id}>
-            <ITO pid={pid} payload={payload ?? props.payload} />
-        </EthereumChainBoundary>
-    )
+    return <EthereumChainBoundary chainId={chain_id}>{Content}</EthereumChainBoundary>
 }
