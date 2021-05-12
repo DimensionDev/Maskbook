@@ -16,7 +16,7 @@ i18nNextInstance.init({
     resources: {
         en: { translation: en },
         zh: { translation: removeEmpty(zh) },
-        // ko: { translation: removeEmpty(ko) }, // TODO: Uncomment by translator
+        ko: { translation: removeEmpty(ko) },
         ja: { translation: removeEmpty(ja) },
     },
     keySeparator: false,
