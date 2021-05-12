@@ -140,9 +140,7 @@ export function TransferTab(props: TransferTabProps) {
     //#region validation
     const validationMessage = useMemo(() => {
         if (insufficientBalance) {
-            return t('wallet_transfer_error_insufficent_balance', {
-                token: token.symbol,
-            })
+            return t('wallet_transfer_error_insufficent_balance', { token: token.symbol })
         }
         if (!transferAmount || new BigNumber(transferAmount).isZero()) return t('wallet_transfer_error_amount_absence')
         if (new BigNumber(transferAmount).isGreaterThan(tokenBalance))
