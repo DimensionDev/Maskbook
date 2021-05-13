@@ -1,7 +1,7 @@
 import { useMemo, createElement } from 'react'
 import { ValueRef, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { unstable_createMuiStrictModeTheme, ThemeProvider, makeStyles, PaletteMode } from '@material-ui/core'
-import { useMaskbookTheme } from '../../../utils/theme'
+import { useClassicMaskTheme } from '../../../utils/theme'
 import type { SocialNetworkUI } from '../../../social-network'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
@@ -43,7 +43,7 @@ export function useThemeTwitterVariant() {
     const primaryColor = useValueRef(primaryColorRef)
     const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
-    const MaskbookTheme = useMaskbookTheme({
+    const MaskbookTheme = useClassicMaskTheme({
         appearance: isDark(fromRGB(backgroundColor)!) ? Appearance.dark : Appearance.light,
     })
     return useMemo(() => {
