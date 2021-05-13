@@ -9,6 +9,7 @@ import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaContext } from './hooks/usePersonaContext'
 import { useDashboardI18N } from '../../locales'
+import type { PersonaInformation } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -49,15 +50,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+function firstProfileNetwork(x: PersonaInformation | undefined) {
+    return x?.linkedProfiles[0].identifier.network || ''
+}
 function Personas() {
     const classes = useStyles()
     const t = useDashboardI18N()
     const { drawerOpen, toggleDrawer, personas, currentPersona, onConnect } = PersonaContext.useContainer()
 
-    const [activeTab, setActiveTab] = useState(currentPersona?.linkedProfiles?.[0]?.identifier.network ?? '')
+    const [activeTab, setActiveTab] = useState(firstProfileNetwork(currentPersona))
 
     useEffect(() => {
-        setActiveTab(currentPersona?.linkedProfiles?.[0]?.identifier.network ?? '')
+        setActiveTab(firstProfileNetwork(currentPersona))
     }, [currentPersona])
 
     return (
@@ -91,7 +95,7 @@ function Personas() {
                     {currentPersona?.linkedProfiles?.map((provider) => (
                         <TabPanel key={provider.identifier.network} value={provider.identifier.network}>
                             <PersonaSetup
-                                connected={provider.connected}
+                                connected={true}
                                 networkIdentifier={provider.identifier.network}
                                 onConnect={() => {
                                     if (currentPersona.identifier) {

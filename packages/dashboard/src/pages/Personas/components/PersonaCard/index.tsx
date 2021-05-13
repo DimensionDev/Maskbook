@@ -4,9 +4,7 @@ import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { SettingsIcon } from '@dimensiondev/icons'
 import { IconButton, MenuItem, Typography } from '@material-ui/core'
 import { PersonaLine } from '../PersonaLine'
-import { PersonaIdentifier, ProfileIdentifier, useMenu } from '@dimensiondev/maskbook-shared'
-//TODO: replace to new settings
-import type { ProfileInfo } from '../../type'
+import { PersonaIdentifier, ProfileIdentifier, ProfileInformation, useMenu } from '@dimensiondev/maskbook-shared'
 import { DeletePersonaDialog } from '../DeletePersonaDialog'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
@@ -56,7 +54,7 @@ export interface PersonaCardProps {
     nickname?: string
     active?: boolean
     identifier: PersonaIdentifier
-    providers: ProfileInfo[]
+    profiles: ProfileInformation[]
     onClick(): void
 }
 
@@ -69,11 +67,11 @@ export const PersonaCard = memo<PersonaCardProps>((props) => {
 export interface PersonaCardUIProps extends PersonaCardProps {
     onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
     onDisconnect: (identifier?: ProfileIdentifier) => void
-    onRename: (target: string, identifier: PersonaIdentifier, callback?: () => void) => void
+    onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => void
 }
 
 export const PersonaCardUI = memo<PersonaCardUIProps>(
-    ({ nickname, active = false, identifier, providers, onConnect, onDisconnect, onClick, onRename }) => {
+    ({ nickname, active = false, identifier, profiles: providers, onConnect, onDisconnect, onClick, onRename }) => {
         const t = useDashboardI18N()
         const classes = useStyles({ active })
         const [renameDialogOpen, setRenameDialogOpen] = useState(false)
@@ -110,6 +108,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>(
                                     networkIdentifier={provider.identifier.network}
                                     onConnect={() => onConnect(identifier, provider.identifier.network)}
                                     onDisconnect={() => onDisconnect(provider?.identifier)}
+                                    connected={true}
                                     {...provider}
                                 />
                             )
@@ -122,7 +121,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>(
                     nickname={nickname}
                     onClose={() => setRenameDialogOpen(false)}
                     onConfirm={(name) => {
-                        onRename(name, identifier)
+                        onRename(identifier, name)
                         setRenameDialogOpen(false)
                     }}
                 />

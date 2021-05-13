@@ -2,12 +2,10 @@ import { memo, useState } from 'react'
 import { Box, Button, Drawer, makeStyles } from '@material-ui/core'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PersonaCard } from '../PersonaCard'
-//TODO: replace to new settings
-import type { PersonaInfo } from '../../type'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { AddPersonaCard } from '../AddPersonaCard'
 import { useDashboardI18N } from '../../../../locales'
-import type { PersonaIdentifier } from '@dimensiondev/maskbook-shared'
+import type { PersonaIdentifier, PersonaInformation } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export interface PersonaDrawer {
-    personas: PersonaInfo[]
+    personas: PersonaInformation[]
 }
 
 export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
@@ -65,7 +63,7 @@ export interface PersonaDrawerUIProps extends PersonaDrawer {
     open: boolean
     currentPersonaIdentifier?: PersonaIdentifier
     toggleDrawer: () => void
-    onChangeCurrentPersona: (persona: PersonaInfo) => void
+    onChangeCurrentPersona: (persona: PersonaIdentifier) => void
     onAddPersona: (nickname: string) => void
 }
 
@@ -98,8 +96,8 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                             active={identifier.equals(currentPersonaIdentifier)}
                             key={identifier.toText()}
                             nickname={nickname}
-                            providers={linkedProfiles}
-                            onClick={() => onChangeCurrentPersona(item)}
+                            profiles={[...linkedProfiles.values()]}
+                            onClick={() => onChangeCurrentPersona(identifier)}
                         />
                     )
                 })}

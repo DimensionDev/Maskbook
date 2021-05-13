@@ -12,9 +12,8 @@ export default meta({
 export const PersonaCard = of({
     args: {
         active: false,
-        providers: [
+        profiles: [
             {
-                connected: false,
                 identifier: new ProfileIdentifier('twitter.com', ''),
             },
         ],
