@@ -133,7 +133,7 @@ export enum EthereumTokenType {
 export enum EthereumMethodType {
     PERSONAL_SIGN = 'personal_sign',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
-    ETh_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
+    ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_GAS_PRICE = 'eth_gasPrice',
     ETH_BLOCK_NUMBER = 'eth_blockNumber',
     ETH_GET_BALANCE = 'eth_getBalance',

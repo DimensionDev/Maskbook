@@ -1,14 +1,14 @@
 import { pick } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { UNSAFE_send } from './send'
+import { INTERNAL_send } from './send'
 
 let id = 0
 
 export async function request<T extends unknown>(requestArguments: RequestArguments) {
     return new Promise<T>((resolve, reject) => {
         id++
-        UNSAFE_send(
+        INTERNAL_send(
             {
                 jsonrpc: '2.0',
                 id,

@@ -134,7 +134,7 @@ export function useSwapCallback(
         const config = await Services.Ethereum.composeTransaction({
             from: account,
             to: ITO_Contract.options.address,
-            gas: isQualificationHasLucky ? undefined : 200000,
+            gas: isQualificationHasLucky ? 200000 : undefined,
             value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
             data: ITO_Contract.methods.swap(...swapParams).encodeABI(),
         }).catch((error) => {

@@ -11,7 +11,7 @@ import { commitNonce, resetNonce } from './nonce'
  * @param payload
  * @param callback
  */
-export async function UNSAFE_send(
+export async function INTERNAL_send(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
 ) {
@@ -56,7 +56,7 @@ export async function UNSAFE_send(
                 // get the signer
                 const signer = web3.eth.accounts.wallet[0]
                 if (!signer) {
-                    callback(new Error('failed to create signer'))
+                    callback(new Error('failed to create signer.'))
                     return
                 }
 
@@ -64,7 +64,7 @@ export async function UNSAFE_send(
                 provider.send(
                     {
                         ...payload,
-                        method: EthereumMethodType.ETh_SEND_RAW_TRANSACTION,
+                        method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
                         params: [(await signer.signTransaction(config)).rawTransaction],
                     },
                     (error, result) => {

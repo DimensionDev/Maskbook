@@ -1,8 +1,8 @@
-import { head, omit } from 'lodash-es'
+import { head } from 'lodash-es'
 import { OpenSeaPort } from 'opensea-js'
 import type { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
-import { getChainId, request } from '../../../extension/background-script/EthereumService'
+import { getChainId, request, requestSend } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaRinkebyBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
 import { Flags } from '../../../utils/flags'
@@ -10,26 +10,15 @@ import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../types'
 import { OpenSeaEventHistoryQuery } from '../queries/OpenSea'
 import { ChainId } from '../../../web3/types'
 import { resolveChainName } from '../../../web3/pipes'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 
 function createExternalProvider() {
-    const send = async (
-        payload: JsonRpcPayload,
-        callback: (error: Error | null, response?: JsonRpcResponse) => void,
-    ) => {
-        try {
-            callback(null, await request(omit(payload, ['id', 'jsonrpc'])))
-        } catch (e) {
-            callback(e)
-        }
-    }
     return {
         isMetaMask: false,
         isStatus: true,
         host: '',
         path: '',
-        sendAsync: send,
-        send,
+        sendAsync: requestSend,
+        send: requestSend,
         request,
     }
 }
