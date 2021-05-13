@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
     tokenCardWrapper: {
         width: '100%',
+        color: 'white',
         maxHeight: 450,
         marginBottom: theme.spacing(1),
         overflow: 'auto',

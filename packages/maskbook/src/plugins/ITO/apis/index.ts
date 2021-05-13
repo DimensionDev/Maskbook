@@ -39,7 +39,7 @@ const POOL_FIELDS = `
     seller {
         address
     }
-    buyers {
+    buyers (first: 1) {
         address
         name
     }
@@ -56,9 +56,6 @@ export async function getTradeInfo(pid: string, trader: string) {
         body: stringify({
             query: `
             {
-                pool (id: "${pid.toLowerCase()}") {
-                    ${POOL_FIELDS}
-                }
                 buyInfos (where: { pool: "${pid.toLowerCase()}", buyer: "${trader.toLowerCase()}" }) {
                     buyer {
                         ${TRADER_FIELDS}
@@ -88,7 +85,6 @@ export async function getTradeInfo(pid: string, trader: string) {
     })
     const { data } = (await response.json()) as {
         data: {
-            pool: JSON_PayloadOutMask | null
             buyInfos: {
                 buyer: {
                     address: string
@@ -117,12 +113,11 @@ export async function getTradeInfo(pid: string, trader: string) {
             }[]
         }
     }
-    if (!data.pool) throw new Error('Failed to load trade info.')
+    if (!data.buyInfos) throw new Error('Failed to load trade info.')
     return {
         buyInfo: first(data.buyInfos),
         sellInfo: first(data.sellInfos),
         destructInfo: first(data.destructInfos),
-        pool: payloadIntoMask(data.pool),
     }
 }
 

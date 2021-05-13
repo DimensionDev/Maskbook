@@ -1,6 +1,4 @@
-import { Suspense } from 'react'
-import { makeStyles } from '@material-ui/core'
-import { ITO_Loading } from './UI/ITO'
+import { makeStyles, createStyles } from '@material-ui/core'
 import { PostInspector } from './UI/PostInspector'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
@@ -56,9 +54,7 @@ export const ITO_PluginDefine: PluginConfig = {
         if (!payload.ok) return null
         return (
             <MaskbookPluginWrapper pluginName="ITO">
-                <Suspense fallback={<ITO_Loading />}>
-                    <PostInspector payload={payloadIntoMask(payload.val)} />
-                </Suspense>
+                <PostInspector payload={payloadIntoMask(payload.val)} />
             </MaskbookPluginWrapper>
         )
     },
