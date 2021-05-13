@@ -9,7 +9,7 @@ import { PersonaIdentifier, ProfileIdentifier, useMenu } from '@dimensiondev/mas
 import type { PersonaProvider } from '../../type'
 import { DeletePersonaDialog } from '../DeletePersonaDialog'
 import { useDashboardI18N } from '../../../../locales'
-import { PersonaState } from '../../hooks/usePersonaState'
+import { PersonaContext } from '../../hooks/usePersonaContext'
 import { RenameDialog } from '../RenameDialog'
 
 const useStyles = makeStyles<Theme, { active: boolean }, 'card' | 'status' | 'header' | 'content' | 'line' | 'setting'>(
@@ -61,7 +61,7 @@ export interface PersonaCardProps {
 }
 
 export const PersonaCard = memo<PersonaCardProps>((props) => {
-    const { onConnect, onDisconnect, onRename } = PersonaState.useContainer()
+    const { onConnect, onDisconnect, onRename } = PersonaContext.useContainer()
 
     return <PersonaCardUI {...props} onConnect={onConnect} onDisconnect={onDisconnect} onRename={onRename} />
 })

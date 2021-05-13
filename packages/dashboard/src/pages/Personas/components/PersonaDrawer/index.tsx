@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { Box, Button, Drawer, makeStyles } from '@material-ui/core'
-import { PersonaState } from '../../hooks/usePersonaState'
+import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PersonaCard } from '../PersonaCard'
 //TODO: replace to new settings
 import type { PersonaInfo } from '../../type'
@@ -47,7 +47,7 @@ export interface PersonaDrawer {
 
 export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
     const { drawerOpen, toggleDrawer, currentPersona, onAddPersona, onChangeCurrentPersona } =
-        PersonaState.useContainer()
+        PersonaContext.useContainer()
 
     return (
         <PersonaDrawerUI

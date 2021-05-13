@@ -10,7 +10,7 @@ import { useCreatePersona } from './useCreatePersona'
 import { ECKeyIdentifier, useValueRef } from '@dimensiondev/maskbook-shared'
 import { currentPersonaIdentifier } from '../settings'
 
-function usePersonaState() {
+function usePersonaContext() {
     const currentPersonaIdentifierRef = useValueRef(currentPersonaIdentifier)
 
     const [currentPersona, setCurrentPersona] = useState<PersonaInfo>()
@@ -95,4 +95,4 @@ function usePersonaState() {
     }
 }
 
-export const PersonaState = createContainer(usePersonaState)
+export const PersonaContext = createContainer(usePersonaContext)

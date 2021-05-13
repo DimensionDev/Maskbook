@@ -7,7 +7,7 @@ import { PersonaSetup } from './components/PersonaSetup'
 import { AuthorIcon, ArrowDownRound, ArrowUpRound } from '@dimensiondev/icons'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { PersonaDrawer } from './components/PersonaDrawer'
-import { PersonaState } from './hooks/usePersonaState'
+import { PersonaContext } from './hooks/usePersonaContext'
 import { useDashboardI18N } from '../../locales'
 
 const useStyles = makeStyles((theme) => ({
@@ -49,10 +49,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export default function Personas() {
+function Personas() {
     const classes = useStyles()
     const t = useDashboardI18N()
-    const { drawerOpen, toggleDrawer, personas, currentPersona, onConnect } = PersonaState.useContainer()
+    const { drawerOpen, toggleDrawer, personas, currentPersona, onConnect } = PersonaContext.useContainer()
 
     const [activeTab, setActiveTab] = useState(currentPersona?.providers?.[0]?.networkIdentifier ?? '')
 
@@ -105,5 +105,13 @@ export default function Personas() {
             </Box>
             <PersonaDrawer personas={personas} />
         </PageFrame>
+    )
+}
+
+export default function () {
+    return (
+        <PersonaContext.Provider>
+            <Personas />
+        </PersonaContext.Provider>
     )
 }
