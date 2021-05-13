@@ -15,12 +15,6 @@ export async function getDefinedSocialNetworkUIs() {
         }
     })
 }
-
-export interface SocialNetworkProvider {
-    networkIdentifier: string
-    network: string
-}
-
 export async function connectSocialNetwork(identifier: PersonaIdentifier, network: string) {
     const ui = await loadSocialNetworkUI(network)
     const home = ui.utils.getHomePage?.()
