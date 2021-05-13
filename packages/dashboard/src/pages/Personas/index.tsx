@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function firstProfileNetwork(x: PersonaInformation | undefined) {
-    return x?.linkedProfiles[0].identifier.network || ''
+    return x?.linkedProfiles[0]?.identifier.network || ''
 }
 function Personas() {
     const classes = useStyles()

@@ -31,7 +31,7 @@ function usePersonaContext() {
 
     useEffect(() => {
         if (myPersonas.length) {
-            const persona = !currentPersonaIdentifierRef
+            const persona = !currentPersonaIdentifierRef.ok
                 ? head(myPersonas)
                 : myPersonas.find((i) => i.identifier.equals(currentPersonaIdentifierRef.unwrap()))
 
