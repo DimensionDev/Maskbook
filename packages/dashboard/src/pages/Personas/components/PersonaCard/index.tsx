@@ -6,7 +6,7 @@ import { IconButton, MenuItem, Typography } from '@material-ui/core'
 import { PersonaLine } from '../PersonaLine'
 import { PersonaIdentifier, ProfileIdentifier, useMenu } from '@dimensiondev/maskbook-shared'
 //TODO: replace to new settings
-import type { PersonaProvider } from '../../type'
+import type { ProfileInfo } from '../../type'
 import { DeletePersonaDialog } from '../DeletePersonaDialog'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
@@ -56,7 +56,7 @@ export interface PersonaCardProps {
     nickname?: string
     active?: boolean
     identifier: PersonaIdentifier
-    providers: PersonaProvider[]
+    providers: ProfileInfo[]
     onClick(): void
 }
 
@@ -106,8 +106,9 @@ export const PersonaCardUI = memo<PersonaCardUIProps>(
                         {providers.map((provider) => {
                             return (
                                 <PersonaLine
-                                    key={provider.networkIdentifier}
-                                    onConnect={() => onConnect(identifier, provider.networkIdentifier)}
+                                    key={provider.identifier.network}
+                                    networkIdentifier={provider.identifier.network}
+                                    onConnect={() => onConnect(identifier, provider.identifier.network)}
                                     onDisconnect={() => onDisconnect(provider?.identifier)}
                                     {...provider}
                                 />

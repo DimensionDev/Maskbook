@@ -91,14 +91,14 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                 elevation={0}
                 classes={{ root: classes.root, paper: classes.paper }}>
                 {personas.map((item) => {
-                    const { identifier, nickname, providers } = item
+                    const { identifier, nickname, linkedProfiles } = item
                     return (
                         <PersonaCard
                             identifier={identifier}
                             active={identifier.equals(currentPersonaIdentifier)}
                             key={identifier.toText()}
                             nickname={nickname}
-                            providers={providers}
+                            providers={linkedProfiles}
                             onClick={() => onChangeCurrentPersona(item)}
                         />
                     )

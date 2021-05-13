@@ -1,14 +1,12 @@
 import type { PersonaIdentifier, ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 
-export interface PersonaProvider {
-    networkIdentifier: string
+export interface ProfileInfo {
     connected: boolean
-    userId?: string
-    identifier?: ProfileIdentifier
+    identifier: ProfileIdentifier
 }
 
 export interface PersonaInfo {
     nickname?: string
     identifier: PersonaIdentifier
-    providers: PersonaProvider[]
+    linkedProfiles: ProfileInfo[]
 }

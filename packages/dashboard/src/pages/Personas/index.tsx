@@ -54,10 +54,10 @@ function Personas() {
     const t = useDashboardI18N()
     const { drawerOpen, toggleDrawer, personas, currentPersona, onConnect } = PersonaContext.useContainer()
 
-    const [activeTab, setActiveTab] = useState(currentPersona?.providers?.[0]?.networkIdentifier ?? '')
+    const [activeTab, setActiveTab] = useState(currentPersona?.linkedProfiles?.[0]?.identifier.network ?? '')
 
     useEffect(() => {
-        setActiveTab(currentPersona?.providers?.[0]?.networkIdentifier ?? '')
+        setActiveTab(currentPersona?.linkedProfiles?.[0]?.identifier.network ?? '')
     }, [currentPersona])
 
     return (
@@ -79,23 +79,23 @@ function Personas() {
             <Box className={classes.container}>
                 <TabContext value={activeTab}>
                     <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
-                        {currentPersona?.providers?.map(({ networkIdentifier }) => (
+                        {currentPersona?.linkedProfiles?.map(({ identifier: { network } }) => (
                             <Tab
-                                key={networkIdentifier}
-                                value={networkIdentifier}
-                                label={capitalize(networkIdentifier.replace('.com', ''))}
+                                key={network}
+                                value={network}
+                                label={capitalize(network.replace('.com', ''))}
                                 classes={{ wrapper: classes.wrapper }}
                             />
                         ))}
                     </Tabs>
-                    {currentPersona?.providers?.map((provider) => (
-                        <TabPanel key={provider.networkIdentifier} value={provider.networkIdentifier}>
+                    {currentPersona?.linkedProfiles?.map((provider) => (
+                        <TabPanel key={provider.identifier.network} value={provider.identifier.network}>
                             <PersonaSetup
                                 connected={provider.connected}
-                                networkIdentifier={provider.networkIdentifier}
+                                networkIdentifier={provider.identifier.network}
                                 onConnect={() => {
                                     if (currentPersona.identifier) {
-                                        onConnect(currentPersona.identifier, provider.networkIdentifier)
+                                        onConnect(currentPersona.identifier, provider.identifier.network)
                                     }
                                 }}
                             />

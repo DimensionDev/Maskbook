@@ -5,7 +5,7 @@ import { useConnectSocialNetwork, useDisconnectSocialNetwork } from './useConnec
 import { Services } from '../../../API'
 import type { PersonaIdentifier } from '@dimensiondev/maskbook-shared'
 import { useDefinedSocialNetworkUIs, useMyPersonas } from '../api'
-import type { PersonaInfo } from '../type'
+import type { PersonaInfo, ProfileInfo } from '../type'
 import { useCreatePersona } from './useCreatePersona'
 import { ECKeyIdentifier, useValueRef } from '@dimensiondev/maskbook-shared'
 import { currentPersonaIdentifier } from '../settings'
@@ -28,26 +28,24 @@ function usePersonaContext() {
                 if (a.updatedAt < b.updatedAt) return 1
                 return 0
             })
-            .map((persona) => {
+            .map<PersonaInfo>((persona) => {
                 const profiles = persona ? [...persona.linkedProfiles] : []
                 const providers = compact(
-                    definedSocialNetworkUIs.map((i) => {
+                    definedSocialNetworkUIs.map<ProfileInfo | null>((i) => {
                         const profile = profiles.find(([key]) => key.network === i.networkIdentifier)
                         if (i.networkIdentifier === 'localhost') return null
-                        return {
-                            networkIdentifier: i.networkIdentifier,
-                            network: i.networkIdentifier,
+                        const x: ProfileInfo = {
                             connected: !!profile,
-                            userId: profile?.[0].userId,
-                            identifier: profile?.[0],
+                            identifier: profile?.[0]!,
                         }
+                        return x
                     }),
                 )
 
                 return {
                     identifier: persona.identifier,
                     nickname: persona.nickname,
-                    providers: providers,
+                    linkedProfiles: providers,
                 }
             })
     }, [myPersonas])
