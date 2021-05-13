@@ -9,7 +9,7 @@ import { ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
 
 export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
     const chainId = useChainId()
-    const asyncResult = useAvailability(payload?.pid)
+    const asyncResult = useAvailability(payload.pid, payload.contract_address)
     const { value: qualification_start_time } = useQualification(payload.qualification_address)
 
     //#region ticker
