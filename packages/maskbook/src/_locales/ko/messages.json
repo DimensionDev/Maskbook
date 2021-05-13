@@ -603,5 +603,12 @@
     "wallet_transfer_error_amount_absence": "",
     "wallet_transfer_error_address_absence": "",
     "wallet_transfer_error_invalid_address": "",
-    "wallet_transfer_error_insufficent_balance": ""
+    "wallet_transfer_error_insufficent_balance": "",
+    "wallet_import_json": "",
+    "wallet_import_json_keystore": "",
+    "wallet_import_json_keystore_content": "",
+    "wallet_import_json_keystore_password": "",
+    "wallet_import_json_keystore_password_helper": "",
+    "wallet_import_json_wallet_name": "",
+    "wallet_import_json_wallet_name_helper": ""
 }

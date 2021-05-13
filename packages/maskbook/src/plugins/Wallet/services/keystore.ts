@@ -53,19 +53,19 @@ export interface V3Keystore {
 }
 
 export async function fromV3Keystore(input: string | V3Keystore, password: string) {
-    const json: V3Keystore = typeof input === 'object' ? input : (JSON.parse(input) as V3Keystore)
+    const json: V3Keystore = typeof input === 'object' ? input : JSON.parse(input)
 
     if (json.version !== 3) {
         throw new Error('Not a V3 wallet')
     }
 
-    // TODO; check json schema
+    // TODO: check json schema
 
     let derivedKey: Uint8Array
     let kdfparams: KeyStore.KeyDerivation['kdfparams']
     if (json.crypto.kdf === 'scrypt') {
         kdfparams = json.crypto.kdfparams as KeyStore.ScryptParams
-        derivedKey = scrypt.syncScrypt(
+        derivedKey = await scrypt.scrypt(
             Buffer.from(password),
             Buffer.from(kdfparams.salt, 'hex'),
             kdfparams.n,
