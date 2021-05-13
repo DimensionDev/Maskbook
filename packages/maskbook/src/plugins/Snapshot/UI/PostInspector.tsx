@@ -1,7 +1,7 @@
 import { SnapshotContext } from '../context'
 import { getProposalIdentifier } from '../helpers'
 import { Snapshot } from './Snapshot'
-import { NetworkFail } from './NetworkFail'
+import { LoadingFailCard } from './LoadingFailCard'
 import { useRetry } from '../hooks/useRetry'
 import { ChainState } from '../../../web3/state/useChainState'
 
@@ -15,9 +15,9 @@ export function PostInspector(props: PostInspectorProps) {
     return (
         <ChainState.Provider>
             <SnapshotContext.Provider value={identifier}>
-                <NetworkFail title="" isFullPluginDown={true} retry={retry}>
+                <LoadingFailCard title="" isFullPluginDown={true} retry={retry}>
                     <Snapshot />
-                </NetworkFail>
+                </LoadingFailCard>
             </SnapshotContext.Provider>
         </ChainState.Provider>
     )

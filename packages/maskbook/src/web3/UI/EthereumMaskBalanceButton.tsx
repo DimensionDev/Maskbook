@@ -4,13 +4,13 @@ import RefreshIcon from '@material-ui/icons/Refresh'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { BreakdownDialog } from '../../components/InjectedComponents/BreakdownDialog'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
-import { formatBalance } from '../../plugins/Wallet/formatter'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { CONSTANTS } from '../constants'
 import { useConstant } from '../hooks/useConstant'
 import { useERC20TokenBalance } from '../hooks/useERC20TokenBalance'
 import { createERC20Token } from '../helpers'
 import { useChainId } from '../hooks/useBlockNumber'
+import { FormattedBalance } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -76,7 +76,9 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
                 {process.env.architecture === 'web' && !maskBalanceLoading && !maskBalanceError ? (
                     <MaskbookIcon className={classes.icon} />
                 ) : null}
-                <Typography>{formatBalance(maskBalance, 18, 6)} MASK</Typography>
+                <Typography>
+                    <FormattedBalance value={maskBalance} decimals={18} significant={6} symbol="MASK" />
+                </Typography>
             </ActionButton>
             {maskToken ? (
                 <BreakdownDialog

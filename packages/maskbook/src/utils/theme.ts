@@ -7,7 +7,7 @@ import { appearanceSettings, languageSettings } from '../settings/settings'
 import { Appearance, Language } from '../settings/types'
 import { useValueRef } from './hooks/useValueRef'
 import { useMemo, useRef } from 'react'
-import { zhTW, jaJP } from '@material-ui/core/locale/index'
+import { zhTW, koKR, jaJP } from '@material-ui/core/locale/index'
 import { safeUnreachable } from './utils'
 import { or } from '../components/custom-ui-helper'
 import { activatedSocialNetworkUI } from '../social-network'
@@ -121,6 +121,8 @@ export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Lan
             return baseTheme
         case Language.ja:
             return unstable_createMuiStrictModeTheme(baseTheme, jaJP)
+        case Language.ko:
+            return unstable_createMuiStrictModeTheme(baseTheme, koKR)
         case Language.zh:
             return unstable_createMuiStrictModeTheme(baseTheme, zhTW)
         default:

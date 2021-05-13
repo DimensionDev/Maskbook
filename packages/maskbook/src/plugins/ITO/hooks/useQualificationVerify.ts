@@ -6,12 +6,20 @@ import { useERC165 } from '../../../web3/hooks/useERC165'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useContract } from '../../../web3/hooks/useContract'
 
-import { QUALIFICATION_INTERFACE_ID, QUALIFICATION_HAS_START_TIME_INTERFACE_ID } from '../constants'
+import {
+    QUALIFICATION_INTERFACE_ID,
+    QUALIFICATION_HAS_START_TIME_INTERFACE_ID,
+    QUALIFICATION_HAS_LUCKY_INTERFACE_ID,
+} from '../constants'
 
 export function useQualificationVerify(address: string) {
     const account = useAccount()
     const qualificationContract = useContract<Qualification>(address, QualificationABI as AbiItem[])
-
+    const { value: isQualificationHasLucky, loading: loadingQualificationHasLucky } = useERC165<Qualification>(
+        qualificationContract,
+        address,
+        QUALIFICATION_HAS_LUCKY_INTERFACE_ID,
+    )
     const { value: isQualification, loading: loadingQualification } = useERC165<Qualification>(
         qualificationContract,
         address,
@@ -31,16 +39,19 @@ export function useQualificationVerify(address: string) {
         }
 
         return {
-            loadingERC165: loadingQualification || loadingQualificationHasStartTime,
+            loadingERC165: loadingQualification || loadingQualificationHasStartTime || loadingQualificationHasLucky,
             isQualification,
             startTime,
+            isQualificationHasLucky,
         }
     }, [
         address,
-        qualificationContract,
         isQualification,
         qualificationHasStartTime,
+        isQualificationHasLucky,
         loadingQualification,
         loadingQualificationHasStartTime,
+        loadingQualificationHasLucky,
+        qualificationContract,
     ])
 }

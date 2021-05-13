@@ -1,9 +1,7 @@
-import { Suspense } from 'react'
 import { makeStyles } from '@material-ui/core'
-import { ITO_Loading } from './UI/ITO'
 import { PostInspector } from './UI/PostInspector'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
-import { formatBalance } from '../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { ITO_MetaKey, ITO_PluginID } from './constants'
 import type { JSON_PayloadOutMask } from './types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
@@ -11,7 +9,7 @@ import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import { CompositionDialog } from './UI/CompositionDialog'
 import { ItoLabelIcon } from './assets/ItoLabelIcon'
-import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 
 interface LabelWrapperProps {
     iconSize: number
@@ -56,9 +54,7 @@ export const ITO_PluginDefine: PluginConfig = {
         if (!payload.ok) return null
         return (
             <MaskbookPluginWrapper pluginName="ITO">
-                <Suspense fallback={<ITO_Loading />}>
-                    <PostInspector payload={payloadIntoMask(payload.val)} />
-                </Suspense>
+                <PostInspector payload={payloadIntoMask(payload.val)} />
             </MaskbookPluginWrapper>
         )
     },

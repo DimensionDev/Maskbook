@@ -10,30 +10,32 @@ import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import { usePoolPayload } from './usePoolPayload'
 import { useQualificationContract } from '../contracts/useQualificationContract'
 import Services from '../../../extension/service'
+import type { JSON_PayloadInMask } from '../types'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 export function useSwapCallback(
-    id: string,
-    password: string,
+    payload: JSON_PayloadInMask,
     total: string,
     token: PartialRequired<EtherTokenDetailed | ERC20TokenDetailed, 'address'>,
+    isQualificationHasLucky = false,
 ) {
-    const { payload } = usePoolPayload(id)
+    const { t } = useI18N()
+    const account = useAccount()
     const ITO_Contract = useITO_Contract()
+    const [swapState, setSwapState] = useTransactionState()
     const qualificationContract = useQualificationContract(payload.qualification_address)
 
-    const account = useAccount()
-    const [swapState, setSwapState] = useTransactionState()
-
     const swapCallback = useCallback(async () => {
-        if (!ITO_Contract || !qualificationContract || !payload || !id) {
+        if (!ITO_Contract || !qualificationContract || !payload) {
             setSwapState({
                 type: TransactionStateType.UNKNOWN,
             })
             return
         }
+
+        const { pid, password } = payload
 
         // error: cannot find password
         if (!password) {
@@ -45,7 +47,7 @@ export function useSwapCallback(
         }
 
         // error: poll has expired
-        if (payload.end_time * 1000 < Date.now()) {
+        if (payload.end_time < Date.now()) {
             setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Pool has expired.'),
@@ -99,7 +101,7 @@ export function useSwapCallback(
 
         // check remaining
         try {
-            const availability = await ITO_Contract.methods.check_availability(id).call({
+            const availability = await ITO_Contract.methods.check_availability(pid).call({
                 from: account,
             })
             if (new BigNumber(availability.remaining).isZero()) {
@@ -118,7 +120,7 @@ export function useSwapCallback(
         }
 
         const swapParams = [
-            id,
+            pid,
             Web3Utils.soliditySha3(
                 Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 5))}`),
                 account,
@@ -132,6 +134,7 @@ export function useSwapCallback(
         const config = await Services.Ethereum.composeTransaction({
             from: account,
             to: ITO_Contract.options.address,
+            gas: isQualificationHasLucky ? undefined : 200000,
             value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
             data: ITO_Contract.methods.swap(...swapParams).encodeABI(),
         }).catch((error) => {
@@ -149,6 +152,7 @@ export function useSwapCallback(
                     type: TransactionStateType.CONFIRMED,
                     no,
                     receipt,
+                    reason: !receipt.events?.SwapSuccess ? t('plugin_ito_swap_unlucky_fail') : undefined,
                 })
                 resolve()
             }
@@ -174,7 +178,7 @@ export function useSwapCallback(
                 .on(TransactionEventType.CONFIRMATION, onSucceed)
                 .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => onSucceed(0, receipt))
         })
-    }, [ITO_Contract, qualificationContract, id, password, account, payload, total, token.address])
+    }, [ITO_Contract, qualificationContract, account, payload, total, token.address, isQualificationHasLucky])
 
     const resetCallback = useCallback(() => {
         setSwapState({

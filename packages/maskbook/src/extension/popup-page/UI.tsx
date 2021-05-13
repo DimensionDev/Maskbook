@@ -1,6 +1,3 @@
-import '../../social-network-adaptor/popup-page/index'
-import '../../setup.ui'
-
 import { useCallback, memo } from 'react'
 import { noop } from 'lodash-es'
 import { ThemeProvider, makeStyles, Theme, withStyles } from '@material-ui/core/styles'

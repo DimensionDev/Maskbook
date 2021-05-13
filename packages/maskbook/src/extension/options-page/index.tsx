@@ -1,4 +1,4 @@
-import '../../social-network-adaptor'
+import '../../social-network-adaptor/options-page'
 import '../../setup.ui'
 
 import { useState } from 'react'

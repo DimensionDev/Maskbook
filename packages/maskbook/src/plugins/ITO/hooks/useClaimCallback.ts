@@ -10,10 +10,10 @@ import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import Services from '../../../extension/service'
 
-export function useClaimCallback(pids: string[]) {
+export function useClaimCallback(pids: string[], contractAddress?: string) {
     const account = useAccount()
     const chainId = useChainId()
-    const ITO_Contract = useITO_Contract()
+    const ITO_Contract = useITO_Contract(contractAddress)
     const [claimState, setClaimState] = useTransactionState()
 
     const claimCallback = useCallback(async () => {

@@ -1,5 +1,5 @@
 import { memoizePromise } from '@dimensiondev/kit'
-import { formatChecksumAddress } from '../../../plugins/Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { EthereumTokenType, ChainId, ERC20TokenDetailed } from '../../../web3/types'
 
 interface TokenList {
@@ -67,7 +67,7 @@ export async function fetchERC20TokensFromTokenLists(
     )
     return tokens.filter((x) => {
         // checksummed address in one loop
-        x.address = formatChecksumAddress(x.address)
+        x.address = formatEthereumAddress(x.address)
 
         const key = x.address.toLowerCase()
         if (uniqueSet.has(key)) return false

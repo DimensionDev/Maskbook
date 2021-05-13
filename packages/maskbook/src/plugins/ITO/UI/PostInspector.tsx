@@ -1,23 +1,32 @@
-import { ChainState } from '../../../web3/state/useChainState'
+import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { poolPayloadErrorRetry } from '../hooks/usePoolPayload'
+import { isCompactPayload } from '../helpers'
+import { usePoolPayload } from '../hooks/usePoolPayload'
 import type { JSON_PayloadInMask } from '../types'
-import { ITO, ITO_LoadingFail } from './ITO'
+import { ITO, ITO_Error, ITO_Loading } from './ITO'
 
 export interface PostInspectorProps {
     payload: JSON_PayloadInMask
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    const { chain_id, pid, password, regions } = props.payload
+    const { chain_id, pid } = props.payload
+    const isCompactPayload_ = isCompactPayload(props.payload)
 
-    return (
-        <ChainState.Provider>
-            <EthereumChainBoundary chainId={chain_id}>
-                <ITO_LoadingFail retryPoolPayload={poolPayloadErrorRetry}>
-                    <ITO pid={pid} password={password} regions={regions} />
-                </ITO_LoadingFail>
-            </EthereumChainBoundary>
-        </ChainState.Provider>
-    )
+    const chainId = useChainId()
+    const {
+        value: payload,
+        error,
+        loading,
+        retry,
+    } = usePoolPayload(isCompactPayload_ && chainId === chain_id ? pid : '')
+
+    const renderITO = () => {
+        if (isCompactPayload_) {
+            if (loading) return <ITO_Loading />
+            if (error) return <ITO_Error retryPoolPayload={retry} />
+        }
+        return <ITO pid={pid} payload={payload ?? props.payload} />
+    }
+    return <EthereumChainBoundary chainId={chain_id}>{renderITO()}</EthereumChainBoundary>
 }

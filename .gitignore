@@ -17,6 +17,7 @@ i18n_generated.d.ts.map
 # Cache
 *.tsbuildinfo
 .type-coverage
+.snowpack
 
 # Build out
 dist

@@ -13,7 +13,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import formatDateTime from 'date-fns/format'
-import { formatBalance } from '../../../plugins/Wallet/formatter'
+import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { useSnackbar, VariantType } from 'notistack'
 
 const useStyles = makeStyles((theme) => ({
@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
     tokenCardWrapper: {
         width: '100%',
+        color: 'white',
         maxHeight: 450,
         marginBottom: theme.spacing(1),
         overflow: 'auto',
@@ -180,8 +181,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                         )}
                                     </div>
                                     <Typography className={classes.cardContent}>
-                                        {formatBalance(swappedToken.amount, swappedToken.token.decimals)}{' '}
-                                        {swappedToken.token.symbol}
+                                        <FormattedBalance
+                                            value={swappedToken.amount}
+                                            decimals={swappedToken.token.decimals}
+                                            symbol={swappedToken.token.symbol}
+                                        />
                                     </Typography>
                                 </ListItem>
                             ))}

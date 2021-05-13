@@ -110,9 +110,15 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                 ) : null}
                 {state.type === TransactionStateType.CONFIRMED ? (
                     <>
-                        <DoneIcon className={classes.icon} />
+                        {state.receipt.status ? (
+                            <DoneIcon className={classes.icon} />
+                        ) : (
+                            <WarningIcon className={classes.icon} />
+                        )}
                         <Typography className={classes.primary} color="textPrimary">
-                            {t('plugin_wallet_transaction_confirmed')}
+                            {state.receipt.status
+                                ? t('plugin_wallet_transaction_confirmed')
+                                : state.reason ?? t('plugin_wallet_transaction_reverted')}
                         </Typography>
                         <Typography>
                             <Link

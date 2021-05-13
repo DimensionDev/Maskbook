@@ -48,7 +48,7 @@
     "@commitlint/config-conventional": "^12.1.1",
     "@dimensiondev/cli": "workspace:*",
     "@magic-works/commonjs-import.meta": "^1.0.0",
-    "@magic-works/i18n-codegen": "^0.0.5",
+    "@magic-works/i18n-codegen": "^0.0.6",
     "@nice-labs/git-rev": "^3.5.0",
     "eslint": "^7.24.0",
     "eslint-config-prettier": "^8.2.0",

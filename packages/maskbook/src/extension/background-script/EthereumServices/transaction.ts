@@ -12,21 +12,18 @@ import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/se
  * @param from
  * @returns
  */
-export async function composeTransaction({
-    from = currentSelectedWalletAddressSettings.value,
-    to,
-    data,
-    value,
-}: TransactionConfig): Promise<TransactionConfig> {
+export async function composeTransaction(config: TransactionConfig): Promise<TransactionConfig> {
+    const { from = currentSelectedWalletAddressSettings.value, to, data, value } = config
     const [nonce, gas, gasPrice] = await Promise.all([
-        getNonce(from as string),
-        estimateGas({
-            from,
-            to,
-            data,
-            value: value ? toHex(value) : undefined,
-        }),
-        getGasPrice(),
+        config.nonce ?? getNonce(from as string),
+        config.gas ??
+            estimateGas({
+                from,
+                to,
+                data,
+                value: value ? toHex(value) : undefined,
+            }),
+        config.gasPrice ?? getGasPrice(),
     ])
 
     return pickBy({

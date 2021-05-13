@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import { makeStyles, Typography, Slider } from '@material-ui/core'
+import { makeStyles, Typography, Slider, CircularProgress } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 
@@ -13,7 +13,7 @@ import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useSwapCallback } from '../hooks/useSwapCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatBalance } from '../../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import type { ChainId } from '../../../web3/types'
 import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
@@ -25,6 +25,7 @@ import { isETH, isSameAddress } from '../../../web3/helpers'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { useQualificationVerify } from '../hooks/useQualificationVerify'
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -76,6 +77,9 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 10,
         marginTop: theme.spacing(1),
     },
+    loading: {
+        color: theme.palette.text.primary,
+    },
 }))
 
 export interface SwapDialogProps extends withClasses<'root'> {
@@ -112,7 +116,7 @@ export function SwapDialog(props: SwapDialogProps) {
     const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
 
     const [ratio, setRatio] = useState<BigNumber>(
-        new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(new BigNumber(payload.exchange_amounts[0 * 2 + 1])),
+        new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),
     )
     const [swapToken, setSwapToken] = useState<EtherTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
     const [swapAmount, setSwapAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
@@ -129,7 +133,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 if (ev.open || !ev.token || ev.uuid !== id) return
                 const at = exchangeTokens.findIndex((x) => isSameAddress(x.address, ev.token!.address))
                 const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(
-                    new BigNumber(payload.exchange_amounts[at * 2 + 1]),
+                    payload.exchange_amounts[at * 2 + 1],
                 )
                 setRatio(ratio)
                 setSwapToken(ev.token)
@@ -181,11 +185,15 @@ export function SwapDialog(props: SwapDialogProps) {
     //#endregion
 
     //#region swap
+    const { value: qualificationInfo, loading: loadingQualification } = useQualificationVerify(
+        payload.qualification_address,
+    )
+
     const [swapState, swapCallback, resetSwapCallback] = useSwapCallback(
-        payload.pid,
-        payload.password,
+        payload,
         swapAmount.toFixed(),
         swapToken,
+        qualificationInfo?.isQualificationHasLucky,
     )
     const onSwap = useCallback(async () => {
         await swapCallback()
@@ -198,6 +206,7 @@ export function SwapDialog(props: SwapDialogProps) {
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
+            if (swapState.type === TransactionStateType.CONFIRMED && !swapState.receipt.status) resetSwapCallback()
             if (swapState.type !== TransactionStateType.CONFIRMED && swapState.type !== TransactionStateType.RECEIPT)
                 return
             const { receipt } = swapState
@@ -309,9 +318,13 @@ export function SwapDialog(props: SwapDialogProps) {
                             fullWidth
                             variant="contained"
                             size="large"
-                            disabled={!!validationMessage}
+                            disabled={!!validationMessage || loadingQualification}
                             onClick={onSwap}>
-                            {validationMessage || t('plugin_ito_swap')}
+                            {loadingQualification ? (
+                                <CircularProgress size={16} className={classes.loading} />
+                            ) : (
+                                validationMessage || t('plugin_ito_swap')
+                            )}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
                 </EthereumWalletConnectedBoundary>

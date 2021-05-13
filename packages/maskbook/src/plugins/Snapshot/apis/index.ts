@@ -1,6 +1,6 @@
 import ss from '@snapshot-labs/snapshot.js'
 import { ChainId } from '../../../web3/types'
-import type { Votes, Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess } from '../types'
+import type { VoteItemList, Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess } from '../types'
 import Services from '../../../extension/service'
 
 export async function fetchProposal(id: string) {
@@ -16,7 +16,7 @@ export async function fetchAllVotesOfProposal(id: string, space: string) {
     const response = await fetch(`https://hub.snapshot.page/api/${space}/proposal/${id}`, {
         method: 'GET',
     })
-    const result: Votes = await response.json()
+    const result: VoteItemList = await response.json()
     return result
 }
 

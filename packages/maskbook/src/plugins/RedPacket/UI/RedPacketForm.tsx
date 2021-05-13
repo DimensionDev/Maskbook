@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js'
 
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import { formatBalance } from '../../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import {
     RED_PACKET_MIN_SHARES,
     RED_PACKET_MAX_SHARES,
