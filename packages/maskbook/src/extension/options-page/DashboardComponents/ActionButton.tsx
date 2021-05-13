@@ -48,7 +48,7 @@ function useDebounceAsync<T extends any[]>(
     return { disabled: false, loading: false, f }
 }
 export function DebounceButton(_props: DebounceButtonProps) {
-    const { onClick, color, title, ...props } = _props
+    const { onClick, color, ...props } = _props
     const classes = useErrorStyles()
     const { f, loading } = useDebounceAsync(onClick)
     return (
