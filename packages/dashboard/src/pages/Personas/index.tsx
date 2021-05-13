@@ -95,7 +95,7 @@ export default function Personas() {
                                 networkIdentifier={provider.networkIdentifier}
                                 onConnect={() => {
                                     if (currentPersona.identifier) {
-                                        onConnect(currentPersona.identifier, provider)
+                                        onConnect(currentPersona.identifier, provider.networkIdentifier)
                                     }
                                 }}
                             />
