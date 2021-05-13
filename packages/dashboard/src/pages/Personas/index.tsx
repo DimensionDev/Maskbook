@@ -104,8 +104,8 @@ function Personas() {
                                 <PersonaSetup
                                     networkIdentifier={networkIdentifier}
                                     onConnect={() => {
-                                        if (networkIdentifier) {
-                                            onConnect(networkIdentifier, currentPersona?.identifier)
+                                        if (currentPersona?.identifier) {
+                                            onConnect(currentPersona.identifier, networkIdentifier)
                                         }
                                     }}
                                 />

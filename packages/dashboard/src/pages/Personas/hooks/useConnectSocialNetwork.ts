@@ -1,13 +1,9 @@
 import { useAsyncFn } from 'react-use'
 import { Services } from '../../../API'
-import type { ProfileIdentifier, PersonaIdentifier } from '@dimensiondev/maskbook-shared'
+import type { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 
 export function useConnectSocialNetwork() {
-    return useAsyncFn(async (network: string, identifier?: PersonaIdentifier) => {
-        if (identifier) {
-            await Services.SocialNetwork.connectSocialNetwork(identifier, network)
-        }
-    })
+    return useAsyncFn(Services.SocialNetwork.connectSocialNetwork)
 }
 
 export function useDisconnectSocialNetwork() {

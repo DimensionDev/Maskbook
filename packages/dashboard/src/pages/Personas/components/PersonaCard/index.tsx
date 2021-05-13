@@ -66,7 +66,7 @@ export const PersonaCard = memo<PersonaCardProps>((props) => {
 })
 
 export interface PersonaCardUIProps extends PersonaCardProps {
-    onConnect: (networkIdentifier: string, identifier?: PersonaIdentifier) => void
+    onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
     onDisconnect: (identifier?: ProfileIdentifier) => void
     onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => void
 }
@@ -114,7 +114,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>(
                             ) : (
                                 <UnconnectedPersonaLine
                                     key={networkIdentifier}
-                                    onConnect={() => onConnect(networkIdentifier, identifier)}
+                                    onConnect={() => onConnect(identifier, networkIdentifier)}
                                     networkIdentifier={networkIdentifier}
                                 />
                             )
