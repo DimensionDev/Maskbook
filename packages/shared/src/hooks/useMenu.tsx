@@ -1,4 +1,13 @@
-import { SyntheticEvent, cloneElement, isValidElement, useCallback, useState, createContext, useContext } from 'react'
+import {
+    SyntheticEvent,
+    useRef,
+    cloneElement,
+    isValidElement,
+    useCallback,
+    useState,
+    createContext,
+    useContext,
+} from 'react'
 import { Menu, MenuProps } from '@material-ui/core'
 
 /** Provide ShadowRootMenu for useMenu in content script. */
@@ -28,7 +37,7 @@ export function useMenuConfig(
     openDialog: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void,
     closeDialog: () => void,
 ] {
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>()
+    const anchorEl = useRef<HTMLElement>()
     const [status, setOpen] = useState(false)
     const open = useCallback((anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => {
         let element: HTMLElement
@@ -37,13 +46,13 @@ export function useMenuConfig(
         } else {
             element = anchorElOrEvent.currentTarget
         }
-        setAnchorEl(element)
+        anchorEl.current = element
         setOpen(true)
     }, [])
     const close = useCallback(() => setOpen(false), [])
     const Menu = useContext(useMenuContext)
     return [
-        <Menu open={status} onClose={close} onClick={close} anchorEl={anchorEl}>
+        <Menu open={status} onClose={close} onClick={close} anchorEl={anchorEl.current}>
             {elements?.map((element, key) =>
                 isValidElement<object>(element) ? cloneElement(element, { ...element.props, key }) : element,
             )}
