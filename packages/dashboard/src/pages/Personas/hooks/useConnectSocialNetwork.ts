@@ -5,6 +5,6 @@ import type { PersonaIdentifier } from '@dimensiondev/maskbook-shared'
 
 export function useConnectSocialNetwork() {
     return useAsyncFn(async (identifier: PersonaIdentifier, provider: SocialNetworkProvider) => {
-        return Services.SocialNetwork.connectSocialNetwork(identifier, provider)
+        return Services.SocialNetwork.connectSocialNetwork(identifier, provider.networkIdentifier)
     })
 }

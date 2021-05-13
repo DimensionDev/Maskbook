@@ -21,13 +21,13 @@ export interface SocialNetworkProvider {
     network: string
 }
 
-export const connectSocialNetwork = async (identifier: PersonaIdentifier, provider: SocialNetworkProvider) => {
-    const ui = await loadSocialNetworkUI(provider.networkIdentifier)
+export async function connectSocialNetwork(identifier: PersonaIdentifier, network: string) {
+    const ui = await loadSocialNetworkUI(network)
     const home = ui.utils.getHomePage?.()
     if (!Flags.no_web_extension_dynamic_permission_request) {
         if (!(await requestSNSAdaptorPermission(ui))) return
     }
-    currentSetupGuideStatus[provider.network].value = stringify({
+    currentSetupGuideStatus[network].value = stringify({
         status: SetupGuideStep.FindUsername,
         persona: identifier.toText(),
     })
