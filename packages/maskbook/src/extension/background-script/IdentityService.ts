@@ -22,7 +22,7 @@ import { decodeText, decodeArrayBuffer } from '../../utils/type-transform/String
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { IdentifierMap, PersonaInformation, ProfileInformation } from '@dimensiondev/maskbook-shared'
+import type { PersonaInformation, ProfileInformation } from '@dimensiondev/maskbook-shared'
 assertEnvironment(Environment.ManifestBackground)
 
 export { storeAvatar, queryAvatarDataURL } from '../../database'
@@ -91,8 +91,8 @@ export function queryMyPersonas(network?: string): Promise<Persona[]> {
 export async function queryOwnedPersonaInformation(): Promise<PersonaInformation[]> {
     const personas = await queryPersonas(undefined, true)
     const result: PersonaInformation[] = []
-    for (const persona of personas) {
-        const map = new IdentifierMap<ProfileIdentifier, ProfileInformation>(new Map(), ProfileIdentifier)
+    for (const persona of personas.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))) {
+        const map: ProfileInformation[] = []
         result.push({
             nickname: persona.nickname,
             identifier: persona.identifier,
@@ -100,7 +100,7 @@ export async function queryOwnedPersonaInformation(): Promise<PersonaInformation
         })
         for (const [profile] of persona.linkedProfiles) {
             const nickname = (await queryProfile(profile)).nickname
-            map.set(profile, { nickname })
+            map.push({ identifier: profile, nickname })
         }
     }
     return result
