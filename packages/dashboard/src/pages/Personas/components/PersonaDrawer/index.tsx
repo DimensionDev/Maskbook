@@ -11,9 +11,11 @@ import type { PersonaIdentifier } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        // material-ui toolbar height
         top: `64px !important`,
     },
     paper: {
+        // material-ui toolbar height
         top: `64px`,
         padding: theme.spacing(3.75, 3.75, 0, 3.75),
         background: MaskColorVar.suspensionBackground,
