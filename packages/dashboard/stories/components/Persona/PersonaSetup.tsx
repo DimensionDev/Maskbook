@@ -10,7 +10,6 @@ export default meta({
 
 export const PersonaSetup = of({
     args: {
-        connected: false,
         networkIdentifier: 'twitter.com',
         onConnect: action('onConnect'),
     },

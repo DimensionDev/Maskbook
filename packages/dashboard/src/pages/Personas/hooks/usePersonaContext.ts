@@ -4,7 +4,7 @@ import { head } from 'lodash-es'
 import { useConnectSocialNetwork, useDisconnectSocialNetwork } from './useConnectSocialNetwork'
 import { Services } from '../../../API'
 import { Identifier, PersonaIdentifier } from '@dimensiondev/maskbook-shared'
-import { useOwnedPersonas } from '../api'
+import { useOwnedPersonas, useDefinedSocialNetworkUIs } from '../api'
 import { useCreatePersona } from './useCreatePersona'
 import { ECKeyIdentifier, useValueRef } from '@dimensiondev/maskbook-shared'
 import { currentPersonaIdentifier } from '../settings'
@@ -14,6 +14,8 @@ function usePersonaContext() {
         useValueRef(currentPersonaIdentifier),
         ECKeyIdentifier,
     )
+    const definedSocialNetworkUIs = useDefinedSocialNetworkUIs()
+
     const myPersonas = useOwnedPersonas()
     const currentPersona = currentPersonaIdentifierRef
         .map((key) => myPersonas.find((id) => key.equals(id.identifier)))
@@ -44,6 +46,7 @@ function usePersonaContext() {
         onDisconnect,
         onAddPersona,
         onRename,
+        definedSocialNetworkUIs,
         personas: myPersonas,
         onChangeCurrentPersona,
         currentPersona,

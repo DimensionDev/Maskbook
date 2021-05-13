@@ -10,6 +10,7 @@ import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaContext } from './hooks/usePersonaContext'
 import { useDashboardI18N } from '../../locales'
 import type { PersonaInformation } from '@dimensiondev/maskbook-shared'
+import { useProfiles } from './hooks/useProfiles'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -51,18 +52,23 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function firstProfileNetwork(x: PersonaInformation | undefined) {
-    return x?.linkedProfiles[0]?.identifier.network || ''
+    return x?.linkedProfiles[0]?.identifier?.network
 }
 function Personas() {
     const classes = useStyles()
     const t = useDashboardI18N()
-    const { drawerOpen, toggleDrawer, personas, currentPersona, onConnect } = PersonaContext.useContainer()
+    const { drawerOpen, toggleDrawer, personas, currentPersona, onConnect, definedSocialNetworkUIs } =
+        PersonaContext.useContainer()
 
-    const [activeTab, setActiveTab] = useState(firstProfileNetwork(currentPersona))
+    const [activeTab, setActiveTab] = useState(
+        firstProfileNetwork(currentPersona) ?? definedSocialNetworkUIs[0].networkIdentifier,
+    )
+
+    const providerUIs = useProfiles(currentPersona?.linkedProfiles)
 
     useEffect(() => {
-        setActiveTab(firstProfileNetwork(currentPersona))
-    }, [currentPersona])
+        setActiveTab(firstProfileNetwork(currentPersona) ?? definedSocialNetworkUIs[0].networkIdentifier)
+    }, [currentPersona, definedSocialNetworkUIs])
 
     return (
         <PageFrame
@@ -83,26 +89,27 @@ function Personas() {
             <Box className={classes.container}>
                 <TabContext value={activeTab}>
                     <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
-                        {currentPersona?.linkedProfiles?.map(({ identifier: { network } }) => (
+                        {providerUIs?.map(({ networkIdentifier }) => (
                             <Tab
-                                key={network}
-                                value={network}
-                                label={capitalize(network.replace('.com', ''))}
+                                key={networkIdentifier}
+                                value={networkIdentifier}
+                                label={capitalize(networkIdentifier.replace('.com', ''))}
                                 classes={{ wrapper: classes.wrapper }}
                             />
                         ))}
                     </Tabs>
-                    {currentPersona?.linkedProfiles?.map((provider) => (
-                        <TabPanel key={provider.identifier.network} value={provider.identifier.network}>
-                            <PersonaSetup
-                                connected={true}
-                                networkIdentifier={provider.identifier.network}
-                                onConnect={() => {
-                                    if (currentPersona.identifier) {
-                                        onConnect(currentPersona.identifier, provider.identifier.network)
-                                    }
-                                }}
-                            />
+                    {providerUIs?.map(({ networkIdentifier, provider }) => (
+                        <TabPanel key={networkIdentifier} value={networkIdentifier}>
+                            {provider ? null : (
+                                <PersonaSetup
+                                    networkIdentifier={networkIdentifier}
+                                    onConnect={() => {
+                                        if (networkIdentifier) {
+                                            onConnect(networkIdentifier, currentPersona?.identifier)
+                                        }
+                                    }}
+                                />
+                            )}
                         </TabPanel>
                     ))}
                 </TabContext>

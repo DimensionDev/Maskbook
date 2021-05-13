@@ -3,12 +3,13 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { SettingsIcon } from '@dimensiondev/icons'
 import { IconButton, MenuItem, Typography } from '@material-ui/core'
-import { PersonaLine } from '../PersonaLine'
+import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
 import { PersonaIdentifier, ProfileIdentifier, ProfileInformation, useMenu } from '@dimensiondev/maskbook-shared'
 import { DeletePersonaDialog } from '../DeletePersonaDialog'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { RenameDialog } from '../RenameDialog'
+import { useProfiles } from '../../hooks/useProfiles'
 
 const useStyles = makeStyles<Theme, { active: boolean }, 'card' | 'status' | 'header' | 'content' | 'line' | 'setting'>(
     (theme) => ({
@@ -65,7 +66,7 @@ export const PersonaCard = memo<PersonaCardProps>((props) => {
 })
 
 export interface PersonaCardUIProps extends PersonaCardProps {
-    onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
+    onConnect: (networkIdentifier: string, identifier?: PersonaIdentifier) => void
     onDisconnect: (identifier?: ProfileIdentifier) => void
     onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => void
 }
@@ -82,6 +83,8 @@ export const PersonaCardUI = memo<PersonaCardUIProps>(
                 {t.personas_delete()}
             </MenuItem>,
         )
+
+        const providerUIs = useProfiles(providers)
 
         return (
             <div className={classes.card}>
@@ -101,15 +104,18 @@ export const PersonaCardUI = memo<PersonaCardUIProps>(
                         </IconButton>
                     </div>
                     <div className={classes.content}>
-                        {providers.map((provider) => {
-                            return (
-                                <PersonaLine
-                                    key={provider.identifier.network}
-                                    networkIdentifier={provider.identifier.network}
-                                    onConnect={() => onConnect(identifier, provider.identifier.network)}
-                                    onDisconnect={() => onDisconnect(provider?.identifier)}
-                                    connected={true}
-                                    {...provider}
+                        {providerUIs.map(({ networkIdentifier, provider }) => {
+                            return provider ? (
+                                <ConnectedPersonaLine
+                                    key={networkIdentifier}
+                                    onDisconnect={() => onDisconnect(provider.identifier)}
+                                    userId={provider.identifier.userId}
+                                />
+                            ) : (
+                                <UnconnectedPersonaLine
+                                    key={networkIdentifier}
+                                    onConnect={() => onConnect(networkIdentifier, identifier)}
+                                    networkIdentifier={networkIdentifier}
                                 />
                             )
                         })}
