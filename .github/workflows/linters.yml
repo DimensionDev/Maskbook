@@ -56,8 +56,8 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm install
-      - run: npm run lint:typecoverage
-        working-directory: packages/maskbook
+      # - run: npm run lint:typecoverage
+      #   working-directory: packages/maskbook
   eslint:
     runs-on: ubuntu-20.04
     needs: [prettier, locale-kit, type-check, type-coverage]
