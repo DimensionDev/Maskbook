@@ -56,6 +56,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm install
+      # typecoverage computes different coverage rate on the developer's machine and CI and fails on CI. disabled for now
       # - run: npm run lint:typecoverage
       #   working-directory: packages/maskbook
   eslint:
