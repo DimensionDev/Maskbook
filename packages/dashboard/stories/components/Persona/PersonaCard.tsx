@@ -16,7 +16,6 @@ export const PersonaCard = of({
             {
                 networkIdentifier: 'twitter.com',
                 connected: false,
-                network: 'twitter.com',
                 identifier: new ProfileIdentifier('twitter.com', ''),
             },
         ],

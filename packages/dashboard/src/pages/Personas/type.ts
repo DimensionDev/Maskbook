@@ -2,13 +2,11 @@ import type { PersonaIdentifier, ProfileIdentifier } from '@dimensiondev/maskboo
 
 export interface SocialNetworkProvider {
     networkIdentifier: string
-    network: string
     connected: boolean
 }
 
 export interface PersonaProvider {
     networkIdentifier: string
-    network: string
     connected: boolean
     userId?: string
     identifier?: ProfileIdentifier
