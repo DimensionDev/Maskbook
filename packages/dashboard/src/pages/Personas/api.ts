@@ -6,7 +6,7 @@ export const [useDefinedSocialNetworkUIs, revalidateSocialNetworkUIs, definedSoc
     () => () => {},
 )
 
-export const [useMyPersonas, revalidateMyPersonas, myPersonas] = createGlobalState(
+export const [useMyPersonas, revalidateMyPersonas, currentPersonas] = createGlobalState(
     Services.Identity.queryMyPersonas,
     Messages.events.personaChanged.on,
 )

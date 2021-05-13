@@ -1,8 +1,7 @@
 import { createContainer } from 'unstated-next'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { compact, head } from 'lodash-es'
-import { useConnectSocialNetwork } from './useConnectSocialNetwork'
-import { useDisConnectSocialNetwork } from './useDisConnectSocialNetwork'
+import { useConnectSocialNetwork, useDisconnectSocialNetwork } from './useConnectSocialNetwork'
 import { Services } from '../../../API'
 import type { PersonaIdentifier } from '@dimensiondev/maskbook-shared'
 import { useDefinedSocialNetworkUIs, useMyPersonas } from '../api'
@@ -55,7 +54,7 @@ function usePersonaState() {
 
     const [, onConnect] = useConnectSocialNetwork()
 
-    const [, onDisconnect] = useDisConnectSocialNetwork()
+    const [, onDisconnect] = useDisconnectSocialNetwork()
 
     const [, onAddPersona] = useCreatePersona()
 
