@@ -89,23 +89,23 @@ function Personas() {
             <Box className={classes.container}>
                 <TabContext value={activeTab}>
                     <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
-                        {providerUIs?.map(({ networkIdentifier }) => (
+                        {providerUIs?.map(({ identifier }) => (
                             <Tab
-                                key={networkIdentifier}
-                                value={networkIdentifier}
-                                label={capitalize(networkIdentifier.replace('.com', ''))}
+                                key={identifier.network}
+                                value={identifier.network}
+                                label={capitalize(identifier.network.replace('.com', ''))}
                                 classes={{ wrapper: classes.wrapper }}
                             />
                         ))}
                     </Tabs>
-                    {providerUIs?.map(({ networkIdentifier, provider }) => (
-                        <TabPanel key={networkIdentifier} value={networkIdentifier}>
-                            {provider ? null : (
+                    {providerUIs?.map(({ identifier }) => (
+                        <TabPanel key={identifier.network} value={identifier.network}>
+                            {identifier.userId ? null : (
                                 <PersonaSetup
-                                    networkIdentifier={networkIdentifier}
+                                    networkIdentifier={identifier.network}
                                     onConnect={() => {
                                         if (currentPersona?.identifier) {
-                                            onConnect(currentPersona.identifier, networkIdentifier)
+                                            onConnect(currentPersona.identifier, identifier.network)
                                         }
                                     }}
                                 />

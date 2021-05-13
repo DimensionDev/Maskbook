@@ -104,18 +104,18 @@ export const PersonaCardUI = memo<PersonaCardUIProps>(
                         </IconButton>
                     </div>
                     <div className={classes.content}>
-                        {providerUIs.map(({ networkIdentifier, provider }) => {
-                            return provider ? (
+                        {providerUIs.map(({ identifier: networkIdentifier }) => {
+                            return networkIdentifier.userId ? (
                                 <ConnectedPersonaLine
-                                    key={networkIdentifier}
-                                    onDisconnect={() => onDisconnect(provider.identifier)}
-                                    userId={provider.identifier.userId}
+                                    key={networkIdentifier.network}
+                                    onDisconnect={() => onDisconnect(networkIdentifier)}
+                                    userId={networkIdentifier.userId}
                                 />
                             ) : (
                                 <UnconnectedPersonaLine
-                                    key={networkIdentifier}
-                                    onConnect={() => onConnect(identifier, networkIdentifier)}
-                                    networkIdentifier={networkIdentifier}
+                                    key={networkIdentifier.network}
+                                    onConnect={() => onConnect(identifier, networkIdentifier.network)}
+                                    networkIdentifier={networkIdentifier.network}
                                 />
                             )
                         })}
