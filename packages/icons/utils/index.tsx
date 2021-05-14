@@ -1,5 +1,5 @@
 import SvgIcon, { SvgIconProps } from '@material-ui/core/SvgIcon'
-import useTheme from '@material-ui/core/styles/useTheme'
+import { useTheme } from '@material-ui/core/styles'
 import { forwardRef, memo, ForwardedRef } from 'react'
 import type { Theme } from '@material-ui/core'
 
