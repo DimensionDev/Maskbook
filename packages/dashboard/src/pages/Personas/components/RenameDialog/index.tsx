@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react'
-import { MaskDialog } from '../../../../../../theme'
+import { MaskDialog } from '@dimensiondev/maskbook-theme'
 import { Button, DialogActions, DialogContent, TextField } from '@material-ui/core'
 import { useDashboardI18N } from '../../../../locales'
 import { isPersonaNameLengthValid, PERSONA_NAME_MAX_LENGTH } from '../../../../utils/checkLengthExceed'
