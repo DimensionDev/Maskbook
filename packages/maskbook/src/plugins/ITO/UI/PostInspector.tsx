@@ -1,5 +1,4 @@
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
-import { ChainState } from '../../../web3/state/useChainState'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { isCompactPayload } from '../helpers'
 import { usePoolPayload } from '../hooks/usePoolPayload'
@@ -29,9 +28,5 @@ export function PostInspector(props: PostInspectorProps) {
         }
         return <ITO pid={pid} payload={payload ?? props.payload} />
     }
-    return (
-        <ChainState.Provider>
-            <EthereumChainBoundary chainId={chain_id}>{renderITO()}</EthereumChainBoundary>
-        </ChainState.Provider>
-    )
+    return <EthereumChainBoundary chainId={chain_id}>{renderITO()}</EthereumChainBoundary>
 }

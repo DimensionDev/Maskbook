@@ -8,6 +8,7 @@ import { createCompositionDialog } from '../utils/createCompositionDialog'
 import RedPacketDialog from './UI/RedPacketDialog'
 import { EthereumTokenType } from '../../web3/types'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
+import { ChainState } from '../../web3/state/useChainState'
 
 export const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDialog('💰 Red Packet', (props) => (
     <RedPacketDialog open={props.open} onConfirm={props.onClose} onClose={props.onClose} />
@@ -25,7 +26,9 @@ export const RedPacketPluginDefine: PluginConfig = {
         if (!RedPacketMetadataReader(props.message.meta).ok) return null
         return (
             <MaskbookPluginWrapper pluginName="Red Packet">
-                <RedPacketInspector {...props} />
+                <ChainState.Provider>
+                    <RedPacketInspector {...props} />
+                </ChainState.Provider>
             </MaskbookPluginWrapper>
         )
     },

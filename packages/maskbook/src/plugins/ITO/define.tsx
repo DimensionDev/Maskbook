@@ -10,6 +10,7 @@ import { createCompositionDialog } from '../utils/createCompositionDialog'
 import { CompositionDialog } from './UI/CompositionDialog'
 import { ItoLabelIcon } from './assets/ItoLabelIcon'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { ChainState } from '../../web3/state/useChainState'
 
 interface LabelWrapperProps {
     iconSize: number
@@ -38,7 +39,11 @@ function LabelWrapper(props: LabelWrapperProps) {
 
 export const [ITO_CompositionEntry, ITO_CompositionUI] = createCompositionDialog(
     <LabelWrapper iconSize={12} labelText={'ITO'} />,
-    (props) => <CompositionDialog open={props.open} onConfirm={props.onClose} onClose={props.onClose} />,
+    (props) => (
+        <ChainState.Provider>
+            <CompositionDialog open={props.open} onConfirm={props.onClose} onClose={props.onClose} />
+        </ChainState.Provider>
+    ),
 )
 
 export const ITO_PluginDefine: PluginConfig = {
@@ -54,7 +59,9 @@ export const ITO_PluginDefine: PluginConfig = {
         if (!payload.ok) return null
         return (
             <MaskbookPluginWrapper pluginName="ITO">
-                <PostInspector payload={payloadIntoMask(payload.val)} />
+                <ChainState.Provider>
+                    <PostInspector payload={payloadIntoMask(payload.val)} />
+                </ChainState.Provider>
             </MaskbookPluginWrapper>
         )
     },

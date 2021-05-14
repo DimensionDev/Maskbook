@@ -27,14 +27,12 @@ export async function requestSend(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
 ) {
-    try {
-        id++
-        callback(null, {
-            jsonrpc: '2.0',
+    id++
+    INTERNAL_send(
+        {
+            ...payload,
             id,
-            result: await request(pick(payload, ['method', 'params'])),
-        })
-    } catch (e) {
-        callback(e)
-    }
+        },
+        callback,
+    )
 }

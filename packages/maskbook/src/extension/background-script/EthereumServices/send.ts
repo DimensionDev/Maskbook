@@ -1,6 +1,5 @@
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { HttpProvider, TransactionConfig } from 'web3-core'
-import { personalSign } from './network'
 import { createWeb3 } from './web3'
 import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
 import { EthereumMethodType, ProviderType } from '../../../web3/types'
@@ -39,12 +38,23 @@ export async function INTERNAL_send(
     switch (payload.method) {
         case EthereumMethodType.PERSONAL_SIGN:
             const [data, address] = payload.params as [string, string]
+
             try {
-                callback(null, {
-                    jsonrpc: '2.0',
-                    id: payload.id as number,
-                    result: await personalSign(data, address, providerType === ProviderType.Maskbook ? undefined : ''),
-                })
+                if (providerType === ProviderType.Maskbook) {
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: await web3.eth.sign(data, address),
+                    })
+                } else {
+                    provider.send(
+                        {
+                            ...payload,
+                            params: [...payload.params, ''],
+                        },
+                        callback,
+                    )
+                }
             } catch (e) {
                 callback(e)
             }
@@ -76,7 +86,9 @@ export async function INTERNAL_send(
                         else commitNonce(signer.address)
                     },
                 )
-            } else provider.send(payload, callback)
+            } else {
+                provider.send(payload, callback)
+            }
             break
         default:
             provider.send(payload, callback)

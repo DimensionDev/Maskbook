@@ -2,7 +2,6 @@ import type { TypedMessage } from '../../../protocols/typed-message'
 import { makeStyles } from '@material-ui/core'
 import { renderWithRedPacketMetadata } from '../helpers'
 import { RedPacketInPost } from './RedPacketInPost'
-import { ChainState } from '../../../web3/state/useChainState'
 
 const useStyles = makeStyles((theme) => ({
     line: {
@@ -20,11 +19,7 @@ export function RedPacketInspector(props: RedPacketInspectorProps) {
     const jsx = message
         ? renderWithRedPacketMetadata(message.meta, (r) => {
               if (process.env.STORYBOOK) return null
-              return (
-                  <ChainState.Provider>
-                      <RedPacketInPost payload={r} />
-                  </ChainState.Provider>
-              )
+              return <RedPacketInPost payload={r} />
           })
         : null
     return <>{jsx}</>
