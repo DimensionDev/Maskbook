@@ -4,6 +4,7 @@ import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import RestoreIcon from '@material-ui/icons/Restore'
+import { useI18N, useQueryParams, Flags, extendsTheme } from '../../../utils'
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
 import {
@@ -13,13 +14,9 @@ import {
     DashboardWalletErrorDialog,
     DashboardWalletRedPacketDetailDialog,
 } from '../DashboardDialogs/Wallet'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import useQueryParams from '../../../utils/hooks/useQueryParams'
-import { Flags } from '../../../utils/flags'
 import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
-import { extendsTheme } from '../../../utils/theme'
 
 //#region theme
 const walletsTheme = extendsTheme((theme) => ({

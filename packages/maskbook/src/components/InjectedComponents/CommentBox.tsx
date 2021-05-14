@@ -1,6 +1,6 @@
-import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
 import { InputBase } from '@material-ui/core'
+import { useI18N } from '../../utils'
 
 const useStyles = makeStyles(() => {
     return {

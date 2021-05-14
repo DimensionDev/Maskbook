@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { makeStyles, DialogContent, Tab, Tabs } from '@material-ui/core'
+import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { ChainState } from '../../../web3/state/useChainState'
 import { ListingByPriceCard } from './ListingByPriceCard'
 import { ListingByHighestBidCard } from './ListingByHighestBidCard'

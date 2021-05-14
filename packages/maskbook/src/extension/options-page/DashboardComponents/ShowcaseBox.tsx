@@ -1,10 +1,8 @@
 import { useRef } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { Paper, Typography, makeStyles, TypographyProps } from '@material-ui/core'
-import { selectElementContents } from '../../../utils/utils'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import { useSnackbar } from 'notistack'
+import { selectElementContents, useI18N, useMatchXS } from '../../../utils'
 
 const useStyle = makeStyles((theme) => ({
     title: {

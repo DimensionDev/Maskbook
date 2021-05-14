@@ -13,8 +13,7 @@ import {
     useMediaQuery,
 } from '@material-ui/core'
 import { Children, cloneElement } from 'react'
-import { useI18N } from '../../utils/i18n-next-ui'
-import { usePortalShadowRoot } from '../../utils/shadow-root/usePortalShadowRoot'
+import { useI18N, usePortalShadowRoot } from '../../utils'
 import { mergeClasses, useStylesExtends } from '../custom-ui-helper'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
 import { ErrorBoundary } from '@dimensiondev/maskbook-theme'

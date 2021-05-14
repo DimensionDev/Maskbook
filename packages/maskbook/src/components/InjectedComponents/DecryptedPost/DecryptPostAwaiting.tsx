@@ -1,6 +1,6 @@
 import { memo } from 'react'
+import { useI18N } from '../../../utils'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import type { DecryptionProgress } from '../../../extension/background-script/CryptoServices/decryptFrom'
 import type { ProfileIdentifier } from '../../../database/type'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'

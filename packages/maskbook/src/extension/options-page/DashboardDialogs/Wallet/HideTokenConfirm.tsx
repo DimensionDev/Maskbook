@@ -1,8 +1,7 @@
 import { Button } from '@material-ui/core'
 import { Trash2 as TrashIcon } from 'react-feather'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import { unreachable } from '../../../../utils/utils'
+import { useI18N, unreachable } from '../../../../utils'
 import { isNative } from '../../../../web3/helpers'
 import type {
     ERC1155TokenDetailed,

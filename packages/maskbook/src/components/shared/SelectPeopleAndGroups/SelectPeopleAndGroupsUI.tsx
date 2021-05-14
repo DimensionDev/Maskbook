@@ -1,12 +1,13 @@
 import { useEffect, useState, useCallback } from 'react'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from '@material-ui/core'
+import { useI18N } from '../../../utils'
 import type { Profile, Group } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { ProfileOrGroupInList, ProfileOrGroupInListProps } from './PersonOrGroupInList'
 import { ProfileOrGroupInChip, ProfileOrGroupInChipProps } from './PersonOrGroupInChip'
 import { ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import { useStylesExtends } from '../../custom-ui-helper'
+
 type ProfileOrGroup = Group | Profile
 export interface SelectProfileAndGroupsUIProps<ServeType extends Group | Profile = Group | Profile>
     extends withClasses<never | 'root'> {

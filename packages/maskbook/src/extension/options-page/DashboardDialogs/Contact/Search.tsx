@@ -1,7 +1,7 @@
 import { TextField } from '@material-ui/core'
 import { useState } from 'react'
 import { Search } from 'react-feather'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useI18N } from '../../../../utils'
 import ActionButton from '../../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'

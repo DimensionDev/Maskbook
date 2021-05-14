@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useI18N } from '../../../../utils'
 
 export const FirefoxPlatform: React.FC<{ uri: string }> = ({ uri }) => {
     const { t } = useI18N()

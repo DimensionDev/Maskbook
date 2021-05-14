@@ -1,6 +1,6 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
+import { useI18N } from '../../../../utils'
 import { QRCode } from '../../../../components/shared/qrcode'
-import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) => ({
     container: {

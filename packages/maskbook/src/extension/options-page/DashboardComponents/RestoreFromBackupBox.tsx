@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import { useDropArea } from 'react-use'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { makeStyles } from '@material-ui/core'
+import { useI18N } from '../../../utils'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { RestoreBox } from './RestoreBox'
-import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) => ({
     root: {

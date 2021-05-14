@@ -12,22 +12,19 @@ import {
     Button,
     DialogContent,
 } from '@material-ui/core'
+import { getEnumAsArray, useI18N, useRemoteControlledDialog, useValueRef } from '../../../../utils'
 import { ZrxTradePool, TradeProvider } from '../../types'
 import { SelectPoolPanel } from './SelectPoolPanel'
 import { SlippageSlider } from './SlippageSlider'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { getEnumAsArray } from '../../../../utils/enum'
 import {
     currentSlippageTolerance,
     currentTradeProviderSettings,
     getCurrentTradeProviderGeneralSettings,
 } from '../../settings'
 import { SLIPPAGE_TOLERANCE_DEFAULT } from '../../constants'
-import { useI18N } from '../../../../utils/i18n-next-ui'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../messages'
-import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import stringify from 'json-stable-stringify'
 import { useTradeProviderSettings } from '../../trader/useTradeSettings'
 

@@ -21,7 +21,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency, FormattedCurrency } from '@dimensiondev/maskbook-shared'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useMatchXS, useI18N } from '../../../utils'
 import { CurrencyType, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { isSameAddress } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
@@ -32,7 +32,6 @@ import { useStableTokensDebank } from '../../../web3/hooks/useStableTokensDebank
 import type { Asset } from '../../../plugins/Wallet/types'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
 import { useAssets } from '../../../plugins/Wallet/hooks/useAssets'
-import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 const useStyles = makeStyles<
     Theme,

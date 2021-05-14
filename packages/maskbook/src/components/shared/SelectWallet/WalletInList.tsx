@@ -1,9 +1,9 @@
 import { Avatar, ListItem, ListItemText, makeStyles, Theme, ListTypeMap, ListItemAvatar } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useStylesExtends } from '../../custom-ui-helper'
-import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
+import { useI18N } from '../../../utils'
+import { useStylesExtends } from '../../custom-ui-helper'
+import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { useBlockie } from '../../../web3/hooks/useBlockie'
 
 const useStyle = makeStyles((theme: Theme) => ({

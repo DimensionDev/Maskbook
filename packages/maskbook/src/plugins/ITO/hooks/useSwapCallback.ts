@@ -4,8 +4,8 @@ import Web3Utils from 'web3-utils'
 import type { TransactionReceipt } from 'web3-core'
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
-import { buf2hex, hex2buf } from '../../../utils/utils'
 import { isSameAddress } from '../../../web3/helpers'
+import { buf2hex, hex2buf, useI18N } from '../../../utils'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
@@ -13,7 +13,6 @@ import { useITO_Contract } from '../contracts/useITO_Contract'
 import { useQualificationContract } from '../contracts/useQualificationContract'
 import Services from '../../../extension/service'
 import type { JSON_PayloadInMask } from '../types'
-import { useI18N } from '../../../utils/i18n-next-ui'
 
 export function useSwapCallback(
     payload: JSON_PayloadInMask,

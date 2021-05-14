@@ -2,13 +2,15 @@ import { Box, Checkbox, FormControlLabel, makeStyles, TextField, Theme, Typograp
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { useCallback, useState } from 'react'
 import { CreditCard as CreditCardIcon } from 'react-feather'
+import {
+    WALLET_OR_PERSONA_NAME_MAX_LEN,
+    useRemoteControlledDialog,
+    useI18N,
+    checkInputLengthExceed,
+} from '../../../../utils'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../../../plugins/Wallet/constants'
 import { useWalletHD } from '../../../../plugins/Wallet/hooks/useWallet'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
-import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../../utils/constants'
-import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import { checkInputLengthExceed } from '../../../../utils/utils'
 import AbstractTab, { AbstractTabProps } from '../../DashboardComponents/AbstractTab'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'

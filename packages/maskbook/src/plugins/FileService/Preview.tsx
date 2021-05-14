@@ -1,9 +1,9 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { makeStyles, Paper, Typography } from '@material-ui/core'
 import { DownloadCloud, File } from 'react-feather'
+import { useI18N } from '../../utils'
 import { CopyableCode } from './components/Copyable'
 import type { FileInfo } from './types'
-import { useI18N } from '../../utils/i18n-next-ui'
 
 interface Props {
     info: FileInfo

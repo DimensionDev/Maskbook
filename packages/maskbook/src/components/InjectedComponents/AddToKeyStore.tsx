@@ -1,9 +1,9 @@
-import { AdditionalContent, AdditionalContentProps } from './AdditionalPostContent'
-import Services from '../../extension/service'
-import { useI18N } from '../../utils/i18n-next-ui'
-import type { ProfileIdentifier } from '../../database/type'
 import { useAsync } from 'react-use'
 import { createElement, memo } from 'react'
+import { useI18N } from '../../utils'
+import { AdditionalContent, AdditionalContentProps } from './AdditionalPostContent'
+import Services from '../../extension/service'
+import type { ProfileIdentifier } from '../../database/type'
 
 export interface AddToKeyStoreProps {
     provePost: string

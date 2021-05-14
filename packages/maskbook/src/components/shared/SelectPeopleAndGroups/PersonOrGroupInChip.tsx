@@ -1,11 +1,10 @@
-import { Avatar } from '../../../utils/components/Avatar'
 import MuiAvatar from '@material-ui/core/Avatar/Avatar'
 import { Chip } from '@material-ui/core'
+import type { ChipProps } from '@material-ui/core/Chip'
+import { Avatar, useI18N } from '../../../utils'
 import type { Profile, Group } from '../../../database'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { isGroup, isPerson } from './SelectPeopleAndGroupsUI'
 import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
-import type { ChipProps } from '@material-ui/core/Chip'
 
 export interface ProfileOrGroupInChipProps {
     onDelete?(): void

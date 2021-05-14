@@ -1,5 +1,5 @@
 import { Card, makeStyles, CardContent, CardHeader, Typography } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles((theme) => {
     return {

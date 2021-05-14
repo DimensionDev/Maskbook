@@ -5,14 +5,12 @@ import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
 import { Link, useRouteMatch } from 'react-router-dom'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
+import { useI18N, useMatchXS, extendsTheme } from '../../../utils'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardFeedbackDialog } from '../DashboardDialogs/Feedback'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import Logo from './MaskbookLogo'
 import { Carousel } from './Carousel'
 import { makeNewBugIssueURL } from '../../debug-page/issue'
-import { useMatchXS } from '../../../utils/hooks/useMatchXS'
-import { extendsTheme } from '../../../utils/theme'
 
 const useStyles = makeStyles((theme) => ({
     drawer: {

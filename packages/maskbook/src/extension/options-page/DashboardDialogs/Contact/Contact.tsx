@@ -1,7 +1,6 @@
 import { Button, makeStyles, TextField } from '@material-ui/core'
 import { useState } from 'react'
-import { Avatar } from '../../../../utils/components/Avatar'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { Avatar, useI18N } from '../../../../utils'
 import Services from '../../../service'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'
