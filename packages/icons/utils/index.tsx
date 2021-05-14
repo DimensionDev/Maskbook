@@ -9,7 +9,7 @@ export type Size = [width: number | undefined, height: number | undefined]
 export type SvgIconRaw = JSX.Element | ((theme: Theme) => JSX.Element)
 
 /**
- * Create a icon from svg fragment
+ * Create an icon from svg fragment
  * @internal
  * @param name Name of the Icon
  * @param svg SVG content. Do not include <svg> tag
@@ -39,7 +39,7 @@ export function createIcon(name: string, svg: SvgIconRaw, viewBox?: string, defa
 }
 
 /**
- * Create a icon from svg fragment
+ * Create an icon from svg fragment
  * @internal
  * @param name Name of the Icon
  * @param light SVG content when the theme is light theme. Do not include <svg> tag
