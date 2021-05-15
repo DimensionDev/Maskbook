@@ -1,12 +1,14 @@
 import { ProfileIdentifier } from '../../../database/type'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
+import { untilDocumentReady } from '../../../utils/dom'
 import { mindsBase } from '../base'
 import { selfInfoSelectors } from '../utils/selector'
 
-function resolveLastRecognizedIdentityInner(
+async function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['lastRecognized'],
     cancel: AbortSignal,
 ) {
+    await untilDocumentReady()
     const handle = selfInfoSelectors().handle.evaluate()
     const avatar = selfInfoSelectors().avatar.evaluate()
 
