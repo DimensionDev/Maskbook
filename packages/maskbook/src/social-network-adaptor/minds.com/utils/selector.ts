@@ -43,7 +43,13 @@ export const selfInfoSelectors = () => ({
 })
 
 export const composeButtonSelector = () =>
-    new LiveSelector().querySelector<HTMLDivElement>('.m-composer__topbarButton').enableSingleMode()
+    querySelector(
+        [
+            '.m-sidebarNavigation__item m-sidebarNavigation__item--compose',
+            '.m-sidebarNavigation__item--compose a', // legacy
+        ].join(),
+        true,
+    )
 
 export const composeTextareaSelector = () =>
     new LiveSelector().querySelector<HTMLTextAreaElement>('m-composer__textarea textarea').enableSingleMode()
