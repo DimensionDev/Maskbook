@@ -1,11 +1,6 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
-import {
-    extractTextFromTypedMessage,
-    makeTypedMessageCompound,
-    makeTypedMessageImage,
-    TypedMessage,
-} from '../../../protocols/typed-message'
+import { makeTypedMessageTuple, ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { extractTextFromTypedMessage, makeTypedMessageImage, TypedMessage } from '../../../protocols/typed-message'
 import { PostInfo } from '../../../social-network/PostInfo'
 import type { SocialNetworkUI as Next } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
@@ -90,7 +85,7 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
                     nextTypedMessage.push(makeTypedMessageImage(url))
                 }
 
-                info.postMessage.value = makeTypedMessageCompound(nextTypedMessage)
+                info.postMessage.value = makeTypedMessageTuple(nextTypedMessage)
             }
 
             collectPostInfo()

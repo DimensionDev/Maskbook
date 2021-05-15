@@ -76,7 +76,7 @@ export function useThemeMindsVariant() {
                         paddingLeft: 15,
                         paddingRight: 15,
                         boxShadow: 'none',
-                        [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                             '&': {
                                 height: '28px !important',
                                 minHeight: 'auto !important',
