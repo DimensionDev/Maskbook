@@ -15,11 +15,13 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
+import { DashboardRoute } from '../../extension/options-page/Route'
+import { isMinds } from '../../social-network-adaptor/minds.com/base'
 import { CompositionEvent, MaskMessage } from '../../utils/messages'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
 import { useFriendsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
-import { currentImagePayloadStatus, debugModeSetting } from '../../settings/settings'
+import { clipboardReadPermissionGranted, currentImagePayloadStatus, debugModeSetting } from '../../settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { activatedSocialNetworkUI } from '../../social-network'
 import Services from '../../extension/service'
@@ -48,6 +50,7 @@ import { editActivatedPostMetadata, globalTypedMessageMetadata } from '../../pro
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { SteganographyTextPayload } from './SteganographyTextPayload'
 import { Plugin, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
+import { useForceUpdate } from '../../utils/hooks/useForceUpdate'
 
 const defaultTheme = {}
 
@@ -95,6 +98,21 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const { t } = useI18N()
     const isDebug = useValueRef(debugModeSetting)
     const [showPostMetadata, setShowPostMetadata] = useState(false)
+    const forceUpdate = useForceUpdate()
+
+    const requestClipboardPermission = useCallback(() => {
+        const permission = 'clipboardRead'
+        const reason =
+            'Mask needs permission to read the clipboard content to ' +
+            'enable automatically pasting the Image Payload into the composer'
+        Services.Welcome.openOptionsPage(DashboardRoute.RequestPermission, `permission=${permission}&reason=${reason}`)
+
+        const removeListener = MaskMessage.events.permissionsGranted.on((permissions) => {
+            removeListener()
+            clipboardReadPermissionGranted.value = permissions.clipboardRead
+            forceUpdate()
+        })
+    }, [])
     const onPostContentChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
         const newText = e.target.value
         const msg = props.postContent
@@ -246,6 +264,16 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         {isTypedMessageText(props.postContent) && props.maxLength ? (
                             <CharLimitIndicator value={props.postContent.content.length} max={props.maxLength} />
                         ) : null}
+                        {isMinds(activatedSocialNetworkUI) &&
+                            currentImagePayloadStatus[activatedSocialNetworkUI.networkIdentifier].value === 'true' &&
+                            typeof clipboardReadPermissionGranted.value === 'undefined' && (
+                                <Button
+                                    variant="outlined"
+                                    onClick={requestClipboardPermission}
+                                    data-testid="auto_paste_prompt">
+                                    {'Enable auto paste'}
+                                </Button>
+                            )}
                         <Button
                             variant="contained"
                             disabled={props.postBoxButtonDisabled}

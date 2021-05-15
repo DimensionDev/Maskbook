@@ -34,7 +34,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         nativeCompositionDialog: {
             appendText: pasteTextToCompositionMinds,
             // TODO: make a better way to detect
-            attachImage: pasteImageToCompositionMinds(() => false),
+            attachImage: pasteImageToCompositionMinds(),
         },
         redirect: {
             newsFeed: gotoNewsFeedPageMinds,
