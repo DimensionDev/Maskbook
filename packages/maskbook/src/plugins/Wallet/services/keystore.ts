@@ -1,6 +1,8 @@
 import scrypt from 'scrypt-js'
 import Web3Utils from 'web3-utils'
 import { Buffer } from 'buffer'
+import keystoreSchema from './keystore.schema.json'
+import z_schema from 'z-schema'
 
 export type KeyStore = KeyStore.Type
 
@@ -52,14 +54,26 @@ export interface V3Keystore {
     address: string
 }
 
-export async function fromV3Keystore(input: string | V3Keystore, password: string) {
-    const json: V3Keystore = typeof input === 'object' ? input : JSON.parse(input)
-
-    if (json.version !== 3) {
-        throw new Error('Not a V3 wallet')
+function ValidatKeystore(input: string | V3Keystore) {
+    try {
+        const json = typeof input === 'object' ? input : JSON.parse(input)
+        const validator = new z_schema({})
+        const valid = validator.validate(json, keystoreSchema)
+        if (!valid) return null
+        return json
+    } catch {
+        return null
     }
+}
 
-    // TODO: check json schema
+export async function fromV3Keystore(input: string | V3Keystore, password: string) {
+    const json = ValidatKeystore(input)
+    if (json === null) {
+        throw new Error('Invalid Keystore!')
+    }
+    if (json.version !== 3) {
+        throw new Error('Not a V3 wallet!')
+    }
 
     let derivedKey: Uint8Array
     let kdfparams: KeyStore.KeyDerivation['kdfparams']
