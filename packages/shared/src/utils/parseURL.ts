@@ -4,6 +4,7 @@ export function parseURL(text: string) {
         .list(text)
         .map((x) => x.string)
         .filter((y) => {
+            // See https://github.com/alexcorvi/anchorme.js/issues/109
             try {
                 new URL(y)
                 return true
