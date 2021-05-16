@@ -54,7 +54,7 @@ export interface V3Keystore {
     address: string
 }
 
-function ValidatKeystore(input: string | V3Keystore) {
+function ValidateKeystore(input: string | V3Keystore) {
     try {
         const json = typeof input === 'object' ? input : JSON.parse(input)
         const validator = new z_schema({})
