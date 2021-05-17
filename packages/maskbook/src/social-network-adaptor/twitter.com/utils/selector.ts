@@ -18,9 +18,9 @@ const querySelectorAll = <T extends E>(selector: string) => {
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
 
 export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('a[href="/compose/tweet"]')
+    querySelector<HTMLAnchorElement>('header[role=banner] a[href="/compose/tweet"]')
 export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('a[href="/compose/tweet"] div[dir]')
+    querySelector<HTMLAnchorElement>('header[role=banner] a[href="/compose/tweet"] div[dir]')
 
 export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3)')
