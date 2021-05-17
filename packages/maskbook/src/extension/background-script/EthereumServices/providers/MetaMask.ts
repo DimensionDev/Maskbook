@@ -53,9 +53,9 @@ export async function createProvider() {
 // MetaMask provider can be wrapped into web3 lib directly.
 // https://github.com/MetaMask/extension-provider
 export async function createWeb3() {
-    provider = await createProvider()
-    if (!web3) web3 = new Web3(provider as Provider)
-    else web3.setProvider(provider as Provider)
+    const provider_ = (await createProvider()) as Provider
+    if (!web3) web3 = new Web3(provider_)
+    else web3.setProvider(provider_)
     return web3
 }
 
@@ -74,11 +74,11 @@ export async function requestAccounts() {
 }
 
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {
-    const provider_ = currentSelectedWalletProviderSettings.value
+    const providerType = currentSelectedWalletProviderSettings.value
 
     // validate address
     if (!EthereumAddress.isValid(address)) {
-        if (provider_ === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = ''
+        if (providerType === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = ''
         return
     }
 
@@ -89,5 +89,5 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
     if (setAsDefault) currentSelectedWalletProviderSettings.value = ProviderType.MetaMask
 
     // update the selected wallet address
-    if (setAsDefault || provider_ === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = address
+    if (setAsDefault || providerType === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = address
 }

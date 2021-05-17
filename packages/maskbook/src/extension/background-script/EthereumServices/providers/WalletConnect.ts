@@ -199,11 +199,11 @@ const onDisconnect = async (error: Error | null) => {
 }
 
 async function updateWalletInDB(address: string, name: string = 'WalletConnect', setAsDefault: boolean = false) {
-    const provider_ = currentSelectedWalletProviderSettings.value
+    const providerType = currentSelectedWalletProviderSettings.value
 
     // validate address
     if (!EthereumAddress.isValid(address)) {
-        if (provider_ === ProviderType.WalletConnect) currentSelectedWalletAddressSettings.value = ''
+        if (providerType === ProviderType.WalletConnect) currentSelectedWalletAddressSettings.value = ''
         return
     }
 
@@ -214,5 +214,5 @@ async function updateWalletInDB(address: string, name: string = 'WalletConnect',
     if (setAsDefault) currentSelectedWalletProviderSettings.value = ProviderType.WalletConnect
 
     // update the selected wallet address
-    if (setAsDefault || provider_ === ProviderType.WalletConnect) currentSelectedWalletAddressSettings.value = address
+    if (setAsDefault || providerType === ProviderType.WalletConnect) currentSelectedWalletAddressSettings.value = address
 }
