@@ -20,6 +20,7 @@ import { PaletteModeProviderMinds, useThemeMindsVariant } from './customization/
 import injectCommentBoxAtMinds from './injection/CommentBox'
 import { injectPostBoxComposed } from './injection/inject'
 import { injectPostInspectorAtMinds } from './injection/PostInspector'
+import { injectPostReplacerAtMinds } from './injection/PostReplacer'
 import { injectSearchResultBoxAtMinds } from './injection/SearchResult'
 import { injectSetupPromptAtMinds } from './injection/SetupPrompt'
 import { injectToolboxHintAtMinds } from './injection/ToolboxHint'
@@ -64,6 +65,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         toolBoxInNavBar: injectToolboxHintAtMinds,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtMinds,
+        enhancedPostRenderer: injectPostReplacerAtMinds,
         setupPrompt: injectSetupPromptAtMinds,
         searchResult: injectSearchResultBoxAtMinds,
         newPostComposition: {
@@ -84,7 +86,6 @@ const mindsUI: SocialNetworkUI.Definition = {
         },
         // NOT SUPPORTED YET
         toolbar: undefined,
-        enhancedPostRenderer: undefined,
         userBadge: undefined,
     },
     configuration: {

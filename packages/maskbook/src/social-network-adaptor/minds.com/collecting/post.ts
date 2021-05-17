@@ -1,16 +1,22 @@
-import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeTypedMessageTuple, ProfileIdentifier } from '@dimensiondev/maskbook-shared'
-import { extractTextFromTypedMessage, makeTypedMessageImage, TypedMessage } from '../../../protocols/typed-message'
+import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import {
+    makeTypedMessageEmpty,
+    makeTypedMessagePromise,
+    makeTypedMessageTuple,
+    makeTypedMessageTupleFromList,
+    ProfileIdentifier,
+} from '@dimensiondev/maskbook-shared'
+import { extractTextFromTypedMessage, makeTypedMessageImage } from '../../../protocols/typed-message'
 import { PostInfo } from '../../../social-network/PostInfo'
 import type { SocialNetworkUI as Next } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
+import { untilElementAvailable } from '../../../utils/dom'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { startWatch } from '../../../utils/watcher'
 import { mindsBase } from '../base'
 import { mindsShared } from '../shared'
 import { postParser } from '../utils/fetch'
-
-const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('m-activity, m-activity__modal')
+import { postContentSelector } from '../utils/selector'
 
 export const PostProviderMinds: Next.CollectingCapabilities.PostsProvider = {
     posts: creator.PostProviderStore(),
@@ -21,25 +27,17 @@ export const PostProviderMinds: Next.CollectingCapabilities.PostsProvider = {
 
 function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider['posts'], signal: AbortSignal) {
     startWatch(
-        new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
-            const root = new LiveSelector().replace(() => [metadata.realCurrent]).closest('m-activity')
-
-            const messageWrapper = metadata.current.querySelector<HTMLDivElement>(
-                'm-activity__content .m-activityContent__messageWrapper',
-            )
-            const isImage = metadata.current.querySelector<HTMLDivElement>(
-                'm-activity__content .m-activityContent__media--image',
-            )
-            const descriptionWrapper = metadata.current.querySelector<HTMLDivElement>(
-                'm-activity__content .m-activityContent__mediaDescription .m-activityContent__descriptionWrapper',
-            )
-            const postContentNode = metadata.current.querySelector<HTMLDivElement>('m-activity__content')
+        new MutationObserverWatcher(postContentSelector()).useForeach((node, key, metadata) => {
+            const activitySelector = new LiveSelector().replace(() => [metadata.realCurrent]).closest('m-activity')
+            const activityNode = activitySelector.evaluate()[0]! as HTMLElement
 
             // ? inject after comments
-            const commentSelector = root.clone().querySelectorAll<HTMLElement>('m-comment .m-comment__message')
+            const commentSelector = activitySelector
+                .clone()
+                .querySelectorAll<HTMLElement>('m-comment .m-comment__message')
 
             // ? inject comment text field
-            const commentBoxSelector = root
+            const commentBoxSelector = activitySelector
                 .clone()
                 .querySelectorAll<HTMLFormElement>('.m-commentPoster__form')
                 .map((x) => x.parentElement)
@@ -48,19 +46,17 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
                 commentsSelector = commentSelector
                 commentBoxSelector = commentBoxSelector
                 rootNodeProxy = metadata
-                postContentNode = (isImage ? descriptionWrapper : messageWrapper) || postContentNode!
+                postContentNode = node
 
                 get rootNode() {
-                    return root.evaluate()[0]! as HTMLElement
+                    return activityNode
                 }
             })()
 
             store.set(metadata, info)
 
             function collectPostInfo() {
-                const nextTypedMessage: TypedMessage[] = []
-
-                const { pid, messages, handle, name, avatar } = postParser(metadata.current)
+                const { pid, messages, handle, name, avatar } = postParser(activityNode)
                 if (!pid) return
                 const postBy = handle
                     ? new ProfileIdentifier(mindsBase.networkIdentifier, handle)
@@ -77,15 +73,24 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
                 info.nickname.value = name
                 info.avatarURL.value = avatar || null
 
-                nextTypedMessage.push(...messages)
+                // decode steganographic image
+                // don't add await on this
+                const images = untilElementAvailable(
+                    new LiveSelector([activityNode]).querySelectorAll<HTMLImageElement>(
+                        '.m-activityContent__media--image img',
+                    ),
+                    10000,
+                )
+                    .then(() => getMetadataImages(activityNode))
+                    .then((urls) => {
+                        for (const url of urls) info.postMetadataImages.add(url)
+                        if (urls.length)
+                            return makeTypedMessageTupleFromList(...urls.map((x) => makeTypedMessageImage(x)))
+                        return makeTypedMessageEmpty()
+                    })
+                    .catch(() => makeTypedMessageEmpty())
 
-                const images = getMetadataImages(metadata)
-                for (const url of images) {
-                    info.postMetadataImages.add(url)
-                    nextTypedMessage.push(makeTypedMessageImage(url))
-                }
-
-                info.postMessage.value = makeTypedMessageTuple(nextTypedMessage)
+                info.postMessage.value = makeTypedMessageTuple([...messages, makeTypedMessagePromise(images)])
             }
 
             collectPostInfo()
@@ -106,8 +111,8 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
     )
 }
 
-function getMetadataImages(node: DOMProxy): string[] {
-    const imgNodes = node.current?.querySelectorAll<HTMLImageElement>('.m-activityContent__media--image img') || []
+function getMetadataImages(activityNode: HTMLElement): string[] {
+    const imgNodes = activityNode.querySelectorAll<HTMLImageElement>('.m-activityContent__media--image img') || []
 
     if (!imgNodes.length) return []
     const imgUrls = Array.from(imgNodes)
