@@ -7,10 +7,5 @@ export function useConnectSocialNetwork() {
 }
 
 export function useDisconnectSocialNetwork() {
-    return useAsyncFn(async (identifier?: ProfileIdentifier) => {
-        if (identifier) {
-            //TODO: Maybe need snackbar
-            await Services.Identity.detachProfile(identifier)
-        }
-    }, [])
+    return useAsyncFn((identifier: ProfileIdentifier) => Services.Identity.detachProfile(identifier))
 }

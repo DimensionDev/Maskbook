@@ -4,8 +4,9 @@ import { delay } from '@dimensiondev/maskbook-shared'
 
 export function useCreatePersona() {
     return useAsyncFn(async (nickName: string) => {
+        // TODO: should second parameter be the password?
         const identifier = await Services.Identity.createPersonaByMnemonic(nickName, '')
-        delay(300)
+        await delay(300)
         Messages.events.personaChanged.sendToAll([{ of: identifier, owned: true, reason: 'new' }])
     })
 }

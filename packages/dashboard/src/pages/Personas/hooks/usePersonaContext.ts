@@ -1,24 +1,29 @@
 import { createContainer } from 'unstated-next'
-import { useCallback, useEffect, useState } from 'react'
-import { head } from 'lodash-es'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useConnectSocialNetwork, useDisconnectSocialNetwork } from './useConnectSocialNetwork'
 import { Services } from '../../../API'
 import { Identifier, PersonaIdentifier } from '@dimensiondev/maskbook-shared'
-import { useOwnedPersonas, useDefinedSocialNetworkUIs } from '../api'
+import { useOwnedPersonas, useDefinedSocialNetworkUIs, SocialNetwork } from '../api'
 import { useCreatePersona } from './useCreatePersona'
 import { ECKeyIdentifier, useValueRef } from '@dimensiondev/maskbook-shared'
 import { currentPersonaIdentifier } from '../settings'
 
-function usePersonaContext() {
-    const currentPersonaIdentifierRef = Identifier.fromString<ECKeyIdentifier>(
-        useValueRef(currentPersonaIdentifier),
-        ECKeyIdentifier,
+function useCurrentPersonaIdentifier() {
+    const raw = useValueRef(currentPersonaIdentifier)
+    const currentPersonaIdentifierResult = useMemo(
+        () => Identifier.fromString<ECKeyIdentifier>(raw, ECKeyIdentifier),
+        [raw],
     )
-    const definedSocialNetworkUIs = useDefinedSocialNetworkUIs()
+    return currentPersonaIdentifierResult
+}
 
-    const myPersonas = useOwnedPersonas()
-    const currentPersona = currentPersonaIdentifierRef
-        .map((key) => myPersonas.find((id) => key.equals(id.identifier)))
+function usePersonaContext() {
+    const currentPersonaIdentifierResult = useCurrentPersonaIdentifier()
+    const definedSocialNetworks: SocialNetwork[] = useDefinedSocialNetworkUIs()
+
+    const personas = useOwnedPersonas()
+    const currentPersona = currentPersonaIdentifierResult
+        .map((key) => personas.find((id) => key.equals(id.identifier)))
         .unwrapOr(undefined)
 
     const [open, setOpen] = useState(false)
@@ -32,22 +37,21 @@ function usePersonaContext() {
     }, [])
 
     useEffect(() => {
-        if (myPersonas.length) {
-            const persona = !currentPersonaIdentifierRef.ok
-                ? head(myPersonas)
-                : myPersonas.find((i) => i.identifier.equals(currentPersonaIdentifierRef.unwrap()))
+        if (currentPersonaIdentifierResult.ok || !personas.length) return
 
-            if (persona) currentPersonaIdentifier.value = persona.identifier.toText()
-        }
-    }, [myPersonas, currentPersonaIdentifierRef])
+        const firstValidPersona = personas.find((i) => i.identifier.equals(currentPersonaIdentifierResult.unwrap()))
+        if (!firstValidPersona) return
+
+        currentPersonaIdentifier.value = firstValidPersona.identifier.toText()
+    }, [personas, currentPersonaIdentifierResult])
 
     return {
         onConnect,
         onDisconnect,
         onAddPersona,
         onRename,
-        definedSocialNetworkUIs,
-        personas: myPersonas,
+        definedSocialNetworks,
+        personas,
         onChangeCurrentPersona,
         currentPersona,
         drawerOpen: open,

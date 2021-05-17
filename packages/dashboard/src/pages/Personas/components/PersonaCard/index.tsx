@@ -9,7 +9,7 @@ import { DeletePersonaDialog } from '../DeletePersonaDialog'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { RenameDialog } from '../RenameDialog'
-import { useProfiles } from '../../hooks/useProfiles'
+import type { SocialNetwork } from '../../api'
 
 const useStyles = makeStyles<Theme, { active: boolean }, 'card' | 'status' | 'header' | 'content' | 'line' | 'setting'>(
     (theme) => ({
@@ -60,83 +60,100 @@ export interface PersonaCardProps {
 }
 
 export const PersonaCard = memo<PersonaCardProps>((props) => {
-    const { onConnect, onDisconnect, onRename } = PersonaContext.useContainer()
+    const {
+        onConnect,
+        onDisconnect,
+        onRename,
+        definedSocialNetworks: definedSocialNetworkUIs,
+    } = PersonaContext.useContainer()
 
-    return <PersonaCardUI {...props} onConnect={onConnect} onDisconnect={onDisconnect} onRename={onRename} />
+    return (
+        <PersonaCardUI
+            {...props}
+            onConnect={onConnect}
+            onDisconnect={onDisconnect}
+            onRename={onRename}
+            definedSocialNetworks={definedSocialNetworkUIs}
+        />
+    )
 })
 
 export interface PersonaCardUIProps extends PersonaCardProps {
+    definedSocialNetworks: SocialNetwork[]
     onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
-    onDisconnect: (identifier?: ProfileIdentifier) => void
+    onDisconnect: (identifier: ProfileIdentifier) => void
     onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => void
 }
 
-export const PersonaCardUI = memo<PersonaCardUIProps>(
-    ({ nickname, active = false, identifier, profiles: providers, onConnect, onDisconnect, onClick, onRename }) => {
-        const t = useDashboardI18N()
-        const classes = useStyles({ active })
-        const [renameDialogOpen, setRenameDialogOpen] = useState(false)
-        const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-        const [menu, openMenu] = useMenu(
-            <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
-            <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
-                {t.personas_delete()}
-            </MenuItem>,
-        )
+export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
+    const { nickname, active = false, definedSocialNetworks, identifier, profiles } = props
+    const { onConnect, onDisconnect, onClick, onRename } = props
+    const t = useDashboardI18N()
+    const classes = useStyles({ active })
+    const [renameDialogOpen, setRenameDialogOpen] = useState(false)
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+    const [menu, openMenu] = useMenu(
+        <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
+        <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
+            {t.personas_delete()}
+        </MenuItem>,
+    )
 
-        const providerUIs = useProfiles(providers)
-
-        return (
-            <div className={classes.card}>
-                <div className={classes.status} />
-                <div style={{ flex: 1 }}>
-                    <div className={classes.header}>
-                        <Typography variant="subtitle2" sx={{ cursor: 'pointer' }} onClick={onClick}>
-                            {nickname}
-                        </Typography>
-                        <IconButton
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                openMenu(e)
-                            }}
-                            className={classes.setting}>
-                            <SettingsIcon fontSize="inherit" style={{ fill: MaskColorVar.textPrimary }} />
-                        </IconButton>
-                    </div>
-                    <div className={classes.content}>
-                        {providerUIs.map(({ identifier: networkIdentifier }) => {
-                            return networkIdentifier.userId ? (
+    return (
+        <div className={classes.card}>
+            <div className={classes.status} />
+            <div style={{ flex: 1 }}>
+                <div className={classes.header}>
+                    <Typography variant="subtitle2" sx={{ cursor: 'pointer' }} onClick={onClick}>
+                        {nickname}
+                    </Typography>
+                    <IconButton
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            openMenu(e)
+                        }}
+                        className={classes.setting}>
+                        <SettingsIcon fontSize="inherit" style={{ fill: MaskColorVar.textPrimary }} />
+                    </IconButton>
+                </div>
+                <div className={classes.content}>
+                    {definedSocialNetworks.map(({ networkIdentifier }) => {
+                        const profile = profiles.find((x) => x.identifier.network === networkIdentifier)
+                        if (profile) {
+                            return (
                                 <ConnectedPersonaLine
-                                    key={networkIdentifier.network}
-                                    onDisconnect={() => onDisconnect(networkIdentifier)}
-                                    userId={networkIdentifier.userId}
-                                />
-                            ) : (
-                                <UnconnectedPersonaLine
-                                    key={networkIdentifier.network}
-                                    onConnect={() => onConnect(identifier, networkIdentifier.network)}
-                                    networkIdentifier={networkIdentifier.network}
+                                    key={networkIdentifier}
+                                    onDisconnect={() => onDisconnect(profile.identifier)}
+                                    userId={profile.identifier.userId}
                                 />
                             )
-                        })}
-                    </div>
+                        } else {
+                            return (
+                                <UnconnectedPersonaLine
+                                    key={networkIdentifier}
+                                    onConnect={() => onConnect(identifier, networkIdentifier)}
+                                    networkIdentifier={networkIdentifier}
+                                />
+                            )
+                        }
+                    })}
                 </div>
-                {menu}
-                <RenameDialog
-                    open={renameDialogOpen}
-                    nickname={nickname}
-                    onClose={() => setRenameDialogOpen(false)}
-                    onConfirm={(name) => {
-                        onRename(identifier, name)
-                        setRenameDialogOpen(false)
-                    }}
-                />
-                <DeletePersonaDialog
-                    open={deleteDialogOpen}
-                    onClose={() => setDeleteDialogOpen(false)}
-                    nickname={nickname}
-                />
             </div>
-        )
-    },
-)
+            {menu}
+            <RenameDialog
+                open={renameDialogOpen}
+                nickname={nickname}
+                onClose={() => setRenameDialogOpen(false)}
+                onConfirm={(name) => {
+                    onRename(identifier, name)
+                    setRenameDialogOpen(false)
+                }}
+            />
+            <DeletePersonaDialog
+                open={deleteDialogOpen}
+                onClose={() => setDeleteDialogOpen(false)}
+                nickname={nickname}
+            />
+        </div>
+    )
+})

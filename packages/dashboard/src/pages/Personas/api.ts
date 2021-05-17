@@ -1,6 +1,9 @@
 import { createGlobalState } from '@dimensiondev/maskbook-shared'
 import { Services, Messages } from '../../API'
 
+export type SocialNetwork = {
+    networkIdentifier: string
+}
 export const [useDefinedSocialNetworkUIs, revalidateSocialNetworkUIs, definedSocialNetworkUIs] = createGlobalState(
     Services.SocialNetwork.getDefinedSocialNetworkUIs,
     () => () => {},

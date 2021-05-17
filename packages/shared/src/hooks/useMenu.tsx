@@ -18,13 +18,7 @@ export const useMenuContext = createContext<React.ComponentType<MenuProps>>(Menu
  * If you need configuration, please use useMenuConfig
  */
 // ! Do not change signature of this. Change useMenuConfig instead.
-export function useMenu(
-    ...elements: Array<JSX.Element | null>
-): [
-    menu: React.ReactElement,
-    openDialog: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void,
-    closeDialog: () => void,
-] {
+export function useMenu(...elements: Array<JSX.Element | null>) {
     return useMenuConfig(elements, {})
 }
 

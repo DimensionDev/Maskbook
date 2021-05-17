@@ -10,7 +10,6 @@ import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaContext } from './hooks/usePersonaContext'
 import { useDashboardI18N } from '../../locales'
 import type { PersonaInformation } from '@dimensiondev/maskbook-shared'
-import { useProfiles } from './hooks/useProfiles'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -57,18 +56,16 @@ function firstProfileNetwork(x: PersonaInformation | undefined) {
 function Personas() {
     const classes = useStyles()
     const t = useDashboardI18N()
-    const { drawerOpen, toggleDrawer, personas, currentPersona, onConnect, definedSocialNetworkUIs } =
+    const { drawerOpen, toggleDrawer, personas, currentPersona, onConnect, definedSocialNetworks } =
         PersonaContext.useContainer()
 
     const [activeTab, setActiveTab] = useState(
-        firstProfileNetwork(currentPersona) ?? definedSocialNetworkUIs[0].networkIdentifier,
+        firstProfileNetwork(currentPersona) ?? definedSocialNetworks[0].networkIdentifier,
     )
 
-    const providerUIs = useProfiles(currentPersona?.linkedProfiles)
-
     useEffect(() => {
-        setActiveTab(firstProfileNetwork(currentPersona) ?? definedSocialNetworkUIs[0].networkIdentifier)
-    }, [currentPersona, definedSocialNetworkUIs])
+        setActiveTab(firstProfileNetwork(currentPersona) ?? definedSocialNetworks[0].networkIdentifier)
+    }, [currentPersona, definedSocialNetworks])
 
     return (
         <PageFrame
@@ -89,29 +86,31 @@ function Personas() {
             <Box className={classes.container}>
                 <TabContext value={activeTab}>
                     <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
-                        {providerUIs?.map(({ identifier }) => (
+                        {definedSocialNetworks.map(({ networkIdentifier }) => (
                             <Tab
-                                key={identifier.network}
-                                value={identifier.network}
-                                label={capitalize(identifier.network.replace('.com', ''))}
+                                key={networkIdentifier}
+                                value={networkIdentifier}
+                                // They should be localized
+                                label={capitalize(networkIdentifier.replace('.com', ''))}
                                 classes={{ wrapper: classes.wrapper }}
                             />
                         ))}
                     </Tabs>
-                    {providerUIs?.map(({ identifier }) => (
-                        <TabPanel key={identifier.network} value={identifier.network}>
-                            {identifier.userId ? null : (
+                    {definedSocialNetworks.map(({ networkIdentifier }) => {
+                        if (!currentPersona) return null
+                        const profile = currentPersona.linkedProfiles.find(
+                            (x) => x.identifier.network === networkIdentifier,
+                        )
+                        if (profile) return <TabPanel key={networkIdentifier} value={networkIdentifier}></TabPanel>
+                        return (
+                            <TabPanel key={networkIdentifier} value={networkIdentifier}>
                                 <PersonaSetup
-                                    networkIdentifier={identifier.network}
-                                    onConnect={() => {
-                                        if (currentPersona?.identifier) {
-                                            onConnect(currentPersona.identifier, identifier.network)
-                                        }
-                                    }}
+                                    networkIdentifier={networkIdentifier}
+                                    onConnect={() => onConnect(currentPersona.identifier, networkIdentifier)}
                                 />
-                            )}
-                        </TabPanel>
-                    ))}
+                            </TabPanel>
+                        )
+                    })}
                 </TabContext>
             </Box>
             <PersonaDrawer personas={personas} />
