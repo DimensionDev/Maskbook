@@ -8,7 +8,7 @@ export default meta({
     title: 'Components/Persona/Unconnected Persona Line',
 })
 
-export const PersonaLine = of({
+export const UnconnectedPersonaLine = of({
     args: {
         networkIdentifier: 'twitter',
         onConnect: action('onConnect'),

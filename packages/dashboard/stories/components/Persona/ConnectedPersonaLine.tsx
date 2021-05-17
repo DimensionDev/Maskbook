@@ -10,7 +10,7 @@ export default meta({
 
 export const ConnectedPersonaLine = of({
     args: {
-        userId: '',
+        userId: 'nickname',
         onDisconnect: action('onDisconnect'),
     },
 })
