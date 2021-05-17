@@ -103,7 +103,7 @@ export function makeTypedMessageUnknown(raw?: unknown, meta?: Meta): TypedMessag
 export interface TypedMessageEmpty extends SerializableTypedMessage<1> {
     readonly type: 'empty'
 }
-export const isTypedMessageEmpty = createIsType<TypedMessageEmpty>('unknown')
+export const isTypedMessageEmpty = createIsType<TypedMessageEmpty>('empty')
 export function makeTypedMessageEmpty(meta?: Meta): TypedMessageEmpty {
     return { type: 'empty', serializable: true, version: 1, meta }
 }
