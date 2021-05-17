@@ -54,23 +54,29 @@ export interface V3Keystore {
     address: string
 }
 
-function ValidateKeystore(input: string | V3Keystore) {
-    try {
-        const json = typeof input === 'object' ? input : JSON.parse(input)
-        const validator = new z_schema({})
-        const valid = validator.validate(json, keystoreSchema)
-        if (!valid) return null
-        return json
-    } catch {
-        return null
+function assertKeystore(input: object): asserts input is V3Keystore {
+    const validator = new z_schema({})
+    const valid = validator.validate(input, keystoreSchema)
+    if (!valid) {
+        const error = validator.getLastError()
+        throw new Error(error.details[0].message)
     }
 }
 
-export async function fromV3Keystore(input: string | V3Keystore, password: string) {
-    const json = ValidateKeystore(input)
-    if (json === null) {
-        throw new Error('Invalid Keystore!')
+function ValidateKeystore(input: string) {
+    let json: object
+    try {
+        json = JSON.parse(input)
+    } catch {
+        throw new Error('We donot support non-json format keystore!')
     }
+
+    assertKeystore(json)
+    return json
+}
+
+export async function fromV3Keystore(input: string, password: string) {
+    const json: V3Keystore = ValidateKeystore(input)
     if (json.version !== 3) {
         throw new Error('Not a V3 wallet!')
     }
