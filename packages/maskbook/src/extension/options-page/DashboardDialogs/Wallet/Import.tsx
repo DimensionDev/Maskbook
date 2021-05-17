@@ -312,8 +312,8 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                         disabled={
                             (!(state[0] === 0 && name && confirmed) &&
                                 !(state[0] === 1 && name && keyStore && keyStorePwd) &&
-                                !(state[0] === 1 && name && mnemonic) &&
-                                !(state[0] === 2 && name && privKey)) ||
+                                !(state[0] === 2 && name && mnemonic) &&
+                                !(state[0] === 3 && name && privKey)) ||
                             checkInputLengthExceed(name)
                         }>
                         {t(state[0] === 0 ? 'create' : 'import')}
