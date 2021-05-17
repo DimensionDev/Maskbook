@@ -3,13 +3,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useConnectSocialNetwork, useDisconnectSocialNetwork } from './useConnectSocialNetwork'
 import { Services } from '../../../API'
 import { Identifier, PersonaIdentifier } from '@dimensiondev/maskbook-shared'
-import { useOwnedPersonas, useDefinedSocialNetworkUIs, SocialNetwork } from '../api'
+import { useOwnedPersonas, useDefinedSocialNetworkUIs, SocialNetwork, useCurrentPersona } from '../api'
 import { useCreatePersona } from './useCreatePersona'
-import { ECKeyIdentifier, useValueRef } from '@dimensiondev/maskbook-shared'
-import { currentPersonaIdentifier } from '../settings'
+import { ECKeyIdentifier } from '@dimensiondev/maskbook-shared'
 
 function useCurrentPersonaIdentifier() {
-    const raw = useValueRef(currentPersonaIdentifier)
+    const raw = useCurrentPersona()
     const currentPersonaIdentifierResult = useMemo(
         () => Identifier.fromString<ECKeyIdentifier>(raw, ECKeyIdentifier),
         [raw],
@@ -33,7 +32,7 @@ function usePersonaContext() {
     const [, onAddPersona] = useCreatePersona()
     const onRename = Services.Identity.renamePersona
     const onChangeCurrentPersona = useCallback((persona: PersonaIdentifier) => {
-        currentPersonaIdentifier.value = persona.toText()
+        Services.Settings.setCurrentPersonaIdentifier(persona.toText())
     }, [])
 
     useEffect(() => {
@@ -42,7 +41,7 @@ function usePersonaContext() {
         const firstValidPersona = personas.find((i) => i.identifier.equals(currentPersonaIdentifierResult.unwrap()))
         if (!firstValidPersona) return
 
-        currentPersonaIdentifier.value = firstValidPersona.identifier.toText()
+        Services.Settings.setCurrentPersonaIdentifier(firstValidPersona.identifier.toText())
     }, [personas, currentPersonaIdentifierResult])
 
     return {

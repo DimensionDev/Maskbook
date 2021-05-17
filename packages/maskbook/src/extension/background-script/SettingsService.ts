@@ -1,5 +1,5 @@
 import type { InternalSettings } from '../../settings/createSettings'
-import { appearanceSettings } from '../../settings/settings'
+import { appearanceSettings, currentPersonaIdentifier } from '../../settings/settings'
 
 function create<T>(settings: InternalSettings<T>) {
     async function get() {
@@ -14,3 +14,5 @@ function create<T>(settings: InternalSettings<T>) {
 }
 
 export const [getTheme, setTheme] = create(appearanceSettings)
+
+export const [getCurrentPersonaIdentifier, setCurrentPersonaIdentifier] = create(currentPersonaIdentifier)

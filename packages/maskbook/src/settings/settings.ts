@@ -1,4 +1,4 @@
-import { createGlobalSettings, createNetworkSettings } from './createSettings'
+import { createGlobalSettings, createNetworkSettings, createInternalSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { Appearance, Language, LaunchPage } from './types'
@@ -68,6 +68,8 @@ export const newDashboardConnection = createGlobalSettings('beta-dashboard', fal
     primary: () => 'Experimental: Allow isolated dashboard to connect',
     secondary: () => "WARNING: DON'T OPEN THIS UNLESS YOU KNOW WHAT YOU ARE DOING.",
 })
+
+export const currentPersonaIdentifier = createInternalSettings<string>('currentPersonaIdentifier', '')
 
 sideEffect.then(() => {
     // reset it to false after Mask startup
