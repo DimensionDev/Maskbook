@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'
 import { useAvailableTraderProviders } from '../../trending/useAvailableTraderProviders'
-import { useSearchedKeywordAtTwitter } from '../../trending/useSearchedKeywordAtTwitter'
+import { useSearchedKeyword } from '../../trending/useSearchedKeyword'
 import { TagType } from '../../types'
 import { SearchResultView } from './SearchResultView'
 
@@ -14,8 +14,7 @@ export interface SearchResultInspectorProps {}
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     const classes = useStylesExtends(useStyles(), props)
-
-    const keyword = useSearchedKeywordAtTwitter()
+    const keyword = useSearchedKeyword()
     const [_, type, name = ''] = keyword.match(/([\$\#])([\w\d]+)/) ?? []
     const type_ = type === '$' ? TagType.CASH : TagType.HASH
     const { value: dataProviders = [] } = useAvailableDataProviders(type_, name)

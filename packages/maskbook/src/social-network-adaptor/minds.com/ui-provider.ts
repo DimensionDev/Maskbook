@@ -13,12 +13,14 @@ import { gotoProfilePageMinds } from './automation/gotoProfilePage'
 import { openComposeBoxMinds } from './automation/openComposeBox'
 import { pasteTextToCompositionMinds } from './automation/pasteTextToComposition'
 import { mindsBase } from './base'
+import getSearchedKeywordAtMinds from './collecting/getSearchedKeyword'
 import { IdentityProviderMinds } from './collecting/identity'
 import { PostProviderMinds } from './collecting/post'
 import { PaletteModeProviderMinds, useThemeMindsVariant } from './customization/custom'
 import injectCommentBoxAtMinds from './injection/CommentBox'
 import { injectPostBoxComposed } from './injection/inject'
 import { injectPostInspectorAtMinds } from './injection/PostInspector'
+import { injectSearchResultBoxAtMinds } from './injection/SearchResult'
 import { injectSetupPromptAtMinds } from './injection/SetupPrompt'
 import { injectToolboxHintAtMinds } from './injection/ToolboxHint'
 import { mindsShared } from './shared'
@@ -45,6 +47,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderMinds,
         postsProvider: PostProviderMinds,
         profilesCollector: undefined,
+        getSearchedKeyword: getSearchedKeywordAtMinds,
     },
     customization: {
         paletteMode: PaletteModeProviderMinds,
@@ -62,6 +65,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtMinds,
         setupPrompt: injectSetupPromptAtMinds,
+        searchResult: injectSearchResultBoxAtMinds,
         newPostComposition: {
             start: injectPostBoxComposed,
             supportedInputTypes: {
@@ -82,7 +86,6 @@ const mindsUI: SocialNetworkUI.Definition = {
         toolbar: undefined,
         enhancedPostRenderer: undefined,
         userBadge: undefined,
-        searchResult: undefined,
     },
     configuration: {
         steganography: {
