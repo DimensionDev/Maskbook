@@ -2,10 +2,12 @@ import type { PostInfo } from '../../../social-network/PostInfo'
 import { injectPostReplacer } from '../../../social-network/defaults/inject/PostReplacer'
 
 function resolveContentNode(node: HTMLElement) {
-    return node.closest([
-        'm-activity__content .m-activityContent__messageWrapper > span:first-child',
-        'm-activity__content .m-activityContent__mediaDescriptionText',
-    ].join() as any)
+    return node.closest(
+        [
+            'm-activity__content .m-activityContent__messageWrapper > span:first-child',
+            'm-activity__content .m-activityContent__mediaDescriptionText',
+        ].join() as any,
+    )
 }
 
 export function injectPostReplacerAtMinds(signal: AbortSignal, current: PostInfo) {

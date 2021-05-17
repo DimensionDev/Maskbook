@@ -67,9 +67,10 @@ export const composerPreviewSelector = () =>
 
 export const searchResultHeadingSelector = () => querySelector('m-discovery__search')
 
-export const postContentSelector = () => new LiveSelector().querySelectorAll<HTMLDivElement>(
-  [
-    'm-activity__content .m-activityContent__messageWrapper > span:first-child',
-    'm-activity__content .m-activityContent__mediaDescriptionText',
-  ].join(),
-)
+export const postContentSelector = () =>
+    new LiveSelector().querySelectorAll<HTMLDivElement>(
+        [
+            'm-activity__content .m-activityContent__messageWrapper > span:first-child',
+            'm-activity__content .m-activityContent__mediaDescriptionText',
+        ].join(),
+    )
