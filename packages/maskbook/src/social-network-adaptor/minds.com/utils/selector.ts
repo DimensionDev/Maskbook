@@ -25,6 +25,9 @@ export const composerModalSelector: () => LiveSelector<E, true> = () => querySel
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('m-composer__modal m-composer__toolbar > div > *:nth-child(4)', true)
 
+export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('m-newsfeed m-composer m-composer__toolbar > div > *:nth-child(4), m-channel__feed m-composer m-composer__toolbar > div > *:nth-child(4)', true)
+
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('.m-sidebarNavigation__list li:nth-child(11)')
 

@@ -3,10 +3,11 @@ import { createStyles, makeStyles } from '@material-ui/core'
 import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { startWatch } from '../../../utils/watcher'
-import { postEditorInPopupSelector } from '../utils/selector'
+import { postEditorInPopupSelector, postEditorInTimelineSelector } from '../utils/selector'
 
 export function injectSetupPromptAtMinds(signal: AbortSignal) {
     injectSetupPrompt(postEditorInPopupSelector(), signal)
+    injectSetupPrompt(postEditorInTimelineSelector(), signal)
 }
 
 function injectSetupPrompt<T>(ls: LiveSelector<T, true>, signal: AbortSignal) {
