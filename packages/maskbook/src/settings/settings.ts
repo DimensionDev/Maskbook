@@ -1,4 +1,4 @@
-import { createGlobalSettings, createNetworkSettings, createInternalSettings } from './createSettings'
+import { createGlobalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { Appearance, Language, LaunchPage } from './types'
@@ -69,7 +69,9 @@ export const newDashboardConnection = createGlobalSettings('beta-dashboard', fal
     secondary: () => "WARNING: DON'T OPEN THIS UNLESS YOU KNOW WHAT YOU ARE DOING.",
 })
 
-export const currentPersonaIdentifier = createInternalSettings<string>('currentPersonaIdentifier', '')
+export const currentPersonaIdentifier = createGlobalSettings<string>('currentPersonaIdentifier', '', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
 
 sideEffect.then(() => {
     // reset it to false after Mask startup
