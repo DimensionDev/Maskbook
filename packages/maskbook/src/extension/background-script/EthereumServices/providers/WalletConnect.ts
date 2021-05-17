@@ -214,5 +214,6 @@ async function updateWalletInDB(address: string, name: string = 'WalletConnect',
     if (setAsDefault) currentSelectedWalletProviderSettings.value = ProviderType.WalletConnect
 
     // update the selected wallet address
-    if (setAsDefault || providerType === ProviderType.WalletConnect) currentSelectedWalletAddressSettings.value = address
+    if (setAsDefault || providerType === ProviderType.WalletConnect)
+        currentSelectedWalletAddressSettings.value = address
 }

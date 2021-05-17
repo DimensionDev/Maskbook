@@ -1,4 +1,3 @@
-import { pick } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { INTERNAL_send } from './send'
@@ -28,7 +27,7 @@ export async function requestSend(
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
 ) {
     id++
-    INTERNAL_send(
+    await INTERNAL_send(
         {
             ...payload,
             id,

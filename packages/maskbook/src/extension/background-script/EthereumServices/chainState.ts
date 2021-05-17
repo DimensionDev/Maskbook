@@ -1,8 +1,6 @@
 import stringify from 'json-stable-stringify'
 import { debounce, first, uniq } from 'lodash-es'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { getWallets } from '../../../plugins/Wallet/services'
 import {
     currentBlockNumnberSettings,
     currentMaskbookChainIdSettings,
@@ -17,13 +15,14 @@ import { ChainId, ProviderType } from '../../../web3/types'
 import { getBlockNumber } from './network'
 import { startEffects } from '../../../utils/side-effects'
 import { Flags } from '../../../utils/flags'
+import { getWalletsCached } from './wallet'
 
 const effect = startEffects(module.hot)
 
 //#region tracking chain state
 export const updateChainState = debounce(
     async () => {
-        const wallets = await getWallets()
+        const wallets = getWalletsCached()
         const chainIds = uniq(await Promise.all(wallets.map((x) => getChainId(x.address))))
         currentBlockNumnberSettings.value = stringify(
             await Promise.all(
@@ -67,20 +66,12 @@ effect(() => currentWalletConnectChainIdSettings.addListener(updateChainState))
 effect(() => WalletMessages.events.walletsUpdated.on(updateChainState))
 //#endregion
 
-//#region tracking wallets
-let wallets: WalletRecord[] = []
-const revalidateWallets = async () => {
-    wallets = await getWallets()
-}
-effect(() => WalletMessages.events.walletsUpdated.on(revalidateWallets))
-revalidateWallets()
-//#endregion
-
 /**
  * Get the chain id which is using by the given (or default) wallet
  * @param address
  */
 export function getUnsafeChainId(address?: string) {
+    const wallets = getWalletsCached()
     const address_ = currentSelectedWalletAddressSettings.value
     const provider = currentSelectedWalletProviderSettings.value
     const wallet =

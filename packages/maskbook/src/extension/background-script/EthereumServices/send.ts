@@ -25,13 +25,13 @@ export async function INTERNAL_send(
 
     // unable to create provider
     if (!provider) {
-        callback(new Error('failed to create provider'))
+        callback(new Error('Failed to create provider.'))
         return
     }
 
     // illegal payload
     if (typeof payload.id === 'undefined') {
-        callback(new Error('unknown payload id'))
+        callback(new Error('Unknown payload id.'))
         return
     }
 
@@ -65,12 +65,13 @@ export async function INTERNAL_send(
 
                 // get the signer
                 const signer = web3.eth.accounts.wallet[0]
+
                 if (!signer) {
-                    callback(new Error('failed to create signer.'))
+                    callback(new Error('Failed to create signer.'))
                     return
                 }
 
-                // send signed transaction
+                // send the signed transaction
                 provider.send(
                     {
                         ...payload,
@@ -82,6 +83,7 @@ export async function INTERNAL_send(
 
                         // handle nonce
                         const message = error?.message || result?.error
+
                         if (/nonce\b.*\blow/im.test(message ?? '')) resetNonce(signer.address)
                         else commitNonce(signer.address)
                     },
