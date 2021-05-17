@@ -67,7 +67,7 @@ function ValidateKeystore(input: string | V3Keystore) {
 }
 
 export async function fromV3Keystore(input: string | V3Keystore, password: string) {
-    const json = ValidatKeystore(input)
+    const json = ValidateKeystore(input)
     if (json === null) {
         throw new Error('Invalid Keystore!')
     }
