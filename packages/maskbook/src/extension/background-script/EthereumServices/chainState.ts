@@ -1,8 +1,7 @@
-import stringify from 'json-stable-stringify'
-import { debounce, first, uniq } from 'lodash-es'
+import { debounce, first } from 'lodash-es'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import {
-    currentBlockNumnberSettings,
+    currentBlockNumberSettings,
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
     currentWalletConnectChainIdSettings,
@@ -20,18 +19,10 @@ import { getWalletsCached } from './wallet'
 const effect = startEffects(module.hot)
 
 //#region tracking chain state
-export const updateChainState = debounce(
+export const updateBlockNumber = debounce(
     async () => {
-        const wallets = getWalletsCached()
-        const chainIds = uniq(await Promise.all(wallets.map((x) => getChainId(x.address))))
-        currentBlockNumnberSettings.value = stringify(
-            await Promise.all(
-                chainIds.map(async (chainId) => ({
-                    chainId,
-                    blockNumber: await getBlockNumber(),
-                })),
-            ),
-        )
+        currentBlockNumberSettings.value = await getBlockNumber()
+
         // reset the polling if chain state updated successfully
         if (typeof resetPoolTask === 'function') resetPoolTask()
     },
@@ -46,7 +37,7 @@ let resetPoolTask: () => void
 effect(() => {
     const { reset } = pollingTask(
         async () => {
-            await updateChainState()
+            await updateBlockNumber()
             return false // never stop the polling
         },
         {
@@ -58,12 +49,12 @@ effect(() => {
 })
 
 // revalidate ChainState if the chainId of current provider was changed
-effect(() => currentMaskbookChainIdSettings.addListener(updateChainState))
-effect(() => currentMetaMaskChainIdSettings.addListener(updateChainState))
-effect(() => currentWalletConnectChainIdSettings.addListener(updateChainState))
+effect(() => currentMaskbookChainIdSettings.addListener(updateBlockNumber))
+effect(() => currentMetaMaskChainIdSettings.addListener(updateBlockNumber))
+effect(() => currentWalletConnectChainIdSettings.addListener(updateBlockNumber))
 
 // revaldiate if the current wallet was changed
-effect(() => WalletMessages.events.walletsUpdated.on(updateChainState))
+effect(() => WalletMessages.events.walletsUpdated.on(updateBlockNumber))
 //#endregion
 
 /**

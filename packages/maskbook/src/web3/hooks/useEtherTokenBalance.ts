@@ -10,7 +10,7 @@ import Services from '../../extension/service'
 export function useEtherTokenBalance(address: string) {
     const account = useAccount()
     const chainId = useChainId()
-    const blockNumber = useBlockNumber(chainId)
+    const blockNumber = useBlockNumber()
     return useAsyncRetry(async () => {
         if (!account || !address) return undefined
         return Services.Ethereum.getBalance(account)

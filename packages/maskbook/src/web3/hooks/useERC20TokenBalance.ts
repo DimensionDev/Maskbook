@@ -10,7 +10,7 @@ import { useBlockNumber, useChainId } from './useBlockNumber'
 export function useERC20TokenBalance(address: string) {
     const account = useAccount()
     const chainId = useChainId()
-    const blockNumber = useBlockNumber(chainId)
+    const blockNumber = useBlockNumber()
     const erc20Contract = useERC20TokenContract(address)
     return useAsyncRetry(async () => {
         if (!account || !address || !erc20Contract) return undefined

@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react'
-import { useValueRef } from '../../utils/hooks/useValueRef'
 import { ChainId, ProviderType } from '../types'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+import { Flags } from '../../utils/flags'
 import {
-    currentBlockNumnberSettings,
+    currentBlockNumberSettings,
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
     currentWalletConnectChainIdSettings,
 } from '../../plugins/Wallet/settings'
-import type { ChainBlockNumber } from '../../settings/types'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
-import { Flags } from '../../utils/flags'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
 
 /**
@@ -52,40 +51,19 @@ export function useChainIdValid() {
 /**
  * Get the current block number
  */
-export function useBlockNumber(chainId: ChainId) {
-    return useBlockNumberState(chainId).blockNumber
+export function useBlockNumber() {
+    const blockNumber = useValueRef(currentBlockNumberSettings)
+    return blockNumber
 }
 
 /**
  * Get the current block number for once
  */
-export function useBlockNumberOnce(chainId: ChainId) {
-    const blockNumberState = useBlockNumberState(chainId)
-    const [chainState, setChainState] = useState({
-        chainId: ChainId.Mainnet,
-        blockNumber: 0,
-    })
+export function useBlockNumberOnce() {
+    const blockNumber = useBlockNumber()
+    const [blockNumberOnce, setBlockNumberOnce] = useState(0)
     useEffect(() => {
-        if (chainState.blockNumber === 0 || chainState.chainId !== blockNumberState.chainId)
-            setChainState(blockNumberState)
-    }, [blockNumberState])
-    return chainState.blockNumber
-}
-
-/**
- * Get the newest chain state
- */
-const DEFAULT_CHAIN_STATE = {
-    chainId: ChainId.Mainnet,
-    blockNumber: 0,
-}
-
-function useBlockNumberState(chainId: ChainId) {
-    const chainState = useValueRef(currentBlockNumnberSettings)
-    try {
-        const parsedChainState = JSON.parse(chainState) as ChainBlockNumber[]
-        return parsedChainState.find((x) => x.chainId === chainId) ?? DEFAULT_CHAIN_STATE
-    } catch (e) {
-        return DEFAULT_CHAIN_STATE
-    }
+        if (blockNumberOnce === 0 && blockNumber > 0) setBlockNumberOnce(blockNumber)
+    }, [blockNumber])
+    return blockNumberOnce
 }

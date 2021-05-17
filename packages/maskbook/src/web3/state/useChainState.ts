@@ -8,7 +8,7 @@ function useChainState() {
     const account = useAccount()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-    const blockNumber = useBlockNumber(chainId)
+    const blockNumber = useBlockNumber()
     const chainTokenDetailed = useEtherTokenDetailed()
     const chainTokenBalance = useEtherTokenBalance(account)
 

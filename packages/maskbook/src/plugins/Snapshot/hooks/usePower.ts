@@ -4,14 +4,13 @@ import type { ProposalIdentifier } from '../types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useProposal } from './useProposal'
 import { useBlockNumber } from '../../../web3/hooks/useBlockNumber'
-import { ChainId } from '../../../web3/types'
 
 export function usePower(identifier: ProposalIdentifier) {
     const {
         payload: { message },
     } = useProposal(identifier.id)
 
-    const blockNumber = useBlockNumber(ChainId.Mainnet)
+    const blockNumber = useBlockNumber()
     const account = useAccount()
     return useAsyncRetry(async () => {
         if (!account) return 0
