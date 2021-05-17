@@ -33,6 +33,7 @@ export const Services = {
     Provider: add(() => import('./background-script/ProviderService'), 'Provider'),
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
     SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
+    Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
 }
 export default Services
 export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', true)

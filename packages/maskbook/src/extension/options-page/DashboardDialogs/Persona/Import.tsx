@@ -90,9 +90,9 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                 label: 'Base64',
                 children: (
                     <TextField
-                        inputProps={{ style: { height: 147 } }}
                         multiline
-                        minRows={1}
+                        minRows={5}
+                        maxRows={5}
                         autoFocus
                         placeholder={t('dashboard_paste_database_base64_hint')}
                         onChange={(e) => setBase64Value(e.target.value)}
