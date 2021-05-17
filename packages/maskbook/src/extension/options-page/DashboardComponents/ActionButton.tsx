@@ -59,7 +59,7 @@ export function DebounceButton(_props: DebounceButtonProps) {
             classes={color === 'danger' ? classes : undefined}
             color={color === 'danger' ? 'primary' : color}
             {...props}>
-            {loading ? 'loading...' : _props.children}
+            {loading ? null : _props.children}
         </Button>
     )
 }
