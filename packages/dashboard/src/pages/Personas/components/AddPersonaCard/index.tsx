@@ -31,8 +31,9 @@ export const AddPersonaCard = memo<AddPersonaCardProps>(({ onConfirm, onCancel }
 
     return (
         <div className={classes.container}>
-            {/*TODO: add color prop */}
+            {/* TODO: add color prop */}
             <TextField
+                label="Name"
                 variant="filled"
                 error={!isPersonaNameLengthValid(name)}
                 helperText={
