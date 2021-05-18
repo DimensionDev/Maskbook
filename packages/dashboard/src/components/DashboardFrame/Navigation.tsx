@@ -9,6 +9,7 @@ import {
     useMediaQuery,
     experimentalStyled as styled,
     listItemClasses,
+    listItemIconClasses,
 } from '@material-ui/core'
 import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@material-ui/icons'
 import { useContext } from 'react'
@@ -18,24 +19,24 @@ import { Routes } from '../../pages/routes'
 import { DashboardContext } from './context'
 import { MaskNotSquareIcon } from '@dimensiondev/icons'
 import { useDashboardI18N } from '../../locales'
+import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 
 function ListItemLinkUnStyled({ nested, ...props }: LinkProps & ListItemProps & { nested?: boolean; to: string }) {
     return <MuiListItem button component={Link} selected={!!useRouteMatch(props.to)} {...props} />
 }
 
 const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
-    const highlightColor = theme.palette.mode === 'light' ? theme.palette.primary.main : '#fff'
     return {
         [`&.${listItemClasses.root}`]: {
             color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
             paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
         },
         [`&.${listItemClasses.selected}`]: {
-            color: highlightColor,
+            color: MaskColorVar.linkText,
             backgroundColor: 'transparent',
             position: 'relative',
-            '.MuiListItemIcon-root': {
-                color: highlightColor,
+            [`${listItemIconClasses.root}`]: {
+                color: MaskColorVar.linkText,
             },
             '&:after': {
                 content: '""',
@@ -44,7 +45,7 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
                 height: 40,
                 boxShadow: '-2px 0px 10px 2px rgba(0, 56, 255, 0.15)',
                 borderRadius: 50,
-                background: highlightColor,
+                background: MaskColorVar.linkText,
                 position: 'absolute',
                 right: 0,
             },
@@ -59,13 +60,6 @@ const LogoItem = styled(MuiListItem)(({ theme }) => ({
         marginBottom: theme.spacing(3.5),
     },
 })) as any as typeof MuiListItem
-
-const ListItem = styled(MuiListItem)(({ theme }) => ({
-    [`&.${listItemClasses.selected}`]: {
-        backgroundColor: 'transparent',
-        borderRight: '4px solid ' + (theme.palette.mode === 'light' ? theme.palette.action.selected : 'white'),
-    },
-}))
 
 export interface NavigationProps {}
 export function Navigation({}: NavigationProps) {
@@ -87,26 +81,17 @@ export function Navigation({}: NavigationProps) {
                 </ListItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
-            <ListItem button onClick={toggleNavigationExpand}>
+            <ListItemLink to={Routes.Wallets} onClick={toggleNavigationExpand}>
                 <ListItemIcon>
                     <AccountBalanceWallet />
                 </ListItemIcon>
                 <ListItemText>{t.wallets()}</ListItemText>
                 {expanded ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
+            </ListItemLink>
             <Collapse in={expanded}>
                 <List disablePadding>
                     <ListItemLink nested to={Routes.WalletsTransfer}>
                         <ListItemText primary={t.wallets_transfer()} />
-                    </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsSwap}>
-                        <ListItemText primary={t.wallets_swap()} />
-                    </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsRedPacket}>
-                        <ListItemText primary={t.wallets_red_packet()} />
-                    </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsSell}>
-                        <ListItemText primary={t.wallets_sell()} />
                     </ListItemLink>
                     <ListItemLink nested to={Routes.WalletsHistory}>
                         <ListItemText primary={t.wallets_history()} />
@@ -121,15 +106,4 @@ export function Navigation({}: NavigationProps) {
             </ListItemLink>
         </List>
     )
-}
-
-export enum NavigationTarget {
-    Personas,
-    WalletsTransfer,
-    WalletsSwap,
-    Wallets,
-    WalletsRedPacket,
-    WalletsSell,
-    WalletsHistory,
-    Settings,
 }
