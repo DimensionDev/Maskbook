@@ -76,7 +76,9 @@ export const searchResultHeadingSelector = () => querySelector('m-discovery__sea
 export const postContentSelector = () =>
     new LiveSelector().querySelectorAll<HTMLDivElement>(
         [
-            'm-activity__content .m-activityContent__messageWrapper > span:first-child',
-            'm-activity__content .m-activityContent__mediaDescriptionText',
+            'm-activity__modal m-activity__content .m-activityContent__mediaDescriptionText',
+            'm-activity__modal m-activity__content .m-activityContent__messageWrapper > span:first-child',
+            'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__messageWrapper > span:first-child',
+            'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__mediaDescriptionText',
         ].join(),
     )
