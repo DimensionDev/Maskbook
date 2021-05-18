@@ -2,10 +2,12 @@
 /// <reference types="react-dom/experimental" />
 
 import { Suspense } from 'react'
-import { Switch } from 'react-router'
+import { Route, Switch } from 'react-router'
 import { HashRouter } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import { MaskUIRoot } from '../../UIRoot'
+import { DialogRoutes } from '.'
+import { RequestPermissionPage } from './RequestPermission'
 
 const root = document.createElement('div')
 document.body.insertBefore(root, document.body.children[0] || null)
@@ -15,7 +17,11 @@ function Dialogs() {
     return MaskUIRoot(
         <Suspense fallback="">
             <HashRouter>
-                <Switch></Switch>
+                <Switch>
+                    <Route path={DialogRoutes.RequestPermission}>
+                        <RequestPermissionPage />
+                    </Route>
+                </Switch>
             </HashRouter>
         </Suspense>,
     )
