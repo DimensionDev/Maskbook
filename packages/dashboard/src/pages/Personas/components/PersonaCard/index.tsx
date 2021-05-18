@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { makeStyles, Theme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { SettingsIcon } from '@dimensiondev/icons'
 import { IconButton, MenuItem, Typography } from '@material-ui/core'
@@ -10,46 +10,49 @@ import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { RenameDialog } from '../RenameDialog'
 import type { SocialNetwork } from '../../api'
+import classNames from 'classnames'
 
-const useStyles = makeStyles<Theme, { active: boolean }, 'card' | 'status' | 'header' | 'content' | 'line' | 'setting'>(
-    (theme) => ({
-        card: {
-            borderRadius: Number(theme.shape.borderRadius) * 3,
-            backgroundColor: MaskColorVar.primaryBackground,
-            display: 'flex',
-            padding: theme.spacing(1.25),
-            minWidth: 320,
-        },
-        status: {
-            width: 10,
-            height: 10,
-            borderRadius: '50%',
-            marginRight: theme.spacing(1.25),
-            marginTop: theme.spacing(0.625),
-            backgroundColor: ({ active }: { active: boolean }) =>
-                active ? MaskColorVar.greenMain : MaskColorVar.iconLight,
-        },
-        header: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            fontSize: theme.typography.caption.fontSize,
-        },
-        content: {
-            marginTop: theme.spacing(1.25),
-            paddingRight: theme.spacing(1.25),
-        },
-        line: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            fontSize: theme.typography.caption.fontSize,
-        },
-        setting: {
-            fontSize: theme.typography.caption.fontSize,
-            padding: 0,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    card: {
+        borderRadius: Number(theme.shape.borderRadius) * 3,
+        backgroundColor: MaskColorVar.primaryBackground,
+        display: 'flex',
+        padding: theme.spacing(1.25),
+        minWidth: 320,
+    },
+    status: {
+        width: 10,
+        height: 10,
+        borderRadius: '50%',
+        marginRight: theme.spacing(1.25),
+        marginTop: theme.spacing(0.625),
+    },
+    statusInactivated: {
+        backgroundColor: MaskColorVar.iconLight,
+    },
+    statusActivated: {
+        backgroundColor: MaskColorVar.greenMain,
+    },
+    header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        fontSize: theme.typography.caption.fontSize,
+    },
+    content: {
+        marginTop: theme.spacing(1.25),
+        paddingRight: theme.spacing(1.25),
+    },
+    line: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        fontSize: theme.typography.caption.fontSize,
+    },
+    setting: {
+        fontSize: theme.typography.caption.fontSize,
+        padding: 0,
+    },
+}))
 
 export interface PersonaCardProps {
     nickname?: string
@@ -89,7 +92,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
     const { nickname, active = false, definedSocialNetworks, identifier, profiles } = props
     const { onConnect, onDisconnect, onClick, onRename } = props
     const t = useDashboardI18N()
-    const classes = useStyles({ active })
+    const classes = useStyles()
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [menu, openMenu] = useMenu(
@@ -101,7 +104,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
 
     return (
         <div className={classes.card}>
-            <div className={classes.status} />
+            <div className={classNames(classes.status, active ? classes.statusActivated : classes.statusInactivated)} />
             <div style={{ flex: 1 }}>
                 <div className={classes.header}>
                     <Typography variant="subtitle2" sx={{ cursor: 'pointer' }} onClick={onClick}>
