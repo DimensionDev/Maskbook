@@ -28,7 +28,9 @@ export const PostProviderMinds: Next.CollectingCapabilities.PostsProvider = {
 function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider['posts'], signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(postContentSelector()).useForeach((node, key, metadata) => {
-            const activitySelector = new LiveSelector().replace(() => [metadata.realCurrent]).closest('m-activity, m-activity__modal')
+            const activitySelector = new LiveSelector()
+                .replace(() => [metadata.realCurrent])
+                .closest('m-activity, m-activity__modal')
             const activityNode = activitySelector.evaluate()[0]! as HTMLElement
 
             // ? inject after comments
