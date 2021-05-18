@@ -85,25 +85,18 @@ export function MaskbookSharpIcon(props: SvgIconProps) {
     )
 }
 
-interface MaskbookSharpIconOfSizeProps extends SvgIconProps {
-    size: number
-}
-
-export function MaskbookSharpIconOfSize(props: MaskbookSharpIconOfSizeProps) {
+export function MaskbookSharpIconOfSize(props: SvgIconProps) {
     return (
         <SvgIcon {...props}>
-            <MaskbookSmileFaceSharpSVG size={props.size} />
+            <MaskbookSmileFaceSharpSVG />
         </SvgIcon>
     )
 }
 
-interface WalletSharpProps extends SvgIconProps {
-    size: number
-}
-export function WalletSharp(props: WalletSharpProps) {
+export function WalletSharp(props: SvgIconProps) {
     return (
         <SvgIcon {...props}>
-            <WalletSharpSVG size={props.size} />
+            <WalletSharpSVG />
         </SvgIcon>
     )
 }

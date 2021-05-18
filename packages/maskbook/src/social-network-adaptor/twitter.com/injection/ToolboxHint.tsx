@@ -3,7 +3,8 @@ import { ToolboxHint } from '../../../components/InjectedComponents/ToolboxHint'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { toolBoxInSideBarSelector } from '../utils/selector'
 import { startWatch } from '../../../utils/watcher'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
+import { fromRGB } from '../../../utils/theme-tools'
 
 export function injectToolboxHintAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(toolBoxInSideBarSelector())
@@ -11,7 +12,12 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal) {
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ToolboxHintAtTwitter />)
 }
 
-const useStyles = makeStyles((theme) => ({
+function toRGBA(color: string, a: number): string | undefined {
+    const rgb = fromRGB(color)
+    if (!rgb) return
+    return `rgba(${rgb.join()}, ${a})`
+}
+const useStyles = makeStyles<Theme, { color: string; fontSize: string; iconSize: string }>((theme) => ({
     wrapper: {
         paddingTop: 4,
         paddingBottom: 4,
@@ -25,50 +31,43 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(2),
     },
     title: {
-        color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
+        color: (props) => props.color,
+        fontSize: (props) => props.fontSize,
     },
     text: {
         marginLeft: 12,
         fontSize: 15,
-        color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
+        color: (props) => props.color,
         paddingRight: theme.spacing(2),
     },
     icon: {
-        color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
+        color: (props) => props.color,
+        width: (props) => props.iconSize,
+        height: (props) => props.iconSize,
     },
     button: {
         '&:hover': {
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgb(7, 15, 25)' : 'rgb(233, 246, 253)',
+            backgroundColor: toRGBA(theme.palette.primary.main, 0.1),
         },
         '&:active': {
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgb(13, 29, 48)' : 'rgb(212,237,252)',
+            backgroundColor: toRGBA(theme.palette.primary.main, 0.2),
         },
     },
 }))
 
-function GetColor() {
+function GetMoreStyle(): { color: string; fontSize: string; iconSize: string } {
     const ele = new LiveSelector()
         .querySelector<HTMLDivElement>('[data-testid="AppTabBar_More_Menu"]')
         .querySelector<HTMLDivElement>('div')
         .querySelectorAll<HTMLDivElement>('div')
     const style = window.getComputedStyle(ele.evaluate()[1], null)
-    return style.color
+    const svgStyle = window.getComputedStyle(ele.evaluate()[0], null)
+    return { color: style.color, fontSize: style.fontSize, iconSize: svgStyle.height }
 }
 function ToolboxHintAtTwitter() {
-    const color = GetColor()
-    const classes = useStyles({ color })
+    const style = GetMoreStyle()
+    const classes = useStyles({ color: style.color, fontSize: style.fontSize, iconSize: style.iconSize })
 
     // Todo: add click handler
-    return (
-        <ToolboxHint
-            classes={{
-                wrapper: classes.wrapper,
-                menuItem: classes.menuItem,
-                title: classes.title,
-                text: classes.text,
-                button: classes.button,
-                icon: classes.icon,
-            }}
-        />
-    )
+    return <ToolboxHint classes={classes} />
 }
