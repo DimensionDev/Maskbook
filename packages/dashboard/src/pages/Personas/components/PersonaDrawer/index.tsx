@@ -44,7 +44,7 @@ export interface PersonaDrawer {
 }
 
 export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
-    const { drawerOpen, toggleDrawer, currentPersona, onAddPersona, onChangeCurrentPersona } =
+    const { drawerOpen, toggleDrawer, currentPersona, createPersona, changeCurrentPersona } =
         PersonaContext.useContainer()
 
     return (
@@ -53,8 +53,8 @@ export const PersonaDrawer = memo<PersonaDrawer>(({ personas }) => {
             currentPersonaIdentifier={currentPersona?.identifier}
             open={drawerOpen}
             toggleDrawer={toggleDrawer}
-            onChangeCurrentPersona={onChangeCurrentPersona}
-            onAddPersona={onAddPersona}
+            onChangeCurrentPersona={changeCurrentPersona}
+            onCreatePersona={createPersona}
         />
     )
 })
@@ -64,11 +64,11 @@ export interface PersonaDrawerUIProps extends PersonaDrawer {
     currentPersonaIdentifier?: PersonaIdentifier
     toggleDrawer: () => void
     onChangeCurrentPersona: (persona: PersonaIdentifier) => void
-    onAddPersona: (nickname: string) => void
+    onCreatePersona: (nickname: string) => void
 }
 
 export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
-    ({ open, currentPersonaIdentifier, toggleDrawer, personas, onChangeCurrentPersona, onAddPersona }) => {
+    ({ open, currentPersonaIdentifier, toggleDrawer, personas, onChangeCurrentPersona, onCreatePersona }) => {
         const classes = useStyles()
 
         const t = useDashboardI18N()
@@ -102,7 +102,7 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                     )
                 })}
                 {showAddPersonaCard && (
-                    <AddPersonaCard onConfirm={onAddPersona} onCancel={() => setShowAddPersonaCard(false)} />
+                    <AddPersonaCard onConfirm={onCreatePersona} onCancel={() => setShowAddPersonaCard(false)} />
                 )}
                 <Box className={classes.buttons}>
                     <Button onClick={() => setShowAddPersonaCard(true)}>{t.personas_add_persona()}</Button>

@@ -63,20 +63,15 @@ export interface PersonaCardProps {
 }
 
 export const PersonaCard = memo<PersonaCardProps>((props) => {
-    const {
-        onConnect,
-        onDisconnect,
-        onRename,
-        definedSocialNetworks: definedSocialNetworkUIs,
-    } = PersonaContext.useContainer()
+    const { connectPersona, disconnectPersona, renamePersona, definedSocialNetworks } = PersonaContext.useContainer()
 
     return (
         <PersonaCardUI
             {...props}
-            onConnect={onConnect}
-            onDisconnect={onDisconnect}
-            onRename={onRename}
-            definedSocialNetworks={definedSocialNetworkUIs}
+            onConnect={connectPersona}
+            onDisconnect={disconnectPersona}
+            onRename={renamePersona}
+            definedSocialNetworks={definedSocialNetworks}
         />
     )
 })

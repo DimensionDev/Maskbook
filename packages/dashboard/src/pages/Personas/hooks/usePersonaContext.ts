@@ -14,21 +14,21 @@ function usePersonaContext() {
 
     const [open, setOpen] = useState(false)
 
-    const [, onConnect] = useConnectSocialNetwork()
-    const [, onDisconnect] = useDisconnectSocialNetwork()
-    const [, onAddPersona] = useCreatePersona()
-    const onRename = Services.Identity.renamePersona
-    const onChangeCurrentPersona = useCallback(Services.Settings.setCurrentPersonaIdentifier, [])
+    const [, connectPersona] = useConnectSocialNetwork()
+    const [, disconnectPersona] = useDisconnectSocialNetwork()
+    const [, createPersona] = useCreatePersona()
+    const renamePersona = Services.Identity.renamePersona
+    const changeCurrentPersona = useCallback(Services.Settings.setCurrentPersonaIdentifier, [])
 
     return {
-        onConnect,
-        onDisconnect,
-        onAddPersona,
-        onRename,
+        connectPersona,
+        disconnectPersona,
+        createPersona,
+        renamePersona,
+        changeCurrentPersona,
+        currentPersona,
         definedSocialNetworks,
         personas,
-        onChangeCurrentPersona,
-        currentPersona,
         drawerOpen: open,
         toggleDrawer: () => setOpen((e) => !e),
     }

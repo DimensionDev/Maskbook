@@ -56,7 +56,7 @@ function firstProfileNetwork(x: PersonaInformation | undefined) {
 function Personas() {
     const classes = useStyles()
     const t = useDashboardI18N()
-    const { drawerOpen, toggleDrawer, personas, currentPersona, onConnect, definedSocialNetworks } =
+    const { drawerOpen, toggleDrawer, personas, currentPersona, connectPersona, definedSocialNetworks } =
         PersonaContext.useContainer()
 
     const [activeTab, setActiveTab] = useState(
@@ -106,7 +106,7 @@ function Personas() {
                             <TabPanel key={networkIdentifier} value={networkIdentifier}>
                                 <PersonaSetup
                                     networkIdentifier={networkIdentifier}
-                                    onConnect={() => onConnect(currentPersona.identifier, networkIdentifier)}
+                                    onConnect={() => connectPersona(currentPersona.identifier, networkIdentifier)}
                                 />
                             </TabPanel>
                         )
