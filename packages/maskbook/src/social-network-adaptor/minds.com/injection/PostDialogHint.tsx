@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createStyles, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { useCallback } from 'react'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { MaskMessage } from '../../../utils/messages'
@@ -23,13 +23,11 @@ function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>, signal: AbortSigna
     })
 }
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        buttonText: {
-            margin: 0,
-        },
-    }),
-)
+const useStyles = makeStyles(() => ({
+    buttonText: {
+        margin: 0,
+    },
+}))
 
 function PostDialogHintAtMinds({ reason }: { reason: 'timeline' | 'popup' }) {
     const classes = useStyles()

@@ -1,5 +1,5 @@
-import type { PostInfo } from '../../../social-network/PostInfo'
 import { injectPostReplacer } from '../../../social-network/defaults/inject/PostReplacer'
+import type { PostInfo } from '../../../social-network/PostInfo'
 
 function resolveContentNode(node: HTMLElement) {
     return node.closest(

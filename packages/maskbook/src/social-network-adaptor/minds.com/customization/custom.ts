@@ -5,9 +5,9 @@ import { createElement, useMemo } from 'react'
 import { Appearance } from '../../../settings/types'
 import type { SocialNetworkUI } from '../../../social-network'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { useMaskbookTheme } from '../../../utils/theme'
+import { useClassicMaskTheme } from '../../../utils/theme'
 import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme-tools'
-import { themeListItemSelector, composeAnchorTextSelector } from '../utils/selector'
+import { composeAnchorTextSelector, themeListItemSelector } from '../utils/selector'
 
 // TODO: get this from DOM. But currently Minds has a single primary color
 const primaryColorRef = new ValueRef(toRGB([68, 170, 255]))
@@ -43,7 +43,7 @@ export function useThemeMindsVariant() {
     const primaryColor = useValueRef(primaryColorRef)
     const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
-    const MaskbookTheme = useMaskbookTheme({
+    const MaskbookTheme = useClassicMaskTheme({
         appearance: isDark(fromRGB(backgroundColor)!) ? Appearance.dark : Appearance.light,
     })
     return useMemo(() => {

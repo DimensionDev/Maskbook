@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createStyles, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { startWatch } from '../../../utils/watcher'
@@ -15,9 +15,8 @@ function injectSetupPrompt<T>(ls: LiveSelector<T, true>, signal: AbortSignal) {
     startWatch(watcher, signal)
 
     watcher.useForeach((node, key, meta) => {
-        const tagsAnchor = watcher.firstDOMProxy.current?.parentElement?.querySelector<HTMLAnchorElement>(
-            'a:nth-child(4)',
-        )
+        const tagsAnchor =
+            watcher.firstDOMProxy.current?.parentElement?.querySelector<HTMLAnchorElement>('a:nth-child(4)')
         if (tagsAnchor) {
             tagsAnchor.style.marginRight = '10px'
         }
@@ -27,16 +26,14 @@ function injectSetupPrompt<T>(ls: LiveSelector<T, true>, signal: AbortSignal) {
     })
 }
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        buttonText: {
-            margin: 0,
-        },
-        content: {
-            marginRight: 5,
-        },
-    }),
-)
+const useStyles = makeStyles(() => ({
+    buttonText: {
+        margin: 0,
+    },
+    content: {
+        marginRight: 5,
+    },
+}))
 
 const MindsNotSetupYet = () => {
     const classes = useStyles()
