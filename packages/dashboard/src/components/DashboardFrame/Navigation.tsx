@@ -23,15 +23,34 @@ function ListItemLinkUnStyled({ nested, ...props }: LinkProps & ListItemProps & 
     return <MuiListItem button component={Link} selected={!!useRouteMatch(props.to)} {...props} />
 }
 
-const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => ({
-    [`&.${listItemClasses.root}`]: {
-        paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
-    },
-    [`&.${listItemClasses.selected}`]: {
-        backgroundColor: 'transparent',
-        borderRight: '4px solid ' + (theme.palette.mode === 'light' ? theme.palette.action.selected : 'white'),
-    },
-}))
+const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
+    const highlightColor = theme.palette.mode === 'light' ? theme.palette.primary.main : '#fff'
+    return {
+        [`&.${listItemClasses.root}`]: {
+            color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
+            paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
+        },
+        [`&.${listItemClasses.selected}`]: {
+            color: highlightColor,
+            backgroundColor: 'transparent',
+            position: 'relative',
+            '.MuiListItemIcon-root': {
+                color: highlightColor,
+            },
+            '&:after': {
+                content: '""',
+                display: 'inline-block',
+                width: 5,
+                height: 40,
+                boxShadow: '-2px 0px 10px 2px rgba(0, 56, 255, 0.15)',
+                borderRadius: 50,
+                background: highlightColor,
+                position: 'absolute',
+                right: 0,
+            },
+        },
+    }
+})
 
 const LogoItem = styled(MuiListItem)(({ theme }) => ({
     [`&.${listItemClasses.root}`]: {
@@ -68,7 +87,7 @@ export function Navigation({}: NavigationProps) {
                 </ListItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
-            <ListItem button selected={!!useRouteMatch(Routes.Wallets)} onClick={toggleNavigationExpand}>
+            <ListItem button onClick={toggleNavigationExpand}>
                 <ListItemIcon>
                     <AccountBalanceWallet />
                 </ListItemIcon>

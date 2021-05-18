@@ -103,7 +103,7 @@ function Personas() {
                         )
                         if (profile) return <TabPanel key={networkIdentifier} value={networkIdentifier}></TabPanel>
                         return (
-                            <TabPanel key={networkIdentifier} value={networkIdentifier}>
+                            <TabPanel key={networkIdentifier} value={networkIdentifier} sx={{ flex: 1 }}>
                                 <PersonaSetup
                                     networkIdentifier={networkIdentifier}
                                     onConnect={() => connectPersona(currentPersona.identifier, networkIdentifier)}
