@@ -12,5 +12,8 @@ export const mindsShared: SocialNetwork.Shared & SocialNetwork.Base = {
         getPostURL(post) {
             return new URL(`https://minds.com/newsfeed/${post.postId}`)
         },
+        getShareLinkURL(message) {
+            return new URL(`https://www.minds.com/newsfeed/subscriptions?intentUrl=${encodeURIComponent(message)}`)
+        },
     },
 }
