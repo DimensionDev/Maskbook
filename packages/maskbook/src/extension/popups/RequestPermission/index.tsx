@@ -25,7 +25,7 @@ export function RequestPermissionPage() {
     const permissions = _.getAll('permissions').filter(isAcceptablePermission)
 
     const { retry, value: hasPermission } = useAsyncRetry(
-        () => browser.permissions.request({ origins, permissions }),
+        () => browser.permissions.contains({ origins, permissions }),
         [param.search],
     )
 
