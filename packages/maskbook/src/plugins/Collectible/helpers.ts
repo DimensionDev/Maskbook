@@ -36,7 +36,7 @@ export function toDecimalAmount(weiAmount: string, decimals: number) {
 }
 
 export function toUnixTimestamp(date: Date) {
-    return Math.round(date.getTime() / 1000)
+    return Math.floor(date.getTime() / 1000)
 }
 
 export function toDate(timestamp: number) {

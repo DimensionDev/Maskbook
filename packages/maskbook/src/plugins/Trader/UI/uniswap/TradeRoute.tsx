@@ -1,32 +1,30 @@
-import { Box, Breadcrumbs, Typography, makeStyles, createStyles, Paper, AvatarGroup } from '@material-ui/core'
+import { Box, Breadcrumbs, Typography, makeStyles, Paper, AvatarGroup } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { TradeComputed } from '../../types'
-import { formatEthereumAddress } from '../../../Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            width: '100%',
-            boxSizing: 'border-box',
-            padding: theme.spacing(1.5, 2),
-            margin: theme.spacing(0, 'auto', 2),
-        },
-        list: {
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        item: {
-            display: 'flex',
-            padding: theme.spacing(0.5, 0),
-        },
-        name: {
-            fontSize: 12,
-            marginLeft: theme.spacing(1),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        boxSizing: 'border-box',
+        padding: theme.spacing(1.5, 2),
+        margin: theme.spacing(0, 'auto', 2),
+    },
+    list: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    item: {
+        display: 'flex',
+        padding: theme.spacing(0.5, 0),
+    },
+    name: {
+        fontSize: 12,
+        marginLeft: theme.spacing(1),
+    },
+}))
 
 export interface TradeRouteProps extends withClasses<never> {
     trade: TradeComputed

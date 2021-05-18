@@ -1,19 +1,17 @@
-import { createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
+import { Grid, makeStyles, Typography } from '@material-ui/core'
 import { QRCode } from '../../../../components/shared/qrcode'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        container: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        tip: { fontSize: 14, marginBottom: theme.spacing(2) },
-        onCopy: { marginTop: theme.spacing(1) },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    tip: { fontSize: 14, marginBottom: theme.spacing(2) },
+    onCopy: { marginTop: theme.spacing(1) },
+}))
 
 export const QRCodeModel: React.FC<{ uri: string }> = ({ uri }) => {
     const { t } = useI18N()

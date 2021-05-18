@@ -7,7 +7,6 @@ import {
     Checkbox,
     Link as MuiLink,
     makeStyles,
-    createStyles,
     ThemeProvider,
     InputBase,
     FormControlLabel,
@@ -44,79 +43,77 @@ import { Flags } from '../../../utils/flags'
 import { extendsTheme } from '../../../utils/theme'
 
 //#region setup form
-const useSetupFormStyles = makeStyles((theme) =>
-    createStyles({
-        wrapper: {
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
+const useSetupFormStyles = makeStyles((theme) => ({
+    wrapper: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    section: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    primary: {
+        textAlign: 'center',
+        fontWeight: 500,
+        fontSize: 39,
+        lineHeight: 1,
+        marginBottom: theme.spacing(2),
+        [theme.breakpoints.down('sm')]: {
+            fontSize: 18,
+            margin: theme.spacing(3, 0, 1),
         },
-        section: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-        },
-        primary: {
-            textAlign: 'center',
-            fontWeight: 500,
-            fontSize: 39,
-            lineHeight: 1,
+    },
+    secondary: {
+        textAlign: 'center',
+        fontSize: 20,
+        lineHeight: 1.5,
+        marginBottom: theme.spacing(5),
+        [theme.breakpoints.down('sm')]: {
+            fontSize: 14,
             marginBottom: theme.spacing(2),
-            [theme.breakpoints.down('sm')]: {
-                fontSize: 18,
-                margin: theme.spacing(3, 0, 1),
-            },
         },
-        secondary: {
-            textAlign: 'center',
-            fontSize: 20,
-            lineHeight: 1.5,
-            marginBottom: theme.spacing(5),
-            [theme.breakpoints.down('sm')]: {
-                fontSize: 14,
-                marginBottom: theme.spacing(2),
-            },
-        },
-        form: {
-            width: 368,
-            minHeight: 200,
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-            },
-        },
-        input: {
+    },
+    form: {
+        width: 368,
+        minHeight: 200,
+        [theme.breakpoints.down('sm')]: {
             width: '100%',
         },
-        or: {
-            marginTop: 28,
-            marginBottom: 10,
-            [theme.breakpoints.down('sm')]: {
-                margin: 0,
-            },
+    },
+    input: {
+        width: '100%',
+    },
+    or: {
+        marginTop: 28,
+        marginBottom: 10,
+        [theme.breakpoints.down('sm')]: {
+            margin: 0,
         },
-        button: {
-            width: 220,
-            height: 40,
-            marginBottom: 20,
+    },
+    button: {
+        width: 220,
+        height: 40,
+        marginBottom: 20,
+    },
+    restoreButton: {
+        marginTop: 44,
+    },
+    importButton: {
+        marginTop: 44,
+    },
+    doneButton: {
+        color: '#fff',
+        backgroundColor: green[500],
+        // extra 36 pixel eliminates the visual shaking when switch between pages
+        marginBottom: 20 + 36,
+        '&:hover': {
+            backgroundColor: green[700],
         },
-        restoreButton: {
-            marginTop: 44,
-        },
-        importButton: {
-            marginTop: 44,
-        },
-        doneButton: {
-            color: '#fff',
-            backgroundColor: green[500],
-            // extra 36 pixel eliminates the visual shaking when switch between pages
-            marginBottom: 20 + 36,
-            '&:hover': {
-                backgroundColor: green[700],
-            },
-        },
-    }),
-)
+    },
+}))
 
 interface SetupFormProps extends withClasses<never> {
     primary: string
@@ -151,25 +148,23 @@ function SetupForm(props: SetupFormProps) {
 //#endregion
 
 //#region consent data collection
-const useConsentDataCollectionStyles = makeStyles((theme) =>
-    createStyles({
-        form: {
-            color: theme.palette.text.primary,
-            fontSize: 16,
-            lineHeight: 1.75,
-            width: 660,
-            minHeight: 256,
-            marginTop: 78,
-        },
-        label: {
-            color: theme.palette.text.primary,
-            marginBottom: 32,
-        },
-        button: {
-            minWidth: 220,
-        },
-    }),
-)
+const useConsentDataCollectionStyles = makeStyles((theme) => ({
+    form: {
+        color: theme.palette.text.primary,
+        fontSize: 16,
+        lineHeight: 1.75,
+        width: 660,
+        minHeight: 256,
+        marginTop: 78,
+    },
+    label: {
+        color: theme.palette.text.primary,
+        marginBottom: 32,
+    },
+    button: {
+        minWidth: 220,
+    },
+}))
 
 export function ConsentDataCollection() {
     const { t } = useI18N()
@@ -223,13 +218,11 @@ export function ConsentDataCollection() {
 //#endregion
 
 //#region create persona
-const userCreatePersonaStyles = makeStyles((theme) =>
-    createStyles({
-        form: {
-            minHeight: 130,
-        },
-    }),
-)
+const userCreatePersonaStyles = makeStyles((theme) => ({
+    form: {
+        minHeight: 130,
+    },
+}))
 
 export function CreatePersona() {
     const { t } = useI18N()
@@ -318,7 +311,11 @@ export function ConnectNetwork() {
     const initializedPersonas = useMyPersonas()
     const uninitializedPersonas = useMyUninitializedPersonas()
     const { identifier } = useQueryParams(['identifier'])
-    const { value = null, loading, error } = useAsync(async () => {
+    const {
+        value = null,
+        loading,
+        error,
+    } = useAsync(async () => {
         const persona = initializedPersonas.find((x) => x.identifier.toText() === identifier)
         // auto-finished by setup guide
         if (persona?.linkedProfiles.size) {
@@ -377,37 +374,35 @@ export function ConnectNetwork() {
 //#endregion
 
 //#region restore
-const useRestoreDatabaseStyle = makeStyles((theme) =>
-    createStyles({
-        file: {
-            display: 'none',
+const useRestoreDatabaseStyle = makeStyles((theme) => ({
+    file: {
+        display: 'none',
+    },
+    input: {
+        width: '100%',
+        boxSizing: 'border-box',
+        border: `solid 1px ${theme.palette.divider}`,
+        borderRadius: 4,
+        height: 176,
+        padding: theme.spacing(2, 3),
+        '& > textarea': {
+            overflow: 'auto !important',
+            height: '100% !important',
         },
-        input: {
-            width: '100%',
-            boxSizing: 'border-box',
-            border: `solid 1px ${theme.palette.divider}`,
-            borderRadius: 4,
-            height: 176,
-            padding: theme.spacing(2, 3),
-            '& > textarea': {
-                overflow: 'auto !important',
-                height: '100% !important',
-            },
-            [theme.breakpoints.down('sm')]: {
-                padding: theme.spacing(2),
-            },
+        [theme.breakpoints.down('sm')]: {
+            padding: theme.spacing(2),
         },
-        restoreTextWrapper: {
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-        },
-        restoreActionButton: {
-            alignSelf: 'flex-end',
-            marginTop: theme.spacing(1),
-        },
-    }),
-)
+    },
+    restoreTextWrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+    },
+    restoreActionButton: {
+        alignSelf: 'flex-end',
+        marginTop: theme.spacing(1),
+    },
+}))
 
 export function RestoreDatabase() {
     const { t } = useI18N()
@@ -704,30 +699,28 @@ export function RestoreDatabaseAdvance() {
 //#endregion
 
 //#region restore database confirmation
-const useRestoreDatabaseConfirmationStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        databasePreviewCardTable: {
-            width: 432,
-            border: `solid 1px ${theme.palette.divider}`,
-            borderRadius: 4,
-            padding: 32,
-            marginTop: 0,
-            marginLeft: -32,
-            marginBottom: 38,
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-                marginLeft: 0,
-            },
+const useRestoreDatabaseConfirmationStyles = makeStyles((theme: Theme) => ({
+    databasePreviewCardTable: {
+        width: 432,
+        border: `solid 1px ${theme.palette.divider}`,
+        borderRadius: 4,
+        padding: 32,
+        marginTop: 0,
+        marginLeft: -32,
+        marginBottom: 38,
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+            marginLeft: 0,
         },
-        databasePreviewCardLabel: {
-            fontSize: 18,
-        },
-        databasePreviewCardIcon: {
-            width: 18,
-            height: 18,
-        },
-    }),
-)
+    },
+    databasePreviewCardLabel: {
+        fontSize: 18,
+    },
+    databasePreviewCardIcon: {
+        width: 18,
+        height: 18,
+    },
+}))
 
 export function RestoreDatabaseConfirmation() {
     const { t } = useI18N()
@@ -842,13 +835,6 @@ const setupTheme = extendsTheme((theme) => ({
                 multiline: {
                     paddingTop: 14.5,
                     paddingBottom: 14.5,
-                },
-            },
-        },
-        MuiInputLabel: {
-            styleOverrides: {
-                outlined: {
-                    transform: 'translate(14px, 16px) scale(1)',
                 },
             },
         },

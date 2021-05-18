@@ -48,18 +48,20 @@ export function compressBackupFile(
             ? Identifier.fromString(linkedProfile, ProfileIdentifier).unwrap()
             : undefined
     const { localKey, nickname, privateKey } = persona
-    return ([
-        '1',
-        profileIdentifier_?.network,
-        profileIdentifier_?.userId,
-        nickname,
-        localKey?.k ||
-            profiles.filter((x) => x.identifier === profileIdentifier_?.toText()).filter((x) => x.localKey)[0]?.localKey
-                ?.k ||
-            '',
-        compressSecp256k1Key(privateKey, 'private'),
-        grantedHostPermissions.join(';'),
-    ] as BackupJSONFileLatestShort).join('🤔')
+    return (
+        [
+            '1',
+            profileIdentifier_?.network,
+            profileIdentifier_?.userId,
+            nickname,
+            localKey?.k ||
+                profiles.filter((x) => x.identifier === profileIdentifier_?.toText()).filter((x) => x.localKey)[0]
+                    ?.localKey?.k ||
+                '',
+            compressSecp256k1Key(privateKey, 'private'),
+            grantedHostPermissions.join(';'),
+        ] as BackupJSONFileLatestShort
+    ).join('🤔')
 }
 export function decompressBackupFile(short: string): BackupJSONFileLatest {
     let compressed: string

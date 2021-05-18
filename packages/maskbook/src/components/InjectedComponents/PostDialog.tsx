@@ -393,7 +393,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                 // there is nothing to write if it shared with public
                 if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayloadEnabled, t, i18n.language],
+            [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayloadEnabled, i18n.language],
         ),
     )
     const onRequestReset = or(

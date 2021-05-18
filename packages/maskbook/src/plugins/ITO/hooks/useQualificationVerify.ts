@@ -6,12 +6,20 @@ import QualificationABI from '@dimensiondev/contracts/abis/Qualification.json'
 import { createContract } from '../../../web3/hooks/useContract'
 import type { AbiItem } from 'web3-utils'
 
-import { QUALIFICATION_INTERFACE_ID, QUALIFICATION_HAS_START_TIME_INTERFACE_ID } from '../constants'
+import {
+    QUALIFICATION_INTERFACE_ID,
+    QUALIFICATION_HAS_START_TIME_INTERFACE_ID,
+    QUALIFICATION_HAS_LUCKY_INTERFACE_ID,
+} from '../constants'
 
 export function useQualificationVerify(address: string) {
     const account = useAccount()
     const contract = createContract<Qualification>(account, address, QualificationABI as AbiItem[])
-
+    const { value: isQualificationHasLucky, loading: loadingQualificationHasLucky } = useERC165<Qualification>(
+        contract,
+        address,
+        QUALIFICATION_HAS_LUCKY_INTERFACE_ID,
+    )
     const { value: isQualification, loading: loadingQualification } = useERC165<Qualification>(
         contract,
         address,
@@ -31,9 +39,18 @@ export function useQualificationVerify(address: string) {
         }
 
         return {
-            loadingERC165: loadingQualification || loadingQualificationHasStartTime,
+            loadingERC165: loadingQualification || loadingQualificationHasStartTime || loadingQualificationHasLucky,
             isQualification,
             startTime,
+            isQualificationHasLucky,
         }
-    }, [address, isQualification, qualificationHasStartTime, loadingQualification, loadingQualificationHasStartTime])
+    }, [
+        address,
+        isQualification,
+        qualificationHasStartTime,
+        isQualificationHasLucky,
+        loadingQualification,
+        loadingQualificationHasStartTime,
+        loadingQualificationHasLucky,
+    ])
 }

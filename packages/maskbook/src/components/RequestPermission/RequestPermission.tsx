@@ -1,13 +1,22 @@
-import { makeStyles, createStyles, Theme, Button, Card, DialogTitle, DialogActions } from '@material-ui/core'
+import {
+    makeStyles,
+    Theme,
+    Button,
+    Card,
+    List,
+    ListItem,
+    ListItemText,
+    ListSubheader,
+    DialogTitle,
+    DialogActions,
+    DialogContent,
+} from '@material-ui/core'
 import { useLocation } from 'react-router-dom'
-import { MaskMessage } from '../../utils/messages'
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            margin: theme.spacing(2, 2, 2, 2),
-        },
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+        margin: theme.spacing(2, 2, 2, 2),
+    },
+}))
 interface RequestPermissionProps {
     onRequestApprove(): void
     onReject(): void

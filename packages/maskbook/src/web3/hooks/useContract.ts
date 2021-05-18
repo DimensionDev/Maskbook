@@ -16,7 +16,7 @@ export function createContract<T extends Contract>(from: string, address: string
     if (!address || !EthereumAddress.isValid(address)) return null
 
     // hijack method invocations and redirect them to the background service
-    const contract = (new nonFunctionalWeb3.eth.Contract(ABI, address) as unknown) as T
+    const contract = new nonFunctionalWeb3.eth.Contract(ABI, address) as unknown as T
     return Object.assign(contract, {
         methods: new Proxy(contract.methods, {
             get(target, name) {
@@ -139,10 +139,9 @@ export function useContract<T extends Contract>(address: string, ABI: AbiItem[])
  */
 export function useContracts<T extends Contract>(listOfAddress: string[], ABI: AbiItem[]) {
     const account = useAccount()
-    const contracts = useMemo(() => listOfAddress.map((address) => createContract<T>(account, address, ABI)), [
-        account,
-        listOfAddress,
-        ABI,
-    ])
+    const contracts = useMemo(
+        () => listOfAddress.map((address) => createContract<T>(account, address, ABI)),
+        [account, listOfAddress, ABI],
+    )
     return contracts.filter(Boolean) as T[]
 }

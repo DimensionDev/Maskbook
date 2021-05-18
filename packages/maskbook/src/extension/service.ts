@@ -32,6 +32,7 @@ export const Services = {
     Helper: add(() => import('./background-script/HelperService'), 'Helper'),
     Provider: add(() => import('./background-script/ProviderService'), 'Provider'),
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
+    Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
 }
 export default Services
 export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', true)

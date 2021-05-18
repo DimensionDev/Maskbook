@@ -11,10 +11,11 @@ export function useCurrentCurrency(dataProvider: DataProvider) {
 
     // TODO:
     // support multiple crcurrencies
-    const { value: currencies = [], loading, error } = useAsync(
-        () => PluginTraderRPC.getLimitedCurrenies(dataProvider),
-        [dataProvider],
-    )
+    const {
+        value: currencies = [],
+        loading,
+        error,
+    } = useAsync(() => PluginTraderRPC.getLimitedCurrenies(dataProvider), [dataProvider])
 
     useEffect(() => {
         if (!currencies.length) return

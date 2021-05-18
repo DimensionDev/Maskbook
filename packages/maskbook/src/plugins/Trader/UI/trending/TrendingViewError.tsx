@@ -1,27 +1,25 @@
-import { makeStyles, Typography, CardContent, Theme, createStyles, Box } from '@material-ui/core'
+import { makeStyles, Typography, CardContent, Theme, Box } from '@material-ui/core'
 import { AlertCircle } from 'react-feather'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        content: {
-            paddingTop: 0,
-            paddingBottom: 0,
-        },
-        placeholder: {
-            padding: theme.spacing(18, 4),
-        },
-        icon: {
-            width: theme.spacing(8),
-            height: theme.spacing(8),
-            marginBottom: theme.spacing(2),
-            color: theme.palette.text.secondary,
-        },
-        message: {
-            fontSize: 16,
-        },
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    content: {
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
+    placeholder: {
+        padding: theme.spacing(18, 4),
+    },
+    icon: {
+        width: theme.spacing(8),
+        height: theme.spacing(8),
+        marginBottom: theme.spacing(2),
+        color: theme.palette.text.secondary,
+    },
+    message: {
+        fontSize: 16,
+    },
+}))
 export interface TrendingViewErrorProps {
     reaction?: React.ReactNode
     message: React.ReactNode

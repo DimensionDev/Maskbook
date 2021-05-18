@@ -1,28 +1,26 @@
-import { Box, createStyles, makeStyles, TextField } from '@material-ui/core'
+import { Box, makeStyles, TextField } from '@material-ui/core'
 import { useState } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import type { ERC20TokenDetailed } from '../../../../web3/types'
 import { EthereumTokenType } from '../../../../web3/types'
 import { FixedTokenList } from '../../DashboardComponents/FixedTokenList'
 
-const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) =>
-    createStyles({
-        list: {
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
+const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) => ({
+    list: {
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        search: {
-            marginBottom: theme.spacing(1),
-        },
-        placeholder: {
-            textAlign: 'center',
-            paddingTop: theme.spacing(10.5),
-            paddingBottom: theme.spacing(10.5),
-        },
-    }),
-)
+    },
+    search: {
+        marginBottom: theme.spacing(1),
+    },
+    placeholder: {
+        textAlign: 'center',
+        paddingTop: theme.spacing(10.5),
+        paddingBottom: theme.spacing(10.5),
+    },
+}))
 
 interface ERC20PredefinedTokenSelectorProps {
     excludeTokens?: string[]

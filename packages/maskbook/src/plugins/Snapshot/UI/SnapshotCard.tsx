@@ -1,8 +1,8 @@
-import { Card, createStyles, makeStyles, CardContent, CardHeader, Typography } from '@material-ui/core'
+import { Card, makeStyles, CardContent, CardHeader, Typography } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             minHeight: 120,
             padding: 0,
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             alignItems: 'center',
         },
-    })
+    }
 })
 
 export interface SnapshotCardProps {

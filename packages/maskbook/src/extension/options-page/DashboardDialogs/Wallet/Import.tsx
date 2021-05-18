@@ -1,13 +1,4 @@
-import {
-    Box,
-    Checkbox,
-    createStyles,
-    FormControlLabel,
-    makeStyles,
-    TextField,
-    Theme,
-    Typography,
-} from '@material-ui/core'
+import { Box, Checkbox, FormControlLabel, makeStyles, TextField, Theme, Typography } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { useCallback, useState } from 'react'
 import { CreditCard as CreditCardIcon } from 'react-feather'
@@ -22,32 +13,30 @@ import AbstractTab, { AbstractTabProps } from '../../DashboardComponents/Abstrac
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
 
-const useWalletImportDialogStyle = makeStyles((theme: Theme) =>
-    createStyles({
-        confirmation: {
-            fontSize: 16,
-            lineHeight: 1.75,
-            [theme.breakpoints.down('sm')]: {
-                fontSize: 14,
-            },
+const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({
+    confirmation: {
+        fontSize: 16,
+        lineHeight: 1.75,
+        [theme.breakpoints.down('sm')]: {
+            fontSize: 14,
         },
-        notification: {
-            fontSize: 12,
-            fontWeight: 500,
-            textAlign: 'center',
-            backgroundColor: theme.palette.mode === 'dark' ? '#17191D' : '#EFF5FF',
+    },
+    notification: {
+        fontSize: 12,
+        fontWeight: 500,
+        textAlign: 'center',
+        backgroundColor: theme.palette.mode === 'dark' ? '#17191D' : '#EFF5FF',
 
-            padding: '8px 22px',
-            margin: theme.spacing(1, 0, 0),
-            borderRadius: '4px',
-        },
-        notificationIcon: {
-            width: 16,
-            height: 16,
-            color: theme.palette.primary.main,
-        },
-    }),
-)
+        padding: '8px 22px',
+        margin: theme.spacing(1, 0, 0),
+        borderRadius: '4px',
+    },
+    notificationIcon: {
+        width: 16,
+        height: 16,
+        color: theme.palette.primary.main,
+    },
+}))
 
 export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     const { t } = useI18N()
@@ -196,17 +185,19 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
         height: 'auto',
     }
 
-    const [, setCreateWalletDialogOpen] = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
+    const { setDialog: setCreateWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.createWalletDialogUpdated,
+    )
 
     const onCreate = useCallback(
         (name: string) => {
             if (hdWallet) return
-            setCreateWalletDialogOpen({
+            setCreateWalletDialog({
                 open: true,
                 name,
             })
         },
-        [hdWallet?.address, setCreateWalletDialogOpen],
+        [hdWallet?.address, setCreateWalletDialog],
     )
     const onDeriveOrImport = useSnackbarCallback(
         async () => {

@@ -85,6 +85,10 @@ export function resolveLinkOnEtherscan(chainId: ChainId) {
     }
 }
 
+export function checkIfChainSupport(chainId: number) {
+    return Object.values(ChainId).includes(chainId)
+}
+
 export function resolveTransactionLinkOnEtherscan(chainId: ChainId, tx: string) {
     return `${resolveLinkOnEtherscan(chainId)}/tx/${tx}`
 }

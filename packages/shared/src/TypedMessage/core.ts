@@ -59,7 +59,7 @@ export interface TypedMessageTuple<T extends readonly TypedMessage[] = readonly 
     readonly items: T
 }
 export interface TypedMessageTupleSerializable<
-    T extends readonly SerializableTypedMessages[] = readonly SerializableTypedMessages[]
+    T extends readonly SerializableTypedMessages[] = readonly SerializableTypedMessages[],
 > extends SerializableTypedMessage<1>,
         TypedMessageTuple<T> {
     readonly type: 'tuple'
@@ -79,12 +79,12 @@ export function makeTypedMessageTupleFromList<T extends readonly TypedMessage[] 
     return { type: 'tuple', items: args }
 }
 export function makeTypedMessageTupleSerializable<
-    T extends readonly SerializableTypedMessages[] = readonly SerializableTypedMessages[]
+    T extends readonly SerializableTypedMessages[] = readonly SerializableTypedMessages[],
 >(items: T, meta?: Meta): TypedMessageTupleSerializable<T> {
     return { type: 'tuple', version: 1, serializable: true, items, meta }
 }
 export function makeTypedMessageSerializableTupleFromList<
-    T extends readonly SerializableTypedMessages[] = readonly SerializableTypedMessages[]
+    T extends readonly SerializableTypedMessages[] = readonly SerializableTypedMessages[],
 >(...args: T): TypedMessageTupleSerializable<T> {
     return { type: 'tuple', version: 1, items: args, serializable: true }
 }

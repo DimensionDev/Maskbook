@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
-import { makeStyles, createStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/sdk'
 
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
@@ -15,7 +15,7 @@ import { SwapResponse, TokenPanelType, TradeComputed, TradeProvider, Coin } from
 import { delay } from '../../../../utils/utils'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
-import { formatBalance } from '../../../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { TradePairViewer } from '../uniswap/TradePairViewer'
 import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { currentTradeProviderSettings } from '../../settings'
@@ -34,7 +34,7 @@ import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { isEtherWrapper } from '../../helpers'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             display: 'flex',
             flexDirection: 'column',
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => {
         router: {
             marginTop: 0,
         },
-    })
+    }
 })
 
 export interface TraderProps extends withClasses<never> {
@@ -158,7 +158,7 @@ export function Trader(props: TraderProps) {
     //#region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
     const [focusedTokenPanelType, setFocusedTokenPanelType] = useState(TokenPanelType.Input)
-    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
@@ -177,7 +177,7 @@ export function Trader(props: TraderProps) {
     const onTokenChipClick = useCallback(
         (type: TokenPanelType) => {
             setFocusedTokenPanelType(type)
-            setSelectTokenDialogOpen({
+            setSelectTokenDialog({
                 open: true,
                 uuid: String(type),
                 disableEther: false,
@@ -243,7 +243,7 @@ export function Trader(props: TraderProps) {
         .toString()
 
     // close the transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -265,7 +265,7 @@ export function Trader(props: TraderProps) {
     // open the transaction dialog
     useEffect(() => {
         if (tradeState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             shareLink,
             state: tradeState,

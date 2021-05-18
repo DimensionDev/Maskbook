@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import classNames from 'classnames'
 import { noop } from 'lodash-es'
 import BigNumber from 'bignumber.js'
-import { makeStyles, createStyles, Typography, IconButton } from '@material-ui/core'
+import { makeStyles, Typography, IconButton } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import TuneIcon from '@material-ui/icons/Tune'
 import RefreshOutlined from '@material-ui/icons/RefreshOutlined'
@@ -16,7 +16,7 @@ import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../..
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { isEtherWrapper, toBips } from '../../helpers'
-import { formatPercentage } from '../../../Wallet/formatter'
+import { formatPercentage } from '@dimensiondev/maskbook-shared'
 import { resolveUniswapWarningLevel } from '../../pipes'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -24,7 +24,7 @@ import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { MINIMUM_AMOUNT } from '../../constants'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         form: {
             marginTop: theme.spacing(2),
             marginBottom: theme.spacing(2),
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => {
         ethereumAccountChip: {
             borderRadius: 12,
         },
-    })
+    }
 })
 
 export interface TradeFormProps extends withClasses<never> {
@@ -119,7 +119,7 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region remote controlled swap settings dialog
-    const [, setSwapSettingsDialogOpen] = useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated)
+    const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated)
     //#endregion
 
     //#region form controls
@@ -239,10 +239,7 @@ export function TradeForm(props: TradeFormProps) {
                     <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
                         <RefreshOutlined fontSize="small" />
                     </IconButton>
-                    <IconButton
-                        className={classes.icon}
-                        size="small"
-                        onClick={() => setSwapSettingsDialogOpen({ open: true })}>
+                    <IconButton className={classes.icon} size="small" onClick={openDialog}>
                         <TuneIcon fontSize="small" />
                     </IconButton>
                 </div>

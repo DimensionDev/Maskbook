@@ -4,7 +4,6 @@ import {
     Box,
     Theme,
     makeStyles,
-    createStyles,
     DialogActions,
     Button,
     DialogProps,
@@ -14,27 +13,25 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import type { ERC20TokenDetailed } from '../../../web3/types'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        content: {
-            padding: theme.spacing(5, 5, 10),
-        },
-        icon: {
-            width: 36,
-            height: 36,
-        },
-        symbol: {
-            marginLeft: theme.spacing(2.5),
-        },
-        token: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            fontSize: 28,
-            color: theme.palette.common.black,
-        },
-    }),
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    content: {
+        padding: theme.spacing(5, 5, 10),
+    },
+    icon: {
+        width: 36,
+        height: 36,
+    },
+    symbol: {
+        marginLeft: theme.spacing(2.5),
+    },
+    token: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        fontSize: 28,
+        color: theme.palette.common.black,
+    },
+}))
 
 interface ClaimDialogUIProps extends withClasses<never> {
     open: boolean

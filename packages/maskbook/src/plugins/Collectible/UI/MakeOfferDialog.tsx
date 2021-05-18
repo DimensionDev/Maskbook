@@ -1,6 +1,5 @@
 import { ChangeEvent, useState, useCallback, useMemo, useEffect } from 'react'
 import {
-    createStyles,
     makeStyles,
     DialogContent,
     Box,
@@ -28,12 +27,12 @@ import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { ChainState } from '../../../web3/state/useChainState'
 import { toAsset, toUnixTimestamp } from '../helpers'
-import { useRemoteControlledDialogEvent } from '../../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { isETH } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         content: {
             padding: 0,
         },
@@ -57,7 +56,7 @@ const useStyles = makeStyles((theme) => {
             flex: 1,
             margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
         },
-    })
+    }
 })
 
 export interface MakeOfferDialogProps {
@@ -111,7 +110,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         }
     }, [asset?.value, token, account, amount, expirationDateTime, isAuction, enqueueSnackbar])
 
-    const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
 
     useEffect(() => {
         setAmount('')

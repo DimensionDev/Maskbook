@@ -1,6 +1,6 @@
 import { ExternalLink } from 'react-feather'
 import type { Trade } from '@uniswap/sdk'
-import { createStyles, Link, makeStyles, Typography } from '@material-ui/core'
+import { Link, makeStyles, Typography } from '@material-ui/core'
 import { resolveTradePairLink } from '../../pipes'
 import type { TradeComputed, TradeProvider } from '../../types'
 import { useContext } from 'react'
@@ -8,7 +8,7 @@ import { TradeContext } from '../../trader/useTradeContext'
 import { getPairAddress } from '../../helpers'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             border: `1px solid ${theme.palette.divider}`,
             borderRadius: 15,
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => {
             verticalAlign: 'middle',
             marginLeft: theme.spacing(0.5),
         },
-    })
+    }
 })
 
 export interface TradePairViewerProps {

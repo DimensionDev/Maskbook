@@ -3,7 +3,7 @@ import { useAssetsFromProvider } from './useAssetsFromProvider'
 import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsMerged } from './useAssetsMerged'
 import { useWallet } from './useWallet'
-import { formatChecksumAddress } from '../formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 
@@ -40,7 +40,7 @@ export function useAssets(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
 
     // filter out tokens in blacklist
     return {
-        value: assetsDetailed.filter((x) => !wallet?.erc20_token_blacklist.has(formatChecksumAddress(x.token.address))),
+        value: assetsDetailed.filter((x) => !wallet?.erc20_token_blacklist.has(formatEthereumAddress(x.token.address))),
         error: etherTokenDetailedError || assetsDetailedChainError || assetsDetailedProviderError,
         loading: etherTokenDetailedLoading || assetsDetailedChainLoading || assetsDetailedProviderLoading,
         retry: detailedTokensRetry,

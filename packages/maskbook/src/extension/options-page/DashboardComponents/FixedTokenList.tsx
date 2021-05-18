@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { uniqBy } from 'lodash-es'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
-import { makeStyles, createStyles, Typography } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 import {
     TokenListsState,
     useERC20TokensDetailedFromTokenLists,
@@ -13,12 +13,10 @@ import { isSameAddress } from '../../../web3/helpers'
 import { TokenInList } from './TokenInList'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        list: {},
-        placeholder: {},
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    list: {},
+    placeholder: {},
+}))
 
 export interface FixedTokenListProps extends withClasses<never> {
     keyword?: string

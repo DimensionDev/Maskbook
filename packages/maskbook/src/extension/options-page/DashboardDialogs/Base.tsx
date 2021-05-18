@@ -4,34 +4,32 @@ import {
     DialogProps,
     Dialog,
     IconButton,
-    createStyles,
     makeStyles,
     DialogContent,
     Typography,
     SvgIconProps,
     IconButtonProps,
+    Theme,
 } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { extendsTheme, useMaskbookTheme } from '../../../utils/theme'
+import { extendsTheme, useClassicMaskTheme } from '../../../utils/theme'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            userSelect: 'none',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        },
-        close: {
-            color: theme.palette.text.primary,
-            position: 'absolute',
-            right: 10,
-            top: 10,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        userSelect: 'none',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    close: {
+        color: theme.palette.text.primary,
+        position: 'absolute',
+        right: 10,
+        top: 10,
+    },
+}))
 
 export interface DashboardDialogCoreProps extends DialogProps {
     CloseIconProps?: Partial<SvgIconProps>
@@ -103,7 +101,7 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
         open: state === DialogState.Opened,
         onClose,
     }
-    const theme = useMaskbookTheme()
+    const theme = useClassicMaskTheme()
     const renderedComponent =
         state === DialogState.Destroyed ? null : (
             <ThemeProvider theme={theme}>
@@ -114,55 +112,57 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
     return [renderedComponent, showModal, showStatefulModal]
 }
 
-const useDashboardDialogWrapperStyles = makeStyles((theme) =>
-    createStyles<string, DashboardDialogWrapperProps>({
-        wrapper: {
-            display: 'flex',
-            flexDirection: 'column',
-            maxWidth: '100%',
-            width: (props) => (props.size === 'small' ? 280 : 440),
-            padding: (props) => (props.size === 'small' ? '40px 24px !important' : '40px 36px !important'),
-            margin: '0 auto',
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
+const useDashboardDialogWrapperStyles = makeStyles<
+    Theme,
+    DashboardDialogWrapperProps,
+    'wrapper' | 'header' | 'content' | 'footer' | 'primary' | 'secondary' | 'confineSecondary'
+>((theme) => ({
+    wrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        maxWidth: '100%',
+        width: (props) => (props.size === 'small' ? 280 : 440),
+        padding: (props) => (props.size === 'small' ? '40px 24px !important' : '40px 36px !important'),
+        margin: '0 auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        header: {
-            textAlign: 'center',
-            margin: '0 auto',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-        },
-        content: {
-            flex: 1,
-            textAlign: 'center',
-        },
-        footer: {
-            display: 'flex',
-            justifyContent: 'space-around',
-            marginTop: theme.spacing(3),
-        },
-        primary: {
-            margin: theme.spacing(2, 0, 1),
-            fontWeight: 500,
-            fontSize: 20,
-            lineHeight: '30px',
-        },
-        secondary: {
-            lineHeight: 1.75,
-            fontSize: 14,
-            textAlign: 'center',
-            wordBreak: 'break-word',
-            marginBottom: 18,
-        },
-        confineSecondary: {
-            paddingLeft: (props) => (props.size === 'small' ? 24 : 46),
-            paddingRight: (props) => (props.size === 'small' ? 24 : 46),
-        },
-    }),
-)
+    },
+    header: {
+        textAlign: 'center',
+        margin: '0 auto',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    content: {
+        flex: 1,
+        textAlign: 'center',
+    },
+    footer: {
+        display: 'flex',
+        justifyContent: 'space-around',
+        marginTop: theme.spacing(3),
+    },
+    primary: {
+        margin: theme.spacing(2, 0, 1),
+        fontWeight: 500,
+        fontSize: 20,
+        lineHeight: '30px',
+    },
+    secondary: {
+        lineHeight: 1.75,
+        fontSize: 14,
+        textAlign: 'center',
+        wordBreak: 'break-word',
+        marginBottom: 18,
+    },
+    confineSecondary: {
+        paddingLeft: (props) => (props.size === 'small' ? 24 : 46),
+        paddingRight: (props) => (props.size === 'small' ? 24 : 46),
+    },
+}))
 
 const dialogTheme = extendsTheme((theme) => ({
     components: {
@@ -175,13 +175,6 @@ const dialogTheme = extendsTheme((theme) => ({
                 multiline: {
                     paddingTop: 14.5,
                     paddingBottom: 14.5,
-                },
-            },
-        },
-        MuiInputLabel: {
-            styleOverrides: {
-                outlined: {
-                    transform: 'translate(14px, 16px) scale(1)',
                 },
             },
         },

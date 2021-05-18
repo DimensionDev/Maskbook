@@ -1,9 +1,9 @@
-import { makeStyles, createStyles, Link } from '@material-ui/core'
+import { makeStyles, Link } from '@material-ui/core'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         body: {
             display: 'flex',
             justifyContent: 'center',
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => {
             maxWidth: '100%',
             maxWeight: '100%',
         },
-    })
+    }
 })
 
 export interface ArticleTabProps {}

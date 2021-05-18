@@ -1,6 +1,7 @@
-import { Avatar, createStyles, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Avatar, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import LinkIcon from '@material-ui/icons/Link'
-import { formatBalance, formatElapsed } from '../../../Wallet/formatter'
+import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
+import { formatElapsed } from '../../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { CollectibleProvider, NFTHistory, OpenSeaAssetEventType, RaribleEventType } from '../../types'
@@ -9,7 +10,7 @@ import { resolveOpenSeaAssetEventType, resolveRaribleAssetEventType } from '../.
 import { Account } from '../Account'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         account: {
             display: 'flex',
             alignItems: 'center',
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             alignItems: 'center',
         },
-    })
+    }
 })
 
 interface Props {
@@ -49,11 +50,8 @@ export function Row({ event, isDifferenceToken }: Props) {
 
     const unitPrice = useMemo(() => {
         if (provider === CollectibleProvider.RARIBLE || !isDifferenceToken || !event.price) return null
-        const price = formatBalance(new BigNumber(event.price.quantity), event.price.asset?.decimals ?? 0)
-        const quantity = formatBalance(
-            new BigNumber(event.assetQuantity?.quantity ?? 0),
-            event.assetQuantity?.asset.decimals ?? 0,
-        )
+        const price = formatBalance(event.price.quantity, event.price.asset?.decimals ?? 0)
+        const quantity = formatBalance(event.assetQuantity?.quantity ?? 0, event.assetQuantity?.asset.decimals ?? 0)
 
         return new BigNumber(price).dividedBy(quantity).toFixed(3, 1).toString()
     }, [event, isDifferenceToken, provider])
@@ -92,10 +90,10 @@ export function Row({ event, isDifferenceToken }: Props) {
                     </TableCell>
                     <TableCell>
                         <Typography className={classes.content} variant="body2">
-                            {formatBalance(
-                                new BigNumber(event.assetQuantity?.quantity ?? 0),
-                                event.assetQuantity?.asset.decimals ?? 0,
-                            )}
+                            <FormattedBalance
+                                value={event.assetQuantity?.quantity ?? 0}
+                                decimals={event.assetQuantity?.asset.decimals ?? 0}
+                            />
                         </Typography>
                     </TableCell>
                 </>
@@ -103,7 +101,7 @@ export function Row({ event, isDifferenceToken }: Props) {
                 <TableCell>
                     <Typography className={classes.content} variant="body2">
                         {event.price && provider === CollectibleProvider.OPENSEA
-                            ? formatBalance(new BigNumber(event.price.quantity), event.price?.asset?.decimals ?? 0)
+                            ? formatBalance(event.price.quantity, event.price?.asset?.decimals ?? 0)
                             : event.price?.quantity ?? ''}
                     </Typography>
                 </TableCell>

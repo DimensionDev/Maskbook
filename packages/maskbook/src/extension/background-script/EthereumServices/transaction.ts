@@ -156,6 +156,11 @@ export async function sendSignedTransaction(from: string, config: TransactionCon
  */
 
 export async function callTransaction(config: TransactionConfig) {
+    const provider = currentSelectedWalletProviderSettings.value
+    if (provider === ProviderType.MetaMask) {
+        const web3 = await MetaMask.createWeb3()
+        return web3.eth.call(config)
+    }
     return Maskbook.createWeb3({
         chainId: await getChainId(config.from as string | undefined),
     }).eth.call(config)

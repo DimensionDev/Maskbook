@@ -10,7 +10,7 @@ import { FileServiceCompositionEntry } from '../../plugins/FileService/UI-define
 import { ITO_CompositionEntry } from '../../plugins/ITO/define'
 import { useControlledDialog } from '../../plugins/Collectible/UI/useControlledDialog'
 import { useAccount } from '../../web3/hooks/useAccount'
-import { useRemoteControlledDialog, useRemoteControlledDialogEvent } from '../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { Flags } from '../../utils/flags'
@@ -22,7 +22,7 @@ import { ProviderIcon } from '../shared/ProviderIcon'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { formatEthereumAddress } from '../../plugins/Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useChainId } from '../../web3/hooks/useBlockNumber'
 import { ChainId } from '../../web3/types'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
                 ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
                 : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
         }`,
+        backgroundImage: 'none',
     },
     menu: {
         paddingTop: 0,
@@ -124,18 +125,18 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Wallet
-    const { onOpen: onSelectWalletDialogOpen } = useRemoteControlledDialogEvent(
+    const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
 
-    const { onOpen: onSelectProviderDialogOpen } = useRemoteControlledDialogEvent(
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const openWallet = useCallback(() => {
         if (selectedWallet) {
-            onSelectWalletDialogOpen()
+            openSelectWalletDialog()
         } else {
-            onSelectProviderDialogOpen()
+            openSelectProviderDialog()
         }
     }, [])
     //#endregion
@@ -168,9 +169,9 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Buy currency
-    const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     const openBuyCurrency = useCallback(() => {
-        setBuyDialogOpen({
+        setBuyDialog({
             open: true,
             address: account,
         })
@@ -178,7 +179,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Swap
-    const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
     //#endregion
 
     //#region Claim All ITO

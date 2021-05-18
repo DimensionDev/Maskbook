@@ -1,4 +1,4 @@
-import { formatBalance } from '../../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { TradeProvider, TradeStrategy } from '../types'
 import { useTradeComputed } from './useTradeComputed'
 import { useTradeState } from './useTradeState'

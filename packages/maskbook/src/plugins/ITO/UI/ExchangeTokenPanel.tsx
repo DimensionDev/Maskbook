@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import { useCallback, useEffect, useState } from 'react'
-import { makeStyles, createStyles, Paper, IconButton } from '@material-ui/core'
+import { makeStyles, Paper, IconButton } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/AddOutlined'
 import RemoveIcon from '@material-ui/icons/RemoveOutlined'
 
@@ -11,30 +11,28 @@ import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages, SelectTokenDialogEvent } from '../../Wallet/messages'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            width: '100%',
-        },
-        line: {
-            margin: theme.spacing(1),
-            display: 'flex',
-        },
-        input: {
-            flex: 1,
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(1),
-        },
-        flow: {
-            margin: theme.spacing(1),
-            textAlign: 'center',
-        },
-        button: {
-            margin: theme.spacing(1),
-            borderRadius: 10,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+    },
+    line: {
+        margin: theme.spacing(1),
+        display: 'flex',
+    },
+    input: {
+        flex: 1,
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+    },
+    flow: {
+        margin: theme.spacing(1),
+        textAlign: 'center',
+    },
+    button: {
+        margin: theme.spacing(1),
+        borderRadius: 10,
+    },
+}))
 
 export interface ExchangetokenPanelProps {
     onAmountChange: (amount: string, key: string) => void
@@ -80,7 +78,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
 
     //#region select token dialog
     const [id] = useState(uuid())
-    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
@@ -91,7 +89,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         ),
     )
     const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialogOpen({
+        setSelectTokenDialog({
             open: true,
             uuid: id,
             disableEther: isSell,

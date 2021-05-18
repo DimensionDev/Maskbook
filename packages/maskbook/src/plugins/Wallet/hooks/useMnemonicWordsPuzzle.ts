@@ -11,17 +11,18 @@ const TOTAL_SIZE = 12
 
 export function useMnemonicWordsPuzzle() {
     const [answerWords, setAnswerWords] = useState<string[]>([])
-    const { value: words = [], loading: wordsLoading, retry: wordsRetry } = useAsyncRetry(
-        () => WalletRPC.createMnemonicWords(),
-        [],
-    )
+    const {
+        value: words = [],
+        loading: wordsLoading,
+        retry: wordsRetry,
+    } = useAsyncRetry(() => WalletRPC.createMnemonicWords(), [])
 
     //#region generate some mask indexes randomly which should be filled by the user
     const [seed, setSeed] = useState(0)
-    const indexes = useMemo(() => shuffle(new Array(TOTAL_SIZE).fill(seed).map((_, i) => i)).slice(0, PUZZLE_SIZE), [
-        seed,
-        words,
-    ])
+    const indexes = useMemo(
+        () => shuffle(new Array(TOTAL_SIZE).fill(seed).map((_, i) => i)).slice(0, PUZZLE_SIZE),
+        [seed, words],
+    )
     //#endregion
 
     //#region a serial of words and the user gonna complete those empty ones

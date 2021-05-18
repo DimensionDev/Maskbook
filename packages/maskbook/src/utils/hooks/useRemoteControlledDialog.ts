@@ -7,6 +7,13 @@ export interface RemoteControlledDialogEvent {
     hookId?: string
 }
 
+interface Result<T> {
+    open: boolean
+    closeDialog: () => void
+    openDialog: () => void
+    setDialog: (ev: T) => void
+}
+
 /**
  * Use a dialog state controlled by remote
  */
@@ -14,13 +21,13 @@ export function useRemoteControlledDialog<T extends { open: boolean }>(
     event: UnboundedRegistry<T>,
     onUpdateByRemote?: (ev: T) => void,
     tabType: 'self' | 'activated' = 'self',
-) {
+): Result<T> {
     const [HOOK_ID] = useState(uuid()) // create a id for every hook
     const [open, setOpen] = useState(false)
     useEffect(
         () =>
             event.on((_ev: T) => {
-                const event = (_ev as unknown) as RemoteControlledDialogEvent
+                const event = _ev as unknown as RemoteControlledDialogEvent
 
                 // ignore the event from the same hook
                 if (event.hookId === HOOK_ID) return
@@ -48,27 +55,17 @@ export function useRemoteControlledDialog<T extends { open: boolean }>(
         },
         [event, tabType, HOOK_ID],
     )
-    return [open, onUpdateByLocal] as const
-}
-
-type DialogToggleEvent = Pick<RemoteControlledDialogEvent, 'open'>
-
-export function useRemoteControlledDialogEvent(event: UnboundedRegistry<DialogToggleEvent>) {
-    const [open, setOpen] = useRemoteControlledDialog<DialogToggleEvent>(event)
-    const onOpen = useCallback(() => {
-        setOpen({
-            open: true,
-        })
+    const openDialog = useCallback(() => {
+        onUpdateByLocal({ open: true } as T)
     }, [])
-    const onClose = useCallback(() => {
-        setOpen({
-            open: false,
-        })
+    const closeDialog = useCallback(() => {
+        onUpdateByLocal({ open: false } as T)
     }, [])
+
     return {
         open,
-        setOpen,
-        onClose,
-        onOpen,
+        openDialog,
+        closeDialog,
+        setDialog: onUpdateByLocal,
     }
 }

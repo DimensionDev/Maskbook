@@ -1,3 +1,5 @@
+import '../utils/debug/general'
+import '../utils/debug/ui'
 import Services from '../extension/service'
 import { untilDomLoaded } from '../utils/dom'
 import { Flags } from '../utils/flags'
@@ -12,12 +14,8 @@ import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
 import { startPluginSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
+import { definedSocialNetworkUIs } from './define'
 
-const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
-export const definedSocialNetworkUIs: ReadonlyMap<
-    string,
-    SocialNetworkUI.DeferredDefinition
-> = definedSocialNetworkUIsLocal
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     automation: {},
@@ -40,10 +38,8 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
 }
 export let globalUIState: Readonly<SocialNetworkUI.State> = {} as any
 
-export async function activateSocialNetworkUI(): Promise<void> {
+export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.DeferredDefinition): Promise<void> {
     assertNotEnvironment(Environment.ManifestBackground)
-    const ui_deferred = [...definedSocialNetworkUIs.values()].find((x) => x.shouldActivate(location))
-    if (!ui_deferred) return
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
     const ui = (activatedSocialNetworkUI = await loadSocialNetworkUI(ui_deferred.networkIdentifier))
@@ -59,7 +55,7 @@ export async function activateSocialNetworkUI(): Promise<void> {
             abort.abort()
             await delay(200)
             definedSocialNetworkUIsResolved.set(ui_deferred.networkIdentifier, newDefinition)
-            activateSocialNetworkUI()
+            activateSocialNetworkUIInner(ui_deferred)
         })
     }
     await untilDomLoaded()
@@ -165,12 +161,4 @@ export async function loadSocialNetworkUI(identifier: string): Promise<SocialNet
         define.hotModuleReload?.((ui) => definedSocialNetworkUIsResolved.set(identifier, ui))
     }
     return ui
-}
-
-export function defineSocialNetworkUI(UI: SocialNetworkUI.DeferredDefinition) {
-    if (UI.notReadyForProduction) {
-        if (process.env.build === 'stable' && process.env.NODE_ENV === 'production') return UI
-    }
-    definedSocialNetworkUIsLocal.set(UI.networkIdentifier, UI)
-    return UI
 }

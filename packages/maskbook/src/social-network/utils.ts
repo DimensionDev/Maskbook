@@ -22,7 +22,8 @@ export function managedStateCreator(): SocialNetworkUI.ManagedState {
     return {}
 }
 export const creator = {
-    IdentityResolveProviderLastRecognized: (): SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['lastRecognized'] =>
-        new ValueRef({ identifier: ProfileIdentifier.unknown }),
+    IdentityResolveProviderLastRecognized:
+        (): SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['lastRecognized'] =>
+            new ValueRef({ identifier: ProfileIdentifier.unknown }),
     PostProviderStore: (): SocialNetworkUI.CollectingCapabilities.PostsProvider['posts'] => new ObservableWeakMap(),
 }

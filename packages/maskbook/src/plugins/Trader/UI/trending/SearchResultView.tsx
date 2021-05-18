@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { makeStyles, createStyles, Link, Tab, Tabs } from '@material-ui/core'
+import { makeStyles, Link, Tab, Tabs } from '@material-ui/core'
 import { DataProvider, TagType, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
@@ -30,7 +30,7 @@ import { useChainId } from '../../../../web3/hooks/useBlockNumber'
 import { Flags } from '../../../../utils/flags'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             width: '100%',
             boxShadow: 'none',
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => {
             minHeight: 'unset',
             minWidth: 'unset',
         },
-    })
+    }
 })
 
 export interface SearchResultViewProps {
@@ -101,7 +101,11 @@ export function SearchResultView(props: SearchResultViewProps) {
     //#endregion
 
     //#region swap
-    const { value: tokenDetailed, error: tokenDetailedError, loading: loadingTokenDetailed } = useTokenDetailed(
+    const {
+        value: tokenDetailed,
+        error: tokenDetailedError,
+        loading: loadingTokenDetailed,
+    } = useTokenDetailed(
         trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
         trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.eth_address ?? '',
     )
@@ -110,7 +114,11 @@ export function SearchResultView(props: SearchResultViewProps) {
 
     //#region stats
     const [days, setDays] = useState(Days.ONE_WEEK)
-    const { value: stats = [], loading: loadingStats, retry: retryStats } = usePriceStats({
+    const {
+        value: stats = [],
+        loading: loadingStats,
+        retry: retryStats,
+    } = usePriceStats({
         coinId: trending?.coin.id,
         dataProvider: trending?.dataProvider,
         currency: trending?.currency,

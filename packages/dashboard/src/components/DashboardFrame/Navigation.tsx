@@ -33,13 +33,13 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => ({
     },
 }))
 
-const LogoItem = (styled(MuiListItem)(({ theme }) => ({
+const LogoItem = styled(MuiListItem)(({ theme }) => ({
     [`&.${listItemClasses.root}`]: {
         justifyContent: 'center',
         paddingLeft: theme.spacing(7),
         marginBottom: theme.spacing(3.5),
     },
-})) as any) as typeof MuiListItem
+})) as any as typeof MuiListItem
 
 const ListItem = styled(MuiListItem)(({ theme }) => ({
     [`&.${listItemClasses.selected}`]: {

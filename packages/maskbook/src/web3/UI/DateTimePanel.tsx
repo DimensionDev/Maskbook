@@ -1,7 +1,5 @@
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
-import { TextField, TextFieldProps } from '@material-ui/core'
-import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
-import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
+import { makeStyles, TextField, TextFieldProps } from '@material-ui/core'
+import formatDateTime from 'date-fns/format'
 
 export interface DateTimePanelProps {
     label: string
@@ -10,23 +8,32 @@ export interface DateTimePanelProps {
     TextFieldProps?: Partial<TextFieldProps>
 }
 
+const useStyles = makeStyles((theme) => ({
+    datetime: {
+        '&::-webkit-calendar-picker-indicator': {
+            marginLeft: 0,
+            backgroundImage: `url(${new URL('./calendar.png', import.meta.url)})`,
+        },
+    },
+}))
+
 export function DateTimePanel(props: DateTimePanelProps) {
     const { label, date, onChange, TextFieldProps } = props
     const GMT = (new Date().getTimezoneOffset() / 60) * -1
-    return usePortalShadowRoot((container) => (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MobileDateTimePicker
-                showTodayButton
-                ampm={false}
-                label={`${label} ${GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})`}`}
-                onChange={(date: Date | null) => {
-                    if (!date) return
-                    onChange(date)
-                }}
-                renderInput={(props) => <TextField fullWidth {...props} {...TextFieldProps} />}
-                value={date}
-                DialogProps={{ container }}
-            />
-        </LocalizationProvider>
-    ))
+    const classes = useStyles()
+
+    return (
+        <TextField
+            label={`${label} ${GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})`}`}
+            type="datetime-local"
+            value={formatDateTime(date, "yyyy-MM-dd'T'HH:mm")}
+            onChange={(e) => {
+                const date = new Date(e.currentTarget.value)
+                onChange(date)
+            }}
+            InputLabelProps={{ shrink: true }}
+            inputProps={{ className: classes.datetime }}
+            {...TextFieldProps}
+        />
+    )
 }

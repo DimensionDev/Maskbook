@@ -39,11 +39,19 @@ export function sortTokens(tokenA: { address: string }, tokenB: { address: strin
     return addressA < addressB ? -1 : 1
 }
 
+export function timestampInMask(timestamp: number) {
+    return timestamp * 1000
+}
+
+export function timestampOutMask(timestamp: number) {
+    return Math.floor(timestamp / 1000)
+}
+
 export function tokenIntoMask(token: JSON_PayloadOutMask['token']) {
-    return ({
+    return {
         ...omit(token, 'chain_id'),
         chainId: token.chain_id,
-    } as unknown) as EtherTokenDetailed | ERC20TokenDetailed
+    } as unknown as EtherTokenDetailed | ERC20TokenDetailed
 }
 
 export function tokenOutMask(token: EtherTokenDetailed | ERC20TokenDetailed) {
@@ -56,12 +64,26 @@ export function tokenOutMask(token: EtherTokenDetailed | ERC20TokenDetailed) {
 export function payloadIntoMask(payload: JSON_PayloadOutMask) {
     return {
         ...payload,
+        start_time: timestampInMask(payload.start_time),
+        end_time: timestampInMask(payload.end_time),
+        creation_time: timestampInMask(payload.creation_time),
         token: tokenIntoMask(payload.token),
         exchange_tokens: payload.exchange_tokens.map(tokenIntoMask).sort(sortTokens),
     } as JSON_PayloadInMask
 }
 
 export function payloadOutMask(payload: JSON_PayloadInMask) {
+    return {
+        ...payload,
+        start_time: timestampOutMask(payload.start_time),
+        end_time: timestampOutMask(payload.end_time),
+        creation_time: timestampOutMask(payload.creation_time),
+        token: tokenOutMask(payload.token),
+        exchange_tokens: payload.exchange_tokens.map(tokenOutMask),
+    } as JSON_PayloadOutMask
+}
+
+export function payloadOutMaskCompact(payload: JSON_PayloadInMask) {
     return {
         ...payload,
 
@@ -79,4 +101,8 @@ export function payloadOutMask(payload: JSON_PayloadInMask) {
         exchange_amounts: [],
         exchange_tokens: [],
     } as JSON_PayloadOutMask
+}
+
+export function isCompactPayload(payload: JSON_PayloadInMask) {
+    return !payload.exchange_tokens.length
 }

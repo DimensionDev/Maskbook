@@ -1,35 +1,33 @@
-import { createStyles, Grid, makeStyles } from '@material-ui/core'
+import { Grid, makeStyles } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect } from 'react'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
-import { formatBalance } from '../../plugins/Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { unreachable } from '../../utils/utils'
 import { ApproveStateType, useERC20TokenApproveCallback } from '../hooks/useERC20TokenApproveCallback'
 import { TransactionStateType } from '../hooks/useTransactionState'
 import type { ERC20TokenDetailed } from '../types'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        button: {
-            flexDirection: 'column',
-            position: 'relative',
-            marginTop: theme.spacing(1.5),
-        },
-        buttonLabel: {
-            display: 'block',
-            fontWeight: 'inherit',
-            marginTop: theme.spacing(-0.5),
-            marginBottom: theme.spacing(1),
-        },
-        buttonAmount: {
-            fontSize: 10,
-            fontWeight: 300,
-            bottom: theme.spacing(1),
-            position: 'absolute',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    button: {
+        flexDirection: 'column',
+        position: 'relative',
+        marginTop: theme.spacing(1.5),
+    },
+    buttonLabel: {
+        display: 'block',
+        fontWeight: 'inherit',
+        marginTop: theme.spacing(-0.5),
+        marginBottom: theme.spacing(1),
+    },
+    buttonAmount: {
+        fontSize: 10,
+        fontWeight: 300,
+        bottom: theme.spacing(1),
+        position: 'absolute',
+    },
+}))
 
 export interface EthereumERC20TokenApprovedBoundaryProps {
     amount: string
@@ -45,12 +43,8 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
-    const [
-        { type: approveStateType, allowance },
-        transactionState,
-        approveCallback,
-        resetApproveCallback,
-    ] = useERC20TokenApproveCallback(token?.address ?? '', amount, spender)
+    const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
+        useERC20TokenApproveCallback(token?.address ?? '', amount, spender)
 
     const onApprove = useCallback(
         async (useExact = false) => {

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import DashboardRouterContainer from './Container'
-import { Button, makeStyles, createStyles, ThemeProvider } from '@material-ui/core'
+import { Button, makeStyles, ThemeProvider } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import RestoreIcon from '@material-ui/icons/Restore'
@@ -11,42 +11,40 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
 import { extendsTheme } from '../../../utils/theme'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        container: {
-            alignItems: 'baseline',
-            padding: theme.spacing(3, 0),
+const useStyles = makeStyles((theme) => ({
+    container: {
+        alignItems: 'baseline',
+        padding: theme.spacing(3, 0),
 
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        personaList: {
-            margin: 0,
-            padding: 0,
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gridGap: theme.spacing(3),
-            [theme.breakpoints.down('sm')]: {
-                display: 'block',
-            },
+    },
+    personaList: {
+        margin: 0,
+        padding: 0,
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gridGap: theme.spacing(3),
+        [theme.breakpoints.down('sm')]: {
+            display: 'block',
         },
-        personaItem: {
-            listStyle: 'none',
-            [theme.breakpoints.down('sm')]: {
-                marginBottom: theme.spacing(2),
-            },
+    },
+    personaItem: {
+        listStyle: 'none',
+        [theme.breakpoints.down('sm')]: {
+            marginBottom: theme.spacing(2),
         },
-        databaseButton: {
-            paddingTop: 0,
-            paddingBottom: 0,
-            lineHeight: '24px',
-        },
-        placeholder: {
-            flex: 1,
-        },
-    }),
-)
+    },
+    databaseButton: {
+        paddingTop: 0,
+        paddingBottom: 0,
+        lineHeight: '24px',
+    },
+    placeholder: {
+        flex: 1,
+    },
+}))
 
 const personasTheme = extendsTheme((theme) => ({
     components: {

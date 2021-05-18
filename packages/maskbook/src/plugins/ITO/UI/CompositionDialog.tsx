@@ -19,7 +19,7 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { formatBalance } from '../../Wallet/formatter'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
 
@@ -61,7 +61,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings)
     //#endregion
 
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -112,7 +112,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 regions: fillSettings.regions,
             }
 
-            // output the redpacket as JSON payload
+            setPoolSettings(undefined)
             onCreateOrSelect(payload)
             onBack()
         },
@@ -177,7 +177,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     // open the transaction dialog
     useEffect(() => {
         if (!poolSettings?.token || fillState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             state: fillState,
             summary: t('plugin_ito_transaction_dialog_summary', {
@@ -185,7 +185,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 symbol: poolSettings.token.symbol,
             }),
         })
-    }, [fillState, poolSettings, setTransactionDialogOpen])
+    }, [fillState, poolSettings, setTransactionDialog])
 
     return (
         <>

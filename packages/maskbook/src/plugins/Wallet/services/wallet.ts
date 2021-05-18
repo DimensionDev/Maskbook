@@ -9,7 +9,7 @@ import { WalletMessages } from '../messages'
 import { buf2hex, hex2buf, assert } from '../../../utils/utils'
 import { ProviderType } from '../../../web3/types'
 import { resolveProviderName } from '../../../web3/pipes'
-import { formatChecksumAddress } from '../formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
 import { isSameAddress } from '../../../web3/helpers'
 import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
@@ -78,7 +78,7 @@ export async function updateExoticWalletFromSource(
     for await (const cursor of walletStore) {
         const wallet = cursor.value
         {
-            if (updates.has(formatChecksumAddress(wallet.address))) {
+            if (updates.has(formatEthereumAddress(wallet.address))) {
                 await cursor.update(
                     WalletRecordIntoDB({
                         ...WalletRecordOutDB(cursor.value),
@@ -91,7 +91,7 @@ export async function updateExoticWalletFromSource(
         }
     }
     for (const address of updates.keys()) {
-        const wallet = await walletStore.get(formatChecksumAddress(address))
+        const wallet = await walletStore.get(formatEthereumAddress(address))
         if (wallet) continue
         await walletStore.put(
             WalletRecordIntoDB({
@@ -191,7 +191,7 @@ export async function importFirstWallet(rec: Parameters<typeof importNewWallet>[
 
 export async function renameWallet(address: string, name: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
-    const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
+    const wallet = await getWalletByAddress(t, formatEthereumAddress(address))
     assert(wallet)
     wallet.name = name
     wallet.updatedAt = new Date()
@@ -201,7 +201,7 @@ export async function renameWallet(address: string, name: string) {
 
 export async function removeWallet(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
-    const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
+    const wallet = await getWalletByAddress(t, formatEthereumAddress(address))
     if (!wallet) return
     await t.objectStore('Wallet').delete(wallet.address)
     WalletMessages.events.walletsUpdated.sendToAll(undefined)

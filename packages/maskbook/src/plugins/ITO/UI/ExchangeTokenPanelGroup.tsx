@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
-import { makeStyles, createStyles, InputAdornment } from '@material-ui/core'
+import { makeStyles, InputAdornment } from '@material-ui/core'
 import { v4 as uuid } from 'uuid'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
@@ -12,14 +12,12 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ExchangeTokenPanel } from './ExchangeTokenPanel'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        arrow: {
-            display: 'flex',
-            justifyContent: 'center',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    arrow: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+}))
 
 export interface ExchangeTokenPanelGroupProps {
     token: EtherTokenDetailed | ERC20TokenDetailed | undefined

@@ -1,11 +1,11 @@
-import { Card, createStyles, makeStyles } from '@material-ui/core'
+import { Card, makeStyles } from '@material-ui/core'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isTwitter as isTwitterF } from '../../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles((theme) => {
     const isTwitter = isTwitterF(activatedSocialNetworkUI)
-    return createStyles({
+    return {
         root: {
             width: 450,
             overflow: 'auto',
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => {
                       border: `1px solid ${theme.palette.divider}`,
                   }),
         },
-    })
+    }
 })
 
 export interface TrendingCardProps extends withClasses<'root'> {

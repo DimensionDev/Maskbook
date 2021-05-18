@@ -18,9 +18,7 @@ export class MaskITO extends Contract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
     clone(): MaskITO
     methods: {
-        check_availability(
-            id: string | number[],
-        ): TransactionObject<{
+        check_availability(id: string | number[]): TransactionObject<{
             exchange_addrs: string[]
             remaining: string
             started: boolean
