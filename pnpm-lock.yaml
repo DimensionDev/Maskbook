@@ -183,7 +183,10 @@ importers:
 
   packages/icons:
     specifiers:
+      '@dimensiondev/maskbook-theme': workspace:*
       snowpack: ^3.3.5
+    dependencies:
+      '@dimensiondev/maskbook-theme': link:../theme
     devDependencies:
       snowpack: 3.3.5
 
