@@ -10,9 +10,8 @@ export function useFetchPool(address: string) {
 
 export function useFetchPoolHistory(address: string, period: Period, sort = true) {
     const API_URL = useApiURL()
-    return useAsyncRetry(() => PluginDHedgeRPC.fetchPoolPerformance(address, period, API_URL, sort), [
-        address,
-        period,
-        sort,
-    ])
+    return useAsyncRetry(
+        () => PluginDHedgeRPC.fetchPoolPerformance(address, period, API_URL, sort),
+        [address, period, sort],
+    )
 }
