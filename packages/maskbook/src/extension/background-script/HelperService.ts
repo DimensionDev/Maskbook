@@ -1,5 +1,4 @@
 import { memoizePromise } from '../../utils/memoize'
-import { getHostPermissionFieldFromURL } from '../popups/PermissionAwareRedirect/utils'
 import { constructRequestPermissionURL } from '../popups'
 
 const cache = new Map<string, string>()
@@ -40,21 +39,6 @@ export function saveAsFileFromBuffer(file: BufferSource, mimeType: string, fileN
     const blob = new Blob([file], { type: mimeType })
     const url = URL.createObjectURL(blob)
     saveAsFileFromUrl(url, fileName)
-}
-
-export function openDialogPopup(url: string) {
-    browser.windows.create({
-        type: 'popup',
-        width: 400,
-        height: 600,
-        url: browser.runtime.getURL('/popups.html#' + url),
-    })
-}
-export async function enableSDK(url: string) {
-    sessionStorage.setItem('sdk:' + getHostPermissionFieldFromURL(url), '1')
-}
-export function isSDKEnabled(url: string) {
-    return !!sessionStorage.getItem('sdk:' + getHostPermissionFieldFromURL(url))
 }
 
 export async function requestBrowserPermission(permission: browser.permissions.Permissions) {

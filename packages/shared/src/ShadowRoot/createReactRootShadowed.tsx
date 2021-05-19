@@ -9,6 +9,8 @@ import type {} from 'react-dom/experimental'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'
 
 export interface RenderInShadowRootConfig {
+    /** Root tag. @default "main" */
+    tag?: string
     /** Allow to render multiple React root into a same ShadowRoot */
     key?: string
     /** The AbortSignal to stop the render */
@@ -67,8 +69,9 @@ function mount(
     instanceConfig: RenderInShadowRootConfig,
     globalConfig: CreateRenderInShadowRootConfig,
 ): ReactRootShadowed {
+    const tag = instanceConfig.tag || 'main'
     const key = instanceConfig.key || 'main'
-    if (shadow.querySelector<HTMLElement>(`main.${key}`)) {
+    if (shadow.querySelector<HTMLElement>(`${tag}.${key}`)) {
         console.error('Tried to create root in', shadow, 'with key', key, ' which is already used. Skip rendering.')
         return {
             destory: () => {},
@@ -79,7 +82,7 @@ function mount(
     const wrap = globalConfig.wrapJSX
     jsx = getJSX(jsx)
 
-    const container = shadow.appendChild(document.createElement('main'))
+    const container = shadow.appendChild(document.createElement(tag))
     container.className = key
 
     let undoActions: Function[] = []

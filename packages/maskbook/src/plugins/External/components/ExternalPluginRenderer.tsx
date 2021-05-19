@@ -7,7 +7,7 @@ import { PermissionAwareRedirectOf } from '../../../extension/popups'
 
 setHostConfig({
     permissionAwareOpen(url) {
-        Services.Helper.openDialogPopup(PermissionAwareRedirectOf(url))
+        Services.ThirdPartyPlugin.openPluginPopup(PermissionAwareRedirectOf(url))
     },
 })
 

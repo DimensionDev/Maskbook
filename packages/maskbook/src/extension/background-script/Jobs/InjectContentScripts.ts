@@ -1,5 +1,5 @@
 import { Flags } from '../../../utils/flags'
-import { isSDKEnabled } from '../HelperService'
+import { isSDKEnabled } from '../ThirdPartyPlugin'
 
 type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never
 export default function () {

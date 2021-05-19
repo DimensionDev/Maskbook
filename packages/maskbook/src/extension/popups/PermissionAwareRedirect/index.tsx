@@ -20,7 +20,7 @@ function Inner({ url }: { url: string }) {
     }, [url])
     useEffect(() => {
         if (hasPermission) {
-            Services.Helper.enableSDK(url).then(() => (location.href = url))
+            Services.ThirdPartyPlugin.enableSDK(url).then(() => (location.href = url))
         }
     }, [hasPermission, url])
     return (
