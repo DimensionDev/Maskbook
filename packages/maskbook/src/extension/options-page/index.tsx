@@ -29,7 +29,6 @@ import { DashboardRoute } from './Route'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 
 import Services from '../service'
-import { RequestPermissionPage } from '../../components/RequestPermission/RequestPermission'
 import { grey } from '@material-ui/core/colors'
 import { DashboardSnackbarProvider } from './DashboardComponents/DashboardSnackbar'
 import { SetupStep } from './SetupStep'
@@ -207,8 +206,6 @@ function DashboardUI() {
                 <Route path={DashboardRoute.Plugins} component={withErrorBoundary(DashboardPluginsRouter)} />
                 <Route path={DashboardRoute.Settings} component={withErrorBoundary(DashboardSettingsRouter)} />
                 <Route path={DashboardRoute.Setup} component={withErrorBoundary(DashboardSetupRouter)} />
-                {/* // TODO: this page should be boardless */}
-                <Route path={DashboardRoute.RequestPermission} component={withErrorBoundary(RequestPermissionPage)} />
                 <Redirect
                     path="*"
                     to={Flags.has_no_browser_tab_ui && xsMatched ? DashboardRoute.Nav : DashboardRoute.Personas}

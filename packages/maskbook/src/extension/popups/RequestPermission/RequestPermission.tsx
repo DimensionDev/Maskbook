@@ -11,30 +11,41 @@ import {
     DialogActions,
     DialogContent,
 } from '@material-ui/core'
-import { useLocation } from 'react-router-dom'
+
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
         margin: theme.spacing(2, 2, 2, 2),
     },
 }))
-interface RequestPermissionProps {
-    permission: browser.permissions.Permissions
+export interface RequestPermissionProps extends browser.permissions.Permissions {
     onRequestApprove(): void
     onCancel(): void
 }
 export function RequestPermission(props: RequestPermissionProps) {
     const classes = useStyles()
+    const { origins, permissions } = props
     return (
         <Card className={classes.root}>
             <DialogTitle>Mask needs the following permissions</DialogTitle>
             <DialogContent>
-                <List dense subheader={<ListSubheader>Sites</ListSubheader>}>
-                    {props.permission.origins?.map((x) => (
-                        <ListItem key={x}>
-                            <ListItemText primary={x}></ListItemText>
-                        </ListItem>
-                    ))}
-                </List>
+                {origins?.length ? (
+                    <List dense subheader={<ListSubheader>Sites</ListSubheader>}>
+                        {origins?.map((x) => (
+                            <ListItem key={x}>
+                                <ListItemText primary={x}></ListItemText>
+                            </ListItem>
+                        ))}
+                    </List>
+                ) : null}
+                {permissions?.length ? (
+                    <List dense subheader={<ListSubheader>Permissions</ListSubheader>}>
+                        {permissions?.map((x) => (
+                            <ListItem key={x}>
+                                <ListItemText primary={x}></ListItemText>
+                            </ListItem>
+                        ))}
+                    </List>
+                ) : null}
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.onCancel} variant="text">
@@ -45,20 +56,5 @@ export function RequestPermission(props: RequestPermissionProps) {
                 </Button>
             </DialogActions>
         </Card>
-    )
-}
-
-export function RequestPermissionPage() {
-    const param = useLocation()
-    const _ = new URLSearchParams(param.search)
-    const origins = _.getAll('origin')
-    return (
-        <div style={{ width: 'fit-content', maxWidth: 600, margin: 'auto' }}>
-            <RequestPermission
-                onCancel={() => window.close()}
-                onRequestApprove={() => browser.permissions.request({ origins }).then(() => window.close())}
-                permission={{ origins }}
-            />
-        </div>
     )
 }
