@@ -61,6 +61,13 @@ const LogoItem = styled(MuiListItem)(({ theme }) => ({
     },
 })) as any as typeof MuiListItem
 
+const ListItem = styled(MuiListItem)(({ theme }) => ({
+    [`&.${listItemClasses.selected}`]: {
+        backgroundColor: 'transparent',
+        borderRight: '4px solid ' + (theme.palette.mode === 'light' ? theme.palette.action.selected : 'white'),
+    },
+}))
+
 export interface NavigationProps {}
 export function Navigation({}: NavigationProps) {
     const { expanded, toggleNavigationExpand } = useContext(DashboardContext)
@@ -81,13 +88,13 @@ export function Navigation({}: NavigationProps) {
                 </ListItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
-            <ListItemLink to={Routes.Wallets} onClick={toggleNavigationExpand}>
+            <ListItem button selected={!!useRouteMatch(Routes.Wallets)} onClick={toggleNavigationExpand}>
                 <ListItemIcon>
                     <AccountBalanceWallet />
                 </ListItemIcon>
                 <ListItemText>{t.wallets()}</ListItemText>
                 {expanded ? <ExpandLess /> : <ExpandMore />}
-            </ListItemLink>
+            </ListItem>
             <Collapse in={expanded}>
                 <List disablePadding>
                     <ListItemLink nested to={Routes.WalletsTransfer}>

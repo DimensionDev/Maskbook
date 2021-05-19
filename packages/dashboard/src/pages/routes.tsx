@@ -24,7 +24,8 @@ export function Pages() {
             <Switch>
                 <Route path={Routes.Welcome} children={<Welcome />} />
                 <Route path={Routes.Personas} children={frame(<Personas />)} exact />
-                <Route path={Routes.Wallets} children={frame(<Wallets />)} exact />
+                {/* This is intentional. Wallets has subroutes and we want to make it selected in the subroutes */}
+                <Route path={Routes.Wallets} children={frame(<Wallets />)} />
                 <Route path={Routes.Settings} children={frame(<Settings />)} exact />
                 <Route path={Routes.Plugins} children={frame(<Plugins />)} exact />
                 <Route children={<Redirect to={Routes.Personas} />} />
