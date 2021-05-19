@@ -294,6 +294,7 @@
     "plugin_wallet_connect_a_wallet": "ウォレットと接続",
     "plugin_wallet_unlock_metamask": "",
     "plugin_wallet_no_gas_fee": "ガス代が不足しています",
+    "plugin_wallet_update_gas_fee": "",
     "plugin_wallet_invalid_network": "無効のネットワーク",
     "plugin_wallet_select_a_wallet": "ウォレットを選択",
     "plugin_wallet_transaction_wait_for_confirmation": "確認を待っています",
