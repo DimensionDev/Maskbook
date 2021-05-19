@@ -49,7 +49,6 @@ export interface MaskMessages {
         before: PersonaIdentifier | undefined
         after: PersonaIdentifier | undefined
     }[]
-    permissionsGranted: { [k in browser.permissions.Permission]?: boolean | undefined }
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })

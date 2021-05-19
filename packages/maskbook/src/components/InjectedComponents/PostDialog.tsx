@@ -49,7 +49,6 @@ import { editActivatedPostMetadata, globalTypedMessageMetadata } from '../../pro
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { SteganographyTextPayload } from './SteganographyTextPayload'
 import { Plugin, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
-import { useForceUpdate } from '../../utils/hooks/useForceUpdate'
 
 const defaultTheme = {}
 
