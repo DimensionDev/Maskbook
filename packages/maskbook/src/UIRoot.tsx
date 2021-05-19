@@ -4,7 +4,7 @@ import { I18nextProvider } from 'react-i18next'
 import i18nNextInstance from './utils/i18n-next'
 import { ErrorBoundary, ErrorBoundaryBuildInfoContext } from '@dimensiondev/maskbook-theme'
 import { buildInfoMarkdown } from './extension/background-script/Jobs/PrintBuildFlags'
-import { StyledEngineProvider, ThemeProvider } from '@material-ui/core'
+import { CssBaseline, StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { StylesProvider } from '@material-ui/styles'
 import { useClassicMaskTheme } from './utils/theme'
 
@@ -29,7 +29,10 @@ export function MaskUIRoot(JSX: JSX.Element) {
     return MaskUIRootWithinShadow(
         <StyledEngineProvider injectFirst>
             <StylesProvider>
-                <ThemeProvider theme={useClassicMaskTheme()}>{JSX}</ThemeProvider>
+                <ThemeProvider theme={useClassicMaskTheme()}>
+                    <CssBaseline />
+                    {JSX}
+                </ThemeProvider>
             </StylesProvider>
         </StyledEngineProvider>,
     )

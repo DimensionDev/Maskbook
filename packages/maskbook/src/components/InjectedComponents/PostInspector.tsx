@@ -31,7 +31,6 @@ export interface PostInspectorProps {
     slotPosition?: 'before' | 'after'
 }
 export function PostInspector(props: PostInspectorProps) {
-    const postInfo = usePostInfo()
     const postBy = usePostInfoDetails('postBy')
     const postContent = usePostInfoDetails('postContent')
     const encryptedPost = usePostInfoDetails('postPayload')

@@ -7,6 +7,7 @@ import { HashRouter } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import { MaskUIRoot } from '../../UIRoot'
 import { DialogRoutes } from '.'
+import { RequestPermissionPage } from './RequestPermission'
 
 const root = document.createElement('div')
 document.body.insertBefore(root, document.body.children[0] || null)
@@ -18,6 +19,9 @@ function Dialogs() {
         <Suspense fallback="">
             <HashRouter>
                 <Switch>
+                    <Route path={DialogRoutes.RequestPermission}>
+                        <RequestPermissionPage />
+                    </Route>
                     <Route path={DialogRoutes.PermissionAwareRedirect} children={<PermissionAwareRedirect />} exact />
                 </Switch>
             </HashRouter>
