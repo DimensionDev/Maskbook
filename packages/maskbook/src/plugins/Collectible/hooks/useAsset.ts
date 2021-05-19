@@ -90,7 +90,8 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     is_verified: false,
                     is_owner: false,
                     is_auction: false,
-                    image_url: raribleResponse.properties.imagePreview,
+                    image_url:
+                        raribleResponse.properties.imagePreview ?? toRaribleImage(raribleResponse.properties.image),
                     asset_contract: {
                         ...raribleResponse.assetContract,
                         schemaName: raribleResponse.assetContract.standard,
