@@ -58,7 +58,7 @@ function render(f: Components.Component<any>, props: any, shadow: ShadowRoot) {
     root.render(f(props, (event) => void shadow.host.dispatchEvent(event)))
 }
 
-const unknown = ['div', (() => '') as any as Components.Component<any>] as const
+const unknown = ['div', (() => null) as any as Components.Component<any>] as const
 
 function shouldRender(element: string): readonly [string, Components.Component<any>] {
     for (const F of Object.values(Components)) {

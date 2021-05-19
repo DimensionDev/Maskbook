@@ -9,7 +9,7 @@ export const MaskCard: Component<MaskCardProps> = (props) => {
                     {String(props.caption)}
                 </Typography>
                 <Typography variant="h5" component="div">
-                    {String(props.title)}
+                    <slot name="title" />
                 </Typography>
                 <Typography variant="body2" component="p">
                     <slot></slot>
