@@ -35,7 +35,10 @@ export function useClaimAll() {
             }),
         )
         const swappedTokens: SwappedToken[] = raws
-            .filter((raw) => raw.availability.swapped !== '0')
+            .filter(
+                (raw) =>
+                    raw.availability.swapped !== '0' && raw.pool.end_time < Number(raw.availability.unlock_time) * 1000,
+            )
             .map((raw) => {
                 return {
                     pids: [raw.pool.pid],
