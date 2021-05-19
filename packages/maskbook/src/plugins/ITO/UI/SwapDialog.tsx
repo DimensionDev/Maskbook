@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import { makeStyles, Typography, Slider, CircularProgress } from '@material-ui/core'
+import { makeStyles, createStyles, Typography, Slider, CircularProgress } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 
