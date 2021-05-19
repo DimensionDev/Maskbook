@@ -54,15 +54,16 @@ function createElement(element: string, options: ElementCreationOptions) {
 }
 
 function render(f: Components.Component<any>, props: any, shadow: ShadowRoot) {
-    const root: ReactRootShadowed = (shadow as any).__root || ((shadow as any).__root = createReactRootShadowed(shadow))
+    const root: ReactRootShadowed =
+        (shadow as any).__root || ((shadow as any).__root = createReactRootShadowed(shadow, { tag: 'span' }))
     root.render(f(props, (event) => void shadow.host.dispatchEvent(event)))
 }
 
-const unknown = ['div', (() => null) as any as Components.Component<any>] as const
+const unknown = ['span', (() => null) as any as Components.Component<any>] as const
 
 function shouldRender(element: string): readonly [string, Components.Component<any>] {
     for (const F of Object.values(Components)) {
-        if (F.displayName === element) return ['main', F]
+        if (F.displayName === element) return ['span', F]
     }
     return unknown
 }
