@@ -2,17 +2,17 @@ import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import type { TransactionReceipt } from 'web3-core'
+import type { ITO } from '@dimensiondev/contracts/types/ITO'
+import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { EtherTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '../../../web3/types'
-import type { Tx } from '@dimensiondev/contracts/types/types'
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../constants'
 import Services from '../../../extension/service'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import type { AdvanceSettingData } from '../UI/AdvanceSetting'
-import type { ITO } from '@dimensiondev/contracts/types/ITO'
 
 export interface PoolSettings {
     password: string
@@ -249,7 +249,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = ITO_Contract.methods.fill_pool(...params).send(config as Tx)
+            const promiEvent = ITO_Contract.methods.fill_pool(...params).send(config as NonPayableTx)
 
             promiEvent
                 .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {

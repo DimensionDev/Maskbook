@@ -2,8 +2,8 @@ import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
 import type { TransactionReceipt } from 'web3-core'
-import type { Tx } from '@dimensiondev/contracts/types/types'
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
+import type { PayableTx } from '@dimensiondev/contracts/types/types'
 import { buf2hex, hex2buf } from '../../../utils/utils'
 import { isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
@@ -170,7 +170,7 @@ export function useSwapCallback(
                 })
                 resolve()
             }
-            const promiEvent = ITO_Contract.methods.swap(...swapParams).send(config as Tx)
+            const promiEvent = ITO_Contract.methods.swap(...swapParams).send(config as PayableTx)
 
             promiEvent
                 .on(TransactionEventType.TRANSACTION_HASH, onHash)

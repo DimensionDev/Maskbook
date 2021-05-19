@@ -2,10 +2,10 @@ import Web3 from 'web3'
 import type { provider as Provider } from 'web3-core'
 import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
-import createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
+import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
 import { ChainId } from '../../../../web3/types'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
-import { ProviderType, MetaMaskInpageProvider } from '../../../../web3/types'
+import { ProviderType } from '../../../../web3/types'
 import {
     currentMetaMaskChainIdSettings,
     currentSelectedWalletAddressSettings,
@@ -37,13 +37,14 @@ function onError(error: string) {
         currentSelectedWalletAddressSettings.value = ''
 }
 
-export async function createProvider() {
+export function createProvider() {
     if (provider) {
         provider.off('accountsChanged', onAccountsChanged)
         provider.off('chainChanged', onChainIdChanged)
         provider.off('error', onError)
     }
-    provider = await createMetaMaskProvider()
+    provider = createMetaMaskProvider()
+    if (!provider) throw new Error('Unable to create in page provider.')
     provider.on('accountsChanged', onAccountsChanged as (...args: unknown[]) => void)
     provider.on('chainChanged', onChainIdChanged as (...args: unknown[]) => void)
     provider.on('error', onError as (...args: unknown[]) => void)

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
-import type { Tx } from '@dimensiondev/contracts/types/types'
+import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionEventType } from '../../../web3/types'
@@ -42,7 +42,7 @@ export function useMaskClaimCallback() {
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = MaskITO_Contract.methods.claim().send(config as Tx)
+            const promiEvent = MaskITO_Contract.methods.claim().send(config as NonPayableTx)
             promiEvent
                 .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                     setClaimState({

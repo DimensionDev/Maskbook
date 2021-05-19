@@ -6,6 +6,7 @@ import { addGasMargin } from '../../../../web3/helpers'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import type { TradeComputed } from '../../types'
 import type { RouterV2 } from '@dimensiondev/contracts/types/RouterV2'
+import { TransactionEventType } from '../../../../web3/types'
 
 interface SuccessfulCall {
     parameters: SwapParameters
@@ -94,27 +95,25 @@ export function useTradeCallback(
             const config = !value || /^0x0*$/.test(value) ? {} : { value }
 
             // @ts-ignore
-            routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args).send(
-                {
+            routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args)
+                .send({
                     gas: addGasMargin(gasEstimated).toFixed(),
                     ...config,
-                },
-                (error, hash) => {
-                    if (error) {
-                        setTradeState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
-                        reject(error)
-                    } else {
-                        setTradeState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
-                    }
-                },
-            )
+                })
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                    setTradeState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
+                })
+                .on(TransactionEventType.ERROR, (error) => {
+                    setTradeState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                })
         })
     }, [tradeParameters, routerV2Contract])
 

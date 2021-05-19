@@ -15,6 +15,7 @@ import { getBlockNumber } from './network'
 import { startEffects } from '../../../utils/side-effects'
 import { Flags } from '../../../utils/flags'
 import { getWalletsCached } from './wallet'
+import { resetAllNonce } from './nonce'
 
 const effect = startEffects(module.hot)
 
@@ -49,7 +50,12 @@ effect(() => {
 })
 
 // revalidate ChainState if the chainId of current provider was changed
-effect(() => currentMaskbookChainIdSettings.addListener(updateBlockNumber))
+effect(() =>
+    currentMaskbookChainIdSettings.addListener(() => {
+        updateBlockNumber()
+        resetAllNonce()
+    }),
+)
 effect(() => currentMetaMaskChainIdSettings.addListener(updateBlockNumber))
 effect(() => currentWalletConnectChainIdSettings.addListener(updateBlockNumber))
 

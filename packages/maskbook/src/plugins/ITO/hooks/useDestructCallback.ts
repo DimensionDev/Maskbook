@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
-import type { Tx } from '@dimensiondev/contracts/types/types'
+import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { TransactionEventType } from '../../../web3/types'
@@ -56,7 +56,7 @@ export function useDestructCallback() {
                     })
                     reject(error)
                 }
-                const promiEvent = ITO_Contract.methods.destruct(id).send(config as Tx)
+                const promiEvent = ITO_Contract.methods.destruct(id).send(config as NonPayableTx)
                 promiEvent.on(TransactionEventType.CONFIRMATION, onConfirm).on(TransactionEventType.ERROR, onFailed)
             })
         },

@@ -1,7 +1,6 @@
 import { pickBy } from 'lodash-es'
 import type { TransactionConfig } from 'web3-core'
 import { toHex } from 'web3-utils'
-
 import { addGasMargin } from '../../../web3/helpers'
 import { getNonce } from './nonce'
 import { estimateGas, getGasPrice } from './network'
@@ -14,13 +13,16 @@ import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/se
  */
 export async function composeTransaction(config: TransactionConfig): Promise<TransactionConfig> {
     const { from = currentSelectedWalletAddressSettings.value, to, data, value } = config
-    const [nonce, gas, gasPrice] = await Promise.all([
-        config.nonce ?? getNonce(from as string),
+    const from_ = from as string
+    const nonce = config.nonce ?? (await getNonce(from_))
+
+    const [gas, gasPrice] = await Promise.all([
         config.gas ??
             estimateGas({
-                from,
+                from: from_,
                 to,
                 data,
+                nonce,
                 value: value ? toHex(value) : undefined,
             }),
         config.gasPrice ?? getGasPrice(),
@@ -28,8 +30,10 @@ export async function composeTransaction(config: TransactionConfig): Promise<Tra
 
     return pickBy({
         from,
-        value,
+        to,
+        data,
         nonce,
+        value,
         gas: addGasMargin(gas).toFixed(),
         gasPrice,
     })

@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js'
-import { useCallback, useMemo } from 'react'
 import { once } from 'lodash-es'
+import { useCallback, useMemo } from 'react'
 import type { TransactionReceipt } from 'web3-eth'
-import type { Tx } from '@dimensiondev/contracts/types/types'
+import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionEventType } from '../types'
 import { useAccount } from './useAccount'
@@ -112,7 +112,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
             return new Promise<void>(async (resolve, reject) => {
                 const promiEvent = erc20Contract.methods
                     .approve(spender, useExact ? amount : MaxUint256)
-                    .send(config as Tx)
+                    .send(config as NonPayableTx)
                 const revalidate = once(() => {
                     revalidateBalance()
                     revalidateAllowance()

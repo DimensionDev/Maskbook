@@ -1,11 +1,12 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import type { Tx } from '@dimensiondev/contracts/types/types'
+import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import Services from '../../extension/service'
+import { TransactionEventType } from '../types'
 
 export function useERC20TokenTransferCallback(address: string, amount?: string, recipient?: string) {
     const account = useAccount()
@@ -60,21 +61,23 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
 
         // send transaction and wait for hash
         return new Promise<string>(async (resolve, reject) => {
-            erc20Contract.methods.transfer(recipient, amount).send(config as Tx, (error, hash) => {
-                if (error) {
-                    setTransferState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
-                } else {
+            erc20Contract.methods
+                .transfer(recipient, amount)
+                .send(config as NonPayableTx)
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     setTransferState({
                         type: TransactionStateType.HASH,
                         hash,
                     })
                     resolve(hash)
-                }
-            })
+                })
+                .on(TransactionEventType.ERROR, (error) => {
+                    setTransferState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                })
         })
     }, [account, address, amount, recipient, erc20Contract])
 

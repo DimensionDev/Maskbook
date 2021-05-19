@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import type { Tx } from '@dimensiondev/contracts/types/types'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import type { PayableTx } from '@dimensiondev/contracts/types/types'
+import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed, TransactionEventType } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
@@ -28,17 +28,17 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
         const grantAmount = new BigNumber(amount).minus(tipAmount)
         if (!address || !token) return []
         return [
-            {
-                token: token.type === EthereumTokenType.Ether ? GITCOIN_ETH_ADDRESS : token.address,
-                amount: tipAmount.toFixed(),
-                dest: address,
-            },
-            {
-                token: token.type === EthereumTokenType.Ether ? GITCOIN_ETH_ADDRESS : token.address,
-                amount: grantAmount.toFixed(),
-                dest: address,
-            },
-        ]
+            [
+                token.type === EthereumTokenType.Ether ? GITCOIN_ETH_ADDRESS : token.address, // token
+                tipAmount.toFixed(), // amount
+                address, // dest
+            ],
+            [
+                token.type === EthereumTokenType.Ether ? GITCOIN_ETH_ADDRESS : token.address, // token
+                grantAmount.toFixed(), // amount
+                address, // dest
+            ],
+        ] as [string, string, string][]
     }, [address, amount, token])
 
     const donateCallback = useCallback(async () => {
@@ -70,21 +70,23 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
-            bulkCheckoutContract.methods.donate(donations).send(config as Tx, (error, hash) => {
-                if (error) {
-                    setDonateState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
-                } else {
+            bulkCheckoutContract.methods
+                .donate(donations)
+                .send(config as PayableTx)
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     setDonateState({
                         type: TransactionStateType.HASH,
                         hash,
                     })
                     resolve(hash)
-                }
-            })
+                })
+                .on(TransactionEventType.ERROR, (error) => {
+                    setDonateState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                })
         })
     }, [account, amount, token, donations])
 

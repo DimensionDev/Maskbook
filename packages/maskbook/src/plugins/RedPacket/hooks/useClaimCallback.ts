@@ -2,9 +2,9 @@ import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import type { Tx } from '@dimensiondev/contracts/types/types'
-import { RedPacketRPC } from '../messages'
 import Services from '../../../extension/service'
+import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+import { TransactionEventType } from '../../../web3/types'
 
 export function useClaimCallback(from: string, id?: string, password?: string) {
     const [claimState, setClaimState] = useTransactionState()
@@ -45,29 +45,23 @@ export function useClaimCallback(from: string, id?: string, password?: string) {
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
-            const onSucceed = (hash: string) => {
-                setClaimState({
-                    type: TransactionStateType.HASH,
-                    hash,
+            redPacketContract.methods
+                .claim(...params)
+                .send(config as NonPayableTx)
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                    setClaimState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
                 })
-                resolve(hash)
-            }
-            const onFailed = (error: Error) => {
-                setClaimState({
-                    type: TransactionStateType.FAILED,
-                    error,
+                .on(TransactionEventType.ERROR, (error) => {
+                    setClaimState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
                 })
-                reject(error)
-            }
-            redPacketContract.methods.claim(...params).send(config as Tx, async (error, hash) => {
-                if (hash) onSucceed(hash)
-                // claim by server
-                else if (error?.message.includes('insufficient funds for gas')) {
-                    RedPacketRPC.claimRedPacket(from, id, password)
-                        .then(({ claim_transaction_hash }) => onSucceed(claim_transaction_hash))
-                        .catch(onFailed)
-                } else if (error) onFailed(error)
-            })
         })
     }, [id, password, from, redPacketContract])
 

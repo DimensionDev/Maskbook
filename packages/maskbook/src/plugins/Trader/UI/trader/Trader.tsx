@@ -220,7 +220,7 @@ export function Trader(props: TraderProps) {
     }, 30 /* seconds */ * 1000 /* milliseconds */)
 
     const onRefreshClick = useCallback(async () => {
-        await Services.Ethereum.updateChainState()
+        await Services.Ethereum.updateBlockNumber()
         asyncTradeComputed.retry()
         resetTimeout()
     }, [asyncTradeComputed.retry, resetTimeout])

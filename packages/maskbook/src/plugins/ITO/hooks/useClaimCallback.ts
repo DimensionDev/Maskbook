@@ -1,8 +1,8 @@
 import { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
+import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import stringify from 'json-stable-stringify'
 import type { TransactionReceipt } from 'web3-core'
-import type { Tx } from '@dimensiondev/contracts/types/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionEventType } from '../../../web3/types'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
@@ -70,7 +70,7 @@ export function useClaimCallback(pids: string[], contractAddress?: string) {
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = ITO_Contract.methods.claim(pids).send(config as Tx)
+            const promiEvent = ITO_Contract.methods.claim(pids).send(config as NonPayableTx)
 
             promiEvent
                 .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {

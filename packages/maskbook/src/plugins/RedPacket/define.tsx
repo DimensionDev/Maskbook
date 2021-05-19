@@ -11,7 +11,9 @@ import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { ChainState } from '../../web3/state/useChainState'
 
 export const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDialog('💰 Red Packet', (props) => (
-    <RedPacketDialog open={props.open} onConfirm={props.onClose} onClose={props.onClose} />
+    <ChainState.Provider>
+        <RedPacketDialog open={props.open} onConfirm={props.onClose} onClose={props.onClose} />
+    </ChainState.Provider>
 ))
 export const RedPacketPluginDefine: PluginConfig = {
     id: RedPacketPluginID,

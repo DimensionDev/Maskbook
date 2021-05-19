@@ -3,10 +3,17 @@
 /* eslint-disable */
 
 import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
+import { ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import {
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
+    BaseContract,
+} from './types'
 
 interface EventOptions {
     filter?: object
@@ -14,15 +21,15 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class BalanceChecker extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
+export interface BalanceChecker extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): BalanceChecker
     clone(): BalanceChecker
     methods: {
-        tokenBalance(user: string, token: string): TransactionObject<string>
+        tokenBalance(user: string, token: string): NonPayableTransactionObject<string>
 
-        balances(users: string[], tokens: string[]): TransactionObject<string[]>
+        balances(users: string[], tokens: string[]): NonPayableTransactionObject<string[]>
     }
     events: {
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
 }

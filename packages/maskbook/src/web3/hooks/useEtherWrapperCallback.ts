@@ -1,10 +1,11 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import type { Tx } from '@dimensiondev/contracts/types/types'
+import type { NonPayableTx, PayableTx } from '@dimensiondev/contracts/types/types'
 import { useEtherWrapperContract } from '../contracts/useWrappedEtherContract'
 import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import Services from '../../extension/service'
+import { TransactionEventType } from '../types'
 
 export function useEtherWrapperCallback() {
     const account = useAccount()
@@ -49,21 +50,23 @@ export function useEtherWrapperCallback() {
 
             // send transaction and wait for hash
             return new Promise<string>((resolve, reject) => {
-                wrapperContract.methods.deposit().send(config as Tx, (error, hash) => {
-                    if (error) {
-                        setTransactionState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
-                        reject(error)
-                    } else {
+                wrapperContract.methods
+                    .deposit()
+                    .send(config as PayableTx)
+                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
                         setTransactionState({
                             type: TransactionStateType.HASH,
                             hash,
                         })
                         resolve(hash)
-                    }
-                })
+                    })
+                    .on(TransactionEventType.ERROR, (error) => {
+                        setTransactionState({
+                            type: TransactionStateType.FAILED,
+                            error,
+                        })
+                        reject(error)
+                    })
             })
         },
         [account, wrapperContract],
@@ -118,21 +121,23 @@ export function useEtherWrapperCallback() {
 
             // send transaction and wait for hash
             return new Promise<string>((resolve, reject) => {
-                wrapperContract.methods.withdraw(withdrawAmount).send(config as Tx, (error, hash) => {
-                    if (error) {
-                        setTransactionState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
-                        reject(error)
-                    } else {
+                wrapperContract.methods
+                    .withdraw(withdrawAmount)
+                    .send(config as NonPayableTx)
+                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
                         setTransactionState({
                             type: TransactionStateType.HASH,
                             hash,
                         })
                         resolve(hash)
-                    }
-                })
+                    })
+                    .on(TransactionEventType.ERROR, (error) => {
+                        setTransactionState({
+                            type: TransactionStateType.FAILED,
+                            error,
+                        })
+                        reject(error)
+                    })
             })
         },
         [account, wrapperContract],

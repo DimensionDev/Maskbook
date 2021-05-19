@@ -1,8 +1,9 @@
 import { useCallback } from 'react'
-import type { Tx } from '@dimensiondev/contracts/types/types'
+import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import Services from '../../../extension/service'
+import { TransactionEventType } from '../../../web3/types'
 
 export function useRefundCallback(from: string, id?: string) {
     const [refundState, setRefundState] = useTransactionState()
@@ -36,21 +37,23 @@ export function useRefundCallback(from: string, id?: string) {
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
-            redPacketContract.methods.refund(id).send(config as Tx, (error, hash) => {
-                if (error) {
-                    setRefundState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
-                } else {
+            redPacketContract.methods
+                .refund(id)
+                .send(config as NonPayableTx)
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     setRefundState({
                         type: TransactionStateType.HASH,
                         hash,
                     })
                     resolve(hash)
-                }
-            })
+                })
+                .on(TransactionEventType.ERROR, (error) => {
+                    setRefundState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                })
         })
     }, [id, redPacketContract])
 

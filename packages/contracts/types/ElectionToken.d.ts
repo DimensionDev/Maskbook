@@ -3,10 +3,17 @@
 /* eslint-disable */
 
 import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
+import { ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import {
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
+    BaseContract,
+} from './types'
 
 interface EventOptions {
     filter?: object
@@ -14,75 +21,105 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class ElectionToken extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
+export type Approval = ContractEventLog<{
+    owner: string
+    approved: string
+    tokenId: string
+    0: string
+    1: string
+    2: string
+}>
+export type ApprovalForAll = ContractEventLog<{
+    owner: string
+    operator: string
+    approved: boolean
+    0: string
+    1: string
+    2: boolean
+}>
+export type Transfer = ContractEventLog<{
+    from: string
+    to: string
+    tokenId: string
+    0: string
+    1: string
+    2: string
+}>
+
+export interface ElectionToken extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): ElectionToken
     clone(): ElectionToken
     methods: {
-        approve(to: string, tokenId: number | string): TransactionObject<void>
+        approve(to: string, tokenId: number | string | BN): NonPayableTransactionObject<void>
 
-        mintStateToken(claimer: string, state: number | string): TransactionObject<string>
+        mintStateToken(claimer: string, state: number | string | BN): NonPayableTransactionObject<string>
 
-        modify_admin(target: string, ifadmin: boolean): TransactionObject<void>
+        modify_admin(target: string, ifadmin: boolean): NonPayableTransactionObject<void>
 
-        modify_limits(state: number | string, delta: number | string): TransactionObject<void>
+        modify_limits(state: number | string | BN, delta: number | string | BN): NonPayableTransactionObject<void>
 
-        safeTransferFrom(from: string, to: string, tokenId: number | string): TransactionObject<void>
+        'safeTransferFrom(address,address,uint256)'(
+            from: string,
+            to: string,
+            tokenId: number | string | BN,
+        ): NonPayableTransactionObject<void>
 
-        setApprovalForAll(operator: string, approved: boolean): TransactionObject<void>
+        'safeTransferFrom(address,address,uint256,bytes)'(
+            from: string,
+            to: string,
+            tokenId: number | string | BN,
+            _data: string | number[],
+        ): NonPayableTransactionObject<void>
 
-        transferFrom(from: string, to: string, tokenId: number | string): TransactionObject<void>
+        setApprovalForAll(operator: string, approved: boolean): NonPayableTransactionObject<void>
 
-        balanceOf(owner: string): TransactionObject<string>
+        transferFrom(from: string, to: string, tokenId: number | string | BN): NonPayableTransactionObject<void>
 
-        baseURI(): TransactionObject<string>
+        balanceOf(owner: string): NonPayableTransactionObject<string>
 
-        check_availability(state: number | string): TransactionObject<string>
+        baseURI(): NonPayableTransactionObject<string>
 
-        getApproved(tokenId: number | string): TransactionObject<string>
+        check_availability(state: number | string | BN): NonPayableTransactionObject<string>
 
-        isApprovedForAll(owner: string, operator: string): TransactionObject<boolean>
+        getApproved(tokenId: number | string | BN): NonPayableTransactionObject<string>
 
-        name(): TransactionObject<string>
+        isApprovedForAll(owner: string, operator: string): NonPayableTransactionObject<boolean>
 
-        ownerOf(tokenId: number | string): TransactionObject<string>
+        name(): NonPayableTransactionObject<string>
 
-        supportsInterface(interfaceId: string | number[]): TransactionObject<boolean>
+        ownerOf(tokenId: number | string | BN): NonPayableTransactionObject<string>
 
-        symbol(): TransactionObject<string>
+        supportsInterface(interfaceId: string | number[]): NonPayableTransactionObject<boolean>
 
-        tokenByIndex(index: number | string): TransactionObject<string>
+        symbol(): NonPayableTransactionObject<string>
 
-        tokenOfOwnerByIndex(owner: string, index: number | string): TransactionObject<string>
+        tokenByIndex(index: number | string | BN): NonPayableTransactionObject<string>
 
-        tokenURI(tokenId: number | string): TransactionObject<string>
+        tokenOfOwnerByIndex(owner: string, index: number | string | BN): NonPayableTransactionObject<string>
 
-        totalSupply(): TransactionObject<string>
+        tokenURI(tokenId: number | string | BN): NonPayableTransactionObject<string>
+
+        totalSupply(): NonPayableTransactionObject<string>
     }
     events: {
-        Approval: ContractEvent<{
-            owner: string
-            approved: string
-            tokenId: string
-            0: string
-            1: string
-            2: string
-        }>
-        ApprovalForAll: ContractEvent<{
-            owner: string
-            operator: string
-            approved: boolean
-            0: string
-            1: string
-            2: boolean
-        }>
-        Transfer: ContractEvent<{
-            from: string
-            to: string
-            tokenId: string
-            0: string
-            1: string
-            2: string
-        }>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+        Approval(cb?: Callback<Approval>): EventEmitter
+        Approval(options?: EventOptions, cb?: Callback<Approval>): EventEmitter
+
+        ApprovalForAll(cb?: Callback<ApprovalForAll>): EventEmitter
+        ApprovalForAll(options?: EventOptions, cb?: Callback<ApprovalForAll>): EventEmitter
+
+        Transfer(cb?: Callback<Transfer>): EventEmitter
+        Transfer(options?: EventOptions, cb?: Callback<Transfer>): EventEmitter
+
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
+
+    once(event: 'Approval', cb: Callback<Approval>): void
+    once(event: 'Approval', options: EventOptions, cb: Callback<Approval>): void
+
+    once(event: 'ApprovalForAll', cb: Callback<ApprovalForAll>): void
+    once(event: 'ApprovalForAll', options: EventOptions, cb: Callback<ApprovalForAll>): void
+
+    once(event: 'Transfer', cb: Callback<Transfer>): void
+    once(event: 'Transfer', options: EventOptions, cb: Callback<Transfer>): void
 }

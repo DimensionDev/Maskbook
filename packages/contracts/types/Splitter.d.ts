@@ -3,10 +3,17 @@
 /* eslint-disable */
 
 import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
+import { ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import {
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
+    BaseContract,
+} from './types'
 
 interface EventOptions {
     filter?: object
@@ -14,19 +21,19 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class Splitter extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
+export interface Splitter extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): Splitter
     clone(): Splitter
     methods: {
         splitTransfer(
             toFirst: string,
             toSecond: string,
-            valueFirst: number | string,
-            valueSecond: number | string,
+            valueFirst: number | string | BN,
+            valueSecond: number | string | BN,
             tokenAddress: string,
-        ): TransactionObject<void>
+        ): NonPayableTransactionObject<void>
     }
     events: {
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
 }

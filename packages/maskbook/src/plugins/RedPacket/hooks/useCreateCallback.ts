@@ -2,11 +2,11 @@ import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import type { TransactionReceipt } from 'web3-core'
+import type { PayableTx } from '@dimensiondev/contracts/types/types'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed, TransactionEventType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import type { Tx } from '@dimensiondev/contracts/types/types'
 import Services from '../../../extension/service'
 
 export interface RedPacketSettings {
@@ -94,7 +94,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = redPacketContract.methods.create_red_packet(...params).send(config as Tx)
+            const promiEvent = redPacketContract.methods.create_red_packet(...params).send(config as PayableTx)
 
             promiEvent
                 .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
