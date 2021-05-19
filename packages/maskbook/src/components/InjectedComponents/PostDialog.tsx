@@ -15,13 +15,12 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
-import { DashboardRoute } from '../../extension/options-page/Route'
 import { isMinds } from '../../social-network-adaptor/minds.com/base'
 import { CompositionEvent, MaskMessage } from '../../utils/messages'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
 import { useFriendsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
-import { clipboardReadPermissionGranted, currentImagePayloadStatus, debugModeSetting } from '../../settings/settings'
+import { currentImagePayloadStatus, debugModeSetting } from '../../settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { activatedSocialNetworkUI } from '../../social-network'
 import Services from '../../extension/service'
@@ -98,21 +97,19 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const { t } = useI18N()
     const isDebug = useValueRef(debugModeSetting)
     const [showPostMetadata, setShowPostMetadata] = useState(false)
-    const forceUpdate = useForceUpdate()
+    const [clipboardReadPermissionGranted, setClipboardReadPermissionGranted] = useState<boolean | undefined>(undefined)
 
-    const requestClipboardPermission = useCallback(() => {
-        const permission = 'clipboardRead'
-        const reason =
-            'Mask needs permission to read the clipboard content to ' +
-            'enable automatically pasting the Image Payload into the composer'
-        Services.Welcome.openOptionsPage(DashboardRoute.RequestPermission, `permission=${permission}&reason=${reason}`)
-
-        const removeListener = MaskMessage.events.permissionsGranted.on((permissions) => {
-            removeListener()
-            clipboardReadPermissionGranted.value = permissions.clipboardRead
-            forceUpdate()
+    useEffect(() => {
+        Services.Helper.queryPermission({ permissions: ['clipboardRead'] }).then((granted) => {
+            setClipboardReadPermissionGranted(granted)
         })
     }, [])
+
+    const requestClipboardPermission = useCallback(async () => {
+        const granted = await Services.Helper.requestBrowserPermission({ permissions: ['clipboardRead'] })
+        setClipboardReadPermissionGranted(Boolean(granted))
+    }, [])
+
     const onPostContentChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
         const newText = e.target.value
         const msg = props.postContent
@@ -266,7 +263,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         ) : null}
                         {isMinds(activatedSocialNetworkUI) &&
                             currentImagePayloadStatus[activatedSocialNetworkUI.networkIdentifier].value === 'true' &&
-                            typeof clipboardReadPermissionGranted.value === 'undefined' && (
+                            !clipboardReadPermissionGranted && (
                                 <Button
                                     variant="outlined"
                                     onClick={requestClipboardPermission}
