@@ -15,11 +15,12 @@ importers:
       '@emotion/react': ^11.1.2
       '@emotion/styled': ^11.3.0
       '@magic-works/commonjs-import.meta': ^1.0.0
-      '@magic-works/i18n-codegen': ^0.0.5
-      '@material-ui/core': 5.0.0-alpha.32
-      '@material-ui/icons': 5.0.0-alpha.29
-      '@material-ui/lab': 5.0.0-alpha.32
-      '@material-ui/system': 5.0.0-alpha.31
+      '@magic-works/i18n-codegen': ^0.0.6
+      '@material-ui/core': 5.0.0-alpha.34
+      '@material-ui/icons': 5.0.0-alpha.34
+      '@material-ui/lab': 5.0.0-alpha.34
+      '@material-ui/styles': 5.0.0-alpha.33
+      '@material-ui/system': 5.0.0-alpha.34
       '@nice-labs/git-rev': ^3.5.0
       '@types/react': ^17.0.2
       '@types/react-dom': ^17.0.1
@@ -37,7 +38,7 @@ importers:
       lint-staged: ^10.5.3
       npm-run-all: ^4.1.5
       only-allow: ^1.0.0
-      prettier: ^2.1.2
+      prettier: ^2.3.0
       react: '=0.0.0-experimental-dc27b5aaa'
       react-dom: '=0.0.0-experimental-dc27b5aaa'
       react-i18next: ^11.8.13
@@ -48,10 +49,11 @@ importers:
       '@emotion/cache': 11.1.3
       '@emotion/react': 11.1.5_c0af80ec34849f4f0672964fcb8d549e
       '@emotion/styled': 11.3.0_6914f0bc990f15d4167a2a655b85da19
-      '@material-ui/core': 5.0.0-alpha.32_bac37eb8a1c0dc02087b7b9dfc212d0e
-      '@material-ui/icons': 5.0.0-alpha.29_d6d36e4915e6175df8ee5b483a07146f
-      '@material-ui/lab': 5.0.0-alpha.32_7849df54b1deac57f4daa701731e1f8d
-      '@material-ui/system': 5.0.0-alpha.31_5f00b486bfe15771a66ffa2b391ac8b5
+      '@material-ui/core': 5.0.0-alpha.34_bac37eb8a1c0dc02087b7b9dfc212d0e
+      '@material-ui/icons': 5.0.0-alpha.34_aacef12d6d4d9a6bf7bfd1142db5175b
+      '@material-ui/lab': 5.0.0-alpha.34_c809bf955311ebfa47e2f96dfb2af107
+      '@material-ui/styles': 5.0.0-alpha.33_c0af80ec34849f4f0672964fcb8d549e
+      '@material-ui/system': 5.0.0-alpha.34_5f00b486bfe15771a66ffa2b391ac8b5
       '@types/react': 17.0.3
       '@types/react-dom': 17.0.3
       i18next: 20.2.1
@@ -64,13 +66,13 @@ importers:
       '@commitlint/config-conventional': 12.1.1
       '@dimensiondev/cli': link:packages/cli
       '@magic-works/commonjs-import.meta': 1.0.0_typescript@4.2.4
-      '@magic-works/i18n-codegen': 0.0.5_typescript@4.2.4
+      '@magic-works/i18n-codegen': 0.0.6_typescript@4.2.4
       '@nice-labs/git-rev': 3.5.0
       eslint: 7.24.0
       eslint-config-prettier: 8.2.0_eslint@7.24.0
       eslint-plugin-import: 2.22.1_eslint@7.24.0
       eslint-plugin-lodash: 7.2.0_eslint@7.24.0
-      eslint-plugin-prettier: 3.4.0_64fa1aa96df95a5df14fce32631d8e89
+      eslint-plugin-prettier: 3.4.0_34cfdd9635f7f98da5af3b7734dcacb1
       eslint-plugin-react-hooks: 4.2.0_eslint@7.24.0
       eslint-plugin-unused-imports: 1.1.1
       esm: 3.2.25
@@ -78,7 +80,7 @@ importers:
       lint-staged: 10.5.4
       npm-run-all: 4.1.5
       only-allow: 1.0.0
-      prettier: 2.2.1
+      prettier: 2.3.0
       ts-node: 9.1.1_typescript@4.2.4
       ttypescript: 1.5.12_ts-node@9.1.1+typescript@4.2.4
       typescript: 4.2.4
@@ -181,7 +183,10 @@ importers:
 
   packages/icons:
     specifiers:
+      '@dimensiondev/maskbook-theme': workspace:*
       snowpack: ^3.3.5
+    dependencies:
+      '@dimensiondev/maskbook-theme': link:../theme
     devDependencies:
       snowpack: 3.3.5
 
@@ -555,6 +560,7 @@ importers:
       typeson: ^6.1.0
       typeson-registry: ^1.0.0-alpha.38
       use-subscription: ^1.5.1
+      wallet.ts: ^1.0.1
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@servie/events': 3.0.0
@@ -567,6 +573,7 @@ importers:
       typeson: 6.1.0
       typeson-registry: 1.0.0-alpha.39
       use-subscription: 1.5.1
+      wallet.ts: 1.0.1
 
   packages/storybook-shared:
     specifiers:
@@ -587,13 +594,17 @@ importers:
       '@storybook/addons': ^6.2.9
       '@storybook/react': ^6.2.9
       '@storybook/theming': ^6.2.9
+      '@types/tinycolor2': ^1.4.2
       babel-loader: ^8.2.2
       lodash-es: ^4.17.20
       storybook-addon-matrix: ^1.6.0
+      tinycolor2: ^1.4.2
     dependencies:
       '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
+      '@types/tinycolor2': 1.4.2
       lodash-es: 4.17.21
+      tinycolor2: 1.4.2
     devDependencies:
       '@babel/core': 7.13.16
       '@storybook/addon-actions': 6.2.9
@@ -634,7 +645,7 @@ packages:
     dependencies:
       '@0xproject/utils': 0.3.4
       chalk: 2.4.2
-      glob: 7.1.6
+      glob: 7.1.7
       handlebars: 4.7.7
       lodash: 4.17.21
       mkdirp: 0.5.5
@@ -3523,8 +3534,8 @@ packages:
       typescript: 4.2.4
     dev: true
 
-  /@magic-works/i18n-codegen/0.0.5_typescript@4.2.4:
-    resolution: {integrity: sha512-gJ6SFMiXOza4KaSZx8l0WleNK6UReLMR1KnSHUmIIK0Sfqq7OqNuPooBBTF1U78nG+FWaeg9S9SI42u4Lpzwpg==}
+  /@magic-works/i18n-codegen/0.0.6_typescript@4.2.4:
+    resolution: {integrity: sha512-vM8DzT7zcmCDk2KBoeyUgGzkW/4MaKIdDTTh67cJT0/VVXu7fQd2tjRglJwOunowTCwPxwIHWjoCD/DIN4iPXQ==}
     hasBin: true
     peerDependencies:
       typescript: ^4
@@ -3536,8 +3547,8 @@ packages:
       yargs: 16.2.0
     dev: true
 
-  /@material-ui/core/5.0.0-alpha.32_bac37eb8a1c0dc02087b7b9dfc212d0e:
-    resolution: {integrity: sha512-Q7ppqI0+xWf7bV3EkLwW6t18l+Q/vWrRi8VgGJ9hTii9EBMmgKqGPLxGRQKfNo6VO4yb6Kp4JVPG0NI8q7l+iw==}
+  /@material-ui/core/5.0.0-alpha.34_bac37eb8a1c0dc02087b7b9dfc212d0e:
+    resolution: {integrity: sha512-OlY10og9ziDqFUpwjzILUoSBWyF8iEXJXEnVSNhn3ul0bUUb26Z5IZbddhSS1LF+F+iSuHHVaIjbFOnjy7uC5Q==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@emotion/react': ^11.0.0
@@ -3556,12 +3567,13 @@ packages:
       '@babel/runtime': 7.13.17
       '@emotion/react': 11.1.5_c0af80ec34849f4f0672964fcb8d549e
       '@emotion/styled': 11.3.0_6914f0bc990f15d4167a2a655b85da19
-      '@material-ui/styled-engine': 5.0.0-alpha.26_f4200605207c7bcd36a14097dbf7cce0
-      '@material-ui/styles': 5.0.0-alpha.32_c0af80ec34849f4f0672964fcb8d549e
-      '@material-ui/system': 5.0.0-alpha.31_5f00b486bfe15771a66ffa2b391ac8b5
+      '@material-ui/private-theming': 5.0.0-alpha.33_c0af80ec34849f4f0672964fcb8d549e
+      '@material-ui/styled-engine': 5.0.0-alpha.34_f4200605207c7bcd36a14097dbf7cce0
+      '@material-ui/styles': 5.0.0-alpha.33_c0af80ec34849f4f0672964fcb8d549e
+      '@material-ui/system': 5.0.0-alpha.34_5f00b486bfe15771a66ffa2b391ac8b5
       '@material-ui/types': 6.0.0_@types+react@17.0.3
-      '@material-ui/unstyled': 5.0.0-alpha.32_5f00b486bfe15771a66ffa2b391ac8b5
-      '@material-ui/utils': 5.0.0-alpha.31_bbe24f3d390b2dd762addfb9b4a0c180
+      '@material-ui/unstyled': 5.0.0-alpha.34_5f00b486bfe15771a66ffa2b391ac8b5
+      '@material-ui/utils': 5.0.0-alpha.33_bbe24f3d390b2dd762addfb9b4a0c180
       '@popperjs/core': 2.9.2
       '@types/react': 17.0.3
       '@types/react-transition-group': 4.4.1
@@ -3575,8 +3587,8 @@ packages:
       react-transition-group: 4.4.1_871975e9b4da30d210a8a87beea73db9
     dev: false
 
-  /@material-ui/icons/5.0.0-alpha.29_d6d36e4915e6175df8ee5b483a07146f:
-    resolution: {integrity: sha512-DNJ7MD46WMEAPl0j8CVOcCIDuLOMbTf7+x8EO4diJ4R7DlNwH1YPJ47gHr1yYhp6ETLmlIrzo+apzfLerAmRSw==}
+  /@material-ui/icons/5.0.0-alpha.34_aacef12d6d4d9a6bf7bfd1142db5175b:
+    resolution: {integrity: sha512-wjKuI5afTX0qzWS70Un8xRfNWYqAX8PTJhMZM/1UN2c+v6Qwx+M5WAnMLhbeS2hJt0t6vEkYZJfTRU3ThSX1Yw==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@material-ui/core': ^5.0.0-alpha.15
@@ -3587,13 +3599,13 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.13.17
-      '@material-ui/core': 5.0.0-alpha.32_bac37eb8a1c0dc02087b7b9dfc212d0e
+      '@material-ui/core': 5.0.0-alpha.34_bac37eb8a1c0dc02087b7b9dfc212d0e
       '@types/react': 17.0.3
       react: 0.0.0-experimental-dc27b5aaa
     dev: false
 
-  /@material-ui/lab/5.0.0-alpha.32_7849df54b1deac57f4daa701731e1f8d:
-    resolution: {integrity: sha512-YfWfv/QYYIG1OeGuNlJrLzAOUVMWDBEvoSDDXgz4PbZ0vCG9ox7PXRnYEJH80JWe7epJ/pK3ui2m1QXEDdqwNw==}
+  /@material-ui/lab/5.0.0-alpha.34_c809bf955311ebfa47e2f96dfb2af107:
+    resolution: {integrity: sha512-Pgp2bVUF8+MOiF0A3szV5BCP92QtIk9r9YJKjnNqBf7W7VkY/AQApPOrPmYZfdFbe/coxSNdpo9jLrzTau6e/Q==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@material-ui/core': ^5.0.0-alpha.18
@@ -3620,9 +3632,9 @@ packages:
       '@date-io/dayjs': 2.10.8
       '@date-io/luxon': 2.10.8
       '@date-io/moment': 2.10.8
-      '@material-ui/core': 5.0.0-alpha.32_bac37eb8a1c0dc02087b7b9dfc212d0e
-      '@material-ui/system': 5.0.0-alpha.31_5f00b486bfe15771a66ffa2b391ac8b5
-      '@material-ui/utils': 5.0.0-alpha.31_bbe24f3d390b2dd762addfb9b4a0c180
+      '@material-ui/core': 5.0.0-alpha.34_bac37eb8a1c0dc02087b7b9dfc212d0e
+      '@material-ui/system': 5.0.0-alpha.34_5f00b486bfe15771a66ffa2b391ac8b5
+      '@material-ui/utils': 5.0.0-alpha.33_bbe24f3d390b2dd762addfb9b4a0c180
       '@types/react': 17.0.3
       clsx: 1.1.1
       prop-types: 15.7.2
@@ -3634,8 +3646,25 @@ packages:
       - react-dom
     dev: false
 
-  /@material-ui/styled-engine/5.0.0-alpha.26_f4200605207c7bcd36a14097dbf7cce0:
-    resolution: {integrity: sha512-an3Rvear3FHxKESQtHhLG4Ty4lMOliGXh/4pu26tvBGcn3MpB3Rzlh7BRZP3m0jallKNqb0HwFmgPGiw6Yf1Nw==}
+  /@material-ui/private-theming/5.0.0-alpha.33_c0af80ec34849f4f0672964fcb8d549e:
+    resolution: {integrity: sha512-3nZQD4gKqjPoVZHjwCZrs7yi6twmO2Z6m6QpYMcg3kuRfwpJZE2uZSQ0WrSX73otS8uwZM5Y+EgcKpJPnIxIgg==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      '@types/react': ^16.8.6 || ^17.0.0
+      react: ^17.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.13.17
+      '@material-ui/utils': 5.0.0-alpha.33_bbe24f3d390b2dd762addfb9b4a0c180
+      '@types/react': 17.0.3
+      prop-types: 15.7.2
+      react: 0.0.0-experimental-dc27b5aaa
+    dev: false
+
+  /@material-ui/styled-engine/5.0.0-alpha.34_f4200605207c7bcd36a14097dbf7cce0:
+    resolution: {integrity: sha512-1j+4tIxS6x3McJ+3O9mxwzjkci/uu09nnON7ZDgqX9O3f15D8CP8cmAy0PDm47M4utMwIqj+EaS4Y6d2PZWF5Q==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@emotion/react': ^11.0.0
@@ -3655,8 +3684,8 @@ packages:
       react: 0.0.0-experimental-dc27b5aaa
     dev: false
 
-  /@material-ui/styles/5.0.0-alpha.32_c0af80ec34849f4f0672964fcb8d549e:
-    resolution: {integrity: sha512-KZHIXUCdZlnvDrZfkEVVBpqxRQLPNajA2rVLO0qsl8s3p3W49eFcmXmZQKn59IYe5hsjcqpaOfbPjs9O4oyuzA==}
+  /@material-ui/styles/5.0.0-alpha.33_c0af80ec34849f4f0672964fcb8d549e:
+    resolution: {integrity: sha512-pTJBrm5u210A41gY9JUyYwrUbLHBgge8GA81FgoEsfSVcSfJlrt1nw2vmD9ukMhjO+bd8Bkfkpn0aTiXYclntA==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@types/react': ^16.8.6 || ^17.0.0
@@ -3667,8 +3696,9 @@ packages:
     dependencies:
       '@babel/runtime': 7.13.17
       '@emotion/hash': 0.8.0
+      '@material-ui/private-theming': 5.0.0-alpha.33_c0af80ec34849f4f0672964fcb8d549e
       '@material-ui/types': 6.0.0_@types+react@17.0.3
-      '@material-ui/utils': 5.0.0-alpha.31_bbe24f3d390b2dd762addfb9b4a0c180
+      '@material-ui/utils': 5.0.0-alpha.33_bbe24f3d390b2dd762addfb9b4a0c180
       '@types/react': 17.0.3
       clsx: 1.1.1
       csstype: 3.0.8
@@ -3685,8 +3715,8 @@ packages:
       react: 0.0.0-experimental-dc27b5aaa
     dev: false
 
-  /@material-ui/system/5.0.0-alpha.31_5f00b486bfe15771a66ffa2b391ac8b5:
-    resolution: {integrity: sha512-fHTMpcu3r+1KsNWoK3YSXNiOJjO5LzafPtS31XoWCnW+Dq1wC/hu8Q6u+tUJlxAPRsFCRW+d27Y/a+BWWwFtVQ==}
+  /@material-ui/system/5.0.0-alpha.34_5f00b486bfe15771a66ffa2b391ac8b5:
+    resolution: {integrity: sha512-HgaOfsn3nz/DJl8RLpD8whmC2L6EzjpVrYsG93vs1tDdDJF7e+x7SghnFvhQaltuIYqL7S5/tCNDwDEGcLxSLw==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@types/react': ^16.8.6 || ^17.0.0
@@ -3697,7 +3727,7 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.13.17
-      '@material-ui/utils': 5.0.0-alpha.31_bbe24f3d390b2dd762addfb9b4a0c180
+      '@material-ui/utils': 5.0.0-alpha.33_bbe24f3d390b2dd762addfb9b4a0c180
       '@types/react': 17.0.3
       csstype: 3.0.8
       prop-types: 15.7.2
@@ -3716,8 +3746,8 @@ packages:
       '@types/react': 17.0.3
     dev: false
 
-  /@material-ui/unstyled/5.0.0-alpha.32_5f00b486bfe15771a66ffa2b391ac8b5:
-    resolution: {integrity: sha512-P6UDen5Ow7PWkrXkfeQ/CM7R40k0KCVgzMfjUdtbGUIUlX30AJolr/6ZkKxhL1tYqXTCI9oxOfpuu/Hu31JNzg==}
+  /@material-ui/unstyled/5.0.0-alpha.34_5f00b486bfe15771a66ffa2b391ac8b5:
+    resolution: {integrity: sha512-V/fnSlSC/QUsAOabhwERFL7t83qnGOreunAq7ZguuRxpHRBowMZ/R1dXnaOpoRsQfS43XBjmdqI9/uoYlq0/gg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@types/react': ^16.8.6 || ^17.0.0
@@ -3728,7 +3758,7 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.13.17
-      '@material-ui/utils': 5.0.0-alpha.31_bbe24f3d390b2dd762addfb9b4a0c180
+      '@material-ui/utils': 5.0.0-alpha.33_bbe24f3d390b2dd762addfb9b4a0c180
       '@types/react': 17.0.3
       clsx: 1.1.1
       prop-types: 15.7.2
@@ -3737,8 +3767,8 @@ packages:
       react-is: 17.0.2
     dev: false
 
-  /@material-ui/utils/5.0.0-alpha.31_bbe24f3d390b2dd762addfb9b4a0c180:
-    resolution: {integrity: sha512-4OzVD12+HbfWMftwiHCBforgjkhzbWMdK9GTQLQcekjdG2qpi41BGvanPpHjlxegzou0A2MEaULBvWqsKrUP9A==}
+  /@material-ui/utils/5.0.0-alpha.33_bbe24f3d390b2dd762addfb9b4a0c180:
+    resolution: {integrity: sha512-jzXUtTntCC7fumvXvT+scHj6t/A+qUKJ3XM/C1ZtPmPg4dA5+XmhD8uU9wZU3IuaDb66LJdZnfnhRD72052k+Q==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       react: ^17.0.0
@@ -5897,8 +5927,8 @@ packages:
   /@types/node/14.14.41:
     resolution: {integrity: sha512-dueRKfaJL4RTtSa7bWeTK1M+VH+Gns73oCgzvYfHZywRCoPSd8EkXBL0mZ9unPTveBn+D9phZBaxuzpwjWkW0g==}
 
-  /@types/node/14.14.43:
-    resolution: {integrity: sha512-3pwDJjp1PWacPTpH0LcfhgjvurQvrZFBrC6xxjaUEZ7ifUtT32jtjPxEMMblpqd2Mvx+k8haqQJLQxolyGN/cQ==}
+  /@types/node/14.14.44:
+    resolution: {integrity: sha512-+gaugz6Oce6ZInfI/tK4Pq5wIIkJMEJUu92RB3Eu93mtj4wjjjz9EB5mLp5s1pSsLXdC/CPut/xF20ZzAQJbTA==}
 
   /@types/node/8.10.66:
     resolution: {integrity: sha512-tktOkFUA4kXx2hhhrB8bIFb5TbwzS4uOhKEmwiD+NoiL0qtP2OQ9mFldbgD4dV1djrlBYP6eBuQZiWjuHUpqFw==}
@@ -5929,7 +5959,7 @@ packages:
   /@types/pbkdf2/3.1.0:
     resolution: {integrity: sha512-Cf63Rv7jCQ0LaL8tNXmEyqTHuIJxRdlS5vMh1mj5voN4+QFhVZnlZruezqpWYDiJ8UTzhP0VmeLXCmBk66YrMQ==}
     dependencies:
-      '@types/node': 14.14.43
+      '@types/node': 14.14.44
 
   /@types/prettier/2.2.3:
     resolution: {integrity: sha512-PijRCG/K3s3w1We6ynUKdxEc5AcuuH3NBmMDP8uvKVp6X43UY7NQlTzczakXP3DJR0F4dfNQIGjU2cUeRYs2AA==}
@@ -6073,7 +6103,7 @@ packages:
   /@types/secp256k1/4.0.2:
     resolution: {integrity: sha512-QMg+9v0bbNJ2peLuHRWxzmy0HRJIG6gFZNhaRSp7S3ggSbCCxiqQB2/ybvhXyhHOCequpNkrx7OavNhrWOsW0A==}
     dependencies:
-      '@types/node': 14.14.43
+      '@types/node': 14.14.44
 
   /@types/serve-static/1.13.9:
     resolution: {integrity: sha512-ZFqF6qa48XsPdjXV5Gsz0Zqmux2PerNd3a/ktL45mHpa19cuMi/cL8tcxdAx497yRh+QtYPuofjT9oWw9P7nkA==}
@@ -6122,6 +6152,10 @@ packages:
     resolution: {integrity: sha512-IW3dFGNyVkVLC1MCMogVWQaKH/ZtjPQdOW9c3X128o5lVpFYNsq/l3Qo1pV7sfTmvDzWEXR3QTxg1TMy1pyaAQ==}
     dependencies:
       '@types/node': 14.14.37
+    dev: false
+
+  /@types/tinycolor2/1.4.2:
+    resolution: {integrity: sha512-PeHg/AtdW6aaIO2a+98Xj7rWY4KC1E6yOy7AFknJQ7VXUGNrMlyxDFxJo7HqLtjQms/ZhhQX52mLVW/EX3JGOw==}
     dev: false
 
   /@types/uglify-js/3.13.0:
@@ -7664,7 +7698,7 @@ packages:
     resolution: {integrity: sha1-LY4+XQvb1zJ/kbyBT1xXZg+Bgk0=}
     deprecated: Critical security vulnerability fixed in v0.21.1. For more information, see https://github.com/axios/axios/pull/3410
     dependencies:
-      follow-redirects: 1.14.0
+      follow-redirects: 1.14.1
       is-buffer: 1.1.6
     transitivePeerDependencies:
       - debug
@@ -8720,8 +8754,8 @@ packages:
     resolution: {integrity: sha512-WHVocJYavUwVgVViC0ORikPHQquXwVh939TaelZ4WDqpWgTX/FsGhl/+P4qBUAGcRvtOgDgC+xftNWWp2RUTAQ==}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001216
-      electron-to-chromium: 1.3.720
+      caniuse-lite: 1.0.30001223
+      electron-to-chromium: 1.3.727
     dev: false
 
   /browserslist/4.14.2:
@@ -9016,8 +9050,8 @@ packages:
     resolution: {integrity: sha512-O2/SCpuaU3eASWVaesQirZv1MSjUNOvmugaD8zNSJqw6Vv5SGwoOpA9LJs3pNPfM745nxqPvfZY3MQKY4AKHYg==}
     dev: true
 
-  /caniuse-lite/1.0.30001216:
-    resolution: {integrity: sha512-1uU+ww/n5WCJRwUcc9UH/W6925Se5aNnem/G5QaSDga2HzvjYMs8vRbekGUN/PnTZ7ezTHcxxTEb9fgiMYwH6Q==}
+  /caniuse-lite/1.0.30001223:
+    resolution: {integrity: sha512-k/RYs6zc/fjbxTjaWZemeSmOjO0JJV+KguOBA3NwPup8uzxM1cMhR2BD9XmO86GuqaqTCO8CgkgH9Rz//vdDiA==}
     dev: false
 
   /capture-exit/2.0.0:
@@ -10939,8 +10973,8 @@ packages:
     resolution: {integrity: sha512-B6zLTxxaOFP4WZm6DrvgRk8kLFYWNhQ5TrHMC0l5WtkMXhU5UbnvWoTfeEwqOruUSlNMhVLfYak7REX6oC5Yfw==}
     dev: true
 
-  /electron-to-chromium/1.3.723:
-    resolution: {integrity: sha512-L+WXyXI7c7+G1V8ANzRsPI5giiimLAUDC6Zs1ojHHPhYXb3k/iTABFmWjivEtsWrRQymjnO66/rO2ZTABGdmWg==}
+  /electron-to-chromium/1.3.727:
+    resolution: {integrity: sha512-Mfz4FIB4FSvEwBpDfdipRIrwd6uo8gUDoRDF4QEYb4h4tSuI3ov594OrjU6on042UlFHouIJpClDODGkPcBSbg==}
     dev: false
 
   /element-resize-detector/1.2.2:
@@ -11497,7 +11531,7 @@ packages:
       eslint: 7.21.0
     dev: true
 
-  /eslint-plugin-prettier/3.4.0_64fa1aa96df95a5df14fce32631d8e89:
+  /eslint-plugin-prettier/3.4.0_34cfdd9635f7f98da5af3b7734dcacb1:
     resolution: {integrity: sha512-UDK6rJT6INSfcOo545jiaOwB701uAIt2/dR7WnFQoGCVl1/EMqdANBmwUaqqQ45aXprsTGzSa39LI1PyuRBxxw==}
     engines: {node: '>=6.0.0'}
     peerDependencies:
@@ -11510,7 +11544,7 @@ packages:
     dependencies:
       eslint: 7.24.0
       eslint-config-prettier: 8.2.0_eslint@7.24.0
-      prettier: 2.2.1
+      prettier: 2.3.0
       prettier-linter-helpers: 1.0.0
     dev: true
 
@@ -12651,8 +12685,8 @@ packages:
       debug: 4.3.1_supports-color@6.1.0
     dev: true
 
-  /follow-redirects/1.14.0:
-    resolution: {integrity: sha512-0vRwd7RKQBTt+mgu87mtYeofLFZpTas2S9zY+jIeuLJMNvudIgF52nr19q40HOwH5RrhWIPuj9puybzSJiRrVg==}
+  /follow-redirects/1.14.1:
+    resolution: {integrity: sha512-HWqDgT7ZEkqRzBvc2s64vSZ/hfOceEol3ac/7tKwzuvEyWx3/4UegXh5oBOIotkGsObyk3xznnSRVADBgWSQVg==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -13106,6 +13140,17 @@ packages:
 
   /glob/7.1.6:
     resolution: {integrity: sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==}
+    dependencies:
+      fs.realpath: 1.0.0
+      inflight: 1.0.6
+      inherits: 2.0.4
+      minimatch: 3.0.4
+      once: 1.4.0
+      path-is-absolute: 1.0.1
+    dev: true
+
+  /glob/7.1.7:
+    resolution: {integrity: sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==}
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6
@@ -18572,6 +18617,12 @@ packages:
     hasBin: true
     dev: true
 
+  /prettier/2.3.0:
+    resolution: {integrity: sha512-kXtO4s0Lz/DW/IJ9QdWhAf7/NmPWQXkFr/r/WkR3vyI+0v8amTDxiaQSLzs8NBlytfLWX/7uQUMIW677yLKl4w==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: true
+
   /pretty-error/2.1.2:
     resolution: {integrity: sha512-EY5oDzmsX5wvuynAByrmY0P0hcp+QpnAKbJng2A2MPjVKXCxrDSUkzghVJ4ZGPIv+JC4gX8fPUWscC0RtjsWGw==}
     dependencies:
@@ -20044,7 +20095,7 @@ packages:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
     hasBin: true
     dependencies:
-      glob: 7.1.6
+      glob: 7.1.7
 
   /rimraf/3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
@@ -21459,7 +21510,7 @@ packages:
       dotignore: 0.1.2
       for-each: 0.3.3
       function-bind: 1.1.1
-      glob: 7.1.6
+      glob: 7.1.7
       has: 1.0.3
       inherits: 2.0.4
       is-regex: 1.0.5
@@ -21743,6 +21794,10 @@ packages:
 
   /tiny-warning/1.0.3:
     resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
+    dev: false
+
+  /tinycolor2/1.4.2:
+    resolution: {integrity: sha512-vJhccZPs965sV/L2sU4oRQVAos0pQXwsvTLkWYdqJ+a8Q5kPFzJTuOFwy7UniPli44NKQGAglksjvOcpo95aZA==}
     dev: false
 
   /tmp/0.0.33:
@@ -22105,7 +22160,7 @@ packages:
       chalk: 2.4.2
       commander: 2.20.3
       diff: 4.0.2
-      glob: 7.1.6
+      glob: 7.1.7
       js-yaml: 3.14.1
       minimatch: 3.0.4
       mkdirp: 0.5.5

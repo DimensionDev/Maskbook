@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { useSnackbar } from 'notistack'
-import { createStyles, makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
+import { makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
@@ -16,7 +16,7 @@ import { toAsset, toUnixTimestamp } from '../helpers'
 import { isETH } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         content: {},
         footer: {
             display: 'flex',
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => {
         button: {
             marginTop: theme.spacing(1.5),
         },
-    })
+    }
 })
 
 export interface ListingByHighestBidCardProps {

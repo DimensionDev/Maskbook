@@ -22,7 +22,7 @@ export async function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
         return ''
     } else {
         const Server = await import('react-dom/server')
-        const { ServerStyleSheets } = await import('@material-ui/core/styles')
+        const { ServerStyleSheets } = await import('@material-ui/styles')
         const sheets = new ServerStyleSheets()
         const html = Server.renderToString(sheets.collect(jsx))
         const styles = sheets.toString()

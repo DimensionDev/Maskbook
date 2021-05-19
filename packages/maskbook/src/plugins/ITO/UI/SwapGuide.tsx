@@ -1,46 +1,44 @@
 import { unstable_useTransition } from 'react'
-import { createStyles, DialogContent, makeStyles, DialogProps } from '@material-ui/core'
+import { DialogContent, makeStyles, DialogProps } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { RemindDialog } from './RemindDialog'
 import { ShareDialog } from './ShareDialog'
-import { ClaimDialog, ClaimDialogProps } from './ClaimDialog'
+import { SwapDialog, SwapDialogProps } from './SwapDialog'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { UnlockDialog } from './UnlockDialog'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 
-export enum ClaimStatus {
+export enum SwapStatus {
     Remind,
     Swap,
     Share,
     Unlock,
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        content: {
-            display: 'flex',
-            flexDirection: 'column',
-            padding: theme.spacing(2, 3),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    content: {
+        display: 'flex',
+        flexDirection: 'column',
+        padding: theme.spacing(2, 3),
+    },
+}))
 
-interface ClaimGuideProps extends Pick<ClaimDialogProps, 'exchangeTokens' | 'payload'> {
+interface SwapGuideProps extends Pick<SwapDialogProps, 'exchangeTokens' | 'payload'> {
     open: boolean
-    status: ClaimStatus
+    status: SwapStatus
     shareSuccessLink: string | undefined
     isBuyer: boolean
     retryPayload: () => void
-    onUpdate: (status: ClaimStatus) => void
+    onUpdate: (status: SwapStatus) => void
     onClose: () => void
     DialogProps?: Partial<DialogProps>
 }
 
-export function ClaimGuide(props: ClaimGuideProps) {
+export function SwapGuide(props: SwapGuideProps) {
     const { t } = useI18N()
     const { status, payload, exchangeTokens, isBuyer, open, retryPayload, shareSuccessLink, onUpdate, onClose } = props
     const [startTransition] = unstable_useTransition({ busyDelayMs: 1000 })
@@ -52,7 +50,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
     }, [retryPayload, startTransition, onClose])
     const classes = useStyles()
     const maxSwapAmount = useMemo(
-        () => BigNumber.min(new BigNumber(payload.limit), new BigNumber(payload.total_remaining)),
+        () => BigNumber.min(payload.limit, payload.total_remaining),
         [payload.limit, payload.total_remaining],
     )
     const initAmount = new BigNumber(0)
@@ -61,29 +59,29 @@ export function ClaimGuide(props: ClaimGuideProps) {
     const chainId = useChainId()
     const account = useAccount()
 
-    const ClaimTitle: EnumRecord<ClaimStatus, string> = {
-        [ClaimStatus.Remind]: t('plugin_ito_dialog_claim_reminder_title'),
-        [ClaimStatus.Unlock]: t('plugin_ito_dialog_claim_unlock_title'),
-        [ClaimStatus.Swap]: t('plugin_ito_dialog_claim_swap_title', { token: payload.token.symbol }),
-        [ClaimStatus.Share]: t('plugin_ito_dialog_claim_share_title'),
+    const SwapTitle: EnumRecord<SwapStatus, string> = {
+        [SwapStatus.Remind]: t('plugin_ito_dialog_swap_reminder_title'),
+        [SwapStatus.Unlock]: t('plugin_ito_dialog_swap_unlock_title'),
+        [SwapStatus.Swap]: t('plugin_ito_dialog_swap_title', { token: payload.token.symbol }),
+        [SwapStatus.Share]: t('plugin_ito_dialog_swap_share_title'),
     }
 
     useEffect(() => {
-        onUpdate(isBuyer ? ClaimStatus.Share : ClaimStatus.Remind)
+        onUpdate(isBuyer ? SwapStatus.Share : SwapStatus.Remind)
     }, [account, isBuyer, chainId, payload.chain_id])
 
     return (
         <InjectedDialog
             open={open}
-            title={ClaimTitle[status]}
-            onClose={status === ClaimStatus.Share ? onCloseShareDialog : onClose}
-            DialogProps={{ maxWidth: status === ClaimStatus.Swap || status === ClaimStatus.Unlock ? 'xs' : 'sm' }}>
+            title={SwapTitle[status]}
+            onClose={status === SwapStatus.Share ? onCloseShareDialog : onClose}
+            DialogProps={{ maxWidth: status === SwapStatus.Swap || status === SwapStatus.Unlock ? 'xs' : 'sm' }}>
             <DialogContent className={classes.content}>
                 {(() => {
                     switch (status) {
-                        case ClaimStatus.Remind:
+                        case SwapStatus.Remind:
                             return <RemindDialog token={payload.token} chainId={chainId} setStatus={onUpdate} />
-                        case ClaimStatus.Unlock:
+                        case SwapStatus.Unlock:
                             return (
                                 <UnlockDialog
                                     tokens={
@@ -93,9 +91,9 @@ export function ClaimGuide(props: ClaimGuideProps) {
                                     }
                                 />
                             )
-                        case ClaimStatus.Swap:
+                        case SwapStatus.Swap:
                             return (
-                                <ClaimDialog
+                                <SwapDialog
                                     account={account}
                                     initAmount={initAmount}
                                     tokenAmount={tokenAmount}
@@ -109,7 +107,7 @@ export function ClaimGuide(props: ClaimGuideProps) {
                                     chainId={chainId}
                                 />
                             )
-                        case ClaimStatus.Share:
+                        case SwapStatus.Share:
                             return (
                                 <ShareDialog
                                     shareSuccessLink={shareSuccessLink}

@@ -1,65 +1,54 @@
-import {
-    Theme,
-    createStyles,
-    makeStyles,
-    Link,
-    Button,
-    Typography,
-    CircularProgress,
-    IconButton,
-} from '@material-ui/core'
+import { Theme, makeStyles, Link, Button, Typography, CircularProgress, IconButton } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { LBPPriceChart } from './LBPPriceChart'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { ERC20TokenDetailed } from '../../../../web3/types'
 import { usePoolTokenPrices } from '../../LBP/usePoolTokenPrices'
-import { formatEthereumAddress } from '../../../Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../../web3/constants'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { usePools } from '../../LBP/usePools'
 import type { Currency } from '../../types'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            paddingBottom: theme.spacing(2),
+const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+        paddingBottom: theme.spacing(2),
+    },
+    chart: {
+        position: 'relative',
+    },
+    introduce: {
+        fontSize: 14,
+        margin: theme.spacing(1, 0),
+        padding: theme.spacing(0, 2.5),
+    },
+    placeholder: {
+        color: theme.palette.text.secondary,
+        padding: theme.spacing(2, 2, 0),
+        textAlign: 'center',
+    },
+    connect: {
+        padding: theme.spacing(0, 2.5),
+        display: 'flex',
+        justifyContent: 'flex-end',
+        '& > div': {
+            width: 'auto',
         },
-        chart: {
-            position: 'relative',
-        },
-        introduce: {
-            fontSize: 14,
-            margin: theme.spacing(1, 0),
-            padding: theme.spacing(0, 2.5),
-        },
-        placeholder: {
-            color: theme.palette.text.secondary,
-            padding: theme.spacing(2, 2, 0),
-            textAlign: 'center',
-        },
-        connect: {
-            padding: theme.spacing(0, 2.5),
-            display: 'flex',
-            justifyContent: 'flex-end',
-            '& > div': {
-                width: 'auto',
-            },
-        },
-        progress: {
-            zIndex: 1,
-            bottom: theme.spacing(1),
-            right: theme.spacing(1),
-            position: 'absolute',
-        },
-        retry: {
-            zIndex: 1,
-            bottom: theme.spacing(1),
-            right: theme.spacing(1),
-            position: 'absolute',
-        },
-    }),
-)
+    },
+    progress: {
+        zIndex: 1,
+        bottom: theme.spacing(1),
+        right: theme.spacing(1),
+        position: 'absolute',
+    },
+    retry: {
+        zIndex: 1,
+        bottom: theme.spacing(1),
+        right: theme.spacing(1),
+        position: 'absolute',
+    },
+}))
 
 export interface LBPPanelProps extends withClasses<never> {
     duration: number
@@ -74,11 +63,12 @@ export function LBPPanel(props: LBPPanelProps) {
 
     const USDC_ADDRESS = useConstant(CONSTANTS, 'USDC_ADDRESS')
     const { value: pools = [], loading: poolsLoading, error: poolsError } = usePools(token.address)
-    const { value: prices = [], loading: pricesLoading, error: pricesError, retry: pricesRetry } = usePoolTokenPrices(
-        token.address,
-        duration,
-        100,
-    )
+    const {
+        value: prices = [],
+        loading: pricesLoading,
+        error: pricesError,
+        retry: pricesRetry,
+    } = usePoolTokenPrices(token.address, duration, 100)
 
     if (!pools.length)
         return (

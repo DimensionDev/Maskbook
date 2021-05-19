@@ -1,5 +1,5 @@
 import { useMemo, Suspense } from 'react'
-import { Skeleton, makeStyles, createStyles } from '@material-ui/core'
+import { Skeleton, makeStyles } from '@material-ui/core'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { SNAPSHOT_PLUGIN_NAME, SNAPSHOT_PLUGIN_ID } from './constants'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
@@ -9,14 +9,14 @@ import { extractTextFromTypedMessage } from '../../protocols/typed-message'
 import { parseURL } from '../../utils/utils'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         skeleton: {
             margin: theme.spacing(2),
             '&:first-child': {
                 marginTop: theme.spacing(3),
             },
         },
-    })
+    }
 })
 
 const isSnaphotURL = (x: string): boolean =>
@@ -53,6 +53,7 @@ function Renderer({ url }: { url: string }) {
             <Suspense
                 fallback={new Array(2).fill(0).map((_, i) => (
                     <Skeleton
+                        key={i}
                         className={classes.skeleton}
                         animation="wave"
                         variant="rectangular"

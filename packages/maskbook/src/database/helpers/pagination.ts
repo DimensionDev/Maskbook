@@ -5,7 +5,7 @@ export async function queryTransactionPaged<
     DBType extends DBSchema,
     TxStores extends StoreNames<DBType>[],
     Mode extends 'readonly' | 'readwrite',
-    RecordType extends IDBPCursorWithValueIteratorValue<DBType, TxStores, TxStores[0], unknown>['value']
+    RecordType extends IDBPCursorWithValueIteratorValue<DBType, TxStores, TxStores[0], unknown>['value'],
 >(
     t: IDBPSafeTransaction<DBType, TxStores, Mode>,
     storeName: TxStores[0],

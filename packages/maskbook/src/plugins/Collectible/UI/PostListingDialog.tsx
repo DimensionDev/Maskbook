@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createStyles, makeStyles, DialogContent, Tab, Tabs } from '@material-ui/core'
+import { makeStyles, DialogContent, Tab, Tabs } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ChainState } from '../../../web3/state/useChainState'
@@ -10,7 +10,7 @@ import { useTokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { first } from 'lodash-es'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         content: {
             padding: 0,
         },
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => {
         button: {
             marginTop: theme.spacing(1.5),
         },
-    })
+    }
 })
 
 export interface PostListingDialogProps {

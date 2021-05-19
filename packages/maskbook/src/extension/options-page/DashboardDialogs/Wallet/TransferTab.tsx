@@ -1,10 +1,10 @@
-import { Button, createStyles, makeStyles, TextField } from '@material-ui/core'
+import { Button, makeStyles, TextField } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
 import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
-import { formatBalance, formatEthereumAddress } from '../../../../plugins/Wallet/formatter'
+import { formatBalance, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
@@ -14,24 +14,22 @@ import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/ty
 import { EthereumTokenType } from '../../../../web3/types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 
-const useTransferTabStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(1),
-        },
-        button: {
-            marginTop: theme.spacing(3),
-        },
-        maxChipRoot: {
-            fontSize: 11,
-            height: 21,
-        },
-        maxChipLabel: {
-            paddingLeft: 6,
-            paddingRight: 6,
-        },
-    }),
-)
+const useTransferTabStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(1),
+    },
+    button: {
+        marginTop: theme.spacing(3),
+    },
+    maxChipRoot: {
+        fontSize: 11,
+        height: 21,
+    },
+    maxChipLabel: {
+        paddingLeft: 6,
+        paddingRight: 6,
+    },
+}))
 
 interface TransferTabProps {
     wallet: WalletRecord
@@ -77,7 +75,7 @@ export function TransferTab(props: TransferTabProps) {
     //#endregion
 
     //#region remote controlled transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         useCallback(
             (ev) => {
@@ -94,7 +92,7 @@ export function TransferTab(props: TransferTabProps) {
     // open the transaction dialog
     useEffect(() => {
         if (transferState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             state: transferState,
             summary: `Transfer ${formatBalance(transferAmount, token.decimals ?? 0)} ${
@@ -107,7 +105,7 @@ export function TransferTab(props: TransferTabProps) {
     //#region validation
     const validationMessage = useMemo(() => {
         if (!transferAmount || new BigNumber(transferAmount).isZero()) return t('wallet_transfer_error_amount_absence')
-        if (new BigNumber(transferAmount).isGreaterThan(new BigNumber(tokenBalance)))
+        if (new BigNumber(transferAmount).isGreaterThan(tokenBalance))
             return t('wallet_transfer_error_insufficent_balance', {
                 token: token.symbol,
             })

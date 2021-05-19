@@ -1,18 +1,16 @@
-import { Chip, createStyles, DialogContent, makeStyles } from '@material-ui/core'
+import { Chip, DialogContent, makeStyles } from '@material-ui/core'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { Linking } from './Linking'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        tag: {
-            marginRight: theme.spacing(1),
-        },
-        chip: {
-            margin: theme.spacing(1),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    tag: {
+        marginRight: theme.spacing(1),
+    },
+    chip: {
+        margin: theme.spacing(1),
+    },
+}))
 
 export interface CoinMetadataTagsProps {
     tags?: string[]
@@ -36,13 +34,19 @@ export function CoinMetadataTags(props: CoinMetadataTagsProps) {
         <>
             {tags.slice(0, 4).map((x, i) => (
                 <Linking key={i} href={x} LinkProps={{ className: classes.tag }}>
-                    <Chip label={x.replace(/-/g, ' ')} size="small" />
+                    <Chip style={{ marginTop: 2, marginBottom: 2 }} label={x.replace(/-/g, ' ')} size="small" />
                 </Linking>
             ))}
             {tags.length > 4 ? (
                 <>
                     <Linking key={tags.length + 1} href={'View all'} LinkProps={{ className: classes.tag }}>
-                        <Chip label="View all" color="primary" onClick={onClick} size="small" />
+                        <Chip
+                            style={{ marginTop: 2, marginBottom: 2 }}
+                            label="View all"
+                            color="primary"
+                            onClick={onClick}
+                            size="small"
+                        />
                     </Linking>
                     <TagsDialog open={open} onClose={onClose} tags={tags} />
                 </>

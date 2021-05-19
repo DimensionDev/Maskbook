@@ -1,18 +1,16 @@
 import { useState } from 'react'
-import { makeStyles, createStyles, Typography, MenuItem } from '@material-ui/core'
+import { makeStyles, Typography, MenuItem } from '@material-ui/core'
 import { ShadowRootMenu } from '../../../../utils/shadow-root/ShadowRootComponents'
 import type { Coin } from '../../types'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        name: {},
-        symbol: {
-            color: theme.palette.text.secondary,
-            fontSize: 12,
-            marginLeft: theme.spacing(0.5),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    name: {},
+    symbol: {
+        color: theme.palette.text.secondary,
+        fontSize: 12,
+        marginLeft: theme.spacing(0.5),
+    },
+}))
 
 export interface CoinMenuOption {
     coin: Coin

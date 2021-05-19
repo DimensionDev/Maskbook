@@ -1,4 +1,4 @@
-import { createStyles, Link, makeStyles, Typography } from '@material-ui/core'
+import { Link, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -14,7 +14,7 @@ import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { formatBalance, formatEthereumAddress } from '../../Wallet/formatter'
+import { formatBalance, FormattedAddress } from '@dimensiondev/maskbook-shared'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { ITO_CONSTANTS } from '../constants'
 
@@ -22,18 +22,16 @@ function isMoreThanMillion(allowance: string, decimals: number) {
     return new BigNumber(allowance).isGreaterThan(`100000000000e${decimals}`) // 100 billion
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {},
-        tip: {
-            margin: theme.spacing(1.5, 0, 1),
-            fontSize: 10,
-        },
-        button: {
-            marginTop: theme.spacing(1.5),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {},
+    tip: {
+        margin: theme.spacing(1.5, 0, 1),
+        fontSize: 10,
+    },
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
+}))
 
 export interface UnlockDialogProps {
     tokens: ERC20TokenDetailed[]
@@ -52,7 +50,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     //#region select token
     const [token, setToken] = useState<ERC20TokenDetailed>(tokens[0])
     const [id] = useState(uuid())
-    const [, setSelectTokenDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
             (ev: SelectTokenDialogEvent) => {
@@ -64,7 +62,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
         ),
     )
     const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialogOpen({
+        setSelectTokenDialog({
             open: true,
             uuid: id,
             disableEther: true,
@@ -109,7 +107,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     href={`${resolveLinkOnEtherscan(chainId)}/address/${recipientAddress}`}>
-                    {formatEthereumAddress(recipientAddress, 4)}
+                    <FormattedAddress address={recipientAddress} size={4} />
                 </Link>{' '}
                 to use your {token.symbol ?? 'Token'} tokens when a new ITO round starts later.
             </Typography>

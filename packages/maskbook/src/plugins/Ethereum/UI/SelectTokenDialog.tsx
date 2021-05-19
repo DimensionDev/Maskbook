@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { makeStyles, createStyles, Theme, DialogContent, TextField } from '@material-ui/core'
+import { makeStyles, Theme, DialogContent, TextField } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -10,26 +10,24 @@ import { WalletMessages } from '../../Wallet/messages'
 import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
 import { delay } from '../../../utils/utils'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        search: {
-            width: '100%',
-            margin: theme.spacing(1, 0, 2),
+const useStyles = makeStyles((theme: Theme) => ({
+    search: {
+        width: '100%',
+        margin: theme.spacing(1, 0, 2),
+    },
+    list: {
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        list: {
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        placeholder: {
-            textAlign: 'center',
-            height: 288,
-            paddingTop: theme.spacing(14),
-            boxSizing: 'border-box',
-        },
-    }),
-)
+    },
+    placeholder: {
+        textAlign: 'center',
+        height: 288,
+        paddingTop: theme.spacing(14),
+        boxSizing: 'border-box',
+    },
+}))
 
 export interface SelectTokenDialogProps extends withClasses<never> {}
 
@@ -49,7 +47,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const [disableSearchBar, setDisableSearchBar] = useState(false)
     const [FixedTokenListProps, setFixedTokenListProps] = useState<FixedTokenListProps | null>(null)
 
-    const [open, setOpen] = useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, (ev) => {
+    const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, (ev) => {
         if (!ev.open) return
         setId(ev.uuid)
         setDisableEther(ev.disableEther ?? true)
@@ -58,7 +56,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     })
     const onSubmit = useCallback(
         async (token: EtherTokenDetailed | ERC20TokenDetailed) => {
-            setOpen({
+            setDialog({
                 open: false,
                 uuid: id,
                 token,
@@ -66,16 +64,16 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
             await delay(300)
             setKeyword('')
         },
-        [id, setOpen, setKeyword],
+        [id, setDialog, setKeyword],
     )
     const onClose = useCallback(async () => {
-        setOpen({
+        setDialog({
             open: false,
             uuid: id,
         })
         await delay(300)
         setKeyword('')
-    }, [id, setOpen])
+    }, [id, setDialog])
     //#endregion
 
     return (

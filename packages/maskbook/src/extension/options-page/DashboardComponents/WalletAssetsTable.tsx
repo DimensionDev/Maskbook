@@ -4,7 +4,6 @@ import {
     Button,
     Chip,
     IconButton,
-    createStyles,
     makeStyles,
     Skeleton,
     Table,
@@ -21,7 +20,7 @@ import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { formatBalance, formatCurrency } from '../../../plugins/Wallet/formatter'
+import { formatBalance, formatCurrency, FormattedCurrency } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { CurrencyType, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { isSameAddress } from '../../../web3/helpers'
@@ -35,53 +34,53 @@ import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
 import { useAssets } from '../../../plugins/Wallet/hooks/useAssets'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles<string, { isMobile: boolean }>({
-        container: {
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-            padding: theme.spacing(0),
+const useStyles = makeStyles<
+    Theme,
+    { isMobile: boolean },
+    'container' | 'head' | 'cell' | 'record' | 'coin' | 'name' | 'chain' | 'price' | 'more' | 'lessButton'
+>((theme) => ({
+    container: {
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        table: {},
-        head: {
-            backgroundColor: theme.palette.mode === 'light' ? theme.palette.common.white : 'var(--drawerBody)',
-        },
-        cell: {
-            paddingLeft: ({ isMobile }) => (isMobile ? theme.spacing(0.5) : theme.spacing(2)),
-            paddingRight: ({ isMobile }) => (isMobile ? theme.spacing(0.5) : theme.spacing(1.5)),
-            fontSize: ({ isMobile }) => (isMobile ? '0.8rem' : '0.875rem'),
-            whiteSpace: 'nowrap',
-        },
-        record: {
-            display: 'flex',
-        },
-        coin: {
-            width: ({ isMobile }) => (isMobile ? 20 : 24),
-            height: ({ isMobile }) => (isMobile ? 20 : 24),
-        },
-        name: {
-            marginLeft: theme.spacing(1),
-            fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
-        },
-        chain: {
-            marginLeft: theme.spacing(1),
-        },
-        price: {
-            fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
-        },
-        more: {
-            color: theme.palette.text.primary,
-            fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
-        },
-        lessButton: {
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: theme.spacing(1),
-        },
-        menuAnchorElRef: {},
-    }),
-)
+        padding: theme.spacing(0),
+    },
+    head: {
+        backgroundColor: theme.palette.mode === 'light' ? theme.palette.common.white : 'var(--drawerBody)',
+    },
+    cell: {
+        paddingLeft: ({ isMobile }) => (isMobile ? theme.spacing(0.5) : theme.spacing(2)),
+        paddingRight: ({ isMobile }) => (isMobile ? theme.spacing(0.5) : theme.spacing(1.5)),
+        fontSize: ({ isMobile }) => (isMobile ? '0.8rem' : '0.875rem'),
+        whiteSpace: 'nowrap',
+    },
+    record: {
+        display: 'flex',
+    },
+    coin: {
+        width: ({ isMobile }) => (isMobile ? 20 : 24),
+        height: ({ isMobile }) => (isMobile ? 20 : 24),
+    },
+    name: {
+        marginLeft: theme.spacing(1),
+        fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
+    },
+    chain: {
+        marginLeft: theme.spacing(1),
+    },
+    price: {
+        fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
+    },
+    more: {
+        color: theme.palette.text.primary,
+        fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
+    },
+    lessButton: {
+        display: 'flex',
+        justifyContent: 'center',
+        marginTop: theme.spacing(1),
+    },
+}))
 
 //#region view detailed
 interface ViewDetailedProps extends WalletAssetsTableProps {
@@ -138,7 +137,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                         justifyContent: 'flex-end',
                     }}>
                     <Typography className={classes.price} color="textPrimary" component="span">
-                        {formatCurrency(Number(getTokenUSDValue(asset).toFixed(2)), '$')}
+                        <FormattedCurrency value={getTokenUSDValue(asset).toFixed(2)} sign="$" />
                     </Typography>
                 </Box>,
                 ...(isMobile
@@ -228,7 +227,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     return (
         <>
             <TableContainer className={classes.container}>
-                <Table className={classes.table} component="table" size="medium" stickyHeader>
+                <Table component="table" size="medium" stickyHeader>
                     <TableHead className={classes.head}>
                         <TableRow>
                             {LABELS.map((x, i) => (

@@ -1,40 +1,38 @@
 import { useState, useRef, useEffect } from 'react'
 import { useDropArea } from 'react-use'
-import { makeStyles, createStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { RestoreBox } from './RestoreBox'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { QRCodeImageScanner } from './QRCodeImageScanner'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            width: '100%',
-            height: 112,
-        },
-        file: {
-            display: 'none',
-        },
-        qr: {
-            maxWidth: 64,
-            maxHeight: 64,
-            display: 'block',
-        },
-        restoreBoxRoot: {
-            boxSizing: 'border-box',
-            border: `solid 1px ${theme.palette.divider}`,
-            display: 'flex',
-            justifyContent: 'center',
-            height: 112,
-            marginBottom: 16,
-            borderRadius: 4,
-        },
-        restoreBoxPlaceholder: {
-            marginTop: 0,
-            marginBottom: 6,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        height: 112,
+    },
+    file: {
+        display: 'none',
+    },
+    qr: {
+        maxWidth: 64,
+        maxHeight: 64,
+        display: 'block',
+    },
+    restoreBoxRoot: {
+        boxSizing: 'border-box',
+        border: `solid 1px ${theme.palette.divider}`,
+        display: 'flex',
+        justifyContent: 'center',
+        height: 112,
+        marginBottom: 16,
+        borderRadius: 4,
+    },
+    restoreBoxPlaceholder: {
+        marginTop: 0,
+        marginBottom: 6,
+    },
+}))
 
 export interface RestoreFromQRCodeImageBoxProps extends withClasses<never> {
     file: File | null

@@ -1,19 +1,19 @@
 import { useState, useCallback, useMemo } from 'react'
-import { createStyles, makeStyles, Typography } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { BreakdownDialog } from '../../components/InjectedComponents/BreakdownDialog'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
-import { formatBalance } from '../../plugins/Wallet/formatter'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { CONSTANTS } from '../constants'
 import { useConstant } from '../hooks/useConstant'
 import { useERC20TokenBalance } from '../hooks/useERC20TokenBalance'
 import { createERC20Token } from '../helpers'
 import { useChainId } from '../hooks/useBlockNumber'
+import { FormattedBalance } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             borderRadius: 16,
             fontWeight: 300,
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => {
             borderRadius: '50%',
             marginRight: theme.spacing(0.5),
         },
-    })
+    }
 })
 
 export interface EthereumMaskBalanceButtonProps extends withClasses<'root'> {}
@@ -38,10 +38,10 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
     //#region mask token
     const chainId = useChainId()
     const MASK_ADDRESS = useConstant(CONSTANTS, 'MASK_ADDRESS')
-    const maskToken = useMemo(() => createERC20Token(chainId, MASK_ADDRESS, 18, 'Mask Network', 'MASK'), [
-        chainId,
-        MASK_ADDRESS,
-    ])
+    const maskToken = useMemo(
+        () => createERC20Token(chainId, MASK_ADDRESS, 18, 'Mask Network', 'MASK'),
+        [chainId, MASK_ADDRESS],
+    )
     //#endregion
 
     //#region token balance
@@ -76,7 +76,9 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
                 {process.env.architecture === 'web' && !maskBalanceLoading && !maskBalanceError ? (
                     <MaskbookIcon className={classes.icon} />
                 ) : null}
-                <Typography>{formatBalance(maskBalance, 18, 6)} MASK</Typography>
+                <Typography>
+                    <FormattedBalance value={maskBalance} decimals={18} significant={6} symbol="MASK" />
+                </Typography>
             </ActionButton>
             {maskToken ? (
                 <BreakdownDialog

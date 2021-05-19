@@ -1,4 +1,4 @@
-import { Button, createStyles, experimentalStyled as styled, FilledInput, Tab, makeStyles } from '@material-ui/core'
+import { Button, experimentalStyled as styled, FilledInput, Tab, makeStyles } from '@material-ui/core'
 import { ButtonGroupTabList, MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { memo, useState } from 'react'
 import { TabContext, TabPanel } from '@material-ui/lab'
@@ -72,16 +72,14 @@ const PrivateKeyInput = styled(FilledInput)(
 `,
 )
 
-const useTabPanelStyles = makeStyles(() =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: 0,
-        },
-    }),
-)
+const useTabPanelStyles = makeStyles(() => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: 0,
+    },
+}))
 
 const walletTabs = ['mnemonic', 'jsonFile', 'privateKey'] as const
 type TabType = typeof walletTabs[number]

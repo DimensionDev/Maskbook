@@ -1,16 +1,18 @@
 import { PluginSnapshotRPC } from '../messages'
-import type { Votes, ProposalIdentifier, Vote } from '../types'
+import type { VoteItemList, ProposalIdentifier, VoteItem } from '../types'
 import { useSuspense } from '../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
 import { useBlockNumber } from '../../../web3/hooks/useBlockNumber'
 import { ChainId } from '../../../web3/types'
 
-const cache = new Map<string, [0, Promise<void>] | [1, Votes] | [2, Error]>()
-export function votesErrorRetry() {
-    cache.forEach(([status], id) => status === 2 && cache.delete(id))
+const cache = new Map<string, [0, Promise<void>] | [1, VoteItemList] | [2, Error]>()
+export function votesRetry() {
+    for (const key of cache.keys()) {
+        cache.delete(key)
+    }
 }
 export function useVotes(identifier: ProposalIdentifier) {
-    return useSuspense<Votes, [ProposalIdentifier]>(identifier.id, [identifier], cache, Suspender)
+    return useSuspense<VoteItemList, [ProposalIdentifier]>(identifier.id, [identifier], cache, Suspender)
 }
 async function Suspender(identifier: ProposalIdentifier) {
     const blockNumber = useBlockNumber(ChainId.Mainnet)
@@ -26,7 +28,7 @@ async function Suspender(identifier: ProposalIdentifier) {
 
     const votes = Object.fromEntries(
         Object.entries(rawVotes)
-            .map((voteEntry: [string, Vote]) => {
+            .map((voteEntry: [string, VoteItem]) => {
                 voteEntry[1].scores = message.payload.metadata.strategies.map(
                     (_strategy, i) => scores[i][voteEntry[1].address] || 0,
                 )

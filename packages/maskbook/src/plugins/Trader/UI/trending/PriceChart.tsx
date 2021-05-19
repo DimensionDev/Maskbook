@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
 import type { Coin, Currency, Stat } from '../../types'
-import { makeStyles, Theme, createStyles, CircularProgress, Typography } from '@material-ui/core'
+import { makeStyles, Theme, CircularProgress, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
 import { usePriceLineChart } from '../../../hooks/usePriceLineChart'
@@ -18,7 +18,7 @@ const DEFAULT_DIMENSION: Dimension = {
 }
 
 const useStyles = makeStyles((theme: Theme) => {
-    return createStyles({
+    return {
         root: {
             position: 'relative',
             cursor: ({ stats, coin }: PriceChartProps) => (stats.length && coin?.platform_url ? 'pointer' : 'default'),
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) => {
             paddingBottom: theme.spacing(10),
             borderStyle: 'none',
         },
-    })
+    }
 })
 
 export interface PriceChartProps extends withClasses<'root'> {

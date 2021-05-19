@@ -1,6 +1,5 @@
 import { ChangeEvent, useState, useCallback, useMemo } from 'react'
 import {
-    createStyles,
     makeStyles,
     DialogContent,
     Box,
@@ -21,12 +20,12 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
 import { ChainState } from '../../../web3/state/useChainState'
-import { useRemoteControlledDialogEvent } from '../../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         content: {
             padding: 0,
         },
@@ -50,7 +49,7 @@ const useStyles = makeStyles((theme) => {
             flex: 1,
             margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
         },
-    })
+    }
 })
 
 export interface CheckoutDialogProps {
@@ -92,7 +91,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         }
     }, [asset?.value, account, enqueueSnackbar])
 
-    const { onOpen: openSwapDialog } = useRemoteControlledDialogEvent(PluginTraderMessages.events.swapDialogUpdated)
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
 
     const validationMessage = useMemo(() => {
         if (!isVerified && !unreviewedChecked) return 'Please ensure unreviewed item'

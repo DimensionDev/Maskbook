@@ -13,19 +13,16 @@ export function useTransactionDialog(
     resetTransactionState: () => void,
 ) {
     // close the transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            if (transactionState.type !== transactionStateType) return
-            resetTransactionState()
-        },
-    )
+    const { setDialog } = useRemoteControlledDialog(EthereumMessages.events.transactionDialogUpdated, (ev) => {
+        if (ev.open) return
+        if (transactionState.type !== transactionStateType) return
+        resetTransactionState()
+    })
 
     // open the transation dialog
     useEffect(() => {
         if (transactionState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setDialog({
             open: true,
             state: transactionState,
             ...transactionDialogEvent,

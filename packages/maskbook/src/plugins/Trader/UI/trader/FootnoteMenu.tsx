@@ -1,20 +1,18 @@
 import { useState } from 'react'
-import { makeStyles, createStyles, Typography, MenuItem, Link } from '@material-ui/core'
+import { makeStyles, Typography, MenuItem, Link } from '@material-ui/core'
 import { ShadowRootMenu } from '../../../../utils/shadow-root/ShadowRootComponents'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        link: {
-            display: 'flex',
-            alignItems: 'center',
-            cursor: 'pointer',
-        },
-        title: {
-            fontSize: 10,
-            color: theme.palette.text.secondary,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    link: {
+        display: 'flex',
+        alignItems: 'center',
+        cursor: 'pointer',
+    },
+    title: {
+        fontSize: 10,
+        color: theme.palette.text.secondary,
+    },
+}))
 
 export interface FootnoteMenuOption {
     name: React.ReactNode

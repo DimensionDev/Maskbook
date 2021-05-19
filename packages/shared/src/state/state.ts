@@ -131,9 +131,7 @@ export type ClientReturn = {
     globalBindings: {
         [key in keyof PersistentStateStore]: Readonly<StateBinding<PersistentStateStore[key]>>
     }
-    createNamespacedBinding(
-        namespace: string,
-    ): {
+    createNamespacedBinding(namespace: string): {
         [key in keyof NamespacedBinding]: Readonly<StateBinding<NamespacedBinding>>
     }
 }

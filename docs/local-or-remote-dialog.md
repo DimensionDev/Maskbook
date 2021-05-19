@@ -12,7 +12,7 @@ maintainer:
 function useRemoteControlledDialog<
   T extends {
     open: boolean
-  }
+  },
 >(
   event: UnboundedRegistry<T>,
   onUpdateByRemote?: ((ev: T) => void) | undefined,

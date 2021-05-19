@@ -1,22 +1,20 @@
 import { useState, useRef, useEffect } from 'react'
 import { useDropArea } from 'react-use'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { makeStyles, createStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { RestoreBox } from './RestoreBox'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            border: `solid 1px ${theme.palette.divider}`,
-            height: 176,
-            borderRadius: 4,
-        },
-        file: {
-            display: 'none',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        border: `solid 1px ${theme.palette.divider}`,
+        height: 176,
+        borderRadius: 4,
+    },
+    file: {
+        display: 'none',
+    },
+}))
 
 export interface RestoreFromBackupBoxProps extends withClasses<never> {
     file: File | null

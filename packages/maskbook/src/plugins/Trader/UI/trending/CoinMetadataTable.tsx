@@ -1,7 +1,6 @@
 import { useCopyToClipboard } from 'react-use'
 import {
     makeStyles,
-    createStyles,
     TableContainer,
     Paper,
     Table,
@@ -15,40 +14,38 @@ import FileCopyIcon from '@material-ui/icons/FileCopy'
 import type { DataProvider, Trending } from '../../types'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import { Linking } from './Linking'
-import { formatEthereumAddress } from '../../../Wallet/formatter'
+import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 import { CoinMetadataTags } from './CoinMetadataTags'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(2),
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+    },
+    container: {
+        borderRadius: 0,
+        boxSizing: 'border-box',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        container: {
-            borderRadius: 0,
-            boxSizing: 'border-box',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
+    },
+    table: {},
+    cell: {
+        whiteSpace: 'nowrap',
+        border: 'none',
+    },
+    label: {
+        color: theme.palette.text.secondary,
+        whiteSpace: 'nowrap',
+    },
+    link: {
+        display: 'inline-block',
+        whiteSpace: 'nowrap',
+        paddingRight: theme.spacing(1),
+        '&:last-child': {
+            paddingRight: 0,
         },
-        table: {},
-        cell: {
-            whiteSpace: 'nowrap',
-            border: 'none',
-        },
-        label: {
-            color: theme.palette.text.secondary,
-            whiteSpace: 'nowrap',
-        },
-        link: {
-            display: 'inline-block',
-            whiteSpace: 'nowrap',
-            paddingRight: theme.spacing(1),
-            '&:last-child': {
-                paddingRight: 0,
-            },
-        },
-    }),
-)
+    },
+}))
 
 export interface CoinMetadataTableProps {
     trending: Trending
@@ -115,7 +112,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                             </TableCell>
                             <TableCell>
                                 <Typography variant="body2" component="span">
-                                    {formatEthereumAddress(trending.coin.eth_address, 4)}
+                                    <FormattedAddress address={trending.coin.eth_address} size={4} />
                                 </Typography>
                                 <IconButton color="primary" size="small" onClick={onCopyAddress}>
                                     <FileCopyIcon fontSize="small" />

@@ -104,7 +104,7 @@ export async function generateOthersAESKeyEncrypted(
         othersPublicKeyECDH.map<Promise<PublishedAESKeyRecordV40>>(async ({ key, name }) => {
             const encrypted = await encrypt1To1({
                 // This is the deprecated -40 code path
-                version: (-40 as unknown) as -38,
+                version: -40 as unknown as -38,
                 content: exportedAESKey,
                 othersPublicKeyECDH: key,
                 privateKeyECDH: privateKeyECDH,

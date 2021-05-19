@@ -1,25 +1,12 @@
 import { useState, useContext } from 'react'
-import {
-    makeStyles,
-    createStyles,
-    Box,
-    Card,
-    CardHeader,
-    CardContent,
-    Typography,
-    Tab,
-    Tabs,
-    Chip,
-    Paper,
-} from '@material-ui/core'
+import { makeStyles, Box, Card, CardHeader, CardContent, Typography, Tab, Tabs, Chip, Paper } from '@material-ui/core'
 import { SnapshotContext } from '../context'
 import { useProposal } from '../hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
-import { useRetry } from '../hooks/useRetry'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             '--contentHeight': '400px',
             '--tabHeight': '35px',
@@ -60,7 +47,7 @@ const useStyles = makeStyles((theme) => {
             fontSize: 12,
             marginRight: theme.spacing(0.5),
         },
-    })
+    }
 })
 
 export function Snapshot() {
@@ -75,8 +62,6 @@ export function Snapshot() {
         <Tab className={classes.tab} key="proposal" label="Proposal" />,
         <Tab className={classes.tab} key="progress" label="Progress" />,
     ]
-    const retry = useRetry()
-
     return (
         <Card className={classes.root} elevation={0}>
             <CardHeader
@@ -117,7 +102,7 @@ export function Snapshot() {
                 </Tabs>
                 <Paper className={classes.body}>
                     {tabIndex === 0 ? <ProposalTab /> : null}
-                    {tabIndex === 1 ? <ProgressTab retry={retry} /> : null}
+                    {tabIndex === 1 ? <ProgressTab /> : null}
                 </Paper>
             </CardContent>
         </Card>

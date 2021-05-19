@@ -2,7 +2,7 @@ import { Component } from 'react'
 import { SnapshotCard } from './SnapshotCard'
 import { Typography, Button } from '@material-ui/core'
 
-export class NetworkFail extends Component<{ title: string; retry: () => void; isFullPluginDown?: boolean }> {
+export class LoadingFailCard extends Component<{ title: string; retry: () => void; isFullPluginDown?: boolean }> {
     static getDerivedStateFromError(error: unknown) {
         return { error }
     }

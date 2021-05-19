@@ -1,7 +1,7 @@
-import { Component, useCallback, useState, useEffect, useMemo } from 'react'
+import { useCallback, useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
 import { BigNumber } from 'bignumber.js'
-import { makeStyles, createStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
+import { makeStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
@@ -13,12 +13,12 @@ import { resolveLinkOnEtherscan } from '../../../web3/pipes'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useBlockNumber'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
+import { formatAmountPrecision, formatBalance } from '@dimensiondev/maskbook-shared'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatDateTime } from '../../../utils/date'
 import { getTextUILength } from '../../../utils/getTextUILength'
-import { ClaimGuide, ClaimStatus } from './ClaimGuide'
+import { SwapGuide, SwapStatus } from './SwapGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { sortTokens } from '../helpers'
@@ -27,11 +27,9 @@ import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { usePoolPayload } from '../hooks/usePoolPayload'
-import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useClaimCallback } from '../hooks/useClaimCallback'
-import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useIPRegion, decodeRegionCode, checkRegionRestrict } from '../hooks/useRegion'
 import { useIfQualified } from '../hooks/useIfQualified'
 
@@ -44,130 +42,128 @@ interface StyleProps {
     tokenNumber?: number
 }
 
-const useStyles = makeStyles<Theme, StyleProps>((theme) =>
-    createStyles({
-        root: {
-            position: 'relative',
-            color: theme.palette.common.white,
-            flexDirection: 'column',
-            height: (props: StyleProps) => (props.tokenNumber! > 4 ? 425 : 405),
-            minHeight: 405,
-            boxSizing: 'border-box',
-            backgroundAttachment: 'local',
-            backgroundPosition: '0 0',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            borderRadius: theme.spacing(1),
-            paddingLeft: theme.spacing(4),
-            paddingRight: theme.spacing(1),
-            paddingTop: theme.spacing(4),
-            paddingBottom: theme.spacing(2),
-        },
-        header: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'end',
-            width: '100%',
-            maxWidth: 470,
-        },
-        title: {
-            fontSize: (props: StyleProps) => (props.titleLength! > 31 ? '1.3rem' : '1.6rem'),
-            fontWeight: 'bold',
-            marginBottom: 4,
-            marginRight: 4,
-            width: '80%',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-        },
-        status: {
-            background: 'rgba(20, 23, 26, 0.6)',
-            padding: '5px 16px',
-            whiteSpace: 'nowrap',
-            borderRadius: 10,
-        },
-        totalText: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        tokenLink: {
-            display: 'flex',
-            alignItems: 'center',
-            color: '#fff',
-        },
-        tokenIcon: {
-            width: 24,
-            height: 24,
-        },
-        totalIcon: {
+const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
+    root: {
+        position: 'relative',
+        color: theme.palette.common.white,
+        flexDirection: 'column',
+        height: (props: StyleProps) => (props.tokenNumber! > 4 ? 425 : 405),
+        minHeight: 405,
+        boxSizing: 'border-box',
+        backgroundAttachment: 'local',
+        backgroundPosition: '0 0',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        borderRadius: theme.spacing(1),
+        paddingLeft: theme.spacing(4),
+        paddingRight: theme.spacing(1),
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(2),
+    },
+    header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'end',
+        width: '100%',
+        maxWidth: 470,
+    },
+    title: {
+        fontSize: (props: StyleProps) => (props.titleLength! > 31 ? '1.3rem' : '1.6rem'),
+        fontWeight: 'bold',
+        marginBottom: 4,
+        marginRight: 4,
+        width: '80%',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+    },
+    status: {
+        background: 'rgba(20, 23, 26, 0.6)',
+        padding: '5px 16px',
+        whiteSpace: 'nowrap',
+        borderRadius: 10,
+    },
+    totalText: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    tokenLink: {
+        display: 'flex',
+        alignItems: 'center',
+        color: '#fff',
+    },
+    tokenIcon: {
+        width: 24,
+        height: 24,
+    },
+    totalIcon: {
+        marginLeft: theme.spacing(1),
+        cursor: 'pointer',
+    },
+    progressWrap: {
+        width: 220,
+        marginBottom: theme.spacing(3),
+        marginTop: theme.spacing(1),
+    },
+    footer: {
+        position: 'absolute',
+        width: '90%',
+        maxWidth: 470,
+        bottom: theme.spacing(2),
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    fromText: {
+        opacity: 0.6,
+        transform: 'translateY(5px)',
+    },
+    rationWrap: {
+        marginBottom: theme.spacing(1),
+        display: 'flex',
+        alignItems: 'center',
+        '& > span': {
             marginLeft: theme.spacing(1),
-            cursor: 'pointer',
-        },
-        progressWrap: {
-            width: 220,
-            marginBottom: theme.spacing(3),
-            marginTop: theme.spacing(1),
-        },
-        footer: {
-            position: 'absolute',
-            width: '90%',
-            maxWidth: 470,
-            bottom: theme.spacing(2),
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-        },
-        fromText: {
-            opacity: 0.6,
-            transform: 'translateY(5px)',
-        },
-        rationWrap: {
-            marginBottom: theme.spacing(1),
-            display: 'flex',
-            alignItems: 'center',
-            '& > span': {
-                marginLeft: theme.spacing(1),
-                fontSize: 14,
-                '& > b': {
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                },
+            fontSize: 14,
+            '& > b': {
+                fontSize: 16,
+                fontWeight: 'bold',
             },
         },
-        actionFooter: {
-            marginTop: theme.spacing(1),
+    },
+    actionFooter: {
+        marginTop: theme.spacing(1),
+    },
+    actionButton: {
+        minHeight: 'auto',
+        width: '100%',
+    },
+    textProviderErr: {
+        color: '#EB5757',
+        marginTop: theme.spacing(1),
+    },
+    loadingITO: {
+        marginTop: 260,
+        textAlign: 'center',
+        fontSize: 24,
+    },
+    loadingITO_Button: {
+        color: '#fff',
+        borderColor: '#fff !important',
+        margin: theme.spacing(1, 'auto'),
+        minHeight: 35,
+        '&:hover': {
+            background: 'none',
         },
-        actionButton: {
-            minHeight: 'auto',
-            width: '100%',
-        },
-        textProviderErr: {
-            color: '#EB5757',
-            marginTop: theme.spacing(1),
-        },
-        loadingITO: {
-            marginTop: 260,
-            textAlign: 'center',
-            fontSize: 24,
-        },
-        loadingITO_Button: {
-            color: '#fff',
-            borderColor: '#fff !important',
-            margin: theme.spacing(1, 'auto'),
-            minHeight: 35,
-            '&:hover': {
-                background: 'none',
-            },
-        },
-        loadingWrap: {
-            display: 'flex',
-            justifyContent: 'center',
-        },
-        textInOneLine: {
-            whiteSpace: 'nowrap',
-        },
-    }),
-)
+    },
+    loadingWrap: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    textInOneLine: {
+        whiteSpace: 'nowrap',
+    },
+}))
 
 //#region token item
 interface TokenItemProps {
@@ -191,8 +187,7 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 
 export interface ITO_Props {
     pid: string
-    password: string
-    regions: string
+    payload: JSON_PayloadInMask
 }
 
 export function ITO(props: ITO_Props) {
@@ -203,30 +198,14 @@ export function ITO(props: ITO_Props) {
     const chainIdValid = useChainIdValid()
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
-    const [claimDialogStatus, setClaimDialogStatus] = useState(ClaimStatus.Remind)
+    const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)
 
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
-    const { pid, password, regions: defaultRegions = '-' } = props
-
-    const { payload: payload_, retry: retryPoolPayload } = usePoolPayload(pid)
-
-    // append the password from the outcoming pool
-    const payload: JSON_PayloadInMask = {
-        ...payload_,
-        password: payload_.password || password,
-    }
-    const {
-        token,
-        total: payload_total,
-        total_remaining: payload_total_remaining,
-        exchange_amounts,
-        exchange_tokens,
-        limit,
-        end_time,
-        message,
-    } = payload
+    const { pid, payload } = props
+    const { regions: defaultRegions = '-' } = props.payload
+    const { token, total: payload_total, exchange_amounts, exchange_tokens, limit, end_time, message } = payload
 
     const { t } = useI18N()
     const sellerName =
@@ -237,23 +216,24 @@ export function ITO(props: ITO_Props) {
     const regions = message.split(MSG_DELIMITER)[2] ?? defaultRegions
     const classes = useStyles({ titleLength: getTextUILength(title), tokenNumber: exchange_tokens.length })
 
+    //#region token detailed
+    const {
+        value: availability,
+        computed: availabilityComputed,
+        loading: loadingAvailability,
+        error: errorAvailability,
+        retry: retryAvailability,
+    } = useAvailabilityComputed(payload)
+    //#ednregion
+
     const total = new BigNumber(payload_total)
-    const total_remaining = new BigNumber(payload_total_remaining)
+    const total_remaining = new BigNumber(availability?.remaining ?? '0')
     const sold = total.minus(total_remaining)
 
     const { value: currentRegion, loading: loadingRegion } = useIPRegion()
     const allowRegions = decodeRegionCode(regions)
     const isRegionRestrict = checkRegionRestrict(allowRegions)
     const isRegionAllow = !isRegionRestrict || (!loadingRegion && allowRegions.includes(currentRegion!.code))
-
-    //#region token detailed
-    const {
-        value: availability,
-        computed: availabilityComputed,
-        loading: loadingAvailability,
-        retry: retryAvailability,
-    } = useAvailabilityComputed(payload)
-    //#ednregion
 
     //#region if qualified
     const {
@@ -271,12 +251,9 @@ export function ITO(props: ITO_Props) {
     const noRemain = total_remaining.isZero()
 
     //#region remote controlled select provider dialog
-    const [, setSelectProviderDialogOpen] = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const onConnect = useCallback(() => {
-        setSelectProviderDialogOpen({
-            open: true,
-        })
-    }, [setSelectProviderDialogOpen])
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     //#endregion
 
     //#region buy info
@@ -299,13 +276,11 @@ export function ITO(props: ITO_Props) {
         [tradeInfo, listOfStatus, isAccountSeller, noRemain],
     )
 
-    const refundAmount = useMemo(
-        () =>
-            tradeInfo?.buyInfo
-                ? new BigNumber(tradeInfo?.buyInfo.amount).minus(new BigNumber(tradeInfo?.buyInfo.amount_sold))
-                : new BigNumber(0),
-        [tradeInfo],
-    )
+    const refundAmount = useMemo(() => {
+        const buyInfo = tradeInfo?.buyInfo
+        if (!buyInfo) return new BigNumber(0)
+        return new BigNumber(buyInfo.amount).minus(buyInfo.amount_sold)
+    }, [tradeInfo])
     // out of stock
     const refundAllAmount = tradeInfo?.buyInfo && new BigNumber(tradeInfo?.buyInfo.amount_sold).isZero()
 
@@ -315,18 +290,17 @@ export function ITO(props: ITO_Props) {
     //#endregion
 
     const retryITOCard = useCallback(() => {
-        retryPoolPayload()
         retryPoolTradeInfo()
         retryAvailability()
-    }, [retryPoolPayload, retryPoolTradeInfo, retryAvailability])
+    }, [retryPoolTradeInfo, retryAvailability])
 
     //#region claim
-    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback([pid])
+    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback([pid], payload.contract_address)
     const onClaimButtonClick = useCallback(() => {
         claimCallback()
     }, [claimCallback])
 
-    const [_open, setClaimTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -338,10 +312,10 @@ export function ITO(props: ITO_Props) {
 
     useEffect(() => {
         if (claimState.type === TransactionStateType.UNKNOWN) return
-        setClaimTransactionDialogOpen({
+        setClaimTransactionDialog({
             open: true,
             state: claimState,
-            summary: `Claiming ${formatBalance(new BigNumber(availability?.swapped ?? 0), token.decimals)} ${
+            summary: `Claiming ${formatBalance(availability?.swapped ?? 0, token.decimals)} ${
                 token?.symbol ?? 'Token'
             }.`,
         })
@@ -362,16 +336,16 @@ export function ITO(props: ITO_Props) {
         window.open(shareLink, '_blank', 'noopener noreferrer')
     }, [shareLink])
     const onUnlock = useCallback(async () => {
-        setClaimDialogStatus(ClaimStatus.Unlock)
+        setClaimDialogStatus(SwapStatus.Unlock)
         setOpenClaimDialog(true)
     }, [])
     const onClaim = useCallback(async () => {
-        setClaimDialogStatus(ClaimStatus.Remind)
+        setClaimDialogStatus(SwapStatus.Remind)
         setOpenClaimDialog(true)
     }, [])
 
     //#region withdraw
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
@@ -382,7 +356,7 @@ export function ITO(props: ITO_Props) {
     )
 
     useEffect(() => {
-        const timeToExpired = end_time * 1000 - Date.now()
+        const timeToExpired = end_time - Date.now()
         if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired)) return
 
         const timer = setTimeout(() => {
@@ -391,7 +365,7 @@ export function ITO(props: ITO_Props) {
         }, timeToExpired + TIME_WAIT_BLOCKCHAIN)
 
         return () => clearTimeout(timer)
-    }, [])
+    }, [end_time, listOfStatus])
 
     useEffect(() => {
         if (destructState.type === TransactionStateType.UNKNOWN) return
@@ -406,7 +380,7 @@ export function ITO(props: ITO_Props) {
                 summary += comma + formatBalance(availability?.exchanged_tokens[i], token.decimals) + ' ' + token.symbol
             }
         })
-        setTransactionDialogOpen({
+        setTransactionDialog({
             open: true,
             state: destructState,
             summary,
@@ -426,7 +400,7 @@ export function ITO(props: ITO_Props) {
             return t('plugin_ito_status_ongoing')
         }
         return ''
-    }, [listOfStatus, t, total_remaining])
+    }, [listOfStatus, total_remaining])
 
     const swapResultText = useMemo(() => {
         if (refundAllAmount) {
@@ -456,7 +430,6 @@ export function ITO(props: ITO_Props) {
         availability?.swapped,
         refundAllAmount,
         refundAmount,
-        t,
         token.decimals,
         token.symbol,
         tradeInfo?.buyInfo?.token.decimals,
@@ -469,13 +442,13 @@ export function ITO(props: ITO_Props) {
                 {t('plugin_ito_list_start_date', { date: formatDateTime(new Date(startTime), true) })}
             </Typography>
         )
-    }, [startTime, t])
+    }, [startTime])
 
     const footerEndTime = useMemo(
         () => (
             <Typography variant="body1">
                 {t('plugin_ito_swap_end_date', {
-                    date: formatDateTime(new Date(end_time * 1000), true),
+                    date: formatDateTime(new Date(end_time), true),
                 })}
             </Typography>
         ),
@@ -497,7 +470,7 @@ export function ITO(props: ITO_Props) {
             <>
                 <Typography variant="body1">
                     {t('plugin_ito_allocation_per_wallet', {
-                        limit: `: ${formatBalance(limit, token.decimals)}`,
+                        limit: formatBalance(limit, token.decimals),
                         token: token.symbol,
                     })}
                 </Typography>
@@ -509,7 +482,7 @@ export function ITO(props: ITO_Props) {
                     : null}
             </>
         ),
-        [footerEndTime, footerStartTime, limit, listOfStatus, t, token.decimals, token.symbol],
+        [footerEndTime, footerStartTime, limit, listOfStatus, token.decimals, token.symbol],
     )
 
     return (
@@ -554,7 +527,7 @@ export function ITO(props: ITO_Props) {
                                 <TokenItem
                                     price={formatBalance(
                                         new BigNumber(exchange_amounts[i * 2])
-                                            .dividedBy(new BigNumber(exchange_amounts[i * 2 + 1]))
+                                            .dividedBy(exchange_amounts[i * 2 + 1])
                                             .multipliedBy(
                                                 new BigNumber(10).pow(token.decimals - exchange_tokens[i].decimals),
                                             )
@@ -611,7 +584,11 @@ export function ITO(props: ITO_Props) {
                         {t('plugin_ito_loading')}
                     </ActionButton>
                 ) : !account || !chainIdValid ? (
-                    <ActionButton onClick={onConnect} variant="contained" size="large" className={classes.actionButton}>
+                    <ActionButton
+                        onClick={openSelectProviderDialog}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
                 ) : canWithdraw ? (
@@ -716,7 +693,7 @@ export function ITO(props: ITO_Props) {
                     </ActionButton>
                 ) : null}
             </Box>
-            <ClaimGuide
+            <SwapGuide
                 status={claimDialogStatus}
                 payload={payload}
                 shareSuccessLink={shareSuccessLink}
@@ -750,23 +727,17 @@ export function ITO_Loading() {
     )
 }
 
-function ITO_LoadingFailUI({
-    retryPoolPayload,
-    isConnectMetaMask = false,
-}: {
-    retryPoolPayload: () => void
-    isConnectMetaMask?: boolean
-}) {
+export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }) {
     const { t } = useI18N()
-    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     const classes = useStyles({})
+    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     return (
         <Card
             className={classNames(classes.root, classes.loadingWrap)}
             elevation={0}
             style={{ backgroundImage: `url(${PoolBackground})` }}>
             <Typography variant="body1" className={classes.loadingITO}>
-                {isConnectMetaMask ? '' : t('plugin_ito_loading_failed')}
+                {t('plugin_ito_loading_failed')}
             </Typography>
             <ActionButton
                 onClick={retryPoolPayload}
@@ -774,34 +745,8 @@ function ITO_LoadingFailUI({
                 size="large"
                 color="primary"
                 className={classes.loadingITO_Button}>
-                {isConnectMetaMask ? t('plugin_wallet_connect_to_metamask') : t('plugin_ito_loading_try_again')}
+                {t('plugin_ito_loading_try_again')}
             </ActionButton>
         </Card>
     )
-}
-
-export function ITO_ConnectMetaMask() {
-    return (
-        <ITO_LoadingFailUI retryPoolPayload={async () => await Services.Ethereum.connectMetaMask()} isConnectMetaMask />
-    )
-}
-
-export class ITO_LoadingFail extends Component<{ retryPoolPayload: () => void }> {
-    static getDerivedStateFromError(error: unknown) {
-        return { error }
-    }
-    state: { error: Error | null } = { error: null }
-    render() {
-        if (this.state.error) {
-            return (
-                <ITO_LoadingFailUI
-                    retryPoolPayload={() => {
-                        this.setState({ error: null })
-                        this.props.retryPoolPayload()
-                    }}
-                />
-            )
-        }
-        return this.props.children
-    }
 }

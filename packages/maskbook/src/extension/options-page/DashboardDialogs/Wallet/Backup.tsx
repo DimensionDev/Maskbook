@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 import { CreditCard as CreditCardIcon } from 'react-feather'
 import { useAsync } from 'react-use'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
@@ -8,13 +8,11 @@ import ShowcaseBox from '../../DashboardComponents/ShowcaseBox'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import type { WalletProps } from './types'
 
-const useBackupDialogStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        section: {
-            textAlign: 'left',
-        },
-    }),
-)
+const useBackupDialogStyles = makeStyles((theme: Theme) => ({
+    section: {
+        textAlign: 'left',
+    },
+}))
 
 export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()

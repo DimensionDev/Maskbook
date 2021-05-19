@@ -1,33 +1,30 @@
 import { Fragment, useCallback, useState } from 'react'
-import { createStyles, makeStyles, Typography, Grid, Paper, Card, IconButton, Link } from '@material-ui/core'
+import { makeStyles, Typography, Grid, Paper, Card, IconButton, Link } from '@material-ui/core'
 import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import LaunchIcon from '@material-ui/icons/Launch'
-import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
+import { formatAmountPrecision, formatBalance, FormattedAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import BigNumber from 'bignumber.js'
 import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { dateTimeFormat } from '../assets/formatDate'
 import { isETH } from '../../../web3/helpers'
 import { resolveTokenLinkOnEtherscan, resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
-import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
 import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
 import { ITO_CONSTANTS } from '../constants'
 
-const useSwapItemStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-        },
-        icon: {},
-    }),
-)
+const useSwapItemStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    icon: {},
+}))
 interface SwapItemProps {
     token?: EtherTokenDetailed | ERC20TokenDetailed
     swapAmount?: string
@@ -60,41 +57,39 @@ function SwapItem(props: SwapItemProps) {
     )
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-        },
-        title: {
-            padding: theme.spacing(2),
-            textAlign: 'center',
-            color: theme.palette.text.secondary,
-            fontSize: 18,
-        },
-        line: {
-            display: 'flex',
-            padding: theme.spacing(1),
-        },
-        data: {
-            padding: theme.spacing(1),
-            textAlign: 'right',
-            color: theme.palette.text.primary,
-        },
-        label: {
-            padding: theme.spacing(1),
-            textAlign: 'left',
-            color: theme.palette.text.secondary,
-        },
-        button: {
-            padding: theme.spacing(2),
-        },
-        link: {
-            padding: 0,
-            marginLeft: theme.spacing(0.5),
-            marginTop: 2,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    title: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        fontSize: 18,
+    },
+    line: {
+        display: 'flex',
+        padding: theme.spacing(1),
+    },
+    data: {
+        padding: theme.spacing(1),
+        textAlign: 'right',
+        color: theme.palette.text.primary,
+    },
+    label: {
+        padding: theme.spacing(1),
+        textAlign: 'left',
+        color: theme.palette.text.secondary,
+    },
+    button: {
+        padding: theme.spacing(2),
+    },
+    link: {
+        padding: 0,
+        marginLeft: theme.spacing(0.5),
+        marginTop: 2,
+    },
+}))
 export interface ConfirmDialogProps {
     poolSettings?: PoolSettings
     onDone: () => void
@@ -150,8 +145,11 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 <Grid item xs={6}>
                     <Paper className={classes.data}>
                         <Typography>
-                            {formatBalance(poolSettings?.total, poolSettings?.token?.decimals)}{' '}
-                            {poolSettings?.token?.symbol}
+                            <FormattedBalance
+                                value={poolSettings?.total}
+                                decimals={poolSettings?.token?.decimals}
+                                symbol={poolSettings?.token?.symbol}
+                            />
                         </Typography>
                     </Paper>
                 </Grid>
@@ -187,8 +185,11 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 <Grid item xs={6}>
                     <Paper className={classes.data}>
                         <Typography>
-                            {formatBalance(poolSettings?.limit, poolSettings?.token?.decimals)}{' '}
-                            {poolSettings?.token?.symbol}
+                            <FormattedBalance
+                                value={poolSettings?.total}
+                                decimals={poolSettings?.token?.decimals}
+                                symbol={poolSettings?.token?.symbol}
+                            />
                         </Typography>
                     </Paper>
                 </Grid>
@@ -228,7 +229,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Typography>
-                                        {formatEthereumAddress(poolSettings?.qualificationAddress!, 4)}
+                                        <FormattedAddress address={poolSettings?.qualificationAddress!} size={4} />
                                     </Typography>
                                 </Link>
                             </Paper>

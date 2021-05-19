@@ -13,5 +13,5 @@ if (typeof self !== 'undefined') {
 }
 export {}
 setTimeout(() => {
-    ;((self as any) as Worker).postMessage('Alive')
+    ;(self as any as Worker).postMessage('Alive')
 }, 10)

@@ -1,15 +1,15 @@
-import { makeStyles, createStyles, Card, CardContent, CardProps } from '@material-ui/core'
+import { makeStyles, Card, CardContent, CardProps } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme) => {
-    return createStyles({
+    return {
         root: {
             width: '100%',
             height: '100%',
             borderRadius: 0,
         },
         content: {},
-    })
+    }
 })
 
 export interface CollectibleTabProps extends withClasses<'root' | 'content'> {

@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react'
-import { createStyles, DialogContent, IconButton, makeStyles } from '@material-ui/core'
+import { useState } from 'react'
+import { DialogContent, IconButton, makeStyles } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
@@ -8,32 +8,30 @@ import { PluginTransakMessages } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useTransakURL } from '../hooks/useTransakURL'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        dialogPaper: {
-            width: '500px !important',
-        },
-        close: {
-            color: `${theme.palette.common.white} !important`,
-            backgroundColor: `${theme.palette.primary.light} !important`,
-            top: theme.spacing(2),
-            right: theme.spacing(2),
-            position: 'absolute',
-        },
-        content: {
-            width: '100%',
-            padding: 0,
-            backgroundColor: theme.palette.common.white,
-            position: 'relative',
-        },
-        frame: {
-            display: 'block',
-            width: '100%',
-            height: 630,
-            border: 0,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    dialogPaper: {
+        width: '500px !important',
+    },
+    close: {
+        color: `${theme.palette.common.white} !important`,
+        backgroundColor: `${theme.palette.primary.light} !important`,
+        top: theme.spacing(2),
+        right: theme.spacing(2),
+        position: 'absolute',
+    },
+    content: {
+        width: '100%',
+        padding: 0,
+        backgroundColor: theme.palette.common.white,
+        position: 'relative',
+    },
+    frame: {
+        display: 'block',
+        width: '100%',
+        height: 630,
+        border: 0,
+    },
+}))
 
 export interface BuyTokenDialogProps extends withClasses<never | 'root'> {}
 
@@ -49,24 +47,22 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
     })
 
     //#region remote controlled buy token dialog
-    const [open, setOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated, (ev) => {
-        if (ev.open) {
-            setCode(ev.code ?? 'ETH')
-            setAddress(ev.address)
-        }
-    })
-    const onClose = useCallback(() => {
-        setOpen({
-            open: false,
-        })
-    }, [setOpen])
+    const { open, closeDialog } = useRemoteControlledDialog(
+        PluginTransakMessages.events.buyTokenDialogUpdated,
+        (ev) => {
+            if (ev.open) {
+                setCode(ev.code ?? 'ETH')
+                setAddress(ev.address)
+            }
+        },
+    )
     //#endregion
 
     return (
         <div className={classes.root}>
             <InjectedDialog
                 open={open}
-                onClose={onClose}
+                onClose={closeDialog}
                 DialogProps={{
                     classes: {
                         paper: classes.dialogPaper,
@@ -74,7 +70,7 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
                 }}
                 disableBackdropClick>
                 <DialogContent className={classes.content}>
-                    <IconButton className={classes.close} size="small" onClick={onClose}>
+                    <IconButton className={classes.close} size="small" onClick={closeDialog}>
                         <CloseIcon />
                     </IconButton>
                     {transakURL ? <iframe className={classes.frame} src={transakURL} /> : null}

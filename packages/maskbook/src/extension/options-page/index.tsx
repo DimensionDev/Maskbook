@@ -1,10 +1,10 @@
-import '../../social-network-adaptor'
+import '../../social-network-adaptor/options-page'
 import '../../setup.ui'
 
 import { useState } from 'react'
 import { useAsync } from 'react-use'
-import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card, StylesProvider } from '@material-ui/core'
-import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'
+import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card } from '@material-ui/core'
+import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
@@ -14,7 +14,7 @@ import PowerIcon from '@material-ui/icons/Power'
 import { HashRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom'
 
 import { useI18N } from '../../utils/i18n-next-ui'
-import { useMaskbookTheme } from '../../utils/theme'
+import { useClassicMaskTheme } from '../../utils/theme'
 
 import FooterLine from './DashboardComponents/FooterLine'
 import Drawer from './DashboardComponents/Drawer'
@@ -29,7 +29,6 @@ import { DashboardRoute } from './Route'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 
 import Services from '../service'
-import { RequestPermissionPage } from '../../components/RequestPermission/RequestPermission'
 import { grey } from '@material-ui/core/colors'
 import { DashboardSnackbarProvider } from './DashboardComponents/DashboardSnackbar'
 import { SetupStep } from './SetupStep'
@@ -41,7 +40,7 @@ import { useMatchXS } from '../../utils/hooks/useMatchXS'
 import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/PluginUI'
 import { ErrorBoundary, withErrorBoundary } from '../../components/shared/ErrorBoundary'
-import { MaskbookUIRoot } from '../../UIRoot'
+import { MaskUIRoot } from '../../UIRoot'
 import {
     createInjectHooksRenderer,
     startPluginDashboard,
@@ -51,7 +50,7 @@ import { createPluginHost } from '../../plugin-infra/host'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.mode === 'dark'
-    return createStyles({
+    return {
         root: {
             '--monospace': 'SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace',
             '--drawerHeader': dark ? '#121212' : theme.palette.primary.main,
@@ -117,7 +116,7 @@ const useStyles = makeStyles((theme) => {
             whiteSpace: 'pre-wrap',
             marginBottom: theme.spacing(3),
         },
-    })
+    }
 })
 
 function DashboardUI() {
@@ -125,13 +124,15 @@ function DashboardUI() {
     const classes = useStyles()
     const history = useHistory<unknown>()
     const xsMatched = useMatchXS()
-    const routers = ([
-        [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
-        [t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />],
-        [t('contacts'), DashboardRoute.Contacts, <BookmarkBorderOutlinedIcon />],
-        [t('plugins'), DashboardRoute.Plugins, <PowerIcon />],
-        [t('settings'), DashboardRoute.Settings, <SettingsOutlinedIcon />],
-    ] as const).filter((x) => x)
+    const routers = (
+        [
+            [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
+            [t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />],
+            [t('contacts'), DashboardRoute.Contacts, <BookmarkBorderOutlinedIcon />],
+            [t('plugins'), DashboardRoute.Plugins, <PowerIcon />],
+            [t('settings'), DashboardRoute.Settings, <SettingsOutlinedIcon />],
+        ] as const
+    ).filter((x) => x)
 
     // jump to persona if needed
     const [reloadSpy, setReloadSpy] = useState(false)
@@ -205,8 +206,6 @@ function DashboardUI() {
                 <Route path={DashboardRoute.Plugins} component={withErrorBoundary(DashboardPluginsRouter)} />
                 <Route path={DashboardRoute.Settings} component={withErrorBoundary(DashboardSettingsRouter)} />
                 <Route path={DashboardRoute.Setup} component={withErrorBoundary(DashboardSetupRouter)} />
-                {/* // TODO: this page should be boardless */}
-                <Route path={DashboardRoute.RequestPermission} component={withErrorBoundary(RequestPermissionPage)} />
                 <Redirect
                     path="*"
                     to={Flags.has_no_browser_tab_ui && xsMatched ? DashboardRoute.Nav : DashboardRoute.Personas}
@@ -225,7 +224,7 @@ function PluginDashboardInspectorForEach({ config }: { config: PluginConfig }) {
 
 function OldPluginRender() {
     return (
-        <ThemeProvider theme={useMaskbookTheme()}>
+        <ThemeProvider theme={useClassicMaskTheme()}>
             {[...PluginUI.values()].map((x) => (
                 <ErrorBoundary key={x.identifier} subject={`Plugin "${x.pluginName}"`}>
                     <PluginDashboardInspectorForEach config={x} />
@@ -236,22 +235,19 @@ function OldPluginRender() {
 }
 //#endregion
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
+
 export function Dashboard() {
-    return MaskbookUIRoot(
-        <StylesProvider injectFirst>
-            <ThemeProvider theme={useMaskbookTheme()}>
-                <DashboardSnackbarProvider>
-                    <NoSsr>
-                        <Router>
-                            <CssBaseline />
-                            <DashboardUI />
-                            <PluginRender />
-                            <OldPluginRender />
-                        </Router>
-                    </NoSsr>
-                </DashboardSnackbarProvider>
-            </ThemeProvider>
-        </StylesProvider>,
+    return MaskUIRoot(
+        <DashboardSnackbarProvider>
+            <NoSsr>
+                <Router>
+                    <CssBaseline />
+                    <DashboardUI />
+                    <PluginRender />
+                    <OldPluginRender />
+                </Router>
+            </NoSsr>
+        </DashboardSnackbarProvider>,
     )
 }
 
