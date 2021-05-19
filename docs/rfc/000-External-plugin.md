@@ -70,7 +70,7 @@ The manifest file should match the following shape:
 
 ```typescript
 interface ExternalPluginManifestFile {
-  manifest_version: 0
+  manifest_version: 1
   name: string
   publisher: string
   description: string
@@ -80,20 +80,16 @@ interface ExternalPluginManifestFile {
   metadata?: Record<PayloadMetadataKey, MetadataDetail>
   contribution?: {
     composition?: {
-      target: URL
+      target: URL | string
       icon: string | URL
     }
   }
 }
 
-type KnownPayloadTemplates = 'Card_1'
 interface MetadataDetail {
   // points to the JSON schema to validate if it is valid
   schema?: URL
-  preview?: SupportedPayloadPreviews
-}
-interface SupportedPayloadPreviews extends Record<KnownPayloadTemplates, URL> {
-  prefer?: KnownPayloadTemplates
+  preview?: URL
 }
 ```
 
@@ -114,7 +110,7 @@ Here is an example:
   "integrity": {
     // I can provide hash to enforce security
     // Opt-in feature.
-    "./preview/Card_1.json": "sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC"
+    "./preview/kind1.html": "sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC"
     // Now with sign.gpg and this hash, we can make sure ./preview/Card_1.json is trustable
   },
   "i18n": {
@@ -126,9 +122,7 @@ Here is an example:
     // In Mask it will be plugin:example.com/my-plugin:kind:1
     "kind1:1": {
       "schema": "./kind1-v1.schema.json",
-      "preview": {
-        "Card_1": "./preview/Card_1.json"
-      }
+      "preview": "./preview/kind1.html"
     }
   },
   "contribution": {
@@ -155,51 +149,28 @@ You might notice that there is no permission in the manifest because all permiss
 To avoid code execution in the Mask Network extension itself and still render a plugin UI,
 we can provide some common templates allowing developers to interpolate with.
 
-Here is an example of `./preview/Card_1.json`
+Here is an example of `./preview/kind1.html`
 
-```jsonc
-{
-  "plugin": {
-    // $ refers to the payload
-    "title": "$.title",
-    "description": {
-      // So if the __locale:preview_description is
-      // "There are still {{ balance }} in the {{ desc }}
-      // It will call the contract, get the result and plug the value in
-      "key": "__locale:preview_description",
-      "map": {
-        "desc": "$.description",
-        "balance": "#.balance"
-      }
-    },
-    "action_text": "__locale:open_to_check",
-    "action_url": "./popup.html"
-  },
-  "vars": {
-    "balance": {
-      "type": "contract",
-      "abi": "./my-contract.abi",
-      "method": "queryDetail",
-      "args": ["someVal", 0, "$.id"]
-    }
-  }
-}
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <mask-card caption="From localhost!" button="Details" href="http://localhost:4242/entry?id={{payload.data.0}}">
+        <i18n-translate slot="title" key="title">
+          This is preview of id <span slot="id0">{{payload.data.0}}</span> and
+          <span slot="id1">{{payload.data.1}}</span>
+        </i18n-translate>
+        Child content
+      </mask-card>
+    </template>
+  </body>
+</html>
 ```
 
 ### API in popups
 
-#### Mask.setMetadata(key: string, value: object)
-
-Report the payload back to the composition.
-
-```typescript
-Mask.setMetadata('kind1:1', {
-  title,
-  description,
-  id,
-})
-```
-
-#### Mask.permission.{query,request,revoke}
-
-Manage permissions
+The Mask plugin will only provide a JSON RPC based on EventTarget. The client should import a SDK file that wraps the RPC to the programmer friendly API.
