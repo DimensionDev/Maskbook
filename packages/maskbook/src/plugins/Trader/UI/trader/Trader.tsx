@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/sdk'
 
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed, ChainId } from '../../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed, ChainId } from '../../../../web3/types'
 import { TradeForm } from './TradeForm'
 import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
 import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
@@ -27,7 +27,7 @@ import { EthereumMessages } from '../../../Ethereum/messages'
 import Services from '../../../../extension/service'
 import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
-import { useChainId } from '../../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../../web3/hooks/useChainId'
 import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
 import { PluginTraderRPC } from '../../messages'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => {
 
 export interface TraderProps extends withClasses<never> {
     coin?: Coin
-    tokenDetailed?: ERC20TokenDetailed | EtherTokenDetailed
+    tokenDetailed?: NativeTokenDetailed | ERC20TokenDetailed
 }
 
 export function Trader(props: TraderProps) {
@@ -116,12 +116,12 @@ export function Trader(props: TraderProps) {
         value: inputTokenBalance_,
         loading: loadingInputTokenBalance,
         retry: retryInputTokenBalance,
-    } = useTokenBalance(inputToken?.type ?? EthereumTokenType.Ether, inputToken?.address ?? '')
+    } = useTokenBalance(inputToken?.type ?? EthereumTokenType.Native, inputToken?.address ?? '')
     const {
         value: outputTokenBalance_,
         loading: loadingOutputTokenBalance,
         retry: retryOutputTokenBalance,
-    } = useTokenBalance(outputToken?.type ?? EthereumTokenType.Ether, outputToken?.address ?? '')
+    } = useTokenBalance(outputToken?.type ?? EthereumTokenType.Native, outputToken?.address ?? '')
 
     useEffect(() => {
         if (inputTokenBalance_ && !loadingInputTokenBalance)

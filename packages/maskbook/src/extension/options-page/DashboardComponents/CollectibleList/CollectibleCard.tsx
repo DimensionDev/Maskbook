@@ -4,7 +4,7 @@ import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { resolveCollectibleLink } from '../../../../plugins/Wallet/pipes'
 import type { CollectibleProvider } from '../../../../plugins/Wallet/types'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
-import { useChainId } from '../../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../../web3/hooks/useChainId'
 import type { ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '../../../../web3/types'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 

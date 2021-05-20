@@ -6,7 +6,7 @@ import {
     ChainId,
     ERC20TokenDetailed,
     EthereumTokenType,
-    EtherTokenDetailed,
+    NativeTokenDetailed,
     ERC721TokenAssetDetailed,
     ERC1155TokenAssetDetailed,
 } from './types'
@@ -23,8 +23,8 @@ export function isOKB(address: string) {
     return isSameAddress(address, getConstant(CONSTANTS, 'OBK_ADDRESS'))
 }
 
-export function isETH(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'ETH_ADDRESS'))
+export function isNative(address: string) {
+    return isSameAddress(address, getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'))
 }
 
 export function addGasMargin(value: BigNumber.Value, scale = 1000) {
@@ -57,11 +57,11 @@ export function getAllConstants<T extends Web3Constants, K extends keyof T>(cons
 }
 //#endregion
 
-export function createEtherToken(chainId: ChainId): EtherTokenDetailed {
+export function createEtherToken(chainId: ChainId): NativeTokenDetailed {
     return {
-        type: EthereumTokenType.Ether,
+        type: EthereumTokenType.Native,
         chainId,
-        address: getConstant(CONSTANTS, 'ETH_ADDRESS'),
+        address: getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'),
         decimals: 18,
         name: 'Ether',
         symbol: 'ETH',

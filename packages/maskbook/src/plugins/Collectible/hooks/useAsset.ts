@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { head, uniqBy } from 'lodash-es'
 import BigNumber from 'bignumber.js'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { PluginCollectibleRPC } from '../messages'
 import type { CollectibleToken } from '../types'
 import { CollectibleProvider } from '../types'
@@ -10,7 +10,7 @@ import { unreachable } from '../../../utils/utils'
 import { toDate, toRaribleImage, toTokenDetailed, toTokenIdentifier } from '../helpers'
 import { OpenSeaAccountURL } from '../constants'
 import { resolveRaribleUserNetwork } from '../pipes'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { isSameAddress } from '../../../web3/helpers'
 import { useConstant } from '../../../web3/hooks/useConstant'
@@ -121,8 +121,8 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     current_price: raribleResponse.item.offer?.buyPriceEth,
                     current_symbol: 'ETH',
                     end_time: null,
-                    order_payment_tokens: [] as (EtherTokenDetailed | ERC20TokenDetailed)[],
-                    offer_payment_tokens: [] as (EtherTokenDetailed | ERC20TokenDetailed)[],
+                    order_payment_tokens: [] as (NativeTokenDetailed | ERC20TokenDetailed)[],
+                    offer_payment_tokens: [] as (NativeTokenDetailed | ERC20TokenDetailed)[],
                     order_: null,
                     slug: raribleResponse.assetContract.shortUrl,
                     response_: raribleResponse,

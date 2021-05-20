@@ -14,9 +14,9 @@ import {
     RED_PACKET_DEFAULT_SHARES,
 } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { EthereumTokenType, EthereumNetwork, ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { EthereumTokenType, EthereumNetwork, NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useBlockNumber'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useCreateCallback } from '../hooks/useCreateCallback'
@@ -26,7 +26,7 @@ import type { RedPacketJSONPayload } from '../types'
 import { resolveChainName } from '../../../web3/pipes'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
+import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -74,8 +74,8 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const RED_PACKET_ADDRESS = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
 
     //#region select token
-    const { value: etherTokenDetailed } = useEtherTokenDetailed()
-    const [token = etherTokenDetailed, setToken] = useState<EtherTokenDetailed | ERC20TokenDetailed | undefined>()
+    const { value: etherTokenDetailed } = useNativeTokenDetailed()
+    const [token = etherTokenDetailed, setToken] = useState<NativeTokenDetailed | ERC20TokenDetailed | undefined>()
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
@@ -126,7 +126,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
-        token?.type ?? EthereumTokenType.Ether,
+        token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',
     )
     //#endregion

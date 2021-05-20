@@ -1,4 +1,4 @@
-import { useChainId } from './useBlockNumber'
+import { useChainId } from './useChainId'
 import type { ChainId } from '../types'
 import { getConstant, getAllConstants, Web3Constants } from '../helpers'
 

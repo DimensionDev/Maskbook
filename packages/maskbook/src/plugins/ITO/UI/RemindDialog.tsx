@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import classNames from 'classnames'
 import { Typography, Link, Checkbox, makeStyles, FormControlLabel } from '@material-ui/core'
+import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
-import { resolveLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveLinkOnExplorer } from '../../../web3/pipes'
 import type { ChainId } from '../../../web3/types'
 import { SwapStatus } from './SwapGuide'
-import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     reminderText: {
@@ -113,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export interface RemindDialogProps extends withClasses<'root'> {
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    token: NativeTokenDetailed | ERC20TokenDetailed
     chainId: ChainId
     setStatus: (status: SwapStatus) => void
 }
@@ -152,7 +152,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         target="_blank"
                         className={classes.tokenLink}
                         rel="noopener noreferrer"
-                        href={`${resolveLinkOnEtherscan(chainId)}/token/${token.address}`}>
+                        href={`${resolveLinkOnExplorer(chainId)}/token/${token.address}`}>
                         <Typography variant="body2">
                             <FormattedAddress address={token.address} size={4} />
                             (View on Etherscan)

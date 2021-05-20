@@ -8,7 +8,7 @@ import { buf2hex, hex2buf } from '../../../utils/utils'
 import { isSameAddress } from '../../../web3/helpers'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
+import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { useQualificationContract } from '../contracts/useQualificationContract'
 import Services from '../../../extension/service'
@@ -18,7 +18,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 export function useSwapCallback(
     payload: JSON_PayloadInMask,
     total: string,
-    token: PartialRequired<EtherTokenDetailed | ERC20TokenDetailed, 'address'>,
+    token: PartialRequired<NativeTokenDetailed | ERC20TokenDetailed, 'address'>,
     isQualificationHasLucky = false,
 ) {
     const { t } = useI18N()
@@ -135,7 +135,7 @@ export function useSwapCallback(
             from: account,
             to: ITO_Contract.options.address,
             gas: isQualificationHasLucky ? 200000 : undefined,
-            value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
+            value: new BigNumber(token.type === EthereumTokenType.Native ? total : '0').toFixed(),
             data: ITO_Contract.methods.swap(...swapParams).encodeABI(),
         }).catch((error) => {
             setSwapState({

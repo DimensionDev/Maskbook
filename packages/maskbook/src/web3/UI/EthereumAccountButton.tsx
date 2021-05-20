@@ -10,13 +10,13 @@ import { formatEthereumAddress, FormattedBalance } from '@dimensiondev/maskbook-
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { useChainId } from '../hooks/useBlockNumber'
+import { useChainId } from '../hooks/useChainId'
 import { resolveChainColor } from '../pipes'
 import { ChainId } from '../types'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils/flags'
-import { useEtherTokenBalance } from '../hooks/useEtherTokenBalance'
+import { useNativeTokenBalance } from '../hooks/useNativeTokenBalance'
 import { useAccount } from '../hooks/useAccount'
 
 const useStyles = makeStyles((theme) => {
@@ -63,7 +63,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
 
     const chainId = useChainId()
     const account = useAccount()
-    const { value: balance = '0' } = useEtherTokenBalance(account)
+    const { value: balance = '0' } = useNativeTokenBalance(account)
 
     const selectedWallet = useWallet()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)

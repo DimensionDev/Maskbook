@@ -2,18 +2,18 @@ import { useMemo } from 'react'
 import { Trade, Pair } from '@uniswap/sdk'
 import BigNumber from 'bignumber.js'
 import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
-import { useChainId } from '../../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../../web3/hooks/useChainId'
 import { TradeStrategy } from '../../types'
 import { useAllCommonPairs } from './useAllCommonPairs'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
 import { MAX_HOP } from '../../constants'
 
 export function useV2Trade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed,
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
+    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
+    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
 ) {
     const isExactIn = strategy === TradeStrategy.ExactIn
     const isTradable = !new BigNumber(inputAmount).isZero() || !new BigNumber(outputAmount).isZero()
@@ -42,8 +42,8 @@ export function useV2Trade(
 
 export function useBestTradeExactIn(
     amount: string,
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed,
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
+    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
+    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
     pairs: Pair[] = [],
 ) {
     const chainId = useChainId()
@@ -66,8 +66,8 @@ export function useBestTradeExactIn(
 
 export function useBestTradeExactOut(
     amount: string,
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed,
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
+    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
+    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
     pairs: Pair[] = [],
 ) {
     const chainId = useChainId()

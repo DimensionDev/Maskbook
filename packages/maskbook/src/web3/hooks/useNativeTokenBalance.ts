@@ -1,13 +1,14 @@
 import { useAccount } from './useAccount'
 import { useAsyncRetry } from 'react-use'
-import { useBlockNumber, useChainId } from './useBlockNumber'
+import { useChainId } from './useChainId'
+import { useBlockNumber } from './useBlockNumber'
 import Services from '../../extension/service'
 
 /**
- * Fetch token balance from chain
- * @param token
+ * Fetch native token balance from chain
+ * @param address
  */
-export function useEtherTokenBalance(address: string) {
+export function useNativeTokenBalance(address: string) {
     const account = useAccount()
     const chainId = useChainId()
     const blockNumber = useBlockNumber()

@@ -5,7 +5,7 @@ import stringify from 'json-stable-stringify'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionEventType } from '../../../web3/types'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import Services from '../../../extension/service'
 

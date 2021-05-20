@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { EthereumTokenType, ERC20TokenDetailed } from '../types'
-import { useChainId } from './useBlockNumber'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { EthereumTokenType, ERC20TokenDetailed } from '../types'
+import { useChainId } from './useChainId'
 import { useSingleContractMultipleData } from './useMulticall'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 

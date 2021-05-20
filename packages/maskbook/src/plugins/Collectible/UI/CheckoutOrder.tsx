@@ -1,7 +1,7 @@
 import { makeStyles, Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@material-ui/core'
 import type { Order } from 'opensea-js/lib/types'
 import { Image } from '../../../components/shared/Image'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import type { useAsset } from '../hooks/useAsset'
 import { resolveAssetLinkOnOpenSea } from '../pipes'
 

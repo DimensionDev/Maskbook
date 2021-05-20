@@ -5,7 +5,7 @@ import { makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../web3/types'
 import type { TokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
@@ -13,7 +13,7 @@ import type { useAsset } from '../hooks/useAsset'
 import { ChainState } from '../../../web3/state/useChainState'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
-import { isETH } from '../../../web3/helpers'
+import { isNative } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -41,7 +41,7 @@ export interface ListingByHighestBidCardProps {
     onClose: () => void
     asset?: ReturnType<typeof useAsset>
     tokenWatched: TokenWatched
-    paymentTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
+    paymentTokens: (NativeTokenDetailed | ERC20TokenDetailed)[]
 }
 
 export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
@@ -105,8 +105,8 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                 <SelectTokenAmountPanel
                     amount={amount}
                     balance={balance.value ?? '0'}
-                    token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
-                    disableEther={!paymentTokens.some((x) => isETH(x.address))}
+                    token={token.value as NativeTokenDetailed | ERC20TokenDetailed}
+                    disableEther={!paymentTokens.some((x) => isNative(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
@@ -128,7 +128,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     amount={reservePrice}
                     balance={balance.value ?? '0'}
                     onAmountChange={setReservePrice}
-                    token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
+                    token={token.value as NativeTokenDetailed | ERC20TokenDetailed}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
                         classes: {

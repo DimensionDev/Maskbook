@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed, TransactionEventType } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed, TransactionEventType } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
@@ -15,7 +15,7 @@ import Services from '../../../extension/service'
  * @param amount
  * @param token
  */
-export function useDonateCallback(address: string, amount: string, token?: EtherTokenDetailed | ERC20TokenDetailed) {
+export function useDonateCallback(address: string, amount: string, token?: NativeTokenDetailed | ERC20TokenDetailed) {
     const GITCOIN_ETH_ADDRESS = useConstant(GITCOIN_CONSTANT, 'GITCOIN_ETH_ADDRESS')
     const GITCOIN_TIP_PERCENTAGE = useConstant(GITCOIN_CONSTANT, 'GITCOIN_TIP_PERCENTAGE')
     const bulkCheckoutContract = useBulkCheckoutContract()
@@ -29,12 +29,12 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
         if (!address || !token) return []
         return [
             [
-                token.type === EthereumTokenType.Ether ? GITCOIN_ETH_ADDRESS : token.address, // token
+                token.type === EthereumTokenType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
                 tipAmount.toFixed(), // amount
                 address, // dest
             ],
             [
-                token.type === EthereumTokenType.Ether ? GITCOIN_ETH_ADDRESS : token.address, // token
+                token.type === EthereumTokenType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
                 grantAmount.toFixed(), // amount
                 address, // dest
             ],
@@ -58,7 +58,7 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
         const config = await Services.Ethereum.composeTransaction({
             from: account,
             to: bulkCheckoutContract.options.address,
-            value: new BigNumber(token.type === EthereumTokenType.Ether ? amount : 0).toFixed(),
+            value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
             data: bulkCheckoutContract.methods.donate(donations).encodeABI(),
         }).catch((error) => {
             setDonateState({

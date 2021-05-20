@@ -3,12 +3,12 @@ import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { FormattedAddress } from '@dimensiondev/maskbook-shared'
-import { resolveAddressLinkOnEtherscan, resolveChainName } from '../../../web3/pipes'
+import { resolveAddressLinkOnExplorer, resolveChainName } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'
 import { Markdown } from '../../Snapshot/UI/Markdown'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea } from '../pipes'
+import { useChainId } from '../../../web3/hooks/useChainId'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -147,7 +147,7 @@ export function TokenTab(props: TokenTabProps) {
                 <Box className={classes.chain_row}>
                     <Typography variant="body2">{t('plugin_collectible_contract_address')}</Typography>
                     <Link
-                        href={resolveAddressLinkOnEtherscan(ChainId.Mainnet, token?.contractAddress ?? '')}
+                        href={resolveAddressLinkOnExplorer(ChainId.Mainnet, token?.contractAddress ?? '')}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Typography variant="body2">

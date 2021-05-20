@@ -2,6 +2,7 @@ export enum ProviderType {
     Maskbook = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
+    CustomNetwork = 'CustomNetwork',
 }
 
 export enum CurrencyType {
@@ -9,13 +10,13 @@ export enum CurrencyType {
 }
 
 //#region Ether
-export interface EtherToken {
-    type: EthereumTokenType.Ether
+export interface NativeToken {
+    type: EthereumTokenType.Native
     address: string
     chainId: ChainId
 }
 
-export interface EtherTokenDetailed extends EtherToken {
+export interface NativeTokenDetailed extends NativeToken {
     name: 'Ether'
     symbol: 'ETH'
     decimals: 18
@@ -86,7 +87,7 @@ export interface ERC1155TokenAssetDetailed extends ERC1155TokenDetailed {
 //#endregion
 
 interface TokenDetailedMap {
-    [EthereumTokenType.Ether]: EtherTokenDetailed
+    [EthereumTokenType.Native]: NativeTokenDetailed
     [EthereumTokenType.ERC20]: ERC20TokenDetailed
     [EthereumTokenType.ERC721]: ERC721TokenDetailed
     [EthereumTokenType.ERC1155]: ERC1155TokenDetailed
@@ -97,7 +98,7 @@ interface TokenAssetDetailedMap {
     [EthereumTokenType.ERC1155]: ERC1155TokenAssetDetailed
 }
 
-export type TokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
+export type EthereumTokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
 
 export type TokenAssetDetailedType<T extends EthereumTokenType.ERC721 | EthereumTokenType.ERC1155> =
     TokenAssetDetailedMap[T]
@@ -116,7 +117,7 @@ export enum EthereumNetwork {
 }
 
 export enum EthereumTokenType {
-    Ether = 0,
+    Native = 0,
     ERC20 = 1,
     ERC721 = 2,
     ERC1155 = 3,
