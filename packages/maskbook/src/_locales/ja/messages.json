@@ -339,6 +339,7 @@
     "plugin_wallet_settings_portfolio_data_source_secondary": "",
     "plugin_wallet_settings_collectible_data_source_primary": "",
     "plugin_wallet_settings_collectible_data_source_secondary": "",
+    "plugin_wallet_name_placeholder": "",
     "plugin_red_packet_display_name": "プラグイン: 投げ銭",
     "plugin_red_packet_split_mode": "分割モード",
     "plugin_red_packet_average": "平均",

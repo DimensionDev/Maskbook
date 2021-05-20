@@ -24,7 +24,9 @@
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
     "packages/**/*.{ts,tsx,js,jsx}": "eslint -c packages/.eslintrc.json --fix",
-    "packages/maskbook/**/*": "locale-kit --sync-keys --remove-unused-keys"
+    "packages/maskbook/**/*": ["locale-kit --sync-keys --remove-unused-keys",
+      "git add packages/maskbook/src/_locales/en/*.json"
+    ]
   },
   "dependencies": {
     "@emotion/cache": "^11",

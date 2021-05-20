@@ -339,6 +339,7 @@
     "plugin_wallet_settings_portfolio_data_source_secondary": "",
     "plugin_wallet_settings_collectible_data_source_primary": "",
     "plugin_wallet_settings_collectible_data_source_secondary": "",
+    "plugin_wallet_name_placeholder": "",
     "plugin_red_packet_display_name": "插件：紅包",
     "plugin_red_packet_split_mode": "分配模式",
     "plugin_red_packet_average": "平均",
