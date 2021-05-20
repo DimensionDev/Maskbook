@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/sdk'
 
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed, ChainId } from '../../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed, ChainId } from '../../../../web3/types'
 import { TradeForm } from './TradeForm'
 import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
 import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => {
 
 export interface TraderProps extends withClasses<never> {
     coin?: Coin
-    tokenDetailed?: ERC20TokenDetailed | EtherTokenDetailed
+    tokenDetailed?: ERC20TokenDetailed | NativeTokenDetailed
 }
 
 export function Trader(props: TraderProps) {
@@ -116,12 +116,12 @@ export function Trader(props: TraderProps) {
         value: inputTokenBalance_,
         loading: loadingInputTokenBalance,
         retry: retryInputTokenBalance,
-    } = useTokenBalance(inputToken?.type ?? EthereumTokenType.Ether, inputToken?.address ?? '')
+    } = useTokenBalance(inputToken?.type ?? EthereumTokenType.Native, inputToken?.address ?? '')
     const {
         value: outputTokenBalance_,
         loading: loadingOutputTokenBalance,
         retry: retryOutputTokenBalance,
-    } = useTokenBalance(outputToken?.type ?? EthereumTokenType.Ether, outputToken?.address ?? '')
+    } = useTokenBalance(outputToken?.type ?? EthereumTokenType.Native, outputToken?.address ?? '')
 
     useEffect(() => {
         if (inputTokenBalance_ && !loadingInputTokenBalance)

@@ -50,7 +50,7 @@ export function CoinSaftyAlert(props: CoinSaftyAlertProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         href={resolveTokenLinkOnEtherscan({
-                            type: EthereumTokenType.Ether,
+                            type: EthereumTokenType.Native,
                             address: coin.eth_address,
                             chainId: ChainId.Mainnet,
                         })}>

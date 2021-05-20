@@ -1,11 +1,11 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { unreachable } from '../../utils/utils'
-import { ERC20TokenDetailed, ERC721TokenDetailed, EthereumTokenType, TokenDetailedType } from '../types'
+import { ERC20TokenDetailed, ERC721TokenDetailed, EthereumTokenType, EthereumTokenDetailedType } from '../types'
 import { useERC20TokenDetailed } from './useERC20TokenDetailed'
 import { useERC721TokenDetailed } from './useERC721TokenDetailed'
 import { useEtherTokenDetailed } from './useEtherTokenDetailed'
 
-export function useTokenDetailed<P extends EthereumTokenType, Q extends TokenDetailedType<P>>(
+export function useTokenDetailed<P extends EthereumTokenType, Q extends EthereumTokenDetailedType<P>>(
     type: P,
     address: string,
     token?: Partial<Q>,
@@ -22,7 +22,7 @@ export function useTokenDetailed<P extends EthereumTokenType, Q extends TokenDet
 
     const type_ = type as EthereumTokenType
     switch (type_) {
-        case EthereumTokenType.Ether:
+        case EthereumTokenType.Native:
             return r1 as AsyncStateRetry<Q | undefined>
         case EthereumTokenType.ERC20:
             return r2 as AsyncStateRetry<Q | undefined>

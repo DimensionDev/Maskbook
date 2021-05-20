@@ -13,7 +13,7 @@ function getTransactionLog(name: History.Log['$name'], transactions: History.Red
 function getPayload(chainId: ChainId, record: History.RedPacketRecord, overrides?: Partial<RedPacketJSONPayload>) {
     const createLog = getTransactionLog('create_red_packet', record.transactions) as History.CreateInputLog
     const CreationSuccessLog = getTransactionLog('CreationSuccess', record.transactions) as History.CreateOutputLog
-    const tokenType = Number.parseInt(createLog._token_type, 10) as EthereumTokenType.Ether | EthereumTokenType.ERC20
+    const tokenType = Number.parseInt(createLog._token_type, 10) as EthereumTokenType.Native | EthereumTokenType.ERC20
     const payload: RedPacketJSONPayload = {
         contract_address: RED_PACKET_CONSTANTS.HAPPY_RED_PACKET_ADDRESS[chainId],
         contract_version: RED_PACKET_CONTRACT_VERSION,

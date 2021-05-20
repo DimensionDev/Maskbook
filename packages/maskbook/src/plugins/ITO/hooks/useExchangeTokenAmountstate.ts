@@ -1,11 +1,11 @@
 import { v4 as uuid } from 'uuid'
 import { useReducer } from 'react'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 
 export interface ExchangeTokenAndAmountState {
     key: string
     amount: string
-    token?: EtherTokenDetailed | ERC20TokenDetailed
+    token?: NativeTokenDetailed | ERC20TokenDetailed
 }
 
 export enum ExchangeTokenAndAmountActionType {
@@ -20,7 +20,7 @@ export type ExchangeTokenAndAmountAction =
           type: ExchangeTokenAndAmountActionType.ADD
           key: string
           amount: string
-          token?: EtherTokenDetailed | ERC20TokenDetailed
+          token?: NativeTokenDetailed | ERC20TokenDetailed
       }
     | {
           type: ExchangeTokenAndAmountActionType.REMOVE
@@ -33,7 +33,7 @@ export type ExchangeTokenAndAmountAction =
       }
     | {
           type: ExchangeTokenAndAmountActionType.UPDATE_TOKEN
-          token?: EtherTokenDetailed | ERC20TokenDetailed
+          token?: NativeTokenDetailed | ERC20TokenDetailed
           key: string
       }
 

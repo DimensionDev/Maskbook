@@ -130,7 +130,7 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
                     decimals: asset.decimals,
                     address: asset.name === 'Ether' ? getConstant(CONSTANTS, 'ETH_ADDRESS') : asset.asset_code,
                     chainId: ChainId.Mainnet,
-                    type: asset.name === 'Ether' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
+                    type: asset.name === 'Ether' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                 },
                 chain: 'eth',
                 balance: quantity,

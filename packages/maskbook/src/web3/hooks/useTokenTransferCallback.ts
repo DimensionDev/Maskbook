@@ -11,7 +11,7 @@ export function useTokenTransferCallback(
     recipient: string,
     memo?: string,
 ) {
-    const r1 = useEtherTransferCallback(type === EthereumTokenType.Ether ? amountOrTokenId : '', recipient, memo)
+    const r1 = useEtherTransferCallback(type === EthereumTokenType.Native ? amountOrTokenId : '', recipient, memo)
     const r2 = useERC20TokenTransferCallback(
         address,
         type === EthereumTokenType.ERC20 ? amountOrTokenId : '',
@@ -24,7 +24,7 @@ export function useTokenTransferCallback(
     )
     const type_ = type
     switch (type_) {
-        case EthereumTokenType.Ether:
+        case EthereumTokenType.Native:
             return r1
         case EthereumTokenType.ERC20:
             return r2

@@ -79,6 +79,7 @@ export function getUnsafeChainId(address?: string) {
     if (provider === ProviderType.Maskbook) return currentMaskbookChainIdSettings.value
     if (provider === ProviderType.MetaMask) return currentMetaMaskChainIdSettings.value
     if (provider === ProviderType.WalletConnect) return currentWalletConnectChainIdSettings.value
+    if (provider === ProviderType.CustomNetwork) return currentWalletConnectChainIdSettings.value
     unreachable(provider)
 }
 

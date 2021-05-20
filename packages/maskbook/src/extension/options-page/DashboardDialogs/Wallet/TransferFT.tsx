@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Send as SendIcon } from 'react-feather'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
 import AbstractTab, { AbstractTabProps } from '../../DashboardComponents/AbstractTab'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import { ReceiveTab } from './ReceiveTab'
@@ -9,7 +9,7 @@ import { TransferTab } from './TransferTab'
 import type { WalletProps } from './types'
 
 export function DashboardWalletTransferDialogFT(
-    props: WrappedDialogProps<WalletProps & { token: ERC20TokenDetailed | EtherTokenDetailed }>,
+    props: WrappedDialogProps<WalletProps & { token: ERC20TokenDetailed | NativeTokenDetailed }>,
 ) {
     const { wallet, token } = props.ComponentProps!
     const { t } = useI18N()

@@ -4,7 +4,7 @@ import { getEnumAsArray } from '../../../../utils/enum'
 import { CONSTANTS } from '../../../../web3/constants'
 import { useBlockNumber, useChainId } from '../../../../web3/hooks/useBlockNumber'
 import { useConstant } from '../../../../web3/hooks/useConstant'
-import type { EtherTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy, ZrxTradePool } from '../../types'
@@ -15,8 +15,8 @@ export function useTrade(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed,
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
+    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
+    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
 ) {
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const chainId = useChainId()

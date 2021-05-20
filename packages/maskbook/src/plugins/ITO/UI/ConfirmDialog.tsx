@@ -11,7 +11,7 @@ import { useChainId } from '../../../web3/hooks/useBlockNumber'
 import { dateTimeFormat } from '../assets/formatDate'
 import { isETH } from '../../../web3/helpers'
 import { resolveTokenLinkOnEtherscan, resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
 import { ITO_CONSTANTS } from '../constants'
@@ -26,9 +26,9 @@ const useSwapItemStyles = makeStyles((theme) => ({
     icon: {},
 }))
 interface SwapItemProps {
-    token?: EtherTokenDetailed | ERC20TokenDetailed
+    token?: NativeTokenDetailed | ERC20TokenDetailed
     swapAmount?: string
-    swap?: EtherTokenDetailed | ERC20TokenDetailed
+    swap?: NativeTokenDetailed | ERC20TokenDetailed
 }
 
 function SwapItem(props: SwapItemProps) {
