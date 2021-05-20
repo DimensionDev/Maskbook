@@ -12,7 +12,6 @@ import {
     DashboardWalletAddERC721TokenDialog,
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
-    DashboardWalletRenameDialog,
 } from '../DashboardDialogs/Wallet'
 import { useMenu } from '../../../utils/hooks/useMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -22,6 +21,7 @@ import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { Flags } from '../../../utils/flags'
 import { useChainIdValid } from '../../../web3/hooks/useChainId'
 import { TransactionList } from './TransactionList'
@@ -96,11 +96,20 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
-    const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
     const [addAsset, , openAddAsset] = useModal(DashboardWalletAddERC721TokenDialog)
+    const { setDialog: setWalletRenameDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletRenameDialogUpdated,
+    )
 
     const [menu, openMenu] = useMenu([
-        <MenuItem key="rename" onClick={() => openWalletRename({ wallet })}>
+        <MenuItem
+            key="rename"
+            onClick={() => {
+                setWalletRenameDialog({
+                    open: true,
+                    wallet,
+                })
+            }}>
             {t('rename')}
         </MenuItem>,
         wallet._private_key_ || wallet.mnemonic.length ? (
@@ -283,7 +292,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
             {addAsset}
             {walletBackup}
             {walletDelete}
-            {walletRename}
         </div>
     )
 })

@@ -307,6 +307,7 @@
     "plugin_wallet_view_on_etherscan": "View on Etherscan",
     "plugin_wallet_wrong_network_tip": "Please connect to the appropriate Ethereum network.",
     "plugin_wallet_recent_transaction": "Recent Transactions",
+    "plugin_wallet_clear_all": "Clear All",
     "plugin_wallet_on_create": "Create Wallet",
     "plugin_wallet_on_connect": "Connect Wallet",
     "plugin_wallet_setup_title_create": "Create a Wallet",

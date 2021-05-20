@@ -3,6 +3,7 @@ import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
+import type { WalletRecord } from './database/types'
 
 export type SelectProviderDialogEvent =
     | {
@@ -33,6 +34,11 @@ export type ImportWalletDialogEvent = {
 
 export type WalletStatusDialogEvent = {
     open: boolean
+}
+
+export type WalletRenameDialogEvent = {
+    open: boolean
+    wallet: WalletRecord | null
 }
 
 export type WalletConnectQRCodeDialogEvent =
@@ -92,6 +98,11 @@ interface WalletMessage {
      * Wallet status dialog
      */
     walletStatusDialogUpdated: WalletStatusDialogEvent
+
+    /**
+     * Wallet status dialog
+     */
+    walletRenameDialogUpdated: WalletRenameDialogEvent
 
     /**
      * Select token dialog

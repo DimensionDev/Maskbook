@@ -146,7 +146,7 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
             case 1:
                 return false
             case 2:
-                return walletFromPrivateKey.privateKeyValid
+                return !!walletFromPrivateKey.privateKeyValid
         }
         return false
     }, [tabState[0], walletFromPrivateKey.privateKeyValid])
