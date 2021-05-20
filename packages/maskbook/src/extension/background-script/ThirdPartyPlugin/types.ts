@@ -8,4 +8,5 @@ export enum ThirdPartyPluginPermission {
      * This permission should be revoked once the popup has closed.
      */
     SDKEnabled,
+    DEBUG_Profiles,
 }

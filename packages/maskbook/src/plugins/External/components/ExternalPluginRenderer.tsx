@@ -54,7 +54,7 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
 
 // TODO: support suspense
 function useExternalPluginManifest(url: string) {
-    return useAsyncRetry(() => fetchManifest(url), [url])
+    return useAsyncRetry(() => Services.ThirdPartyPlugin.fetchManifest(url), [url])
 }
 
 function useExternalPluginTemplate(url: string, manifest: Manifest | undefined, metaKey: string) {
@@ -106,18 +106,4 @@ function htmlToTemplate(top: NodeListOf<ChildNode>) {
         return node.nodeType === document.TEXT_NODE
     }
     return [...convertList(0, top)].join('\n')
-}
-
-async function fetchManifest(addr: string) {
-    const blob = await Services.Helper.fetch(addr + 'mask-manifest.json')
-    const json = await blob.text().then(JSONC)
-    // TODO: verify manifest
-    return JSON.parse(json)
-}
-
-function JSONC(x: string) {
-    return x
-        .split('\n')
-        .filter((x) => !x.match(/^ +\/\//))
-        .join('\n')
 }
