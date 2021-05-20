@@ -2,10 +2,10 @@ import Web3 from 'web3'
 import type { provider as Provider } from 'web3-core'
 import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
-import createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
+import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
 import { ChainId } from '../../../../web3/types'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
-import { ProviderType, MetaMaskInpageProvider } from '../../../../web3/types'
+import { ProviderType } from '../../../../web3/types'
 import {
     currentMetaMaskChainIdSettings,
     currentSelectedWalletAddressSettings,
@@ -37,13 +37,14 @@ function onError(error: string) {
         currentSelectedWalletAddressSettings.value = ''
 }
 
-export async function createProvider() {
+export function createProvider() {
     if (provider) {
         provider.off('accountsChanged', onAccountsChanged)
         provider.off('chainChanged', onChainIdChanged)
         provider.off('error', onError)
     }
-    provider = await createMetaMaskProvider()
+    provider = createMetaMaskProvider()
+    if (!provider) throw new Error('Unable to create in page provider.')
     provider.on('accountsChanged', onAccountsChanged as (...args: unknown[]) => void)
     provider.on('chainChanged', onChainIdChanged as (...args: unknown[]) => void)
     provider.on('error', onError as (...args: unknown[]) => void)
@@ -53,9 +54,9 @@ export async function createProvider() {
 // MetaMask provider can be wrapped into web3 lib directly.
 // https://github.com/MetaMask/extension-provider
 export async function createWeb3() {
-    provider = await createProvider()
-    if (!web3) web3 = new Web3(provider as Provider)
-    else web3.setProvider(provider as Provider)
+    const provider_ = createProvider() as Provider
+    if (!web3) web3 = new Web3(provider_)
+    else web3.setProvider(provider_)
     return web3
 }
 
@@ -72,12 +73,13 @@ export async function requestAccounts() {
 
     return accounts
 }
+
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {
-    const provider_ = currentSelectedWalletProviderSettings.value
+    const providerType = currentSelectedWalletProviderSettings.value
 
     // validate address
     if (!EthereumAddress.isValid(address)) {
-        if (provider_ === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = ''
+        if (providerType === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = ''
         return
     }
 
@@ -88,5 +90,5 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
     if (setAsDefault) currentSelectedWalletProviderSettings.value = ProviderType.MetaMask
 
     // update the selected wallet address
-    if (setAsDefault || provider_ === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = address
+    if (setAsDefault || providerType === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = address
 }

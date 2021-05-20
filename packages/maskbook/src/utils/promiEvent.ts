@@ -81,14 +81,14 @@ export function promiEventToIterator<T extends string | TransactionReceipt>(
             })
             stopIfNeeded(StageType.TRANSACTION_HASH)
         })
-        ev.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+        ev.on(TransactionEventType.RECEIPT, (receipt) => {
             queue.push({
                 type: StageType.RECEIPT,
                 receipt,
             })
             stopIfNeeded(StageType.RECEIPT)
         })
-        ev.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+        ev.on(TransactionEventType.CONFIRMATION, (no, receipt) => {
             queue.push({
                 type: StageType.CONFIRMATION,
                 no,

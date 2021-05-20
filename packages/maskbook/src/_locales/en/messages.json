@@ -317,7 +317,6 @@
     "plugin_wallet_setup_verify": "Verify",
     "plugin_wallet_select_provider_dialog_title": "Connect Wallet",
     "plugin_wallet_qr_code_with_wallet_connect": "Scan QR code with a WalletConnect-compatible wallet",
-    "plugin_wallet_wrong_network": "Wrong Network",
     "plugin_wallet_metamask_unlock": "Unlock MetaMask",
     "plugin_wallet_token_unlock": "Exact Unlock",
     "plugin_wallet_token_infinite_unlock": "Infinite Unlock",

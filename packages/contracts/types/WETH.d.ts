@@ -3,10 +3,17 @@
 /* eslint-disable */
 
 import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
+import { ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import {
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
+    BaseContract,
+} from './types'
 
 interface EventOptions {
     filter?: object
@@ -14,61 +21,86 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class WETH extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
+export type Approval = ContractEventLog<{
+    src: string
+    guy: string
+    wad: string
+    0: string
+    1: string
+    2: string
+}>
+export type Transfer = ContractEventLog<{
+    src: string
+    dst: string
+    wad: string
+    0: string
+    1: string
+    2: string
+}>
+export type Deposit = ContractEventLog<{
+    dst: string
+    wad: string
+    0: string
+    1: string
+}>
+export type Withdrawal = ContractEventLog<{
+    src: string
+    wad: string
+    0: string
+    1: string
+}>
+
+export interface WETH extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): WETH
     clone(): WETH
     methods: {
-        name(): TransactionObject<string>
+        name(): NonPayableTransactionObject<string>
 
-        approve(guy: string, wad: number | string): TransactionObject<boolean>
+        approve(guy: string, wad: number | string | BN): NonPayableTransactionObject<boolean>
 
-        totalSupply(): TransactionObject<string>
+        totalSupply(): NonPayableTransactionObject<string>
 
-        transferFrom(src: string, dst: string, wad: number | string): TransactionObject<boolean>
+        transferFrom(src: string, dst: string, wad: number | string | BN): NonPayableTransactionObject<boolean>
 
-        withdraw(wad: number | string): TransactionObject<void>
+        withdraw(wad: number | string | BN): NonPayableTransactionObject<void>
 
-        decimals(): TransactionObject<string>
+        decimals(): NonPayableTransactionObject<string>
 
-        balanceOf(arg0: string): TransactionObject<string>
+        balanceOf(arg0: string): NonPayableTransactionObject<string>
 
-        symbol(): TransactionObject<string>
+        symbol(): NonPayableTransactionObject<string>
 
-        transfer(dst: string, wad: number | string): TransactionObject<boolean>
+        transfer(dst: string, wad: number | string | BN): NonPayableTransactionObject<boolean>
 
-        deposit(): TransactionObject<void>
+        deposit(): PayableTransactionObject<void>
 
-        allowance(arg0: string, arg1: string): TransactionObject<string>
+        allowance(arg0: string, arg1: string): NonPayableTransactionObject<string>
     }
     events: {
-        Approval: ContractEvent<{
-            src: string
-            guy: string
-            wad: string
-            0: string
-            1: string
-            2: string
-        }>
-        Transfer: ContractEvent<{
-            src: string
-            dst: string
-            wad: string
-            0: string
-            1: string
-            2: string
-        }>
-        Deposit: ContractEvent<{
-            dst: string
-            wad: string
-            0: string
-            1: string
-        }>
-        Withdrawal: ContractEvent<{
-            src: string
-            wad: string
-            0: string
-            1: string
-        }>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+        Approval(cb?: Callback<Approval>): EventEmitter
+        Approval(options?: EventOptions, cb?: Callback<Approval>): EventEmitter
+
+        Transfer(cb?: Callback<Transfer>): EventEmitter
+        Transfer(options?: EventOptions, cb?: Callback<Transfer>): EventEmitter
+
+        Deposit(cb?: Callback<Deposit>): EventEmitter
+        Deposit(options?: EventOptions, cb?: Callback<Deposit>): EventEmitter
+
+        Withdrawal(cb?: Callback<Withdrawal>): EventEmitter
+        Withdrawal(options?: EventOptions, cb?: Callback<Withdrawal>): EventEmitter
+
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
+
+    once(event: 'Approval', cb: Callback<Approval>): void
+    once(event: 'Approval', options: EventOptions, cb: Callback<Approval>): void
+
+    once(event: 'Transfer', cb: Callback<Transfer>): void
+    once(event: 'Transfer', options: EventOptions, cb: Callback<Transfer>): void
+
+    once(event: 'Deposit', cb: Callback<Deposit>): void
+    once(event: 'Deposit', options: EventOptions, cb: Callback<Deposit>): void
+
+    once(event: 'Withdrawal', cb: Callback<Withdrawal>): void
+    once(event: 'Withdrawal', options: EventOptions, cb: Callback<Withdrawal>): void
 }

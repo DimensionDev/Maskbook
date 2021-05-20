@@ -15,7 +15,7 @@ export function useTrade(
     outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
 ) {
     const chainId = useChainId()
-    const blockNumber = useBlockNumber(chainId)
+    const blockNumber = useBlockNumber()
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const WETH_ADDRESS = useConstant(CONSTANTS, 'WETH_ADDRESS')
     const BALANCER_ETH_ADDRESS = useConstant(TRADE_CONSTANTS, 'BALANCER_ETH_ADDRESS')

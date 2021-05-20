@@ -3,10 +3,17 @@
 /* eslint-disable */
 
 import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
+import { ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import {
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
+    BaseContract,
+} from './types'
 
 interface EventOptions {
     filter?: object
@@ -14,34 +21,89 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class Pair extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
+export type Approval = ContractEventLog<{
+    owner: string
+    spender: string
+    value: string
+    0: string
+    1: string
+    2: string
+}>
+export type Burn = ContractEventLog<{
+    sender: string
+    amount0: string
+    amount1: string
+    to: string
+    0: string
+    1: string
+    2: string
+    3: string
+}>
+export type Mint = ContractEventLog<{
+    sender: string
+    amount0: string
+    amount1: string
+    0: string
+    1: string
+    2: string
+}>
+export type Swap = ContractEventLog<{
+    sender: string
+    amount0In: string
+    amount1In: string
+    amount0Out: string
+    amount1Out: string
+    to: string
+    0: string
+    1: string
+    2: string
+    3: string
+    4: string
+    5: string
+}>
+export type Sync = ContractEventLog<{
+    reserve0: string
+    reserve1: string
+    0: string
+    1: string
+}>
+export type Transfer = ContractEventLog<{
+    from: string
+    to: string
+    value: string
+    0: string
+    1: string
+    2: string
+}>
+
+export interface Pair extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): Pair
     clone(): Pair
     methods: {
-        DOMAIN_SEPARATOR(): TransactionObject<string>
+        DOMAIN_SEPARATOR(): NonPayableTransactionObject<string>
 
-        MINIMUM_LIQUIDITY(): TransactionObject<string>
+        MINIMUM_LIQUIDITY(): NonPayableTransactionObject<string>
 
-        PERMIT_TYPEHASH(): TransactionObject<string>
+        PERMIT_TYPEHASH(): NonPayableTransactionObject<string>
 
-        allowance(arg0: string, arg1: string): TransactionObject<string>
+        allowance(arg0: string, arg1: string): NonPayableTransactionObject<string>
 
-        approve(spender: string, value: number | string): TransactionObject<boolean>
+        approve(spender: string, value: number | string | BN): NonPayableTransactionObject<boolean>
 
-        balanceOf(arg0: string): TransactionObject<string>
+        balanceOf(arg0: string): NonPayableTransactionObject<string>
 
-        burn(to: string): TransactionObject<{
+        burn(to: string): NonPayableTransactionObject<{
             amount0: string
             amount1: string
             0: string
             1: string
         }>
 
-        decimals(): TransactionObject<string>
+        decimals(): NonPayableTransactionObject<string>
 
-        factory(): TransactionObject<string>
+        factory(): NonPayableTransactionObject<string>
 
-        getReserves(): TransactionObject<{
+        getReserves(): NonPayableTransactionObject<{
             _reserve0: string
             _reserve1: string
             _blockTimestampLast: string
@@ -50,108 +112,90 @@ export class Pair extends Contract {
             2: string
         }>
 
-        initialize(_token0: string, _token1: string): TransactionObject<void>
+        initialize(_token0: string, _token1: string): NonPayableTransactionObject<void>
 
-        kLast(): TransactionObject<string>
+        kLast(): NonPayableTransactionObject<string>
 
-        mint(to: string): TransactionObject<string>
+        mint(to: string): NonPayableTransactionObject<string>
 
-        name(): TransactionObject<string>
+        name(): NonPayableTransactionObject<string>
 
-        nonces(arg0: string): TransactionObject<string>
+        nonces(arg0: string): NonPayableTransactionObject<string>
 
         permit(
             owner: string,
             spender: string,
-            value: number | string,
-            deadline: number | string,
-            v: number | string,
+            value: number | string | BN,
+            deadline: number | string | BN,
+            v: number | string | BN,
             r: string | number[],
             s: string | number[],
-        ): TransactionObject<void>
+        ): NonPayableTransactionObject<void>
 
-        price0CumulativeLast(): TransactionObject<string>
+        price0CumulativeLast(): NonPayableTransactionObject<string>
 
-        price1CumulativeLast(): TransactionObject<string>
+        price1CumulativeLast(): NonPayableTransactionObject<string>
 
-        skim(to: string): TransactionObject<void>
+        skim(to: string): NonPayableTransactionObject<void>
 
         swap(
-            amount0Out: number | string,
-            amount1Out: number | string,
+            amount0Out: number | string | BN,
+            amount1Out: number | string | BN,
             to: string,
             data: string | number[],
-        ): TransactionObject<void>
+        ): NonPayableTransactionObject<void>
 
-        symbol(): TransactionObject<string>
+        symbol(): NonPayableTransactionObject<string>
 
-        sync(): TransactionObject<void>
+        sync(): NonPayableTransactionObject<void>
 
-        token0(): TransactionObject<string>
+        token0(): NonPayableTransactionObject<string>
 
-        token1(): TransactionObject<string>
+        token1(): NonPayableTransactionObject<string>
 
-        totalSupply(): TransactionObject<string>
+        totalSupply(): NonPayableTransactionObject<string>
 
-        transfer(to: string, value: number | string): TransactionObject<boolean>
+        transfer(to: string, value: number | string | BN): NonPayableTransactionObject<boolean>
 
-        transferFrom(from: string, to: string, value: number | string): TransactionObject<boolean>
+        transferFrom(from: string, to: string, value: number | string | BN): NonPayableTransactionObject<boolean>
     }
     events: {
-        Approval: ContractEvent<{
-            owner: string
-            spender: string
-            value: string
-            0: string
-            1: string
-            2: string
-        }>
-        Burn: ContractEvent<{
-            sender: string
-            amount0: string
-            amount1: string
-            to: string
-            0: string
-            1: string
-            2: string
-            3: string
-        }>
-        Mint: ContractEvent<{
-            sender: string
-            amount0: string
-            amount1: string
-            0: string
-            1: string
-            2: string
-        }>
-        Swap: ContractEvent<{
-            sender: string
-            amount0In: string
-            amount1In: string
-            amount0Out: string
-            amount1Out: string
-            to: string
-            0: string
-            1: string
-            2: string
-            3: string
-            4: string
-            5: string
-        }>
-        Sync: ContractEvent<{
-            reserve0: string
-            reserve1: string
-            0: string
-            1: string
-        }>
-        Transfer: ContractEvent<{
-            from: string
-            to: string
-            value: string
-            0: string
-            1: string
-            2: string
-        }>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+        Approval(cb?: Callback<Approval>): EventEmitter
+        Approval(options?: EventOptions, cb?: Callback<Approval>): EventEmitter
+
+        Burn(cb?: Callback<Burn>): EventEmitter
+        Burn(options?: EventOptions, cb?: Callback<Burn>): EventEmitter
+
+        Mint(cb?: Callback<Mint>): EventEmitter
+        Mint(options?: EventOptions, cb?: Callback<Mint>): EventEmitter
+
+        Swap(cb?: Callback<Swap>): EventEmitter
+        Swap(options?: EventOptions, cb?: Callback<Swap>): EventEmitter
+
+        Sync(cb?: Callback<Sync>): EventEmitter
+        Sync(options?: EventOptions, cb?: Callback<Sync>): EventEmitter
+
+        Transfer(cb?: Callback<Transfer>): EventEmitter
+        Transfer(options?: EventOptions, cb?: Callback<Transfer>): EventEmitter
+
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
+
+    once(event: 'Approval', cb: Callback<Approval>): void
+    once(event: 'Approval', options: EventOptions, cb: Callback<Approval>): void
+
+    once(event: 'Burn', cb: Callback<Burn>): void
+    once(event: 'Burn', options: EventOptions, cb: Callback<Burn>): void
+
+    once(event: 'Mint', cb: Callback<Mint>): void
+    once(event: 'Mint', options: EventOptions, cb: Callback<Mint>): void
+
+    once(event: 'Swap', cb: Callback<Swap>): void
+    once(event: 'Swap', options: EventOptions, cb: Callback<Swap>): void
+
+    once(event: 'Sync', cb: Callback<Sync>): void
+    once(event: 'Sync', options: EventOptions, cb: Callback<Sync>): void
+
+    once(event: 'Transfer', cb: Callback<Transfer>): void
+    once(event: 'Transfer', options: EventOptions, cb: Callback<Transfer>): void
 }

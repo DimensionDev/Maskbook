@@ -131,7 +131,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     )
     //#endregion
 
-    //#region blocking
+    // send transaction and wait for hash
     const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback({
         password: uuid(),
         duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,

@@ -1,5 +1,3 @@
-import type createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
-
 export enum ProviderType {
     Maskbook = 'Maskbook',
     MetaMask = 'MetaMask',
@@ -8,10 +6,6 @@ export enum ProviderType {
 
 export enum CurrencyType {
     USD = 'usd',
-}
-
-export interface MetaMaskInpageProvider extends UnboxPromise<ReturnType<typeof createMetaMaskProvider>> {
-    _metamask: { isUnlocked: () => Promise<boolean> }
 }
 
 //#region Ether
@@ -126,6 +120,23 @@ export enum EthereumTokenType {
     ERC20 = 1,
     ERC721 = 2,
     ERC1155 = 3,
+}
+
+// Learn more for a full list of supported JSON RPC methods
+// https://eth.wiki/json-rpc/API#json-rpc-methods
+export enum EthereumMethodType {
+    PERSONAL_SIGN = 'personal_sign',
+    ETH_SEND_TRANSACTION = 'eth_sendTransaction',
+    ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
+    ETH_GAS_PRICE = 'eth_gasPrice',
+    ETH_BLOCK_NUMBER = 'eth_blockNumber',
+    ETH_GET_BALANCE = 'eth_getBalance',
+    ETH_GET_TRANSACTION_BY_HASH = 'eth_getTransactionByHash',
+    ETH_GET_TRANSACTION_RECEIPT = 'eth_getTransactionReceipt',
+    ETH_GET_TRANSACTION_COUNT = 'eth_getTransactionCount',
+    ETH_ESTIMATE_GAS = 'eth_estimateGas',
+    ETH_SIGN = 'eth_sign',
+    ETH_SIGN_TRANSACTION = 'eth_signTransaction',
 }
 
 export enum TransactionEventType {

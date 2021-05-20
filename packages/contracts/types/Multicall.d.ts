@@ -3,10 +3,17 @@
 /* eslint-disable */
 
 import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
+import { ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import {
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
+    BaseContract,
+} from './types'
 
 interface EventOptions {
     filter?: object
@@ -14,32 +21,32 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class Multicall extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
+export interface Multicall extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): Multicall
     clone(): Multicall
     methods: {
-        getCurrentBlockTimestamp(): TransactionObject<string>
+        getCurrentBlockTimestamp(): NonPayableTransactionObject<string>
 
-        aggregate(calls: { target: string; callData: string | number[] }[]): TransactionObject<{
+        aggregate(calls: [string, string | number[]][]): NonPayableTransactionObject<{
             blockNumber: string
             returnData: string[]
             0: string
             1: string[]
         }>
 
-        getLastBlockHash(): TransactionObject<string>
+        getLastBlockHash(): NonPayableTransactionObject<string>
 
-        getEthBalance(addr: string): TransactionObject<string>
+        getEthBalance(addr: string): NonPayableTransactionObject<string>
 
-        getCurrentBlockDifficulty(): TransactionObject<string>
+        getCurrentBlockDifficulty(): NonPayableTransactionObject<string>
 
-        getCurrentBlockGasLimit(): TransactionObject<string>
+        getCurrentBlockGasLimit(): NonPayableTransactionObject<string>
 
-        getCurrentBlockCoinbase(): TransactionObject<string>
+        getCurrentBlockCoinbase(): NonPayableTransactionObject<string>
 
-        getBlockHash(blockNumber: number | string): TransactionObject<string>
+        getBlockHash(blockNumber: number | string | BN): NonPayableTransactionObject<string>
     }
     events: {
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
 }

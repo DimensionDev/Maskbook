@@ -234,4 +234,11 @@ export const CONSTANTS = {
         [ChainId.Kovan]: [0, 0, 0, 0], // 0 - 100%
         [ChainId.Gorli]: [0, 0, 0, 0], // 0 - 100%
     },
+    PROVIDER_WEIGHT_SEED: {
+        [ChainId.Mainnet]: Math.floor(Math.random() * 4), // 4 is the length of weights
+        [ChainId.Ropsten]: Math.floor(Math.random() * 4),
+        [ChainId.Rinkeby]: Math.floor(Math.random() * 4),
+        [ChainId.Kovan]: Math.floor(Math.random() * 4),
+        [ChainId.Gorli]: Math.floor(Math.random() * 4),
+    },
 }

@@ -3,10 +3,17 @@
 /* eslint-disable */
 
 import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
+import { ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import {
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
+    BaseContract,
+} from './types'
 
 interface EventOptions {
     filter?: object
@@ -14,22 +21,22 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class RouterV2 extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
+export interface RouterV2 extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): RouterV2
     clone(): RouterV2
     methods: {
-        WETH(): TransactionObject<string>
+        WETH(): NonPayableTransactionObject<string>
 
         addLiquidity(
             tokenA: string,
             tokenB: string,
-            amountADesired: number | string,
-            amountBDesired: number | string,
-            amountAMin: number | string,
-            amountBMin: number | string,
+            amountADesired: number | string | BN,
+            amountBDesired: number | string | BN,
+            amountAMin: number | string | BN,
+            amountBMin: number | string | BN,
             to: string,
-            deadline: number | string,
-        ): TransactionObject<{
+            deadline: number | string | BN,
+        ): NonPayableTransactionObject<{
             amountA: string
             amountB: string
             liquidity: string
@@ -40,12 +47,12 @@ export class RouterV2 extends Contract {
 
         addLiquidityETH(
             token: string,
-            amountTokenDesired: number | string,
-            amountTokenMin: number | string,
-            amountETHMin: number | string,
+            amountTokenDesired: number | string | BN,
+            amountTokenMin: number | string | BN,
+            amountETHMin: number | string | BN,
             to: string,
-            deadline: number | string,
-        ): TransactionObject<{
+            deadline: number | string | BN,
+        ): PayableTransactionObject<{
             amountToken: string
             amountETH: string
             liquidity: string
@@ -54,35 +61,39 @@ export class RouterV2 extends Contract {
             2: string
         }>
 
-        factory(): TransactionObject<string>
+        factory(): NonPayableTransactionObject<string>
 
         getAmountIn(
-            amountOut: number | string,
-            reserveIn: number | string,
-            reserveOut: number | string,
-        ): TransactionObject<string>
+            amountOut: number | string | BN,
+            reserveIn: number | string | BN,
+            reserveOut: number | string | BN,
+        ): NonPayableTransactionObject<string>
 
         getAmountOut(
-            amountIn: number | string,
-            reserveIn: number | string,
-            reserveOut: number | string,
-        ): TransactionObject<string>
+            amountIn: number | string | BN,
+            reserveIn: number | string | BN,
+            reserveOut: number | string | BN,
+        ): NonPayableTransactionObject<string>
 
-        getAmountsIn(amountOut: number | string, path: string[]): TransactionObject<string[]>
+        getAmountsIn(amountOut: number | string | BN, path: string[]): NonPayableTransactionObject<string[]>
 
-        getAmountsOut(amountIn: number | string, path: string[]): TransactionObject<string[]>
+        getAmountsOut(amountIn: number | string | BN, path: string[]): NonPayableTransactionObject<string[]>
 
-        quote(amountA: number | string, reserveA: number | string, reserveB: number | string): TransactionObject<string>
+        quote(
+            amountA: number | string | BN,
+            reserveA: number | string | BN,
+            reserveB: number | string | BN,
+        ): NonPayableTransactionObject<string>
 
         removeLiquidity(
             tokenA: string,
             tokenB: string,
-            liquidity: number | string,
-            amountAMin: number | string,
-            amountBMin: number | string,
+            liquidity: number | string | BN,
+            amountAMin: number | string | BN,
+            amountBMin: number | string | BN,
             to: string,
-            deadline: number | string,
-        ): TransactionObject<{
+            deadline: number | string | BN,
+        ): NonPayableTransactionObject<{
             amountA: string
             amountB: string
             0: string
@@ -91,12 +102,12 @@ export class RouterV2 extends Contract {
 
         removeLiquidityETH(
             token: string,
-            liquidity: number | string,
-            amountTokenMin: number | string,
-            amountETHMin: number | string,
+            liquidity: number | string | BN,
+            amountTokenMin: number | string | BN,
+            amountETHMin: number | string | BN,
             to: string,
-            deadline: number | string,
-        ): TransactionObject<{
+            deadline: number | string | BN,
+        ): NonPayableTransactionObject<{
             amountToken: string
             amountETH: string
             0: string
@@ -105,25 +116,25 @@ export class RouterV2 extends Contract {
 
         removeLiquidityETHSupportingFeeOnTransferTokens(
             token: string,
-            liquidity: number | string,
-            amountTokenMin: number | string,
-            amountETHMin: number | string,
+            liquidity: number | string | BN,
+            amountTokenMin: number | string | BN,
+            amountETHMin: number | string | BN,
             to: string,
-            deadline: number | string,
-        ): TransactionObject<string>
+            deadline: number | string | BN,
+        ): NonPayableTransactionObject<string>
 
         removeLiquidityETHWithPermit(
             token: string,
-            liquidity: number | string,
-            amountTokenMin: number | string,
-            amountETHMin: number | string,
+            liquidity: number | string | BN,
+            amountTokenMin: number | string | BN,
+            amountETHMin: number | string | BN,
             to: string,
-            deadline: number | string,
+            deadline: number | string | BN,
             approveMax: boolean,
-            v: number | string,
+            v: number | string | BN,
             r: string | number[],
             s: string | number[],
-        ): TransactionObject<{
+        ): NonPayableTransactionObject<{
             amountToken: string
             amountETH: string
             0: string
@@ -132,30 +143,30 @@ export class RouterV2 extends Contract {
 
         removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(
             token: string,
-            liquidity: number | string,
-            amountTokenMin: number | string,
-            amountETHMin: number | string,
+            liquidity: number | string | BN,
+            amountTokenMin: number | string | BN,
+            amountETHMin: number | string | BN,
             to: string,
-            deadline: number | string,
+            deadline: number | string | BN,
             approveMax: boolean,
-            v: number | string,
+            v: number | string | BN,
             r: string | number[],
             s: string | number[],
-        ): TransactionObject<string>
+        ): NonPayableTransactionObject<string>
 
         removeLiquidityWithPermit(
             tokenA: string,
             tokenB: string,
-            liquidity: number | string,
-            amountAMin: number | string,
-            amountBMin: number | string,
+            liquidity: number | string | BN,
+            amountAMin: number | string | BN,
+            amountBMin: number | string | BN,
             to: string,
-            deadline: number | string,
+            deadline: number | string | BN,
             approveMax: boolean,
-            v: number | string,
+            v: number | string | BN,
             r: string | number[],
             s: string | number[],
-        ): TransactionObject<{
+        ): NonPayableTransactionObject<{
             amountA: string
             amountB: string
             0: string
@@ -163,75 +174,75 @@ export class RouterV2 extends Contract {
         }>
 
         swapETHForExactTokens(
-            amountOut: number | string,
+            amountOut: number | string | BN,
             path: string[],
             to: string,
-            deadline: number | string,
-        ): TransactionObject<string[]>
+            deadline: number | string | BN,
+        ): PayableTransactionObject<string[]>
 
         swapExactETHForTokens(
-            amountOutMin: number | string,
+            amountOutMin: number | string | BN,
             path: string[],
             to: string,
-            deadline: number | string,
-        ): TransactionObject<string[]>
+            deadline: number | string | BN,
+        ): PayableTransactionObject<string[]>
 
         swapExactETHForTokensSupportingFeeOnTransferTokens(
-            amountOutMin: number | string,
+            amountOutMin: number | string | BN,
             path: string[],
             to: string,
-            deadline: number | string,
-        ): TransactionObject<void>
+            deadline: number | string | BN,
+        ): PayableTransactionObject<void>
 
         swapExactTokensForETH(
-            amountIn: number | string,
-            amountOutMin: number | string,
+            amountIn: number | string | BN,
+            amountOutMin: number | string | BN,
             path: string[],
             to: string,
-            deadline: number | string,
-        ): TransactionObject<string[]>
+            deadline: number | string | BN,
+        ): NonPayableTransactionObject<string[]>
 
         swapExactTokensForETHSupportingFeeOnTransferTokens(
-            amountIn: number | string,
-            amountOutMin: number | string,
+            amountIn: number | string | BN,
+            amountOutMin: number | string | BN,
             path: string[],
             to: string,
-            deadline: number | string,
-        ): TransactionObject<void>
+            deadline: number | string | BN,
+        ): NonPayableTransactionObject<void>
 
         swapExactTokensForTokens(
-            amountIn: number | string,
-            amountOutMin: number | string,
+            amountIn: number | string | BN,
+            amountOutMin: number | string | BN,
             path: string[],
             to: string,
-            deadline: number | string,
-        ): TransactionObject<string[]>
+            deadline: number | string | BN,
+        ): NonPayableTransactionObject<string[]>
 
         swapExactTokensForTokensSupportingFeeOnTransferTokens(
-            amountIn: number | string,
-            amountOutMin: number | string,
+            amountIn: number | string | BN,
+            amountOutMin: number | string | BN,
             path: string[],
             to: string,
-            deadline: number | string,
-        ): TransactionObject<void>
+            deadline: number | string | BN,
+        ): NonPayableTransactionObject<void>
 
         swapTokensForExactETH(
-            amountOut: number | string,
-            amountInMax: number | string,
+            amountOut: number | string | BN,
+            amountInMax: number | string | BN,
             path: string[],
             to: string,
-            deadline: number | string,
-        ): TransactionObject<string[]>
+            deadline: number | string | BN,
+        ): NonPayableTransactionObject<string[]>
 
         swapTokensForExactTokens(
-            amountOut: number | string,
-            amountInMax: number | string,
+            amountOut: number | string | BN,
+            amountInMax: number | string | BN,
             path: string[],
             to: string,
-            deadline: number | string,
-        ): TransactionObject<string[]>
+            deadline: number | string | BN,
+        ): NonPayableTransactionObject<string[]>
     }
     events: {
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
 }

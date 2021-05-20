@@ -1,70 +1,102 @@
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { HttpProvider, TransactionConfig } from 'web3-core'
-import * as Maskbook from './providers/Maskbook'
-import { sign } from './sign'
-import { createWeb3 } from './provider'
-import { signTransaction } from './signTransaction'
-import {
-    currentSelectedWalletProviderSettings,
-    currentWalletConnectChainIdSettings,
-} from '../../../plugins/Wallet/settings'
-import { ProviderType } from '../../../web3/types'
+import { createWeb3 } from './web3'
+import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
+import { EthereumMethodType, ProviderType } from '../../../web3/types'
+import { commitNonce, resetNonce } from './nonce'
+import { getWalletCached } from './wallet'
 
-export async function send(
+/**
+ * This API is only used internally. Please use requestSend instead in order to share the same payload id globally.
+ * @param payload
+ * @param callback
+ */
+export async function INTERNAL_send(
     payload: JsonRpcPayload,
-    callback: (error: Error | null, payload?: JsonRpcResponse) => void,
+    callback: (error: Error | null, response?: JsonRpcResponse) => void,
 ) {
     if (process.env.NODE_ENV === 'development') {
-        console.log('DEUBG: send')
-        console.log(payload)
+        console.table(payload)
+        console.log(new Error().stack)
     }
 
-    if (payload.method === 'personal_sign') {
-        const [data, address] = payload.params as [string, string]
-        try {
-            const signed = await sign(data, address)
-            if (!payload.id) throw new Error('unknown payload id')
-            callback(null, {
-                jsonrpc: '2.0',
-                id: payload.id as number,
-                result: signed,
-            })
-        } catch (e) {
-            callback(e)
-        }
+    const web3 = await createWeb3()
+    const provider = web3.currentProvider as HttpProvider | undefined
+    const providerType = currentSelectedWalletProviderSettings.value
+
+    // unable to create provider
+    if (!provider) {
+        callback(new Error('Failed to create provider.'))
         return
     }
 
-    // unable to create provider
-    const provider = (await createWeb3()).currentProvider as HttpProvider | undefined
-    if (!provider) throw new Error('failed to create provider')
+    // illegal payload
+    if (typeof payload.id === 'undefined') {
+        callback(new Error('Unknown payload id.'))
+        return
+    }
 
     switch (payload.method) {
-        case 'eth_sendTransaction':
-            if (currentSelectedWalletProviderSettings.value === ProviderType.Maskbook) {
-                if (!payload.id) throw new Error('unknown payload id')
-                const [config] = payload.params as [TransactionConfig]
-                provider.send(
-                    {
-                        ...payload,
-                        method: 'eth_sendRawTransaction',
-                        params: [await signTransaction(config)],
-                    },
-                    callback,
-                )
-            } else provider.send(payload, callback)
+        case EthereumMethodType.PERSONAL_SIGN:
+            const [data, address] = payload.params as [string, string]
+
+            try {
+                if (providerType === ProviderType.Maskbook) {
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: await web3.eth.sign(data, address),
+                    })
+                } else {
+                    provider.send(
+                        {
+                            ...payload,
+                            params: payload.params.concat(''), // concat the password
+                        },
+                        callback,
+                    )
+                }
+            } catch (e) {
+                callback(e)
+            }
             break
-        case 'eth_sendRawTransaction':
-            provider.send(payload, callback)
+        case EthereumMethodType.ETH_SEND_TRANSACTION:
+            if (providerType === ProviderType.Maskbook) {
+                const [config] = payload.params as [TransactionConfig]
+
+                try {
+                    const wallet = getWalletCached()
+                    const _private_key_ = wallet?._private_key_
+                    if (!wallet || !_private_key_) throw new Error('Unable to sign transaction.')
+
+                    // send the signed transaction
+                    const signedTransaction = await web3.eth.accounts.signTransaction(config, _private_key_)
+                    provider.send(
+                        {
+                            ...payload,
+                            method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
+                            params: [signedTransaction.rawTransaction],
+                        },
+                        (error, result) => {
+                            callback(error, result)
+
+                            // handle nonce
+                            const error_ = (error ?? result?.error) as { message: string } | undefined
+                            const message = error_?.message ?? ''
+                            if (/\bnonce\b/im.test(message) && /\b(low|high)\b/im.test(message))
+                                resetNonce(wallet.address)
+                            else commitNonce(wallet.address)
+                        },
+                    )
+                } catch (error) {
+                    callback(error)
+                }
+            } else {
+                provider.send(payload, callback)
+            }
             break
         default:
-            // hijack walletconnect RPC and redirect to mask RPC
-            if (currentSelectedWalletProviderSettings.value === ProviderType.WalletConnect) {
-                const maskProvider = Maskbook.createWeb3({
-                    chainId: currentWalletConnectChainIdSettings.value,
-                })
-                ;(maskProvider.currentProvider as HttpProvider).send(payload, callback)
-            } else provider.send(payload, callback)
+            provider.send(payload, callback)
             break
     }
 }

@@ -3,7 +3,6 @@ import type { VoteItemList, ProposalIdentifier, VoteItem } from '../types'
 import { useSuspense } from '../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
 import { useBlockNumber } from '../../../web3/hooks/useBlockNumber'
-import { ChainId } from '../../../web3/types'
 
 const cache = new Map<string, [0, Promise<void>] | [1, VoteItemList] | [2, Error]>()
 export function votesRetry() {
@@ -15,7 +14,7 @@ export function useVotes(identifier: ProposalIdentifier) {
     return useSuspense<VoteItemList, [ProposalIdentifier]>(identifier.id, [identifier], cache, Suspender)
 }
 async function Suspender(identifier: ProposalIdentifier) {
-    const blockNumber = useBlockNumber(ChainId.Mainnet)
+    const blockNumber = useBlockNumber()
     const {
         payload: { message },
     } = useProposal(identifier.id)
