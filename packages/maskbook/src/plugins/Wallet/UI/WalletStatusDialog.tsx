@@ -202,7 +202,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                         </div>
                         <div className={classes.infoRow}>
                             <Typography className={classes.address} variant="body2">
-                                <FormattedAddress address={selectedWallet.address} size={4}/>
+                                <FormattedAddress address={selectedWallet.address} size={4} />
                             </Typography>
                             <Link
                                 className={classes.link}
