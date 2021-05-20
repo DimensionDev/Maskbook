@@ -40,5 +40,20 @@
     "wallets_balance_Send": "Send",
     "wallets_balance_Buy": "Buy",
     "wallets_balance_Swap": "Swap",
-    "wallets_balance_Receive": "Receive"
+    "wallets_balance_Receive": "Receive",
+    "personas_setup_connect_tips": "Please connect to your {{type}} account.",
+    "personas_setup_connect": "Connect",
+    "personas_name_maximum_tips": "Maximum length is {{length}} characters long.",
+    "personas_confirm": "Confirm",
+    "personas_cancel": "Cancel",
+    "personas_delete_confirm_tips": "Please confirm that you have deleted persona <i>{{nickname}}</i> and entered your password.",
+    "personas_delete_dialog_title": "Delete Persona",
+    "personas_edit_dialog_title": "Edit Persona",
+    "personas_edit": "Edit",
+    "personas_delete": "Delete",
+    "personas_add_persona": "Add Persona",
+    "personas_back_up": "Back Up",
+    "personas_connect_to": "Connect to {{internalName}}",
+    "personas_disconnect": "Disconnect",
+    "personas_rename": "Rename"
 }

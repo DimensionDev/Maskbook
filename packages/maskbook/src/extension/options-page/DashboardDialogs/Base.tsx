@@ -15,7 +15,7 @@ import { ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { extendsTheme, useMaskbookTheme } from '../../../utils/theme'
+import { extendsTheme, useClassicMaskTheme } from '../../../utils/theme'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 const useStyles = makeStyles((theme) => ({
@@ -101,7 +101,7 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
         open: state === DialogState.Opened,
         onClose,
     }
-    const theme = useMaskbookTheme()
+    const theme = useClassicMaskTheme()
     const renderedComponent =
         state === DialogState.Destroyed ? null : (
             <ThemeProvider theme={theme}>

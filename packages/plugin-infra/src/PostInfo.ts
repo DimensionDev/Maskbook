@@ -10,6 +10,7 @@ import {
     ProfileIdentifier,
     TypedMessage,
     TypedMessageTuple,
+    useObservableValues,
     useValueRef,
 } from '@dimensiondev/maskbook-shared'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
@@ -98,6 +99,7 @@ type ValidKeys = {
         ? key
         : never
 }[keyof PostInfo]
+
 export function usePostInfoDetails<K extends ValidKeys>(
     key: K,
 ): K extends keyof PostInfo
@@ -108,16 +110,13 @@ export function usePostInfoDetails<K extends ValidKeys>(
         : never
     : never {
     const post = usePostInfo()
-    // @ts-expect-error
-    const k = post[useRef(key).current]
+    const k: any = post[useRef(key).current as keyof typeof post]
     // eslint-disable-next-line react-hooks/rules-of-hooks
     if (k instanceof ValueRef) return useValueRef(k)
-    // @ts-expect-error
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    if (k instanceof ObservableMap) return useObservableValues(k)
-    // @ts-expect-error
+    if (k instanceof ObservableMap) return useObservableValues(k) as any
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    if (k instanceof ObservableSet) return useObservableValues(k)
+    if (k instanceof ObservableSet) return useObservableValues(k) as any
     throw new Error()
 }
 

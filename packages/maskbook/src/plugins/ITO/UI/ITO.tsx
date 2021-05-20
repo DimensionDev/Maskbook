@@ -609,8 +609,11 @@ export function ITO(props: ITO_Props) {
                                             onClick={onClaimButtonClick}
                                             variant="contained"
                                             size="large"
+                                            disabled={claimState.type === TransactionStateType.HASH}
                                             className={classes.actionButton}>
-                                            {t('plugin_ito_claim')}
+                                            {claimState.type === TransactionStateType.HASH
+                                                ? t('plugin_ito_claiming')
+                                                : t('plugin_ito_claim')}
                                         </ActionButton>
                                     ) : (
                                         <ActionButton

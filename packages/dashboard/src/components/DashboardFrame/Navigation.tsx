@@ -9,6 +9,7 @@ import {
     useMediaQuery,
     experimentalStyled as styled,
     listItemClasses,
+    listItemIconClasses,
 } from '@material-ui/core'
 import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@material-ui/icons'
 import { useContext } from 'react'
@@ -18,20 +19,39 @@ import { Routes } from '../../pages/routes'
 import { DashboardContext } from './context'
 import { MaskNotSquareIcon } from '@dimensiondev/icons'
 import { useDashboardI18N } from '../../locales'
+import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 
 function ListItemLinkUnStyled({ nested, ...props }: LinkProps & ListItemProps & { nested?: boolean; to: string }) {
     return <MuiListItem button component={Link} selected={!!useRouteMatch(props.to)} {...props} />
 }
 
-const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => ({
-    [`&.${listItemClasses.root}`]: {
-        paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
-    },
-    [`&.${listItemClasses.selected}`]: {
-        backgroundColor: 'transparent',
-        borderRight: '4px solid ' + (theme.palette.mode === 'light' ? theme.palette.action.selected : 'white'),
-    },
-}))
+const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
+    return {
+        [`&.${listItemClasses.root}`]: {
+            color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
+            paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
+        },
+        [`&.${listItemClasses.selected}`]: {
+            color: MaskColorVar.linkText,
+            backgroundColor: 'transparent',
+            position: 'relative',
+            [`${listItemIconClasses.root}`]: {
+                color: MaskColorVar.linkText,
+            },
+            '&:after': {
+                content: '""',
+                display: 'inline-block',
+                width: 5,
+                height: 40,
+                boxShadow: '-2px 0px 10px 2px rgba(0, 56, 255, 0.15)',
+                borderRadius: 50,
+                background: MaskColorVar.linkText,
+                position: 'absolute',
+                right: 0,
+            },
+        },
+    }
+})
 
 const LogoItem = styled(MuiListItem)(({ theme }) => ({
     [`&.${listItemClasses.root}`]: {
@@ -80,15 +100,6 @@ export function Navigation({}: NavigationProps) {
                     <ListItemLink nested to={Routes.WalletsTransfer}>
                         <ListItemText primary={t.wallets_transfer()} />
                     </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsSwap}>
-                        <ListItemText primary={t.wallets_swap()} />
-                    </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsRedPacket}>
-                        <ListItemText primary={t.wallets_red_packet()} />
-                    </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsSell}>
-                        <ListItemText primary={t.wallets_sell()} />
-                    </ListItemLink>
                     <ListItemLink nested to={Routes.WalletsHistory}>
                         <ListItemText primary={t.wallets_history()} />
                     </ListItemLink>
@@ -102,15 +113,4 @@ export function Navigation({}: NavigationProps) {
             </ListItemLink>
         </List>
     )
-}
-
-export enum NavigationTarget {
-    Personas,
-    WalletsTransfer,
-    WalletsSwap,
-    Wallets,
-    WalletsRedPacket,
-    WalletsSell,
-    WalletsHistory,
-    Settings,
 }
