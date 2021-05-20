@@ -1,5 +1,5 @@
 import { useReducer } from 'react'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { TradeStrategy } from '../types'
 
 export interface TradeState {

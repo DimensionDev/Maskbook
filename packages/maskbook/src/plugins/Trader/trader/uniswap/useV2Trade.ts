@@ -5,7 +5,7 @@ import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
 import { useChainId } from '../../../../web3/hooks/useChainId'
 import { TradeStrategy } from '../../types'
 import { useAllCommonPairs } from './useAllCommonPairs'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
 import { MAX_HOP } from '../../constants'
 
 export function useV2Trade(

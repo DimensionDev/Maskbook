@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
 import type { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types'
 
 export function useTradeComputed(

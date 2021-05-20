@@ -4,7 +4,7 @@ import { createTypedMessageMetadataReader, createRenderWithMetadata } from '../.
 import { ITO_MetaKey } from './constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from './types'
 import schema from './schema.json'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../web3/types'
 import { isNative } from '../../web3/helpers'
 
 export const ITO_MetadataReader = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_MetaKey, schema)

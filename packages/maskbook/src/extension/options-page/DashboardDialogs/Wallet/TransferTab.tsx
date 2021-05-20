@@ -10,7 +10,7 @@ import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { useTokenTransferCallback } from '../../../../web3/hooks/useTokenTransferCallback'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
 import { EthereumTokenType } from '../../../../web3/types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 

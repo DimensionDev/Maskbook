@@ -7,7 +7,7 @@ import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogFT 
 import { useMenu } from '../../../utils/hooks/useMenu'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { useAccount } from '../../../web3/hooks/useAccount'

@@ -1,6 +1,6 @@
 import { Trade, TradeType } from '@uniswap/sdk'
 import BigNumber from 'bignumber.js'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
 import { uniswapCurrencyAmountTo, uniswapPercentTo, uniswapPriceTo, uniswapTokenTo } from '../../helpers'
 import { TradeComputed, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'

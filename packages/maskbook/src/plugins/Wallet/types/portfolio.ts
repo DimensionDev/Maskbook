@@ -1,6 +1,6 @@
 import type { ZerionTransactionDirection } from './zerion'
 import type { DebankTransactionDirection } from './debank'
-import type { CurrencyType, ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import type { CurrencyType, NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 
 export enum FilterTransactionType {
     ALL = 'all',

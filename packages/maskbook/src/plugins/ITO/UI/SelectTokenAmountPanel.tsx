@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { TokenAmountPanel, TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import type { FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 
 export interface SelectTokenAmountPanelProps {

@@ -1,5 +1,5 @@
 import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'

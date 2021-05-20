@@ -4,7 +4,7 @@ import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsMerged } from './useAssetsMerged'
 import { useWallet } from './useWallet'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
 
 export function useAssets(tokens: (NativeTokenDetailed | ERC20TokenDetailed)[]) {

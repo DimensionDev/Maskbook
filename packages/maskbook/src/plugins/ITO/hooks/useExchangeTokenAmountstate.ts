@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import { useReducer } from 'react'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 
 export interface ExchangeTokenAndAmountState {
     key: string

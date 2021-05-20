@@ -22,7 +22,7 @@ export interface FixedTokenListProps extends withClasses<never> {
     keyword?: string
     whitelist?: string[]
     blacklist?: string[]
-    tokens?: (ERC20TokenDetailed | NativeTokenDetailed)[]
+    tokens?: (NativeTokenDetailed | ERC20TokenDetailed)[]
     selectedTokens?: string[]
     onSubmit?(token: NativeTokenDetailed | ERC20TokenDetailed): void
     FixedSizeListProps?: Partial<FixedSizeListProps>

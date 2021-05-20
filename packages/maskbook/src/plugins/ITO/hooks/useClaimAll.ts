@@ -4,7 +4,7 @@ import { checkIfChainSupport } from '../../../web3/pipes'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 
 export interface SwappedToken {
     pids: string[]

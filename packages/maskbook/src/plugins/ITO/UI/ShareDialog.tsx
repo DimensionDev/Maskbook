@@ -1,6 +1,6 @@
 import { makeStyles, Typography, Box } from '@material-ui/core'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'

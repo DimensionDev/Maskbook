@@ -14,7 +14,7 @@ import {
     RED_PACKET_DEFAULT_SHARES,
 } from '../constants'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { EthereumTokenType, EthereumNetwork, ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import { EthereumTokenType, EthereumNetwork, NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'

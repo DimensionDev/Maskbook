@@ -2,7 +2,7 @@ import { Fragment, useCallback, useEffect, useState } from 'react'
 import { makeStyles, InputAdornment } from '@material-ui/core'
 import { v4 as uuid } from 'uuid'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import {
     ExchangeTokenAndAmountState,

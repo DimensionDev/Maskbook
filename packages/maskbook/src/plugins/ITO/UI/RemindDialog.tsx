@@ -4,7 +4,7 @@ import { Typography, Link, Checkbox, makeStyles, FormControlLabel } from '@mater
 import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { resolveLinkOnExplorer } from '../../../web3/pipes'

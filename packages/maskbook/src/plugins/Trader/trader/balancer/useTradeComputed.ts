@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 
 const MIN_VALUE = new BigNumber('1e-5')

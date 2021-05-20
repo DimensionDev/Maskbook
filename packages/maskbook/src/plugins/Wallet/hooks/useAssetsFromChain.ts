@@ -1,5 +1,5 @@
 import { useTokensBalance } from '../../../web3/hooks/useTokensBalance'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import type { Asset } from '../types'
 import { useAssetsMerged } from './useAssetsMerged'
 

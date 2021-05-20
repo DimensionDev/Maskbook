@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => {
 
 export interface TraderProps extends withClasses<never> {
     coin?: Coin
-    tokenDetailed?: ERC20TokenDetailed | NativeTokenDetailed
+    tokenDetailed?: NativeTokenDetailed | ERC20TokenDetailed
 }
 
 export function Trader(props: TraderProps) {

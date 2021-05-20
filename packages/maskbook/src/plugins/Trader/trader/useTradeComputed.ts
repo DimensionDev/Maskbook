@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { TradeProvider, TradeStrategy } from '../types'
 import { useTrade as useEtherTrade } from './ether/useTrade'
 import { useTradeComputed as useEtherTradeComputed } from './ether/useTradeComputed'

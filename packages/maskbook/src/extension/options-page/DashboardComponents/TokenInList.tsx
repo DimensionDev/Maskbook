@@ -7,7 +7,7 @@ import { useConstant } from '../../../web3/hooks/useConstant'
 import { CONSTANTS } from '../../../web3/constants'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { resolveTokenLinkOnExplorer } from '../../../web3/pipes'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { isSameAddress } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme: Theme) => ({

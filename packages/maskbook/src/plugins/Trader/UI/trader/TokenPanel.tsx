@@ -1,7 +1,7 @@
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { Box, makeStyles, Theme, Typography } from '@material-ui/core'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
 
 export interface TokenPanelProps {
     amount: string

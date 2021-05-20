@@ -9,7 +9,7 @@ import { PriceStaleWarnning } from './PriceStaleWarnning'
 import type { TradeComputed, TradeProvider } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
 
 const useStyles = makeStyles((theme) => ({
     reverseIcon: {

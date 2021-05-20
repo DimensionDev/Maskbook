@@ -4,7 +4,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ErrorIcon from '@material-ui/icons/Error'
 import { noop } from 'lodash-es'
 import { TokenIcon } from '../../extension/options-page/DashboardComponents/TokenIcon'
-import type { ERC20TokenDetailed, NativeTokenDetailed } from '../types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../types'
 
 const useStyles = makeStyles((theme: Theme) => {
     return {

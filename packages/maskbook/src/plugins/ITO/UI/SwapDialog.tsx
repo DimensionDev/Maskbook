@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { ERC20TokenDetailed, NativeTokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
