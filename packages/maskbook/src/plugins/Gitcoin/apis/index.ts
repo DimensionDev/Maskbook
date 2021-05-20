@@ -1,5 +1,4 @@
 import { GITCOIN_API_GRANTS_V1 } from '../constants'
-import MOCK_DATA from './mock.json'
 
 export interface Metadata {}
 
@@ -39,7 +38,6 @@ export interface GitcoinGrant {
 }
 
 export async function fetchGrant(id: string) {
-    if (process.env.NODE_ENV === 'development') return Promise.resolve(MOCK_DATA.grants)
     if (!/\d+/.test(id)) return
     const response = await fetch(`${GITCOIN_API_GRANTS_V1}${id}/`)
     const { grants } = (await response.json()) as {
