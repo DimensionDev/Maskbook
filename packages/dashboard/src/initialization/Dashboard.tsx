@@ -26,7 +26,6 @@ import { useAppearance } from '../pages/Personas/api'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
-applyMaskColorVars(document.body, 'light')
 // TODO: implement
 startPluginDashboard({
     enabled: { events: new Emitter(), isEnabled: () => true },
@@ -34,12 +33,16 @@ startPluginDashboard({
 })
 export default function DashboardRoot() {
     const settings = useAppearance()
+    const mode = useSystemPreferencePalatte()
     const themes: Record<typeof settings, Theme> = {
         dark: MaskDarkTheme,
         light: MaskLightTheme,
-        default: useSystemPreferencePalatte() === 'dark' ? MaskDarkTheme : MaskLightTheme,
+        default: mode === 'dark' ? MaskDarkTheme : MaskLightTheme,
     }
     const theme = themes[settings]
+
+    applyMaskColorVars(document.body, mode)
+
     return (
         <StrictMode>
             <I18nextProvider i18n={i18n}>
