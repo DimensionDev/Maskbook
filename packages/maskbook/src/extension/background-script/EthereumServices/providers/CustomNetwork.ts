@@ -1,7 +1,7 @@
-export function createProvider(url: string) {}
+export function createWeb3() {
+    throw new Error('To be implemented.')
+}
 
-export function createWeb3() {}
-
-export function requestAccounts() {
+export async function requestAccounts() {
     return []
 }

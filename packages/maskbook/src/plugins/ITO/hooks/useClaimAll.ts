@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { checkIfChainSupport } from '../../../web3/pipes'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'

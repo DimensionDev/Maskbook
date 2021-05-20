@@ -83,8 +83,8 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                     fullWidth
                     variant="contained"
                     size="large"
-                    onClick={chainTokenBalance.retry}>
-                    {t(chainTokenBalance.loading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee')}
+                    onClick={nativeTokenBalance.retry}>
+                    {t(nativeTokenBalance.loading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee')}
                 </ActionButton>
             </Grid>
         )

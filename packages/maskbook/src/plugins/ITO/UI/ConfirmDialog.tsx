@@ -10,7 +10,7 @@ import BigNumber from 'bignumber.js'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { dateTimeFormat } from '../assets/formatDate'
 import { isNative } from '../../../web3/helpers'
-import { resolveTokenLinkOnExplorer, resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveTokenLinkOnExplorer, resolveAddressLinkOnExplorer } from '../../../web3/pipes'
 import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../web3/types'
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
@@ -225,7 +225,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Grid item xs={6}>
                             <Paper className={classes.data}>
                                 <Link
-                                    href={resolveAddressLinkOnEtherscan(chainId, poolSettings?.qualificationAddress!)}
+                                    href={resolveAddressLinkOnExplorer(chainId, poolSettings?.qualificationAddress!)}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Typography>

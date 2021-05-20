@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { once } from 'lodash-es'
 import { useCallback, useMemo } from 'react'
-import type { TransactionReceipt } from 'web3-eth'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionEventType } from '../types'
