@@ -1,20 +1,12 @@
-import {
-    Button,
-    DialogContent,
-    makeStyles,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    Typography,
-    DialogActions,
-} from '@material-ui/core'
+import { useState } from 'react'
+import { Button, DialogContent, makeStyles, DialogActions } from '@material-ui/core'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { ImportWallet } from './ImportWallet'
+import { ImportResult } from './ImportResult'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -70,13 +62,23 @@ const addressList = [
     },
 ]
 
+enum ImportStep {
+    Import = 0,
+    Result,
+}
+
 export interface ImportWalletDialogProps extends withClasses<never> {}
 
 export function ImportWalletDialog(props: ImportWalletDialogProps) {
     const { t } = useI18N()
+    const [step, setStep] = useState<ImportStep>(ImportStep.Import)
     const classes = useStylesExtends(useStyles(), props)
 
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.importWalletDialogUpdated)
+
+    const handleNext = () => {
+        setStep(ImportStep.Result)
+    }
 
     return (
         <InjectedDialog
@@ -87,43 +89,13 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
                 maxWidth: 'sm',
             }}>
             <DialogContent className={classes.content}>
-                <Typography variant="h1" className={classes.title}>
-                    Derivation path (m'/ 44'/ 60'/ 0 /'0 )
-                </Typography>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell className={classes.headCell}>Address</TableCell>
-                            <TableCell align="center" className={classes.headCell}>
-                                Balances(ETH)
-                            </TableCell>
-                            <TableCell align="center" className={classes.headCell}>
-                                Balances
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {addressList.map((address) => (
-                            <TableRow key={address.address}>
-                                <TableCell align="left" className={classes.bodyCell}>
-                                    {address.address}
-                                </TableCell>
-                                <TableCell align="center" className={classes.bodyCell}>
-                                    {address.balance}
-                                </TableCell>
-                                <TableCell align="center" className={classes.bodyCell}>
-                                    <Button>Add</Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                {step === ImportStep.Import ? <ImportWallet /> : <ImportResult />}
             </DialogContent>
             <DialogActions className={classes.dialogActions}>
                 <Button fullWidth className={classes.actionButton}>
                     Previous
                 </Button>
-                <Button fullWidth className={classes.actionButton}>
+                <Button fullWidth className={classes.actionButton} onClick={handleNext}>
                     Next
                 </Button>
             </DialogActions>
