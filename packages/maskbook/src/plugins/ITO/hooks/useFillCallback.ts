@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
-import type { TransactionReceipt } from 'web3-core'
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'

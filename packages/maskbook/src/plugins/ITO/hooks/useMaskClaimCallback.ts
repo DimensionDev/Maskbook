@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import type { TransactionReceipt } from 'web3-core'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useAccount } from '../../../web3/hooks/useAccount'

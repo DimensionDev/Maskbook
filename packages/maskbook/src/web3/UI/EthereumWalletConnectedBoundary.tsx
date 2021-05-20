@@ -84,7 +84,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                     variant="contained"
                     size="large"
                     onClick={chainTokenBalance.retry}>
-                    {t(etherBalanceLoading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee')}
+                    {t(chainTokenBalance.loading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee')}
                 </ActionButton>
             </Grid>
         )
