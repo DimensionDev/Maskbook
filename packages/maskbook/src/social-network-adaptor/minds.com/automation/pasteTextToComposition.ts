@@ -40,7 +40,6 @@ export const pasteTextToCompositionMinds: SocialNetworkUI.AutomationCapabilities
 
             // paste
             dispatchCustomEvents(textarea, 'input', text)
-            textarea.dispatchEvent(new CustomEvent('input', { bubbles: true, cancelable: false, composed: true }))
 
             await delay(interval)
             if (!getEditorContent().replace(/\n/g, '').includes(text.replace(/\n/g, ''))) {

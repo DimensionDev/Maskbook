@@ -1,15 +1,9 @@
 import type { SocialNetworkUI } from '../../../social-network'
 import { MaskMessage } from '../../../utils/messages'
 import { downloadUrl } from '../../../utils/utils'
-import { getEditorContent } from '../utils/postBox'
 import { composerModalTextAreaSelector, composerPreviewSelector } from '../utils/selector'
 
-const hasSucceed = async (text: string) => {
-    const composerImagePreview = composerPreviewSelector().evaluate()
-    const composerTextPayloadPasted = getEditorContent().replace(/\n/g, '').includes(text.replace(/\n/g, ''))
-
-    return composerImagePreview && composerTextPayloadPasted
-}
+const hasSucceed = () => composerPreviewSelector().evaluate()
 
 export function pasteImageToCompositionMinds() {
     return async function (
@@ -22,7 +16,7 @@ export function pasteImageToCompositionMinds() {
         composerModalTextAreaSelector().evaluate()?.focus()
         document.execCommand('paste')
 
-        if (relatedTextPayload && (await hasSucceed(relatedTextPayload))) {
+        if (hasSucceed()) {
             // clear clipboard
             return navigator.clipboard.writeText('')
         } else if (recover) {
