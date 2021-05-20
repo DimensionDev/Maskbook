@@ -1,9 +1,18 @@
+import { promises as fs } from 'fs'
 import path from 'path'
 import { runTypeChain, glob } from 'typechain'
 import { run } from '../cli/utils'
 
 const ABIS_PATH = path.join(__dirname, 'abis')
 const GENERATED_PATH = path.join(__dirname, 'types')
+
+async function replaceFileAll(file: string, pairs: [string, string][]) {
+    let content = await fs.readFile(file, 'utf-8')
+    for (const [pattern, value] of pairs) {
+        content = content.replace(new RegExp(pattern, 'img'), value)
+    }
+    await fs.writeFile(file, content, 'utf-8')
+}
 
 async function main() {
     const cwd = process.cwd()
@@ -17,6 +26,19 @@ async function main() {
         outDir: GENERATED_PATH,
         target: 'web3-v1',
     })
+
+    // rename Qualifiction to QualificationEvent
+    const qualificationDefinition = path.join(GENERATED_PATH, 'Qualification.d.ts')
+    replaceFileAll(qualificationDefinition, [
+        [
+            'type Qualification',
+            'type QualificationEvent'
+        ],
+        [
+            'Callback<Qualification>',
+            'Callback<QualificationEvent>'
+        ]
+    ])
 
     // format code
     run(GENERATED_PATH, 'npx', 'prettier', '--write', '*')
