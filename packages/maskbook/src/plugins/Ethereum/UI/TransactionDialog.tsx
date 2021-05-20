@@ -15,7 +15,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { TransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { resolveTransactionLinkOnExplorer} from '../../../web3/pipes'
+import { resolveTransactionLinkOnExplorer } from '../../../web3/pipes'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { EthereumMessages } from '../messages'
@@ -100,7 +100,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         <Typography>
                             <Link
                                 className={classes.link}
-                                href={resolveTransactionLinkOnExplorerchainId, state.hash)}
+                                href={resolveTransactionLinkOnExplorer(chainId, state.hash)}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 {t('plugin_wallet_view_on_etherscan')}
@@ -123,14 +123,14 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         <Typography>
                             <Link
                                 className={classes.link}
-                                href={resolveTransactionLinkOnExplorerchainId, state.receipt.transactionHash)}
+                                href={resolveTransactionLinkOnExplorer(chainId, state.receipt.transactionHash)}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 {t('plugin_wallet_view_on_etherscan')}
                             </Link>
                         </Typography>
                     </>
-                ) :}
+                ) : null}
                 {state.type === TransactionStateType.FAILED ? (
                     <>
                         <WarningIcon className={classes.icon} />

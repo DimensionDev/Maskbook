@@ -1,12 +1,12 @@
 import { useAsyncRetry } from 'react-use'
 import { CONSTANTS } from '../../../../web3/constants'
-import { useChainId } from '../../../../web3/hooks/useChainId'
 import { useBlockNumber } from '../../../../web3/hooks/useBlockNumber'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../../../web3/types'
 import { BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { SwapResponse, TradeStrategy } from '../../types'
+import { isNative } from '../../../../web3/helpers'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -26,8 +26,8 @@ export function useTrade(
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
         // the WETH address is used for looking for available pools
-        const sellToken = inputToken.address === NATIVE_TOKEN_ADDRESS ? WETH_ADDRESS : inputToken.address
-        const buyToken = outputToken.address === NATIVE_TOKEN_ADDRESS ? WETH_ADDRESS : outputToken.address
+        const sellToken = isNative(inputToken.address) ? WETH_ADDRESS : inputToken.address
+        const buyToken = isNative(outputToken.address) ? WETH_ADDRESS : outputToken.address
         const { swaps, routes } = await PluginTraderRPC.getSwaps(
             sellToken,
             buyToken,

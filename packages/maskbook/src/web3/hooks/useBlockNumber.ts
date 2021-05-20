@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import {
-    currentBlockNumberSettings,
-} from '../../plugins/Wallet/settings'
+import { currentBlockNumberSettings } from '../../plugins/Wallet/settings'
 
 /**
  * Get the current block number

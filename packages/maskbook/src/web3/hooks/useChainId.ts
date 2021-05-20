@@ -2,7 +2,12 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { ChainId, ProviderType } from '../types'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { Flags } from '../../utils/flags'
-import { currentMaskbookChainIdSettings, currentMetaMaskChainIdSettings, currentSelectedWalletProviderSettings, currentWalletConnectChainIdSettings } from '../../plugins/Wallet/settings'
+import {
+    currentMaskbookChainIdSettings,
+    currentMetaMaskChainIdSettings,
+    currentSelectedWalletProviderSettings,
+    currentWalletConnectChainIdSettings,
+} from '../../plugins/Wallet/settings'
 
 /**
  * Get the chain id which is using by the given (or default) wallet

@@ -5,8 +5,7 @@ import { ITO_MetaKey } from './constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from './types'
 import schema from './schema.json'
 import type { ERC20TokenDetailed, NativeTokenDetailed } from '../../web3/types'
-import { getConstant, isSameAddress } from '../../web3/helpers'
-import { CONSTANTS } from '../../web3/constants'
+import { isNative } from '../../web3/helpers'
 
 export const ITO_MetadataReader = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_MetaKey, schema)
 export const renderWithITO_Metadata = createRenderWithMetadata(ITO_MetadataReader)
@@ -31,11 +30,10 @@ export function gcd(a: BigNumber, b: BigNumber) {
 }
 
 export function sortTokens(tokenA: { address: string }, tokenB: { address: string }) {
-    const NATIVE_TOKEN_ADDRESS = getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     const addressA = tokenA.address.toLowerCase()
     const addressB = tokenB.address.toLowerCase()
-    if (isSameAddress(addressA, NATIVE_TOKEN_ADDRESS)) return -1
-    if (isSameAddress(addressB, NATIVE_TOKEN_ADDRESS)) return 1
+    if (isNative(addressA)) return -1
+    if (isNative(addressB)) return 1
     return addressA < addressB ? -1 : 1
 }
 
