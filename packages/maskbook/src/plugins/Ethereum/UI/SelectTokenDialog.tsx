@@ -4,10 +4,10 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
-import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
+import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
 import { delay } from '../../../utils/utils'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -39,7 +39,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const [keyword, setKeyword] = useState('')
 
     //#region ether token
-    const { value: etherTokenDetailed } = useEtherTokenDetailed()
+    const { value: etherTokenDetailed } = useNativeTokenDetailed()
     //#endregion
 
     //#region remote controlled dialog
@@ -55,7 +55,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
         setFixedTokenListProps(ev.FixedTokenListProps ?? null)
     })
     const onSubmit = useCallback(
-        async (token: EtherTokenDetailed | ERC20TokenDetailed) => {
+        async (token: NativeTokenDetailed | ERC20TokenDetailed) => {
             setDialog({
                 open: false,
                 uuid: id,

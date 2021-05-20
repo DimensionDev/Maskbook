@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
 import { useAccount } from '../../../../web3/hooks/useAccount'
-import { useChainId } from '../../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../../web3/hooks/useChainId'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import type { ExchangeProxy } from '@dimensiondev/contracts/types/ExchangeProxy'
@@ -59,9 +59,9 @@ export function useTradeCallback(
 
         // balancer use a different address for Ether
         const inputTokenAddress =
-            trade.inputToken.type === EthereumTokenType.Ether ? BALANCER_ETH_ADDRESS : trade.inputToken.address
+            trade.inputToken.type === EthereumTokenType.Native ? BALANCER_ETH_ADDRESS : trade.inputToken.address
         const outputTokenAddress =
-            trade.outputToken.type === EthereumTokenType.Ether ? BALANCER_ETH_ADDRESS : trade.outputToken.address
+            trade.outputToken.type === EthereumTokenType.Native ? BALANCER_ETH_ADDRESS : trade.outputToken.address
 
         const tx =
             trade.strategy === TradeStrategy.ExactIn
@@ -81,9 +81,9 @@ export function useTradeCallback(
 
         // trade with ether
         let transactionValue = '0'
-        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Ether)
+        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Native)
             transactionValue = trade.inputAmount.toFixed()
-        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === EthereumTokenType.Ether)
+        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === EthereumTokenType.Native)
             transactionValue = trade.outputAmount.toFixed()
 
         // send transaction and wait for hash

@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import { makeStyles, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
+import { FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { BreakdownDialog } from '../../components/InjectedComponents/BreakdownDialog'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
@@ -9,8 +10,7 @@ import { CONSTANTS } from '../constants'
 import { useConstant } from '../hooks/useConstant'
 import { useERC20TokenBalance } from '../hooks/useERC20TokenBalance'
 import { createERC20Token } from '../helpers'
-import { useChainId } from '../hooks/useBlockNumber'
-import { FormattedBalance } from '@dimensiondev/maskbook-shared'
+import { useChainId } from '../hooks/useChainId'
 
 const useStyles = makeStyles((theme) => {
     return {

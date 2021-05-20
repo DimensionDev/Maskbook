@@ -2,7 +2,7 @@ import { Avatar, Link, makeStyles, TableCell, TableRow, Typography } from '@mate
 import { CollectibleProvider, NFTOrder } from '../types'
 import { formatDistanceToNow } from 'date-fns'
 import BigNumber from 'bignumber.js'
-import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveAddressLinkOnExplorer } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
@@ -81,7 +81,7 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                             order.paymentTokenContract?.symbol !== 'WETH' &&
                             provider === CollectibleProvider.OPENSEA ? (
                                 <Link
-                                    href={resolveAddressLinkOnEtherscan(ChainId.Mainnet, order.paymentToken!)}
+                                    href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.paymentToken!)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={classes.tokenLink}>
@@ -114,7 +114,7 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                             order.paymentTokenContract?.symbol !== 'WETH' &&
                             provider === CollectibleProvider.OPENSEA ? (
                                 <Link
-                                    href={resolveAddressLinkOnEtherscan(ChainId.Mainnet, order.paymentToken!)}
+                                    href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.paymentToken!)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={classes.tokenLink}>

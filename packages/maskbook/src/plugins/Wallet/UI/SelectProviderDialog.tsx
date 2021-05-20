@@ -98,6 +98,8 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                         uri: await Services.Ethereum.createConnectionURI(),
                     })
                     break
+                case ProviderType.CustomNetwork:
+                    break
                 default:
                     unreachable(providerType)
             }

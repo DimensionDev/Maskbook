@@ -16,8 +16,8 @@ export function useTradeCallback(trade: TradeComputed<EtherWrapper> | null) {
             const tradeAmount = trade.inputAmount.toFixed()
 
             if (
-                (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Ether) ||
-                (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === EthereumTokenType.Ether)
+                (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Native) ||
+                (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === EthereumTokenType.Native)
             ) {
                 wrapCallback(tradeAmount)
                 return

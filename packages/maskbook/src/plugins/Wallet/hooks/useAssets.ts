@@ -4,17 +4,17 @@ import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsMerged } from './useAssetsMerged'
 import { useWallet } from './useWallet'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { useEtherTokenDetailed } from '../../../web3/hooks/useEtherTokenDetailed'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
 
-export function useAssets(tokens: (EtherTokenDetailed | ERC20TokenDetailed)[]) {
+export function useAssets(tokens: (NativeTokenDetailed | ERC20TokenDetailed)[]) {
     const wallet = useWallet()
     const {
         value: etherTokenDetailed,
         loading: etherTokenDetailedLoading,
         error: etherTokenDetailedError,
         retry: retryEtherTokenDetailed,
-    } = useEtherTokenDetailed()
+    } = useNativeTokenDetailed()
     const {
         value: assetsDetailedChain = [],
         loading: assetsDetailedChainLoading,

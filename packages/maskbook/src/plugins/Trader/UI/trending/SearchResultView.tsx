@@ -100,7 +100,7 @@ export function SearchResultView(props: SearchResultViewProps) {
         error: tokenDetailedError,
         loading: loadingTokenDetailed,
     } = useTokenDetailed(
-        trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
+        trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
         trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.eth_address ?? '',
     )
     const tradeProvider = useCurrentTradeProvider(tradeProviders)

@@ -101,3 +101,14 @@ export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
 )
+
+/**
+ * Chain Id of CustomNetwork
+ */
+export const currentCustomNetworkChainIdSettings = createGlobalSettings<ChainId>(
+    `${PLUGIN_IDENTIFIER}+CustomNetworkChainId`,
+    ChainId.Mainnet,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)

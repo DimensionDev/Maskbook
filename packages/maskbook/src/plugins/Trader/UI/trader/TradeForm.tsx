@@ -12,7 +12,7 @@ import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteCont
 import { TradeStrategy, TokenPanelType, TradeComputed, WarningLevel, TradeProvider } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../../web3/types'
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { isEtherWrapper, toBips } from '../../helpers'
@@ -73,8 +73,8 @@ export interface TradeFormProps extends withClasses<never> {
     strategy: TradeStrategy
     provider: TradeProvider
     loading: boolean
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed
+    inputToken?: NativeTokenDetailed | ERC20TokenDetailed
+    outputToken?: NativeTokenDetailed | ERC20TokenDetailed
     inputAmount: string
     outputAmount: string
     inputTokenBalance?: string

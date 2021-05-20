@@ -8,9 +8,9 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { resolveLinkOnEtherscan } from '../../../web3/pipes'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useBlockNumber'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import { resolveLinkOnExplorer } from '../../../web3/pipes'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { formatAmountPrecision, formatBalance } from '@dimensiondev/maskbook-shared'
@@ -168,8 +168,8 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
 //#region token item
 interface TokenItemProps {
     price: string
-    token: EtherTokenDetailed | ERC20TokenDetailed
-    exchangeToken: EtherTokenDetailed | ERC20TokenDetailed
+    token: NativeTokenDetailed | ERC20TokenDetailed
+    exchangeToken: NativeTokenDetailed | ERC20TokenDetailed
 }
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
@@ -506,7 +506,7 @@ export function ITO(props: ITO_Props) {
                     })}
                     <Link
                         className={classes.tokenLink}
-                        href={`${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`}
+                        href={`${resolveLinkOnExplorer(token.chainId)}/token/${token.address}`}
                         target="_blank"
                         rel="noopener noreferrer">
                         <OpenInNewIcon fontSize="small" className={classes.totalIcon} />

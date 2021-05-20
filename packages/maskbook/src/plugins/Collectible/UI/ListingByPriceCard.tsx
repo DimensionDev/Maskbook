@@ -16,7 +16,7 @@ import {
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../web3/types'
 import type { TokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
@@ -24,7 +24,7 @@ import { PluginCollectibleRPC } from '../messages'
 import { ChainState } from '../../../web3/state/useChainState'
 import { toAsset, toUnixTimestamp } from '../helpers'
 import type { useAsset } from '../hooks/useAsset'
-import { isETH } from '../../../web3/helpers'
+import { isNative } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -57,7 +57,7 @@ export interface ListingByPriceCardProps {
     onClose: () => void
     asset?: ReturnType<typeof useAsset>
     tokenWatched: TokenWatched
-    paymentTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
+    paymentTokens: (NativeTokenDetailed | ERC20TokenDetailed)[]
 }
 
 export function ListingByPriceCard(props: ListingByPriceCardProps) {
@@ -70,7 +70,8 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
 
     const { account } = ChainState.useContainer()
 
-    const [scheduleDateTime, setScheduleDateTime] = useState(new Date())
+    const [scheduleTime, setScheduleTime] = useState(new Date())
+    const [expirationTime, setExpirationTime] = useState(new Date())
     const [buyerAddress, setBuyerAddress] = useState('')
     const [endingAmount, setEndingAmount] = useState('')
 
@@ -82,16 +83,26 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
         if (endingPriceChecked && endingAmount && !new BigNumber(amount || '0').isGreaterThan(endingAmount || '0'))
             return 'Invalid ending price'
-        if (futureTimeChecked && scheduleDateTime.getTime() - Date.now() <= 0) return 'Invalid schedule date'
+        if (futureTimeChecked && Date.now() >= scheduleTime.getTime()) return 'Invalid schedule date'
+        if (endingPriceChecked && Date.now() >= expirationTime.getTime()) return 'Invalid expiration date'
         if (privacyChecked && buyerAddress && !EthereumAddress.isValid(buyerAddress)) return 'Invalid buyer address'
         return ''
-    }, [amount, endingPriceChecked, endingAmount, futureTimeChecked, scheduleDateTime, privacyChecked, buyerAddress])
+    }, [
+        amount,
+        endingPriceChecked,
+        endingAmount,
+        futureTimeChecked,
+        scheduleTime,
+        expirationTime,
+        privacyChecked,
+        buyerAddress,
+    ])
 
     const onPostListing = useCallback(async () => {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.Ether && token.value.type !== EthereumTokenType.ERC20) return
+        if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
         try {
             await PluginCollectibleRPC.createSellOrder({
                 asset: toAsset({
@@ -102,7 +113,8 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 accountAddress: account,
                 startAmount: Number.parseFloat(amount),
                 endAmount: endingPriceChecked && endingAmount ? Number.parseFloat(endingAmount) : undefined,
-                listingTime: futureTimeChecked ? toUnixTimestamp(scheduleDateTime) : undefined,
+                listingTime: futureTimeChecked ? toUnixTimestamp(scheduleTime) : undefined,
+                expirationTime: endingPriceChecked ? toUnixTimestamp(expirationTime) : undefined,
                 buyerAddress: privacyChecked ? buyerAddress : undefined,
             })
         } catch (e) {
@@ -118,7 +130,8 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         amount,
         account,
         endingAmount,
-        scheduleDateTime,
+        scheduleTime,
+        expirationTime,
         buyerAddress,
         endingPriceChecked,
         futureTimeChecked,
@@ -128,7 +141,8 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
 
     useEffect(() => {
         setAmount('')
-        setScheduleDateTime(new Date())
+        setScheduleTime(new Date())
+        setExpirationTime(new Date())
         setBuyerAddress('')
         setEndingAmount('')
     }, [open])
@@ -139,8 +153,8 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 <SelectTokenAmountPanel
                     amount={amount}
                     balance={balance.value ?? '0'}
-                    token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
-                    disableEther={!paymentTokens.some((x) => isETH(x.address))}
+                    token={token.value as NativeTokenDetailed | ERC20TokenDetailed}
+                    disableEther={!paymentTokens.some((x) => isNative(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
@@ -165,7 +179,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         amount={endingAmount}
                         balance={balance.value ?? '0'}
                         onAmountChange={setEndingAmount}
-                        token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
+                        token={token.value as NativeTokenDetailed | ERC20TokenDetailed}
                         onTokenChange={setToken}
                         TokenAmountPanelProps={{
                             label: 'Ending Price',
@@ -181,14 +195,16 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         }}
                     />
                 ) : null}
-                {futureTimeChecked ? (
+                {futureTimeChecked || endingPriceChecked ? (
                     <DateTimePanel
-                        label="Schedule Date"
-                        date={scheduleDateTime}
-                        onChange={setScheduleDateTime}
+                        label={endingPriceChecked ? 'Expiration date' : 'Schedule Date'}
+                        date={endingPriceChecked ? expirationTime : scheduleTime}
+                        onChange={endingPriceChecked ? setExpirationTime : setScheduleTime}
                         TextFieldProps={{
                             className: classes.panel,
-                            helperText: 'Schedule a future date.',
+                            helperText: endingPriceChecked
+                                ? 'Your listing will automatically end at this time. No need to cancel it!'
+                                : 'Schedule a future date.',
                         }}
                     />
                 ) : null}

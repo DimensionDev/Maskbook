@@ -72,6 +72,7 @@
     "https-browserify": "^1.0.0",
     "idb": "^5.0.7",
     "immer": "^9.0.1",
+    "isomorphic-dompurify": "^0.13.0",
     "json-stable-stringify": "^1.0.1",
     "json2csv": "^5.0.6",
     "jsonwebtoken": "^8.5.1",

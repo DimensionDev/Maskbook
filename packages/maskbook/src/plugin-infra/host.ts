@@ -8,6 +8,7 @@ import {
     currentMetaMaskChainIdSettings,
     currentSelectedWalletProviderSettings,
     currentWalletConnectChainIdSettings,
+    currentCustomNetworkChainIdSettings,
 } from '../plugins/Wallet/settings'
 import { startEffects } from '../utils/side-effects'
 import { ChainId, ProviderType } from '../web3/types'
@@ -36,6 +37,8 @@ const ethStatusReporter: Plugin.__Host.EthStatusReporter = {
                 return currentMetaMaskChainIdSettings.value
             case ProviderType.WalletConnect:
                 return currentWalletConnectChainIdSettings.value
+            case ProviderType.CustomNetwork:
+                return currentCustomNetworkChainIdSettings.value
             default:
                 safeUnreachable(val)
                 return ChainId.Mainnet

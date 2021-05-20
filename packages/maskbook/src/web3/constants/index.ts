@@ -20,7 +20,7 @@ export const CONSTANTS = {
         ],
         [ChainId.Ropsten]: ['https://dimensiondev.github.io/Mask-Token-List/mask.json'],
         [ChainId.Rinkeby]: ['https://dimensiondev.github.io/Mask-Token-List/mask.json'],
-        [ChainId.Kovan]: [],
+        [ChainId.Kovan]: ['https://irhonin.github.io/kovan-token-list/kovan-token-list.json'],
         [ChainId.Gorli]: [],
     },
 
@@ -195,7 +195,7 @@ export const CONSTANTS = {
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
     },
-    ETH_ADDRESS: {
+    NATIVE_TOKEN_ADDRESS: {
         [ChainId.Mainnet]: '0x0000000000000000000000000000000000000000',
         [ChainId.Ropsten]: '0x0000000000000000000000000000000000000000',
         [ChainId.Rinkeby]: '0x0000000000000000000000000000000000000000',
