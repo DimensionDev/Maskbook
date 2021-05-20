@@ -16,6 +16,7 @@ const QRCodeContainer = styled('div')(
 
     background-repeat: no-repeat;
     background-size: ${borderWidth}px ${borderWidth}px;
+    padding: ${borderHeight}px;
 `,
 )
 

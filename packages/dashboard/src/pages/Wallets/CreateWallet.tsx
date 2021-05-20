@@ -97,41 +97,39 @@ export const CreateWallet = memo(() => {
     const [activeTab, setActiveTab] = useState<TabType>(walletTabs[0])
 
     return (
-        <>
-            <Container>
-                <TabContext value={walletTabs.includes(activeTab) ? activeTab : walletTabs[0]}>
-                    <ButtonGroupTabContainer>
-                        <ButtonGroupTabList
-                            onChange={(e, v: TabType) => setActiveTab(v)}
-                            aria-label={t.wallets_create_wallet_tabs()}
-                            fullWidth>
-                            {walletTabs.map((key) => (
-                                <Tab key={key} value={key} label={walletTabsLabel[key]} />
-                            ))}
-                        </ButtonGroupTabList>
-                    </ButtonGroupTabContainer>
-                    <TabPanel key="mnemonic" value="mnemonic" classes={tabClasses}>
-                        <Refresh>
-                            <RefreshIcon />
-                            <span>{t.wallets_create_wallet_refresh()}</span>
-                        </Refresh>
-                        <MnemonicGeneratorContainer>
-                            <MnemonicReveal words={[...Array(12).keys()].map((i) => String(i))} />
-                        </MnemonicGeneratorContainer>
-                    </TabPanel>
-                    <TabPanel key="privateKey" value="privateKey" classes={tabClasses}>
-                        <PrivateKeyInput />
-                    </TabPanel>
-                </TabContext>
+        <Container>
+            <TabContext value={walletTabs.includes(activeTab) ? activeTab : walletTabs[0]}>
+                <ButtonGroupTabContainer>
+                    <ButtonGroupTabList
+                        onChange={(e, v: TabType) => setActiveTab(v)}
+                        aria-label={t.wallets_create_wallet_tabs()}
+                        fullWidth>
+                        {walletTabs.map((key) => (
+                            <Tab key={key} value={key} label={walletTabsLabel[key]} />
+                        ))}
+                    </ButtonGroupTabList>
+                </ButtonGroupTabContainer>
+                <TabPanel key="mnemonic" value="mnemonic" classes={tabClasses}>
+                    <Refresh>
+                        <RefreshIcon />
+                        <span>{t.wallets_create_wallet_refresh()}</span>
+                    </Refresh>
+                    <MnemonicGeneratorContainer>
+                        <MnemonicReveal words={[...Array(12).keys()].map((i) => String(i))} />
+                    </MnemonicGeneratorContainer>
+                </TabPanel>
+                <TabPanel key="privateKey" value="privateKey" classes={tabClasses}>
+                    <PrivateKeyInput />
+                </TabPanel>
+            </TabContext>
 
-                <ControlContainer>
-                    <Button color="secondary">{t.wallets_create_wallet_remember_later()}</Button>
-                    <Button color="primary">{t.wallets_create_wallet_verification()}</Button>
-                </ControlContainer>
-                <AlertContainer>
-                    <MaskAlert />
-                </AlertContainer>
-            </Container>
-        </>
+            <ControlContainer>
+                <Button color="secondary">{t.wallets_create_wallet_remember_later()}</Button>
+                <Button color="primary">{t.wallets_create_wallet_verification()}</Button>
+            </ControlContainer>
+            <AlertContainer>
+                <MaskAlert />
+            </AlertContainer>
+        </Container>
     )
 })

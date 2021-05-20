@@ -2,13 +2,24 @@ import { Button } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
 import { useWallets } from '@dimensiondev/web3-shared'
 import { StartUp } from './StartUp'
-import { CreateWallet } from './CreateWallet'
+import { Market } from './Market'
+import { WalletContext } from './hooks/useWalletContext'
 
-export default function Wallets() {
+function Wallets() {
     const wallets = useWallets()
     return (
-        <PageFrame title="Wallets" primaryAction={<Button>Create a new wallet</Button>}>
-            {wallets.length === 0 ? <StartUp /> : <CreateWallet />}
+        <PageFrame
+            title={wallets.length === 0 ? 'Create a Wallet' : 'Market'}
+            primaryAction={<Button>Connect Wallet</Button>}>
+            {wallets.length === 0 ? <StartUp /> : <Market />}
         </PageFrame>
+    )
+}
+
+export default function () {
+    return (
+        <WalletContext.Provider>
+            <Wallets />
+        </WalletContext.Provider>
     )
 }

@@ -20,6 +20,11 @@ import { DashboardContext } from './context'
 import { Navigation } from './Navigation'
 import { MaskNotSquareIcon } from '@dimensiondev/icons'
 import { memo } from 'react'
+import { Advertisements } from './Advertisements'
+import { useLocation } from 'react-router'
+import { Routes } from '../../type'
+
+const adsWhiteList = [Routes.Wallets, Routes.WalletsTransfer, Routes.WalletsHistory]
 
 const Root = styled(Grid)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -89,6 +94,7 @@ const PageTitle = styled(Grid)(({ theme }) => ({
 
 const Containment = styled(Grid)(({ theme }) => ({
     contain: 'strict',
+    display: 'flex',
     [theme.breakpoints.down('lg')]: {
         minHeight: `calc(100vh - 64px)`,
     },
@@ -113,6 +119,9 @@ const ShapeHelper = styled('div')(({ theme }) => ({
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
     backgroundColor: theme.palette.background.default,
     overflow: 'auto',
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
 }))
 
 const ShapeContainer = styled('div')(({ theme }) => ({
@@ -142,10 +151,12 @@ export interface PageFrameProps extends React.PropsWithChildren<{}> {
 }
 
 export const PageFrame = memo((props: PageFrameProps) => {
+    const location = useLocation()
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
+    const showAdvertisements = adsWhiteList.some((path: string) => path === location.pathname)
     const classes = useStyle()
 
     return (
@@ -182,6 +193,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
                         <ErrorBoundary>{props.children}</ErrorBoundary>
                     </ShapeContainer>
                 </ShapeHelper>
+                {showAdvertisements ? <Advertisements /> : null}
             </Containment>
         </>
     )

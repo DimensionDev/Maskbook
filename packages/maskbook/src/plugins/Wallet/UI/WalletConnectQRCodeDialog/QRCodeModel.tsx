@@ -1,6 +1,6 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
+import { QRCode } from '@dimensiondev/maskbook-theme'
 import { useI18N } from '../../../../utils'
-import { QRCode } from '../../../../components/shared/qrcode'
 
 const useStyles = makeStyles((theme) => ({
     container: {

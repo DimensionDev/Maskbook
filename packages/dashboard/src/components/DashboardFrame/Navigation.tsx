@@ -15,7 +15,7 @@ import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@
 import { useContext } from 'react'
 import { useRouteMatch } from 'react-router'
 import { Link, LinkProps } from 'react-router-dom'
-import { Routes } from '../../pages/routes'
+import { Routes } from '../../type'
 import { DashboardContext } from './context'
 import { MaskNotSquareIcon } from '@dimensiondev/icons'
 import { useDashboardI18N } from '../../locales'
@@ -32,11 +32,11 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
             paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
         },
         [`&.${listItemClasses.selected}`]: {
-            color: MaskColorVar.linkText,
+            color: MaskColorVar.textLink,
             backgroundColor: 'transparent',
             position: 'relative',
             [`${listItemIconClasses.root}`]: {
-                color: MaskColorVar.linkText,
+                color: MaskColorVar.textLink,
             },
             '&:after': {
                 content: '""',
@@ -45,7 +45,7 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
                 height: 40,
                 boxShadow: '-2px 0px 10px 2px rgba(0, 56, 255, 0.15)',
                 borderRadius: 50,
-                background: MaskColorVar.linkText,
+                background: MaskColorVar.textLink,
                 position: 'absolute',
                 right: 0,
             },
@@ -88,13 +88,13 @@ export function Navigation({}: NavigationProps) {
                 </ListItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
-            <ListItem button selected={!!useRouteMatch(Routes.Wallets)} onClick={toggleNavigationExpand}>
+            <ListItemLink to={Routes.Wallets} onClick={toggleNavigationExpand}>
                 <ListItemIcon>
                     <AccountBalanceWallet />
                 </ListItemIcon>
                 <ListItemText>{t.wallets()}</ListItemText>
                 {expanded ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
+            </ListItemLink>
             <Collapse in={expanded}>
                 <List disablePadding>
                     <ListItemLink nested to={Routes.WalletsTransfer}>

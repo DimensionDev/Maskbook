@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { User } from 'react-feather'
+import { QRCode } from '@dimensiondev/maskbook-theme'
 import { useI18N, compressBackupFile, encodeArrayBuffer, encodeText } from '../../../../utils'
-import { QRCode } from '../../../../components/shared/qrcode'
 import Services from '../../../service'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import ShowcaseBox from '../../DashboardComponents/ShowcaseBox'

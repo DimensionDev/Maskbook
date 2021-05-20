@@ -159,6 +159,7 @@ importers:
       color: ^3.1.3
       json-stable-stringify: ^1.0.1
       lodash-es: ^4.17.21
+      notistack: ^1.0.6
       react-router: ^5.2.0
       react-router-dom: ^5.2.0
       react-use: ^17.2.4
@@ -181,6 +182,7 @@ importers:
       color: 3.1.3
       json-stable-stringify: 1.0.1
       lodash-es: 4.17.21
+      notistack: 1.0.9
       react-router: 5.2.0
       react-router-dom: 5.2.0
       react-use: 17.2.4
@@ -616,16 +618,24 @@ importers:
       '@storybook/addons': ^6.2.9
       '@storybook/react': ^6.2.9
       '@storybook/theming': ^6.2.9
+      '@types/classnames': ^2.3.1
+      '@types/qrcode': ^1.3.5
       '@types/tinycolor2': ^1.4.2
       babel-loader: ^8.2.2
+      classnames: ^2.3.1
       lodash-es: ^4.17.20
+      qrcode: ^1.4.4
       storybook-addon-matrix: ^1.6.0
       tinycolor2: ^1.4.2
     dependencies:
       '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
+      '@types/classnames': 2.3.1
+      '@types/qrcode': 1.4.0
       '@types/tinycolor2': 1.4.2
+      classnames: 2.3.1
       lodash-es: 4.17.21
+      qrcode: 1.4.4
       tinycolor2: 1.4.2
     devDependencies:
       '@babel/core': 7.14.3
@@ -6446,7 +6456,7 @@ packages:
   /@types/qrcode/1.4.0:
     resolution: {integrity: sha512-BwDnCjdZKVOyy6+SPJ4ph+0DAftZGn5JFCY/MhetdEQ8yF6+YndhJWlfdBP8vtMe0w5/FH29Xi6bnEwVWkU1LQ==}
     dependencies:
-      '@types/node': 14.14.37
+      '@types/node': 14.17.0
     dev: false
 
   /@types/qs/6.9.6:
@@ -17546,6 +17556,17 @@ packages:
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
     dev: false
 
+  /notistack/1.0.9:
+    resolution: {integrity: sha512-Dal2HtTpWrdYCZ3t0HhJt47NJZwVSPee36WzORRbqUkFR0k9pxFszxBuPSWshBLwF6Av8s86XPP+ED5zRz0CGw==}
+    peerDependencies:
+      '@material-ui/core': ^4.0.0
+      react: ^16.8.0 || ^17.0.0
+      react-dom: ^16.8.0 || ^17.0.0
+    dependencies:
+      clsx: 1.1.1
+      hoist-non-react-statics: 3.3.2
+    dev: false
+
   /now-and-later/2.0.1:
     resolution: {integrity: sha512-KGvQ0cB70AQfg107Xvs/Fbu+dGmZoTRJp2TaPwcwQm3/7PteUyN2BCgk8KBMPGBUXZdVwyWS8fDCGFygBm19UQ==}
     engines: {node: '>= 0.10'}
@@ -24054,10 +24075,10 @@ packages:
 
   /y18n/4.0.1:
     resolution: {integrity: sha512-wNcy4NvjMYL8gogWWYAO7ZFWFfHcbdbE57tZO8e4cbpj8tfUcwrwqSl3ad8HxpYWCdXcJUCeKKZS62Av1affwQ==}
+    dev: true
 
   /y18n/4.0.3:
     resolution: {integrity: sha512-JKhqTOwSrqNA1NY5lSztJ1GrBiUodLMmIZuLiDaMRJ+itFd+ABVE8XBjOvIWL+rSqNDC74LCSFmlb/U4UZ4hJQ==}
-    dev: true
 
   /y18n/5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
@@ -24154,7 +24175,7 @@ packages:
       set-blocking: 2.0.0
       string-width: 3.1.0
       which-module: 2.0.0
-      y18n: 4.0.1
+      y18n: 4.0.3
       yargs-parser: 13.1.2
 
   /yargs/16.2.0:
