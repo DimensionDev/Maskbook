@@ -44,14 +44,14 @@ export function useMaskClaimCallback() {
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = MaskITO_Contract.methods.claim().send(config as NonPayableTx)
             promiEvent
-                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                .on(TransactionEventType.RECEIPT, (receipt) => {
                     setClaimState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
                         receipt,
                     })
                 })
-                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setClaimState({
                         type: TransactionStateType.CONFIRMED,
                         no,
@@ -59,7 +59,7 @@ export function useMaskClaimCallback() {
                     })
                     resolve()
                 })
-                .on(TransactionEventType.ERROR, (error: Error) => {
+                .on(TransactionEventType.ERROR, (error) => {
                     setClaimState({
                         type: TransactionStateType.FAILED,
                         error,

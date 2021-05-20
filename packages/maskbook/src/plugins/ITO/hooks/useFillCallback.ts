@@ -252,14 +252,20 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             const promiEvent = ITO_Contract.methods.fill_pool(...params).send(config as NonPayableTx)
 
             promiEvent
-                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                    setFillState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                })
+                .on(TransactionEventType.RECEIPT, (receipt) => {
                     setFillState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
                         receipt,
                     })
                 })
-                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setFillState({
                         type: TransactionStateType.CONFIRMED,
                         no,
@@ -267,7 +273,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                     })
                     resolve()
                 })
-                .on(TransactionEventType.ERROR, (error: Error) => {
+                .on(TransactionEventType.ERROR, (error) => {
                     setFillState({
                         type: TransactionStateType.FAILED,
                         error,

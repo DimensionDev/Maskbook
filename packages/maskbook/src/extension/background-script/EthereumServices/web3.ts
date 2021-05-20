@@ -1,3 +1,4 @@
+import type Web3 from 'web3'
 import * as Maskbook from './providers/Maskbook'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
@@ -7,10 +8,10 @@ import { unreachable } from '../../../utils/utils'
 import { getWalletCached } from './wallet'
 
 export async function createWeb3({
-    // only available if the chain id is Maskbook
+    // this parameter only available if a managed wallet was selected
     chainId = currentMaskbookChainIdSettings.value,
     providerType = currentSelectedWalletProviderSettings.value,
-} = {}) {
+} = {}): Promise<Web3> {
     switch (providerType) {
         case ProviderType.Maskbook:
             const _private_key_ = getWalletCached()?._private_key_

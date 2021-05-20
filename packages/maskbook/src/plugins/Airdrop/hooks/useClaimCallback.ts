@@ -86,8 +86,8 @@ export function useClaimCallback(packet?: AirdropPacket) {
 
             promiEvent
                 .on(TransactionEventType.ERROR, onFailed)
+                .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
                 .on(TransactionEventType.CONFIRMATION, onSucceed)
-                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => onSucceed(0, receipt))
         })
     }, [AirdropContract, account, packet])
 

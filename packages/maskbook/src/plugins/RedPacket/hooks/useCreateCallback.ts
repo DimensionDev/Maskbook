@@ -97,7 +97,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
             const promiEvent = redPacketContract.methods.create_red_packet(...params).send(config as PayableTx)
 
             promiEvent
-                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                .on(TransactionEventType.RECEIPT, (receipt) => {
                     setCreateSettings(redPacketSettings)
                     setCreateState({
                         type: TransactionStateType.CONFIRMED,
@@ -105,7 +105,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                         receipt,
                     })
                 })
-                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setCreateSettings(redPacketSettings)
                     setCreateState({
                         type: TransactionStateType.CONFIRMED,
@@ -114,7 +114,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                     })
                     resolve()
                 })
-                .on(TransactionEventType.ERROR, (error: Error) => {
+                .on(TransactionEventType.ERROR, (error) => {
                     setCreateState({
                         type: TransactionStateType.FAILED,
                         error,

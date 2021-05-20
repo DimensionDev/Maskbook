@@ -1,4 +1,3 @@
-export * from './EthereumServices/send'
 export * from './EthereumServices/request'
 export * from './EthereumServices/network'
 export * from './EthereumServices/provider'

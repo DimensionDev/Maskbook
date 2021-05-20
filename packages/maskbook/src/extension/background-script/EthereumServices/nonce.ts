@@ -1,4 +1,3 @@
-import { currentMaskbookChainIdSettings } from '../../../plugins/Wallet/settings'
 import { getTransactionCount } from './network'
 
 class NonceManager {

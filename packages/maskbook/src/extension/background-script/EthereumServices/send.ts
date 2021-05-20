@@ -51,7 +51,7 @@ export async function INTERNAL_send(
                     provider.send(
                         {
                             ...payload,
-                            params: [...payload.params, ''],
+                            params: payload.params.concat(''), // concat the password
                         },
                         callback,
                     )

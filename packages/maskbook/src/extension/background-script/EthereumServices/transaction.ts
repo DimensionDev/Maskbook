@@ -14,8 +14,8 @@ import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/se
 export async function composeTransaction(config: TransactionConfig): Promise<TransactionConfig> {
     const { from = currentSelectedWalletAddressSettings.value, to, data, value } = config
     const from_ = from as string
-    const nonce = config.nonce ?? (await getNonce(from_))
 
+    const nonce = config.nonce ?? (await getNonce(from_))
     const [gas, gasPrice] = await Promise.all([
         config.gas ??
             estimateGas({

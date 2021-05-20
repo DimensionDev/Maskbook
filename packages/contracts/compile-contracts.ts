@@ -30,14 +30,8 @@ async function main() {
     // rename Qualifiction to QualificationEvent
     const qualificationDefinition = path.join(GENERATED_PATH, 'Qualification.d.ts')
     replaceFileAll(qualificationDefinition, [
-        [
-            'type Qualification',
-            'type QualificationEvent'
-        ],
-        [
-            'Callback<Qualification>',
-            'Callback<QualificationEvent>'
-        ]
+        ['type Qualification', 'type QualificationEvent'],
+        ['Callback<Qualification>', 'Callback<QualificationEvent>'],
     ])
 
     // format code

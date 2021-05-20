@@ -118,7 +118,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                     revalidateAllowance()
                 })
                 promiEvent
-                    .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                    .on(TransactionEventType.RECEIPT, (receipt) => {
                         setTransactionState({
                             type: TransactionStateType.CONFIRMED,
                             no: 0,
@@ -126,7 +126,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                         })
                         revalidate()
                     })
-                    .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                    .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                         setTransactionState({
                             type: TransactionStateType.CONFIRMED,
                             no,
@@ -135,7 +135,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                         revalidate()
                         resolve()
                     })
-                    .on(TransactionEventType.ERROR, (error: Error) => {
+                    .on(TransactionEventType.ERROR, (error) => {
                         setTransactionState({
                             type: TransactionStateType.FAILED,
                             error,

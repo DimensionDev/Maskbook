@@ -176,7 +176,7 @@ export function useSwapCallback(
                 .on(TransactionEventType.TRANSACTION_HASH, onHash)
                 .on(TransactionEventType.ERROR, onFailed)
                 .on(TransactionEventType.CONFIRMATION, onSucceed)
-                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => onSucceed(0, receipt))
+                .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
         })
     }, [ITO_Contract, qualificationContract, account, payload, total, token.address, isQualificationHasLucky])
 
