@@ -589,7 +589,6 @@
     "plugin_snapshot_current_result_title": "",
     "plugin_snapshot_download_report": "",
     "wallet_status_title": "帳戶",
-    "wallet_status_connect_with": "已連接到 {{provider}}",
     "wallet_status_button_change": "變更",
     "wallet_status_button_disconnect": "斷開",
     "wallet_status_button_copy_address": "拷貝地址",
