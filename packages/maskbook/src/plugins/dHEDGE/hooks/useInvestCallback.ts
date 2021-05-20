@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import type { Tx } from '@dimensiondev/contracts/types/types'
 import { useDHedgePoolContract } from '../contracts/useDHedgePool'
 import { useAccount } from '../../../web3/hooks/useAccount'
 
@@ -33,7 +32,7 @@ export function useInvestCallback(address: string, amount: string, token?: Ether
         })
 
         // step 1: estimate gas
-        const config: Tx = {
+        const config = {
             from: account,
             to: poolContract.options.address,
             value: new BigNumber(token.type === EthereumTokenType.Ether ? amount : 0).toFixed(),
@@ -41,7 +40,7 @@ export function useInvestCallback(address: string, amount: string, token?: Ether
         const estimatedGas = await poolContract.methods
             .deposit(amount)
             .estimateGas(config)
-            .catch((error) => {
+            .catch((error: any) => {
                 setInvestState({
                     type: TransactionStateType.FAILED,
                     error,
@@ -56,7 +55,7 @@ export function useInvestCallback(address: string, amount: string, token?: Ether
                     gas: addGasMargin(estimatedGas).toFixed(),
                     ...config,
                 },
-                (error, hash) => {
+                (error: any, hash: string) => {
                     if (error) {
                         setInvestState({
                             type: TransactionStateType.FAILED,
