@@ -1,13 +1,31 @@
 import { FC, useState } from 'react'
-import { Box, TextField, makeStyles } from '@material-ui/core'
+import { Box, TextField, DialogContent, makeStyles } from '@material-ui/core'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { MnemonicTab } from './MnemonicTab'
 import { FromJson } from './FromJson'
+import { FromPrivateKey } from './FromPrivateKey'
 
 const useStyles = makeStyles((theme) => ({
+    content: {
+        padding: theme.spacing(4, 5, 1),
+    },
+    walletName: {
+        width: '100%',
+    },
     textField: {
         width: '100%',
         minHeight: 97,
+    },
+    dialogActions: {
+        alignItems: 'center',
+        padding: theme.spacing(3, 5),
+    },
+    actionButton: {
+        backgroundColor: '#1C68F3',
+        color: '#ffffff',
+        '&:hover': {
+            backgroundColor: '#1854c4',
+        },
     },
 }))
 
@@ -19,6 +37,7 @@ export const ImportWallet: FC<ImportWalletProps> = () => {
     const classes = useStyles()
     const [words, setWords] = useState<string[]>(BLANK_WORDS)
     const tabState = useState(0)
+    const [privateKey, setPrivateKey] = useState('')
     const tabs: AbstractTabProps['tabs'] = [
         {
             label: 'Mnemonic',
@@ -30,16 +49,24 @@ export const ImportWallet: FC<ImportWalletProps> = () => {
         },
         {
             label: 'Private Key',
-            children: (
-                <Box>
-                    <TextField className={classes.textField} multiline placeholder="Input your private key" />
-                </Box>
-            ),
+            children: <FromPrivateKey value={privateKey} onChange={setPrivateKey} />,
         },
     ]
     return (
-        <Box>
-            <AbstractTab tabs={tabs} state={tabState}></AbstractTab>
-        </Box>
+        <>
+            <DialogContent className={classes.content}>
+                <Box>
+                    <TextField
+                        className={classes.walletName}
+                        inputProps={{
+                            maxLength: 12,
+                        }}
+                        label="Wallet Name"
+                        placeholder="Enter 1-12 characters"
+                    />
+                    <AbstractTab tabs={tabs} state={tabState} />
+                </Box>
+            </DialogContent>
+        </>
     )
 }

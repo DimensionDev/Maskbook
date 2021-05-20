@@ -341,6 +341,7 @@
     "plugin_wallet_settings_portfolio_data_source_secondary": "Select the source of portfolio data.",
     "plugin_wallet_settings_collectible_data_source_primary": "Collectible Data Source",
     "plugin_wallet_settings_collectible_data_source_secondary": "Select the source of collectible data.",
+    "plugin_wallet_name_placeholder": "Enter 1-12 characters",
     "plugin_red_packet_display_name": "Plugin: Red Packet",
     "plugin_red_packet_split_mode": "Split Mode",
     "plugin_red_packet_average": "Average",
