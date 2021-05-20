@@ -43,6 +43,12 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         exchangeProxyContract,
     )
 
+    console.log('DEBUG: balancer')
+    console.log({
+        balancer,
+        tradeComputed,
+    })
+
     // the trade is an ETH-WETH pair
     if (isEtherWrapper_) return ether
 

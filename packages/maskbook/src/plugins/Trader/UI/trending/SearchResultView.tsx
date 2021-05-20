@@ -174,7 +174,6 @@ export function SearchResultView(props: SearchResultViewProps) {
         )
     //#endregion
 
-
     //#region tabs
     const { coin, market, tickers } = trending
     const tabs = [
