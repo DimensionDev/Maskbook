@@ -13,6 +13,7 @@ import { useAccount } from '../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
+import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
@@ -22,7 +23,6 @@ import { ChainState } from '../../web3/state/useChainState'
 import { ProviderIcon } from '../shared/ProviderIcon'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
-import { WalletMessages } from '../../plugins/Wallet/messages'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useChainId } from '../../web3/hooks/useChainId'
 import { ChainId } from '../../web3/types'
@@ -191,6 +191,10 @@ export function ToolboxHint(props: ToolboxHintProps) {
     } = useControlledDialog()
     //#endregion
 
+    const { openDialog: openCreateImportDialog } = useRemoteControlledDialog(
+        WalletMessages.events.createImportWalletDialogUpdated,
+    )
+
     const [menu, openMenu] = useMenu(
         [
             <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
@@ -222,6 +226,10 @@ export function ToolboxHint(props: ToolboxHintProps) {
             <MenuItem onClick={onClaimAllDialogOpen} className={classes.menuItem}>
                 <Image src={ToolIconURLs.claim.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.claim.text}</Typography>
+            </MenuItem>,
+            <MenuItem onClick={openCreateImportDialog} className={classes.menuItem}>
+                <Image src={ToolIconURLs.claim.image} width={19} height={19} />
+                <Typography className={classes.text}>create and import</Typography>
             </MenuItem>,
         ],
         false,
