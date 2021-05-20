@@ -20,7 +20,7 @@ export const CONSTANTS = {
         ],
         [ChainId.Ropsten]: ['https://dimensiondev.github.io/Mask-Token-List/mask.json'],
         [ChainId.Rinkeby]: ['https://dimensiondev.github.io/Mask-Token-List/mask.json'],
-        [ChainId.Kovan]: [],
+        [ChainId.Kovan]: ['https://irhonin.github.io/kovan-token-list/kovan-token-list.json'],
         [ChainId.Gorli]: [],
     },
 

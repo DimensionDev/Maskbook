@@ -21,6 +21,7 @@ import { CollectiblesPluginDefine } from './Collectible/define'
 import { sideEffect } from '../utils/side-effects'
 import { VCentPluginDefine } from './VCent/define'
 import { SnapShotPluginDefine } from './Snapshot/define'
+import { DHedgePluginDefine } from './dHEDGE/define'
 
 sideEffect.then(() => {
     plugins.add(EthereumPluginDefine)
@@ -37,5 +38,6 @@ sideEffect.then(() => {
     if (Flags.airdrop_enabled) plugins.add(AirdropPluginDefine)
     if (Flags.snapshot_enabled) plugins.add(SnapShotPluginDefine)
     if (Flags.collectibles_enabled) plugins.add(CollectiblesPluginDefine)
+    if (Flags.dhedge_enabled) plugins.add(DHedgePluginDefine)
     if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)
 })

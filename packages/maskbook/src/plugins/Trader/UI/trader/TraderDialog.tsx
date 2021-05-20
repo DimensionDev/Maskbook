@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { DialogContent } from '@material-ui/core'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
@@ -10,10 +10,15 @@ import { useAvailableTraderProviders } from '../../trending/useAvailableTraderPr
 import { currentTradeProviderSettings } from '../../settings'
 import { TradeProvider, TagType } from '../../types'
 import { PluginTraderMessages } from '../../messages'
-import { Trader } from './Trader'
+import { Trader, TraderProps } from './Trader'
 
 export function TraderDialog() {
-    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
+    const [traderProps, setTraderProps] = useState<TraderProps>()
+
+    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated, (ev) => {
+        if (ev?.traderProps) setTraderProps(ev.traderProps)
+    })
+
     const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {
         currentTradeProviderSettings.value = option.value as TradeProvider
     }, [])
@@ -24,7 +29,7 @@ export function TraderDialog() {
         <TradeContext.Provider value={tradeContext}>
             <InjectedDialog open={open} onClose={closeDialog} title="Swap">
                 <DialogContent>
-                    <Trader />
+                    <Trader {...traderProps} />
                     <TradeFooter
                         showDataProviderIcon={false}
                         showTradeProviderIcon
