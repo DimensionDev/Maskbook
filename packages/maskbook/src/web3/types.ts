@@ -2,7 +2,7 @@ export enum ProviderType {
     Maskbook = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
-    UNKNOWN = 'UNKNOWN',
+    CustomNetwork = 'CustomNetwork',
 }
 
 export enum CurrencyType {
