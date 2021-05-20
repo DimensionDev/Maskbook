@@ -7,6 +7,7 @@ import { TransactionState, TransactionStateType } from '../../../../web3/hooks/u
 import type { TradeComputed } from '../../types'
 import type { RouterV2 } from '@dimensiondev/contracts/types/RouterV2'
 import { TransactionEventType } from '../../../../web3/types'
+import { useAccount } from '../../../../web3/hooks/useAccount'
 
 interface SuccessfulCall {
     parameters: SwapParameters
@@ -24,6 +25,7 @@ export function useTradeCallback(
     allowedSlippage = SLIPPAGE_TOLERANCE_DEFAULT,
     ddl = DEFAULT_TRANSACTION_DEADLINE,
 ) {
+    const account = useAccount()
     const tradeParameters = useTradeParameters(trade, allowedSlippage, ddl)
 
     const [tradeState, setTradeState] = useState<TransactionState>({
@@ -97,6 +99,7 @@ export function useTradeCallback(
             // @ts-ignore
             routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args)
                 .send({
+                    from: account,
                     gas: addGasMargin(gasEstimated).toFixed(),
                     ...config,
                 })
@@ -115,7 +118,7 @@ export function useTradeCallback(
                     reject(error)
                 })
         })
-    }, [tradeParameters, routerV2Contract])
+    }, [account, tradeParameters, routerV2Contract])
 
     const resetCallback = useCallback(() => {
         setTradeState({
