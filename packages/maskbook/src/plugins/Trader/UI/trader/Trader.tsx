@@ -32,6 +32,7 @@ import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
 import { PluginTraderRPC } from '../../messages'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { isEtherWrapper } from '../../helpers'
+import { ChainState } from '../../../../web3/state/useChainState'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -219,7 +220,7 @@ export function Trader(props: TraderProps) {
     }, 30 /* seconds */ * 1000 /* milliseconds */)
 
     const onRefreshClick = useCallback(async () => {
-        await Services.Ethereum.updateChainState()
+        await Services.Ethereum.updateBlockNumber()
         asyncTradeComputed.retry()
         resetTimeout()
     }, [asyncTradeComputed.retry, resetTimeout])
@@ -288,57 +289,63 @@ export function Trader(props: TraderProps) {
     //#endregion
 
     return (
-        <div className={classes.root}>
-            <TradeForm
-                trade={trade}
-                provider={provider}
-                strategy={strategy}
-                loading={asyncTradeComputed.loading || updateBalancerPoolsLoading}
-                inputToken={inputToken}
-                outputToken={outputToken}
-                inputTokenBalance={inputTokenBalance}
-                outputTokenBalance={outputTokenBalance}
-                inputAmount={inputAmount}
-                outputAmount={outputAmount}
-                onInputAmountChange={onInputAmountChange}
-                onOutputAmountChange={onOutputAmountChange}
-                onReverseClick={onReverseClick}
-                onRefreshClick={onRefreshClick}
-                onTokenChipClick={onTokenChipClick}
-                onSwap={onSwap}
-            />
-            {trade && !isEtherWrapper(trade) && inputToken && outputToken ? (
-                <>
-                    <ConfirmDialog
-                        open={openConfirmDialog}
-                        trade={trade}
-                        provider={provider}
-                        inputToken={inputToken}
-                        outputToken={outputToken}
-                        onConfirm={onConfirmDialogConfirm}
-                        onClose={onConfirmDialogClose}
-                    />
-                    <TradeSummary
-                        classes={{ root: classes.summary }}
-                        trade={trade}
-                        provider={provider}
-                        inputToken={inputToken}
-                        outputToken={outputToken}
-                    />
-                    {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider) ? (
-                        <UniswapTradeRoute classes={{ root: classes.router }} trade={trade} />
-                    ) : null}
-                    {[TradeProvider.BALANCER].includes(provider) ? (
-                        <BalancerTradeRoute
-                            classes={{ root: classes.router }}
-                            trade={trade as TradeComputed<SwapResponse>}
+        <ChainState.Provider>
+            <div className={classes.root}>
+                <TradeForm
+                    trade={trade}
+                    provider={provider}
+                    strategy={strategy}
+                    loading={asyncTradeComputed.loading || updateBalancerPoolsLoading}
+                    inputToken={inputToken}
+                    outputToken={outputToken}
+                    inputTokenBalance={inputTokenBalance}
+                    outputTokenBalance={outputTokenBalance}
+                    inputAmount={inputAmount}
+                    outputAmount={outputAmount}
+                    onInputAmountChange={onInputAmountChange}
+                    onOutputAmountChange={onOutputAmountChange}
+                    onReverseClick={onReverseClick}
+                    onRefreshClick={onRefreshClick}
+                    onTokenChipClick={onTokenChipClick}
+                    onSwap={onSwap}
+                />
+                {trade && !isEtherWrapper(trade) && inputToken && outputToken ? (
+                    <>
+                        <ConfirmDialog
+                            open={openConfirmDialog}
+                            trade={trade}
+                            provider={provider}
+                            inputToken={inputToken}
+                            outputToken={outputToken}
+                            onConfirm={onConfirmDialogConfirm}
+                            onClose={onConfirmDialogClose}
                         />
-                    ) : null}
-                    {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider) ? (
-                        <TradePairViewer trade={trade as TradeComputed<Trade>} provider={provider} />
-                    ) : null}
-                </>
-            ) : null}
-        </div>
+                        <TradeSummary
+                            classes={{ root: classes.summary }}
+                            trade={trade}
+                            provider={provider}
+                            inputToken={inputToken}
+                            outputToken={outputToken}
+                        />
+                        {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(
+                            provider,
+                        ) ? (
+                            <UniswapTradeRoute classes={{ root: classes.router }} trade={trade} />
+                        ) : null}
+                        {[TradeProvider.BALANCER].includes(provider) ? (
+                            <BalancerTradeRoute
+                                classes={{ root: classes.router }}
+                                trade={trade as TradeComputed<SwapResponse>}
+                            />
+                        ) : null}
+                        {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(
+                            provider,
+                        ) ? (
+                            <TradePairViewer trade={trade as TradeComputed<Trade>} provider={provider} />
+                        ) : null}
+                    </>
+                ) : null}
+            </div>
+        </ChainState.Provider>
     )
 }

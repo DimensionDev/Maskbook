@@ -1,10 +1,10 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
-import { MnemonicReveal as C } from '../src/components/Mnemonic'
+import { MnemonicReveal as C } from '../../../src/components/Mnemonic'
 
 const { meta, of } = story(C)
 
 export default meta({
-    title: 'Components/Mnemonic Reveal',
+    title: 'Components/Wallet/Mnemonic Reveal',
 })
 
 export const MnemonicReveal = of({

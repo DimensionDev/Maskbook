@@ -20,7 +20,7 @@ export function useTrade(
 ) {
     const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
     const chainId = useChainId()
-    const blockNumber = useBlockNumber(chainId)
+    const blockNumber = useBlockNumber()
 
     const slippage = useSlippageTolerance()
     const { pools } = useTradeProviderSettings()

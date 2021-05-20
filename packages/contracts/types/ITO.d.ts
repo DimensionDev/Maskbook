@@ -3,10 +3,17 @@
 /* eslint-disable */
 
 import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
+import { ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import {
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
+    BaseContract,
+} from './types'
 
 interface EventOptions {
     filter?: object
@@ -14,11 +21,70 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class ITO extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
+export type ClaimSuccess = ContractEventLog<{
+    id: string
+    claimer: string
+    timestamp: string
+    to_value: string
+    token_address: string
+    0: string
+    1: string
+    2: string
+    3: string
+    4: string
+}>
+export type DestructSuccess = ContractEventLog<{
+    id: string
+    token_address: string
+    remaining_balance: string
+    exchanged_values: string[]
+    0: string
+    1: string
+    2: string
+    3: string[]
+}>
+export type FillSuccess = ContractEventLog<{
+    total: string
+    id: string
+    creator: string
+    creation_time: string
+    token_address: string
+    message: string
+    0: string
+    1: string
+    2: string
+    3: string
+    4: string
+    5: string
+}>
+export type SwapSuccess = ContractEventLog<{
+    id: string
+    swapper: string
+    from_address: string
+    to_address: string
+    from_value: string
+    to_value: string
+    0: string
+    1: string
+    2: string
+    3: string
+    4: string
+    5: string
+}>
+export type WithdrawSuccess = ContractEventLog<{
+    id: string
+    token_address: string
+    withdraw_balance: string
+    0: string
+    1: string
+    2: string
+}>
+
+export interface ITO extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): ITO
     clone(): ITO
     methods: {
-        check_availability(id: string | number[]): TransactionObject<{
+        check_availability(id: string | number[]): NonPayableTransactionObject<{
             exchange_addrs: string[]
             remaining: string
             started: boolean
@@ -37,97 +103,69 @@ export class ITO extends Contract {
             7: string[]
         }>
 
-        claim(ito_ids: (string | number[])[]): TransactionObject<void>
+        claim(ito_ids: (string | number[])[]): NonPayableTransactionObject<void>
 
-        contract_creator(): TransactionObject<string>
+        contract_creator(): NonPayableTransactionObject<string>
 
-        destruct(id: string | number[]): TransactionObject<void>
+        destruct(id: string | number[]): NonPayableTransactionObject<void>
 
         fill_pool(
             _hash: string | number[],
-            _start: number | string,
-            _end: number | string,
+            _start: number | string | BN,
+            _end: number | string | BN,
             message: string,
             _exchange_addrs: string[],
-            _ratios: (number | string)[],
-            _unlock_time: number | string,
+            _ratios: (number | string | BN)[],
+            _unlock_time: number | string | BN,
             _token_addr: string,
-            _total_tokens: number | string,
-            _limit: number | string,
+            _total_tokens: number | string | BN,
+            _limit: number | string | BN,
             _qualification: string,
-        ): TransactionObject<void>
+        ): PayableTransactionObject<void>
 
-        setUnlockTime(id: string | number[], _unlock_time: number | string): TransactionObject<void>
+        setUnlockTime(id: string | number[], _unlock_time: number | string | BN): NonPayableTransactionObject<void>
 
         swap(
             id: string | number[],
             verification: string | number[],
             validation: string | number[],
-            exchange_addr_i: number | string,
-            input_total: number | string,
-        ): TransactionObject<string>
+            exchange_addr_i: number | string | BN,
+            input_total: number | string | BN,
+        ): PayableTransactionObject<string>
 
-        withdraw(id: string | number[], addr_i: number | string): TransactionObject<void>
+        withdraw(id: string | number[], addr_i: number | string | BN): NonPayableTransactionObject<void>
     }
     events: {
-        ClaimSuccess: ContractEvent<{
-            id: string
-            claimer: string
-            timestamp: string
-            to_value: string
-            token_address: string
-            0: string
-            1: string
-            2: string
-            3: string
-            4: string
-        }>
-        DestructSuccess: ContractEvent<{
-            id: string
-            token_address: string
-            remaining_balance: string
-            exchanged_values: string[]
-            0: string
-            1: string
-            2: string
-            3: string[]
-        }>
-        FillSuccess: ContractEvent<{
-            total: string
-            id: string
-            creator: string
-            creation_time: string
-            token_address: string
-            message: string
-            0: string
-            1: string
-            2: string
-            3: string
-            4: string
-            5: string
-        }>
-        SwapSuccess: ContractEvent<{
-            id: string
-            swapper: string
-            from_address: string
-            to_address: string
-            from_value: string
-            to_value: string
-            0: string
-            1: string
-            2: string
-            3: string
-            4: string
-            5: string
-        }>
-        WithdrawSuccess: ContractEvent<{
-            id: string
-            token_address: string
-            withdraw_balance: string
-            0: string
-            1: string
-            2: string
-        }>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+        ClaimSuccess(cb?: Callback<ClaimSuccess>): EventEmitter
+        ClaimSuccess(options?: EventOptions, cb?: Callback<ClaimSuccess>): EventEmitter
+
+        DestructSuccess(cb?: Callback<DestructSuccess>): EventEmitter
+        DestructSuccess(options?: EventOptions, cb?: Callback<DestructSuccess>): EventEmitter
+
+        FillSuccess(cb?: Callback<FillSuccess>): EventEmitter
+        FillSuccess(options?: EventOptions, cb?: Callback<FillSuccess>): EventEmitter
+
+        SwapSuccess(cb?: Callback<SwapSuccess>): EventEmitter
+        SwapSuccess(options?: EventOptions, cb?: Callback<SwapSuccess>): EventEmitter
+
+        WithdrawSuccess(cb?: Callback<WithdrawSuccess>): EventEmitter
+        WithdrawSuccess(options?: EventOptions, cb?: Callback<WithdrawSuccess>): EventEmitter
+
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
+
+    once(event: 'ClaimSuccess', cb: Callback<ClaimSuccess>): void
+    once(event: 'ClaimSuccess', options: EventOptions, cb: Callback<ClaimSuccess>): void
+
+    once(event: 'DestructSuccess', cb: Callback<DestructSuccess>): void
+    once(event: 'DestructSuccess', options: EventOptions, cb: Callback<DestructSuccess>): void
+
+    once(event: 'FillSuccess', cb: Callback<FillSuccess>): void
+    once(event: 'FillSuccess', options: EventOptions, cb: Callback<FillSuccess>): void
+
+    once(event: 'SwapSuccess', cb: Callback<SwapSuccess>): void
+    once(event: 'SwapSuccess', options: EventOptions, cb: Callback<SwapSuccess>): void
+
+    once(event: 'WithdrawSuccess', cb: Callback<WithdrawSuccess>): void
+    once(event: 'WithdrawSuccess', options: EventOptions, cb: Callback<WithdrawSuccess>): void
 }

@@ -1,10 +1,7 @@
-import stringify from 'json-stable-stringify'
-import { debounce, first, uniq } from 'lodash-es'
+import { debounce, first } from 'lodash-es'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { getWallets } from '../../../plugins/Wallet/services'
 import {
-    currentBlockNumnberSettings,
+    currentBlockNumberSettings,
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
     currentWalletConnectChainIdSettings,
@@ -17,22 +14,16 @@ import { ChainId, ProviderType } from '../../../web3/types'
 import { getBlockNumber } from './network'
 import { startEffects } from '../../../utils/side-effects'
 import { Flags } from '../../../utils/flags'
+import { getWalletsCached } from './wallet'
+import { resetAllNonce } from './nonce'
 
 const effect = startEffects(module.hot)
 
 //#region tracking chain state
-export const updateChainState = debounce(
+export const updateBlockNumber = debounce(
     async () => {
-        const wallets = await getWallets()
-        const chainIds = uniq(await Promise.all(wallets.map((x) => getChainId(x.address))))
-        currentBlockNumnberSettings.value = stringify(
-            await Promise.all(
-                chainIds.map(async (chainId) => ({
-                    chainId,
-                    blockNumber: await getBlockNumber(chainId),
-                })),
-            ),
-        )
+        currentBlockNumberSettings.value = await getBlockNumber()
+
         // reset the polling if chain state updated successfully
         if (typeof resetPoolTask === 'function') resetPoolTask()
     },
@@ -47,7 +38,7 @@ let resetPoolTask: () => void
 effect(() => {
     const { reset } = pollingTask(
         async () => {
-            await updateChainState()
+            await updateBlockNumber()
             return false // never stop the polling
         },
         {
@@ -59,29 +50,25 @@ effect(() => {
 })
 
 // revalidate ChainState if the chainId of current provider was changed
-effect(() => currentMaskbookChainIdSettings.addListener(updateChainState))
-effect(() => currentMetaMaskChainIdSettings.addListener(updateChainState))
-effect(() => currentWalletConnectChainIdSettings.addListener(updateChainState))
+effect(() =>
+    currentMaskbookChainIdSettings.addListener(() => {
+        updateBlockNumber()
+        resetAllNonce()
+    }),
+)
+effect(() => currentMetaMaskChainIdSettings.addListener(updateBlockNumber))
+effect(() => currentWalletConnectChainIdSettings.addListener(updateBlockNumber))
 
 // revaldiate if the current wallet was changed
-effect(() => WalletMessages.events.walletsUpdated.on(updateChainState))
-//#endregion
-
-//#region tracking wallets
-let wallets: WalletRecord[] = []
-const revalidateWallets = async () => {
-    wallets = await getWallets()
-}
-effect(() => WalletMessages.events.walletsUpdated.on(revalidateWallets))
-revalidateWallets()
+effect(() => WalletMessages.events.walletsUpdated.on(updateBlockNumber))
 //#endregion
 
 /**
  * Get the chain id which is using by the given (or default) wallet
- * It will always yield Mainnet in production mode
  * @param address
  */
-export async function getUnsafeChainId(address?: string) {
+export function getUnsafeChainId(address?: string) {
+    const wallets = getWalletsCached()
     const address_ = currentSelectedWalletAddressSettings.value
     const provider = currentSelectedWalletProviderSettings.value
     const wallet =
@@ -97,6 +84,7 @@ export async function getUnsafeChainId(address?: string) {
 
 /**
  * Get the chain id which is using by the given (or default) wallet
+ * It will always yield Mainnet in production mode
  * @param address
  */
 export async function getChainId(address?: string) {

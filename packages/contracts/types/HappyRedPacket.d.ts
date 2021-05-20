@@ -3,10 +3,17 @@
 /* eslint-disable */
 
 import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
+import { ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import {
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
+    BaseContract,
+} from './types'
 
 interface EventOptions {
     filter?: object
@@ -14,11 +21,42 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class HappyRedPacket extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
+export type ClaimSuccess = ContractEventLog<{
+    id: string
+    claimer: string
+    claimed_value: string
+    token_address: string
+    0: string
+    1: string
+    2: string
+    3: string
+}>
+export type CreationSuccess = ContractEventLog<{
+    total: string
+    id: string
+    creator: string
+    creation_time: string
+    token_address: string
+    0: string
+    1: string
+    2: string
+    3: string
+    4: string
+}>
+export type RefundSuccess = ContractEventLog<{
+    id: string
+    token_address: string
+    remaining_balance: string
+    0: string
+    1: string
+    2: string
+}>
+
+export interface HappyRedPacket extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): HappyRedPacket
     clone(): HappyRedPacket
     methods: {
-        check_availability(id: string | number[]): TransactionObject<{
+        check_availability(id: string | number[]): NonPayableTransactionObject<{
             token_address: string
             balance: string
             total: string
@@ -33,73 +71,61 @@ export class HappyRedPacket extends Contract {
             5: boolean
         }>
 
-        check_claimed_list(id: string | number[]): TransactionObject<string[]>
+        check_claimed_list(id: string | number[]): NonPayableTransactionObject<string[]>
 
         claim(
             id: string | number[],
             password: string,
             _recipient: string,
             validation: string | number[],
-        ): TransactionObject<string>
+        ): NonPayableTransactionObject<string>
 
-        contract_creator(): TransactionObject<string>
+        contract_creator(): NonPayableTransactionObject<string>
 
         create_red_packet(
             _hash: string | number[],
-            _number: number | string,
+            _number: number | string | BN,
             _ifrandom: boolean,
-            _duration: number | string,
+            _duration: number | string | BN,
             _seed: string | number[],
             _message: string,
             _name: string,
-            _token_type: number | string,
+            _token_type: number | string | BN,
             _token_addr: string,
-            _total_tokens: number | string,
-        ): TransactionObject<void>
+            _total_tokens: number | string | BN,
+        ): PayableTransactionObject<void>
 
-        refund(id: string | number[]): TransactionObject<void>
+        refund(id: string | number[]): NonPayableTransactionObject<void>
 
-        toBytes(a: string): TransactionObject<string>
+        toBytes(a: string): NonPayableTransactionObject<string>
 
         transfer_token(
-            token_type: number | string,
+            token_type: number | string | BN,
             token_address: string,
             sender_address: string,
             recipient_address: string,
-            amount: number | string,
-        ): TransactionObject<void>
+            amount: number | string | BN,
+        ): PayableTransactionObject<void>
     }
     events: {
-        ClaimSuccess: ContractEvent<{
-            id: string
-            claimer: string
-            claimed_value: string
-            token_address: string
-            0: string
-            1: string
-            2: string
-            3: string
-        }>
-        CreationSuccess: ContractEvent<{
-            total: string
-            id: string
-            creator: string
-            creation_time: string
-            token_address: string
-            0: string
-            1: string
-            2: string
-            3: string
-            4: string
-        }>
-        RefundSuccess: ContractEvent<{
-            id: string
-            token_address: string
-            remaining_balance: string
-            0: string
-            1: string
-            2: string
-        }>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+        ClaimSuccess(cb?: Callback<ClaimSuccess>): EventEmitter
+        ClaimSuccess(options?: EventOptions, cb?: Callback<ClaimSuccess>): EventEmitter
+
+        CreationSuccess(cb?: Callback<CreationSuccess>): EventEmitter
+        CreationSuccess(options?: EventOptions, cb?: Callback<CreationSuccess>): EventEmitter
+
+        RefundSuccess(cb?: Callback<RefundSuccess>): EventEmitter
+        RefundSuccess(options?: EventOptions, cb?: Callback<RefundSuccess>): EventEmitter
+
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
+
+    once(event: 'ClaimSuccess', cb: Callback<ClaimSuccess>): void
+    once(event: 'ClaimSuccess', options: EventOptions, cb: Callback<ClaimSuccess>): void
+
+    once(event: 'CreationSuccess', cb: Callback<CreationSuccess>): void
+    once(event: 'CreationSuccess', options: EventOptions, cb: Callback<CreationSuccess>): void
+
+    once(event: 'RefundSuccess', cb: Callback<RefundSuccess>): void
+    once(event: 'RefundSuccess', options: EventOptions, cb: Callback<RefundSuccess>): void
 }

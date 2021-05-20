@@ -5,7 +5,7 @@ export const PLUGIN_META_KEY = 'com.maskbook.collectibles:1'
 export const openseaHostnames = ['opensea.io', 'testnets.opensea.io']
 export const openseaPathnameRegexMatcher = /^\/assets\/(0x[0-9a-fA-F]{40})\/(\d+)/
 
-export const raribleHostnames = ['rarible.com', 'app.rarible.com']
+export const raribleHostnames = ['rarible.com', 'app.rarible.com', 'ropsten.rarible.com']
 export const rariblePathnameRegexMatcher = /^\/token\/(0x[0-9a-fA-F]{40})\:(\d+)/
 
 export const OpenSeaAPI_Key = 'c38fe2446ee34f919436c32db480a2e3'

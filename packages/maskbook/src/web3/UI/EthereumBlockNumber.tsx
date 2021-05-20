@@ -20,7 +20,7 @@ export function EthereumBlockNumber(props: EthereumBlockNumberProps) {
     const { t } = useI18N()
 
     const chainId = useChainId()
-    const blockNumber = useBlockNumber(chainId)
+    const blockNumber = useBlockNumber()
 
     return (
         <Typography className={classes.root} title={t('block_number')} variant="body2" {...props.TypographyProps}>

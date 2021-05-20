@@ -5,9 +5,6 @@ import { getConstant } from '../../../../web3/helpers'
 import { CONSTANTS } from '../../../../web3/constants'
 import type { ChainId } from '../../../../web3/types'
 
-// 5 is the length of weights
-const SEED = Math.floor(Math.random() * 4)
-
 //#region providers
 const providerPool = new Map<string, HttpProvider>()
 
@@ -37,28 +34,24 @@ export function createProvider(url: string) {
 const instancePool = new Map<string, Web3>()
 
 function createWeb3Instance(provider: HttpProvider) {
-    const web3 = instancePool.get(provider.host) ?? new Web3()
-    if (web3.currentProvider !== provider) web3.setProvider(provider)
-
-    // 24 confirmation blocks is not necessary
-    web3.eth.transactionConfirmationBlocks = 0
-    return web3
+    return instancePool.get(provider.host) ?? new Web3(provider)
 }
 
 export function createWeb3({
+    url = '',
     chainId = currentMaskbookChainIdSettings.value,
     privKeys = [],
-    url = '',
 }: {
-    privKeys?: string[]
     url?: string
     chainId?: ChainId
+    privKeys?: string[]
 } = {}) {
     // get the provider url by weights if needed
     if (!url) {
         const urls = getConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST', chainId)
         const weights = getConstant(CONSTANTS, 'PROVIDER_WEIGHT_LIST', chainId)
-        url = urls[weights[SEED]]
+        const seed = getConstant(CONSTANTS, 'PROVIDER_WEIGHT_SEED', chainId)
+        url = urls[weights[seed]]
     }
     const provider = createProvider(url)
     const web3 = createWeb3Instance(provider)

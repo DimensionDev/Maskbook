@@ -9,5 +9,5 @@ export function useERC721TokenByIndex(token?: ERC721Token, index: number = 0) {
     return useAsync(async () => {
         if (!erc721Contract) return
         return erc721Contract.methods.tokenByIndex(index).call()
-    }, [chainId /* re-calc when switch the chain */, erc721Contract, index])
+    }, [chainId, erc721Contract, index])
 }

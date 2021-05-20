@@ -1,16 +1,14 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import { useAccount } from './useAccount'
-import Services, { ServicesWithProgress } from '../../extension/service'
 import { toHex } from 'web3-utils'
-import { StageType } from '../../utils/promiEvent'
-import type { TransactionConfig } from 'web3-core'
-import { useChainId } from './useBlockNumber'
-import { addGasMargin } from '../helpers'
-import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { EthereumAddress } from 'wallet.ts'
+import { useAccount } from './useAccount'
+import Services from '../../extension/service'
+import { useChainId } from './useBlockNumber'
+import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { useConstant } from './useConstant'
 import { CONSTANTS } from '../constants'
+import { nonFunctionalWeb3 } from '../web3'
 
 export function useEtherTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const account = useAccount()
@@ -36,7 +34,7 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
         }
 
         // error: insufficent balance
-        const balance = await Services.Ethereum.getBalance(account, chainId)
+        const balance = await Services.Ethereum.getBalance(account)
 
         if (new BigNumber(amount).isGreaterThan(balance)) {
             setTransferState({
@@ -46,63 +44,43 @@ export function useEtherTransferCallback(amount?: string, recipient?: string, me
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setTransferState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const config: TransactionConfig = {
+        // send transaction and wait for hash
+        const config = await Services.Ethereum.composeTransaction({
             from: account,
             to: recipient,
             value: amount,
-
-            // FIXME:
-            // the ether tx will be canceled by quicknode's holy-water provider.
-            // @ts-ignore
-            __provider_url__: PROVIDER_ADDRESS_LIST[1],
-        }
-
-        // encode memo as data
-        if (memo) config.data = toHex(memo)
-
-        // step 1: estimate gas
-        const estimatedGas = await Services.Ethereum.estimateGas(config, chainId)
-        const iterator = ServicesWithProgress.sendTransaction(account, {
-            // the esitmated gas limit is too low with arbitrary message to be encoded as data (increase 20% gas limit)
-            gas: addGasMargin(estimatedGas, 2000).toFixed(),
-            ...config,
-        })
-
-        // step 2: blocking
-        try {
-            for await (const stage of iterator) {
-                switch (stage.type) {
-                    case StageType.TRANSACTION_HASH:
-                        setTransferState({
-                            type: TransactionStateType.HASH,
-                            hash: stage.hash,
-                        })
-                        break
-                    case StageType.RECEIPT:
-                        setTransferState({
-                            type: TransactionStateType.HASH,
-                            hash: stage.receipt.transactionHash,
-                        })
-                        break
-                    case StageType.CONFIRMATION:
-                        setTransferState({
-                            type: TransactionStateType.HASH,
-                            hash: stage.receipt.transactionHash,
-                        })
-                        break
-                }
-            }
-        } catch (error) {
+            data: memo ? toHex(memo) : undefined,
+        }).catch((error) => {
             setTransferState({
                 type: TransactionStateType.FAILED,
                 error,
             })
-        }
+            throw error
+        })
+
+        // send transaction and wait for hash
+        return new Promise<string>((resolve, reject) => {
+            nonFunctionalWeb3.eth.sendTransaction(config, (error, hash) => {
+                if (error) {
+                    setTransferState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                } else {
+                    setTransferState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
+                }
+            })
+        })
     }, [account, amount, chainId, recipient, memo, PROVIDER_ADDRESS_LIST])
 
     const resetCallback = useCallback(() => {

@@ -68,6 +68,10 @@ export const newDashboardConnection = createGlobalSettings('beta-dashboard', fal
     secondary: () => "WARNING: DON'T OPEN THIS UNLESS YOU KNOW WHAT YOU ARE DOING.",
 })
 
+export const currentPersonaIdentifier = createGlobalSettings<string>('currentPersonaIdentifier', '', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
 sideEffect.then(() => {
     // reset it to false after Mask startup
     currentImportingBackup.value = false

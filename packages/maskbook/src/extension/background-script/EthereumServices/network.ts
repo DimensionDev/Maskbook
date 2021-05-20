@@ -1,39 +1,74 @@
-import type { TransactionConfig } from 'web3-core'
-import * as Maskbook from './providers/Maskbook'
-import * as MetaMask from './providers/MetaMask'
-import { ChainId, ProviderType } from '../../../web3/types'
-import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
+import type { SignedTransaction, Transaction, TransactionConfig, TransactionReceipt } from 'web3-core'
+import { EthereumMethodType } from '../../../web3/types'
+import { request } from './request'
 
-async function createWeb3(chainId: ChainId) {
-    const provider = currentSelectedWalletProviderSettings.value
-    if (provider === ProviderType.MetaMask) return await MetaMask.createWeb3()
-    return Maskbook.createWeb3({ chainId })
+export async function getGasPrice() {
+    return request<string>({
+        method: EthereumMethodType.ETH_GAS_PRICE,
+    })
 }
 
-export async function getGasPrice(chainId: ChainId) {
-    return (await createWeb3(chainId)).eth.getGasPrice()
+export async function getBlockNumber() {
+    const blockNumber = await request<string>({
+        method: EthereumMethodType.ETH_BLOCK_NUMBER,
+    })
+    return Number.parseInt(blockNumber, 16)
 }
 
-export async function getBlockNumber(chainId: ChainId) {
-    return (await createWeb3(chainId)).eth.getBlockNumber()
+export async function getBalance(address: string) {
+    return request<string>({
+        method: EthereumMethodType.ETH_GET_BALANCE,
+        params: [address, 'latest'],
+    })
 }
 
-export async function getBalance(address: string, chainId: ChainId) {
-    return (await createWeb3(chainId)).eth.getBalance(address)
+export async function getTransactionByHash(hash: string) {
+    return request<Transaction>({
+        method: EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
+        params: [hash],
+    })
 }
 
-export async function getTransaction(id: string, chainId: ChainId) {
-    return (await createWeb3(chainId)).eth.getTransaction(id)
+export async function getTransactionReceipt(hash: string) {
+    return request<TransactionReceipt>({
+        method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
+        params: [hash],
+    })
 }
 
-export async function getTransactionReceipt(id: string, chainId: ChainId) {
-    return (await createWeb3(chainId)).eth.getTransactionReceipt(id)
+export async function getTransactionCount(address: string) {
+    const count = await request<string>({
+        method: EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
+        params: [address, 'latest'],
+    })
+    return Number.parseInt(count, 16)
 }
 
-export async function getTransactionCount(address: string, chainId: ChainId) {
-    return (await createWeb3(chainId)).eth.getTransactionCount(address)
+export async function estimateGas(config: TransactionConfig) {
+    const gas = await request<string>({
+        method: EthereumMethodType.ETH_ESTIMATE_GAS,
+        params: [config],
+    })
+    return Number.parseInt(gas, 16)
 }
 
-export async function estimateGas(config: TransactionConfig, chainId: ChainId) {
-    return (await createWeb3(chainId)).eth.estimateGas(config)
+export async function sign(dataToSign: string, address: string) {
+    return request<string>({
+        method: EthereumMethodType.ETH_SIGN,
+        params: [dataToSign, address],
+    })
+}
+
+export async function personalSign(dataToSign: string, address: string, password?: string) {
+    return request<string>({
+        method: EthereumMethodType.PERSONAL_SIGN,
+        params: [dataToSign, address, password].filter((x) => typeof x !== 'undefined'),
+    })
+}
+
+export async function signTransaction(config: TransactionConfig) {
+    return request<SignedTransaction>({
+        method: EthereumMethodType.ETH_SIGN_TRANSACTION,
+        params: [config],
+    })
 }

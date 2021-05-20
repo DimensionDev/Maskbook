@@ -11,5 +11,5 @@ export function useERC721TokenOwnerByIndex(token?: ERC721Token, index: number = 
     return useAsync(async () => {
         if (!account || !erc721Contract) return
         return erc721Contract.methods.tokenOfOwnerByIndex(account, index).call()
-    }, [account, chainId /* re-calc when switch the chain */, token, erc721Contract, index])
+    }, [account, chainId, token, erc721Contract, index])
 }

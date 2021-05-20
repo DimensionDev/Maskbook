@@ -10,8 +10,8 @@ import {
     currentWalletConnectChainIdSettings,
 } from '../plugins/Wallet/settings'
 import { startEffects } from '../utils/side-effects'
-import { safeUnreachable } from '../utils/utils'
 import { ChainId, ProviderType } from '../web3/types'
+import { safeUnreachable } from '../utils/utils'
 
 const effect = startEffects(module.hot)
 export function createPluginHost(signal?: AbortSignal): Plugin.__Host.Host {

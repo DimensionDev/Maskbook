@@ -1,9 +1,9 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
-import { WalletQRCodeContainer as C } from '../src/components/WalletQRCodeContainer'
+import { WalletQRCodeContainer as C } from '../../../src/components/WalletQRCodeContainer'
 
 const { meta, of } = story(C)
 
-export default meta({ title: 'Components/Wallet QR Code Container' })
+export default meta({ title: 'Components/Wallet/Wallet QR Code Container' })
 export const WalletQRCodeContainer = of({
     args: {
         width: 330,

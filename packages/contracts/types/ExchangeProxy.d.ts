@@ -3,10 +3,17 @@
 /* eslint-disable */
 
 import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
+import { ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import {
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
+    BaseContract,
+} from './types'
 
 interface EventOptions {
     filter?: object
@@ -14,153 +21,118 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class ExchangeProxy extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
+export type OwnershipTransferred = ContractEventLog<{
+    previousOwner: string
+    newOwner: string
+    0: string
+    1: string
+}>
+
+export interface ExchangeProxy extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): ExchangeProxy
     clone(): ExchangeProxy
     methods: {
         batchSwapExactIn(
-            swaps: {
-                pool: string
-                tokenIn: string
-                tokenOut: string
-                swapAmount: number | string
-                limitReturnAmount: number | string
-                maxPrice: number | string
-            }[],
+            swaps: [string, string, string, number | string | BN, number | string | BN, number | string | BN][],
             tokenIn: string,
             tokenOut: string,
-            totalAmountIn: number | string,
-            minTotalAmountOut: number | string,
-        ): TransactionObject<string>
+            totalAmountIn: number | string | BN,
+            minTotalAmountOut: number | string | BN,
+        ): PayableTransactionObject<string>
 
         batchSwapExactOut(
-            swaps: {
-                pool: string
-                tokenIn: string
-                tokenOut: string
-                swapAmount: number | string
-                limitReturnAmount: number | string
-                maxPrice: number | string
-            }[],
+            swaps: [string, string, string, number | string | BN, number | string | BN, number | string | BN][],
             tokenIn: string,
             tokenOut: string,
-            maxTotalAmountIn: number | string,
-        ): TransactionObject<string>
+            maxTotalAmountIn: number | string | BN,
+        ): PayableTransactionObject<string>
 
-        isOwner(): TransactionObject<boolean>
+        isOwner(): NonPayableTransactionObject<boolean>
 
         multihopBatchSwapExactIn(
-            swapSequences: {
-                pool: string
-                tokenIn: string
-                tokenOut: string
-                swapAmount: number | string
-                limitReturnAmount: number | string
-                maxPrice: number | string
-            }[][],
+            swapSequences: [
+                string,
+                string,
+                string,
+                number | string | BN,
+                number | string | BN,
+                number | string | BN,
+            ][][],
             tokenIn: string,
             tokenOut: string,
-            totalAmountIn: number | string,
-            minTotalAmountOut: number | string,
-        ): TransactionObject<string>
+            totalAmountIn: number | string | BN,
+            minTotalAmountOut: number | string | BN,
+        ): PayableTransactionObject<string>
 
         multihopBatchSwapExactOut(
-            swapSequences: {
-                pool: string
-                tokenIn: string
-                tokenOut: string
-                swapAmount: number | string
-                limitReturnAmount: number | string
-                maxPrice: number | string
-            }[][],
+            swapSequences: [
+                string,
+                string,
+                string,
+                number | string | BN,
+                number | string | BN,
+                number | string | BN,
+            ][][],
             tokenIn: string,
             tokenOut: string,
-            maxTotalAmountIn: number | string,
-        ): TransactionObject<string>
+            maxTotalAmountIn: number | string | BN,
+        ): PayableTransactionObject<string>
 
-        owner(): TransactionObject<string>
+        owner(): NonPayableTransactionObject<string>
 
-        renounceOwnership(): TransactionObject<void>
+        renounceOwnership(): NonPayableTransactionObject<void>
 
-        setRegistry(_registry: string): TransactionObject<void>
+        setRegistry(_registry: string): NonPayableTransactionObject<void>
 
         smartSwapExactIn(
             tokenIn: string,
             tokenOut: string,
-            totalAmountIn: number | string,
-            minTotalAmountOut: number | string,
-            nPools: number | string,
-        ): TransactionObject<string>
+            totalAmountIn: number | string | BN,
+            minTotalAmountOut: number | string | BN,
+            nPools: number | string | BN,
+        ): PayableTransactionObject<string>
 
         smartSwapExactOut(
             tokenIn: string,
             tokenOut: string,
-            totalAmountOut: number | string,
-            maxTotalAmountIn: number | string,
-            nPools: number | string,
-        ): TransactionObject<string>
+            totalAmountOut: number | string | BN,
+            maxTotalAmountIn: number | string | BN,
+            nPools: number | string | BN,
+        ): PayableTransactionObject<string>
 
-        transferOwnership(newOwner: string): TransactionObject<void>
+        transferOwnership(newOwner: string): NonPayableTransactionObject<void>
 
         viewSplitExactIn(
             tokenIn: string,
             tokenOut: string,
-            swapAmount: number | string,
-            nPools: number | string,
-        ): TransactionObject<{
-            swaps: {
-                pool: string
-                tokenIn: string
-                tokenOut: string
-                swapAmount: string
-                limitReturnAmount: string
-                maxPrice: string
-            }[]
+            swapAmount: number | string | BN,
+            nPools: number | string | BN,
+        ): NonPayableTransactionObject<{
+            swaps: [string, string, string, string, string, string][]
             totalOutput: string
-            0: {
-                pool: string
-                tokenIn: string
-                tokenOut: string
-                swapAmount: string
-                limitReturnAmount: string
-                maxPrice: string
-            }[]
+            0: [string, string, string, string, string, string][]
             1: string
         }>
 
         viewSplitExactOut(
             tokenIn: string,
             tokenOut: string,
-            swapAmount: number | string,
-            nPools: number | string,
-        ): TransactionObject<{
-            swaps: {
-                pool: string
-                tokenIn: string
-                tokenOut: string
-                swapAmount: string
-                limitReturnAmount: string
-                maxPrice: string
-            }[]
+            swapAmount: number | string | BN,
+            nPools: number | string | BN,
+        ): NonPayableTransactionObject<{
+            swaps: [string, string, string, string, string, string][]
             totalOutput: string
-            0: {
-                pool: string
-                tokenIn: string
-                tokenOut: string
-                swapAmount: string
-                limitReturnAmount: string
-                maxPrice: string
-            }[]
+            0: [string, string, string, string, string, string][]
             1: string
         }>
     }
     events: {
-        OwnershipTransferred: ContractEvent<{
-            previousOwner: string
-            newOwner: string
-            0: string
-            1: string
-        }>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+        OwnershipTransferred(cb?: Callback<OwnershipTransferred>): EventEmitter
+        OwnershipTransferred(options?: EventOptions, cb?: Callback<OwnershipTransferred>): EventEmitter
+
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
+
+    once(event: 'OwnershipTransferred', cb: Callback<OwnershipTransferred>): void
+    once(event: 'OwnershipTransferred', options: EventOptions, cb: Callback<OwnershipTransferred>): void
 }

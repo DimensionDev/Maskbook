@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
-import type { Contract } from 'web3-eth-contract'
+import type { BaseContract } from '@dimensiondev/contracts/types/types'
 import { useAccount } from './useAccount'
 import { ERC165_INTERFACE_ID } from '../constants'
 
-export function useERC165<T extends Contract>(contract: T | null, address: string, interfaceId: string) {
+export function useERC165<T extends BaseContract>(contract: T | null, address: string, interfaceId: string) {
     const account = useAccount()
 
     return useAsyncRetry<boolean>(async () => {
