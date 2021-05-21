@@ -15,6 +15,7 @@
     "@dimensiondev/kit": "0.0.0-20210221102734-0b4a937",
     "@dimensiondev/mask-plugin-infra": "workspace:*",
     "@dimensiondev/maskbook-shared": "workspace:*",
+    "@dimensiondev/web3-shared": "workspace:*",
     "@dimensiondev/maskbook-theme": "workspace:*",
     "@dimensiondev/metamask-extension-provider": "3.0.6-20210519045409-1835d4d",
     "@dimensiondev/plugin-example": "workspace:*",

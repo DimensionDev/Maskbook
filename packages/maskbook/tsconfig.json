@@ -10,6 +10,7 @@
   // !       do not add dashboard/ as a reference otherwise there is a circular dependency on the type level.
   "references": [
     { "path": "../shared/" },
+    { "path": "../web3-shared" },
     { "path": "../theme/" },
     { "path": "../icons/" },
     { "path": "../plugin-infra" }
