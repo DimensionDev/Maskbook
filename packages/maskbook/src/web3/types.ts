@@ -33,7 +33,7 @@ export interface ERC20TokenDetailed extends ERC20Token {
 //#endregion
 
 //#region TokenOutMask
-export type TokenOutMask = Omit<EtherTokenDetailed | ERC20TokenDetailed, 'chainId'> & {
+export type TokenOutMask = Omit<NativeTokenDetailed | ERC20TokenDetailed, 'chainId'> & {
     chain_id: ChainId
 }
 //#endregion

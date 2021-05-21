@@ -78,7 +78,9 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
         // error: unable to sign password
         let signedPassword = ''
         try {
-            signedPassword = await Services.Ethereum.sign(Web3Utils.sha3(message) ?? '', account)
+            console.log({ message, account })
+            signedPassword = await Services.Ethereum.personalSign(Web3Utils.sha3(message) ?? '', account)
+            console.log({ signedPassword })
         } catch (e) {
             // it is trick, log(e) print {"code": 4001 ...}, log(e.code) print -1
             if (e.message === 'MetaMask Message Signature: User denied message signature.') {

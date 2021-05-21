@@ -80,13 +80,6 @@ export interface HappyRedPacket extends BaseContract {
             _total_tokens: number | string | BN,
         ): PayableTransactionObject<void>
 
-        claim(
-            id: string | number[],
-            password: string,
-            _recipient: string,
-            validation: string | number[],
-        ): TransactionObject<string>
-
         check_availability(id: string | number[]): NonPayableTransactionObject<{
             token_address: string
             balance: string
@@ -102,10 +95,10 @@ export interface HappyRedPacket extends BaseContract {
             5: string
         }>
 
-        contract_creator(): NonPayableTransactionObject<string>
+        refund(id: string | number[]): NonPayableTransactionObject<void>
     }
     events: {
-        ClaimSuccess: ContractEvent<{
+        ClaimSuccess: ContractEventLog<{
             id: string
             claimer: string
             claimed_value: string
@@ -115,7 +108,7 @@ export interface HappyRedPacket extends BaseContract {
             2: string
             3: string
         }>
-        CreationSuccess: ContractEvent<{
+        CreationSuccess: ContractEventLog<{
             total: string
             id: string
             name: string
@@ -131,7 +124,7 @@ export interface HappyRedPacket extends BaseContract {
             5: string
             6: string
         }>
-        RefundSuccess: ContractEvent<{
+        RefundSuccess: ContractEventLog<{
             id: string
             token_address: string
             remaining_balance: string

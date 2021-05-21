@@ -10,8 +10,8 @@ import { RedPacketForm } from './RedPacketForm'
 import { RedPacketHistoryList } from './RedPacketHistoryList'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import Services from '../../../extension/service'
-import { useChainId } from '../../../web3/hooks/useChainState'
 import Web3Utils from 'web3-utils'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { useAccount } from '../../../web3/hooks/useAccount'
 
 interface RedPacketDialogProps extends withClasses<never> {
@@ -35,10 +35,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 }
 
                 if (payload.contract_version === 2) {
-                    payload.password = await Services.Ethereum.sign(
+                    payload.password = await Services.Ethereum.personalSign(
                         Web3Utils.sha3(payload.sender.message) ?? '',
                         account,
-                        chainId,
                     )
                     payload.password = payload.password!.slice(2)
                 }
@@ -49,7 +48,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             )
             onConfirm(payload)
         },
-        [onConfirm],
+        [onConfirm, chainId],
     )
 
     const state = useState(DialogTabs.create)
