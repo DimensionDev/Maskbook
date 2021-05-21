@@ -11,10 +11,9 @@ import {
     ERC1155TokenAssetDetailed,
 } from './types'
 import type { Web3Constants } from '@dimensiondev/web3-shared'
+import { isSameAddress } from '@dimensiondev/web3-shared'
 
-export function isSameAddress(addrA: string, addrB: string) {
-    return addrA.toLowerCase() === addrB.toLowerCase()
-}
+export { isSameAddress } from '@dimensiondev/web3-shared'
 
 export function isDAI(address: string) {
     return isSameAddress(address, getConstant(CONSTANTS, 'DAI_ADDRESS'))
