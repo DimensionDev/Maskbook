@@ -7,6 +7,7 @@ export interface Web3Context {
     currentChain: Subscription<ChainId>
     wallets: Subscription<Wallet[]>
     walletProvider: Subscription<WalletProvider>
+    selectedWalletAddress: Subscription<string>
 }
 
 const Web3Context = createContext<Web3Context>(null!)

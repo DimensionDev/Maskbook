@@ -17,13 +17,14 @@ WalletMessages.events.walletsUpdated.on(revalidate)
 revalidate()
 //#endregion
 
-export function useWallet(address?: string) {
+/** internal use. Signature is different from useWallet in web3-shared package */
+function useWallet(address?: string) {
     const address_ = useValueRef(currentSelectedWalletAddressSettings)
     const wallets = useWallets()
     return wallets.find((x) => isSameAddress(x.address, address ?? address_))
 }
 
-export { useWallets } from '@dimensiondev/web3-shared'
+export { useWallets, useWallet } from '@dimensiondev/web3-shared'
 
 /** internal use. Signature is different from useWallets in web3-shared package */
 function useWallets(provider?: ProviderType) {

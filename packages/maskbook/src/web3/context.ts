@@ -5,10 +5,12 @@ import {
     currentCustomNetworkChainIdSettings,
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
+    currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
     currentWalletConnectChainIdSettings,
 } from '../plugins/Wallet/settings'
 import { ProviderType } from './types'
+import { pick } from 'lodash-es'
 
 let currentChain: ChainId = ChainId.Mainnet
 let wallets: Wallet[] = []
@@ -42,12 +44,24 @@ export const Web3Context: Context = {
         subscribe: (f) =>
             WalletMessages.events.walletsUpdated.on(async () => {
                 const raw = await WalletRPC.getWallets()
-                wallets = raw.map<Wallet>(({ address, name, _private_key_, mnemonic }) => ({
-                    address,
-                    name,
-                    hasPrivateKey: Boolean(_private_key_ || mnemonic),
+                wallets = raw.map<Wallet>((record) => ({
+                    ...pick(record, [
+                        'address',
+                        'name',
+                        'erc1155_token_whitelist',
+                        'erc1155_token_blacklist',
+                        'erc20_token_whitelist',
+                        'erc20_token_blacklist',
+                        'erc721_token_whitelist',
+                        'erc721_token_blacklist',
+                    ] as (keyof typeof record)[]),
+                    hasPrivateKey: Boolean(record._private_key_ || record.mnemonic),
                 }))
                 f()
             }),
+    },
+    selectedWalletAddress: {
+        getCurrentValue: () => currentSelectedWalletAddressSettings.value,
+        subscribe: (f) => currentSelectedWalletAddressSettings.addListener(f),
     },
 }

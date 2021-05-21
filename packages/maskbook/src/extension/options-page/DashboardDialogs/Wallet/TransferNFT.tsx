@@ -11,7 +11,6 @@ import { TransactionStateType } from '../../../../web3/hooks/useTransactionState
 import type { ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '../../../../web3/types'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
-import type { WalletProps } from './types'
 
 const useTransferDialogStylesNFT = makeStyles((theme) => ({
     root: {
@@ -28,9 +27,9 @@ const useTransferDialogStylesNFT = makeStyles((theme) => ({
 }))
 
 export function DashboardWalletTransferDialogNFT(
-    props: WrappedDialogProps<WalletProps & { token: ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed }>,
+    props: WrappedDialogProps<{ token: ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed }>,
 ) {
-    const { wallet, token } = props.ComponentProps!
+    const { token } = props.ComponentProps!
     const { onClose } = props
 
     const { t } = useI18N()
