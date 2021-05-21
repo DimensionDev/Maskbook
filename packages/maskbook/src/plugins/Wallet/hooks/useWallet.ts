@@ -23,7 +23,10 @@ export function useWallet(address?: string) {
     return wallets.find((x) => isSameAddress(x.address, address ?? address_))
 }
 
-export function useWallets(provider?: ProviderType) {
+export { useWallets } from '@dimensiondev/web3-shared'
+
+/** internal use. Signature is different from useWallets in web3-shared package */
+function useWallets(provider?: ProviderType) {
     const wallets = useValueRef(walletsRef)
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
     if (provider === ProviderType.Maskbook) return wallets.filter((x) => x._private_key_ || x.mnemonic.length)

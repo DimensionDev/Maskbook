@@ -171,7 +171,7 @@ export async function importNewWallet(
             await t.objectStore('Wallet').put(WalletRecordIntoDB(record))
     }
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
-    selectMaskbookWallet(record)
+    selectMaskbookWallet(record.address)
     return address
     async function getWalletAddress() {
         if (rec.address) return rec.address

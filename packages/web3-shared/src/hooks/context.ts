@@ -1,9 +1,12 @@
 import { createContext, useContext } from 'react'
-import type { ChainId } from '../types'
+import type { ChainId, WalletProvider } from '../types'
 import type { Subscription } from 'use-subscription'
+import type { Wallet } from './useWallets'
 
 export interface Web3Context {
     currentChain: Subscription<ChainId>
+    wallets: Subscription<Wallet[]>
+    walletProvider: Subscription<WalletProvider>
 }
 
 const Web3Context = createContext<Web3Context>(null!)

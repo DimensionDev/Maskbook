@@ -6,7 +6,6 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { WalletMessages } from '../messages'
 import { useWallet, useWallets } from '../hooks/useWallet'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
-import type { WalletRecord } from '../database/types'
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
@@ -37,9 +36,9 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     //#endregion
 
     const onSelect = useCallback(
-        (wallet: WalletRecord) => {
+        (address: string) => {
             closeDialog()
-            selectMaskbookWallet(wallet)
+            selectMaskbookWallet(address)
         },
         [closeDialog],
     )
@@ -80,7 +79,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
                             selectedWallet?.address === wallet.address &&
                             selectedWalletProvider === ProviderType.Maskbook
                         }
-                        onClick={() => onSelect(wallet)}
+                        onClick={() => onSelect(wallet.address)}
                     />
                 ))}
             </DialogContent>
