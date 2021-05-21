@@ -6,7 +6,7 @@
     "rootDir": "./src/"
   },
   "include": ["./src/**/*"],
-  "references": [{ "path": "../shared/" }, { "path": "../theme/" }],
+  "references": [{ "path": "../shared/" }, { "path": "../theme/" }, { "path": "../web3-shared" }],
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": { "module": "CommonJS" }

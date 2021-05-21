@@ -9,7 +9,7 @@ import {
     MaskDarkTheme,
     useSystemPreferencePalatte,
 } from '@dimensiondev/maskbook-theme'
-import { ChainId } from '@dimensiondev/maskbook-shared'
+import { ChainId } from '@dimensiondev/web3-shared'
 import { Emitter } from '@servie/events'
 
 import i18n from 'i18next'
