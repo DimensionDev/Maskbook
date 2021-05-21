@@ -12,7 +12,7 @@ import {
 /**
  * Get the chain id which is using by the given (or default) wallet
  */
-export function useUnsafeChainId() {
+function useUnsafeChainId() {
     const provider = useValueRef(currentSelectedWalletProviderSettings)
     const MaskbookChainId = useValueRef(currentMaskbookChainIdSettings)
     const MetaMaskChainId = useValueRef(currentMetaMaskChainIdSettings)
@@ -26,16 +26,7 @@ export function useUnsafeChainId() {
     return MaskbookChainId
 }
 
-/**
- * Get the chain id which is using by the given (or default) wallet
- * It will always yield Mainnet in production mode
- */
-export function useChainId() {
-    const unsafeChainId = useUnsafeChainId()
-    return unsafeChainId !== ChainId.Mainnet && Flags.wallet_network_strict_mode_enabled
-        ? ChainId.Mainnet
-        : unsafeChainId
-}
+export { useChainId } from '@dimensiondev/web3-shared'
 
 /**
  * Retruns true if chain id is available

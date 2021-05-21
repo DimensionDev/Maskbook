@@ -7,6 +7,8 @@ import { buildInfoMarkdown } from './extension/background-script/Jobs/PrintBuild
 import { CssBaseline, StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { StylesProvider } from '@material-ui/styles'
 import { useClassicMaskTheme } from './utils/theme'
+import { Web3Provider } from '@dimensiondev/web3-shared'
+import { Web3Context } from './web3/context'
 
 export function MaskUIRootWithinShadow(JSX: JSX.Element) {
     return (
@@ -31,7 +33,7 @@ export function MaskUIRoot(JSX: JSX.Element) {
             <StylesProvider>
                 <ThemeProvider theme={useClassicMaskTheme()}>
                     <CssBaseline />
-                    {JSX}
+                    <Web3Provider value={Web3Context}>{JSX}</Web3Provider>
                 </ThemeProvider>
             </StylesProvider>
         </StyledEngineProvider>,
