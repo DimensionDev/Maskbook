@@ -148,7 +148,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //  otherwise password in database would be different from creating red-packet.
     const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback({
         // Todo: revert it back after test
-        duration: 60 /* seconds */ * 60 /* mins */ * 1 /* hours */,
+        duration: 60 /* seconds */ * 15 /* mins */ * 1 /* hours */,
         isRandom: Boolean(isRandom),
         name: senderName,
         message,

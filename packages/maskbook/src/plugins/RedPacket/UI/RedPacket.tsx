@@ -187,20 +187,7 @@ export function RedPacket(props: RedPacketProps) {
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-
-            if (
-                claimState.type !== TransactionStateType.CONFIRMED &&
-                refundState.type !== TransactionStateType.CONFIRMED
-            ) {
-                return
-            }
-
-            resetClaimCallback()
-            resetRefundCallback()
-            revalidateAvailability()
-        },
+        (ev) => undefined,
     )
 
     // open the transation dialog
@@ -208,19 +195,25 @@ export function RedPacket(props: RedPacketProps) {
         const state = canClaim ? claimState : refundState
         if (state.type === TransactionStateType.UNKNOWN) return
         if (!availability || !tokenDetailed) return
-        setTransactionDialog({
-            open: true,
-            shareLink: shareLink!.toString(),
-            state,
-            summary: canClaim
-                ? t('plugin_red_packet_claiming_from', { name: payload.sender.name })
-                : canRefund
-                ? t('plugin_red_packet_refunding_for', {
-                      balance: formatBalance(availability.balance, tokenDetailed.decimals),
-                      symbol: tokenDetailed.symbol,
-                  })
-                : '',
-        })
+        if (state.type === TransactionStateType.HASH) {
+            setTransactionDialog({
+                open: true,
+                shareLink: shareLink!.toString(),
+                state,
+                summary: canClaim
+                    ? t('plugin_red_packet_claiming_from', { name: payload.sender.name })
+                    : canRefund
+                    ? t('plugin_red_packet_refunding_for', {
+                          balance: formatBalance(availability.balance, tokenDetailed.decimals),
+                          symbol: tokenDetailed.symbol,
+                      })
+                    : '',
+            })
+        } else if (state.type === TransactionStateType.CONFIRMED) {
+            resetClaimCallback()
+            resetRefundCallback()
+            revalidateAvailability()
+        }
     }, [claimState, refundState /* update tx dialog only if state changed */])
     //#endregion
 
