@@ -50,3 +50,10 @@ Mainnet 0x26760783c12181efa3c435aee4ae686c53bdddbb
 Ropsten 0x6d84e4863c0530bc0bb4291ef0ff454a40660ca3
 Rinkeby 0x575f906db24154977c7361c2319e2b25e897e3b6
 ```
+
+> May-21-2020
+
+```plain
+commit 494216e
+Ropsten 0x2E37676de88aD97f2BdBAa24d1421b4E3f3a63c8
+```
