@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useMemo, ChangeEvent, useEffect } from 'react'
 import { makeStyles, FormControl, TextField, InputLabel, Select, MenuItem, MenuProps } from '@material-ui/core'
 import { omit } from 'lodash-es'
+import classNames from 'classnames'
 import { v4 as uuid } from 'uuid'
 import BigNumber from 'bignumber.js'
 
@@ -44,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
     input: {
         flex: 1,
         padding: theme.spacing(0.5),
+    },
+    selectInput: {
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
     },
     tip: {
         fontSize: 12,
@@ -257,7 +262,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     return (
         <>
             <div className={classes.line}>
-                <FormControl className={classes.input} variant="outlined">
+                <FormControl className={classNames(classes.input, classes.selectInput)} variant="outlined">
                     <InputLabel className={classes.selectShrinkLabel}>{t('plugin_red_packet_split_mode')}</InputLabel>
                     <Select
                         value={isRandom ? 1 : 0}
