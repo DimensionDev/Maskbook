@@ -114,7 +114,8 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#region packet settings
     const [isRandom, setIsRandom] = useState(0)
     const [message, setMessage] = useState('Best Wishes!')
-    const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
+    const currentIdentity = useCurrentIdentity()
+    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
 
     // shares
     const [shares, setShares] = useState<number | ''>(RED_PACKET_DEFAULT_SHARES)
