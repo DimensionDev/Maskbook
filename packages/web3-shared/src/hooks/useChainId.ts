@@ -8,3 +8,4 @@ import { useWeb3Context } from './context'
 export function useChainId() {
     return useSubscription(useWeb3Context().currentChain)
 }
+export { ChainId } from '../types'

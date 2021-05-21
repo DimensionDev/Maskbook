@@ -10,6 +10,7 @@ import {
     ERC721TokenAssetDetailed,
     ERC1155TokenAssetDetailed,
 } from './types'
+import type { Web3Constants } from '@dimensiondev/web3-shared'
 
 export function isSameAddress(addrA: string, addrB: string) {
     return addrA.toLowerCase() === addrB.toLowerCase()
@@ -32,10 +33,14 @@ export function addGasMargin(value: BigNumber.Value, scale = 1000) {
 }
 
 //#region constants
-export interface Web3Constants {
-    [K: string]: EnumRecord<ChainId, Primitive | Primitive[]>
-}
 
+/**
+ * @deprecated Use constantOfChain from @dimensiondev/web3-shared package
+ *
+ * Before: `getConstant(T, "a", ChainId.Mainnet)`
+ *
+ * After: `constantOfChain(T, ChainId.Mainnet).a`
+ */
 export function getConstant<T extends Web3Constants, K extends keyof T>(
     constants: T,
     key: K,
