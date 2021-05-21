@@ -164,3 +164,9 @@ export enum TransactionEventType {
     CONFIRMATION = 'confirmation',
     ERROR = 'error',
 }
+
+export enum TransactionStatusType {
+    NOT_DEPEND,
+    SUCCEED,
+    FAILED,
+}

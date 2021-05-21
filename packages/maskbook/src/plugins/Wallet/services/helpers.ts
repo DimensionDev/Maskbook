@@ -12,6 +12,8 @@ import type {
     ERC1155TokenRecordInDatabase,
     PhraseRecord,
     PhraseRecordInDatabase,
+    TransactionRecord,
+    TransactionRecordInDatabase,
 } from '../database/types'
 import { resolveChainId } from '../../../web3/pipes'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
@@ -89,5 +91,18 @@ export function ERC1155TokenRecordIntoDB(x: ERC1155TokenRecord) {
 
 export function ERC1155TokenRecordOutDB(x: ERC1155TokenRecordInDatabase) {
     const record: ERC1155TokenRecord = omit(x, 'record_id')
+    return record
+}
+
+export function RecentTransactionRecordIntoDB(x: TransactionRecord) {
+    const record: TransactionRecordInDatabase = {
+        ...x,
+        record_id: `${x.chain_id}_${x.hash}`,
+    }
+    return record
+}
+
+export function RecentTransactionRecordOutDB(x: TransactionRecordInDatabase) {
+    const record: TransactionRecord = omit(x, 'record_id')
     return record
 }
