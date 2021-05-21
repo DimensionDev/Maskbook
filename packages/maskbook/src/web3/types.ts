@@ -1,9 +1,4 @@
-export enum ProviderType {
-    Maskbook = 'Maskbook',
-    MetaMask = 'MetaMask',
-    WalletConnect = 'WalletConnect',
-    CustomNetwork = 'CustomNetwork',
-}
+export { WalletProvider as ProviderType } from '@dimensiondev/web3-shared'
 
 export enum CurrencyType {
     USD = 'usd',
