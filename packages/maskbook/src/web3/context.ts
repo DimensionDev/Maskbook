@@ -10,11 +10,16 @@ import {
     currentWalletConnectChainIdSettings,
 } from '../plugins/Wallet/settings'
 import { ProviderType } from './types'
-import { pick } from 'lodash-es'
+import { noop, pick } from 'lodash-es'
+import { Flags } from '../utils/flags'
 
 let currentChain: ChainId = ChainId.Mainnet
 let wallets: Wallet[] = []
 export const Web3Context: Context = {
+    allowTestChain: {
+        getCurrentValue: () => !Flags.wallet_allow_test_chain,
+        subscribe: () => noop,
+    },
     currentChain: {
         getCurrentValue: () => currentChain,
         subscribe(f) {

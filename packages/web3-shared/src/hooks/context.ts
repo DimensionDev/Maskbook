@@ -4,6 +4,7 @@ import type { Subscription } from 'use-subscription'
 import type { Wallet } from './useWallets'
 
 export interface Web3Context {
+    allowTestChain: Subscription<boolean>
     currentChain: Subscription<ChainId>
     wallets: Subscription<Wallet[]>
     walletProvider: Subscription<WalletProvider>
