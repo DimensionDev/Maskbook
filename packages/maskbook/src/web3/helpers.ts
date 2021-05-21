@@ -44,17 +44,6 @@ export function getConstant<T extends Web3Constants, K extends keyof T>(
     return constants[key][chainId]
 }
 
-export function getAllConstants<T extends Web3Constants, K extends keyof T>(constants: T, chainId = ChainId.Mainnet) {
-    return Object.entries(constants).reduce(
-        (accumulate, [key, value]) => {
-            accumulate[key as K] = value[chainId]
-            return accumulate
-        },
-        {} as {
-            [U in K]: T[U][ChainId.Mainnet]
-        },
-    )
-}
 //#endregion
 
 export function createEtherToken(chainId: ChainId): NativeTokenDetailed {
