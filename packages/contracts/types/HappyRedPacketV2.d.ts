@@ -40,9 +40,7 @@ export class HappyRedPacketV2 extends Contract {
             validation: string | number[],
         ): TransactionObject<string>
 
-        check_availability(
-            id: string | number[],
-        ): TransactionObject<{
+        check_availability(id: string | number[]): TransactionObject<{
             token_address: string
             balance: string
             total: string
