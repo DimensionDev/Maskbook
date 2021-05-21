@@ -12,7 +12,7 @@ import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteCont
 import { TradeStrategy, TokenPanelType, TradeComputed, WarningLevel, TradeProvider } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../../web3/types'
+import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../../web3/types'
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { isEtherWrapper, toBips } from '../../helpers'

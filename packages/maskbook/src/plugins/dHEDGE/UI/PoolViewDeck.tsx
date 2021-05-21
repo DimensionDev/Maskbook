@@ -1,18 +1,18 @@
+import { useCallback } from 'react'
+import { Trans } from 'react-i18next'
+import BigNumber from 'bignumber.js'
 import { makeStyles, Typography, Grid, Link, Avatar, Button, Chip } from '@material-ui/core'
 import type { Pool } from '../types'
-import { resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveAddressLinkOnExplorer } from '../../../web3/pipes'
 import { useAvatar } from '../hooks/useManager'
-import { Trans } from 'react-i18next'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { usePoolURL } from '../hooks/useUrl'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
-import { useCallback } from 'react'
-import type { EtherTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { Coin } from '../../Trader/types'
 import { PluginDHedgeMessages } from '../messages'
-import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface PoolDeckProps {
     pool: Pool
-    inputToken: EtherTokenDetailed | ERC20TokenDetailed
+    inputToken: NativeTokenDetailed | ERC20TokenDetailed
 }
 
 export function PoolViewDeck(props: PoolDeckProps) {
@@ -132,7 +132,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
                                         <Link
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            href={resolveAddressLinkOnEtherscan(chainId, pool.managerAddress)}
+                                            href={resolveAddressLinkOnExplorer(chainId, pool.managerAddress)}
                                         />
                                     ),
                                 }}

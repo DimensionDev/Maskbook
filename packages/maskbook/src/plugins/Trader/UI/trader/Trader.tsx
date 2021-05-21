@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/sdk'
 
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed, ChainId } from '../../../../web3/types'
+import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType, ChainId } from '../../../../web3/types'
 import { TradeForm } from './TradeForm'
 import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
 import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'

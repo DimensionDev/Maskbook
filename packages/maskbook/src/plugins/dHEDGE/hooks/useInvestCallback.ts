@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useDHedgePoolContract } from '../contracts/useDHedgePool'
@@ -12,7 +12,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
  * @param amount
  * @param token
  */
-export function useInvestCallback(address: string, amount: string, token?: EtherTokenDetailed | ERC20TokenDetailed) {
+export function useInvestCallback(address: string, amount: string, token?: NativeTokenDetailed | ERC20TokenDetailed) {
     const poolContract = useDHedgePoolContract(address)
 
     const account = useAccount()
@@ -35,7 +35,7 @@ export function useInvestCallback(address: string, amount: string, token?: Ether
         const config = {
             from: account,
             to: poolContract.options.address,
-            value: new BigNumber(token.type === EthereumTokenType.Ether ? amount : 0).toFixed(),
+            value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
         }
         const estimatedGas = await poolContract.methods
             .deposit(amount)
