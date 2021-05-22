@@ -17,8 +17,8 @@ export interface NativeToken {
 }
 
 export interface NativeTokenDetailed extends NativeToken {
-    name: 'Ether'
-    symbol: 'ETH'
+    name: string
+    symbol: string
     decimals: 18
 }
 //#endregion

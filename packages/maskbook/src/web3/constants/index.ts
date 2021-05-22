@@ -306,6 +306,28 @@ export const CONSTANTS = {
         [ChainId.Matic]: '0x0000000000000000000000000000000000000000',
         [ChainId.Mumbai]: '0x0000000000000000000000000000000000000000',
     },
+    NATIVE_TOKEN_NAME: {
+        [ChainId.Mainnet]: 'Ether',
+        [ChainId.Ropsten]: 'Ether',
+        [ChainId.Rinkeby]: 'Ether',
+        [ChainId.Kovan]: 'Ether',
+        [ChainId.Gorli]: 'Ether',
+        [ChainId.BSC]: 'BNB',
+        [ChainId.BSCT]: 'BNB',
+        [ChainId.Matic]: 'MATIC',
+        [ChainId.Mumbai]: 'MATIC',
+    },
+    NATIVE_TOKEN_SYMBOL: {
+        [ChainId.Mainnet]: 'ETH',
+        [ChainId.Ropsten]: 'ETH',
+        [ChainId.Rinkeby]: 'ETH',
+        [ChainId.Kovan]: 'ETH',
+        [ChainId.Gorli]: 'ETH',
+        [ChainId.BSC]: 'BNB',
+        [ChainId.BSCT]: 'BNB',
+        [ChainId.Matic]: 'MATIC',
+        [ChainId.Mumbai]: 'MATIC',
+    },
 
     // settings
     PROVIDER_ADDRESS_LIST:
