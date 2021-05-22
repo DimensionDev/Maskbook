@@ -20,6 +20,7 @@ export async function getRecentTransactions(address: string) {
 export async function updateTransactions(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Transaction', 'Wallet')
     for await (const x of t.objectStore('Transaction').iterate()) {
+        if (!isSameAddress(x.value.address, address)) continue
         if (x.value.status !== TransactionStatusType.NOT_DEPEND) continue
         try {
             const receipt = await getTransactionReceipt(x.value.hash)
@@ -43,7 +44,9 @@ export async function clearRecentTransactions(address: string) {
     }
 }
 
-export async function addRecentTransaction(transaction: PartialRequired<TransactionRecord, 'address' | 'hash' | 'description'>) {
+export async function addRecentTransaction(
+    transaction: PartialRequired<TransactionRecord, 'address' | 'hash' | 'description'>,
+) {
     const now = new Date()
     const chainId = await getChainId()
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Transaction', 'Wallet')
