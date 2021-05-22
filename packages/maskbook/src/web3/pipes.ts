@@ -29,6 +29,14 @@ export function resolveChainId(name: string) {
             return ChainId.Kovan
         case 'gorli':
             return ChainId.Gorli
+        case 'bnb':
+            return ChainId.BSC
+        case 'bnbt':
+            return ChainId.BSCT
+        case 'matic':
+            return ChainId.Matic
+        case 'maticmum':
+            return ChainId.Mumbai
         default:
             return
     }
@@ -46,6 +54,14 @@ export function resolveChainName(chainId: ChainId) {
             return 'Kovan'
         case ChainId.Gorli:
             return 'Gorli'
+        case ChainId.BSC:
+            return 'BSC Mainnet'
+        case ChainId.BSCT:
+            return 'BSC Testnet'
+        case ChainId.Matic:
+            return 'Matic Mainnet'
+        case ChainId.Mumbai:
+            return 'Mumbai'
         default:
             safeUnreachable(chainId)
             return 'Unknown'
@@ -81,6 +97,14 @@ export function resolveLinkOnExplorer(chainId: ChainId) {
             return 'https://kovan.etherscan.io'
         case ChainId.Gorli:
             return 'https://goerli.etherscan.io'
+        case ChainId.BSC:
+            return 'https://bscscan.com'
+        case ChainId.BSCT:
+            return 'https://testnet.bscscan.com'
+        case ChainId.Matic:
+            return 'https://explorer.matic.network'
+        case ChainId.Mumbai:
+            return 'https://mumbai-explorer.matic.today'
         default:
             safeUnreachable(chainId)
             return 'https://etherscan.io'
