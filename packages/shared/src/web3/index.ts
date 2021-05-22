@@ -5,4 +5,12 @@ export enum ChainId {
     Rinkeby = 4,
     Gorli = 5,
     Kovan = 42,
+
+    // BSC
+    BSC = 56,
+    BSCT = 97,
+
+    // Matic
+    Matic = 137,
+    Mumbai = 80001,
 }
