@@ -12,7 +12,7 @@ export const RED_PACKET_CONSTANTS = {
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
         [ChainId.BSC]: '',
-        [ChainId.BSCT]: '',
+        [ChainId.BSCT]: '0xBfc06EB6279C0771e46e95c8daD79BccD7496150',
         [ChainId.Matic]: '',
         [ChainId.Mumbai]: '',
     },
