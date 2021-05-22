@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAsync, useInterval } from 'react-use'
+import { useAsyncRetry, useInterval } from 'react-use'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { WalletRPC } from '../messages'
@@ -14,7 +14,7 @@ export function useRecentTransactions() {
     // update transaction status intervally
     useInterval(() => setFlag((x) => !x), UPDATE_TRANSACTION_LATENCY)
 
-    return useAsync(async () => {
+    return useAsyncRetry(async () => {
         await WalletRPC.updateTransactions(account)
         return WalletRPC.getRecentTransactions(account)
     }, [flag, account, chainId])

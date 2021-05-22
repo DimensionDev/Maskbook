@@ -1,24 +1,26 @@
 import { useCallback } from 'react'
-import { Copy, ExternalLink, XCircle, RotateCcw, Edit3 } from 'react-feather'
+import { Copy, ExternalLink, Edit3 } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import classNames from 'classnames'
 import ErrorIcon from '@material-ui/icons/Error'
-import { Button, DialogActions, DialogContent, Link, makeStyles, Typography, List, ListItem } from '@material-ui/core'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { ProviderIcon } from '../../../components/shared/ProviderIcon'
-import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
-import Services from '../../../extension/service'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
-import { resolveAddressLinkOnExplorer } from '../../../web3/pipes'
-import { ChainId, ProviderType } from '../../../web3/types'
-import { EthereumChainChip } from '../../../web3/UI/EthereumChainChip'
-import { useWallet } from '../hooks/useWallet'
-import { WalletMessages } from '../messages'
-import { currentSelectedWalletProviderSettings } from '../settings'
 import { FormattedAddress } from '@dimensiondev/maskbook-shared'
+import { Button, DialogActions, DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
+import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { ProviderIcon } from '../../../../components/shared/ProviderIcon'
+import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
+import Services from '../../../../extension/service'
+import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
+import { useValueRef } from '../../../../utils/hooks/useValueRef'
+import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useChainId, useChainIdValid } from '../../../../web3/hooks/useChainId'
+import { resolveAddressLinkOnExplorer } from '../../../../web3/pipes'
+import { ChainId, ProviderType } from '../../../../web3/types'
+import { EthereumChainChip } from '../../../../web3/UI/EthereumChainChip'
+import { useWallet } from '../../hooks/useWallet'
+import { WalletMessages, WalletRPC } from '../../messages'
+import { currentSelectedWalletProviderSettings } from '../../settings'
+import { RecentTransactionList } from './RecentTransactionList'
+import { useAccount } from '../../../../web3/hooks/useAccount'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -108,14 +110,6 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 14,
         marginLeft: 'auto',
     },
-    transaction: {
-        fontSize: 14,
-        padding: 0,
-        marginTop: 6,
-    },
-    transactionButton: {
-        marginLeft: 'auto',
-    },
 }))
 
 export interface WalletStatusDialogProps {}
@@ -124,6 +118,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
+    const account = useAccount()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     const selectedWallet = useWallet()
@@ -141,6 +136,19 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
         undefined,
         undefined,
         t('copy_success_of_wallet_addr'),
+    )
+    //#endregion
+
+    //#region clear the most recent transactions
+    const onClear = useSnackbarCallback(
+        async (ev) => {
+            await WalletRPC.clearRecentTransactions(account)
+        },
+        [],
+        undefined,
+        undefined,
+        undefined,
+        t('done'),
     )
     //#endregion
 
@@ -252,26 +260,15 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                         <Typography variant="h2" className={classes.sectionTitleText}>
                             {t('plugin_wallet_recent_transaction')}
                         </Typography>
-                        <Link aria-label="Clear All" component="button" className={classes.clearAllButton}>
+                        <Link
+                            aria-label="Clear All"
+                            component="button"
+                            className={classes.clearAllButton}
+                            onClick={onClear}>
                             ({t('plugin_wallet_clear_all')})
                         </Link>
                     </div>
-                    <List>
-                        <ListItem className={classes.transaction}>
-                            <Typography variant="body2">Add 2,000.00 USDT </Typography>
-                            <ExternalLink className={classes.linkIcon} size={14} />
-                            <Link component="button" className={classes.transactionButton}>
-                                <RotateCcw size={14} />
-                            </Link>
-                        </ListItem>
-                        <ListItem className={classes.transaction}>
-                            <Typography variant="body2">Add 2,000.00 USDT </Typography>
-                            <ExternalLink className={classes.linkIcon} size={14} />
-                            <Link component="button" className={classes.transactionButton}>
-                                <XCircle size={14} color="red" />
-                            </Link>
-                        </ListItem>
-                    </List>
+                    <RecentTransactionList />
                 </section>
             </DialogContent>
             {!chainIdValid ? (

@@ -48,8 +48,11 @@ export async function addRecentTransaction(
     transaction: PartialRequired<TransactionRecord, 'address' | 'hash' | 'description'>,
 ) {
     const now = new Date()
+    const { address } = transaction
     const chainId = await getChainId()
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Transaction', 'Wallet')
+
+    // write the new transaction into DB
     await t.objectStore('Transaction').put(
         RecentTransactionRecordIntoDB({
             ...transaction,
@@ -59,4 +62,10 @@ export async function addRecentTransaction(
             status: TransactionStatusType.NOT_DEPEND,
         }),
     )
+
+    // clear the eldest transactions
+    for await (const x of t.objectStore('Transaction').iterate()) {
+        if (!isSameAddress(x.value.address, address)) continue
+        // TODO
+    }
 }
