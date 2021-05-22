@@ -98,13 +98,13 @@ export function resolveLinkOnExplorer(chainId: ChainId) {
         case ChainId.Gorli:
             return 'https://goerli.etherscan.io'
         case ChainId.BSC:
-            return 'https://bscscan.com/'
+            return 'https://bscscan.com'
         case ChainId.BSCT:
-            return 'https://testnet.bscscan.com/'
+            return 'https://testnet.bscscan.com'
         case ChainId.Matic:
-            return 'https://explorer.matic.network/'
+            return 'https://explorer.matic.network'
         case ChainId.Mumbai:
-            return 'https://mumbai-explorer.matic.today/'
+            return 'https://mumbai-explorer.matic.today'
         default:
             safeUnreachable(chainId)
             return 'https://etherscan.io'
