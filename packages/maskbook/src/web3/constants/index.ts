@@ -22,6 +22,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: ['https://dimensiondev.github.io/Mask-Token-List/mask.json'],
         [ChainId.Kovan]: ['https://irhonin.github.io/kovan-token-list/kovan-token-list.json'],
         [ChainId.Gorli]: [],
+        [ChainId.BSC]: [],
+        [ChainId.BSCT]: [],
+        [ChainId.Matic]: [],
+        [ChainId.Mumbai]: [],
     },
 
     // contracts
@@ -31,6 +35,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0xe3AE8Ae4160680C7Ac0FB0A79F519d7D7eAe06aB',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     MULTICALL_ADDRESS: {
         [ChainId.Mainnet]: '0xeefba1e63905ef1d7acba5a8513c70307c1ce441',
@@ -38,6 +46,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0x42ad527de7d4e9d9d011ac45b31d8551f8fe9821',
         [ChainId.Kovan]: '0x2cc8688c5f75e365aaeeb4ea8d6a480405a48d2a',
         [ChainId.Gorli]: '0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
 
     // tokens
@@ -47,6 +59,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
         [ChainId.Kovan]: '0xd0A1E359811322d97991E03f863a0C30C2cF029C',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     USDC_ADDRESS: {
         [ChainId.Mainnet]: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
@@ -54,6 +70,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
         [ChainId.Kovan]: '0x2F375e94FC336Cdec2Dc0cCB5277FE59CBf1cAe5',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     USDT_ADDRESS: {
         [ChainId.Mainnet]: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
@@ -61,6 +81,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0xD9BA894E0097f8cC2BBc9D24D308b98e36dc6D02',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     HUSD_ADDRESS: {
         [ChainId.Mainnet]: '0xdf574c24545e5ffecb9a659c229253d4111d87e1',
@@ -68,6 +92,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     BUSD_ADDRESS: {
         [ChainId.Mainnet]: '0x4fabb145d64652a948d72533023f6e7a623c7c53',
@@ -75,6 +103,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     COMP_ADDRESS: {
         [ChainId.Mainnet]: '0xc00e94Cb662C3520282E6f5717214004A7f26888',
@@ -82,6 +114,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     MKR_ADDRESS: {
         [ChainId.Mainnet]: '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2',
@@ -89,6 +125,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     MASK_ADDRESS: {
         [ChainId.Mainnet]: '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074',
@@ -96,6 +136,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0xFD9Eb54f6aC885079e7bB3E207922Bb7256E3fcb',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     MSKA_ADDRESS: {
         [ChainId.Mainnet]: '',
@@ -103,6 +147,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0x960B816d6dD03eD514c03F56788279154348Ea37',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     MSKB_ADDRESS: {
         [ChainId.Mainnet]: '',
@@ -110,6 +158,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0xFa4Bddbc85c0aC7a543c4b59dCfb5deB17F67D8E',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     MSKC_ADDRESS: {
         [ChainId.Mainnet]: '',
@@ -117,6 +169,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0xbE88c0E7029929f50c81690275395Da1d05745B0',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     MSKD_ADDRESS: {
         [ChainId.Mainnet]: '',
@@ -124,6 +180,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0x57b9bD626507421d82C7542e2877D72fE7815aFd',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     MSKE_ADDRESS: {
         [ChainId.Mainnet]: '',
@@ -131,6 +191,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0xB46e44E06B89798Af11b8fE456b4796dc9026cE0',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     DAI_ADDRESS: {
         [ChainId.Mainnet]: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
@@ -138,6 +202,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
         [ChainId.Kovan]: '0x1528F3FCc26d13F7079325Fb78D9442607781c8C',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     AMPL_ADDRESS: {
         [ChainId.Mainnet]: '0xD46bA6D942050d489DBd938a2C909A5d5039A161',
@@ -145,6 +213,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     OBK_ADDRESS: {
         [ChainId.Mainnet]: '0x75231F58b43240C9718Dd58B4967c5114342a86c',
@@ -152,6 +224,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     UST_ADDRESS: {
         [ChainId.Mainnet]: '0xa47c8bf37f92aBed4A126BDA807A7b7498661acD',
@@ -159,6 +235,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     WBTC_ADDRESS: {
         [ChainId.Mainnet]: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
@@ -166,6 +246,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     SUSHI_ADDRESS: {
         [ChainId.Mainnet]: '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
@@ -173,6 +257,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     YAM_ADDRESS: {
         [ChainId.Mainnet]: '0x0e2298E3B3390e3b945a5456fBf59eCc3f55DA16',
@@ -180,6 +268,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     RUNE_ADDRESS: {
         [ChainId.Mainnet]: '0x3155BA85D5F96b2d030a4966AF206230e46849cb',
@@ -187,6 +279,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     YFI_ADDRESS: {
         [ChainId.Mainnet]: '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e',
@@ -194,6 +290,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     NATIVE_TOKEN_ADDRESS: {
         [ChainId.Mainnet]: '0x0000000000000000000000000000000000000000',
@@ -201,6 +301,32 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0x0000000000000000000000000000000000000000',
         [ChainId.Kovan]: '0x0000000000000000000000000000000000000000',
         [ChainId.Gorli]: '0x0000000000000000000000000000000000000000',
+        [ChainId.BSC]: '0x0000000000000000000000000000000000000000',
+        [ChainId.BSCT]: '0x0000000000000000000000000000000000000000',
+        [ChainId.Matic]: '0x0000000000000000000000000000000000000000',
+        [ChainId.Mumbai]: '0x0000000000000000000000000000000000000000',
+    },
+    NATIVE_TOKEN_NAME: {
+        [ChainId.Mainnet]: 'Ether',
+        [ChainId.Ropsten]: 'Ether',
+        [ChainId.Rinkeby]: 'Ether',
+        [ChainId.Kovan]: 'Ether',
+        [ChainId.Gorli]: 'Ether',
+        [ChainId.BSC]: 'BNB',
+        [ChainId.BSCT]: 'BNB',
+        [ChainId.Matic]: 'MATIC',
+        [ChainId.Mumbai]: 'MATIC',
+    },
+    NATIVE_TOKEN_SYMBOL: {
+        [ChainId.Mainnet]: 'ETH',
+        [ChainId.Ropsten]: 'ETH',
+        [ChainId.Rinkeby]: 'ETH',
+        [ChainId.Kovan]: 'ETH',
+        [ChainId.Gorli]: 'ETH',
+        [ChainId.BSC]: 'BNB',
+        [ChainId.BSCT]: 'BNB',
+        [ChainId.Matic]: 'MATIC',
+        [ChainId.Mumbai]: 'MATIC',
     },
 
     // settings
@@ -212,6 +338,10 @@ export const CONSTANTS = {
                   [ChainId.Rinkeby]: ['https://rinkeby.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
                   [ChainId.Kovan]: ['https://kovan.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
                   [ChainId.Gorli]: ['https://goerli.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
+                  [ChainId.BSC]: ['https://bsc-dataseed.binance.org/'],
+                  [ChainId.BSCT]: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+                  [ChainId.Matic]: ['https://rpc-mainnet.maticvigil.com/'],
+                  [ChainId.Mumbai]: ['https://rpc-mumbai.maticvigil.com/'],
               }
             : {
                   [ChainId.Mainnet]: [
@@ -223,6 +353,10 @@ export const CONSTANTS = {
                   [ChainId.Rinkeby]: ['https://rinkeby.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5'],
                   [ChainId.Kovan]: ['https://kovan.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5'],
                   [ChainId.Gorli]: ['https://goerli.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5'],
+                  [ChainId.BSC]: ['https://bsc-dataseed.binance.org/'],
+                  [ChainId.BSCT]: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+                  [ChainId.Matic]: ['https://polygon-mainnet.infura.io/v3/50676f4e9b9d4780a34fc8a503ff7f4f'],
+                  [ChainId.Mumbai]: ['https://polygon-mumbai.infura.io/v3/50676f4e9b9d4780a34fc8a503ff7f4f'],
               },
     PROVIDER_WEIGHT_LIST: {
         [ChainId.Mainnet]:
@@ -233,6 +367,10 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: [0, 0, 0, 0], // 0 - 100%
         [ChainId.Kovan]: [0, 0, 0, 0], // 0 - 100%
         [ChainId.Gorli]: [0, 0, 0, 0], // 0 - 100%
+        [ChainId.BSC]: [0, 0, 0, 0], // 0 - 100%
+        [ChainId.BSCT]: [0, 0, 0, 0], // 0 - 100%
+        [ChainId.Matic]: [0, 0, 0, 0], // 0 - 100%
+        [ChainId.Mumbai]: [0, 0, 0, 0], // 0 - 100%
     },
     PROVIDER_WEIGHT_SEED: {
         [ChainId.Mainnet]: Math.floor(Math.random() * 4), // 4 is the length of weights
@@ -240,5 +378,9 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: Math.floor(Math.random() * 4),
         [ChainId.Kovan]: Math.floor(Math.random() * 4),
         [ChainId.Gorli]: Math.floor(Math.random() * 4),
+        [ChainId.BSC]: Math.floor(Math.random() * 4),
+        [ChainId.BSCT]: Math.floor(Math.random() * 4),
+        [ChainId.Matic]: Math.floor(Math.random() * 4),
+        [ChainId.Mumbai]: Math.floor(Math.random() * 4),
     },
 }
