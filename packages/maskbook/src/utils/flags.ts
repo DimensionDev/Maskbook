@@ -55,6 +55,9 @@ export const Flags = {
     plugin_switch_enabled: betaOrInsiderOnly,
     //#endregion
 
+    bsc_enabled: true,
+    bsc_provider_polygon_enabled: true,
+
     //#region Functionality missing / broken
     /**
      * - iOS: WebExtension polyfill didn't implemented the dynamic permission API

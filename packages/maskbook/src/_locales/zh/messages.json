@@ -327,7 +327,6 @@
     "plugin_wallet_token_unlock": "",
     "plugin_wallet_token_infinite_unlock": "",
     "plugin_wallet_connect_dialog_title": "",
-    "plugin_wallet_connect_to_metamask": "連接到 MetaMask",
     "plugin_wallet_connect_new_ethereum": "不熟悉 Ethereum？",
     "plugin_wallet_connect_learn_more_wallets": "了解更多錢包資訊",
     "plugin_wallet_connect_safari_metamask": "連接到 MetaMask",

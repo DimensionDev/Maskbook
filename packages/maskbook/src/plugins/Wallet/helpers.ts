@@ -6,9 +6,13 @@ import type {
     ERC1155TokenRecord,
     PhraseRecord,
 } from './database/types'
-import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from './settings'
+import {
+    currentSelectedWalletAddressSettings,
+    currentSelectedWalletProviderSettings,
+    currentSelectedWalletNetworkSettings,
+} from './settings'
 import { isSameAddress } from '../../web3/helpers'
-import { CurrencyType, ProviderType } from '../../web3/types'
+import { CurrencyType, ProviderType, WalletNetworkType } from '../../web3/types'
 import type { Asset } from './types'
 
 function serializeWalletRecord(record: WalletRecord) {
@@ -76,6 +80,10 @@ export function ERC1155TokenArrayComparer(a: ERC1155TokenRecord[], b: ERC1155Tok
 export function selectMaskbookWallet(wallet: WalletRecord) {
     currentSelectedWalletAddressSettings.value = wallet.address
     currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
+}
+
+export function selectWalletNetwork(network: WalletNetworkType) {
+    currentSelectedWalletNetworkSettings.value = network
 }
 
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)

@@ -89,6 +89,9 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
         marginLeft: 22,
     },
+    iconWrapper: {
+        position: 'relative',
+    },
     icon: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
         width: 24,
@@ -255,11 +258,13 @@ export function ToolboxHint(props: ToolboxHintProps) {
             <div className={classes.wrapper} onClick={openWallet}>
                 <div className={classes.button}>
                     {selectedWallet ? (
-                        <ProviderIcon
-                            classes={{ icon: classes.icon }}
-                            size={24}
-                            providerType={selectedWalletProvider}
-                        />
+                        <div className={classes.iconWrapper}>
+                            <ProviderIcon
+                                classes={{ icon: classes.icon }}
+                                size={24}
+                                providerType={selectedWalletProvider}
+                            />
+                        </div>
                     ) : (
                         <WalletSharp classes={{ root: classes.icon }} size={24} />
                     )}
