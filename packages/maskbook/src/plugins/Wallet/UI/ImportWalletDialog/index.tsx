@@ -74,11 +74,11 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
     const tabs: AbstractTabProps['tabs'] = useMemo(
         () => [
             {
-                label: 'Mnemonic',
+                label: 'Mnemonic Words',
                 children: <MnemonicTab words={words} onChange={setWords} />,
             },
             {
-                label: 'Json File',
+                label: 'JSON File',
                 children: <FromJson />,
             },
             {
