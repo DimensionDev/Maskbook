@@ -91,6 +91,10 @@ const walletNetworks = [
         id: 'binance',
         icon: new URL('./binance.png', import.meta.url).toString(),
     },
+    {
+        id: 'polygon',
+        icon: new URL('./binance.png', import.meta.url).toString(),
+    },
 ]
 
 interface SelectProviderDialogUIProps extends withClasses<never> {}
