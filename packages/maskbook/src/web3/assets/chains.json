@@ -1,0 +1,75 @@
+[
+    {
+        "name": "Binance Smart Chain Mainnet",
+        "chainId": 56,
+        "shortName": "bnb",
+        "chain": "BSC",
+        "network": "mainnet",
+        "networkId": 56,
+        "nativeCurrency": { "name": "Binance Chain Native Token", "symbol": "BNB", "decimals": 18 },
+        "rpc": [
+            "https://bsc-dataseed1.binance.org",
+            "https://bsc-dataseed2.binance.org",
+            "https://bsc-dataseed3.binance.org",
+            "https://bsc-dataseed4.binance.org",
+            "https://bsc-dataseed1.defibit.io",
+            "https://bsc-dataseed2.defibit.io",
+            "https://bsc-dataseed3.defibit.io",
+            "https://bsc-dataseed4.defibit.io",
+            "https://bsc-dataseed1.ninicoin.io",
+            "https://bsc-dataseed2.ninicoin.io",
+            "https://bsc-dataseed3.ninicoin.io",
+            "https://bsc-dataseed4.ninicoin.io",
+            "wss://bsc-ws-node.nariox.org"
+        ],
+        "faucets": [],
+        "explorers": [{ "name": "bscscan", "url": "https://bscscan.com", "standard": "EIP3091" }],
+        "infoURL": "https://www.binance.org"
+    },
+    {
+        "name": "Binance Smart Chain Testnet",
+        "chainId": 97,
+        "shortName": "bnbt",
+        "chain": "BSC",
+        "network": "Chapel",
+        "networkId": 97,
+        "nativeCurrency": { "name": "Binance Chain Native Token", "symbol": "tBNB", "decimals": 18 },
+        "rpc": [
+            "https://data-seed-prebsc-1-s1.binance.org:8545",
+            "https://data-seed-prebsc-2-s1.binance.org:8545",
+            "https://data-seed-prebsc-1-s2.binance.org:8545",
+            "https://data-seed-prebsc-2-s2.binance.org:8545",
+            "https://data-seed-prebsc-1-s3.binance.org:8545",
+            "https://data-seed-prebsc-2-s3.binance.org:8545"
+        ],
+        "faucets": ["https://testnet.binance.org/faucet-smart"],
+        "explorers": [{ "name": "bscscan-testnet", "url": "https://testnet.bscscan.com", "standard": "EIP3091" }],
+        "infoURL": "https://testnet.binance.org/"
+    },
+    {
+        "name": "Matic Mainnet",
+        "chainId": 137,
+        "shortName": "matic",
+        "chain": "Matic",
+        "network": "mainnet",
+        "networkId": 137,
+        "nativeCurrency": { "name": "Matic", "symbol": "MATIC", "decimals": 18 },
+        "rpc": ["https://rpc-mainnet.matic.network", "wss://ws-mainnet.matic.network"],
+        "faucets": [],
+        "explorers": [{ "name": "matic", "url": "https://explorer.matic.network", "standard": "EIP3091" }],
+        "infoURL": "https://matic.network/"
+    },
+    {
+        "name": "Matic Testnet Mumbai",
+        "chainId": 80001,
+        "shortName": "maticmum",
+        "chain": "Matic",
+        "network": "testnet",
+        "networkId": 80001,
+        "nativeCurrency": { "name": "Matic", "symbol": "tMATIC", "decimals": 18 },
+        "rpc": ["https://rpc-mumbai.matic.today", "wss://ws-mumbai.matic.today"],
+        "faucets": ["https://faucet.matic.network/"],
+        "explorers": [{ "name": "matic", "url": "https://explorer-mumbai.maticvigil.com", "standard": "EIP3091" }],
+        "infoURL": "https://matic.network/"
+    }
+]
