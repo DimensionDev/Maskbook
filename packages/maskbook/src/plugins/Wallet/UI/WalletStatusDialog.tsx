@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
     infoRow: {
         display: 'flex',
         alignItems: 'center',
+        marginLeft: theme.spacing(1),
     },
     footer: {
         fontSize: 12,
@@ -79,7 +80,6 @@ const useStyles = makeStyles((theme) => ({
     },
     address: {
         fontSize: 16,
-        padding: theme.spacing(1),
         marginRight: theme.spacing(1),
         display: 'inline-block',
     },
