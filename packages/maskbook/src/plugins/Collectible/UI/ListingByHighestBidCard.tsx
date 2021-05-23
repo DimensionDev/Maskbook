@@ -151,6 +151,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                         className: classes.panel,
                         helperText:
                             'Your auction will automatically end at this time and the highest bidder will win. No need to cancel it!',
+                        fullWidth: true,
                     }}
                 />
             </CardContent>

@@ -162,6 +162,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 onChange={setExpirationDateTime}
                                 TextFieldProps={{
                                     className: classes.panel,
+                                    fullWidth: true,
                                 }}
                             />
                         ) : null}
