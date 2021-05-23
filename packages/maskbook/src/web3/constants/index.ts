@@ -384,3 +384,55 @@ export const CONSTANTS = {
         [ChainId.Mumbai]: Math.floor(Math.random() * 4),
     },
 }
+
+// learn more: https://chainid.network/chains.json
+export const EXTERNAL_ETHEREUM_CHAIN_DETAILED = {
+    [ChainId.BSC]: {
+        name: 'Binance Smart Chain Mainnet',
+        chainId: 56,
+        shortName: 'bnb',
+        chain: 'BSC',
+        network: 'mainnet',
+        networkId: 56,
+        nativeCurrency: {
+            name: 'Binance Chain Native Token',
+            symbol: 'BNB',
+            decimals: 18,
+        },
+        rpc: [
+            'https://bsc-dataseed1.binance.org',
+            'https://bsc-dataseed2.binance.org',
+            'https://bsc-dataseed3.binance.org',
+            'https://bsc-dataseed4.binance.org',
+            'https://bsc-dataseed1.defibit.io',
+            'https://bsc-dataseed2.defibit.io',
+            'https://bsc-dataseed3.defibit.io',
+            'https://bsc-dataseed4.defibit.io',
+            'https://bsc-dataseed1.ninicoin.io',
+            'https://bsc-dataseed2.ninicoin.io',
+            'https://bsc-dataseed3.ninicoin.io',
+            'https://bsc-dataseed4.ninicoin.io',
+            'wss://bsc-ws-node.nariox.org',
+        ],
+        faucets: [],
+        explorers: [{ name: 'bscscan', url: 'https://bscscan.com', standard: 'EIP3091' }],
+        infoURL: 'https://www.binance.org',
+    },
+    [ChainId.Matic]: {
+        name: 'Matic Mainnet',
+        chainId: 137,
+        shortName: 'matic',
+        chain: 'Matic',
+        network: 'mainnet',
+        networkId: 137,
+        nativeCurrency: {
+            name: 'Matic',
+            symbol: 'MATIC',
+            decimals: 18,
+        },
+        rpc: ['https://rpc-mainnet.matic.network', 'wss://ws-mainnet.matic.network'],
+        faucets: [],
+        explorers: [{ name: 'matic', url: 'https://explorer.matic.network', standard: 'EIP3091' }],
+        infoURL: 'https://matic.network/',
+    },
+}
