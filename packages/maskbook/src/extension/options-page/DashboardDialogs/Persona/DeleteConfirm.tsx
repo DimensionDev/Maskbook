@@ -1,7 +1,7 @@
 import { Button } from '@material-ui/core'
 import { UserMinus } from 'react-feather'
+import { useI18N } from '../../../../utils'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
-import { useI18N } from '../../../../utils/i18n-next-ui'
 import Services from '../../../service'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'

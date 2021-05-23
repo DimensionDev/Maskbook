@@ -1,5 +1,5 @@
+import { useI18N } from '../../../utils'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { isSameAddress } from '../../../web3/helpers'
 
 export interface AccountProps {

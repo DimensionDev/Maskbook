@@ -1,7 +1,7 @@
 import { Skeleton } from '@material-ui/core'
 import { ListItem, ListItemText, makeStyles, Theme, Typography } from '@material-ui/core'
+import { useI18N } from '../../../utils'
 import type { RedPacketJSONPayload } from '../types'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { formatElapsed } from '../../Wallet/formatter'
 import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'

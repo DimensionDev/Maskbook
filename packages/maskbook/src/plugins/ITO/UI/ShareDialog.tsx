@@ -1,12 +1,11 @@
+import { useCallback } from 'react'
+import BigNumber from 'bignumber.js'
 import { makeStyles, Typography, Box } from '@material-ui/core'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { useI18N, getAssetAsBlobURL } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
-import BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
-import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
-import { useCallback } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     shareWrapper: {

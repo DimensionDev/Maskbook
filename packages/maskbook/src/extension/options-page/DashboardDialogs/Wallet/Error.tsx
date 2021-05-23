@@ -1,9 +1,7 @@
 import { Button } from '@material-ui/core'
 import { Info as InfoIcon } from 'react-feather'
 import { useHistory } from 'react-router-dom'
-import useQueryParams from '../../../../utils/hooks/useQueryParams'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import { delay } from '../../../../utils/utils'
+import { useQueryParams, useI18N, delay } from '../../../../utils'
 import { DashboardRoute } from '../../Route'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 

@@ -1,6 +1,6 @@
 import { makeStyles, Box } from '@material-ui/core'
+import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useControlledDialog } from './useControlledDialog'
 import { MakeOfferDialog } from './MakeOfferDialog'

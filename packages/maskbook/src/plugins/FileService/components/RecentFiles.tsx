@@ -1,10 +1,9 @@
 import { Button, List, ListItem, ListItemIcon, ListItemText, makeStyles, Typography } from '@material-ui/core'
 import { File } from 'react-feather'
 import { useHistory } from 'react-router'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N, formatDateTime } from '../../../utils'
 import { FileRouter } from '../constants'
 import type { FileInfo } from '../types'
-import { formatDateTime } from '../../../utils/date'
 
 const useStyles = makeStyles((theme) => ({
     container: {

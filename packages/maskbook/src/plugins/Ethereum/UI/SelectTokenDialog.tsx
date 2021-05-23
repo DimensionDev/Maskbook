@@ -1,14 +1,12 @@
 import { useCallback, useState } from 'react'
 import { makeStyles, Theme, DialogContent, TextField } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
-import { delay } from '../../../utils/utils'
+import { delay, useRemoteControlledDialog, useI18N } from '../../../utils'
 
 const useStyles = makeStyles((theme: Theme) => ({
     search: {

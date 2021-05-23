@@ -2,8 +2,7 @@ import classNames from 'classnames'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
 import { Table, TableBody, TableRow, TableCell, Typography, makeStyles, Theme } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { unreachable } from '../../../utils/utils'
+import { useI18N, unreachable } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 
 const useDatabasePreviewCardStyles = makeStyles((theme: Theme) => ({

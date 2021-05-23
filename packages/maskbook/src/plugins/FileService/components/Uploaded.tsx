@@ -3,11 +3,10 @@ import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import { useEffect } from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N, formatDateTime } from '../../../utils'
 import { FileRouter } from '../constants'
 import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
-import { formatDateTime } from '../../../utils/date'
 import { FileName } from './FileName'
 
 const useStyles = makeStyles({

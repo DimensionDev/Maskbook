@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react'
 import { makeStyles, FormGroup, FormLabel, FormControlLabel, Checkbox } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
 
 export enum SettingField {
     IPRegion = 'IPRegion',

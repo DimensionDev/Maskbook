@@ -12,21 +12,27 @@ import {
     FormControlLabel,
 } from '@material-ui/core'
 import classNames from 'classnames'
-import DashboardRouterContainer from './Container'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
 
+import {
+    useQueryParams,
+    useI18N,
+    extraPermissions,
+    delay,
+    Flags,
+    extendsTheme,
+    UpgradeBackupJSONFile,
+    BackupJSONFileLatest,
+    decompressBackupFile,
+} from '../../../utils'
 import ActionButton from '../DashboardComponents/ActionButton'
+import DashboardRouterContainer from './Container'
 import { v4 as uuid } from 'uuid'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import Services from '../../service'
-import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useAsync } from 'react-use'
 import { Identifier, ECKeyIdentifier } from '../../../database/type'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { useMyPersonas, useMyUninitializedPersonas } from '../../../components/DataSource/useMyPersonas'
-import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
-import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
-import { extraPermissions } from '../../../utils/permissions'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { green } from '@material-ui/core/colors'
 import { DashboardRoute } from '../Route'
@@ -37,10 +43,7 @@ import { RestoreFromQRCodeImageBox } from '../DashboardComponents/RestoreFromQRC
 import { RestoreFromBackupBox } from '../DashboardComponents/RestoreFromBackupBox'
 import { DatabaseRecordType, DatabasePreviewCard } from '../DashboardComponents/DatabasePreviewCard'
 import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQRCodeCameraBox'
-import { delay } from '../../../utils/utils'
 import { SetupStep } from '../SetupStep'
-import { Flags } from '../../../utils/flags'
-import { extendsTheme } from '../../../utils/theme'
 
 //#region setup form
 const useSetupFormStyles = makeStyles((theme) => ({

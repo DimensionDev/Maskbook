@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
+import { useMatchXS, extendsTheme, useI18N, Flags } from '../../../utils'
 
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
 import {
@@ -14,7 +15,6 @@ import {
     newDashboardConnection,
 } from '../../../settings/settings'
 import { Appearance, LaunchPage, Language } from '../../../settings/types'
-import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'
@@ -31,10 +31,8 @@ import WifiIcon from '@material-ui/icons/Wifi'
 import LaunchIcon from '@material-ui/icons/Launch'
 import NewIcon from '@material-ui/icons/NewReleases'
 import DashboardRouterContainer from './Container'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
-import { Flags } from '../../../utils/flags'
 import { currentTrendingDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
 import {
     resolveDataProviderName as resolveTraderDataProviderName,
@@ -42,7 +40,6 @@ import {
 } from '../../../plugins/Trader/pipes'
 import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
 import { ChainId } from '../../../web3/types'
-import { extendsTheme } from '../../../utils/theme'
 import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
 import { PortfolioProvider } from '../../../plugins/Wallet/types'
 import { currentPortfolioDataProviderSettings, currentMaskbookChainIdSettings } from '../../../plugins/Wallet/settings'

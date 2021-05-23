@@ -1,18 +1,17 @@
 import { useMemo } from 'react'
-import type { Profile, Group } from '../../../database'
 import { ListItem, Theme, ListItemAvatar, ListItemText } from '@material-ui/core'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
+import type { ListItemTypeMap } from '@material-ui/core/ListItem'
 import { makeStyles } from '@material-ui/core/styles'
-import { Avatar } from '../../../utils/components/Avatar'
 import MuiAvatar from '@material-ui/core/Avatar/Avatar'
 import GroupIcon from '@material-ui/icons/Group'
+import { Avatar, useI18N, useIntlListFormat } from '../../../utils'
 import { useFriendsList } from '../../DataSource/useActivatedUI'
+import type { Profile, Group } from '../../../database'
 import type { ProfileIdentifier } from '../../../database/type'
-import { useI18N, useIntlListFormat } from '../../../utils/i18n-next-ui'
 import { isGroup } from './SelectPeopleAndGroupsUI'
 import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
 import { useStylesExtends } from '../../custom-ui-helper'
-import type { ListItemTypeMap } from '@material-ui/core/ListItem'
 
 export interface ProfileOrGroupInListProps extends withClasses<never> {
     item: Group | Profile

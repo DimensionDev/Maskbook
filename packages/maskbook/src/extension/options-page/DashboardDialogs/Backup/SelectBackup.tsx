@@ -5,10 +5,13 @@ import { useState } from 'react'
 import { Database as DatabaseIcon } from 'react-feather'
 import { useAsync } from 'react-use'
 import { v4 as uuid } from 'uuid'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import { extraPermissions } from '../../../../utils/permissions'
-import { decompressBackupFile } from '../../../../utils/type-transform/BackupFileShortRepresentation'
-import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../../utils/type-transform/BackupFormat/JSON/latest'
+import {
+    useI18N,
+    extraPermissions,
+    decompressBackupFile,
+    BackupJSONFileLatest,
+    UpgradeBackupJSONFile,
+} from '../../../../utils'
 import Services from '../../../service'
 import AbstractTab, { AbstractTabProps } from '../../DashboardComponents/AbstractTab'
 import ActionButton from '../../DashboardComponents/ActionButton'

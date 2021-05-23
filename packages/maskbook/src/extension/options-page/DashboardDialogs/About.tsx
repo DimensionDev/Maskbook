@@ -3,7 +3,7 @@ import FacebookIcon from '@material-ui/icons/Facebook'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import TelegramIcon from '@material-ui/icons/Telegram'
 import TwitterIcon from '@material-ui/icons/Twitter'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
 import { DashboardDialogCore, WrappedDialogProps } from './Base'
 
 const useStyles = makeStyles((theme) => ({

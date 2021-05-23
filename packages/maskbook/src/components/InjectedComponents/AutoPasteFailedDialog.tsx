@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../utils/i18n-next-ui'
+import { formatDateTime, useI18N, MaskMessages, useMatchXS, useQueryNavigatorPermission } from '../../utils'
 import { makeStyles } from '@material-ui/core/styles'
 import {
     DialogActions,
@@ -15,16 +15,12 @@ import {
     Button,
 } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
-import type { MaskMessages } from '../../utils/messages'
 import { Image } from '../shared/Image'
 import { useSnackbar } from 'notistack'
 import { DraggableDiv } from '../shared/DraggableDiv'
-import { useMatchXS } from '../../utils/hooks/useMatchXS'
-import { useQueryNavigatorPermission } from '../../utils/hooks/useQueryNavigatorPermission'
 import Download from '@material-ui/icons/CloudDownload'
 import CloseIcon from '@material-ui/icons/Close'
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser'
-import { formatDateTime } from '../../utils/date'
 import { saveAsFileFromUrl } from '../../extension/background-script/HelperService'
 
 export interface AutoPasteFailedDialogProps extends withClasses<never> {

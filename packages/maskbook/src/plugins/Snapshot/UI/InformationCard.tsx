@@ -3,7 +3,7 @@ import { Box, Link, makeStyles, Typography, Avatar } from '@material-ui/core'
 import { format } from 'date-fns'
 import OpenInNew from '@material-ui/icons/OpenInNew'
 
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
 import { SnapshotCard } from './SnapshotCard'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
