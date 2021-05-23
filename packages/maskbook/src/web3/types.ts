@@ -121,6 +121,18 @@ export enum EthereumNetwork {
     Gorli = 'Gorli',
 }
 
+export interface EthereumChainDetailed {
+    chainId: string // A 0x-prefixed hexadecimal string
+    chainName: string
+    nativeCurrency: {
+        name: string
+        symbol: string // 2-6 characters long
+        decimals: number
+    }
+    rpcUrls: string[]
+    blockExplorerUrls: string[]
+}
+
 export enum EthereumTokenType {
     Native = 0,
     ERC20 = 1,
@@ -132,6 +144,7 @@ export enum EthereumTokenType {
 // https://eth.wiki/json-rpc/API#json-rpc-methods
 export enum EthereumMethodType {
     PERSONAL_SIGN = 'personal_sign',
+    WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_GAS_PRICE = 'eth_gasPrice',

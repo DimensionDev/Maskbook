@@ -1,5 +1,5 @@
 import type { SignedTransaction, Transaction, TransactionConfig, TransactionReceipt } from 'web3-core'
-import { EthereumMethodType } from '../../../web3/types'
+import { EthereumChainDetailed, EthereumMethodType } from '../../../web3/types'
 import { request } from './request'
 
 export async function getGasPrice() {
@@ -63,6 +63,13 @@ export async function personalSign(dataToSign: string, address: string, password
     return request<string>({
         method: EthereumMethodType.PERSONAL_SIGN,
         params: [dataToSign, address, password].filter((x) => typeof x !== 'undefined'),
+    })
+}
+
+export async function addEthereumChain(address: string, chainDetailed: EthereumChainDetailed) {
+    return request<boolean>({
+        method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
+        params: [chainDetailed, address],
     })
 }
 
