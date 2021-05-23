@@ -205,6 +205,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                             helperText: endingPriceChecked
                                 ? 'Your listing will automatically end at this time. No need to cancel it!'
                                 : 'Schedule a future date.',
+                            fullWidth: true,
                         }}
                     />
                 ) : null}
