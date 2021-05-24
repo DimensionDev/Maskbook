@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { makeStyles, Link, Tab, Tabs } from '@material-ui/core'
-import { Flags, useI18N, useSettingsSwticher } from '../../../../utils'
+import { useI18N, useSettingsSwticher } from '../../../../utils'
 import { DataProvider, TagType, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
