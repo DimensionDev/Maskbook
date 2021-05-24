@@ -34,7 +34,14 @@ export function createProvider(url: string) {
 const instancePool = new Map<string, Web3>()
 
 function createWeb3Instance(provider: HttpProvider) {
-    return instancePool.get(provider.host) ?? new Web3(provider)
+    return (
+        instancePool.get(provider.host) ??
+        (() => {
+            const newInstance = new Web3()
+            instancePool.set(provider.host, newInstance)
+            return newInstance
+        })()
+    )
 }
 
 export function createWeb3({
