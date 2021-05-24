@@ -6,6 +6,7 @@ import { Tab, Tabs, Box, Button, makeStyles } from '@material-ui/core'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { TokenTable } from './components/TokenTable'
 import { useDashboardI18N } from '../../locales'
+import { AddTokenDialog } from './components/AddTokenDialog'
 
 const useStyles = makeStyles((theme) => ({
     caption: {
@@ -47,6 +48,8 @@ export const Market = memo(() => {
 
     const [activeTab, setActiveTab] = useState<assetType>(assetTabs[0])
 
+    const [addTokenOpen, setAddTokenOpen] = useState(false)
+
     return (
         <>
             <Balance balance={0.1} onSend={() => {}} onBuy={() => {}} onSwap={() => {}} onReceive={() => {}} />
@@ -58,7 +61,10 @@ export const Market = memo(() => {
                                 <Tab key={key} value={key} label={assetTabsLabel[key]} sx={{ textTransform: 'none' }} />
                             ))}
                         </Tabs>
-                        <Button color="secondary" className={classes.addCustomTokenButton}>
+                        <Button
+                            color="secondary"
+                            className={classes.addCustomTokenButton}
+                            onClick={() => setAddTokenOpen(true)}>
                             + {t.wallets_assets_custom_token()}
                         </Button>
                     </Box>
@@ -67,6 +73,7 @@ export const Market = memo(() => {
                     </TabPanel>
                 </TabContext>
             </ShapeContainer>
+            <AddTokenDialog open={addTokenOpen} onClose={() => setAddTokenOpen(false)} />
         </>
     )
 })
