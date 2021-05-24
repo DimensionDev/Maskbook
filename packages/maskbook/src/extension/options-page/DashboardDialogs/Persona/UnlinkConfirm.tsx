@@ -1,9 +1,9 @@
 import { Button } from '@material-ui/core'
-import { useI18N } from '../../../../utils'
+import { useI18N, useSnackbarCallback } from '../../../../utils'
 import Services from '../../../service'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'
-import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
+import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 
 const LinkOffIcon = () => (
     <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Hexagon as HexagonIcon } from 'react-feather'
-import { useI18N } from '../../../../utils'
+import { useI18N, useSnackbarCallback } from '../../../../utils'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import type { ERC20TokenDetailed } from '../../../../web3/types'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
-import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
+import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import { ERC20PredefinedTokenSelector } from './ERC20PredefinedTokenSelector'
 import type { WalletProps } from './types'
 

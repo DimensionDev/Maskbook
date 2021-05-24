@@ -5,6 +5,7 @@ import { CreditCard as CreditCardIcon } from 'react-feather'
 import {
     WALLET_OR_PERSONA_NAME_MAX_LEN,
     useRemoteControlledDialog,
+    useSnackbarCallback,
     useI18N,
     checkInputLengthExceed,
 } from '../../../../utils'
@@ -14,7 +15,7 @@ import { useWallet } from '@dimensiondev/web3-shared'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import AbstractTab, { AbstractTabProps } from '../../DashboardComponents/AbstractTab'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
-import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
+import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import { useAsync } from 'react-use'
 
 const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({

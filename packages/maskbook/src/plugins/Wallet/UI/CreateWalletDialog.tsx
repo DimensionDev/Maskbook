@@ -12,7 +12,7 @@ import {
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { WalletMessages, WalletRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
+import { useSnackbarCallback } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useMnemonicWordsPuzzle } from '../hooks/useMnemonicWordsPuzzle'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'

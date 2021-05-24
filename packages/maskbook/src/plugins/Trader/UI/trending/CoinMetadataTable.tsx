@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
 import type { DataProvider, Trending } from '../../types'
-import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
+import { useSnackbarCallback } from '../../../../utils'
 import { Linking } from './Linking'
 import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 import { CoinMetadataTags } from './CoinMetadataTags'

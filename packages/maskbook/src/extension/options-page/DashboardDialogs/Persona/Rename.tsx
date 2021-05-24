@@ -1,10 +1,10 @@
 import { Button, TextField } from '@material-ui/core'
 import { useState } from 'react'
-import { WALLET_OR_PERSONA_NAME_MAX_LEN, useI18N, checkInputLengthExceed } from '../../../../utils'
+import { WALLET_OR_PERSONA_NAME_MAX_LEN, useI18N, checkInputLengthExceed, useSnackbarCallback } from '../../../../utils'
 import Services from '../../../service'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'
-import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
+import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import type { PersonaProps } from './types'
 
 export function DashboardPersonaRenameDialog(props: WrappedDialogProps<PersonaProps>) {

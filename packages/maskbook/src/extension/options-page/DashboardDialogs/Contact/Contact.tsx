@@ -1,10 +1,10 @@
 import { Button, makeStyles, TextField } from '@material-ui/core'
 import { useState } from 'react'
-import { Avatar, useI18N } from '../../../../utils'
+import { Avatar, useI18N, useSnackbarCallback } from '../../../../utils'
 import Services from '../../../service'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'
-import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
+import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import type { ContactProps } from './types'
 
 const useStyles = makeStyles((theme) => ({
