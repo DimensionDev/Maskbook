@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { Trans } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
 
-import { useI18N, useRemoteControlledDialog, Flags } from '../../../utils'
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
