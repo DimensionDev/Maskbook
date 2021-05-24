@@ -23,8 +23,12 @@ import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
 import { ChainState } from '../../web3/state/useChainState'
 import { ProviderIcon } from '../shared/ProviderIcon'
+import { NetworkIcon } from '../shared/NetworkIcon'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
+import {
+    currentSelectedWalletProviderSettings,
+    currentSelectedWalletNetworkSettings,
+} from '../../plugins/Wallet/settings'
 import { useChainId } from '../../web3/hooks/useChainId'
 import { ChainId } from '../../web3/types'
 import { resolveChainColor } from '../../web3/pipes'
@@ -92,12 +96,24 @@ const useStyles = makeStyles((theme) => ({
     },
     iconWrapper: {
         position: 'relative',
+        height: 24,
+        width: 24,
     },
     icon: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
         width: 24,
         height: 24,
         fontSize: 24,
+    },
+    networkIcon: {
+        position: 'absolute',
+        right: -4,
+        bottom: -4,
+        backgroundColor: theme.palette.background.paper,
+        height: 16,
+        width: 16,
+        borderRadius: '50%',
+        boxShadow: '0 0 0 2px #fffff',
     },
     mask: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
@@ -120,6 +136,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const selectedWallet = useWallet()
     const chainId = useChainId()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
+    const selectedNetwork = useValueRef(currentSelectedWalletNetworkSettings)
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
@@ -264,6 +281,11 @@ export function ToolboxHint(props: ToolboxHintProps) {
                                 classes={{ icon: classes.icon }}
                                 size={24}
                                 providerType={selectedWalletProvider}
+                            />
+                            <NetworkIcon
+                                size={16}
+                                classes={{ networkIcon: classes.networkIcon }}
+                                networkType={selectedNetwork}
                             />
                         </div>
                     ) : (

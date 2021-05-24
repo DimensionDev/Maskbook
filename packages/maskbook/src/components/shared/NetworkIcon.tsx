@@ -4,13 +4,10 @@ import { NetworkType } from '../../web3/types'
 import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles(() => ({
-    networkIcon: {
-        height: 48,
-        width: 48,
-    },
+    networkIcon: {},
 }))
 
-export interface NetworkIconProps extends withClasses<never> {
+export interface NetworkIconProps extends withClasses<'networkIcon'> {
     size?: number
     networkType?: NetworkType
 }
