@@ -112,7 +112,10 @@ export const postIdParser = (node: HTMLElement) => {
                 node.closest('article > div')?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
             ),
         )
-        return idNode ? parseId(idNode.href) : parseId(location.href)
+        const isRetweet = !!node.querySelector('[data-testid=socialContext]')
+        const pid = idNode ? parseId(idNode.href) : parseId(location.href)
+        // You can't retweet a tweet or a retweet, but only cancel retweeting
+        return isRetweet ? `retweet:${pid}` : pid
     }
 }
 
