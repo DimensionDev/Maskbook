@@ -7,6 +7,7 @@ import {
     currentWalletConnectChainIdSettings,
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
+    currentCustomNetworkChainIdSettings,
 } from '../../../plugins/Wallet/settings'
 import { pollingTask, unreachable } from '../../../utils/utils'
 import { isSameAddress } from '../../../web3/helpers'
@@ -54,10 +55,28 @@ effect(() =>
     currentMaskbookChainIdSettings.addListener(() => {
         updateBlockNumber()
         resetAllNonce()
+        WalletMessages.events.chainIdUpdated.sendToAll(undefined)
     }),
 )
-effect(() => currentMetaMaskChainIdSettings.addListener(updateBlockNumber))
-effect(() => currentWalletConnectChainIdSettings.addListener(updateBlockNumber))
+effect(() =>
+    currentMetaMaskChainIdSettings.addListener(() => {
+        updateBlockNumber()
+        WalletMessages.events.chainIdUpdated.sendToAll(undefined)
+    }),
+)
+effect(() =>
+    currentWalletConnectChainIdSettings.addListener(() => {
+        updateBlockNumber()
+        WalletMessages.events.chainIdUpdated.sendToAll(undefined)
+    }),
+)
+
+effect(() =>
+    currentCustomNetworkChainIdSettings.addListener(() => {
+        updateBlockNumber()
+        WalletMessages.events.chainIdUpdated.sendToAll(undefined)
+    }),
+)
 
 // revaldiate if the current wallet was changed
 effect(() => WalletMessages.events.walletsUpdated.on(updateBlockNumber))
