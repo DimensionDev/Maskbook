@@ -107,13 +107,13 @@ const useStyles = makeStyles((theme) => ({
     },
     networkIcon: {
         position: 'absolute',
-        right: -4,
-        bottom: -4,
+        right: -2,
+        bottom: -2,
         backgroundColor: theme.palette.background.paper,
-        height: 16,
-        width: 16,
+        height: 14,
+        width: 14,
         borderRadius: '50%',
-        boxShadow: '0 0 0 2px #fffff',
+        boxShadow: `0 0 0 1px ${theme.palette.background.paper}`,
     },
     mask: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
@@ -283,7 +283,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                                 providerType={selectedWalletProvider}
                             />
                             <NetworkIcon
-                                size={16}
+                                size={14}
                                 classes={{ networkIcon: classes.networkIcon }}
                                 networkType={selectedNetwork}
                             />
