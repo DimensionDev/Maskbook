@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { MaskDialog } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar, MaskDialog } from '@dimensiondev/maskbook-theme'
 import { Button, DialogActions, DialogContent, makeStyles, TextField } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
@@ -81,7 +81,7 @@ const useAddTokenFormUIStyles = makeStyles((theme) => ({
     },
     title: {
         fontSize: theme.typography.pxToRem(12),
-        color: '#15181B',
+        color: MaskColorVar.textPrimary,
         marginBottom: theme.spacing(1.2),
     },
 }))
