@@ -136,6 +136,7 @@ const ShapeContainer = styled('div')(({ theme }) => ({
 export interface PageFrameProps extends React.PropsWithChildren<{}> {
     title: React.ReactNode | string
     primaryAction?: React.ReactNode
+    withoutShapeContainer?: boolean
 }
 
 export const PageFrame = memo((props: PageFrameProps) => {
@@ -173,9 +174,13 @@ export const PageFrame = memo((props: PageFrameProps) => {
                     </NavigationDrawer>
                 )}
                 <ShapeHelper>
-                    <ShapeContainer>
+                    {props.withoutShapeContainer ? (
                         <ErrorBoundary>{props.children}</ErrorBoundary>
-                    </ShapeContainer>
+                    ) : (
+                        <ShapeContainer>
+                            <ErrorBoundary>{props.children}</ErrorBoundary>
+                        </ShapeContainer>
+                    )}
                 </ShapeHelper>
             </Containment>
         </>
