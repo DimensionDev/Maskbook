@@ -4,7 +4,6 @@ import { orange, green, red, blue, grey } from '@material-ui/core/colors'
 import type { Theme, ThemeOptions } from '@material-ui/core/styles/createTheme'
 import { merge, cloneDeep } from 'lodash-es'
 import { appearanceSettings, languageSettings } from '../settings/settings'
-import { Appearance, Language } from '../settings/types'
 import { useValueRef } from './hooks/useValueRef'
 import { useMemo, useRef } from 'react'
 import { zhTW, koKR, jaJP } from '@material-ui/core/locale/index'
@@ -12,6 +11,7 @@ import { safeUnreachable } from './utils'
 import { or } from '../components/custom-ui-helper'
 import { activatedSocialNetworkUI } from '../social-network'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
+import { Appearance, Language } from '@dimensiondev/maskbook-theme'
 
 function getFontFamily(monospace?: boolean) {
     // We want to look native.

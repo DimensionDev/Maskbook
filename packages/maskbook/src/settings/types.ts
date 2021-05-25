@@ -2,23 +2,9 @@
 //  if you make an incompatible change in this file, it will break the API.
 import type { ChainId } from '../web3/types'
 import type { SetupGuideStep } from '../components/InjectedComponents/SetupGuide'
-
-export enum Appearance {
-    default = 'default',
-    light = 'light',
-    dark = 'dark',
-}
-
 export interface ChainBlockNumber {
     chainId: ChainId
     blockNumber: number
-}
-
-export enum Language {
-    zh = 'zh',
-    en = 'en',
-    ko = 'ko',
-    ja = 'ja',
 }
 
 export type SetupGuideCrossContextStatus = {

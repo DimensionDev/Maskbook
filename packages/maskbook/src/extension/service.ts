@@ -49,6 +49,8 @@ if (module.hot && isEnvironment(Environment.ManifestBackground)) {
             './background-script/HelperService',
             './background-script/ProviderService',
             './background-script/EthereumService',
+            './background-script/SettingsService',
+            './background-script/SocialNetworkService',
             './service-generator',
         ],
         () => document.dispatchEvent(new Event(SERVICE_HMR_EVENT)),

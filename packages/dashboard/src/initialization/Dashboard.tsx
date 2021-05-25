@@ -41,7 +41,7 @@ export default function DashboardRoot() {
     }
     const theme = themes[settings]
 
-    applyMaskColorVars(document.body, mode)
+    applyMaskColorVars(document.body, settings === 'default' ? mode : settings)
 
     return (
         <StrictMode>
