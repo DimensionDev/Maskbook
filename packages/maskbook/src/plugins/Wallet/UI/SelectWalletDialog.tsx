@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { useValueRef, delay, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { WalletMessages } from '../messages'
-import { useWallet, useWallets } from '../hooks/useWallet'
+import { useWalletsOfProvider, useWallet } from '@dimensiondev/web3-shared'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
@@ -27,7 +27,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const wallets = useWallets(ProviderType.Maskbook)
+    const wallets = useWalletsOfProvider(ProviderType.Maskbook)
     const selectedWallet = useWallet()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
 

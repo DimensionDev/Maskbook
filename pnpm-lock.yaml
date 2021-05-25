@@ -632,9 +632,11 @@ importers:
   packages/web3-shared:
     specifiers:
       '@types/use-subscription': ^1.0.0
+      unstated-next: ^1.1.0
       use-subscription: ^1.5.1
     dependencies:
       '@types/use-subscription': 1.0.0
+      unstated-next: 1.1.0
       use-subscription: 1.5.1
 
 packages:

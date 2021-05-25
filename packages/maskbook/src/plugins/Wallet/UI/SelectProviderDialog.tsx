@@ -23,7 +23,7 @@ import { WalletMessages } from '../messages'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { ProviderType } from '../../../web3/types'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useWallets } from '../hooks/useWallet'
+import { useWalletsOfProvider } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme: Theme) => ({
     paper: {
@@ -72,7 +72,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     )
     //#endregion
 
-    const wallets = useWallets(ProviderType.Maskbook)
+    const wallets = useWalletsOfProvider(ProviderType.Maskbook)
     const onConnect = useCallback(
         async (providerType: ProviderType) => {
             closeDialog()
