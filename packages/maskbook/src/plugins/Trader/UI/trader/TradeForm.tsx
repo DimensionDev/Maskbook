@@ -233,7 +233,8 @@ export function TradeForm(props: TradeFormProps) {
             <div className={classes.section}>
                 <div className={classes.status}>
                     <Typography className={classes.label} color="textSecondary" variant="body2">
-                        Slippage Tolerance: {formatPercentage(toBips(currentSlippageTolerance.value))}
+                        {t('plugin_trader_slipage_tolerance')}{' '}
+                        {formatPercentage(toBips(currentSlippageTolerance.value))}
                     </Typography>
                     <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
                         <RefreshOutlined fontSize="small" />
