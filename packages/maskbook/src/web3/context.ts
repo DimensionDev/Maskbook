@@ -9,7 +9,7 @@ import type { InternalSettings } from '../settings/createSettings'
 
 export const Web3Context: Web3ProviderType = {
     allowTestChain: {
-        getCurrentValue: () => !Flags.wallet_allow_test_chain,
+        getCurrentValue: () => Flags.wallet_allow_test_chain,
         subscribe: () => noop,
     },
     currentChain: createSubscriptionAsync(
