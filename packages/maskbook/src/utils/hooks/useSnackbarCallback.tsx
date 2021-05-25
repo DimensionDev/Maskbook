@@ -92,7 +92,6 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                         key,
                         variant: 'error',
                         preventDuplicate: true,
-                        autoHideDuration: 50000,
                         content: description ? (
                             <div>
                                 <CustomAlert
