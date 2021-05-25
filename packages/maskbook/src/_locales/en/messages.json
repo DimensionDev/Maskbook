@@ -692,6 +692,7 @@
     "plugin_dhedge_loading": "Loading...",
     "plugin_dhedge_pool_not_found": "Invalid pool address!",
     "plugin_dhedge_smt_wrong": "Something went wrong!",
+    "token": "Token",
     "wallet_status_title": "Account",
     "wallet_status_button_change": "Change",
     "wallet_status_button_disconnect": "Disconnect",

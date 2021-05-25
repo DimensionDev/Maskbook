@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     line: {
         margin: theme.spacing(1),
         display: 'flex',
+        boxShadow: 'none',
     },
     input: {
         flex: 1,

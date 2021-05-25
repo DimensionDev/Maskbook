@@ -692,6 +692,7 @@
     "plugin_dhedge_loading": "로딩 중",
     "plugin_dhedge_pool_not_found": "무효한 풀 주소!",
     "plugin_dhedge_smt_wrong": "오류가 발생합니다.",
+    "token": "",
     "wallet_status_title": "계정",
     "wallet_status_button_change": "바꾸기",
     "wallet_status_button_disconnect": "연결 끊기",

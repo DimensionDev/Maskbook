@@ -94,7 +94,7 @@ export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
     onNext: () => void
     origin?: PoolSettings
-    dateDialogProps: Partial<DialogProps>
+    dateDialogProps?: Partial<DialogProps>
 }
 
 export function CreateForm(props: CreateFormProps) {

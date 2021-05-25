@@ -692,6 +692,7 @@
     "plugin_dhedge_loading": "ロード中…",
     "plugin_dhedge_pool_not_found": "無効なプールアドレスです！",
     "plugin_dhedge_smt_wrong": "何か間違いが発生しました！",
+    "token": "",
     "wallet_status_title": "アカウント",
     "wallet_status_button_change": "変更",
     "wallet_status_button_disconnect": "接続を外す",

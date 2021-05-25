@@ -11,6 +11,7 @@ import CreditCardIcon from '@material-ui/icons/CreditCard'
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined'
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import PowerIcon from '@material-ui/icons/Power'
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
 import { HashRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom'
 
 import { useI18N, useClassicMaskTheme, SSRRenderer, Flags, useMatchXS } from '../../utils'
@@ -24,6 +25,7 @@ import DashboardContactsRouter from './DashboardRouters/Contacts'
 import DashboardPluginsRouter from './DashboardRouters/Plugins'
 import DashboardSettingsRouter from './DashboardRouters/Settings'
 import { DashboardSetupRouter } from './DashboardRouters/Setup'
+import { DashboardTokenRouter } from './DashboardRouters/Token'
 import { DashboardRoute } from './Route'
 
 import Services from '../service'
@@ -120,15 +122,14 @@ function DashboardUI() {
     const classes = useStyles()
     const history = useHistory<unknown>()
     const xsMatched = useMatchXS()
-    const routers = (
-        [
-            [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
-            [t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />],
-            [t('contacts'), DashboardRoute.Contacts, <BookmarkBorderOutlinedIcon />],
-            [t('plugins'), DashboardRoute.Plugins, <PowerIcon />],
-            [t('settings'), DashboardRoute.Settings, <SettingsOutlinedIcon />],
-        ] as const
-    ).filter((x) => x)
+    const routers = [
+        [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
+        [t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />],
+        [t('contacts'), DashboardRoute.Contacts, <BookmarkBorderOutlinedIcon />],
+        [t('plugins'), DashboardRoute.Plugins, <PowerIcon />],
+        [t('settings'), DashboardRoute.Settings, <SettingsOutlinedIcon />],
+        [t('token'), DashboardRoute.Token, <AttachMoneyIcon />],
+    ] as const
 
     // jump to persona if needed
     const [reloadSpy, setReloadSpy] = useState(false)
@@ -202,6 +203,7 @@ function DashboardUI() {
                 <Route path={DashboardRoute.Plugins} component={withErrorBoundary(DashboardPluginsRouter)} />
                 <Route path={DashboardRoute.Settings} component={withErrorBoundary(DashboardSettingsRouter)} />
                 <Route path={DashboardRoute.Setup} component={withErrorBoundary(DashboardSetupRouter)} />
+                <Route path={DashboardRoute.Token} component={withErrorBoundary(DashboardTokenRouter)} />
                 <Redirect
                     path="*"
                     to={Flags.has_no_browser_tab_ui && xsMatched ? DashboardRoute.Nav : DashboardRoute.Personas}

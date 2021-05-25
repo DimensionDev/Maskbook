@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 const pluginsTheme = extendsTheme((theme) => ({}))
 
-export default function DashboardSettingsRouter() {
+export default function DashboardPluginsRouter() {
     const { t } = useI18N()
     const classes = useStyles()
     const [search, setSearch] = useState('')

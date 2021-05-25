@@ -692,6 +692,7 @@
     "plugin_dhedge_loading": "讀取中…",
     "plugin_dhedge_pool_not_found": "錯誤的池地址！",
     "plugin_dhedge_smt_wrong": "出錯了！",
+    "token": "",
     "wallet_status_title": "帳戶",
     "wallet_status_button_change": "更改",
     "wallet_status_button_disconnect": "取消連接",
