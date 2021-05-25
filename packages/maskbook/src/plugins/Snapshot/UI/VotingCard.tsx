@@ -53,7 +53,7 @@ export function VotingCard() {
             setLoading(true)
             return PluginSnapshotRPC.vote(identifier, choice, account)
         },
-        [choice, identifier],
+        [choice, identifier, account],
         () => {
             setLoading(false)
             setOpen(false)
@@ -61,6 +61,7 @@ export function VotingCard() {
         },
         (_err: Error) => setLoading(false),
         void 0,
+        t('plugin_snapshot_vote'),
         t('plugin_snapshot_vote_success'),
     )
 
