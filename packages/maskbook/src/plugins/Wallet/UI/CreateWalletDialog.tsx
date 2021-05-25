@@ -275,7 +275,7 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
                 </Box>
                 {step === CreateWalletStep.NameAndWords && (
                     <Box className={classes.warning}>
-                        <Alert severity="warning">Please properly back up your account’s mnemonic.</Alert>
+                        <Alert severity="warning">Please properly back up your account’s mnemonic words.</Alert>
                     </Box>
                 )}
             </DialogContent>

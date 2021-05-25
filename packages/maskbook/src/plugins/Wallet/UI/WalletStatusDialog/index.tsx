@@ -17,7 +17,7 @@ import { resolveAddressLinkOnExplorer } from '../../../../web3/pipes'
 import { ChainId, ProviderType } from '../../../../web3/types'
 import { EthereumChainChip } from '../../../../web3/UI/EthereumChainChip'
 import { useWallet } from '../../hooks/useWallet'
-import { WalletMessages, WalletRPC } from '../../messages'
+import { WalletMessages } from '../../messages'
 import { currentSelectedWalletProviderSettings } from '../../settings'
 import { RecentTransactionList } from './RecentTransactionList'
 import { useAccount } from '../../../../web3/hooks/useAccount'
@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     },
     currentAccount: {
         padding: theme.spacing(2, 3),
+        marginBottom: theme.spacing(2),
         display: 'flex',
         backgroundColor: theme.palette.mode === 'dark' ? '#17191D' : '#F7F9FA',
         borderRadius: 8,
@@ -53,11 +54,8 @@ const useStyles = makeStyles((theme) => ({
         borderTop: `1px solid ${theme.palette.divider}`,
         justifyContent: 'flex-start',
     },
-    section: {
+    transactionList: {
         alignItems: 'center',
-        '&:last-child': {
-            paddingTop: theme.spacing(0.5),
-        },
     },
     actions: {},
     actionButton: {
@@ -97,21 +95,6 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         color: '#1C68F3',
     },
-    sectionTitle: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: theme.spacing(1),
-    },
-    sectionTitleText: {
-        fontSize: '18px',
-        fontWeight: 500,
-        fontFamily: 'Helvetica',
-    },
-    clearAllButton: {
-        fontSize: 14,
-        marginLeft: 'auto',
-    },
 }))
 
 export interface WalletStatusDialogProps {}
@@ -138,19 +121,6 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
         undefined,
         undefined,
         t('copy_success_of_wallet_addr'),
-    )
-    //#endregion
-
-    //#region clear the most recent transactions
-    const onClear = useSnackbarCallback(
-        async (ev) => {
-            await WalletRPC.clearRecentTransactions(account)
-        },
-        [],
-        undefined,
-        undefined,
-        undefined,
-        t('done'),
     )
     //#endregion
 
@@ -196,6 +166,9 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
             <DialogContent className={classes.content}>
                 <section className={classes.currentAccount}>
                     <ProviderIcon classes={{ icon: classes.icon }} size={48} providerType={selectedWalletProvider} />
+                    {chainIdValid && chainId !== ChainId.Mainnet ? (
+                        <EthereumChainChip chainId={chainId} ChipProps={{ variant: 'outlined' }} />
+                    ) : null}
                     <div className={classes.accountInfo}>
                         <div className={classes.infoRow}>
                             <Typography className={classes.accountName}>{selectedWallet.name}</Typography>
@@ -253,24 +226,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                         </Button>
                     </section>
                 </section>
-                <section className={classes.section}>
-                    {chainIdValid && chainId !== ChainId.Mainnet ? (
-                        <EthereumChainChip chainId={chainId} ChipProps={{ variant: 'outlined' }} />
-                    ) : null}
-                </section>
-                <section className={classes.section}>
-                    <div className={classes.sectionTitle}>
-                        <Typography variant="h2" className={classes.sectionTitleText}>
-                            {t('plugin_wallet_recent_transaction')}
-                        </Typography>
-                        <Link
-                            aria-label="Clear All"
-                            component="button"
-                            className={classes.clearAllButton}
-                            onClick={onClear}>
-                            ({t('plugin_wallet_clear_all')})
-                        </Link>
-                    </div>
+                <section className={classes.transactionList}>
                     <RecentTransactionList />
                 </section>
             </DialogContent>

@@ -128,33 +128,13 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const selectedNetworkType = useValueRef(currentSelectedWalletNetworkSettings)
     const selectedProviderType = useValueRef(currentSelectedWalletProviderSettings)
 
-    const onSelectNetwork = useSnackbarCallback(
+    const onSelectNetwork = useCallback(
         async (networkType: NetworkType) => {
             const chainId = resolveNetworkChainId(networkType)
             const chainDetailed = CHAINS.find((x) => x.chainId === chainId)
-
             if (!chainDetailed) throw new Error('The selected network is not supported.')
-
-            switch (selectedProviderType) {
-                case ProviderType.Maskbook:
-                    currentMaskbookChainIdSettings.value = chainId
-                    break
-                default:
-                    await Services.Ethereum.addEthereumChain(account, {
-                        chainId: chainDetailed.chainId.toString(16),
-                        chainName: chainDetailed.name,
-                        nativeCurrency: chainDetailed.nativeCurrency,
-                        rpcUrls: chainDetailed.rpc,
-                        blockExplorerUrls: [
-                            chainDetailed.explorers &&
-                            chainDetailed.explorers.length > 0 &&
-                            chainDetailed.explorers[0].url
-                                ? chainDetailed.explorers[0].url
-                                : chainDetailed.infoURL,
-                        ],
-                    })
-                    break
-            }
+            if (selectedProviderType === ProviderType.Maskbook) currentMaskbookChainIdSettings.value = chainId
+            currentSelectedWalletNetworkSettings.value = networkType
         },
         [account, selectedProviderType],
     )
