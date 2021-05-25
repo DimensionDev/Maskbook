@@ -49,3 +49,10 @@ export enum Appearance {
     light = 'light',
     dark = 'dark',
 }
+
+export enum Language {
+    zh = 'zh',
+    en = 'en',
+    ko = 'ko',
+    ja = 'ja',
+}

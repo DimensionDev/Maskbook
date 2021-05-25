@@ -1,8 +1,8 @@
 import { createGlobalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
-import { Language, LaunchPage } from './types'
-import { Appearance } from '@dimensiondev/maskbook-theme'
+import { LaunchPage } from './types'
+import { Appearance, Language } from '@dimensiondev/maskbook-theme'
 
 /**
  * Does the debug mode on

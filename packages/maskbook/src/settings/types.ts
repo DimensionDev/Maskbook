@@ -7,13 +7,6 @@ export interface ChainBlockNumber {
     blockNumber: number
 }
 
-export enum Language {
-    zh = 'zh',
-    en = 'en',
-    ko = 'ko',
-    ja = 'ja',
-}
-
 export type SetupGuideCrossContextStatus = {
     /** The persona to be connected */
     persona?: string
