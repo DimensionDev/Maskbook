@@ -4,7 +4,7 @@ import { useTrendingDataSource } from '../api'
 import { Services } from '../../../API'
 
 export default function DataSourceSetting() {
-    let source = useTrendingDataSource()
+    const source = useTrendingDataSource()
     const handleChange = (event: any) => {
         const value = event.target.value
         Services.Settings.setTrendingDataSource(value)

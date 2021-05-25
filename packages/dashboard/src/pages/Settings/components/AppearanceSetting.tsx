@@ -5,7 +5,7 @@ import { useAppearance } from '../../Personas/api'
 import SettingSelect from './SettingSelect'
 
 export default function AppearanceSetting() {
-    let mode = useAppearance()
+    const mode = useAppearance()
     const handleChange = (event: any) => {
         Services.Settings.setTheme(event.target.value)
     }

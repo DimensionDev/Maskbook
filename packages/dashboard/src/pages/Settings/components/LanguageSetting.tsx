@@ -4,7 +4,7 @@ import { Services } from '../../../API'
 import SettingSelect from './SettingSelect'
 
 export default function LanguageSetting() {
-    let lang = useLanguage()
+    const lang = useLanguage()
     const handleChange = (event: any) => {
         Services.Settings.setLanguage(event.target.value)
     }

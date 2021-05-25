@@ -4,7 +4,7 @@ import { useAncientPostsCompatibilityMode } from '../api'
 import SettingSwitch from './SettingSwitch'
 
 export default function AncientPostsSetting() {
-    let checked = useAncientPostsCompatibilityMode()
+    const checked = useAncientPostsCompatibilityMode()
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         Services.Settings.setAncientPostsCompatibiltyMode(event.target.checked)
