@@ -14,7 +14,7 @@ export interface NetworkIconProps extends withClasses<'networkIcon'> {
 
 const EthereumIcon = new URL('../../resources/wallet-network-icon/ethereum.png', import.meta.url).toString()
 const BinanceIcon = new URL('../../resources/wallet-network-icon/binance.png', import.meta.url).toString()
-const PolygonIcon = new URL('../../resources/wallet-network-icon/binance.png', import.meta.url).toString()
+const PolygonIcon = new URL('../../resources/wallet-network-icon/polygon.png', import.meta.url).toString()
 
 export function NetworkIcon(props: NetworkIconProps) {
     const { size = 48, networkType } = props
