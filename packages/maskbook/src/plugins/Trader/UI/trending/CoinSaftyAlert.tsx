@@ -1,6 +1,6 @@
 import { Alert, AlertTitle, Box, Button, Link, makeStyles, Paper } from '@material-ui/core'
+import { useI18N } from '../../../../utils'
 import type { Coin } from '../../types'
-import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useApprovedTokens } from '../../trending/useApprovedTokens'
 import { resolveTokenLinkOnExplorer } from '../../../../web3/pipes'
 import { ChainId, EthereumTokenType } from '../../../../web3/types'

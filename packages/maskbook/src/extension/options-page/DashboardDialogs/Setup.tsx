@@ -1,7 +1,6 @@
 import { makeStyles, Typography } from '@material-ui/core'
 import { DashboardDialogCore, WrappedDialogProps } from './Base'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { delay } from '../../../utils/utils'
+import { useI18N, delay } from '../../../utils'
 import { QRCodeVideoScanner } from '../DashboardComponents/QRCodeVideoScanner'
 
 const useStyles = makeStyles((theme) => ({

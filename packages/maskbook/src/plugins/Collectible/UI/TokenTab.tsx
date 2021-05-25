@@ -1,7 +1,7 @@
 import { Box, Paper, Link, makeStyles, Typography } from '@material-ui/core'
+import { useI18N } from '../../../utils'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 import { resolveAddressLinkOnExplorer, resolveChainName } from '../../../web3/pipes'
 import { ChainId } from '../../../web3/types'

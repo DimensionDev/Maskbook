@@ -14,15 +14,10 @@ import {
     DashboardWalletDeleteConfirmDialog,
     DashboardWalletRenameDialog,
 } from '../DashboardDialogs/Wallet'
-import { useMenu } from '../../../utils/hooks/useMenu'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useColorStyles } from '../../../utils/theme'
-import { useMatchXS } from '../../../utils/hooks/useMatchXS'
+import { Flags, useMenu, useI18N, useColorStyles, useMatchXS, useRemoteControlledDialog } from '../../../utils'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { WalletAssetsTable } from './WalletAssetsTable'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
-import { Flags } from '../../../utils/flags'
 import { useChainIdValid } from '../../../web3/hooks/useChainId'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'

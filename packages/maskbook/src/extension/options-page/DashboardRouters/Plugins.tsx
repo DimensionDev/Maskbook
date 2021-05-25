@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
+import { useI18N, extendsTheme } from '../../../utils'
 import PluginCard from '../DashboardComponents/PluginCard'
 
 import DashboardRouterContainer from './Container'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { extendsTheme } from '../../../utils/theme'
 import { PluginUI } from '../../../plugins/PluginUI'
 import { PluginScope } from '../../../plugins/types'
 

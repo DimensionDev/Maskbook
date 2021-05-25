@@ -1,12 +1,11 @@
 import { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import type { Persona } from '../../../database'
 import { MenuItem, Card, IconButton } from '@material-ui/core'
-import Services from '../../service'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
-import { useColorStyles } from '../../../utils/theme'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useColorStyles, useI18N, useMenu } from '../../../utils'
+import type { Persona } from '../../../database'
+import Services from '../../service'
 import ProfileBox from './ProfileBox'
 import type { ProfileIdentifier } from '../../../database/type'
 import { useModal } from '../DashboardDialogs/Base'
@@ -15,7 +14,6 @@ import {
     DashboardPersonaBackupDialog,
     DashboardPersonaDeleteConfirmDialog,
 } from '../DashboardDialogs/Persona'
-import { useMenu } from '../../../utils/hooks/useMenu'
 
 interface Props {
     persona: Persona

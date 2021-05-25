@@ -3,13 +3,13 @@ import { makeStyles, InputAdornment } from '@material-ui/core'
 import { v4 as uuid } from 'uuid'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import { useI18N } from '../../../utils'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import {
     ExchangeTokenAndAmountState,
     ExchangeTokenAndAmountActionType,
     useExchangeTokenAndAmount,
 } from '../hooks/useExchangeTokenAmountstate'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { ExchangeTokenPanel } from './ExchangeTokenPanel'
 
 const useStyles = makeStyles((theme) => ({

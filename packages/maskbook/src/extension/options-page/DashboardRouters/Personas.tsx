@@ -4,12 +4,11 @@ import { Button, makeStyles, ThemeProvider } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import RestoreIcon from '@material-ui/icons/Restore'
+import { useI18N, extendsTheme } from '../../../utils'
 import PersonaCard from '../DashboardComponents/PersonaCard'
 import { DashboardPersonaCreateDialog, DashboardImportPersonaDialog } from '../DashboardDialogs/Persona'
 import { useModal } from '../DashboardDialogs/Base'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
-import { extendsTheme } from '../../../utils/theme'
 
 const useStyles = makeStyles((theme) => ({
     container: {

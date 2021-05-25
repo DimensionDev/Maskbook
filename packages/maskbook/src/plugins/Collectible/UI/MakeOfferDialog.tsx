@@ -14,12 +14,12 @@ import {
 import { first } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import BigNumber from 'bignumber.js'
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../web3/types'
+import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useTokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
@@ -27,7 +27,6 @@ import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { ChainState } from '../../../web3/state/useChainState'
 import { toAsset, toUnixTimestamp } from '../helpers'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { isNative } from '../../../web3/helpers'
 
@@ -162,6 +161,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 onChange={setExpirationDateTime}
                                 TextFieldProps={{
                                     className: classes.panel,
+                                    fullWidth: true,
                                 }}
                             />
                         ) : null}

@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import type { Coin, Currency, Stat } from '../../types'
 import { makeStyles, Theme, CircularProgress, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
+import { useI18N } from '../../../../utils'
+import type { Coin, Currency, Stat } from '../../types'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
 import { usePriceLineChart } from '../../../hooks/usePriceLineChart'
-import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 
 const DEFAULT_DIMENSION: Dimension = {

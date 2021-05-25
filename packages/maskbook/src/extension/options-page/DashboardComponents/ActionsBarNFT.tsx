@@ -1,12 +1,11 @@
 import { useCallback } from 'react'
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import { useMenu, useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogNFT } from '../DashboardDialogs/Wallet'
-import { useMenu } from '../../../utils/hooks/useMenu'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { ERC1155TokenDetailed, ERC721TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useChainIdValid } from '../../../web3/hooks/useChainId'
 

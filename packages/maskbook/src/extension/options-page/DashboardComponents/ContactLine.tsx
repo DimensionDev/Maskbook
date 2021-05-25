@@ -2,13 +2,10 @@ import { Typography, IconButton, MenuItem, ListItem, ListItemTypeMap } from '@ma
 import { makeStyles } from '@material-ui/core/styles'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import type { Profile } from '../../../database'
-import { Avatar } from '../../../utils/components/Avatar'
+import { Avatar, useMenu, useI18N, useMatchXS } from '../../../utils'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardContactDialog, DashboardContactDeleteConfirmDialog } from '../DashboardDialogs/Contact'
-import { useMenu } from '../../../utils/hooks/useMenu'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
-import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 const useStyles = makeStyles((theme) => ({
     line: {

@@ -2,7 +2,7 @@ import { useAsyncRetry } from 'react-use'
 import { CONSTANTS } from '../../../../web3/constants'
 import { isSameAddress } from '../../../../web3/helpers'
 import { useConstant } from '../../../../web3/hooks/useConstant'
-import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../../web3/types'
+import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../../web3/types'
 
 export function useTrade(
     inputToken?: NativeTokenDetailed | ERC20TokenDetailed,

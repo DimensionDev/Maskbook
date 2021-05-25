@@ -13,10 +13,10 @@ import {
     Typography,
     TextField,
 } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../web3/types'
+import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import type { TokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
@@ -205,6 +205,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                             helperText: endingPriceChecked
                                 ? 'Your listing will automatically end at this time. No need to cancel it!'
                                 : 'Schedule a future date.',
+                            fullWidth: true,
                         }}
                     />
                 ) : null}

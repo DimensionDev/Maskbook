@@ -1,6 +1,6 @@
 import { Box, makeStyles, TextField } from '@material-ui/core'
 import { useState } from 'react'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useI18N } from '../../../../utils'
 import type { ERC20TokenDetailed } from '../../../../web3/types'
 import { EthereumTokenType } from '../../../../web3/types'
 import { FixedTokenList } from '../../DashboardComponents/FixedTokenList'

@@ -14,11 +14,9 @@ import {
     FilledInput,
 } from '@material-ui/core'
 
-import { Flags } from '../../../utils/flags'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { Flags, useI18N, usePortalShadowRoot } from '../../../utils'
 import { useRegionList } from '../hooks/useRegion'
 import type { RegionCode } from '../hooks/useRegion'
-import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
 
 export interface RegionSelectProps extends InputBaseComponentProps {
     value: RegionCode[]

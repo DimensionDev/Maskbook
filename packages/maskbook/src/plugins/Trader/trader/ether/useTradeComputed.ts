@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../../web3/types'
+import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../../web3/types'
 import { TradeComputed, TradeStrategy } from '../../types'
 
 const ZERO = new BigNumber(0)

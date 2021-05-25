@@ -1,7 +1,7 @@
 import { memo, useRef, useEffect } from 'react'
+import { useI18N } from '../../../utils'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
 import { useShareMenu } from '../SelectPeopleDialog'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from '@material-ui/core'
 import type { Profile } from '../../../database'

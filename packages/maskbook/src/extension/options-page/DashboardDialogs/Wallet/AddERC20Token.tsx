@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Hexagon as HexagonIcon } from 'react-feather'
+import { useI18N } from '../../../../utils'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
-import { useI18N } from '../../../../utils/i18n-next-ui'
 import type { ERC20TokenDetailed } from '../../../../web3/types'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'

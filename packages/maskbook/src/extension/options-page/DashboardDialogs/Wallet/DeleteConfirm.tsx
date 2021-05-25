@@ -1,7 +1,7 @@
 import { Button } from '@material-ui/core'
 import { CreditCard as CreditCardIcon } from 'react-feather'
+import { useI18N } from '../../../../utils'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
-import { useI18N } from '../../../../utils/i18n-next-ui'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'

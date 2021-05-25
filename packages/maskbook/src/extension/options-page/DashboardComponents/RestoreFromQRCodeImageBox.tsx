@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useDropArea } from 'react-use'
 import { makeStyles } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
 import { RestoreBox } from './RestoreBox'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { QRCodeImageScanner } from './QRCodeImageScanner'

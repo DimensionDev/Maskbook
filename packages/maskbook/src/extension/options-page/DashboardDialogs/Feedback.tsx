@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from './Base'
 import { Smile as SmileIcon } from 'react-feather'
 import { TextField } from '@material-ui/core'
+import { useI18N } from '../../../utils'
+import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from './Base'
 import { DebounceButton } from '../DashboardComponents/ActionButton'
-import { useI18N } from '../../../utils/i18n-next-ui'
 
 export function DashboardFeedbackDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
