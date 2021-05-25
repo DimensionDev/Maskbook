@@ -12,6 +12,7 @@ export default function DataSourceSetting() {
 
     return (
         <SettingSelect value={source} onChange={handleChange}>
+            // TODO: use DataProvider
             <MenuItem value={0}>CoinGecko</MenuItem>
             <MenuItem value={1}>CoinMarketCap</MenuItem>
             <MenuItem value={2}>Uniswap Info</MenuItem>

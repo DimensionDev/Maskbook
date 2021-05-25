@@ -14,7 +14,7 @@ export default styled(Switch)(() => ({
             transform: 'translateX(28px)',
         },
         [`&+.${switchClasses.track}`]: {
-            opacity: 0.1,
+            opacity: '0.1 !important',
         },
     },
     [`& .${switchClasses.track}`]: {

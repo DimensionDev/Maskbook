@@ -31,7 +31,7 @@ import DataSourceSetting from './components/DataSourceSetting'
 export default function Settings() {
     const t = useDashboardI18N()
     return (
-        <PageFrame title={t.settings()} withoutShapeContainer={true}>
+        <PageFrame title={t.settings()} withoutShapeContainer>
             <SettingCard title={t.settings_general()}>
                 <SettingItem
                     icon={<LanguageIcon />}
