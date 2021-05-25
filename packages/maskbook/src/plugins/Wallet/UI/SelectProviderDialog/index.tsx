@@ -53,6 +53,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     stepTitle: {
         fontSize: 19,
         fontWeight: 'bold',
+        fontFamily: 'PingFang SC',
     },
     stepContent: {
         marginTop: 21,
@@ -62,10 +63,16 @@ const useStyles = makeStyles((theme: Theme) => ({
         gap: 32,
     },
     network: {
-        position: 'relative',
-        cursor: 'pointer',
         width: 'auto',
         padding: 0,
+    },
+    networkIconContainer: {
+        position: 'relative',
+        cursor: 'pointer',
+        height: 48,
+        width: 48,
+        borderRadius: 48,
+        backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey['900'] : '#F7F9FA',
     },
     networkIcon: {
         height: 48,
@@ -75,11 +82,11 @@ const useStyles = makeStyles((theme: Theme) => ({
         position: 'absolute',
         right: 0,
         bottom: 0,
-        width: 16,
-        height: 16,
+        width: 14,
+        height: 14,
         background: '#fff',
         borderRadius: '50%',
-        border: '2px solid #fff',
+        boxShadow: `0 0 0 1.5px #fff`,
     },
     grid: {
         width: '100%',
@@ -183,8 +190,12 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                 className={classes.network}
                                 key={network}
                                 onClick={() => onSelectNetwork(network)}>
-                                <NetworkIcon networkType={network} />
-                                {selectedNetworkType === network && <SuccessIcon className={classes.checkedBadge} />}
+                                <div className={classes.networkIconContainer}>
+                                    <NetworkIcon networkType={network} />
+                                    {selectedNetworkType === network && (
+                                        <SuccessIcon className={classes.checkedBadge} />
+                                    )}
+                                </div>
                             </ListItem>
                         ))}
                     </List>
