@@ -1,6 +1,7 @@
 import { MenuItem } from '@material-ui/core'
 import { Services } from '../../../API'
 import { useAppearance } from '../../Personas/api'
+import { Appearance } from '@dimensiondev/maskbook-theme'
 
 import SettingSelect from './SettingSelect'
 
@@ -12,9 +13,9 @@ export default function AppearanceSetting() {
 
     return (
         <SettingSelect value={mode} onChange={handleChange}>
-            <MenuItem value="default">Follow system settings</MenuItem>
-            <MenuItem value="light">Light</MenuItem>
-            <MenuItem value="dark">Dark</MenuItem>
+            <MenuItem value={Appearance.default}>Follow system settings</MenuItem>
+            <MenuItem value={Appearance.light}>Light</MenuItem>
+            <MenuItem value={Appearance.dark}>Dark</MenuItem>
         </SettingSelect>
     )
 }
