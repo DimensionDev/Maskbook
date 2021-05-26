@@ -245,8 +245,8 @@ export async function decryptMessage1ToNByMyself(info: {
     myLocalKey: AESJsonWebKey
     iv: string | ArrayBuffer
 }): Promise<[ArrayBuffer, AESJsonWebKey]> {
-    const { encryptedContent, myLocalKey, iv, encryptedAESKey } = info
-    const decryptedAESKey = await extractAESKeyInMessage(-40, encryptedAESKey, iv, myLocalKey)
+    const { version, encryptedContent, myLocalKey, iv, encryptedAESKey } = info
+    const decryptedAESKey = await extractAESKeyInMessage(version, encryptedAESKey, iv, myLocalKey)
     const post = await decryptWithAES({ aesKey: decryptedAESKey, encrypted: encryptedContent, iv })
     return [post, decryptedAESKey]
 }
