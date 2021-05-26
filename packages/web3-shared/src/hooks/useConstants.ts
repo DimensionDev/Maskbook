@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import { ChainId, useChainId } from './useChainId'
 
-type Primitive = string | number | boolean
+// bigint is not in our list. iOS doesn't support that.
+type Primitive = string | number | boolean | symbol | undefined | null
 export interface Web3Constants {
     [K: string]: { [K in ChainId]: Primitive | Primitive[] }
 }

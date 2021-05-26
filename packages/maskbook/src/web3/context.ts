@@ -35,7 +35,7 @@ async function getWallets() {
             'erc721_token_whitelist',
             'erc721_token_blacklist',
         ] as (keyof typeof record)[]),
-        hasPrivateKey: Boolean(record._private_key_ || record.mnemonic),
+        hasPrivateKey: Boolean(record._private_key_ || record.mnemonic.length),
     }))
 }
 // utils
