@@ -9,7 +9,7 @@ import { usePostInfoDetails, usePostInfo, PostInfoProvider } from '../../../comp
 import { noop } from 'lodash-es'
 import { MaskMessage } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
-import type { TypedMessageText } from '@dimensiondev/maskbook-shared'
+import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,
@@ -36,8 +36,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         const onCallback = useCallback(
             async (content) => {
                 const postIV = iv || payload.unwrap().iv
-                // TODO: currently we only one item which is TypedMessageText in the tuple
-                const decryptedText = (postContent.items[0] as TypedMessageText).content
+                const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
                 const encryptedComment = await Services.Crypto.encryptComment(postIV, decryptedText, content)
                 onPasteToCommentBox(encryptedComment, info, dom).catch(console.error)
             },
