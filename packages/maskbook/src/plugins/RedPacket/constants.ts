@@ -28,7 +28,7 @@ export const RED_PACKET_CONSTANTS = {
         [ChainId.Mumbai]: '0x6DfC82B48CFd38d4722366Cd6F444a341b8840f5',
     },
     SUBGRAPH_URL: {
-        [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet',
+        [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mainnet',
         [ChainId.Ropsten]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-ropsten',
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
