@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js'
 import { useSnackbar } from 'notistack'
 import { makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
 import { FungibleTokenDetailed, EthereumTokenType, useAccount, TokenWatched, isNative } from '@dimensiondev/web3-shared'
+import { format as formatDateTime } from 'date-fns'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
@@ -142,12 +143,11 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                 <DateTimePanel
                     label={t('plugin_collectible_expiration_date')}
                     date={expirationDateTime}
+                    min={formatDateTime(new Date(), "yyyy-MM-dd'T23:59")}
                     onChange={setExpirationDateTime}
-                    TextFieldProps={{
-                        className: classes.panel,
-                        helperText: t('plugin_collectible_auction_auto_end'),
-                        fullWidth: true,
-                    }}
+                    className={classes.panel}
+                    helperText={t('plugin_collectible_auction_auto_end')}
+                    fullWidth
                 />
             </CardContent>
             <CardActions className={classes.footer}>

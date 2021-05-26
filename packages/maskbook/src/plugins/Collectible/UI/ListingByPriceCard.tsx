@@ -14,6 +14,7 @@ import {
     TextField,
 } from '@material-ui/core'
 import { FungibleTokenDetailed, EthereumTokenType, useAccount, TokenWatched, isNative } from '@dimensiondev/web3-shared'
+import { format as formatDateTime } from 'date-fns'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
@@ -204,14 +205,15 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                                 : t('plugin_collectible_schedule_date')
                         }
                         date={endingPriceChecked ? expirationTime : scheduleTime}
+                        min={formatDateTime(new Date(), "yyyy-MM-dd'T23:59")}
                         onChange={endingPriceChecked ? setExpirationTime : setScheduleTime}
-                        TextFieldProps={{
-                            className: classes.panel,
-                            helperText: endingPriceChecked
+                        className={classes.panel}
+                        helperText={
+                            endingPriceChecked
                                 ? t('plugin_collectible_auto_cancel_tip')
-                                : t('plugin_collectible_schedule_future_date'),
-                            fullWidth: true,
-                        }}
+                                : t('plugin_collectible_schedule_future_date')
+                        }
+                        fullWidth
                     />
                 ) : null}
                 {privacyChecked ? (
