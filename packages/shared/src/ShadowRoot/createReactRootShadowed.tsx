@@ -31,6 +31,22 @@ export interface ReactRootShadowed {
     // do not name it as unmount otherwise it might be compatible with ReactDOM's Root interface.
     destory(): void
 }
+let observing = false
+const pendingMountPair = new Map<ShadowRoot, Function>()
+const mutationObserver = new MutationObserver(() => {
+    for (const [node, mount] of pendingMountPair) {
+        if (node.host.parentNode) {
+            pendingMountPair.delete(node)
+            try {
+                mount()
+            } catch {}
+        }
+    }
+    if (pendingMountPair.size === 0) {
+        observing = false
+        mutationObserver.disconnect()
+    }
+})
 /**
  * @returns
  * A function that render the JSX in the ShadowRoot with JSS (in material-ui/core) and emotion support.
@@ -50,22 +66,11 @@ export function createReactRootShadowedPartial(_config: CreateRenderInShadowRoot
         if (shadowRoot.host.parentNode) {
             f()
         } else {
-            // NOTE: DOMNodeInserted is deprecated and greately affects performance. Hope passive can help.
-            // See https://github.com/whatwg/dom/issues/533
-            // If we use MutationObserver, we have to listen the whole document
-
-            // https://caniuse.com/mutation-events
-            shadowRoot.host.addEventListener(
-                'DOMNodeInserted',
-                () => {
-                    // Not change the DOM now, it's a sync event
-                    setTimeout(f)
-                },
-                {
-                    once: true,
-                    passive: true,
-                },
-            )
+            pendingMountPair.set(shadowRoot, f)
+            if (!observing) {
+                observing = true
+                mutationObserver.observe(document, { childList: true, subtree: true })
+            }
         }
 
         return {
