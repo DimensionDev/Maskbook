@@ -176,7 +176,7 @@ export function PoolView(props: PoolViewProps) {
             </CardContent>
             <CardActions className={classes.footer}>
                 <Typography className={classes.footnote} variant="subtitle2">
-                    <span>Powered by </span>
+                    <span>{t('plugin_powered_by')} </span>
                     <Link
                         className={classes.footLink}
                         color="textSecondary"

@@ -209,7 +209,9 @@ export function RedPacketForm(props: RedPacketFormProps) {
         setTransactionDialog({
             open: true,
             state: createState,
-            summary: `Creating red packet with ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`,
+            summary: t('plugin_red_packet_create_with_token', {
+                symbol: `${formatBalance(totalAmount, token.decimals)} ${token.symbol}`,
+            }),
         })
     }, [createState /* update tx dialog only if state changed */])
     //#endregion
@@ -219,8 +221,9 @@ export function RedPacketForm(props: RedPacketFormProps) {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (new BigNumber(shares || '0').isZero()) return 'Enter shares'
         if (new BigNumber(shares || '0').isGreaterThan(255)) return 'At most 255 recipients'
-        if (new BigNumber(amount).isZero()) return 'Enter an amount'
-        if (new BigNumber(totalAmount).isGreaterThan(tokenBalance)) return `Insufficient ${token.symbol} balance`
+        if (new BigNumber(amount).isZero()) return t('plugin_dhedge_enter_an_amount')
+        if (new BigNumber(totalAmount).isGreaterThan(tokenBalance))
+            return t('plugin_gitcoin_insufficient_balance', { symbol: token.symbol })
         return ''
     }, [account, amount, totalAmount, shares, token, tokenBalance])
 
@@ -270,7 +273,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
             <div className={classes.line}>
                 <TokenAmountPanel
                     classes={{ root: classes.input }}
-                    label={isRandom ? 'Total Amount' : 'Amount per Share'}
+                    label={isRandom ? 'Total Amount' : t('plugin_red_packet_amount_per_share')}
                     amount={rawAmount}
                     balance={tokenBalance}
                     token={token}
@@ -310,7 +313,10 @@ export function RedPacketForm(props: RedPacketFormProps) {
                         fullWidth
                         disabled={!!validationMessage}
                         onClick={createCallback}>
-                        {validationMessage || `Send ${formatBalance(totalAmount, token.decimals)} ${token.symbol}`}
+                        {validationMessage ||
+                            t('plugin_red_packet_send_symbol', {
+                                symbol: `${formatBalance(totalAmount, token.decimals)} ${token.symbol}`,
+                            })}
                     </ActionButton>
                 </EthereumERC20TokenApprovedBoundary>
             </EthereumWalletConnectedBoundary>

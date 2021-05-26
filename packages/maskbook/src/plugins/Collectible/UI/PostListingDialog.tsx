@@ -45,10 +45,17 @@ export function PostListingDialog(props: PostListingDialogProps) {
     const tokenWatched = useTokenWatched(selectedPaymentToken)
 
     const [tabIndex, setTabIndex] = useState(0)
-    const tabs = [<Tab key="price" label="Set Price" />, <Tab key="bid" label="Highest Bid" />]
+    const tabs = [
+        <Tab key="price" label={t('plugin_collectible_set_price')} />,
+        <Tab key="bid" label={t('plugin_collectible_highest_bid')} />,
+    ]
 
     return (
-        <InjectedDialog title="Post Listing" open={open} onClose={onClose} DialogProps={{ maxWidth: 'md' }}>
+        <InjectedDialog
+            title={t('plugin_collectible_post_listing')}
+            open={open}
+            onClose={onClose}
+            DialogProps={{ maxWidth: 'md' }}>
             <DialogContent className={classes.content}>
                 <Tabs
                     indicatorColor="primary"
