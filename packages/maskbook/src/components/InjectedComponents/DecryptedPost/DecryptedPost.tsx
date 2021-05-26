@@ -19,6 +19,7 @@ import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIter
 import { or } from '../../custom-ui-helper'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 import type { Payload } from '../../../utils/type-transform/Payload'
+import { makeTypedMessageTuple, TypedMessageTuple } from '@dimensiondev/maskbook-shared'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
