@@ -46,7 +46,7 @@ function createSubscriptionFromSettings<T>(settings: InternalSettings<T>): Subsc
         getCurrentValue: () => settings.value,
         subscribe: (f) => {
             const a = subscribe(f)
-            const b = settings.addListener(trigger)
+            const b = settings.addListener(() => trigger())
             return () => void [a(), b()]
         },
     }
