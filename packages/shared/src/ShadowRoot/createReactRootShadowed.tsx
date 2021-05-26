@@ -44,13 +44,13 @@ export function createReactRootShadowedPartial(_config: CreateRenderInShadowRoot
     ): ReactRootShadowed {
         let jsx: React.ReactChild = ''
         let root: ReactRootShadowed | null = null
-        function tryRender(): void {
+        function renderUntilMounted(): void {
             if (config.signal?.aborted) return
-            if (shadowRoot.host?.parentNode === null) return void setTimeout(tryRender, 20)
+            if (shadowRoot.host.parentNode === null) return renderQueue.queue(renderUntilMounted)
 
             root = mount(jsx, shadowRoot, config, _config)
         }
-        tryRender()
+        renderQueue.queue(renderUntilMounted)
         return {
             render: (_jsx) => {
                 if (!root) jsx = _jsx
@@ -60,6 +60,31 @@ export function createReactRootShadowedPartial(_config: CreateRenderInShadowRoot
         }
     }
 }
+const renderQueue = new (class {
+    private tasks = new Set<Function>()
+    private running = false
+    queue(f: Function) {
+        this.tasks.add(() => f())
+        if (!this.running) this.start()
+    }
+    private start() {
+        this.running = true
+        this.onTimeout()
+    }
+    private onTimeout() {
+        for (const f of [...this.tasks]) {
+            try {
+                this.tasks.delete(f)
+                f()
+            } catch {}
+        }
+        if (this.tasks.size) {
+            setTimeout(() => this.onTimeout(), 16 * 4)
+        } else {
+            this.running = false
+        }
+    }
+})()
 
 function mount(
     jsx: React.ReactChild,
