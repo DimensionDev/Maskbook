@@ -11,7 +11,7 @@
     "@dimensiondev/maskbook-theme": "workspace:*",
     "@servie/events": "^3.0.0",
     "@types/use-subscription": "^1.0.0",
-    "ts-results": "^3.2.1",
+    "ts-results": "^3.3.0",
     "use-subscription": "^1.5.1"
   }
 }
