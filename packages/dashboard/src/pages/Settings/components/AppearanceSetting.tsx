@@ -4,12 +4,13 @@ import { useAppearance } from '../../Personas/api'
 import { Appearance } from '@dimensiondev/maskbook-theme'
 
 import SettingSelect from './SettingSelect'
+import { useCallback } from 'react'
 
 export default function AppearanceSetting() {
     const mode = useAppearance()
-    const handleChange = (event: any) => {
+    const handleChange = useCallback((event: any) => {
         Services.Settings.setTheme(event.target.value)
-    }
+    }, [])
 
     return (
         <SettingSelect value={mode} onChange={handleChange}>

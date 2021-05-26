@@ -9,4 +9,4 @@ export default styled(Select)(() => ({
     [`& .${outlinedInputClasses.notchedOutline}`]: {
         borderColor: MaskColorVar.lineLighter,
     },
-}))
+})) as unknown as typeof Select

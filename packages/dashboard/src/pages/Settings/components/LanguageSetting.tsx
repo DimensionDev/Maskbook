@@ -3,12 +3,13 @@ import { useLanguage } from '../api'
 import { Services } from '../../../API'
 import SettingSelect from './SettingSelect'
 import { Language } from '@dimensiondev/maskbook-theme'
+import { useCallback } from 'react'
 
 export default function LanguageSetting() {
     const lang = useLanguage()
-    const handleChange = (event: any) => {
+    const handleChange = useCallback((event: any) => {
         Services.Settings.setLanguage(event.target.value)
-    }
+    }, [])
 
     return (
         <SettingSelect value={lang} onChange={handleChange}>
