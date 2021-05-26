@@ -41,9 +41,7 @@ export const postEditorDraftContentSelector = () => {
 export const handleSelector = () => querySelector<HTMLScriptElement>('.m-user-menu ul li a:first-child')
 
 export const selfInfoSelectors = () => ({
-    handle: handleSelector().map((x) =>
-        x.innerText.replace(/@/, '').trim(),
-    ),
+    handle: handleSelector().map((x) => x.innerText.replace(/@/, '').trim()),
     avatar: querySelector<HTMLScriptElement>('.m-user-menu .minds-avatar').map((x) =>
         // get everything between the parens (the url)
         x.style.backgroundImage.match(/\((.*?)\)/)![1].replace(/('|")/g, ''),

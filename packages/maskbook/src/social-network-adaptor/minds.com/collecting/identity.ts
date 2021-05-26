@@ -23,14 +23,14 @@ async function resolveLastRecognizedIdentityInner(
 
         // call the API to get the nickname
         fetch('/api/v1/channel/' + handle, { signal: cancel })
-          .then((res) => res.json())
-          .then(({ channel }) => {
-              ref.value = {
-                  identifier: new ProfileIdentifier(mindsBase.networkIdentifier, channel.username),
-                  nickname: channel.name,
-                  avatar: channel.avatar_url?.medium,
-              }
-          })
+            .then((res) => res.json())
+            .then(({ channel }) => {
+                ref.value = {
+                    identifier: new ProfileIdentifier(mindsBase.networkIdentifier, channel.username),
+                    nickname: channel.name,
+                    avatar: channel.avatar_url?.medium,
+                }
+            })
     }
 }
 
