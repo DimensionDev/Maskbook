@@ -38,8 +38,10 @@ export const postEditorDraftContentSelector = () => {
     return querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea.m-composerTextarea__message')
 }
 
+export const handleSelector = () => querySelector<HTMLScriptElement>('.m-user-menu ul li a:first-child')
+
 export const selfInfoSelectors = () => ({
-    handle: querySelector<HTMLScriptElement>('.m-user-menu ul li a:first-child').map((x) =>
+    handle: handleSelector().map((x) =>
         x.innerText.replace(/@/, '').trim(),
     ),
     avatar: querySelector<HTMLScriptElement>('.m-user-menu .minds-avatar').map((x) =>
