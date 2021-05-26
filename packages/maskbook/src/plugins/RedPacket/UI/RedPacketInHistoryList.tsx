@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { ListItem, makeStyles, Theme, Typography, Box } from '@material-ui/core'
 import { Trans } from 'react-i18next'
-import type { RedPacketJSONPayload, RedPacketHistory } from '../types'
+import { RedPacketJSONPayload, RedPacketHistory, RedPacketStatus } from '../types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
@@ -102,7 +102,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const classes = useStyles()
     const {
         value: availability,
-        computed: { canRefund, canSend },
+        computed: { canRefund, canSend, listOfStatus },
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, history.payload)
 
@@ -115,40 +115,35 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            if (refundState.type !== TransactionStateType.CONFIRMED) {
-                return
-            }
-            resetRefundCallback()
-            revalidateAvailability()
-        },
+        (ev) => undefined,
     )
 
     useEffect(() => {
-        if (
-            refundState.type === TransactionStateType.UNKNOWN ||
-            (!availability && refundState.type !== TransactionStateType.CONFIRMED)
-        )
-            return
-        setTransactionDialogOpen({
-            open: true,
-            state: refundState,
-            summary: availability
-                ? `Refunding red packet for ${formatBalance(
-                      new BigNumber(availability.balance),
-                      history.token.decimals ?? 0,
-                      history.token.decimals ?? 0,
-                  )} ${history.token.symbol}`
-                : '',
-        })
+        if (refundState.type === TransactionStateType.UNKNOWN || !availability) return
+        if (refundState.type === TransactionStateType.HASH) {
+            console.log({ refundState })
+            setTransactionDialogOpen({
+                open: true,
+                state: refundState,
+                summary: availability
+                    ? `Refunding red packet for ${formatBalance(
+                          new BigNumber(availability.balance),
+                          history.token.decimals ?? 0,
+                          history.token.decimals ?? 0,
+                      )} ${history.token.symbol}`
+                    : '',
+            })
+        } else if (refundState.type === TransactionStateType.CONFIRMED) {
+            console.log({ refundState }, 'c')
+            resetRefundCallback()
+            revalidateAvailability()
+        }
     }, [refundState /* update tx dialog only if state changed */])
     //#endregion
 
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) await refundCallback()
         if (canSend) onSelect(history.payload)
-        onClose()
     }, [onSelect, onClose, refundCallback, canRefund, canSend, history])
 
     return (
@@ -184,13 +179,26 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                 })}
                             </Typography>
                         </div>
-                        {canRefund || canSend ? (
+                        {canRefund ||
+                        canSend ||
+                        listOfStatus.includes(RedPacketStatus.empty) ||
+                        refundState.type === TransactionStateType.HASH ? (
                             <ActionButton
                                 onClick={onSendOrRefund}
+                                disabled={
+                                    listOfStatus.includes(RedPacketStatus.empty) ||
+                                    refundState.type === TransactionStateType.HASH
+                                }
                                 className={classes.actionButton}
                                 variant="contained"
                                 size="large">
-                                {canSend ? t('plugin_red_packet_history_send') : t('plugin_red_packet_refund')}
+                                {canSend
+                                    ? t('plugin_red_packet_history_send')
+                                    : refundState.type === TransactionStateType.HASH
+                                    ? t('plugin_red_packet_refunding')
+                                    : listOfStatus.includes(RedPacketStatus.empty)
+                                    ? t('plugin_red_packet_empty')
+                                    : t('plugin_red_packet_refund')}
                             </ActionButton>
                         ) : null}
                     </section>

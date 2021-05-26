@@ -148,8 +148,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     // password should remain the same rather than change each time when createState change,
     //  otherwise password in database would be different from creating red-packet.
     const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback({
-        // Todo: revert it back after test
-        duration: 60 /* seconds */ * 15 /* mins */ * 1 /* hours */,
+        duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
         isRandom: Boolean(isRandom),
         name: senderName,
         message,

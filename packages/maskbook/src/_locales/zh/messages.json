@@ -350,6 +350,7 @@
     "plugin_red_packet_claim": "認領",
     "plugin_red_packet_claiming": "",
     "plugin_red_packet_refund": "退款",
+    "plugin_red_packet_empty": "空",
     "plugin_red_packet_refunding": "",
     "plugin_red_packet_select_existing": "選擇已存在的",
     "plugin_red_packet_share_message": "",

@@ -366,6 +366,7 @@
     "plugin_red_packet_claiming_from": "{{name}}에서 빨간 팩 받는 중",
     "plugin_red_packet_refunding_for": "{{balance}} {{symbol}} 빨간 백 반환 중",
     "plugin_red_packet_claiming": "",
+    "plugin_red_packet_empty": "",
     "plugin_red_packet_refunding": "",
     "plugin_red_packet_amount_per_share": "공유 총액",
     "plugin_red_packet_send_symbol": "{{symbol}} 보내기",
