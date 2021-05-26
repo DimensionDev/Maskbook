@@ -8,7 +8,6 @@ import {
     Payload,
     PostIdentifier,
     ProfileIdentifier,
-    TypedMessage,
     TypedMessageTuple,
     useObservableValues,
     useValueRef,
@@ -57,11 +56,7 @@ export abstract class PostInfo {
     /**
      * The un-decrypted post content after transformation.
      */
-    readonly transformedPostContent = new ValueRef<TypedMessage>(makeTypedMessageTuple([]), isTypedMessageEqual)
-    /** @deprecated It should appear in the transformedPostContent */
-    readonly decryptedPostContent = new ValueRef<TypedMessage | null>(null)
-    /** @deprecated It should appear in the transformedPostContent */
-    readonly decryptedPostContentRaw = new ValueRef('')
+    readonly transformedPostContent = new ValueRef<TypedMessageTuple>(makeTypedMessageTuple([]), isTypedMessageEqual)
     readonly iv = new ValueRef<string | null>(null)
     abstract readonly rootNode: HTMLElement
     abstract readonly rootNodeProxy: DOMProxy

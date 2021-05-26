@@ -9,7 +9,7 @@ import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../../settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
-import type { TypedMessage } from '../../protocols/typed-message'
+import type { TypedMessageTuple } from '@dimensiondev/maskbook-shared'
 import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/PluginUI'
 import { usePostInfoDetails, usePostInfo } from '../DataSource/usePostInfo'
@@ -21,7 +21,7 @@ import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@dimen
 const PluginHooksRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (plugin) => plugin.PostInspector)
 
 export interface PostInspectorProps {
-    onDecrypted(post: TypedMessage, raw: string): void
+    onDecrypted(post: TypedMessageTuple): void
     needZip(): void
     DecryptPostProps?: Partial<DecryptPostProps>
     DecryptPostComponent?: React.ComponentType<DecryptPostProps>

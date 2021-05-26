@@ -8,6 +8,7 @@ import type { ChipProps } from '@material-ui/core/Chip'
 import { useStylesExtends } from '../custom-ui-helper'
 import { useAsync } from 'react-use'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
+import type { TypedMessageText } from '@dimensiondev/maskbook-shared'
 
 const useStyle = makeStyles({
     root: {
@@ -45,17 +46,19 @@ export interface PostCommentProps {
 export function PostComment(props: PostCommentProps) {
     const { failedComponent: Fail, waitingComponent: Wait, needZip } = props
     const comment = useValueRef(props.comment)
-    const decryptedPostContent = usePostInfoDetails('decryptedPostContentRaw')
+    const postContent = usePostInfoDetails('transformedPostContent')
     const postPayload = usePostInfoDetails('postPayload')
     const iv = usePostInfoDetails('iv')
     const postIV = postPayload.map((x) => x.iv).unwrapOr(iv)
 
     const dec = useAsync(async () => {
-        if (!postIV || !decryptedPostContent) throw new Error('Decrypt comment failed')
-        const result = await Services.Crypto.decryptComment(postIV, decryptedPostContent, comment)
+        // TODO: currently we only one item which is TypedMessageText in the tuple
+        const decryptedText = (postContent.items[0] as TypedMessageText).content
+        if (!postIV || !decryptedText) throw new Error('Decrypt comment failed')
+        const result = await Services.Crypto.decryptComment(postIV, decryptedText, comment)
         if (result === null) throw new Error('Decrypt result empty')
         return result
-    }, [postIV, decryptedPostContent, comment])
+    }, [postIV, postContent, comment])
 
     const Success = props.successComponent || PostCommentDecrypted
     useEffect(() => void (dec.value && needZip()), [dec.value, needZip])
