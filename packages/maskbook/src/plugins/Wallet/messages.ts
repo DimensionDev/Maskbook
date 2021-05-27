@@ -1,3 +1,4 @@
+import type { ProviderType, Wallet } from '@dimensiondev/web3-shared'
 import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { createPluginMessage } from '../utils/createPluginMessage'
@@ -13,7 +14,20 @@ export type SelectProviderDialogEvent =
           address?: string
       }
 
+export type ConnectWalletDialogEvent =
+    | {
+          open: true
+          providerType: ProviderType
+      }
+    | {
+          open: false
+      }
+
 export type SelectWalletDialogEvent = {
+    open: boolean
+}
+
+export type CreateImportWalletDialogEvent = {
     open: boolean
 }
 
@@ -22,8 +36,18 @@ export type CreateWalletDialogEvent = {
     open: boolean
 }
 
+export type ImportWalletDialogEvent = {
+    name?: string
+    open: boolean
+}
+
 export type WalletStatusDialogEvent = {
     open: boolean
+}
+
+export type WalletRenameDialogEvent = {
+    open: boolean
+    wallet: Wallet | null
 }
 
 export type WalletConnectQRCodeDialogEvent =
@@ -60,9 +84,19 @@ interface WalletMessage {
     selectWalletDialogUpdated: SelectWalletDialogEvent
 
     /**
+     * Create or import wallet choose dialog
+     */
+    createImportWalletDialogUpdated: CreateImportWalletDialogEvent
+
+    /**
      * Create wallet dialog
      */
     createWalletDialogUpdated: CreateWalletDialogEvent
+
+    /**
+     * import wallet dialog
+     */
+    importWalletDialogUpdated: ImportWalletDialogEvent
 
     /**
      * Select provider dialog
@@ -70,9 +104,19 @@ interface WalletMessage {
     selectProviderDialogUpdated: SelectProviderDialogEvent
 
     /**
+     * Connect wallet dialog
+     */
+    connectWalletDialogUpdated: ConnectWalletDialogEvent
+
+    /**
      * Wallet status dialog
      */
     walletStatusDialogUpdated: WalletStatusDialogEvent
+
+    /**
+     * Wallet status dialog
+     */
+    walletRenameDialogUpdated: WalletRenameDialogEvent
 
     /**
      * Select token dialog

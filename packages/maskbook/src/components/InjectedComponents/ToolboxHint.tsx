@@ -1,5 +1,6 @@
 import { makeStyles, Typography, MenuItem } from '@material-ui/core'
 import { useAccount, useChainId, ChainId, resolveChainColor } from '@dimensiondev/web3-shared'
+import classNames from 'classnames'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
@@ -13,15 +14,18 @@ import { useControlledDialog } from '../../plugins/Collectible/UI/useControlledD
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
+import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
-import classNames from 'classnames'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
 import { ProviderIcon } from '../shared/ProviderIcon'
+import { NetworkIcon } from '../shared/NetworkIcon'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
-import { WalletMessages } from '../../plugins/Wallet/messages'
+import {
+    currentSelectedWalletProviderSettings,
+    currentSelectedWalletNetworkSettings,
+} from '../../plugins/Wallet/settings'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 
@@ -86,11 +90,26 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
         marginLeft: 22,
     },
+    iconWrapper: {
+        position: 'relative',
+        height: 24,
+        width: 24,
+    },
     icon: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
         width: 24,
         height: 24,
         fontSize: 24,
+    },
+    networkIcon: {
+        position: 'absolute',
+        right: -2,
+        bottom: -2,
+        backgroundColor: '#F7F9FA',
+        height: 10,
+        width: 10,
+        borderRadius: '50%',
+        boxShadow: `0 0 0 2px #F7F9FA`,
     },
     mask: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
@@ -113,6 +132,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const selectedWallet = useWallet()
     const chainId = useChainId()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
+    const selectedNetwork = useValueRef(currentSelectedWalletNetworkSettings)
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
@@ -187,6 +207,10 @@ export function ToolboxHint(props: ToolboxHintProps) {
     } = useControlledDialog()
     //#endregion
 
+    const { openDialog: openCreateImportDialog } = useRemoteControlledDialog(
+        WalletMessages.events.createImportWalletDialogUpdated,
+    )
+
     const [menu, openMenu] = useMenu(
         [
             <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
@@ -219,6 +243,10 @@ export function ToolboxHint(props: ToolboxHintProps) {
                 <Image src={ToolIconURLs.claim.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.claim.text}</Typography>
             </MenuItem>,
+            <MenuItem onClick={openCreateImportDialog} className={classes.menuItem}>
+                <Image src={ToolIconURLs.claim.image} width={19} height={19} />
+                <Typography className={classes.text}>create and import</Typography>
+            </MenuItem>,
         ],
         false,
         {
@@ -244,11 +272,18 @@ export function ToolboxHint(props: ToolboxHintProps) {
             <div className={classes.wrapper} onClick={openWallet}>
                 <div className={classes.button}>
                     {selectedWallet ? (
-                        <ProviderIcon
-                            classes={{ icon: classes.icon }}
-                            size={24}
-                            providerType={selectedWalletProvider}
-                        />
+                        <div className={classes.iconWrapper}>
+                            <ProviderIcon
+                                classes={{ icon: classes.icon }}
+                                size={24}
+                                providerType={selectedWalletProvider}
+                            />
+                            <NetworkIcon
+                                size={14}
+                                classes={{ icon: classes.networkIcon }}
+                                networkType={selectedNetwork}
+                            />
+                        </div>
                     ) : (
                         <WalletSharp classes={{ root: classes.icon }} size={24} />
                     )}
