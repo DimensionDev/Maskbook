@@ -6,7 +6,7 @@ import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import { NativeTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '../../../web3/types'
+import { FungibleTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '../../../web3/types'
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../constants'
 import Services from '../../../extension/service'
@@ -25,7 +25,7 @@ export interface PoolSettings {
     total: string
     qualificationAddress: string
     exchangeAmounts: string[]
-    exchangeTokens: (NativeTokenDetailed | ERC20TokenDetailed)[]
+    exchangeTokens: FungibleTokenDetailed[]
     token?: ERC20TokenDetailed
     advanceSettingData: AdvanceSettingData
 }

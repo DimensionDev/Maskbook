@@ -11,7 +11,7 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { TradeStrategy, TokenPanelType, TradeComputed, WarningLevel, TradeProvider } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useRemoteControlledDialog, useI18N } from '../../../../utils'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../../web3/types'
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { isEtherWrapper, toBips } from '../../helpers'
@@ -72,8 +72,8 @@ export interface TradeFormProps extends withClasses<never> {
     strategy: TradeStrategy
     provider: TradeProvider
     loading: boolean
-    inputToken?: NativeTokenDetailed | ERC20TokenDetailed
-    outputToken?: NativeTokenDetailed | ERC20TokenDetailed
+    inputToken?: FungibleTokenDetailed
+    outputToken?: FungibleTokenDetailed
     inputAmount: string
     outputAmount: string
     inputTokenBalance?: string

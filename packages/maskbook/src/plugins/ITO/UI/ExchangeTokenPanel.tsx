@@ -5,7 +5,7 @@ import AddIcon from '@material-ui/icons/AddOutlined'
 import RemoveIcon from '@material-ui/icons/RemoveOutlined'
 
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
@@ -40,8 +40,8 @@ export interface ExchangetokenPanelProps {
 
     disableBalance: boolean
     isSell: boolean
-    exchangeToken: NativeTokenDetailed | ERC20TokenDetailed | undefined
-    onExchangeTokenChange: (token: NativeTokenDetailed | ERC20TokenDetailed, key: string) => void
+    exchangeToken: FungibleTokenDetailed | undefined
+    onExchangeTokenChange: (token: FungibleTokenDetailed, key: string) => void
 
     onAdd: () => void
     onRemove: () => void

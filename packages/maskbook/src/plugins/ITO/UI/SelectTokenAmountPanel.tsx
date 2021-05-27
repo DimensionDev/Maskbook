@@ -3,17 +3,17 @@ import { v4 as uuid } from 'uuid'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { TokenAmountPanel, TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import type { FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 
 export interface SelectTokenAmountPanelProps {
     amount: string
     balance: string
-    token?: NativeTokenDetailed | ERC20TokenDetailed
+    token?: FungibleTokenDetailed
     disableEther?: boolean
     disableSearchBar?: boolean
     onAmountChange: (amount: string) => void
-    onTokenChange: (token: NativeTokenDetailed | ERC20TokenDetailed) => void
+    onTokenChange: (token: FungibleTokenDetailed) => void
     FixedTokenListProps?: Partial<FixedTokenListProps>
     TokenAmountPanelProps?: Partial<TokenAmountPanelProps>
 }

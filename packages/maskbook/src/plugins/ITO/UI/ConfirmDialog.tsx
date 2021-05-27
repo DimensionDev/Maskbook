@@ -11,7 +11,7 @@ import { useChainId } from '../../../web3/hooks/useChainId'
 import { dateTimeFormat } from '../assets/formatDate'
 import { isNative } from '../../../web3/helpers'
 import { resolveTokenLinkOnExplorer, resolveAddressLinkOnExplorer } from '../../../web3/pipes'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
 import { ITO_CONSTANTS } from '../constants'
@@ -26,9 +26,9 @@ const useSwapItemStyles = makeStyles((theme) => ({
     icon: {},
 }))
 interface SwapItemProps {
-    token?: NativeTokenDetailed | ERC20TokenDetailed
+    token?: FungibleTokenDetailed
     swapAmount?: string
-    swap?: NativeTokenDetailed | ERC20TokenDetailed
+    swap?: FungibleTokenDetailed
 }
 
 function SwapItem(props: SwapItemProps) {

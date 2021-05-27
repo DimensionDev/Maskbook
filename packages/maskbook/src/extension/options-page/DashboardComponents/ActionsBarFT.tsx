@@ -6,7 +6,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogFT } from '../DashboardDialogs/Wallet'
 import type { Wallet } from '@dimensiondev/web3-shared'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainIdValid } from '../../../web3/hooks/useChainId'
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 export interface ActionsBarFT_Props extends withClasses<'more'> {
     chain: 'eth' | string
     wallet: Wallet
-    token: NativeTokenDetailed | ERC20TokenDetailed
+    token: FungibleTokenDetailed
 }
 
 export function ActionsBarFT(props: ActionsBarFT_Props) {

@@ -4,7 +4,7 @@ import { createTypedMessageMetadataReader, createRenderWithMetadata } from '../.
 import { ITO_MetaKey } from './constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from './types'
 import schema from './schema.json'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../web3/types'
+import type { FungibleTokenDetailed } from '../../web3/types'
 import { isNative } from '../../web3/helpers'
 
 export const ITO_MetadataReader = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_MetaKey, schema)
@@ -49,10 +49,10 @@ export function tokenIntoMask(token: JSON_PayloadOutMask['token']) {
     return {
         ...omit(token, 'chain_id'),
         chainId: token.chain_id,
-    } as unknown as NativeTokenDetailed | ERC20TokenDetailed
+    } as unknown as FungibleTokenDetailed
 }
 
-export function tokenOutMask(token: NativeTokenDetailed | ERC20TokenDetailed) {
+export function tokenOutMask(token: FungibleTokenDetailed) {
     return {
         ...omit(token, 'chainId'),
         chain_id: token.chainId,

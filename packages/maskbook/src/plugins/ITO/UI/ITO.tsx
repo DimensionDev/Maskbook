@@ -7,7 +7,7 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { useRemoteControlledDialog, getAssetAsBlobURL, formatDateTime, getTextUILength, useI18N } from '../../../utils'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import { resolveLinkOnExplorer } from '../../../web3/pipes'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
 import { useAccount } from '../../../web3/hooks/useAccount'
@@ -164,8 +164,8 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
 //#region token item
 interface TokenItemProps {
     price: string
-    token: NativeTokenDetailed | ERC20TokenDetailed
-    exchangeToken: NativeTokenDetailed | ERC20TokenDetailed
+    token: FungibleTokenDetailed
+    exchangeToken: FungibleTokenDetailed
 }
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {

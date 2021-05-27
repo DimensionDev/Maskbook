@@ -81,6 +81,16 @@ export interface ERC1155TokenAssetDetailed extends ERC1155TokenDetailed {
 }
 //#endregion
 
+//#region fungible token
+export type FungibleToken = NativeToken | ERC20Token
+export type FungibleTokenDetailed = NativeTokenDetailed | ERC20TokenDetailed
+//#endregion
+
+//#region non-fungible token
+export type NonFungibleToken = ERC721Token | ERC1155Token
+export type NonFungibleTokenDetailed = ERC721TokenDetailed | ERC1155TokenDetailed
+//#endregion
+
 interface TokenDetailedMap {
     [EthereumTokenType.Native]: NativeTokenDetailed
     [EthereumTokenType.ERC20]: ERC20TokenDetailed

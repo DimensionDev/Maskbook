@@ -8,7 +8,7 @@ import { isSameAddress } from '../../../web3/helpers'
 import { buf2hex, hex2buf, useI18N } from '../../../utils'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { useQualificationContract } from '../contracts/useQualificationContract'
 import Services from '../../../extension/service'
@@ -17,7 +17,7 @@ import type { JSON_PayloadInMask } from '../types'
 export function useSwapCallback(
     payload: JSON_PayloadInMask,
     total: string,
-    token: PartialRequired<NativeTokenDetailed | ERC20TokenDetailed, 'address'>,
+    token: PartialRequired<FungibleTokenDetailed, 'address'>,
     isQualificationHasLucky = false,
 ) {
     const { t } = useI18N()

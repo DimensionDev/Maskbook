@@ -1,13 +1,13 @@
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../../web3/types'
 import type { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types'
 
 export function useTradeComputed(
     trade: SwapQuoteResponse | null,
     strategy: TradeStrategy,
-    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
-    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
+    inputToken?: FungibleTokenDetailed,
+    outputToken?: FungibleTokenDetailed,
 ) {
     return useMemo(() => {
         if (!trade) return null

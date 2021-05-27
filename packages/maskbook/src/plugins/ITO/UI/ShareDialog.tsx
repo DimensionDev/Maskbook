@@ -4,7 +4,7 @@ import { makeStyles, Typography, Box } from '@material-ui/core'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { useI18N, getAssetAsBlobURL } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme) => ({
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 export interface ShareDialogProps extends withClasses<'root'> {
     shareSuccessLink: string | undefined
-    token: NativeTokenDetailed | ERC20TokenDetailed
+    token: FungibleTokenDetailed
     actualSwapAmount: BigNumber.Value
     poolName: string
     onClose: () => void

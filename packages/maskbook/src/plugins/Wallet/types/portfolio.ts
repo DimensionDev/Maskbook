@@ -1,6 +1,6 @@
 import type { ZerionTransactionDirection } from './zerion'
 import type { DebankTransactionDirection } from './debank'
-import type { CurrencyType, NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { CurrencyType, FungibleTokenDetailed } from '../../../web3/types'
 
 export enum FilterTransactionType {
     ALL = 'all',
@@ -44,7 +44,7 @@ export enum CollectibleProvider {
 }
 
 export interface Asset {
-    token: NativeTokenDetailed | ERC20TokenDetailed
+    token: FungibleTokenDetailed
     /**
      * The chain name of assets
      */

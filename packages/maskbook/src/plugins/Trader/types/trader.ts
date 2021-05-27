@@ -1,5 +1,5 @@
 import type BigNumber from 'bignumber.js'
-import type { ChainId, NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
 
 export enum TradeProvider {
     UNISWAP,
@@ -47,8 +47,8 @@ export enum ZrxTradePool {
 
 export interface TradeComputed<T = unknown> {
     strategy: TradeStrategy
-    inputToken?: NativeTokenDetailed | ERC20TokenDetailed
-    outputToken?: NativeTokenDetailed | ERC20TokenDetailed
+    inputToken?: FungibleTokenDetailed
+    outputToken?: FungibleTokenDetailed
     inputAmount: BigNumber
     outputAmount: BigNumber
     nextMidPrice: BigNumber
