@@ -3,21 +3,18 @@ import classNames from 'classnames'
 import { BigNumber } from 'bignumber.js'
 import { makeStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_Status, JSON_PayloadInMask } from '../types'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { resolveLinkOnEtherscan } from '../../../web3/pipes'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useBlockNumber'
+import { useRemoteControlledDialog, getAssetAsBlobURL, formatDateTime, getTextUILength, useI18N } from '../../../utils'
+import type { FungibleTokenDetailed } from '../../../web3/types'
+import { resolveLinkOnExplorer } from '../../../web3/pipes'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import { formatAmountPrecision, formatBalance } from '@dimensiondev/maskbook-shared'
+import { formatAmountPrecision, formatEthereumAddress, formatBalance } from '@dimensiondev/maskbook-shared'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { formatDateTime } from '../../../utils/date'
-import { getTextUILength } from '../../../utils/getTextUILength'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
@@ -25,11 +22,9 @@ import { sortTokens } from '../helpers'
 import { ITO_EXCHANGE_RATION_MAX, TIME_WAIT_BLOCKCHAIN, MSG_DELIMITER } from '../constants'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { useDestructCallback } from '../hooks/useDestructCallback'
-import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useClaimCallback } from '../hooks/useClaimCallback'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useIPRegion, decodeRegionCode, checkRegionRestrict } from '../hooks/useRegion'
 import { useIfQualified } from '../hooks/useIfQualified'
 
@@ -168,8 +163,8 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
 //#region token item
 interface TokenItemProps {
     price: string
-    token: EtherTokenDetailed | ERC20TokenDetailed
-    exchangeToken: EtherTokenDetailed | ERC20TokenDetailed
+    token: FungibleTokenDetailed
+    exchangeToken: FungibleTokenDetailed
 }
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
@@ -506,7 +501,7 @@ export function ITO(props: ITO_Props) {
                     })}
                     <Link
                         className={classes.tokenLink}
-                        href={`${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`}
+                        href={`${resolveLinkOnExplorer(token.chainId)}/token/${token.address}`}
                         target="_blank"
                         rel="noopener noreferrer">
                         <OpenInNewIcon fontSize="small" className={classes.totalIcon} />
@@ -609,8 +604,11 @@ export function ITO(props: ITO_Props) {
                                             onClick={onClaimButtonClick}
                                             variant="contained"
                                             size="large"
+                                            disabled={claimState.type === TransactionStateType.HASH}
                                             className={classes.actionButton}>
-                                            {t('plugin_ito_claim')}
+                                            {claimState.type === TransactionStateType.HASH
+                                                ? t('plugin_ito_claiming')
+                                                : t('plugin_ito_claim')}
                                         </ActionButton>
                                     ) : (
                                         <ActionButton

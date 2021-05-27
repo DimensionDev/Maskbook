@@ -2,7 +2,7 @@ import { useAsync } from 'react-use'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import type { ERC721Token } from '../types'
 import { useAccount } from './useAccount'
-import { useChainId } from './useBlockNumber'
+import { useChainId } from './useChainId'
 
 export function useERC721TokenOwnerByIndex(token?: ERC721Token, index: number = 0) {
     const account = useAccount()
@@ -11,5 +11,5 @@ export function useERC721TokenOwnerByIndex(token?: ERC721Token, index: number = 
     return useAsync(async () => {
         if (!account || !erc721Contract) return
         return erc721Contract.methods.tokenOfOwnerByIndex(account, index).call()
-    }, [account, chainId /* re-calc when switch the chain */, token, erc721Contract, index])
+    }, [account, chainId, token, erc721Contract, index])
 }

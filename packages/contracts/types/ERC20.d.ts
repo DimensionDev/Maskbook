@@ -3,10 +3,17 @@
 /* eslint-disable */
 
 import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
+import { ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import {
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
+    BaseContract,
+} from './types'
 
 interface EventOptions {
     filter?: object
@@ -14,45 +21,58 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class ERC20 extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
+export type Approval = ContractEventLog<{
+    owner: string
+    spender: string
+    value: string
+    0: string
+    1: string
+    2: string
+}>
+export type Transfer = ContractEventLog<{
+    from: string
+    to: string
+    value: string
+    0: string
+    1: string
+    2: string
+}>
+
+export interface ERC20 extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): ERC20
     clone(): ERC20
     methods: {
-        name(): TransactionObject<string>
+        name(): NonPayableTransactionObject<string>
 
-        approve(_spender: string, _value: number | string): TransactionObject<boolean>
+        approve(_spender: string, _value: number | string | BN): NonPayableTransactionObject<boolean>
 
-        totalSupply(): TransactionObject<string>
+        totalSupply(): NonPayableTransactionObject<string>
 
-        transferFrom(_from: string, _to: string, _value: number | string): TransactionObject<boolean>
+        transferFrom(_from: string, _to: string, _value: number | string | BN): NonPayableTransactionObject<boolean>
 
-        decimals(): TransactionObject<string>
+        decimals(): NonPayableTransactionObject<string>
 
-        balanceOf(_owner: string): TransactionObject<string>
+        balanceOf(_owner: string): NonPayableTransactionObject<string>
 
-        symbol(): TransactionObject<string>
+        symbol(): NonPayableTransactionObject<string>
 
-        transfer(_to: string, _value: number | string): TransactionObject<boolean>
+        transfer(_to: string, _value: number | string | BN): NonPayableTransactionObject<boolean>
 
-        allowance(_owner: string, _spender: string): TransactionObject<string>
+        allowance(_owner: string, _spender: string): NonPayableTransactionObject<string>
     }
     events: {
-        Approval: ContractEvent<{
-            owner: string
-            spender: string
-            value: string
-            0: string
-            1: string
-            2: string
-        }>
-        Transfer: ContractEvent<{
-            from: string
-            to: string
-            value: string
-            0: string
-            1: string
-            2: string
-        }>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+        Approval(cb?: Callback<Approval>): EventEmitter
+        Approval(options?: EventOptions, cb?: Callback<Approval>): EventEmitter
+
+        Transfer(cb?: Callback<Transfer>): EventEmitter
+        Transfer(options?: EventOptions, cb?: Callback<Transfer>): EventEmitter
+
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
+
+    once(event: 'Approval', cb: Callback<Approval>): void
+    once(event: 'Approval', options: EventOptions, cb: Callback<Approval>): void
+
+    once(event: 'Transfer', cb: Callback<Transfer>): void
+    once(event: 'Transfer', options: EventOptions, cb: Callback<Transfer>): void
 }

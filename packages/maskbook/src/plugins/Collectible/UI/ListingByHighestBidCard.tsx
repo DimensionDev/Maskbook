@@ -2,10 +2,10 @@ import { useState, useMemo, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { useSnackbar } from 'notistack'
 import { makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import type { TokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
@@ -13,7 +13,7 @@ import type { useAsset } from '../hooks/useAsset'
 import { ChainState } from '../../../web3/state/useChainState'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
-import { isETH } from '../../../web3/helpers'
+import { isNative } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -41,7 +41,7 @@ export interface ListingByHighestBidCardProps {
     onClose: () => void
     asset?: ReturnType<typeof useAsset>
     tokenWatched: TokenWatched
-    paymentTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
+    paymentTokens: FungibleTokenDetailed[]
 }
 
 export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
@@ -58,10 +58,10 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
 
     const validationMessage = useMemo(() => {
-        if (new BigNumber(amount || '0').isZero()) return 'Enter minimum bid'
-        if (new BigNumber(reservePrice || '0').isZero()) return 'Enter reserve price'
-        if (new BigNumber(reservePrice).isLessThan(amount)) return 'Invalid reserve price'
-        if (expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid expiration date'
+        if (new BigNumber(amount || '0').isZero()) return t('plugin_collectible_enter_minimum_bid')
+        if (new BigNumber(reservePrice || '0').isZero()) return t('plugin_collectible_enter_reserve_price')
+        if (new BigNumber(reservePrice).isLessThan(amount)) return t('plugin_collectible_invalid_reserve_price')
+        if (expirationDateTime.getTime() - Date.now() <= 0) return t('plugin_collectible_invalid_expiration_date')
         return ''
     }, [amount, reservePrice, expirationDateTime])
 
@@ -105,17 +105,17 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                 <SelectTokenAmountPanel
                     amount={amount}
                     balance={balance.value ?? '0'}
-                    token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
-                    disableEther={!paymentTokens.some((x) => isETH(x.address))}
+                    token={token.value as FungibleTokenDetailed}
+                    disableNativeToken={!paymentTokens.some((x) => isNative(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
                         classes: {
                             root: classes.panel,
                         },
-                        label: 'Minimum Bid',
+                        label: t('plugin_collectible_minimum_bid'),
                         TextFieldProps: {
-                            helperText: 'Set your starting bid price.',
+                            helperText: t('plugin_collectible_set_starting_bid_price'),
                         },
                     }}
                     FixedTokenListProps={{
@@ -128,7 +128,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     amount={reservePrice}
                     balance={balance.value ?? '0'}
                     onAmountChange={setReservePrice}
-                    token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
+                    token={token.value as FungibleTokenDetailed}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
                         classes: {
@@ -136,21 +136,20 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                         },
                         disableToken: true,
                         disableBalance: true,
-                        label: 'Reserve Price',
+                        label: t('plugin_collectible_reserve_price'),
                         TextFieldProps: {
-                            helperText:
-                                'Create a hidden limit by setting a reserve price. Reserve price must be greater than or equal to the start amount.',
+                            helperText: t('plugin_collectible_reserve_price_helper'),
                         },
                     }}
                 />
                 <DateTimePanel
-                    label="Expiration Date"
+                    label={t('plugin_collectible_expiration_date')}
                     date={expirationDateTime}
                     onChange={setExpirationDateTime}
                     TextFieldProps={{
                         className: classes.panel,
-                        helperText:
-                            'Your auction will automatically end at this time and the highest bidder will win. No need to cancel it!',
+                        helperText: t('plugin_collectible_auction_auto_end'),
+                        fullWidth: true,
                     }}
                 />
             </CardContent>

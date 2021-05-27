@@ -1,5 +1,5 @@
 import { DataProvider, TagType } from '../../types'
-import { unreachable } from '../../../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import MIRRORED_TOKENS from './mirrored_tokens.json'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'

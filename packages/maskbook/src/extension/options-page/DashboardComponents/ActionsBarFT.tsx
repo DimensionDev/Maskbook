@@ -1,17 +1,15 @@
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { isETH } from '../../../web3/helpers'
+import { isNative } from '../../../web3/helpers'
+import { useMenu, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogFT } from '../DashboardDialogs/Wallet'
-import { useMenu } from '../../../utils/hooks/useMenu'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import type { Wallet } from '@dimensiondev/web3-shared'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainIdValid } from '../../../web3/hooks/useBlockNumber'
+import { useChainIdValid } from '../../../web3/hooks/useChainId'
 
 const useStyles = makeStyles((theme) => ({
     more: {
@@ -21,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
 
 export interface ActionsBarFT_Props extends withClasses<'more'> {
     chain: 'eth' | string
-    wallet: WalletRecord
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    wallet: Wallet
+    token: FungibleTokenDetailed
 }
 
 export function ActionsBarFT(props: ActionsBarFT_Props) {
@@ -56,7 +54,7 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
                 {t('transfer')}
             </MenuItem>,
             <MenuItem
-                style={{ display: isETH(token.address) ? 'none' : 'initial' }}
+                style={{ display: isNative(token.address) ? 'none' : 'initial' }}
                 onClick={() => openHideTokenConfirmDialog({ wallet, token })}>
                 {t('hide')}
             </MenuItem>,

@@ -1,5 +1,5 @@
-import { ChainId, ERC20Token, ERC721Token, EtherToken, ProviderType } from './types'
-import { safeUnreachable } from '../utils/utils'
+import { ChainId, ERC20Token, ERC721Token, NativeToken, ProviderType } from './types'
+import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 
 export function resolveProviderName(providerType: ProviderType) {
     switch (providerType) {
@@ -9,6 +9,8 @@ export function resolveProviderName(providerType: ProviderType) {
             return 'MetaMask'
         case ProviderType.WalletConnect:
             return 'WalletConnect'
+        case ProviderType.CustomNetwork:
+            return 'CustomNetwork'
         default:
             safeUnreachable(providerType)
             return 'Unknown'
@@ -63,11 +65,11 @@ export function resolveChainColor(chainId: ChainId) {
         case ChainId.Gorli:
             return 'rgb(48, 153, 242)'
         default:
-            return 'silver'
+            return 'rgb(214, 217, 220)'
     }
 }
 
-export function resolveLinkOnEtherscan(chainId: ChainId) {
+export function resolveLinkOnExplorer(chainId: ChainId) {
     switch (chainId) {
         case ChainId.Mainnet:
             return 'https://etherscan.io'
@@ -89,20 +91,20 @@ export function checkIfChainSupport(chainId: number) {
     return Object.values(ChainId).includes(chainId)
 }
 
-export function resolveTransactionLinkOnEtherscan(chainId: ChainId, tx: string) {
-    return `${resolveLinkOnEtherscan(chainId)}/tx/${tx}`
+export function resolveTransactionLinkOnExplorer(chainId: ChainId, tx: string) {
+    return `${resolveLinkOnExplorer(chainId)}/tx/${tx}`
 }
 
-export function resolveTokenLinkOnEtherscan(token: EtherToken | ERC20Token | ERC721Token) {
-    return `${resolveLinkOnEtherscan(token.chainId)}/token/${token.address}`
+export function resolveTokenLinkOnExplorer(token: NativeToken | ERC20Token | ERC721Token) {
+    return `${resolveLinkOnExplorer(token.chainId)}/token/${token.address}`
 }
 
-export function resolveAddressLinkOnEtherscan(chainId: ChainId, address: string): string {
-    return `${resolveLinkOnEtherscan(chainId)}/address/${address}`
+export function resolveAddressLinkOnExplorer(chainId: ChainId, address: string): string {
+    return `${resolveLinkOnExplorer(chainId)}/address/${address}`
 }
 
-export function resolveBlockLinkOnEtherscan(chainId: ChainId, block: string): string {
-    return `${resolveLinkOnEtherscan(chainId)}/block/${block}`
+export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): string {
+    return `${resolveLinkOnExplorer(chainId)}/block/${block}`
 }
 
 export function resolveIPFSLink(ipfs: string): string {

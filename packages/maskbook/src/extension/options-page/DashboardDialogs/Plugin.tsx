@@ -5,7 +5,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import DescriptionIcon from '@material-ui/icons/Description'
 import FingerprintIcon from '@material-ui/icons/Fingerprint'
 
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
 
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from './Base'
 import { DebounceButton } from '../DashboardComponents/ActionButton'

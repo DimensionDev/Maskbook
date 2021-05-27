@@ -104,6 +104,7 @@ function config(opts: {
                 '@dimensiondev/external-plugin-previewer': require.resolve(
                     '../external-plugin-previewer/src/index.tsx',
                 ),
+                '@dimensiondev/web3-shared': require.resolve('../web3-shared/src/index.ts'),
             },
             // Polyfill those Node built-ins
             fallback: {
@@ -174,8 +175,9 @@ function config(opts: {
         ].filter(nonNullable),
         optimization: {
             minimize: false,
-            // If multiple entry loaded in the same page, HMR will break.
-            runtimeChunk: 'single',
+            // Injected scripts must have it's own runtime chunks.
+            // HMR must have single runtime chunks
+            runtimeChunk: disableHMR ? undefined : 'single',
             splitChunks: {
                 // Chrome bug https://bugs.chromium.org/p/chromium/issues/detail?id=1108199
                 automaticNameDelimiter: '-',

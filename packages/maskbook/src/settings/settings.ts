@@ -1,7 +1,8 @@
 import { createGlobalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
-import { Appearance, Language, LaunchPage } from './types'
+import { LaunchPage } from './types'
+import { Appearance, Language } from '@dimensiondev/maskbook-theme'
 
 /**
  * Does the debug mode on
@@ -67,6 +68,10 @@ export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage',
 export const newDashboardConnection = createGlobalSettings('beta-dashboard', false, {
     primary: () => 'Experimental: Allow isolated dashboard to connect',
     secondary: () => "WARNING: DON'T OPEN THIS UNLESS YOU KNOW WHAT YOU ARE DOING.",
+})
+
+export const currentPersonaIdentifier = createGlobalSettings<string>('currentPersonaIdentifier', '', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
 sideEffect.then(() => {

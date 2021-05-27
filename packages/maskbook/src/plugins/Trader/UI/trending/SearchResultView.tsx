@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { makeStyles, Link, Tab, Tabs } from '@material-ui/core'
+import { useI18N, useSettingsSwticher } from '../../../../utils'
 import { DataProvider, TagType, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
@@ -10,8 +11,6 @@ import { usePriceStats } from '../../trending/usePriceStats'
 import { Days, PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
 import { useCurrentTradeProvider } from '../../trending/useCurrentTradeProvider'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import { useSettingsSwticher } from '../../../../utils/hooks/useSettingSwitcher'
 import { TradeView } from '../trader/TradeView'
 import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewError } from './TrendingViewError'
@@ -23,11 +22,6 @@ import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
 import { EthereumTokenType } from '../../../../web3/types'
 import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
-import { LBPPanel } from './LBPPanel'
-import { useLBP } from '../../LBP/useLBP'
-import { createERC20Token } from '../../../../web3/helpers'
-import { useChainId } from '../../../../web3/hooks/useBlockNumber'
-import { Flags } from '../../../../utils/flags'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -83,7 +77,6 @@ export function SearchResultView(props: SearchResultViewProps) {
     const dataProvider = useCurrentDataProvider(dataProviders)
     //#endregion
 
-    const chainId = useChainId()
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
     //#region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
@@ -106,7 +99,7 @@ export function SearchResultView(props: SearchResultViewProps) {
         error: tokenDetailedError,
         loading: loadingTokenDetailed,
     } = useTokenDetailed(
-        trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
+        trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
         trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.eth_address ?? '',
     )
     const tradeProvider = useCurrentTradeProvider(tradeProviders)
@@ -124,10 +117,6 @@ export function SearchResultView(props: SearchResultViewProps) {
         currency: trending?.currency,
         days,
     })
-    //#endregion
-
-    //#region LBP
-    const LBP = useLBP(tokenDetailed?.type === EthereumTokenType.ERC20 ? tokenDetailed : undefined)
     //#endregion
 
     //#region trader context
@@ -170,9 +159,12 @@ export function SearchResultView(props: SearchResultViewProps) {
         )
     //#endregion
 
-    //#region display loading skeleton
+    //#region is ethereum based coin
     const isEthereum = !!trending?.coin.eth_address || trending?.coin.symbol.toLowerCase() === 'eth'
-    if (!currency || !trending || (isEthereum && !tokenDetailed) || loadingTrending || loadingTokenDetailed)
+    //#endregion
+
+    //#region display loading skeleton
+    if (!currency || !trending || loadingTrending)
         return (
             <TrendingViewSkeleton
                 classes={{ footer: classes.skeletonFooter }}
@@ -188,7 +180,6 @@ export function SearchResultView(props: SearchResultViewProps) {
         <Tab className={classes.tab} key="price" label={t('plugin_trader_tab_price')} />,
         <Tab className={classes.tab} key="exchange" label={t('plugin_trader_tab_exchange')} />,
         isEthereum ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
-        Flags.LBP_enabled && LBP ? <Tab className={classes.tab} key="lbp" label="LBP" /> : null,
     ].filter(Boolean)
     //#endregion
 
@@ -247,19 +238,6 @@ export function SearchResultView(props: SearchResultViewProps) {
                             coin,
                             tokenDetailed,
                         }}
-                    />
-                ) : null}
-                {Flags.LBP_enabled && LBP && tabIndex === tabs.length - 1 ? (
-                    <LBPPanel
-                        duration={LBP.duration}
-                        currency={currency}
-                        token={createERC20Token(
-                            chainId,
-                            LBP.token.address,
-                            LBP.token.decimals,
-                            LBP.token.name ?? '',
-                            LBP.token.symbol ?? '',
-                        )}
                     />
                 ) : null}
             </TrendingViewDeck>

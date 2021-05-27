@@ -3,10 +3,17 @@
 /* eslint-disable */
 
 import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
+import { ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import {
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
+    BaseContract,
+} from './types'
 
 interface EventOptions {
     filter?: object
@@ -14,28 +21,53 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class Airdrop extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
+export type Claimed = ContractEventLog<{
+    amount: string
+    timestamp: string
+    0: string
+    1: string
+}>
+export type Recharged = ContractEventLog<{
+    total: string
+    timestamp: string
+    0: string
+    1: string
+}>
+export type RootChanged = ContractEventLog<{
+    previous: string
+    now: string
+    0: string
+    1: string
+}>
+export type Withdrawed = ContractEventLog<{
+    left: string
+    timestamp: string
+    0: string
+    1: string
+}>
+
+export interface Airdrop extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): Airdrop
     clone(): Airdrop
     methods: {
         claim(
-            index: number | string,
-            amount: number | string,
+            index: number | string | BN,
+            amount: number | string | BN,
             merkleProof: (string | number[])[],
-        ): TransactionObject<void>
+        ): NonPayableTransactionObject<void>
 
-        recharge(_total: number | string): TransactionObject<void>
+        recharge(_total: number | string | BN): NonPayableTransactionObject<void>
 
-        set_root(root: string | number[]): TransactionObject<void>
+        set_root(root: string | number[]): NonPayableTransactionObject<void>
 
-        withdraw(): TransactionObject<void>
+        withdraw(): NonPayableTransactionObject<void>
 
         check(
-            index: number | string,
+            index: number | string | BN,
             claimer: string,
-            amount: number | string,
+            amount: number | string | BN,
             merkleProof: (string | number[])[],
-        ): TransactionObject<{
+        ): NonPayableTransactionObject<{
             available: boolean
             start: string
             end: string
@@ -47,30 +79,30 @@ export class Airdrop extends Contract {
         }>
     }
     events: {
-        Claimed: ContractEvent<{
-            amount: string
-            timestamp: string
-            0: string
-            1: string
-        }>
-        Recharged: ContractEvent<{
-            total: string
-            timestamp: string
-            0: string
-            1: string
-        }>
-        RootChanged: ContractEvent<{
-            previous: string
-            now: string
-            0: string
-            1: string
-        }>
-        Withdrawed: ContractEvent<{
-            left: string
-            timestamp: string
-            0: string
-            1: string
-        }>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+        Claimed(cb?: Callback<Claimed>): EventEmitter
+        Claimed(options?: EventOptions, cb?: Callback<Claimed>): EventEmitter
+
+        Recharged(cb?: Callback<Recharged>): EventEmitter
+        Recharged(options?: EventOptions, cb?: Callback<Recharged>): EventEmitter
+
+        RootChanged(cb?: Callback<RootChanged>): EventEmitter
+        RootChanged(options?: EventOptions, cb?: Callback<RootChanged>): EventEmitter
+
+        Withdrawed(cb?: Callback<Withdrawed>): EventEmitter
+        Withdrawed(options?: EventOptions, cb?: Callback<Withdrawed>): EventEmitter
+
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
+
+    once(event: 'Claimed', cb: Callback<Claimed>): void
+    once(event: 'Claimed', options: EventOptions, cb: Callback<Claimed>): void
+
+    once(event: 'Recharged', cb: Callback<Recharged>): void
+    once(event: 'Recharged', options: EventOptions, cb: Callback<Recharged>): void
+
+    once(event: 'RootChanged', cb: Callback<RootChanged>): void
+    once(event: 'RootChanged', options: EventOptions, cb: Callback<RootChanged>): void
+
+    once(event: 'Withdrawed', cb: Callback<Withdrawed>): void
+    once(event: 'Withdrawed', options: EventOptions, cb: Callback<Withdrawed>): void
 }

@@ -1,16 +1,14 @@
 import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
-import type { PluginConfig } from '../../plugins/types'
-import { PluginUI } from '../../plugins/PluginUI'
-import { MaskMessage } from '../../utils/messages'
 import Button from '@material-ui/core/Button'
 import Close from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
-import { useI18N } from '../../utils/i18n-next-ui'
-import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog'
-import { useMatchXS } from '../../utils/hooks/useMatchXS'
-import { ErrorBoundary } from '../shared/ErrorBoundary'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
+import { useMatchXS, MaskMessage, useI18N } from '../../utils'
+import type { PluginConfig } from '../../plugins/types'
+import { PluginUI } from '../../plugins/PluginUI'
+import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog'
+import { ErrorBoundary } from '../shared/ErrorBoundary'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => x.GlobalInjection)
 export interface PageInspectorProps {}

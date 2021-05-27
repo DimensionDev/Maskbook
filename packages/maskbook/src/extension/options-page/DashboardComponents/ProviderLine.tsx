@@ -2,14 +2,13 @@ import { Typography, IconButton, Link } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
 import { capitalize } from 'lodash-es'
-import { useI18N } from '../../../utils/i18n-next-ui'
-
 import LinkOffIcon from '@material-ui/icons/LinkOff'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+
+import { useI18N, Flags } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { facebookDomain } from '../../../social-network-adaptor/facebook.com/utils/isMobile'
 import { twitterDomain } from '../../../social-network-adaptor/twitter.com/utils/isMobile'
-import { Flags } from '../../../utils/flags'
 
 const useStyles = makeStyles((theme) => ({
     title: {

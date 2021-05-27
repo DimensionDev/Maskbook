@@ -1,14 +1,15 @@
 import { Button } from '@material-ui/core'
 import { Trash2 as TrashIcon } from 'react-feather'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import { unreachable } from '../../../../utils/utils'
-import { isETH } from '../../../../web3/helpers'
+import { useI18N } from '../../../../utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
+import { isNative } from '../../../../web3/helpers'
 import type {
     ERC1155TokenDetailed,
     ERC20TokenDetailed,
     ERC721TokenDetailed,
-    EtherTokenDetailed,
+    FungibleTokenDetailed,
+    NonFungibleTokenDetailed,
 } from '../../../../web3/types'
 import { EthereumTokenType } from '../../../../web3/types'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
@@ -17,9 +18,7 @@ import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, Wrapp
 import type { WalletProps } from './types'
 
 export function DashboardWalletHideTokenConfirmDialog(
-    props: WrappedDialogProps<
-        WalletProps & { token: EtherTokenDetailed | ERC20TokenDetailed | ERC721TokenDetailed | ERC1155TokenDetailed }
-    >,
+    props: WrappedDialogProps<WalletProps & { token: FungibleTokenDetailed | NonFungibleTokenDetailed }>,
 ) {
     const { wallet, token } = props.ComponentProps!
     const { t } = useI18N()
@@ -28,8 +27,8 @@ export function DashboardWalletHideTokenConfirmDialog(
         () => {
             const type = token.type
             switch (type) {
-                case EthereumTokenType.Ether:
-                    throw new Error('Unable to hide Ether.')
+                case EthereumTokenType.Native:
+                    throw new Error('Unable to hide the native token.')
                 case EthereumTokenType.ERC20:
                     return WalletRPC.blockERC20Token(wallet.address, token as ERC20TokenDetailed)
                 case EthereumTokenType.ERC721:
@@ -44,7 +43,7 @@ export function DashboardWalletHideTokenConfirmDialog(
         props.onClose,
     )
 
-    if (isETH(token.address)) return null
+    if (isNative(token.address)) return null
     return (
         <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper

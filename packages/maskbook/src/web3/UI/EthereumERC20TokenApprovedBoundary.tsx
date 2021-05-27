@@ -1,10 +1,9 @@
 import { Grid, makeStyles } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect } from 'react'
+import { formatBalance, unreachable } from '@dimensiondev/maskbook-shared'
+import { useI18N } from '../../utils'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
-import { useI18N } from '../../utils/i18n-next-ui'
-import { unreachable } from '../../utils/utils'
 import { ApproveStateType, useERC20TokenApproveCallback } from '../hooks/useERC20TokenApproveCallback'
 import { TransactionStateType } from '../hooks/useTransactionState'
 import type { ERC20TokenDetailed } from '../types'
@@ -113,9 +112,10 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         return (
             <Grid container>
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" disabled>
-                    {`${approveStateType === ApproveStateType.PENDING ? 'Unlocking' : 'Updating'} ${
-                        token.symbol ?? 'Token'
-                    }…`}
+                    {approveStateType === ApproveStateType.PENDING
+                        ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
+                        : `Updating ${token.symbol}`}
+                    …
                 </ActionButton>
             </Grid>
         )

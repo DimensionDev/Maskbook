@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/sdk'
 
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed, ChainId } from '../../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType, ChainId } from '../../../../web3/types'
 import { TradeForm } from './TradeForm'
 import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
 import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
@@ -27,11 +27,12 @@ import { EthereumMessages } from '../../../Ethereum/messages'
 import Services from '../../../../extension/service'
 import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
-import { useChainId } from '../../../../web3/hooks/useBlockNumber'
-import { createERC20Token, createEtherToken } from '../../../../web3/helpers'
+import { useChainId } from '../../../../web3/hooks/useChainId'
+import { createERC20Token, createNativeToken } from '../../../../web3/helpers'
 import { PluginTraderRPC } from '../../messages'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
-import { isEtherWrapper } from '../../helpers'
+import { isNativeTokenWrapper } from '../../helpers'
+import { ChainState } from '../../../../web3/state/useChainState'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -55,7 +56,7 @@ const useStyles = makeStyles((theme) => {
 
 export interface TraderProps extends withClasses<never> {
     coin?: Coin
-    tokenDetailed?: ERC20TokenDetailed | EtherTokenDetailed
+    tokenDetailed?: FungibleTokenDetailed
 }
 
 export function Trader(props: TraderProps) {
@@ -76,7 +77,7 @@ export function Trader(props: TraderProps) {
     useEffect(() => {
         dispatchTradeStore({
             type: TradeActionType.UPDATE_INPUT_TOKEN,
-            token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST : createEtherToken(chainId),
+            token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST : createNativeToken(chainId),
         })
         dispatchTradeStore({
             type: TradeActionType.UPDATE_OUTPUT_TOKEN,
@@ -115,12 +116,12 @@ export function Trader(props: TraderProps) {
         value: inputTokenBalance_,
         loading: loadingInputTokenBalance,
         retry: retryInputTokenBalance,
-    } = useTokenBalance(inputToken?.type ?? EthereumTokenType.Ether, inputToken?.address ?? '')
+    } = useTokenBalance(inputToken?.type ?? EthereumTokenType.Native, inputToken?.address ?? '')
     const {
         value: outputTokenBalance_,
         loading: loadingOutputTokenBalance,
         retry: retryOutputTokenBalance,
-    } = useTokenBalance(outputToken?.type ?? EthereumTokenType.Ether, outputToken?.address ?? '')
+    } = useTokenBalance(outputToken?.type ?? EthereumTokenType.Native, outputToken?.address ?? '')
 
     useEffect(() => {
         if (inputTokenBalance_ && !loadingInputTokenBalance)
@@ -180,7 +181,7 @@ export function Trader(props: TraderProps) {
             setSelectTokenDialog({
                 open: true,
                 uuid: String(type),
-                disableEther: false,
+                disableNativeToken: false,
                 FixedTokenListProps: {
                     selectedTokens: excludeTokens,
                 },
@@ -219,7 +220,7 @@ export function Trader(props: TraderProps) {
     }, 30 /* seconds */ * 1000 /* milliseconds */)
 
     const onRefreshClick = useCallback(async () => {
-        await Services.Ethereum.updateChainState()
+        await Services.Ethereum.updateBlockNumber()
         asyncTradeComputed.retry()
         resetTimeout()
     }, [asyncTradeComputed.retry, resetTimeout])
@@ -281,64 +282,70 @@ export function Trader(props: TraderProps) {
 
     //#region swap callback
     const onSwap = useCallback(() => {
-        // no need to open the confirmation dialog if it (un)wraps ether
-        if (trade && isEtherWrapper(trade)) tradeCallback()
+        // no need to open the confirmation dialog if it (un)wraps the native token
+        if (trade && isNativeTokenWrapper(trade)) tradeCallback()
         else setOpenConfirmDialog(true)
     }, [trade])
     //#endregion
 
     return (
-        <div className={classes.root}>
-            <TradeForm
-                trade={trade}
-                provider={provider}
-                strategy={strategy}
-                loading={asyncTradeComputed.loading || updateBalancerPoolsLoading}
-                inputToken={inputToken}
-                outputToken={outputToken}
-                inputTokenBalance={inputTokenBalance}
-                outputTokenBalance={outputTokenBalance}
-                inputAmount={inputAmount}
-                outputAmount={outputAmount}
-                onInputAmountChange={onInputAmountChange}
-                onOutputAmountChange={onOutputAmountChange}
-                onReverseClick={onReverseClick}
-                onRefreshClick={onRefreshClick}
-                onTokenChipClick={onTokenChipClick}
-                onSwap={onSwap}
-            />
-            {trade && !isEtherWrapper(trade) && inputToken && outputToken ? (
-                <>
-                    <ConfirmDialog
-                        open={openConfirmDialog}
-                        trade={trade}
-                        provider={provider}
-                        inputToken={inputToken}
-                        outputToken={outputToken}
-                        onConfirm={onConfirmDialogConfirm}
-                        onClose={onConfirmDialogClose}
-                    />
-                    <TradeSummary
-                        classes={{ root: classes.summary }}
-                        trade={trade}
-                        provider={provider}
-                        inputToken={inputToken}
-                        outputToken={outputToken}
-                    />
-                    {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider) ? (
-                        <UniswapTradeRoute classes={{ root: classes.router }} trade={trade} />
-                    ) : null}
-                    {[TradeProvider.BALANCER].includes(provider) ? (
-                        <BalancerTradeRoute
-                            classes={{ root: classes.router }}
-                            trade={trade as TradeComputed<SwapResponse>}
+        <ChainState.Provider>
+            <div className={classes.root}>
+                <TradeForm
+                    trade={trade}
+                    provider={provider}
+                    strategy={strategy}
+                    loading={asyncTradeComputed.loading || updateBalancerPoolsLoading}
+                    inputToken={inputToken}
+                    outputToken={outputToken}
+                    inputTokenBalance={inputTokenBalance}
+                    outputTokenBalance={outputTokenBalance}
+                    inputAmount={inputAmount}
+                    outputAmount={outputAmount}
+                    onInputAmountChange={onInputAmountChange}
+                    onOutputAmountChange={onOutputAmountChange}
+                    onReverseClick={onReverseClick}
+                    onRefreshClick={onRefreshClick}
+                    onTokenChipClick={onTokenChipClick}
+                    onSwap={onSwap}
+                />
+                {trade && !isNativeTokenWrapper(trade) && inputToken && outputToken ? (
+                    <>
+                        <ConfirmDialog
+                            open={openConfirmDialog}
+                            trade={trade}
+                            provider={provider}
+                            inputToken={inputToken}
+                            outputToken={outputToken}
+                            onConfirm={onConfirmDialogConfirm}
+                            onClose={onConfirmDialogClose}
                         />
-                    ) : null}
-                    {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider) ? (
-                        <TradePairViewer trade={trade as TradeComputed<Trade>} provider={provider} />
-                    ) : null}
-                </>
-            ) : null}
-        </div>
+                        <TradeSummary
+                            classes={{ root: classes.summary }}
+                            trade={trade}
+                            provider={provider}
+                            inputToken={inputToken}
+                            outputToken={outputToken}
+                        />
+                        {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(
+                            provider,
+                        ) ? (
+                            <UniswapTradeRoute classes={{ root: classes.router }} trade={trade} />
+                        ) : null}
+                        {[TradeProvider.BALANCER].includes(provider) ? (
+                            <BalancerTradeRoute
+                                classes={{ root: classes.router }}
+                                trade={trade as TradeComputed<SwapResponse>}
+                            />
+                        ) : null}
+                        {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(
+                            provider,
+                        ) ? (
+                            <TradePairViewer trade={trade as TradeComputed<Trade>} provider={provider} />
+                        ) : null}
+                    </>
+                ) : null}
+            </div>
+        </ChainState.Provider>
     )
 }

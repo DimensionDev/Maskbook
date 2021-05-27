@@ -1,5 +1,4 @@
 import type { TypedMessage } from '../../../protocols/typed-message'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { makeStyles } from '@material-ui/core'
 import { renderWithRedPacketMetadata } from '../helpers'
 import { RedPacketInPost } from './RedPacketInPost'
@@ -20,11 +19,7 @@ export function RedPacketInspector(props: RedPacketInspectorProps) {
     const jsx = message
         ? renderWithRedPacketMetadata(message.meta, (r) => {
               if (process.env.STORYBOOK) return null
-              return (
-                  <MaskbookPluginWrapper pluginName="Red Packet">
-                      <RedPacketInPost payload={r} />
-                  </MaskbookPluginWrapper>
-              )
+              return <RedPacketInPost payload={r} />
           })
         : null
     return <>{jsx}</>

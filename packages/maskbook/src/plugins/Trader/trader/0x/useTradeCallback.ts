@@ -1,14 +1,13 @@
-import stringify from 'json-stable-stringify'
-import { omit, pick } from 'lodash-es'
 import { useCallback, useMemo, useState } from 'react'
+import stringify from 'json-stable-stringify'
+import { pick } from 'lodash-es'
 import type { TransactionConfig } from 'web3-core'
-import Services, { ServicesWithProgress } from '../../../../extension/service'
-import { StageType } from '../../../../utils/promiEvent'
-import { addGasMargin } from '../../../../web3/helpers'
+import Services from '../../../../extension/service'
 import { useAccount } from '../../../../web3/hooks/useAccount'
-import { useChainId } from '../../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../../web3/hooks/useChainId'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import { ChainId } from '../../../../web3/types'
+import { nonFunctionalWeb3 } from '../../../../web3/web3'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {
@@ -36,50 +35,38 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setTradeState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        try {
-            // step 1: estimate tx
-            const gasEstimated = await Services.Ethereum.estimateGas(omit(config, ['gas']), chainId)
-            const config_ = {
-                ...config,
-                gas: addGasMargin(gasEstimated).toFixed(),
-            }
-
-            // step 2: send tx
-            for await (const stage of ServicesWithProgress.sendTransaction(account, config_)) {
-                switch (stage.type) {
-                    case StageType.TRANSACTION_HASH:
-                        setTradeState({
-                            type: TransactionStateType.HASH,
-                            hash: stage.hash,
-                        })
-                        break
-                    case StageType.RECEIPT:
-                        setTradeState({
-                            type: TransactionStateType.HASH,
-                            hash: stage.receipt.transactionHash,
-                        })
-                        break
-                    case StageType.CONFIRMATION:
-                        setTradeState({
-                            type: TransactionStateType.HASH,
-                            hash: stage.receipt.transactionHash,
-                        })
-                        break
-                    default:
-                        return
-                }
-            }
-        } catch (error) {
+        // compose transaction config
+        const config_ = await Services.Ethereum.composeTransaction(config).catch((error) => {
             setTradeState({
                 type: TransactionStateType.FAILED,
                 error,
             })
-        }
+            throw error
+        })
+
+        // send transaction and wait for hash
+        return new Promise<string>((resolve, reject) => {
+            nonFunctionalWeb3.eth.sendTransaction(config_, (error, hash) => {
+                if (error) {
+                    setTradeState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                } else {
+                    setTradeState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
+                }
+            })
+        })
     }, [account, chainId, stringify(config)])
 
     const resetCallback = useCallback(() => {

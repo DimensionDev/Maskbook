@@ -1,8 +1,8 @@
 import { Alert, AlertTitle, Box, Button, Link, makeStyles, Paper } from '@material-ui/core'
+import { useI18N } from '../../../../utils'
 import type { Coin } from '../../types'
-import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useApprovedTokens } from '../../trending/useApprovedTokens'
-import { resolveTokenLinkOnEtherscan } from '../../../../web3/pipes'
+import { resolveTokenLinkOnExplorer } from '../../../../web3/pipes'
 import { ChainId, EthereumTokenType } from '../../../../web3/types'
 
 const useStyles = makeStyles((theme) => {
@@ -49,8 +49,8 @@ export function CoinSaftyAlert(props: CoinSaftyAlertProps) {
                         color="primary"
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={resolveTokenLinkOnEtherscan({
-                            type: EthereumTokenType.Ether,
+                        href={resolveTokenLinkOnExplorer({
+                            type: EthereumTokenType.Native,
                             address: coin.eth_address,
                             chainId: ChainId.Mainnet,
                         })}>

@@ -21,18 +21,17 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency, FormattedCurrency } from '@dimensiondev/maskbook-shared'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useMatchXS, useI18N } from '../../../utils'
 import { CurrencyType, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { isSameAddress } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import type { Wallet } from '@dimensiondev/web3-shared'
 import { ActionsBarFT } from './ActionsBarFT'
 import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
 import { useStableTokensDebank } from '../../../web3/hooks/useStableTokensDebank'
 import type { Asset } from '../../../plugins/Wallet/types'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
 import { useAssets } from '../../../plugins/Wallet/hooks/useAssets'
-import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
 const useStyles = makeStyles<
     Theme,
@@ -167,7 +166,7 @@ function ViewDetailed(props: ViewDetailedProps) {
 const MIN_VALUE = 5
 
 export interface WalletAssetsTableProps extends withClasses<never> {
-    wallet: WalletRecord
+    wallet: Wallet
 }
 
 export function WalletAssetsTable(props: WalletAssetsTableProps) {
@@ -221,7 +220,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const viewDetailedTokens = detailedTokens.filter(
         (x) =>
             new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(MIN_VALUE) ||
-            x.token.type === EthereumTokenType.Ether,
+            x.token.type === EthereumTokenType.Native,
     )
 
     return (

@@ -38,7 +38,7 @@ export function createPluginWalletAccess<Data, Index extends [IDBValidKey?, IDBV
         function get(this: ROT, id: string) {
             return this.objectStore('PluginStore').get(`${pluginID}:${id}`).then(_unwrap)
         }
-        function put(this: ROT, data: Data) {
+        function put(this: RWT, data: Data) {
             return this.objectStore('PluginStore').put(_wrap(data))
         }
         function getAll(this: ROT) {

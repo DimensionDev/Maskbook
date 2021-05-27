@@ -2,16 +2,19 @@ import { useState, useCallback } from 'react'
 import { Button, Box, Card, DialogContent, makeStyles, useTheme, TextField, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import classNames from 'classnames'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import {
+    WALLET_OR_PERSONA_NAME_MAX_LEN,
+    checkInputLengthExceed,
+    delay,
+    useRemoteControlledDialog,
+    useI18N,
+} from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages, WalletRPC } from '../messages'
-import { checkInputLengthExceed, delay } from '../../../utils/utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useMnemonicWordsPuzzle } from '../hooks/useMnemonicWordsPuzzle'
-import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../utils/constants'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
 
 enum CreateWalletStep {

@@ -15,12 +15,12 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
-import { CompositionEvent, MaskMessage } from '../../utils/messages'
+import { Plugin, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
+import { CompositionEvent, MaskMessage, useValueRef, useI18N, Flags } from '../../utils'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
 import { useFriendsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { currentImagePayloadStatus, debugModeSetting } from '../../settings/settings'
-import { useValueRef } from '../../utils/hooks/useValueRef'
 import { activatedSocialNetworkUI } from '../../social-network'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
@@ -35,7 +35,6 @@ import {
 import { EthereumTokenType } from '../../web3/types'
 import { isDAI, isOKB } from '../../web3/helpers'
 import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
-import { useI18N } from '../../utils/i18n-next-ui'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/PluginUI'
 import { Result } from 'ts-results'
@@ -43,11 +42,9 @@ import { ErrorBoundary } from '../shared/ErrorBoundary'
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { PluginStage } from '../../plugins/types'
-import { Flags } from '../../utils/flags'
 import { editActivatedPostMetadata, globalTypedMessageMetadata } from '../../protocols/typed-message/global-state'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { SteganographyTextPayload } from './SteganographyTextPayload'
-import { Plugin, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
 
 const defaultTheme = {}
 

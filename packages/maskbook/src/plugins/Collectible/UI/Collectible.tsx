@@ -18,23 +18,21 @@ import { findIndex } from 'lodash-es'
 import { format } from 'date-fns'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
+import { useI18N, getEnumAsArray, useSettingsSwticher } from '../../../utils'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
 import { ListingTab } from './ListingTab'
 import { HistoryTab } from './HistoryTab'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { PluginSkeleton } from '../../PluginSkeleton'
-import { getEnumAsArray } from '../../../utils/enum'
 import { CollectibleProvider, CollectibleTab } from '../types'
 import { currentCollectibleProviderSettings } from '../settings'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/UI/trader/FootnoteMenu'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
-import { useSettingsSwticher } from '../../../utils/hooks/useSettingSwitcher'
 import { ChainState } from '../../../web3/state/useChainState'
 import { Markdown } from '../../Snapshot/UI/Markdown'
 import { ActionBar } from './ActionBar'
@@ -269,7 +267,7 @@ export function Collectible(props: CollectibleProps) {
                 </CardContent>
                 <CardActions className={classes.footer}>
                     <Typography className={classes.footnote} variant="subtitle2">
-                        <span>Powered by </span>
+                        <span>{t('plugin_powered_by')} </span>
                         <Link
                             className={classes.footLink}
                             color="textSecondary"
@@ -303,7 +301,9 @@ export function Collectible(props: CollectibleProps) {
             {asset.value?.end_time && (
                 <Box sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
-                        Sale ends in {format(new Date(asset.value.end_time), 'yyyy-MM-dd HH:mm:ss')}.
+                        {t('plugin_collectible_sale_end', {
+                            time: format(new Date(asset.value.end_time), 'yyyy-MM-dd HH:mm:ss'),
+                        })}
                     </Typography>
                 </Box>
             )}

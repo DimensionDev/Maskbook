@@ -1,27 +1,25 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import { makeStyles, Typography, Slider, CircularProgress } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
+import { makeStyles, Typography, Slider, CircularProgress } from '@material-ui/core'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 
+import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType } from '../../../web3/types'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { FungibleTokenDetailed, ERC20TokenDetailed, EthereumTokenType, ChainId } from '../../../web3/types'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { useSwapCallback } from '../hooks/useSwapCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import type { ChainId } from '../../../web3/types'
-import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { resolveTransactionLinkOnExplorer } from '../../../web3/pipes'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO_CONSTANTS } from '../constants'
 import { SwapStatus } from './SwapGuide'
-import { isETH, isSameAddress } from '../../../web3/helpers'
+import { isNative, isSameAddress } from '../../../web3/helpers'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -83,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export interface SwapDialogProps extends withClasses<'root'> {
-    exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
+    exchangeTokens: FungibleTokenDetailed[]
     payload: JSON_PayloadInMask
     initAmount: BigNumber
     tokenAmount: BigNumber
@@ -93,7 +91,7 @@ export interface SwapDialogProps extends withClasses<'root'> {
     setStatus: (status: SwapStatus) => void
     chainId: ChainId
     account: string
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    token: FungibleTokenDetailed
 }
 
 export function SwapDialog(props: SwapDialogProps) {
@@ -118,7 +116,7 @@ export function SwapDialog(props: SwapDialogProps) {
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),
     )
-    const [swapToken, setSwapToken] = useState<EtherTokenDetailed | ERC20TokenDetailed>(payload.exchange_tokens[0])
+    const [swapToken, setSwapToken] = useState<FungibleTokenDetailed>(payload.exchange_tokens[0])
     const [swapAmount, setSwapAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
     const [inputAmountForUI, setInputAmountForUI] = useState(
         swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken.decimals),
@@ -158,10 +156,10 @@ export function SwapDialog(props: SwapDialogProps) {
         setSelectTokenDialog({
             open: true,
             uuid: id,
-            disableEther: !exchangeTokens.some((x) => isETH(x.address)),
+            disableNativeToken: !exchangeTokens.some((x) => isNative(x.address)),
             disableSearchBar: true,
             FixedTokenListProps: {
-                tokens: exchangeTokens.filter((x) => !isETH(x.address)) as ERC20TokenDetailed[],
+                tokens: exchangeTokens.filter((x) => !isNative(x.address)) as ERC20TokenDetailed[],
                 whitelist: exchangeTokens.map((x) => x.address),
             },
         })
@@ -223,7 +221,7 @@ export function SwapDialog(props: SwapDialogProps) {
         if (swapState.type === TransactionStateType.HASH) {
             const { hash } = swapState
             setTimeout(() => {
-                window.open(resolveTransactionLinkOnEtherscan(chainId, hash), '_blank', 'noopener noreferrer')
+                window.open(resolveTransactionLinkOnExplorer(chainId, hash), '_blank', 'noopener noreferrer')
             }, 2000)
             return
         }

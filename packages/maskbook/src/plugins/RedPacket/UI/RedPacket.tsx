@@ -4,17 +4,16 @@ import { Skeleton } from '@material-ui/core'
 import classNames from 'classnames'
 import type { RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N, useRemoteControlledDialog, useValueRef } from '../../../utils'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
 import { isDAI, isOKB } from '../../../web3/helpers'
 import { resolveRedPacketStatus } from '../pipes'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useBlockNumber'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { resolveChainId } from '../../../web3/pipes'
@@ -24,7 +23,6 @@ import {
     currentSelectedWalletProviderSettings,
 } from '../../../plugins/Wallet/settings'
 import { ChainId, ProviderType } from '../../../web3/types'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import Services from '../../../extension/service'
 import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
@@ -205,11 +203,12 @@ export function RedPacket(props: RedPacketProps) {
             shareLink,
             state,
             summary: canClaim
-                ? `Claiming red packet from ${payload.sender.name}`
+                ? t('plugin_red_packet_claiming_from', { name: payload.sender.name })
                 : canRefund
-                ? `Refunding red packet for ${formatBalance(availability.balance, tokenDetailed.decimals)} ${
-                      tokenDetailed.symbol
-                  }`
+                ? t('plugin_red_packet_refunding_for', {
+                      balance: formatBalance(availability.balance, tokenDetailed.decimals),
+                      symbol: tokenDetailed.symbol,
+                  })
                 : '',
         })
     }, [claimState, refundState /* update tx dialog only if state changed */])

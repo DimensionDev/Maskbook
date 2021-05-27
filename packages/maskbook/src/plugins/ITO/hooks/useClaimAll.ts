@@ -1,15 +1,15 @@
 import { useAsyncRetry } from 'react-use'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { checkIfChainSupport } from '../../../web3/pipes'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 
 export interface SwappedToken {
     pids: string[]
     amount: number
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    token: FungibleTokenDetailed
     isClaimable: boolean
     unlockTime: Date
 }
@@ -35,7 +35,10 @@ export function useClaimAll() {
             }),
         )
         const swappedTokens: SwappedToken[] = raws
-            .filter((raw) => raw.availability.swapped !== '0')
+            .filter(
+                (raw) =>
+                    raw.availability.swapped !== '0' && raw.pool.end_time < Number(raw.availability.unlock_time) * 1000,
+            )
             .map((raw) => {
                 return {
                     pids: [raw.pool.pid],

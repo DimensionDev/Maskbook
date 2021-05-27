@@ -1,5 +1,5 @@
 import { makeStyles, Theme, Typography, Link } from '@material-ui/core'
-import { useI18N } from '../../utils/i18n-next-ui'
+import { useI18N } from '../../utils'
 
 const useStyle = makeStyles((theme: Theme) => ({
     text: {

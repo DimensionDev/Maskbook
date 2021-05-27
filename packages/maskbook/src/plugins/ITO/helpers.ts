@@ -1,12 +1,11 @@
 import type BigNumber from 'bignumber.js'
+import { omit } from 'lodash-es'
 import { createTypedMessageMetadataReader, createRenderWithMetadata } from '../../protocols/typed-message/metadata'
 import { ITO_MetaKey } from './constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from './types'
 import schema from './schema.json'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../web3/types'
-import { omit } from 'lodash-es'
-import { getConstant, isSameAddress } from '../../web3/helpers'
-import { CONSTANTS } from '../../web3/constants'
+import type { FungibleTokenDetailed } from '../../web3/types'
+import { isNative } from '../../web3/helpers'
 
 export const ITO_MetadataReader = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_MetaKey, schema)
 export const renderWithITO_Metadata = createRenderWithMetadata(ITO_MetadataReader)
@@ -31,11 +30,10 @@ export function gcd(a: BigNumber, b: BigNumber) {
 }
 
 export function sortTokens(tokenA: { address: string }, tokenB: { address: string }) {
-    const ETH_ADDRESS = getConstant(CONSTANTS, 'ETH_ADDRESS')
     const addressA = tokenA.address.toLowerCase()
     const addressB = tokenB.address.toLowerCase()
-    if (isSameAddress(addressA, ETH_ADDRESS)) return -1
-    if (isSameAddress(addressB, ETH_ADDRESS)) return 1
+    if (isNative(addressA)) return -1
+    if (isNative(addressB)) return 1
     return addressA < addressB ? -1 : 1
 }
 
@@ -51,10 +49,10 @@ export function tokenIntoMask(token: JSON_PayloadOutMask['token']) {
     return {
         ...omit(token, 'chain_id'),
         chainId: token.chain_id,
-    } as unknown as EtherTokenDetailed | ERC20TokenDetailed
+    } as unknown as FungibleTokenDetailed
 }
 
-export function tokenOutMask(token: EtherTokenDetailed | ERC20TokenDetailed) {
+export function tokenOutMask(token: FungibleTokenDetailed) {
     return {
         ...omit(token, 'chainId'),
         chain_id: token.chainId,

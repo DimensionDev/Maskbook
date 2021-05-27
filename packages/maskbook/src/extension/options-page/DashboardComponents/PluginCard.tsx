@@ -3,11 +3,10 @@ import Button from '@material-ui/core/Button'
 import Switch from '@material-ui/core/Switch'
 import Typography from '@material-ui/core/Typography'
 import { Card } from '@material-ui/core'
+import { Flags, useI18N } from '../../../utils'
 import { useModal } from '../DashboardDialogs/Base'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import type { PluginConfig } from '../../../plugins/types'
 import { DashboardPluginDetailDialog } from '../DashboardDialogs/Plugin'
-import { Flags } from '../../../utils/flags'
 
 interface Props {
     plugin: PluginConfig

@@ -1,19 +1,17 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
-import type { TransactionReceipt } from 'web3-core'
+import type { ITO } from '@dimensiondev/contracts/types/ITO'
+import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import { EtherTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '../../../web3/types'
-import type { Tx } from '@dimensiondev/contracts/types/types'
-import { addGasMargin } from '../../../web3/helpers'
+import { FungibleTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '../../../web3/types'
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../constants'
 import Services from '../../../extension/service'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import type { AdvanceSettingData } from '../UI/AdvanceSetting'
-import type { ITO } from '@dimensiondev/contracts/types/ITO'
 
 export interface PoolSettings {
     password: string
@@ -27,7 +25,7 @@ export interface PoolSettings {
     total: string
     qualificationAddress: string
     exchangeAmounts: string[]
-    exchangeTokens: (EtherTokenDetailed | ERC20TokenDetailed)[]
+    exchangeTokens: FungibleTokenDetailed[]
     token?: ERC20TokenDetailed
     advanceSettingData: AdvanceSettingData
 }
@@ -193,7 +191,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         // error: unable to sign password
         let signedPassword = ''
         try {
-            signedPassword = await Services.Ethereum.sign(password, account)
+            signedPassword = await Services.Ethereum.personalSign(password, account)
         } catch (e) {
             signedPassword = ''
         }
@@ -215,16 +213,10 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             exchangeAmounts: exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
         })
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setFillState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
-
-        const config: Tx = {
-            from: account,
-            to: ITO_Contract.options.address,
-            value: '0',
-        }
 
         let params = [
             Web3Utils.sha3(signedPassword)!,
@@ -241,46 +233,52 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             qualificationAddress,
         ] as Parameters<ITO['methods']['fill_pool']>
 
-        // step 1: estimate gas
-        const estimatedGas = await ITO_Contract.methods
-            .fill_pool(...params)
-            .estimateGas(config)
-            .catch((error: Error) => {
-                setFillState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
-                throw error
+        // estimate gas and compose transaction
+        const config = await Services.Ethereum.composeTransaction({
+            from: account,
+            to: ITO_Contract.options.address,
+            data: ITO_Contract.methods.fill_pool(...params).encodeABI(),
+        }).catch((error) => {
+            setFillState({
+                type: TransactionStateType.FAILED,
+                error,
             })
+            throw error
+        })
 
-        // step 2: blocking
+        // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = ITO_Contract.methods.fill_pool(...params).send({
-                gas: addGasMargin(estimatedGas).toFixed(),
-                ...config,
-            })
-            promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                setFillState({
-                    type: TransactionStateType.CONFIRMED,
-                    no: 0,
-                    receipt,
+            const promiEvent = ITO_Contract.methods.fill_pool(...params).send(config as NonPayableTx)
+
+            promiEvent
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                    setFillState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
                 })
-            })
-            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                setFillState({
-                    type: TransactionStateType.CONFIRMED,
-                    no,
-                    receipt,
+                .on(TransactionEventType.RECEIPT, (receipt) => {
+                    setFillState({
+                        type: TransactionStateType.CONFIRMED,
+                        no: 0,
+                        receipt,
+                    })
                 })
-                resolve()
-            })
-            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
-                setFillState({
-                    type: TransactionStateType.FAILED,
-                    error,
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                    setFillState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                    resolve()
                 })
-                reject(error)
-            })
+                .on(TransactionEventType.ERROR, (error) => {
+                    setFillState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                })
         })
     }, [account, chainId, ITO_Contract, poolSettings])
 

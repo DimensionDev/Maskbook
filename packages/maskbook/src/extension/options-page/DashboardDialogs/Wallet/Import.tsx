@@ -2,16 +2,20 @@ import { Box, Checkbox, FormControlLabel, makeStyles, TextField, Theme, Typograp
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { useCallback, useState } from 'react'
 import { CreditCard as CreditCardIcon } from 'react-feather'
+import {
+    WALLET_OR_PERSONA_NAME_MAX_LEN,
+    useRemoteControlledDialog,
+    useI18N,
+    checkInputLengthExceed,
+} from '../../../../utils'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../../../plugins/Wallet/constants'
-import { useWalletHD } from '../../../../plugins/Wallet/hooks/useWallet'
+import { first } from 'lodash-es'
+import { useWallet } from '@dimensiondev/web3-shared'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
-import { WALLET_OR_PERSONA_NAME_MAX_LEN } from '../../../../utils/constants'
-import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import { checkInputLengthExceed } from '../../../../utils/utils'
 import AbstractTab, { AbstractTabProps } from '../../DashboardComponents/AbstractTab'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
+import { useAsync } from 'react-use'
 
 const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({
     confirmation: {
@@ -268,4 +272,14 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
             />
         </DashboardDialogCore>
     )
+}
+/** Return the wallet with mnemonic words */
+function useWalletHD() {
+    const selectedWallet = useWallet()?.address
+    return useAsync(async () => {
+        const selected = await WalletRPC.getWallet(selectedWallet)
+        if (selected?.mnemonic.length) return selected
+        const all = await WalletRPC.getWallets()
+        return first(all.filter((x) => x.mnemonic.length).sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime()))
+    }, [selectedWallet]).value
 }

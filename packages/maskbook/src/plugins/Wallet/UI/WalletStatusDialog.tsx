@@ -7,11 +7,9 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ProviderIcon } from '../../../components/shared/ProviderIcon'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 import Services from '../../../extension/service'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useBlockNumber'
-import { resolveLinkOnEtherscan, resolveProviderName } from '../../../web3/pipes'
+import { useRemoteControlledDialog, useValueRef, useI18N } from '../../../utils'
+import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
+import { resolveLinkOnExplorer, resolveProviderName } from '../../../web3/pipes'
 import { ChainId, ProviderType } from '../../../web3/types'
 import { EthereumChainChip } from '../../../web3/UI/EthereumChainChip'
 import { useWallet } from '../hooks/useWallet'
@@ -174,7 +172,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                     </Link>
                     <Link
                         className={classes.link}
-                        href={`${resolveLinkOnEtherscan(chainId)}/address/${selectedWallet.address}`}
+                        href={`${resolveLinkOnExplorer(chainId)}/address/${selectedWallet.address}`}
                         target="_blank"
                         rel="noopener noreferrer">
                         <ExternalLink className={classes.linkIcon} size={14} />

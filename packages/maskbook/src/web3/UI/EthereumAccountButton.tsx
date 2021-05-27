@@ -8,15 +8,12 @@ import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { ProviderIcon } from '../../components/shared/ProviderIcon'
 import { formatEthereumAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { useI18N } from '../../utils/i18n-next-ui'
-import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { useChainId } from '../hooks/useBlockNumber'
+import { useI18N, useRemoteControlledDialog, useValueRef, Flags } from '../../utils'
+import { useChainId } from '../hooks/useChainId'
 import { resolveChainColor } from '../pipes'
 import { ChainId } from '../types'
-import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
-import { Flags } from '../../utils/flags'
-import { useEtherTokenBalance } from '../hooks/useEtherTokenBalance'
+import { useNativeTokenBalance } from '../hooks/useNativeTokenBalance'
 import { useAccount } from '../hooks/useAccount'
 
 const useStyles = makeStyles((theme) => {
@@ -53,7 +50,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface EthereumAccountButtonProps extends withClasses<never> {
-    disableEther?: boolean
+    disableNativeToken?: boolean
     ButtonProps?: Partial<ButtonProps>
 }
 
@@ -63,7 +60,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
 
     const chainId = useChainId()
     const account = useAccount()
-    const { value: balance = '0' } = useEtherTokenBalance(account)
+    const { value: balance = '0' } = useNativeTokenBalance(account)
 
     const selectedWallet = useWallet()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
@@ -82,14 +79,14 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     if (Flags.has_native_nav_bar) return <AccountBalanceWalletIcon onClick={onOpen} />
 
     return (
-        <div className={props.disableEther ? '' : classes.root}>
-            {!props.disableEther ? (
+        <div className={props.disableNativeToken ? '' : classes.root}>
+            {!props.disableNativeToken ? (
                 <Typography className={classes.balance}>
                     <FormattedBalance value={balance} decimals={18} significant={4} symbol="ETH" />
                 </Typography>
             ) : null}
             <Button
-                className={classNames(classes.button, props.disableEther ? classes.buttonTransparent : '')}
+                className={classNames(classes.button, props.disableNativeToken ? classes.buttonTransparent : '')}
                 variant="outlined"
                 startIcon={
                     selectedWallet ? (

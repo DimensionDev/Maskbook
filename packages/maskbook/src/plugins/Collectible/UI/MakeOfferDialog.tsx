@@ -14,12 +14,12 @@ import {
 import { first } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import BigNumber from 'bignumber.js'
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useTokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
@@ -27,9 +27,8 @@ import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { ChainState } from '../../../web3/state/useChainState'
 import { toAsset, toUnixTimestamp } from '../helpers'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
-import { isETH } from '../../../web3/helpers'
+import { isNative } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -88,7 +87,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.Ether && token.value.type !== EthereumTokenType.ERC20) return
+        if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
         try {
             await PluginCollectibleRPC.createBuyOrder({
                 asset: toAsset({
@@ -99,7 +98,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                 accountAddress: account,
                 startAmount: Number.parseFloat(amount),
                 expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
-                paymentTokenAddress: token.value.type === EthereumTokenType.Ether ? undefined : token.value.address,
+                paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
             })
         } catch (e) {
             enqueueSnackbar(e.message, {
@@ -120,11 +119,12 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const validationMessage = useMemo(() => {
         const amount_ = new BigNumber(amount || '0')
         const balance_ = new BigNumber(balance.value ?? '0')
-        if (amount_.isZero()) return 'Enter a price'
-        if (balance_.isZero() || amount_.isGreaterThan(balance_)) return 'Insufficent balance'
-        if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid expiration date'
-        if (!isVerified && !unreviewedChecked) return 'Please ensure unreviewed item'
-        if (!isVerified && !ToS_Checked) return 'Please check ToS document'
+        if (amount_.isZero()) return t('plugin_collectible_enter_a_price')
+        if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficent_balance')
+        if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0)
+            return t('plugin_collectible_invalid_expiration_date')
+        if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')
+        if (!isVerified && !ToS_Checked) return t('plugin_collectible_check_tos_document')
         return ''
     }, [amount, balance.value, expirationDateTime, isVerified, isAuction, unreviewedChecked, ToS_Checked])
 
@@ -142,8 +142,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         <SelectTokenAmountPanel
                             amount={amount}
                             balance={balance.value ?? '0'}
-                            token={token.value as EtherTokenDetailed | ERC20TokenDetailed}
-                            disableEther={!paymentTokens.some((x) => isETH(x.address))}
+                            token={token.value as FungibleTokenDetailed}
+                            disableNativeToken={!paymentTokens.some((x) => isNative(x.address))}
                             onAmountChange={setAmount}
                             onTokenChange={setToken}
                             TokenAmountPanelProps={{
@@ -162,6 +162,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 onChange={setExpirationDateTime}
                                 TextFieldProps={{
                                     className: classes.panel,
+                                    fullWidth: true,
                                 }}
                             />
                         ) : null}

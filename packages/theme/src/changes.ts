@@ -4,7 +4,7 @@ export const Font: ThemeOptions = {
     typography: {
         // TODO: lang=JP? offer different font list for different lang target?
         // Firefox doesn't support "system-ui" so we need fallback
-        fontFamily: `system-ui, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Helvetica, Arial,
+        fontFamily: `PingFang SC, system-ui, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Helvetica, Arial,
         PingFang TC, Hiragino Sans TC, Source Han Sans TC, Noto Sans CJK TC, Microsoft JhengHei UI, Microsoft JhengHei, sans-serif;`,
     },
 }

@@ -5,7 +5,8 @@ import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../constants'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import type { EtherTokenDetailed, ERC20TokenDetailed } from '../types'
+import type { FungibleTokenDetailed } from '../types'
+import { useI18N } from '../../utils'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -48,7 +49,7 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     disableToken?: boolean
     disableBalance?: boolean
     label: string
-    token?: EtherTokenDetailed | ERC20TokenDetailed | null
+    token?: FungibleTokenDetailed | null
     onAmountChange: (amount: string) => void
     InputProps?: Partial<InputProps>
     MaxChipProps?: Partial<ChipProps>
@@ -69,7 +70,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         disableBalance = false,
         MaxChipProps,
     } = props
-
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     //#region update amount by self
@@ -127,7 +128,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                 color="textSecondary"
                                 variant="body2"
                                 component="span">
-                                Balance:
+                                {t('plugin_ito_list_table_got')}:
                                 <FormattedBalance value={balance} decimals={token.decimals} significant={6} />
                             </Typography>
                         ) : null}

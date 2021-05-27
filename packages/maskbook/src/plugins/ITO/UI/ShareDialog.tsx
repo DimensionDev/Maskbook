@@ -1,12 +1,11 @@
-import { makeStyles, Typography, Box } from '@material-ui/core'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import BigNumber from 'bignumber.js'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
-import { getAssetAsBlobURL } from '../../../utils/suspends/getAssetAsBlobURL'
 import { useCallback } from 'react'
+import BigNumber from 'bignumber.js'
+import { makeStyles, Typography, Box } from '@material-ui/core'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { useI18N, getAssetAsBlobURL } from '../../../utils'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import type { FungibleTokenDetailed } from '../../../web3/types'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme) => ({
     shareWrapper: {
@@ -55,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 export interface ShareDialogProps extends withClasses<'root'> {
     shareSuccessLink: string | undefined
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    token: FungibleTokenDetailed
     actualSwapAmount: BigNumber.Value
     poolName: string
     onClose: () => void

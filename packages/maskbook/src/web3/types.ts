@@ -1,27 +1,17 @@
-import type createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
-
-export enum ProviderType {
-    Maskbook = 'Maskbook',
-    MetaMask = 'MetaMask',
-    WalletConnect = 'WalletConnect',
-}
+export { WalletProvider as ProviderType } from '@dimensiondev/web3-shared'
 
 export enum CurrencyType {
     USD = 'usd',
 }
 
-export interface MetaMaskInpageProvider extends UnboxPromise<ReturnType<typeof createMetaMaskProvider>> {
-    _metamask: { isUnlocked: () => Promise<boolean> }
-}
-
 //#region Ether
-export interface EtherToken {
-    type: EthereumTokenType.Ether
+export interface NativeToken {
+    type: EthereumTokenType.Native
     address: string
     chainId: ChainId
 }
 
-export interface EtherTokenDetailed extends EtherToken {
+export interface NativeTokenDetailed extends NativeToken {
     name: 'Ether'
     symbol: 'ETH'
     decimals: 18
@@ -91,8 +81,18 @@ export interface ERC1155TokenAssetDetailed extends ERC1155TokenDetailed {
 }
 //#endregion
 
+//#region fungible token
+export type FungibleToken = NativeToken | ERC20Token
+export type FungibleTokenDetailed = NativeTokenDetailed | ERC20TokenDetailed
+//#endregion
+
+//#region non-fungible token
+export type NonFungibleToken = ERC721Token | ERC1155Token
+export type NonFungibleTokenDetailed = ERC721TokenDetailed | ERC1155TokenDetailed
+//#endregion
+
 interface TokenDetailedMap {
-    [EthereumTokenType.Ether]: EtherTokenDetailed
+    [EthereumTokenType.Native]: NativeTokenDetailed
     [EthereumTokenType.ERC20]: ERC20TokenDetailed
     [EthereumTokenType.ERC721]: ERC721TokenDetailed
     [EthereumTokenType.ERC1155]: ERC1155TokenDetailed
@@ -103,13 +103,13 @@ interface TokenAssetDetailedMap {
     [EthereumTokenType.ERC1155]: ERC1155TokenAssetDetailed
 }
 
-export type TokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
+export type EthereumTokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
 
 export type TokenAssetDetailedType<T extends EthereumTokenType.ERC721 | EthereumTokenType.ERC1155> =
     TokenAssetDetailedMap[T]
 
-import type { ChainId } from '@dimensiondev/maskbook-shared'
-export { ChainId } from '@dimensiondev/maskbook-shared'
+import type { ChainId } from '@dimensiondev/web3-shared'
+export { ChainId } from '@dimensiondev/web3-shared'
 
 // Please don't use this enum but use ChainId instead
 // this exists for back backward compatible
@@ -122,10 +122,27 @@ export enum EthereumNetwork {
 }
 
 export enum EthereumTokenType {
-    Ether = 0,
+    Native = 0,
     ERC20 = 1,
     ERC721 = 2,
     ERC1155 = 3,
+}
+
+// Learn more for a full list of supported JSON RPC methods
+// https://eth.wiki/json-rpc/API#json-rpc-methods
+export enum EthereumMethodType {
+    PERSONAL_SIGN = 'personal_sign',
+    ETH_SEND_TRANSACTION = 'eth_sendTransaction',
+    ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
+    ETH_GAS_PRICE = 'eth_gasPrice',
+    ETH_BLOCK_NUMBER = 'eth_blockNumber',
+    ETH_GET_BALANCE = 'eth_getBalance',
+    ETH_GET_TRANSACTION_BY_HASH = 'eth_getTransactionByHash',
+    ETH_GET_TRANSACTION_RECEIPT = 'eth_getTransactionReceipt',
+    ETH_GET_TRANSACTION_COUNT = 'eth_getTransactionCount',
+    ETH_ESTIMATE_GAS = 'eth_estimateGas',
+    ETH_SIGN = 'eth_sign',
+    ETH_SIGN_TRANSACTION = 'eth_signTransaction',
 }
 
 export enum TransactionEventType {

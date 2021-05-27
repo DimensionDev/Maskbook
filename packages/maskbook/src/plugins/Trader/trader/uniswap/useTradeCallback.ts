@@ -6,6 +6,8 @@ import { addGasMargin } from '../../../../web3/helpers'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import type { TradeComputed } from '../../types'
 import type { RouterV2 } from '@dimensiondev/contracts/types/RouterV2'
+import { TransactionEventType } from '../../../../web3/types'
+import { useAccount } from '../../../../web3/hooks/useAccount'
 
 interface SuccessfulCall {
     parameters: SwapParameters
@@ -23,6 +25,7 @@ export function useTradeCallback(
     allowedSlippage = SLIPPAGE_TOLERANCE_DEFAULT,
     ddl = DEFAULT_TRANSACTION_DEADLINE,
 ) {
+    const account = useAccount()
     const tradeParameters = useTradeParameters(trade, allowedSlippage, ddl)
 
     const [tradeState, setTradeState] = useState<TransactionState>({
@@ -37,7 +40,7 @@ export function useTradeCallback(
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setTradeState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
@@ -85,7 +88,7 @@ export function useTradeCallback(
             return
         }
 
-        // step 3: blocking
+        // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
             const {
                 gasEstimated,
@@ -94,29 +97,28 @@ export function useTradeCallback(
             const config = !value || /^0x0*$/.test(value) ? {} : { value }
 
             // @ts-ignore
-            routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args).send(
-                {
+            routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args)
+                .send({
+                    from: account,
                     gas: addGasMargin(gasEstimated).toFixed(),
                     ...config,
-                },
-                (error, hash) => {
-                    if (error) {
-                        setTradeState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
-                        reject(error)
-                    } else {
-                        setTradeState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
-                    }
-                },
-            )
+                })
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                    setTradeState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
+                })
+                .on(TransactionEventType.ERROR, (error) => {
+                    setTradeState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                })
         })
-    }, [tradeParameters, routerV2Contract])
+    }, [account, tradeParameters, routerV2Contract])
 
     const resetCallback = useCallback(() => {
         setTradeState({

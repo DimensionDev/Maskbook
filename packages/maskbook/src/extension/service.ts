@@ -32,6 +32,7 @@ export const Services = {
     Helper: add(() => import('./background-script/HelperService'), 'Helper'),
     Provider: add(() => import('./background-script/ProviderService'), 'Provider'),
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
+    SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
     Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
     ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
 }
@@ -51,6 +52,7 @@ if (module.hot && isEnvironment(Environment.ManifestBackground)) {
             './background-script/EthereumService',
             './background-script/SettingsService',
             './background-script/ThirdPartyPlugin',
+            './background-script/SocialNetworkService',
             './service-generator',
         ],
         () => document.dispatchEvent(new Event(SERVICE_HMR_EVENT)),

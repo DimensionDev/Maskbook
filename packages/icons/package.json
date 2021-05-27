@@ -8,7 +8,7 @@
     "@dimensiondev/maskbook-theme": "workspace:*"
   },
   "devDependencies": {
-    "snowpack": "^3.3.5"
+    "snowpack": "^3.5.1"
   },
   "scripts": {
     "start": "snowpack dev",

@@ -1,5 +1,7 @@
 import { useMemo, useState, useEffect, useReducer, Fragment } from 'react'
-import { delay, unreachable } from '../../../utils/utils'
+import { unreachable, makeTypedMessageTuple, TypedMessageTuple } from '@dimensiondev/maskbook-shared'
+
+import { delay } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
 import type { ProfileIdentifier } from '../../../database/type'
@@ -8,7 +10,6 @@ import type {
     FailureDecryption,
     SuccessDecryption,
 } from '../../../extension/background-script/CryptoServices/decryptFrom'
-import type { TypedMessage } from '../../../protocols/typed-message'
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
 import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwaiting'
 import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'
@@ -48,7 +49,7 @@ function progressReducer(
 }
 
 export interface DecryptPostProps {
-    onDecrypted: (post: TypedMessage, raw: string) => void
+    onDecrypted: (post: TypedMessageTuple) => void
     whoAmI: ProfileIdentifier
     profiles: Profile[]
     alreadySelectedPreviously: Profile[]
@@ -172,7 +173,7 @@ export function DecryptPost(props: DecryptPostProps) {
     const firstSucceedDecrypted = progress.find((p) => p.progress.type === 'success')
     useEffect(() => {
         if (firstSucceedDecrypted?.progress.type !== 'success') return
-        onDecrypted(firstSucceedDecrypted.progress.content, firstSucceedDecrypted.progress.rawContent)
+        onDecrypted(makeTypedMessageTuple([firstSucceedDecrypted.progress.content]))
     }, [firstSucceedDecrypted, onDecrypted])
     //#endregion
 

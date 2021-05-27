@@ -8,14 +8,13 @@ import TuneIcon from '@material-ui/icons/Tune'
 import RefreshOutlined from '@material-ui/icons/RefreshOutlined'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { TradeStrategy, TokenPanelType, TradeComputed, WarningLevel, TradeProvider } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../../web3/types'
+import { useRemoteControlledDialog, useI18N } from '../../../../utils'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../../web3/types'
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
-import { isEtherWrapper, toBips } from '../../helpers'
+import { isNativeTokenWrapper, toBips } from '../../helpers'
 import { formatPercentage } from '@dimensiondev/maskbook-shared'
 import { resolveUniswapWarningLevel } from '../../pipes'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -58,13 +57,6 @@ const useStyles = makeStyles((theme) => {
             paddingTop: 12,
             paddingBottom: 12,
         },
-        ethereumChainChip: {
-            borderRadius: 8,
-            marginRight: theme.spacing(1),
-        },
-        ethereumAccountChip: {
-            borderRadius: 12,
-        },
     }
 })
 
@@ -73,8 +65,8 @@ export interface TradeFormProps extends withClasses<never> {
     strategy: TradeStrategy
     provider: TradeProvider
     loading: boolean
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed
+    inputToken?: FungibleTokenDetailed
+    outputToken?: FungibleTokenDetailed
     inputAmount: string
     outputAmount: string
     inputTokenBalance?: string
@@ -234,7 +226,8 @@ export function TradeForm(props: TradeFormProps) {
             <div className={classes.section}>
                 <div className={classes.status}>
                     <Typography className={classes.label} color="textSecondary" variant="body2">
-                        Slippage Tolerance: {formatPercentage(toBips(currentSlippageTolerance.value))}
+                        {t('plugin_trader_slipage_tolerance')}{' '}
+                        {formatPercentage(toBips(currentSlippageTolerance.value))}
                     </Typography>
                     <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
                         <RefreshOutlined fontSize="small" />
@@ -249,7 +242,7 @@ export function TradeForm(props: TradeFormProps) {
                     <EthereumERC20TokenApprovedBoundary
                         amount={approveAmount.toFixed()}
                         token={
-                            !isEtherWrapper(trade) && approveToken?.type === EthereumTokenType.ERC20
+                            !isNativeTokenWrapper(trade) && approveToken?.type === EthereumTokenType.ERC20
                                 ? approveToken
                                 : undefined
                         }
@@ -262,7 +255,7 @@ export function TradeForm(props: TradeFormProps) {
                             disabled={loading || !!validationMessage}
                             onClick={onSwap}>
                             {validationMessage ||
-                                (isEtherWrapper(trade)
+                                (isNativeTokenWrapper(trade)
                                     ? trade?.trade_?.isWrap
                                         ? t('plugin_trader_wrap')
                                         : t('plugin_trader_unwrap')

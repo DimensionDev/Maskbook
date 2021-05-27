@@ -43,3 +43,16 @@ export function useSystemPreferencePalatte(): PaletteMode {
 export function currentSystemPreferencePalatte(): PaletteMode {
     return matchMedia(query).matches ? 'dark' : 'light'
 }
+
+export enum Appearance {
+    default = 'default',
+    light = 'light',
+    dark = 'dark',
+}
+
+export enum Language {
+    zh = 'zh',
+    en = 'en',
+    ko = 'ko',
+    ja = 'ja',
+}

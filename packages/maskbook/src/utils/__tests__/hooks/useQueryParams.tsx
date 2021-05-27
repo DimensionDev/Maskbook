@@ -1,6 +1,6 @@
 import { BrowserRouter } from 'react-router-dom'
 import { renderHook } from '@testing-library/react-hooks'
-import useQueryParams from '../../hooks/useQueryParams'
+import { useQueryParams } from '../../hooks/useQueryParams'
 
 function BrwoserRouterWrapper({ children }: { children?: React.ReactNode }) {
     return <BrowserRouter>{children}</BrowserRouter>

@@ -1,9 +1,12 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
+import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
+import Services from '../../extension/service'
+import { TransactionEventType } from '../types'
 
 export function useERC20TokenTransferCallback(address: string, amount?: string, recipient?: string) {
     const account = useAccount()
@@ -38,41 +41,43 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setTransferState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        // step 1: estimate gas
-        const estimatedGas = await erc20Contract.methods.transfer(recipient, amount).estimateGas({
+        // estimate gas and compose transaction
+        const config = await Services.Ethereum.composeTransaction({
             from: account,
             to: erc20Contract.options.address,
+            data: erc20Contract.methods.transfer(recipient, amount).encodeABI(),
+        }).catch((error) => {
+            setTransferState({
+                type: TransactionStateType.FAILED,
+                error,
+            })
+            throw error
         })
 
-        // step 2: blocking
+        // send transaction and wait for hash
         return new Promise<string>(async (resolve, reject) => {
-            erc20Contract.methods.transfer(recipient, amount).send(
-                {
-                    from: account,
-                    to: erc20Contract.options.address,
-                    gas: estimatedGas,
-                },
-                (error, hash) => {
-                    if (error) {
-                        setTransferState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
-                        reject(error)
-                    } else {
-                        setTransferState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
-                    }
-                },
-            )
+            erc20Contract.methods
+                .transfer(recipient, amount)
+                .send(config as NonPayableTx)
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                    setTransferState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
+                })
+                .on(TransactionEventType.ERROR, (error) => {
+                    setTransferState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                })
         })
     }, [account, address, amount, recipient, erc20Contract])
 

@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { WalletRPC } from '../messages'
 import { currentPortfolioDataProviderSettings } from '../settings'
 

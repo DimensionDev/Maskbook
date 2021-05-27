@@ -6,7 +6,7 @@ import type { SocialNetworkUI } from '../../../social-network'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
 import { toRGB, getBackgroundColor, fromRGB, shade, isDark, getForegroundColor } from '../../../utils/theme-tools'
-import { Appearance } from '../../../settings/types'
+import { Appearance } from '@dimensiondev/maskbook-theme'
 import produce, { setAutoFreeze } from 'immer'
 import { isMobileTwitter } from '../utils/isMobile'
 

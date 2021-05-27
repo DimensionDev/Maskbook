@@ -1,9 +1,9 @@
 import { IconButton, InputAdornment, makeStyles, TextField, Theme } from '@material-ui/core'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import { useCopyToClipboard } from 'react-use'
+import { useI18N } from '../../../../utils'
 import { QRCode } from '../../../../components/shared/qrcode'
-import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import type { Wallet } from '@dimensiondev/web3-shared'
 import { useSnackbarCallback } from '../Base'
 
 const useReceiveTabStyles = makeStyles((theme: Theme) => ({
@@ -19,7 +19,7 @@ const useReceiveTabStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface ReceiveTabProps {
-    wallet: WalletRecord
+    wallet: Wallet
     onClose: () => void
 }
 

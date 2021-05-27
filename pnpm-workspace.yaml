@@ -5,6 +5,7 @@ packages:
   - 'packages/dashboard'
   - 'packages/maskbook'
   - 'packages/shared'
+  - 'packages/web3-shared'
   - 'packages/storybook-shared'
   - 'packages/theme'
   - 'packages/icons'

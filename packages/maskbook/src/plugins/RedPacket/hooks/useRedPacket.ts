@@ -3,7 +3,7 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { RedPacketRecord } from '../types'
 import { RedPacketArrayComparer } from '../helpers'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { resolveChainId } from '../../../web3/pipes'
 import { useBlockNumberOnce } from '../../../web3/hooks/useBlockNumber'
 import { RED_PACKET_HISTROY_MAX_BLOCK_SIZE } from '../constants'
@@ -32,7 +32,7 @@ export function useRedPacketsFromDB() {
 export function useRedPacketsFromChain() {
     const account = useAccount()
     const chainId = useChainId()
-    const blockNumber = useBlockNumberOnce(chainId)
+    const blockNumber = useBlockNumberOnce()
     return useAsync(
         async () =>
             blockNumber

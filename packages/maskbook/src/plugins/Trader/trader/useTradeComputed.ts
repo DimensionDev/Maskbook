@@ -1,33 +1,33 @@
 import BigNumber from 'bignumber.js'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import { TradeProvider, TradeStrategy } from '../types'
-import { useTrade as useEtherTrade } from './ether/useTrade'
-import { useTradeComputed as useEtherTradeComputed } from './ether/useTradeComputed'
+import { useTrade as useNativeTokenTrade } from './native/useTrade'
+import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
 import { useV2Trade as useUniswapTrade } from './uniswap/useV2Trade'
 import { useV2TradeComputed as useUniswapTradeComputed } from './uniswap/useV2TradeComputed'
 import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
 import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
 import { useTrade as useZrxTrade } from './0x/useTrade'
 import { useTrade as useBalancerTrade } from './balancer/useTrade'
-import { unreachable } from '../../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 
 export function useTradeComputed(
     provider: TradeProvider,
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed,
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
+    inputToken?: FungibleTokenDetailed,
+    outputToken?: FungibleTokenDetailed,
 ) {
     const inputTokenProduct = new BigNumber(10).pow(inputToken?.decimals ?? 0)
     const outputTokenProduct = new BigNumber(10).pow(outputToken?.decimals ?? 0)
     const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
 
-    // ETH-WETH pair
-    const ether_ = useEtherTrade(inputToken, outputToken)
-    const ether = useEtherTradeComputed(
-        ether_.value ?? false,
+    // NATIVE-WNATIVE pair
+    const nativeToken_ = useNativeTokenTrade(inputToken, outputToken)
+    const nativeToken = useNativeTokenTradeComputed(
+        nativeToken_.value ?? false,
         strategy,
         inputAmount_,
         outputAmount_,
@@ -76,10 +76,10 @@ export function useTradeComputed(
         outputToken,
     )
 
-    if (ether_.value)
+    if (nativeToken_.value)
         return {
-            ...ether_,
-            value: ether,
+            ...nativeToken_,
+            value: nativeToken,
         }
 
     switch (provider) {

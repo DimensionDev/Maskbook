@@ -52,7 +52,7 @@ export interface RedPacketJSONPayload {
     creation_time: number
     duration: number
     network?: EthereumNetwork
-    token_type: EthereumTokenType.Ether | EthereumTokenType.ERC20
+    token_type: EthereumTokenType.Native | EthereumTokenType.ERC20
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }
 

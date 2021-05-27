@@ -1,4 +1,3 @@
-import stringify from 'json-stable-stringify'
 import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
 import { ChainId, ProviderType } from '../../web3/types'
@@ -65,18 +64,9 @@ export const currentCollectibleDataProviderSettings = createGlobalSettings<Colle
 /**
  * The block number state
  */
-export const currentBlockNumnberSettings = createGlobalSettings<string>(
-    `${PLUGIN_IDENTIFIER}+blockNumberState`,
-    stringify([]),
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
-
-export interface ChainBlockNumber {
-    chainId: ChainId
-    blockNumber: number
-}
+export const currentBlockNumberSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+blockNumber`, 0, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
 
 /**
  * Chain Id of Mask Network
@@ -106,6 +96,17 @@ export const currentMetaMaskChainIdSettings = createGlobalSettings<ChainId>(
  */
 export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>(
     `${PLUGIN_IDENTIFIER}+WalletConnectChainId`,
+    ChainId.Mainnet,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
+/**
+ * Chain Id of CustomNetwork
+ */
+export const currentCustomNetworkChainIdSettings = createGlobalSettings<ChainId>(
+    `${PLUGIN_IDENTIFIER}+CustomNetworkChainId`,
     ChainId.Mainnet,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',

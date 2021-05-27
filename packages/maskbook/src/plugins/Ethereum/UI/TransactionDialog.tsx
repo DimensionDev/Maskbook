@@ -12,12 +12,11 @@ import {
 import WarningIcon from '@material-ui/icons/Warning'
 import DoneIcon from '@material-ui/icons/Done'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useRemoteControlledDialog, useI18N } from '../../../utils'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { TransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
+import { resolveTransactionLinkOnExplorer } from '../../../web3/pipes'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { EthereumMessages } from '../messages'
 import { JSON_RPC_ErrorCode } from '../constants'
 
@@ -58,13 +57,13 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
     const [state, setState] = useState<TransactionState | null>(null)
     const [shareLink, setShareLink] = useState('')
     const [summary, setSummary] = useState('')
-    const [title, setTitle] = useState('Transaction')
+    const [title, setTitle] = useState(t('plugin_wallet_transaction'))
     const { open, closeDialog } = useRemoteControlledDialog(EthereumMessages.events.transactionDialogUpdated, (ev) => {
         if (ev.open) {
             setState(ev.state)
             setSummary(ev.summary ?? '')
             setShareLink(ev.shareLink ?? '')
-            setTitle(ev.title ?? 'Transaction')
+            setTitle(ev.title ?? t('plugin_wallet_transaction'))
         } else {
             setSummary('')
             setShareLink('')
@@ -100,7 +99,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         <Typography>
                             <Link
                                 className={classes.link}
-                                href={resolveTransactionLinkOnEtherscan(chainId, state.hash)}
+                                href={resolveTransactionLinkOnExplorer(chainId, state.hash)}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 {t('plugin_wallet_view_on_etherscan')}
@@ -123,7 +122,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         <Typography>
                             <Link
                                 className={classes.link}
-                                href={resolveTransactionLinkOnEtherscan(chainId, state.receipt.transactionHash)}
+                                href={resolveTransactionLinkOnExplorer(chainId, state.receipt.transactionHash)}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 {t('plugin_wallet_view_on_etherscan')}

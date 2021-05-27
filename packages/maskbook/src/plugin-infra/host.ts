@@ -8,10 +8,11 @@ import {
     currentMetaMaskChainIdSettings,
     currentSelectedWalletProviderSettings,
     currentWalletConnectChainIdSettings,
+    currentCustomNetworkChainIdSettings,
 } from '../plugins/Wallet/settings'
 import { startEffects } from '../utils/side-effects'
-import { safeUnreachable } from '../utils/utils'
 import { ChainId, ProviderType } from '../web3/types'
+import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 
 const effect = startEffects(module.hot)
 export function createPluginHost(signal?: AbortSignal): Plugin.__Host.Host {
@@ -36,6 +37,8 @@ const ethStatusReporter: Plugin.__Host.EthStatusReporter = {
                 return currentMetaMaskChainIdSettings.value
             case ProviderType.WalletConnect:
                 return currentWalletConnectChainIdSettings.value
+            case ProviderType.CustomNetwork:
+                return currentCustomNetworkChainIdSettings.value
             default:
                 safeUnreachable(val)
                 return ChainId.Mainnet

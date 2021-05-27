@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react'
 import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
 import { CollectibleCard } from './CollectibleCard'
-import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
+import type { Wallet } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { EthereumTokenType } from '../../../../web3/types'
 import { useValueRef } from '../../../../utils/hooks/useValueRef'
@@ -9,6 +9,7 @@ import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wall
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
 import { useUpdateEffect } from 'react-use'
+import { useI18N } from '../../../../utils'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -48,11 +49,12 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export interface CollectibleListProps {
-    wallet: WalletRecord
+    wallet: Wallet
 }
 
 export function CollectibleList(props: CollectibleListProps) {
     const { wallet } = props
+    const { t } = useI18N()
 
     const classes = useStyles()
     const account = useAccount()
@@ -113,14 +115,14 @@ export function CollectibleList(props: CollectibleListProps) {
                             justifyContent: 'center',
                             height: '100%',
                         }}>
-                        <Typography color="textSecondary">No collectible found.</Typography>
+                        <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
                         <Button
                             sx={{
                                 marginTop: 1,
                             }}
                             variant="text"
                             onClick={() => collectiblesRetry()}>
-                            Retry
+                            {t('plugin_collectible_retry')}
                         </Button>
                     </Box>
                 ) : (

@@ -1,9 +1,10 @@
 import { makeStyles, Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@material-ui/core'
 import type { Order } from 'opensea-js/lib/types'
 import { Image } from '../../../components/shared/Image'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import type { useAsset } from '../hooks/useAsset'
 import { resolveAssetLinkOnOpenSea } from '../pipes'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles((theme) => ({
     itemInfo: {
@@ -20,6 +21,7 @@ export interface CheckoutOrderProps {
 }
 
 export function CheckoutOrder(props: CheckoutOrderProps) {
+    const { t } = useI18N()
     const { asset } = props
     const order = asset?.value?.order_ as Order | undefined
 
@@ -33,8 +35,8 @@ export function CheckoutOrder(props: CheckoutOrderProps) {
         <Table size="small">
             <TableHead>
                 <TableRow>
-                    <TableCell>Item</TableCell>
-                    <TableCell align="right">Subtotal</TableCell>
+                    <TableCell>{t('plugin_collectible_item')}</TableCell>
+                    <TableCell align="right">{t('plugin_collectible_subtotal')}</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>

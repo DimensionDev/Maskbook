@@ -5,7 +5,7 @@ import { isNil } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import { UploadCloud } from 'react-feather'
 import { useDropArea } from 'react-use'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles((theme) => ({
     label: {

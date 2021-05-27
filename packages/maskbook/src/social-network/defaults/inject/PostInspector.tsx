@@ -28,9 +28,8 @@ export function injectPostInspectorDefault<T extends string>(
         const jsx = (
             <PostInfoProvider post={current}>
                 <PostInspectorDefault
-                    onDecrypted={(typed, raw) => {
-                        current.decryptedPostContent.value = typed
-                        current.decryptedPostContentRaw.value = raw
+                    onDecrypted={(typed) => {
+                        current.transformedPostContent.value = typed
                     }}
                     zipPost={() => zipPostF(current.rootNodeProxy)}
                     {...current}

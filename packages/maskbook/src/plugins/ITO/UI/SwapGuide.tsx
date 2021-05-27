@@ -1,14 +1,14 @@
 import { unstable_useTransition } from 'react'
 import { DialogContent, makeStyles, DialogProps } from '@material-ui/core'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import BigNumber from 'bignumber.js'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { RemindDialog } from './RemindDialog'
 import { ShareDialog } from './ShareDialog'
 import { SwapDialog, SwapDialogProps } from './SwapDialog'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { UnlockDialog } from './UnlockDialog'
 import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 
@@ -41,7 +41,7 @@ interface SwapGuideProps extends Pick<SwapDialogProps, 'exchangeTokens' | 'paylo
 export function SwapGuide(props: SwapGuideProps) {
     const { t } = useI18N()
     const { status, payload, exchangeTokens, isBuyer, open, retryPayload, shareSuccessLink, onUpdate, onClose } = props
-    const [startTransition] = unstable_useTransition({ busyDelayMs: 1000 })
+    const [isPending, startTransition] = unstable_useTransition()
     const onCloseShareDialog = useCallback(() => {
         startTransition(() => {
             onClose()

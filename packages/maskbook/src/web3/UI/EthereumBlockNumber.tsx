@@ -1,6 +1,7 @@
 import { makeStyles, Typography, TypographyProps } from '@material-ui/core'
-import { useI18N } from '../../utils/i18n-next-ui'
-import { useBlockNumber, useChainId } from '../hooks/useBlockNumber'
+import { useI18N } from '../../utils'
+import { useChainId } from '../hooks/useChainId'
+import { useBlockNumber } from '../hooks/useBlockNumber'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,7 +21,7 @@ export function EthereumBlockNumber(props: EthereumBlockNumberProps) {
     const { t } = useI18N()
 
     const chainId = useChainId()
-    const blockNumber = useBlockNumber(chainId)
+    const blockNumber = useBlockNumber()
 
     return (
         <Typography className={classes.root} title={t('block_number')} variant="body2" {...props.TypographyProps}>

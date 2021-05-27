@@ -1,17 +1,16 @@
 import { useCallback, useEffect } from 'react'
 import { uniq, flatten } from 'lodash-es'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { makeStyles, DialogContent, CircularProgress, Typography, List, ListItem } from '@material-ui/core'
 import { useClaimAll } from '../hooks/useClaimAll'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { resolveTransactionLinkOnEtherscan } from '../../../web3/pipes'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { resolveTransactionLinkOnExplorer } from '../../../web3/pipes'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import formatDateTime from 'date-fns/format'
 import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { useSnackbar, VariantType } from 'notistack'
@@ -133,7 +132,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         if (claimState.type === TransactionStateType.HASH) {
             const { hash } = claimState
             setTimeout(() => {
-                window.open(resolveTransactionLinkOnEtherscan(chainId, hash), '_blank', 'noopener noreferrer')
+                window.open(resolveTransactionLinkOnExplorer(chainId, hash), '_blank', 'noopener noreferrer')
             }, 2000)
             return
         }

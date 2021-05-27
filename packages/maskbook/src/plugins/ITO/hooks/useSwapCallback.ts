@@ -2,29 +2,30 @@ import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
 import type { TransactionReceipt } from 'web3-core'
-import type { Tx } from '@dimensiondev/contracts/types/types'
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
-import { buf2hex, hex2buf } from '../../../utils/utils'
-import { addGasMargin, isSameAddress } from '../../../web3/helpers'
+import type { PayableTx } from '@dimensiondev/contracts/types/types'
+import { isSameAddress } from '../../../web3/helpers'
+import { buf2hex, hex2buf, useI18N } from '../../../utils'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { ERC20TokenDetailed, EtherTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { useQualificationContract } from '../contracts/useQualificationContract'
+import Services from '../../../extension/service'
 import type { JSON_PayloadInMask } from '../types'
-import { useI18N } from '../../../utils/i18n-next-ui'
 
 export function useSwapCallback(
     payload: JSON_PayloadInMask,
     total: string,
-    token: PartialRequired<EtherTokenDetailed | ERC20TokenDetailed, 'address'>,
+    token: PartialRequired<FungibleTokenDetailed, 'address'>,
     isQualificationHasLucky = false,
 ) {
     const { t } = useI18N()
     const account = useAccount()
     const ITO_Contract = useITO_Contract()
-    const qualificationContract = useQualificationContract(payload.qualification_address)
     const [swapState, setSwapState] = useTransactionState()
+    const qualificationContract = useQualificationContract(payload.qualification_address)
+
     const swapCallback = useCallback(async () => {
         if (!ITO_Contract || !qualificationContract || !payload) {
             setSwapState({
@@ -92,18 +93,12 @@ export function useSwapCallback(
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setSwapState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const config: Tx = {
-            from: account,
-            to: ITO_Contract.options.address,
-            value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toFixed(),
-        }
-
-        // step 1: check remaining
+        // check remaining
         try {
             const availability = await ITO_Contract.methods.check_availability(pid).call({
                 from: account,
@@ -134,21 +129,22 @@ export function useSwapCallback(
             total,
         ] as Parameters<ITO['methods']['swap']>
 
-        // step 2-1: estimate gas
-        const estimatedGas = isQualificationHasLucky
-            ? null
-            : await ITO_Contract.methods
-                  .swap(...swapParams)
-                  .estimateGas(config)
-                  .catch((error: Error) => {
-                      setSwapState({
-                          type: TransactionStateType.FAILED,
-                          error,
-                      })
-                      throw error
-                  })
+        // estimate gas and compose transaction
+        const config = await Services.Ethereum.composeTransaction({
+            from: account,
+            to: ITO_Contract.options.address,
+            gas: isQualificationHasLucky ? 200000 : undefined,
+            value: new BigNumber(token.type === EthereumTokenType.Native ? total : '0').toFixed(),
+            data: ITO_Contract.methods.swap(...swapParams).encodeABI(),
+        }).catch((error) => {
+            setSwapState({
+                type: TransactionStateType.FAILED,
+                error,
+            })
+            throw error
+        })
 
-        // step 2-2: blocking
+        // send transaction and wait for hash
         return new Promise<void>((resolve, reject) => {
             const onSucceed = (no: number, receipt: TransactionReceipt) => {
                 setSwapState({
@@ -173,14 +169,13 @@ export function useSwapCallback(
                 })
                 resolve()
             }
-            const promiEvent = ITO_Contract.methods.swap(...swapParams).send({
-                gas: estimatedGas ? addGasMargin(estimatedGas).toFixed() : 200000,
-                ...config,
-            })
-            promiEvent.on(TransactionEventType.TRANSACTION_HASH, onHash)
-            promiEvent.on(TransactionEventType.ERROR, onFailed)
-            promiEvent.on(TransactionEventType.CONFIRMATION, onSucceed)
-            promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => onSucceed(0, receipt))
+            const promiEvent = ITO_Contract.methods.swap(...swapParams).send(config as PayableTx)
+
+            promiEvent
+                .on(TransactionEventType.TRANSACTION_HASH, onHash)
+                .on(TransactionEventType.ERROR, onFailed)
+                .on(TransactionEventType.CONFIRMATION, onSucceed)
+                .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
         })
     }, [ITO_Contract, qualificationContract, account, payload, total, token.address, isQualificationHasLucky])
 

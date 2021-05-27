@@ -2,15 +2,14 @@ import { Button, makeStyles, TextField } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
+import { useRemoteControlledDialog, useI18N } from '../../../../utils'
 import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
-import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
+import type { Wallet } from '@dimensiondev/web3-shared'
 import { formatBalance, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
-import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { useTokenTransferCallback } from '../../../../web3/hooks/useTokenTransferCallback'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../../web3/types'
 import { EthereumTokenType } from '../../../../web3/types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 
@@ -32,8 +31,8 @@ const useTransferTabStyles = makeStyles((theme) => ({
 }))
 
 interface TransferTabProps {
-    wallet: WalletRecord
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    wallet: Wallet
+    token: FungibleTokenDetailed
     onClose: () => void
 }
 
@@ -49,7 +48,7 @@ export function TransferTab(props: TransferTabProps) {
 
     // balance
     const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useTokenBalance(
-        token?.type ?? EthereumTokenType.Ether,
+        token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',
     )
 

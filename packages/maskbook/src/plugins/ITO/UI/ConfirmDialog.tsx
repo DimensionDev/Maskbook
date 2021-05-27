@@ -1,17 +1,17 @@
 import { Fragment, useCallback, useState } from 'react'
 import { makeStyles, Typography, Grid, Paper, Card, IconButton, Link } from '@material-ui/core'
+import { useI18N } from '../../../utils'
 import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import LaunchIcon from '@material-ui/icons/Launch'
 import { formatAmountPrecision, formatBalance, FormattedAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import BigNumber from 'bignumber.js'
-import { useChainId } from '../../../web3/hooks/useBlockNumber'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { dateTimeFormat } from '../assets/formatDate'
-import { isETH } from '../../../web3/helpers'
-import { resolveTokenLinkOnEtherscan, resolveAddressLinkOnEtherscan } from '../../../web3/pipes'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import { isNative } from '../../../web3/helpers'
+import { resolveTokenLinkOnExplorer, resolveAddressLinkOnExplorer } from '../../../web3/pipes'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
 import { ITO_CONSTANTS } from '../constants'
@@ -26,9 +26,9 @@ const useSwapItemStyles = makeStyles((theme) => ({
     icon: {},
 }))
 interface SwapItemProps {
-    token?: EtherTokenDetailed | ERC20TokenDetailed
+    token?: FungibleTokenDetailed
     swapAmount?: string
-    swap?: EtherTokenDetailed | ERC20TokenDetailed
+    swap?: FungibleTokenDetailed
 }
 
 function SwapItem(props: SwapItemProps) {
@@ -124,10 +124,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Typography variant="body1" component="span">
                             {poolSettings?.token?.symbol}
                         </Typography>
-                        {isETH(poolSettings?.token?.address!) ? null : (
+                        {isNative(poolSettings?.token?.address!) ? null : (
                             <Link
                                 className={classes.link}
-                                href={resolveTokenLinkOnEtherscan(poolSettings?.token!)}
+                                href={resolveTokenLinkOnExplorer(poolSettings?.token!)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={stop}>
@@ -225,7 +225,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Grid item xs={6}>
                             <Paper className={classes.data}>
                                 <Link
-                                    href={resolveAddressLinkOnEtherscan(chainId, poolSettings?.qualificationAddress!)}
+                                    href={resolveAddressLinkOnExplorer(chainId, poolSettings?.qualificationAddress!)}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Typography>

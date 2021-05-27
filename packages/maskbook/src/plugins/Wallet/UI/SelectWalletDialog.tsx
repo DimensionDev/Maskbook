@@ -1,21 +1,17 @@
 import { useCallback } from 'react'
 import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useValueRef, delay, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../messages'
-import { useWallet, useWallets } from '../hooks/useWallet'
+import { useWalletsOfProvider, useWallet } from '@dimensiondev/web3-shared'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
-import type { WalletRecord } from '../database/types'
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
-import { delay } from '../../../utils/utils'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { currentSelectedWalletProviderSettings } from '../settings'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ProviderType } from '../../../web3/types'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { selectMaskbookWallet } from '../helpers'
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +27,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const wallets = useWallets(ProviderType.Maskbook)
+    const wallets = useWalletsOfProvider(ProviderType.Maskbook)
     const selectedWallet = useWallet()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
 
@@ -40,9 +36,9 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     //#endregion
 
     const onSelect = useCallback(
-        (wallet: WalletRecord) => {
+        (address: string) => {
             closeDialog()
-            selectMaskbookWallet(wallet)
+            selectMaskbookWallet(address)
         },
         [closeDialog],
     )
@@ -83,7 +79,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
                             selectedWallet?.address === wallet.address &&
                             selectedWalletProvider === ProviderType.Maskbook
                         }
-                        onClick={() => onSelect(wallet)}
+                        onClick={() => onSelect(wallet.address)}
                     />
                 ))}
             </DialogContent>

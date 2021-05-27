@@ -14,9 +14,7 @@ import {
 import { ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
 import { useSnackbar } from 'notistack'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { extendsTheme, useClassicMaskTheme } from '../../../utils/theme'
-import { useMatchXS } from '../../../utils/hooks/useMatchXS'
+import { useI18N, extendsTheme, useClassicMaskTheme, useMatchXS } from '../../../utils'
 
 const useStyles = makeStyles((theme) => ({
     root: {

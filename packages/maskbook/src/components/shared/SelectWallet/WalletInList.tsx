@@ -1,9 +1,9 @@
 import { Avatar, ListItem, ListItemText, makeStyles, Theme, ListTypeMap, ListItemAvatar } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useStylesExtends } from '../../custom-ui-helper'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import type { Wallet } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { useI18N } from '../../../utils'
+import { useStylesExtends } from '../../custom-ui-helper'
 import { useBlockie } from '../../../web3/hooks/useBlockie'
 
 const useStyle = makeStyles((theme: Theme) => ({
@@ -19,7 +19,7 @@ const useStyle = makeStyles((theme: Theme) => ({
 }))
 
 export interface WalletInListProps extends withClasses<never> {
-    wallet: WalletRecord
+    wallet: Wallet
     disabled?: boolean
     onClick?: () => void
     ListItemProps?: Partial<DefaultComponentProps<ListTypeMap<{ button: true }, 'div'>>>

@@ -14,16 +14,11 @@ import {
     DashboardWalletDeleteConfirmDialog,
     DashboardWalletRenameDialog,
 } from '../DashboardDialogs/Wallet'
-import { useMenu } from '../../../utils/hooks/useMenu'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useColorStyles } from '../../../utils/theme'
-import { useMatchXS } from '../../../utils/hooks/useMatchXS'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import type { Wallet } from '@dimensiondev/web3-shared'
+import { Flags, useMenu, useI18N, useColorStyles, useMatchXS, useRemoteControlledDialog } from '../../../utils'
 import { WalletAssetsTable } from './WalletAssetsTable'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
-import { Flags } from '../../../utils/flags'
-import { useChainIdValid } from '../../../web3/hooks/useBlockNumber'
+import { useChainIdValid } from '../../../web3/hooks/useChainId'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
@@ -76,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface WalletContentProps {
-    wallet: WalletRecord
+    wallet: Wallet
 }
 
 export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ wallet }, ref) => {
@@ -103,7 +98,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
         <MenuItem key="rename" onClick={() => openWalletRename({ wallet })}>
             {t('rename')}
         </MenuItem>,
-        wallet._private_key_ || wallet.mnemonic.length ? (
+        wallet.hasPrivateKey ? (
             <MenuItem key="backup" onClick={() => openWalletBackup({ wallet })}>
                 {t('backup')}
             </MenuItem>

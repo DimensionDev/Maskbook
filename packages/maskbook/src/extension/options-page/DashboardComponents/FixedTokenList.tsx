@@ -11,7 +11,7 @@ import { CONSTANTS } from '../../../web3/constants'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { isSameAddress } from '../../../web3/helpers'
 import { TokenInList } from './TokenInList'
-import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) => ({
     list: {},
@@ -22,9 +22,9 @@ export interface FixedTokenListProps extends withClasses<never> {
     keyword?: string
     whitelist?: string[]
     blacklist?: string[]
-    tokens?: (ERC20TokenDetailed | EtherTokenDetailed)[]
+    tokens?: FungibleTokenDetailed[]
     selectedTokens?: string[]
-    onSubmit?(token: EtherTokenDetailed | ERC20TokenDetailed): void
+    onSubmit?(token: FungibleTokenDetailed): void
     FixedSizeListProps?: Partial<FixedSizeListProps>
 }
 
@@ -71,8 +71,8 @@ export function FixedTokenList(props: FixedTokenListProps) {
             (!excludeTokens.length || !excludeTokens.some((y) => isSameAddress(y, x.address))),
     )
     const renderTokens = uniqBy([...tokens, ...filteredTokens], (x) => x.address.toLowerCase()).sort((a, z) => {
-        if (a.type === EthereumTokenType.Ether) return -1
-        if (z.type === EthereumTokenType.Ether) return 1
+        if (a.type === EthereumTokenType.Native) return -1
+        if (z.type === EthereumTokenType.Native) return 1
         if (isSameAddress(a.address, MASK_ADDRESS)) return -1
         if (isSameAddress(z.address, MASK_ADDRESS)) return 1
         return 0

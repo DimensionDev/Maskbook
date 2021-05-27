@@ -38,6 +38,7 @@ export const LightColor = {
     warning: '#FFB915',
     blue: 'rgb(28, 104, 243)',
     linkText: '#1C68F3',
+    lineLighter: '#E9E9EA',
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
@@ -78,6 +79,7 @@ export const DarkColor: typeof LightColor = {
     warning: '#FFB915',
     blue: 'rgb(28, 104, 243)',
     linkText: '#ffffff',
+    lineLighter: '#E9E9EA',
 }
 
 export type Color = typeof LightColor
