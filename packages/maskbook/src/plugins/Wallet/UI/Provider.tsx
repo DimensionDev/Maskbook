@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         padding: theme.spacing(4, 1),
-        backgroundColor: '#F7F9FA',
+        backgroundColor: theme.palette.background.paper,
     },
     logo: {
         width: 45,

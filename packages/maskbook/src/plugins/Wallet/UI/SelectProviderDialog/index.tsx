@@ -17,6 +17,7 @@ import { SuccessIcon } from '@dimensiondev/icons'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { useWalletsOfProvider } from '@dimensiondev/web3-shared'
 import { useHistory } from 'react-router-dom'
+import classnames from 'classnames'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { Provider } from '../Provider'
@@ -47,9 +48,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     step: {
         flexGrow: 1,
+        marginTop: 21,
     },
     stepTitle: {
-        fontSize: 16,
+        fontSize: 19,
+        fontWeight: 'bold',
+    },
+    stepContent: {
+        marginTop: 21,
     },
     networkList: {
         display: 'flex',
@@ -191,7 +197,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     <Typography className={classes.stepTitle} variant="h2" component="h2">
                         1. Choose Network
                     </Typography>
-                    <List className={classes.networkList}>
+                    <List className={classnames(classes.networkList, classes.stepContent)}>
                         {networks.map((network) => (
                             <ListItem
                                 className={classes.network}
@@ -205,9 +211,13 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                 </Box>
                 <Box className={classes.step}>
                     <Typography className={classes.stepTitle} variant="h2" component="h2">
-                        {`${Flags.bsc_enabled ? '2.' : ''} Choose Wallet`}
+                        {`${Flags.bsc_enabled ? '2. ' : ''}Choose Wallet`}
                     </Typography>
-                    <ImageList className={classes.grid} gap={16} cols={3} rowHeight={183}>
+                    <ImageList
+                        className={classnames(classes.stepContent, classes.grid)}
+                        gap={16}
+                        cols={3}
+                        rowHeight={183}>
                         <ImageListItem>
                             <Provider
                                 logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
