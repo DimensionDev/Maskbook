@@ -16,6 +16,10 @@ export const CONSTANT = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: 'https://dh-1111.web.app',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     API_URL: {
         [ChainId.Mainnet]: 'https://api.dhedge.org/graphql',
@@ -23,5 +27,9 @@ export const CONSTANT = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: 'https://dev.dhedge.org/graphql',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
 }

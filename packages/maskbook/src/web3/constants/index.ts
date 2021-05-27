@@ -295,6 +295,17 @@ export const CONSTANTS = {
         [ChainId.Matic]: '',
         [ChainId.Mumbai]: '',
     },
+    SUSD_ADDRESS: {
+        [ChainId.Mainnet]: '0x57ab1ec28d129707052df4df418d58a2d46d5f51',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
     NATIVE_TOKEN_ADDRESS: {
         [ChainId.Mainnet]: '0x0000000000000000000000000000000000000000',
         [ChainId.Ropsten]: '0x0000000000000000000000000000000000000000',
