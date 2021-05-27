@@ -17,7 +17,7 @@ import {
     getConstant,
 } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
-import { resolveChainId } from '../../../web3/pipes'
+import { resolveChainDetailed, resolveChainId } from '../../../web3/pipes'
 
 export async function getAssetsListNFT(
     address: string,
@@ -93,11 +93,12 @@ export async function getAssetsList(address: string, provider: PortfolioProvider
 }
 
 function formatAssetsFromDebank(data: BalanceRecord[]) {
-    return data.map(
-        (x): Asset => ({
+    return data.map((x): Asset => {
+        const chainId = resolveChainId(x.id)
+        return {
             chain: x.chain,
             token:
-                x.id === 'eth' || x.id === 'bsc' || x.id === 'matic'
+                chainId && resolveChainDetailed(chainId).network === 'mainnet'
                     ? createNativeToken(resolveChainId(x.id) ?? ChainId.Mainnet)
                     : createERC20Token(
                           resolveChainId(x.chain) ?? ChainId.Mainnet,
@@ -116,8 +117,8 @@ function formatAssetsFromDebank(data: BalanceRecord[]) {
                     .toFixed(),
             },
             logoURL: x.logo_url,
-        }),
-    )
+        }
+    })
 }
 
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
