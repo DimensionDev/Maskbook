@@ -156,7 +156,7 @@ export function SwapDialog(props: SwapDialogProps) {
         setSelectTokenDialog({
             open: true,
             uuid: id,
-            disableEther: !exchangeTokens.some((x) => isNative(x.address)),
+            disableNativeToken: !exchangeTokens.some((x) => isNative(x.address)),
             disableSearchBar: true,
             FixedTokenListProps: {
                 tokens: exchangeTokens.filter((x) => !isNative(x.address)) as ERC20TokenDetailed[],

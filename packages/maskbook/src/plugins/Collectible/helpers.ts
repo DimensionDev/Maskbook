@@ -4,7 +4,7 @@ import { PLUGIN_META_KEY, RaribleIPFSURL } from './constants'
 import type { CollectibleJSON_Payload, CollectibleToken } from './types'
 import schema from './schema.json'
 import BigNumber from 'bignumber.js'
-import { createERC20Token, createEtherToken } from '../../web3/helpers'
+import { createERC20Token, createNativeToken } from '../../web3/helpers'
 import type { ChainId } from '../../web3/types'
 
 export const CollectibleMetadataReader = createTypedMessageMetadataReader<CollectibleJSON_Payload>(
@@ -22,7 +22,7 @@ export function toAsset(asset: { tokenId: string; tokenAddress: string; schemaNa
 }
 
 export function toTokenDetailed(chainId: ChainId, token: OpenSeaFungibleToken) {
-    if (token.symbol === 'ETH') return createEtherToken(chainId)
+    if (token.symbol === 'ETH') return createNativeToken(chainId)
     return createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
 }
 

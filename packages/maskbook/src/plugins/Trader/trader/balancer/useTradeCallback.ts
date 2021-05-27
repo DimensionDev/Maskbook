@@ -57,7 +57,7 @@ export function useTradeCallback(
             ),
         )
 
-        // balancer use a different address for Ether
+        // balancer use a different address for the native token
         const inputTokenAddress =
             trade.inputToken.type === EthereumTokenType.Native ? BALANCER_ETH_ADDRESS : trade.inputToken.address
         const outputTokenAddress =
@@ -79,7 +79,7 @@ export function useTradeCallback(
                       tradeAmount.toFixed(),
                   )
 
-        // trade with ether
+        // trade with the native token
         let transactionValue = '0'
         if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Native)
             transactionValue = trade.inputAmount.toFixed()

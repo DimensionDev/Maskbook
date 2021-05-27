@@ -10,7 +10,7 @@ export function useTrade(inputToken?: FungibleTokenDetailed, outputToken?: Fungi
     // to mimic the same interface with other trade providers
     return useAsyncRetry(async () => {
         if (!inputToken || !outputToken) return false
-        // none of the tokens is ether
+        // none of the tokens is native token
         if (inputToken.type !== EthereumTokenType.Native && outputToken.type !== EthereumTokenType.Native) return false
         // none of the tokens is weth
         if (!isSameAddress(inputToken.address, WETH_ADDRESS) && !isSameAddress(outputToken.address, WETH_ADDRESS))

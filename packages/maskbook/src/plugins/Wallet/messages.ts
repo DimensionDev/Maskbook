@@ -39,7 +39,7 @@ export type SelectTokenDialogEvent =
     | {
           open: true
           uuid: string
-          disableEther?: boolean
+          disableNativeToken?: boolean
           disableSearchBar?: boolean
           FixedTokenListProps?: Omit<FixedTokenListProps, 'onSubmit'>
       }

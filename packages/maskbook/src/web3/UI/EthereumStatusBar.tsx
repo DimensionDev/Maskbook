@@ -15,20 +15,20 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export interface EthereumStatusBarProps extends withClasses<never> {
-    disableEther?: boolean
+    disableNativeToken?: boolean
     BoxProps?: Partial<BoxProps>
     AccountButtonProps?: Partial<ButtonProps>
 }
 
 export function EthereumStatusBar(props: EthereumStatusBarProps) {
-    const { disableEther = false, BoxProps, AccountButtonProps } = props
+    const { disableNativeToken = false, BoxProps, AccountButtonProps } = props
     const classes = useStylesExtends(useStyles(), props)
 
     return (
         <Box className={classes.root} {...BoxProps}>
             <EthereumAccountButton
                 classes={{ root: classes.accountChip }}
-                disableEther={disableEther}
+                disableNativeToken={disableNativeToken}
                 ButtonProps={props.AccountButtonProps}
             />
         </Box>

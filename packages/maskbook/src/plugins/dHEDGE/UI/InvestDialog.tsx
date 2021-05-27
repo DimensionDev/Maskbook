@@ -88,7 +88,7 @@ export function InvestDialog() {
         setSelectTokenDialogOpen({
             open: true,
             uuid: id,
-            disableEther: true,
+            disableNativeToken: true,
             FixedTokenListProps: {
                 selectedTokens: [token.address],
                 whitelist: [token.address],

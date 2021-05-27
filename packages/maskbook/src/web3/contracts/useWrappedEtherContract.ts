@@ -5,7 +5,7 @@ import { CONSTANTS } from '../constants'
 import { useConstant } from '../hooks/useConstant'
 import type { WETH } from '@dimensiondev/contracts/types/WETH'
 
-export function useEtherWrapperContract() {
+export function useNativeTokenWrapperContract() {
     const address = useConstant(CONSTANTS, 'WETH_ADDRESS')
     return useContract<WETH>(address, WETH_ABI as AbiItem[])
 }

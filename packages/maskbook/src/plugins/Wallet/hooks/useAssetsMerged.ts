@@ -20,7 +20,7 @@ export function useAssetsMerged(...listOfTokens: Asset[][]) {
     )
         .filter((x) => x.token.chainId === chainId)
         .sort((a, z) => {
-            // ether goes first place
+            // the native token goes first place
             if (a.token.address === NATIVE_TOKEN_ADDRESS) return -1
             if (z.token.address === NATIVE_TOKEN_ADDRESS) return 1
 

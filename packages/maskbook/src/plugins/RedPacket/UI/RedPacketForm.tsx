@@ -16,7 +16,7 @@ import {
 } from '../constants'
 import { EthereumTokenType, EthereumNetwork, FungibleTokenDetailed } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
+import { useChainId } from '../../../web3/hooks/useChainId'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { useCreateCallback } from '../hooks/useCreateCallback'
@@ -69,12 +69,11 @@ export function RedPacketForm(props: RedPacketFormProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
     const RED_PACKET_ADDRESS = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
 
     //#region select token
-    const { value: etherTokenDetailed } = useNativeTokenDetailed()
-    const [token = etherTokenDetailed, setToken] = useState<FungibleTokenDetailed | undefined>()
+    const { value: nativeTokenDetailed } = useNativeTokenDetailed()
+    const [token = nativeTokenDetailed, setToken] = useState<FungibleTokenDetailed | undefined>()
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
@@ -90,7 +89,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
         setSelectTokenDialog({
             open: true,
             uuid: id,
-            disableEther: false,
+            disableNativeToken: false,
             FixedTokenListProps: {
                 selectedTokens: token ? [token.address] : [],
             },

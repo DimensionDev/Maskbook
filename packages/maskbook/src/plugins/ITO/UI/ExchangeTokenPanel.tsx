@@ -92,7 +92,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         setSelectTokenDialog({
             open: true,
             uuid: id,
-            disableEther: isSell,
+            disableNativeToken: isSell,
             FixedTokenListProps: {
                 blacklist: excludeTokensAddress,
                 selectedTokens: [exchangeToken?.address ?? '', ...selectedTokensAddress],

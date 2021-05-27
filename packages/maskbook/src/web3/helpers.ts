@@ -50,7 +50,7 @@ export function getConstant<T extends Web3Constants, K extends keyof T>(
 
 //#endregion
 
-export function createEtherToken(chainId: ChainId): NativeTokenDetailed {
+export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     return {
         type: EthereumTokenType.Native,
         chainId,

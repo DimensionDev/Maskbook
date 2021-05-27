@@ -5,28 +5,28 @@ import { TradeComputed, TradeStrategy } from '../../types'
 
 const ZERO = new BigNumber(0)
 
-export interface EtherWrapper {
+export interface NativeTokenWrapper {
     /**
-     * if the trade wraps ether
+     * if the trade wraps the native token
      */
     isWrap: boolean
 
     /**
-     * if the trade is an ETH-WETH pair
+     * if the trade is an NATIVE-WNATIVE pair
      */
-    isEtherWrapper: boolean
+    isNativeTokenWrapper: boolean
 }
 
 export function useTradeComputed(
-    isEtherWrapper: boolean,
+    isNativeTokenWrapper: boolean,
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
-    return useMemo((): TradeComputed<EtherWrapper> | null => {
-        if (!isEtherWrapper) return null
+    return useMemo((): TradeComputed<NativeTokenWrapper> | null => {
+        if (!isNativeTokenWrapper) return null
 
         // the trade amount follows trade strategy
         const tradeAmount = new BigNumber(strategy === TradeStrategy.ExactIn ? inputAmount || '0' : outputAmount || '0')
@@ -51,8 +51,8 @@ export function useTradeComputed(
                 isWrap:
                     (strategy === TradeStrategy.ExactIn && inputToken?.type === EthereumTokenType.Native) ||
                     (strategy === TradeStrategy.ExactOut && outputToken?.type === EthereumTokenType.Native),
-                isEtherWrapper,
+                isNativeTokenWrapper,
             },
         }
-    }, [isEtherWrapper, strategy, inputAmount, outputAmount, inputToken, outputToken])
+    }, [isNativeTokenWrapper, strategy, inputAmount, outputAmount, inputToken, outputToken])
 }

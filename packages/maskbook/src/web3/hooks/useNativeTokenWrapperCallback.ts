@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import type { NonPayableTx, PayableTx } from '@dimensiondev/contracts/types/types'
-import { useEtherWrapperContract } from '../contracts/useWrappedEtherContract'
+import { useNativeTokenWrapperContract } from '../contracts/useWrappedEtherContract'
 import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import Services from '../../extension/service'
 import { TransactionEventType } from '../types'
 
-export function useEtherWrapperCallback() {
+export function useNativeTokenWrapperCallback() {
     const account = useAccount()
-    const wrapperContract = useEtherWrapperContract()
+    const wrapperContract = useNativeTokenWrapperContract()
     const [transactionState, setTransactionState] = useTransactionState()
 
     const wrapCallback = useCallback(
