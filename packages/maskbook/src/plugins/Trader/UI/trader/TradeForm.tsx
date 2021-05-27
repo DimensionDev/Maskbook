@@ -14,7 +14,7 @@ import { useRemoteControlledDialog, useI18N } from '../../../../utils'
 import { FungibleTokenDetailed, EthereumTokenType } from '../../../../web3/types'
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
-import { isEtherWrapper, toBips } from '../../helpers'
+import { isNativeTokenWrapper, toBips } from '../../helpers'
 import { formatPercentage } from '@dimensiondev/maskbook-shared'
 import { resolveUniswapWarningLevel } from '../../pipes'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -56,13 +56,6 @@ const useStyles = makeStyles((theme) => {
             marginTop: theme.spacing(1.5),
             paddingTop: 12,
             paddingBottom: 12,
-        },
-        ethereumChainChip: {
-            borderRadius: 8,
-            marginRight: theme.spacing(1),
-        },
-        ethereumAccountChip: {
-            borderRadius: 12,
         },
     }
 })
@@ -249,7 +242,7 @@ export function TradeForm(props: TradeFormProps) {
                     <EthereumERC20TokenApprovedBoundary
                         amount={approveAmount.toFixed()}
                         token={
-                            !isEtherWrapper(trade) && approveToken?.type === EthereumTokenType.ERC20
+                            !isNativeTokenWrapper(trade) && approveToken?.type === EthereumTokenType.ERC20
                                 ? approveToken
                                 : undefined
                         }
@@ -262,7 +255,7 @@ export function TradeForm(props: TradeFormProps) {
                             disabled={loading || !!validationMessage}
                             onClick={onSwap}>
                             {validationMessage ||
-                                (isEtherWrapper(trade)
+                                (isNativeTokenWrapper(trade)
                                     ? trade?.trade_?.isWrap
                                         ? t('plugin_trader_wrap')
                                         : t('plugin_trader_unwrap')

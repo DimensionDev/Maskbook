@@ -28,7 +28,7 @@ export function DashboardWalletHideTokenConfirmDialog(
             const type = token.type
             switch (type) {
                 case EthereumTokenType.Native:
-                    throw new Error('Unable to hide Ether.')
+                    throw new Error('Unable to hide the native token.')
                 case EthereumTokenType.ERC20:
                     return WalletRPC.blockERC20Token(wallet.address, token as ERC20TokenDetailed)
                 case EthereumTokenType.ERC721:

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { DialogContent, DialogProps } from '@material-ui/core'
+import { formatBalance, usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ITO_CONSTANTS, ITO_MetaKey, MSG_DELIMITER } from '../constants'
@@ -18,9 +19,7 @@ import { PoolSettings, useFillCallback } from '../hooks/useFillCallback'
 import { ConfirmDialog } from './ConfirmDialog'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
 
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',

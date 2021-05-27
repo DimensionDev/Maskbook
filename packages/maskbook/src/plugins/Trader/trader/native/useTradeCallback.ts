@@ -1,15 +1,15 @@
-import { useEtherWrapperCallback } from '../../../../web3/hooks/useEtherWrapperCallback'
+import { useNativeTokenWrapperCallback } from '../../../../web3/hooks/useNativeTokenWrapperCallback'
 import { EthereumTokenType } from '../../../../web3/types'
 import { TradeComputed, TradeStrategy } from '../../types'
-import type { EtherWrapper } from './useTradeComputed'
+import type { NativeTokenWrapper } from './useTradeComputed'
 
-export function useTradeCallback(trade: TradeComputed<EtherWrapper> | null) {
-    const [transactionState, wrapCallback, unwrapCallback, resetCallback] = useEtherWrapperCallback()
+export function useTradeCallback(trade: TradeComputed<NativeTokenWrapper> | null) {
+    const [transactionState, wrapCallback, unwrapCallback, resetCallback] = useNativeTokenWrapperCallback()
 
     return [
         transactionState,
         async () => {
-            if (!trade?.trade_?.isEtherWrapper) return
+            if (!trade?.trade_?.isNativeTokenWrapper) return
             if (!trade.inputToken || !trade.outputToken) return
 
             // input amount and output amount are the same value

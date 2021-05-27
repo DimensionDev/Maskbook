@@ -96,7 +96,7 @@ export function DonateDialog(props: DonateDialogProps) {
         setSelectTokenDialog({
             open: true,
             uuid: id,
-            disableEther: false,
+            disableNativeToken: false,
             FixedTokenListProps: {
                 selectedTokens: token ? [token.address] : [],
             },

@@ -10,7 +10,7 @@ export interface SelectTokenAmountPanelProps {
     amount: string
     balance: string
     token?: FungibleTokenDetailed
-    disableEther?: boolean
+    disableNativeToken?: boolean
     disableSearchBar?: boolean
     onAmountChange: (amount: string) => void
     onTokenChange: (token: FungibleTokenDetailed) => void
@@ -23,7 +23,7 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
         amount,
         balance,
         token,
-        disableEther = false,
+        disableNativeToken = false,
         disableSearchBar = false,
         onAmountChange,
         onTokenChange,
@@ -47,11 +47,11 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
         setSelectTokenDialog({
             open: true,
             uuid: id,
-            disableEther,
+            disableNativeToken,
             disableSearchBar,
             FixedTokenListProps,
         })
-    }, [id, disableEther, disableSearchBar, FixedTokenListProps])
+    }, [id, disableNativeToken, disableSearchBar, FixedTokenListProps])
     //#endregion
 
     return (
