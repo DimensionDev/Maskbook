@@ -331,8 +331,6 @@
     "plugin_wallet_connect_to_metamask": "あなたの MetaMask ウォレットに接続する",
     "plugin_wallet_connect_to_walletconnect_on_web": "WalletConnect をスキャンして接続する",
     "plugin_wallet_connect_to_walletconnect_on_app": "WalletConnect で接続",
-    "plugin_wallet_connect_more": "もっと見る",
-    "plugin_wallet_connect_more_description": "まもなく公開…",
     "plugin_wallet_connect_new_ethereum": "Ethereum ははじめてですか?",
     "plugin_wallet_connect_learn_more_wallets": "もっとウォレットについて知りましょう",
     "plugin_wallet_connect_safari_metamask": "MetaMask に接続する",

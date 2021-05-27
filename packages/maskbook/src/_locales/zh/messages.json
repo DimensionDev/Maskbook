@@ -331,8 +331,6 @@
     "plugin_wallet_connect_to_metamask": "連接到 MetaMask",
     "plugin_wallet_connect_to_walletconnect_on_web": "掃描以連接 WalletConnect",
     "plugin_wallet_connect_to_walletconnect_on_app": "連接 WalletConnect",
-    "plugin_wallet_connect_more": "更多",
-    "plugin_wallet_connect_more_description": "即將到來…",
     "plugin_wallet_connect_new_ethereum": "不熟悉 Ethereum？",
     "plugin_wallet_connect_learn_more_wallets": "了解更多錢包資訊",
     "plugin_wallet_connect_safari_metamask": "連接到 MetaMask",
