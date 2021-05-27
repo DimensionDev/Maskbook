@@ -3,7 +3,7 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { WalletRPC } from '../messages'
 import { currentPortfolioDataProviderSettings } from '../settings'
 import { PortfolioProvider, Transaction } from '../types'
-import { unreachable } from '../../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export function useTransactions(

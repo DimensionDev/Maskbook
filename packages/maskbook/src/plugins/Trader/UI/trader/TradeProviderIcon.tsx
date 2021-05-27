@@ -3,7 +3,7 @@ import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { ZRXIcon } from '../../../../resources/ZRXIcon'
 import { SushiSwapIcon } from '../../../../resources/SushiSwapIcon'
 import { SashimiSwapIcon } from '../../../../resources/SashimiSwapIcon'
-import { unreachable } from '../../../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { TradeProvider } from '../../types'
 import { BalancerIcon } from '../../../../resources/BalancerIcon'
 

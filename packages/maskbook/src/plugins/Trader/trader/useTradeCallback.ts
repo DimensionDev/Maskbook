@@ -1,5 +1,5 @@
 import type { Trade } from '@uniswap/sdk'
-import { unreachable } from '../../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { SwapQuoteResponse, SwapResponse, TradeComputed, TradeProvider } from '../types'
 import { useTradeCallback as useEtherCallback } from './ether/useTradeCallback'
 import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback'

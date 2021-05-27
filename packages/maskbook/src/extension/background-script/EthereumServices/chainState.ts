@@ -8,7 +8,8 @@ import {
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
 } from '../../../plugins/Wallet/settings'
-import { pollingTask, unreachable } from '../../../utils/utils'
+import { pollingTask } from '../../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { isSameAddress } from '../../../web3/helpers'
 import { ChainId, ProviderType } from '../../../web3/types'
 import { getBlockNumber } from './network'

@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core'
 import { CoinMarketCapIcon } from '../../../../resources/CoinMarketCapIcon'
 import { CoinGeckoIcon } from '../../../../resources/CoinGeckoIcon'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
-import { unreachable } from '../../../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { DataProvider } from '../../types'
 
 const useStyles = makeStyles((theme) => {

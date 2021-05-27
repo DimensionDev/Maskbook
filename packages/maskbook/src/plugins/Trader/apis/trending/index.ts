@@ -14,7 +14,7 @@ import {
     isBlockedKeyword,
     isMirroredKeyword,
 } from './hotfix'
-import { unreachable } from '../../../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 
 /**
  * Get supported currencies of specific data provider

@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect, useReducer, Fragment } from 'react'
-import { delay, unreachable } from '../../../utils/utils'
+import { delay } from '../../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
 import type { ProfileIdentifier } from '../../../database/type'

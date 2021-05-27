@@ -5,7 +5,7 @@ import { SwapQuoteResponse, TradeComputed, TradeProvider } from '../types'
 import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { TRADE_CONSTANTS } from '../constants'
-import { safeUnreachable } from '../../../utils/utils'
+import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 import BigNumber from 'bignumber.js'
 
 export function useTradeApproveComputed(
