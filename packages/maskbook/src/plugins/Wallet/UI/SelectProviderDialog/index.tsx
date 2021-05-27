@@ -31,9 +31,8 @@ import { ProviderType, WalletNetworkType } from '../../../../web3/types'
 import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { Flags } from '../../../../utils/flags'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { WalletNetworkIcon } from '../../../../components/shared/WalletNetworkIcon'
+import { NetworkIcon } from '../../../../components/shared/NetworkIcon'
 import { currentSelectedWalletNetworkSettings } from '../../settings'
-import { selectWalletNetwork } from '../../helpers'
 
 const useStyles = makeStyles((theme: Theme) => ({
     paper: {
@@ -85,10 +84,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
-const walletNetworks = Flags.bsc_enabled ? [WalletNetworkType.Ethereum, WalletNetworkType.Binance] : []
-if (Flags.bsc_enabled && Flags.bsc_provider_polygon_enabled) {
-    walletNetworks.push(WalletNetworkType.Polygon)
-}
+const networks = [
+    WalletNetworkType.Ethereum,
+    Flags.bsc_enabled ? WalletNetworkType.Binance : undefined,
+    Flags.polygon_enabled ? WalletNetworkType.Polygon : undefined,
+].filter(Boolean) as WalletNetworkType[]
 
 interface SelectProviderDialogUIProps extends withClasses<never> {}
 
@@ -149,29 +149,28 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
-                {Flags.bsc_enabled ? (
-                    <Box className={classes.step}>
-                        <Typography className={classes.stepTitle} variant="h2" component="h2">
-                            1.Choose Network
-                        </Typography>
-                        <List className={classes.networkList}>
-                            {walletNetworks.map((network) => (
-                                <ListItem
-                                    className={classes.network}
-                                    onClick={() => {
-                                        selectWalletNetwork(network)
-                                    }}>
-                                    <WalletNetworkIcon networkType={network} />
-                                    {selectedNetwork === network && <SuccessIcon className={classes.checkedBadge} />}
-                                </ListItem>
-                            ))}
-                        </List>
-                    </Box>
-                ) : null}
                 <Box className={classes.step}>
                     <Typography className={classes.stepTitle} variant="h2" component="h2">
-                        {/* TODO use css counter */}
-                        {Flags.bsc_enabled ? '2.' : ''}Choose Wallet
+                        1. Choose Network
+                    </Typography>
+                    <List className={classes.networkList}>
+                        {networks.map((network) => (
+                            <ListItem
+                                className={classes.network}
+                                key={network}
+                                onClick={() => {
+                                    currentSelectedWalletNetworkSettings.value = network
+                                    // TODO
+                                }}>
+                                <NetworkIcon networkType={network} />
+                                {selectedNetwork === network && <SuccessIcon className={classes.checkedBadge} />}
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>
+                <Box className={classes.step}>
+                    <Typography className={classes.stepTitle} variant="h2" component="h2">
+                        {`${Flags.bsc_enabled ? '2.' : ''} Choose Wallet`}
                     </Typography>
                     <ImageList className={classes.grid} gap={16} cols={3} rowHeight={183}>
                         <ImageListItem>

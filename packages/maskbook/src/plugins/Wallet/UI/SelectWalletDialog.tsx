@@ -9,10 +9,9 @@ import { WalletInList } from '../../../components/shared/SelectWallet/WalletInLi
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { currentSelectedWalletProviderSettings } from '../settings'
+import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ProviderType } from '../../../web3/types'
-import { selectMaskbookWallet } from '../helpers'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -38,7 +37,8 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const onSelect = useCallback(
         (address: string) => {
             closeDialog()
-            selectMaskbookWallet(address)
+            currentSelectedWalletAddressSettings.value = wallet.address
+            currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
         },
         [closeDialog],
     )

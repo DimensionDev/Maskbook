@@ -57,7 +57,7 @@ export const Flags = {
     //#endregion
 
     bsc_enabled: true,
-    bsc_provider_polygon_enabled: true,
+    polygon_enabled: true,
 
     //#region Functionality missing / broken
     /**

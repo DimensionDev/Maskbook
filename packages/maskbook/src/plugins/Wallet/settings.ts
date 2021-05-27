@@ -1,6 +1,6 @@
 import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
-import { ChainId, ProviderType, WalletNetworkType } from '../../web3/types'
+import { ChainId, ProviderType, NetworkType } from '../../web3/types'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { CollectibleProvider, PortfolioProvider } from './types'
 
@@ -16,11 +16,11 @@ export const currentSelectedWalletAddressSettings = createGlobalSettings<string>
 )
 
 /**
- * The provider type of the selected wallet
+ * The network type of the selected wallet
  */
-export const currentSelectedWalletNetworkSettings = createGlobalSettings<WalletNetworkType>(
+export const currentSelectedWalletNetworkSettings = createGlobalSettings<NetworkType>(
     `${PLUGIN_IDENTIFIER}+selectedWalletNetwork`,
-    WalletNetworkType.Ethereum,
+    NetworkType.Ethereum,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },

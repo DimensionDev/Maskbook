@@ -1,6 +1,6 @@
 export { ProviderType } from '@dimensiondev/web3-shared'
 
-export enum WalletNetworkType {
+export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
     Polygon = 'Polygon',

@@ -43,7 +43,7 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
     return (
         <List>
             {transactions.map((transaction) => (
-                <ListItem className={classes.transaction}>
+                <ListItem className={classes.transaction} key={transaction.hash}>
                     <Typography variant="body2">{transaction.description}</Typography>
                     <ExternalLink className={classes.linkIcon} size={14} />
                     <Link component="button" className={classes.transactionButton}>
