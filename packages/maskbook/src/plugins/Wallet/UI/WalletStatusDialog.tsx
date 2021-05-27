@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
-import { Copy, ExternalLink } from 'react-feather'
+import { Copy, ExternalLink, XCircle, RotateCcw } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import ErrorIcon from '@material-ui/icons/Error'
-import { Button, DialogActions, DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, Link, makeStyles, Typography, List, ListItem } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ProviderIcon } from '../../../components/shared/ProviderIcon'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 import Services from '../../../extension/service'
 import { useRemoteControlledDialog, useValueRef, useI18N } from '../../../utils'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
-import { resolveLinkOnExplorer, resolveProviderName } from '../../../web3/pipes'
+import { resolveAddressLinkOnExplorer } from '../../../web3/pipes'
 import { ChainId, ProviderType } from '../../../web3/types'
 import { EthereumChainChip } from '../../../web3/UI/EthereumChainChip'
 import { useWallet } from '../hooks/useWallet'
@@ -21,6 +21,17 @@ const useStyles = makeStyles((theme) => ({
     content: {
         padding: theme.spacing(2, 4, 3),
     },
+    currentAccount: {
+        padding: theme.spacing(2, 3),
+        display: 'flex',
+    },
+    accountInfo: {
+        fontSize: 16,
+    },
+    accountName: {
+        fontSize: 16,
+    },
+    infoRow: {},
     footer: {
         fontSize: 12,
         textAlign: 'left',
@@ -29,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-start',
     },
     section: {
-        display: 'flex',
         alignItems: 'center',
         '&:last-child': {
             paddingTop: theme.spacing(0.5),
@@ -41,9 +51,9 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(1),
     },
     icon: {
-        fontSize: 24,
-        width: 24,
-        height: 24,
+        fontSize: 48,
+        width: 48,
+        height: 48,
         marginRight: theme.spacing(1),
     },
     tip: {
@@ -51,16 +61,14 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 14,
     },
     address: {
-        fontSize: 24,
+        fontSize: 16,
         padding: theme.spacing(1),
         marginRight: theme.spacing(1),
+        display: 'inline-block',
     },
     link: {
-        display: 'flex',
-        alignItems: 'center',
         color: theme.palette.text.secondary,
         fontSize: 14,
-        marginRight: theme.spacing(2),
     },
     linkIcon: {
         marginRight: theme.spacing(1),
@@ -131,10 +139,34 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
             onClose={closeDialog}
             DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent className={classes.content}>
-                <section className={classes.section}>
-                    <Typography className={classes.tip} color="textSecondary">
-                        {t('wallet_status_connect_with', { provider: resolveProviderName(selectedWalletProvider) })}
-                    </Typography>
+                <section className={classes.currentAccount}>
+                    <ProviderIcon classes={{ icon: classes.icon }} size={14} providerType={selectedWalletProvider} />
+                    <div className={classes.accountInfo}>
+                        <div className={classes.infoRow}>
+                            <Typography className={classes.accountName}>{selectedWallet.name}</Typography>
+                        </div>
+                        <div className={classes.infoRow}>
+                            <Typography className={classes.address}>
+                                <FormattedAddress address={selectedWallet.address} size={4}/>
+                            </Typography>
+                            <Link
+                                className={classes.link}
+                                underline="none"
+                                component="button"
+                                title={t('wallet_status_button_copy_address')}
+                                onClick={onCopy}>
+                                <Copy className={classes.linkIcon} size={14} />
+                            </Link>
+                            <Link
+                                className={classes.link}
+                                href={`${resolveAddressLinkOnExplorer(chainId, selectedWallet.address)}`}
+                                target="_blank"
+                                title={t('plugin_wallet_view_on_etherscan')}
+                                rel="noopener noreferrer">
+                                <ExternalLink className={classes.linkIcon} size={14} />
+                            </Link>
+                        </div>
+                    </div>
                     <section className={classes.actions}>
                         {selectedWalletProvider === ProviderType.WalletConnect ? (
                             <Button
@@ -157,27 +189,31 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                     </section>
                 </section>
                 <section className={classes.section}>
-                    <ProviderIcon classes={{ icon: classes.icon }} size={14} providerType={selectedWalletProvider} />
-                    <Typography className={classes.address}>
-                        <FormattedAddress address={selectedWallet.address} size={4} />
-                    </Typography>
                     {chainIdValid && chainId !== ChainId.Mainnet ? (
                         <EthereumChainChip chainId={chainId} ChipProps={{ variant: 'outlined' }} />
                     ) : null}
                 </section>
                 <section className={classes.section}>
-                    <Link className={classes.link} underline="none" component="button" onClick={onCopy}>
-                        <Copy className={classes.linkIcon} size={14} />
-                        <Typography variant="body2">{t('wallet_status_button_copy_address')}</Typography>
-                    </Link>
-                    <Link
-                        className={classes.link}
-                        href={`${resolveLinkOnExplorer(chainId)}/address/${selectedWallet.address}`}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <ExternalLink className={classes.linkIcon} size={14} />
-                        <Typography variant="body2">{t('plugin_wallet_view_on_etherscan')}</Typography>
-                    </Link>
+                    <div className="sectionTitle">
+                        <Typography variant="h2">Recent Transactions</Typography>
+                        <Button aria-label="Clear All">(Clear all)</Button>
+                    </div>
+                    <List>
+                        <ListItem>
+                            <Typography variant="body2">Add 2,000.00 USDT </Typography>
+                            <ExternalLink className={classes.linkIcon} size={14} />
+                            <Button>
+                                <RotateCcw />
+                            </Button>
+                        </ListItem>
+                        <ListItem>
+                            <Typography variant="body2">Add 2,000.00 USDT </Typography>
+                            <ExternalLink className={classes.linkIcon} size={14} />
+                            <Button>
+                                <XCircle color="red" />
+                            </Button>
+                        </ListItem>
+                    </List>
                 </section>
             </DialogContent>
             {!chainIdValid ? (
