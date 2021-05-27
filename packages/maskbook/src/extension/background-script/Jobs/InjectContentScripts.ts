@@ -1,11 +1,9 @@
 import { Flags } from '../../../utils/flags'
-import { isSDKEnabled } from '../ThirdPartyPlugin'
 
 type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never
 export default function () {
     const injectedScript = fetchInjectedScript()
     const contentScripts = fetchInjectContentScript('/generated__content__script.html')
-    const sdk = fetchInjectContentScript('/generated__content__script__sdk.html')
     async function onCommittedListener(arg: Args): Promise<void> {
         if (arg.url === 'about:blank') return
         if (!arg.url.startsWith('http')) return
@@ -33,9 +31,6 @@ export default function () {
             })
         }
         contentScripts(arg.tabId, arg.frameId).catch(HandleError(arg))
-        if (isSDKEnabled(arg.url)) {
-            sdk(arg.tabId, arg.frameId).catch(HandleError(arg))
-        }
     }
     browser.webNavigation.onCommitted.addListener(onCommittedListener)
     return () => browser.webNavigation.onCommitted.removeListener(onCommittedListener)

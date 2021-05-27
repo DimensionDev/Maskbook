@@ -286,7 +286,6 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             'background-service': withBrowserPolyfill(src('./src/background-service.ts')),
             debug: withBrowserPolyfill(src('./src/extension/debug-page')),
             popups: withBrowserPolyfill(src('./src/extension/popups/render.tsx')),
-            'content-script-external-sdk': withBrowserPolyfill(src('./src/extension/external-sdk')),
         }
         if (isManifestV3) delete main.entry['background-script']
         if (mode === 'production') delete main.entry['dashboard-next']
@@ -299,10 +298,6 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             getHTMLPlugin({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
             getHTMLPlugin({ chunks: ['debug'], filename: 'debug.html' }),
             getHTMLPlugin({ chunks: ['popups'], filename: 'popups.html' }),
-            getHTMLPlugin({
-                chunks: ['content-script-external-sdk'],
-                filename: 'generated__content__script__sdk.html',
-            }),
         ) // generate pages for each entry
         if (mode === 'development')
             main.plugins!.push(getHTMLPlugin({ chunks: ['dashboard-next'], filename: 'next.html' }))
