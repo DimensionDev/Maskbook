@@ -25,6 +25,9 @@ jobs:
             - v3-maskbook-cache-pnpm
       - run:
           name: Install Dependencies
+          command: sudo npm i -g typescript
+      - run:
+          name: Install Dependencies
           command: npx pnpm@6.2.1 install --frozen-lockfile --store-dir ~/.pnpm/
       - save_cache:
           name: Save NPM Package Cache
