@@ -4,14 +4,11 @@ import type { Pair } from '@uniswap/sdk'
 import { toUniswapChainId, toUniswapToken } from '../../helpers'
 import { usePairs, TokenPair, PairState } from './usePairs'
 import { useChainId } from '../../../../web3/hooks/useChainId'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../../web3/types'
 import { useUniswapToken } from './useUniswapToken'
 import { TradeContext } from '../useTradeContext'
 
-export function useAllCommonPairs(
-    tokenA?: NativeTokenDetailed | ERC20TokenDetailed,
-    tokenB?: NativeTokenDetailed | ERC20TokenDetailed,
-) {
+export function useAllCommonPairs(tokenA?: FungibleTokenDetailed, tokenB?: FungibleTokenDetailed) {
     const chainId = useChainId()
     const context = useContext(TradeContext)
     const uniswapTokenA = useUniswapToken(tokenA)

@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid'
 
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -74,9 +74,9 @@ export function DonateDialog(props: DonateDialogProps) {
     //#endregion
 
     //#region the selected token
-    const [token = nativeTokenDetailed.value, setToken] = useState<
-        NativeTokenDetailed | ERC20TokenDetailed | undefined
-    >(nativeTokenDetailed.value)
+    const [token = nativeTokenDetailed.value, setToken] = useState<FungibleTokenDetailed | undefined>(
+        nativeTokenDetailed.value,
+    )
     const tokenBalance = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     //#endregion
 

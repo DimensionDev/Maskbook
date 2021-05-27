@@ -3,7 +3,7 @@ import { makeStyles, Theme, DialogContent, TextField } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import { WalletMessages } from '../../Wallet/messages'
 import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
 import { delay, useRemoteControlledDialog, useI18N } from '../../../utils'
@@ -53,7 +53,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
         setFixedTokenListProps(ev.FixedTokenListProps ?? null)
     })
     const onSubmit = useCallback(
-        async (token: NativeTokenDetailed | ERC20TokenDetailed) => {
+        async (token: FungibleTokenDetailed) => {
             setDialog({
                 open: false,
                 uuid: id,

@@ -9,7 +9,7 @@ import { formatBalance, formatEthereumAddress } from '@dimensiondev/maskbook-sha
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { useTokenTransferCallback } from '../../../../web3/hooks/useTokenTransferCallback'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../../web3/types'
 import { EthereumTokenType } from '../../../../web3/types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 
@@ -32,7 +32,7 @@ const useTransferTabStyles = makeStyles((theme) => ({
 
 interface TransferTabProps {
     wallet: Wallet
-    token: NativeTokenDetailed | ERC20TokenDetailed
+    token: FungibleTokenDetailed
     onClose: () => void
 }
 

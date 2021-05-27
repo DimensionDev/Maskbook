@@ -8,7 +8,8 @@ import type {
     ERC1155TokenDetailed,
     ERC20TokenDetailed,
     ERC721TokenDetailed,
-    NativeTokenDetailed,
+    FungibleTokenDetailed,
+    NonFungibleTokenDetailed,
 } from '../../../../web3/types'
 import { EthereumTokenType } from '../../../../web3/types'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
@@ -17,9 +18,7 @@ import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, Wrapp
 import type { WalletProps } from './types'
 
 export function DashboardWalletHideTokenConfirmDialog(
-    props: WrappedDialogProps<
-        WalletProps & { token: NativeTokenDetailed | ERC20TokenDetailed | ERC721TokenDetailed | ERC1155TokenDetailed }
-    >,
+    props: WrappedDialogProps<WalletProps & { token: FungibleTokenDetailed | NonFungibleTokenDetailed }>,
 ) {
     const { wallet, token } = props.ComponentProps!
     const { t } = useI18N()

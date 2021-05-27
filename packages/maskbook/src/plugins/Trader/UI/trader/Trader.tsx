@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/sdk'
 
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType, ChainId } from '../../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType, ChainId } from '../../../../web3/types'
 import { TradeForm } from './TradeForm'
 import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
 import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => {
 
 export interface TraderProps extends withClasses<never> {
     coin?: Coin
-    tokenDetailed?: NativeTokenDetailed | ERC20TokenDetailed
+    tokenDetailed?: FungibleTokenDetailed
 }
 
 export function Trader(props: TraderProps) {

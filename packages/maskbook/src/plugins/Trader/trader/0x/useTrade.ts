@@ -4,7 +4,7 @@ import { getEnumAsArray } from '../../../../utils/enum'
 import { CONSTANTS } from '../../../../web3/constants'
 import { useBlockNumber } from '../../../../web3/hooks/useBlockNumber'
 import { useConstant } from '../../../../web3/hooks/useConstant'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../../web3/types'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy, ZrxTradePool } from '../../types'
@@ -16,8 +16,8 @@ export function useTrade(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
-    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
+    inputToken?: FungibleTokenDetailed,
+    outputToken?: FungibleTokenDetailed,
 ) {
     const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     const blockNumber = useBlockNumber()

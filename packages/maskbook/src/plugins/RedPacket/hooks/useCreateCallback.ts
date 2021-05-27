@@ -4,7 +4,7 @@ import Web3Utils from 'web3-utils'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import Services from '../../../extension/service'
 
@@ -16,7 +16,7 @@ export interface RedPacketSettings {
     total: string
     name: string
     message: string
-    token?: NativeTokenDetailed | ERC20TokenDetailed
+    token?: FungibleTokenDetailed
 }
 
 export function useCreateCallback(redPacketSettings: RedPacketSettings) {

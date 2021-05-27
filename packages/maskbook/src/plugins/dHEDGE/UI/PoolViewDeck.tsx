@@ -9,7 +9,7 @@ import { useChainId } from '../../../web3/hooks/useChainId'
 import { usePoolURL } from '../hooks/useUrl'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTraderMessages } from '../../Trader/messages'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { Coin } from '../../Trader/types'
 import { PluginDHedgeMessages } from '../messages'
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface PoolDeckProps {
     pool: Pool
-    inputToken: NativeTokenDetailed | ERC20TokenDetailed
+    inputToken: FungibleTokenDetailed
 }
 
 export function PoolViewDeck(props: PoolDeckProps) {

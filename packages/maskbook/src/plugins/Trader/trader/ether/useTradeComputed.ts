@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../../web3/types'
 import { TradeComputed, TradeStrategy } from '../../types'
 
 const ZERO = new BigNumber(0)
@@ -22,8 +22,8 @@ export function useTradeComputed(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
-    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
+    inputToken?: FungibleTokenDetailed,
+    outputToken?: FungibleTokenDetailed,
 ) {
     return useMemo((): TradeComputed<EtherWrapper> | null => {
         if (!isEtherWrapper) return null

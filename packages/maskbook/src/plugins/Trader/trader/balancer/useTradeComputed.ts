@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../../web3/types'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 
 const MIN_VALUE = new BigNumber('1e-5')
@@ -10,8 +10,8 @@ export function useTradeComputed(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
-    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
+    inputToken?: FungibleTokenDetailed,
+    outputToken?: FungibleTokenDetailed,
 ) {
     return useMemo(() => {
         if (!trade) return null

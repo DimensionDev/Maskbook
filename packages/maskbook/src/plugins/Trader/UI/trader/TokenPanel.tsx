@@ -1,11 +1,11 @@
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { Box, makeStyles, Theme, Typography } from '@material-ui/core'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../../web3/types'
 
 export interface TokenPanelProps {
     amount: string
-    token: NativeTokenDetailed | ERC20TokenDetailed
+    token: FungibleTokenDetailed
 }
 
 const useStyles = makeStyles((theme: Theme) => ({

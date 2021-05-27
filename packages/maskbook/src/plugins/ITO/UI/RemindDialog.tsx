@@ -4,7 +4,7 @@ import { Typography, Link, Checkbox, makeStyles, FormControlLabel } from '@mater
 import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { resolveLinkOnExplorer } from '../../../web3/pipes'
@@ -113,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export interface RemindDialogProps extends withClasses<'root'> {
-    token: NativeTokenDetailed | ERC20TokenDetailed
+    token: FungibleTokenDetailed
     chainId: ChainId
     setStatus: (status: SwapStatus) => void
 }
