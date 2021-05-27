@@ -1,5 +1,5 @@
 import { useSubscription } from 'use-subscription'
-import { WalletProvider } from '../types'
+import { ProviderType } from '../types'
 import { isSameAddress } from '../utils'
 import { useWeb3Provider, useWeb3Context } from './context'
 export interface Wallet {
@@ -24,10 +24,10 @@ export interface Wallet {
 export function useWallets(): Wallet[] {
     return useWeb3Context().wallets
 }
-export function useWalletsOfProvider(expectedProvider?: WalletProvider): Wallet[] {
+export function useWalletsOfProvider(expectedProvider?: ProviderType): Wallet[] {
     const wallets = useWallets()
     const selectedWalletProvider = useSubscription(useWeb3Provider().walletProvider)
-    if (expectedProvider === WalletProvider.Maskbook) return wallets.filter((x) => x.hasPrivateKey)
+    if (expectedProvider === ProviderType.Maskbook) return wallets.filter((x) => x.hasPrivateKey)
     if (expectedProvider === selectedWalletProvider)
         return wallets.filter((x) => isSameAddress(x.address, selectedWalletProvider))
     if (expectedProvider) return []

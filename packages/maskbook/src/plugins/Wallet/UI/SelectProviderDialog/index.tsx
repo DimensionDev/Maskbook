@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import {
     Box,
     makeStyles,
@@ -27,10 +27,13 @@ import Services from '../../../../extension/service'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../messages'
 import { DashboardRoute } from '../../../../extension/options-page/Route'
-import { ProviderType } from '../../../../web3/types'
+import { ProviderType, WalletNetworkType } from '../../../../web3/types'
+import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { Flags } from '../../../../utils/flags'
-import { Image } from '../../../../components/shared/Image'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { WalletNetworkIcon } from '../../../../components/shared/WalletNetworkIcon'
+import { currentSelectedWalletNetworkSettings } from '../../settings'
+import { selectWalletNetwork } from '../../helpers'
 
 const useStyles = makeStyles((theme: Theme) => ({
     paper: {
@@ -82,26 +85,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
-const walletNetworks = [
-    {
-        id: 'Ethereum',
-        icon: new URL('./ethereum.png', import.meta.url).toString(),
-    },
-    {
-        id: 'binance',
-        icon: new URL('./binance.png', import.meta.url).toString(),
-    },
-    {
-        id: 'polygon',
-        icon: new URL('./binance.png', import.meta.url).toString(),
-    },
-]
+const walletNetworks = Flags.bsc_enabled ? [WalletNetworkType.Ethereum, WalletNetworkType.Binance] : []
+if (Flags.bsc_enabled && Flags.bsc_provider_polygon_enabled) {
+    walletNetworks.push(WalletNetworkType.Polygon)
+}
 
 interface SelectProviderDialogUIProps extends withClasses<never> {}
 
 function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const { t } = useI18N()
-    const [selectedNetwork, setSelectedNetwork] = useState(walletNetworks[0].id)
+    const selectedNetwork = useValueRef(currentSelectedWalletNetworkSettings)
     const classes = useStylesExtends(useStyles(), props)
     const history = useHistory()
 
@@ -156,26 +149,29 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
+                {Flags.bsc_enabled ? (
+                    <Box className={classes.step}>
+                        <Typography className={classes.stepTitle} variant="h2" component="h2">
+                            1.Choose Network
+                        </Typography>
+                        <List className={classes.networkList}>
+                            {walletNetworks.map((network) => (
+                                <ListItem
+                                    className={classes.network}
+                                    onClick={() => {
+                                        selectWalletNetwork(network)
+                                    }}>
+                                    <WalletNetworkIcon networkType={network} />
+                                    {selectedNetwork === network && <SuccessIcon className={classes.checkedBadge} />}
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Box>
+                ) : null}
                 <Box className={classes.step}>
                     <Typography className={classes.stepTitle} variant="h2" component="h2">
-                        1.Choose Network
-                    </Typography>
-                    <List className={classes.networkList}>
-                        {walletNetworks.map((network) => (
-                            <ListItem
-                                className={classes.network}
-                                onClick={() => {
-                                    setSelectedNetwork(network.id)
-                                }}>
-                                <Image height={48} width={48} src={network.icon} className={classes.networkIcon} />
-                                {selectedNetwork === network.id && <SuccessIcon className={classes.checkedBadge} />}
-                            </ListItem>
-                        ))}
-                    </List>
-                </Box>
-                <Box className={classes.step}>
-                    <Typography className={classes.stepTitle} variant="h2" component="h2">
-                        2.Choose Wallet
+                        {/* TODO use css counter */}
+                        {Flags.bsc_enabled ? '2.' : ''}Choose Wallet
                     </Typography>
                     <ImageList className={classes.grid} gap={16} cols={3} rowHeight={183}>
                         <ImageListItem>

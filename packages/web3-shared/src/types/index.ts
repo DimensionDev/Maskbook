@@ -14,7 +14,8 @@ export enum ChainId {
     Matic = 137,
     Mumbai = 80001,
 }
-export enum WalletProvider {
+
+export enum ProviderType {
     Maskbook = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
