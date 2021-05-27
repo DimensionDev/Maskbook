@@ -14,6 +14,10 @@ export default function () {
             console.log('New connection from', conn)
             if (!newDashboardConnection.value) return false
             if (!conn.url) return false
+
+            if (conn.url.startsWith('http://localhost:') || conn.url.startsWith('http://127.0.0.1:')) {
+                return { acceptAs: Environment.HasBrowserAPI }
+            }
             if (!new URL(conn.url).host.endsWith('compassionate-northcutt-326a3a.netlify.app')) return false
             return { acceptAs: Environment.HasBrowserAPI }
         })

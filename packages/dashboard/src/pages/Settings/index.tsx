@@ -64,7 +64,6 @@ export default function Settings() {
                     <MobileSyncSetting />
                 </SettingItem>
             </SettingCard>
-
             <SettingCard title={t.settings_database_management()}>
                 <SettingItem
                     icon={<SaveIcon />}
@@ -79,7 +78,6 @@ export default function Settings() {
                     <RestoreSetting />
                 </SettingItem>
             </SettingCard>
-
             <SettingCard title={t.settings_profile()}>
                 <SettingItem icon={<PermIdentityIcon />} title={t.settigns_email_title()} desc="xxx@xxx">
                     <EmailSetting />

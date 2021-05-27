@@ -14,6 +14,7 @@
     { "path": "../plugin-infra" }
   ],
   "ts-node": {
-    "compilerOptions": { "module": "CommonJS" }
+    "compilerOptions": { "module": "CommonJS" },
+    "transpileOnly": true
   }
 }

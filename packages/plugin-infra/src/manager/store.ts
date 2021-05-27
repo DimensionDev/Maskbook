@@ -14,17 +14,24 @@ export function registerPlugin(def: Plugin.DeferredDefinition) {
 }
 
 function __meetRegisterRequirement(def: Plugin.Shared.Definition) {
-    // arch check
-    if (process.env.architecture === 'app' && !def.enableRequirement.architecture.app) return false
-    if (process.env.architecture === 'web' && !def.enableRequirement.architecture.web) return false
+    try {
+        // arch check
+        // TODO: process.env.architecture is not well known envs
+        if (process.env.architecture === 'app' && !def.enableRequirement.architecture.app) return false
+        if (process.env.architecture === 'web' && !def.enableRequirement.architecture.web) return false
+    } catch {}
 
     // build variant check
     if (process.env.NODE_ENV === 'production') {
-        if (process.env.build === 'stable' && def.enableRequirement.target !== 'stable') {
-            return false
-        } else if (process.env.build === 'beta' && def.enableRequirement.target === 'insider') {
-            return false
-        }
+        // arch check
+        // TODO: process.env.build is not well known envs
+        try {
+            if (process.env.build === 'stable' && def.enableRequirement.target !== 'stable') {
+                return false
+            } else if (process.env.build === 'beta' && def.enableRequirement.target === 'insider') {
+                return false
+            }
+        } catch {}
     }
     return true
 }
