@@ -1,29 +1,35 @@
-import { ChainId, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
-import Services from '../extension/service'
-import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
-import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../plugins/Wallet/settings'
-import { noop, pick } from 'lodash-es'
-import { Flags } from '../utils'
+import type { Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
+import { ChainId, WalletProvider } from '@dimensiondev/web3-shared'
+import { Messages, PluginMessages, PluginServices, Services } from '../API'
+import { pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import type { InternalSettings } from '../settings/createSettings'
 
 export const Web3Context: Web3ProviderType = {
-    allowTestChain: {
-        getCurrentValue: () => Flags.wallet_allow_test_chain,
-        subscribe: () => noop,
-    },
+    allowTestChain: createSubscriptionAsync(
+        Services.Settings.getWalletAllowTestChain,
+        false,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
     currentChain: createSubscriptionAsync(
         Services.Ethereum.getChainId,
         ChainId.Mainnet,
-        WalletMessages.events.chainIdUpdated.on,
+        PluginMessages.Wallet.events.chainIdUpdated.on,
     ),
-    walletProvider: createSubscriptionFromSettings(currentSelectedWalletProviderSettings),
-    wallets: createSubscriptionAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
-    selectedWalletAddress: createSubscriptionFromSettings(currentSelectedWalletAddressSettings),
+    walletProvider: createSubscriptionAsync(
+        Services.Settings.getCurrentSelectedWalletProvider,
+        WalletProvider.Maskbook,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    wallets: createSubscriptionAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
+    selectedWalletAddress: createSubscriptionAsync(
+        Services.Settings.getSelectedWalletAddress,
+        '',
+        Messages.events.createInternalSettingsChanged.on,
+    ),
 }
 
 async function getWallets() {
-    const raw = await WalletRPC.getWallets()
+    const raw = await PluginServices.Wallet.getWallets()
     return raw.map<Wallet>((record) => ({
         ...pick(record, [
             'address',
@@ -38,19 +44,7 @@ async function getWallets() {
         hasPrivateKey: Boolean(record._private_key_ || record.mnemonic.length),
     }))
 }
-// utils
-function createSubscriptionFromSettings<T>(settings: InternalSettings<T>): Subscription<T> {
-    const { trigger, subscribe } = getEventTarget()
-    settings.readyPromise.finally(trigger)
-    return {
-        getCurrentValue: () => settings.value,
-        subscribe: (f) => {
-            const a = subscribe(f)
-            const b = settings.addListener(() => trigger())
-            return () => void [a(), b()]
-        },
-    }
-}
+
 function createSubscriptionAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,
@@ -73,6 +67,7 @@ function createSubscriptionAsync<T>(
         },
     }
 }
+
 function getEventTarget() {
     const event = new EventTarget()
     const EVENT = 'event'
