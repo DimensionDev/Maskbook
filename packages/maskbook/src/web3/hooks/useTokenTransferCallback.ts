@@ -1,4 +1,4 @@
-import { unreachable } from '../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { EthereumTokenType } from '../types'
 import { useERC20TokenTransferCallback } from './useERC20TokenTransferCallback'
 import { useERC721TokenTransferCallback } from './useERC721TokenTransferCallback'

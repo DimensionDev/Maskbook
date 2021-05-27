@@ -12,7 +12,7 @@ import {
 } from '../plugins/Wallet/settings'
 import { startEffects } from '../utils/side-effects'
 import { ChainId, ProviderType } from '../web3/types'
-import { safeUnreachable } from '../utils/utils'
+import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 
 const effect = startEffects(module.hot)
 export function createPluginHost(signal?: AbortSignal): Plugin.__Host.Host {

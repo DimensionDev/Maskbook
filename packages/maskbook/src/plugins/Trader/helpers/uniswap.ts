@@ -12,7 +12,7 @@ import {
 } from '@uniswap/sdk'
 import { WETH } from '../constants'
 import { ChainId, ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../web3/types'
-import { unreachable } from '../../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { isNative } from '../../../web3/helpers'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 

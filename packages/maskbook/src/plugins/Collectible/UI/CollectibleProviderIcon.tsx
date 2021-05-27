@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 import { OpenSeaIcon } from '../../../resources/OpenSeaIcon'
 import { RaribleIcon } from '../../../resources/RaribleIcon'
-import { unreachable } from '../../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { CollectibleProvider } from '../types'
 
 const useStyles = makeStyles((theme) => {

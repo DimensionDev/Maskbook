@@ -1,4 +1,4 @@
-import { unreachable } from '../../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { ChainId, ERC1155TokenDetailed, ERC721TokenDetailed } from '../../../web3/types'
 import { CollectibleProvider, PortfolioProvider } from '../types'
 

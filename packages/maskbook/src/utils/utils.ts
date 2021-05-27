@@ -63,13 +63,7 @@ export function selectElementContents(el: Node) {
 export function nopWithUnmount(..._args: unknown[]) {
     return noop
 }
-export function unreachable(val: never): never {
-    console.error('Unhandled value: ', val)
-    throw new Error('Unreachable case:' + val)
-}
-export function safeUnreachable(val: never) {
-    console.error('Unhandled value: ', val)
-}
+
 /**
  * index starts at one.
  */

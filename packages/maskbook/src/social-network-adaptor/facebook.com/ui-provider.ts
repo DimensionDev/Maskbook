@@ -25,7 +25,7 @@ import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
 import { currentSelectedIdentity } from '../../settings/settings'
 import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 import { globalUIState } from '../../social-network'
-import { unreachable } from '../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 
 const facebookUI: SocialNetworkUI.Definition = {
     ...facebookBase,
