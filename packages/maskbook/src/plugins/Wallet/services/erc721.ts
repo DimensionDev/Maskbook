@@ -13,7 +13,7 @@ import { isSameAddress } from '../../../web3/helpers'
 import { queryTransactionPaged } from '../../../database/helpers/pagination'
 
 export async function getERC721Tokens() {
-    const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC721Token', 'Wallet')
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC721Token')
     return t.objectStore('ERC721Token').getAll()
 }
 

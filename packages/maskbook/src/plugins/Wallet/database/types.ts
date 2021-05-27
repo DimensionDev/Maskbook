@@ -1,4 +1,5 @@
-import type { ChainId } from '../../../web3/types'
+import type { Transaction, TransactionReceipt } from 'web3-core'
+import type { ChainId, TransactionStatusType } from '../../../web3/types'
 
 export interface ERC20TokenRecord {
     /** contract address */
@@ -95,6 +96,25 @@ export interface PhraseRecord {
     updatedAt: Date
 }
 
+export interface TransactionRecord {
+    /** A hash labels a transaction uniquely */
+    hash: string
+    /** Status type of transaction: SUCCEED, FAILED or NOT_DEPEND */
+    status: TransactionStatusType
+    /** The transaction owner's address */
+    address: string
+    /** The chain id of network */
+    chain_id: ChainId
+    /** A simple one-line description */
+    description: string
+    /** Transaction Object */
+    transaction?: Transaction
+    /** Transaction Receipt */
+    receipt?: TransactionReceipt
+    createdAt: Date
+    updatedAt: Date
+}
+
 export interface ERC20TokenRecordInDatabase extends ERC20TokenRecord {}
 
 export interface ERC721TokenRecordInDatabase extends ERC721TokenRecord {
@@ -108,3 +128,7 @@ export interface ERC1155TokenRecordInDatabase extends ERC1155TokenRecord {
 export interface WalletRecordInDatabase extends WalletRecord {}
 
 export interface PhraseRecordInDatabase extends PhraseRecord {}
+
+export interface TransactionRecordInDatabase extends TransactionRecord {
+    record_id: string
+}
