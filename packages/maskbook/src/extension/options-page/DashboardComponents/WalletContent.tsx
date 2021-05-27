@@ -6,18 +6,18 @@ import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutline
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Check from '@material-ui/icons/Check'
+import type { Wallet } from '@dimensiondev/web3-shared'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddERC20TokenDialog,
     DashboardWalletAddERC721TokenDialog,
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
-    DashboardWalletRenameDialog,
 } from '../DashboardDialogs/Wallet'
-import type { Wallet } from '@dimensiondev/web3-shared'
 import { Flags, useMenu, useI18N, useColorStyles, useMatchXS, useRemoteControlledDialog } from '../../../utils'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { useChainIdValid } from '../../../web3/hooks/useChainId'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
@@ -91,11 +91,20 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
-    const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
     const [addAsset, , openAddAsset] = useModal(DashboardWalletAddERC721TokenDialog)
+    const { setDialog: setWalletRenameDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletRenameDialogUpdated,
+    )
 
     const [menu, openMenu] = useMenu([
-        <MenuItem key="rename" onClick={() => openWalletRename({ wallet })}>
+        <MenuItem
+            key="rename"
+            onClick={() => {
+                setWalletRenameDialog({
+                    open: true,
+                    wallet,
+                })
+            }}>
             {t('rename')}
         </MenuItem>,
         wallet.hasPrivateKey ? (
@@ -278,7 +287,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
             {addAsset}
             {walletBackup}
             {walletDelete}
-            {walletRename}
         </div>
     )
 })

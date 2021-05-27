@@ -1,3 +1,4 @@
+import type { Wallet } from '@dimensiondev/web3-shared'
 import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
 import type { FungibleTokenDetailed } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'
@@ -33,6 +34,11 @@ export type ImportWalletDialogEvent = {
 
 export type WalletStatusDialogEvent = {
     open: boolean
+}
+
+export type WalletRenameDialogEvent = {
+    open: boolean
+    wallet: Wallet | null
 }
 
 export type WalletConnectQRCodeDialogEvent =
@@ -92,6 +98,11 @@ interface WalletMessage {
      * Wallet status dialog
      */
     walletStatusDialogUpdated: WalletStatusDialogEvent
+
+    /**
+     * Wallet status dialog
+     */
+    walletRenameDialogUpdated: WalletRenameDialogEvent
 
     /**
      * Select token dialog
