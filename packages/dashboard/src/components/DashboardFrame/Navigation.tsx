@@ -11,7 +11,11 @@ import {
     listItemClasses,
     listItemIconClasses,
 } from '@material-ui/core'
-import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@material-ui/icons'
+import Masks from '@material-ui/icons/Masks'
+import AccountBalanceWallet from '@material-ui/icons/AccountBalanceWallet'
+import ExpandLess from '@material-ui/icons/ExpandLess'
+import ExpandMore from '@material-ui/icons/ExpandMore'
+import Settings from '@material-ui/icons/Settings'
 import { useContext } from 'react'
 import { useRouteMatch } from 'react-router'
 import { Link, LinkProps } from 'react-router-dom'

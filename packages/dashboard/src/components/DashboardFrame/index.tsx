@@ -12,7 +12,8 @@ import {
     paperClasses,
     makeStyles,
 } from '@material-ui/core'
-import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
+import MenuIcon from '@material-ui/icons/Menu'
+import CloseIcon from '@material-ui/icons/Close'
 import Color from 'color'
 import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
 import { useState, useContext, useMemo } from 'react'

@@ -1,5 +1,5 @@
 import { Fab, experimentalStyled as styled } from '@material-ui/core'
-import { Create } from '@material-ui/icons'
+import Create from '@material-ui/icons/Create'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { useState, useEffect } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'

@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from 'react'
 import { Alert, Collapse, IconButton, experimentalStyled as styled, Typography } from '@material-ui/core'
-import { Close as CloseIcon } from '@material-ui/icons'
+import CloseIcon from '@material-ui/icons/Close'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { useDashboardI18N } from '../../locales'
 
