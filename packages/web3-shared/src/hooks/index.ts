@@ -1,4 +1,5 @@
 export * from './useAccount'
+export * from './useBlockie'
 export * from './useBlockNumber'
 export * from './useChainDetailed'
 export * from './useChainId'

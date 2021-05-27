@@ -1,5 +1,17 @@
 import { useState, useCallback } from 'react'
-import { Button, Box, Card, DialogContent, makeStyles, useTheme, TextField, Typography } from '@material-ui/core'
+import {
+    Alert,
+    Button,
+    Box,
+    Card,
+    Checkbox,
+    DialogContent,
+    FormControlLabel,
+    makeStyles,
+    useTheme,
+    TextField,
+    Typography,
+} from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import classNames from 'classnames'
 import {
@@ -18,8 +30,7 @@ import { useMnemonicWordsPuzzle } from '../hooks/useMnemonicWordsPuzzle'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
 
 enum CreateWalletStep {
-    Name = 0,
-    Words,
+    NameAndWords = 0,
     Verify,
 }
 
@@ -30,8 +41,8 @@ const useStyles = makeStyles((theme) => ({
     top: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: theme.spacing(0, 0, 2),
+        justifyContent: 'space-between',
+        padding: theme.spacing(2, 0, 1),
     },
     bottom: {
         display: 'flex',
@@ -70,6 +81,13 @@ const useStyles = makeStyles((theme) => ({
     wordTextfield: {
         width: 110,
     },
+    confirmation: {
+        fontSize: 12,
+        lineHeight: 1.75,
+    },
+    warning: {
+        marginTop: theme.spacing(2),
+    },
 }))
 
 export interface CreateWalletDialogProps extends withClasses<never> {}
@@ -79,8 +97,9 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const theme = useTheme()
-    const [step, setStep] = useState(CreateWalletStep.Name)
+    const [step, setStep] = useState(CreateWalletStep.NameAndWords)
     const [name, setName] = useState('')
+    const [confirmed, setConfirmed] = useState(false)
 
     //#region create mnemonic words
     const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
@@ -91,34 +110,28 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
         if (!ev.open) return
         if (!ev.name) return
         setName(ev.name)
-        setStep(CreateWalletStep.Words)
+        setStep(CreateWalletStep.Verify)
     })
     const onClose = useCallback(async () => {
         closeDialog()
         await delay(300)
         setName('')
-        setStep(CreateWalletStep.Name)
+        setStep(CreateWalletStep.NameAndWords)
         refreshCallback()
     }, [refreshCallback])
     //#endregion
 
     const onNext = useCallback(() => {
         switch (step) {
-            case CreateWalletStep.Name:
-                setStep(CreateWalletStep.Words)
-                break
-            case CreateWalletStep.Words:
+            case CreateWalletStep.NameAndWords:
                 setStep(CreateWalletStep.Verify)
                 break
         }
     }, [step])
     const onBack = useCallback(() => {
         switch (step) {
-            case CreateWalletStep.Words:
-                setStep(CreateWalletStep.Name)
-                break
             case CreateWalletStep.Verify:
-                setStep(CreateWalletStep.Words)
+                setStep(CreateWalletStep.NameAndWords)
                 resetCallback()
                 break
         }
@@ -148,19 +161,15 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
             onClose={onClose}
             title={t('plugin_wallet_setup_title_create')}
             DialogProps={{
-                maxWidth: step === CreateWalletStep.Name ? 'xs' : 'sm',
+                maxWidth: 'sm',
             }}>
             <DialogContent className={classes.content}>
-                {step !== CreateWalletStep.Name ? (
+                {step !== CreateWalletStep.NameAndWords ? (
                     <Typography className={classes.description}>
-                        {t(
-                            step === CreateWalletStep.Words
-                                ? 'plugin_wallet_setup_description_words'
-                                : 'plugin_wallet_setup_description_verify',
-                        )}
+                        {t('plugin_wallet_setup_description_verify')}
                     </Typography>
                 ) : null}
-                {step === CreateWalletStep.Name ? (
+                {step === CreateWalletStep.NameAndWords ? (
                     <Box>
                         <TextField
                             className={classes.input}
@@ -179,11 +188,8 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
                             onChange={(e) => setName(e.target.value)}
                             variant="outlined"
                         />
-                    </Box>
-                ) : null}
-                {step === CreateWalletStep.Words ? (
-                    <>
                         <Box className={classes.top}>
+                            <Typography variant="body1">Mnemonic</Typography>
                             <Button startIcon={<RefreshIcon />} onClick={refreshCallback}>
                                 {t('refresh')}
                             </Button>
@@ -198,7 +204,7 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
                                 </Button>
                             ))}
                         </Card>
-                    </>
+                    </Box>
                 ) : null}
                 {step === CreateWalletStep.Verify ? (
                     <Card className={classNames(classes.card, classes.cardTextfield)} elevation={0}>
@@ -217,9 +223,34 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
                         ))}
                     </Card>
                 ) : null}
+                {step === CreateWalletStep.NameAndWords && (
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                color="primary"
+                                checked={confirmed}
+                                onChange={() => setConfirmed((confirmed) => !confirmed)}
+                            />
+                        }
+                        label={
+                            <Box
+                                sx={{
+                                    display: 'inline-flex',
+                                    alignItems: 'flex-start',
+                                }}>
+                                <Typography className={classes.confirmation} variant="body2">
+                                    I have securely written down my mnemonic word, I understand that lost mnemonic word
+                                    cannot be recovered.
+                                </Typography>
+                            </Box>
+                        }
+                    />
+                )}
+
                 <Box className={classes.bottom}>
-                    {step === CreateWalletStep.Words || step === CreateWalletStep.Verify ? (
+                    {step === CreateWalletStep.Verify ? (
                         <ActionButton
+                            fullWidth
                             color="primary"
                             variant="text"
                             onClick={onBack}
@@ -231,18 +262,22 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
                     ) : null}
                     <ActionButton
                         variant="contained"
+                        fullWidth
                         disabled={
-                            (step === CreateWalletStep.Name && !name) ||
+                            (step === CreateWalletStep.NameAndWords && !name) ||
                             (step === CreateWalletStep.Verify && words.join(' ') !== puzzleWords.join(' '))
                         }
-                        onClick={step === CreateWalletStep.Name || step === CreateWalletStep.Words ? onNext : onSubmit}>
-                        {step === CreateWalletStep.Name
+                        onClick={step === CreateWalletStep.NameAndWords ? onNext : onSubmit}>
+                        {step === CreateWalletStep.NameAndWords
                             ? t('plugin_wallet_setup_create')
-                            : step === CreateWalletStep.Words
-                            ? t('plugin_wallet_setup_next')
                             : t('plugin_wallet_setup_verify')}
                     </ActionButton>
                 </Box>
+                {step === CreateWalletStep.NameAndWords && (
+                    <Box className={classes.warning}>
+                        <Alert severity="warning">Please properly back up your account’s mnemonic words.</Alert>
+                    </Box>
+                )}
             </DialogContent>
         </InjectedDialog>
     )

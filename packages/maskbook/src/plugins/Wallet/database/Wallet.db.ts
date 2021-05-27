@@ -5,6 +5,7 @@ import type {
     ERC20TokenRecordInDatabase,
     ERC721TokenRecordInDatabase,
     PhraseRecordInDatabase,
+    TransactionChunkRecordInDatabase,
     WalletRecordInDatabase,
 } from './types'
 import { sideEffect } from '../../../utils/side-effects'
@@ -13,8 +14,9 @@ import { migratePluginDatabase } from './migrate.plugins'
 function path<T>(x: T) {
     return x
 }
+
 export const createWalletDBAccess = createDBAccess(() => {
-    return openDB<WalletDB>('maskbook-plugin-wallet', 7, {
+    return openDB<WalletDB>('maskbook-plugin-wallet', 8, {
         async upgrade(db, oldVersion, newVersion, tx) {
             function v0_v1() {
                 db.createObjectStore('ERC20Token', { keyPath: path<keyof ERC20TokenRecordInDatabase>('address') })
@@ -37,11 +39,17 @@ export const createWalletDBAccess = createDBAccess(() => {
             function v6_v7() {
                 db.createObjectStore('Phrase', { keyPath: path<keyof PhraseRecordInDatabase>('id') })
             }
+            function v7_v8() {
+                db.createObjectStore('TransactionChunk', {
+                    keyPath: path<keyof TransactionChunkRecordInDatabase>('record_id'),
+                })
+            }
 
             if (oldVersion < 1) v0_v1()
             if (oldVersion < 3) v2_v3()
             if (oldVersion < 6) v5_v6()
             if (oldVersion < 7) v6_v7()
+            if (oldVersion < 8) v7_v8()
         },
     })
 })
@@ -68,6 +76,10 @@ export interface WalletDB<Data = unknown, Indexes extends [IDBValidKey?, IDBVali
     }
     Wallet: {
         value: WalletRecordInDatabase
+        key: string
+    }
+    TransactionChunk: {
+        value: TransactionChunkRecordInDatabase
         key: string
     }
     ERC20Token: {

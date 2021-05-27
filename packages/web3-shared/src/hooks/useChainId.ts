@@ -1,6 +1,8 @@
 import type { ChainId } from '../types'
 import { useWeb3StateContext } from '../context'
 
+export { ChainId } from '../types'
+
 /**
  * Get the chain id which is using by the given (or default) wallet
  * It will always yield Mainnet in production mode

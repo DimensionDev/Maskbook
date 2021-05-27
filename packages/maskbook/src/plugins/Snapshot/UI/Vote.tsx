@@ -1,5 +1,5 @@
+import { useBlockie } from '@dimensiondev/web3-shared'
 import { Avatar, Box, makeStyles } from '@material-ui/core'
-import { useBlockie } from '../../../web3/hooks/useBlockie'
 import type { VoteItem as VoteType } from '../types'
 
 const useStlyes = makeStyles(() => ({

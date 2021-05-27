@@ -1,10 +1,9 @@
 import { Avatar, ListItem, ListItemText, makeStyles, Theme, ListTypeMap, ListItemAvatar } from '@material-ui/core'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
-import type { Wallet } from '@dimensiondev/web3-shared'
+import { Wallet, useBlockie } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../custom-ui-helper'
-import { useBlockie } from '../../../web3/hooks/useBlockie'
 
 const useStyle = makeStyles((theme: Theme) => ({
     root: {
