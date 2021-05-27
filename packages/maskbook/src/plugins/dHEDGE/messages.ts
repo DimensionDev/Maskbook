@@ -1,4 +1,4 @@
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../web3/types'
+import type { FungibleTokenDetailed } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { DHEDGE_PLUGIN_ID } from './constants'
@@ -8,7 +8,7 @@ type InvestDialogUpdated =
     | {
           open: true
           pool: Pool
-          token: NativeTokenDetailed | ERC20TokenDetailed
+          token: FungibleTokenDetailed
       }
     | {
           open: false

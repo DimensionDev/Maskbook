@@ -25,7 +25,7 @@ import { useMatchXS, useI18N } from '../../../utils'
 import { CurrencyType, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { isSameAddress } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import type { Wallet } from '@dimensiondev/web3-shared'
 import { ActionsBarFT } from './ActionsBarFT'
 import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
 import { useStableTokensDebank } from '../../../web3/hooks/useStableTokensDebank'
@@ -166,7 +166,7 @@ function ViewDetailed(props: ViewDetailedProps) {
 const MIN_VALUE = 5
 
 export interface WalletAssetsTableProps extends withClasses<never> {
-    wallet: WalletRecord
+    wallet: Wallet
 }
 
 export function WalletAssetsTable(props: WalletAssetsTableProps) {

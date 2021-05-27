@@ -11,7 +11,7 @@ import { CONSTANTS } from '../../../web3/constants'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { isSameAddress } from '../../../web3/helpers'
 import { TokenInList } from './TokenInList'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) => ({
     list: {},
@@ -22,9 +22,9 @@ export interface FixedTokenListProps extends withClasses<never> {
     keyword?: string
     whitelist?: string[]
     blacklist?: string[]
-    tokens?: (NativeTokenDetailed | ERC20TokenDetailed)[]
+    tokens?: FungibleTokenDetailed[]
     selectedTokens?: string[]
-    onSubmit?(token: NativeTokenDetailed | ERC20TokenDetailed): void
+    onSubmit?(token: FungibleTokenDetailed): void
     FixedSizeListProps?: Partial<FixedSizeListProps>
 }
 

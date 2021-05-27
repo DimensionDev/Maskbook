@@ -1,5 +1,7 @@
 import { useMemo, useState, useEffect, useReducer, Fragment } from 'react'
-import { delay, unreachable } from '../../../utils/utils'
+import { unreachable, makeTypedMessageTuple, TypedMessageTuple } from '@dimensiondev/maskbook-shared'
+
+import { delay } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
 import type { ProfileIdentifier } from '../../../database/type'
@@ -17,7 +19,6 @@ import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIter
 import { or } from '../../custom-ui-helper'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 import type { Payload } from '../../../utils/type-transform/Payload'
-import { makeTypedMessageTuple, TypedMessageTuple } from '@dimensiondev/maskbook-shared'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { addGasMargin } from '../../../web3/helpers'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useDHedgePoolContract } from '../contracts/useDHedgePool'
@@ -12,7 +12,7 @@ import { useAccount } from '../../../web3/hooks/useAccount'
  * @param amount
  * @param token
  */
-export function useInvestCallback(address: string, amount: string, token?: NativeTokenDetailed | ERC20TokenDetailed) {
+export function useInvestCallback(address: string, amount: string, token?: FungibleTokenDetailed) {
     const poolContract = useDHedgePoolContract(address)
 
     const account = useAccount()

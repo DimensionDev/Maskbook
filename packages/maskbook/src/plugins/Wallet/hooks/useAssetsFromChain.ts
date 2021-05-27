@@ -1,9 +1,9 @@
 import { useTokensBalance } from '../../../web3/hooks/useTokensBalance'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import type { Asset } from '../types'
 import { useAssetsMerged } from './useAssetsMerged'
 
-export function useAssetsFromChain(tokens: (NativeTokenDetailed | ERC20TokenDetailed)[]) {
+export function useAssetsFromChain(tokens: FungibleTokenDetailed[]) {
     const { value: listOfBalance = [], loading, error, retry } = useTokensBalance(tokens.map((y) => y.address))
     return {
         value: useAssetsMerged(

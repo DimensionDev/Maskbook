@@ -10,10 +10,10 @@ import {
     ERC721TokenAssetDetailed,
     ERC1155TokenAssetDetailed,
 } from './types'
+import type { Web3Constants } from '@dimensiondev/web3-shared'
+import { isSameAddress } from '@dimensiondev/web3-shared'
 
-export function isSameAddress(addrA: string, addrB: string) {
-    return addrA.toLowerCase() === addrB.toLowerCase()
-}
+export { isSameAddress } from '@dimensiondev/web3-shared'
 
 export function isDAI(address: string) {
     return isSameAddress(address, getConstant(CONSTANTS, 'DAI_ADDRESS'))
@@ -32,10 +32,14 @@ export function addGasMargin(value: BigNumber.Value, scale = 1000) {
 }
 
 //#region constants
-export interface Web3Constants {
-    [K: string]: EnumRecord<ChainId, Primitive | Primitive[]>
-}
 
+/**
+ * @deprecated Use constantOfChain from @dimensiondev/web3-shared package
+ *
+ * Before: `getConstant(T, "a", ChainId.Mainnet)`
+ *
+ * After: `constantOfChain(T, ChainId.Mainnet).a`
+ */
 export function getConstant<T extends Web3Constants, K extends keyof T>(
     constants: T,
     key: K,
@@ -44,20 +48,9 @@ export function getConstant<T extends Web3Constants, K extends keyof T>(
     return constants[key][chainId]
 }
 
-export function getAllConstants<T extends Web3Constants, K extends keyof T>(constants: T, chainId = ChainId.Mainnet) {
-    return Object.entries(constants).reduce(
-        (accumulate, [key, value]) => {
-            accumulate[key as K] = value[chainId]
-            return accumulate
-        },
-        {} as {
-            [U in K]: T[U][ChainId.Mainnet]
-        },
-    )
-}
 //#endregion
 
-export function createEtherToken(chainId: ChainId): NativeTokenDetailed {
+export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     return {
         type: EthereumTokenType.Native,
         chainId,

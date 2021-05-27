@@ -16,7 +16,7 @@ import {
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import type { TokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
@@ -57,7 +57,7 @@ export interface ListingByPriceCardProps {
     onClose: () => void
     asset?: ReturnType<typeof useAsset>
     tokenWatched: TokenWatched
-    paymentTokens: (NativeTokenDetailed | ERC20TokenDetailed)[]
+    paymentTokens: FungibleTokenDetailed[]
 }
 
 export function ListingByPriceCard(props: ListingByPriceCardProps) {
@@ -153,8 +153,8 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 <SelectTokenAmountPanel
                     amount={amount}
                     balance={balance.value ?? '0'}
-                    token={token.value as NativeTokenDetailed | ERC20TokenDetailed}
-                    disableEther={!paymentTokens.some((x) => isNative(x.address))}
+                    token={token.value as FungibleTokenDetailed}
+                    disableNativeToken={!paymentTokens.some((x) => isNative(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
@@ -179,7 +179,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         amount={endingAmount}
                         balance={balance.value ?? '0'}
                         onAmountChange={setEndingAmount}
-                        token={token.value as NativeTokenDetailed | ERC20TokenDetailed}
+                        token={token.value as FungibleTokenDetailed}
                         onTokenChange={setToken}
                         TokenAmountPanelProps={{
                             label: t('plugin_collectible_ending_price'),

@@ -1,5 +1,5 @@
-import { unreachable } from '../../../utils/utils'
-import { ChainId, ERC1155TokenDetailed, ERC721TokenDetailed } from '../../../web3/types'
+import { unreachable } from '@dimensiondev/maskbook-shared'
+import { ChainId, NonFungibleTokenDetailed } from '../../../web3/types'
 import { CollectibleProvider, PortfolioProvider } from '../types'
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
@@ -26,7 +26,7 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: Colle
 export function resolveCollectibleLink(
     chainId: ChainId,
     provider: CollectibleProvider,
-    token: ERC721TokenDetailed | ERC1155TokenDetailed,
+    token: NonFungibleTokenDetailed,
 ) {
     switch (provider) {
         case CollectibleProvider.OPENSEAN:

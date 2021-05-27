@@ -7,12 +7,12 @@ import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { useRemoteControlledDialog, getAssetAsBlobURL, formatDateTime, getTextUILength, useI18N } from '../../../utils'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import { resolveLinkOnExplorer } from '../../../web3/pipes'
 import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import { formatAmountPrecision, formatBalance } from '@dimensiondev/maskbook-shared'
+import { formatAmountPrecision, formatEthereumAddress, formatBalance } from '@dimensiondev/maskbook-shared'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SwapGuide, SwapStatus } from './SwapGuide'
@@ -25,7 +25,6 @@ import { useDestructCallback } from '../hooks/useDestructCallback'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useClaimCallback } from '../hooks/useClaimCallback'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useIPRegion, decodeRegionCode, checkRegionRestrict } from '../hooks/useRegion'
 import { useIfQualified } from '../hooks/useIfQualified'
 
@@ -164,8 +163,8 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
 //#region token item
 interface TokenItemProps {
     price: string
-    token: NativeTokenDetailed | ERC20TokenDetailed
-    exchangeToken: NativeTokenDetailed | ERC20TokenDetailed
+    token: FungibleTokenDetailed
+    exchangeToken: FungibleTokenDetailed
 }
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {

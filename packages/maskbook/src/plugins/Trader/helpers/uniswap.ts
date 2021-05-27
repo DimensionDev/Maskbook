@@ -10,11 +10,10 @@ import {
     TokenAmount,
     ETHER,
 } from '@uniswap/sdk'
+import { formatEthereumAddress, unreachable } from '@dimensiondev/maskbook-shared'
 import { WETH } from '../constants'
-import { ChainId, ERC20TokenDetailed, EthereumTokenType, NativeTokenDetailed } from '../../../web3/types'
-import { unreachable } from '../../../utils/utils'
+import { ChainId, EthereumTokenType, FungibleTokenDetailed } from '../../../web3/types'
 import { isNative } from '../../../web3/helpers'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 
 export function toUniswapChainId(chainId: ChainId): UniswapChainId {
     switch (chainId) {
@@ -37,12 +36,12 @@ export function toUniswapPercent(numerator: number, denominator: number) {
     return new UniswapPercent(JSBI.BigInt(numerator), JSBI.BigInt(denominator))
 }
 
-export function toUniswapCurrency(chainId: ChainId, token: NativeTokenDetailed | ERC20TokenDetailed): UniswapCurrency {
+export function toUniswapCurrency(chainId: ChainId, token: FungibleTokenDetailed): UniswapCurrency {
     if (isNative(token.address)) return ETHER
     return toUniswapToken(chainId, token)
 }
 
-export function toUniswapToken(chainId: ChainId, token: NativeTokenDetailed | ERC20TokenDetailed): UniswapToken {
+export function toUniswapToken(chainId: ChainId, token: FungibleTokenDetailed): UniswapToken {
     if (isNative(token.address)) return toUniswapToken(chainId, WETH[chainId])
     return new UniswapToken(
         toUniswapChainId(chainId),
@@ -53,11 +52,7 @@ export function toUniswapToken(chainId: ChainId, token: NativeTokenDetailed | ER
     )
 }
 
-export function toUniswapCurrencyAmount(
-    chainId: ChainId,
-    token: NativeTokenDetailed | ERC20TokenDetailed,
-    amount: string,
-) {
+export function toUniswapCurrencyAmount(chainId: ChainId, token: FungibleTokenDetailed, amount: string) {
     return isNative(token.address)
         ? UniswapCurrencyAmount.ether(JSBI.BigInt(amount))
         : new TokenAmount(toUniswapToken(chainId, token), JSBI.BigInt(amount))
@@ -96,7 +91,7 @@ export function uniswapTokenTo(token: UniswapToken) {
         decimals: token.decimals,
         address: formatEthereumAddress(token.address),
         chainId: uniswapChainIdTo(token.chainId),
-    } as NativeTokenDetailed | ERC20TokenDetailed
+    } as FungibleTokenDetailed
 }
 
 export function uniswapCurrencyAmountTo(currencyAmount: UniswapCurrencyAmount) {

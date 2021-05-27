@@ -30,7 +30,7 @@ import { pasteImageToCompositionDefault } from '../../social-network/defaults/au
 import { currentSelectedIdentity } from '../../settings/settings'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { ProfileIdentifier } from '../../database/type'
-import { unreachable } from '../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 
 const twitterUI: SocialNetworkUI.Definition = {
     ...twitterBase,

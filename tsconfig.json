@@ -5,6 +5,7 @@
     { "path": "./packages/theme/" },
     { "path": "./packages/dashboard/" },
     { "path": "./packages/shared/" },
+    { "path": "./packages/web3-shared/" },
     { "path": "./packages/storybook-shared/" },
     { "path": "./packages/icons/" },
     { "path": "./packages/plugin-infra" },

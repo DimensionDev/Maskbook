@@ -1,6 +1,6 @@
 import { Trade, TradeType } from '@uniswap/sdk'
 import BigNumber from 'bignumber.js'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../../web3/types'
 import { uniswapCurrencyAmountTo, uniswapPercentTo, uniswapPriceTo, uniswapTokenTo } from '../../helpers'
 import { TradeComputed, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
@@ -8,8 +8,8 @@ import { useV2TradeBreakdown } from './useV2TradeBreakdown'
 
 export function useV2TradeComputed(
     trade: Trade | null,
-    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
-    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
+    inputToken?: FungibleTokenDetailed,
+    outputToken?: FungibleTokenDetailed,
 ): TradeComputed<Trade> | null {
     const slippage = useSlippageTolerance()
     const breakdown = useV2TradeBreakdown(trade)

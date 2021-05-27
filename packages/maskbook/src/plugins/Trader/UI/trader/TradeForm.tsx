@@ -11,10 +11,10 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { TradeStrategy, TokenPanelType, TradeComputed, WarningLevel, TradeProvider } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useRemoteControlledDialog, useI18N } from '../../../../utils'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../../web3/types'
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
-import { isEtherWrapper, toBips } from '../../helpers'
+import { isNativeTokenWrapper, toBips } from '../../helpers'
 import { formatPercentage } from '@dimensiondev/maskbook-shared'
 import { resolveUniswapWarningLevel } from '../../pipes'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -57,13 +57,6 @@ const useStyles = makeStyles((theme) => {
             paddingTop: 12,
             paddingBottom: 12,
         },
-        ethereumChainChip: {
-            borderRadius: 8,
-            marginRight: theme.spacing(1),
-        },
-        ethereumAccountChip: {
-            borderRadius: 12,
-        },
     }
 })
 
@@ -72,8 +65,8 @@ export interface TradeFormProps extends withClasses<never> {
     strategy: TradeStrategy
     provider: TradeProvider
     loading: boolean
-    inputToken?: NativeTokenDetailed | ERC20TokenDetailed
-    outputToken?: NativeTokenDetailed | ERC20TokenDetailed
+    inputToken?: FungibleTokenDetailed
+    outputToken?: FungibleTokenDetailed
     inputAmount: string
     outputAmount: string
     inputTokenBalance?: string
@@ -249,7 +242,7 @@ export function TradeForm(props: TradeFormProps) {
                     <EthereumERC20TokenApprovedBoundary
                         amount={approveAmount.toFixed()}
                         token={
-                            !isEtherWrapper(trade) && approveToken?.type === EthereumTokenType.ERC20
+                            !isNativeTokenWrapper(trade) && approveToken?.type === EthereumTokenType.ERC20
                                 ? approveToken
                                 : undefined
                         }
@@ -262,7 +255,7 @@ export function TradeForm(props: TradeFormProps) {
                             disabled={loading || !!validationMessage}
                             onClick={onSwap}>
                             {validationMessage ||
-                                (isEtherWrapper(trade)
+                                (isNativeTokenWrapper(trade)
                                     ? trade?.trade_?.isWrap
                                         ? t('plugin_trader_wrap')
                                         : t('plugin_trader_unwrap')

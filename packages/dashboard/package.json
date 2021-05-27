@@ -18,6 +18,7 @@
     "@dimensiondev/maskbook-storybook-shared": "workspace:*",
     "@dimensiondev/maskbook-theme": "workspace:*",
     "@dimensiondev/plugin-example": "workspace:*",
+    "@dimensiondev/web3-shared": "workspace:*",
     "@servie/events": "^3.0.0",
     "@types/color": "^3.0.1",
     "async-call-rpc": "^5.1.0",
@@ -28,7 +29,8 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-use": "^17.2.4",
-    "unstated-next": "^1.1.0"
+    "unstated-next": "^1.1.0",
+    "use-subscription": "^1.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",

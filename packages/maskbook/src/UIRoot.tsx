@@ -7,19 +7,23 @@ import { buildInfoMarkdown } from './extension/background-script/Jobs/PrintBuild
 import { CssBaseline, StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { StylesProvider } from '@material-ui/styles'
 import { useClassicMaskTheme } from './utils/theme'
+import { Web3Provider } from '@dimensiondev/web3-shared'
+import { Web3Context } from './web3/context'
 
 export function MaskUIRootWithinShadow(JSX: JSX.Element) {
     return (
         <StrictMode>
-            <I18nextProvider i18n={i18nNextInstance}>
-                <ErrorBoundaryBuildInfoContext.Provider value={buildInfoMarkdown}>
-                    <ErrorBoundary>
-                        <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                            <StrictMode>{JSX}</StrictMode>
-                        </SnackbarProvider>
-                    </ErrorBoundary>
-                </ErrorBoundaryBuildInfoContext.Provider>
-            </I18nextProvider>
+            <Web3Provider value={Web3Context}>
+                <I18nextProvider i18n={i18nNextInstance}>
+                    <ErrorBoundaryBuildInfoContext.Provider value={buildInfoMarkdown}>
+                        <ErrorBoundary>
+                            <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                                <StrictMode>{JSX}</StrictMode>
+                            </SnackbarProvider>
+                        </ErrorBoundary>
+                    </ErrorBoundaryBuildInfoContext.Provider>
+                </I18nextProvider>
+            </Web3Provider>
         </StrictMode>
     )
 }

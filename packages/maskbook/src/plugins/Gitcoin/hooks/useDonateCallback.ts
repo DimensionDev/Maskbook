@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
@@ -15,7 +15,7 @@ import Services from '../../../extension/service'
  * @param amount
  * @param token
  */
-export function useDonateCallback(address: string, amount: string, token?: NativeTokenDetailed | ERC20TokenDetailed) {
+export function useDonateCallback(address: string, amount: string, token?: FungibleTokenDetailed) {
     const GITCOIN_ETH_ADDRESS = useConstant(GITCOIN_CONSTANT, 'GITCOIN_ETH_ADDRESS')
     const GITCOIN_TIP_PERCENTAGE = useConstant(GITCOIN_CONSTANT, 'GITCOIN_TIP_PERCENTAGE')
     const bulkCheckoutContract = useBulkCheckoutContract()

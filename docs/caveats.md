@@ -79,8 +79,15 @@ _save as temp variables_ also fails.
 
 #### Use React Devtools
 
-React devtools is also an browser extension so unfortunately it doesn't work with Mask Network out of the box.
-You need [the standalone version of React Devtools](https://github.com/facebook/react/tree/master/packages/react-devtools#:~:text=Chrome%20extension,instead)
+Run the following command to start the React Devtools. It doesn't work if you install it as a browser extension.
+
+> pnpx react-devtools
+
+Due to bug https://github.com/facebook/react/issues/20377, React Devtools is conflict with React Fast Refresh.
+
+Please use the following command, it will start the development process in profile mode, which disables React Fast Refresh and enables React Devtools.
+
+> pnpx dev profile
 
 ## Contribute your working
 

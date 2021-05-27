@@ -1,9 +1,4 @@
-export enum ProviderType {
-    Maskbook = 'Maskbook',
-    MetaMask = 'MetaMask',
-    WalletConnect = 'WalletConnect',
-    CustomNetwork = 'CustomNetwork',
-}
+export { WalletProvider as ProviderType } from '@dimensiondev/web3-shared'
 
 export enum CurrencyType {
     USD = 'usd',
@@ -86,6 +81,16 @@ export interface ERC1155TokenAssetDetailed extends ERC1155TokenDetailed {
 }
 //#endregion
 
+//#region fungible token
+export type FungibleToken = NativeToken | ERC20Token
+export type FungibleTokenDetailed = NativeTokenDetailed | ERC20TokenDetailed
+//#endregion
+
+//#region non-fungible token
+export type NonFungibleToken = ERC721Token | ERC1155Token
+export type NonFungibleTokenDetailed = ERC721TokenDetailed | ERC1155TokenDetailed
+//#endregion
+
 interface TokenDetailedMap {
     [EthereumTokenType.Native]: NativeTokenDetailed
     [EthereumTokenType.ERC20]: ERC20TokenDetailed
@@ -103,8 +108,8 @@ export type EthereumTokenDetailedType<T extends EthereumTokenType> = TokenDetail
 export type TokenAssetDetailedType<T extends EthereumTokenType.ERC721 | EthereumTokenType.ERC1155> =
     TokenAssetDetailedMap[T]
 
-import type { ChainId } from '@dimensiondev/maskbook-shared'
-export { ChainId } from '@dimensiondev/maskbook-shared'
+import type { ChainId } from '@dimensiondev/web3-shared'
+export { ChainId } from '@dimensiondev/web3-shared'
 
 // Please don't use this enum but use ChainId instead
 // this exists for back backward compatible

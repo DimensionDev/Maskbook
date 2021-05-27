@@ -1,13 +1,15 @@
 import { Button } from '@material-ui/core'
 import { Trash2 as TrashIcon } from 'react-feather'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
-import { useI18N, unreachable } from '../../../../utils'
+import { useI18N } from '../../../../utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { isNative } from '../../../../web3/helpers'
 import type {
     ERC1155TokenDetailed,
     ERC20TokenDetailed,
     ERC721TokenDetailed,
-    NativeTokenDetailed,
+    FungibleTokenDetailed,
+    NonFungibleTokenDetailed,
 } from '../../../../web3/types'
 import { EthereumTokenType } from '../../../../web3/types'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
@@ -16,9 +18,7 @@ import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, Wrapp
 import type { WalletProps } from './types'
 
 export function DashboardWalletHideTokenConfirmDialog(
-    props: WrappedDialogProps<
-        WalletProps & { token: NativeTokenDetailed | ERC20TokenDetailed | ERC721TokenDetailed | ERC1155TokenDetailed }
-    >,
+    props: WrappedDialogProps<WalletProps & { token: FungibleTokenDetailed | NonFungibleTokenDetailed }>,
 ) {
     const { wallet, token } = props.ComponentProps!
     const { t } = useI18N()
@@ -28,7 +28,7 @@ export function DashboardWalletHideTokenConfirmDialog(
             const type = token.type
             switch (type) {
                 case EthereumTokenType.Native:
-                    throw new Error('Unable to hide Ether.')
+                    throw new Error('Unable to hide the native token.')
                 case EthereumTokenType.ERC20:
                     return WalletRPC.blockERC20Token(wallet.address, token as ERC20TokenDetailed)
                 case EthereumTokenType.ERC721:

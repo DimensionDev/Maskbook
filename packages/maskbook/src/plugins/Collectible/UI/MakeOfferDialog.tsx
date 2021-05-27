@@ -19,7 +19,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useTokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
@@ -142,8 +142,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         <SelectTokenAmountPanel
                             amount={amount}
                             balance={balance.value ?? '0'}
-                            token={token.value as NativeTokenDetailed | ERC20TokenDetailed}
-                            disableEther={!paymentTokens.some((x) => isNative(x.address))}
+                            token={token.value as FungibleTokenDetailed}
+                            disableNativeToken={!paymentTokens.some((x) => isNative(x.address))}
                             onAmountChange={setAmount}
                             onTokenChange={setToken}
                             TokenAmountPanelProps={{

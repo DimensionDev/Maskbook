@@ -1,5 +1,5 @@
 import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../web3/types'
+import type { FungibleTokenDetailed } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
@@ -39,7 +39,7 @@ export type SelectTokenDialogEvent =
     | {
           open: true
           uuid: string
-          disableEther?: boolean
+          disableNativeToken?: boolean
           disableSearchBar?: boolean
           FixedTokenListProps?: Omit<FixedTokenListProps, 'onSubmit'>
       }
@@ -50,7 +50,7 @@ export type SelectTokenDialogEvent =
           /**
            * The selected detailed token.
            */
-          token?: NativeTokenDetailed | ERC20TokenDetailed
+          token?: FungibleTokenDetailed
       }
 
 interface WalletMessage {
@@ -85,6 +85,7 @@ interface WalletMessage {
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
 
     walletsUpdated: void
+    chainIdUpdated: void
     phrasesUpdated: void
     erc20TokensUpdated: void
     erc721TokensUpdated: void

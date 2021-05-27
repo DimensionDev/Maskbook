@@ -64,7 +64,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
         setSelectTokenDialog({
             open: true,
             uuid: id,
-            disableEther: true,
+            disableNativeToken: true,
             disableSearchBar: true,
             FixedTokenListProps: {
                 selectedTokens: token ? [token.address] : [],

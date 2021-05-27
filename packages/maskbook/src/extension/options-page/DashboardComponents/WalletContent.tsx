@@ -14,8 +14,8 @@ import {
     DashboardWalletDeleteConfirmDialog,
     DashboardWalletRenameDialog,
 } from '../DashboardDialogs/Wallet'
+import type { Wallet } from '@dimensiondev/web3-shared'
 import { Flags, useMenu, useI18N, useColorStyles, useMatchXS, useRemoteControlledDialog } from '../../../utils'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { useChainIdValid } from '../../../web3/hooks/useChainId'
@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface WalletContentProps {
-    wallet: WalletRecord
+    wallet: Wallet
 }
 
 export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ wallet }, ref) => {
@@ -98,7 +98,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
         <MenuItem key="rename" onClick={() => openWalletRename({ wallet })}>
             {t('rename')}
         </MenuItem>,
-        wallet._private_key_ || wallet.mnemonic.length ? (
+        wallet.hasPrivateKey ? (
             <MenuItem key="backup" onClick={() => openWalletBackup({ wallet })}>
                 {t('backup')}
             </MenuItem>

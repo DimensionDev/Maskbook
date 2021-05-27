@@ -73,8 +73,8 @@ export function ERC1155TokenArrayComparer(a: ERC1155TokenRecord[], b: ERC1155Tok
     return a.every((token, index) => ERC1155TokenComparer(token, b[index]))
 }
 
-export function selectMaskbookWallet(wallet: WalletRecord) {
-    currentSelectedWalletAddressSettings.value = wallet.address
+export function selectMaskbookWallet(address: string) {
+    currentSelectedWalletAddressSettings.value = address
     currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
 }
 

@@ -6,11 +6,11 @@ import { PluginCollectibleRPC } from '../messages'
 import type { CollectibleToken } from '../types'
 import { CollectibleProvider } from '../types'
 import { getOrderUnitPrice } from '../utils'
-import { unreachable } from '../../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { toDate, toRaribleImage, toTokenDetailed, toTokenIdentifier } from '../helpers'
 import { OpenSeaAccountURL } from '../constants'
 import { resolveRaribleUserNetwork } from '../pipes'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { isSameAddress } from '../../../web3/helpers'
 import { useConstant } from '../../../web3/hooks/useConstant'
@@ -121,8 +121,8 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     current_price: raribleResponse.item.offer?.buyPriceEth,
                     current_symbol: 'ETH',
                     end_time: null,
-                    order_payment_tokens: [] as (NativeTokenDetailed | ERC20TokenDetailed)[],
-                    offer_payment_tokens: [] as (NativeTokenDetailed | ERC20TokenDetailed)[],
+                    order_payment_tokens: [] as FungibleTokenDetailed[],
+                    offer_payment_tokens: [] as FungibleTokenDetailed[],
                     order_: null,
                     slug: raribleResponse.assetContract.shortUrl,
                     response_: raribleResponse,

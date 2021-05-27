@@ -1,6 +1,6 @@
 import { Card, Link, makeStyles } from '@material-ui/core'
 import { Image } from '../../../../components/shared/Image'
-import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
+import type { Wallet } from '@dimensiondev/web3-shared'
 import { resolveCollectibleLink } from '../../../../plugins/Wallet/pipes'
 import type { CollectibleProvider } from '../../../../plugins/Wallet/types'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 export interface CollectibleCardProps {
     provider: CollectibleProvider
-    wallet: WalletRecord
+    wallet: Wallet
     token: ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed
 }
 

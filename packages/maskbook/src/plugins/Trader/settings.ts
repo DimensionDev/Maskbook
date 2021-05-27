@@ -3,7 +3,7 @@ import { createInternalSettings, createGlobalSettings } from '../../settings/cre
 import { DataProvider, ZrxTradePool, TradeProvider } from './types'
 import { SLIPPAGE_TOLERANCE_DEFAULT, PLUGIN_IDENTIFIER } from './constants'
 import { i18n } from '../../utils/i18n-next'
-import { unreachable } from '../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { getEnumAsArray } from '../../utils/enum'
 
 /**

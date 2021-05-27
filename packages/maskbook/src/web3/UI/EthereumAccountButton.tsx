@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface EthereumAccountButtonProps extends withClasses<never> {
-    disableEther?: boolean
+    disableNativeToken?: boolean
     ButtonProps?: Partial<ButtonProps>
 }
 
@@ -79,14 +79,14 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     if (Flags.has_native_nav_bar) return <AccountBalanceWalletIcon onClick={onOpen} />
 
     return (
-        <div className={props.disableEther ? '' : classes.root}>
-            {!props.disableEther ? (
+        <div className={props.disableNativeToken ? '' : classes.root}>
+            {!props.disableNativeToken ? (
                 <Typography className={classes.balance}>
                     <FormattedBalance value={balance} decimals={18} significant={4} symbol="ETH" />
                 </Typography>
             ) : null}
             <Button
-                className={classNames(classes.button, props.disableEther ? classes.buttonTransparent : '')}
+                className={classNames(classes.button, props.disableNativeToken ? classes.buttonTransparent : '')}
                 variant="outlined"
                 startIcon={
                     selectedWallet ? (

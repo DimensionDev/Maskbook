@@ -1,15 +1,15 @@
 import { values } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
+import { unreachable, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+
 import { Asset, CollectibleProvider, BalanceRecord, PortfolioProvider, ZerionAddressAsset } from '../types'
 import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
 import * as DebankAPI from '../apis/debank'
 import { CurrencyType } from '../../../web3/types'
 import { ChainId, EthereumTokenType } from '../../../web3/types'
-import { unreachable } from '../../../utils/utils'
-import { createERC1155Token, createERC721Token, createEtherToken, getConstant } from '../../../web3/helpers'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { createERC1155Token, createERC721Token, createNativeToken, getConstant } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
 
 export async function getAssetsListNFT(
@@ -92,7 +92,7 @@ function formatAssetsFromDebank(data: BalanceRecord[]) {
             chain: x.chain,
             token:
                 x.id === 'eth'
-                    ? createEtherToken(ChainId.Mainnet)
+                    ? createNativeToken(ChainId.Mainnet)
                     : {
                           // distinguish token type
                           type: EthereumTokenType.ERC20,

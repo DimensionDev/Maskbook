@@ -4,15 +4,15 @@ import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsMerged } from './useAssetsMerged'
 import { useWallet } from './useWallet'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../web3/types'
 import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
 
-export function useAssets(tokens: (NativeTokenDetailed | ERC20TokenDetailed)[]) {
+export function useAssets(tokens: FungibleTokenDetailed[]) {
     const wallet = useWallet()
     const {
-        value: etherTokenDetailed,
-        loading: etherTokenDetailedLoading,
-        error: etherTokenDetailedError,
+        value: nativeTokenDetailed,
+        loading: nativeTokenDetailedLoading,
+        error: nativeTokenDetailedError,
         retry: retryEtherTokenDetailed,
     } = useNativeTokenDetailed()
     const {
@@ -20,7 +20,7 @@ export function useAssets(tokens: (NativeTokenDetailed | ERC20TokenDetailed)[]) 
         loading: assetsDetailedChainLoading,
         error: assetsDetailedChainError,
         retry: retryAssetsDetailedChain,
-    } = useAssetsFromChain(etherTokenDetailed ? [etherTokenDetailed, ...tokens] : tokens)
+    } = useAssetsFromChain(nativeTokenDetailed ? [nativeTokenDetailed, ...tokens] : tokens)
     const {
         value: assetsDetailedProvider = [],
         loading: assetsDetailedProviderLoading,
@@ -41,8 +41,8 @@ export function useAssets(tokens: (NativeTokenDetailed | ERC20TokenDetailed)[]) 
     // filter out tokens in blacklist
     return {
         value: assetsDetailed.filter((x) => !wallet?.erc20_token_blacklist.has(formatEthereumAddress(x.token.address))),
-        error: etherTokenDetailedError || assetsDetailedChainError || assetsDetailedProviderError,
-        loading: etherTokenDetailedLoading || assetsDetailedChainLoading || assetsDetailedProviderLoading,
+        error: nativeTokenDetailedError || assetsDetailedChainError || assetsDetailedProviderError,
+        loading: nativeTokenDetailedLoading || assetsDetailedChainLoading || assetsDetailedProviderLoading,
         retry: detailedTokensRetry,
     }
 }

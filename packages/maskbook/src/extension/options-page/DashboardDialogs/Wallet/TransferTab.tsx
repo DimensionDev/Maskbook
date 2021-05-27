@@ -4,12 +4,12 @@ import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { useRemoteControlledDialog, useI18N } from '../../../../utils'
 import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
-import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
+import type { Wallet } from '@dimensiondev/web3-shared'
 import { formatBalance, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { useTokenTransferCallback } from '../../../../web3/hooks/useTokenTransferCallback'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../../web3/types'
 import { EthereumTokenType } from '../../../../web3/types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 
@@ -31,8 +31,8 @@ const useTransferTabStyles = makeStyles((theme) => ({
 }))
 
 interface TransferTabProps {
-    wallet: WalletRecord
-    token: NativeTokenDetailed | ERC20TokenDetailed
+    wallet: Wallet
+    token: FungibleTokenDetailed
     onClose: () => void
 }
 

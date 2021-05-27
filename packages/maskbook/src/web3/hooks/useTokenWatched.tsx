@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ERC1155TokenDetailed, ERC721TokenDetailed, EthereumTokenType } from '../types'
+import { NonFungibleTokenDetailed, EthereumTokenType } from '../types'
 import { useTokenBalance } from './useTokenBalance'
 import { useTokenDetailed } from './useTokenDetailed'
 import { useTokenAssetDetailed } from './useTokenAssetDetailed'
@@ -14,7 +14,7 @@ export function useTokenWatched(initialToken?: { type: EthereumTokenType; addres
     const detailed = useTokenDetailed(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     const assetDetailed = useTokenAssetDetailed(
         detailed.value?.type === EthereumTokenType.ERC721 || detailed.value?.type === EthereumTokenType.ERC1155
-            ? (detailed.value as ERC721TokenDetailed | ERC1155TokenDetailed)
+            ? (detailed.value as NonFungibleTokenDetailed)
             : undefined,
     )
     return {

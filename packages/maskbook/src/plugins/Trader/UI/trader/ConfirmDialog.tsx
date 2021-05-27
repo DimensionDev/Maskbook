@@ -9,7 +9,7 @@ import { PriceStaleWarnning } from './PriceStaleWarnning'
 import type { TradeComputed, TradeProvider } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '../../../../web3/types'
 
 const useStyles = makeStyles((theme) => ({
     reverseIcon: {
@@ -35,8 +35,8 @@ export interface ConfirmDialogUIProps extends withClasses<never> {
     open: boolean
     trade: TradeComputed
     provider: TradeProvider
-    inputToken: NativeTokenDetailed | ERC20TokenDetailed
-    outputToken: NativeTokenDetailed | ERC20TokenDetailed
+    inputToken: FungibleTokenDetailed
+    outputToken: FungibleTokenDetailed
     onConfirm: () => void
     onClose?: () => void
     TradeSummaryProps?: Partial<TradeSummaryProps>
