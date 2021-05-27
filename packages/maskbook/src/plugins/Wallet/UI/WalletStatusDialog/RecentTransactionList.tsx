@@ -1,6 +1,6 @@
 import { ExternalLink, XCircle, RotateCcw, Check } from 'react-feather'
 import { makeStyles, List, ListItem, Typography, Link, Button } from '@material-ui/core'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useI18N } from '../../../../utils'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { TransactionStatusType } from '../../../../web3/types'
 
