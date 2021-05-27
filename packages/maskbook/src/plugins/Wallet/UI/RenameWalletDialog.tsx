@@ -15,18 +15,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         padding: theme.spacing(3, 5),
     },
-    actionButton: {
-        backgroundColor: '#1C68F3',
-        color: '#ffffff',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
-        '&:disabled': {
-            color: '#ffffff',
-            backgroundColor: '#1C68F3',
-            opacity: 0.5,
-        },
-    },
+    actionButton: {},
 }))
 
 export function WalletRenameWalletDialog() {
@@ -76,7 +65,12 @@ export function WalletRenameWalletDialog() {
                 <Button fullWidth color="inherit" variant="outlined" onClick={handleClose}>
                     Cancel
                 </Button>
-                <Button fullWidth className={classes.actionButton} onClick={renameWallet} disabled={!name}>
+                <Button
+                    className={classes.actionButton}
+                    variant="contained"
+                    onClick={renameWallet}
+                    disabled={!name}
+                    fullWidth>
                     Confirm
                 </Button>
             </DialogActions>

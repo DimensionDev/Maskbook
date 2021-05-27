@@ -16,13 +16,6 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         padding: theme.spacing(3, 5),
     },
-    actionButton: {
-        backgroundColor: '#1C68F3',
-        color: '#ffffff',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
-    },
     headCell: {
         borderBottom: 'none',
         backgroundColor: '#F3F3F4',

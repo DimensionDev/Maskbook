@@ -17,10 +17,6 @@ const useStyles = makeStyles((theme) => {
         root: {
             borderRadius: 16,
             fontWeight: 300,
-            backgroundColor: '#1C68F3',
-            '&:hover, &:active': {
-                backgroundColor: '#1C68F3',
-            },
         },
         icon: {
             border: `solid 1px ${theme.palette.common.white}`,

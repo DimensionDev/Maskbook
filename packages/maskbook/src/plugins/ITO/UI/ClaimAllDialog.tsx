@@ -22,10 +22,6 @@ const useStyles = makeStyles((theme) => ({
     actionButton: {
         margin: '0 auto',
         minHeight: 'auto',
-        backgroundColor: '#1C68F3',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
         width: '100%',
         fontSize: 18,
         fontWeight: 400,
@@ -191,11 +187,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         </List>
                         <EthereumWalletConnectedBoundary>
                             <ActionButton
-                                onClick={onClaimButtonClick}
+                                className={classes.actionButton}
                                 variant="contained"
                                 disabled={claimablePids!.length === 0}
                                 size="large"
-                                className={classes.actionButton}>
+                                onClick={onClaimButtonClick}>
                                 {t('plugin_ito_claim_all')}
                             </ActionButton>
                         </EthereumWalletConnectedBoundary>

@@ -100,7 +100,6 @@ const useStyles = makeStyles((theme) => ({
     },
     linkIcon: {
         marginRight: theme.spacing(1),
-        color: '#1C68F3',
     },
 }))
 

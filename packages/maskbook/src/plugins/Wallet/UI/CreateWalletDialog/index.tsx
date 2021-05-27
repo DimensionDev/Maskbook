@@ -27,11 +27,6 @@ const useStyles = makeStyles((theme) => ({
     button: {
         width: 90,
         flexShink: 0,
-        backgroundColor: '#1C68F3',
-        color: '#ffffff',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
     },
     optionName: {
         fontSize: 16,
@@ -80,7 +75,11 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
                             {t('plugin_wallet_create_a_new_wallet_description')}
                         </Typography>
                     </Box>
-                    <Button className={classes.button} size="small" onClick={openCreateWalletDialog}>
+                    <Button
+                        className={classes.button}
+                        variant="contained"
+                        size="small"
+                        onClick={openCreateWalletDialog}>
                         {t('plugin_wallet_setup_create')}
                     </Button>
                 </Box>

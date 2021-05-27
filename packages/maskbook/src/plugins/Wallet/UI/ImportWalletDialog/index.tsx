@@ -29,18 +29,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         padding: theme.spacing(3, 5),
     },
-    actionButton: {
-        backgroundColor: '#1C68F3',
-        color: '#ffffff',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
-        '&:disabled': {
-            color: '#ffffff',
-            backgroundColor: '#1C68F3',
-            opacity: 0.5,
-        },
-    },
+    actionButton: {},
     headCell: {
         borderBottom: 'none',
         backgroundColor: '#F3F3F4',
@@ -161,12 +150,13 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
             }}>
             <DialogContent className={classes.content}>{isImportStep ? importWallet : <ImportResult />}</DialogContent>
             <DialogActions className={classes.dialogActions}>
-                <Button fullWidth className={classes.actionButton}>
+                <Button className={classes.actionButton} variant="contained" fullWidth>
                     Previous
                 </Button>
                 <Button
-                    fullWidth
                     className={classes.actionButton}
+                    fullWidth
+                    variant="contained"
                     onClick={handleImport}
                     disabled={isImportStep && !importable}>
                     {isImportStep ? 'Import' : 'Next'}
