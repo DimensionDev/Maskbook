@@ -121,12 +121,12 @@ export function PreviewCard(props: PreviewCardProps) {
                 <div className={classes.meta}>
                     <QueryBuilderIcon fontSize="small" color="disabled" />
                     <Typography variant="body2" color="textSecondary">
-                        Last update: {grant.last_update_natural}
+                        {t('plugin_gitcoin_last_updated')} {grant.last_update_natural}
                     </Typography>
                 </div>
                 <div className={classes.meta}>
                     <Typography variant="body2" color="textSecondary">
-                        By
+                        {t('plugin_gitcoin_by')}
                     </Typography>
                     <Avatar
                         alt={grant.admin_profile.handle}
@@ -147,12 +147,12 @@ export function PreviewCard(props: PreviewCardProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         href={`https://gitcoin.co${grant.url}`}>
-                        View on Gitcoin
+                        {t('plugin_gitcoin_view_on')}
                     </Button>
                 </Grid>
                 <Grid item xs={6}>
                     <Button variant="contained" fullWidth color="primary" onClick={onDonate}>
-                        Donate
+                        {t('plugin_gitcoin_donate')}
                     </Button>
                 </Grid>
             </Grid>

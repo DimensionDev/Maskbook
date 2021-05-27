@@ -9,6 +9,7 @@ import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wall
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
 import { useUpdateEffect } from 'react-use'
+import { useI18N } from '../../../../utils'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -53,6 +54,7 @@ export interface CollectibleListProps {
 
 export function CollectibleList(props: CollectibleListProps) {
     const { wallet } = props
+    const { t } = useI18N()
 
     const classes = useStyles()
     const account = useAccount()
@@ -113,14 +115,14 @@ export function CollectibleList(props: CollectibleListProps) {
                             justifyContent: 'center',
                             height: '100%',
                         }}>
-                        <Typography color="textSecondary">No collectible found.</Typography>
+                        <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
                         <Button
                             sx={{
                                 marginTop: 1,
                             }}
                             variant="text"
                             onClick={() => collectiblesRetry()}>
-                            Retry
+                            {t('plugin_collectible_retry')}
                         </Button>
                     </Box>
                 ) : (

@@ -203,11 +203,12 @@ export function RedPacket(props: RedPacketProps) {
             shareLink,
             state,
             summary: canClaim
-                ? `Claiming red packet from ${payload.sender.name}`
+                ? t('plugin_red_packet_claiming_from', { name: payload.sender.name })
                 : canRefund
-                ? `Refunding red packet for ${formatBalance(availability.balance, tokenDetailed.decimals)} ${
-                      tokenDetailed.symbol
-                  }`
+                ? t('plugin_red_packet_refunding_for', {
+                      balance: formatBalance(availability.balance, tokenDetailed.decimals),
+                      symbol: tokenDetailed.symbol,
+                  })
                 : '',
         })
     }, [claimState, refundState /* update tx dialog only if state changed */])

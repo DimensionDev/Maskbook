@@ -10,6 +10,7 @@ import { findIndex } from 'lodash-es'
 import { DataProviderIcon } from '../trader/DataProviderIcon'
 import { TradeProviderIcon } from '../trader/TradeProviderIcon'
 import { FootnoteMenu, FootnoteMenuOption } from '../trader/FootnoteMenu'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -66,6 +67,7 @@ export const TradeFooter: FC<TradeFooterProps> = (props) => {
         onDataProviderChange,
         onTradeProviderChange,
     } = props
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const dataProviderOptions = showDataProviderIcon
         ? getEnumAsArray(DataProvider).filter((x) => dataProviders.includes(x.value))
@@ -76,7 +78,7 @@ export const TradeFooter: FC<TradeFooterProps> = (props) => {
     return (
         <CardActions className={classes.footer}>
             <Typography className={classes.footnote} variant="subtitle2">
-                <span>Powered by </span>
+                <span>{t('plugin_powered_by')} </span>
                 <Link
                     className={classes.footLink}
                     color="textSecondary"

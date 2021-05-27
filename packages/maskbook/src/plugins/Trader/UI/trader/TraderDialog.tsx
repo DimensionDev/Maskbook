@@ -11,8 +11,10 @@ import { currentTradeProviderSettings } from '../../settings'
 import { TradeProvider, TagType } from '../../types'
 import { PluginTraderMessages } from '../../messages'
 import { Trader, TraderProps } from './Trader'
+import { useI18N } from '../../../../utils'
 
 export function TraderDialog() {
+    const { t } = useI18N()
     const [traderProps, setTraderProps] = useState<TraderProps>()
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated, (ev) => {
@@ -27,7 +29,7 @@ export function TraderDialog() {
     const tradeContext = useTradeContext(tradeProvider)
     return (
         <TradeContext.Provider value={tradeContext}>
-            <InjectedDialog open={open} onClose={closeDialog} title="Swap">
+            <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_trader_swap')}>
                 <DialogContent>
                     <Trader {...traderProps} />
                     <TradeFooter

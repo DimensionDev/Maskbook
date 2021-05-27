@@ -112,9 +112,10 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         return (
             <Grid container>
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" disabled>
-                    {`${approveStateType === ApproveStateType.PENDING ? 'Unlocking' : 'Updating'} ${
-                        token.symbol ?? 'Token'
-                    }…`}
+                    {approveStateType === ApproveStateType.PENDING
+                        ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
+                        : `Updating ${token.symbol}`}
+                    …
                 </ActionButton>
             </Grid>
         )

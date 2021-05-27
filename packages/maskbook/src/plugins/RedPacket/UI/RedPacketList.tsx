@@ -5,6 +5,7 @@ import { RedPacketInList } from './RedPacketInList'
 import { useRedPacketsFromChain } from '../hooks/useRedPacket'
 import { usePayloadsComputed } from '../hooks/usePayloadComputed'
 import { useChainIdValid } from '../../../web3/hooks/useChainId'
+import { useI18N } from '../../../utils'
 
 //#region red packet list UI
 const useStyles = makeStyles((theme) => ({
@@ -36,17 +37,18 @@ interface RedPacketListProps {
 }
 
 function RedPacketList(props: RedPacketListProps) {
+    const { t } = useI18N()
     const { loading = false, payloads, FixedSizeListProps, onSelect } = props
     const classes = useStyles()
     return (
         <div className={classes.root}>
             {loading ? (
                 <Typography className={classes.placeholder} color="textSecondary">
-                    Loading...
+                    {t('plugin_dhedge_loading')}
                 </Typography>
             ) : payloads.length === 0 ? (
                 <Typography className={classes.placeholder} color="textSecondary">
-                    No Data
+                    {t('plugin_dhedge_no_data')}
                 </Typography>
             ) : (
                 <FixedSizeList

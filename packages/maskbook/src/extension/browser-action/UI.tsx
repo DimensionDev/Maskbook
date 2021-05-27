@@ -81,6 +81,11 @@ function BrowserActionUI() {
                 active: true,
                 url: browser.runtime.getURL('/debug.html'),
             })
+        } else if (process.env.NODE_ENV === 'development' && event.ctrlKey) {
+            browser.tabs.create({
+                active: true,
+                url: browser.runtime.getURL('/next.html'),
+            })
         } else {
             browser.runtime.openOptionsPage()
         }

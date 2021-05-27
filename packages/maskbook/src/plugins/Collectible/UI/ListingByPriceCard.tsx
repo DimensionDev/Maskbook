@@ -158,14 +158,14 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
-                        label: endingPriceChecked ? 'Starting Price' : 'Price',
+                        label: endingPriceChecked ? t('plugin_collectible_starting_price') : 'Price',
                         TextFieldProps: {
                             classes: {
                                 root: classes.panel,
                             },
                             helperText: endingPriceChecked
-                                ? 'Set an initial price.'
-                                : 'Will be on sale until you transfer this item or cancel it.',
+                                ? t('plugin_collectible_set_initial_price')
+                                : t('plugin_collectible_ending_price_tip'),
                         },
                     }}
                     FixedTokenListProps={{
@@ -182,29 +182,32 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         token={token.value as NativeTokenDetailed | ERC20TokenDetailed}
                         onTokenChange={setToken}
                         TokenAmountPanelProps={{
-                            label: 'Ending Price',
+                            label: t('plugin_collectible_ending_price'),
                             disableToken: true,
                             disableBalance: true,
                             TextFieldProps: {
                                 classes: {
                                     root: classes.panel,
                                 },
-                                helperText:
-                                    'Must be less than or equal to the starting price. The price will progress linearly to this amount until the expiration date.',
+                                helperText: t('plugin_collectible_ending_price_less_than_staring'),
                             },
                         }}
                     />
                 ) : null}
                 {futureTimeChecked || endingPriceChecked ? (
                     <DateTimePanel
-                        label={endingPriceChecked ? 'Expiration date' : 'Schedule Date'}
+                        label={
+                            endingPriceChecked
+                                ? t('plugin_collectible_expiration_date')
+                                : t('plugin_collectible_schedule_date')
+                        }
                         date={endingPriceChecked ? expirationTime : scheduleTime}
                         onChange={endingPriceChecked ? setExpirationTime : setScheduleTime}
                         TextFieldProps={{
                             className: classes.panel,
                             helperText: endingPriceChecked
-                                ? 'Your listing will automatically end at this time. No need to cancel it!'
-                                : 'Schedule a future date.',
+                                ? t('plugin_collectible_auto_cancel_tip')
+                                : t('plugin_collectible_schedule_future_date'),
                             fullWidth: true,
                         }}
                     />
@@ -215,9 +218,9 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         fullWidth
                         value={buyerAddress}
                         variant="outlined"
-                        label="Buyer Address"
-                        placeholder="Enter the buyer's address."
-                        helperText="Only the buyer is allowed to buy it."
+                        label={t('plugin_collectible_buyer_address')}
+                        placeholder={t('plugin_collectible_buyer_address_placeholder')}
+                        helperText={t('plugin_collectible_buyer_address_helper_text')}
                         onChange={(e) => setBuyerAddress(e.target.value)}
                         InputLabelProps={{
                             shrink: true,
@@ -238,10 +241,9 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         }
                         label={
                             <>
-                                <Typography>Include ending price</Typography>
+                                <Typography>{t('plugin_collectible_include_ending_price')}</Typography>
                                 <Typography className={classes.caption} color="textSecondary" variant="body2">
-                                    Adding an ending price will allow this listing to expire, or for the price to be
-                                    reduced until a buyer is found.
+                                    {t('plugin_collectible_include_ending_price_helper')}
                                 </Typography>
                             </>
                         }
@@ -259,9 +261,9 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         }
                         label={
                             <>
-                                <Typography>Schedule for a future time</Typography>
+                                <Typography>{t('plugin_collectible_schedule_for_a_future_time')}</Typography>
                                 <Typography className={classes.caption} color="textSecondary" variant="body2">
-                                    You can schedule this listing to only be buyable at a future data.
+                                    {t('plugin_collectible_schedule_for_a_future_time_helper')}
                                 </Typography>
                             </>
                         }
@@ -277,10 +279,9 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         }
                         label={
                             <>
-                                <Typography>Privacy</Typography>
+                                <Typography>{t('plugin_collectible_privacy')}</Typography>
                                 <Typography className={classes.caption} color="textSecondary" variant="body2">
-                                    You can keep your listing public, or you can specify one address that's allowed to
-                                    buy it.
+                                    {t('plugin_collectible_privacy_helper')}
                                 </Typography>
                             </>
                         }

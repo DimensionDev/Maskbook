@@ -48,7 +48,6 @@ type Success = {
     iv: string
     decryptedPayloadForImage: Payload
     content: TypedMessage
-    rawContent: string
     through: SuccessThrough[]
     internal: boolean
 }
@@ -72,7 +71,6 @@ const makeSuccessResultF =
     ) =>
     (rawEncryptedContent: string, through: Success['through']): Success => {
         const success: Success = {
-            rawContent: rawEncryptedContent,
             through,
             iv,
             decryptedPayloadForImage,

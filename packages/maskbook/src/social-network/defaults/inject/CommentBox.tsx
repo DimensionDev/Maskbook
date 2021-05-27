@@ -9,6 +9,7 @@ import { usePostInfoDetails, usePostInfo, PostInfoProvider } from '../../../comp
 import { noop } from 'lodash-es'
 import { MaskMessage } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
+import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,
@@ -28,20 +29,21 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
         const info = usePostInfo()
         const payload = usePostInfoDetails('postPayload')
-        const decrypted = usePostInfoDetails('decryptedPostContentRaw')
+        const postContent = usePostInfoDetails('transformedPostContent')
         const styles = useCustomStyles()
         const iv = usePostInfoDetails('iv')
         const props = additionPropsToCommentBox(styles)
         const onCallback = useCallback(
             async (content) => {
                 const postIV = iv || payload.unwrap().iv
-                const encryptedComment = await Services.Crypto.encryptComment(postIV, decrypted, content)
+                const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
+                const encryptedComment = await Services.Crypto.encryptComment(postIV, decryptedText, content)
                 onPasteToCommentBox(encryptedComment, info, dom).catch(console.error)
             },
-            [payload, decrypted, info, dom, iv],
+            [payload, postContent, info, dom, iv],
         )
 
-        if (!(payload && decrypted)) return null
+        if (!(payload && postContent)) return null
         return <CommentBox onSubmit={onCallback} {...props} />
     })
     return (signal: AbortSignal, current: PostInfo) => {

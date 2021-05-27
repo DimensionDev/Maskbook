@@ -1,6 +1,6 @@
 import {
     useMediaQuery,
-    Toolbar as MuiToolbar,
+    Toolbar,
     Theme,
     Typography,
     AppBar,
@@ -9,8 +9,8 @@ import {
     Drawer,
     experimentalStyled as styled,
     Box,
-    toolbarClasses,
     paperClasses,
+    makeStyles,
 } from '@material-ui/core'
 import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
 import Color from 'color'
@@ -73,17 +73,6 @@ const MaskLogo = styled(Grid)`
     }
 `
 
-const Toolbar = styled(MuiToolbar)(({ theme }) => ({
-    [`&.${toolbarClasses.gutters}`]: {
-        [theme.breakpoints.up('lg')]: {
-            paddingLeft: theme.spacing(0),
-        },
-        [theme.breakpoints.down('lg')]: {
-            paddingLeft: theme.spacing(1),
-        },
-    },
-}))
-
 const MenuButton = styled(IconButton)(({ theme }) => ({
     paddingLeft: theme.spacing(1.5),
     paddingRight: theme.spacing(1.5),
@@ -130,12 +119,26 @@ const ShapeContainer = styled('div')(({ theme }) => ({
     height: '100%',
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
-    backgroundColor: theme.palette.background.paper,
+}))
+
+const useStyle = makeStyles((theme) => ({
+    toolbarGutters: {
+        [theme.breakpoints.up('lg')]: {
+            paddingLeft: theme.spacing(0),
+        },
+        [theme.breakpoints.down('lg')]: {
+            paddingLeft: theme.spacing(1),
+        },
+    },
+    shapeContainerWithBackground: {
+        backgroundColor: theme.palette.background.paper,
+    },
 }))
 
 export interface PageFrameProps extends React.PropsWithChildren<{}> {
     title: React.ReactNode | string
     primaryAction?: React.ReactNode
+    noBackgroundFill?: boolean
 }
 
 export const PageFrame = memo((props: PageFrameProps) => {
@@ -143,11 +146,12 @@ export const PageFrame = memo((props: PageFrameProps) => {
     const right = props.primaryAction
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
+    const classes = useStyle()
 
     return (
         <>
             <AppBar position="relative" color="inherit" elevation={0}>
-                <Toolbar>
+                <Toolbar classes={{ gutters: classes.toolbarGutters }}>
                     {!isLargeScreen && (
                         <MaskLogo item container alignItems="center">
                             <MenuButton onClick={toggleDrawer}>{drawerOpen ? <CloseIcon /> : <MenuIcon />}</MenuButton>
@@ -173,7 +177,8 @@ export const PageFrame = memo((props: PageFrameProps) => {
                     </NavigationDrawer>
                 )}
                 <ShapeHelper>
-                    <ShapeContainer>
+                    <ShapeContainer
+                        className={props.noBackgroundFill ? undefined : classes.shapeContainerWithBackground}>
                         <ErrorBoundary>{props.children}</ErrorBoundary>
                     </ShapeContainer>
                 </ShapeHelper>

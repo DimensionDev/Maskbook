@@ -57,13 +57,13 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
     const [state, setState] = useState<TransactionState | null>(null)
     const [shareLink, setShareLink] = useState('')
     const [summary, setSummary] = useState('')
-    const [title, setTitle] = useState('Transaction')
+    const [title, setTitle] = useState(t('plugin_wallet_transaction'))
     const { open, closeDialog } = useRemoteControlledDialog(EthereumMessages.events.transactionDialogUpdated, (ev) => {
         if (ev.open) {
             setState(ev.state)
             setSummary(ev.summary ?? '')
             setShareLink(ev.shareLink ?? '')
-            setTitle(ev.title ?? 'Transaction')
+            setTitle(ev.title ?? t('plugin_wallet_transaction'))
         } else {
             setSummary('')
             setShareLink('')

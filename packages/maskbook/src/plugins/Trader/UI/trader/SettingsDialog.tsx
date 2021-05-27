@@ -73,14 +73,20 @@ export function SettingsDialog(props: SettingsDialogProps) {
     }, [provider])
 
     return (
-        <InjectedDialog open={open} onClose={closeDialog} title="Swap Settings" DialogProps={{ maxWidth: 'xs' }}>
+        <InjectedDialog
+            open={open}
+            onClose={closeDialog}
+            title={t('plugin_trader_swap_settings')}
+            DialogProps={{ maxWidth: 'xs' }}>
             <DialogContent className={classes.content}>
                 <Paper component="section" elevation={0}>
                     <Card elevation={0}>
                         <CardContent>
                             <Accordion className={classes.accordion} elevation={0}>
                                 <AccordionSummary>
-                                    <Typography className={classes.heading}>Slippage Tolerance</Typography>
+                                    <Typography className={classes.heading}>
+                                        {t('plugin_trader_slipage_tolerance')}
+                                    </Typography>
                                     <Typography className={classes.subheading}>{slippage / 100}%</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails className={classes.details}>

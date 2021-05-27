@@ -267,7 +267,7 @@ export function Collectible(props: CollectibleProps) {
                 </CardContent>
                 <CardActions className={classes.footer}>
                     <Typography className={classes.footnote} variant="subtitle2">
-                        <span>Powered by </span>
+                        <span>{t('plugin_powered_by')} </span>
                         <Link
                             className={classes.footLink}
                             color="textSecondary"
@@ -301,7 +301,9 @@ export function Collectible(props: CollectibleProps) {
             {asset.value?.end_time && (
                 <Box sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
-                        Sale ends in {format(new Date(asset.value.end_time), 'yyyy-MM-dd HH:mm:ss')}.
+                        {t('plugin_collectible_sale_end', {
+                            time: format(new Date(asset.value.end_time), 'yyyy-MM-dd HH:mm:ss'),
+                        })}
                     </Typography>
                 </Box>
             )}

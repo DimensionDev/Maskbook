@@ -4,6 +4,7 @@
     "compilerOptions": {
       "target": "ES2018",
       "module": "CommonJS"
-    }
+    },
+    "transpileOnly": true
   }
 }

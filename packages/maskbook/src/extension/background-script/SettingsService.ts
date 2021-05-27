@@ -1,7 +1,13 @@
 import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@dimensiondev/maskbook-shared'
 import { head } from 'lodash-es'
 import type { InternalSettings } from '../../settings/createSettings'
-import { appearanceSettings, currentPersonaIdentifier } from '../../settings/settings'
+import {
+    appearanceSettings,
+    currentPersonaIdentifier,
+    languageSettings,
+    disableOpenNewTabInBackgroundSettings,
+} from '../../settings/settings'
+import { currentTrendingDataProviderSettings } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 
 function create<T>(settings: InternalSettings<T>) {
@@ -16,6 +22,11 @@ function create<T>(settings: InternalSettings<T>) {
     return [get, set] as const
 }
 export const [getTheme, setTheme] = create(appearanceSettings)
+export const [getLanguage, setLanguage] = create(languageSettings)
+export const [getTrendingDataSource, setTrendingDataSource] = create(currentTrendingDataProviderSettings)
+export const [getAncientPostsCompatibiltyMode, setAncientPostsCompatibiltyMode] = create(
+    disableOpenNewTabInBackgroundSettings,
+)
 
 export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier | undefined> {
     await currentPersonaIdentifier.readyPromise

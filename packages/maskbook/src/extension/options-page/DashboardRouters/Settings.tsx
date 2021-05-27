@@ -14,7 +14,8 @@ import {
     launchPageSettings,
     newDashboardConnection,
 } from '../../../settings/settings'
-import { Appearance, LaunchPage, Language } from '../../../settings/types'
+import { LaunchPage } from '../../../settings/types'
+import { Appearance, Language } from '@dimensiondev/maskbook-theme'
 
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'

@@ -41,7 +41,7 @@ interface SwapGuideProps extends Pick<SwapDialogProps, 'exchangeTokens' | 'paylo
 export function SwapGuide(props: SwapGuideProps) {
     const { t } = useI18N()
     const { status, payload, exchangeTokens, isBuyer, open, retryPayload, shareSuccessLink, onUpdate, onClose } = props
-    const [startTransition] = unstable_useTransition({ busyDelayMs: 1000 })
+    const [isPending, startTransition] = unstable_useTransition()
     const onCloseShareDialog = useCallback(() => {
         startTransition(() => {
             onClose()

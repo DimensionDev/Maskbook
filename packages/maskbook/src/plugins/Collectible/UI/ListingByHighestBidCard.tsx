@@ -58,10 +58,10 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
 
     const validationMessage = useMemo(() => {
-        if (new BigNumber(amount || '0').isZero()) return 'Enter minimum bid'
-        if (new BigNumber(reservePrice || '0').isZero()) return 'Enter reserve price'
-        if (new BigNumber(reservePrice).isLessThan(amount)) return 'Invalid reserve price'
-        if (expirationDateTime.getTime() - Date.now() <= 0) return 'Invalid expiration date'
+        if (new BigNumber(amount || '0').isZero()) return t('plugin_collectible_enter_minimum_bid')
+        if (new BigNumber(reservePrice || '0').isZero()) return t('plugin_collectible_enter_reserve_price')
+        if (new BigNumber(reservePrice).isLessThan(amount)) return t('plugin_collectible_invalid_reserve_price')
+        if (expirationDateTime.getTime() - Date.now() <= 0) return t('plugin_collectible_invalid_expiration_date')
         return ''
     }, [amount, reservePrice, expirationDateTime])
 
@@ -113,9 +113,9 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                         classes: {
                             root: classes.panel,
                         },
-                        label: 'Minimum Bid',
+                        label: t('plugin_collectible_minimum_bid'),
                         TextFieldProps: {
-                            helperText: 'Set your starting bid price.',
+                            helperText: t('plugin_collectible_set_starting_bid_price'),
                         },
                     }}
                     FixedTokenListProps={{
@@ -136,21 +136,19 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                         },
                         disableToken: true,
                         disableBalance: true,
-                        label: 'Reserve Price',
+                        label: t('plugin_collectible_reserve_price'),
                         TextFieldProps: {
-                            helperText:
-                                'Create a hidden limit by setting a reserve price. Reserve price must be greater than or equal to the start amount.',
+                            helperText: t('plugin_collectible_reserve_price_helper'),
                         },
                     }}
                 />
                 <DateTimePanel
-                    label="Expiration Date"
+                    label={t('plugin_collectible_expiration_date')}
                     date={expirationDateTime}
                     onChange={setExpirationDateTime}
                     TextFieldProps={{
                         className: classes.panel,
-                        helperText:
-                            'Your auction will automatically end at this time and the highest bidder will win. No need to cancel it!',
+                        helperText: t('plugin_collectible_auction_auto_end'),
                         fullWidth: true,
                     }}
                 />
