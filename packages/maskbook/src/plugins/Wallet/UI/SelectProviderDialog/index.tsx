@@ -53,7 +53,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     stepTitle: {
         fontSize: 19,
         fontWeight: 'bold',
-        fontFamily: 'PingFang SC',
     },
     stepContent: {
         marginTop: 21,

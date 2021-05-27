@@ -91,7 +91,6 @@ function ViewDetailed(props: ViewDetailedProps) {
     const { wallet, asset } = props
 
     const isMobile = useMatchXS()
-
     const classes = useStylesExtends(useStyles({ isMobile }), props)
 
     const stableTokens = useStableTokensDebank()

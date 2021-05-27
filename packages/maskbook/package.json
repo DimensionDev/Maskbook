@@ -161,11 +161,7 @@
     "react-test-renderer": "^17.0.1",
     "rimraf": "^3.0.2",
     "source-map-loader": "^3.0.0",
-<<<<<<< HEAD
     "ts-jest": "27.0.1",
-=======
-    "ts-jest": "27.0.0",
->>>>>>> 7e3237e72... chore: upgrade dependencies
     "ts-loader": "^9.2.2",
     "type-coverage": "^2.17.5",
     "webpack": "^5.37.1",
