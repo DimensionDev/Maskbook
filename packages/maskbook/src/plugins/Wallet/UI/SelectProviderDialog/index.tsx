@@ -12,7 +12,8 @@ import {
     Link,
     DialogActions,
 } from '@material-ui/core'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable, useValueRef } from '@dimensiondev/maskbook-shared'
+import { SuccessIcon } from '@dimensiondev/icons'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { useWalletsOfProvider } from '@dimensiondev/web3-shared'
 import { useHistory } from 'react-router-dom'
@@ -21,18 +22,20 @@ import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { Provider } from '../Provider'
 import { MetaMaskIcon } from '../../../../resources/MetaMaskIcon'
 import { MaskbookIcon } from '../../../../resources/MaskbookIcon'
-import { SuccessIcon } from '@dimensiondev/icons'
 import { WalletConnectIcon } from '../../../../resources/WalletConnectIcon'
 import Services from '../../../../extension/service'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../messages'
 import { DashboardRoute } from '../../../../extension/options-page/Route'
-import { ProviderType, WalletNetworkType } from '../../../../web3/types'
-import { useValueRef } from '../../../../utils/hooks/useValueRef'
-import { Flags } from '../../../../utils/flags'
+import { ProviderType, NetworkType } from '../../../../web3/types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { NetworkIcon } from '../../../../components/shared/NetworkIcon'
-import { currentSelectedWalletNetworkSettings } from '../../settings'
+import { useAccount } from '../../../../web3/hooks/useAccount'
+import { currentMaskbookChainIdSettings, currentSelectedWalletNetworkSettings, currentSelectedWalletProviderSettings } from '../../settings'
+import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
+import { resolveNetworkChainId } from '../../../../web3/pipes'
+import CHAINS from '../../../../web3/assets/chains.json'
+import { Flags } from '../../../../utils'
 
 const useStyles = makeStyles((theme: Theme) => ({
     paper: {
@@ -85,17 +88,18 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 const networks = [
-    WalletNetworkType.Ethereum,
-    Flags.bsc_enabled ? WalletNetworkType.Binance : undefined,
-    Flags.polygon_enabled ? WalletNetworkType.Polygon : undefined,
-].filter(Boolean) as WalletNetworkType[]
+    NetworkType.Ethereum,
+    Flags.bsc_enabled ? NetworkType.Binance : undefined,
+    Flags.polygon_enabled ? NetworkType.Polygon : undefined,
+].filter(Boolean) as NetworkType[]
 
 interface SelectProviderDialogUIProps extends withClasses<never> {}
 
 function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const { t } = useI18N()
-    const selectedNetwork = useValueRef(currentSelectedWalletNetworkSettings)
     const classes = useStylesExtends(useStyles(), props)
+
+    const account = useAccount()
     const history = useHistory()
 
     //#region remote controlled dialog logic
@@ -115,7 +119,41 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     //#endregion
 
     const wallets = useWalletsOfProvider(ProviderType.Maskbook)
-    const onConnect = useCallback(
+    const selectedNetworkType = useValueRef(currentSelectedWalletNetworkSettings)
+    const selectedProviderType = useValueRef(currentSelectedWalletProviderSettings)
+
+    const onSelectNetwork = useSnackbarCallback(
+        async (networkType: NetworkType) => {
+            const chainId = resolveNetworkChainId(networkType)
+            const chainDetailed = CHAINS.find((x) => x.chainId === chainId)
+
+            if (!chainDetailed) throw new Error('The selected network is not supported.')
+
+            switch (selectedProviderType) {
+                case ProviderType.Maskbook:
+                    currentMaskbookChainIdSettings.value = chainId
+                    break
+                default:
+                    await Services.Ethereum.addEthereumChain(account, {
+                        chainId: chainDetailed.chainId.toString(16),
+                        chainName: chainDetailed.name,
+                        nativeCurrency: chainDetailed.nativeCurrency,
+                        rpcUrls: chainDetailed.rpc,
+                        blockExplorerUrls: [
+                            chainDetailed.explorers &&
+                            chainDetailed.explorers.length > 0 &&
+                            chainDetailed.explorers[0].url
+                                ? chainDetailed.explorers[0].url
+                                : chainDetailed.infoURL,
+                        ],
+                    })
+                    break
+            }
+        },
+        [account, selectedProviderType],
+    )
+
+    const onConnectProvider = useCallback(
         async (providerType: ProviderType) => {
             closeDialog()
             switch (providerType) {
@@ -158,12 +196,9 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             <ListItem
                                 className={classes.network}
                                 key={network}
-                                onClick={() => {
-                                    currentSelectedWalletNetworkSettings.value = network
-                                    // TODO
-                                }}>
+                                onClick={() => onSelectNetwork(network)}>
                                 <NetworkIcon networkType={network} />
-                                {selectedNetwork === network && <SuccessIcon className={classes.checkedBadge} />}
+                                {selectedNetworkType === network && <SuccessIcon className={classes.checkedBadge} />}
                             </ListItem>
                         ))}
                     </List>
@@ -177,7 +212,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             <Provider
                                 logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
                                 name="Mask Network"
-                                onClick={() => onConnect(ProviderType.Maskbook)}
+                                onClick={() => onConnectProvider(ProviderType.Maskbook)}
                             />
                         </ImageListItem>
                         {Flags.metamask_support_enabled ? (
@@ -185,7 +220,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                 <Provider
                                     logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
                                     name="MetaMask"
-                                    onClick={() => onConnect(ProviderType.MetaMask)}
+                                    onClick={() => onConnectProvider(ProviderType.MetaMask)}
                                 />
                             </ImageListItem>
                         ) : null}
@@ -193,7 +228,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             <Provider
                                 logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
                                 name="WalletConnect"
-                                onClick={() => onConnect(ProviderType.WalletConnect)}
+                                onClick={() => onConnectProvider(ProviderType.WalletConnect)}
                             />
                         </ImageListItem>
                     </ImageList>

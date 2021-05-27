@@ -1,5 +1,5 @@
-import { ChainId, ERC20Token, ERC721Token, NativeToken, ProviderType } from './types'
-import { safeUnreachable } from '@dimensiondev/maskbook-shared'
+import { ChainId, ERC20Token, ERC721Token, NativeToken, NetworkType, ProviderType } from './types'
+import { safeUnreachable, unreachable } from '@dimensiondev/maskbook-shared'
 
 export function resolveProviderName(providerType: ProviderType) {
     switch (providerType) {
@@ -39,6 +39,19 @@ export function resolveChainId(name: string) {
             return ChainId.Mumbai
         default:
             return
+    }
+}
+
+export function resolveNetworkChainId(networkType: NetworkType) {
+    switch (networkType) {
+        case NetworkType.Ethereum:
+            return ChainId.Mainnet
+        case NetworkType.Binance:
+            return ChainId.BSC
+        case NetworkType.Polygon:
+            return ChainId.Matic
+        default:
+            unreachable(networkType)
     }
 }
 
