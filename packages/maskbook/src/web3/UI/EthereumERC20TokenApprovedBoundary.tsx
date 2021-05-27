@@ -1,6 +1,6 @@
-import { Grid, makeStyles } from '@material-ui/core'
-import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect } from 'react'
+import { useSnackbar } from 'notistack'
+import { Grid, makeStyles } from '@material-ui/core'
 import { formatBalance, unreachable } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../utils'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'

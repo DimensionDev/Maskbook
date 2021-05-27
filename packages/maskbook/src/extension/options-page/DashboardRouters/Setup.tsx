@@ -1,4 +1,5 @@
 import { useState, ChangeEvent } from 'react'
+import { v4 as uuid } from 'uuid'
 import { useSnackbar } from 'notistack'
 import classNames from 'classnames'
 import {
@@ -29,7 +30,6 @@ import {
 } from '../../../utils'
 import ActionButton from '../DashboardComponents/ActionButton'
 import DashboardRouterContainer from './Container'
-import { v4 as uuid } from 'uuid'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import Services from '../../service'
 import { useAsync } from 'react-use'

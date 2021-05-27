@@ -1,8 +1,8 @@
-import { Button } from '@material-ui/core'
 import { Trash2 as TrashIcon } from 'react-feather'
+import { Button } from '@material-ui/core'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils'
-import { unreachable } from '@dimensiondev/maskbook-shared'
 import { isNative } from '../../../../web3/helpers'
 import type {
     ERC1155TokenDetailed,

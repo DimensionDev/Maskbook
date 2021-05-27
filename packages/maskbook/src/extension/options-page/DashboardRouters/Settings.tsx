@@ -1,8 +1,9 @@
 import { useRef } from 'react'
 import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
-import { useMatchXS, extendsTheme, useI18N, Flags } from '../../../utils'
+import { Appearance, Language } from '@dimensiondev/maskbook-theme'
 
+import { useMatchXS, extendsTheme, useI18N, Flags } from '../../../utils'
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
 import {
     debugModeSetting,
@@ -15,7 +16,6 @@ import {
     newDashboardConnection,
 } from '../../../settings/settings'
 import { LaunchPage } from '../../../settings/types'
-import { Appearance, Language } from '@dimensiondev/maskbook-theme'
 
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'
