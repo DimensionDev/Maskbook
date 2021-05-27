@@ -9,12 +9,7 @@ import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
 import { useChainId } from '../../../../web3/hooks/useChainId'
-import {
-    currentMaskbookChainIdSettings,
-    currentMetaMaskChainIdSettings,
-    currentSelectedWalletNetworkSettings,
-    currentSelectedWalletProviderSettings,
-} from '../../settings'
+import { currentSelectedWalletNetworkSettings, currentSelectedWalletProviderSettings } from '../../settings'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { resolveNetworkChainId, resolveProviderName } from '../../../../web3/pipes'
 import CHAINS from '../../../../web3/assets/chains.json'
