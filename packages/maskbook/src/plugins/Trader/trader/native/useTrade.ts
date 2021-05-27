@@ -12,7 +12,7 @@ export function useTrade(inputToken?: FungibleTokenDetailed, outputToken?: Fungi
         if (!inputToken || !outputToken) return false
         // none of the tokens is native token
         if (inputToken.type !== EthereumTokenType.Native && outputToken.type !== EthereumTokenType.Native) return false
-        // none of the tokens is weth
+        // none of the tokens is wrapped native token
         if (!isSameAddress(inputToken.address, WETH_ADDRESS) && !isSameAddress(outputToken.address, WETH_ADDRESS))
             return false
         return true

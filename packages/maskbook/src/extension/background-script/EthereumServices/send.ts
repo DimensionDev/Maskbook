@@ -96,14 +96,7 @@ export async function INTERNAL_send(
             }
             break
         default:
-            provider.send(payload, (error, response) => {
-                console.log({
-                    payload,
-                    response,
-                    error,
-                })
-                callback(error, response)
-            })
+            provider.send(payload, callback)
             break
     }
 }

@@ -7,11 +7,6 @@ import type { ProviderType } from '../../../../web3/types'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
-export enum ConnectProgress {
-    NOT_DEPEND,
-    ERROR,
-}
-
 const useStyles = makeStyles((theme) => ({
     root: {},
     content: {

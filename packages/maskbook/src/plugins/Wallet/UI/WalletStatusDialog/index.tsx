@@ -80,8 +80,8 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         right: -2,
         bottom: 0,
-        height: 14,
-        width: 14,
+        height: 18,
+        width: 18,
     },
     tip: {
         flex: 1,
@@ -176,7 +176,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                     <div className={classes.iconWrapper}>
                         <ProviderIcon classes={{ icon: classes.icon }} size={48} providerType={selectedProviderType} />
                         <NetworkIcon
-                            size={24}
+                            size={28}
                             classes={{ icon: classes.networkIcon }}
                             networkType={selectedNetworkType}
                         />
