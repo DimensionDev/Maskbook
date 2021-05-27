@@ -1,10 +1,10 @@
+import { noop, pick } from 'lodash-es'
+import type { Subscription } from 'use-subscription'
 import { ChainId, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
 import Services from '../extension/service'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../plugins/Wallet/settings'
-import { noop, pick } from 'lodash-es'
 import { Flags } from '../utils/flags'
-import type { Subscription } from 'use-subscription'
 import type { InternalSettings } from '../settings/createSettings'
 
 export const Web3Context: Web3ProviderType = {

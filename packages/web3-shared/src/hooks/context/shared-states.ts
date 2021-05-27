@@ -1,6 +1,6 @@
+import { useSubscription } from 'use-subscription'
 import { ChainId } from '..'
 import { useWeb3Provider } from './provider'
-import { useSubscription } from 'use-subscription'
 import type { Wallet } from '../useWallets'
 import { isSameAddress } from '../../utils'
 

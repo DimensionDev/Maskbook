@@ -1,5 +1,5 @@
-import type { ChainId, ProviderType } from '../../types'
 import type { Subscription } from 'use-subscription'
+import type { ChainId, ProviderType } from '../../types'
 import type { Wallet } from '../useWallets'
 
 export interface Web3ProviderType {
