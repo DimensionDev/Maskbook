@@ -9,6 +9,7 @@ import { SelectWalletDialog } from './UI/SelectWalletDialog'
 import { WalletConnectQRCodeDialog } from './UI/WalletConnectQRCodeDialog'
 import { WalletStatusDialog } from './UI/WalletStatusDialog'
 import { WalletRenameWalletDialog } from './UI/RenameWalletDialog'
+import { ConnectWalletDialog } from './UI/ConnectWalletDialog'
 
 export const WalletPluginDefine: PluginConfig = {
     id: PLUGIN_IDENTIFIER,
@@ -28,6 +29,7 @@ export const WalletPluginDefine: PluginConfig = {
                 <CreateImportChooseDialog />
                 <ImportWalletDialog />
                 <WalletStatusDialog />
+                <ConnectWalletDialog />
                 <WalletConnectQRCodeDialog />
                 <WalletRenameWalletDialog />
             </>
@@ -43,6 +45,7 @@ export const WalletPluginDefine: PluginConfig = {
                 <CreateImportChooseDialog />
                 <ImportWalletDialog />
                 <WalletStatusDialog />
+                <ConnectWalletDialog />
                 <WalletConnectQRCodeDialog />
                 <WalletRenameWalletDialog />
             </>

@@ -13,7 +13,7 @@ export async function getRecentTransactions(address: string) {
     const transactions = await t.objectStore('Transaction').getAll()
     return transactions
         .filter((x) => isSameAddress(x.address, address))
-        .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
+        .sort((a, z) => z.createdAt.getTime() - a.createdAt.getTime())
         .slice(0, MAX_RECENT_TRANSACTIONS_SIZE)
 }
 

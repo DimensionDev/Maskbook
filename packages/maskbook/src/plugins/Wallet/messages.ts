@@ -14,6 +14,15 @@ export type SelectProviderDialogEvent =
           address?: string
       }
 
+export type ConnectWalletDialogEvent =
+    | {
+          open: true
+          providerType: ProviderType
+      }
+    | {
+          open: false
+      }
+
 export type SelectWalletDialogEvent = {
     open: boolean
 }
@@ -93,6 +102,11 @@ interface WalletMessage {
      * Select provider dialog
      */
     selectProviderDialogUpdated: SelectProviderDialogEvent
+
+    /**
+     * Connect wallet dialog
+     */
+    connectWalletDialogUpdated: ConnectWalletDialogEvent
 
     /**
      * Wallet status dialog

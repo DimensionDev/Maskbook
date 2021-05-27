@@ -1,7 +1,7 @@
-import { makeStyles, Theme, Typography, Card, ButtonBase, ButtonBaseProps } from '@material-ui/core'
+import { makeStyles, Typography, Card, ButtonBase, ButtonBaseProps } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         textAlign: 'center',
     },
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         padding: theme.spacing(4, 1),
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey['900'] : '#F7F9FA',
     },
     logo: {
         width: 45,

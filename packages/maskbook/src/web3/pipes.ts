@@ -1,5 +1,6 @@
 import { ChainId, ERC20Token, ERC721Token, NativeToken, NetworkType, ProviderType } from './types'
 import { safeUnreachable, unreachable } from '@dimensiondev/maskbook-shared'
+import CHAINS from './assets/chains.json'
 
 export function resolveProviderName(providerType: ProviderType) {
     switch (providerType) {
@@ -18,28 +19,8 @@ export function resolveProviderName(providerType: ProviderType) {
 }
 
 export function resolveChainId(name: string) {
-    switch (name.toLowerCase()) {
-        case 'mainnet':
-            return ChainId.Mainnet
-        case 'ropsten':
-            return ChainId.Ropsten
-        case 'rinkeby':
-            return ChainId.Rinkeby
-        case 'kovan':
-            return ChainId.Kovan
-        case 'gorli':
-            return ChainId.Gorli
-        case 'bnb':
-            return ChainId.BSC
-        case 'bnbt':
-            return ChainId.BSCT
-        case 'matic':
-            return ChainId.Matic
-        case 'maticmum':
-            return ChainId.Mumbai
-        default:
-            return
-    }
+    const chainDetailed = CHAINS.find((x) => x.shortName === name || x.network === name)
+    return chainDetailed?.chainId as ChainId | undefined
 }
 
 export function resolveNetworkChainId(networkType: NetworkType) {
@@ -55,30 +36,15 @@ export function resolveNetworkChainId(networkType: NetworkType) {
     }
 }
 
+export function resolveChainDetailed(chainId: ChainId) {
+    const chainDetailed = CHAINS.find((x) => x.chainId === chainId)
+    if (!chainDetailed) throw new Error('Unknown chain id.')
+    return chainDetailed
+}
+
 export function resolveChainName(chainId: ChainId) {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return 'Mainnet'
-        case ChainId.Ropsten:
-            return 'Ropsten'
-        case ChainId.Rinkeby:
-            return 'Rinkeby'
-        case ChainId.Kovan:
-            return 'Kovan'
-        case ChainId.Gorli:
-            return 'Gorli'
-        case ChainId.BSC:
-            return 'BSC Mainnet'
-        case ChainId.BSCT:
-            return 'BSC Testnet'
-        case ChainId.Matic:
-            return 'Matic Mainnet'
-        case ChainId.Mumbai:
-            return 'Mumbai'
-        default:
-            safeUnreachable(chainId)
-            return 'Unknown'
-    }
+    const chainDetailed = resolveChainDetailed(chainId)
+    return chainDetailed.name
 }
 
 export function resolveChainColor(chainId: ChainId) {
@@ -98,34 +64,16 @@ export function resolveChainColor(chainId: ChainId) {
     }
 }
 
-export function resolveLinkOnExplorer(chainId: ChainId) {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return 'https://etherscan.io'
-        case ChainId.Ropsten:
-            return 'https://ropsten.etherscan.io'
-        case ChainId.Rinkeby:
-            return 'https://rinkeby.etherscan.io'
-        case ChainId.Kovan:
-            return 'https://kovan.etherscan.io'
-        case ChainId.Gorli:
-            return 'https://goerli.etherscan.io'
-        case ChainId.BSC:
-            return 'https://bscscan.com'
-        case ChainId.BSCT:
-            return 'https://testnet.bscscan.com'
-        case ChainId.Matic:
-            return 'https://explorer.matic.network'
-        case ChainId.Mumbai:
-            return 'https://mumbai-explorer.matic.today'
-        default:
-            safeUnreachable(chainId)
-            return 'https://etherscan.io'
-    }
+export function resolveProviderURLs(chainId: ChainId) {
+    const chainDetailed = resolveChainDetailed(chainId)
+    return chainDetailed.rpc
 }
 
-export function checkIfChainSupport(chainId: number) {
-    return Object.values(ChainId).includes(chainId)
+export function resolveLinkOnExplorer(chainId: ChainId) {
+    const chainDetailed = resolveChainDetailed(chainId)
+    return chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
+        ? chainDetailed.explorers[0].url
+        : chainDetailed.infoURL
 }
 
 export function resolveTransactionLinkOnExplorer(chainId: ChainId, tx: string) {

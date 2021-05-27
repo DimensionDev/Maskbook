@@ -46,9 +46,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface ConnectWalletDialogProps extends withClasses<never> {}
+export interface CreateWalletDialogProps extends withClasses<never> {}
 
-export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
+export function CreateWalletDialog(props: CreateWalletDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
