@@ -1,5 +1,5 @@
 import { ChainId, ERC20Token, ERC721Token, NativeToken, ProviderType } from './types'
-import { safeUnreachable } from '../utils/utils'
+import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 
 export function resolveProviderName(providerType: ProviderType) {
     switch (providerType) {
