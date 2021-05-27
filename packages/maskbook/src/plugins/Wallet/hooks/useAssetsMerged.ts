@@ -24,14 +24,14 @@ export function useAssetsMerged(...listOfTokens: Asset[][]) {
             if (a.token.address === NATIVE_TOKEN_ADDRESS) return -1
             if (z.token.address === NATIVE_TOKEN_ADDRESS) return 1
 
-            // token with high usd value estimation has priority
-            const valueDifference = getTokenUSDValue(z) - getTokenUSDValue(a)
-            if (valueDifference !== 0) return valueDifference
+        // token with high usd value estimation has priority
+        const valueDifference = getTokenUSDValue(z) - getTokenUSDValue(a)
+        if (valueDifference !== 0) return valueDifference
 
-            if (a.balance.length > z.balance.length) return -1
-            if (a.balance.length < z.balance.length) return 1
-            if (a.balance > z.balance) return -1
-            if (a.balance < z.balance) return 1
-            return 0
-        })
+        if (a.balance.length > z.balance.length) return -1
+        if (a.balance.length < z.balance.length) return 1
+        if (a.balance > z.balance) return -1
+        if (a.balance < z.balance) return 1
+        return 0
+    })
 }

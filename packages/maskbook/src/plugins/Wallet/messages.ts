@@ -1,4 +1,4 @@
-import type { Wallet } from '@dimensiondev/web3-shared'
+import type { ProviderType, Wallet } from '@dimensiondev/web3-shared'
 import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
 import type { FungibleTokenDetailed } from '../../web3/types'
 import { createPluginMessage } from '../utils/createPluginMessage'

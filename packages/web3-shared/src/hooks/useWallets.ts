@@ -2,6 +2,7 @@ import { useSubscription } from 'use-subscription'
 import { ProviderType } from '../types'
 import { isSameAddress } from '../utils'
 import { useWeb3Provider, useWeb3Context } from './context'
+
 export interface Wallet {
     /** ethereum hex address */
     address: string
@@ -21,9 +22,11 @@ export interface Wallet {
     /** A list of untrusted ERC1155 contract address */
     erc1155_token_blacklist: Set<string>
 }
+
 export function useWallets(): Wallet[] {
     return useWeb3Context().wallets
 }
+
 export function useWalletsOfProvider(expectedProvider?: ProviderType): Wallet[] {
     const wallets = useWallets()
     const selectedWalletProvider = useSubscription(useWeb3Provider().walletProvider)

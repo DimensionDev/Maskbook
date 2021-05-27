@@ -19,7 +19,10 @@ export function resolveProviderName(providerType: ProviderType) {
 }
 
 export function resolveChainId(name: string) {
-    const chainDetailed = CHAINS.find((x) => x.shortName === name || x.network === name)
+    const name_ = name.toLowerCase()
+    const chainDetailed = CHAINS.find((x) =>
+        [x.chain.toLowerCase(), x.shortName.toLowerCase(), x.network.toLowerCase()].includes(name_),
+    )
     return chainDetailed?.chainId as ChainId | undefined
 }
 
@@ -64,9 +67,9 @@ export function resolveChainColor(chainId: ChainId) {
     }
 }
 
-export function resolveProviderURLs(chainId: ChainId) {
+export function resolveChainCurrency(chainId: ChainId) {
     const chainDetailed = resolveChainDetailed(chainId)
-    return chainDetailed.rpc
+    return chainDetailed.nativeCurrency
 }
 
 export function resolveLinkOnExplorer(chainId: ChainId) {
@@ -94,4 +97,8 @@ export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): str
 
 export function resolveIPFSLink(ipfs: string): string {
     return `https://ipfs.fleek.co/ipfs/${ipfs}`
+}
+
+export function checkIfChainSupport(chainId: number) {
+    return Object.values(ChainId).includes(chainId)
 }

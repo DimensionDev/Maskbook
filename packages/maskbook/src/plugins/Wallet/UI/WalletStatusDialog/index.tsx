@@ -14,13 +14,13 @@ import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useChainId, useChainIdValid } from '../../../../web3/hooks/useChainId'
 import { resolveAddressLinkOnExplorer } from '../../../../web3/pipes'
-import { ChainId, ProviderType } from '../../../../web3/types'
-import { EthereumChainChip } from '../../../../web3/UI/EthereumChainChip'
+import { ProviderType } from '../../../../web3/types'
 import { useWallet } from '../../hooks/useWallet'
 import { WalletMessages } from '../../messages'
-import { currentSelectedWalletProviderSettings } from '../../settings'
+import { currentSelectedWalletNetworkSettings, currentSelectedWalletProviderSettings } from '../../settings'
 import { RecentTransactionList } from './RecentTransactionList'
 import { useAccount } from '../../../../web3/hooks/useAccount'
+import { NetworkIcon } from '../../../../components/shared/NetworkIcon'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
     accountInfo: {
         fontSize: 16,
         flexGrow: 1,
+        marginLeft: theme.spacing(1),
     },
     accountName: {
         fontSize: 16,
@@ -45,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
     infoRow: {
         display: 'flex',
         alignItems: 'center',
-        marginLeft: theme.spacing(1),
     },
     footer: {
         fontSize: 12,
@@ -63,18 +63,25 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(1),
     },
     changeButton: {
-        backgroundColor: '#1C68F3',
         borderRadius: 20,
-        color: '#FFFFFF',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
+    },
+    iconWrapper: {
+        position: 'relative',
+        height: 48,
+        width: 48,
+        marginRight: theme.spacing(1.5),
     },
     icon: {
         fontSize: 48,
         width: 48,
         height: 48,
-        marginRight: theme.spacing(1),
+    },
+    networkIcon: {
+        position: 'absolute',
+        right: -2,
+        bottom: 0,
+        height: 14,
+        width: 14,
     },
     tip: {
         flex: 1,
@@ -107,7 +114,8 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     const selectedWallet = useWallet()
-    const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
+    const selectedProviderType = useValueRef(currentSelectedWalletProviderSettings)
+    const selectedNetworkType = useValueRef(currentSelectedWalletNetworkSettings)
 
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
@@ -143,13 +151,13 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { setDialog: setRenameDialog } = useRemoteControlledDialog(WalletMessages.events.walletRenameDialogUpdated)
 
     const onDisconnect = useCallback(async () => {
-        if (selectedWalletProvider !== ProviderType.WalletConnect) return
+        if (selectedProviderType !== ProviderType.WalletConnect) return
         closeDialog()
         setWalletConnectDialog({
             open: true,
             uri: await Services.Ethereum.createConnectionURI(),
         })
-    }, [selectedWalletProvider, closeDialog, setWalletConnectDialog])
+    }, [selectedProviderType, closeDialog, setWalletConnectDialog])
     const onChange = useCallback(() => {
         closeDialog()
         openSelectProviderDialog()
@@ -165,10 +173,14 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
             DialogProps={{ maxWidth: 'sm' }}>
             <DialogContent className={classes.content}>
                 <section className={classes.currentAccount}>
-                    <ProviderIcon classes={{ icon: classes.icon }} size={48} providerType={selectedWalletProvider} />
-                    {chainIdValid && chainId !== ChainId.Mainnet ? (
-                        <EthereumChainChip chainId={chainId} ChipProps={{ variant: 'outlined' }} />
-                    ) : null}
+                    <div className={classes.iconWrapper}>
+                        <ProviderIcon classes={{ icon: classes.icon }} size={48} providerType={selectedProviderType} />
+                        <NetworkIcon
+                            size={24}
+                            classes={{ icon: classes.networkIcon }}
+                            networkType={selectedNetworkType}
+                        />
+                    </div>
                     <div className={classes.accountInfo}>
                         <div className={classes.infoRow}>
                             <Typography className={classes.accountName}>{selectedWallet.name}</Typography>
@@ -200,14 +212,14 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                                 className={classes.link}
                                 href={`${resolveAddressLinkOnExplorer(chainId, selectedWallet.address)}`}
                                 target="_blank"
-                                title={t('plugin_wallet_view_on_etherscan')}
+                                title={t('plugin_wallet_view_on_explorer')}
                                 rel="noopener noreferrer">
                                 <ExternalLink className={classes.linkIcon} size={14} />
                             </Link>
                         </div>
                     </div>
                     <section className={classes.actions}>
-                        {selectedWalletProvider === ProviderType.WalletConnect ? (
+                        {selectedProviderType === ProviderType.WalletConnect ? (
                             <Button
                                 className={classes.actionButton}
                                 color="primary"
@@ -218,8 +230,9 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                             </Button>
                         ) : null}
                         <Button
-                            className={classNames(classes.actionButton, classes.changeButton)}
+                            className={classNames(classes.actionButton)}
                             color="primary"
+                            variant="contained"
                             size="small"
                             onClick={onChange}>
                             {t('wallet_status_button_change')}

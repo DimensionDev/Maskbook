@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useValueRef } from '../../utils/hooks/useValueRef'
+import { useValueRefDelayed } from '../../utils/hooks/useValueRef'
 import { currentBlockNumberSettings } from '../../plugins/Wallet/settings'
 
 /**
  * Get the current block number
  */
 export function useBlockNumber() {
-    const blockNumber = useValueRef(currentBlockNumberSettings)
+    const blockNumber = useValueRefDelayed(currentBlockNumberSettings)
     return blockNumber
 }
 

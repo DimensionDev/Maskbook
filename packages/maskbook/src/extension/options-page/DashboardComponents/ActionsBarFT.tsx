@@ -58,7 +58,7 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
                 onClick={() => openHideTokenConfirmDialog({ wallet, token })}>
                 {t('hide')}
             </MenuItem>,
-        ].slice(chain === 'eth' ? 0 : 2),
+        ].slice(chain === 'eth' ? 0 : 1),
     )
 
     return (

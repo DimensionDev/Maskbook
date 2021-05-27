@@ -20,7 +20,7 @@ export interface NativeToken {
 export interface NativeTokenDetailed extends NativeToken {
     name: string
     symbol: string
-    decimals: 18
+    decimals: number
 }
 //#endregion
 

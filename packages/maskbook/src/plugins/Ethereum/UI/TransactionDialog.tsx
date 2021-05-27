@@ -102,7 +102,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                                 href={resolveTransactionLinkOnExplorer(chainId, state.hash)}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                {t('plugin_wallet_view_on_etherscan')}
+                                {t('plugin_wallet_view_on_explorer')}
                             </Link>
                         </Typography>
                     </>
@@ -125,7 +125,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                                 href={resolveTransactionLinkOnExplorer(chainId, state.receipt.transactionHash)}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                {t('plugin_wallet_view_on_etherscan')}
+                                {t('plugin_wallet_view_on_explorer')}
                             </Link>
                         </Typography>
                     </>

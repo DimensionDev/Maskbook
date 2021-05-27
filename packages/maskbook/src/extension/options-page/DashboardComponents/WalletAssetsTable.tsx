@@ -32,6 +32,7 @@ import { useStableTokensDebank } from '../../../web3/hooks/useStableTokensDebank
 import type { Asset } from '../../../plugins/Wallet/types'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
 import { useAssets } from '../../../plugins/Wallet/hooks/useAssets'
+import { useChainDetailed } from '../../../web3/hooks/useChainDetailed'
 
 const useStyles = makeStyles<
     Theme,
@@ -90,10 +91,13 @@ function ViewDetailed(props: ViewDetailedProps) {
     const { wallet, asset } = props
 
     const isMobile = useMatchXS()
-    const classes = useStylesExtends(useStyles({ isMobile }), props)
-    const stableTokens = useStableTokensDebank()
 
-    console.log(asset)
+    const classes = useStylesExtends(useStyles({ isMobile }), props)
+
+    const stableTokens = useStableTokensDebank()
+    const chainDetailed = useChainDetailed()
+
+    if (!chainDetailed) return null
 
     return (
         <TableRow className={classes.cell} key={asset.token.address}>
@@ -104,7 +108,9 @@ function ViewDetailed(props: ViewDetailedProps) {
                     }}>
                     <TokenIcon classes={{ icon: classes.coin }} name={asset.token.name} address={asset.token.address} />
                     <Typography className={classes.name}>{asset.token.symbol}</Typography>
-                    {asset.chain !== 'eth' ? <Chip className={classes.chain} label={asset.chain} size="small" /> : null}
+                    {asset.chain !== chainDetailed.chain.toLowerCase() ? (
+                        <Chip className={classes.chain} label={asset.chain} size="small" />
+                    ) : null}
                 </Box>,
                 <Box
                     sx={{

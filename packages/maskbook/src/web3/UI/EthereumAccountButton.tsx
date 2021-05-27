@@ -12,9 +12,13 @@ import { useI18N, useRemoteControlledDialog, useValueRef, Flags } from '../../ut
 import { useChainId } from '../hooks/useChainId'
 import { resolveChainColor } from '../pipes'
 import { ChainId } from '../types'
-import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
+import {
+    currentSelectedWalletNetworkSettings,
+    currentSelectedWalletProviderSettings,
+} from '../../plugins/Wallet/settings'
 import { useNativeTokenBalance } from '../hooks/useNativeTokenBalance'
 import { useAccount } from '../hooks/useAccount'
+import { NetworkIcon } from '../../components/shared/NetworkIcon'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -40,6 +44,12 @@ const useStyles = makeStyles((theme) => {
             width: 18,
             height: 18,
         },
+        networkIcon: {
+            fontSize: 18,
+            width: 18,
+            height: 18,
+            marginLeft: theme.spacing(-1),
+        },
         chainIcon: {
             fontSize: 18,
             width: 18,
@@ -63,7 +73,8 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     const { value: balance = '0' } = useNativeTokenBalance(account)
 
     const selectedWallet = useWallet()
-    const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
+    const selectedProviderType = useValueRef(currentSelectedWalletProviderSettings)
+    const selectedNetworkType = useValueRef(currentSelectedWalletNetworkSettings)
 
     const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
@@ -90,11 +101,18 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
                 variant="outlined"
                 startIcon={
                     selectedWallet ? (
-                        <ProviderIcon
-                            classes={{ icon: classes.providerIcon }}
-                            size={18}
-                            providerType={selectedWalletProvider}
-                        />
+                        <>
+                            <ProviderIcon
+                                classes={{ icon: classes.providerIcon }}
+                                size={18}
+                                providerType={selectedProviderType}
+                            />
+                            <NetworkIcon
+                                classes={{ icon: classes.networkIcon }}
+                                size={18}
+                                networkType={selectedNetworkType}
+                            />
+                        </>
                     ) : null
                 }
                 color="primary"

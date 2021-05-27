@@ -9,8 +9,15 @@ import * as ZerionAPI from '../apis/zerion'
 import * as DebankAPI from '../apis/debank'
 import { CurrencyType } from '../../../web3/types'
 import { ChainId, EthereumTokenType } from '../../../web3/types'
-import { createERC1155Token, createERC721Token, createNativeToken, getConstant } from '../../../web3/helpers'
+import {
+    createERC1155Token,
+    createERC20Token,
+    createERC721Token,
+    createNativeToken,
+    getConstant,
+} from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
+import { resolveChainId } from '../../../web3/pipes'
 
 export async function getAssetsListNFT(
     address: string,
@@ -67,8 +74,7 @@ export async function getAssetsListNFT(
     }
 }
 
-export async function getAssetsList(address: string, chainId: ChainId, provider: PortfolioProvider): Promise<Asset[]> {
-    if (chainId !== ChainId.Mainnet) return []
+export async function getAssetsList(address: string, provider: PortfolioProvider): Promise<Asset[]> {
     if (!EthereumAddress.isValid(address)) return []
     switch (provider) {
         case PortfolioProvider.ZERION:
@@ -91,17 +97,15 @@ function formatAssetsFromDebank(data: BalanceRecord[]) {
         (x): Asset => ({
             chain: x.chain,
             token:
-                x.id === 'eth'
-                    ? createNativeToken(ChainId.Mainnet)
-                    : {
-                          // distinguish token type
-                          type: EthereumTokenType.ERC20,
-                          address: formatEthereumAddress(x.id),
-                          chainId: ChainId.Mainnet,
-                          name: x.name,
-                          symbol: x.symbol,
-                          decimals: x.decimals,
-                      },
+                x.id === 'eth' || x.id === 'bsc' || x.id === 'matic'
+                    ? createNativeToken(resolveChainId(x.id) ?? ChainId.Mainnet)
+                    : createERC20Token(
+                          resolveChainId(x.chain) ?? ChainId.Mainnet,
+                          formatEthereumAddress(x.id),
+                          x.decimals,
+                          x.name,
+                          x.symbol,
+                      ),
             balance: new BigNumber(x.balance).toFixed(),
             price: {
                 [CurrencyType.USD]: new BigNumber(x.price).toFixed(),

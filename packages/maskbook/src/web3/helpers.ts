@@ -1,6 +1,9 @@
 import type Web3 from 'web3'
 import type { AbiOutput } from 'web3-utils'
 import BigNumber from 'bignumber.js'
+import type { Web3Constants } from '@dimensiondev/web3-shared'
+import { isSameAddress } from '@dimensiondev/web3-shared'
+
 import { CONSTANTS } from './constants'
 import {
     ChainId,
@@ -10,8 +13,7 @@ import {
     ERC721TokenAssetDetailed,
     ERC1155TokenAssetDetailed,
 } from './types'
-import type { Web3Constants } from '@dimensiondev/web3-shared'
-import { isSameAddress } from '@dimensiondev/web3-shared'
+import { resolveChainDetailed } from './pipes'
 
 export { isSameAddress } from '@dimensiondev/web3-shared'
 
@@ -51,13 +53,12 @@ export function getConstant<T extends Web3Constants, K extends keyof T>(
 //#endregion
 
 export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
+    const chainDetailed = resolveChainDetailed(chainId)
     return {
         type: EthereumTokenType.Native,
         chainId,
         address: getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'),
-        decimals: 18,
-        name: 'Ether',
-        symbol: 'ETH',
+        ...chainDetailed.nativeCurrency,
     }
 }
 

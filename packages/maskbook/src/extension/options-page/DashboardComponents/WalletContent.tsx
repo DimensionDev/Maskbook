@@ -23,7 +23,6 @@ import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
-import { useAccount } from '../../../web3/hooks/useAccount'
 import { FilterTransactionType } from '../../../plugins/Wallet/types'
 
 const useStyles = makeStyles((theme) => ({
@@ -80,7 +79,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
 
     const history = useHistory()
     const location = useLocation()
-    const account = useAccount()
 
     const color = useColorStyles()
     const xsMatched = useMatchXS()

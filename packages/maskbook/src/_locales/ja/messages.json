@@ -308,7 +308,7 @@
     "plugin_wallet_transaction_reverted": "",
     "plugin_wallet_transaction_rejected": "取引は拒否されました。",
     "plugin_wallet_transaction_server_error": "",
-    "plugin_wallet_view_on_etherscan": "Etherscan で見る",
+    "plugin_wallet_view_on_explorer": "Explorer で見る",
     "plugin_wallet_wrong_network_tip": "正しい Ethereum ネットワークを選択してください。",
     "plugin_wallet_recent_transaction": "",
     "plugin_wallet_clear_all": "",

@@ -30,7 +30,7 @@ export const CONSTANTS = {
 
     // contracts
     BALANCE_CHECKER_ADDRESS: {
-        [ChainId.Mainnet]: '0xb1f8e55c7f64d203c1400b9d8555d050f94adf39',
+        [ChainId.Mainnet]: '0xb1F8e55c7f64D203C1400B9D8555d050F94aDF39',
         [ChainId.Ropsten]: '0x1604c587BF77702c2e944a15fAACE246B72ff6f6',
         [ChainId.Rinkeby]: '0xe3AE8Ae4160680C7Ac0FB0A79F519d7D7eAe06aB',
         [ChainId.Kovan]: '',
@@ -46,8 +46,8 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0x42ad527de7d4e9d9d011ac45b31d8551f8fe9821',
         [ChainId.Kovan]: '0x2cc8688c5f75e365aaeeb4ea8d6a480405a48d2a',
         [ChainId.Gorli]: '0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e',
-        [ChainId.BSC]: '',
-        [ChainId.BSCT]: '',
+        [ChainId.BSC]: '0x59CED6942f5506bc01e5D438e7ce3D4635271659',
+        [ChainId.BSCT]: '0x6e5BB1a5Ad6F68A8D7D6A5e47750eC15773d6042',
         [ChainId.Matic]: '',
         [ChainId.Mumbai]: '',
     },
@@ -316,134 +316,5 @@ export const CONSTANTS = {
         [ChainId.BSCT]: '0x0000000000000000000000000000000000000000',
         [ChainId.Matic]: '0x0000000000000000000000000000000000000000',
         [ChainId.Mumbai]: '0x0000000000000000000000000000000000000000',
-    },
-    NATIVE_TOKEN_NAME: {
-        [ChainId.Mainnet]: 'Ether',
-        [ChainId.Ropsten]: 'Ether',
-        [ChainId.Rinkeby]: 'Ether',
-        [ChainId.Kovan]: 'Ether',
-        [ChainId.Gorli]: 'Ether',
-        [ChainId.BSC]: 'BNB',
-        [ChainId.BSCT]: 'BNB',
-        [ChainId.Matic]: 'MATIC',
-        [ChainId.Mumbai]: 'MATIC',
-    },
-    NATIVE_TOKEN_SYMBOL: {
-        [ChainId.Mainnet]: 'ETH',
-        [ChainId.Ropsten]: 'ETH',
-        [ChainId.Rinkeby]: 'ETH',
-        [ChainId.Kovan]: 'ETH',
-        [ChainId.Gorli]: 'ETH',
-        [ChainId.BSC]: 'BNB',
-        [ChainId.BSCT]: 'BNB',
-        [ChainId.Matic]: 'MATIC',
-        [ChainId.Mumbai]: 'MATIC',
-    },
-
-    // settings
-    PROVIDER_ADDRESS_LIST:
-        process.env.NODE_ENV === 'development'
-            ? {
-                  [ChainId.Mainnet]: ['https://mainnet.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
-                  [ChainId.Ropsten]: ['https://ropsten.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
-                  [ChainId.Rinkeby]: ['https://rinkeby.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
-                  [ChainId.Kovan]: ['https://kovan.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
-                  [ChainId.Gorli]: ['https://goerli.infura.io/v3/4ab93ab12e864f0eb58fae67143e0195'],
-                  [ChainId.BSC]: ['https://bsc-dataseed.binance.org/'],
-                  [ChainId.BSCT]: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
-                  [ChainId.Matic]: ['https://rpc-mainnet.maticvigil.com/'],
-                  [ChainId.Mumbai]: ['https://rpc-mumbai.maticvigil.com/'],
-              }
-            : {
-                  [ChainId.Mainnet]: [
-                      'https://damp-holy-water.quiknode.pro/d5bcb6c5e265afd11fecb0d52275afa961487a29/',
-                      'https://mainnet.infura.io/v3/50676f4e9b9d4780a34fc8a503ff7f4f',
-                      'https://throbbing-blue-bird.quiknode.io/73e66978-1a45-4f91-97f3-25d59b51a00e/YScEAjYfzZqNphokjzn-Zt3sZsOd0Nav5sauA3j03se0LOseR8PQFyBfINzhYStWrg44VfLLfCFE34FR2CA_kQ==/',
-                  ],
-                  [ChainId.Ropsten]: ['https://ropsten.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5'],
-                  [ChainId.Rinkeby]: ['https://rinkeby.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5'],
-                  [ChainId.Kovan]: ['https://kovan.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5'],
-                  [ChainId.Gorli]: ['https://goerli.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5'],
-                  [ChainId.BSC]: ['https://bsc-dataseed.binance.org/'],
-                  [ChainId.BSCT]: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
-                  [ChainId.Matic]: ['https://polygon-mainnet.infura.io/v3/50676f4e9b9d4780a34fc8a503ff7f4f'],
-                  [ChainId.Mumbai]: ['https://polygon-mumbai.infura.io/v3/50676f4e9b9d4780a34fc8a503ff7f4f'],
-              },
-    PROVIDER_WEIGHT_LIST: {
-        [ChainId.Mainnet]:
-            process.env.NODE_ENV === 'development'
-                ? [0, 0, 0, 0] // 0 - 100%
-                : [0, 1, 1, 2], // 0 - 25%, 1 - 50%, 2 - 25%
-        [ChainId.Ropsten]: [0, 0, 0, 0], // 0 - 100%
-        [ChainId.Rinkeby]: [0, 0, 0, 0], // 0 - 100%
-        [ChainId.Kovan]: [0, 0, 0, 0], // 0 - 100%
-        [ChainId.Gorli]: [0, 0, 0, 0], // 0 - 100%
-        [ChainId.BSC]: [0, 0, 0, 0], // 0 - 100%
-        [ChainId.BSCT]: [0, 0, 0, 0], // 0 - 100%
-        [ChainId.Matic]: [0, 0, 0, 0], // 0 - 100%
-        [ChainId.Mumbai]: [0, 0, 0, 0], // 0 - 100%
-    },
-    PROVIDER_WEIGHT_SEED: {
-        [ChainId.Mainnet]: Math.floor(Math.random() * 4), // 4 is the length of weights
-        [ChainId.Ropsten]: Math.floor(Math.random() * 4),
-        [ChainId.Rinkeby]: Math.floor(Math.random() * 4),
-        [ChainId.Kovan]: Math.floor(Math.random() * 4),
-        [ChainId.Gorli]: Math.floor(Math.random() * 4),
-        [ChainId.BSC]: Math.floor(Math.random() * 4),
-        [ChainId.BSCT]: Math.floor(Math.random() * 4),
-        [ChainId.Matic]: Math.floor(Math.random() * 4),
-        [ChainId.Mumbai]: Math.floor(Math.random() * 4),
-    },
-}
-
-// learn more: https://chainid.network/chains.json
-export const EXTERNAL_ETHEREUM_CHAIN_DETAILED = {
-    [ChainId.BSC]: {
-        name: 'Binance Smart Chain Mainnet',
-        chainId: 56,
-        shortName: 'bnb',
-        chain: 'BSC',
-        network: 'mainnet',
-        networkId: 56,
-        nativeCurrency: {
-            name: 'Binance Chain Native Token',
-            symbol: 'BNB',
-            decimals: 18,
-        },
-        rpc: [
-            'https://bsc-dataseed1.binance.org',
-            'https://bsc-dataseed2.binance.org',
-            'https://bsc-dataseed3.binance.org',
-            'https://bsc-dataseed4.binance.org',
-            'https://bsc-dataseed1.defibit.io',
-            'https://bsc-dataseed2.defibit.io',
-            'https://bsc-dataseed3.defibit.io',
-            'https://bsc-dataseed4.defibit.io',
-            'https://bsc-dataseed1.ninicoin.io',
-            'https://bsc-dataseed2.ninicoin.io',
-            'https://bsc-dataseed3.ninicoin.io',
-            'https://bsc-dataseed4.ninicoin.io',
-            'wss://bsc-ws-node.nariox.org',
-        ],
-        faucets: [],
-        explorers: [{ name: 'bscscan', url: 'https://bscscan.com', standard: 'EIP3091' }],
-        infoURL: 'https://www.binance.org',
-    },
-    [ChainId.Matic]: {
-        name: 'Matic Mainnet',
-        chainId: 137,
-        shortName: 'matic',
-        chain: 'Matic',
-        network: 'mainnet',
-        networkId: 137,
-        nativeCurrency: {
-            name: 'Matic',
-            symbol: 'MATIC',
-            decimals: 18,
-        },
-        rpc: ['https://rpc-mainnet.matic.network', 'wss://ws-mainnet.matic.network'],
-        faucets: [],
-        explorers: [{ name: 'matic', url: 'https://explorer.matic.network', standard: 'EIP3091' }],
-        infoURL: 'https://matic.network/',
     },
 }

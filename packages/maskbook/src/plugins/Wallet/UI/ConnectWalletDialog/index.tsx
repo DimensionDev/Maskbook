@@ -3,13 +3,18 @@ import { useAsyncRetry } from 'react-use'
 import { makeStyles, DialogContent } from '@material-ui/core'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { useI18N, useRemoteControlledDialog, useValueRef } from '../../../../utils'
-import { ChainId, NetworkType, ProviderType } from '../../../../web3/types'
+import { delay, useI18N, useRemoteControlledDialog, useValueRef } from '../../../../utils'
+import { NetworkType, ProviderType } from '../../../../web3/types'
 import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
-import { useChainId, useChainIdValid } from '../../../../web3/hooks/useChainId'
-import { currentSelectedWalletNetworkSettings, currentSelectedWalletProviderSettings } from '../../settings'
+import { useChainId } from '../../../../web3/hooks/useChainId'
+import {
+    currentMaskbookChainIdSettings,
+    currentMetaMaskChainIdSettings,
+    currentSelectedWalletNetworkSettings,
+    currentSelectedWalletProviderSettings,
+} from '../../settings'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { resolveNetworkChainId, resolveProviderName } from '../../../../web3/pipes'
 import CHAINS from '../../../../web3/assets/chains.json'
@@ -28,7 +33,6 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
     const account = useAccount()
     const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
 
     const selectedNetworkType = useValueRef(currentSelectedWalletNetworkSettings)
@@ -44,6 +48,12 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     //#region wallet status dialog
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
+    )
+    //#endregion
+
+    //#region walletconnect
+    const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletConnectQRCodeDialogUpdated,
     )
     //#endregion
 
@@ -78,9 +88,19 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         } catch (e) {
             throw new Error(e.message)
         }
-    }, [account, chainId, chainIdValid, selectedNetworkType, selectedProviderType])
+    }, [account, chainId, selectedNetworkType, selectedProviderType])
 
     const connectToWalletConnect = useCallback(async () => {
+        const [uri_] = await Promise.allSettled([await Services.Ethereum.createConnectionURI(), delay(1000)])
+
+        // create wallet connect QR code URI
+        const uri = uri_.status === 'fulfilled' ? uri_.value : ''
+        if (!uri) throw new Error('Failed to create connection URI.')
+
+        setWalletConnectDialog({
+            open: true,
+            uri,
+        })
         return true as const
     }, [])
 

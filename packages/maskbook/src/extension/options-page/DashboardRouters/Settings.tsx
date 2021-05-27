@@ -44,6 +44,7 @@ import { ChainId } from '../../../web3/types'
 import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
 import { PortfolioProvider } from '../../../plugins/Wallet/types'
 import { currentPortfolioDataProviderSettings, currentMaskbookChainIdSettings } from '../../../plugins/Wallet/settings'
+import { resolveChainName } from '../../../web3/pipes'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -197,6 +198,7 @@ export default function DashboardSettingsRouter() {
                                     <SettingsUIEnum
                                         classes={listStyle}
                                         enumObject={ChainId}
+                                        getText={resolveChainName}
                                         icon={<WifiIcon />}
                                         value={currentMaskbookChainIdSettings}
                                     />

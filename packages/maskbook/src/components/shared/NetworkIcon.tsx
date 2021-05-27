@@ -4,10 +4,13 @@ import { NetworkType } from '../../web3/types'
 import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles(() => ({
-    networkIcon: {},
+    icon: {
+        borderRadius: '50%',
+        backgroundColor: '#F7F9FA',
+    },
 }))
 
-export interface NetworkIconProps extends withClasses<'networkIcon'> {
+export interface NetworkIconProps extends withClasses<'icon'> {
     size?: number
     networkType?: NetworkType
 }
@@ -22,11 +25,11 @@ export function NetworkIcon(props: NetworkIconProps) {
 
     switch (networkType) {
         case NetworkType.Ethereum:
-            return <Image height={size} width={size} src={EthereumIcon} className={classes.networkIcon} />
+            return <Image height={size} width={size} src={EthereumIcon} className={classes.icon} />
         case NetworkType.Binance:
-            return <Image height={size} width={size} src={BinanceIcon} className={classes.networkIcon} />
+            return <Image height={size} width={size} src={BinanceIcon} className={classes.icon} />
         case NetworkType.Polygon:
-            return <Image height={size} width={size} src={PolygonIcon} className={classes.networkIcon} />
+            return <Image height={size} width={size} src={PolygonIcon} className={classes.icon} />
         default:
             return null
     }

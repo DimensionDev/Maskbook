@@ -6,18 +6,18 @@ import { getChainId } from '../../../../extension/background-script/EthereumServ
 import { getConstant, isSameAddress } from '../../../../web3/helpers'
 import type { ChainId } from '../../../../web3/types'
 import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
-import { CONSTANTS } from '../../../../web3/constants'
 import type { Route } from '../../types'
 import { getFutureTimestamps } from '../../helpers/blocks'
 import { fetchBlockNumbersByTimestamps } from '../blocks'
 import { fetchLBP_PoolsByTokenAddress, fetchLBP_PoolTokenPrices, fetchLBP_PoolTokens } from '../LBP'
+import { resolveChainDetailed } from '../../../../web3/pipes'
 
 //#region create cached SOR
 const createSOR_ = memoize(
     (chainId: ChainId) =>
         new SOR(
             // we choose a fixed provider cause it's only used here.
-            new JsonRpcProvider(getConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST', chainId)[0]),
+            new JsonRpcProvider(resolveChainDetailed(chainId).rpc[0]),
             BALANCER_SOR_GAS_PRICE,
             BALANCER_MAX_NO_POOLS,
             chainId,

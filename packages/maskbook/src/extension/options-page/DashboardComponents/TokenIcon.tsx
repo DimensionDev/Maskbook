@@ -1,23 +1,16 @@
 import { makeStyles, Avatar, Theme, AvatarProps } from '@material-ui/core'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { isSameAddress, getConstant } from '../../../web3/helpers'
+import { getConstant } from '../../../web3/helpers'
 import { CONSTANTS } from '../../../web3/constants'
 import { useBlockie } from '../../../web3/hooks/useBlockie'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { useChainDetailed } from '../../../web3/hooks/useChainDetailed'
 import { useImageFailover } from '../../../utils/hooks/useImageFailover'
 
 //#region fix icon image
-const NATIVE_TOKEN_ADDRESS = getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
-
-const iconSourceList = [
-    'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum',
-    'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum',
-]
-const IMG_SUFFIX = '/info/logo.png'
-
-function resolveTokenIconURL(address: string, trustWalletAssets: string) {
+function resolveTokenIconURL(address: string, baseURI: string) {
     const iconMap = {
-        [NATIVE_TOKEN_ADDRESS]: `${trustWalletAssets}/info/logo.png`,
+        [getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')]: `${baseURI}/info/logo.png`,
         '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074':
             'https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg', // MASK
         '0x32a7C02e79c4ea1008dD6564b35F131428673c41': 'https://s2.coinmarketcap.com/static/img/coins/64x64/6747.png', // CRUST
@@ -27,10 +20,8 @@ function resolveTokenIconURL(address: string, trustWalletAssets: string) {
             'https://raw.githubusercontent.com/chainswap/chainswap-assets/main/logo_white_256.png', // TOKEN
     }
     const checksummedAddress = formatEthereumAddress(address)
-    if (isSameAddress(checksummedAddress, getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')))
-        return 'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png'
     if (iconMap[checksummedAddress]) return iconMap[checksummedAddress]
-    return `${trustWalletAssets}/assets/${checksummedAddress}/logo.png`
+    return `${baseURI}/assets/${checksummedAddress}/logo.png`
 }
 //#endregion
 
@@ -53,9 +44,19 @@ export interface TokenIconProps extends withClasses<never> {
 export function TokenIcon(props: TokenIconProps) {
     const { address, logoURL, name } = props
     const classes = useStylesExtends(useStyles(), props)
+
+    const chainDetailed = useChainDetailed()
     const tokenBlockie = useBlockie(props.address)
 
-    const { value: trustWalletAssets, loading } = useImageFailover(iconSourceList, IMG_SUFFIX)
+    const { value: baseURI, loading } = useImageFailover(
+        chainDetailed
+            ? [
+                  `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${chainDetailed.fullName.toLowerCase()}`,
+                  `https://rawcdn.githack.com/trustwallet/assets/master/blockchains/${chainDetailed.fullName.toLowerCase()}`,
+              ]
+            : [],
+        '/info/logo.png',
+    )
 
     if (logoURL)
         return (
@@ -66,7 +67,7 @@ export function TokenIcon(props: TokenIconProps) {
     return (
         <Avatar
             className={classes.icon}
-            src={loading ? '' : resolveTokenIconURL(address, trustWalletAssets as string)}
+            src={loading ? '' : resolveTokenIconURL(address, baseURI as string)}
             {...props.AvatarProps}>
             <Avatar className={classes.icon} src={tokenBlockie}>
                 {name?.substr(0, 1).toLocaleUpperCase()}
