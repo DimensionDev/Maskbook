@@ -1,4 +1,5 @@
-import type { TypedMessage, ChainId } from '@dimensiondev/maskbook-shared'
+import type { TypedMessage } from '@dimensiondev/maskbook-shared'
+import type { ChainId } from '@dimensiondev/web3-shared'
 import type { Emitter } from '@servie/events'
 
 export namespace Plugin {

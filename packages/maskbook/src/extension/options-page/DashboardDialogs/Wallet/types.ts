@@ -1,5 +1,5 @@
-import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
+import type { Wallet } from '@dimensiondev/web3-shared'
 
 export interface WalletProps {
-    wallet: WalletRecord
+    wallet: Wallet
 }

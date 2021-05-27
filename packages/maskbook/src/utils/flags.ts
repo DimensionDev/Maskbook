@@ -29,7 +29,7 @@ export const Flags = {
     //#region Experimental features
     image_payload_marked_as_beta: appOnly,
     /** Prohibit the use of test networks in production */
-    wallet_network_strict_mode_enabled: process.env.NODE_ENV === 'production' && !betaOrInsiderOnly,
+    wallet_allow_test_chain: betaOrInsiderOnly || process.env.NODE_ENV !== 'production',
     transak_enabled: webOnly,
     trader_enabled: true,
     trader_zrx_enabled: webOnly,

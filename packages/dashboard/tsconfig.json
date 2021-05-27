@@ -8,6 +8,7 @@
   "references": [
     { "path": "../theme/" },
     { "path": "../maskbook/" },
+    { "path": "../web3-shared/" },
     { "path": "../storybook-shared/" },
     { "path": "../icons/" },
     { "path": "../plugin-infra" }

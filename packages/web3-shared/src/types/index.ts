@@ -6,3 +6,9 @@ export enum ChainId {
     Gorli = 5,
     Kovan = 42,
 }
+export enum WalletProvider {
+    Maskbook = 'Maskbook',
+    MetaMask = 'MetaMask',
+    WalletConnect = 'WalletConnect',
+    CustomNetwork = 'CustomNetwork',
+}

@@ -7,6 +7,7 @@ import {
     currentWalletConnectChainIdSettings,
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
+    currentCustomNetworkChainIdSettings,
 } from '../../../plugins/Wallet/settings'
 import { pollingTask } from '../../../utils/utils'
 import { unreachable } from '@dimensiondev/maskbook-shared'
@@ -55,10 +56,28 @@ effect(() =>
     currentMaskbookChainIdSettings.addListener(() => {
         updateBlockNumber()
         resetAllNonce()
+        WalletMessages.events.chainIdUpdated.sendToAll(undefined)
     }),
 )
-effect(() => currentMetaMaskChainIdSettings.addListener(updateBlockNumber))
-effect(() => currentWalletConnectChainIdSettings.addListener(updateBlockNumber))
+effect(() =>
+    currentMetaMaskChainIdSettings.addListener(() => {
+        updateBlockNumber()
+        WalletMessages.events.chainIdUpdated.sendToAll(undefined)
+    }),
+)
+effect(() =>
+    currentWalletConnectChainIdSettings.addListener(() => {
+        updateBlockNumber()
+        WalletMessages.events.chainIdUpdated.sendToAll(undefined)
+    }),
+)
+
+effect(() =>
+    currentCustomNetworkChainIdSettings.addListener(() => {
+        updateBlockNumber()
+        WalletMessages.events.chainIdUpdated.sendToAll(undefined)
+    }),
+)
 
 // revaldiate if the current wallet was changed
 effect(() => WalletMessages.events.walletsUpdated.on(updateBlockNumber))
@@ -91,7 +110,5 @@ export function getUnsafeChainId(address?: string) {
  */
 export async function getChainId(address?: string) {
     const unsafeChainId = await getUnsafeChainId(address)
-    return unsafeChainId !== ChainId.Mainnet && Flags.wallet_network_strict_mode_enabled
-        ? ChainId.Mainnet
-        : unsafeChainId
+    return unsafeChainId !== ChainId.Mainnet && !Flags.wallet_allow_test_chain ? ChainId.Mainnet : unsafeChainId
 }

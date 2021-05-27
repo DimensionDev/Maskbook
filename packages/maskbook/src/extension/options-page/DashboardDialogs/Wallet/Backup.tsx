@@ -17,12 +17,14 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
     const classes = useBackupDialogStyles()
-    const { value: privateKeyInHex } = useAsync(async () => {
+    const { value: [privateKeyInHex, mnemonic] = ['', []] } = useAsync(async () => {
         if (!wallet) return
-        const { privateKeyInHex } = wallet._private_key_
-            ? await WalletRPC.recoverWalletFromPrivateKey(wallet._private_key_)
-            : await WalletRPC.recoverWalletFromMnemonicWords(wallet.mnemonic, wallet.passphrase)
-        return privateKeyInHex
+        const record = await WalletRPC.getWallet(wallet.address)
+        if (!record) return
+        const { privateKeyInHex } = record._private_key_
+            ? await WalletRPC.recoverWalletFromPrivateKey(record._private_key_)
+            : await WalletRPC.recoverWalletFromMnemonicWords(record.mnemonic, record.passphrase)
+        return [privateKeyInHex, record.mnemonic] as const
     }, [wallet])
 
     return (
@@ -35,9 +37,9 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
                 constraintSecondary={false}
                 content={
                     <>
-                        {Flags.wallet_mnemonic_words_backup_enabled && wallet?.mnemonic.length ? (
+                        {Flags.wallet_mnemonic_words_backup_enabled && mnemonic.length ? (
                             <section className={classes.section}>
-                                <ShowcaseBox title={t('mnemonic_words')}>{wallet.mnemonic.join(' ')}</ShowcaseBox>
+                                <ShowcaseBox title={t('mnemonic_words')}>{mnemonic.join(' ')}</ShowcaseBox>
                             </section>
                         ) : null}
                         {Flags.wallet_private_key_backup_enabled ? (

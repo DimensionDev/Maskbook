@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react'
 import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
 import { CollectibleCard } from './CollectibleCard'
-import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
+import type { Wallet } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { EthereumTokenType } from '../../../../web3/types'
 import { useValueRef } from '../../../../utils/hooks/useValueRef'
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export interface CollectibleListProps {
-    wallet: WalletRecord
+    wallet: Wallet
 }
 
 export function CollectibleList(props: CollectibleListProps) {
