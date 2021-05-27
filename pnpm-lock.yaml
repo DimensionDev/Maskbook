@@ -666,7 +666,7 @@ packages:
     dependencies:
       '@0xproject/utils': 0.3.4
       chalk: 2.4.2
-      glob: 7.1.7
+      glob: 7.1.6
       handlebars: 4.7.7
       lodash: 4.17.21
       mkdirp: 0.5.5
@@ -7812,7 +7812,7 @@ packages:
     resolution: {integrity: sha1-LY4+XQvb1zJ/kbyBT1xXZg+Bgk0=}
     deprecated: Critical security vulnerability fixed in v0.21.1. For more information, see https://github.com/axios/axios/pull/3410
     dependencies:
-      follow-redirects: 1.14.1
+      follow-redirects: 1.14.0
       is-buffer: 1.1.6
     transitivePeerDependencies:
       - debug
@@ -15600,7 +15600,6 @@ packages:
       - bufferutil
       - supports-color
       - utf-8-validate
-    dev: true
 
   /jsesc/0.5.0:
     resolution: {integrity: sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0=}
@@ -19852,7 +19851,7 @@ packages:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
     hasBin: true
     dependencies:
-      glob: 7.1.7
+      glob: 7.1.6
 
   /rimraf/3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
@@ -21175,7 +21174,7 @@ packages:
       dotignore: 0.1.2
       for-each: 0.3.3
       function-bind: 1.1.1
-      glob: 7.1.7
+      glob: 7.1.6
       has: 1.0.3
       inherits: 2.0.4
       is-regex: 1.0.5
@@ -21788,7 +21787,7 @@ packages:
       chalk: 2.4.2
       commander: 2.20.3
       diff: 4.0.2
-      glob: 7.1.7
+      glob: 7.1.6
       js-yaml: 3.14.1
       minimatch: 3.0.4
       mkdirp: 0.5.5

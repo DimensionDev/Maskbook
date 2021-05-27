@@ -11,15 +11,15 @@ import {
     Paper,
     CardHeader,
 } from '@material-ui/core'
+import { RefreshIcon } from '@dimensiondev/icons'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useFetchPool } from '../hooks/usePool'
 import { PoolViewDeck } from './PoolViewDeck'
 import { PoolStats } from './PoolStats'
 import { PerformanceChart } from './PerformanceChart'
 import { useERC20TokenDetailed } from '../../../web3/hooks/useERC20TokenDetailed'
-import StableCoins from '../../../web3/hooks/stables_coins.json'
+import StableCoins from '../../../web3/assets/stables_coins.json'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
-import { RefreshIcon } from '@dimensiondev/icons'
 
 const useStyles = makeStyles((theme) => ({
     root: {
