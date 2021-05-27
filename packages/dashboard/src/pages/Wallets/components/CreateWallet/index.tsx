@@ -3,9 +3,9 @@ import { ButtonGroupTabList, MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { memo, useState } from 'react'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { RefreshIcon } from '@dimensiondev/icons'
-import { MnemonicReveal } from '../../components/Mnemonic'
-import { MaskAlert } from '../../components/MaskAlert'
-import { useDashboardI18N } from '../../locales'
+import { MnemonicReveal } from '../../../../components/Mnemonic'
+import { MaskAlert } from '../../../../components/MaskAlert'
+import { useDashboardI18N } from '../../../../locales'
 
 const Container = styled('div')`
     display: flex;
@@ -98,6 +98,7 @@ export const CreateWallet = memo(() => {
 
     return (
         <Container>
+            ../dashboard/src/pages/Wallets/index.tsx
             <TabContext value={walletTabs.includes(activeTab) ? activeTab : walletTabs[0]}>
                 <ButtonGroupTabContainer>
                     <ButtonGroupTabList
@@ -122,7 +123,6 @@ export const CreateWallet = memo(() => {
                     <PrivateKeyInput />
                 </TabPanel>
             </TabContext>
-
             <ControlContainer>
                 <Button color="secondary">{t.wallets_create_wallet_remember_later()}</Button>
                 <Button color="primary">{t.wallets_create_wallet_verification()}</Button>

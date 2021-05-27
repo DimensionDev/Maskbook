@@ -2,9 +2,9 @@ import { memo, useState } from 'react'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { Button, Tab, experimentalStyled as styled, makeStyles, FilledInput } from '@material-ui/core'
 import { ButtonGroupTabList } from '@dimensiondev/maskbook-theme'
-import { DesktopMnemonicConfirm } from '../../components/Mnemonic'
-import { MaskAlert } from '../../components/MaskAlert'
-import { useDashboardI18N } from '../../locales'
+import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
+import { MaskAlert } from '../../../../components/MaskAlert'
+import { useDashboardI18N } from '../../../../locales'
 
 const Container = styled('div')`
     display: flex;

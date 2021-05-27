@@ -225,7 +225,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             {market ? (
                                 <>
                                     {typeof coin.market_cap_rank === 'number' ? (
-                                        <span className={classes.rank} title="Market Cap Rank">
+                                        <span className={classes.rank} title="Index Cap Rank">
                                             #{coin.market_cap_rank}
                                         </span>
                                     ) : null}
