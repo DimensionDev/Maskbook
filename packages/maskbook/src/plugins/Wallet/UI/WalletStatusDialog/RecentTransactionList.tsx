@@ -67,7 +67,7 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
             <List>
                 {transactions.map((transaction) => (
                     <ListItem className={classes.transaction} key={transaction.hash}>
-                        <Typography variant="body2">{transaction.description}</Typography>
+                        <Typography variant="body2">{transaction.hash}</Typography>
                         <ExternalLink className={classes.linkIcon} size={14} />
                         <Link component="button" className={classes.transactionButton}>
                             {transaction.status === TransactionStatusType.NOT_DEPEND ? (

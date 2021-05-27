@@ -5,7 +5,7 @@ import type {
     ERC20TokenRecordInDatabase,
     ERC721TokenRecordInDatabase,
     PhraseRecordInDatabase,
-    TransactionRecordInDatabase,
+    TransactionChunkRecordInDatabase,
     WalletRecordInDatabase,
 } from './types'
 import { sideEffect } from '../../../utils/side-effects'
@@ -40,7 +40,9 @@ export const createWalletDBAccess = createDBAccess(() => {
                 db.createObjectStore('Phrase', { keyPath: path<keyof PhraseRecordInDatabase>('id') })
             }
             function v7_v8() {
-                db.createObjectStore('Transaction', { keyPath: path<keyof TransactionRecordInDatabase>('record_id') })
+                db.createObjectStore('TransactionChunk', {
+                    keyPath: path<keyof TransactionChunkRecordInDatabase>('record_id'),
+                })
             }
 
             if (oldVersion < 1) v0_v1()
@@ -76,8 +78,8 @@ export interface WalletDB<Data = unknown, Indexes extends [IDBValidKey?, IDBVali
         value: WalletRecordInDatabase
         key: string
     }
-    Transaction: {
-        value: TransactionRecordInDatabase
+    TransactionChunk: {
+        value: TransactionChunkRecordInDatabase
         key: string
     }
     ERC20Token: {
