@@ -1,9 +1,16 @@
-import { Configuration } from 'webpack'
+import type { Configuration } from 'webpack'
+import type { Configuration as DevConfiguration } from 'webpack-dev-server'
 import { join, resolve } from 'path'
 import ReactRefreshTypeScriptTransformer from 'react-refresh-typescript'
 import WatchMissingModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin'
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+
+declare module 'webpack' {
+    interface Configuration {
+        devServer?: DevConfiguration
+    }
+}
 
 type Env = { WEBPACK_BUNDLE: boolean; WEBPACK_BUILD: boolean; WEBPACK_SERVE: boolean }
 export default function Config(env: Env): Configuration {
@@ -58,7 +65,6 @@ export default function Config(env: Env): Configuration {
             // isDev ? new HotModuleReplacementPlugin() : undefined,
             isDev ? new ReactRefreshWebpackPlugin() : undefined,
         ].filter(Boolean),
-        // @ts-ignore
         devServer: {
             hot: isDev,
             hotOnly: isDev,
