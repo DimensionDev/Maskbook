@@ -75,11 +75,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     //#endregion
 
     return (
-        <InjectedDialog
-            open={open}
-            onClose={onClose}
-            title={t('plugin_wallet_select_a_token')}
-            DialogProps={{ maxWidth: 'xs' }}>
+        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_token')} maxWidth="xs">
             <DialogContent>
                 {!disableSearchBar ? (
                     <TextField

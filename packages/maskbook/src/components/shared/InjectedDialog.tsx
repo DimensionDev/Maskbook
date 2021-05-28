@@ -39,14 +39,16 @@ export type InjectedDialogClassKey =
     | 'dialogTitleTypography'
     | 'dialogCloseButton'
     | 'dialogBackdropRoot'
-export interface InjectedDialogProps extends withClasses<InjectedDialogClassKey>, React.PropsWithChildren<{}> {
-    open: boolean
+
+export interface InjectedDialogProps
+    extends withClasses<InjectedDialogClassKey>,
+        Omit<DialogProps, 'onClose' | 'title' | 'classes'> {
     onClose?(): void
     title?: React.ReactChild
-    DialogProps?: Partial<DialogProps>
     disableBackdropClick?: boolean
     disableArrowBack?: boolean
 }
+
 export function InjectedDialog(props: InjectedDialogProps) {
     const classes = useStyles()
     const overwrite = activatedSocialNetworkUI.customization.componentOverwrite || {}
@@ -62,43 +64,44 @@ export function InjectedDialog(props: InjectedDialogProps) {
     } = useStylesExtends(classes, props, overwrite.InjectedDialog?.classes)
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
 
+    const { children, open, disableBackdropClick, disableArrowBack, onClose, title, ...rest } = props
     const { t } = useI18N()
-    const actions = CopyElementWithNewProps(props.children, DialogActions, { root: dialogActions })
-    const content = CopyElementWithNewProps(props.children, DialogContent, { root: dialogContent })
+    const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
+    const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
 
     return usePortalShadowRoot((container) => (
         <Dialog
             container={container}
             fullScreen={fullScreen}
             classes={dialogClasses}
-            open={props.open}
+            open={open}
             scroll="paper"
             fullWidth
             maxWidth="sm"
             disableAutoFocus
             disableEnforceFocus
             onClose={(event, reason) => {
-                if (reason === 'backdropClick' && props.disableBackdropClick) return
-                props.onClose?.()
+                if (reason === 'backdropClick' && disableBackdropClick) return
+                onClose?.()
             }}
-            onBackdropClick={props.disableBackdropClick ? void 0 : props.onClose}
+            onBackdropClick={disableBackdropClick ? void 0 : onClose}
             BackdropProps={{
                 classes: {
                     root: dialogBackdropRoot,
                 },
             }}
-            {...props.DialogProps}>
+            {...rest}>
             <ErrorBoundary>
-                {props.title ? (
+                {title ? (
                     <DialogTitle classes={{ root: dialogTitle }}>
                         <IconButton
                             classes={{ root: dialogCloseButton }}
                             aria-label={t('post_dialog__dismiss_aria')}
-                            onClick={props.onClose}>
-                            <DialogDismissIconUI disableArrowBack={props.disableArrowBack} />
+                            onClick={onClose}>
+                            <DialogDismissIconUI disableArrowBack={disableArrowBack} />
                         </IconButton>
                         <Typography className={dialogTitleTypography} display="inline" variant="inherit">
-                            {props.title}
+                            {title}
                         </Typography>
                     </DialogTitle>
                 ) : null}

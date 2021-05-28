@@ -209,7 +209,7 @@ export function InvestDialog() {
 
     return (
         <div className={classes.root}>
-            <InjectedDialog open={open} onClose={onClose} title={pool.name} DialogProps={{ maxWidth: 'xs' }}>
+            <InjectedDialog open={open} onClose={onClose} title={pool.name} maxWidth="xs">
                 <DialogContent>
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel

@@ -86,6 +86,7 @@ export interface PostDialogUIProps extends withClasses<never> {
     DialogProps?: Partial<DialogProps>
     SelectRecipientsUIProps?: Partial<SelectRecipientsUIProps>
 }
+
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()

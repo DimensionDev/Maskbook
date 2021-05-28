@@ -73,11 +73,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
     }, [provider])
 
     return (
-        <InjectedDialog
-            open={open}
-            onClose={closeDialog}
-            title={t('plugin_trader_swap_settings')}
-            DialogProps={{ maxWidth: 'xs' }}>
+        <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_trader_swap_settings')} maxWidth="xs">
             <DialogContent className={classes.content}>
                 <Paper component="section" elevation={0}>
                     <Card elevation={0}>

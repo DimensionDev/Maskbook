@@ -1,4 +1,4 @@
-import { makeStyles, Box, TextField, DialogProps, CircularProgress, Typography } from '@material-ui/core'
+import { makeStyles, Box, TextField, CircularProgress, Typography } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
 import UnCheckIcon from '@material-ui/icons/Close'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
@@ -94,7 +94,6 @@ export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
     onNext: () => void
     origin?: PoolSettings
-    dateDialogProps: Partial<DialogProps>
 }
 
 export function CreateForm(props: CreateFormProps) {

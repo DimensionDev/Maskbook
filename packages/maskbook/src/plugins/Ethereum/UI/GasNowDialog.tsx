@@ -1,17 +1,17 @@
-import { DialogContent, makeStyles, Theme, List, ListItem, Typography, TextField, Skeleton } from '@material-ui/core'
-import classNames from 'classnames'
-import { EthereumMessages } from '../messages'
-import { useRemoteControlledDialog, useI18N } from '../../../utils'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { currentGasNowSettings, currentGasPriceSettings } from '../../Wallet/settings'
-import { useAssets } from '../../Wallet/hooks/useAssets'
+import { formatWeiToGwei, useValueRef } from '@dimensiondev/maskbook-shared'
+import { EthereumTokenType, GasNow } from '@dimensiondev/web3-shared'
+import { DialogContent, List, ListItem, makeStyles, Skeleton, TextField, Theme, Typography } from '@material-ui/core'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-import { useValueRef, formatWeiToGwei } from '@dimensiondev/maskbook-shared'
-import { GasNow, EthereumTokenType } from '@dimensiondev/web3-shared'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { useMemo, useState, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
+import classNames from 'classnames'
+import { useCallback, useMemo, useState } from 'react'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { useAssets } from '../../Wallet/hooks/useAssets'
+import { currentGasNowSettings, currentGasPriceSettings } from '../../Wallet/settings'
+import { EthereumMessages } from '../messages'
 
 const useStyles = makeStyles((theme: Theme) => ({
     content: {},
@@ -143,11 +143,7 @@ export function GasNowDialog() {
     }, [customGasToWei, options, select, setDialog])
 
     return (
-        <InjectedDialog
-            open={open}
-            onClose={closeDialog}
-            title={t('plugin_gas_now_dialog_title')}
-            DialogProps={{ maxWidth: 'xl' }}>
+        <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_gas_now_dialog_title')} maxWidth="xl">
             <DialogContent className={classes.content}>
                 <List className={classes.list}>
                     {options.map((option, i) => (

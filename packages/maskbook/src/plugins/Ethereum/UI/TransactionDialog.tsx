@@ -80,7 +80,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
 
     if (!state) return null
     return (
-        <InjectedDialog open={open} onClose={closeDialog} title={title} DialogProps={{ maxWidth: 'xs' }}>
+        <InjectedDialog open={open} onClose={closeDialog} title={title} maxWidth="xs">
             <DialogContent className={classes.content}>
                 {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ? (
                     <>

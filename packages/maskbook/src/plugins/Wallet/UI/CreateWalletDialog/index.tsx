@@ -126,13 +126,7 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
     )
 
     return (
-        <InjectedDialog
-            open={open}
-            onClose={onClose}
-            title={t('plugin_wallet_setup_title_create')}
-            DialogProps={{
-                maxWidth: 'sm',
-            }}>
+        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_setup_title_create')} maxWidth="sm">
             <DialogContent className={classes.content}>
                 {step === CreateWalletStep.NameAndWords && (
                     <StepNameAndWords

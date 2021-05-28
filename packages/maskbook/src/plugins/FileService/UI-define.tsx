@@ -10,15 +10,7 @@ import type { FileInfo } from './types'
 
 export const [FileServiceCompositionEntry, FileServiceCompositionUI] = createCompositionDialog(
     '📃 File Service',
-    (props) => (
-        <FileServiceDialog
-            // classes={classes}
-            // DialogProps={props.DialogProps}
-            open={props.open}
-            onConfirm={props.onClose}
-            onDecline={props.onClose}
-        />
-    ),
+    (props) => <FileServiceDialog open={props.open} onConfirm={props.onClose} onDecline={props.onClose} />,
 )
 export const FileServicePluginDefine: PluginConfig = {
     id: identifier,
