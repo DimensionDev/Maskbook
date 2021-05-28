@@ -1,11 +1,17 @@
 import { useCallback } from 'react'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
-import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import Services from '../../../extension/service'
-import { TransactionEventType } from '@dimensiondev/web3-shared'
+import {
+    TransactionEventType,
+    TransactionStateType,
+    useGasPrice,
+    useNonce,
+    useTransactionState,
+} from '@dimensiondev/web3-shared'
 
 export function useRefundCallback(from: string, id?: string) {
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const [refundState, setRefundState] = useTransactionState()
     const redPacketContract = useRedPacketContract()
 
@@ -23,17 +29,21 @@ export function useRefundCallback(from: string, id?: string) {
         })
 
         // estimate gas and compose transaction
-        const config = await Services.Ethereum.composeTransaction({
+        const config = {
             from,
-            to: redPacketContract.options.address,
-            data: redPacketContract.methods.refund(id).encodeABI(),
-        }).catch((error) => {
-            setRefundState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
-            throw error
-        })
+            gas: await redPacketContract.methods
+                .refund(id)
+                .estimateGas()
+                .catch((error) => {
+                    setRefundState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    throw error
+                }),
+            gasPrice,
+            nonce,
+        }
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {

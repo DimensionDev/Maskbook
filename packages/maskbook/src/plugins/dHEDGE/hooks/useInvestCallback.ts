@@ -1,10 +1,16 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import { FungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
+import {
+    FungibleTokenDetailed,
+    EthereumTokenType,
+    useAccount,
+    useTransactionState,
+    TransactionStateType,
+    useNonce,
+    useGasPrice,
+} from '@dimensiondev/web3-shared'
 import { addGasMargin } from '@dimensiondev/web3-shared'
-import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useDHedgePoolContract } from '../contracts/useDHedgePool'
-import { useAccount } from '../../../web3/hooks/useAccount'
 
 /**
  * A callback for invest dhedge pool
@@ -16,6 +22,8 @@ export function useInvestCallback(address: string, amount: string, token?: Fungi
     const poolContract = useDHedgePoolContract(address)
 
     const account = useAccount()
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const [investState, setInvestState] = useTransactionState()
 
     const investCallback = useCallback(async () => {
@@ -34,8 +42,9 @@ export function useInvestCallback(address: string, amount: string, token?: Fungi
         // step 1: estimate gas
         const config = {
             from: account,
-            to: poolContract.options.address,
             value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
+            gasPrice,
+            nonce,
         }
         const estimatedGas = await poolContract.methods
             .deposit(amount)
@@ -72,7 +81,7 @@ export function useInvestCallback(address: string, amount: string, token?: Fungi
                 },
             )
         })
-    }, [address, account, amount, token])
+    }, [gasPrice, nonce, address, account, amount, token])
 
     const resetCallback = useCallback(() => {
         setInvestState({

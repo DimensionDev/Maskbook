@@ -1,7 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useChainId } from '../../../web3/hooks/useChainId'
-import { getChainDetailed } from '@dimensiondev/web3-shared'
-import { useAccount } from '../../../web3/hooks/useAccount'
+import { getChainDetailed, useAccount, useChainId } from '@dimensiondev/web3-shared'
 import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'

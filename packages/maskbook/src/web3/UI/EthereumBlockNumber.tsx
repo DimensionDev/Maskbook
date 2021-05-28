@@ -1,7 +1,6 @@
+import { useBlockNumber } from '@dimensiondev/web3-shared'
 import { makeStyles, Typography, TypographyProps } from '@material-ui/core'
 import { useI18N } from '../../utils'
-import { useChainId } from '../hooks/useChainId'
-import { useBlockNumber } from '../hooks/useBlockNumber'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,10 +16,8 @@ export interface EthereumBlockNumberProps {
 }
 
 export function EthereumBlockNumber(props: EthereumBlockNumberProps) {
-    const classes = useStyles()
     const { t } = useI18N()
-
-    const chainId = useChainId()
+    const classes = useStyles()
     const blockNumber = useBlockNumber()
 
     return (

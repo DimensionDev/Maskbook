@@ -8,12 +8,9 @@ import type { RedPacketJSONPayload } from './types'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import RedPacketDialog from './UI/RedPacketDialog'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
-import { ChainState } from '../../web3/state/useChainState'
 
 export const [RedPacketCompositionEntry, RedPacketCompositionUI] = createCompositionDialog('💰 Red Packet', (props) => (
-    <ChainState.Provider>
-        <RedPacketDialog open={props.open} onConfirm={props.onClose} onClose={props.onClose} />
-    </ChainState.Provider>
+    <RedPacketDialog open={props.open} onConfirm={props.onClose} onClose={props.onClose} />
 ))
 export const RedPacketPluginDefine: PluginConfig = {
     id: RedPacketPluginID,
@@ -28,9 +25,7 @@ export const RedPacketPluginDefine: PluginConfig = {
         if (!RedPacketMetadataReader(props.message.meta).ok) return null
         return (
             <MaskbookPluginWrapper pluginName="Red Packet">
-                <ChainState.Provider>
-                    <RedPacketInspector {...props} />
-                </ChainState.Provider>
+                <RedPacketInspector {...props} />
             </MaskbookPluginWrapper>
         )
     },

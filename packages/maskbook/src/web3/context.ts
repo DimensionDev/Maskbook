@@ -5,13 +5,15 @@ import Services from '../extension/service'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
+    currentGasPriceSettings,
+    currentNonceSettings,
     currentSelectedWalletAddressSettings,
     currentSelectedWalletNetworkSettings,
     currentSelectedWalletProviderSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils/flags'
 import type { InternalSettings } from '../settings/createSettings'
-import { createExternalProvider } from './web3'
+import { createExternalProvider } from './helpers'
 
 export const Web3Context: Web3ProviderType = {
     provider: {
@@ -29,6 +31,8 @@ export const Web3Context: Web3ProviderType = {
     ),
     account: createSubscriptionFromSettings(currentSelectedWalletAddressSettings),
     blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
+    nonce: createSubscriptionFromSettings(currentNonceSettings),
+    gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
     wallets: createSubscriptionAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
     providerType: createSubscriptionFromSettings(currentSelectedWalletProviderSettings),
     networkType: createSubscriptionFromSettings(currentSelectedWalletNetworkSettings),

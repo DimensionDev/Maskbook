@@ -8,8 +8,8 @@ import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogFT } from '../DashboardDialogs/Wallet'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainIdValid } from '../../../web3/hooks/useChainId'
+import { useAccount } from '@dimensiondev/web3-shared'
+import { useChainIdValid } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     more: {

@@ -73,9 +73,23 @@ export const currentCollectibleDataProviderSettings = createGlobalSettings<Colle
 )
 
 /**
- * The block number state
+ * Block number
  */
 export const currentBlockNumberSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+blockNumber`, 0, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+/**
+ * Nonce
+ */
+export const currentNonceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+nonce`, 0, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+/**
+ * Gas Price
+ */
+export const currentGasPriceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+gasPrice`, 0, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 

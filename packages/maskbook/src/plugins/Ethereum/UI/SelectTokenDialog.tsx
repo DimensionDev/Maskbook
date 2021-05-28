@@ -5,9 +5,9 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { WalletMessages } from '../../Wallet/messages'
-import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
+import { useNativeTokenDetailed } from '@dimensiondev/web3-shared'
 import { delay, useRemoteControlledDialog, useI18N } from '../../../utils'
-import { useChainDetailed } from '../../../web3/hooks/useChainDetailed'
+import { useChainDetailed } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme: Theme) => ({
     search: {

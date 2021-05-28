@@ -16,12 +16,11 @@ import {
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { FungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
-import type { TokenWatched } from '../../../web3/hooks/useTokenWatched'
+import { FungibleTokenDetailed, EthereumTokenType, useAccount } from '@dimensiondev/web3-shared'
+import type { TokenWatched } from '@dimensiondev/web3-shared'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
-import { ChainState } from '../../../web3/state/useChainState'
 import { toAsset, toUnixTimestamp } from '../helpers'
 import type { useAsset } from '../hooks/useAsset'
 import { isNative } from '@dimensiondev/web3-shared'
@@ -68,7 +67,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
-    const { account } = ChainState.useContainer()
+    const account = useAccount()
 
     const [scheduleTime, setScheduleTime] = useState(new Date())
     const [expirationTime, setExpirationTime] = useState(new Date())

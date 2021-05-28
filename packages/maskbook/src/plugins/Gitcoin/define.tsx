@@ -8,7 +8,6 @@ import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import { GITCOIN_PLUGIN_ID } from './constants'
 import { DonateDialog } from './UI/DonateDialog'
 import { PreviewCard } from './UI/PreviewCard'
-import { ChainState } from '../../web3/state/useChainState'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
@@ -35,18 +34,10 @@ export const GitcoinPluginDefine: PluginConfig = {
         return <Renderer url={link} />
     },
     PageComponent() {
-        return (
-            <ChainState.Provider>
-                <DonateDialog />
-            </ChainState.Provider>
-        )
+        return <DonateDialog />
     },
     DashboardComponent() {
-        return (
-            <ChainState.Provider>
-                <DonateDialog />
-            </ChainState.Provider>
-        )
+        return <DonateDialog />
     },
 }
 

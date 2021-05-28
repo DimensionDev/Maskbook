@@ -4,7 +4,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { getConstant } from '@dimensiondev/web3-shared'
 import { CONSTANTS } from '@dimensiondev/web3-shared'
 import { useBlockie } from '../../../web3/hooks/useBlockie'
-import { useChainDetailed } from '../../../web3/hooks/useChainDetailed'
+import { useChainDetailed } from '@dimensiondev/web3-shared'
 import { useImageFailover } from '../../../utils/hooks/useImageFailover'
 
 //#region fix icon image

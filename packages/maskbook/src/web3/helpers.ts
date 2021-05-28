@@ -1,8 +1,13 @@
-import type Web3 from 'web3'
-import type { AbiOutput } from 'web3-utils'
+import Services from '../extension/service'
 
-export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
-    if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)
-    if (abis.length > 1) return web3.eth.abi.decodeParameters(abis, output)
-    return
+export function createExternalProvider() {
+    return {
+        isMetaMask: false,
+        isStatus: true,
+        host: '',
+        path: '',
+        sendAsync: Services.Ethereum.requestSend,
+        send: Services.Ethereum.requestSend,
+        request: Services.Ethereum.request,
+    }
 }

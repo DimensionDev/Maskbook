@@ -631,21 +631,31 @@ importers:
 
   packages/web3-shared:
     specifiers:
+      '@dimensiondev/contracts': workspace:*
       '@dimensiondev/maskbook-shared': workspace:*
       '@types/use-subscription': ^1.0.0
       bignumber.js: 9.0.1
+      lodash-es: ^4.17.21
+      react-use: ^17.2.4
       unstated-next: ^1.1.0
       use-subscription: ^1.5.1
+      wallet.ts: ^1.0.1
       web3: ^1.3.6
       web3-core: ^1.3.6
+      web3-utils: ^1.3.6
     dependencies:
+      '@dimensiondev/contracts': link:../contracts
       '@dimensiondev/maskbook-shared': link:../shared
       '@types/use-subscription': 1.0.0
       bignumber.js: 9.0.1
+      lodash-es: 4.17.21
+      react-use: 17.2.4
       unstated-next: 1.1.0
       use-subscription: 1.5.1
+      wallet.ts: 1.0.1
       web3: 1.3.6
       web3-core: 1.3.6
+      web3-utils: 1.3.6
 
 packages:
 
@@ -2423,6 +2433,12 @@ packages:
     resolution: {integrity: sha512-NCdgJEelPTSh+FEFylhnP1ylq848l1z9t9N0j1Lfbcw0+KXGjsTvUmkxy+voLLXB5SOKMbLLx4jxYliGrYQseA==}
     dependencies:
       regenerator-runtime: 0.13.7
+
+  /@babel/runtime/7.14.0:
+    resolution: {integrity: sha512-JELkvo/DlpNdJ7dlyw/eY7E0suy5i5GQH+Vlxaq1nsNJ+H7f4Vtv3jMeCEgRhZZQFXTjldYfQgv2qmM6M1v5wA==}
+    dependencies:
+      regenerator-runtime: 0.13.7
+    dev: false
 
   /@babel/template/7.12.13:
     resolution: {integrity: sha512-/7xxiGA57xMo/P2GVvdEumr8ONhFOhfgq2ihK3h1e6THqzTAkHbkXgB0xI9yeTfIUoH3+oAeHhqm/I43OTbbjA==}
@@ -17299,7 +17315,7 @@ packages:
       rtl-css-js: 1.14.1
       sourcemap-codec: 1.4.8
       stacktrace-js: 2.0.2
-      stylis: 4.0.9
+      stylis: 4.0.10
     dev: false
 
   /nano-json-stream-parser/0.1.2:
@@ -20063,7 +20079,7 @@ packages:
   /rtl-css-js/1.14.1:
     resolution: {integrity: sha512-G9N1s/6329FpJr8k9e1U/Lg0IDWThv99sb7k0IrXHjSnubxe01h52/ajsPRafJK1/2Vqrhz3VKLe3E1dx6jS9Q==}
     dependencies:
-      '@babel/runtime': 7.13.17
+      '@babel/runtime': 7.14.0
     dev: false
 
   /run-async/2.4.1:
@@ -21206,6 +21222,10 @@ packages:
       '@styled-system/variant': 5.1.5
       object-assign: 4.1.1
     dev: true
+
+  /stylis/4.0.10:
+    resolution: {integrity: sha512-m3k+dk7QeJw660eIKRRn3xPF6uuvHs/FFzjX3HQ5ove0qYsiygoAhwn5a3IYKaZPo5LrYD0rfVmtv1gNY1uYwg==}
+    dev: false
 
   /stylis/4.0.9:
     resolution: {integrity: sha512-ci7pEFNVW3YJiWEzqPOMsAjY6kgraZ3ZgBfQ5HYbNtLJEsQ0G46ejWZpfSSCp/FaSiCSGGhzL9O2lN+2cB6ong==}

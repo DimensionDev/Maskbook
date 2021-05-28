@@ -1,5 +1,4 @@
-import { useNativeTokenWrapperCallback } from '../../../../web3/hooks/useNativeTokenWrapperCallback'
-import { EthereumTokenType } from '@dimensiondev/web3-shared'
+import { EthereumTokenType, useNativeTokenWrapperCallback } from '@dimensiondev/web3-shared'
 import { TradeComputed, TradeStrategy } from '../../types'
 import type { NativeTokenWrapper } from './useTradeComputed'
 

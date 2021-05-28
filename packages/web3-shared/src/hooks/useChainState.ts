@@ -7,6 +7,8 @@ export function useChainState() {
     const account = useSubscription(_.account)
     const allowTestChain = useSubscription(_.allowTestChain)
     const blockNumber = useSubscription(_.blockNumber)
+    const nonce = useSubscription(_.nonce)
+    const gasPrice = useSubscription(_.gasPrice)
     const providerType = useSubscription(_.providerType)
     const networkType = useSubscription(_.networkType)
     const wallets = useSubscription(_.wallets)
@@ -14,6 +16,8 @@ export function useChainState() {
     const chainDetailed = CHAINS.find((x) => x.chainId === chainId)
     return {
         account,
+        nonce,
+        gasPrice,
         blockNumber,
         providerType,
         networkType,

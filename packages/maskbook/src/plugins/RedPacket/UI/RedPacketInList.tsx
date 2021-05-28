@@ -4,7 +4,7 @@ import { useI18N } from '../../../utils'
 import type { RedPacketJSONPayload } from '../types'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { formatElapsed } from '../../Wallet/formatter'
-import { useTokenDetailed } from '../../../web3/hooks/useTokenDetailed'
+import { useTokenDetailed } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme: Theme) => ({
     primary: {

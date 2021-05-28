@@ -1,21 +1,30 @@
 import { useCallback, useState } from 'react'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
-import { useAccount } from '../../../../web3/hooks/useAccount'
-import { useChainId } from '../../../../web3/hooks/useChainId'
-import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
+import {
+    EthereumTokenType,
+    TransactionEventType,
+    TransactionState,
+    TransactionStateType,
+    useAccount,
+    useChainId,
+    useConstant,
+    useGasPrice,
+    useNonce,
+    useWeb3,
+} from '@dimensiondev/web3-shared'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import type { ExchangeProxy } from '@dimensiondev/contracts/types/ExchangeProxy'
 import { SLIPPAGE_TOLERANCE_DEFAULT, TRADE_CONSTANTS } from '../../constants'
-import { EthereumTokenType, TransactionEventType } from '@dimensiondev/web3-shared'
-import { useConstant } from '../../../../web3/hooks/useConstant'
 import { useTradeAmount } from './useTradeAmount'
-import Services from '../../../../extension/service'
 
 export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,
     exchangeProxyContract: ExchangeProxy | null,
     allowedSlippage = SLIPPAGE_TOLERANCE_DEFAULT,
 ) {
+    const web3 = useWeb3()
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const BALANCER_ETH_ADDRESS = useConstant(TRADE_CONSTANTS, 'BALANCER_ETH_ADDRESS')
@@ -87,18 +96,23 @@ export function useTradeCallback(
             transactionValue = trade.outputAmount.toFixed()
 
         // send transaction and wait for hash
-        const config = await Services.Ethereum.composeTransaction({
+        const config = {
             from: account,
-            to: exchangeProxyContract.options.address,
+            gas: await tx
+                .estimateGas({
+                    value: transactionValue,
+                })
+                .catch((error: Error) => {
+                    setTradeState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    throw error
+                }),
+            gasPrice,
+            nonce,
             value: transactionValue,
-            data: tx.encodeABI(),
-        }).catch((error: Error) => {
-            setTradeState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
-            throw error
-        })
+        }
 
         // send transaction and wait for hash
         return new Promise<void>((resolve, reject) => {
@@ -127,7 +141,7 @@ export function useTradeCallback(
                     reject(error)
                 })
         })
-    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS])
+    }, [web3, nonce, gasPrice, chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS])
 
     const resetCallback = useCallback(() => {
         setTradeState({

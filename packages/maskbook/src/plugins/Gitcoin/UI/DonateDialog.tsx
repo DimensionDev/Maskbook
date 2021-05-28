@@ -6,12 +6,18 @@ import { v4 as uuid } from 'uuid'
 
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { FungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
+import {
+    FungibleTokenDetailed,
+    EthereumTokenType,
+    useAccount,
+    useNativeTokenDetailed,
+    useChainId,
+} from '@dimensiondev/web3-shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
-import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
+import { TransactionStateType } from '@dimensiondev/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
@@ -20,11 +26,10 @@ import { PluginGitcoinMessages } from '../messages'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { useConstant } from '../../../web3/hooks/useConstant'
+import { useConstant } from '@dimensiondev/web3-shared'
 import { GITCOIN_CONSTANT } from '../constants'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { ChainState } from '../../../web3/state/useChainState'
-import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
+import { useTokenBalance } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -59,7 +64,9 @@ export function DonateDialog(props: DonateDialogProps) {
     const [address, setAddress] = useState('')
 
     // context
-    const { account, chainId, nativeTokenDetailed } = ChainState.useContainer()
+    const account = useAccount()
+    const chainId = useChainId()
+    const nativeTokenDetailed = useNativeTokenDetailed()
     const BULK_CHECKOUT_ADDRESS = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
 
     //#region remote controlled dialog

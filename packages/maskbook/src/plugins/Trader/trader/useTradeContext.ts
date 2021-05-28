@@ -1,6 +1,6 @@
 import { createContext, useMemo } from 'react'
 import { TradeContext as TradeContext_, TradeProvider } from '../types'
-import { useChainId } from '../../../web3/hooks/useChainId'
+import { useChainId } from '@dimensiondev/web3-shared'
 import {
     SUSHISWAP_BASE_AGAINST_TOKENS,
     SUSHISWAP_CUSTOM_BASES,

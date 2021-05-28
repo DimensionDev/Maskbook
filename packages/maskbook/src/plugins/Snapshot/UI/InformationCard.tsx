@@ -9,7 +9,7 @@ import { TokenIcon } from '../../../extension/options-page/DashboardComponents/T
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
 import { resolveAddressLinkOnExplorer, resolveBlockLinkOnExplorer, resolveIPFSLink } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { useChainId } from '../../../web3/hooks/useChainId'
+import { useChainId } from '@dimensiondev/web3-shared'
 
 import { SnapshotContext } from '../context'
 import { useProposal } from '../hooks/useProposal'

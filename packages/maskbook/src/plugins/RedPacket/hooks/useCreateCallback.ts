@@ -3,10 +3,16 @@ import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
-import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { FungibleTokenDetailed, EthereumTokenType, TransactionEventType } from '@dimensiondev/web3-shared'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import Services from '../../../extension/service'
+import {
+    FungibleTokenDetailed,
+    EthereumTokenType,
+    TransactionEventType,
+    TransactionStateType,
+    useAccount,
+    useTransactionState,
+    useNonce,
+    useGasPrice,
+} from '@dimensiondev/web3-shared'
 
 export interface RedPacketSettings {
     password: string
@@ -20,6 +26,8 @@ export interface RedPacketSettings {
 }
 
 export function useCreateCallback(redPacketSettings: RedPacketSettings) {
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const account = useAccount()
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract()
@@ -78,18 +86,23 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
         ]
 
         // estimate gas and compose transaction
-        const config = await Services.Ethereum.composeTransaction({
+        const value = new BigNumber(token.type === EthereumTokenType.Native ? total : '0').toFixed()
+        const config = {
             from: account,
-            to: redPacketContract.options.address,
-            value: new BigNumber(token.type === EthereumTokenType.Native ? total : '0').toFixed(),
-            data: redPacketContract.methods.create_red_packet(...params).encodeABI(),
-        }).catch((error) => {
-            setCreateState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
-            throw error
-        })
+            value,
+            gas: await redPacketContract.methods
+                .create_red_packet(...params)
+                .estimateGas()
+                .catch((error) => {
+                    setCreateState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    throw error
+                }),
+            gasPrice,
+            nonce,
+        }
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
@@ -121,7 +134,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                     reject(error)
                 })
         })
-    }, [account, redPacketContract, redPacketSettings])
+    }, [nonce, gasPrice, account, redPacketContract, redPacketSettings])
 
     const resetCallback = useCallback(() => {
         setCreateState({

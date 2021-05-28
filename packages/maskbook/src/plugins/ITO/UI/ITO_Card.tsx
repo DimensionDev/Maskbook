@@ -7,7 +7,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
+import { TransactionStateType } from '@dimensiondev/web3-shared'
 import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { formatBalance } from '@dimensiondev/maskbook-shared'

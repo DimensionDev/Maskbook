@@ -7,7 +7,7 @@ import { Messages, PluginMessages, PluginServices, Services } from '../API'
 export const Web3Context: Web3ProviderType = {
     provider: {
         getCurrentValue: createExternalProvider,
-        subscribe: () => noop
+        subscribe: () => noop,
     },
     allowTestChain: createSubscriptionAsync(
         Services.Settings.getWalletAllowTestChain,
@@ -36,6 +36,16 @@ export const Web3Context: Web3ProviderType = {
         Messages.events.createInternalSettingsChanged.on,
     ),
     blockNumber: createSubscriptionAsync(
+        Services.Settings.getBlockNumber,
+        0,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    nonce: createSubscriptionAsync(
+        Services.Settings.getBlockNumber,
+        0,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    gasPrice: createSubscriptionAsync(
         Services.Settings.getBlockNumber,
         0,
         Messages.events.createInternalSettingsChanged.on,

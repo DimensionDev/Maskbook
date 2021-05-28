@@ -2,8 +2,7 @@ import { useAsyncRetry } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import type { Qualification } from '@dimensiondev/contracts/types/Qualification'
 import QualificationABI from '@dimensiondev/contracts/abis/Qualification.json'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { useContract } from '../../../web3/hooks/useContract'
+import { useAccount, useContract } from '@dimensiondev/web3-shared'
 
 export function useQualification(qualification_address: string) {
     const account = useAccount()

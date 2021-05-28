@@ -1,11 +1,10 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '../../../web3/hooks/useAccount'
+import { useAccount } from '@dimensiondev/web3-shared'
 import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
 
 export function useMaskITO_Packet() {
     const account = useAccount()
     const MaskITO_Contract = useMaskITO_Contract()
-
     return useAsyncRetry(async () => {
         if (!MaskITO_Contract) return
         const [unlockTime, claimable = '0'] = await Promise.all([

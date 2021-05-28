@@ -8,7 +8,7 @@ import { ChainId } from '@dimensiondev/web3-shared'
 import { Markdown } from '../../Snapshot/UI/Markdown'
 import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea } from '../pipes'
-import { useChainId } from '../../../web3/hooks/useChainId'
+import { useChainId } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => {
     return {

@@ -12,11 +12,11 @@ import {
     Typography,
 } from '@material-ui/core'
 import { useTransactions } from '../../../../plugins/Wallet/hooks/useTransactions'
-import { useAccount } from '../../../../web3/hooks/useAccount'
+import { useAccount } from '@dimensiondev/web3-shared'
 import { Row } from './Row'
 import { useMemo, useState } from 'react'
 import { FilterTransactionType } from '../../../../plugins/Wallet/types'
-import { useChainId } from '../../../../web3/hooks/useChainId'
+import { useChainId } from '@dimensiondev/web3-shared'
 import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles(() => ({

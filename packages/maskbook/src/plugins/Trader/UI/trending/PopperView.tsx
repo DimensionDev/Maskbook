@@ -18,8 +18,7 @@ import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType } from '@dimensiondev/web3-shared'
-import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
+import { EthereumTokenType, useTokenDetailed } from '@dimensiondev/web3-shared'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 
 const useStyles = makeStyles((theme) => {

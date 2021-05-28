@@ -2,7 +2,7 @@ import { PluginSnapshotRPC } from '../messages'
 import type { VoteItemList, ProposalIdentifier, VoteItem } from '../types'
 import { useSuspense } from '../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
-import { useBlockNumber } from '../../../web3/hooks/useBlockNumber'
+import { useBlockNumberOnce } from '@dimensiondev/web3-shared'
 
 const cache = new Map<string, [0, Promise<void>] | [1, VoteItemList] | [2, Error]>()
 export function votesRetry() {
@@ -14,7 +14,7 @@ export function useVotes(identifier: ProposalIdentifier) {
     return useSuspense<VoteItemList, [ProposalIdentifier]>(identifier.id, [identifier], cache, Suspender)
 }
 async function Suspender(identifier: ProposalIdentifier) {
-    const blockNumber = useBlockNumber()
+    const blockNumber = useBlockNumberOnce()
     const {
         payload: { message },
     } = useProposal(identifier.id)

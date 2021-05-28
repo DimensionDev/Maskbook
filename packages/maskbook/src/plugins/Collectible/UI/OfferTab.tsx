@@ -8,7 +8,7 @@ import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
-import { ChainState } from '../../../web3/state/useChainState'
+import { useAccount } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -39,7 +39,7 @@ export function OfferTab() {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const { account } = ChainState.useContainer()
+    const account = useAccount()
     const { asset, token, provider, offers, offerPage, setOfferPage } = CollectibleState.useContainer()
 
     const isDifferenceToken = useMemo(() => {
