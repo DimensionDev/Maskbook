@@ -3,7 +3,7 @@ import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import Services from '../extension/service'
 
 // Learn more about external provider. Please check https://eips.ethereum.org/EIPS/eip-1193
-function createExternalProvider() {
+export function createExternalProvider() {
     return {
         isMetaMask: false,
         isStatus: true,

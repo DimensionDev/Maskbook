@@ -1,10 +1,14 @@
 import { NetworkType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
+import { pick, noop } from 'lodash-es'
+import type { Subscription } from 'use-subscription'
 import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
 import { Messages, PluginMessages, PluginServices, Services } from '../API'
-import { pick } from 'lodash-es'
-import type { Subscription } from 'use-subscription'
 
 export const Web3Context: Web3ProviderType = {
+    provider: {
+        getCurrentValue: createExternalProvider,
+        subscribe: () => noop
+    },
     allowTestChain: createSubscriptionAsync(
         Services.Settings.getWalletAllowTestChain,
         false,
@@ -36,6 +40,18 @@ export const Web3Context: Web3ProviderType = {
         0,
         Messages.events.createInternalSettingsChanged.on,
     ),
+}
+
+export function createExternalProvider() {
+    return {
+        isMetaMask: false,
+        isStatus: true,
+        host: '',
+        path: '',
+        request: Services.Ethereum.request,
+        send: Services.Ethereum.requestSend,
+        sendAsync: Services.Ethereum.requestSend,
+    }
 }
 
 async function getWallets() {
