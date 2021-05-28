@@ -13,7 +13,7 @@ import {
     UpgradeBackupJSONFile,
 } from '../../../../utils'
 import Services from '../../../service'
-import AbstractTab, { AbstractTabProps } from '../../DashboardComponents/AbstractTab'
+import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import ActionButton from '../../DashboardComponents/ActionButton'
 import { RestoreFromBackupBox } from '../../DashboardComponents/RestoreFromBackupBox'
 import { DashboardDialogWrapper } from '../Base'

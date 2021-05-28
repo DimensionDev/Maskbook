@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NonFungibleTokenDetailed, EthereumTokenType } from '../types'
+import { NonFungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
 import { useTokenBalance } from './useTokenBalance'
 import { useTokenDetailed } from './useTokenDetailed'
 import { useTokenAssetDetailed } from './useTokenAssetDetailed'

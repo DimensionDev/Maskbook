@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
-import { FungibleTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType, TransactionEventType } from '@dimensiondev/web3-shared'
 import { useConstant } from '../../../web3/hooks/useConstant'
 import { GITCOIN_CONSTANT } from '../constants'
 import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'

@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from 'react'
 import { makeStyles, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { FormattedBalance } from '@dimensiondev/maskbook-shared'
+import { createERC20Token } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { BreakdownDialog } from '../../components/InjectedComponents/BreakdownDialog'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
@@ -9,7 +10,6 @@ import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { CONSTANTS } from '../constants'
 import { useConstant } from '../hooks/useConstant'
 import { useERC20TokenBalance } from '../hooks/useERC20TokenBalance'
-import { createERC20Token } from '../helpers'
 import { useChainId } from '../hooks/useChainId'
 
 const useStyles = makeStyles((theme) => {
@@ -17,10 +17,6 @@ const useStyles = makeStyles((theme) => {
         root: {
             borderRadius: 16,
             fontWeight: 300,
-            backgroundColor: '#1C68F3',
-            '&:hover, &:active': {
-                backgroundColor: '#1C68F3',
-            },
         },
         icon: {
             border: `solid 1px ${theme.palette.common.white}`,

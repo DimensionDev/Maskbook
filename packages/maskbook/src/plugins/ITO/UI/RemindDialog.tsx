@@ -4,11 +4,11 @@ import { Typography, Link, Checkbox, makeStyles, FormControlLabel } from '@mater
 import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import type { FungibleTokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
-import { resolveLinkOnExplorer } from '../../../web3/pipes'
-import type { ChainId } from '../../../web3/types'
+import { resolveLinkOnExplorer } from '@dimensiondev/web3-shared'
+import type { ChainId } from '@dimensiondev/web3-shared'
 import { SwapStatus } from './SwapGuide'
 
 const useStyles = makeStyles((theme) => ({

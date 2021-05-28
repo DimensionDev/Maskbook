@@ -1,5 +1,5 @@
 import stringify from 'json-stable-stringify'
-import { getConstant } from '../../../../web3/helpers'
+import { getConstant } from '@dimensiondev/web3-shared'
 import { TRENDING_CONSTANTS } from '../../constants'
 import { getChainId } from '../../../../extension/background-script/EthereumService'
 import { chunk, first, flatten } from 'lodash-es'

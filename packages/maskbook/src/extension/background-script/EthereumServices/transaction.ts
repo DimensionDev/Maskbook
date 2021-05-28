@@ -1,7 +1,7 @@
 import { pickBy } from 'lodash-es'
 import type { TransactionConfig } from 'web3-core'
 import { toHex } from 'web3-utils'
-import { addGasMargin } from '../../../web3/helpers'
+import { addGasMargin } from '@dimensiondev/web3-shared'
 import { getNonce } from './nonce'
 import { estimateGas, getGasPrice } from './network'
 import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'

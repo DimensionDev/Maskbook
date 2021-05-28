@@ -2,7 +2,7 @@ import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { HttpProvider, TransactionConfig } from 'web3-core'
 import { createWeb3 } from './web3'
 import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
-import { EthereumMethodType, ProviderType } from '../../../web3/types'
+import { EthereumMethodType, ProviderType } from '@dimensiondev/web3-shared'
 import { commitNonce, resetNonce } from './nonce'
 import { getWalletCached } from './wallet'
 

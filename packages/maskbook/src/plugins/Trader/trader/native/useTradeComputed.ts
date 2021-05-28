@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { FungibleTokenDetailed, EthereumTokenType } from '../../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
 import { TradeComputed, TradeStrategy } from '../../types'
 
 const ZERO = new BigNumber(0)

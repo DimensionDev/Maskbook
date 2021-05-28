@@ -1,6 +1,6 @@
 import { useChainId } from '../../../web3/hooks/useChainId'
-import { resolveChainName } from '../../../web3/pipes'
-import { ChainId, EthereumNetwork, EthereumTokenType } from '../../../web3/types'
+import { resolveChainName } from '@dimensiondev/web3-shared'
+import { ChainId, EthereumNetwork, EthereumTokenType } from '@dimensiondev/web3-shared'
 import { RED_PACKET_CONSTANTS, RED_PACKET_CONTRACT_VERSION } from '../constants'
 import type { History, RedPacketJSONPayload } from '../types'
 import { useRedPacketsFromDB } from './useRedPacket'

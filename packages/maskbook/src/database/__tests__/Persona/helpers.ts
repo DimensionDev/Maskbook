@@ -187,17 +187,6 @@ test('queryPrivateKey', async () => {
     expect(await queryPrivateKey(personaRecord.identifier)).toEqual(privateKey)
 })
 
-test('createPersonaByMnemonic & createPersonaByJsonWebKey', async () => {
-    // getBalance will be called in the event chain reaction
-    nonFunctionalWeb3.eth.getBalance = async () => '0'
-
-    const identifier = await createPersonaByMnemonic('test', 'test')
-    const persona = await queryPersonaDB(identifier)
-    expect(persona?.identifier).toEqual(identifier)
-    expect(persona?.nickname).toEqual('test')
-    expect(persona?.mnemonic?.parameter.withPassword).toEqual(true)
-})
-
 test('createProfileWithPersona', async () => {
     const profileRecord = await createProfileRecord()
     const personaRecord = await createPersonaRecord()

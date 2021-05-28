@@ -4,7 +4,7 @@ import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { WalletRecordIntoDB, ERC1155TokenRecordIntoDB, getWalletByAddress } from './helpers'
-import type { ERC1155TokenDetailed } from '../../../web3/types'
+import type { ERC1155TokenDetailed } from '@dimensiondev/web3-shared'
 
 export async function getERC1155Tokens() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC1155Token', 'Wallet')

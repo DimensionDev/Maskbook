@@ -5,7 +5,7 @@ import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../constants'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import type { FungibleTokenDetailed } from '../types'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { useI18N } from '../../utils'
 
 const useStyles = makeStyles((theme) => {

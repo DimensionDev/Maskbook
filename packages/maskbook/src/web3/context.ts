@@ -1,10 +1,15 @@
+import { noop, pick } from 'lodash-es'
+import type { Subscription } from 'use-subscription'
 import { ChainId, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
 import Services from '../extension/service'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
-import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../plugins/Wallet/settings'
-import { noop, pick } from 'lodash-es'
-import { Flags } from '../utils'
-import type { Subscription } from 'use-subscription'
+import {
+    currentBlockNumberSettings,
+    currentSelectedWalletAddressSettings,
+    currentSelectedWalletNetworkSettings,
+    currentSelectedWalletProviderSettings,
+} from '../plugins/Wallet/settings'
+import { Flags } from '../utils/flags'
 import type { InternalSettings } from '../settings/createSettings'
 
 export const Web3Context: Web3ProviderType = {
@@ -12,14 +17,16 @@ export const Web3Context: Web3ProviderType = {
         getCurrentValue: () => Flags.wallet_allow_test_chain,
         subscribe: () => noop,
     },
-    currentChain: createSubscriptionAsync(
+    chainId: createSubscriptionAsync(
         Services.Ethereum.getChainId,
         ChainId.Mainnet,
         WalletMessages.events.chainIdUpdated.on,
     ),
-    walletProvider: createSubscriptionFromSettings(currentSelectedWalletProviderSettings),
+    account: createSubscriptionFromSettings(currentSelectedWalletAddressSettings),
+    blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
     wallets: createSubscriptionAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
-    selectedWalletAddress: createSubscriptionFromSettings(currentSelectedWalletAddressSettings),
+    providerType: createSubscriptionFromSettings(currentSelectedWalletProviderSettings),
+    networkType: createSubscriptionFromSettings(currentSelectedWalletNetworkSettings),
 }
 
 async function getWallets() {

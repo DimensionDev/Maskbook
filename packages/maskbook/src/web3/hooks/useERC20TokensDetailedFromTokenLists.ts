@@ -1,11 +1,10 @@
 import { useMemo } from 'react'
 import Fuse from 'fuse.js'
+import { EthereumTokenType, isSameAddress } from '@dimensiondev/web3-shared'
 import Services from '../../extension/service'
 import { useAsync } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
-import { isSameAddress } from '../helpers'
 import { useChainId } from './useChainId'
-import { EthereumTokenType } from '../types'
 import { useERC20TokenDetailed } from './useERC20TokenDetailed'
 
 export enum TokenListsState {

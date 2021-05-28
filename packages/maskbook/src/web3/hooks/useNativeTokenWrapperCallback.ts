@@ -5,7 +5,7 @@ import { useNativeTokenWrapperContract } from '../contracts/useWrappedEtherContr
 import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import Services from '../../extension/service'
-import { TransactionEventType } from '../types'
+import { TransactionEventType } from '@dimensiondev/web3-shared'
 
 export function useNativeTokenWrapperCallback() {
     const account = useAccount()

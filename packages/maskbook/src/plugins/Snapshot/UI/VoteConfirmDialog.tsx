@@ -13,10 +13,10 @@ import {
 import millify from 'millify'
 import OpenInNew from '@material-ui/icons/OpenInNew'
 import type { ProposalMessage } from '../types'
-import { resolveBlockLinkOnExplorer } from '../../../web3/pipes'
+import { resolveBlockLinkOnExplorer } from '@dimensiondev/web3-shared'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { ChainId } from '../../../web3/types'
+import { ChainId } from '@dimensiondev/web3-shared'
 import { InfoField } from './InformationCard'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 

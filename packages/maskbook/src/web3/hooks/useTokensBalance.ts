@@ -1,3 +1,4 @@
+import { ChainId } from '@dimensiondev/web3-shared'
 import { useAsyncRetry } from 'react-use'
 import { useBalanceCheckerContract } from '../contracts/useBalanceChecker'
 import { useAccount } from './useAccount'
@@ -13,6 +14,7 @@ export function useTokensBalance(listOfAddress: string[]) {
     const chainId = useChainId()
     const balanceCheckerContract = useBalanceCheckerContract()
     return useAsyncRetry(async () => {
+        if (chainId !== ChainId.Mainnet) return []
         if (!account || !balanceCheckerContract || !listOfAddress.length) return []
         return balanceCheckerContract.methods.balances([account], listOfAddress).call({
             // cannot check the sender's balance in the same contract

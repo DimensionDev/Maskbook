@@ -1,6 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { CollectibleToken, NFTHistory } from '../types'
-import { CollectibleProvider, OpenSeaAssetEventType } from '../types'
+import { CollectibleToken, NFTHistory, CollectibleProvider, OpenSeaAssetEventType } from '../types'
 import { PluginCollectibleRPC } from '../messages'
 import { NullAddress, NullContractAddress, OpenSeaAccountURL } from '../constants'
 import { toRaribleImage, toTokenIdentifier } from '../helpers'

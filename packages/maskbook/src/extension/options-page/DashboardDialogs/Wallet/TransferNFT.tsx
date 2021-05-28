@@ -8,7 +8,7 @@ import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 import { useTokenTransferCallback } from '../../../../web3/hooks/useTokenTransferCallback'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import type { ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '../../../../web3/types'
+import type { ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '@dimensiondev/web3-shared'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 

@@ -4,7 +4,7 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { ERC721TokenRecord } from '../database/types'
 import { ERC721TokenArrayComparer } from '../helpers'
 import { useWallet } from './useWallet'
-import { ERC721TokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { ERC721TokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
 
 //#region cache service query result
 const erc721TokensRef = new ValueRef<ERC721TokenRecord[]>([], ERC721TokenArrayComparer)

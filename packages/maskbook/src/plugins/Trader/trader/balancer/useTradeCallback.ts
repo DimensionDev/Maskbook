@@ -6,7 +6,7 @@ import { TransactionState, TransactionStateType } from '../../../../web3/hooks/u
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import type { ExchangeProxy } from '@dimensiondev/contracts/types/ExchangeProxy'
 import { SLIPPAGE_TOLERANCE_DEFAULT, TRADE_CONSTANTS } from '../../constants'
-import { EthereumTokenType, TransactionEventType } from '../../../../web3/types'
+import { EthereumTokenType, TransactionEventType } from '@dimensiondev/web3-shared'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import { useTradeAmount } from './useTradeAmount'
 import Services from '../../../../extension/service'

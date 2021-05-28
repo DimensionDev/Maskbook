@@ -1,12 +1,11 @@
 import { useCallback } from 'react'
 import { EthereumAddress } from 'wallet.ts'
+import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+import { TransactionEventType, isSameAddress } from '@dimensiondev/web3-shared'
 import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
-import { isSameAddress } from '../helpers'
 import Services from '../../extension/service'
-import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
-import { TransactionEventType } from '../types'
 
 export function useERC721TokenTransferCallback(address: string, tokenId?: string, recipient?: string) {
     const account = useAccount()

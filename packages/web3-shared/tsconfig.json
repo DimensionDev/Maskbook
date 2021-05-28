@@ -4,8 +4,9 @@
     "rootDir": "./src/",
     "outDir": "./dist/"
   },
-  "include": ["./src/"],
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.json"],
   "ts-node": {
     "compilerOptions": { "module": "CommonJS" }
-  }
+  },
+  "references": [{ "path": "../shared/" }]
 }

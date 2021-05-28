@@ -11,7 +11,7 @@ import {
     currentCustomNetworkChainIdSettings,
 } from '../plugins/Wallet/settings'
 import { startEffects } from '../utils/side-effects'
-import { ChainId, ProviderType } from '../web3/types'
+import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
 import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 
 const effect = startEffects(module.hot)

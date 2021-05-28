@@ -4,7 +4,7 @@ import type { Pair } from '@uniswap/sdk'
 import { toUniswapChainId, toUniswapToken } from '../../helpers'
 import { usePairs, TokenPair, PairState } from './usePairs'
 import { useChainId } from '../../../../web3/hooks/useChainId'
-import type { FungibleTokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { useUniswapToken } from './useUniswapToken'
 import { TradeContext } from '../useTradeContext'
 

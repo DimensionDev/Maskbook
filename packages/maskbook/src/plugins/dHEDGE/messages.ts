@@ -1,4 +1,4 @@
-import type { FungibleTokenDetailed } from '../../web3/types'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { DHEDGE_PLUGIN_ID } from './constants'

@@ -14,8 +14,8 @@ import {
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
 } from '../../../../plugins/Wallet/settings'
-import { ChainId, TransactionEventType } from '../../../../web3/types'
-import { ProviderType } from '../../../../web3/types'
+import { ChainId, TransactionEventType } from '@dimensiondev/web3-shared'
+import { ProviderType } from '@dimensiondev/web3-shared'
 
 let connector: WalletConnect | null = null
 

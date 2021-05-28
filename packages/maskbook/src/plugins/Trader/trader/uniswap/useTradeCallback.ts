@@ -2,11 +2,11 @@ import { useCallback, useState } from 'react'
 import type { SwapParameters, Trade } from '@uniswap/sdk'
 import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
-import { addGasMargin } from '../../../../web3/helpers'
+import { addGasMargin } from '@dimensiondev/web3-shared'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
 import type { TradeComputed } from '../../types'
 import type { RouterV2 } from '@dimensiondev/contracts/types/RouterV2'
-import { TransactionEventType } from '../../../../web3/types'
+import { TransactionEventType } from '@dimensiondev/web3-shared'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 
 interface SuccessfulCall {

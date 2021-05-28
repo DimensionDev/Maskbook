@@ -6,15 +6,12 @@ import { useAccount } from './useAccount'
 import Services from '../../extension/service'
 import { useChainId } from './useChainId'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
-import { useConstant } from './useConstant'
-import { CONSTANTS } from '../constants'
 import { nonFunctionalWeb3 } from '../web3'
 
 export function useNativeTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const account = useAccount()
     const chainId = useChainId()
     const [transferState, setTransferState] = useTransactionState()
-    const PROVIDER_ADDRESS_LIST = useConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST')
 
     const transferCallback = useCallback(async () => {
         if (!account || !recipient || !amount || new BigNumber(amount).isZero()) {
@@ -81,7 +78,7 @@ export function useNativeTransferCallback(amount?: string, recipient?: string, m
                 }
             })
         })
-    }, [account, amount, chainId, recipient, memo, PROVIDER_ADDRESS_LIST])
+    }, [account, amount, chainId, recipient, memo])
 
     const resetCallback = useCallback(() => {
         setTransferState({

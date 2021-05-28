@@ -23,6 +23,7 @@ import { ChainState } from '../../../web3/state/useChainState'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
 import { Trans } from 'react-i18next'
+
 const useStyles = makeStyles((theme) => {
     return {
         content: {

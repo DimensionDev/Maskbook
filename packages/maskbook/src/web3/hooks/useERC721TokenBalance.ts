@@ -1,6 +1,6 @@
+import { useAsyncRetry } from 'react-use'
 import { useAccount } from './useAccount'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
-import { useAsyncRetry } from 'react-use'
 import { useChainId } from './useChainId'
 import { useBlockNumber } from './useBlockNumber'
 

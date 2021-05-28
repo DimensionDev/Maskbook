@@ -7,10 +7,17 @@ import { Asset, CollectibleProvider, BalanceRecord, PortfolioProvider, ZerionAdd
 import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
 import * as DebankAPI from '../apis/debank'
-import { CurrencyType } from '../../../web3/types'
-import { ChainId, EthereumTokenType } from '../../../web3/types'
-import { createERC1155Token, createERC721Token, createNativeToken, getConstant } from '../../../web3/helpers'
-import { CONSTANTS } from '../../../web3/constants'
+import { CurrencyType } from '@dimensiondev/web3-shared'
+import { ChainId, EthereumTokenType } from '@dimensiondev/web3-shared'
+import {
+    createERC1155Token,
+    createERC20Token,
+    createERC721Token,
+    createNativeToken,
+    getConstant,
+} from '@dimensiondev/web3-shared'
+import { CONSTANTS } from '@dimensiondev/web3-shared'
+import { getChainDetailed, resolveChainId } from '@dimensiondev/web3-shared'
 
 export async function getAssetsListNFT(
     address: string,
@@ -67,8 +74,7 @@ export async function getAssetsListNFT(
     }
 }
 
-export async function getAssetsList(address: string, chainId: ChainId, provider: PortfolioProvider): Promise<Asset[]> {
-    if (chainId !== ChainId.Mainnet) return []
+export async function getAssetsList(address: string, provider: PortfolioProvider): Promise<Asset[]> {
     if (!EthereumAddress.isValid(address)) return []
     switch (provider) {
         case PortfolioProvider.ZERION:
@@ -87,21 +93,20 @@ export async function getAssetsList(address: string, chainId: ChainId, provider:
 }
 
 function formatAssetsFromDebank(data: BalanceRecord[]) {
-    return data.map(
-        (x): Asset => ({
+    return data.map((x): Asset => {
+        const chainId = resolveChainId(x.id)
+        return {
             chain: x.chain,
             token:
-                x.id === 'eth'
-                    ? createNativeToken(ChainId.Mainnet)
-                    : {
-                          // distinguish token type
-                          type: EthereumTokenType.ERC20,
-                          address: formatEthereumAddress(x.id),
-                          chainId: ChainId.Mainnet,
-                          name: x.name,
-                          symbol: x.symbol,
-                          decimals: x.decimals,
-                      },
+                chainId && getChainDetailed(chainId)?.network === 'mainnet'
+                    ? createNativeToken(resolveChainId(x.id) ?? ChainId.Mainnet)
+                    : createERC20Token(
+                          resolveChainId(x.chain) ?? ChainId.Mainnet,
+                          formatEthereumAddress(x.id),
+                          x.decimals,
+                          x.name,
+                          x.symbol,
+                      ),
             balance: new BigNumber(x.balance).toFixed(),
             price: {
                 [CurrencyType.USD]: new BigNumber(x.price).toFixed(),
@@ -112,8 +117,8 @@ function formatAssetsFromDebank(data: BalanceRecord[]) {
                     .toFixed(),
             },
             logoURL: x.logo_url,
-        }),
-    )
+        }
+    })
 }
 
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']

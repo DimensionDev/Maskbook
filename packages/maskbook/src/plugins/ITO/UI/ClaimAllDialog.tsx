@@ -9,7 +9,7 @@ import { useClaimCallback } from '../hooks/useClaimCallback'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { resolveTransactionLinkOnExplorer } from '../../../web3/pipes'
+import { resolveTransactionLinkOnExplorer } from '@dimensiondev/web3-shared'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import formatDateTime from 'date-fns/format'
 import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
@@ -22,10 +22,6 @@ const useStyles = makeStyles((theme) => ({
     actionButton: {
         margin: '0 auto',
         minHeight: 'auto',
-        backgroundColor: '#1C68F3',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
         width: '100%',
         fontSize: 18,
         fontWeight: 400,
@@ -191,11 +187,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         </List>
                         <EthereumWalletConnectedBoundary>
                             <ActionButton
-                                onClick={onClaimButtonClick}
+                                className={classes.actionButton}
                                 variant="contained"
                                 disabled={claimablePids!.length === 0}
                                 size="large"
-                                className={classes.actionButton}>
+                                onClick={onClaimButtonClick}>
                                 {t('plugin_ito_claim_all')}
                             </ActionButton>
                         </EthereumWalletConnectedBoundary>

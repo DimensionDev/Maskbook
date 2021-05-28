@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core'
+import { formatBalance, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { PostInspector } from './UI/PostInspector'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { ITO_MetaKey, ITO_PluginID } from './constants'
 import type { JSON_PayloadOutMask } from './types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
@@ -9,7 +9,6 @@ import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { createCompositionDialog } from '../utils/createCompositionDialog'
 import { CompositionDialog } from './UI/CompositionDialog'
 import { ItoLabelIcon } from './assets/ItoLabelIcon'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { ChainState } from '../../web3/state/useChainState'
 
 interface LabelWrapperProps {

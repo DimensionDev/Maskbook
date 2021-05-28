@@ -1,8 +1,9 @@
 import { useRef } from 'react'
 import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
-import { useMatchXS, extendsTheme, useI18N, Flags } from '../../../utils'
+import { Appearance, Language } from '@dimensiondev/maskbook-theme'
 
+import { useMatchXS, extendsTheme, useI18N, Flags } from '../../../utils'
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
 import {
     debugModeSetting,
@@ -15,7 +16,6 @@ import {
     newDashboardConnection,
 } from '../../../settings/settings'
 import { LaunchPage } from '../../../settings/types'
-import { Appearance, Language } from '@dimensiondev/maskbook-theme'
 
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'
@@ -31,6 +31,7 @@ import LanguageIcon from '@material-ui/icons/Language'
 import WifiIcon from '@material-ui/icons/Wifi'
 import LaunchIcon from '@material-ui/icons/Launch'
 import NewIcon from '@material-ui/icons/NewReleases'
+
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
@@ -40,10 +41,11 @@ import {
     resolveTradeProviderName,
 } from '../../../plugins/Trader/pipes'
 import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
-import { ChainId } from '../../../web3/types'
+import { ChainId } from '@dimensiondev/web3-shared'
 import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
 import { PortfolioProvider } from '../../../plugins/Wallet/types'
 import { currentPortfolioDataProviderSettings, currentMaskbookChainIdSettings } from '../../../plugins/Wallet/settings'
+import { resolveChainName } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -197,6 +199,7 @@ export default function DashboardSettingsRouter() {
                                     <SettingsUIEnum
                                         classes={listStyle}
                                         enumObject={ChainId}
+                                        getText={resolveChainName}
                                         icon={<WifiIcon />}
                                         value={currentMaskbookChainIdSettings}
                                     />

@@ -10,7 +10,7 @@ import { SwapDialog, SwapDialogProps } from './SwapDialog'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { UnlockDialog } from './UnlockDialog'
-import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { ERC20TokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
 
 export enum SwapStatus {
     Remind,

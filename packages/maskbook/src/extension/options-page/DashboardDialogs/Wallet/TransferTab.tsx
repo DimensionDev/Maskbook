@@ -9,8 +9,8 @@ import { formatBalance, formatEthereumAddress } from '@dimensiondev/maskbook-sha
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { useTokenTransferCallback } from '../../../../web3/hooks/useTokenTransferCallback'
 import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import type { FungibleTokenDetailed } from '../../../../web3/types'
-import { EthereumTokenType } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import { EthereumTokenType } from '@dimensiondev/web3-shared'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 
 const useTransferTabStyles = makeStyles((theme) => ({

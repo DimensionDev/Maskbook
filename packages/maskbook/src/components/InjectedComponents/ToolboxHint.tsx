@@ -25,9 +25,9 @@ import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/sett
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useChainId } from '../../web3/hooks/useChainId'
-import { ChainId } from '../../web3/types'
+import { ChainId } from '@dimensiondev/web3-shared'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-import { resolveChainColor } from '../../web3/pipes'
+import { resolveChainColor } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     paper: {

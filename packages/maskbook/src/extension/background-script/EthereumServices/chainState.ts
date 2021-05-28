@@ -11,8 +11,8 @@ import {
 } from '../../../plugins/Wallet/settings'
 import { pollingTask } from '../../../utils/utils'
 import { unreachable } from '@dimensiondev/maskbook-shared'
-import { isSameAddress } from '../../../web3/helpers'
-import { ChainId, ProviderType } from '../../../web3/types'
+import { isSameAddress } from '@dimensiondev/web3-shared'
+import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
 import { getBlockNumber } from './network'
 import { startEffects } from '../../../utils/side-effects'
 import { Flags } from '../../../utils/flags'
@@ -99,7 +99,7 @@ export function getUnsafeChainId(address?: string) {
     if (provider === ProviderType.Maskbook) return currentMaskbookChainIdSettings.value
     if (provider === ProviderType.MetaMask) return currentMetaMaskChainIdSettings.value
     if (provider === ProviderType.WalletConnect) return currentWalletConnectChainIdSettings.value
-    if (provider === ProviderType.CustomNetwork) return currentWalletConnectChainIdSettings.value
+    if (provider === ProviderType.CustomNetwork) return currentMaskbookChainIdSettings.value
     unreachable(provider)
 }
 

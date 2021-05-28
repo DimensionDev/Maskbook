@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
+import type { ERC721Token } from '@dimensiondev/web3-shared'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
-import type { ERC721Token } from '../types'
 import { useAccount } from './useAccount'
 import { useERC721TokenBalance } from './useERC721TokenBalance'
 import { useSingleContractMultipleData } from './useMulticall'

@@ -4,8 +4,8 @@ import { isNil } from 'lodash-es'
 import { Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import { Record } from './Record'
 import type { Transaction } from '../../../../plugins/Wallet/types'
-import { resolveLinkOnExplorer } from '../../../../web3/pipes'
-import type { ChainId } from '../../../../web3/types'
+import { resolveLinkOnExplorer } from '@dimensiondev/web3-shared'
+import type { ChainId } from '@dimensiondev/web3-shared'
 
 interface Props {
     chainId: ChainId

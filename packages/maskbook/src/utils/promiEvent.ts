@@ -1,7 +1,7 @@
 import { EventIterator } from 'event-iterator'
 import PromiEvent from 'promievent'
 import type { PromiEvent as PromiEventW3, TransactionReceipt } from 'web3-core'
-import { TransactionEventType } from '../web3/types'
+import { TransactionEventType } from '@dimensiondev/web3-shared'
 
 export enum StageType {
     TRANSACTION_HASH = 0,

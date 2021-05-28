@@ -7,11 +7,11 @@ import {
     useERC20TokensDetailedFromTokenLists,
 } from '../../../web3/hooks/useERC20TokensDetailedFromTokenLists'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { CONSTANTS } from '../../../web3/constants'
+import { CONSTANTS } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { isSameAddress } from '../../../web3/helpers'
+import { isSameAddress } from '@dimensiondev/web3-shared'
 import { TokenInList } from './TokenInList'
-import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     list: {},

@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { ERC721TokenAssetDetailed, ERC721TokenDetailed } from '../types'
+import type { ERC721TokenAssetDetailed, ERC721TokenDetailed } from '@dimensiondev/web3-shared'
 
 export function useERC721TokenAssetDetailed(token?: ERC721TokenDetailed) {
     return useAsyncRetry(async () => {
