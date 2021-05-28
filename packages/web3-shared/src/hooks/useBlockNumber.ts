@@ -1,5 +1,5 @@
-import { useWeb3Context } from './context'
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useWeb3Context } from '../context'
 
 /**
  * Get the current block number
