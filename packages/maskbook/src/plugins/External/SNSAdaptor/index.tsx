@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import { ExternalPluginLoader } from '../components/Container'
 import type { ExternalPluginLoadDetails } from '../types'
 import { base } from '../base'
+import { ThirdPartyPluginCompositionEntry } from '../components/CompositionEntry'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -23,6 +24,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             </Suspense>
         )
     },
+    CompositionDialogEntry: { label: '🧩 Third party plugins', dialog: ThirdPartyPluginCompositionEntry },
 }
 
 export default sns
