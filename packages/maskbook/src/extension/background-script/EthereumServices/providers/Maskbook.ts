@@ -36,7 +36,7 @@ function createWeb3Instance(provider: HttpProvider) {
     return (
         instancePool.get(provider.host) ??
         (() => {
-            const newInstance = new Web3()
+            const newInstance = new Web3(provider)
             instancePool.set(provider.host, newInstance)
             return newInstance
         })()
