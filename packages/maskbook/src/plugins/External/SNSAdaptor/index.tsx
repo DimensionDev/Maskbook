@@ -25,6 +25,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
         )
     },
     CompositionDialogEntry: { label: '🧩 Third party plugins', dialog: ThirdPartyPluginCompositionEntry },
+    CompositionDialogMetadataBadgeRender: (key, val) =>
+        key.startsWith('plugin:')
+            ? {
+                  text: `A 3rd party plugin (${key})`,
+                  tooltip: `It's inner content: ${JSON.stringify(val)}`,
+              }
+            : null,
 }
 
 export default sns
