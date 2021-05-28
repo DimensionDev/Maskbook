@@ -1,5 +1,4 @@
-import { MaskMessage, startEffect } from '../../utils'
-
+import './reactions'
 const bindingContext = new Set<string>()
 export type ThirdPartyPopupContextIdentifier = string & { __brand__: 'context' }
 /**
@@ -15,14 +14,6 @@ export function createThirdPartyPopupContext(): ThirdPartyPopupContextIdentifier
     bindingContext.add(id)
     return id
 }
-function isLocalContext(x: string): x is ThirdPartyPopupContextIdentifier {
+export function isLocalContext(x: string): x is ThirdPartyPopupContextIdentifier {
     return bindingContext.has(x)
 }
-
-startEffect(module.hot, () => {
-    return MaskMessage.events.thirdPartyPing.on((data) => {
-        if (isLocalContext(data.context)) {
-            MaskMessage.events.thirdPartyPong.sendToContentScripts(data.challenge)
-        }
-    })
-})

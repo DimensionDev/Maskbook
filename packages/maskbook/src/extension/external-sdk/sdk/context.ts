@@ -1,3 +1,4 @@
+import type { ThirdPartyPopupContextIdentifier } from '../../../plugins/External/popup-context'
 import { MaskMessage } from '../../../utils'
 import { currentPopupContext, SDKErrors } from '../constant'
 
@@ -10,19 +11,19 @@ export async function __assertLocalContext() {
 export function __validateRemoteContext() {
     if (isContextDisconnected) return Promise.reject(new Error(SDKErrors.M2_Context_disconnected))
 
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<ThirdPartyPopupContextIdentifier>((resolve, reject) => {
         if (!currentPopupContext) throw onContextDisconnected()
         const challenge = Math.random()
         const f = MaskMessage.events.thirdPartyPong.on((i) => {
             if (i !== challenge) return
-            resolve()
+            resolve(currentPopupContext!)
             f()
         })
         MaskMessage.events.thirdPartyPing.sendToContentScripts({
             context: currentPopupContext,
             challenge,
         })
-        setTimeout(() => reject(onContextDisconnected), 2000)
+        setTimeout(() => reject(onContextDisconnected()), 2000)
     })
 }
 

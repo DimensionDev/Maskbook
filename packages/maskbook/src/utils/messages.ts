@@ -53,6 +53,11 @@ export interface MaskMessages {
     // When a SNS page get this event, if it know this context, it should response the challenge with pong.
     thirdPartyPing: { context: ThirdPartyPopupContextIdentifier; challenge: number }
     thirdPartyPong: number
+    thirdPartySetPayload: {
+        payload: Record<string, unknown>
+        appendText: string
+        context: ThirdPartyPopupContextIdentifier
+    }
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })
