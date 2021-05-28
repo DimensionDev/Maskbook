@@ -1,5 +1,5 @@
-import type { ERC20TokenDetailed, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
-import { ChainId, EthereumTokenType, WalletProvider } from '@dimensiondev/web3-shared'
+import { NetworkType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
+import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
 import { Messages, PluginMessages, PluginServices, Services } from '../API'
 import { pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
@@ -10,23 +10,27 @@ export const Web3Context: Web3ProviderType = {
         false,
         Messages.events.createInternalSettingsChanged.on,
     ),
-    currentChain: createSubscriptionAsync(
+    chainId: createSubscriptionAsync(
         Services.Ethereum.getChainId,
         ChainId.Mainnet,
         PluginMessages.Wallet.events.chainIdUpdated.on,
     ),
-    walletProvider: createSubscriptionAsync(
+    providerType: createSubscriptionAsync(
         Services.Settings.getCurrentSelectedWalletProvider,
-        WalletProvider.Maskbook,
+        ProviderType.Maskbook,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    networkType: createSubscriptionAsync(
+        Services.Settings.getCurrentSelectedWalletNetwork,
+        NetworkType.Ethereum,
         Messages.events.createInternalSettingsChanged.on,
     ),
     wallets: createSubscriptionAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
-    selectedWalletAddress: createSubscriptionAsync(
+    account: createSubscriptionAsync(
         Services.Settings.getSelectedWalletAddress,
         '',
         Messages.events.createInternalSettingsChanged.on,
     ),
-    erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
     blockNumber: createSubscriptionAsync(
         Services.Settings.getBlockNumber,
         0,
@@ -48,14 +52,6 @@ async function getWallets() {
             'erc721_token_blacklist',
         ] as (keyof typeof record)[]),
         hasPrivateKey: Boolean(record._private_key_ || record.mnemonic.length),
-    }))
-}
-
-async function getERC20Tokens() {
-    const raw = await PluginServices.Wallet.getERC20Tokens()
-    return raw.map<ERC20TokenDetailed>((x) => ({
-        type: EthereumTokenType.ERC20,
-        ...x,
     }))
 }
 

@@ -12,6 +12,7 @@ import { queryMyPersonas } from './IdentityService'
 import {
     currentBlockNumberSettings,
     currentSelectedWalletAddressSettings,
+    currentSelectedWalletNetworkSettings,
     currentSelectedWalletProviderSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
@@ -29,6 +30,7 @@ function create<T>(settings: InternalSettings<T>) {
 }
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
+export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentTrendingDataProviderSettings)
 export const [getAncientPostsCompatibiltyMode, setAncientPostsCompatibiltyMode] = create(
     disableOpenNewTabInBackgroundSettings,
@@ -38,7 +40,9 @@ export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider
     currentSelectedWalletProviderSettings,
 )
 
-export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
+export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(
+    currentSelectedWalletNetworkSettings,
+)
 
 export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentSelectedWalletAddressSettings)
 
