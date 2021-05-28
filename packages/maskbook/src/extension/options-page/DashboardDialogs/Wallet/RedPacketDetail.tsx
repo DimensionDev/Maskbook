@@ -4,7 +4,7 @@ import { useRedPacketFromDB } from '../../../../plugins/RedPacket/hooks/useRedPa
 import type { RedPacketJSONPayload } from '../../../../plugins/RedPacket/types'
 import { RedPacket } from '../../../../plugins/RedPacket/UI/RedPacket'
 import { isSameAddress } from '@dimensiondev/web3-shared'
-import { useAccount } from '../../../../web3/hooks/useAccount'
+import { useAccount } from '@dimensiondev/web3-shared'
 import ActionButton from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import WalletLine from '../WalletLine'

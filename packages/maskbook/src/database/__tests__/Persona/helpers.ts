@@ -1,6 +1,5 @@
 import { v4 as uuid } from 'uuid'
 import {
-    createPersonaByMnemonic,
     queryPersona,
     profileRecordToProfile,
     personaRecordToPersona,
@@ -19,7 +18,6 @@ import {
 import { queryPersonaDB, createProfileDB, createPersonaDB, queryProfileDB } from '../../Persona/Persona.db'
 import { createPersonaRecord, createProfileRecord, personaDBWriteAccess } from './Persona.db'
 import { storeAvatarDB } from '../../avatar'
-import { nonFunctionalWeb3 } from '../../../web3/web3'
 
 beforeAll(() => {
     // MessageCenter will dispatch events on each tab

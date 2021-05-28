@@ -1,15 +1,21 @@
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { TransactionEventType } from '@dimensiondev/web3-shared'
+import {
+    TransactionEventType,
+    TransactionStateType,
+    useAccount,
+    useGasPrice,
+    useNonce,
+    useTransactionState,
+} from '@dimensiondev/web3-shared'
 import type { AirdropPacket } from '../apis'
 import { useAirdropContract } from '../contracts/useAirdropContract'
-import Services from '../../../extension/service'
 
 export function useClaimCallback(packet?: AirdropPacket) {
     const account = useAccount()
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const AirdropContract = useAirdropContract()
 
     const [claimState, setClaimState] = useTransactionState()
@@ -53,17 +59,21 @@ export function useClaimCallback(packet?: AirdropPacket) {
         const claimParams: Parameters<typeof AirdropContract['methods']['claim']> = [index, packet.amount, proof]
 
         // estimate gas and compose transaction
-        const config = await Services.Ethereum.composeTransaction({
+        const config = {
             from: account,
-            to: AirdropContract.options.address,
-            data: AirdropContract.methods.claim(...claimParams).encodeABI(),
-        }).catch((error) => {
-            setClaimState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
-            throw error
-        })
+            gas: await AirdropContract.methods
+                .claim(...claimParams)
+                .estimateGas()
+                .catch((error) => {
+                    setClaimState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    throw error
+                }),
+            gasPrice,
+            nonce,
+        }
 
         // send transaction
         return new Promise<void>((resolve, reject) => {
@@ -89,7 +99,7 @@ export function useClaimCallback(packet?: AirdropPacket) {
                 .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
                 .on(TransactionEventType.CONFIRMATION, onSucceed)
         })
-    }, [AirdropContract, account, packet])
+    }, [nonce, gasPrice, AirdropContract, account, packet])
 
     const resetCallback = useCallback(() => {
         setClaimState({

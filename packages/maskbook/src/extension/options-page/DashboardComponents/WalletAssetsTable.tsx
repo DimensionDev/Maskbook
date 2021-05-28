@@ -28,11 +28,11 @@ import { TokenIcon } from './TokenIcon'
 import type { Wallet } from '@dimensiondev/web3-shared'
 import { ActionsBarFT } from './ActionsBarFT'
 import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
-import { useStableTokensDebank } from '../../../web3/hooks/useStableTokensDebank'
+import { useStableTokensDebank } from '@dimensiondev/web3-shared'
 import type { Asset } from '../../../plugins/Wallet/types'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
 import { useAssets } from '../../../plugins/Wallet/hooks/useAssets'
-import { useChainDetailed } from '../../../web3/hooks/useChainDetailed'
+import { useChainDetailed } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles<
     Theme,

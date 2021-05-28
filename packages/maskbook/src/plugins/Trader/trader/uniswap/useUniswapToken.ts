@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useChainId } from '../../../../web3/hooks/useChainId'
+import { useChainId } from '@dimensiondev/web3-shared'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { toUniswapToken } from '../../helpers'
 

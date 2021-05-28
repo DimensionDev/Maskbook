@@ -1,31 +1,22 @@
-import { EthereumTokenType, ChainId } from '../types'
-import { useChainId } from './useChainId'
-import { useConstantNext } from './useConstants'
-import { CONSTANTS } from '../constants'
 import { useAsyncRetry } from 'react-use'
+import { CONSTANTS } from '../constants'
+import { NativeTokenDetailed, EthereumTokenType } from '../types'
+import { getChainDetailed } from '../utils'
+import { useChainId } from './useChainId'
+import { useConstant } from './useConstant'
 
-//#region Ether
-export interface NativeToken {
-    type: EthereumTokenType.Native
-    address: string
-    chainId: ChainId
-}
-
-export interface NativeTokenDetailed extends NativeToken {
-    name: 'Ether'
-    symbol: 'ETH'
-    decimals: 18
-}
-//#endregion
 export function useNativeTokenDetailed() {
     const chainId = useChainId()
-    const NATIVE_TOKEN_ADDRESS = useConstantNext(CONSTANTS).NATIVE_TOKEN_ADDRESS
-    return useAsyncRetry<NativeTokenDetailed>(async () => ({
-        type: EthereumTokenType.Native,
-        address: NATIVE_TOKEN_ADDRESS,
-        chainId,
-        name: 'Ether',
-        symbol: 'ETH',
-        decimals: 18,
-    }))
+    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    return useAsyncRetry(async (): Promise<NativeTokenDetailed> => {
+        const nativeCurrency = getChainDetailed(chainId)?.nativeCurrency
+        return {
+            type: EthereumTokenType.Native,
+            address: NATIVE_TOKEN_ADDRESS,
+            chainId,
+            name: nativeCurrency?.name ?? 'Unknown',
+            symbol: nativeCurrency?.symbol ?? '',
+            decimals: nativeCurrency?.decimals ?? 0,
+        }
+    }, [chainId, NATIVE_TOKEN_ADDRESS])
 }

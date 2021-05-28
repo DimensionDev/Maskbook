@@ -1,7 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { head, uniqBy } from 'lodash-es'
 import BigNumber from 'bignumber.js'
-import { useChainId } from '../../../web3/hooks/useChainId'
 import { PluginCollectibleRPC } from '../messages'
 import { CollectibleToken, CollectibleProvider } from '../types'
 import { getOrderUnitPrice } from '../utils'
@@ -9,9 +8,14 @@ import { unreachable } from '@dimensiondev/maskbook-shared'
 import { toDate, toRaribleImage, toTokenDetailed, toTokenIdentifier } from '../helpers'
 import { OpenSeaAccountURL } from '../constants'
 import { resolveRaribleUserNetwork } from '../pipes'
-import { FungibleTokenDetailed, EthereumTokenType, isSameAddress } from '@dimensiondev/web3-shared'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { useConstant } from '../../../web3/hooks/useConstant'
+import {
+    FungibleTokenDetailed,
+    EthereumTokenType,
+    isSameAddress,
+    useAccount,
+    useChainId,
+    useConstant,
+} from '@dimensiondev/web3-shared'
 import { CONSTANTS } from '@dimensiondev/web3-shared'
 
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {

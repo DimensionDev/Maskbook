@@ -5,13 +5,15 @@ import Services from '../extension/service'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
+    currentGasPriceSettings,
+    currentNonceSettings,
     currentSelectedWalletAddressSettings,
     currentSelectedWalletNetworkSettings,
     currentSelectedWalletProviderSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
-import { createExternalProvider } from './web3'
+import { createExternalProvider } from './helpers'
 
 export const Web3Context: Web3ProviderType = {
     provider: {
@@ -29,10 +31,13 @@ export const Web3Context: Web3ProviderType = {
     ),
     account: createSubscriptionFromSettings(currentSelectedWalletAddressSettings),
     blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
+    nonce: createSubscriptionFromSettings(currentNonceSettings),
+    gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
     wallets: createSubscriptionAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
     providerType: createSubscriptionFromSettings(currentSelectedWalletProviderSettings),
     networkType: createSubscriptionFromSettings(currentSelectedWalletNetworkSettings),
     erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
+    erc721Tokens: createSubscriptionAsync(getERC721Tokens, [], WalletMessages.events.erc721TokensUpdated.on),
 }
 
 async function getWallets() {
@@ -59,6 +64,11 @@ async function getERC20Tokens() {
         ...x,
     }))
 }
+
+async function getERC721Tokens() {
+    return []
+}
+
 // utils
 function createSubscriptionFromSettings<T>(settings: InternalSettings<T>): Subscription<T> {
     const { trigger, subscribe } = getEventTarget()

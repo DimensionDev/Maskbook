@@ -7,11 +7,31 @@ import { Messages, PluginMessages, PluginServices, Services } from '../API'
 export const Web3Context: Web3ProviderType = {
     provider: {
         getCurrentValue: createExternalProvider,
-        subscribe: () => noop
+        subscribe: () => noop,
     },
     allowTestChain: createSubscriptionAsync(
         Services.Settings.getWalletAllowTestChain,
         false,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    account: createSubscriptionAsync(
+        Services.Settings.getSelectedWalletAddress,
+        '',
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    nonce: createSubscriptionAsync(
+        Services.Settings.getBlockNumber,
+        0,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    gasPrice: createSubscriptionAsync(
+        Services.Settings.getBlockNumber,
+        0,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    blockNumber: createSubscriptionAsync(
+        Services.Settings.getBlockNumber,
+        0,
         Messages.events.createInternalSettingsChanged.on,
     ),
     chainId: createSubscriptionAsync(
@@ -30,17 +50,8 @@ export const Web3Context: Web3ProviderType = {
         Messages.events.createInternalSettingsChanged.on,
     ),
     wallets: createSubscriptionAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
-    account: createSubscriptionAsync(
-        Services.Settings.getSelectedWalletAddress,
-        '',
-        Messages.events.createInternalSettingsChanged.on,
-    ),
-    blockNumber: createSubscriptionAsync(
-        Services.Settings.getBlockNumber,
-        0,
-        Messages.events.createInternalSettingsChanged.on,
-    ),
     erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
+    erc721Tokens: createSubscriptionAsync(getERC721Tokens, [], PluginMessages.Wallet.events.erc721TokensUpdated.on),
 }
 
 export function createExternalProvider() {
@@ -78,6 +89,10 @@ async function getERC20Tokens() {
         type: EthereumTokenType.ERC20,
         ...x,
     }))
+}
+
+async function getERC721Tokens() {
+    return []
 }
 
 function createSubscriptionAsync<T>(

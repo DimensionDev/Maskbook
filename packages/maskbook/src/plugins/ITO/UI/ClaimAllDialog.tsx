@@ -6,11 +6,11 @@ import { makeStyles, DialogContent, CircularProgress, Typography, List, ListItem
 import { useClaimAll } from '../hooks/useClaimAll'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { useClaimCallback } from '../hooks/useClaimCallback'
-import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
+import { TransactionStateType } from '@dimensiondev/web3-shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { resolveTransactionLinkOnExplorer } from '@dimensiondev/web3-shared'
-import { useChainId } from '../../../web3/hooks/useChainId'
+import { useChainId } from '@dimensiondev/web3-shared'
 import formatDateTime from 'date-fns/format'
 import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { useSnackbar, VariantType } from 'notistack'
@@ -25,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         fontSize: 18,
         fontWeight: 400,
+        backgroundColor: '#1C68F3',
+        '&:hover': {
+            backgroundColor: '#1854c4',
+        },
     },
     footer: {
         marginTop: theme.spacing(2),

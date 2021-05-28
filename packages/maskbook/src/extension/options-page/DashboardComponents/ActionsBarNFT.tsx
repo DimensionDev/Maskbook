@@ -7,7 +7,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogNFT } from '../DashboardDialogs/Wallet'
 import { NonFungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
-import { useChainIdValid } from '../../../web3/hooks/useChainId'
+import { useChainIdValid } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     more: {

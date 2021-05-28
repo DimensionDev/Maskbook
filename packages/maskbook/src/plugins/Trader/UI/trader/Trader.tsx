@@ -13,7 +13,7 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { TradeActionType } from '../../trader/useTradeState'
 import { SwapResponse, TokenPanelType, TradeComputed, TradeProvider, Coin } from '../../types'
 import { delay } from '../../../../utils/utils'
-import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
+import { TransactionStateType } from '@dimensiondev/web3-shared'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { TradePairViewer } from '../uniswap/TradePairViewer'
@@ -21,18 +21,17 @@ import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { currentTradeProviderSettings } from '../../settings'
 import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
-import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
+import { useTokenBalance } from '@dimensiondev/web3-shared'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { EthereumMessages } from '../../../Ethereum/messages'
 import Services from '../../../../extension/service'
 import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
-import { useChainId } from '../../../../web3/hooks/useChainId'
+import { useChainId } from '@dimensiondev/web3-shared'
 import { createERC20Token, createNativeToken } from '@dimensiondev/web3-shared'
 import { PluginTraderRPC } from '../../messages'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { isNativeTokenWrapper } from '../../helpers'
-import { ChainState } from '../../../../web3/state/useChainState'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -62,6 +61,7 @@ export interface TraderProps extends withClasses<never> {
 export function Trader(props: TraderProps) {
     const { coin, tokenDetailed } = props
     const { decimals } = tokenDetailed ?? coin ?? {}
+
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -289,63 +289,57 @@ export function Trader(props: TraderProps) {
     //#endregion
 
     return (
-        <ChainState.Provider>
-            <div className={classes.root}>
-                <TradeForm
-                    trade={trade}
-                    provider={provider}
-                    strategy={strategy}
-                    loading={asyncTradeComputed.loading || updateBalancerPoolsLoading}
-                    inputToken={inputToken}
-                    outputToken={outputToken}
-                    inputTokenBalance={inputTokenBalance}
-                    outputTokenBalance={outputTokenBalance}
-                    inputAmount={inputAmount}
-                    outputAmount={outputAmount}
-                    onInputAmountChange={onInputAmountChange}
-                    onOutputAmountChange={onOutputAmountChange}
-                    onReverseClick={onReverseClick}
-                    onRefreshClick={onRefreshClick}
-                    onTokenChipClick={onTokenChipClick}
-                    onSwap={onSwap}
-                />
-                {trade && !isNativeTokenWrapper(trade) && inputToken && outputToken ? (
-                    <>
-                        <ConfirmDialog
-                            open={openConfirmDialog}
-                            trade={trade}
-                            provider={provider}
-                            inputToken={inputToken}
-                            outputToken={outputToken}
-                            onConfirm={onConfirmDialogConfirm}
-                            onClose={onConfirmDialogClose}
+        <div className={classes.root}>
+            <TradeForm
+                trade={trade}
+                provider={provider}
+                strategy={strategy}
+                loading={asyncTradeComputed.loading || updateBalancerPoolsLoading}
+                inputToken={inputToken}
+                outputToken={outputToken}
+                inputTokenBalance={inputTokenBalance}
+                outputTokenBalance={outputTokenBalance}
+                inputAmount={inputAmount}
+                outputAmount={outputAmount}
+                onInputAmountChange={onInputAmountChange}
+                onOutputAmountChange={onOutputAmountChange}
+                onReverseClick={onReverseClick}
+                onRefreshClick={onRefreshClick}
+                onTokenChipClick={onTokenChipClick}
+                onSwap={onSwap}
+            />
+            {trade && !isNativeTokenWrapper(trade) && inputToken && outputToken ? (
+                <>
+                    <ConfirmDialog
+                        open={openConfirmDialog}
+                        trade={trade}
+                        provider={provider}
+                        inputToken={inputToken}
+                        outputToken={outputToken}
+                        onConfirm={onConfirmDialogConfirm}
+                        onClose={onConfirmDialogClose}
+                    />
+                    <TradeSummary
+                        classes={{ root: classes.summary }}
+                        trade={trade}
+                        provider={provider}
+                        inputToken={inputToken}
+                        outputToken={outputToken}
+                    />
+                    {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider) ? (
+                        <UniswapTradeRoute classes={{ root: classes.router }} trade={trade} />
+                    ) : null}
+                    {[TradeProvider.BALANCER].includes(provider) ? (
+                        <BalancerTradeRoute
+                            classes={{ root: classes.router }}
+                            trade={trade as TradeComputed<SwapResponse>}
                         />
-                        <TradeSummary
-                            classes={{ root: classes.summary }}
-                            trade={trade}
-                            provider={provider}
-                            inputToken={inputToken}
-                            outputToken={outputToken}
-                        />
-                        {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(
-                            provider,
-                        ) ? (
-                            <UniswapTradeRoute classes={{ root: classes.router }} trade={trade} />
-                        ) : null}
-                        {[TradeProvider.BALANCER].includes(provider) ? (
-                            <BalancerTradeRoute
-                                classes={{ root: classes.router }}
-                                trade={trade as TradeComputed<SwapResponse>}
-                            />
-                        ) : null}
-                        {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(
-                            provider,
-                        ) ? (
-                            <TradePairViewer trade={trade as TradeComputed<Trade>} provider={provider} />
-                        ) : null}
-                    </>
-                ) : null}
-            </div>
-        </ChainState.Provider>
+                    ) : null}
+                    {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider) ? (
+                        <TradePairViewer trade={trade as TradeComputed<Trade>} provider={provider} />
+                    ) : null}
+                </>
+            ) : null}
+        </div>
     )
 }

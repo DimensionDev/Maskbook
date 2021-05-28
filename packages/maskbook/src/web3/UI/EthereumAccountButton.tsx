@@ -9,11 +9,9 @@ import { ProviderIcon } from '../../components/shared/ProviderIcon'
 import { formatEthereumAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N, useRemoteControlledDialog, useValueRef, Flags } from '../../utils'
-import { useChainId } from '../hooks/useChainId'
-import { ChainId, resolveChainColor } from '@dimensiondev/web3-shared'
+import { ChainId, resolveChainColor, useChainId, useNativeTokenBalance } from '@dimensiondev/web3-shared'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
-import { useNativeTokenBalance } from '../hooks/useNativeTokenBalance'
-import { useAccount } from '../hooks/useAccount'
+import { useAccount } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => {
     return {

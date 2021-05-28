@@ -4,8 +4,7 @@ import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsMerged } from './useAssetsMerged'
 import { useWallet } from './useWallet'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
-import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
+import { FungibleTokenDetailed, useNativeTokenDetailed } from '@dimensiondev/web3-shared'
 
 export function useAssets(tokens: FungibleTokenDetailed[]) {
     const wallet = useWallet()

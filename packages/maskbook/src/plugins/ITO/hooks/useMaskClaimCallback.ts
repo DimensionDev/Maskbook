@@ -1,13 +1,19 @@
 import { useCallback } from 'react'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
-import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { TransactionEventType } from '@dimensiondev/web3-shared'
+import {
+    TransactionEventType,
+    TransactionStateType,
+    useTransactionState,
+    useAccount,
+    useChainId,
+    useGasPrice,
+    useNonce,
+} from '@dimensiondev/web3-shared'
 import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
-import { useChainId } from '../../../web3/hooks/useChainId'
-import Services from '../../../extension/service'
 
 export function useMaskClaimCallback() {
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const MaskITO_Contract = useMaskITO_Contract()
@@ -27,17 +33,21 @@ export function useMaskClaimCallback() {
         })
 
         // estimate gas and compose transaction
-        const config = await Services.Ethereum.composeTransaction({
+        const config = {
             from: account,
-            to: MaskITO_Contract.options.address,
-            data: MaskITO_Contract.methods.claim().encodeABI(),
-        }).catch((error) => {
-            setClaimState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
-            throw error
-        })
+            gas: await MaskITO_Contract.methods
+                .claim()
+                .estimateGas()
+                .catch((error) => {
+                    setClaimState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    throw error
+                }),
+            gasPrice,
+            nonce,
+        }
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
@@ -66,7 +76,7 @@ export function useMaskClaimCallback() {
                     reject(error)
                 })
         })
-    }, [account, chainId, MaskITO_Contract])
+    }, [gasPrice, nonce, account, chainId, MaskITO_Contract])
 
     const resetCallback = useCallback(() => {
         setClaimState({

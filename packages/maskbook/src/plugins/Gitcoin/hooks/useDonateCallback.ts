@@ -1,13 +1,20 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
-import { FungibleTokenDetailed, EthereumTokenType, TransactionEventType } from '@dimensiondev/web3-shared'
-import { useConstant } from '../../../web3/hooks/useConstant'
+import {
+    FungibleTokenDetailed,
+    EthereumTokenType,
+    TransactionEventType,
+    useConstant,
+    TransactionStateType,
+    useTransactionState,
+    useAccount,
+    useWeb3,
+    useNonce,
+    useGasPrice,
+} from '@dimensiondev/web3-shared'
 import { GITCOIN_CONSTANT } from '../constants'
-import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
 import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import Services from '../../../extension/service'
 
 /**
  * A callback for donate gitcoin grant
@@ -20,7 +27,10 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
     const GITCOIN_TIP_PERCENTAGE = useConstant(GITCOIN_CONSTANT, 'GITCOIN_TIP_PERCENTAGE')
     const bulkCheckoutContract = useBulkCheckoutContract()
 
+    const web3 = useWeb3()
     const account = useAccount()
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const [donateState, setDonateState] = useTransactionState()
 
     const donations = useMemo(() => {
@@ -55,18 +65,25 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         })
 
         // estimate gas and compose transaction
-        const config = await Services.Ethereum.composeTransaction({
+        const value = new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed()
+        const config = {
             from: account,
-            to: bulkCheckoutContract.options.address,
-            value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
-            data: bulkCheckoutContract.methods.donate(donations).encodeABI(),
-        }).catch((error) => {
-            setDonateState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
-            throw error
-        })
+            nonce,
+            gas: await bulkCheckoutContract.methods
+                .donate(donations)
+                .estimateGas({
+                    value,
+                })
+                .catch((error) => {
+                    setDonateState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    throw error
+                }),
+            gasPrice,
+            value,
+        }
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
@@ -88,7 +105,7 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
                     reject(error)
                 })
         })
-    }, [account, amount, token, donations])
+    }, [web3, nonce, gasPrice, account, amount, token, donations])
 
     const resetCallback = useCallback(() => {
         setDonateState({

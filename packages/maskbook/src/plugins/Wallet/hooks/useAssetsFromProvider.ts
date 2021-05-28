@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
+import { useAccount } from '@dimensiondev/web3-shared'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { useAccount } from '../../../web3/hooks/useAccount'
 import { WalletRPC } from '../messages'
 import { currentPortfolioDataProviderSettings } from '../settings'
 

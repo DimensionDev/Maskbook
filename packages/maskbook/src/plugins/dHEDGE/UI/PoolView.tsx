@@ -17,9 +17,9 @@ import { useFetchPool } from '../hooks/usePool'
 import { PoolViewDeck } from './PoolViewDeck'
 import { PoolStats } from './PoolStats'
 import { PerformanceChart } from './PerformanceChart'
-import { useERC20TokenDetailed } from '../../../web3/hooks/useERC20TokenDetailed'
+import { useERC20TokenDetailed } from '@dimensiondev/web3-shared'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
-import { useConstant } from '../../../web3/hooks/useConstant'
+import { useConstant } from '@dimensiondev/web3-shared'
 import { CONSTANTS } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({

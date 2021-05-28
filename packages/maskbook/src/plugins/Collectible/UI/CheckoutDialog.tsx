@@ -19,10 +19,10 @@ import ActionButton, { ActionButtonPromise } from '../../../extension/options-pa
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
-import { ChainState } from '../../../web3/state/useChainState'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
 import { Trans } from 'react-i18next'
+import { useAccount } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -67,7 +67,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
-    const { account } = ChainState.useContainer()
+    const account = useAccount()
 
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)

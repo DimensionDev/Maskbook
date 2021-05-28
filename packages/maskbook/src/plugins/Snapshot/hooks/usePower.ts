@@ -1,17 +1,16 @@
 import { useAsyncRetry } from 'react-use'
+import { useAccount, useBlockNumber } from '@dimensiondev/web3-shared'
 import { PluginSnapshotRPC } from '../messages'
 import type { ProposalIdentifier } from '../types'
-import { useAccount } from '../../../web3/hooks/useAccount'
 import { useProposal } from './useProposal'
-import { useBlockNumber } from '../../../web3/hooks/useBlockNumber'
 
 export function usePower(identifier: ProposalIdentifier) {
     const {
         payload: { message },
     } = useProposal(identifier.id)
 
-    const blockNumber = useBlockNumber()
     const account = useAccount()
+    const blockNumber = useBlockNumber()
     return useAsyncRetry(async () => {
         if (!account) return 0
         const scores = await PluginSnapshotRPC.getScores(message, [account], blockNumber)

@@ -3,10 +3,12 @@ import { makeStyles, TextField, Typography, Box, Chip, InputProps, ChipProps, Te
 import classNames from 'classnames'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
-import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../constants'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { useI18N } from '../../utils'
+
+const MIN_AMOUNT_LENGTH = 1
+const MAX_AMOUNT_LENGTH = 79
 
 const useStyles = makeStyles((theme) => {
     return {

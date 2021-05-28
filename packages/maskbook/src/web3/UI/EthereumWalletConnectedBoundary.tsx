@@ -7,9 +7,8 @@ import Services from '../../extension/service'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { currentIsMetamaskLockedSettings, currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
 import { useRemoteControlledDialog, useValueRef, useI18N } from '../../utils'
-import { ProviderType } from '@dimensiondev/web3-shared'
+import { ProviderType, useAccount, useChainIdValid, useNativeTokenBalance } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import { ChainState } from '../state/useChainState'
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -28,7 +27,9 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const { account, chainIdValid, nativeTokenBalance } = ChainState.useContainer()
+    const account = useAccount()
+    const chainIdValid = useChainIdValid()
+    const nativeTokenBalance = useNativeTokenBalance('_')
 
     //#region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(

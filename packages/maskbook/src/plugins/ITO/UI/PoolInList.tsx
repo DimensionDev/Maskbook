@@ -15,7 +15,7 @@ import {
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useAccount } from '../../../web3/hooks/useAccount'
+import { useAccount } from '@dimensiondev/web3-shared'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'

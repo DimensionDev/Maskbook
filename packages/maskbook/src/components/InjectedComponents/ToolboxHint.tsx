@@ -9,7 +9,7 @@ import { RedPacketCompositionEntry } from '../../plugins/RedPacket/define'
 import { FileServiceCompositionEntry } from '../../plugins/FileService/UI-define'
 import { ITO_CompositionEntry } from '../../plugins/ITO/define'
 import { useControlledDialog } from '../../plugins/Collectible/UI/useControlledDialog'
-import { useAccount } from '../../web3/hooks/useAccount'
+import { useAccount } from '@dimensiondev/web3-shared'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
@@ -18,13 +18,12 @@ import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
-import { ChainState } from '../../web3/state/useChainState'
 import { ProviderIcon } from '../shared/ProviderIcon'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { useChainId } from '../../web3/hooks/useChainId'
+import { useChainId } from '@dimensiondev/web3-shared'
 import { ChainId } from '@dimensiondev/web3-shared'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { resolveChainColor } from '@dimensiondev/web3-shared'
@@ -271,9 +270,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                 </div>
             </div>
             {isClaimAllDialogOpen ? (
-                <ChainState.Provider>
-                    <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
-                </ChainState.Provider>
+                <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
             ) : null}
         </>
     )

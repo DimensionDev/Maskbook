@@ -1,6 +1,5 @@
 import { Typography } from '@material-ui/core'
-import { ChainId, resolveChainName } from '@dimensiondev/web3-shared'
-import { useChainId } from '../hooks/useChainId'
+import { ChainId, resolveChainName, useChainId } from '@dimensiondev/web3-shared'
 
 export interface EthereumChainBoundaryProps {
     chainId: ChainId

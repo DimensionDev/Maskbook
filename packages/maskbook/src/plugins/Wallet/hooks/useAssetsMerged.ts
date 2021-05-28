@@ -1,7 +1,5 @@
 import { uniqBy } from 'lodash-es'
-import { CONSTANTS } from '@dimensiondev/web3-shared'
-import { useChainId } from '../../../web3/hooks/useChainId'
-import { useConstant } from '../../../web3/hooks/useConstant'
+import { CONSTANTS, useConstant } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { getTokenUSDValue } from '../helpers'
 import type { Asset } from '../types'
@@ -12,7 +10,6 @@ import type { Asset } from '../types'
  * @param listOfTokens
  */
 export function useAssetsMerged(...listOfTokens: Asset[][]) {
-    const chainId = useChainId()
     const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     return uniqBy(
         listOfTokens.flatMap((x) => x),
