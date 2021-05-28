@@ -1,5 +1,5 @@
-import type { Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
-import { ChainId, WalletProvider } from '@dimensiondev/web3-shared'
+import { NetworkType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
+import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
 import { Messages, PluginMessages, PluginServices, Services } from '../API'
 import { pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
@@ -10,20 +10,30 @@ export const Web3Context: Web3ProviderType = {
         false,
         Messages.events.createInternalSettingsChanged.on,
     ),
-    currentChain: createSubscriptionAsync(
+    chainId: createSubscriptionAsync(
         Services.Ethereum.getChainId,
         ChainId.Mainnet,
         PluginMessages.Wallet.events.chainIdUpdated.on,
     ),
-    walletProvider: createSubscriptionAsync(
+    providerType: createSubscriptionAsync(
         Services.Settings.getCurrentSelectedWalletProvider,
-        WalletProvider.Maskbook,
+        ProviderType.Maskbook,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    networkType: createSubscriptionAsync(
+        Services.Settings.getCurrentSelectedWalletNetwork,
+        NetworkType.Ethereum,
         Messages.events.createInternalSettingsChanged.on,
     ),
     wallets: createSubscriptionAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
-    selectedWalletAddress: createSubscriptionAsync(
+    account: createSubscriptionAsync(
         Services.Settings.getSelectedWalletAddress,
         '',
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    blockNumber: createSubscriptionAsync(
+        Services.Settings.getBlockNumber,
+        0,
         Messages.events.createInternalSettingsChanged.on,
     ),
 }
