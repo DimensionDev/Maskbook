@@ -1,5 +1,5 @@
 import type { OpenSeaFungibleToken, WyvernSchemaName } from 'opensea-js/lib/types'
-import type { ChainId } from '../../../web3/types'
+import type { ChainId } from '@dimensiondev/web3-shared'
 import type { OpenSeaAssetEventType } from './opensea'
 import type { RaribleEventType } from './rarible'
 

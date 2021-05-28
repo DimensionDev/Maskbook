@@ -5,7 +5,7 @@ import { resolveCollectibleLink } from '../../../../plugins/Wallet/pipes'
 import type { CollectibleProvider } from '../../../../plugins/Wallet/types'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 import { useChainId } from '../../../../web3/hooks/useChainId'
-import type { ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '../../../../web3/types'
+import type { ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '@dimensiondev/web3-shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 
 const useStyles = makeStyles((theme) => ({

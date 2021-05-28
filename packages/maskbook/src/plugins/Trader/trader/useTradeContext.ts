@@ -16,7 +16,7 @@ import {
     UNISWAP_CUSTOM_BASES,
     UNISWAP_INIT_CODE_HASH,
 } from '../constants'
-import { getConstant } from '../../../web3/helpers'
+import { getConstant } from '@dimensiondev/web3-shared'
 
 export const TradeContext = createContext<TradeContext_ | null>(null)
 

@@ -6,7 +6,7 @@ import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import Services from '../../extension/service'
-import { TransactionEventType } from '../types'
+import { TransactionEventType } from '@dimensiondev/web3-shared'
 
 export function useERC20TokenTransferCallback(address: string, amount?: string, recipient?: string) {
     const account = useAccount()

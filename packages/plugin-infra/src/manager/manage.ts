@@ -1,8 +1,8 @@
+import { Emitter } from '@servie/events'
+import { ALL_EVENTS } from '@dimensiondev/maskbook-shared'
 import type { Plugin } from '../types'
 import { __meetEthChainRequirement } from '../utils/internal'
 import { getPluginDefine, registeredPluginIDs } from './store'
-import { Emitter } from '@servie/events'
-import { ALL_EVENTS } from '@dimensiondev/maskbook-shared'
 
 interface ActivatedPluginInstance<U extends Plugin.Shared.DefinitionWithInit> {
     instance: U

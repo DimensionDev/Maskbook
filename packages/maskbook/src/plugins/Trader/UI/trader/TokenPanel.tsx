@@ -1,7 +1,7 @@
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { Box, makeStyles, Theme, Typography } from '@material-ui/core'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
-import type { FungibleTokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 
 export interface TokenPanelProps {
     amount: string

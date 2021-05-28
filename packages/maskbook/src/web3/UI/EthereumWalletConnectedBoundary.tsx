@@ -7,7 +7,7 @@ import Services from '../../extension/service'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { currentIsMetamaskLockedSettings, currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
 import { useRemoteControlledDialog, useValueRef, useI18N } from '../../utils'
-import { ProviderType } from '../types'
+import { ProviderType } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { ChainState } from '../state/useChainState'
 

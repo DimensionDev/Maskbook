@@ -1,4 +1,4 @@
-import type { ChainId, FungibleTokenDetailed } from '../../web3/types'
+import type { ChainId, FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 
 export interface AirdropJSONPayload {
     contract_address: string

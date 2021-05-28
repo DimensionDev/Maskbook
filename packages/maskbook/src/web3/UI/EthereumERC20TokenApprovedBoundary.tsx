@@ -1,12 +1,12 @@
-import { Grid, makeStyles } from '@material-ui/core'
-import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect } from 'react'
+import { useSnackbar } from 'notistack'
+import { Grid, makeStyles } from '@material-ui/core'
 import { formatBalance, unreachable } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../utils'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import { ApproveStateType, useERC20TokenApproveCallback } from '../hooks/useERC20TokenApproveCallback'
 import { TransactionStateType } from '../hooks/useTransactionState'
-import type { ERC20TokenDetailed } from '../types'
+import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     button: {

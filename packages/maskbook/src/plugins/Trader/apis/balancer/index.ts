@@ -3,10 +3,9 @@ import { first, memoize } from 'lodash-es'
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { getChainId } from '../../../../extension/background-script/EthereumService'
-import { getConstant, isSameAddress } from '../../../../web3/helpers'
-import type { ChainId } from '../../../../web3/types'
+import { getChainDetailed, getConstant, isSameAddress } from '@dimensiondev/web3-shared'
+import type { ChainId } from '@dimensiondev/web3-shared'
 import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
-import { CONSTANTS } from '../../../../web3/constants'
 import type { Route } from '../../types'
 import { getFutureTimestamps } from '../../helpers/blocks'
 import { fetchBlockNumbersByTimestamps } from '../blocks'
@@ -14,15 +13,18 @@ import { fetchLBP_PoolsByTokenAddress, fetchLBP_PoolTokenPrices, fetchLBP_PoolTo
 
 //#region create cached SOR
 const createSOR_ = memoize(
-    (chainId: ChainId) =>
-        new SOR(
+    (chainId: ChainId) => {
+        const rpc = getChainDetailed(chainId)?.rpc[0]
+        if (!rpc) throw new Error('Unknown chain id.')
+        return new SOR(
             // we choose a fixed provider cause it's only used here.
-            new JsonRpcProvider(getConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST', chainId)[0]),
+            new JsonRpcProvider(rpc),
             BALANCER_SOR_GAS_PRICE,
             BALANCER_MAX_NO_POOLS,
             chainId,
             '', // set pools url later
-        ),
+        )
+    },
     (chainId: ChainId) => String(chainId),
 )
 

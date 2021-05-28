@@ -3,7 +3,7 @@ import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { getWallets } from '../../../plugins/Wallet/services'
 import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
 import { startEffects } from '../../../utils/side-effects'
-import { isSameAddress } from '../../../web3/helpers'
+import { isSameAddress } from '@dimensiondev/web3-shared'
 
 const effect = startEffects(module.hot)
 

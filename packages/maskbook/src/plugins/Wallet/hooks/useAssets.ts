@@ -4,7 +4,7 @@ import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsMerged } from './useAssetsMerged'
 import { useWallet } from './useWallet'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import type { FungibleTokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
 
 export function useAssets(tokens: FungibleTokenDetailed[]) {
@@ -13,7 +13,7 @@ export function useAssets(tokens: FungibleTokenDetailed[]) {
         value: nativeTokenDetailed,
         loading: nativeTokenDetailedLoading,
         error: nativeTokenDetailedError,
-        retry: retryEtherTokenDetailed,
+        retry: retryNativeTokenDetailed,
     } = useNativeTokenDetailed()
     const {
         value: assetsDetailedChain = [],
@@ -29,10 +29,10 @@ export function useAssets(tokens: FungibleTokenDetailed[]) {
     } = useAssetsFromProvider()
 
     const detailedTokensRetry = useCallback(() => {
-        retryEtherTokenDetailed()
+        retryNativeTokenDetailed()
         retryAssetsDetailedChain()
         retryAssetsDetailedDebank()
-    }, [retryEtherTokenDetailed, retryAssetsDetailedChain, retryAssetsDetailedDebank])
+    }, [retryNativeTokenDetailed, retryAssetsDetailedChain, retryAssetsDetailedDebank])
 
     // should place debank detailed tokens at the first place
     // it prevents them from replacing by previous detailed tokens because the uniq algorithm

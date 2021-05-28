@@ -4,7 +4,7 @@ import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import Services from '../../../extension/service'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
-import { TransactionEventType } from '../../../web3/types'
+import { TransactionEventType } from '@dimensiondev/web3-shared'
 
 export function useClaimCallback(from: string, id?: string, password?: string) {
     const [claimState, setClaimState] = useTransactionState()

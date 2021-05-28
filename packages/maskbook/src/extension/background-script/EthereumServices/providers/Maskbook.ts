@@ -1,9 +1,7 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import { currentMaskbookChainIdSettings } from '../../../../plugins/Wallet/settings'
-import { getConstant } from '../../../../web3/helpers'
-import { CONSTANTS } from '../../../../web3/constants'
-import type { ChainId } from '../../../../web3/types'
+import { ChainId, getChainDetailed } from '@dimensiondev/web3-shared'
 
 //#region providers
 const providerPool = new Map<string, HttpProvider>()
@@ -32,6 +30,7 @@ export function createProvider(url: string) {
 
 //#region web3 instances
 const instancePool = new Map<string, Web3>()
+const SEED = Math.floor(Math.random() * 4)
 
 function createWeb3Instance(provider: HttpProvider) {
     return (
@@ -55,10 +54,11 @@ export function createWeb3({
 } = {}) {
     // get the provider url by weights if needed
     if (!url) {
-        const urls = getConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST', chainId)
-        const weights = getConstant(CONSTANTS, 'PROVIDER_WEIGHT_LIST', chainId)
-        const seed = getConstant(CONSTANTS, 'PROVIDER_WEIGHT_SEED', chainId)
-        url = urls[weights[seed]]
+        const chainDetailed = getChainDetailed(chainId)
+        if (!chainDetailed) throw new Error('Unknown chain id.')
+        const urls = chainDetailed.rpc
+        const weights = chainDetailed.rpcWeights
+        url = urls[weights[SEED]]
     }
     const provider = createProvider(url)
     const web3 = createWeb3Instance(provider)

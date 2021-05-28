@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/maskbook-shared'
-import { EthereumTokenType } from '../types'
+import { EthereumTokenType } from '@dimensiondev/web3-shared'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { useERC721TokenBalance } from './useERC721TokenBalance'
 import { useNativeTokenBalance } from './useNativeTokenBalance'

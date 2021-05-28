@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import classNames from 'classnames'
-import { Button } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core'
+import { Button, makeStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 import { SnapshotContext } from '../context'
 import { useAccount } from '../../../web3/hooks/useAccount'

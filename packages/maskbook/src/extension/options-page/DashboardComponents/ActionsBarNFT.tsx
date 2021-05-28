@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import type { Wallet } from '@dimensiondev/web3-shared'
 import { useMenu, useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogNFT } from '../DashboardDialogs/Wallet'
-import type { Wallet } from '@dimensiondev/web3-shared'
-import { NonFungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { NonFungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
 import { useChainIdValid } from '../../../web3/hooks/useChainId'
 
 const useStyles = makeStyles((theme) => ({

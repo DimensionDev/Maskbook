@@ -1,4 +1,4 @@
-import { ChainId, ERC20TokenDetailed } from '../../../web3/types'
+import { ChainId, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 import { AMPL, DAI, USDC, USDT, WETH, WETH_ONLY, COMP, MKR } from './trader'
 
 /**

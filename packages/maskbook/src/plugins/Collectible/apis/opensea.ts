@@ -8,8 +8,8 @@ import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaRinkebyBaseURL, OpenSeaGraphQLUR
 import { Flags } from '../../../utils/flags'
 import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../types'
 import { OpenSeaEventHistoryQuery } from '../queries/OpenSea'
-import { ChainId } from '../../../web3/types'
-import { resolveChainName } from '../../../web3/pipes'
+import { ChainId } from '@dimensiondev/web3-shared'
+import { resolveChainName } from '@dimensiondev/web3-shared'
 
 function createExternalProvider() {
     return {

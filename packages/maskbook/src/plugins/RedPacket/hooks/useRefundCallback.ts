@@ -3,7 +3,7 @@ import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import Services from '../../../extension/service'
-import { TransactionEventType } from '../../../web3/types'
+import { TransactionEventType } from '@dimensiondev/web3-shared'
 
 export function useRefundCallback(from: string, id?: string) {
     const [refundState, setRefundState] = useTransactionState()

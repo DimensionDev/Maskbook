@@ -1,14 +1,14 @@
-import { SnackbarProvider } from 'notistack'
 import { StrictMode } from 'react'
 import { I18nextProvider } from 'react-i18next'
-import i18nNextInstance from './utils/i18n-next'
-import { ErrorBoundary, ErrorBoundaryBuildInfoContext } from '@dimensiondev/maskbook-theme'
-import { buildInfoMarkdown } from './extension/background-script/Jobs/PrintBuildFlags'
-import { CssBaseline, StyledEngineProvider, ThemeProvider } from '@material-ui/core'
+import { SnackbarProvider } from 'notistack'
 import { StylesProvider } from '@material-ui/styles'
-import { useClassicMaskTheme } from './utils/theme'
+import { CssBaseline, StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { Web3Provider } from '@dimensiondev/web3-shared'
+import { ErrorBoundary, ErrorBoundaryBuildInfoContext } from '@dimensiondev/maskbook-theme'
+import i18nNextInstance from './utils/i18n-next'
+import { useClassicMaskTheme } from './utils/theme'
 import { Web3Context } from './web3/context'
+import { buildInfoMarkdown } from './extension/background-script/Jobs/PrintBuildFlags'
 
 export function MaskUIRootWithinShadow(JSX: JSX.Element) {
     return (

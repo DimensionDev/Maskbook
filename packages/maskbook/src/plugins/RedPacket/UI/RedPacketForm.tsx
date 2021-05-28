@@ -14,7 +14,7 @@ import {
     RED_PACKET_CONSTANTS,
     RED_PACKET_DEFAULT_SHARES,
 } from '../constants'
-import { EthereumTokenType, EthereumNetwork, FungibleTokenDetailed } from '../../../web3/types'
+import { EthereumTokenType, EthereumNetwork, FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -23,7 +23,7 @@ import { useCreateCallback } from '../hooks/useCreateCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { RedPacketJSONPayload } from '../types'
-import { resolveChainName } from '../../../web3/pipes'
+import { resolveChainName } from '@dimensiondev/web3-shared'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'

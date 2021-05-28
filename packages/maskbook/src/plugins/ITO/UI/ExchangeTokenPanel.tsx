@@ -5,7 +5,7 @@ import AddIcon from '@material-ui/icons/AddOutlined'
 import RemoveIcon from '@material-ui/icons/RemoveOutlined'
 
 import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'

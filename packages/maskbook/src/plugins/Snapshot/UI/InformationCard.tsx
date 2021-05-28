@@ -7,7 +7,7 @@ import { useI18N } from '../../../utils'
 import { SnapshotCard } from './SnapshotCard'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
-import { resolveAddressLinkOnExplorer, resolveBlockLinkOnExplorer, resolveIPFSLink } from '../../../web3/pipes'
+import { resolveAddressLinkOnExplorer, resolveBlockLinkOnExplorer, resolveIPFSLink } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useChainId } from '../../../web3/hooks/useChainId'
 

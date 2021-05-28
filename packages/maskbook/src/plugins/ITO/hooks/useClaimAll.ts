@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
 import { useChainId } from '../../../web3/hooks/useChainId'
-import { checkIfChainSupport } from '../../../web3/pipes'
+import { getChainDetailed } from '@dimensiondev/web3-shared'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import type { FungibleTokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 
 export interface SwappedToken {
     pids: string[]
@@ -21,7 +21,8 @@ export function useClaimAll() {
     const { value: pools = [], loading } = useAllPoolsAsBuyer(account)
 
     return useAsyncRetry(async () => {
-        if (!checkIfChainSupport(chainId)) return []
+        const chainDetailed = getChainDetailed(chainId)
+        if (!chainDetailed) return []
         if (!ITO_Contract || loading) return undefined
         if (pools.length === 0) return []
 

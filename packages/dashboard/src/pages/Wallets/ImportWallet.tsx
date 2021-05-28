@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import { memo, useState } from 'react'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { Button, Tab, experimentalStyled as styled, makeStyles, FilledInput } from '@material-ui/core'
 import { ButtonGroupTabList } from '@dimensiondev/maskbook-theme'

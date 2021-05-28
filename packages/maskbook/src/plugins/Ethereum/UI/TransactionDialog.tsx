@@ -15,7 +15,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { TransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { resolveTransactionLinkOnExplorer } from '../../../web3/pipes'
+import { resolveTransactionLinkOnExplorer } from '@dimensiondev/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { EthereumMessages } from '../messages'
 import { JSON_RPC_ErrorCode } from '../constants'
@@ -102,7 +102,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                                 href={resolveTransactionLinkOnExplorer(chainId, state.hash)}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                {t('plugin_wallet_view_on_etherscan')}
+                                {t('plugin_wallet_view_on_explorer')}
                             </Link>
                         </Typography>
                     </>
@@ -125,7 +125,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                                 href={resolveTransactionLinkOnExplorer(chainId, state.receipt.transactionHash)}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                {t('plugin_wallet_view_on_etherscan')}
+                                {t('plugin_wallet_view_on_explorer')}
                             </Link>
                         </Typography>
                     </>

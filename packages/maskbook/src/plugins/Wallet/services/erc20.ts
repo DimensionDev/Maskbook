@@ -6,9 +6,9 @@ import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { WalletRecordIntoDB, ERC20TokenRecordIntoDB, getWalletByAddress } from './helpers'
-import type { ERC20TokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 import type { ERC20TokenRecord } from '../database/types'
-import { isSameAddress } from '../../../web3/helpers'
+import { isSameAddress } from '@dimensiondev/web3-shared'
 import { queryTransactionPaged } from '../../../database/helpers/pagination'
 
 export async function getERC20Tokens() {

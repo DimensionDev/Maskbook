@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import type { FungibleTokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { TradeProvider, TradeStrategy } from '../types'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'

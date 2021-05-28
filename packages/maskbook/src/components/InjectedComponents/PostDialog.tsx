@@ -32,8 +32,8 @@ import {
     makeTypedMessageText,
     isTypedMessageText,
 } from '../../protocols/typed-message'
-import { EthereumTokenType } from '../../web3/types'
-import { isDAI, isOKB } from '../../web3/helpers'
+import { EthereumTokenType } from '@dimensiondev/web3-shared'
+import { isDAI, isOKB } from '@dimensiondev/web3-shared'
 import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/PluginUI'

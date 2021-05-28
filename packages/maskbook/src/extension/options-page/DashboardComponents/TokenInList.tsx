@@ -4,11 +4,11 @@ import { ListItem, ListItemText, Typography, ListItemIcon, Link } from '@materia
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { TokenIcon } from './TokenIcon'
 import { useConstant } from '../../../web3/hooks/useConstant'
-import { CONSTANTS } from '../../../web3/constants'
+import { CONSTANTS } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { resolveTokenLinkOnExplorer } from '../../../web3/pipes'
-import type { FungibleTokenDetailed } from '../../../web3/types'
-import { isSameAddress } from '../../../web3/helpers'
+import { resolveTokenLinkOnExplorer } from '@dimensiondev/web3-shared'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import { isSameAddress } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme: Theme) => ({
     icon: {

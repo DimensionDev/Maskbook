@@ -1,5 +1,7 @@
-import { ChainId, ERC20Token, ERC721Token, NativeToken, ProviderType } from './types'
 import { safeUnreachable } from '@dimensiondev/maskbook-shared'
+import { ChainId, ERC20Token, ERC721Token, NativeToken, NetworkType, ProviderType } from '../types'
+import CHAINS from '../assets/chains.json'
+import { getChainDetailed } from '../utils'
 
 export function resolveProviderName(providerType: ProviderType) {
     switch (providerType) {
@@ -18,38 +20,30 @@ export function resolveProviderName(providerType: ProviderType) {
 }
 
 export function resolveChainId(name: string) {
-    switch (name.toLowerCase()) {
-        case 'mainnet':
+    const name_ = name.toLowerCase()
+    const chainDetailed = CHAINS.find((x) =>
+        [x.chain.toLowerCase(), x.shortName.toLowerCase(), x.network.toLowerCase()].includes(name_),
+    )
+    return chainDetailed?.chainId as ChainId | undefined
+}
+
+export function resolveNetworkChainId(networkType: NetworkType) {
+    switch (networkType) {
+        case NetworkType.Ethereum:
             return ChainId.Mainnet
-        case 'ropsten':
-            return ChainId.Ropsten
-        case 'rinkeby':
-            return ChainId.Rinkeby
-        case 'kovan':
-            return ChainId.Kovan
-        case 'gorli':
-            return ChainId.Gorli
+        case NetworkType.Binance:
+            return ChainId.BSC
+        case NetworkType.Polygon:
+            return ChainId.Matic
         default:
-            return
+            safeUnreachable(networkType)
+            return ChainId.Mainnet
     }
 }
 
 export function resolveChainName(chainId: ChainId) {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return 'Mainnet'
-        case ChainId.Ropsten:
-            return 'Ropsten'
-        case ChainId.Rinkeby:
-            return 'Rinkeby'
-        case ChainId.Kovan:
-            return 'Kovan'
-        case ChainId.Gorli:
-            return 'Gorli'
-        default:
-            safeUnreachable(chainId)
-            return 'Unknown'
-    }
+    const chainDetailed = getChainDetailed(chainId)
+    return chainDetailed?.name ?? 'Unknown'
 }
 
 export function resolveChainColor(chainId: ChainId) {
@@ -70,25 +64,11 @@ export function resolveChainColor(chainId: ChainId) {
 }
 
 export function resolveLinkOnExplorer(chainId: ChainId) {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return 'https://etherscan.io'
-        case ChainId.Ropsten:
-            return 'https://ropsten.etherscan.io'
-        case ChainId.Rinkeby:
-            return 'https://rinkeby.etherscan.io'
-        case ChainId.Kovan:
-            return 'https://kovan.etherscan.io'
-        case ChainId.Gorli:
-            return 'https://goerli.etherscan.io'
-        default:
-            safeUnreachable(chainId)
-            return 'https://etherscan.io'
-    }
-}
-
-export function checkIfChainSupport(chainId: number) {
-    return Object.values(ChainId).includes(chainId)
+    const chainDetailed = getChainDetailed(chainId)
+    if (!chainDetailed) return ''
+    return chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
+        ? chainDetailed.explorers[0].url
+        : chainDetailed.infoURL
 }
 
 export function resolveTransactionLinkOnExplorer(chainId: ChainId, tx: string) {

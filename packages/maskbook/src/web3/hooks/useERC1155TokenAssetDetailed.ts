@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { ERC1155TokenAssetDetailed, ERC1155TokenDetailed } from '../types'
+import type { ERC1155TokenAssetDetailed, ERC1155TokenDetailed } from '@dimensiondev/web3-shared'
 
 export function useERC1155TokenAssetDetailed(token?: ERC1155TokenDetailed) {
     return useAsyncRetry(async () => {

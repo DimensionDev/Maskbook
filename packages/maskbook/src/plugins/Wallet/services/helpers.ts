@@ -13,9 +13,8 @@ import type {
     PhraseRecord,
     PhraseRecordInDatabase,
 } from '../database/types'
-import { resolveChainId } from '../../../web3/pipes'
+import { ChainId, resolveChainId } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { ChainId } from '../../../web3/types'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatEthereumAddress(address))

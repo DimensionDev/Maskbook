@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
+import type { ERC721Token } from '@dimensiondev/web3-shared'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
-import type { ERC721Token } from '../types'
 import { useChainId } from './useChainId'
 
 export function useERC721TokenByIndex(token?: ERC721Token, index: number = 0) {

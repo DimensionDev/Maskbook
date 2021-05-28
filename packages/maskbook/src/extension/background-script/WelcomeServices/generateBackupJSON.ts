@@ -9,7 +9,7 @@ import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupForm
 import { ProfileIdentifier, PersonaIdentifier, Identifier } from '../../../database/type'
 import { getWallets } from '../../../plugins/Wallet/services'
 import { WalletRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
-import { ProviderType } from '../../../web3/types'
+import { ProviderType } from '@dimensiondev/web3-shared'
 
 export interface BackupOptions {
     noPosts: boolean

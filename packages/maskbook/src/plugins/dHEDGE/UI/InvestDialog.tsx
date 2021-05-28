@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { EthereumTokenType, FungibleTokenDetailed } from '../../../web3/types'
+import { EthereumTokenType, FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useInvestCallback } from '../hooks/useInvestCallback'

@@ -1,15 +1,7 @@
 import { useMemo } from 'react'
-import { ChainId, useChainId } from './useChainId'
+import { ChainId, Web3Constants } from '../types'
+import { useChainId } from './useChainId'
 
-// bigint is not in our list. iOS doesn't support that.
-type Primitive = string | number | boolean | symbol | undefined | null
-export interface Web3Constants {
-    [K: string]: { [K in ChainId]: Primitive | Primitive[] }
-}
-
-/**
- * @deprecated use useConstantNext instead
- */
 export function useConstant<T extends Web3Constants, K extends keyof T>(constant: T, key: K, chainId?: ChainId) {
     const chainId_ = useChainId()
     return pick(constant, key, chainId ?? chainId_)
@@ -22,8 +14,7 @@ export function useConstantNext<T extends Web3Constants>(constants: T, chainId?:
 }
 
 export function constantOfChain<T extends Web3Constants>(constants: T, chainId: ChainId) {
-    type Result = { [key in keyof T]: T[key][ChainId.Mainnet] }
-    const chainSpecifiedConstant = {} as Result
+    const chainSpecifiedConstant = {} as { [key in keyof T]: T[key][ChainId.Mainnet] }
     for (const i in constants) chainSpecifiedConstant[i] = constants[i][chainId]
     return chainSpecifiedConstant
 }

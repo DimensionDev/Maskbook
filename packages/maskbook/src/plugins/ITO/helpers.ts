@@ -4,8 +4,8 @@ import { createTypedMessageMetadataReader, createRenderWithMetadata } from '../.
 import { ITO_MetaKey } from './constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from './types'
 import schema from './schema.json'
-import type { FungibleTokenDetailed } from '../../web3/types'
-import { isNative } from '../../web3/helpers'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import { isNative } from '@dimensiondev/web3-shared'
 
 export const ITO_MetadataReader = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_MetaKey, schema)
 export const renderWithITO_Metadata = createRenderWithMetadata(ITO_MetadataReader)

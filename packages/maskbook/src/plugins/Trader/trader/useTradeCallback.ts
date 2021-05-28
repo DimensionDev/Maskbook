@@ -1,7 +1,7 @@
 import type { Trade } from '@uniswap/sdk'
 import { unreachable } from '@dimensiondev/maskbook-shared'
 import { SwapQuoteResponse, SwapResponse, TradeComputed, TradeProvider } from '../types'
-import { useTradeCallback as useNativeTokenCallback } from './native/useTradeCallback'
+import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback'
 import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback'
 import { useTradeCallback as useUniswapCallback } from './uniswap/useTradeCallback'
 import { useTradeCallback as useBalancerCallback } from './balancer/useTradeCallback'
@@ -21,7 +21,7 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
 
     // create trade callbacks
     const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed)
-    const nativeToken = useNativeTokenCallback(tradeComputed as TradeComputed<NativeTokenWrapper>)
+    const nativeTokenWrapper = useNativeTokenWrapperCallback(tradeComputed as TradeComputed<NativeTokenWrapper>)
 
     const uniswap = useUniswapCallback(
         provider === TradeProvider.UNISWAP && !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<Trade>) : null,
@@ -50,7 +50,7 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
     )
 
     // the trade is an ETH-WETH pair
-    if (isNativeTokenWrapper_) return nativeToken
+    if (isNativeTokenWrapper_) return nativeTokenWrapper
 
     // handle trades by various provider
     switch (provider) {

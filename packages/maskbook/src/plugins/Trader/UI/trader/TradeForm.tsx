@@ -11,7 +11,7 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { TradeStrategy, TokenPanelType, TradeComputed, WarningLevel, TradeProvider } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useRemoteControlledDialog, useI18N } from '../../../../utils'
-import { FungibleTokenDetailed, EthereumTokenType } from '../../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { isNativeTokenWrapper, toBips } from '../../helpers'

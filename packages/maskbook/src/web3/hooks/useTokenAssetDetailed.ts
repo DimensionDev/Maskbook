@@ -3,7 +3,7 @@ import {
     ERC1155TokenAssetDetailed,
     NonFungibleTokenDetailed,
     EthereumTokenType,
-} from '../types'
+} from '@dimensiondev/web3-shared'
 import { useERC721TokenAssetDetailed } from './useERC721TokenAssetDetailed'
 import { useERC1155TokenAssetDetailed } from './useERC1155TokenAssetDetailed'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'

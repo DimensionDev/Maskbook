@@ -4,7 +4,7 @@ import Web3Utils from 'web3-utils'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { FungibleTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
+import { FungibleTokenDetailed, EthereumTokenType, TransactionEventType } from '@dimensiondev/web3-shared'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import Services from '../../../extension/service'
 

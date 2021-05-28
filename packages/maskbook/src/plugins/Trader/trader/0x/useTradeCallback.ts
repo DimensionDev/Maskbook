@@ -6,7 +6,7 @@ import Services from '../../../../extension/service'
 import { useAccount } from '../../../../web3/hooks/useAccount'
 import { useChainId } from '../../../../web3/hooks/useChainId'
 import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import { ChainId } from '../../../../web3/types'
+import { ChainId } from '@dimensiondev/web3-shared'
 import { nonFunctionalWeb3 } from '../../../../web3/web3'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
 

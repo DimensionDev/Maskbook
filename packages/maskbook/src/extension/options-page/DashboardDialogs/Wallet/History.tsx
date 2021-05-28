@@ -1,10 +1,10 @@
-import { makeStyles, Theme } from '@material-ui/core'
 import { useState } from 'react'
 import { Clock as ClockIcon } from 'react-feather'
-import { useI18N } from '../../../../utils'
+import { makeStyles, Theme } from '@material-ui/core'
+import { useI18N } from '../../../../utils/i18n-next-ui'
+import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import type { RedPacketJSONPayload } from '../../../../plugins/RedPacket/types'
 import { RedPacketInboundList, RedPacketOutboundList } from '../../../../plugins/RedPacket/UI/RedPacketList'
-import AbstractTab, { AbstractTabProps } from '../../DashboardComponents/AbstractTab'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import type { WalletProps } from './types'
 
