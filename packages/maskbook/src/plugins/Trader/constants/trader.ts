@@ -1,7 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { CONSTANTS } from '@dimensiondev/web3-shared'
-import { createERC20Token, getConstant } from '@dimensiondev/web3-shared'
-import { ChainId, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import { CONSTANTS, createERC20Token, getConstant, ChainId, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 
 export const TRADE_CONSTANTS = {
     UNISWAP_V2_ROUTER_ADDRESS: {

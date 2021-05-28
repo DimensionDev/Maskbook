@@ -2,14 +2,13 @@ import { head } from 'lodash-es'
 import { OpenSeaPort } from 'opensea-js'
 import type { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
+import { ChainId, resolveChainName } from '@dimensiondev/web3-shared'
 import { getChainId, request, requestSend } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaRinkebyBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
 import { Flags } from '../../../utils/flags'
 import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../types'
 import { OpenSeaEventHistoryQuery } from '../queries/OpenSea'
-import { ChainId } from '@dimensiondev/web3-shared'
-import { resolveChainName } from '@dimensiondev/web3-shared'
 
 function createExternalProvider() {
     return {

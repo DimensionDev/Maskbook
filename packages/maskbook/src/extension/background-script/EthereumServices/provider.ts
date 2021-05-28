@@ -1,9 +1,9 @@
 import { first } from 'lodash-es'
+import { ProviderType } from '@dimensiondev/web3-shared'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import * as CustomNetwork from './providers/CustomNetwork'
 import { getWallets } from '../../../plugins/Wallet/services'
-import { ProviderType } from '@dimensiondev/web3-shared'
 
 //#region connect WalletConnect
 // step 1:

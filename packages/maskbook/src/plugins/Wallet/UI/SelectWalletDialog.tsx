@@ -2,16 +2,15 @@ import { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+import { ProviderType, useWallets, useWallet } from '@dimensiondev/web3-shared'
 import { useValueRef, delay, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { WalletMessages } from '../messages'
-import { useWallets, useWallet } from '@dimensiondev/web3-shared'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { ProviderType } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     content: {

@@ -3,14 +3,17 @@ import classNames from 'classnames'
 import { BigNumber } from 'bignumber.js'
 import { makeStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import { TransactionStateType } from '@dimensiondev/web3-shared'
+import {
+    TransactionStateType,
+    FungibleTokenDetailed,
+    resolveLinkOnExplorer,
+    useChainId,
+    useChainIdValid,
+    useAccount,
+} from '@dimensiondev/web3-shared'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { useRemoteControlledDialog, getAssetAsBlobURL, formatDateTime, getTextUILength, useI18N } from '../../../utils'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
-import { resolveLinkOnExplorer } from '@dimensiondev/web3-shared'
-import { useChainId, useChainIdValid } from '@dimensiondev/web3-shared'
-import { useAccount } from '@dimensiondev/web3-shared'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { formatAmountPrecision, formatEthereumAddress, formatBalance } from '@dimensiondev/maskbook-shared'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'

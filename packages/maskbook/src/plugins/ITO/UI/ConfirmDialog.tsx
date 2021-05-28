@@ -9,8 +9,12 @@ import { useConstant } from '@dimensiondev/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useChainId } from '@dimensiondev/web3-shared'
 import { dateTimeFormat } from '../assets/formatDate'
-import { resolveTokenLinkOnExplorer, resolveAddressLinkOnExplorer, isNative } from '@dimensiondev/web3-shared'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import {
+    resolveTokenLinkOnExplorer,
+    resolveAddressLinkOnExplorer,
+    isNative,
+    FungibleTokenDetailed,
+} from '@dimensiondev/web3-shared'
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
 import { ITO_CONSTANTS } from '../constants'

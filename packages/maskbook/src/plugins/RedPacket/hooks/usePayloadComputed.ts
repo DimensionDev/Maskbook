@@ -1,5 +1,4 @@
-import { resolveChainName, useChainId } from '@dimensiondev/web3-shared'
-import { ChainId, EthereumNetwork, EthereumTokenType } from '@dimensiondev/web3-shared'
+import { resolveChainName, useChainId, ChainId, EthereumNetwork, EthereumTokenType } from '@dimensiondev/web3-shared'
 import { RED_PACKET_CONSTANTS, RED_PACKET_CONTRACT_VERSION } from '../constants'
 import type { History, RedPacketJSONPayload } from '../types'
 import { useRedPacketsFromDB } from './useRedPacket'

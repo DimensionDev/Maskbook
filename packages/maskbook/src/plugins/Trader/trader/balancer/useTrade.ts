@@ -1,10 +1,8 @@
 import { useAsyncRetry } from 'react-use'
-import { CONSTANTS } from '@dimensiondev/web3-shared'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import { CONSTANTS, FungibleTokenDetailed, isNative, useConstant, useBlockNumber } from '@dimensiondev/web3-shared'
 import { BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { SwapResponse, TradeStrategy } from '../../types'
-import { isNative, useConstant, useBlockNumber } from '@dimensiondev/web3-shared'
 
 export function useTrade(
     strategy: TradeStrategy,

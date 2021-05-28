@@ -1,13 +1,16 @@
 import { useCallback, useState } from 'react'
 import type { SwapParameters, Trade } from '@uniswap/sdk'
-import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
-import { addGasMargin } from '@dimensiondev/web3-shared'
-import { TransactionState, TransactionStateType } from '@dimensiondev/web3-shared'
+import {
+    addGasMargin,
+    TransactionState,
+    TransactionStateType,
+    TransactionEventType,
+    useAccount,
+} from '@dimensiondev/web3-shared'
+import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
 import type { TradeComputed } from '../../types'
 import type { RouterV2 } from '@dimensiondev/contracts/types/RouterV2'
-import { TransactionEventType } from '@dimensiondev/web3-shared'
-import { useAccount } from '@dimensiondev/web3-shared'
 
 interface SuccessfulCall {
     parameters: SwapParameters
