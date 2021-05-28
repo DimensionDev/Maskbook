@@ -12,8 +12,7 @@ import {
 } from '@uniswap/sdk'
 import { formatEthereumAddress, unreachable } from '@dimensiondev/maskbook-shared'
 import { WETH } from '../constants'
-import { ChainId, EthereumTokenType, FungibleTokenDetailed } from '@dimensiondev/web3-shared'
-import { isNative } from '@dimensiondev/web3-shared'
+import { ChainId, EthereumTokenType, FungibleTokenDetailed, isNative } from '@dimensiondev/web3-shared'
 
 export function toUniswapChainId(chainId: ChainId): UniswapChainId {
     switch (chainId) {

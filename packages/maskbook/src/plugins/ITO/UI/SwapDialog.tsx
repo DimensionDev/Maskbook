@@ -6,20 +6,26 @@ import { formatBalance } from '@dimensiondev/maskbook-shared'
 
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { FungibleTokenDetailed, ERC20TokenDetailed, EthereumTokenType, ChainId } from '@dimensiondev/web3-shared'
-import { TransactionStateType } from '@dimensiondev/web3-shared'
+import {
+    FungibleTokenDetailed,
+    ERC20TokenDetailed,
+    EthereumTokenType,
+    ChainId,
+    TransactionStateType,
+    useTokenBalance,
+    useConstant,
+    resolveTransactionLinkOnExplorer,
+    useChainId,
+    isNative,
+    isSameAddress,
+} from '@dimensiondev/web3-shared'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { useTokenBalance } from '@dimensiondev/web3-shared'
 import { useSwapCallback } from '../hooks/useSwapCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { useConstant } from '@dimensiondev/web3-shared'
-import { resolveTransactionLinkOnExplorer } from '@dimensiondev/web3-shared'
-import { useChainId } from '@dimensiondev/web3-shared'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO_CONSTANTS } from '../constants'
 import { SwapStatus } from './SwapGuide'
-import { isNative, isSameAddress } from '@dimensiondev/web3-shared'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'

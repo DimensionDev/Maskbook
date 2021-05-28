@@ -5,8 +5,13 @@ import { WalletRPC, WalletMessages } from '../messages'
 import { ERC721TokenArrayComparer } from '../helpers'
 import type { CollectibleProvider } from '../types'
 import { uniqWith } from 'lodash-es'
-import { createERC721Token, isSameAddress, useChainId } from '@dimensiondev/web3-shared'
-import type { ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '@dimensiondev/web3-shared'
+import {
+    createERC721Token,
+    isSameAddress,
+    useChainId,
+    ERC1155TokenAssetDetailed,
+    ERC721TokenAssetDetailed,
+} from '@dimensiondev/web3-shared'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 //#region cache service query result

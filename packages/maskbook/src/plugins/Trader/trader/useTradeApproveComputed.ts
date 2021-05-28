@@ -1,9 +1,12 @@
 import { useMemo } from 'react'
-import { useChainId } from '@dimensiondev/web3-shared'
-import { createERC20Token } from '@dimensiondev/web3-shared'
+import {
+    useChainId,
+    createERC20Token,
+    FungibleTokenDetailed,
+    EthereumTokenType,
+    useConstant,
+} from '@dimensiondev/web3-shared'
 import { SwapQuoteResponse, TradeComputed, TradeProvider } from '../types'
-import { FungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
-import { useConstant } from '@dimensiondev/web3-shared'
 import { TRADE_CONSTANTS } from '../constants'
 import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 import BigNumber from 'bignumber.js'

@@ -1,7 +1,5 @@
 import { compact } from 'lodash-es'
-import { isSameAddress, useChainId } from '@dimensiondev/web3-shared'
-import { resolveChainId } from '@dimensiondev/web3-shared'
-import { ChainId } from '@dimensiondev/web3-shared'
+import { isSameAddress, useChainId, resolveChainId, ChainId } from '@dimensiondev/web3-shared'
 import { RedPacketJSONPayload, RedPacketStatus } from '../types'
 import { useAvailability } from './useAvailability'
 

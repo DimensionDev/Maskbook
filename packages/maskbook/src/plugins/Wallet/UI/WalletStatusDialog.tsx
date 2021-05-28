@@ -4,15 +4,20 @@ import { useCopyToClipboard } from 'react-use'
 import ErrorIcon from '@material-ui/icons/Error'
 import { Button, DialogActions, DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
 import { FormattedAddress } from '@dimensiondev/maskbook-shared'
+import {
+    useChainId,
+    useChainIdValid,
+    resolveLinkOnExplorer,
+    resolveProviderName,
+    ChainId,
+    ProviderType,
+} from '@dimensiondev/web3-shared'
 
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ProviderIcon } from '../../../components/shared/ProviderIcon'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 import Services from '../../../extension/service'
 import { useRemoteControlledDialog, useValueRef, useI18N } from '../../../utils'
-import { useChainId, useChainIdValid } from '@dimensiondev/web3-shared'
-import { resolveLinkOnExplorer, resolveProviderName } from '@dimensiondev/web3-shared'
-import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
 import { EthereumChainChip } from '../../../web3/UI/EthereumChainChip'
 import { useWallet } from '../hooks/useWallet'
 import { WalletMessages } from '../messages'

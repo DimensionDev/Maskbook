@@ -4,7 +4,16 @@ import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/sdk'
 
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { FungibleTokenDetailed, EthereumTokenType, ChainId } from '@dimensiondev/web3-shared'
+import {
+    FungibleTokenDetailed,
+    EthereumTokenType,
+    ChainId,
+    TransactionStateType,
+    useTokenBalance,
+    useChainId,
+    createERC20Token,
+    createNativeToken,
+} from '@dimensiondev/web3-shared'
 import { TradeForm } from './TradeForm'
 import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
 import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
@@ -13,7 +22,6 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { TradeActionType } from '../../trader/useTradeState'
 import { SwapResponse, TokenPanelType, TradeComputed, TradeProvider, Coin } from '../../types'
 import { delay } from '../../../../utils/utils'
-import { TransactionStateType } from '@dimensiondev/web3-shared'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { TradePairViewer } from '../uniswap/TradePairViewer'
@@ -21,14 +29,11 @@ import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { currentTradeProviderSettings } from '../../settings'
 import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
-import { useTokenBalance } from '@dimensiondev/web3-shared'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { EthereumMessages } from '../../../Ethereum/messages'
 import Services from '../../../../extension/service'
 import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
-import { useChainId } from '@dimensiondev/web3-shared'
-import { createERC20Token, createNativeToken } from '@dimensiondev/web3-shared'
 import { PluginTraderRPC } from '../../messages'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { isNativeTokenWrapper } from '../../helpers'

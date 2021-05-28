@@ -1,6 +1,4 @@
-import { CONSTANTS } from '@dimensiondev/web3-shared'
-import { createERC20Token, getConstant } from '@dimensiondev/web3-shared'
-import { ChainId } from '@dimensiondev/web3-shared'
+import { CONSTANTS, createERC20Token, getConstant, ChainId } from '@dimensiondev/web3-shared'
 
 export const ITO_MetaKey = 'com.maskbook.ito:1'
 export const ITO_PluginID = 'com.maskbook.ito'

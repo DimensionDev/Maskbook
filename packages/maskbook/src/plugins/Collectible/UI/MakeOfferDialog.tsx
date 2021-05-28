@@ -14,13 +14,18 @@ import {
 import { first } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import BigNumber from 'bignumber.js'
+import {
+    FungibleTokenDetailed,
+    EthereumTokenType,
+    useAccount,
+    isNative,
+    useTokenWatched,
+} from '@dimensiondev/web3-shared'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { FungibleTokenDetailed, EthereumTokenType, useAccount } from '@dimensiondev/web3-shared'
-import { isNative, useTokenWatched } from '@dimensiondev/web3-shared'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'

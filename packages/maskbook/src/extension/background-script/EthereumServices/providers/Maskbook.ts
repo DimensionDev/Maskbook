@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { currentMaskbookChainIdSettings } from '../../../../plugins/Wallet/settings'
 import { ChainId, getChainDetailed } from '@dimensiondev/web3-shared'
+import { currentMaskbookChainIdSettings } from '../../../../plugins/Wallet/settings'
 
 //#region providers
 const providerPool = new Map<string, HttpProvider>()

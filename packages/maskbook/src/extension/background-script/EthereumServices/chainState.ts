@@ -1,4 +1,6 @@
 import { debounce, first } from 'lodash-es'
+import { unreachable } from '@dimensiondev/maskbook-shared'
+import { isSameAddress, ChainId, ProviderType } from '@dimensiondev/web3-shared'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
@@ -10,9 +12,6 @@ import {
     currentCustomNetworkChainIdSettings,
 } from '../../../plugins/Wallet/settings'
 import { pollingTask } from '../../../utils/utils'
-import { unreachable } from '@dimensiondev/maskbook-shared'
-import { isSameAddress } from '@dimensiondev/web3-shared'
-import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
 import { getBlockNumber } from './network'
 import { startEffects } from '../../../utils/side-effects'
 import { Flags } from '../../../utils/flags'

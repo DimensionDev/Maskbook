@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Appearance, Language } from '@dimensiondev/maskbook-theme'
+import { resolveChainName, ChainId } from '@dimensiondev/web3-shared'
 
 import { useMatchXS, extendsTheme, useI18N, Flags } from '../../../utils'
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
@@ -41,11 +42,9 @@ import {
     resolveTradeProviderName,
 } from '../../../plugins/Trader/pipes'
 import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
-import { ChainId } from '@dimensiondev/web3-shared'
 import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
 import { PortfolioProvider } from '../../../plugins/Wallet/types'
 import { currentPortfolioDataProviderSettings, currentMaskbookChainIdSettings } from '../../../plugins/Wallet/settings'
-import { resolveChainName } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {

@@ -1,7 +1,6 @@
+import { ERC20TokenDetailed, isSameAddress } from '@dimensiondev/web3-shared'
 import LBP from '../apis/LBP/LBP.json'
-import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 import { useMemo } from 'react'
-import { isSameAddress } from '@dimensiondev/web3-shared'
 import { Flags } from '../../../utils/flags'
 
 export function useLBP(token?: ERC20TokenDetailed) {

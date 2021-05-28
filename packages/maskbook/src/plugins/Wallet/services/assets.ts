@@ -7,17 +7,19 @@ import { Asset, CollectibleProvider, BalanceRecord, PortfolioProvider, ZerionAdd
 import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
 import * as DebankAPI from '../apis/debank'
-import { CurrencyType } from '@dimensiondev/web3-shared'
-import { ChainId, EthereumTokenType } from '@dimensiondev/web3-shared'
 import {
+    CurrencyType,
+    ChainId,
+    EthereumTokenType,
     createERC1155Token,
     createERC20Token,
     createERC721Token,
     createNativeToken,
     getConstant,
+    CONSTANTS,
+    getChainDetailed,
+    resolveChainId,
 } from '@dimensiondev/web3-shared'
-import { CONSTANTS } from '@dimensiondev/web3-shared'
-import { getChainDetailed, resolveChainId } from '@dimensiondev/web3-shared'
 
 export async function getAssetsListNFT(
     address: string,

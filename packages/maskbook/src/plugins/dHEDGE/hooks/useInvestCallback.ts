@@ -8,8 +8,8 @@ import {
     TransactionStateType,
     useNonce,
     useGasPrice,
+    addGasMargin,
 } from '@dimensiondev/web3-shared'
-import { addGasMargin } from '@dimensiondev/web3-shared'
 import { useDHedgePoolContract } from '../contracts/useDHedgePool'
 
 /**

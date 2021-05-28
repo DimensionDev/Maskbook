@@ -2,12 +2,15 @@ import { useState } from 'react'
 import { uniqBy } from 'lodash-es'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { makeStyles, Typography } from '@material-ui/core'
-import { useConstant } from '@dimensiondev/web3-shared'
-import { CONSTANTS } from '@dimensiondev/web3-shared'
+import {
+    useConstant,
+    CONSTANTS,
+    isSameAddress,
+    FungibleTokenDetailed,
+    EthereumTokenType,
+} from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { isSameAddress } from '@dimensiondev/web3-shared'
 import { TokenInList } from './TokenInList'
-import { FungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
 import {
     TokenListsState,
     useERC20TokensDetailedFromTokenLists,

@@ -2,17 +2,15 @@ import { useState, useMemo, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { useSnackbar } from 'notistack'
 import { makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
+import { FungibleTokenDetailed, EthereumTokenType, useAccount, TokenWatched, isNative } from '@dimensiondev/web3-shared'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { FungibleTokenDetailed, EthereumTokenType, useAccount } from '@dimensiondev/web3-shared'
-import type { TokenWatched } from '@dimensiondev/web3-shared'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
-import { isNative } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => {
     return {
