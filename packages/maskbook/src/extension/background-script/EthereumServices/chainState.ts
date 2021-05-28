@@ -1,7 +1,5 @@
-import { debounce, first } from 'lodash-es'
-import { WalletMessages } from '../../../plugins/Wallet/messages'
+import { first } from 'lodash-es'
 import {
-    currentBlockNumberSettings,
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
     currentWalletConnectChainIdSettings,
@@ -9,11 +7,10 @@ import {
     currentSelectedWalletProviderSettings,
     currentCustomNetworkChainIdSettings,
 } from '../../../plugins/Wallet/settings'
-import { pollingTask } from '../../../utils/utils'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { unreachable } from '@dimensiondev/maskbook-shared'
 import { isSameAddress } from '../../../web3/helpers'
 import { ChainId, ProviderType } from '../../../web3/types'
-import { getBlockNumber } from './network'
 import { startEffects } from '../../../utils/side-effects'
 import { Flags } from '../../../utils/flags'
 import { getWalletsCached } from './wallet'
@@ -21,66 +18,29 @@ import { resetAllNonce } from './nonce'
 
 const effect = startEffects(module.hot)
 
-//#region tracking chain state
-export const updateBlockNumber = debounce(
-    async () => {
-        currentBlockNumberSettings.value = await getBlockNumber()
-
-        // reset the polling if chain state updated successfully
-        if (typeof resetPoolTask === 'function') resetPoolTask()
-    },
-    300,
-    {
-        trailing: true,
-    },
-)
-
-// polling the newest block state from the chain
-let resetPoolTask: () => void
-effect(() => {
-    const { reset } = pollingTask(
-        async () => {
-            await updateBlockNumber()
-            return false // never stop the polling
-        },
-        {
-            delay: 30 /* seconds */ * 1000 /* milliseconds */,
-        },
-    )
-    resetPoolTask = reset
-    return reset
-})
-
 // revalidate ChainState if the chainId of current provider was changed
 effect(() =>
     currentMaskbookChainIdSettings.addListener(() => {
-        updateBlockNumber()
         resetAllNonce()
         WalletMessages.events.chainIdUpdated.sendToAll(undefined)
     }),
 )
 effect(() =>
     currentMetaMaskChainIdSettings.addListener(() => {
-        updateBlockNumber()
         WalletMessages.events.chainIdUpdated.sendToAll(undefined)
     }),
 )
 effect(() =>
     currentWalletConnectChainIdSettings.addListener(() => {
-        updateBlockNumber()
         WalletMessages.events.chainIdUpdated.sendToAll(undefined)
     }),
 )
 
 effect(() =>
     currentCustomNetworkChainIdSettings.addListener(() => {
-        updateBlockNumber()
         WalletMessages.events.chainIdUpdated.sendToAll(undefined)
     }),
 )
-
-// revaldiate if the current wallet was changed
-effect(() => WalletMessages.events.walletsUpdated.on(updateBlockNumber))
 //#endregion
 
 /**

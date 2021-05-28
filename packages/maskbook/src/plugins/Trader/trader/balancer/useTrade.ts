@@ -1,6 +1,5 @@
 import { useAsyncRetry } from 'react-use'
 import { CONSTANTS } from '../../../../web3/constants'
-import { useBlockNumber } from '../../../../web3/hooks/useBlockNumber'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import type { FungibleTokenDetailed } from '../../../../web3/types'
 import { BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
@@ -15,7 +14,6 @@ export function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
-    const blockNumber = useBlockNumber()
     const WETH_ADDRESS = useConstant(CONSTANTS, 'WETH_ADDRESS')
     const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     const BALANCER_ETH_ADDRESS = useConstant(TRADE_CONSTANTS, 'BALANCER_ETH_ADDRESS')
@@ -46,6 +44,5 @@ export function useTrade(
         outputAmount,
         inputToken?.address,
         outputToken?.address,
-        blockNumber, // refresh api each block
     ])
 }

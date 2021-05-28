@@ -13,7 +13,7 @@ export function usePower(identifier: ProposalIdentifier) {
     const blockNumber = useBlockNumber()
     const account = useAccount()
     return useAsyncRetry(async () => {
-        if (!account) return 0
+        if (!account || !blockNumber) return 0
         const scores = await PluginSnapshotRPC.getScores(message, [account], blockNumber)
         return scores[0]![account]!
     }, [blockNumber, account])

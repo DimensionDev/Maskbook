@@ -5,7 +5,7 @@ import type { RedPacketRecord } from '../types'
 import { RedPacketArrayComparer } from '../helpers'
 import { useChainId } from '../../../web3/hooks/useChainId'
 import { resolveChainId } from '../../../web3/pipes'
-import { useBlockNumberOnce } from '../../../web3/hooks/useBlockNumber'
+import { useBlockNumber } from '../../../web3/hooks/useBlockNumber'
 import { RED_PACKET_HISTROY_MAX_BLOCK_SIZE } from '../constants'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import { RedPacketMessage, RedPacketRPC } from '../messages'
@@ -32,12 +32,12 @@ export function useRedPacketsFromDB() {
 export function useRedPacketsFromChain() {
     const account = useAccount()
     const chainId = useChainId()
-    const blockNumber = useBlockNumberOnce()
+    const blockNumber = useBlockNumber()
     return useAsync(
         async () =>
             blockNumber
                 ? RedPacketRPC.getRedPacketsFromChain(account, blockNumber - RED_PACKET_HISTROY_MAX_BLOCK_SIZE)
                 : [],
-        [account, blockNumber],
+        [account, blockNumber, chainId],
     )
 }

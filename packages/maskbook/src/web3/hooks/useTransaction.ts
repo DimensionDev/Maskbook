@@ -4,7 +4,6 @@ import type { Transaction, TransactionReceipt } from 'web3-core'
 import Services from '../../extension/service'
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
-import { useBlockNumber } from './useBlockNumber'
 
 export function useTransaction(hash: string) {
     const account = useAccount()
@@ -21,7 +20,6 @@ export function useTransactionReceipt(hash: string) {
     const [receipt, setReceipt] = useState<TransactionReceipt | null>(null)
     const account = useAccount()
     const chainId = useChainId()
-    const blockNumber = useBlockNumber()
     useAsync(async () => {
         if (!hash) {
             setReceipt(null)
@@ -29,6 +27,6 @@ export function useTransactionReceipt(hash: string) {
         }
         if (receipt?.transactionHash === hash) return
         setReceipt(await Services.Ethereum.getTransactionReceipt(hash))
-    }, [account, hash, receipt, blockNumber])
+    }, [account, hash, receipt, chainId])
     return receipt
 }

@@ -2,7 +2,6 @@ import { difference } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import { getEnumAsArray } from '../../../../utils/enum'
 import { CONSTANTS } from '../../../../web3/constants'
-import { useBlockNumber } from '../../../../web3/hooks/useBlockNumber'
 import { useConstant } from '../../../../web3/hooks/useConstant'
 import type { FungibleTokenDetailed } from '../../../../web3/types'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
@@ -20,7 +19,6 @@ export function useTrade(
     outputToken?: FungibleTokenDetailed,
 ) {
     const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
-    const blockNumber = useBlockNumber()
 
     const slippage = useSlippageTolerance()
     const { pools } = useTradeProviderSettings()
@@ -52,6 +50,5 @@ export function useTrade(
         outputToken?.address,
         slippage,
         pools.length,
-        blockNumber, // refresh api each block
     ])
 }

@@ -62,13 +62,6 @@ export const currentCollectibleDataProviderSettings = createGlobalSettings<Colle
 )
 
 /**
- * The block number state
- */
-export const currentBlockNumberSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+blockNumber`, 0, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
-/**
  * Chain Id of Mask Network
  */
 export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>(

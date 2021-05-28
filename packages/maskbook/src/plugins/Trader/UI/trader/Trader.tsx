@@ -24,7 +24,6 @@ import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { useTokenBalance } from '../../../../web3/hooks/useTokenBalance'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { EthereumMessages } from '../../../Ethereum/messages'
-import Services from '../../../../extension/service'
 import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
 import { useChainId } from '../../../../web3/hooks/useChainId'
@@ -220,7 +219,6 @@ export function Trader(props: TraderProps) {
     }, 30 /* seconds */ * 1000 /* milliseconds */)
 
     const onRefreshClick = useCallback(async () => {
-        await Services.Ethereum.updateBlockNumber()
         asyncTradeComputed.retry()
         resetTimeout()
     }, [asyncTradeComputed.retry, resetTimeout])
