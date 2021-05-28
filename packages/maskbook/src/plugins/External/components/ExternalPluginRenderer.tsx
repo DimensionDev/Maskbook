@@ -4,10 +4,11 @@ import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
 import { MaskExternalPluginPreviewRenderer, setHostConfig } from '@dimensiondev/external-plugin-previewer'
 import { PermissionAwareRedirectOf } from '../../../extension/popups'
+import { createThirdPartyPopupContext } from '../popup-context'
 
 setHostConfig({
     permissionAwareOpen(url) {
-        Services.ThirdPartyPlugin.openPluginPopup(PermissionAwareRedirectOf(url))
+        Services.ThirdPartyPlugin.openPluginPopup(PermissionAwareRedirectOf(url, createThirdPartyPopupContext()))
     },
 })
 

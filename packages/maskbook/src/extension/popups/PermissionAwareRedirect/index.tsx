@@ -9,18 +9,24 @@ import { PermissionAwareRedirectUI } from './ui'
 import { getHostPermissionFieldFromURL, isValidURL } from './utils'
 export default function PermissionAwareRedirect() {
     const url = new URLSearchParams(useLocation().search).get('url')
+    const context = new URLSearchParams(useLocation().search).get('context')
     if (!url) return <MissingParameter message="Parameter URL not found." />
+    if (!context) return <MissingParameter message="Parameter context not found." />
     if (!isValidURL(url)) return <MissingParameter message="Parameter URL is not valid." />
-    return <Inner url={url} />
+    return <Inner url={url} context={context} />
 }
-function Inner({ url }: { url: string }) {
+function Inner({ url, context }: { url: string; context: string }) {
     const { value: hasPermission, retry } = useAsyncRetry(async () => {
         if (!url) return false
         return browser.permissions.contains({ origins: [getHostPermissionFieldFromURL(url)] })
     }, [url])
     useEffect(() => {
         if (hasPermission) {
-            Services.ThirdPartyPlugin.enableSDK(new URL('./', url).href).then(() => (location.href = url))
+            Services.ThirdPartyPlugin.enableSDK(new URL('./', url).href).then(() => {
+                const u = new URL(url)
+                u.searchParams.append('mask_context', context)
+                location.href = u.toString()
+            })
         }
     }, [hasPermission, url])
     return (

@@ -1,3 +1,5 @@
+import type { ThirdPartyPopupContextIdentifier } from '../../plugins/External/popup-context'
+
 export enum DialogRoutes {
     PermissionAwareRedirect = '/redirect',
     RequestPermission = '/request-permission',
@@ -7,7 +9,10 @@ export enum DialogRoutes {
 export function getRouteURLWithNoParam(kind: DialogRoutes) {
     return browser.runtime.getURL(`/popups.html#${kind}`)
 }
-export function PermissionAwareRedirectOf(url: string) {
-    return getRouteURLWithNoParam(DialogRoutes.PermissionAwareRedirect) + `?url=${encodeURIComponent(url)}`
+export function PermissionAwareRedirectOf(url: string, context: ThirdPartyPopupContextIdentifier) {
+    return (
+        getRouteURLWithNoParam(DialogRoutes.PermissionAwareRedirect) +
+        `?url=${encodeURIComponent(url)}&context=${context}`
+    )
 }
 export { constructRequestPermissionURL } from './RequestPermission/utils'

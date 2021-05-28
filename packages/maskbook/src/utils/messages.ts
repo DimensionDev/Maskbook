@@ -2,6 +2,7 @@ import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import Serialization from './type-transform/Serialization'
 import type { ProfileIdentifier, GroupIdentifier, PersonaIdentifier } from '../database/type'
 import type { TypedMessage } from '../protocols/typed-message'
+import type { ThirdPartyPopupContextIdentifier } from '../plugins/External/popup-context'
 
 export interface UpdateEvent<Data> {
     readonly reason: 'update' | 'delete' | 'new'
@@ -49,6 +50,9 @@ export interface MaskMessages {
         before: PersonaIdentifier | undefined
         after: PersonaIdentifier | undefined
     }[]
+    // When a SNS page get this event, if it know this context, it should response the challenge with pong.
+    thirdPartyPing: { context: ThirdPartyPopupContextIdentifier; challenge: number }
+    thirdPartyPong: number
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })
