@@ -1,5 +1,5 @@
-import type { Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
-import { ChainId, WalletProvider } from '@dimensiondev/web3-shared'
+import type { ERC20TokenDetailed, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
+import { ChainId, EthereumTokenType, WalletProvider } from '@dimensiondev/web3-shared'
 import { Messages, PluginMessages, PluginServices, Services } from '../API'
 import { pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
@@ -26,6 +26,12 @@ export const Web3Context: Web3ProviderType = {
         '',
         Messages.events.createInternalSettingsChanged.on,
     ),
+    erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
+    blockNumber: createSubscriptionAsync(
+        Services.Settings.getBlockNumber,
+        0,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
 }
 
 async function getWallets() {
@@ -42,6 +48,14 @@ async function getWallets() {
             'erc721_token_blacklist',
         ] as (keyof typeof record)[]),
         hasPrivateKey: Boolean(record._private_key_ || record.mnemonic.length),
+    }))
+}
+
+async function getERC20Tokens() {
+    const raw = await PluginServices.Wallet.getERC20Tokens()
+    return raw.map<ERC20TokenDetailed>((x) => ({
+        type: EthereumTokenType.ERC20,
+        ...x,
     }))
 }
 

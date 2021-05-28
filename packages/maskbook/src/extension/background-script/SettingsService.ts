@@ -10,6 +10,7 @@ import {
 import { currentTrendingDataProviderSettings } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
+    currentBlockNumberSettings,
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
 } from '../../plugins/Wallet/settings'
@@ -36,6 +37,8 @@ export const [getAncientPostsCompatibiltyMode, setAncientPostsCompatibiltyMode] 
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(
     currentSelectedWalletProviderSettings,
 )
+
+export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
 
 export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentSelectedWalletAddressSettings)
 

@@ -11,6 +11,8 @@ import {
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils/flags'
 import type { InternalSettings } from '../settings/createSettings'
+import { EthereumTokenType } from './types'
+import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared/dist/hooks/useERC20Tokens'
 
 export const Web3Context: Web3ProviderType = {
     allowTestChain: {
@@ -27,6 +29,7 @@ export const Web3Context: Web3ProviderType = {
     wallets: createSubscriptionAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
     providerType: createSubscriptionFromSettings(currentSelectedWalletProviderSettings),
     networkType: createSubscriptionFromSettings(currentSelectedWalletNetworkSettings),
+    erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
 }
 
 async function getWallets() {
@@ -45,6 +48,15 @@ async function getWallets() {
         hasPrivateKey: Boolean(record._private_key_ || record.mnemonic.length),
     }))
 }
+
+async function getERC20Tokens() {
+    const raw = await WalletRPC.getERC20Tokens()
+    return raw.map<ERC20TokenDetailed>((x) => ({
+        type: EthereumTokenType.ERC20,
+        ...x,
+    }))
+}
+
 // utils
 function createSubscriptionFromSettings<T>(settings: InternalSettings<T>): Subscription<T> {
     const { trigger, subscribe } = getEventTarget()
