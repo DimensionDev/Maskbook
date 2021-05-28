@@ -1,5 +1,5 @@
-import { EthereumTokenType } from '../types'
-import { ChainId, useChainId } from './useChainId'
+import { EthereumTokenType, ChainId } from '../types'
+import { useChainId } from './useChainId'
 import { useConstantNext } from './useConstants'
 import { CONSTANTS } from '../constants'
 import { useAsyncRetry } from 'react-use'

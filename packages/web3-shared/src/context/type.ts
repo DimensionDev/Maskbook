@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import type { ChainId, NetworkType, ProviderType, Wallet } from '../types'
+import type { ChainId, ERC20TokenDetailed, NetworkType, ProviderType, Wallet } from '../types'
 
 export interface Web3ProviderType {
     allowTestChain: Subscription<boolean>
@@ -9,4 +9,5 @@ export interface Web3ProviderType {
     wallets: Subscription<Wallet[]>
     providerType: Subscription<ProviderType>
     networkType: Subscription<NetworkType>
+    erc20Tokens: Subscription<ERC20TokenDetailed[]>
 }

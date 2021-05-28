@@ -1,5 +1,5 @@
 import { useSubscription } from 'use-subscription'
-import { useWeb3Provider } from '../context/provider'
+import { useWeb3Provider } from '../context'
 import CHAINS from '../assets/chains.json'
 
 export function useChainState() {
@@ -11,6 +11,7 @@ export function useChainState() {
     const networkType = useSubscription(_.networkType)
     const wallets = useSubscription(_.wallets)
     const chainId = useSubscription(_.chainId)
+    const erc20Tokens = useSubscription(_.erc20Tokens)
     const chainDetailed = CHAINS.find((x) => x.chainId === chainId)
     return {
         account,
@@ -20,6 +21,7 @@ export function useChainState() {
         wallets,
         chainId,
         chainDetailed,
+        erc20Tokens,
         chainIdValid: !account || allowTestChain || chainDetailed?.network === 'mainnet',
     }
 }

@@ -1,5 +1,5 @@
 import type { ChainId, EthereumTokenType } from '../types'
-import { useWeb3Context } from './context'
+import { useWeb3Context } from '../context'
 import { useWallet } from './useWallet'
 
 export interface ERC20Token {
