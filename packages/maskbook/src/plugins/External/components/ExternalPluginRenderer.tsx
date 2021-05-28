@@ -43,6 +43,7 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
             />
             <CardContent style={{ background: 'red', height: 200 }}>
                 <MaskExternalPluginPreviewRenderer
+                    pluginBase={props.url}
                     onError={console.warn}
                     script=""
                     payload={props.meta}

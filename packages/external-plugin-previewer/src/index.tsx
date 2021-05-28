@@ -4,10 +4,11 @@ export type { HostConfig } from './host'
 import { useEffect, useState } from 'react'
 import { create } from 'ef.js'
 import './DOMImpl'
-export function MaskExternalPluginPreviewRenderer({ payload, script, template, onError }: RenderData) {
+export function MaskExternalPluginPreviewRenderer({ pluginBase, payload, script, template, onError }: RenderData) {
     const [dom, setDOM] = useState<HTMLDivElement | null>(null)
     useEffect(() => {
         if (!dom) return
+        dom.setAttribute('data-plugin', pluginBase)
         // This is safe. ef template does not allow any form of dynamic code execute in the template.
         try {
             const RemoteContent = create(template)
@@ -18,10 +19,11 @@ export function MaskExternalPluginPreviewRenderer({ payload, script, template, o
             onError?.(e)
         }
         return
-    }, [dom, onError, payload, template])
+    }, [dom, onError, payload, template, pluginBase])
     return <div ref={(ref) => setDOM(ref)} />
 }
 export interface RenderData {
+    pluginBase: string
     template: string
     /** Currently not supported */
     script: string
