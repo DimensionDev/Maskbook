@@ -161,6 +161,8 @@ export namespace Plugin.SNSAdaptor {
         GlobalInjection?: InjectUI<{}>
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
+        /** This UI will be use when there is known badges. */
+        CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
     }
     /**
      * The entry has two type:
@@ -196,6 +198,21 @@ export namespace Plugin.SNSAdaptor {
     export interface CompositionDialogEntry_DialogProps {
         open: boolean
         onClose(): void
+    }
+    export type CompositionMetadataBadgeRender =
+        | CompositionMetadataBadgeRenderStatic
+        | CompositionMetadataBadgeRenderDynamic
+    export type CompositionMetadataBadgeRenderStatic = ReadonlyMap<string, CompositionMetadataBadgeRenderStaticMapper>
+    export type CompositionMetadataBadgeRenderStaticMapper<T = unknown> = (
+        metadata: T,
+    ) => string | BadgeDescriptor | null
+    export type CompositionMetadataBadgeRenderDynamic = (
+        key: string,
+        metadata: unknown,
+    ) => string | BadgeDescriptor | null
+    export interface BadgeDescriptor {
+        text: string | React.ReactChild
+        tooltip?: React.ReactChild
     }
 }
 
