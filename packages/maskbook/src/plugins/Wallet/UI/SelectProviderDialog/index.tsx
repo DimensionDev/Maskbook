@@ -18,6 +18,7 @@ import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { useWalletsOfProvider } from '@dimensiondev/web3-shared'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
+import { useChainId } from '@dimensiondev/web3-shared'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { Provider } from '../Provider'
@@ -32,11 +33,14 @@ import { ProviderType, NetworkType } from '../../../../web3/types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { NetworkIcon } from '../../../../components/shared/NetworkIcon'
 import { useAccount } from '../../../../web3/hooks/useAccount'
-import { currentMaskbookChainIdSettings, currentSelectedWalletNetworkSettings, currentSelectedWalletProviderSettings } from '../../settings'
+import {
+    currentMaskbookChainIdSettings,
+    currentSelectedWalletNetworkSettings,
+    currentSelectedWalletProviderSettings,
+} from '../../settings'
 import { resolveNetworkChainId } from '../../../../web3/pipes'
 import CHAINS from '../../../../web3/assets/chains.json'
 import { Flags } from '../../../../utils'
-import { useChainId } from '../../../../web3/hooks/useChainId'
 
 const useStyles = makeStyles((theme: Theme) => ({
     paper: {

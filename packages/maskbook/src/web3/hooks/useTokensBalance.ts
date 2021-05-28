@@ -1,4 +1,4 @@
-import { ChainId } from '@dimensiondev/maskbook-shared'
+import { ChainId } from '../types'
 import { useAsyncRetry } from 'react-use'
 import { useBalanceCheckerContract } from '../contracts/useBalanceChecker'
 import { useAccount } from './useAccount'
