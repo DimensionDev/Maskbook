@@ -2,7 +2,7 @@
 
 The developing new dashboard.
 
-Expected to working in three mode:
+Expected to work in three mode:
 
 ## Storybook
 
@@ -11,15 +11,22 @@ This means you should split logic and UI components.
 
 ## Isolated website
 
-This project should be able to run under http or https instead of chrome-extension.
+Only works in Chrome.
 
-Currently, you must also install the development mode (`./dist/`) Mask Network extension where the extension ID must be `jkoeaghipilijlahjplgbfiocjhldnap`.
-Otherwise you will encountered error "Error: Attempting to use a disconnected port object".
+1. Install Mask Network extension in the development mode (`./dist/`) or Beta/Nightly build.
+2. Make sure the extension ID is `jkoeaghipilijlahjplgbfiocjhldnap`.
+3. Open chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/index.html#/settings
+4. Make sure the Advanced settings: `Experimental: Allow isolated dashboard to connect` is enabled.
+5. Run `pnpm start` in this folder.
 
-It is not required to open the webpack process of the main Mask Network to develop this project (this is what "isolated" means).
-
-Currently the isolated mode only works on Chrome.
+If you got error "Error: Attempting to use a disconnected port object", it means you didn't set up correctly.
 
 ## Embedded mode
 
-This project should be able to run in the chrome-extension protocol (embedded in the extension).
+Not enabled in build version yet.
+
+Entry 1: Open the old dashboard, go to the settings page, click "Open new dashboard (intergated) (dev-only)".
+
+Entry 2: Click the Mask icon beside the address bar, ctrl+click "Enter dashboard".
+
+Entry 3: Open chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/next.html directly
