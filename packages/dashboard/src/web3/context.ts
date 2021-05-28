@@ -1,10 +1,14 @@
-import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
-import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
-import { Messages, PluginMessages, PluginServices, Services } from '../API'
-import { pick } from 'lodash-es'
+import { pick, noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
+import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
+import { Messages, PluginMessages, PluginServices, Services } from '../API'
 
 export const Web3Context: Web3ProviderType = {
+    provider: {
+        getCurrentValue: createExternalProvider,
+        subscribe: () => noop
+    },
     allowTestChain: createSubscriptionAsync(
         Services.Settings.getWalletAllowTestChain,
         false,
@@ -37,6 +41,18 @@ export const Web3Context: Web3ProviderType = {
         Messages.events.createInternalSettingsChanged.on,
     ),
     erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
+}
+
+export function createExternalProvider() {
+    return {
+        isMetaMask: false,
+        isStatus: true,
+        host: '',
+        path: '',
+        request: Services.Ethereum.request,
+        send: Services.Ethereum.requestSend,
+        sendAsync: Services.Ethereum.requestSend,
+    }
 }
 
 async function getWallets() {

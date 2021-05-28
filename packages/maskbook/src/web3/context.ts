@@ -11,8 +11,13 @@ import {
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
+import { createExternalProvider } from './web3'
 
 export const Web3Context: Web3ProviderType = {
+    provider: {
+        getCurrentValue: createExternalProvider,
+        subscribe: () => noop,
+    },
     allowTestChain: {
         getCurrentValue: () => Flags.wallet_allow_test_chain,
         subscribe: () => noop,
