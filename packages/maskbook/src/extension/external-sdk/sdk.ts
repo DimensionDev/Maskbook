@@ -11,7 +11,7 @@ export async function version() {
 }
 export { __assertLocalContext, __validateRemoteContext } from './sdk/context'
 export async function getProfile() {
-    const granted = await Services.ThirdPartyPlugin.requestPermission(location.origin + '/', [
+    const granted = await Services.ThirdPartyPlugin.requestPermission(new URL('./', location.href).toString(), [
         ThirdPartyPluginPermission.DEBUG_Profiles,
     ])
     if (!granted) throw new Error(SDKErrors.M3_Permission_denied)
