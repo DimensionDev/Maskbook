@@ -22,7 +22,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency, FormattedCurrency } from '@dimensiondev/maskbook-shared'
 import { useMatchXS, useI18N } from '../../../utils'
-import { CurrencyType, ERC20TokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
+import { CurrencyType, ERC20TokenDetailed, EthereumTokenType, resolveChainId } from '@dimensiondev/web3-shared'
 import { isSameAddress } from '@dimensiondev/web3-shared'
 import { TokenIcon } from './TokenIcon'
 import type { Wallet } from '@dimensiondev/web3-shared'
@@ -105,7 +105,12 @@ function ViewDetailed(props: ViewDetailedProps) {
                     sx={{
                         display: 'flex',
                     }}>
-                    <TokenIcon classes={{ icon: classes.coin }} name={asset.token.name} address={asset.token.address} />
+                    <TokenIcon
+                        classes={{ icon: classes.coin }}
+                        name={asset.token.name}
+                        address={asset.token.address}
+                        chainId={resolveChainId(asset.chain)}
+                    />
                     <Typography className={classes.name}>{asset.token.symbol}</Typography>
                     {asset.chain !== chainDetailed.chain.toLowerCase() ? (
                         <Chip className={classes.chain} label={asset.chain} size="small" />

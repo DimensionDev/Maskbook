@@ -1,10 +1,8 @@
 import { makeStyles, Avatar, Theme, AvatarProps } from '@material-ui/core'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { getConstant } from '@dimensiondev/web3-shared'
-import { CONSTANTS } from '@dimensiondev/web3-shared'
+import { CONSTANTS, useChainDetailed, ChainId, getConstant, resolveChainFullName } from '@dimensiondev/web3-shared'
 import { useBlockie } from '../../../web3/hooks/useBlockie'
-import { useChainDetailed } from '@dimensiondev/web3-shared'
 import { useImageFailover } from '../../../utils/hooks/useImageFailover'
 
 //#region fix icon image
@@ -36,23 +34,25 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export interface TokenIconProps extends withClasses<never> {
     name?: string
-    address: string
     logoURL?: string
+    chainId?: ChainId
+    address: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURL, name } = props
+    const { address, logoURL, name, chainId, AvatarProps } = props
+
     const classes = useStylesExtends(useStyles(), props)
-
     const chainDetailed = useChainDetailed()
-    const tokenBlockie = useBlockie(props.address)
+    const tokenBlockie = useBlockie(address)
 
+    const fullName = chainDetailed ? resolveChainFullName(chainId ?? chainDetailed.chainId) : ''
     const { value: baseURI, loading } = useImageFailover(
         chainDetailed
             ? [
-                  `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${chainDetailed.fullName.toLowerCase()}`,
-                  `https://rawcdn.githack.com/trustwallet/assets/master/blockchains/${chainDetailed.fullName.toLowerCase()}`,
+                  `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${fullName.toLowerCase()}`,
+                  `https://rawcdn.githack.com/trustwallet/assets/master/blockchains/${fullName.toLowerCase()}`,
               ]
             : [],
         '/info/logo.png',
@@ -60,7 +60,7 @@ export function TokenIcon(props: TokenIconProps) {
 
     if (logoURL)
         return (
-            <Avatar className={classes.icon} src={logoURL} {...props.AvatarProps}>
+            <Avatar className={classes.icon} src={logoURL} {...AvatarProps}>
                 {name?.substr(0, 1).toLocaleUpperCase()}
             </Avatar>
         )
@@ -68,7 +68,7 @@ export function TokenIcon(props: TokenIconProps) {
         <Avatar
             className={classes.icon}
             src={loading ? '' : resolveTokenIconURL(address, baseURI as string)}
-            {...props.AvatarProps}>
+            {...AvatarProps}>
             <Avatar className={classes.icon} src={tokenBlockie}>
                 {name?.substr(0, 1).toLocaleUpperCase()}
             </Avatar>

@@ -20,9 +20,8 @@ export function resolveProviderName(providerType: ProviderType) {
 }
 
 export function resolveChainId(name: string) {
-    const name_ = name.toLowerCase()
     const chainDetailed = CHAINS.find((x) =>
-        [x.chain.toLowerCase(), x.shortName.toLowerCase(), x.network.toLowerCase()].includes(name_),
+        [x.chain, x.network, x.shortName, x.fullName].map((y) => y.toLowerCase()).includes(name.toLowerCase()),
     )
     return chainDetailed?.chainId as ChainId | undefined
 }
@@ -44,6 +43,11 @@ export function resolveNetworkChainId(networkType: NetworkType) {
 export function resolveChainName(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     return chainDetailed?.name ?? 'Unknown'
+}
+
+export function resolveChainFullName(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    return chainDetailed?.fullName ?? 'Unknown'
 }
 
 export function resolveChainColor(chainId: ChainId) {
