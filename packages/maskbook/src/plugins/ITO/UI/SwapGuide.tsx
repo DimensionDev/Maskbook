@@ -1,4 +1,4 @@
-import { unstable_useTransition } from 'react'
+import { useTransition } from 'react'
 import { DialogContent, makeStyles, DialogProps } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils'
@@ -41,7 +41,7 @@ interface SwapGuideProps extends Pick<SwapDialogProps, 'exchangeTokens' | 'paylo
 export function SwapGuide(props: SwapGuideProps) {
     const { t } = useI18N()
     const { status, payload, exchangeTokens, isBuyer, open, retryPayload, shareSuccessLink, onUpdate, onClose } = props
-    const [isPending, startTransition] = unstable_useTransition()
+    const [isPending, startTransition] = useTransition()
     const onCloseShareDialog = useCallback(() => {
         startTransition(() => {
             onClose()
