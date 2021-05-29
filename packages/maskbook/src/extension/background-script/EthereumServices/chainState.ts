@@ -32,7 +32,6 @@ export const updateBlockNumber = debounce(
     3 /* seconds */ * 1000 /* milliseconds */,
     {
         trailing: true,
-
     },
 )
 
