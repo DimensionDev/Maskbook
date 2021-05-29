@@ -163,8 +163,9 @@ export type EthereumTokenDetailedType<T extends EthereumTokenType> = TokenDetail
 export type TokenAssetDetailedType<T extends EthereumTokenType.ERC721 | EthereumTokenType.ERC1155> =
     TokenAssetDetailedMap[T]
 
-// Please don't use this enum but use ChainId instead
-// this exists for back backward compatible
+/**
+ * @deprecated Please don't use this enum but use ChainId instead this exists for back backward compatible
+ */
 export enum EthereumNetwork {
     Mainnet = 'Mainnet',
     Ropsten = 'Ropsten',
