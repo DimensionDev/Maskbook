@@ -29,9 +29,9 @@ export const CONSTANTS = {
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
         [ChainId.BSC]: '',
-        [ChainId.BSCT]: '',
+        [ChainId.BSCT]: '0x7f004a42D760Eb68eB95Fa50f739917675181fCA',
         [ChainId.Matic]: '',
-        [ChainId.Mumbai]: '',
+        [ChainId.Mumbai]: '0xFEd05EE9b7DdbAb97Abc55e27EF95C7c14688Aad',
     },
     MULTICALL_ADDRESS: {
         [ChainId.Mainnet]: '0xeefba1e63905ef1d7acba5a8513c70307c1ce441',
@@ -42,7 +42,7 @@ export const CONSTANTS = {
         [ChainId.BSC]: '0x59CED6942f5506bc01e5D438e7ce3D4635271659',
         [ChainId.BSCT]: '0x6e5BB1a5Ad6F68A8D7D6A5e47750eC15773d6042',
         [ChainId.Matic]: '',
-        [ChainId.Mumbai]: '',
+        [ChainId.Mumbai]: '0x6B70EC653c4331bdD0D0DCC7C941eb594e69a91d',
     },
 
     // tokens
