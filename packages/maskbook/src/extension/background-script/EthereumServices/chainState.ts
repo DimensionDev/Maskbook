@@ -29,9 +29,10 @@ export const updateBlockNumber = debounce(
         // reset the polling if chain state updated successfully
         if (typeof resetPoolTask === 'function') resetPoolTask()
     },
-    300,
+    3 /* seconds */ * 1000 /* milliseconds */,
     {
         trailing: true,
+
     },
 )
 
