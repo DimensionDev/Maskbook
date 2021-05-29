@@ -1,5 +1,5 @@
-import { useWeb3Context } from '../context'
+import { useWeb3StateContext } from '../context'
 
 export function useGasPrice() {
-    return useWeb3Context().gasPrice
+    return useWeb3StateContext().gasPrice
 }

@@ -1,15 +1,15 @@
+import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { once } from 'lodash-es'
-import { useCallback, useMemo } from 'react'
-import { TransactionEventType } from '../types'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+import { TransactionEventType } from '../types'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
+import { useNonce } from './useNonce'
 import { useAccount } from './useAccount'
+import { useGasPrice } from './useGasPrice'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
-import { useNonce } from './useNonce'
-import { useGasPrice } from './useGasPrice'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 

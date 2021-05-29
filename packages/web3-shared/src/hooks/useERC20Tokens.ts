@@ -1,5 +1,5 @@
+import { useWeb3StateContext } from '../context'
 import type { ChainId, EthereumTokenType } from '../types'
-import { useWeb3Context } from '../context'
 import { useWallet } from './useWallet'
 
 export interface ERC20Token {
@@ -15,7 +15,7 @@ export interface ERC20TokenDetailed extends ERC20Token {
 }
 
 export function useERC20TokensFromDB() {
-    return useWeb3Context().erc20Tokens
+    return useWeb3StateContext().erc20Tokens
 }
 
 export function useTrustedERC20TokensFromDB() {

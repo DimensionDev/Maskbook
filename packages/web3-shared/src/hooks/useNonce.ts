@@ -1,5 +1,5 @@
-import { useWeb3Context } from '../context'
+import { useWeb3StateContext } from '../context'
 
 export function useNonce() {
-    return useWeb3Context().nonce
+    return useWeb3StateContext().nonce
 }

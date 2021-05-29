@@ -1,5 +1,5 @@
-import { useWeb3Context } from '../context'
+import { useWeb3StateContext } from '../context'
 
 export function useChainDetailed() {
-    return useWeb3Context().chainDetailed
+    return useWeb3StateContext().chainDetailed
 }

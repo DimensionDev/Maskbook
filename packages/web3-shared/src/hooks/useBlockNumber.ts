@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import { useWeb3Context } from '../context'
+import { useWeb3StateContext } from '../context'
 
 /**
  * Get the current block number
  */
 export function useBlockNumber() {
-    return useWeb3Context().blockNumber
+    return useWeb3StateContext().blockNumber
 }
 
 /**
