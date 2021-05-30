@@ -29,7 +29,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     const account = useAccount()
     const chainIdValid = useChainIdValid()
-    const nativeTokenBalance = useNativeTokenBalance('_')
+    const nativeTokenBalance = useNativeTokenBalance()
 
     //#region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(

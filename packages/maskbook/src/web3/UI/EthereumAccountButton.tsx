@@ -57,7 +57,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
 
     const chainId = useChainId()
     const account = useAccount()
-    const { value: balance = '0' } = useNativeTokenBalance(account)
+    const { value: balance = '0' } = useNativeTokenBalance()
 
     const selectedWallet = useWallet()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)

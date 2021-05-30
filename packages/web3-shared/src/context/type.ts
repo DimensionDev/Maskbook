@@ -9,6 +9,7 @@ export interface Web3ProviderType {
     nonce: Subscription<number>
     gasPrice: Subscription<number>
     chainId: Subscription<ChainId>
+    balance: Subscription<string>
     blockNumber: Subscription<number>
     wallets: Subscription<Wallet[]>
     providerType: Subscription<ProviderType>

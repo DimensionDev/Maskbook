@@ -6,6 +6,7 @@ import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
     currentGasPriceSettings,
+    currentBalanceSettings,
     currentNonceSettings,
     currentSelectedWalletAddressSettings,
     currentSelectedWalletNetworkSettings,
@@ -30,6 +31,7 @@ export const Web3Context: Web3ProviderType = {
         WalletMessages.events.chainIdUpdated.on,
     ),
     account: createSubscriptionFromSettings(currentSelectedWalletAddressSettings),
+    balance: createSubscriptionFromSettings(currentBalanceSettings),
     blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
     nonce: createSubscriptionFromSettings(currentNonceSettings),
     gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),

@@ -1,20 +1,16 @@
 import { useAccount } from './useAccount'
 import { useAsyncRetry } from 'react-use'
-import { useChainId } from './useChainId'
-import { useBlockNumber } from './useBlockNumber'
-import { useWeb3 } from './useWeb3'
+import { useBalance } from './useBalance'
 
 /**
  * Fetch native token balance from chain
  * @param address
  */
-export function useNativeTokenBalance(address: string) {
-    const web3 = useWeb3()
+export function useNativeTokenBalance() {
     const account = useAccount()
-    const chainId = useChainId()
-    const blockNumber = useBlockNumber()
+    const balance = useBalance()
     return useAsyncRetry(async () => {
-        if (!account || !address) return undefined
-        return web3.eth.getBalance(account)
-    }, [web3, account, blockNumber, chainId, address])
+        if (!account) return undefined
+        return balance
+    }, [account, balance])
 }

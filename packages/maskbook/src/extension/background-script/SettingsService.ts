@@ -10,6 +10,7 @@ import {
 import { currentTrendingDataProviderSettings } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
+    currentBalanceSettings,
     currentBlockNumberSettings,
     currentSelectedWalletAddressSettings,
     currentSelectedWalletNetworkSettings,
@@ -30,6 +31,7 @@ function create<T>(settings: InternalSettings<T>) {
 }
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
+export const [getBalance, setBalance] = create(currentBalanceSettings)
 export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentTrendingDataProviderSettings)
 export const [getAncientPostsCompatibiltyMode, setAncientPostsCompatibiltyMode] = create(

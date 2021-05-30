@@ -2,6 +2,7 @@ import { debounce, first } from 'lodash-es'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
+    currentBalanceSettings,
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
     currentWalletConnectChainIdSettings,
@@ -13,10 +14,10 @@ import { pollingTask } from '../../../utils/utils'
 import { unreachable } from '@dimensiondev/maskbook-shared'
 import { isSameAddress } from '@dimensiondev/web3-shared'
 import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
-import { getBlockNumber } from './network'
+import { getBalance, getBlockNumber } from './network'
 import { startEffects } from '../../../utils/side-effects'
 import { Flags } from '../../../utils/flags'
-import { getWalletsCached } from './wallet'
+import { getWalletCached, getWalletsCached } from './wallet'
 import { resetAllNonce } from './nonce'
 
 const effect = startEffects(module.hot)
@@ -24,7 +25,9 @@ const effect = startEffects(module.hot)
 //#region tracking chain state
 export const updateBlockNumber = debounce(
     async () => {
+        const wallet = getWalletCached()
         currentBlockNumberSettings.value = await getBlockNumber()
+        if (wallet) currentBalanceSettings.value = await getBalance(wallet.address)
 
         // reset the polling if chain state updated successfully
         if (typeof resetPoolTask === 'function') resetPoolTask()

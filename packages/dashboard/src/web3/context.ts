@@ -29,6 +29,11 @@ export const Web3Context: Web3ProviderType = {
         0,
         Messages.events.createInternalSettingsChanged.on,
     ),
+    balance: createSubscriptionAsync(
+        Services.Settings.getBalance,
+        '0',
+        Messages.events.createInternalSettingsChanged.on,
+    ),
     blockNumber: createSubscriptionAsync(
         Services.Settings.getBlockNumber,
         0,

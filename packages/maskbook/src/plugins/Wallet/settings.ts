@@ -80,6 +80,13 @@ export const currentBlockNumberSettings = createGlobalSettings<number>(`${PLUGIN
 })
 
 /**
+ * Balance
+ */
+export const currentBalanceSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+balance`, '0', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+/**
  * Nonce
  */
 export const currentNonceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+nonce`, 0, {
