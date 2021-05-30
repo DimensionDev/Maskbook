@@ -1,11 +1,10 @@
-import { CircularProgress, makeStyles, Typography, Box } from '@material-ui/core'
-import { useAccount } from '@dimensiondev/web3-shared'
-import { TransactionStateType } from '@dimensiondev/web3-shared'
+import { TransactionStateType, useAccount } from '@dimensiondev/web3-shared'
+import { Box, CircularProgress, makeStyles, Typography } from '@material-ui/core'
+import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { useAllPoolsAsSeller } from '../hooks/useAllPoolsAsSeller'
 import { useDestructCallback } from '../hooks/useDestructCallback'
 import type { JSON_PayloadInMask } from '../types'
 import { PoolInList } from './PoolInList'
-import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 
 const useStyles = makeStyles((theme) => ({
     root: {

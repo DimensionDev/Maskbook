@@ -1,3 +1,5 @@
+import { useMemo, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
 import {
     Box,
     Button,
@@ -11,13 +13,10 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core'
+import { useAccount, useChainId } from '@dimensiondev/web3-shared'
 import { useTransactions } from '../../../../plugins/Wallet/hooks/useTransactions'
-import { useAccount } from '@dimensiondev/web3-shared'
 import { Row } from './Row'
-import { useMemo, useState } from 'react'
 import { FilterTransactionType } from '../../../../plugins/Wallet/types'
-import { useChainId } from '@dimensiondev/web3-shared'
-import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles(() => ({
     fixed: { height: 'calc(100% - 52px)' },

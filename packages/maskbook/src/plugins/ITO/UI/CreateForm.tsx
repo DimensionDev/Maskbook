@@ -8,16 +8,19 @@ import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N, sliceTextByUILength } from '../../../utils'
-import { ERC20TokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
-import { useAccount } from '@dimensiondev/web3-shared'
-import { useConstant } from '@dimensiondev/web3-shared'
+import {
+    ERC20TokenDetailed,
+    EthereumTokenType,
+    useAccount,
+    useConstant,
+    useTokenBalance,
+} from '@dimensiondev/web3-shared'
 import { useQualificationVerify } from '../hooks/useQualificationVerify'
 import { ITO_CONSTANTS } from '../constants'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PoolSettings } from '../hooks/useFillCallback'
 import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
-import { useTokenBalance } from '@dimensiondev/web3-shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatAmount, formatBalance } from '@dimensiondev/maskbook-shared'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'

@@ -1,13 +1,11 @@
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { Wallet, isNative, FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import { Wallet, isNative, FungibleTokenDetailed, useAccount, useChainIdValid } from '@dimensiondev/web3-shared'
 import { useMenu, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogFT } from '../DashboardDialogs/Wallet'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
-import { useAccount } from '@dimensiondev/web3-shared'
-import { useChainIdValid } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     more: {

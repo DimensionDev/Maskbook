@@ -2,15 +2,17 @@ import { Button, makeStyles, TextField } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
+import { formatBalance, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import {
+    Wallet,
+    useTokenBalance,
+    useTokenTransferCallback,
+    TransactionStateType,
+    FungibleTokenDetailed,
+    EthereumTokenType,
+} from '@dimensiondev/web3-shared'
 import { useRemoteControlledDialog, useI18N } from '../../../../utils'
 import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
-import type { Wallet } from '@dimensiondev/web3-shared'
-import { formatBalance, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { useTokenBalance } from '@dimensiondev/web3-shared'
-import { useTokenTransferCallback } from '@dimensiondev/web3-shared'
-import { TransactionStateType } from '@dimensiondev/web3-shared'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
-import { EthereumTokenType } from '@dimensiondev/web3-shared'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 
 const useTransferTabStyles = makeStyles((theme) => ({

@@ -1,26 +1,24 @@
-import React, { useState } from 'react'
+import { RefreshIcon } from '@dimensiondev/icons'
+import { CONSTANTS, useConstant, useERC20TokenDetailed } from '@dimensiondev/web3-shared'
 import {
-    makeStyles,
-    Tab,
-    Tabs,
-    Typography,
-    Link,
     Card,
     CardActions,
     CardContent,
-    Paper,
     CardHeader,
+    Link,
+    makeStyles,
+    Paper,
+    Tab,
+    Tabs,
+    Typography,
 } from '@material-ui/core'
-import { RefreshIcon } from '@dimensiondev/icons'
+import React, { useState } from 'react'
+import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useFetchPool } from '../hooks/usePool'
-import { PoolViewDeck } from './PoolViewDeck'
-import { PoolStats } from './PoolStats'
 import { PerformanceChart } from './PerformanceChart'
-import { useERC20TokenDetailed } from '@dimensiondev/web3-shared'
-import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
-import { useConstant } from '@dimensiondev/web3-shared'
-import { CONSTANTS } from '@dimensiondev/web3-shared'
+import { PoolStats } from './PoolStats'
+import { PoolViewDeck } from './PoolViewDeck'
 
 const useStyles = makeStyles((theme) => ({
     root: {

@@ -5,15 +5,15 @@ import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import LaunchIcon from '@material-ui/icons/Launch'
 import { formatAmountPrecision, formatBalance, FormattedAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
-import { useConstant } from '@dimensiondev/web3-shared'
 import BigNumber from 'bignumber.js'
-import { useChainId } from '@dimensiondev/web3-shared'
 import { dateTimeFormat } from '../assets/formatDate'
 import {
     resolveTokenLinkOnExplorer,
     resolveAddressLinkOnExplorer,
     isNative,
     FungibleTokenDetailed,
+    useConstant,
+    useChainId,
 } from '@dimensiondev/web3-shared'
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'

@@ -15,8 +15,8 @@ import {
     useAccount,
     useChainId,
     useConstant,
+    CONSTANTS,
 } from '@dimensiondev/web3-shared'
-import { CONSTANTS } from '@dimensiondev/web3-shared'
 
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
     const account = useAccount()

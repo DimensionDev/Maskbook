@@ -12,6 +12,8 @@ import {
     Link,
 } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
+import { Trans } from 'react-i18next'
+import { useAccount } from '@dimensiondev/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
@@ -21,8 +23,6 @@ import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
-import { Trans } from 'react-i18next'
-import { useAccount } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => {
     return {

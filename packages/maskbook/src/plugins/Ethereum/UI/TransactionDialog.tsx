@@ -11,11 +11,14 @@ import {
 } from '@material-ui/core'
 import WarningIcon from '@material-ui/icons/Warning'
 import DoneIcon from '@material-ui/icons/Done'
+import {
+    useChainId,
+    TransactionState,
+    TransactionStateType,
+    resolveTransactionLinkOnExplorer,
+} from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
-import { useChainId } from '@dimensiondev/web3-shared'
-import { TransactionState, TransactionStateType } from '@dimensiondev/web3-shared'
-import { resolveTransactionLinkOnExplorer } from '@dimensiondev/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { EthereumMessages } from '../messages'
 import { JSON_RPC_ErrorCode } from '../constants'

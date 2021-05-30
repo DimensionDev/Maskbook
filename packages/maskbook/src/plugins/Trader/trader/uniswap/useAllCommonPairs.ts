@@ -1,12 +1,11 @@
-import { useContext, useMemo } from 'react'
-import { flatMap } from 'lodash-es'
+import { FungibleTokenDetailed, useChainId } from '@dimensiondev/web3-shared'
 import type { Pair } from '@uniswap/sdk'
+import { flatMap } from 'lodash-es'
+import { useContext, useMemo } from 'react'
 import { toUniswapChainId, toUniswapToken } from '../../helpers'
-import { usePairs, TokenPair, PairState } from './usePairs'
-import { useChainId } from '@dimensiondev/web3-shared'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
-import { useUniswapToken } from './useUniswapToken'
 import { TradeContext } from '../useTradeContext'
+import { PairState, TokenPair, usePairs } from './usePairs'
+import { useUniswapToken } from './useUniswapToken'
 
 export function useAllCommonPairs(tokenA?: FungibleTokenDetailed, tokenB?: FungibleTokenDetailed) {
     const chainId = useChainId()

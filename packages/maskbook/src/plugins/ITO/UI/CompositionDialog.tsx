@@ -13,13 +13,10 @@ import { payloadOutMask } from '../helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
 import Services from '../../../extension/service'
-import { useChainId } from '@dimensiondev/web3-shared'
-import { useAccount } from '@dimensiondev/web3-shared'
+import { useChainId, useAccount, TransactionStateType, useConstant } from '@dimensiondev/web3-shared'
 import { PoolSettings, useFillCallback } from '../hooks/useFillCallback'
 import { ConfirmDialog } from './ConfirmDialog'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { TransactionStateType } from '@dimensiondev/web3-shared'
-import { useConstant } from '@dimensiondev/web3-shared'
 
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',

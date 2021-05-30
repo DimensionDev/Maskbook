@@ -6,6 +6,7 @@ import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutline
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Check from '@material-ui/icons/Check'
+import { Wallet, useChainIdValid, useAccount } from '@dimensiondev/web3-shared'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddERC20TokenDialog,
@@ -14,16 +15,13 @@ import {
     DashboardWalletDeleteConfirmDialog,
     DashboardWalletRenameDialog,
 } from '../DashboardDialogs/Wallet'
-import type { Wallet } from '@dimensiondev/web3-shared'
 import { Flags, useMenu, useI18N, useColorStyles, useMatchXS, useRemoteControlledDialog } from '../../../utils'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
-import { useChainIdValid } from '@dimensiondev/web3-shared'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
-import { useAccount } from '@dimensiondev/web3-shared'
 import { FilterTransactionType } from '../../../plugins/Wallet/types'
 
 const useStyles = makeStyles((theme) => ({

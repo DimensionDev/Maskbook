@@ -1,19 +1,21 @@
-import BigNumber from 'bignumber.js'
-import { useCallback } from 'react'
-import Web3Utils from 'web3-utils'
-import type { TransactionReceipt } from 'web3-core'
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
-import { buf2hex, hex2buf, useI18N } from '../../../utils'
-import { TransactionStateType, useAccount, useTransactionState } from '@dimensiondev/web3-shared'
 import {
-    FungibleTokenDetailed,
     EthereumTokenType,
-    TransactionEventType,
+    FungibleTokenDetailed,
     isSameAddress,
+    TransactionEventType,
+    TransactionStateType,
+    useAccount,
     useGasPrice,
     useNonce,
+    useTransactionState,
 } from '@dimensiondev/web3-shared'
+import BigNumber from 'bignumber.js'
+import { useCallback } from 'react'
+import type { TransactionReceipt } from 'web3-core'
+import Web3Utils from 'web3-utils'
+import { buf2hex, hex2buf, useI18N } from '../../../utils'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { useQualificationContract } from '../contracts/useQualificationContract'
 import type { JSON_PayloadInMask } from '../types'

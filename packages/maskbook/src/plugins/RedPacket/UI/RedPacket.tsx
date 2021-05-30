@@ -1,32 +1,38 @@
-import { useCallback, useEffect } from 'react'
-import { makeStyles, Card, Typography, Box } from '@material-ui/core'
-import { Skeleton } from '@material-ui/core'
-import classNames from 'classnames'
-import type { RedPacketJSONPayload } from '../types'
-import { RedPacketStatus } from '../types'
-import { useI18N, useRemoteControlledDialog, useValueRef } from '../../../utils'
-import { useClaimCallback } from '../hooks/useClaimCallback'
-import { useRefundCallback } from '../hooks/useRefundCallback'
-import { isDAI, isOKB, resolveChainId, ChainId, ProviderType } from '@dimensiondev/web3-shared'
-import { resolveRedPacketStatus } from '../pipes'
-import { WalletMessages } from '../../Wallet/messages'
-import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
-import { TransactionStateType } from '@dimensiondev/web3-shared'
-import { useChainId, useChainIdValid } from '@dimensiondev/web3-shared'
-import { useAccount } from '@dimensiondev/web3-shared'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import {
+    ChainId,
+    isDAI,
+    isOKB,
+    ProviderType,
+    resolveChainId,
+    TransactionStateType,
+    useAccount,
+    useChainId,
+    useChainIdValid,
+    useTokenDetailed,
+} from '@dimensiondev/web3-shared'
+import { Box, Card, makeStyles, Skeleton, Typography } from '@material-ui/core'
+import classNames from 'classnames'
+import { useCallback, useEffect } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import Services from '../../../extension/service'
 import {
     currentIsMetamaskLockedSettings,
     currentSelectedWalletProviderSettings,
 } from '../../../plugins/Wallet/settings'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
-import Services from '../../../extension/service'
-import { useTokenDetailed } from '@dimensiondev/web3-shared'
-import { EthereumMessages } from '../../Ethereum/messages'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { useI18N, useRemoteControlledDialog, useValueRef } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { EthereumMessages } from '../../Ethereum/messages'
+import { WalletMessages } from '../../Wallet/messages'
+import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
+import { useClaimCallback } from '../hooks/useClaimCallback'
+import { useRefundCallback } from '../hooks/useRefundCallback'
+import { resolveRedPacketStatus } from '../pipes'
+import type { RedPacketJSONPayload } from '../types'
+import { RedPacketStatus } from '../types'
 
 const useStyles = makeStyles((theme) => ({
     root: {

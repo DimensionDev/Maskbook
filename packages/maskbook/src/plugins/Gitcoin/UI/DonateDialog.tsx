@@ -12,12 +12,14 @@ import {
     useAccount,
     useNativeTokenDetailed,
     useChainId,
+    TransactionStateType,
+    useConstant,
+    useTokenBalance,
 } from '@dimensiondev/web3-shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
-import { TransactionStateType } from '@dimensiondev/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
@@ -26,10 +28,8 @@ import { PluginGitcoinMessages } from '../messages'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { useConstant } from '@dimensiondev/web3-shared'
 import { GITCOIN_CONSTANT } from '../constants'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { useTokenBalance } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     paper: {

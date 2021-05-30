@@ -1,6 +1,11 @@
+import {
+    CONSTANTS,
+    EthereumTokenType,
+    FungibleTokenDetailed,
+    isSameAddress,
+    useConstant,
+} from '@dimensiondev/web3-shared'
 import { useAsyncRetry } from 'react-use'
-import { CONSTANTS } from '@dimensiondev/web3-shared'
-import { isSameAddress, useConstant, FungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
 
 export function useTrade(inputToken?: FungibleTokenDetailed, outputToken?: FungibleTokenDetailed) {
     const WETH_ADDRESS = useConstant(CONSTANTS, 'WETH_ADDRESS')
