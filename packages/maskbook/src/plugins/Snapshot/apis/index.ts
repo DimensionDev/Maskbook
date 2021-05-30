@@ -1,5 +1,5 @@
 import ss from '@snapshot-labs/snapshot.js'
-import { ChainId } from '../../../web3/types'
+import { ChainId } from '@dimensiondev/web3-shared'
 import type { VoteItemList, Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess } from '../types'
 import Services from '../../../extension/service'
 

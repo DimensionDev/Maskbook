@@ -1,13 +1,19 @@
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { TransactionEventType } from '../../../web3/types'
+import {
+    TransactionEventType,
+    TransactionStateType,
+    useAccount,
+    useGasPrice,
+    useNonce,
+    useTransactionState,
+} from '@dimensiondev/web3-shared'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import Services from '../../../extension/service'
 
 export function useDestructCallback() {
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const account = useAccount()
     const ITO_Contract = useITO_Contract()
     const [destructState, setDestructState] = useTransactionState()
@@ -27,17 +33,23 @@ export function useDestructCallback() {
             })
 
             // estimate gas and compose transaction
-            const config = await Services.Ethereum.composeTransaction({
+            const config = {
                 from: account,
-                to: ITO_Contract.options.address,
-                data: ITO_Contract.methods.destruct(id).encodeABI(),
-            }).catch((error: Error) => {
-                setDestructState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
-                throw error
-            })
+                gas: await ITO_Contract.methods
+                    .destruct(id)
+                    .estimateGas({
+                        from: account,
+                    })
+                    .catch((error: Error) => {
+                        setDestructState({
+                            type: TransactionStateType.FAILED,
+                            error,
+                        })
+                        throw error
+                    }),
+                gasPrice,
+                nonce,
+            }
 
             // send transaction and wait for hash
             return new Promise<string>((resolve, reject) => {

@@ -5,12 +5,15 @@ import { v4 as uuid } from 'uuid'
 import { formatBalance, FormattedAddress } from '@dimensiondev/maskbook-shared'
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useChainId'
-import { useConstant } from '../../../web3/hooks/useConstant'
-import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import { resolveAddressLinkOnExplorer } from '../../../web3/pipes'
-import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
+import {
+    useAccount,
+    useChainId,
+    useConstant,
+    useTokenBalance,
+    resolveAddressLinkOnExplorer,
+    ERC20TokenDetailed,
+    EthereumTokenType,
+} from '@dimensiondev/web3-shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'

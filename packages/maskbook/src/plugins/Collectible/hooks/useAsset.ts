@@ -1,20 +1,22 @@
 import { useAsyncRetry } from 'react-use'
 import { head, uniqBy } from 'lodash-es'
 import BigNumber from 'bignumber.js'
-import { useChainId } from '../../../web3/hooks/useChainId'
 import { PluginCollectibleRPC } from '../messages'
-import type { CollectibleToken } from '../types'
-import { CollectibleProvider } from '../types'
+import { CollectibleToken, CollectibleProvider } from '../types'
 import { getOrderUnitPrice } from '../utils'
 import { unreachable } from '@dimensiondev/maskbook-shared'
 import { toDate, toRaribleImage, toTokenDetailed, toTokenIdentifier } from '../helpers'
 import { OpenSeaAccountURL } from '../constants'
 import { resolveRaribleUserNetwork } from '../pipes'
-import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { isSameAddress } from '../../../web3/helpers'
-import { useConstant } from '../../../web3/hooks/useConstant'
-import { CONSTANTS } from '../../../web3/constants'
+import {
+    FungibleTokenDetailed,
+    EthereumTokenType,
+    isSameAddress,
+    useAccount,
+    useChainId,
+    useConstant,
+    CONSTANTS,
+} from '@dimensiondev/web3-shared'
 
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
     const account = useAccount()

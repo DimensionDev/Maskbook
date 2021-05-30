@@ -1,6 +1,6 @@
 import stringify from 'json-stable-stringify'
 import { getChainId } from '../../../../extension/background-script/EthereumService'
-import { getConstant } from '../../../../web3/helpers'
+import { getConstant } from '@dimensiondev/web3-shared'
 import { LBP_CONSTANTS } from '../../constants/LBP'
 
 async function fetchFromBalancerPoolSubgraph<T>(query: string) {

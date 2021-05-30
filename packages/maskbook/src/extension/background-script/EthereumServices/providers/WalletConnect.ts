@@ -7,6 +7,7 @@ import type { HttpProvider, PromiEvent as PromiEventW3 } from 'web3-core'
 import WalletConnect from '@walletconnect/client'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import type { ITxData } from '@walletconnect/types'
+import { ChainId, TransactionEventType, ProviderType } from '@dimensiondev/web3-shared'
 import * as Maskbook from '../providers/Maskbook'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import {
@@ -14,8 +15,6 @@ import {
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
 } from '../../../../plugins/Wallet/settings'
-import { ChainId, TransactionEventType } from '../../../../web3/types'
-import { ProviderType } from '../../../../web3/types'
 
 let connector: WalletConnect | null = null
 

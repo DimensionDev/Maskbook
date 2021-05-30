@@ -3,14 +3,20 @@ import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
-import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { useAccount } from '../../../web3/hooks/useAccount'
+import {
+    TransactionEventType,
+    TransactionStateType,
+    useAccount,
+    useChainId,
+    useTransactionState,
+    useGasPrice,
+    useNonce,
+    useWeb3,
+} from '@dimensiondev/web3-shared'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import { FungibleTokenDetailed, ERC20TokenDetailed, TransactionEventType } from '../../../web3/types'
+import type { FungibleTokenDetailed, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../constants'
-import Services from '../../../extension/service'
-import { useChainId } from '../../../web3/hooks/useChainId'
 import type { AdvanceSettingData } from '../UI/AdvanceSetting'
 
 export interface PoolSettings {
@@ -31,6 +37,9 @@ export interface PoolSettings {
 }
 
 export function useFillCallback(poolSettings?: PoolSettings) {
+    const web3 = useWeb3()
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const ITO_Contract = useITO_Contract()
@@ -191,7 +200,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         // error: unable to sign password
         let signedPassword = ''
         try {
-            signedPassword = await Services.Ethereum.personalSign(password, account)
+            signedPassword = await web3.eth.personal.sign(password, account, '')
         } catch (e) {
             signedPassword = ''
         }
@@ -234,17 +243,23 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         ] as Parameters<ITO['methods']['fill_pool']>
 
         // estimate gas and compose transaction
-        const config = await Services.Ethereum.composeTransaction({
+        const config = {
             from: account,
-            to: ITO_Contract.options.address,
-            data: ITO_Contract.methods.fill_pool(...params).encodeABI(),
-        }).catch((error) => {
-            setFillState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
-            throw error
-        })
+            gas: await ITO_Contract.methods
+                .fill_pool(...params)
+                .estimateGas({
+                    from: account,
+                })
+                .catch((error) => {
+                    setFillState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    throw error
+                }),
+            gasPrice,
+            nonce,
+        }
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
@@ -280,7 +295,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                     reject(error)
                 })
         })
-    }, [account, chainId, ITO_Contract, poolSettings])
+    }, [web3, gasPrice, nonce, account, chainId, ITO_Contract, poolSettings])
 
     const resetCallback = useCallback(() => {
         setFillState({

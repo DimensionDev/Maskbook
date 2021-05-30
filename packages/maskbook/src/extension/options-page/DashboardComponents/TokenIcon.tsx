@@ -1,23 +1,14 @@
 import { makeStyles, Avatar, Theme, AvatarProps } from '@material-ui/core'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { isSameAddress, getConstant } from '../../../web3/helpers'
-import { CONSTANTS } from '../../../web3/constants'
-import { useBlockie } from '../../../web3/hooks/useBlockie'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { CONSTANTS, useChainDetailed, ChainId, getConstant, resolveChainFullName } from '@dimensiondev/web3-shared'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useBlockie } from '../../../web3/hooks/useBlockie'
 import { useImageFailover } from '../../../utils/hooks/useImageFailover'
 
 //#region fix icon image
-const NATIVE_TOKEN_ADDRESS = getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
-
-const iconSourceList = [
-    'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum',
-    'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum',
-]
-const IMG_SUFFIX = '/info/logo.png'
-
-function resolveTokenIconURL(address: string, trustWalletAssets: string) {
+function resolveTokenIconURL(address: string, baseURI: string) {
     const iconMap = {
-        [NATIVE_TOKEN_ADDRESS]: `${trustWalletAssets}/info/logo.png`,
+        [getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')]: `${baseURI}/info/logo.png`,
         '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074':
             'https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg', // MASK
         '0x32a7C02e79c4ea1008dD6564b35F131428673c41': 'https://s2.coinmarketcap.com/static/img/coins/64x64/6747.png', // CRUST
@@ -27,10 +18,8 @@ function resolveTokenIconURL(address: string, trustWalletAssets: string) {
             'https://raw.githubusercontent.com/chainswap/chainswap-assets/main/logo_white_256.png', // TOKEN
     }
     const checksummedAddress = formatEthereumAddress(address)
-    if (isSameAddress(checksummedAddress, getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')))
-        return 'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png'
     if (iconMap[checksummedAddress]) return iconMap[checksummedAddress]
-    return `${trustWalletAssets}/assets/${checksummedAddress}/logo.png`
+    return `${baseURI}/assets/${checksummedAddress}/logo.png`
 }
 //#endregion
 
@@ -45,29 +34,41 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export interface TokenIconProps extends withClasses<never> {
     name?: string
-    address: string
     logoURL?: string
+    chainId?: ChainId
+    address: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURL, name } = props
-    const classes = useStylesExtends(useStyles(), props)
-    const tokenBlockie = useBlockie(props.address)
+    const { address, logoURL, name, chainId, AvatarProps } = props
 
-    const { value: trustWalletAssets, loading } = useImageFailover(iconSourceList, IMG_SUFFIX)
+    const classes = useStylesExtends(useStyles(), props)
+    const chainDetailed = useChainDetailed()
+    const tokenBlockie = useBlockie(address)
+
+    const fullName = chainDetailed ? resolveChainFullName(chainId ?? chainDetailed.chainId) : ''
+    const { value: baseURI, loading } = useImageFailover(
+        chainDetailed
+            ? [
+                  `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${fullName.toLowerCase()}`,
+                  `https://rawcdn.githack.com/trustwallet/assets/master/blockchains/${fullName.toLowerCase()}`,
+              ]
+            : [],
+        '/info/logo.png',
+    )
 
     if (logoURL)
         return (
-            <Avatar className={classes.icon} src={logoURL} {...props.AvatarProps}>
+            <Avatar className={classes.icon} src={logoURL} {...AvatarProps}>
                 {name?.substr(0, 1).toLocaleUpperCase()}
             </Avatar>
         )
     return (
         <Avatar
             className={classes.icon}
-            src={loading ? '' : resolveTokenIconURL(address, trustWalletAssets as string)}
-            {...props.AvatarProps}>
+            src={loading ? '' : resolveTokenIconURL(address, baseURI as string)}
+            {...AvatarProps}>
             <Avatar className={classes.icon} src={tokenBlockie}>
                 {name?.substr(0, 1).toLocaleUpperCase()}
             </Avatar>

@@ -1,4 +1,7 @@
 import { useState, ChangeEvent } from 'react'
+import { v4 as uuid } from 'uuid'
+import { useSnackbar } from 'notistack'
+import classNames from 'classnames'
 import {
     Typography,
     Theme,
@@ -11,7 +14,7 @@ import {
     InputBase,
     FormControlLabel,
 } from '@material-ui/core'
-import classNames from 'classnames'
+import { green } from '@material-ui/core/colors'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
 
 import {
@@ -27,16 +30,13 @@ import {
 } from '../../../utils'
 import ActionButton from '../DashboardComponents/ActionButton'
 import DashboardRouterContainer from './Container'
-import { v4 as uuid } from 'uuid'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import Services from '../../service'
 import { useAsync } from 'react-use'
 import { Identifier, ECKeyIdentifier } from '../../../database/type'
 import { useMyPersonas, useMyUninitializedPersonas } from '../../../components/DataSource/useMyPersonas'
-import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
-import { green } from '@material-ui/core/colors'
+import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { DashboardRoute } from '../Route'
-import { useSnackbar } from 'notistack'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { Persona } from '../../../database'
 import { RestoreFromQRCodeImageBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'

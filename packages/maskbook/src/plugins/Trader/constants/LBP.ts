@@ -1,4 +1,4 @@
-import { ChainId } from '../../../web3/types'
+import { ChainId } from '@dimensiondev/web3-shared'
 
 export const LBP_CONSTANTS = {
     BALANCER_POOLS_SUBGRAPH_URL: {
@@ -7,5 +7,9 @@ export const LBP_CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
 }

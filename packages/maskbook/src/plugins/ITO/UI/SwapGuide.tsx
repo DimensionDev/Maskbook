@@ -1,16 +1,13 @@
-import { useTransition } from 'react'
-import { DialogContent, makeStyles, DialogProps } from '@material-ui/core'
+import { ERC20TokenDetailed, EthereumTokenType, useAccount, useChainId } from '@dimensiondev/web3-shared'
+import { DialogContent, DialogProps, makeStyles } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
-import { useI18N } from '../../../utils'
+import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useI18N } from '../../../utils'
 import { RemindDialog } from './RemindDialog'
 import { ShareDialog } from './ShareDialog'
 import { SwapDialog, SwapDialogProps } from './SwapDialog'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useChainId'
 import { UnlockDialog } from './UnlockDialog'
-import { ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
 
 export enum SwapStatus {
     Remind,

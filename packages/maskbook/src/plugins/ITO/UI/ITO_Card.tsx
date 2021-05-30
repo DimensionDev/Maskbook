@@ -1,4 +1,6 @@
-import { Alert, Typography, Skeleton, Box } from '@material-ui/core'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { ERC20TokenDetailed, TransactionStateType } from '@dimensiondev/web3-shared'
+import { Alert, Box, Skeleton, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useCallback, useEffect } from 'react'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -7,10 +9,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import type { ERC20TokenDetailed } from '../../../web3/types'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { useMaskClaimCallback } from '../hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from '../hooks/useMaskITO_Packet'
 

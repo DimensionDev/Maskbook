@@ -1,22 +1,21 @@
+import { getConstant, useChainId } from '@dimensiondev/web3-shared'
 import { createContext, useMemo } from 'react'
-import { TradeContext as TradeContext_, TradeProvider } from '../types'
-import { useChainId } from '../../../web3/hooks/useChainId'
 import {
-    SUSHISWAP_BASE_AGAINST_TOKENS,
-    SUSHISWAP_CUSTOM_BASES,
-    SUSHISWAP_INIT_CODE_HASH,
     SASHIMISWAP_BASE_AGAINST_TOKENS,
     SASHIMISWAP_CUSTOM_BASES,
     SASHIMISWAP_INIT_CODE_HASH,
-    THEGRAPH_SUSHISWAP_FORK,
+    SUSHISWAP_BASE_AGAINST_TOKENS,
+    SUSHISWAP_CUSTOM_BASES,
+    SUSHISWAP_INIT_CODE_HASH,
     THEGRAPH_SASHIMISWAP,
+    THEGRAPH_SUSHISWAP_FORK,
     THEGRAPH_UNISWAP_V2,
     TRADE_CONSTANTS,
     UNISWAP_BASE_AGAINST_TOKENS,
     UNISWAP_CUSTOM_BASES,
     UNISWAP_INIT_CODE_HASH,
 } from '../constants'
-import { getConstant } from '../../../web3/helpers'
+import { TradeContext as TradeContext_, TradeProvider } from '../types'
 
 export const TradeContext = createContext<TradeContext_ | null>(null)
 

@@ -5,6 +5,18 @@ import { v4 as uuid } from 'uuid'
 import BigNumber from 'bignumber.js'
 
 import { formatBalance } from '@dimensiondev/maskbook-shared'
+import {
+    EthereumTokenType,
+    EthereumNetwork,
+    FungibleTokenDetailed,
+    useAccount,
+    useConstant,
+    useChainId,
+    TransactionStateType,
+    resolveChainName,
+    useNativeTokenDetailed,
+    useTokenBalance,
+} from '@dimensiondev/web3-shared'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -14,19 +26,11 @@ import {
     RED_PACKET_CONSTANTS,
     RED_PACKET_DEFAULT_SHARES,
 } from '../constants'
-import { EthereumTokenType, EthereumNetwork, FungibleTokenDetailed } from '../../../web3/types'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainId } from '../../../web3/hooks/useChainId'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { useConstant } from '../../../web3/hooks/useConstant'
 import { useCreateCallback } from '../hooks/useCreateCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import type { RedPacketJSONPayload } from '../types'
-import { resolveChainName } from '../../../web3/pipes'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
-import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'

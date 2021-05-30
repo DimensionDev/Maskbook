@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/maskbook-shared'
-import { ChainId, NonFungibleTokenDetailed } from '../../../web3/types'
+import { ChainId, NonFungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { CollectibleProvider, PortfolioProvider } from '../types'
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {

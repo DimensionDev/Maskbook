@@ -1,6 +1,6 @@
 import { memoizePromise } from '@dimensiondev/kit'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { EthereumTokenType, ChainId, ERC20TokenDetailed } from '../../../web3/types'
+import { EthereumTokenType, ChainId, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 
 interface TokenList {
     keywords: string[]

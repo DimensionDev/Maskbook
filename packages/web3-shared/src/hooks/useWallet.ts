@@ -1,10 +1,8 @@
-import { useWallets } from '.'
+import type { Wallet } from '../types'
 import { isSameAddress } from '../utils'
-import { useWeb3Context } from './context'
-import type { Wallet } from './useWallets'
+import { useWeb3StateContext } from '../context'
 
 export function useWallet(address?: string): Wallet | undefined {
-    const address_ = useWeb3Context().selectedAddress
-    const wallets = useWallets()
+    const { account: address_, wallets } = useWeb3StateContext()
     return wallets.find((x) => isSameAddress(x.address, address ?? address_))
 }

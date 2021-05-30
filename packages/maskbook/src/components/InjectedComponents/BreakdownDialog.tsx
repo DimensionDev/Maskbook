@@ -7,7 +7,7 @@ import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { FormattedBalance } from '@dimensiondev/maskbook-shared'
 import BigNumber from 'bignumber.js'
 import { ITO_Card } from '../../plugins/ITO/UI/ITO_Card'
-import type { ERC20TokenDetailed } from '../../web3/types'
+import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     dialogPaper: {

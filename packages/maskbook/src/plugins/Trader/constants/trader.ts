@@ -1,7 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { CONSTANTS } from '../../../web3/constants'
-import { createERC20Token, getConstant } from '../../../web3/helpers'
-import { ChainId, ERC20TokenDetailed } from '../../../web3/types'
+import { CONSTANTS, createERC20Token, getConstant, ChainId, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 
 export const TRADE_CONSTANTS = {
     UNISWAP_V2_ROUTER_ADDRESS: {
@@ -10,6 +8,10 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
         [ChainId.Kovan]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
         [ChainId.Gorli]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     UNISWAP_FACTORY_ADDRESS: {
         [ChainId.Mainnet]: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
@@ -17,6 +19,10 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
         [ChainId.Kovan]: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
         [ChainId.Gorli]: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     SUSHISWAP_ROUTER_ADDRESS: {
         [ChainId.Mainnet]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
@@ -24,6 +30,10 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
         [ChainId.Kovan]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
         [ChainId.Gorli]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     SUSHISWAP_FACTORY_ADDRESS: {
         [ChainId.Mainnet]: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac',
@@ -31,6 +41,10 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     SASHIMISWAP_ROUTER_ADDRESS: {
         [ChainId.Mainnet]: ' 0x31db862df7be09718a860c46ab17ca57966e69ed',
@@ -38,6 +52,10 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '0xe4fe6a45f354e845f954cddee6084603cedb9410',
         [ChainId.Kovan]: '0xe4fe6a45f354e845f954cddee6084603cedb9410',
         [ChainId.Gorli]: '0xe4fe6a45f354e845f954cddee6084603cedb9410',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     SASHIMISWAP_FACTORY_ADDRESS: {
         [ChainId.Mainnet]: '0xF028F723ED1D0fE01cC59973C49298AA95c57472',
@@ -45,6 +63,10 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     BALANCER_ETH_ADDRESS: {
         [ChainId.Mainnet]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -52,6 +74,10 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         [ChainId.Kovan]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         [ChainId.Gorli]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     BALANCER_EXCHANGE_PROXY_ADDRESS: {
         [ChainId.Mainnet]: '0x3E66B66Fd1d0b02fDa6C811Da9E0547970DB2f21',
@@ -59,6 +85,10 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '0x4e67bf5bD28Dd4b570FBAFe11D0633eCbA2754Ec',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
     BALANCER_POOLS_URL: {
         [ChainId.Mainnet]: 'https://ipfs.fleek.co/ipns/balancer-bucket.storage.fleek.co/balancer-exchange/pools',
@@ -67,6 +97,10 @@ export const TRADE_CONSTANTS = {
         [ChainId.Kovan]:
             'https://ipfs.fleek.co/ipns/balancer-team-bucket.storage.fleek.co/balancer-exchange-kovan/pools',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
 }
 
@@ -109,6 +143,34 @@ export const WETH: {
         'Wrapped Ether',
         'WETH',
     ),
+    [ChainId.BSC]: createERC20Token(
+        ChainId.BSC,
+        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.BSC),
+        18,
+        'Wrapped Ether',
+        'WETH',
+    ),
+    [ChainId.BSCT]: createERC20Token(
+        ChainId.BSCT,
+        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.BSCT),
+        18,
+        'Wrapped Ether',
+        'WETH',
+    ),
+    [ChainId.Matic]: createERC20Token(
+        ChainId.Matic,
+        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Matic),
+        18,
+        'Wrapped Ether',
+        'WETH',
+    ),
+    [ChainId.Mumbai]: createERC20Token(
+        ChainId.Mumbai,
+        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Mumbai),
+        18,
+        'Wrapped Ether',
+        'WETH',
+    ),
 }
 
 export const WETH_ONLY: {
@@ -119,6 +181,10 @@ export const WETH_ONLY: {
     [ChainId.Rinkeby]: [WETH[ChainId.Rinkeby]],
     [ChainId.Kovan]: [],
     [ChainId.Gorli]: [],
+    [ChainId.BSC]: [],
+    [ChainId.BSCT]: [],
+    [ChainId.Matic]: [],
+    [ChainId.Mumbai]: [],
 }
 
 // Mainnet

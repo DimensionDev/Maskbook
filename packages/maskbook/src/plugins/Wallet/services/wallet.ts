@@ -7,13 +7,10 @@ import { createWalletDBAccess } from '../database/Wallet.db'
 import type { WalletRecord } from '../database/types'
 import { WalletMessages } from '../messages'
 import { buf2hex, hex2buf, assert } from '../../../utils/utils'
-import { ProviderType } from '../../../web3/types'
-import { resolveProviderName } from '../../../web3/pipes'
+import { ProviderType, resolveProviderName, isSameAddress } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
-import { isSameAddress } from '../../../web3/helpers'
 import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
-import { selectMaskbookWallet } from '../helpers'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
 
 function sortWallet(a: WalletRecord, b: WalletRecord) {
@@ -171,7 +168,8 @@ export async function importNewWallet(
             await t.objectStore('Wallet').put(WalletRecordIntoDB(record))
     }
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
-    selectMaskbookWallet(record.address)
+    currentSelectedWalletAddressSettings.value = record.address
+    currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
     return address
     async function getWalletAddress() {
         if (rec.address) return rec.address

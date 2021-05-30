@@ -1,4 +1,4 @@
-import { ChainId } from '../../web3/types'
+import { ChainId } from '@dimensiondev/web3-shared'
 
 /** DON'T CHANGE IT. */
 export const RedPacketMetaKey = 'com.maskbook.red_packet:1'
@@ -11,6 +11,10 @@ export const RED_PACKET_CONSTANTS = {
         [ChainId.Rinkeby]: '0x575f906db24154977c7361c2319e2b25e897e3b6',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '0x8440b99B1Df5D4B61957c8Ce0a199487Be3De270',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '0x6DfC82B48CFd38d4722366Cd6F444a341b8840f5',
     },
 }
 

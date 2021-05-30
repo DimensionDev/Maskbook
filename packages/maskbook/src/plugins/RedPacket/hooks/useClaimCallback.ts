@@ -1,12 +1,18 @@
 import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
-import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import Services from '../../../extension/service'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
-import { TransactionEventType } from '../../../web3/types'
+import {
+    useTransactionState,
+    TransactionStateType,
+    TransactionEventType,
+    useGasPrice,
+    useNonce,
+} from '@dimensiondev/web3-shared'
 
 export function useClaimCallback(from: string, id?: string, password?: string) {
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const [claimState, setClaimState] = useTransactionState()
     const redPacketContract = useRedPacketContract()
 
@@ -31,17 +37,23 @@ export function useClaimCallback(from: string, id?: string, password?: string) {
         ]
 
         // esitimate gas and compose transaction
-        const config = await Services.Ethereum.composeTransaction({
+        const config = {
             from,
-            to: redPacketContract.options.address,
-            data: redPacketContract.methods.claim(...params).encodeABI(),
-        }).catch((error) => {
-            setClaimState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
-            throw error
-        })
+            gas: await redPacketContract.methods
+                .claim(...params)
+                .estimateGas({
+                    from,
+                })
+                .catch((error) => {
+                    setClaimState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    throw error
+                }),
+            gasPrice,
+            nonce,
+        }
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
@@ -63,7 +75,7 @@ export function useClaimCallback(from: string, id?: string, password?: string) {
                     reject(error)
                 })
         })
-    }, [id, password, from, redPacketContract])
+    }, [gasPrice, nonce, id, password, from, redPacketContract])
 
     const resetCallback = useCallback(() => {
         setClaimState({

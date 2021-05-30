@@ -1,25 +1,47 @@
-import { ChainId, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
+import { noop, pick } from 'lodash-es'
+import type { Subscription } from 'use-subscription'
+import { ChainId, ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
 import Services from '../extension/service'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
-import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../plugins/Wallet/settings'
-import { noop, pick } from 'lodash-es'
+import {
+    currentBlockNumberSettings,
+    currentGasPriceSettings,
+    currentBalanceSettings,
+    currentNonceSettings,
+    currentSelectedWalletAddressSettings,
+    currentSelectedWalletNetworkSettings,
+    currentSelectedWalletProviderSettings,
+} from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
-import type { Subscription } from 'use-subscription'
 import type { InternalSettings } from '../settings/createSettings'
+import { createExternalProvider } from './helpers'
+
+const Web3Provider = createExternalProvider()
 
 export const Web3Context: Web3ProviderType = {
+    provider: {
+        getCurrentValue: () => Web3Provider,
+        subscribe: () => noop,
+    },
     allowTestChain: {
         getCurrentValue: () => Flags.wallet_allow_test_chain,
         subscribe: () => noop,
     },
-    currentChain: createSubscriptionAsync(
+    chainId: createSubscriptionAsync(
         Services.Ethereum.getChainId,
         ChainId.Mainnet,
         WalletMessages.events.chainIdUpdated.on,
     ),
-    walletProvider: createSubscriptionFromSettings(currentSelectedWalletProviderSettings),
+    account: createSubscriptionFromSettings(currentSelectedWalletAddressSettings),
+    balance: createSubscriptionFromSettings(currentBalanceSettings),
+    blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
+    nonce: createSubscriptionFromSettings(currentNonceSettings),
+    gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
     wallets: createSubscriptionAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
-    selectedWalletAddress: createSubscriptionFromSettings(currentSelectedWalletAddressSettings),
+    providerType: createSubscriptionFromSettings(currentSelectedWalletProviderSettings),
+    networkType: createSubscriptionFromSettings(currentSelectedWalletNetworkSettings),
+    erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
+    erc721Tokens: createSubscriptionAsync(getERC721Tokens, [], WalletMessages.events.erc721TokensUpdated.on),
 }
 
 async function getWallets() {
@@ -38,6 +60,19 @@ async function getWallets() {
         hasPrivateKey: Boolean(record._private_key_ || record.mnemonic.length),
     }))
 }
+
+async function getERC20Tokens() {
+    const raw = await WalletRPC.getERC20Tokens()
+    return raw.map<ERC20TokenDetailed>((x) => ({
+        type: EthereumTokenType.ERC20,
+        ...x,
+    }))
+}
+
+async function getERC721Tokens() {
+    return []
+}
+
 // utils
 function createSubscriptionFromSettings<T>(settings: InternalSettings<T>): Subscription<T> {
     const { trigger, subscribe } = getEventTarget()

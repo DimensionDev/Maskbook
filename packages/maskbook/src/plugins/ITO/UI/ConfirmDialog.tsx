@@ -5,13 +5,16 @@ import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import LaunchIcon from '@material-ui/icons/Launch'
 import { formatAmountPrecision, formatBalance, FormattedAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
-import { useConstant } from '../../../web3/hooks/useConstant'
 import BigNumber from 'bignumber.js'
-import { useChainId } from '../../../web3/hooks/useChainId'
 import { dateTimeFormat } from '../assets/formatDate'
-import { isNative } from '../../../web3/helpers'
-import { resolveTokenLinkOnExplorer, resolveAddressLinkOnExplorer } from '../../../web3/pipes'
-import type { FungibleTokenDetailed } from '../../../web3/types'
+import {
+    resolveTokenLinkOnExplorer,
+    resolveAddressLinkOnExplorer,
+    isNative,
+    FungibleTokenDetailed,
+    useConstant,
+    useChainId,
+} from '@dimensiondev/web3-shared'
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
 import { ITO_CONSTANTS } from '../constants'

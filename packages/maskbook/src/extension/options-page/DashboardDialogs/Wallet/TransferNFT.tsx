@@ -1,14 +1,17 @@
 import { Button, makeStyles, TextField } from '@material-ui/core'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
+import {
+    useTokenTransferCallback,
+    TransactionStateType,
+    ERC1155TokenAssetDetailed,
+    ERC721TokenAssetDetailed,
+} from '@dimensiondev/web3-shared'
 import { useRemoteControlledDialog, useI18N } from '../../../../utils'
 import { Image } from '../../../../components/shared/Image'
 import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
-import { useTokenTransferCallback } from '../../../../web3/hooks/useTokenTransferCallback'
-import { TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import type { ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '../../../../web3/types'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 

@@ -14,6 +14,7 @@ import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { useHistory } from 'react-router-dom'
 import { useRemoteControlledDialog, useI18N, Flags } from '../../../utils'
 import { unreachable } from '@dimensiondev/maskbook-shared'
+import { ProviderType, useWallets } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { Provider } from './Provider'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
@@ -22,9 +23,7 @@ import { WalletConnectIcon } from '../../../resources/WalletConnectIcon'
 import Services from '../../../extension/service'
 import { WalletMessages } from '../messages'
 import { DashboardRoute } from '../../../extension/options-page/Route'
-import { ProviderType } from '../../../web3/types'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useWalletsOfProvider } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme: Theme) => ({
     paper: {
@@ -73,7 +72,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     )
     //#endregion
 
-    const wallets = useWalletsOfProvider(ProviderType.Maskbook)
+    const wallets = useWallets(ProviderType.Maskbook)
     const onConnect = useCallback(
         async (providerType: ProviderType) => {
             closeDialog()

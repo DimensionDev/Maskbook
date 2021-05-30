@@ -1,20 +1,16 @@
-import { useCallback } from 'react'
-import classNames from 'classnames'
-import { makeStyles, Button, ButtonProps, Typography } from '@material-ui/core'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
-import { useStylesExtends } from '../../components/custom-ui-helper'
-import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
-import { ProviderIcon } from '../../components/shared/ProviderIcon'
 import { formatEthereumAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
+import { ChainId, resolveChainColor, useAccount, useChainId, useNativeTokenBalance } from '@dimensiondev/web3-shared'
+import { Button, ButtonProps, makeStyles, Typography } from '@material-ui/core'
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import classNames from 'classnames'
+import { useCallback } from 'react'
+import { useStylesExtends } from '../../components/custom-ui-helper'
+import { ProviderIcon } from '../../components/shared/ProviderIcon'
+import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { useI18N, useRemoteControlledDialog, useValueRef, Flags } from '../../utils'
-import { useChainId } from '../hooks/useChainId'
-import { resolveChainColor } from '../pipes'
-import { ChainId } from '../types'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
-import { useNativeTokenBalance } from '../hooks/useNativeTokenBalance'
-import { useAccount } from '../hooks/useAccount'
+import { Flags, useI18N, useRemoteControlledDialog, useValueRef } from '../../utils'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -60,7 +56,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
 
     const chainId = useChainId()
     const account = useAccount()
-    const { value: balance = '0' } = useNativeTokenBalance(account)
+    const { value: balance = '0' } = useNativeTokenBalance()
 
     const selectedWallet = useWallet()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)

@@ -3,15 +3,18 @@ import { uniqBy } from 'lodash-es'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { makeStyles, Typography } from '@material-ui/core'
 import {
+    useConstant,
+    CONSTANTS,
+    isSameAddress,
+    FungibleTokenDetailed,
+    EthereumTokenType,
+} from '@dimensiondev/web3-shared'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { TokenInList } from './TokenInList'
+import {
     TokenListsState,
     useERC20TokensDetailedFromTokenLists,
 } from '../../../web3/hooks/useERC20TokensDetailedFromTokenLists'
-import { useConstant } from '../../../web3/hooks/useConstant'
-import { CONSTANTS } from '../../../web3/constants'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { isSameAddress } from '../../../web3/helpers'
-import { TokenInList } from './TokenInList'
-import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
 
 const useStyles = makeStyles((theme) => ({
     list: {},
