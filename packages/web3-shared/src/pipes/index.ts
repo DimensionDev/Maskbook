@@ -40,12 +40,6 @@ export function resolveNetworkChainId(networkType: NetworkType) {
     }
 }
 
-export function resolveChainDetailed(chainId: ChainId) {
-    const chainDetailed = CHAINS.find((x) => x.chainId === chainId)
-    if (!chainDetailed) throw new Error('Unknown chain id.')
-    return chainDetailed
-}
-
 export function resolveChainName(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     return chainDetailed?.name ?? 'Unknown'
@@ -99,8 +93,4 @@ export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): str
 
 export function resolveIPFSLink(ipfs: string): string {
     return `https://ipfs.fleek.co/ipfs/${ipfs}`
-}
-
-export function checkIfChainSupport(chainId: number) {
-    return Object.values(ChainId).includes(chainId)
 }
