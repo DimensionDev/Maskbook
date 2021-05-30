@@ -94,6 +94,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                 .create_red_packet(...params)
                 .estimateGas({
                     from: account,
+                    value,
                 })
                 .catch((error) => {
                     setCreateState({
