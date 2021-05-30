@@ -5,7 +5,6 @@ import {
     ERC20TokenDetailed,
     EthereumTokenType,
     Wallet,
-    Web3ProviderContext,
     Web3ProviderType,
 } from '@dimensiondev/web3-shared'
 import Services from '../extension/service'
