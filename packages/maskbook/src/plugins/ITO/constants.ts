@@ -93,7 +93,7 @@ export const ITO_CONSTANTS = {
         [ChainId.BSC]: '',
         [ChainId.BSCT]: '0x153466dc03dd36b85c06cb51973a2e81397fca51',
         [ChainId.Matic]: '',
-        [ChainId.Mumbai]: '',
+        [ChainId.Mumbai]: '0x153466dC03DD36b85c06Cb51973a2E81397fcA51',
     },
     MASK_ITO_CONTRACT_ADDRESS: {
         [ChainId.Mainnet]: '0x86812da3A623ab9606976078588b80C315E55FA3',
@@ -115,7 +115,7 @@ export const ITO_CONSTANTS = {
         [ChainId.BSC]: '',
         [ChainId.BSCT]: '0x0061E06c9f640a03C4981f43762d2AE5e03873c5',
         [ChainId.Matic]: '',
-        [ChainId.Mumbai]: '',
+        [ChainId.Mumbai]: '0xe7a945e915E7c17f3263b03ac1bb84fb89410c3a',
     },
     SUBGRAPH_URL: {
         [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-mainnet',

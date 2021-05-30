@@ -1,6 +1,6 @@
 import { noop, pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ChainId, ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
+import { ChainId, ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderContext, Web3ProviderType } from '@dimensiondev/web3-shared'
 import Services from '../extension/service'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
@@ -16,9 +16,11 @@ import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
 import { createExternalProvider } from './helpers'
 
+const Web3Provider = createExternalProvider()
+
 export const Web3Context: Web3ProviderType = {
     provider: {
-        getCurrentValue: createExternalProvider,
+        getCurrentValue: () => Web3Provider,
         subscribe: () => noop,
     },
     allowTestChain: {

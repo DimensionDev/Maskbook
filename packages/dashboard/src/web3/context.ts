@@ -4,9 +4,11 @@ import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
 import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
 import { Messages, PluginMessages, PluginServices, Services } from '../API'
 
+const Web3Provider = createExternalProvider()
+
 export const Web3Context: Web3ProviderType = {
     provider: {
-        getCurrentValue: createExternalProvider,
+        getCurrentValue: () => Web3Provider,
         subscribe: () => noop,
     },
     allowTestChain: createSubscriptionAsync(
