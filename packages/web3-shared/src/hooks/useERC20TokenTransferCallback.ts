@@ -54,7 +54,9 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
             from: account,
             gas: await erc20Contract.methods
                 .transfer(recipient, amount)
-                .estimateGas()
+                .estimateGas({
+                    from: account,
+                })
                 .catch((error) => {
                     setTransferState({
                         type: TransactionStateType.FAILED,

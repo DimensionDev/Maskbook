@@ -65,7 +65,9 @@ export function useClaimCallback(pids: string[], contractAddress?: string) {
             from: account,
             gas: await ITO_Contract.methods
                 .claim(pids)
-                .estimateGas()
+                .estimateGas({
+                    from: account,
+                })
                 .catch((error) => {
                     setClaimState({
                         type: TransactionStateType.FAILED,

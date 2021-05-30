@@ -63,7 +63,9 @@ export function useClaimCallback(packet?: AirdropPacket) {
             from: account,
             gas: await AirdropContract.methods
                 .claim(...claimParams)
-                .estimateGas()
+                .estimateGas({
+                    from: account,
+                })
                 .catch((error) => {
                     setClaimState({
                         type: TransactionStateType.FAILED,

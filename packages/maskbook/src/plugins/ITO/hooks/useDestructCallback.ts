@@ -37,7 +37,9 @@ export function useDestructCallback() {
                 from: account,
                 gas: await ITO_Contract.methods
                     .destruct(id)
-                    .estimateGas()
+                    .estimateGas({
+                        from: account,
+                    })
                     .catch((error: Error) => {
                         setDestructState({
                             type: TransactionStateType.FAILED,

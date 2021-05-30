@@ -45,6 +45,7 @@ export function useNativeTokenWrapperCallback() {
                 gas: await wrapperContract.methods
                     .deposit()
                     .estimateGas({
+                        from: account,
                         value: amount,
                     })
                     .catch((error) => {
@@ -123,7 +124,9 @@ export function useNativeTokenWrapperCallback() {
                 from: account,
                 gas: await wrapperContract.methods
                     .withdraw(withdrawAmount)
-                    .estimateGas()
+                    .estimateGas({
+                        from: account,
+                    })
                     .catch((error) => {
                         setTransactionState({
                             type: TransactionStateType.FAILED,

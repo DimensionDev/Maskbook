@@ -54,7 +54,9 @@ export function useERC721TokenTransferCallback(address: string, tokenId?: string
             from: account,
             gas: await erc721Contract.methods
                 .transferFrom(account, recipient, tokenId)
-                .estimateGas()
+                .estimateGas({
+                    from: account,
+                })
                 .catch((error) => {
                     setTransferState({
                         type: TransactionStateType.FAILED,

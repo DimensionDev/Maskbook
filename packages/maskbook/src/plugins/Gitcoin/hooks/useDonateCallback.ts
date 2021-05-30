@@ -72,6 +72,7 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
             gas: await bulkCheckoutContract.methods
                 .donate(donations)
                 .estimateGas({
+                    from: account,
                     value,
                 })
                 .catch((error) => {

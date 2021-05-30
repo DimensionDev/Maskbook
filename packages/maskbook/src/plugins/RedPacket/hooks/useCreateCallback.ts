@@ -92,7 +92,9 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
             value,
             gas: await redPacketContract.methods
                 .create_red_packet(...params)
-                .estimateGas()
+                .estimateGas({
+                    from: account,
+                })
                 .catch((error) => {
                     setCreateState({
                         type: TransactionStateType.FAILED,

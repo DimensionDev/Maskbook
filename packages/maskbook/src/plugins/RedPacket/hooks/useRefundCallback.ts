@@ -33,7 +33,9 @@ export function useRefundCallback(from: string, id?: string) {
             from,
             gas: await redPacketContract.methods
                 .refund(id)
-                .estimateGas()
+                .estimateGas({
+                    from,
+                })
                 .catch((error) => {
                     setRefundState({
                         type: TransactionStateType.FAILED,

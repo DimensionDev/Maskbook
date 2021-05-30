@@ -1,9 +1,9 @@
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { HttpProvider, TransactionConfig } from 'web3-core'
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { createWeb3 } from './web3'
 import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
 import { EthereumMethodType, ProviderType } from '@dimensiondev/web3-shared'
-import { commitNonce, resetNonce } from './nonce'
+import { commitNonce, getNonce, resetNonce } from './nonce'
 import { getWalletCached } from './wallet'
 
 /**
@@ -68,6 +68,9 @@ export async function INTERNAL_send(
                     const wallet = getWalletCached()
                     const _private_key_ = wallet?._private_key_
                     if (!wallet || !_private_key_) throw new Error('Unable to sign transaction.')
+
+                    // FIXME: use internal nonce manager to override nonce
+                    config.nonce = await getNonce(wallet.address)
 
                     // send the signed transaction
                     const signedTransaction = await web3.eth.accounts.signTransaction(config, _private_key_)

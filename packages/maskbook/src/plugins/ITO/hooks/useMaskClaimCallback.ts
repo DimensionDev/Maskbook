@@ -37,7 +37,9 @@ export function useMaskClaimCallback() {
             from: account,
             gas: await MaskITO_Contract.methods
                 .claim()
-                .estimateGas()
+                .estimateGas({
+                    from: account,
+                })
                 .catch((error) => {
                     setClaimState({
                         type: TransactionStateType.FAILED,

@@ -90,10 +90,14 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
                 from: account,
                 gas: await erc20Contract.methods
                     .approve(spender, useExact ? amount : MaxUint256)
-                    .estimateGas()
+                    .estimateGas({
+                        from: account,
+                    })
                     .catch((error) => {
                         useExact = !useExact
-                        return erc20Contract.methods.approve(spender, amount).estimateGas()
+                        return erc20Contract.methods.approve(spender, amount).estimateGas({
+                            from: account,
+                        })
                     })
                     .catch((error) => {
                         setTransactionState({
