@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         display: 'flex',
         gap: 32,
     },
-    network: {
+    networkItem: {
         width: 'auto',
         padding: 0,
     },
@@ -75,8 +75,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey['900'] : '#F7F9FA',
     },
     networkIcon: {
-        height: 48,
-        width: 48,
+        backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey['900'] : '#F7F9FA',
     },
     checkedBadge: {
         position: 'absolute',
@@ -91,7 +90,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         width: '100%',
         margin: theme.spacing(2, 0, 0),
     },
-    icon: {
+    providerIcon: {
         fontSize: 45,
     },
     tip: {
@@ -217,11 +216,11 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     <List className={classnames(classes.networkList, classes.stepContent)}>
                         {networks.map((network) => (
                             <ListItem
-                                className={classes.network}
+                                className={classes.networkItem}
                                 key={network}
                                 onClick={() => onSelectNetwork(network)}>
                                 <div className={classes.iconWrapper}>
-                                    <NetworkIcon networkType={network} />
+                                    <NetworkIcon classes={{ icon: classes.networkIcon }} networkType={network} />
                                     {selectedNetworkType === network && (
                                         <SuccessIcon className={classes.checkedBadge} />
                                     )}
@@ -241,7 +240,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                         rowHeight={151}>
                         <ImageListItem>
                             <Provider
-                                logo={<MaskbookIcon className={classes.icon} viewBox="0 0 45 45" />}
+                                logo={<MaskbookIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
                                 name="Mask Network"
                                 onClick={() => onConnectProvider(ProviderType.Maskbook)}
                             />
@@ -249,7 +248,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                         {Flags.metamask_support_enabled ? (
                             <ImageListItem>
                                 <Provider
-                                    logo={<MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />}
+                                    logo={<MetaMaskIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
                                     name="MetaMask"
                                     onClick={() => onConnectProvider(ProviderType.MetaMask)}
                                 />
@@ -257,7 +256,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                         ) : null}
                         <ImageListItem>
                             <Provider
-                                logo={<WalletConnectIcon className={classes.icon} viewBox="0 0 45 45" />}
+                                logo={<WalletConnectIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
                                 name="WalletConnect"
                                 onClick={() => onConnectProvider(ProviderType.WalletConnect)}
                             />
