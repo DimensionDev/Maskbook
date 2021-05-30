@@ -6,5 +6,5 @@ import { useWeb3Context } from '../context'
 export function useWeb3() {
     const _ = useWeb3Context()
     const provider = useSubscription(_.provider)
-    return useMemo(() => new Web3(provider), [])
+    return useMemo(() => new Web3(provider), [provider])
 }
