@@ -1,6 +1,13 @@
 import { noop, pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ChainId, ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderContext, Web3ProviderType } from '@dimensiondev/web3-shared'
+import {
+    ChainId,
+    ERC20TokenDetailed,
+    EthereumTokenType,
+    Wallet,
+    Web3ProviderContext,
+    Web3ProviderType,
+} from '@dimensiondev/web3-shared'
 import Services from '../extension/service'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
