@@ -39,7 +39,7 @@ importers:
       lint-staged: ^11.0.0
       npm-run-all: ^4.1.5
       only-allow: ^1.0.0
-      patch-package: ./patches/patch-package-6.4.7.tgz
+      patch-package: ^6.4.7
       prettier: ^2.3.0
       react: '=0.0.0-experimental-d75105fa9'
       react-dom: '=0.0.0-experimental-d75105fa9'
@@ -83,7 +83,7 @@ importers:
       lint-staged: 11.0.0
       npm-run-all: 4.1.5
       only-allow: 1.0.0
-      patch-package: file:patches/patch-package-6.4.7.tgz
+      patch-package: 6.4.7
       prettier: 2.3.0
       ts-node: 10.0.0_typescript@4.3.2
       ttypescript: 1.5.12_ts-node@10.0.0+typescript@4.3.2
@@ -6067,10 +6067,6 @@ packages:
       '@types/d3-zoom': 1.8.2
     dev: false
 
-  /@types/dashdash/1.14.0:
-    resolution: {integrity: sha512-dBnfu9H6TVawx85FGmVEs5lYFXNwUVxn3Nqu5FHhCAi4aPvZR35W4FEMK3ljlpM2vHPGgEnCZGARF59/QGTNJw==}
-    dev: true
-
   /@types/dompurify/2.2.2:
     resolution: {integrity: sha512-8nNWfAa8/oZjH3OLY5Wsxu9ueo0NwVUotIi353g0P2+N5BuTLJyAVOnF4xBUY0NyFUGJHY05o1pO2bqLto+lmA==}
     dependencies:
@@ -10537,13 +10533,6 @@ packages:
     engines: {node: '>=0.10'}
     dependencies:
       assert-plus: 1.0.0
-
-  /dashdash/2.0.0:
-    resolution: {integrity: sha512-ElMoAPlrzmF4l0OscF5pPBZv8LhUJBnwh7rHKllUOrwabAr47R1aQIIwC53rc59ycCb7k5Sj1/es+A3Bep/x5w==}
-    engines: {node: '>=10.x'}
-    dependencies:
-      assert-plus: 1.0.0
-    dev: true
 
   /data-urls/1.1.0:
     resolution: {integrity: sha512-YTWYI9se1P55u58gL5GkQHW4P6VJBJ5iBT+B5a7i2Tjadhv52paJG0qHX4A0OR6/t52odI64KP2YvFpkDOi3eQ==}
@@ -18251,6 +18240,26 @@ packages:
     resolution: {integrity: sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=}
     engines: {node: '>=0.10.0'}
 
+  /patch-package/6.4.7:
+    resolution: {integrity: sha512-S0vh/ZEafZ17hbhgqdnpunKDfzHQibQizx9g8yEf5dcVk3KOflOfdufRXQX8CSEkyOQwuM/bNz1GwKvFj54kaQ==}
+    engines: {npm: '>5'}
+    hasBin: true
+    dependencies:
+      '@yarnpkg/lockfile': 1.1.0
+      chalk: 2.4.2
+      cross-spawn: 6.0.5
+      find-yarn-workspace-root: 2.0.0
+      fs-extra: 7.0.1
+      is-ci: 2.0.0
+      klaw-sync: 6.0.0
+      minimist: 1.2.5
+      open: 7.4.2
+      rimraf: 2.7.1
+      semver: 5.7.1
+      slash: 2.0.0
+      tmp: 0.0.33
+    dev: true
+
   /path-browserify/0.0.1:
     resolution: {integrity: sha512-BapA40NHICOS+USX9SN4tyhq+A2RrN/Ws5F0Z5aMHDp98Fl86lX8Oti8B7uN93L4Ifv4fHOEA+pQw87gmMO/lQ==}
 
@@ -20480,10 +20489,6 @@ packages:
 
   /shellwords/0.1.1:
     resolution: {integrity: sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==}
-    dev: true
-
-  /shlex/2.1.0:
-    resolution: {integrity: sha512-Tk8PjohJbWpGu2NtAlsEi/9AS4GU2zW2ZWLFrWRDskZpSJmyBIU3nTkBtocxD90r3w4BwRevsNtIqIP9HMuYiQ==}
     dev: true
 
   /side-channel/1.0.4:
@@ -24293,30 +24298,6 @@ packages:
 
   /zwitch/1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
-    dev: true
-
-  file:patches/patch-package-6.4.7.tgz:
-    resolution: {integrity: sha512-ahMzuSJOT2NhXPuoCysQy/lu6Z41Mj303MQhNpG0yphnoYj7zJ1qEYHbWNpPrZphxYUizg/s9OO/8TUPJ2zOVg==, tarball: file:patches/patch-package-6.4.7.tgz}
-    name: patch-package
-    version: 6.4.7
-    engines: {npm: '>5'}
-    hasBin: true
-    dependencies:
-      '@types/dashdash': 1.14.0
-      '@yarnpkg/lockfile': 1.1.0
-      chalk: 2.4.2
-      cross-spawn: 6.0.5
-      dashdash: 2.0.0
-      find-yarn-workspace-root: 2.0.0
-      fs-extra: 7.0.1
-      is-ci: 2.0.0
-      klaw-sync: 6.0.0
-      open: 7.4.2
-      rimraf: 2.7.1
-      semver: 5.7.1
-      shlex: 2.1.0
-      slash: 2.0.0
-      tmp: 0.0.33
     dev: true
 
   github.com/ProjectOpenSea/wyvern-js/fabb7660f23f2252c141077e32193d281036299e:

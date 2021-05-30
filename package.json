@@ -64,7 +64,7 @@
     "lint-staged": "^11.0.0",
     "npm-run-all": "^4.1.5",
     "only-allow": "^1.0.0",
-    "patch-package": "./patches/patch-package-6.4.7.tgz",
+    "patch-package": "^6.4.7",
     "prettier": "^2.3.0",
     "ts-node": "^10.0.0",
     "ttypescript": "^1.5.12",
