@@ -148,7 +148,9 @@ export const StepNameAndWords: FC<StepStepNameAndWordsProps> = ({
                 </ActionButton>
             </Box>
             <Box className={classes.warning}>
-                <Alert severity="warning">Please properly back up your account’s mnemonic words.</Alert>
+                <Alert severity="info" color="warning">
+                    Please properly back up your account’s mnemonic words.
+                </Alert>
             </Box>
         </Box>
     )

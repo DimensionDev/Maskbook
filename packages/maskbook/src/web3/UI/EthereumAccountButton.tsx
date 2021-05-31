@@ -6,7 +6,7 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import classNames from 'classnames'
 import { useCallback } from 'react'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import { ProviderIcon } from '../../components/shared/ProviderIcon'
+import { WalletIcon } from '../../components/shared/WalletIcon'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import {
@@ -14,7 +14,6 @@ import {
     currentSelectedWalletProviderSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags, useI18N, useRemoteControlledDialog, useValueRef } from '../../utils'
-import { NetworkIcon } from '../../components/shared/NetworkIcon'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -34,17 +33,6 @@ const useStyles = makeStyles((theme) => {
         },
         buttonTransparent: {
             backgroundColor: 'transparent',
-        },
-        providerIcon: {
-            fontSize: 18,
-            width: 18,
-            height: 18,
-        },
-        networkIcon: {
-            fontSize: 18,
-            width: 18,
-            height: 18,
-            marginLeft: theme.spacing(-1),
         },
         chainIcon: {
             fontSize: 18,
@@ -95,22 +83,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
             <Button
                 className={classNames(classes.button, props.disableNativeToken ? classes.buttonTransparent : '')}
                 variant="outlined"
-                startIcon={
-                    selectedWallet ? (
-                        <>
-                            <ProviderIcon
-                                classes={{ icon: classes.providerIcon }}
-                                size={18}
-                                providerType={selectedProviderType}
-                            />
-                            <NetworkIcon
-                                classes={{ icon: classes.networkIcon }}
-                                size={18}
-                                networkType={selectedNetworkType}
-                            />
-                        </>
-                    ) : null
-                }
+                startIcon={selectedWallet ? <WalletIcon size={18} badgeSize={9} /> : null}
                 color="primary"
                 onClick={onOpen}
                 {...props.ButtonProps}>

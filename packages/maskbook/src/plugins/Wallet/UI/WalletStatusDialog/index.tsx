@@ -3,27 +3,18 @@ import { Copy, ExternalLink, Edit3 } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import classNames from 'classnames'
 import ErrorIcon from '@material-ui/icons/Error'
-import { FormattedAddress } from '@dimensiondev/maskbook-shared'
+import { FormattedAddress, useValueRef } from '@dimensiondev/maskbook-shared'
+import { ProviderType, resolveAddressLinkOnExplorer, useChainId, useChainIdValid } from '@dimensiondev/web3-shared'
 import { Button, DialogActions, DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { ProviderIcon } from '../../../../components/shared/ProviderIcon'
+import { WalletIcon } from '../../../../components/shared/WalletIcon'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import Services from '../../../../extension/service'
-import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
-import { useValueRef } from '../../../../utils/hooks/useValueRef'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useI18N, useRemoteControlledDialog } from '../../../../utils'
 import { useWallet } from '../../hooks/useWallet'
 import { WalletMessages } from '../../messages'
-import { currentSelectedWalletNetworkSettings, currentSelectedWalletProviderSettings } from '../../settings'
+import { currentSelectedWalletProviderSettings } from '../../settings'
 import { RecentTransactionList } from './RecentTransactionList'
-import { NetworkIcon } from '../../../../components/shared/NetworkIcon'
-import {
-    ProviderType,
-    resolveAddressLinkOnExplorer,
-    useAccount,
-    useChainId,
-    useChainIdValid,
-} from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -74,18 +65,6 @@ const useStyles = makeStyles((theme) => ({
         width: 48,
         marginRight: theme.spacing(1.5),
     },
-    icon: {
-        fontSize: 48,
-        width: 48,
-        height: 48,
-    },
-    networkIcon: {
-        position: 'absolute',
-        right: -2,
-        bottom: 0,
-        height: 18,
-        width: 18,
-    },
     tip: {
         flex: 1,
         fontSize: 14,
@@ -112,12 +91,10 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const account = useAccount()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     const selectedWallet = useWallet()
     const selectedProviderType = useValueRef(currentSelectedWalletProviderSettings)
-    const selectedNetworkType = useValueRef(currentSelectedWalletNetworkSettings)
 
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
@@ -175,14 +152,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
             DialogProps={{ maxWidth: 'sm' }}>
             <DialogContent className={classes.content}>
                 <section className={classes.currentAccount}>
-                    <div className={classes.iconWrapper}>
-                        <ProviderIcon classes={{ icon: classes.icon }} size={48} providerType={selectedProviderType} />
-                        <NetworkIcon
-                            size={28}
-                            classes={{ icon: classes.networkIcon }}
-                            networkType={selectedNetworkType}
-                        />
-                    </div>
+                    <WalletIcon size={48} badgeSize={18}></WalletIcon>
                     <div className={classes.accountInfo}>
                         <div className={classes.infoRow}>
                             <Typography className={classes.accountName}>{selectedWallet.name}</Typography>
