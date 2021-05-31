@@ -493,7 +493,7 @@
     "plugin_ito_error_invalid_qualification": "무효한 인증 주소입니다.",
     "plugin_ito_unlock_time": "언락 시간 {{zone}}",
     "plugin_ito_qualification_label": "플러그인 컨트랙트",
-    "plugin_ito_message_label": "",
+    "plugin_ito_message_label": "제목",
     "plugin_ito_region_label": "IP 지역 선택",
     "plugin_ito_region_comfirm_label": "IP 지역",
     "plugin_ito_region_list": "{{ select }} / {{ all }} 지역",
