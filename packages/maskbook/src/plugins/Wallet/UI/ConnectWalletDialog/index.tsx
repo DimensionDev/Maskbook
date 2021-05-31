@@ -12,6 +12,7 @@ import {
     useAccount,
     useChainId,
     ChainId,
+    resolveNetworkName,
 } from '@dimensiondev/web3-shared'
 import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
@@ -31,8 +32,6 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const account = useAccount()
-    const chainId = useChainId()
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
 
@@ -56,8 +55,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     )
     //#endregion
 
-    const connectToMetamask = useCallback(async () => {
-        try {
+    const connectTo = useCallback(
+        async (providerType: ProviderType) => {
             // unknown network type
             if (!networkType) throw new Error('Unknown network type.')
 
@@ -65,79 +64,89 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             const chainDetailed = CHAINS.find((x) => x.chainId === getChainIdFromNetworkType(networkType))
             if (!chainDetailed) throw new Error('The selected network is not supported.')
 
-            // request to connect with metamask
-            const { account, chainId } = await Services.Ethereum.connectMetaMask()
-            if (!account || !networkType) throw new Error('Failed to connect MetaMask.')
+            let account: string | undefined
+            let chainId: ChainId | undefined
 
-            // it's unable to send a request for switching to ethereum networks
+            switch (providerType) {
+                case ProviderType.Maskbook:
+                    throw new Error('Not necessary!')
+                case ProviderType.MetaMask:
+                    ;({ account, chainId } = await Services.Ethereum.connectMetaMask())
+                    break
+                case ProviderType.WalletConnect:
+                    // a short time loading makes the user fells better
+                    const [uri_] = await Promise.allSettled([Services.Ethereum.createConnectionURI(), delay(1000)])
+
+                    // create wallet connect QR code URI
+                    const uri = uri_.status === 'fulfilled' ? uri_.value : ''
+                    if (!uri) throw new Error('Failed to create connection URI.')
+
+                    // open the QR code dialog
+                    setWalletConnectDialog({
+                        open: true,
+                        uri,
+                    })
+
+                    // wait for walletconnect to be connected
+                    ;({ account, chainId } = await Services.Ethereum.connectWalletConnect())
+                    break
+                case ProviderType.CustomNetwork:
+                    throw new Error('To be implemented.')
+                default:
+                    safeUnreachable(providerType)
+                    break
+            }
+
+            // connection failed
+            if (!account || !networkType) throw new Error(`Failed to connect ${resolveProviderName(providerType)}.`)
+
             if (networkType === NetworkType.Ethereum) {
+                // it's unable to send a request for switching to ethereum networks
                 if (chainId !== ChainId.Mainnet)
-                    throw new Error("Make sure you've selected the Ethereum Mainnet on MetaMask.")
+                    throw new Error(
+                        `Make sure you've selected the Ethereum Mainnet on ${resolveProviderName(providerType)}.`,
+                    )
                 return true
             }
 
             // request ethereum-compatiable network
-            await Services.Ethereum.addEthereumChain(account, {
-                chainId: `0x${chainDetailed.chainId.toString(16)}`,
-                chainName: chainDetailed.name,
-                nativeCurrency: chainDetailed.nativeCurrency,
-                rpcUrls: chainDetailed.rpc,
-                blockExplorerUrls: [
-                    chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
-                        ? chainDetailed.explorers[0].url
-                        : chainDetailed.infoURL,
-                ],
-            })
+            try {
+                await Services.Ethereum.addEthereumChain(account, {
+                    chainId: `0x${chainDetailed.chainId.toString(16)}`,
+                    chainName: chainDetailed.name,
+                    nativeCurrency: chainDetailed.nativeCurrency,
+                    rpcUrls: chainDetailed.rpc,
+                    blockExplorerUrls: [
+                        chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
+                            ? chainDetailed.explorers[0].url
+                            : chainDetailed.infoURL,
+                    ],
+                })
+            } catch (e) {
+                throw new Error(`Connection error! Please switch to ${resolveNetworkName(networkType)} manually.`)
+            }
 
             // wait for settings to be synced
             await delay(1000)
 
             return true as const
-        } catch (e) {
-            throw new Error(e.message)
-        }
-    }, [account, chainId, networkType])
-
-    const connectToWalletConnect = useCallback(async () => {
-        // a short time loading brings a better user experience
-        const [uri_] = await Promise.allSettled([Services.Ethereum.createConnectionURI(), delay(1000)])
-
-        // create wallet connect QR code URI
-        const uri = uri_.status === 'fulfilled' ? uri_.value : ''
-        if (!uri) throw new Error('Failed to create connection URI.')
-
-        setWalletConnectDialog({
-            open: true,
-            uri,
-        })
-        return true as const
-    }, [])
+        },
+        [networkType],
+    )
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
         if (!providerType) throw new Error('Unknown provider type.')
-        switch (providerType) {
-            case ProviderType.Maskbook:
-                throw new Error('Unable to create connection on Mask wallet.')
-            case ProviderType.MetaMask:
-                await connectToMetamask()
-                break
-            case ProviderType.WalletConnect:
-                await connectToWalletConnect()
-                break
-            case ProviderType.CustomNetwork:
-                throw new Error('To be implemented.')
-            default:
-                safeUnreachable(providerType)
-                throw new Error('Unknown provider type.')
-        }
+
+        // connect to the specific provider
+        await connectTo(providerType)
 
         // switch to the wallet status dialog
         closeDialog()
         openWalletStatusDialog()
 
         return true
-    }, [open, providerType, connectToMetamask, openWalletStatusDialog])
+    }, [open, providerType, connectTo, openWalletStatusDialog])
 
     if (!providerType) return null
 
