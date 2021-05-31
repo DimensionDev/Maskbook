@@ -7,7 +7,7 @@ import { delay, useI18N, useRemoteControlledDialog, useValueRef } from '../../..
 import {
     NetworkType,
     ProviderType,
-    resolveNetworkChainId,
+    getChainIdFromNetworkType,
     resolveProviderName,
     useAccount,
     useChainId,
@@ -62,7 +62,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             if (!account) throw new Error('Failed to connect MetaMask.')
 
             // read the chain detailed from the built-in chain list
-            const chainDetailed = CHAINS.find((x) => x.chainId === resolveNetworkChainId(selectedNetworkType))
+            const chainDetailed = CHAINS.find((x) => x.chainId === getChainIdFromNetworkType(selectedNetworkType))
             if (!chainDetailed) throw new Error('The selected network is not supported.')
 
             // it's unable to send a request for switching to ethereum networks

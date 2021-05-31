@@ -15,7 +15,7 @@ import {
 import { unreachable, useValueRef } from '@dimensiondev/maskbook-shared'
 import { SuccessIcon } from '@dimensiondev/icons'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { useWallets, useAccount, resolveNetworkChainId, ProviderType, NetworkType } from '@dimensiondev/web3-shared'
+import { useWallets, useAccount, getChainIdFromNetworkType, ProviderType, NetworkType } from '@dimensiondev/web3-shared'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 import { useChainId } from '@dimensiondev/web3-shared'
@@ -148,7 +148,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
 
     const onSelectNetwork = useCallback(
         async (networkType: NetworkType) => {
-            const chainId = resolveNetworkChainId(networkType)
+            const chainId = getChainIdFromNetworkType(networkType)
             const chainDetailed = CHAINS.find((x) => x.chainId === chainId)
             if (!chainDetailed) throw new Error('The selected network is not supported.')
             if (selectedProviderType === ProviderType.Maskbook) currentMaskbookChainIdSettings.value = chainId
@@ -176,7 +176,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     if (
                         account &&
                         selectedProviderType === providerType &&
-                        resolveNetworkChainId(selectedNetworkType) === chainId
+                        getChainIdFromNetworkType(selectedNetworkType) === chainId
                     ) {
                         openWalletStatusDialog()
                     } else {

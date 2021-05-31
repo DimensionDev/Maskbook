@@ -13,13 +13,13 @@ import { compact, head } from 'lodash-es'
 import { OrderSide } from 'opensea-js/lib/types'
 import { toRaribleImage } from '../helpers'
 import { getChainId } from '../../../extension/background-script/EthereumServices/chainState'
-import { ChainId, resolveChainName } from '@dimensiondev/web3-shared'
+import { ChainId, getChainName } from '@dimensiondev/web3-shared'
 import { resolveRaribleUserNetwork } from '../pipes'
 
 async function createRaribleApi() {
     const chainId = await getChainId()
     if (![ChainId.Mainnet, ChainId.Ropsten].includes(chainId))
-        throw new Error(`${resolveChainName(chainId)} is not supported.`)
+        throw new Error(`${getChainName(chainId)} is not supported.`)
     return chainId === ChainId.Mainnet ? RaribleMainetURL : RaribleRopstenURL
 }
 

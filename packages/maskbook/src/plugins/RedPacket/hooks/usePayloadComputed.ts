@@ -1,4 +1,4 @@
-import { resolveChainName, useChainId, ChainId, EthereumNetwork, EthereumTokenType } from '@dimensiondev/web3-shared'
+import { getChainName, useChainId, ChainId, EthereumNetwork, EthereumTokenType } from '@dimensiondev/web3-shared'
 import { RED_PACKET_CONSTANTS, RED_PACKET_CONTRACT_VERSION } from '../constants'
 import type { History, RedPacketJSONPayload } from '../types'
 import { useRedPacketsFromDB } from './useRedPacket'
@@ -27,7 +27,7 @@ function getPayload(chainId: ChainId, record: History.RedPacketRecord, overrides
         total: createLog._total_tokens,
         creation_time: Number.parseInt(CreationSuccessLog?.creation_time, 10) * 1000,
         duration: Number.parseInt(createLog._duration, 10),
-        network: resolveChainName(chainId) as EthereumNetwork,
+        network: getChainName(chainId) as EthereumNetwork,
         token_type: tokenType,
         ...overrides,
     }
