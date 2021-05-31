@@ -78,19 +78,13 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
         // error: unable to sign password
         let signedPassword = ''
         try {
-            console.log({ message, account })
             signedPassword = await Services.Ethereum.personalSign(Web3Utils.sha3(message) ?? '', account)
-            console.log({ signedPassword })
-        } catch (e) {
-            // it is trick, log(e) print {"code": 4001 ...}, log(e.code) print -1
-            if (e.message === 'MetaMask Message Signature: User denied message signature.') {
-                setCreateState({
-                    type: TransactionStateType.FAILED,
-                    error: new Error(t('plugin_wallet_cancel_sign')),
-                })
-                return
-            }
-            signedPassword = ''
+        } catch (error) {
+            setCreateState({
+                type: TransactionStateType.FAILED,
+                error,
+            })
+            return
         }
         if (!signedPassword) {
             setCreateState({
@@ -101,7 +95,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
         }
 
         // it's trick, the password starts with '0x' would cause wrong password tx fail, so trim it.
-        signedPassword = signedPassword!.slice(2)
+        signedPassword = signedPassword.slice(2)
         setCreateSettings({ ...redPacketSettings, password: signedPassword })
 
         // pre-step: start waiting for provider to confirm tx
@@ -150,7 +144,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
             const promiEvent = redPacketContract.methods.create_red_packet(...params).send(config as PayableTx)
             promiEvent.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
                 setCreateState({
-                    type: TransactionStateType.HASH_WAIT,
+                    type: TransactionStateType.WAIT_FOR_CONFIRMING,
                     hash,
                 })
             })
