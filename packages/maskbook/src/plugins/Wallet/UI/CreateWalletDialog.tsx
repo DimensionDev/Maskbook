@@ -110,7 +110,6 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
         if (!ev.open) return
         if (!ev.name) return
         setName(ev.name)
-        setStep(CreateWalletStep.Verify)
     })
     const onClose = useCallback(async () => {
         closeDialog()
