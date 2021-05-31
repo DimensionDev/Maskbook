@@ -50,6 +50,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     step: {
         flexGrow: 1,
         marginTop: 21,
+        '&:first-child': {
+            marginTop: 0,
+        }
     },
     stepTitle: {
         fontSize: 19,

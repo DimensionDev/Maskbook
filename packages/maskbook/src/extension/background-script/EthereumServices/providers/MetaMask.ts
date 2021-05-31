@@ -55,7 +55,7 @@ export function createProvider() {
 
 // MetaMask provider can be wrapped into web3 lib directly.
 // https://github.com/MetaMask/extension-provider
-export async function createWeb3() {
+export function createWeb3() {
     const provider_ = createProvider() as Provider
     if (!web3) web3 = new Web3(provider_)
     else web3.setProvider(provider_)
