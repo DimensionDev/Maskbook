@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
         height: 24,
         fontSize: 24,
     },
-    networkIcon: {
+    walletIcon: {
         position: 'absolute',
         right: -2,
         bottom: -2,
@@ -273,15 +273,11 @@ export function ToolboxHint(props: ToolboxHintProps) {
                 <div className={classes.button}>
                     {selectedWallet ? (
                         <div className={classes.iconWrapper}>
+                            <NetworkIcon size={14} classes={{ icon: classes.icon }} networkType={selectedNetwork} />
                             <ProviderIcon
-                                classes={{ icon: classes.icon }}
+                                classes={{ icon: classes.walletIcon }}
                                 size={24}
                                 providerType={selectedWalletProvider}
-                            />
-                            <NetworkIcon
-                                size={14}
-                                classes={{ icon: classes.networkIcon }}
-                                networkType={selectedNetwork}
                             />
                         </div>
                     ) : (
