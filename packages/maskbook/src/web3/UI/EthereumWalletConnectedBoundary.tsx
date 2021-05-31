@@ -1,14 +1,14 @@
 import { Grid, makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 import { useCallback } from 'react'
+import { isZero, useValueRef } from '@dimensiondev/maskbook-shared'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import Services from '../../extension/service'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { currentIsMetamaskLockedSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
-import { useRemoteControlledDialog, useValueRef, useI18N } from '../../utils'
+import { useRemoteControlledDialog, useI18N } from '../../utils'
 import { ProviderType, useAccount, useChainIdValid, useNativeTokenBalance } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import { isZero } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     button: {

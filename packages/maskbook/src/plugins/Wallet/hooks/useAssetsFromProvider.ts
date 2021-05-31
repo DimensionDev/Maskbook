@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { useAccount, useChainDetailed } from '@dimensiondev/web3-shared'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { useValueRef } from '@dimensiondev/maskbook-shared'
 import { WalletRPC } from '../messages'
 import { currentPortfolioDataProviderSettings } from '../settings'
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { useValueRef } from '@dimensiondev/maskbook-shared'
 import { currentTradeProviderSettings } from '../settings'
 import { TradeProvider } from '../types'
 

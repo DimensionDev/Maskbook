@@ -1,12 +1,16 @@
+import {
+    isTypedMessagePromise,
+    isWellKnownTypedMessages,
+    makeTypedMessageTuple,
+    useValueRef,
+} from '@dimensiondev/maskbook-shared'
+import { makeStyles, Theme } from '@material-ui/core'
 import { useEffect, useMemo } from 'react'
+import { Result } from 'ts-results'
+import { PluginUI } from '../../plugins/PluginUI'
+import { allPostReplacementSettings } from '../../settings/settings'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
-import { PluginUI } from '../../plugins/PluginUI'
-import { makeTypedMessageTuple, isTypedMessagePromise, isWellKnownTypedMessages } from '@dimensiondev/maskbook-shared'
-import { useValueRef } from '../../utils/hooks/useValueRef'
-import { allPostReplacementSettings } from '../../settings/settings'
-import { makeStyles, Theme } from '@material-ui/core'
-import { Result } from 'ts-results'
 
 const useStlyes = makeStyles((theme: Theme) => ({
     root: {
