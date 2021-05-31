@@ -15,4 +15,4 @@ if (import.meta.hot) {
     document.getElementById('warning')?.remove()
 }
 
-ReactDOM.unstable_createRoot(document.getElementById('root')!).render(<Dashboard />)
+ReactDOM.createRoot(document.getElementById('root')!).render(<Dashboard />)

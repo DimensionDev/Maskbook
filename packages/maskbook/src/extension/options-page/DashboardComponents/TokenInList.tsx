@@ -2,13 +2,15 @@ import { useCallback } from 'react'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { ListItem, ListItemText, Typography, ListItemIcon, Link } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import { TokenIcon } from './TokenIcon'
-import { useConstant } from '../../../web3/hooks/useConstant'
-import { CONSTANTS } from '../../../web3/constants'
+import {
+    useConstant,
+    CONSTANTS,
+    resolveTokenLinkOnExplorer,
+    FungibleTokenDetailed,
+    isSameAddress,
+} from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { resolveTokenLinkOnExplorer } from '../../../web3/pipes'
-import type { FungibleTokenDetailed } from '../../../web3/types'
-import { isSameAddress } from '../../../web3/helpers'
+import { TokenIcon } from './TokenIcon'
 
 const useStyles = makeStyles((theme: Theme) => ({
     icon: {

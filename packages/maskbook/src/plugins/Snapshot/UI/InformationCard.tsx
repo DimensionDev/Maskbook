@@ -1,18 +1,20 @@
-import { useContext } from 'react'
-import { Box, Link, makeStyles, Typography, Avatar } from '@material-ui/core'
-import { format } from 'date-fns'
-import OpenInNew from '@material-ui/icons/OpenInNew'
-
-import { useI18N } from '../../../utils'
-import { SnapshotCard } from './SnapshotCard'
-import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
-import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
-import { resolveAddressLinkOnExplorer, resolveBlockLinkOnExplorer, resolveIPFSLink } from '../../../web3/pipes'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { useChainId } from '../../../web3/hooks/useChainId'
-
+import {
+    resolveAddressLinkOnExplorer,
+    resolveBlockLinkOnExplorer,
+    resolveIPFSLink,
+    useChainId,
+} from '@dimensiondev/web3-shared'
+import { Avatar, Box, Link, makeStyles, Typography } from '@material-ui/core'
+import OpenInNew from '@material-ui/icons/OpenInNew'
+import { format } from 'date-fns'
+import { useContext } from 'react'
+import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
+import { useI18N } from '../../../utils'
+import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
 import { SnapshotContext } from '../context'
 import { useProposal } from '../hooks/useProposal'
+import { SnapshotCard } from './SnapshotCard'
 
 export interface InformationCardProps {}
 

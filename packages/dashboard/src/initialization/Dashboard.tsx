@@ -23,6 +23,8 @@ import {
 } from '@dimensiondev/mask-plugin-infra'
 import { Pages } from '../pages/routes'
 import { useAppearance } from '../pages/Personas/api'
+import { Web3Provider } from '@dimensiondev/web3-shared'
+import { Web3Context } from '../web3/context'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -45,21 +47,23 @@ export default function DashboardRoot() {
 
     return (
         <StrictMode>
-            <I18nextProvider i18n={i18n}>
-                <StyledEngineProvider injectFirst>
-                    <StylesProvider>
-                        <ThemeProvider theme={theme}>
-                            <ErrorBoundary>
-                                <CssBaseline />
-                                <HashRouter>
-                                    <Pages />
-                                </HashRouter>
-                                <PluginRender />
-                            </ErrorBoundary>
-                        </ThemeProvider>
-                    </StylesProvider>
-                </StyledEngineProvider>
-            </I18nextProvider>
+            <Web3Provider value={Web3Context}>
+                <I18nextProvider i18n={i18n}>
+                    <StyledEngineProvider injectFirst>
+                        <StylesProvider>
+                            <ThemeProvider theme={theme}>
+                                <ErrorBoundary>
+                                    <CssBaseline />
+                                    <HashRouter>
+                                        <Pages />
+                                    </HashRouter>
+                                    <PluginRender />
+                                </ErrorBoundary>
+                            </ThemeProvider>
+                        </StylesProvider>
+                    </StyledEngineProvider>
+                </I18nextProvider>
+            </Web3Provider>
         </StrictMode>
     )
 }

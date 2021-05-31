@@ -1,5 +1,5 @@
 import { Box, Divider, makeStyles } from '@material-ui/core'
-import type { ERC20TokenDetailed } from '../../../web3/types'
+import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 import { AirdropClaimCard } from './AirdropClaimCard'
 import { AirdropCheckCard } from './AirdropCheckCard'
 

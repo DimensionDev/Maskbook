@@ -1,6 +1,6 @@
 import type { ZerionTransactionDirection } from './zerion'
 import type { DebankTransactionDirection } from './debank'
-import type { CurrencyType, FungibleTokenDetailed } from '../../../web3/types'
+import type { CurrencyType, FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 
 export enum FilterTransactionType {
     ALL = 'all',

@@ -1,19 +1,17 @@
 import { useCallback, useEffect } from 'react'
 import { uniq, flatten } from 'lodash-es'
+import formatDateTime from 'date-fns/format'
+import { useSnackbar, VariantType } from 'notistack'
+import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
+import { makeStyles, DialogContent, CircularProgress, Typography, List, ListItem } from '@material-ui/core'
+import { TransactionStateType, resolveTransactionLinkOnExplorer, useChainId } from '@dimensiondev/web3-shared'
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { makeStyles, DialogContent, CircularProgress, Typography, List, ListItem } from '@material-ui/core'
 import { useClaimAll } from '../hooks/useClaimAll'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { useClaimCallback } from '../hooks/useClaimCallback'
-import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { resolveTransactionLinkOnExplorer } from '../../../web3/pipes'
-import { useChainId } from '../../../web3/hooks/useChainId'
-import formatDateTime from 'date-fns/format'
-import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
-import { useSnackbar, VariantType } from 'notistack'
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
@@ -22,13 +20,13 @@ const useStyles = makeStyles((theme) => ({
     actionButton: {
         margin: '0 auto',
         minHeight: 'auto',
+        width: '100%',
+        fontSize: 18,
+        fontWeight: 400,
         backgroundColor: '#1C68F3',
         '&:hover': {
             backgroundColor: '#1854c4',
         },
-        width: '100%',
-        fontSize: 18,
-        fontWeight: 400,
     },
     footer: {
         marginTop: theme.spacing(2),
@@ -191,11 +189,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         </List>
                         <EthereumWalletConnectedBoundary>
                             <ActionButton
-                                onClick={onClaimButtonClick}
+                                className={classes.actionButton}
                                 variant="contained"
                                 disabled={claimablePids!.length === 0}
                                 size="large"
-                                className={classes.actionButton}>
+                                onClick={onClaimButtonClick}>
                                 {t('plugin_ito_claim_all')}
                             </ActionButton>
                         </EthereumWalletConnectedBoundary>

@@ -1,30 +1,32 @@
-import { useState, useCallback, useMemo, useEffect } from 'react'
-import { makeStyles, DialogContent } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
-import { v4 as uuid } from 'uuid'
-
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { EthereumTokenType, FungibleTokenDetailed } from '../../../web3/types'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useInvestCallback } from '../hooks/useInvestCallback'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { PluginDHedgeMessages } from '../messages'
-import { EthereumMessages } from '../../Ethereum/messages'
-import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { PluginTraderMessages } from '../../Trader/messages'
-import type { Pool } from '../types'
-import type { Coin } from '../../Trader/types'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
+import {
+    EthereumTokenType,
+    FungibleTokenDetailed,
+    TransactionStateType,
+    useAccount,
+    useTokenBalance,
+} from '@dimensiondev/web3-shared'
+import { DialogContent, makeStyles } from '@material-ui/core'
+import BigNumber from 'bignumber.js'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { v4 as uuid } from 'uuid'
+import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { EthereumMessages } from '../../Ethereum/messages'
+import { PluginTraderMessages } from '../../Trader/messages'
+import type { Coin } from '../../Trader/types'
+import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { useInvestCallback } from '../hooks/useInvestCallback'
+import { PluginDHedgeMessages } from '../messages'
+import type { Pool } from '../types'
 
 const useStyles = makeStyles((theme) => ({
     paper: {

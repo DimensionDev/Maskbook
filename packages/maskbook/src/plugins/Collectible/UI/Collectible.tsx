@@ -33,9 +33,9 @@ import { currentCollectibleProviderSettings } from '../settings'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/UI/trader/FootnoteMenu'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
-import { ChainState } from '../../../web3/state/useChainState'
 import { Markdown } from '../../Snapshot/UI/Markdown'
 import { ActionBar } from './ActionBar'
+import { useChainId } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -136,7 +136,7 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const { chainId } = ChainState.useContainer()
+    const chainId = useChainId()
     const { asset, provider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
     //#region sync with settings

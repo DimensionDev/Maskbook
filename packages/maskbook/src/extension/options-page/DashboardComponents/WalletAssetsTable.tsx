@@ -19,16 +19,22 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import {
+    CurrencyType,
+    ERC20TokenDetailed,
+    EthereumTokenType,
+    resolveChainId,
+    isSameAddress,
+    Wallet,
+    useStableTokensDebank,
+    useChainDetailed,
+} from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency, FormattedCurrency } from '@dimensiondev/maskbook-shared'
 import { useMatchXS, useI18N } from '../../../utils'
-import { CurrencyType, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
-import { isSameAddress } from '../../../web3/helpers'
 import { TokenIcon } from './TokenIcon'
-import type { Wallet } from '@dimensiondev/web3-shared'
 import { ActionsBarFT } from './ActionsBarFT'
 import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
-import { useStableTokensDebank } from '../../../web3/hooks/useStableTokensDebank'
 import type { Asset } from '../../../plugins/Wallet/types'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
 import { useAssets } from '../../../plugins/Wallet/hooks/useAssets'
@@ -91,9 +97,11 @@ function ViewDetailed(props: ViewDetailedProps) {
 
     const isMobile = useMatchXS()
     const classes = useStylesExtends(useStyles({ isMobile }), props)
-    const stableTokens = useStableTokensDebank()
 
-    console.log(asset)
+    const stableTokens = useStableTokensDebank()
+    const chainDetailed = useChainDetailed()
+
+    if (!chainDetailed) return null
 
     return (
         <TableRow className={classes.cell} key={asset.token.address}>
@@ -102,9 +110,16 @@ function ViewDetailed(props: ViewDetailedProps) {
                     sx={{
                         display: 'flex',
                     }}>
-                    <TokenIcon classes={{ icon: classes.coin }} name={asset.token.name} address={asset.token.address} />
+                    <TokenIcon
+                        classes={{ icon: classes.coin }}
+                        name={asset.token.name}
+                        address={asset.token.address}
+                        chainId={resolveChainId(asset.chain)}
+                    />
                     <Typography className={classes.name}>{asset.token.symbol}</Typography>
-                    {asset.chain !== 'eth' ? <Chip className={classes.chain} label={asset.chain} size="small" /> : null}
+                    {asset.chain !== chainDetailed.chain.toLowerCase() ? (
+                        <Chip className={classes.chain} label={asset.chain} size="small" />
+                    ) : null}
                 </Box>,
                 <Box
                     sx={{

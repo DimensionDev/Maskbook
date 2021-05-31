@@ -12,8 +12,7 @@ import {
 } from '@uniswap/sdk'
 import { formatEthereumAddress, unreachable } from '@dimensiondev/maskbook-shared'
 import { WETH } from '../constants'
-import { ChainId, EthereumTokenType, FungibleTokenDetailed } from '../../../web3/types'
-import { isNative } from '../../../web3/helpers'
+import { ChainId, EthereumTokenType, FungibleTokenDetailed, isNative } from '@dimensiondev/web3-shared'
 
 export function toUniswapChainId(chainId: ChainId): UniswapChainId {
     switch (chainId) {
@@ -27,6 +26,14 @@ export function toUniswapChainId(chainId: ChainId): UniswapChainId {
             return UniswapChainId.KOVAN
         case ChainId.Gorli:
             return UniswapChainId.GÖRLI
+        case ChainId.BSC:
+            return UniswapChainId.MAINNET
+        case ChainId.BSCT:
+            return UniswapChainId.MAINNET
+        case ChainId.Matic:
+            return UniswapChainId.MAINNET
+        case ChainId.Mumbai:
+            return UniswapChainId.MAINNET
         default:
             unreachable(chainId)
     }

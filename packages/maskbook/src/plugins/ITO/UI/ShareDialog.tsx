@@ -4,7 +4,7 @@ import { makeStyles, Typography, Box } from '@material-ui/core'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import { useI18N, getAssetAsBlobURL } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import type { FungibleTokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme) => ({

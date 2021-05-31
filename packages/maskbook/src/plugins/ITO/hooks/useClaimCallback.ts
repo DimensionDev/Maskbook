@@ -1,15 +1,21 @@
-import { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
-import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+import { BigNumber } from 'bignumber.js'
 import stringify from 'json-stable-stringify'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { TransactionEventType } from '../../../web3/types'
-import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { useChainId } from '../../../web3/hooks/useChainId'
+import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+import {
+    TransactionEventType,
+    TransactionStateType,
+    useAccount,
+    useChainId,
+    useTransactionState,
+    useGasPrice,
+    useNonce,
+} from '@dimensiondev/web3-shared'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import Services from '../../../extension/service'
 
 export function useClaimCallback(pids: string[], contractAddress?: string) {
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const ITO_Contract = useITO_Contract(contractAddress)
@@ -55,17 +61,23 @@ export function useClaimCallback(pids: string[], contractAddress?: string) {
         }
 
         // estimate gas and compose transaction
-        const config = await Services.Ethereum.composeTransaction({
+        const config = {
             from: account,
-            to: ITO_Contract.options.address,
-            data: ITO_Contract.methods.claim(pids).encodeABI(),
-        }).catch((error) => {
-            setClaimState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
-            throw error
-        })
+            gas: await ITO_Contract.methods
+                .claim(pids)
+                .estimateGas({
+                    from: account,
+                })
+                .catch((error) => {
+                    setClaimState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    throw error
+                }),
+            gasPrice,
+            nonce,
+        }
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {

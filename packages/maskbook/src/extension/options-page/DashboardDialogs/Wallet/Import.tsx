@@ -1,7 +1,9 @@
+import { useCallback, useState } from 'react'
+import { useAsync } from 'react-use'
+import { CreditCard as CreditCardIcon } from 'react-feather'
+import { first } from 'lodash-es'
 import { Box, Checkbox, FormControlLabel, makeStyles, TextField, Theme, Typography } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
-import { useCallback, useState } from 'react'
-import { CreditCard as CreditCardIcon } from 'react-feather'
 import {
     WALLET_OR_PERSONA_NAME_MAX_LEN,
     useRemoteControlledDialog,
@@ -9,13 +11,11 @@ import {
     checkInputLengthExceed,
 } from '../../../../utils'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../../../plugins/Wallet/constants'
-import { first } from 'lodash-es'
 import { useWallet } from '@dimensiondev/web3-shared'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
-import AbstractTab, { AbstractTabProps } from '../../DashboardComponents/AbstractTab'
+import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
-import { useAsync } from 'react-use'
 
 const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({
     confirmation: {

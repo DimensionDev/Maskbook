@@ -1,4 +1,4 @@
-import { ChainId } from '../../web3/types'
+import { ChainId } from '@dimensiondev/web3-shared'
 
 export const AirdropMetaKey = 'com.maskbook.airdrop:1'
 export const AirdropPluginID = 'com.maskbook.airdrop'
@@ -24,5 +24,9 @@ export const AIRDROP_CONSTANTS = {
         [ChainId.Rinkeby]: '0x2189D088927bfc1563d0b3E447F6472402FED6DD',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
     },
 }

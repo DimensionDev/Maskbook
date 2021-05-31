@@ -1,5 +1,5 @@
 import { escapeRegExp } from 'lodash-es'
-import { useConstant } from '../../../web3/hooks/useConstant'
+import { useConstant } from '@dimensiondev/web3-shared'
 import { CONSTANT } from '../constants'
 
 export function useBaseUrl() {

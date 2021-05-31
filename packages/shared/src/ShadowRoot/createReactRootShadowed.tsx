@@ -1,9 +1,4 @@
-import {
-    unstable_createRoot as createRoot,
-    render as legacyRender,
-    unmountComponentAtNode as legacyUnmount,
-    Root,
-} from 'react-dom'
+import { createRoot, render as legacyRender, unmountComponentAtNode as legacyUnmount, Root } from 'react-dom'
 import type {} from 'react/experimental'
 import type {} from 'react-dom/experimental'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'

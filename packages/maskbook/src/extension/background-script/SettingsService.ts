@@ -9,6 +9,14 @@ import {
 } from '../../settings/settings'
 import { currentTrendingDataProviderSettings } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
+import {
+    currentBalanceSettings,
+    currentBlockNumberSettings,
+    currentSelectedWalletAddressSettings,
+    currentSelectedWalletNetworkSettings,
+    currentSelectedWalletProviderSettings,
+} from '../../plugins/Wallet/settings'
+import { Flags } from '../../utils'
 
 function create<T>(settings: InternalSettings<T>) {
     async function get() {
@@ -23,10 +31,26 @@ function create<T>(settings: InternalSettings<T>) {
 }
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
+export const [getBalance, setBalance] = create(currentBalanceSettings)
+export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentTrendingDataProviderSettings)
 export const [getAncientPostsCompatibiltyMode, setAncientPostsCompatibiltyMode] = create(
     disableOpenNewTabInBackgroundSettings,
 )
+
+export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(
+    currentSelectedWalletProviderSettings,
+)
+
+export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(
+    currentSelectedWalletNetworkSettings,
+)
+
+export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentSelectedWalletAddressSettings)
+
+export async function getWalletAllowTestChain() {
+    return Flags.wallet_allow_test_chain
+}
 
 export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier | undefined> {
     await currentPersonaIdentifier.readyPromise

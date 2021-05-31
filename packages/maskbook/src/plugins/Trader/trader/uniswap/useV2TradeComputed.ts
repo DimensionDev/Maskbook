@@ -1,6 +1,6 @@
 import { Trade, TradeType } from '@uniswap/sdk'
 import BigNumber from 'bignumber.js'
-import type { FungibleTokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { uniswapCurrencyAmountTo, uniswapPercentTo, uniswapPriceTo, uniswapTokenTo } from '../../helpers'
 import { TradeComputed, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'

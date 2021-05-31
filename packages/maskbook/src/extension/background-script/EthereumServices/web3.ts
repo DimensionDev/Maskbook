@@ -1,10 +1,10 @@
 import type Web3 from 'web3'
+import { ProviderType } from '@dimensiondev/web3-shared'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import * as Maskbook from './providers/Maskbook'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
-import { ProviderType } from '../../../web3/types'
 import { currentMaskbookChainIdSettings, currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
-import { unreachable } from '@dimensiondev/maskbook-shared'
 import { getWalletCached } from './wallet'
 
 export async function createWeb3({

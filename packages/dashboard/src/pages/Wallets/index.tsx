@@ -1,6 +1,6 @@
 import { Button } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
-import { useWallets } from './api'
+import { useWallets } from '@dimensiondev/web3-shared'
 import { StartUp } from './StartUp'
 import { CreateWallet } from './CreateWallet'
 

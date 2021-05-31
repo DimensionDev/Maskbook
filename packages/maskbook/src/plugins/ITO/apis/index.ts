@@ -1,7 +1,7 @@
 import stringify from 'json-stable-stringify'
 import { first, omit } from 'lodash-es'
 import { getChainId } from '../../../extension/background-script/EthereumService'
-import { getConstant } from '../../../web3/helpers'
+import { getConstant } from '@dimensiondev/web3-shared'
 import { ITO_CONSTANTS } from '../constants'
 import { payloadIntoMask } from '../helpers'
 import type { JSON_PayloadOutMask } from '../types'

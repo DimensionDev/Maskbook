@@ -11,7 +11,7 @@ import { RequestPermissionPage } from './RequestPermission'
 
 const root = document.createElement('div')
 document.body.insertBefore(root, document.body.children[0] || null)
-ReactDOM.unstable_createRoot(root).render(<Dialogs />)
+ReactDOM.createRoot(root).render(<Dialogs />)
 
 function Dialogs() {
     return MaskUIRoot(

@@ -2,11 +2,10 @@ import { useState } from 'react'
 import { makeStyles, DialogContent, Tab, Tabs } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { ChainState } from '../../../web3/state/useChainState'
 import { ListingByPriceCard } from './ListingByPriceCard'
 import { ListingByHighestBidCard } from './ListingByHighestBidCard'
 import type { useAsset } from '../hooks/useAsset'
-import { useTokenWatched } from '../../../web3/hooks/useTokenWatched'
+import { useChainId, useTokenWatched } from '@dimensiondev/web3-shared'
 import { first } from 'lodash-es'
 
 const useStyles = makeStyles((theme) => {
@@ -41,7 +40,7 @@ export function PostListingDialog(props: PostListingDialogProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const { chainId } = ChainState.useContainer()
+    const chainId = useChainId()
     const tokenWatched = useTokenWatched(selectedPaymentToken)
 
     const [tabIndex, setTabIndex] = useState(0)

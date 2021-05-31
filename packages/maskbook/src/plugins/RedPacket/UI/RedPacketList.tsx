@@ -4,7 +4,7 @@ import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { RedPacketInList } from './RedPacketInList'
 import { useRedPacketsFromChain } from '../hooks/useRedPacket'
 import { usePayloadsComputed } from '../hooks/usePayloadComputed'
-import { useChainIdValid } from '../../../web3/hooks/useChainId'
+import { useChainIdValid } from '@dimensiondev/web3-shared'
 import { useI18N } from '../../../utils'
 
 //#region red packet list UI

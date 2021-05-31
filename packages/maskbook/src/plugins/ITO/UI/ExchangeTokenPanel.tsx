@@ -1,15 +1,13 @@
-import { v4 as uuid } from 'uuid'
-import { useCallback, useEffect, useState } from 'react'
-import { makeStyles, Paper, IconButton } from '@material-ui/core'
+import { EthereumTokenType, FungibleTokenDetailed, useTokenBalance } from '@dimensiondev/web3-shared'
+import { IconButton, makeStyles, Paper } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/AddOutlined'
 import RemoveIcon from '@material-ui/icons/RemoveOutlined'
-
-import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
+import { useCallback, useEffect, useState } from 'react'
+import { v4 as uuid } from 'uuid'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessages, SelectTokenDialogEvent } from '../../Wallet/messages'
+import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 
 const useStyles = makeStyles((theme) => ({
     root: {

@@ -32,8 +32,7 @@ import {
     makeTypedMessageText,
     isTypedMessageText,
 } from '../../protocols/typed-message'
-import { EthereumTokenType } from '../../web3/types'
-import { isDAI, isOKB } from '../../web3/helpers'
+import { EthereumTokenType, isDAI, isOKB } from '@dimensiondev/web3-shared'
 import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
 import { PluginUI } from '../../plugins/PluginUI'
@@ -100,26 +99,15 @@ export function PostDialogUI(props: PostDialogUIProps) {
     }
 
     if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
-    const metadataBadge = [...PluginUI].flatMap((plugin) =>
+    const oldMetadataBadge = [...PluginUI].flatMap((plugin) =>
         Result.wrap(() => {
             const knownMeta = plugin.postDialogMetadataBadge
             if (!knownMeta) return undefined
             return [...knownMeta.entries()].map(([metadataKey, tag]) => {
                 return renderWithMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
-                    <Box
-                        key={metadataKey}
-                        sx={{
-                            marginRight: 1,
-                            marginTop: 1,
-                            display: 'inline-block',
-                        }}>
-                        <Tooltip title={`Provided by plugin "${plugin.pluginName}"`}>
-                            <Chip
-                                onDelete={() => editActivatedPostMetadata((meta) => meta.delete(metadataKey))}
-                                label={tag(r)}
-                            />
-                        </Tooltip>
-                    </Box>
+                    <MetaBadge key={metadataKey} meta={metadataKey} title={`Provided by plugin "${plugin.pluginName}"`}>
+                        {tag(r)}
+                    </MetaBadge>
                 ))
             })
         }).unwrapOr(null),
@@ -150,7 +138,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
             <ThemeProvider theme={props.theme ?? defaultTheme}>
                 <InjectedDialog open={props.open} onClose={props.onCloseButtonClicked} title={t('post_dialog__title')}>
                     <DialogContent>
-                        {metadataBadge}
+                        <BadgeRenderer meta={props.postContent.meta} />
+                        {oldMetadataBadge}
                         <InputBase
                             classes={{
                                 root: classes.MUIInputRoot,
@@ -512,6 +501,67 @@ function PluginRenderer() {
         }).unwrapOr(null),
     )
     return <>{result}</>
+}
+function BadgeRenderer({ meta }: { meta: TypedMessage['meta'] }) {
+    const plugins = useActivatedPluginsSNSAdaptor()
+    if (!meta) return null
+    const metadata = [...meta.entries()]
+    return (
+        <>
+            {metadata.flatMap(([key, value]) => {
+                return plugins.map((plugin) => {
+                    const render = plugin.CompositionDialogMetadataBadgeRender
+                    if (!render) return null
+
+                    if (typeof render === 'function') {
+                        if (process.env.NODE_ENV === 'development')
+                            return normalizeBadgeDescriptor(key, plugin, render(key, value))
+                        try {
+                            return normalizeBadgeDescriptor(key, plugin, render(key, value))
+                        } catch (e) {
+                            console.error(e)
+                            return null
+                        }
+                    } else {
+                        const f = render.get(key)
+                        if (!f) return null
+                        if (process.env.NODE_ENV === 'development')
+                            return normalizeBadgeDescriptor(key, plugin, f(value))
+                        try {
+                            return normalizeBadgeDescriptor(key, plugin, f(value))
+                        } catch (e) {
+                            console.error(e)
+                            return null
+                        }
+                    }
+                })
+            })}
+        </>
+    )
+}
+function normalizeBadgeDescriptor(
+    meta: string,
+    plugin: Plugin.SNSAdaptor.Definition,
+    desc: Plugin.SNSAdaptor.BadgeDescriptor | string | null,
+) {
+    if (!desc) return null
+    if (typeof desc === 'string') desc = { text: desc, tooltip: `Provided by plugin "${plugin.name.fallback}"` }
+    return (
+        <MetaBadge key={meta + ';' + plugin.ID} title={desc.tooltip || ''} meta={meta}>
+            {desc.text}
+        </MetaBadge>
+    )
+}
+function MetaBadge({ title, children, meta: key }: React.PropsWithChildren<{ title: React.ReactChild; meta: string }>) {
+    return (
+        <Box sx={{ marginRight: 1, marginTop: 1, display: 'inline-block' }}>
+            <Tooltip title={title}>
+                <span>
+                    <Chip onDelete={() => editActivatedPostMetadata((meta) => meta.delete(key))} label={children} />
+                </span>
+            </Tooltip>
+        </Box>
+    )
 }
 function renderLabel(label: Plugin.SNSAdaptor.CompositionDialogEntry['label']): React.ReactNode {
     if (!label) return null

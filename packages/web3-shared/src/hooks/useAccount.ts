@@ -1,10 +1,8 @@
-import { useWallet } from '.'
+import { useWeb3StateContext } from '../context'
 
 /**
  * Get the address of the default wallet
  */
-// TODO: why use empty string?
 export function useAccount() {
-    const wallet = useWallet()
-    return wallet?.address ?? ''
+    return useWeb3StateContext().account
 }

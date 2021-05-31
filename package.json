@@ -36,13 +36,13 @@
     "@material-ui/lab": "5.0.0-alpha.34",
     "@material-ui/styles": "5.0.0-alpha.33",
     "@material-ui/system": "5.0.0-alpha.34",
-    "@types/react": "^17.0.8",
-    "@types/react-dom": "^17.0.5",
+    "@types/react": "17.0.8",
+    "@types/react-dom": "17.0.5",
     "i18next": "^20.3.0",
     "idb": "5.0.8",
     "jss": "10.5.1",
-    "react": "=0.0.0-experimental-2d8d133e1",
-    "react-dom": "=0.0.0-experimental-2d8d133e1",
+    "react": "=0.0.0-experimental-d75105fa9",
+    "react-dom": "=0.0.0-experimental-d75105fa9",
     "react-i18next": "^11.9.0"
   },
   "devDependencies": {
@@ -64,7 +64,7 @@
     "lint-staged": "^11.0.0",
     "npm-run-all": "^4.1.5",
     "only-allow": "^1.0.0",
-    "patch-package": "github:milahu/patch-package#pnpm-support-2",
+    "patch-package": "./patches/patch-package-6.4.7.tgz",
     "prettier": "^2.3.0",
     "ts-node": "^10.0.0",
     "ttypescript": "^1.5.12",
@@ -76,8 +76,8 @@
   },
   "pnpm": {
     "overrides": {
-      "react": "=0.0.0-experimental-dc27b5aaa",
-      "react-dom": "=0.0.0-experimental-dc27b5aaa"
+      "react": "=0.0.0-experimental-d75105fa9",
+      "react-dom": "=0.0.0-experimental-d75105fa9"
     }
   }
 }

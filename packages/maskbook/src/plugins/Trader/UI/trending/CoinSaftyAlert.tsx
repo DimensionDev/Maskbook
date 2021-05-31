@@ -2,8 +2,7 @@ import { Alert, AlertTitle, Box, Button, Link, makeStyles, Paper } from '@materi
 import { useI18N } from '../../../../utils'
 import type { Coin } from '../../types'
 import { useApprovedTokens } from '../../trending/useApprovedTokens'
-import { resolveTokenLinkOnExplorer } from '../../../../web3/pipes'
-import { ChainId, EthereumTokenType } from '../../../../web3/types'
+import { resolveTokenLinkOnExplorer, ChainId, EthereumTokenType } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => {
     return {
