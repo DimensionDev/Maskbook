@@ -1,4 +1,5 @@
 import { makeStyles, Typography, MenuItem } from '@material-ui/core'
+import { useAccount, useChainId, ChainId, resolveChainColor } from '@dimensiondev/web3-shared'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
@@ -9,7 +10,6 @@ import { RedPacketCompositionEntry } from '../../plugins/RedPacket/define'
 import { FileServiceCompositionEntry } from '../../plugins/FileService/UI-define'
 import { ITO_CompositionEntry } from '../../plugins/ITO/define'
 import { useControlledDialog } from '../../plugins/Collectible/UI/useControlledDialog'
-import { useAccount } from '../../web3/hooks/useAccount'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
@@ -18,16 +18,12 @@ import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
-import { ChainState } from '../../web3/state/useChainState'
 import { ProviderIcon } from '../shared/ProviderIcon'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { useChainId } from '../../web3/hooks/useChainId'
-import { ChainId } from '../../web3/types'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-import { resolveChainColor } from '../../web3/pipes'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -271,9 +267,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                 </div>
             </div>
             {isClaimAllDialogOpen ? (
-                <ChainState.Provider>
-                    <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
-                </ChainState.Provider>
+                <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
             ) : null}
         </>
     )

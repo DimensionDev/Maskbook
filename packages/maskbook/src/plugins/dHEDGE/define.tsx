@@ -9,7 +9,6 @@ import { DHEDGE_PLUGIN_ID } from './constants'
 import { usePoolUrlPattern, useIsPoolUrl } from './hooks/useUrl'
 import { PoolView } from './UI/PoolView'
 import { InvestDialog } from './UI/InvestDialog'
-import { ChainState } from '../../web3/state/useChainState'
 
 export const DHedgePluginDefine: PluginConfig = {
     id: DHEDGE_PLUGIN_ID,
@@ -37,18 +36,18 @@ export const DHedgePluginDefine: PluginConfig = {
     },
     PageComponent() {
         return (
-            <ChainState.Provider>
+            <>
                 <PoolView address="" />
                 <InvestDialog />
-            </ChainState.Provider>
+            </>
         )
     },
     DashboardComponent() {
         return (
-            <ChainState.Provider>
+            <>
                 <PoolView address="" />
                 <InvestDialog />
-            </ChainState.Provider>
+            </>
         )
     },
 }

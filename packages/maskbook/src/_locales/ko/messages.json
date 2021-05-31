@@ -307,7 +307,7 @@
     "plugin_wallet_transaction_reverted": "해당 거래는 이미 확인되었습니다.",
     "plugin_wallet_transaction_rejected": "해당 거래는 이미 거부되었습니다.",
     "plugin_wallet_transaction_server_error": "JSON-RPC 오류 때문에 거래가 실패했습니다.",
-    "plugin_wallet_view_on_etherscan": "Etherscan에서 보기",
+    "plugin_wallet_view_on_explorer": "Explorer에서 보기",
     "plugin_wallet_wrong_network_tip": "정확한 이더리움 네트워크를 연결하세요.",
     "plugin_wallet_on_create": "월렛 만들기",
     "plugin_wallet_on_connect": "월렛 연결하기",

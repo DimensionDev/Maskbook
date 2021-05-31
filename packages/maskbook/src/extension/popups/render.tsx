@@ -10,7 +10,7 @@ import { DialogRoutes } from '.'
 
 const root = document.createElement('div')
 document.body.insertBefore(root, document.body.children[0] || null)
-ReactDOM.unstable_createRoot(root).render(<Dialogs />)
+ReactDOM.createRoot(root).render(<Dialogs />)
 
 const RequestPermissionPage = lazy(() => import('./RequestPermission'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))

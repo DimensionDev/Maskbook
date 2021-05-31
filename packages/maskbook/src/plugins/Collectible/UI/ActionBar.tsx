@@ -5,8 +5,8 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useControlledDialog } from './useControlledDialog'
 import { MakeOfferDialog } from './MakeOfferDialog'
 import { PostListingDialog } from './PostListingDialog'
-import { ChainState } from '../../../web3/state/useChainState'
 import { CheckoutDialog } from './CheckoutDialog'
+import { useAccount } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -27,7 +27,7 @@ export function ActionBar(props: ActionBarProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const { account } = ChainState.useContainer()
+    const account = useAccount()
     const { asset, token } = CollectibleState.useContainer()
 
     const {

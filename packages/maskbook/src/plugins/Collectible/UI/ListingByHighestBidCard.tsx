@@ -2,18 +2,15 @@ import { useState, useMemo, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { useSnackbar } from 'notistack'
 import { makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
+import { FungibleTokenDetailed, EthereumTokenType, useAccount, TokenWatched, isNative } from '@dimensiondev/web3-shared'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/UI/SelectTokenAmountPanel'
-import { FungibleTokenDetailed, EthereumTokenType } from '../../../web3/types'
-import type { TokenWatched } from '../../../web3/hooks/useTokenWatched'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import type { useAsset } from '../hooks/useAsset'
-import { ChainState } from '../../../web3/state/useChainState'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
-import { isNative } from '../../../web3/helpers'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -52,7 +49,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
-    const { account } = ChainState.useContainer()
+    const account = useAccount()
 
     const [reservePrice, setReservePrice] = useState('')
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())

@@ -1,4 +1,4 @@
-import type { ChainId } from '../../../web3/types'
+import type { ChainId } from '@dimensiondev/web3-shared'
 
 export interface ERC20TokenRecord {
     /** contract address */

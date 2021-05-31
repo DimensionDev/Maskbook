@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Trade, Router, Percent, JSBI, TradeType } from '@uniswap/sdk'
 import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
-import { useAccount } from '../../../../web3/hooks/useAccount'
+import { useAccount } from '@dimensiondev/web3-shared'
 import type { TradeComputed } from '../../types'
 
 const UNISWAP_BIPS_BASE = JSBI.BigInt(10000)

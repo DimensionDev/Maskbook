@@ -1,6 +1,5 @@
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import type { TransactionState } from '../../web3/hooks/useTransactionState'
-import type { ERC20TokenDetailed } from '../../web3/types'
+import type { TransactionState, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'

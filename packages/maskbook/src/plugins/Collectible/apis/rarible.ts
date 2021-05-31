@@ -13,8 +13,7 @@ import { compact, head } from 'lodash-es'
 import { OrderSide } from 'opensea-js/lib/types'
 import { toRaribleImage } from '../helpers'
 import { getChainId } from '../../../extension/background-script/EthereumServices/chainState'
-import { ChainId } from '../../../web3/types'
-import { resolveChainName } from '../../../web3/pipes'
+import { ChainId, resolveChainName } from '@dimensiondev/web3-shared'
 import { resolveRaribleUserNetwork } from '../pipes'
 
 async function createRaribleApi() {

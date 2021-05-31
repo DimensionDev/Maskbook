@@ -1,11 +1,10 @@
 import { useContext, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Pair, Token as UniswapToken, TokenAmount } from '@uniswap/sdk'
-import { useChainId } from '../../../../web3/hooks/useChainId'
+import { useChainId, useMutlipleContractSingleData } from '@dimensiondev/web3-shared'
 import { getPairAddress } from '../../helpers'
 import { TradeContext } from '../useTradeContext'
 import { usePairContracts } from '../../contracts/uniswap/usePairContract'
-import { useMutlipleContractSingleData } from '../../../../web3/hooks/useMulticall'
 
 export enum PairState {
     NOT_EXISTS,

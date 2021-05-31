@@ -1,5 +1,4 @@
-import { useTokensBalance } from '../../../web3/hooks/useTokensBalance'
-import type { FungibleTokenDetailed } from '../../../web3/types'
+import { FungibleTokenDetailed, useTokensBalance } from '@dimensiondev/web3-shared'
 import type { Asset } from '../types'
 import { useAssetsMerged } from './useAssetsMerged'
 

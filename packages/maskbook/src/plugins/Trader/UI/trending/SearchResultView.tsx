@@ -19,8 +19,7 @@ import { TrendingViewDeck } from './TrendingViewDeck'
 import { currentTrendingDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType } from '../../../../web3/types'
-import { useTokenDetailed } from '../../../../web3/hooks/useTokenDetailed'
+import { EthereumTokenType, useTokenDetailed } from '@dimensiondev/web3-shared'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 
 const useStyles = makeStyles((theme) => {

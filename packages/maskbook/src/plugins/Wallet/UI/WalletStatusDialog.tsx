@@ -3,19 +3,25 @@ import { Copy, ExternalLink } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import ErrorIcon from '@material-ui/icons/Error'
 import { Button, DialogActions, DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
+import { FormattedAddress } from '@dimensiondev/maskbook-shared'
+import {
+    useChainId,
+    useChainIdValid,
+    resolveLinkOnExplorer,
+    resolveProviderName,
+    ChainId,
+    ProviderType,
+} from '@dimensiondev/web3-shared'
+
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ProviderIcon } from '../../../components/shared/ProviderIcon'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 import Services from '../../../extension/service'
 import { useRemoteControlledDialog, useValueRef, useI18N } from '../../../utils'
-import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainId'
-import { resolveLinkOnExplorer, resolveProviderName } from '../../../web3/pipes'
-import { ChainId, ProviderType } from '../../../web3/types'
 import { EthereumChainChip } from '../../../web3/UI/EthereumChainChip'
 import { useWallet } from '../hooks/useWallet'
 import { WalletMessages } from '../messages'
 import { currentSelectedWalletProviderSettings } from '../settings'
-import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -176,7 +182,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                         target="_blank"
                         rel="noopener noreferrer">
                         <ExternalLink className={classes.linkIcon} size={14} />
-                        <Typography variant="body2">{t('plugin_wallet_view_on_etherscan')}</Typography>
+                        <Typography variant="body2">{t('plugin_wallet_view_on_explorer')}</Typography>
                     </Link>
                 </section>
             </DialogContent>

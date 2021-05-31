@@ -30,7 +30,8 @@ untilDomLoaded().then(() => {
     setupPortalShadowRoot({ mode: Flags.using_ShadowDOM_attach_mode }, captureEvents)
 })
 
-export const createReactRootShadowed = createReactRootShadowedPartial({
+// https://github.com/DimensionDev/Maskbook/issues/3265 with fast refresh or import order?
+const createReactRootShadowed_raw = createReactRootShadowedPartial({
     preventEventPropagationList: captureEvents,
     onHeadCreate(head) {
         const themeCSSVars = head.appendChild(document.createElement('style'))
@@ -49,3 +50,6 @@ export const createReactRootShadowed = createReactRootShadowedPartial({
         )
     },
 })
+export function createReactRootShadowed(...args: Parameters<typeof createReactRootShadowed_raw>) {
+    return createReactRootShadowed_raw(...args)
+}

@@ -1,31 +1,76 @@
-import type { Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
-import { ChainId, WalletProvider } from '@dimensiondev/web3-shared'
-import { Messages, PluginMessages, PluginServices, Services } from '../API'
-import { pick } from 'lodash-es'
+import { pick, noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
+import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
+import { Messages, PluginMessages, PluginServices, Services } from '../API'
+
+const Web3Provider = createExternalProvider()
 
 export const Web3Context: Web3ProviderType = {
+    provider: {
+        getCurrentValue: () => Web3Provider,
+        subscribe: () => noop,
+    },
     allowTestChain: createSubscriptionAsync(
         Services.Settings.getWalletAllowTestChain,
         false,
         Messages.events.createInternalSettingsChanged.on,
     ),
-    currentChain: createSubscriptionAsync(
-        Services.Ethereum.getChainId,
-        ChainId.Mainnet,
-        PluginMessages.Wallet.events.chainIdUpdated.on,
-    ),
-    walletProvider: createSubscriptionAsync(
-        Services.Settings.getCurrentSelectedWalletProvider,
-        WalletProvider.Maskbook,
-        Messages.events.createInternalSettingsChanged.on,
-    ),
-    wallets: createSubscriptionAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
-    selectedWalletAddress: createSubscriptionAsync(
+    account: createSubscriptionAsync(
         Services.Settings.getSelectedWalletAddress,
         '',
         Messages.events.createInternalSettingsChanged.on,
     ),
+    nonce: createSubscriptionAsync(
+        Services.Settings.getBlockNumber,
+        0,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    gasPrice: createSubscriptionAsync(
+        Services.Settings.getBlockNumber,
+        0,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    balance: createSubscriptionAsync(
+        Services.Settings.getBalance,
+        '0',
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    blockNumber: createSubscriptionAsync(
+        Services.Settings.getBlockNumber,
+        0,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    chainId: createSubscriptionAsync(
+        Services.Ethereum.getChainId,
+        ChainId.Mainnet,
+        PluginMessages.Wallet.events.chainIdUpdated.on,
+    ),
+    providerType: createSubscriptionAsync(
+        Services.Settings.getCurrentSelectedWalletProvider,
+        ProviderType.Maskbook,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    networkType: createSubscriptionAsync(
+        Services.Settings.getCurrentSelectedWalletNetwork,
+        NetworkType.Ethereum,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    wallets: createSubscriptionAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
+    erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
+    erc721Tokens: createSubscriptionAsync(getERC721Tokens, [], PluginMessages.Wallet.events.erc721TokensUpdated.on),
+}
+
+export function createExternalProvider() {
+    return {
+        isMetaMask: false,
+        isStatus: true,
+        host: '',
+        path: '',
+        request: Services.Ethereum.request,
+        send: Services.Ethereum.requestSend,
+        sendAsync: Services.Ethereum.requestSend,
+    }
 }
 
 async function getWallets() {
@@ -43,6 +88,18 @@ async function getWallets() {
         ] as (keyof typeof record)[]),
         hasPrivateKey: Boolean(record._private_key_ || record.mnemonic.length),
     }))
+}
+
+async function getERC20Tokens() {
+    const raw = await PluginServices.Wallet.getERC20Tokens()
+    return raw.map<ERC20TokenDetailed>((x) => ({
+        type: EthereumTokenType.ERC20,
+        ...x,
+    }))
+}
+
+async function getERC721Tokens() {
+    return []
 }
 
 function createSubscriptionAsync<T>(

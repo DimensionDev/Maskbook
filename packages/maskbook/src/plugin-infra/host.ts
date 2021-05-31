@@ -3,6 +3,8 @@ import './register'
 
 import type { Plugin } from '@dimensiondev/mask-plugin-infra'
 import { Emitter } from '@servie/events'
+import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
+import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 import {
     currentMaskbookChainIdSettings,
     currentMetaMaskChainIdSettings,
@@ -11,8 +13,6 @@ import {
     currentCustomNetworkChainIdSettings,
 } from '../plugins/Wallet/settings'
 import { startEffects } from '../utils/side-effects'
-import { ChainId, ProviderType } from '../web3/types'
-import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 
 const effect = startEffects(module.hot)
 export function createPluginHost(signal?: AbortSignal): Plugin.__Host.Host {

@@ -3,12 +3,10 @@ import { useI18N } from '../../../utils'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { FormattedAddress } from '@dimensiondev/maskbook-shared'
-import { resolveAddressLinkOnExplorer, resolveChainName } from '../../../web3/pipes'
-import { ChainId } from '../../../web3/types'
+import { resolveAddressLinkOnExplorer, resolveChainName, ChainId, useChainId } from '@dimensiondev/web3-shared'
 import { Markdown } from '../../Snapshot/UI/Markdown'
 import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea } from '../pipes'
-import { useChainId } from '../../../web3/hooks/useChainId'
 
 const useStyles = makeStyles((theme) => {
     return {

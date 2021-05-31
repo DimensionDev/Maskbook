@@ -1,17 +1,23 @@
-import BigNumber from 'bignumber.js'
-import { useCallback } from 'react'
-import Web3Utils from 'web3-utils'
-import type { TransactionReceipt } from 'web3-core'
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
-import { isSameAddress } from '../../../web3/helpers'
+import {
+    EthereumTokenType,
+    FungibleTokenDetailed,
+    isSameAddress,
+    TransactionEventType,
+    TransactionStateType,
+    useAccount,
+    useGasPrice,
+    useNonce,
+    useTransactionState,
+} from '@dimensiondev/web3-shared'
+import BigNumber from 'bignumber.js'
+import { useCallback } from 'react'
+import type { TransactionReceipt } from 'web3-core'
+import Web3Utils from 'web3-utils'
 import { buf2hex, hex2buf, useI18N } from '../../../utils'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { FungibleTokenDetailed, EthereumTokenType, TransactionEventType } from '../../../web3/types'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import { useQualificationContract } from '../contracts/useQualificationContract'
-import Services from '../../../extension/service'
 import type { JSON_PayloadInMask } from '../types'
 
 export function useSwapCallback(
@@ -21,6 +27,9 @@ export function useSwapCallback(
     isQualificationHasLucky = false,
 ) {
     const { t } = useI18N()
+
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const account = useAccount()
     const ITO_Contract = useITO_Contract()
     const [swapState, setSwapState] = useTransactionState()
@@ -130,19 +139,28 @@ export function useSwapCallback(
         ] as Parameters<ITO['methods']['swap']>
 
         // estimate gas and compose transaction
-        const config = await Services.Ethereum.composeTransaction({
+        const value = new BigNumber(token.type === EthereumTokenType.Native ? total : '0').toFixed()
+        const config = {
             from: account,
-            to: ITO_Contract.options.address,
-            gas: isQualificationHasLucky ? 200000 : undefined,
-            value: new BigNumber(token.type === EthereumTokenType.Native ? total : '0').toFixed(),
-            data: ITO_Contract.methods.swap(...swapParams).encodeABI(),
-        }).catch((error) => {
-            setSwapState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
-            throw error
-        })
+            gas: isQualificationHasLucky
+                ? 200000
+                : await ITO_Contract.methods
+                      .swap(...swapParams)
+                      .estimateGas({
+                          from: account,
+                          value,
+                      })
+                      .catch((error) => {
+                          setSwapState({
+                              type: TransactionStateType.FAILED,
+                              error,
+                          })
+                          throw error
+                      }),
+            gasPrice,
+            nonce,
+            value,
+        }
 
         // send transaction and wait for hash
         return new Promise<void>((resolve, reject) => {
@@ -177,7 +195,17 @@ export function useSwapCallback(
                 .on(TransactionEventType.CONFIRMATION, onSucceed)
                 .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
         })
-    }, [ITO_Contract, qualificationContract, account, payload, total, token.address, isQualificationHasLucky])
+    }, [
+        gasPrice,
+        nonce,
+        ITO_Contract,
+        qualificationContract,
+        account,
+        payload,
+        total,
+        token.address,
+        isQualificationHasLucky,
+    ])
 
     const resetCallback = useCallback(() => {
         setSwapState({

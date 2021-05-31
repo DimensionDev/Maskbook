@@ -1,6 +1,6 @@
 import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
-import { ChainId, ProviderType } from '../../web3/types'
+import { ChainId, ProviderType, NetworkType } from '@dimensiondev/web3-shared'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { CollectibleProvider, PortfolioProvider } from './types'
 
@@ -10,6 +10,17 @@ import { CollectibleProvider, PortfolioProvider } from './types'
 export const currentSelectedWalletAddressSettings = createGlobalSettings<string>(
     `${PLUGIN_IDENTIFIER}+selectedWalletAddress`,
     '',
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
+/**
+ * The network type of the selected wallet
+ */
+export const currentSelectedWalletNetworkSettings = createGlobalSettings<NetworkType>(
+    `${PLUGIN_IDENTIFIER}+selectedWalletNetwork`,
+    NetworkType.Ethereum,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
@@ -62,9 +73,30 @@ export const currentCollectibleDataProviderSettings = createGlobalSettings<Colle
 )
 
 /**
- * The block number state
+ * Block number
  */
 export const currentBlockNumberSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+blockNumber`, 0, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+/**
+ * Balance
+ */
+export const currentBalanceSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+balance`, '0', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+/**
+ * Nonce
+ */
+export const currentNonceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+nonce`, 0, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+/**
+ * Gas Price
+ */
+export const currentGasPriceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+gasPrice`, 0, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 

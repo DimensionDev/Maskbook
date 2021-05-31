@@ -1,8 +1,7 @@
-import { Box, makeStyles, TextField } from '@material-ui/core'
 import { useState } from 'react'
+import { Box, makeStyles, TextField } from '@material-ui/core'
+import { EthereumTokenType, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 import { useI18N } from '../../../../utils'
-import type { ERC20TokenDetailed } from '../../../../web3/types'
-import { EthereumTokenType } from '../../../../web3/types'
 import { FixedTokenList } from '../../DashboardComponents/FixedTokenList'
 
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) => ({

@@ -1,11 +1,10 @@
 import { useCallback, useState } from 'react'
 import { makeStyles, Theme, DialogContent, TextField } from '@material-ui/core'
+import { FungibleTokenDetailed, useNativeTokenDetailed, useChainDetailed } from '@dimensiondev/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
-import type { FungibleTokenDetailed } from '../../../web3/types'
 import { WalletMessages } from '../../Wallet/messages'
-import { useNativeTokenDetailed } from '../../../web3/hooks/useNativeTokenDetailed'
 import { delay, useRemoteControlledDialog, useI18N } from '../../../utils'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -35,20 +34,21 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
 
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
+    const chainDetailed = useChainDetailed()
 
     //#region the native token
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     //#endregion
 
     //#region remote controlled dialog
-    const [disableNativeToken, setNativeToken] = useState(true)
+    const [disableNativeToken, setDisableNativeToken] = useState(true)
     const [disableSearchBar, setDisableSearchBar] = useState(false)
     const [FixedTokenListProps, setFixedTokenListProps] = useState<FixedTokenListProps | null>(null)
 
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, (ev) => {
         if (!ev.open) return
         setId(ev.uuid)
-        setNativeToken(ev.disableNativeToken ?? true)
+        setDisableNativeToken(ev.disableNativeToken ?? true)
         setDisableSearchBar(ev.disableSearchBar ?? false)
         setFixedTokenListProps(ev.FixedTokenListProps ?? null)
     })
@@ -100,7 +100,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                         tokens: [
                             ...(!disableNativeToken &&
                             nativeTokenDetailed &&
-                            (!keyword || 'ether'.includes(keyword.toLowerCase()))
+                            (!keyword || chainDetailed?.nativeCurrency.symbol.includes(keyword.toLowerCase()))
                                 ? [nativeTokenDetailed]
                                 : []),
                             ...(FixedTokenListProps?.tokens ?? []),
