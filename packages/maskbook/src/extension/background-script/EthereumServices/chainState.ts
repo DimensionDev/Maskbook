@@ -1,6 +1,6 @@
 import { debounce, first } from 'lodash-es'
 import { unreachable } from '@dimensiondev/maskbook-shared'
-import { isSameAddress, ChainId, ProviderType } from '@dimensiondev/web3-shared'
+import { isSameAddress, ChainId, ProviderType, getNetworkTypeFromChainId } from '@dimensiondev/web3-shared'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
@@ -11,6 +11,7 @@ import {
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
     currentCustomNetworkChainIdSettings,
+    currentSelectedWalletNetworkSettings,
 } from '../../../plugins/Wallet/settings'
 import { pollingTask } from '../../../utils/utils'
 import { getBalance, getBlockNumber } from './network'
@@ -23,7 +24,11 @@ const effect = startEffects(module.hot)
 
 //#region tracking chain state
 const updateChainState = debounce(
-    async () => {
+    async (chainId?: ChainId) => {
+        // update network type
+        if (chainId) currentSelectedWalletNetworkSettings.value = getNetworkTypeFromChainId(chainId)
+
+        // update chat state
         const wallet = getWalletCached()
         currentBlockNumberSettings.value = await getBlockNumber()
         if (wallet) currentBalanceSettings.value = await getBalance(wallet.address)
@@ -56,7 +61,7 @@ effect(() => {
 // revalidate ChainState if the chainId of current provider was changed
 effect(() =>
     currentMaskbookChainIdSettings.addListener((chainId) => {
-        updateChainState()
+        updateChainState(chainId)
         resetAllNonce()
         WalletMessages.events.chainIdUpdated.sendToAll(undefined)
     }),
@@ -82,7 +87,7 @@ effect(() =>
 )
 
 // revaldiate if the current wallet was changed
-effect(() => WalletMessages.events.walletsUpdated.on(updateChainState))
+effect(() => WalletMessages.events.walletsUpdated.on(() => updateChainState()))
 //#endregion
 
 /**
