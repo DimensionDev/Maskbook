@@ -152,8 +152,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         rel="noopener noreferrer"
                         href={`${resolveLinkOnExplorer(chainId)}/token/${token.address}`}>
                         <Typography variant="body2">
-                            <FormattedAddress address={token.address} size={4} />
-                            (View on Etherscan)
+                            <FormattedAddress address={token.address} size={4} /> ({t('plugin_ito_view_on_etherscan')})
                         </Typography>
                     </Link>
                 </div>
@@ -178,7 +177,7 @@ export function RemindDialog(props: RemindDialogProps) {
                 className={classes.button}
                 onClick={() => setStatus(SwapStatus.Swap)}
                 disabled={!agreeReminder}>
-                Continue
+                {t('plugin_ito_continue')}
             </ActionButton>
         </>
     )
