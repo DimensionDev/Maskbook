@@ -21,7 +21,7 @@ import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { debugModeSetting } from '../../../settings/settings'
 import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
-import { dateTimeFormat } from '../assets/formatDate'
+import formatDateTime from 'date-fns/format'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { MSG_DELIMITER } from '../constants'
 
@@ -161,12 +161,12 @@ export function PoolInList(props: PoolInListProps) {
                             </Typography>
                             <Typography className={classes.date} variant="body2" color="textSecondary">
                                 {t('plugin_ito_list_start_date', {
-                                    date: dateTimeFormat(pool.start_time),
+                                    date: formatDateTime(pool.start_time, 'yyyy-MM-dd HH:mm:ss'),
                                 })}
                             </Typography>
                             <Typography className={classes.date} variant="body2" color="textSecondary">
                                 {t('plugin_ito_list_end_date', {
-                                    date: dateTimeFormat(pool.end_time),
+                                    date: formatDateTime(pool.end_time, 'yyyy-MM-dd HH:mm:ss'),
                                 })}
                             </Typography>
                             {debugModeSetting.value ? (
