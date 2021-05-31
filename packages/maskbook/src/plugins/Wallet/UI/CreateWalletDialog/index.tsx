@@ -1,43 +1,74 @@
-import { Button, Box, DialogContent, makeStyles, Typography } from '@material-ui/core'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useState, useCallback } from 'react'
+import { DialogContent, makeStyles } from '@material-ui/core'
+import { delay, useRemoteControlledDialog, useI18N } from '../../../../utils'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
-import { WalletMessages } from '../../messages'
-import { Image } from '../../../../components/shared/Image'
+import { WalletMessages, WalletRPC } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
+import { useMnemonicWordsPuzzle } from '../../hooks/useMnemonicWordsPuzzle'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../constants'
+
+import { StepNameAndWords } from './StepNameAndWords'
+import { StepVerify } from './StepVerify'
+
+enum CreateWalletStep {
+    NameAndWords = 0,
+    Verify,
+}
 
 const useStyles = makeStyles((theme) => ({
     content: {
         padding: theme.spacing(5, 4.5),
     },
-    walletOption: {
+    top: {
         display: 'flex',
         alignItems: 'center',
-        padding: 20,
-        border: `1px solid ${theme.palette.divider}`,
-        borderRadius: 12,
-        '& + &': {
-            marginTop: 20,
-        },
+        justifyContent: 'space-between',
+        padding: theme.spacing(2, 0, 1),
     },
-    optionTexts: {
-        marginRight: 'auto',
-        marginLeft: theme.spacing(2),
+    bottom: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: theme.spacing(4, 0, 0),
     },
-    button: {
-        width: 90,
-        flexShink: 0,
+    description: {},
+    input: {
+        width: '100%',
     },
-    optionName: {
-        fontSize: 16,
+    card: {
+        position: 'relative',
+        minHeight: 140,
+        display: 'flex',
+        flexFlow: 'row wrap',
+        alignContent: 'flex-start',
+        justifyContent: 'space-evenly',
     },
-    optionDescription: {
+    cardButton: {
+        padding: theme.spacing(1, 2, 3),
+        backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : theme.palette.grey[50],
+    },
+    cardTextfield: {
+        justifyContent: 'space-between',
+    },
+    word: {
+        width: 101,
+        minWidth: 101,
+        whiteSpace: 'nowrap',
+        marginTop: theme.spacing(2),
+    },
+    wordButton: {
+        backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : theme.palette.common.white,
+    },
+    wordTextfield: {
+        width: 110,
+    },
+    confirmation: {
         fontSize: 12,
-        color: '#7B8192',
+        lineHeight: 1.75,
     },
-    optionIcon: {
-        height: 48,
-        width: 48,
+    warning: {
+        marginTop: theme.spacing(2),
     },
 }))
 
@@ -47,56 +78,81 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region remote controlled dialog logic
-    const { openDialog: openCreateWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.createWalletDialogUpdated,
-    )
+    const [step, setStep] = useState(CreateWalletStep.NameAndWords)
+    const [name, setName] = useState('')
+
+    //#region create mnemonic words
+    const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
     //#endregion
 
-    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.createImportWalletDialogUpdated)
-    const { openDialog: openImportDialog } = useRemoteControlledDialog(WalletMessages.events.importWalletDialogUpdated)
+    //#region remote controlled dialog logic
+    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated, (ev) => {
+        if (!ev.open) return
+        if (!ev.name) return
+        setName(ev.name)
+    })
+    const onClose = useCallback(async () => {
+        closeDialog()
+        await delay(300)
+        setName('')
+        setStep(CreateWalletStep.NameAndWords)
+        refreshCallback()
+    }, [refreshCallback])
+    //#endregion
+
+    const goVerify = useCallback(() => {
+        setStep(CreateWalletStep.Verify)
+    }, [])
+    const backToNameAndWords = useCallback(() => {
+        setStep(CreateWalletStep.NameAndWords)
+        resetCallback()
+    }, [resetCallback])
+    const onSubmit = useSnackbarCallback(
+        async () => {
+            await WalletRPC.importNewWallet({
+                name,
+                path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+                mnemonic: words,
+                passphrase: '',
+            })
+            await WalletRPC.addPhrase({
+                path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
+                mnemonic: words,
+                passphrase: '',
+            })
+        },
+        [name, words],
+        onClose,
+    )
 
     return (
         <InjectedDialog
             open={open}
-            onClose={closeDialog}
-            title={t('plugin_wallet_create_import_choose')}
+            onClose={onClose}
+            title={t('plugin_wallet_setup_title_create')}
             DialogProps={{
                 maxWidth: 'sm',
             }}>
             <DialogContent className={classes.content}>
-                <Box className={classes.walletOption}>
-                    <Image src={new URL('./wallet.png', import.meta.url).toString()} className={classes.optionIcon} />
-                    <Box className={classes.optionTexts}>
-                        <Typography variant="h2" component="h2" className={classes.optionName}>
-                            {t('plugin_wallet_create_a_new_wallet')}
-                        </Typography>
-                        <Typography variant="body1" className={classes.optionDescription}>
-                            {t('plugin_wallet_create_a_new_wallet_description')}
-                        </Typography>
-                    </Box>
-                    <Button
-                        className={classes.button}
-                        variant="contained"
-                        size="small"
-                        onClick={openCreateWalletDialog}>
-                        {t('plugin_wallet_setup_create')}
-                    </Button>
-                </Box>
-                <Box className={classes.walletOption}>
-                    <Image src={new URL('./import.png', import.meta.url).toString()} className={classes.optionIcon} />
-                    <Box className={classes.optionTexts}>
-                        <Typography variant="h2" component="h2" className={classes.optionName}>
-                            {t('plugin_wallet_import_wallet')}
-                        </Typography>
-                        <Typography variant="body1" className={classes.optionDescription}>
-                            {t('plugin_wallet_import_wallet_description')}
-                        </Typography>
-                    </Box>
-                    <Button className={classes.button} size="small" onClick={openImportDialog}>
-                        {t('plugin_wallet_setup_import')}
-                    </Button>
-                </Box>
+                {step === CreateWalletStep.NameAndWords && (
+                    <StepNameAndWords
+                        name={name}
+                        words={words}
+                        onNameChange={setName}
+                        onRefreshWords={refreshCallback}
+                        onSubmit={goVerify}
+                    />
+                )}
+                {step === CreateWalletStep.Verify && (
+                    <StepVerify
+                        wordsMatched={words.join(' ') === puzzleWords.join(' ')}
+                        puzzleWords={puzzleWords}
+                        indexes={indexes}
+                        onUpdateAnswerWords={answerCallback}
+                        onBack={backToNameAndWords}
+                        onSubmit={onSubmit}
+                    />
+                )}
             </DialogContent>
         </InjectedDialog>
     )
