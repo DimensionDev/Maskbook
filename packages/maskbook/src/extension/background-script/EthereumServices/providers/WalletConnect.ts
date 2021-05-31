@@ -159,13 +159,19 @@ export function createWeb3(chainId = currentWalletConnectChainIdSettings.value) 
  */
 export async function requestAccounts() {
     const connector_ = await createConnectorIfNeeded()
-    return new Promise<string[]>(async (resolve, reject) => {
+    return new Promise<{ accounts: string[]; chainId: ChainId }>(async (resolve, reject) => {
+        function resolve_() {
+            resolve({
+                accounts: connector_.accounts,
+                chainId: connector_.chainId,
+            })
+        }
         if (connector_.accounts.length) {
-            resolve(connector_.accounts)
+            resolve_()
             return
         }
-        connector_.on('connect', () => resolve(connector_.accounts))
-        connector_.on('update', () => resolve(connector_.accounts))
+        connector_.on('connect', resolve_)
+        connector_.on('update', resolve_)
         connector_.on('error', reject)
     })
 }
