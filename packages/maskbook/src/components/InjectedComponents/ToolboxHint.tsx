@@ -19,13 +19,7 @@ import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
-import { ProviderIcon } from '../shared/ProviderIcon'
-import { NetworkIcon } from '../shared/NetworkIcon'
-import { useValueRef } from '../../utils/hooks/useValueRef'
-import {
-    currentSelectedWalletProviderSettings,
-    currentSelectedWalletNetworkSettings,
-} from '../../plugins/Wallet/settings'
+import { WalletIcon } from '../shared/WalletIcon'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 
@@ -101,16 +95,6 @@ const useStyles = makeStyles((theme) => ({
         height: 24,
         fontSize: 24,
     },
-    walletIcon: {
-        position: 'absolute',
-        right: -2,
-        bottom: -2,
-        backgroundColor: '#F7F9FA',
-        height: 10,
-        width: 10,
-        borderRadius: '50%',
-        boxShadow: `0 0 0 2px #F7F9FA`,
-    },
     mask: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
         width: 22,
@@ -131,8 +115,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const account = useAccount()
     const selectedWallet = useWallet()
     const chainId = useChainId()
-    const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
-    const selectedNetwork = useValueRef(currentSelectedWalletNetworkSettings)
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
@@ -271,18 +253,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
             <div className={classes.wrapper} onClick={openWallet}>
                 <div className={classes.button}>
-                    {selectedWallet ? (
-                        <div className={classes.iconWrapper}>
-                            <NetworkIcon size={14} classes={{ icon: classes.icon }} networkType={selectedNetwork} />
-                            <ProviderIcon
-                                classes={{ icon: classes.walletIcon }}
-                                size={24}
-                                providerType={selectedWalletProvider}
-                            />
-                        </div>
-                    ) : (
-                        <WalletSharp classes={{ root: classes.icon }} size={24} />
-                    )}
+                    {selectedWallet ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} size={24} />}
 
                     <Typography className={classes.title}>
                         {account ? formatEthereumAddress(account, 4) : 'Connect Wallet'}
