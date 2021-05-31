@@ -21,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         right: -2,
         bottom: -2,
+        backgroundColor: '#ffffff',
+        borderRadius: '50%',
     },
 }))
 
