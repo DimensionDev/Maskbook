@@ -4,6 +4,8 @@ import { Table, TableContainer, TableHead, TableRow, TableCell, Box, makeStyles 
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
+import { WalletContext } from '../../hooks/useWalletContext'
+import { LoadingPlaceholder } from '../LoadingPlacholder'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -18,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const TokenTable = memo(() => {
+    const { detailedTokensError, detailedTokensLoading, detailedTokens } = WalletContext.useContainer()
     const t = useDashboardI18N()
     const classes = useStyles()
 
@@ -45,7 +48,8 @@ export const TokenTable = memo(() => {
                 </TableHead>
             </Table>
             <Box flex={1}>
-                <EmptyPlaceholder prompt="No assets were queried. Please add tokens." />
+                {detailedTokensLoading ? <LoadingPlaceholder /> : null}
+                {detailedTokensError ? <EmptyPlaceholder prompt="No assets were queried. Please add tokens." /> : null}
             </Box>
         </TableContainer>
     )

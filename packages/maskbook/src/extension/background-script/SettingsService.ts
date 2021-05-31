@@ -16,6 +16,10 @@ import {
     currentNetworkSettings,
     currentProviderSettings,
     currentChainIdSettings,
+    currentPortfolioDataProviderSettings,
+    currentSelectedWalletAddressSettings,
+    currentSelectedWalletNetworkSettings,
+    currentSelectedWalletProviderSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
 
@@ -45,6 +49,10 @@ export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider
 export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(currentNetworkSettings)
 
 export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentAccountSettings)
+
+export const [getCurrentPortfolioDataProvider, setCurrentPortfolioDataProvider] = create(
+    currentPortfolioDataProviderSettings,
+)
 
 export async function getWalletAllowTestChain() {
     return Flags.wallet_allow_testnet

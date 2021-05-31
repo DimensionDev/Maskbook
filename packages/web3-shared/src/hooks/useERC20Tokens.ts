@@ -1,18 +1,5 @@
 import { useWeb3StateContext } from '../context'
-import type { ChainId, EthereumTokenType } from '../types'
 import { useWallet } from './useWallet'
-
-export interface ERC20Token {
-    type: EthereumTokenType.ERC20
-    address: string
-    chainId: ChainId
-}
-
-export interface ERC20TokenDetailed extends ERC20Token {
-    name?: string
-    symbol?: string
-    decimals: number
-}
 
 export function useERC20TokensFromDB() {
     return useWeb3StateContext().erc20Tokens

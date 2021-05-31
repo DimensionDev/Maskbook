@@ -136,6 +136,7 @@ importers:
       '@babel/core': ^7.14.3
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/icons': workspace:*
+      '@dimensiondev/kit': ^0.0.0-20210221102734-0b4a937
       '@dimensiondev/mask-plugin-infra': workspace:*
       '@dimensiondev/maskbook-shared': workspace:*
       '@dimensiondev/maskbook-storybook-shared': workspace:*
@@ -169,6 +170,7 @@ importers:
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/icons': link:../icons
+      '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
       '@dimensiondev/mask-plugin-infra': link:../plugin-infra
       '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
@@ -5877,6 +5879,13 @@ packages:
       '@types/har-format': 1.2.5
     dev: false
 
+  /@types/classnames/2.3.1:
+    resolution: {integrity: sha512-zeOWb0JGBoVmlQoznvqXbE0tEC/HONsnoUNH19Hc96NFsTAwTXbTqb8FMYkru1F/iqp7a18Ws3nWJvtA1sHD1A==}
+    deprecated: This is a stub types definition. classnames provides its own type definitions, so you do not need this installed.
+    dependencies:
+      classnames: 2.3.1
+    dev: false
+
   /@types/color-convert/2.0.0:
     resolution: {integrity: sha512-m7GG7IKKGuJUXvkZ1qqG3ChccdIM/qBBo913z+Xft0nKCX4hAU/IxKwZBU4cpRZ7GS5kV4vOblUkILtSShCPXQ==}
     dependencies:
@@ -6456,7 +6465,7 @@ packages:
   /@types/qrcode/1.4.0:
     resolution: {integrity: sha512-BwDnCjdZKVOyy6+SPJ4ph+0DAftZGn5JFCY/MhetdEQ8yF6+YndhJWlfdBP8vtMe0w5/FH29Xi6bnEwVWkU1LQ==}
     dependencies:
-      '@types/node': 14.17.0
+      '@types/node': 14.14.37
     dev: false
 
   /@types/qs/6.9.6:
@@ -17556,17 +17565,6 @@ packages:
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
     dev: false
 
-  /notistack/1.0.9:
-    resolution: {integrity: sha512-Dal2HtTpWrdYCZ3t0HhJt47NJZwVSPee36WzORRbqUkFR0k9pxFszxBuPSWshBLwF6Av8s86XPP+ED5zRz0CGw==}
-    peerDependencies:
-      '@material-ui/core': ^4.0.0
-      react: ^16.8.0 || ^17.0.0
-      react-dom: ^16.8.0 || ^17.0.0
-    dependencies:
-      clsx: 1.1.1
-      hoist-non-react-statics: 3.3.2
-    dev: false
-
   /now-and-later/2.0.1:
     resolution: {integrity: sha512-KGvQ0cB70AQfg107Xvs/Fbu+dGmZoTRJp2TaPwcwQm3/7PteUyN2BCgk8KBMPGBUXZdVwyWS8fDCGFygBm19UQ==}
     engines: {node: '>= 0.10'}
@@ -24075,10 +24073,10 @@ packages:
 
   /y18n/4.0.1:
     resolution: {integrity: sha512-wNcy4NvjMYL8gogWWYAO7ZFWFfHcbdbE57tZO8e4cbpj8tfUcwrwqSl3ad8HxpYWCdXcJUCeKKZS62Av1affwQ==}
-    dev: true
 
   /y18n/4.0.3:
     resolution: {integrity: sha512-JKhqTOwSrqNA1NY5lSztJ1GrBiUodLMmIZuLiDaMRJ+itFd+ABVE8XBjOvIWL+rSqNDC74LCSFmlb/U4UZ4hJQ==}
+    dev: true
 
   /y18n/5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
@@ -24175,7 +24173,7 @@ packages:
       set-blocking: 2.0.0
       string-width: 3.1.0
       which-module: 2.0.0
-      y18n: 4.0.3
+      y18n: 4.0.1
       yargs-parser: 13.1.2
 
   /yargs/16.2.0:

@@ -13,6 +13,7 @@
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.8.0-20210317064617-6c4792c",
     "@dimensiondev/icons": "workspace:*",
+    "@dimensiondev/kit": "^0.0.0-20210221102734-0b4a937",
     "@dimensiondev/mask-plugin-infra": "workspace:*",
     "@dimensiondev/maskbook-shared": "workspace:*",
     "@dimensiondev/maskbook-storybook-shared": "workspace:*",
