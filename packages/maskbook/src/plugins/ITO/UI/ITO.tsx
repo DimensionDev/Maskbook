@@ -630,7 +630,7 @@ export function ITO(props: ITO_Props) {
                                         size="large"
                                         className={classNames(classes.actionButton, classes.textInOneLine)}>
                                         {t('plugin_ito_wait_unlock_time', {
-                                            unlockTime: formatDateTime(unlockTime!, true),
+                                            unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
                                         })}
                                     </ActionButton>
                                 )}
