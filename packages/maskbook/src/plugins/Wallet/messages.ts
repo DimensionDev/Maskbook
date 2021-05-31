@@ -26,12 +26,12 @@ export type ConnectWalletDialogEvent =
 
 export type SelectWalletDialogEvent =
     | {
-        open: true
-        networkType: NetworkType
-    }
+          open: true
+          networkType: NetworkType
+      }
     | {
-        open: false
-    }
+          open: false
+      }
 
 export type CreateImportWalletDialogEvent = {
     open: boolean
