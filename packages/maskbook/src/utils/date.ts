@@ -1,4 +1,9 @@
-export function formatDateTime(value: Date, hiddenSeconds = false) {
+/**
+ * @deprecated please use `date-fns/format` replace this function.
+ * @see https://date-fns.org/v2.22.1/docs/format
+ **/
+export function formatDateTime(value: Date | string | number, hiddenSeconds = false) {
+    value = new Date(value)
     const pad = (value: number) => value.toString(10).padStart(2, '0')
     const date = [value.getFullYear(), value.getMonth() + 1, value.getDate()]
     const time = [value.getHours(), value.getMinutes(), value.getSeconds()]
@@ -8,7 +13,13 @@ export function formatDateTime(value: Date, hiddenSeconds = false) {
     return `${date.map(pad).join('-')} ${time.map(pad).join(':')}`
 }
 
-export function formatTimeDiffer(startDate: Date, endDate: Date) {
+/**
+ * @deprecated please use `date-fns/formatDistance` replace this function.
+ * @see https://date-fns.org/v2.22.1/docs/formatDistance
+ **/
+export function formatTimeDiffer(startDate: Date | string | number, endDate: Date | string | number) {
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
     let delta = Math.abs(endDate.getTime() - startDate.getTime()) / 1000
     let timeDiffer = ''
     const days = Math.floor(delta / 86400)

@@ -7,7 +7,7 @@ import {
 } from '@dimensiondev/web3-shared'
 import { Avatar, Box, Link, makeStyles, Typography } from '@material-ui/core'
 import OpenInNew from '@material-ui/icons/OpenInNew'
-import { format } from 'date-fns'
+import { format as formatDateTime } from 'date-fns'
 import { useContext } from 'react'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { useI18N } from '../../../utils'
@@ -113,11 +113,9 @@ export function InformationCard(props: InformationCardProps) {
                     </Link>
                 </InfoField>
                 <InfoField title={t('plugin_snapshot_info_start')}>
-                    {format(new Date(start * 1000), 'MM/dd/yyyy')}
+                    {formatDateTime(start * 1000, 'MM/dd/yyyy')}
                 </InfoField>
-                <InfoField title={t('plugin_snapshot_info_end')}>
-                    {format(new Date(end * 1000), 'MM/dd/yyyy')}
-                </InfoField>
+                <InfoField title={t('plugin_snapshot_info_end')}>{formatDateTime(end * 1000, 'MM/dd/yyyy')}</InfoField>
                 <InfoField title={t('plugin_snapshot_info_snapshot')}>
                     <Link
                         className={classes.link}

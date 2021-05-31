@@ -161,12 +161,12 @@ export function PoolInList(props: PoolInListProps) {
                             </Typography>
                             <Typography className={classes.date} variant="body2" color="textSecondary">
                                 {t('plugin_ito_list_start_date', {
-                                    date: dateTimeFormat(new Date(pool.start_time)),
+                                    date: dateTimeFormat(pool.start_time),
                                 })}
                             </Typography>
                             <Typography className={classes.date} variant="body2" color="textSecondary">
                                 {t('plugin_ito_list_end_date', {
-                                    date: dateTimeFormat(new Date(pool.end_time)),
+                                    date: dateTimeFormat(pool.end_time),
                                 })}
                             </Typography>
                             {debugModeSetting.value ? (

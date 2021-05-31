@@ -1,11 +1,15 @@
 import { languageSettings } from '../../../settings/settings'
 
-export const dateTimeFormat = (date: Date) =>
-    new Intl.DateTimeFormat(languageSettings.value, {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: false,
-    }).format(date)
+const formatOptions: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: false,
+}
+
+export const dateTimeFormat = (date: Date | string | number) => {
+    const formatter = new Intl.DateTimeFormat(languageSettings.value, formatOptions)
+    return formatter.format(new Date(date))
+}

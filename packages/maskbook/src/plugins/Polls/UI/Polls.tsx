@@ -87,7 +87,7 @@ export function PollCardUI(props: PollCardProps) {
                         return enUS
                 }
             }
-            const time = formatDistance(new Date(poll.start_time), new Date(poll.end_time), {
+            const time = formatDistance(poll.start_time, poll.end_time, {
                 locale: localeMapping(),
             })
             return t('plugin_poll_deadline', { time })

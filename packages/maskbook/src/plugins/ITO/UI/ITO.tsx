@@ -437,7 +437,7 @@ export function ITO(props: ITO_Props) {
     const footerStartTime = useMemo(() => {
         return (
             <Typography variant="body1">
-                {t('plugin_ito_list_start_date', { date: formatDateTime(new Date(startTime), true) })}
+                {t('plugin_ito_list_start_date', { date: formatDateTime(startTime, true) })}
             </Typography>
         )
     }, [startTime])
@@ -446,7 +446,7 @@ export function ITO(props: ITO_Props) {
         () => (
             <Typography variant="body1">
                 {t('plugin_ito_swap_end_date', {
-                    date: formatDateTime(new Date(end_time), true),
+                    date: formatDateTime(end_time, true),
                 })}
             </Typography>
         ),
@@ -631,7 +631,7 @@ export function ITO(props: ITO_Props) {
                                         size="large"
                                         className={classNames(classes.actionButton, classes.textInOneLine)}>
                                         {t('plugin_ito_wait_unlock_time', {
-                                            unlockTime: formatDateTime(new Date(unlockTime!), true),
+                                            unlockTime: formatDateTime(unlockTime!, true),
                                         })}
                                     </ActionButton>
                                 )}
