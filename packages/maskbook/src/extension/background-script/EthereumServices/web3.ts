@@ -7,11 +7,11 @@ import * as WalletConnect from './providers/WalletConnect'
 import { currentMaskbookChainIdSettings, currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
 import { getWalletCached } from './wallet'
 
-export async function createWeb3({
+export function createWeb3({
     // this parameter only available if a managed wallet was selected
     chainId = currentMaskbookChainIdSettings.value,
     providerType = currentSelectedWalletProviderSettings.value,
-} = {}): Promise<Web3> {
+} = {}) {
     switch (providerType) {
         case ProviderType.Maskbook:
             const _private_key_ = getWalletCached()?._private_key_
@@ -20,7 +20,7 @@ export async function createWeb3({
                 privKeys: _private_key_ ? [_private_key_] : [],
             })
         case ProviderType.MetaMask:
-            return await MetaMask.createWeb3()
+            return MetaMask.createWeb3()
         case ProviderType.WalletConnect:
             return WalletConnect.createWeb3()
         case ProviderType.CustomNetwork:

@@ -11,12 +11,13 @@ import {
     resolveProviderName,
     useAccount,
     useChainId,
+    ChainId,
 } from '@dimensiondev/web3-shared'
 import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
-import { currentSelectedWalletNetworkSettings, currentSelectedWalletProviderSettings } from '../../settings'
 import CHAINS from '../../../../web3/assets/chains.json'
+import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -33,14 +34,13 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const account = useAccount()
     const chainId = useChainId()
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
-
-    const selectedNetworkType = useValueRef(currentSelectedWalletNetworkSettings)
-    const selectedProviderType = useValueRef(currentSelectedWalletProviderSettings)
+    const [networkType, setNetworkType] = useState<NetworkType | undefined>()
 
     //#region remote controlled dialog
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.connectWalletDialogUpdated, (ev) => {
         if (!ev.open) return
         setProviderType(ev.providerType)
+        setNetworkType(ev.networkType)
     })
     //#endregion
 
@@ -58,17 +58,22 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
     const connectToMetamask = useCallback(async () => {
         try {
-            const account = await Services.Ethereum.connectMetaMask()
-            if (!account) throw new Error('Failed to connect MetaMask.')
+            // unknown network type
+            if (!networkType) throw new Error('Unknown network type.')
 
             // read the chain detailed from the built-in chain list
-            const chainDetailed = CHAINS.find((x) => x.chainId === getChainIdFromNetworkType(selectedNetworkType))
+            const chainDetailed = CHAINS.find((x) => x.chainId === getChainIdFromNetworkType(networkType))
             if (!chainDetailed) throw new Error('The selected network is not supported.')
 
+            // request to connect with metamask
+            const { account, chainId } = await Services.Ethereum.connectMetaMask()
+            if (!account || !networkType) throw new Error('Failed to connect MetaMask.')
+
             // it's unable to send a request for switching to ethereum networks
-            if (selectedNetworkType === NetworkType.Ethereum) {
-                if (chainDetailed.chain === 'ETH') return true
-                else throw new Error('Make sure your wallet is on the Ethereum network.')
+            if (networkType === NetworkType.Ethereum) {
+                if (chainId !== ChainId.Mainnet)
+                    throw new Error("Make sure you've selected the Ethereum Mainnet on MetaMask.")
+                return true
             }
 
             // request ethereum-compatiable network
@@ -83,11 +88,15 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                         : chainDetailed.infoURL,
                 ],
             })
+
+            // wait for settings to be synced
+            await delay(1000)
+
             return true as const
         } catch (e) {
             throw new Error(e.message)
         }
-    }, [account, chainId, selectedNetworkType, selectedProviderType])
+    }, [account, chainId, networkType])
 
     const connectToWalletConnect = useCallback(async () => {
         const [uri_] = await Promise.allSettled([await Services.Ethereum.createConnectionURI(), delay(1000)])
@@ -105,14 +114,20 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
+        if (!providerType) throw new Error('Unknown provider type.')
         switch (providerType) {
+            case ProviderType.Maskbook:
+                throw new Error('Unable to create connection on Mask wallet.')
             case ProviderType.MetaMask:
                 await connectToMetamask()
                 break
             case ProviderType.WalletConnect:
                 await connectToWalletConnect()
                 break
+            case ProviderType.CustomNetwork:
+                throw new Error('To be implemented.')
             default:
+                safeUnreachable(providerType)
                 throw new Error('Unknown provider type.')
         }
 

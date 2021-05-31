@@ -63,7 +63,7 @@ export function createWeb3() {
 }
 
 export async function requestAccounts() {
-    const web3 = await createWeb3()
+    const web3 = createWeb3()
 
     // update accounts
     const accounts = await web3.eth.requestAccounts()
@@ -73,7 +73,10 @@ export async function requestAccounts() {
     const chainId = await web3.eth.getChainId()
     onChainIdChanged(chainId.toString(16))
 
-    return accounts
+    return {
+        chainId,
+        accounts,
+    }
 }
 
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {

@@ -20,7 +20,7 @@ export async function INTERNAL_send(
         console.log(new Error().stack)
     }
 
-    const web3 = await createWeb3()
+    const web3 = createWeb3()
     const provider = web3.currentProvider as HttpProvider | undefined
     const providerType = currentSelectedWalletProviderSettings.value
 

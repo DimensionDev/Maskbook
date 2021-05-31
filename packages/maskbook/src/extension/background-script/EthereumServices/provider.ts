@@ -23,8 +23,11 @@ export async function connectWalletConnect() {
 //#endregion
 
 export async function connectMetaMask() {
-    const accounts = await MetaMask.requestAccounts()
-    return first(accounts)
+    const { accounts, chainId } = await MetaMask.requestAccounts()
+    return {
+        account: first(accounts),
+        chainId,
+    }
 }
 
 export async function connectMaskbook() {

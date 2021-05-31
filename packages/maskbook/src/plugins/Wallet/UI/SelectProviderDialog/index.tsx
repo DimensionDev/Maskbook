@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         marginTop: 21,
         '&:first-child': {
             marginTop: 0,
-        }
+        },
     },
     stepTitle: {
         fontSize: 19,
@@ -160,19 +160,20 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     //#endregion
 
     const onConnectProvider = useCallback(
-        async (providerType: ProviderType, networkType: NetworkType) => {
+        async (providerType: ProviderType) => {
             closeDialog()
 
             switch (providerType) {
                 case ProviderType.Maskbook:
+                    // choose a wallet
                     if (wallets.length > 0) {
                         setSelectWalletDialog({
                             open: true,
-                            networkType,
+                            networkType: undeterminedNetworkType,
                         })
                         return
                     }
-                    // open dashboard to create a new wallet
+                    // create a new wallet
                     if (isEnvironment(Environment.ManifestOptions))
                         history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
                     else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
@@ -181,7 +182,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                 case ProviderType.WalletConnect:
                     if (
                         account &&
-                        selectedProviderType === providerType &&
+                        providerType === selectedProviderType &&
                         getChainIdFromNetworkType(undeterminedNetworkType) === chainId
                     ) {
                         openWalletStatusDialog()
@@ -189,7 +190,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                         setConnectWalletDialog({
                             open: true,
                             providerType,
-                            networkType,
+                            networkType: undeterminedNetworkType,
                         })
                     }
                     break
