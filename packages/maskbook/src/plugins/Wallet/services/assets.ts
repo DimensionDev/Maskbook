@@ -18,7 +18,7 @@ import {
     getConstant,
     CONSTANTS,
     getChainDetailed,
-    getChainIdFromName
+    getChainIdFromName,
 } from '@dimensiondev/web3-shared'
 
 export async function getAssetsListNFT(
