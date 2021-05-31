@@ -1,5 +1,4 @@
 import { getChainId } from '../../../extension/background-script/SettingsService'
-import { getConstant } from '@dimensiondev/web3-shared'
 import { omit, pick } from 'lodash-es'
 import { tokenIntoMask } from '../../ITO/helpers'
 import { RED_PACKET_CONSTANTS } from '../constants'
@@ -9,7 +8,7 @@ import type {
     RedPacketSubgraphInMask,
     RedPacketHistory,
 } from '../types'
-import { EthereumNetwork, EthereumTokenType, ChainId } from '../../../web3/types'
+import { EthereumTokenType, ChainId, getConstant } from '@dimensiondev/web3-shared'
 
 const redPacketBasicKeys = [
     'contract_address',
@@ -116,7 +115,7 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
                 name: redPacketSubgraphInMask.creator.name,
                 message: redPacketSubgraphInMask.message,
             }
-            const network = redPacketSubgraphInMask.chain_id as unknown as EthereumNetwork
+            const network = redPacketSubgraphInMask.chain_id.toString()
             const token_type = redPacketSubgraphInMask.token.type
             let token
             if (token_type === EthereumTokenType.ERC20) {

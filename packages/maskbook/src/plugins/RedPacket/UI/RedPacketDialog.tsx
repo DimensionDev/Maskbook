@@ -11,8 +11,7 @@ import { RedPacketHistoryList } from './RedPacketHistoryList'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import Services from '../../../extension/service'
 import Web3Utils from 'web3-utils'
-import { useChainId } from '../../../web3/hooks/useChainId'
-import { useAccount } from '../../../web3/hooks/useAccount'
+import { useAccount, useChainId } from '@dimensiondev/web3-shared'
 
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean

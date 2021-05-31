@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { RedPacketRPC } from '../messages'
-import type { ChainId } from '../../../web3/types'
+import type { ChainId } from '@dimensiondev/web3-shared'
 
 export function useRedPacketHistory(address: string, chainId: ChainId) {
     return useAsyncRetry(async () => {
