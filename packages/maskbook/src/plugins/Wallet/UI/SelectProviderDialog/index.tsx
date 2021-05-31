@@ -31,12 +31,7 @@ import { WalletMessages } from '../../messages'
 import { DashboardRoute } from '../../../../extension/options-page/Route'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { NetworkIcon } from '../../../../components/shared/NetworkIcon'
-import {
-    currentMaskbookChainIdSettings,
-    currentSelectedWalletNetworkSettings,
-    currentSelectedWalletProviderSettings,
-} from '../../settings'
-import CHAINS from '../../../../web3/assets/chains.json'
+import { currentSelectedWalletNetworkSettings, currentSelectedWalletProviderSettings } from '../../settings'
 import { Flags } from '../../../../utils'
 import { useState } from 'react'
 import { useEffect } from 'react'
