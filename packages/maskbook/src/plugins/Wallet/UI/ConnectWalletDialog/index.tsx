@@ -99,7 +99,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     }, [account, chainId, networkType])
 
     const connectToWalletConnect = useCallback(async () => {
-        const [uri_] = await Promise.allSettled([await Services.Ethereum.createConnectionURI(), delay(1000)])
+        // a short time loading brings a better user experience
+        const [uri_] = await Promise.allSettled([Services.Ethereum.createConnectionURI(), delay(1000)])
 
         // create wallet connect QR code URI
         const uri = uri_.status === 'fulfilled' ? uri_.value : ''
