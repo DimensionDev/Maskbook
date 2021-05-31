@@ -5,15 +5,6 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles((theme) => ({
-    content: {
-        padding: theme.spacing(5, 4.5),
-    },
-    top: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: theme.spacing(2, 0, 1),
-    },
     bottom: {
         display: 'flex',
         alignItems: 'center',
@@ -21,9 +12,6 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(4, 0, 0),
     },
     description: {},
-    input: {
-        width: '100%',
-    },
     card: {
         position: 'relative',
         minHeight: 140,
@@ -31,10 +19,6 @@ const useStyles = makeStyles((theme) => ({
         flexFlow: 'row wrap',
         alignContent: 'flex-start',
         justifyContent: 'space-evenly',
-    },
-    cardButton: {
-        padding: theme.spacing(1, 2, 3),
-        backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : theme.palette.grey[50],
     },
     cardTextfield: {
         justifyContent: 'space-between',
@@ -45,18 +29,8 @@ const useStyles = makeStyles((theme) => ({
         whiteSpace: 'nowrap',
         marginTop: theme.spacing(2),
     },
-    wordButton: {
-        backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : theme.palette.common.white,
-    },
     wordTextfield: {
         width: 110,
-    },
-    confirmation: {
-        fontSize: 12,
-        lineHeight: 1.75,
-    },
-    warning: {
-        marginTop: theme.spacing(2),
     },
 }))
 

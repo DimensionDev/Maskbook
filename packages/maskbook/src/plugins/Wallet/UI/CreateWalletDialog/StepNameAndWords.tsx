@@ -17,9 +17,6 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { WALLET_OR_PERSONA_NAME_MAX_LEN, checkInputLengthExceed, useI18N } from '../../../../utils'
 
 const useStyles = makeStyles((theme) => ({
-    content: {
-        padding: theme.spacing(5, 4.5),
-    },
     top: {
         display: 'flex',
         alignItems: 'center',
@@ -32,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         padding: theme.spacing(4, 0, 0),
     },
-    description: {},
     input: {
         width: '100%',
     },
@@ -59,9 +55,6 @@ const useStyles = makeStyles((theme) => ({
     },
     wordButton: {
         backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : theme.palette.common.white,
-    },
-    wordTextfield: {
-        width: 110,
     },
     confirmation: {
         fontSize: 12,
