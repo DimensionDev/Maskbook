@@ -7,13 +7,14 @@ import type { HttpProvider, PromiEvent as PromiEventW3 } from 'web3-core'
 import WalletConnect from '@walletconnect/client'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import type { ITxData } from '@walletconnect/types'
-import { ChainId, TransactionEventType, ProviderType } from '@dimensiondev/web3-shared'
+import { ChainId, TransactionEventType, ProviderType, getNetworkTypeFromChainId } from '@dimensiondev/web3-shared'
 import * as Maskbook from '../providers/Maskbook'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import {
     currentWalletConnectChainIdSettings,
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
+    currentSelectedWalletNetworkSettings,
 } from '../../../../plugins/Wallet/settings'
 
 let connector: WalletConnect | null = null
@@ -171,7 +172,8 @@ export async function requestAccounts() {
 
 const onConnect = async () => {
     if (!connector?.accounts.length) return
-    currentWalletConnectChainIdSettings.value = connector.chainId || ChainId.Mainnet
+    currentWalletConnectChainIdSettings.value = connector.chainId
+    currentSelectedWalletNetworkSettings.value = getNetworkTypeFromChainId(connector.chainId)
     await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, true)
 }
 
@@ -187,6 +189,7 @@ const onUpdate = async (
     if (error) return
     if (!connector?.accounts.length) return
     currentWalletConnectChainIdSettings.value = connector.chainId
+    currentSelectedWalletNetworkSettings.value = getNetworkTypeFromChainId(connector.chainId)
     await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, false)
 }
 

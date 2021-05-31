@@ -3,13 +3,14 @@ import type { provider as Provider } from 'web3-core'
 import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
-import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
+import { ChainId, getNetworkTypeFromChainId, ProviderType } from '@dimensiondev/web3-shared'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import {
     currentMetaMaskChainIdSettings,
     currentSelectedWalletAddressSettings,
     currentSelectedWalletProviderSettings,
     currentIsMetamaskLockedSettings,
+    currentSelectedWalletNetworkSettings,
 } from '../../../../plugins/Wallet/settings'
 
 let provider: MetaMaskInpageProvider | null = null
@@ -22,9 +23,11 @@ async function onAccountsChanged(accounts: string[]) {
 
 async function onChainIdChanged(id: string) {
     // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
-    const chainId = Number.parseInt(id, 16)
+    const chainId_ = Number.parseInt(id, 16)
+    const chainId = chainId_ === 0 ? ChainId.Mainnet : chainId_
     currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked())
-    currentMetaMaskChainIdSettings.value = chainId === 0 ? ChainId.Mainnet : chainId
+    currentMetaMaskChainIdSettings.value = chainId
+    currentSelectedWalletNetworkSettings.value = getNetworkTypeFromChainId(chainId)
 }
 
 function onError(error: string) {
