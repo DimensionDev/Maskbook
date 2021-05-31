@@ -38,6 +38,8 @@ import {
 } from '../../settings'
 import CHAINS from '../../../../web3/assets/chains.json'
 import { Flags } from '../../../../utils'
+import { useState } from 'react'
+import { useEffect } from 'react'
 
 const useStyles = makeStyles((theme: Theme) => ({
     paper: {
@@ -128,7 +130,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     //#endregion
 
     //#region select wallet dialog
-    const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
+    const { setDialog: setSelectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectWalletDialogUpdated,
     )
     //#endregion
@@ -149,27 +151,28 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const selectedNetworkType = useValueRef(currentSelectedWalletNetworkSettings)
     const selectedProviderType = useValueRef(currentSelectedWalletProviderSettings)
 
-    const onSelectNetwork = useCallback(
-        async (networkType: NetworkType) => {
-            const chainId = getChainIdFromNetworkType(networkType)
-            const chainDetailed = CHAINS.find((x) => x.chainId === chainId)
-            if (!chainDetailed) throw new Error('The selected network is not supported.')
-            if (selectedProviderType === ProviderType.Maskbook) currentMaskbookChainIdSettings.value = chainId
-            currentSelectedWalletNetworkSettings.value = networkType
-        },
-        [account, selectedProviderType],
-    )
+    //#region undetermined network type
+    const [undeterminedNetworkType, setUndeterminedNetworkType] = useState(selectedNetworkType)
+    useEffect(() => {
+        if (!open) return
+        setUndeterminedNetworkType(selectedNetworkType)
+    }, [open])
+    //#endregion
 
     const onConnectProvider = useCallback(
-        async (providerType: ProviderType) => {
+        async (providerType: ProviderType, networkType: NetworkType) => {
             closeDialog()
 
             switch (providerType) {
                 case ProviderType.Maskbook:
                     if (wallets.length > 0) {
-                        openSelectWalletDialog()
+                        setSelectWalletDialog({
+                            open: true,
+                            networkType,
+                        })
                         return
                     }
+                    // open dashboard to create a new wallet
                     if (isEnvironment(Environment.ManifestOptions))
                         history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
                     else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
@@ -179,13 +182,14 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     if (
                         account &&
                         selectedProviderType === providerType &&
-                        getChainIdFromNetworkType(selectedNetworkType) === chainId
+                        getChainIdFromNetworkType(undeterminedNetworkType) === chainId
                     ) {
                         openWalletStatusDialog()
                     } else {
                         setConnectWalletDialog({
                             open: true,
                             providerType,
+                            networkType,
                         })
                     }
                     break
@@ -201,10 +205,10 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
             wallets,
             history,
             closeDialog,
-            selectedNetworkType,
+            undeterminedNetworkType,
             selectedProviderType,
             openWalletStatusDialog,
-            openSelectWalletDialog,
+            setSelectWalletDialog,
             setWalletConnectDialog,
         ],
     )
@@ -221,10 +225,10 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             <ListItem
                                 className={classes.networkItem}
                                 key={network}
-                                onClick={() => onSelectNetwork(network)}>
+                                onClick={() => setUndeterminedNetworkType(network)}>
                                 <div className={classes.iconWrapper}>
                                     <NetworkIcon classes={{ icon: classes.networkIcon }} networkType={network} />
-                                    {selectedNetworkType === network && (
+                                    {undeterminedNetworkType === network && (
                                         <SuccessIcon className={classes.checkedBadge} />
                                     )}
                                 </div>
