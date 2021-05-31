@@ -1,4 +1,4 @@
-import type { ProviderType, Wallet } from '@dimensiondev/web3-shared'
+import type { NetworkType, ProviderType, Wallet } from '@dimensiondev/web3-shared'
 import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { createPluginMessage } from '../utils/createPluginMessage'
@@ -18,14 +18,20 @@ export type ConnectWalletDialogEvent =
     | {
           open: true
           providerType: ProviderType
+          networkType: NetworkType
       }
     | {
           open: false
       }
 
-export type SelectWalletDialogEvent = {
-    open: boolean
-}
+export type SelectWalletDialogEvent =
+    | {
+        open: true
+        networkType: NetworkType
+    }
+    | {
+        open: false
+    }
 
 export type CreateImportWalletDialogEvent = {
     open: boolean
