@@ -1,5 +1,6 @@
 import { makeStyles, Card, Typography, CircularProgress, List, ListItem } from '@material-ui/core'
-import { isValid, formatDistance } from 'date-fns'
+import isValid from 'date-fns/isValid'
+import formatDistance from 'date-fns/formatDistance'
 import { zhTW, enUS, ja } from 'date-fns/locale'
 import { useI18N, useValueRef } from '../../../utils'
 import { languageSettings } from '../../../settings/settings'
