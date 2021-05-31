@@ -6,7 +6,7 @@ import {
     useChainDetailed,
     ChainId,
     getConstant,
-    resolveChainFullName,
+    getChainFullName,
 } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useImageFailover } from '../../../utils/hooks/useImageFailover'
@@ -53,7 +53,7 @@ export function TokenIcon(props: TokenIconProps) {
     const chainDetailed = useChainDetailed()
     const tokenBlockie = useBlockie(address)
 
-    const fullName = chainDetailed ? resolveChainFullName(chainId ?? chainDetailed.chainId) : ''
+    const fullName = chainDetailed ? getChainFullName(chainId ?? chainDetailed.chainId) : ''
     const { value: baseURI, loading } = useImageFailover(
         chainDetailed
             ? [

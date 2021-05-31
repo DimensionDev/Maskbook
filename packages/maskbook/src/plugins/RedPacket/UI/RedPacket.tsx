@@ -255,7 +255,7 @@ export function RedPacket(props: RedPacketProps) {
         )
 
     return (
-        <EthereumChainBoundary chainId={resolveChainId(payload.network ?? '') ?? ChainId.Mainnet}>
+        <EthereumChainBoundary chainId={payload.network ? resolveChainId(payload.network) : ChainId.Mainnet}>
             <Card className={classNames(classes.root)} component="article" elevation={0}>
                 <div className={classes.header}>
                     <Typography className={classes.from} variant="body1" color="inherit">

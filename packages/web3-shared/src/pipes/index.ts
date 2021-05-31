@@ -1,6 +1,5 @@
 import { safeUnreachable } from '@dimensiondev/maskbook-shared'
-import { ChainId, ERC20Token, ERC721Token, NativeToken, NetworkType, ProviderType } from '../types'
-import CHAINS from '../assets/chains.json'
+import { ChainId, ERC20Token, ERC721Token, EthereumNetwork, NativeToken, NetworkType, ProviderType } from '../types'
 import { getChainDetailed } from '../utils'
 
 export function resolveProviderName(providerType: ProviderType) {
@@ -19,35 +18,18 @@ export function resolveProviderName(providerType: ProviderType) {
     }
 }
 
-export function resolveChainId(name: string) {
-    const chainDetailed = CHAINS.find((x) =>
-        [x.chain, x.network, x.shortName, x.fullName].map((y) => y.toLowerCase()).includes(name.toLowerCase()),
-    )
-    return chainDetailed?.chainId as ChainId | undefined
-}
-
-export function resolveNetworkChainId(networkType: NetworkType) {
+export function resolveNetworkName(networkType: NetworkType) {
     switch (networkType) {
-        case NetworkType.Ethereum:
-            return ChainId.Mainnet
         case NetworkType.Binance:
-            return ChainId.BSC
+            return 'Binance Smart Chain'
         case NetworkType.Polygon:
-            return ChainId.Matic
+            return 'Polygon'
+        case NetworkType.Ethereum:
+            return 'Ethereum'
         default:
             safeUnreachable(networkType)
-            return ChainId.Mainnet
+            return 'Unknown'
     }
-}
-
-export function resolveChainName(chainId: ChainId) {
-    const chainDetailed = getChainDetailed(chainId)
-    return chainDetailed?.name ?? 'Unknown'
-}
-
-export function resolveChainFullName(chainId: ChainId) {
-    const chainDetailed = getChainDetailed(chainId)
-    return chainDetailed?.fullName ?? 'Unknown'
 }
 
 export function resolveChainColor(chainId: ChainId) {
@@ -64,6 +46,24 @@ export function resolveChainColor(chainId: ChainId) {
             return 'rgb(48, 153, 242)'
         default:
             return 'rgb(214, 217, 220)'
+    }
+}
+
+export function resolveChainId(network: EthereumNetwork) {
+    switch (network) {
+        case EthereumNetwork.Mainnet:
+            return ChainId.Mainnet
+        case EthereumNetwork.Rinkeby:
+            return ChainId.Rinkeby
+        case EthereumNetwork.Ropsten:
+            return ChainId.Ropsten
+        case EthereumNetwork.Kovan:
+            return ChainId.Kovan
+        case EthereumNetwork.Gorli:
+            return ChainId.Gorli
+        default:
+            safeUnreachable(network)
+            return ChainId.Mainnet
     }
 }
 

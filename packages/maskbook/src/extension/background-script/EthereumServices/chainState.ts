@@ -22,7 +22,7 @@ import { resetAllNonce } from './nonce'
 const effect = startEffects(module.hot)
 
 //#region tracking chain state
-export const updateBlockNumber = debounce(
+const updateChainState = debounce(
     async () => {
         const wallet = getWalletCached()
         currentBlockNumberSettings.value = await getBlockNumber()
@@ -37,12 +37,12 @@ export const updateBlockNumber = debounce(
     },
 )
 
-// polling the newest block state from the chain
+// polling the newest chain state
 let resetPoolTask: () => void
 effect(() => {
     const { reset } = pollingTask(
         async () => {
-            await updateBlockNumber()
+            await updateChainState()
             return false // never stop the polling
         },
         {
@@ -55,34 +55,34 @@ effect(() => {
 
 // revalidate ChainState if the chainId of current provider was changed
 effect(() =>
-    currentMaskbookChainIdSettings.addListener(() => {
-        updateBlockNumber()
+    currentMaskbookChainIdSettings.addListener((chainId) => {
+        updateChainState()
         resetAllNonce()
         WalletMessages.events.chainIdUpdated.sendToAll(undefined)
     }),
 )
 effect(() =>
     currentMetaMaskChainIdSettings.addListener(() => {
-        updateBlockNumber()
+        updateChainState()
         WalletMessages.events.chainIdUpdated.sendToAll(undefined)
     }),
 )
 effect(() =>
     currentWalletConnectChainIdSettings.addListener(() => {
-        updateBlockNumber()
+        updateChainState()
         WalletMessages.events.chainIdUpdated.sendToAll(undefined)
     }),
 )
 
 effect(() =>
     currentCustomNetworkChainIdSettings.addListener(() => {
-        updateBlockNumber()
+        updateChainState()
         WalletMessages.events.chainIdUpdated.sendToAll(undefined)
     }),
 )
 
 // revaldiate if the current wallet was changed
-effect(() => WalletMessages.events.walletsUpdated.on(updateBlockNumber))
+effect(() => WalletMessages.events.walletsUpdated.on(updateChainState))
 //#endregion
 
 /**

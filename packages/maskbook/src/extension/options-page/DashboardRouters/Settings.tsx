@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Appearance, Language } from '@dimensiondev/maskbook-theme'
-import { resolveChainName, ChainId } from '@dimensiondev/web3-shared'
+import { getChainName, ChainId } from '@dimensiondev/web3-shared'
 
 import { useMatchXS, extendsTheme, useI18N, Flags } from '../../../utils'
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
@@ -198,7 +198,7 @@ export default function DashboardSettingsRouter() {
                                     <SettingsUIEnum
                                         classes={listStyle}
                                         enumObject={ChainId}
-                                        getText={resolveChainName}
+                                        getText={getChainName}
                                         icon={<WifiIcon />}
                                         value={currentMaskbookChainIdSettings}
                                     />
