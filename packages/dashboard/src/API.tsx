@@ -4,8 +4,6 @@
 
 import type { Services as ServiceType } from '../../maskbook/dist/src/extension/service'
 import type { MaskMessage } from '../../maskbook/dist/src/utils/messages'
-export * as TypeTransform from '../../maskbook/dist/src/utils/type-transform'
-export { extraPermissions } from '../../maskbook/dist/src/utils/permissions'
 export let Services: typeof ServiceType = null!
 export let Messages: typeof MaskMessage = null!
 export let PluginServices: PluginServices = null!
