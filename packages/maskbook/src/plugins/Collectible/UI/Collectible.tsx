@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 import { findIndex } from 'lodash-es'
-import { format as formatDateTime } from 'date-fns'
+import formatDateTime from 'date-fns/format'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { useI18N, getEnumAsArray, useSettingsSwticher } from '../../../utils'

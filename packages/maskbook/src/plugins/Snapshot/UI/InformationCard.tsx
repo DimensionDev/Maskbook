@@ -7,7 +7,7 @@ import {
 } from '@dimensiondev/web3-shared'
 import { Avatar, Box, Link, makeStyles, Typography } from '@material-ui/core'
 import OpenInNew from '@material-ui/icons/OpenInNew'
-import { format as formatDateTime } from 'date-fns'
+import formatDateTime from 'date-fns/format'
 import { useContext } from 'react'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { useI18N } from '../../../utils'
