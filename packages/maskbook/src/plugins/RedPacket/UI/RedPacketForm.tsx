@@ -12,6 +12,7 @@ import {
     useConstant,
     useChainId,
     TransactionStateType,
+    resolveChainNetwork,
     useNativeTokenDetailed,
     useTokenBalance,
 } from '@dimensiondev/web3-shared'
@@ -158,8 +159,8 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const payload = useRef<RedPacketJSONPayload>({
         contract_address: HAPPY_RED_PACKET_ADDRESS,
         contract_version: RED_PACKET_CONTRACT_VERSION,
-        network: chainId,
-    } as unknown as RedPacketJSONPayload)
+        network: resolveChainNetwork(chainId),
+    } as RedPacketJSONPayload)
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
