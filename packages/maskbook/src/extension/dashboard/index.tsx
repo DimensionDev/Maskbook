@@ -19,4 +19,4 @@ startPluginDashboard(createPluginHost())
 
 const root = document.createElement('div')
 document.body.insertBefore(root, document.body.children[0])
-ReactDOM.createRoot(root).render(<IntergratedDashboard />)
+ReactDOM.unstable_createRoot(root).render(<IntergratedDashboard />)

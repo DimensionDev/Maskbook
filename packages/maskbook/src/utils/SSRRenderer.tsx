@@ -10,7 +10,7 @@ export async function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
             document.body.appendChild(container)
         }
         const oldChildren = [...container.children]
-        ReactDOM.createRoot(container).render(
+        ReactDOM.unstable_createRoot(container).render(
             <StrictMode>
                 <ErrorBoundary>{jsx}</ErrorBoundary>
             </StrictMode>,
