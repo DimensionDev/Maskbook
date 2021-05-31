@@ -5,6 +5,7 @@ import { useState } from 'react'
 import ConfirmDialog from '../../../../components/ConfirmDialog'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import FileUpload from '../../../../components/FileUpload'
+import { useAsync } from 'react-use'
 
 const useStyles = makeStyles(() => ({
     container: { flex: 1 },
@@ -21,11 +22,11 @@ const StyledTab = styled(Tab)(() => ({
         flex: 1,
         background: MaskColorVar.secondaryBackground,
         textTransform: 'none',
-        [`&:first-child`]: {
+        [`&:first-of-type`]: {
             borderTopLeftRadius: 4,
             borderBottomLeftRadius: 4,
         },
-        [`&:last-child`]: {
+        [`&:last-of-type`]: {
             borderTopRightRadius: 4,
             borderBottomRightRadius: 4,
         },
@@ -54,36 +55,62 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
     const classes = useStyles()
     const [loading, setLoading] = useState(true)
     // tab switch
-    const [value, setValue] = useState('1')
+    const [tab, setTab] = useState('1')
     // paste text
     const [text, setText] = useState('')
-    // upload file
-    const [file, setFile] = useState()
+    // // upload file
+    // const [file, setFile] = useState()
     // backup content
     const [content, setContent] = useState('')
+    const [json, setJSON] = useState(null)
+
     const handleClose = () => {
         onClose()
     }
-    const handleConfirm = () => {}
+    const handleConfirm = async () => {
+        if (!json) return
+
+        // const permissions = permission.value ?? []
+        // if (permissions.length) {
+        //     const granted = await browser.permissions.request({ origins: permissions ?? [] })
+        //     if (!granted) return
+        // }
+
+        // await Services.Welcome.restoreBackup(json)
+    }
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-        setValue(newValue)
+        setTab(newValue)
     }
     const handleFileChange = (file: File, content?: string) => {
         console.log(file, content)
+        setContent(content || '')
     }
     const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setText(event.target.value)
     }
+
+    const permission = useAsync(async () => {
+        const str = tab === '1' ? content : text
+        // TODO: get json
+        // const json = getJSON(str)
+
+        // if (!json) throw new Error('invalid string')
+
+        // setJSON(json)
+
+        // return extraPermissions(json.grantedHostPermissions)
+    }, [tab, text, content])
+
     return (
         <ConfirmDialog
             title="Restore Backups"
             confirmText="Restore"
             open={open}
-            confirmDisabled={loading}
+            confirmDisabled={!json || permission.loading || !!permission.error}
             onClose={handleClose}
             onConfirm={handleConfirm}>
             <div className={classes.container}>
-                <TabContext value={value}>
+                <TabContext value={tab}>
                     <SyledTabList onChange={handleChange}>
                         <StyledTab label="File" value="1" />
                         <StyledTab label="Text" value="2" />
@@ -93,6 +120,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
                     </StyledTabPanel>
                     <StyledTabPanel value="2">
                         <InputBase
+                            sx={{ height: 123, alignItems: 'flex-start' }}
                             value={text}
                             onChange={handleTextChange}
                             fullWidth
