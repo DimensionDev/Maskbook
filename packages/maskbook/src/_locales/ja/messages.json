@@ -493,7 +493,7 @@
     "plugin_ito_error_invalid_qualification": "無効な資格アドレス",
     "plugin_ito_unlock_time": "ロック解除時間 {{zone}}",
     "plugin_ito_qualification_label": "プラグインのコントラクト",
-    "plugin_ito_message_label": "",
+    "plugin_ito_message_label": "タイトル",
     "plugin_ito_region_label": "IP リージョンの選択",
     "plugin_ito_region_comfirm_label": "IP リージョン",
     "plugin_ito_region_list": "{{ select }} / {{ all }} リージョン",
