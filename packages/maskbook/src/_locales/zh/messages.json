@@ -314,6 +314,7 @@
     "plugin_wallet_clear_all": "",
     "plugin_wallet_on_create": "創建錢包",
     "plugin_wallet_on_connect": "連接錢包",
+    "plugin_wallet_wrong_network": "",
     "plugin_wallet_setup_title_create": "",
     "plugin_wallet_create_import_choose": "",
     "plugin_wallet_create_a_new_wallet": "",

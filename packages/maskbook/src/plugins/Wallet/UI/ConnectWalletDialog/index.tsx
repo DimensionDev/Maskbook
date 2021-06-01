@@ -100,10 +100,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
             if (networkType === NetworkType.Ethereum) {
                 // it's unable to send a request for switching to ethereum networks
-                if (chainId !== ChainId.Mainnet)
-                    throw new Error(
-                        `Make sure you've selected the Ethereum Mainnet on ${resolveProviderName(providerType)}.`,
-                    )
+                if (chainId !== ChainId.Mainnet) throw new Error('Make sure your wallet is on the Ethereum Mainnet.')
                 return true
             }
 
@@ -120,14 +117,16 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                         nativeCurrency: chainDetailed.nativeCurrency,
                         rpcUrls: chainDetailed.rpc,
                         blockExplorerUrls: [
-                            chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
+                            chainDetailed.explorers &&
+                            chainDetailed.explorers.length > 0 &&
+                            chainDetailed.explorers[0].url
                                 ? chainDetailed.explorers[0].url
                                 : chainDetailed.infoURL,
                         ],
-                    })
+                    }),
                 ])
             } catch (e) {
-                throw new Error(`Connection error! Please switch to ${resolveNetworkName(networkType)} manually.`)
+                throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
             }
 
             // wait for settings to be synced

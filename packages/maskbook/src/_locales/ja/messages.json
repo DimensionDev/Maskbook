@@ -314,6 +314,7 @@
     "plugin_wallet_clear_all": "",
     "plugin_wallet_on_create": "ウォレットを作成",
     "plugin_wallet_on_connect": "ウォレットに接続しています",
+    "plugin_wallet_wrong_network": "",
     "plugin_wallet_setup_title_create": "ウォレットを作成",
     "plugin_wallet_create_import_choose": "",
     "plugin_wallet_create_a_new_wallet": "",

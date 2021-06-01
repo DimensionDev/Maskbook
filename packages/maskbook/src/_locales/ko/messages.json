@@ -314,6 +314,7 @@
     "plugin_wallet_clear_all": "",
     "plugin_wallet_on_create": "월렛 만들기",
     "plugin_wallet_on_connect": "월렛 연결하기",
+    "plugin_wallet_wrong_network": "",
     "plugin_wallet_setup_title_create": "월렛 만들기",
     "plugin_wallet_create_import_choose": "",
     "plugin_wallet_create_a_new_wallet": "",

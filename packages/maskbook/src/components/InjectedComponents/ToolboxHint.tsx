@@ -1,6 +1,7 @@
 import { makeStyles, Typography, MenuItem } from '@material-ui/core'
-import { useAccount, useChainId, ChainId, resolveChainColor } from '@dimensiondev/web3-shared'
 import classNames from 'classnames'
+import { useAccount, useChainId, resolveChainColor, useChainDetailed, useChainIdValid } from '@dimensiondev/web3-shared'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
@@ -21,7 +22,7 @@ import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import { useI18N } from '../../utils'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -111,10 +112,12 @@ const useStyles = makeStyles((theme) => ({
 
 interface ToolboxHintProps extends withClasses<never> {}
 export function ToolboxHint(props: ToolboxHintProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
-    const selectedWallet = useWallet()
     const chainId = useChainId()
+    const chainIdValid = useChainIdValid()
+    const chainDetailed = useChainDetailed()
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
@@ -132,12 +135,12 @@ export function ToolboxHint(props: ToolboxHintProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const openWallet = useCallback(() => {
-        if (selectedWallet) {
+        if (account) {
             openSelectWalletDialog()
         } else {
             openSelectProviderDialog()
         }
-    }, [])
+    }, [account])
     //#endregion
 
     //#region Red packet
@@ -253,11 +256,19 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
             <div className={classes.wrapper} onClick={openWallet}>
                 <div className={classes.button}>
-                    {selectedWallet ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} size={24} />}
+                    {account && chainIdValid ? (
+                        <WalletIcon />
+                    ) : (
+                        <WalletSharp classes={{ root: classes.icon }} size={24} />
+                    )}
 
                     <Typography className={classes.title}>
-                        {account ? formatEthereumAddress(account, 4) : 'Connect Wallet'}
-                        {chainId !== ChainId.Mainnet && selectedWallet ? (
+                        {account
+                            ? chainIdValid
+                                ? formatEthereumAddress(account, 4)
+                                : t('plugin_wallet_wrong_network')
+                            : t('plugin_wallet_on_connect')}
+                        {account && chainIdValid && chainDetailed?.network !== 'mainnet' ? (
                             <FiberManualRecordIcon
                                 className={classes.chainIcon}
                                 style={{

@@ -217,7 +217,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>
-                    <ErrorIcon color="secondary" fontSize="small" />
+                    <ErrorIcon color="secondary" fontSize="small" sx={{ marginRight: 1 }} />
                     <Typography color="secondary" variant="body2">
                         {t('plugin_wallet_wrong_network_tip')}
                     </Typography>
