@@ -32,6 +32,11 @@ jobs:
   type-check:
     runs-on: ubuntu-20.04
     steps:
+      - name: Get cache date
+        id: get-date
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -44,8 +49,14 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: "**/dist/"
-          key: ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}
-          # Do not use restore-keys! tsc build should not be shared once tsc config has changed. But IMO it's safe to share if dependencies has changed.
+          # actions/cache will not upload changes in cache if primary key hits
+          # by adding date to the primary key, we can ensure the cache updates on the first build of the day
+          key: ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          # Allow fallback to cache of different dependencies but not allowing fallback to different tsconfig
+          # because that might indicates a structural/flags changes in tsc emit.
+          restore-keys: |
+            ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+            ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}
       - run: npx pnpm install
       - run: npx build -- echo "Check tsc"
   eslint:

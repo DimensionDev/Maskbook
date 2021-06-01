@@ -46,8 +46,16 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: "**/dist/"
-          key: ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}
-          # Do not use restore-keys
+          key: ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          restore-keys: |
+            ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+            ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}
+      - uses: actions/cache@v2
+        with:
+          path: ./packages/maskbook/node_modules/.cache/webpack/
+          key: ${{ runner.os }}-webpack-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          restore-keys: |
+            ${{ runner.os }}-webpack-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: sudo npm i -g pnpm
       - run: npm run ci
       # Install puppeteer requires download a browser when installing which is noisy. Let's move it to CI only
