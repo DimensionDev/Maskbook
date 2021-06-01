@@ -43,25 +43,9 @@ jobs:
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm install
       - run: npx build -- echo "Check tsc"
-  type-coverage:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - uses: actions/setup-node@v2-beta
-      - uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-node-
-      - run: npx pnpm install
-      # typecoverage computes different coverage rate on the developer's machine and CI and fails on CI. disabled for now
-      # - run: npm run lint:typecoverage
-      #   working-directory: packages/maskbook
   eslint:
     runs-on: ubuntu-20.04
-    needs: [prettier, locale-kit, type-check, type-coverage]
+    needs: [prettier, locale-kit, type-check]
     steps:
       - uses: actions/checkout@v2
         with:
