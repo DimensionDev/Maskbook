@@ -1,5 +1,6 @@
 import { makeStyles, Card, Typography, CircularProgress, List, ListItem } from '@material-ui/core'
-import { isValid, formatDistance } from 'date-fns'
+import isValid from 'date-fns/isValid'
+import formatDistance from 'date-fns/formatDistance'
 import { zhTW, enUS, ja } from 'date-fns/locale'
 import { useI18N, useValueRef } from '../../../utils'
 import { languageSettings } from '../../../settings/settings'
@@ -87,7 +88,7 @@ export function PollCardUI(props: PollCardProps) {
                         return enUS
                 }
             }
-            const time = formatDistance(new Date(poll.start_time), new Date(poll.end_time), {
+            const time = formatDistance(poll.start_time, poll.end_time, {
                 locale: localeMapping(),
             })
             return t('plugin_poll_deadline', { time })

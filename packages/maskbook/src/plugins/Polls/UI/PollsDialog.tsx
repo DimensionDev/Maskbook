@@ -15,7 +15,7 @@ import {
     CircularProgress,
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
-import { add as addDate } from 'date-fns'
+import addDate from 'date-fns/add'
 import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'

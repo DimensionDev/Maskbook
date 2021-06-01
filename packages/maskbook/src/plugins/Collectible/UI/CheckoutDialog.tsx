@@ -100,7 +100,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     }, [isVerified, unreviewedChecked, ToS_Checked])
 
     return (
-        <InjectedDialog title="Checkout" open={open} onClose={onClose}>
+        <InjectedDialog title={t('plugin_collectible_checkout')} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Card elevation={0}>
                     <CardContent>

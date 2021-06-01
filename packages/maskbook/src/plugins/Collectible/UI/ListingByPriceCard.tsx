@@ -77,12 +77,15 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const [privacyChecked, setPrivacyChecked] = useState(false)
 
     const validationMessage = useMemo(() => {
-        if (new BigNumber(amount || '0').isZero()) return 'Enter a price'
+        if (new BigNumber(amount || '0').isZero()) return t('plugin_collectible_enter_a_price')
         if (endingPriceChecked && endingAmount && !new BigNumber(amount || '0').isGreaterThan(endingAmount || '0'))
-            return 'Invalid ending price'
-        if (futureTimeChecked && Date.now() >= scheduleTime.getTime()) return 'Invalid schedule date'
-        if (endingPriceChecked && Date.now() >= expirationTime.getTime()) return 'Invalid expiration date'
-        if (privacyChecked && buyerAddress && !EthereumAddress.isValid(buyerAddress)) return 'Invalid buyer address'
+            return t('plugin_collectible_invalid_ending_price')
+        if (futureTimeChecked && Date.now() >= scheduleTime.getTime())
+            return t('plugin_collectible_invalid_schedule_date')
+        if (endingPriceChecked && Date.now() >= expirationTime.getTime())
+            return t('plugin_collectible_invalid_expiration_date')
+        if (privacyChecked && buyerAddress && !EthereumAddress.isValid(buyerAddress))
+            return t('plugin_collectible_invalid_buyer_address')
         return ''
     }, [
         amount,
@@ -155,7 +158,9 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
-                        label: endingPriceChecked ? t('plugin_collectible_starting_price') : 'Price',
+                        label: endingPriceChecked
+                            ? t('plugin_collectible_starting_price')
+                            : t('plugin_collectible_price'),
                         TextFieldProps: {
                             classes: {
                                 root: classes.panel,
