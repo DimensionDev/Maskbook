@@ -11,7 +11,7 @@ import {
     useNativeTokenBalance,
 } from '@dimensiondev/web3-shared'
 import { Button, ButtonProps, makeStyles, Typography } from '@material-ui/core'
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { useStylesExtends } from '../../components/custom-ui-helper'
