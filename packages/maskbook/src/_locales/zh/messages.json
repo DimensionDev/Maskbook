@@ -541,7 +541,7 @@
     "plugin_ito_status_no_start": "尚未開始",
     "plugin_ito_status_ongoing": "進行中",
     "plugin_ito_status_out_of_stock": "缺貨",
-    "plugin_ito_loading": "讀取 ITO 中 。。。",
+    "plugin_ito_loading": "讀取 ITO 中…",
     "plugin_ito_loading_failed": "讀取失敗",
     "plugin_ito_loading_try_again": "再試一次",
     "plugin_ito_amount_unlocked": "已解鎖 {{amount}} {{symbol}}",
