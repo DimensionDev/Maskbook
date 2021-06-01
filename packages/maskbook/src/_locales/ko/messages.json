@@ -548,7 +548,7 @@
     "plugin_ito_amount_unlocked_infinity": "언락된 인피니티 {{symbol}}",
     "plugin_ito_unlocking_symbol": "{{symbol}} 언락 중",
     "plugin_ito_continue": "",
-    "plugin_ito_view_on_etherscan": "",
+    "plugin_ito_view_on_explorer": "",
     "plugin_collectible_you": "You",
     "plugin_collectible_done": "닫기",
     "plugin_collectible_retry": "다시 시도하기",

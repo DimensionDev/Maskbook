@@ -152,7 +152,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         rel="noopener noreferrer"
                         href={`${resolveLinkOnExplorer(chainId)}/token/${token.address}`}>
                         <Typography variant="body2">
-                            <FormattedAddress address={token.address} size={4} /> ({t('plugin_ito_view_on_etherscan')})
+                            <FormattedAddress address={token.address} size={4} /> ({t('plugin_ito_view_on_explorer')})
                         </Typography>
                     </Link>
                 </div>
