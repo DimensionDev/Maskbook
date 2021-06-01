@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '@dimensiondev/web3-shared'
+import { useAccount, useChainDetailed } from '@dimensiondev/web3-shared'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { WalletRPC } from '../messages'
 import { currentPortfolioDataProviderSettings } from '../settings'
@@ -9,9 +9,11 @@ import { currentPortfolioDataProviderSettings } from '../settings'
  */
 export function useAssetsFromProvider() {
     const account = useAccount()
+    const chainDetailed = useChainDetailed()
     const provider = useValueRef(currentPortfolioDataProviderSettings)
     return useAsyncRetry(async () => {
         if (!account) return []
+        if (chainDetailed?.network !== 'mainnet') return []
         return WalletRPC.getAssetsList(account.toLowerCase(), provider)
-    }, [account, provider])
+    }, [account, provider, chainDetailed?.network])
 }
