@@ -75,7 +75,9 @@ export function ShareDialog(props: ShareDialogProps) {
     return (
         <>
             <Box className={classes.shareWrapper}>
-                <div className={classes.shareImage} style={{ backgroundImage: `url(${ShareBackground})` }}>
+                <div
+                    className={classes.shareImage}
+                    style={{ backgroundImage: `url(${ShareBackground})`, borderRadius: 12 }}>
                     <Typography variant="body1" className={classes.shareAmount}>
                         {amount}
                     </Typography>
