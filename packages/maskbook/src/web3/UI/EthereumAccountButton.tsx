@@ -1,5 +1,5 @@
 import { formatEthereumAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
-import { ChainId, resolveChainColor, useAccount, useChainId, useNativeTokenBalance } from '@dimensiondev/web3-shared'
+import { ChainId, resolveChainColor, useChainId, useNativeTokenBalance } from '@dimensiondev/web3-shared'
 import { Button, ButtonProps, makeStyles, Typography } from '@material-ui/core'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
@@ -9,11 +9,7 @@ import { useStylesExtends } from '../../components/custom-ui-helper'
 import { WalletIcon } from '../../components/shared/WalletIcon'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import {
-    currentSelectedWalletNetworkSettings,
-    currentSelectedWalletProviderSettings,
-} from '../../plugins/Wallet/settings'
-import { Flags, useI18N, useRemoteControlledDialog, useValueRef } from '../../utils'
+import { Flags, useI18N, useRemoteControlledDialog } from '../../utils'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -53,12 +49,9 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const chainId = useChainId()
-    const account = useAccount()
     const { value: balance = '0' } = useNativeTokenBalance()
 
     const selectedWallet = useWallet()
-    const selectedProviderType = useValueRef(currentSelectedWalletProviderSettings)
-    const selectedNetworkType = useValueRef(currentSelectedWalletNetworkSettings)
 
     const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,

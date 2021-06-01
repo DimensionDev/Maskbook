@@ -111,17 +111,23 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
             // request ethereum-compatiable network
             try {
-                await Services.Ethereum.addEthereumChain(account, {
-                    chainId: `0x${chainDetailed.chainId.toString(16)}`,
-                    chainName: chainDetailed.name,
-                    nativeCurrency: chainDetailed.nativeCurrency,
-                    rpcUrls: chainDetailed.rpc,
-                    blockExplorerUrls: [
-                        chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
-                            ? chainDetailed.explorers[0].url
-                            : chainDetailed.infoURL,
-                    ],
-                })
+                await Promise.race([
+                    (async () => {
+                        await delay(60 /* seconds */ * 1000 /* milliseconds */)
+                        throw new Error('Timeout!')
+                    })(),
+                    Services.Ethereum.addEthereumChain(account, {
+                        chainId: `0x${chainDetailed.chainId.toString(16)}`,
+                        chainName: chainDetailed.name,
+                        nativeCurrency: chainDetailed.nativeCurrency,
+                        rpcUrls: chainDetailed.rpc,
+                        blockExplorerUrls: [
+                            chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
+                                ? chainDetailed.explorers[0].url
+                                : chainDetailed.infoURL,
+                        ],
+                    })
+                ])
             } catch (e) {
                 throw new Error(`Connection error! Please switch to ${resolveNetworkName(networkType)} manually.`)
             }
