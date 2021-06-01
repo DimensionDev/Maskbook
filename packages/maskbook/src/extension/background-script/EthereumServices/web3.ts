@@ -1,4 +1,3 @@
-import type Web3 from 'web3'
 import { ProviderType } from '@dimensiondev/web3-shared'
 import { unreachable } from '@dimensiondev/maskbook-shared'
 import * as Maskbook from './providers/Maskbook'

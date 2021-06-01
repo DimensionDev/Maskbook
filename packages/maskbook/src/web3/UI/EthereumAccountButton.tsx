@@ -2,7 +2,6 @@ import { useCallback } from 'react'
 import classNames from 'classnames'
 import { formatEthereumAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import {
-    ChainId,
     resolveChainColor,
     useAccount,
     useChainDetailed,
@@ -18,7 +17,6 @@ import { useStylesExtends } from '../../components/custom-ui-helper'
 import { WalletIcon } from '../../components/shared/WalletIcon'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { WalletSharp } from '../../resources/MaskbookIcon'
 import { Flags, useI18N, useRemoteControlledDialog } from '../../utils'
 
 const useStyles = makeStyles((theme) => {

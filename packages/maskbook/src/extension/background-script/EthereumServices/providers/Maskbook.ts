@@ -72,7 +72,7 @@ export function createWeb3({
 //#endregion
 
 export async function requestAccounts() {
-    const wallets = await getWalletsCached()
+    const wallets = getWalletsCached()
     const accounts = wallets.filter((x) => x._private_key_ || x.mnemonic.length).map((y) => y.address)
     return {
         accounts,
