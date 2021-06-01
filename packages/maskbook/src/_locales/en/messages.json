@@ -403,6 +403,7 @@
     "plugin_file_service_error_101": "The input is not a single file.",
     "plugin_file_service_error_102": "The file is too large; limit is {{limit}}.",
     "plugin_file_service_on_change_file": "Change File",
+    "plugin_gas_fee_dialog_title": "Set Gas Fee",
     "plugin_trader_swap": "Swap",
     "plugin_trader_wrap": "Wrap",
     "plugin_trader_unwrap": "Unwrap",
