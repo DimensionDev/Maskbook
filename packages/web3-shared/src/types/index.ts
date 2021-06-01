@@ -164,7 +164,7 @@ export type TokenAssetDetailedType<T extends EthereumTokenType.ERC721 | Ethereum
     TokenAssetDetailedMap[T]
 
 /**
- * @deprecated Please don't use this enum but use ChainId instead this exists for back backward compatible
+ * Please don't use this enum but use ChainId instead this exists for back backward compatible
  */
 export enum EthereumNetwork {
     Mainnet = 'Mainnet',

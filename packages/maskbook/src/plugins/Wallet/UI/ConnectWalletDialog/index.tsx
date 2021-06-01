@@ -3,14 +3,12 @@ import { useAsyncRetry } from 'react-use'
 import { makeStyles, DialogContent } from '@material-ui/core'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { delay, useI18N, useRemoteControlledDialog, useValueRef } from '../../../../utils'
+import { delay, useI18N, useRemoteControlledDialog } from '../../../../utils'
 import {
     NetworkType,
     ProviderType,
     getChainIdFromNetworkType,
     resolveProviderName,
-    useAccount,
-    useChainId,
     ChainId,
     resolveNetworkName,
 } from '@dimensiondev/web3-shared'
