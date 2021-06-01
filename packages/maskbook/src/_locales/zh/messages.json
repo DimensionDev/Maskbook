@@ -63,7 +63,7 @@
     "dashboard_restoration_successful_hint": "在 {{time}} 從備份還原",
     "dashboard_source_code": "原始碼",
     "dashboard_source_code_link": "https://github.com/DimensionDev/Maskbook",
-    "dashboard_email_address": "info@dimension。im",
+    "dashboard_email_address": "info@dimension.im",
     "dashboard_license": "GNU AGPL 3.0",
     "dashboard_no_collectible_found": "找不到收藏品",
     "database_group_followers_name": "{{owner} 的追隨者",
