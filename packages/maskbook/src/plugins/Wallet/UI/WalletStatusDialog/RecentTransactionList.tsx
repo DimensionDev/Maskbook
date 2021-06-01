@@ -48,10 +48,10 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
 
     if (error)
         return (
-            <>
-                <Typography color="textPrimary">{t('wallet_status_tip_error')}</Typography>
+            <Box display="flex" alignItems="center">
+                <Typography color="textPrimary" sx={{marginRight: 1}}>{t('wallet_status_tip_error')}</Typography>
                 <Button onClick={retry}>{t('retry')}</Button>
-            </>
+            </Box>
         )
     if (!transactions?.length) return <Typography color="textPrimary">{t('wallet_status_tip_empty')}</Typography>
 
