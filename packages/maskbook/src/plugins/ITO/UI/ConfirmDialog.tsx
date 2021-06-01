@@ -6,7 +6,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import LaunchIcon from '@material-ui/icons/Launch'
 import { formatAmountPrecision, formatBalance, FormattedAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import BigNumber from 'bignumber.js'
-import { dateTimeFormat } from '../assets/formatDate'
+import formatDateTime from 'date-fns/format'
 import {
     resolveTokenLinkOnExplorer,
     resolveAddressLinkOnExplorer,
@@ -204,7 +204,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 </Grid>
                 <Grid item xs={6}>
                     <Paper className={classes.data}>
-                        <Typography>{dateTimeFormat(poolSettings?.startTime!)}</Typography>
+                        <Typography>{formatDateTime(poolSettings?.startTime!, 'yyyy-MM-dd HH:mm:ss')}</Typography>
                     </Paper>
                 </Grid>
 
@@ -215,7 +215,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 </Grid>
                 <Grid item xs={6}>
                     <Paper className={classes.data}>
-                        <Typography>{dateTimeFormat(poolSettings?.endTime!)}</Typography>
+                        <Typography>{formatDateTime(poolSettings?.endTime!, 'yyyy-MM-dd HH:mm:ss')}</Typography>
                     </Paper>
                 </Grid>
                 {showQualification ? (
@@ -264,7 +264,9 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         </Grid>
                         <Grid item xs={6}>
                             <Paper className={classes.data}>
-                                <Typography>{dateTimeFormat(poolSettings?.unlockTime!)}</Typography>
+                                <Typography>
+                                    {formatDateTime(poolSettings?.unlockTime!, 'yyyy-MM-dd HH:mm:ss')}
+                                </Typography>
                             </Paper>
                         </Grid>
                     </>

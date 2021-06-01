@@ -1,7 +1,8 @@
 import { Button, List, ListItem, ListItemIcon, ListItemText, makeStyles, Typography } from '@material-ui/core'
 import { File } from 'react-feather'
 import { useHistory } from 'react-router'
-import { useI18N, formatDateTime } from '../../../utils'
+import { useI18N } from '../../../utils'
+import formatDateTime from 'date-fns/format'
 import { FileRouter } from '../constants'
 import type { FileInfo } from '../types'
 
@@ -88,7 +89,7 @@ export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
             <ListItemText
                 classes={itemTextClasses}
                 primary={file.name}
-                secondary={formatDateTime(file.createdAt, true)}
+                secondary={formatDateTime(file.createdAt, 'yyyy-MM-dd HH:mm')}
             />
         </ListItem>
     )

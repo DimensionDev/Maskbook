@@ -13,7 +13,8 @@ import {
 } from '@dimensiondev/web3-shared'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_Status, JSON_PayloadInMask } from '../types'
-import { useRemoteControlledDialog, getAssetAsBlobURL, formatDateTime, getTextUILength, useI18N } from '../../../utils'
+import { useRemoteControlledDialog, getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
+import formatDateTime from 'date-fns/format'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { formatAmountPrecision, formatEthereumAddress, formatBalance } from '@dimensiondev/maskbook-shared'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
@@ -437,7 +438,7 @@ export function ITO(props: ITO_Props) {
     const footerStartTime = useMemo(() => {
         return (
             <Typography variant="body1">
-                {t('plugin_ito_list_start_date', { date: formatDateTime(new Date(startTime), true) })}
+                {t('plugin_ito_list_start_date', { date: formatDateTime(startTime, 'yyyy-MM-dd HH:mm') })}
             </Typography>
         )
     }, [startTime])
@@ -445,9 +446,7 @@ export function ITO(props: ITO_Props) {
     const footerEndTime = useMemo(
         () => (
             <Typography variant="body1">
-                {t('plugin_ito_swap_end_date', {
-                    date: formatDateTime(new Date(end_time), true),
-                })}
+                {t('plugin_ito_swap_end_date', { date: formatDateTime(end_time, 'yyyy-MM-dd HH:mm') })}
             </Typography>
         ),
         [end_time, t],
@@ -631,7 +630,7 @@ export function ITO(props: ITO_Props) {
                                         size="large"
                                         className={classNames(classes.actionButton, classes.textInOneLine)}>
                                         {t('plugin_ito_wait_unlock_time', {
-                                            unlockTime: formatDateTime(new Date(unlockTime!), true),
+                                            unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
                                         })}
                                     </ActionButton>
                                 )}
