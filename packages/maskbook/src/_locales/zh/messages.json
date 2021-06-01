@@ -228,7 +228,7 @@
     "set_up_restore_hint": "從之前的一個資料庫備份檔復原。",
     "set_up_restore_fail": "復原失敗",
     "set_up_advance_restore": "進階復原選項",
-    "set_up_advance_restore_hint": "可以通過以下選項匯入角色備份。。",
+    "set_up_advance_restore_hint": "可以通過以下選項匯入角色備份…",
     "set_up_advance_restore_fail": "復原失敗",
     "set_up_restore_confirmation": "復原資料庫",
     "set_up_restore_confirmation_hint": "以下資料將會被匯入",
