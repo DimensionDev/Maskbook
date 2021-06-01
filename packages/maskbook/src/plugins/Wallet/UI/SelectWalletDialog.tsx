@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { ProviderType, useWallets, useWallet, NetworkType } from '@dimensiondev/web3-shared'
+import { ProviderType, useWallets, useWallet, NetworkType, getChainIdFromNetworkType } from '@dimensiondev/web3-shared'
 import { useValueRef, delay, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { WalletMessages } from '../messages'
@@ -10,6 +10,7 @@ import { WalletInList } from '../../../components/shared/SelectWallet/WalletInLi
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import {
+    currentMaskbookChainIdSettings,
     currentSelectedWalletAddressSettings,
     currentSelectedWalletNetworkSettings,
     currentSelectedWalletProviderSettings,
@@ -47,7 +48,10 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
             closeDialog()
             currentSelectedWalletAddressSettings.value = address
             currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
-            if (networkType) currentSelectedWalletNetworkSettings.value = networkType
+            if (networkType) {
+                currentMaskbookChainIdSettings.value = getChainIdFromNetworkType(networkType)
+                currentSelectedWalletNetworkSettings.value = networkType
+            }
         },
         [networkType, closeDialog],
     )
