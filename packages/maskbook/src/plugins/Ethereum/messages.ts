@@ -27,6 +27,10 @@ type TransactionDialogEvent =
           open: false
       }
 
+type GasPriceDialogEvent = {
+    open: boolean
+}
+
 interface EthereumMessage {
     /**
      * Unlock token dialog
@@ -37,6 +41,11 @@ interface EthereumMessage {
      * Transaction dialog
      */
     transactionDialogUpdated: TransactionDialogEvent
+
+    /**
+     * Gas price dialog
+     */
+    gasPriceDialogUpdated: GasPriceDialogEvent
 
     rpc: unknown
 }
