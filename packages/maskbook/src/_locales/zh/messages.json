@@ -184,7 +184,7 @@
     "restore_database_text": "純文字",
     "restore_database_dragging": "將資料庫備份拖入這個視窗…",
     "restore_database_dragged": "選擇或拖入一個檔案。",
-    "restore_database_advance_dragging": "將QR code圖片備份拖入這個視窗…",
+    "restore_database_advance_dragging": "將QR Code圖片備份拖入這個視窗…",
     "restore_database_advance_dragged": "選擇或拖入一個圖片檔。",
     "save": "保存",
     "search": "搜尋",
