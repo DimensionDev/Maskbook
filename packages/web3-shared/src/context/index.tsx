@@ -42,7 +42,6 @@ export function useWeb3State() {
         chainId,
         chainDetailed,
         erc20Tokens,
-        chainIdValid: !account || allowTestChain || chainDetailed?.network === 'mainnet',
     }
 }
 

@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { Wallet, NonFungibleTokenDetailed, EthereumTokenType, useChainIdValid } from '@dimensiondev/web3-shared'
+import { Wallet, NonFungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
 import { useMenu, useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
@@ -24,15 +24,11 @@ export function ActionsBarNFT(props: ActionsBarNFT_Props) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const chainIdValid = useChainIdValid()
-
     const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogNFT)
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu([
         token.type === EthereumTokenType.ERC721 ? (
-            <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ token })}>
-                {t('transfer')}
-            </MenuItem>
+            <MenuItem onClick={() => openTransferDialogOpen({ token })}>{t('transfer')}</MenuItem>
         ) : null,
         <MenuItem onClick={() => openHideTokenConfirmDialog({ wallet, token })}>{t('hide')}</MenuItem>,
     ])

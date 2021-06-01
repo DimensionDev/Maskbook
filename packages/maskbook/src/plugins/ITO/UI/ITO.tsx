@@ -8,7 +8,6 @@ import {
     FungibleTokenDetailed,
     resolveLinkOnExplorer,
     useChainId,
-    useChainIdValid,
     useAccount,
 } from '@dimensiondev/web3-shared'
 import { WalletMessages } from '../../Wallet/messages'
@@ -193,7 +192,7 @@ export function ITO(props: ITO_Props) {
     const account = useAccount()
     const postLink = usePostLink()
     const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
+
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
     const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)
@@ -581,7 +580,7 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_loading')}
                     </ActionButton>
-                ) : !account || !chainIdValid ? (
+                ) : !account ? (
                     <ActionButton
                         onClick={openSelectProviderDialog}
                         variant="contained"

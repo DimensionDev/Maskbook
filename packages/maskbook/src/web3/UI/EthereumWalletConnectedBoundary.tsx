@@ -7,7 +7,7 @@ import Services from '../../extension/service'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { currentIsMetamaskLockedSettings, currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
 import { useRemoteControlledDialog, useValueRef, useI18N } from '../../utils'
-import { ProviderType, useAccount, useChainIdValid, useNativeTokenBalance } from '@dimensiondev/web3-shared'
+import { ProviderType, useAccount, useNativeTokenBalance } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +28,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
-    const chainIdValid = useChainIdValid()
+
     const nativeTokenBalance = useNativeTokenBalance()
 
     //#region remote controlled select provider dialog
@@ -88,13 +88,5 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    if (!chainIdValid)
-        return (
-            <Grid container>
-                <ActionButton className={classes.button} disabled fullWidth variant="contained" size="large">
-                    {t('plugin_wallet_invalid_network')}
-                </ActionButton>
-            </Grid>
-        )
     return <Grid container>{children}</Grid>
 }

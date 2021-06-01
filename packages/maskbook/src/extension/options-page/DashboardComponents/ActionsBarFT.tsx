@@ -1,6 +1,6 @@
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { Wallet, isNative, FungibleTokenDetailed, useAccount, useChainIdValid } from '@dimensiondev/web3-shared'
+import { Wallet, isNative, FungibleTokenDetailed, useAccount } from '@dimensiondev/web3-shared'
 import { useMenu, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
@@ -26,8 +26,6 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
     const account = useAccount()
     const classes = useStylesExtends(useStyles(), props)
 
-    const chainIdValid = useChainIdValid()
-
     //#region remote controlled buy dialog
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     //#endregion
@@ -46,9 +44,7 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
                 }}>
                 {t('buy')}
             </MenuItem>,
-            <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ wallet, token })}>
-                {t('transfer')}
-            </MenuItem>,
+            <MenuItem onClick={() => openTransferDialogOpen({ wallet, token })}>{t('transfer')}</MenuItem>,
             <MenuItem
                 style={{ display: isNative(token.address) ? 'none' : 'initial' }}
                 onClick={() => openHideTokenConfirmDialog({ wallet, token })}>

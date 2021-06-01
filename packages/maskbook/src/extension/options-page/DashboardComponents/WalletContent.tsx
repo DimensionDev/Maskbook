@@ -1,12 +1,12 @@
 import { forwardRef, useCallback, useMemo, useState } from 'react'
-import { Alert, Box, Button, IconButton, MenuItem, Tab, Tabs } from '@material-ui/core'
+import { Box, Button, IconButton, MenuItem, Tab, Tabs } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Check from '@material-ui/icons/Check'
-import { Wallet, useChainIdValid, useAccount } from '@dimensiondev/web3-shared'
+import { Wallet, useAccount } from '@dimensiondev/web3-shared'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddERC20TokenDialog,
@@ -82,7 +82,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
 
     const color = useColorStyles()
     const xsMatched = useMatchXS()
-    const chainIdValid = useChainIdValid()
 
     const [transactionType, setTransactionType] = useState<FilterTransactionType>(FilterTransactionType.ALL)
 
@@ -173,11 +172,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
 
     return (
         <div className={classes.root} ref={ref}>
-            {!chainIdValid ? (
-                <Alert className={classes.alert} severity="warning">
-                    {t('plugin_wallet_wrong_network_tip')}
-                </Alert>
-            ) : null}
             <Box
                 className={classes.caption}
                 sx={{

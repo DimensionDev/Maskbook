@@ -9,11 +9,4 @@ export function useChainId(): ChainId {
     return useWeb3StateContext().chainId
 }
 
-/**
- * Retruns true if chain id is available
- */
-export function useChainIdValid(): boolean {
-    return useWeb3StateContext().chainIdValid
-}
-
 export const useChainIDAvailable = useChainId

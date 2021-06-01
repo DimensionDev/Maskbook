@@ -8,7 +8,6 @@ import {
     TransactionStateType,
     useAccount,
     useChainId,
-    useChainIdValid,
     useTokenDetailed,
 } from '@dimensiondev/web3-shared'
 import { Box, Card, makeStyles, Skeleton, Typography } from '@material-ui/core'
@@ -145,7 +144,6 @@ export function RedPacket(props: RedPacketProps) {
     // context
     const account = useAccount()
     const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
 
     const currentSelectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
     const isMetamaskRedpacketLocked =
@@ -314,10 +312,6 @@ export function RedPacket(props: RedPacketProps) {
                     {!account ? (
                         <ActionButton variant="contained" size="large" onClick={openSelectProviderDialog}>
                             {t('plugin_wallet_connect_a_wallet')}
-                        </ActionButton>
-                    ) : !chainIdValid ? (
-                        <ActionButton disabled variant="contained" size="large">
-                            {t('plugin_wallet_invalid_network')}
                         </ActionButton>
                     ) : (
                         <ActionButton variant="contained" size="large" onClick={onClaimOrRefund}>

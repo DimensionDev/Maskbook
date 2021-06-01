@@ -1,12 +1,10 @@
 import { useCallback } from 'react'
 import { Copy, ExternalLink } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
-import ErrorIcon from '@material-ui/icons/Error'
-import { Button, DialogActions, DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
+import { Button, DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
 import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 import {
     useChainId,
-    useChainIdValid,
     resolveLinkOnExplorer,
     resolveProviderName,
     ChainId,
@@ -80,7 +78,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const classes = useStyles()
 
     const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
+
     const selectedWallet = useWallet()
     const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
 
@@ -167,7 +165,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                     <Typography className={classes.address}>
                         <FormattedAddress address={selectedWallet.address} size={4} />
                     </Typography>
-                    {chainIdValid && chainId !== ChainId.Mainnet ? (
+                    {chainId !== ChainId.Mainnet ? (
                         <EthereumChainChip chainId={chainId} ChipProps={{ variant: 'outlined' }} />
                     ) : null}
                 </section>
@@ -186,14 +184,6 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                     </Link>
                 </section>
             </DialogContent>
-            {!chainIdValid ? (
-                <DialogActions className={classes.footer}>
-                    <ErrorIcon color="secondary" fontSize="small" />
-                    <Typography color="secondary" variant="body2">
-                        {t('plugin_wallet_wrong_network_tip')}
-                    </Typography>
-                </DialogActions>
-            ) : null}
         </InjectedDialog>
     )
 }
