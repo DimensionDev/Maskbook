@@ -1,5 +1,5 @@
 import { uniqBy } from 'lodash-es'
-import { CONSTANTS, useConstant } from '@dimensiondev/web3-shared'
+import { CONSTANTS, getChainIdFromName, useChainId, useConstant } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { getTokenUSDValue } from '../helpers'
 import type { Asset } from '../types'
@@ -10,14 +10,19 @@ import type { Asset } from '../types'
  * @param listOfTokens
  */
 export function useAssetsMerged(...listOfTokens: Asset[][]) {
+    const chainId = useChainId()
     const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     return uniqBy(
         listOfTokens.flatMap((x) => x),
-        (x) => formatEthereumAddress(x.token.address),
+        (x) => `${x.chain}_${formatEthereumAddress(x.token.address)}`,
     ).sort((a, z) => {
         // the native token goes first place
         if (a.token.address === NATIVE_TOKEN_ADDRESS) return -1
         if (z.token.address === NATIVE_TOKEN_ADDRESS) return 1
+
+        // the tokens with the current chain id goes first place
+        if (getChainIdFromName(a.chain) === chainId) return -1
+        if (getChainIdFromName(z.chain) === chainId) return 1
 
         // token with high usd value estimation has priority
         const valueDifference = getTokenUSDValue(z) - getTokenUSDValue(a)

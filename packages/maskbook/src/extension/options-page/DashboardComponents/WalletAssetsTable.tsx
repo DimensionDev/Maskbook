@@ -23,7 +23,6 @@ import {
     CurrencyType,
     ERC20TokenDetailed,
     EthereumTokenType,
-    resolveChainId,
     isSameAddress,
     Wallet,
     useStableTokensDebank,
