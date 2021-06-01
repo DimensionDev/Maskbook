@@ -4,12 +4,13 @@ import classNames from 'classnames'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { Database as DatabaseIcon } from 'react-feather'
-import { useI18N, BackupJSONFileLatest } from '../../../../utils'
+import { useI18N } from '../../../../utils'
 import Services from '../../../service'
 import ActionButton from '../../DashboardComponents/ActionButton'
 import { DatabasePreviewCard, DatabaseRecordType } from '../../DashboardComponents/DatabasePreviewCard'
 import { DashboardDialogWrapper } from '../Base'
 import { useDatabaseStyles } from './style'
+import type { BackupJSONFileLatest } from '@dimensiondev/maskbook-shared'
 
 const useConfirmBackupStyles = makeStyles<Theme, { imported: boolean }, 'dashboardPreviewCardTable' | 'doneButton'>(
     (theme) => ({

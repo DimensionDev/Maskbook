@@ -1,4 +1,4 @@
-import { decompressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
+import { decompressSecp256k1Key } from '@dimensiondev/maskbook-shared'
 import { ECKeyIdentifierFromJsonWebKey, ProfileIdentifier } from '../../../database/type'
 import { decodePublicKeyWorker } from '../../../social-network/utils/text-payload-worker'
 import { createProfileWithPersona, queryPersonaRecord } from '../../../database'

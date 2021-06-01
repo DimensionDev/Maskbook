@@ -2,6 +2,7 @@
   "name": "@dimensiondev/maskbook-shared",
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.8.0-20210317064617-6c4792c",
+    "@dimensiondev/kit": "0.0.0-20210221102734-0b4a937",
     "@servie/events": "^3.0.0",
     "anchorme": "^2.1.2",
     "async-call-rpc": "^5.1.0",
@@ -12,7 +13,9 @@
     "typeson": "^6.1.0",
     "typeson-registry": "^1.0.0-alpha.38",
     "use-subscription": "^1.5.1",
-    "wallet.ts": "^1.0.1"
+    "wallet.ts": "^1.0.1",
+    "pvtsutils": "^1.0.14",
+    "web-ext-types": "^3.1.0"
   },
   "typings": "./dist/index.d.ts",
   "main": "./dist/index.js"

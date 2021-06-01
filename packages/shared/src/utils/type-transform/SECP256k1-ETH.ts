@@ -1,11 +1,7 @@
 import secp256k1 from 'tiny-secp256k1'
 import { ec as EC } from 'elliptic'
 import { EthereumAddress } from 'wallet.ts'
-import type {
-    EC_Public_JsonWebKey,
-    EC_Private_JsonWebKey,
-    EC_JsonWebKey,
-} from '../../modules/CryptoAlgorithm/interfaces/utils'
+import type { EC_Public_JsonWebKey, EC_Private_JsonWebKey, EC_JsonWebKey } from '../../'
 import { Convert, combine } from 'pvtsutils'
 import { Buffer } from 'buffer'
 

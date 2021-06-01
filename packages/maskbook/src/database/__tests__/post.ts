@@ -1,6 +1,5 @@
 import { v4 as uuid } from 'uuid'
 import {
-    PostRecord,
     createPostDB,
     queryPostDB,
     updatePostDB,
@@ -11,6 +10,7 @@ import {
 import { ProfileIdentifier, PostIVIdentifier } from '../type'
 import { IdentifierMap } from '../IdentifierMap'
 import { CryptoWorker } from '../../modules/workers'
+import type { PostRecord } from '@dimensiondev/maskbook-shared'
 
 async function createPostRecord(
     postBy: ProfileIdentifier = new ProfileIdentifier(uuid(), uuid()),

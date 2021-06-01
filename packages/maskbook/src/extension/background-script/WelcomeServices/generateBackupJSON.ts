@@ -1,15 +1,17 @@
 import { ProviderType } from '@dimensiondev/web3-shared'
-import type { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import type { BackupJSONFileLatest } from '@dimensiondev/maskbook-shared'
 import { queryPersonasDB, queryProfilesDB } from '../../../database/Persona/Persona.db'
 import { queryUserGroupsDatabase } from '../../../database/group'
 import { queryPostsDB } from '../../../database/post'
-import { PersonaRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
-import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
-import { GroupRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
-import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
+import {
+    PersonaRecordToJSONFormat,
+    ProfileRecordToJSONFormat,
+    GroupRecordToJSONFormat,
+    PostRecordToJSONFormat,
+    WalletRecordToJSONFormat,
+} from '@dimensiondev/maskbook-shared'
 import { ProfileIdentifier, PersonaIdentifier, Identifier } from '../../../database/type'
 import { getWallets } from '../../../plugins/Wallet/services'
-import { WalletRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 
 export interface BackupOptions {
     noPosts: boolean

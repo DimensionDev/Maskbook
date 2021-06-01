@@ -1,8 +1,9 @@
 import { MaskMessage } from '../../../utils/messages'
 import type { ProfileIdentifier } from '../../../database/type'
-import { queryPostsDB, PostRecord, RecipientReason } from '../../../database/post'
+import { queryPostsDB } from '../../../database/post'
 import { currentImportingBackup } from '../../../settings/settings'
 import { Services } from '../../service'
+import type { PostRecord, RecipientReason } from '@dimensiondev/maskbook-shared'
 
 interface ShareTarget {
     share: ProfileIdentifier[]

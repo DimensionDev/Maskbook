@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@material-ui/core'
 import { useState } from 'react'
 import { extendsTheme } from '../../../../utils/theme'
-import type { BackupJSONFileLatest } from '../../../../utils/type-transform/BackupFormat/JSON/latest'
+import type { BackupJSONFileLatest } from '@dimensiondev/maskbook-shared'
 import { DashboardDialogCore, WrappedDialogProps } from '../Base'
 import { ConfirmBackup } from './ConfirmBackup'
 import { SelectBackup } from './SelectBackup'

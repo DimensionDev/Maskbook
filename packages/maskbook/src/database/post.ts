@@ -6,6 +6,7 @@ import { IdentifierMap } from './IdentifierMap'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from './helpers/openDB'
 import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
 import { CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
+import type { RecipientReason, RecipientDetail, PostRecord } from '@dimensiondev/maskbook-shared'
 
 type UpgradeKnowledge = { version: 4; data: Map<string, AESJsonWebKey> } | undefined
 const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
@@ -259,49 +260,6 @@ function postToDB(out: PostRecord): PostDBRecord {
     }
 }
 //#endregion
-
-//#region types
-/**
- * When you change this, change RecipientReasonJSON as well!
- */
-export type RecipientReason = (
-    | { type: 'auto-share' }
-    | { type: 'direct' }
-    | { type: 'group'; group: GroupIdentifier }
-) & {
-    /**
-     * When we send the key to them by this reason?
-     * If the unix timestamp of this Date is 0,
-     * should display it as "unknown" or "before Nov 2019"
-     */
-    at: Date
-}
-export interface RecipientDetail {
-    /** Why they're able to receive this message? */
-    reason: RecipientReason[]
-}
-export interface PostRecord {
-    /**
-     * For old data stored before version 3, this identifier may be ProfileIdentifier.unknown
-     */
-    postBy: ProfileIdentifier
-    identifier: PostIVIdentifier
-    postCryptoKey?: AESJsonWebKey
-    /**
-     * Receivers
-     */
-    recipients: IdentifierMap<ProfileIdentifier, RecipientDetail>
-    /**
-     * This post shared with these groups.
-     */
-    recipientGroups: GroupIdentifier[]
-    /**
-     * When does Mask find this post.
-     * For your own post, it is when Mask created this post.
-     * For others post, it is when you see it first time.
-     */
-    foundAt: Date
-}
 
 interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients' | 'recipientGroups'> {
     postBy: PrototypeLess<ProfileIdentifier>

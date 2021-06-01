@@ -4,7 +4,7 @@ import { getNetworkWorker } from '../../../social-network'
 import { verifyOthersProve } from './verifyOthersProve'
 import { memoizePromise } from '../../../utils/memoize'
 import { queryPersonaRecord } from '../../../database'
-import type { PersonaRecord } from '../../../database/Persona/Persona.db'
+import type { PersonaRecord } from '@dimensiondev/maskbook-shared'
 import { i18n } from '../../../utils/i18n-next'
 
 async function getUserPublicKeyFromBio(user: ProfileIdentifier) {

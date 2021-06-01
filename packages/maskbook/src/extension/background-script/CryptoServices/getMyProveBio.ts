@@ -1,4 +1,4 @@
-import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
+import { compressSecp256k1Key } from '@dimensiondev/maskbook-shared'
 import { ProfileIdentifier, PersonaIdentifier } from '../../../database/type'
 import { encodePublicKeyWorker } from '../../../social-network/utils/text-payload-worker'
 import { queryPublicKey } from '../../../database'

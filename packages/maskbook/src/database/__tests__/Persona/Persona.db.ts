@@ -2,8 +2,6 @@ import { v4 as uuid } from 'uuid'
 import { IdentifierMap } from '../../IdentifierMap'
 import { ProfileIdentifier, ECKeyIdentifierFromJsonWebKey } from '../../type'
 import {
-    PersonaRecord,
-    ProfileRecord,
     createPersonaDB,
     queryPersonaDB,
     FullPersonaDBTransaction,
@@ -11,7 +9,6 @@ import {
     queryPersonasDB,
     deletePersonaDB,
     updatePersonaDB,
-    LinkedProfileDetails,
     createProfileDB,
     queryProfileDB,
     queryProfilesDB,
@@ -24,6 +21,7 @@ import {
     createOrUpdatePersonaDB,
     safeDeletePersonaDB,
 } from '../../Persona/Persona.db'
+import type { PersonaRecord, ProfileRecord, LinkedProfileDetails } from '@dimensiondev/maskbook-shared'
 import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../../utils/mnemonic-code/localKeyGenerate'
 import { createTransaction } from '../../helpers/openDB'

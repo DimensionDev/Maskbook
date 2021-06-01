@@ -1,10 +1,11 @@
-import type { WalletRecord } from '../../../../../plugins/Wallet/database/types'
+import type { WalletRecord } from '../../../'
 import type { BackupJSONFileLatest } from '../latest'
-import { keyToJWK, keyToAddr, JWKToKey } from '../../../SECP256k1-ETH'
-import type { PartialBy } from '../../../../type'
-import { isSameAddress } from '@dimensiondev/web3-shared'
+import { keyToJWK, keyToAddr, JWKToKey } from '../../../'
 
 type WalletBackup = BackupJSONFileLatest['wallets'][0]
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+
+const isSameAddress = (a: string, b: string) => a.toLowerCase() === b.toLowerCase()
 
 export function WalletRecordToJSONFormat(wallet: WalletRecord): WalletBackup {
     const backup: Partial<WalletBackup> = {

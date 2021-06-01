@@ -1,9 +1,7 @@
 import { ProfileIdentifier, PersonaIdentifier, ECKeyIdentifierFromJsonWebKey } from '../type'
 import type { Profile, Persona } from './types'
 import {
-    ProfileRecord,
     queryProfilesDB,
-    PersonaRecord,
     queryProfileDB,
     queryPersonaDB,
     queryPersonasDB,
@@ -13,12 +11,12 @@ import {
     queryPersonaByProfileDB,
     createPersonaDB,
     attachProfileDB,
-    LinkedProfileDetails,
     consistentPersonaDBWriteAccess,
     updatePersonaDB,
     createOrUpdatePersonaDB,
     queryProfilesPagedDB,
 } from './Persona.db'
+import type { ProfileRecord, PersonaRecord, LinkedProfileDetails } from '@dimensiondev/maskbook-shared'
 import { IdentifierMap } from '../IdentifierMap'
 import { queryAvatarDataURL } from '../helpers/avatar'
 import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'

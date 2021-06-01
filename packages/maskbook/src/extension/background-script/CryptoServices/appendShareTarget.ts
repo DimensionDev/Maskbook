@@ -3,11 +3,13 @@ import { GunAPI as Gun2 } from '../../../network/gun/'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { cryptoProviderTable } from './cryptoProviderTable'
-import { updatePostDB, RecipientDetail, RecipientReason } from '../../../database/post'
+import { updatePostDB } from '../../../database/post'
 import { getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { queryPrivateKey, queryLocalKey } from '../../../database'
 import { IdentifierMap } from '../../../database/IdentifierMap'
 import type { AESJsonWebKey, EC_Private_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
+import type { RecipientDetail, RecipientReason } from '@dimensiondev/maskbook-shared'
+
 export async function appendShareTarget(
     version: -40 | -39 | -38,
     postAESKey: string | AESJsonWebKey,

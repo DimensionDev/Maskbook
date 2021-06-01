@@ -9,17 +9,20 @@ import {
     queryProfilesDB,
     createProfileDB,
     attachProfileDB,
-    LinkedProfileDetails,
-    ProfileRecord,
     createOrUpdateProfileDB,
     consistentPersonaDBWriteAccess,
 } from '../../database/Persona/Persona.db'
 import { queryPersona } from '../../database'
-import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
+import {
+    LinkedProfileDetails,
+    ProfileRecord,
+    BackupJSONFileLatest,
+    UpgradeBackupJSONFile,
+    decompressBackupFile,
+} from '@dimensiondev/maskbook-shared'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
 import { decodeText, decodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
-import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { PersonaInformation, ProfileInformation } from '@dimensiondev/maskbook-shared'

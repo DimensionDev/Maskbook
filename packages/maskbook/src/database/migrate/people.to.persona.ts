@@ -8,6 +8,7 @@ import {
     PersonRecordPublicPrivate,
 } from './_deprecated_people_db'
 import * as persona from '../Persona/Persona.db'
+import type { LinkedProfileDetails, PersonaRecord, ProfileRecord } from '@dimensiondev/maskbook-shared'
 import { ECKeyIdentifier, ECKeyIdentifierFromCryptoKey, ProfileIdentifier } from '../type'
 import { IdentifierMap } from '../IdentifierMap'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
@@ -46,7 +47,7 @@ async function migrateHelper_operateDB(
         }
         for (const [profileID, personaID] of attachRelationMap) {
             const currentRecord = await persona.queryPersonaDB(personaID, t)
-            const data: persona.LinkedProfileDetails = currentRecord!.linkedProfiles.get(profileID) ?? {
+            const data: LinkedProfileDetails = currentRecord!.linkedProfiles.get(profileID) ?? {
                 connectionConfirmState: 'pending',
             }
             await persona.attachProfileDB(profileID, personaID, data, t)
@@ -62,8 +63,8 @@ async function migrateHelper_importPersonaFromPersonRecord(
     const jwkMap = new Map<CryptoKey, JsonWebKey>()
     const attachRelationMap = new IdentifierMap<ProfileIdentifier, ECKeyIdentifier>(new Map(), ProfileIdentifier)
     const localKeysMap = new IdentifierMap<ProfileIdentifier, AESJsonWebKey>(new Map(), ProfileIdentifier)
-    const personaMap = new IdentifierMap<ECKeyIdentifier, persona.PersonaRecord>(new Map(), ECKeyIdentifier)
-    const profilesMap = new IdentifierMap<ProfileIdentifier, persona.ProfileRecord>(new Map(), ProfileIdentifier)
+    const personaMap = new IdentifierMap<ECKeyIdentifier, PersonaRecord>(new Map(), ECKeyIdentifier)
+    const profilesMap = new IdentifierMap<ProfileIdentifier, ProfileRecord>(new Map(), ProfileIdentifier)
 
     await Promise.all(
         otherIDs.concat(myIDs).map(async (value) => {
@@ -93,7 +94,7 @@ async function migrateHelper_importPersonaFromPersonRecord(
 }
 
 function updateOrCreatePersonaRecord(
-    map: IdentifierMap<ECKeyIdentifier, persona.PersonaRecord>,
+    map: IdentifierMap<ECKeyIdentifier, PersonaRecord>,
     ec_id: ECKeyIdentifier,
     profile: PersonRecordPublic,
     cryptoKeyMap: Map<CryptoKey, JsonWebKey>,
@@ -124,7 +125,7 @@ function updateOrCreatePersonaRecord(
     }
 }
 function updateOrCreateProfileRecord(
-    map: IdentifierMap<ProfileIdentifier, persona.ProfileRecord>,
+    map: IdentifierMap<ProfileIdentifier, ProfileRecord>,
     ec_idMap: IdentifierMap<ProfileIdentifier, ECKeyIdentifier>,
     localKeyMap: IdentifierMap<ProfileIdentifier, AESJsonWebKey>,
     profile: PersonRecord,

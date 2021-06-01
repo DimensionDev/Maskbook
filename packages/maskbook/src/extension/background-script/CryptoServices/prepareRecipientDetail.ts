@@ -1,7 +1,7 @@
 import { ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import { queryPublicKey } from '../../../database'
 import { IdentifierMap } from '../../../database/IdentifierMap'
-import type { RecipientDetail, RecipientReason } from '../../../database/post'
+import type { RecipientDetail, RecipientReason } from '@dimensiondev/maskbook-shared'
 import { queryUserGroup } from '../UserGroupService'
 import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 import { unreachable } from '@dimensiondev/maskbook-shared'

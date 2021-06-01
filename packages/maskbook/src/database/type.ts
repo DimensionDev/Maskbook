@@ -1,7 +1,6 @@
-import { ECKeyIdentifier } from '@dimensiondev/maskbook-shared'
+import { ECKeyIdentifier, compressSecp256k1Key } from '@dimensiondev/maskbook-shared'
 import type { EC_JsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
 import { CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
-import { compressSecp256k1Key } from '../utils/type-transform/SECP256k1-Compression'
 
 export {
     ECKeyIdentifier,

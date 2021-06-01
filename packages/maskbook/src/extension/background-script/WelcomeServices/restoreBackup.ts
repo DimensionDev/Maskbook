@@ -1,20 +1,22 @@
 import type { ProfileIdentifier } from '../../../database/type'
-import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '@dimensiondev/maskbook-shared'
 import {
     attachProfileDB,
     createOrUpdatePersonaDB,
     createOrUpdateProfileDB,
     consistentPersonaDBWriteAccess,
 } from '../../../database/Persona/Persona.db'
-import { PersonaRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
-import { ProfileRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
-import { PostRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
+import {
+    PersonaRecordFromJSONFormat,
+    ProfileRecordFromJSONFormat,
+    PostRecordFromJSONFormat,
+    GroupRecordFromJSONFormat,
+    WalletRecordFromJSONFormat,
+} from '@dimensiondev/maskbook-shared'
 import { createOrUpdatePostDB } from '../../../database/post'
-import { GroupRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
 import { createOrUpdateUserGroupDatabase } from '../../../database/group'
 import { i18n } from '../../../utils/i18n-next'
 import { currentImportingBackup } from '../../../settings/settings'
-import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { importNewWallet } from '../../../plugins/Wallet/services'
 
 /**

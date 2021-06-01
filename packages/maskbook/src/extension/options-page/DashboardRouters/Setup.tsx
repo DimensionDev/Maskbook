@@ -16,18 +16,13 @@ import {
 } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
-
+import { useQueryParams, useI18N, delay, Flags, extendsTheme } from '../../../utils'
 import {
-    useQueryParams,
-    useI18N,
-    extraPermissions,
-    delay,
-    Flags,
-    extendsTheme,
+    decompressBackupFile,
     UpgradeBackupJSONFile,
     BackupJSONFileLatest,
-    decompressBackupFile,
-} from '../../../utils'
+    extraPermissions,
+} from '@dimensiondev/maskbook-shared'
 import ActionButton from '../DashboardComponents/ActionButton'
 import DashboardRouterContainer from './Container'
 import ProfileBox from '../DashboardComponents/ProfileBox'

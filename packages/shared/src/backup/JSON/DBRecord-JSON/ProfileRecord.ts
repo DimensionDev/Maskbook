@@ -1,6 +1,6 @@
-import type { ProfileRecord } from '../../../../../database/Persona/Persona.db'
+import type { ProfileRecord } from '../../../'
 import type { BackupJSONFileLatest } from '../latest'
-import { ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../../../../database/type'
+import { ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../../'
 
 export function ProfileRecordToJSONFormat(profile: ProfileRecord): BackupJSONFileLatest['profiles'][0] {
     return {

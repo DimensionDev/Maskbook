@@ -1,6 +1,6 @@
-import type { GroupRecord } from '../../../../../database/group'
+import type { GroupRecord } from '../../../'
 import type { BackupJSONFileLatest } from '../latest'
-import { Identifier, GroupIdentifier, ProfileIdentifier } from '../../../../../database/type'
+import { Identifier, GroupIdentifier, ProfileIdentifier } from '../../../'
 
 export function GroupRecordToJSONFormat(group: GroupRecord): BackupJSONFileLatest['userGroups'][0] {
     return {

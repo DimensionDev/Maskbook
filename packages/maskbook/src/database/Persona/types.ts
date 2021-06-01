@@ -1,4 +1,4 @@
-import type { ProfileRecord, PersonaRecord, LinkedProfileDetails } from './Persona.db'
+import type { ProfileRecord, PersonaRecord, LinkedProfileDetails } from '@dimensiondev/maskbook-shared'
 import type { ReadonlyIdentifierMap } from '../IdentifierMap'
 import type { ProfileIdentifier } from '../type'
 

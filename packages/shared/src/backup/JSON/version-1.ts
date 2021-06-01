@@ -1,11 +1,6 @@
 /* eslint-disable import/no-deprecated */
 import type { BackupJSONFileVersion0 } from './version-0'
-import type { ProfileIdentifier } from '../../../../database/type'
-import type {
-    EC_Public_JsonWebKey,
-    EC_Private_JsonWebKey,
-    AESJsonWebKey,
-} from '../../../../modules/CryptoAlgorithm/interfaces/utils'
+import type { ProfileIdentifier, EC_Public_JsonWebKey, EC_Private_JsonWebKey, AESJsonWebKey } from '../../'
 
 /**
  * @deprecated The old version 1 backup file before persona db was done.
