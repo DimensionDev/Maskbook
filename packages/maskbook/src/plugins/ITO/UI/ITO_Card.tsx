@@ -174,7 +174,7 @@ export function ITO_Card(props: ITO_CardProps) {
             {packet ? (
                 <Box className={classes.ITOAlertContainer}>
                     <Alert icon={false} className={classes.ITOAlert}>
-                        ITO Mask unlock time is {new Date(Number.parseInt(packet.unlockTime) * 1000).toUTCString()}.
+                        ITO Mask unlock time is {new Date(Number.parseInt(packet.unlockTime, 10) * 1000).toUTCString()}.
                     </Alert>
                 </Box>
             ) : null}

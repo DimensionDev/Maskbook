@@ -72,7 +72,7 @@ export function CheckoutOrder(props: CheckoutOrderProps) {
                 </TableRow>
                 <TableRow>
                     <TableCell>
-                        <Typography>Total</Typography>
+                        <Typography>{t('plugin_collectible_total')}</Typography>
                     </TableCell>
                     <TableCell align="right">
                         <Typography>

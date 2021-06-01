@@ -318,7 +318,7 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.line}>
                 <TextField
                     className={classes.input}
-                    label={t('plugin_item_message_label')}
+                    label={t('plugin_ito_message_label')}
                     value={message}
                     onChange={(e) => setMessage(sliceTextByUILength(e.target.value, 90))}
                     InputLabelProps={{

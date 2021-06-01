@@ -89,7 +89,7 @@ function Content() {
                 choice: vote[1].msg.payload.choice,
                 balance: vote[1].balance,
                 timestamp: vote[1].msg.timestamp,
-                dateUtc: new Date(parseInt(vote[1].msg.timestamp) * 1e3).toUTCString(),
+                dateUtc: new Date(Number.parseInt(vote[1].msg.timestamp, 10) * 1e3).toUTCString(),
                 authorIpfsHash: vote[1].authorIpfsHash,
                 relayerIpfsHash: vote[1].relayerIpfsHash,
             })),

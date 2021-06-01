@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { formatDateTime, useI18N, MaskMessages, useMatchXS, useQueryNavigatorPermission } from '../../utils'
+import { useI18N, MaskMessages, useMatchXS, useQueryNavigatorPermission } from '../../utils'
+import formatDateTime from 'date-fns/format'
 import { makeStyles } from '@material-ui/core/styles'
 import {
     DialogActions,
@@ -41,7 +42,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const [, copy] = useCopyToClipboard()
     const isMobile = useMatchXS()
     const permission = useQueryNavigatorPermission(true, 'clipboard-write')
-    const fileName = `maskbook-encrypted-${formatDateTime(new Date()).replace(/:/g, '-')}.png`
+    const fileName = `maskbook-encrypted-${formatDateTime(Date.now(), 'yyyyMMddHHmmss')}.png`
 
     return (
         <DraggableDiv>

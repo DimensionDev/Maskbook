@@ -3,7 +3,8 @@ import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import { useEffect } from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
-import { useI18N, formatDateTime } from '../../../utils'
+import { useI18N } from '../../../utils'
+import formatDateTime from 'date-fns/format'
 import { FileRouter } from '../constants'
 import { useExchange } from '../hooks/Exchange'
 import type { FileInfo } from '../types'
@@ -77,7 +78,7 @@ export const Uploaded: React.FC = () => {
                     <p className={classes.info}>
                         <span>{formatFileSize(state.size)}</span>
                         <span>{'  '}</span>
-                        <span>{formatDateTime(state.createdAt)}</span>
+                        <span>{formatDateTime(state.createdAt, 'yyyy-MM-dd HH:mm:ss')}</span>
                     </p>
                     <Button onClick={onBack} variant="contained">
                         {t('plugin_file_service_on_change_file')}
