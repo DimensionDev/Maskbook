@@ -32,6 +32,7 @@ import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
 import { PluginTraderMessages } from '../../Trader/messages'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -133,7 +134,10 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     if (!asset?.value) return null
     return (
-        <InjectedDialog title={isAuction ? 'Place a Bid' : 'Make an Offer'} open={open} onClose={onClose}>
+        <InjectedDialog
+            title={isAuction ? t('plugin_collectible_place_a_bid') : t('plugin_collectible_make_an_offer')}
+            open={open}
+            onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Card elevation={0}>
                     <CardContent>
@@ -150,7 +154,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             onAmountChange={setAmount}
                             onTokenChange={setToken}
                             TokenAmountPanelProps={{
-                                label: 'Price',
+                                label: t('plugin_collectible_price'),
                             }}
                             FixedTokenListProps={{
                                 selectedTokens: selectedPaymentToken ? [selectedPaymentToken.address] : [],
@@ -160,7 +164,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         />
                         {!isAuction ? (
                             <DateTimePanel
-                                label="Expiration Date"
+                                label={t('plugin_collectible_expiration_date')}
                                 date={expirationDateTime}
                                 onChange={setExpirationDateTime}
                                 TextFieldProps={{
@@ -185,8 +189,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                         }
                                         label={
                                             <Typography variant="body2">
-                                                By checking this box, I acknowledge that this item has not been reviewd
-                                                or approved by OpenSea.
+                                                {t('plugin_collectible_approved_by_open_sea')}
                                             </Typography>
                                         }
                                     />
@@ -203,15 +206,19 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                         }
                                         label={
                                             <Typography variant="body2">
-                                                By checking this box, I agree to OpenSea's{' '}
-                                                <Link
-                                                    color="primary"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href="https://opensea.io/tos">
-                                                    Terms of Service
-                                                </Link>
-                                                .
+                                                <Trans
+                                                    i18nKey="plugin_collectible_legal_text"
+                                                    components={{
+                                                        terms: (
+                                                            <Link
+                                                                color="primary"
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                href="https://opensea.io/tos"
+                                                            />
+                                                        ),
+                                                    }}
+                                                />
                                             </Typography>
                                         }
                                     />
