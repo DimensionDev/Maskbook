@@ -61,6 +61,9 @@ const useStyles = makeStyles({
     sup: {
         paddingLeft: 2,
     },
+    button: {
+        zIndex: 1,
+    },
 })
 
 export interface PostDialogUIProps extends withClasses<never> {
@@ -233,6 +236,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             <CharLimitIndicator value={props.postContent.content.length} max={props.maxLength} />
                         ) : null}
                         <Button
+                            className={classes.button}
                             variant="contained"
                             disabled={props.postBoxButtonDisabled}
                             onClick={props.onFinishButtonClicked}
