@@ -74,7 +74,7 @@
     "decrypted_postbox_decoding": "Mask 正在解碼…",
     "decrypted_postbox_decrypting_finding_person_key": "Mask 正在尋找這個作者的公開金鑰…",
     "decrypted_postbox_decrypting_finding_post_key": "Mask 正在取得貼文金鑰以解密此貼文…",
-    "decrypted_postbox_author_mismatch": "最初由{{name}發佈",
+    "decrypted_postbox_author_mismatch": "最初由 {{name}} 發佈",
     "decrypted_postbox_title": "已由 Mask 解密:",
     "dismiss": "取消",
     "details": "詳細資料",
