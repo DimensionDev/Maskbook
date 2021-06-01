@@ -383,7 +383,7 @@
     "plugin_file_service_uploading_estimating_time": "預估時間…",
     "plugin_file_service_uploading_in_minute_remaining": "剩下{{seconds}}秒",
     "plugin_file_service_uploading_remaining": "剩下{{minutes}}分 {{seconds}}秒",
-    "plugin_file_service_uploading_on_cancal": "上船中… 請勿關閉這個頁面.",
+    "plugin_file_service_uploading_on_cancal": "上傳中… 請勿關閉這個頁面.",
     "plugin_file_service_recent_files": "最近的檔案",
     "plugin_file_service_show_more": "顯示更多",
     "plugin_file_service_file_key": "檔案金鑰:",
