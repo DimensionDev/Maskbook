@@ -14,7 +14,6 @@ export default async function () {
     for (const id of ids) {
         const key = id.privateKey
         if (!key.d) {
-            console.log('Key is broken')
             deletePersona(id.identifier, 'delete even with private').catch(() => {})
             hasBug = true
         }
