@@ -333,6 +333,7 @@
     "plugin_wallet_token_infinite_unlock": "무한 언락",
     "plugin_wallet_connect_dialog_title": "월렛 연결",
     "plugin_wallet_connect_new_ethereum": "Ethereum 왕초보?",
+    "plugin_wallet_connect_switch_disabled_note": "",
     "plugin_wallet_connect_learn_more_wallets": "월렛에 대해 더 알아보기",
     "plugin_wallet_connect_safari_metamask": "MetaMask 연결하기",
     "plugin_wallet_connect_safari_rainbow": "Rainbow 연결하기",

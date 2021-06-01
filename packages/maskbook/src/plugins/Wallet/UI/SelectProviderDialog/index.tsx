@@ -58,6 +58,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     stepContent: {
         marginTop: 21,
     },
+    networkDisabled: {
+        opacity: 0.5,
+    },
     networkList: {
         display: 'flex',
         gap: 32,
@@ -85,6 +88,9 @@ const useStyles = makeStyles((theme: Theme) => ({
         height: 14,
         background: '#fff',
         borderRadius: '50%',
+    },
+    note: {
+        color: theme.palette.warning.main,
     },
     grid: {
         width: '100%',
@@ -209,6 +215,8 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
         ],
     )
 
+    const isWalletConnect = ProviderType.WalletConnect === selectedProviderType
+
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
@@ -216,12 +224,19 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     <Typography className={classes.stepTitle} variant="h2" component="h2">
                         1. Choose Network
                     </Typography>
-                    <List className={classnames(classes.networkList, classes.stepContent)}>
+                    <List
+                        className={classnames(classes.networkList, classes.stepContent, {
+                            [classes.networkDisabled]: isWalletConnect,
+                        })}>
                         {networks.map((network) => (
                             <ListItem
                                 className={classes.networkItem}
                                 key={network}
-                                onClick={() => setUndeterminedNetworkType(network)}>
+                                onClick={() => {
+                                    if (!isWalletConnect) {
+                                        setUndeterminedNetworkType(network)
+                                    }
+                                }}>
                                 <div className={classes.iconWrapper}>
                                     <NetworkIcon classes={{ icon: classes.networkIcon }} networkType={network} />
                                     {undeterminedNetworkType === network && (
@@ -231,6 +246,11 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             </ListItem>
                         ))}
                     </List>
+                    {isWalletConnect && (
+                        <Typography className={classes.note} variant="body1">
+                            {t('plugin_wallet_connect_switch_disabled_note')}
+                        </Typography>
+                    )}
                 </Box>
                 <Box className={classes.step}>
                     <Typography className={classes.stepTitle} variant="h2" component="h2">
