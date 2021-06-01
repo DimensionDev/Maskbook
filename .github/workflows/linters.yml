@@ -41,6 +41,11 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
+      - uses: actions/cache@v2
+        with:
+          path: "**/dist/"
+          key: ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}
+          # Do not use restore-keys! tsc build should not be shared once tsc config has changed. But IMO it's safe to share if dependencies has changed.
       - run: npx pnpm install
       - run: npx build -- echo "Check tsc"
   eslint:
