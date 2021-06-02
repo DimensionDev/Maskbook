@@ -85,7 +85,7 @@
     "delete_wallet": "刪除錢包",
     "delete_wallet_hint": "你確定嗎？<br/>如果你沒有備份，你將損失在這個錢包中<strong>所有的錢<strong>。",
     "hide_token": "隱藏代幣",
-    "hide_token_hint": "您可以在將來新增 <strong>{{token}}</strong> 藉由到錢包面板中的“新增代幣”。",
+    "hide_token_hint": "您可以在將來新增 <strong>{{token}}</strong> 藉由到錢包面板中的「新增代幣」。",
     "disconnect_profile": "取消設定檔連結",
     "done": "完成！",
     "download": "下載",
