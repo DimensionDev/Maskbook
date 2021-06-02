@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { ProviderType, useWallets, useWallet, NetworkType, getChainIdFromNetworkType } from '@dimensiondev/web3-shared'
-import { useValueRef, delay, useI18N, useRemoteControlledDialog } from '../../../utils'
+import { delay, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { WalletMessages } from '../messages'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
@@ -33,7 +33,6 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
 
     const wallets = useWallets(ProviderType.Maskbook)
     const selectedWallet = useWallet()
-    const selectedWalletProvider = useValueRef(currentProviderSettings)
 
     //#region remote controlled dialog logic
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
@@ -77,10 +76,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
                     <WalletInList
                         key={wallet.address}
                         wallet={wallet}
-                        disabled={
-                            selectedWallet?.address === wallet.address &&
-                            selectedWalletProvider === ProviderType.Maskbook
-                        }
+                        selected={selectedWallet?.address === wallet.address}
                         onClick={() => onSelect(wallet.address)}
                     />
                 ))}
