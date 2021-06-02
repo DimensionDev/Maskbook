@@ -1,5 +1,5 @@
 import { safeUnreachable } from '@dimensiondev/maskbook-shared'
-import { ChainId, ERC20Token, ERC721Token, EthereumNetwork, NativeToken, NetworkType, ProviderType } from '../types'
+import { ChainId, ERC20Token, ERC721Token, NativeToken, NetworkType, ProviderType } from '../types'
 import { getChainDetailed } from '../utils'
 
 export function resolveProviderName(providerType: ProviderType) {

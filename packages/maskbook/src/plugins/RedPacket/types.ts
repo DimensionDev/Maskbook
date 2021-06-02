@@ -1,5 +1,5 @@
 import type { ERC20TokenRecord } from '../Wallet/database/types'
-import type { EthereumTokenType, EthereumNetwork } from '@dimensiondev/web3-shared'
+import type { EthereumTokenType } from '@dimensiondev/web3-shared'
 import type { Transaction } from 'web3-core'
 
 /**

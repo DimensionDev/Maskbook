@@ -7,7 +7,6 @@ import BigNumber from 'bignumber.js'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import {
     EthereumTokenType,
-    EthereumNetwork,
     FungibleTokenDetailed,
     useAccount,
     useConstant,
