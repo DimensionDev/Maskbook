@@ -30,7 +30,7 @@ export const Transfer = memo(() => {
     const [activeTab, setActiveTab] = useState<AssetType>(assetTypeTabs[0])
 
     return (
-        <ShapeContainer sx={{ marginTop: 3, height: '80%', display: 'flex', flexDirection: 'column' }}>
+        <ShapeContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>
             <TabContext value={activeTab}>
                 <Box className={classes.caption}>
                     <Tabs value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>

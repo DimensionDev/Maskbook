@@ -1,6 +1,6 @@
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { useTokensBalance } from '@dimensiondev/web3-shared'
-import { useAssetsMerged } from '../../../../../maskbook/src/plugins/Wallet/hooks/useAssetsMerged'
+import { useAssetsMerged } from '.'
 import type { Asset } from '../types'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[]) {

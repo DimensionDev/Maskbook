@@ -45,7 +45,7 @@ export const LightColor = {
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
-    primaryContrastText: '#ffffff',
+    primaryContrastText: '#111432',
 
     secondary: '#242e57',
     secondaryContrastText: '#1c68f3',

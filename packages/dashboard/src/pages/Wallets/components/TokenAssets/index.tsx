@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
     },
     tab: {
         flex: 1,
+        padding: '0px',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
     },
 }))
 
@@ -49,7 +53,8 @@ export const TokenAssets = memo(() => {
 
     return (
         <>
-            <ShapeContainer sx={{ marginTop: 3, height: '80%', display: 'flex', flexDirection: 'column' }}>
+            <ShapeContainer
+                sx={{ marginTop: 3, display: 'flex', flexDirection: 'column', maxHeight: 'calc(100% - 114px)' }}>
                 <TabContext value={activeTab}>
                     <Box className={classes.caption}>
                         <Tabs value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
