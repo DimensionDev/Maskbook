@@ -7,6 +7,7 @@ import {
     TransactionStateType,
     FungibleTokenDetailed,
     resolveLinkOnExplorer,
+    useGasPrice,
     useChainId,
     useChainIdValid,
     useAccount,
@@ -205,7 +206,8 @@ export function ITO(props: ITO_Props) {
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
     const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)
-
+    const gasPrice = useGasPrice()
+    console.log({ gasPrice })
     // assets
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 

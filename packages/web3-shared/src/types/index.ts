@@ -213,7 +213,7 @@ export enum TransactionStatusType {
     FAILED,
 }
 
-export type GasPrices = {
+export type GasNow = {
     rapid: number
     fast: number
     standard: number

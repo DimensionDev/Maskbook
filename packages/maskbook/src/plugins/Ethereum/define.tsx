@@ -6,7 +6,7 @@ export const EthereumPluginDefine: PluginConfig = {
     id: PLUGIN_IDENTIFIER,
     pluginIcon: '♦️',
     pluginName: 'Ethereum',
-    pluginDescription: 'Shared Ethereum Unlities.',
+    pluginDescription: 'Shared Ethereum Utilities.',
     identifier: PLUGIN_IDENTIFIER,
     stage: PluginStage.Production,
     scope: PluginScope.Internal,

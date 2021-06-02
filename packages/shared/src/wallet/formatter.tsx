@@ -97,3 +97,7 @@ export function formatAmountPrecision(
 
     return _amount.toPrecision(_precision)
 }
+
+export function formatWeiToGwei(value: BigNumber.Value) {
+    return new BigNumber(value).idiv(10 ** 9)
+}
