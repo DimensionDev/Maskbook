@@ -494,7 +494,7 @@
     "plugin_ito_unlock_time": "解鎖時間 {{zone}}",
     "plugin_ito_qualification_label": "插件合約",
     "plugin_ito_message_label": "標題",
-    "plugin_ito_region_label": "IP區域選擇",
+    "plugin_ito_region_label": "IP 區域選擇",
     "plugin_ito_region_comfirm_label": "IP區域",
     "plugin_ito_region_list": "{{ select }} / {{ all }} 區域",
     "plugin_ito_region_all": "所有區域",
