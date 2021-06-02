@@ -59,7 +59,6 @@
             "title": "duration"
         },
         "network": {
-            "enum": ["Mainnet", "Rinkeby", "Ropsten"],
             "type": "string",
             "title": "network"
         },
