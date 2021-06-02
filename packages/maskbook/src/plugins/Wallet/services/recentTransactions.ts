@@ -1,43 +1,58 @@
-import { isSameAddress, TransactionStatusType } from '@dimensiondev/web3-shared'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { isSameAddress, TransactionStateType, TransactionStatusType } from '@dimensiondev/web3-shared'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { getTransactionReceipt } from '../../../extension/background-script/EthereumService'
+import type { TransactionRecord } from '../database/types'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { currentChainIdSettings } from '../settings'
+import { TransactionChunkRecordIntoDB, TransactionChunkRecordOutDB } from './helpers'
 
 const MAX_RECENT_TRANSACTIONS_SIZE = 5
 
-export async function getRecentTransactions(address: string) {
+export async function getRecentTransactionsFromDB(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('TransactionChunk')
     const chunks = await t.objectStore('TransactionChunk').getAll()
     return (
-        chunks.find((x) => isSameAddress(x.address, address))?.transactions.slice(0, MAX_RECENT_TRANSACTIONS_SIZE) ?? []
+        chunks.find((x) => isSameAddress(x.address, address))?.transactions.slice(0, MAX_RECENT_TRANSACTIONS_SIZE).reverse() ?? []
     )
 }
 
-export async function updateTransactions(address: string) {
+export async function getRecentTransactionsFromChain(address: string) {
+    const transactions = await getRecentTransactionsFromDB(address)
+    const receipts = await Promise.all(
+        transactions
+            .filter((x) => x.status === TransactionStatusType.NOT_DEPEND)
+            .map((x) => getTransactionReceipt(x.hash)),
+    )
+    return transactions.map((x) => {
+        const receipt = receipts.find((y) => y?.transactionHash === x.hash)
+        if (!receipt) return x
+        return {
+            hash: receipt.transactionHash,
+            status:
+                (receipt.status as any) === '0x1' || receipt.status === true
+                    ? TransactionStatusType.SUCCEED
+                    : TransactionStateType.FAILED,
+        }
+    }) as TransactionRecord[]
+}
+
+export async function updateTransactions(updates: Map<string, TransactionRecord[]>) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('TransactionChunk')
     const store = t.objectStore('TransactionChunk')
     for await (const cursor of store) {
-        if (!isSameAddress(cursor.value.address, address)) continue
-
-        let modified = false
-        const transactions = cursor.value.transactions
-        for (const transaction of transactions) {
-            if (transaction.status !== TransactionStatusType.NOT_DEPEND) continue
-            try {
-                const receipt = await getTransactionReceipt(transaction.hash)
-                if (!receipt) continue
-                transaction.status = receipt.status ? TransactionStatusType.SUCCEED : TransactionStatusType.FAILED
-                modified = true
-            } catch (e) {
-                continue
-            }
-        }
-        if (modified)
-            await cursor.update({
-                ...cursor.value,
-                transactions,
-            })
+        const chunk = cursor.value
+        const updates_ = updates.get(formatEthereumAddress(chunk.address))
+        if (!updates_) continue
+        await cursor.update(
+            TransactionChunkRecordIntoDB({
+                ...TransactionChunkRecordOutDB(chunk),
+                transactions: chunk.transactions.map((x) => ({
+                    ...x,
+                    ...updates_.find((y) => y.hash === x.hash),
+                })),
+            }),
+        )
     }
 }
 

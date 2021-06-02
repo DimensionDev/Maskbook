@@ -1,5 +1,6 @@
-import { ExternalLink, XCircle, RotateCcw, Check } from 'react-feather'
-import { makeStyles, List, ListItem, Typography, Link, Button, Box } from '@material-ui/core'
+import { XCircle, Check } from 'react-feather'
+import { makeStyles, List, ListItem, Typography, Link, Button, Box, CircularProgress } from '@material-ui/core'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import { formatKeccakHash } from '@dimensiondev/maskbook-shared'
 import {
     useAccount,
@@ -17,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 14,
         padding: 0,
         marginTop: 6,
+        display: 'flex',
+        alignItems: 'center',
     },
     transactionButton: {
         marginLeft: 'auto',
@@ -25,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
     },
     link: {
-        color: theme.palette.text.secondary,
+        display: 'inherit',
         fontSize: 14,
     },
     linkIcon: {
@@ -47,6 +50,7 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
     const onClear = useSnackbarCallback(
         async (ev) => {
             await WalletRPC.clearRecentTransactions(account)
+            retry()
         },
         [],
         undefined,
@@ -82,14 +86,15 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
                             {formatKeccakHash(transaction.hash, 6)}
                         </Typography>
                         <Link
+                            className={classes.link}
                             href={resolveTransactionLinkOnExplorer(chainId, transaction.hash)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <ExternalLink className={classes.linkIcon} size={14} />
+                            <OpenInNewIcon className={classes.linkIcon} fontSize="inherit" />
                         </Link>
                         <Link className={classes.transactionButton} component="button">
                             {transaction.status === TransactionStatusType.NOT_DEPEND ? (
-                                <RotateCcw size={14} />
+                                <CircularProgress size={14} color="primary" />
                             ) : transaction.status === TransactionStatusType.SUCCEED ? (
                                 <Check size={14} color="#77E0B5" />
                             ) : (

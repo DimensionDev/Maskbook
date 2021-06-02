@@ -30,7 +30,7 @@ export async function getTransactionByHash(hash: string) {
 }
 
 export async function getTransactionReceipt(hash: string) {
-    return request<TransactionReceipt>({
+    return request<TransactionReceipt | null>({
         method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
         params: [hash],
     })

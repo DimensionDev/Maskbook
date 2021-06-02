@@ -15,7 +15,7 @@ export function useRecentTransactions() {
 
     return useAsyncRetry(async () => {
         if (!account) return []
-        // await WalletRPC.updateTransactions(account)
-        return WalletRPC.getRecentTransactions(account)
-    }, [account])
+        const transactions = await WalletRPC.getRecentTransactionsFromChain(account)
+        return transactions
+    }, [account, flag, chainId])
 }
