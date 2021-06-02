@@ -188,7 +188,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 total: CreationSuccess.total,
                 creation_time: Number.parseInt(CreationSuccess.creation_time, 10) * 1000,
                 duration: createSettings.duration,
-                network: getChainName(chainId) as EthereumNetwork,
+                network: getChainName(chainId),
                 token_type: createSettings.token.type,
             }
             if (createSettings.token.type === EthereumTokenType.ERC20)

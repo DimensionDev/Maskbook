@@ -49,24 +49,6 @@ export function resolveChainColor(chainId: ChainId) {
     }
 }
 
-export function resolveChainId(network: EthereumNetwork) {
-    switch (network) {
-        case EthereumNetwork.Mainnet:
-            return ChainId.Mainnet
-        case EthereumNetwork.Rinkeby:
-            return ChainId.Rinkeby
-        case EthereumNetwork.Ropsten:
-            return ChainId.Ropsten
-        case EthereumNetwork.Kovan:
-            return ChainId.Kovan
-        case EthereumNetwork.Gorli:
-            return ChainId.Gorli
-        default:
-            safeUnreachable(network)
-            return ChainId.Mainnet
-    }
-}
-
 export function resolveLinkOnExplorer(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) return ''

@@ -67,7 +67,7 @@ export function getChainFullName(chainId: ChainId) {
 
 export function getChainIdFromName(name: string) {
     const chainDetailed = CHAINS.find((x) =>
-        [x.chain, x.network, x.shortName, x.fullName].map((y) => y.toLowerCase()).includes(name.toLowerCase()),
+        [x.chain, x.network, x.name, x.shortName, x.fullName].map((y) => y.toLowerCase()).includes(name.toLowerCase()),
     )
     return chainDetailed?.chainId as ChainId | undefined
 }

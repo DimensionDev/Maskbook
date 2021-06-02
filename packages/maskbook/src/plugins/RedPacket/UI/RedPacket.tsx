@@ -1,10 +1,10 @@
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import {
     ChainId,
+    getChainIdFromName,
     isDAI,
     isOKB,
     ProviderType,
-    resolveChainId,
     TransactionStateType,
     useAccount,
     useChainId,
@@ -252,7 +252,7 @@ export function RedPacket(props: RedPacketProps) {
         )
 
     return (
-        <EthereumChainBoundary chainId={payload.network ? resolveChainId(payload.network) : ChainId.Mainnet}>
+        <EthereumChainBoundary chainId={payload.network ? getChainIdFromName(payload.network) ?? ChainId.Mainnet : ChainId.Mainnet}>
             <Card className={classNames(classes.root)} component="article" elevation={0}>
                 <div className={classes.header}>
                     <Typography className={classes.from} variant="body1" color="inherit">
