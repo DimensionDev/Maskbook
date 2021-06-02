@@ -5,9 +5,10 @@ import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 import { createWeb3 } from './web3'
 import * as WalletConnect from './providers/WalletConnect'
-import { currentProviderSettings } from '../../../plugins/Wallet/settings'
+import { currentAccountSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
 import { commitNonce, getNonce, resetNonce } from './nonce'
 import { getWalletCached } from './wallet'
+import { addRecentTransaction } from '../../../plugins/Wallet/services'
 
 /**
  * This API is only used internally. Please use requestSend instead in order to share the same payload id globally.
@@ -24,6 +25,7 @@ export async function INTERNAL_send(
     }
 
     const web3 = createWeb3()
+    const account = currentAccountSettings.value
     const provider = web3.currentProvider as HttpProvider | undefined
     const providerType = currentProviderSettings.value
 
@@ -91,26 +93,22 @@ export async function INTERNAL_send(
                         method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
                         params: [signedTransaction.rawTransaction],
                     },
-                    (error, result) => {
-                        callback(error, result)
-
-                        // handle nonce
-                        const error_ = (error ?? result?.error) as { message: string } | undefined
-                        const message = error_?.message ?? ''
-                        if (/\bnonce\b/im.test(message) && /\b(low|high)\b/im.test(message)) resetNonce(wallet.address)
-                        else commitNonce(wallet.address)
+                    (error, response) => {
+                        callback(error, response)
+                        handleNonce(account, error, response)
+                        handleRecentTransaction(account, response)
                     },
                 )
                 break
             case ProviderType.MetaMask:
-                provider?.send(payload, callback)
+                provider?.send(payload, (error, response) => {
+                    handleRecentTransaction(account, response)
+                })
                 break
             case ProviderType.WalletConnect:
-                callback(null, {
-                    jsonrpc: '2.0',
-                    id: payload.id as number,
-                    result: await WalletConnect.sendCustomRequest(payload as IJsonRpcRequest),
-                })
+                const response = await WalletConnect.sendCustomRequest(payload as IJsonRpcRequest)
+                callback(null, response)
+                handleRecentTransaction(account, response)
                 break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
@@ -134,4 +132,19 @@ export async function INTERNAL_send(
     } catch (error) {
         callback(error)
     }
+}
+
+
+function handleRecentTransaction(account: string, response: JsonRpcResponse | undefined) {
+    const hash = response?.result as string | undefined
+    if (typeof hash !== 'string') return
+    if (!/^0x([A-Fa-f0-9]{64})$/.test(hash)) return
+    addRecentTransaction(account, hash)
+}
+
+async function handleNonce(account: string, error: Error | null, response: JsonRpcResponse | undefined)  {
+    const error_ = (error ?? response?.error) as { message: string } | undefined
+    const message = error_?.message ?? ''
+    if (/\bnonce\b/im.test(message) && /\b(low|high)\b/im.test(message)) resetNonce(account)
+    else commitNonce(account)
 }

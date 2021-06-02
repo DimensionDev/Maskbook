@@ -1,6 +1,7 @@
 import { ExternalLink, XCircle, RotateCcw, Check } from 'react-feather'
 import { makeStyles, List, ListItem, Typography, Link, Button, Box } from '@material-ui/core'
-import { useAccount, TransactionStatusType } from '@dimensiondev/web3-shared'
+import { formatKeccakHash } from '@dimensiondev/maskbook-shared'
+import { useAccount, useChainId, TransactionStatusType, resolveTransactionLinkOnExplorer } from '@dimensiondev/web3-shared'
 import { useI18N } from '../../../../utils'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
@@ -14,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
     },
     transactionButton: {
         marginLeft: 'auto',
+    },
+    title: {
+        marginRight: theme.spacing(1),
     },
     link: {
         color: theme.palette.text.secondary,
@@ -31,6 +35,7 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
     const classes = useStyles()
 
     const account = useAccount()
+    const chainId = useChainId()
     const { value: transactions, error, retry } = useRecentTransactions()
 
     //#region clear the most recent transactions
@@ -59,8 +64,8 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
 
     return (
         <>
-            <Box>
-                <Typography variant="h2">{t('plugin_wallet_recent_transaction')}</Typography>
+            <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Typography color="textPrimary">{t('plugin_wallet_recent_transaction')}</Typography>
                 <Link aria-label="Clear All" component="button" onClick={onClear}>
                     ({t('plugin_wallet_clear_all')})
                 </Link>
@@ -68,9 +73,11 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
             <List>
                 {transactions.map((transaction) => (
                     <ListItem className={classes.transaction} key={transaction.hash}>
-                        <Typography variant="body2">{transaction.hash}</Typography>
-                        <ExternalLink className={classes.linkIcon} size={14} />
-                        <Link component="button" className={classes.transactionButton}>
+                        <Typography className={classes.title} variant="body2">{formatKeccakHash(transaction.hash, 6)}</Typography>
+                        <Link href={resolveTransactionLinkOnExplorer(chainId, transaction.hash)} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className={classes.linkIcon} size={14} />
+                        </Link>
+                        <Link className={classes.transactionButton} component="button">
                             {transaction.status === TransactionStatusType.NOT_DEPEND ? (
                                 <RotateCcw size={14} />
                             ) : transaction.status === TransactionStatusType.SUCCEED ? (

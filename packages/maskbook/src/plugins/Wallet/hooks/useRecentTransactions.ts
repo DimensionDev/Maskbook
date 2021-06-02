@@ -14,7 +14,8 @@ export function useRecentTransactions() {
     useInterval(() => setFlag((x) => !x), UPDATE_TRANSACTION_LATENCY)
 
     return useAsyncRetry(async () => {
-        await WalletRPC.updateTransactions(account)
+        if (!account ) return []
+        // await WalletRPC.updateTransactions(account)
         return WalletRPC.getRecentTransactions(account)
-    }, [flag, account, chainId])
+    }, [account])
 }

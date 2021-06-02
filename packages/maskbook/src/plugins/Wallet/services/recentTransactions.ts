@@ -15,12 +15,13 @@ export async function getRecentTransactions(address: string) {
 }
 
 export async function updateTransactions(address: string) {
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('TransactionChunk', 'Wallet')
-    for await (const x of t.objectStore('TransactionChunk').iterate()) {
-        if (!isSameAddress(x.value.address, address)) continue
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('TransactionChunk')
+    const store = t.objectStore('TransactionChunk')
+    for await (const cursor of store) {
+        if (!isSameAddress(cursor.value.address, address)) continue
 
         let modified = false
-        const transactions = x.value.transactions
+        const transactions = cursor.value.transactions
         for (const transaction of transactions) {
             if (transaction.status !== TransactionStatusType.NOT_DEPEND) continue
             try {
@@ -32,15 +33,16 @@ export async function updateTransactions(address: string) {
                 continue
             }
         }
-        x.update({
-            ...x.value,
-            transactions,
-        })
+        if (modified)
+            await cursor.update({
+                ...cursor.value,
+                transactions,
+            })
     }
 }
 
 export async function clearRecentTransactions(address: string) {
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('TransactionChunk', 'Wallet')
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('TransactionChunk')
     for await (const x of t.objectStore('TransactionChunk').iterate()) {
         if (!isSameAddress(x.value.address, address)) continue
         x.delete()
@@ -49,7 +51,7 @@ export async function clearRecentTransactions(address: string) {
 
 export async function addRecentTransaction(address: string, hash: string) {
     const now = new Date()
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('TransactionChunk', 'Wallet')
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('TransactionChunk')
 
     const chainId = currentChainIdSettings.value
     const recordId = `${chainId}_${address}`
