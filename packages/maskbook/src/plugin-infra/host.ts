@@ -3,9 +3,7 @@ import './register'
 
 import type { Plugin } from '@dimensiondev/mask-plugin-infra'
 import { Emitter } from '@servie/events'
-import {
-    currentChainIdSettings,
-} from '../plugins/Wallet/settings'
+import { currentChainIdSettings } from '../plugins/Wallet/settings'
 import { startEffects } from '../utils/side-effects'
 
 const effect = startEffects(module.hot)

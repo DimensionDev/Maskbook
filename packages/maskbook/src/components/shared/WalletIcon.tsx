@@ -1,10 +1,7 @@
 import { useValueRef } from '@dimensiondev/maskbook-shared'
 import { makeStyles } from '@material-ui/core'
 import type { FC } from 'react'
-import {
-    currentNetworkSettings,
-    currentProviderSettings,
-} from '../../plugins/Wallet/settings'
+import { currentNetworkSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
 import { NetworkIcon } from './NetworkIcon'
 import { ProviderIcon } from './ProviderIcon'
 

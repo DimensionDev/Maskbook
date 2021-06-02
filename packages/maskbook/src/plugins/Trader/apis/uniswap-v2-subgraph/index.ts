@@ -90,13 +90,16 @@ export type Bundle = {
 }
 
 async function fetchFromUniswapV2Subgraph<T>(query: string) {
-    const response = await fetch(getConstant(TRENDING_CONSTANTS, 'UNISWAP_V2_SUBGRAPH_URL', currentChainIdSettings.value), {
-        method: 'POST',
-        mode: 'cors',
-        body: stringify({
-            query,
-        }),
-    })
+    const response = await fetch(
+        getConstant(TRENDING_CONSTANTS, 'UNISWAP_V2_SUBGRAPH_URL', currentChainIdSettings.value),
+        {
+            method: 'POST',
+            mode: 'cors',
+            body: stringify({
+                query,
+            }),
+        },
+    )
     const { data } = (await response.json()) as {
         data: T
     }

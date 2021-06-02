@@ -7,7 +7,13 @@ import type { HttpProvider, PromiEvent as PromiEventW3 } from 'web3-core'
 import WalletConnect from '@walletconnect/client'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import type { ITxData } from '@walletconnect/types'
-import { ChainId, TransactionEventType, ProviderType, getNetworkTypeFromChainId, NetworkType } from '@dimensiondev/web3-shared'
+import {
+    ChainId,
+    TransactionEventType,
+    ProviderType,
+    getNetworkTypeFromChainId,
+    NetworkType,
+} from '@dimensiondev/web3-shared'
 import * as Maskbook from '../providers/Maskbook'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import {
@@ -202,9 +208,8 @@ const onUpdate = async (
 const onDisconnect = async (error: Error | null) => {
     if (connector?.connected) await connector.killSession()
     connector = null
-    if (currentProviderSettings.value === ProviderType.WalletConnect)
-        currentAccountSettings.value = ''
-        currentNetworkSettings.value = NetworkType.Ethereum
+    if (currentProviderSettings.value === ProviderType.WalletConnect) currentAccountSettings.value = ''
+    currentNetworkSettings.value = NetworkType.Ethereum
 }
 
 async function updateWalletInDB(address: string, name: string = 'WalletConnect', setAsDefault: boolean = false) {
@@ -223,6 +228,5 @@ async function updateWalletInDB(address: string, name: string = 'WalletConnect',
     if (setAsDefault) currentProviderSettings.value = ProviderType.WalletConnect
 
     // update the selected wallet address
-    if (setAsDefault || providerType === ProviderType.WalletConnect)
-        currentAccountSettings.value = address
+    if (setAsDefault || providerType === ProviderType.WalletConnect) currentAccountSettings.value = address
 }

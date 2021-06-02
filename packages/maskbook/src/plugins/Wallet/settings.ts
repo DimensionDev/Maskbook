@@ -7,13 +7,9 @@ import { CollectibleProvider, PortfolioProvider } from './types'
 /**
  * The address of the selected wallet
  */
-export const currentAccountSettings = createGlobalSettings<string>(
-    `${PLUGIN_IDENTIFIER}+selectedWalletAddress`,
-    '',
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
+export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+selectedWalletAddress`, '', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
 
 /**
  * The network type of the selected wallet

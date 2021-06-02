@@ -40,13 +40,9 @@ export const [getAncientPostsCompatibiltyMode, setAncientPostsCompatibiltyMode] 
     disableOpenNewTabInBackgroundSettings,
 )
 
-export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(
-    currentProviderSettings,
-)
+export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 
-export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(
-    currentNetworkSettings,
-)
+export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(currentNetworkSettings)
 
 export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentAccountSettings)
 

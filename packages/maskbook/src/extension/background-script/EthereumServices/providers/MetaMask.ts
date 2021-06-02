@@ -37,7 +37,7 @@ function onError(error: string) {
         currentProviderSettings.value === ProviderType.MetaMask
     )
         currentAccountSettings.value = ''
-        currentNetworkSettings.value = NetworkType.Ethereum
+    currentNetworkSettings.value = NetworkType.Ethereum
 }
 
 export function createProvider() {

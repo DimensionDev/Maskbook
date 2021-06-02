@@ -9,13 +9,16 @@ interface Block {
 }
 
 async function fetchFromEthereumBlocksSubgraph<T>(query: string) {
-    const response = await fetch(getConstant(TRENDING_CONSTANTS, 'ETHEREUM_BLOCKS_SUBGRAPH_URL', currentChainIdSettings.value), {
-        method: 'POST',
-        mode: 'cors',
-        body: stringify({
-            query,
-        }),
-    })
+    const response = await fetch(
+        getConstant(TRENDING_CONSTANTS, 'ETHEREUM_BLOCKS_SUBGRAPH_URL', currentChainIdSettings.value),
+        {
+            method: 'POST',
+            mode: 'cors',
+            body: stringify({
+                query,
+            }),
+        },
+    )
     const { data } = (await response.json()) as {
         data: T
     }

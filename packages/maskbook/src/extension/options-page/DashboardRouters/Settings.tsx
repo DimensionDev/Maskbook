@@ -44,7 +44,11 @@ import {
 import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
 import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
 import { PortfolioProvider } from '../../../plugins/Wallet/types'
-import { currentPortfolioDataProviderSettings, currentChainIdSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
+import {
+    currentPortfolioDataProviderSettings,
+    currentChainIdSettings,
+    currentProviderSettings,
+} from '../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles((theme) => ({
     root: {

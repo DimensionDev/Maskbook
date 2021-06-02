@@ -17,10 +17,7 @@ import { useCallback, useEffect } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import Services from '../../../extension/service'
-import {
-    currentIsMetamaskLockedSettings,
-    currentProviderSettings,
-} from '../../../plugins/Wallet/settings'
+import { currentIsMetamaskLockedSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N, useRemoteControlledDialog, useValueRef } from '../../../utils'
