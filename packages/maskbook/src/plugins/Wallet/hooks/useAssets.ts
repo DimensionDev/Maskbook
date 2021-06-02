@@ -26,7 +26,7 @@ export function useAssets(tokens: FungibleTokenDetailed[]) {
         error: assetsDetailedProviderError,
         retry: retryAssetsDetailedDebank,
     } = useAssetsFromProvider()
-
+    console.log({ assetsDetailedProvider })
     const detailedTokensRetry = useCallback(() => {
         retryNativeTokenDetailed()
         retryAssetsDetailedChain()
