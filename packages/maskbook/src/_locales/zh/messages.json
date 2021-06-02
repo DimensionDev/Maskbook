@@ -312,7 +312,7 @@
     "plugin_wallet_on_create": "建立錢包",
     "plugin_wallet_on_connect": "連接錢包",
     "plugin_wallet_setup_title_create": "建立一個錢包",
-    "plugin_wallet_setup_description_words": "你的秘密備份短語將使備份和復原你的帳戶變得很容易。把這個短語寫在一張紙上，放在安全的地方。如果你想更加安全，把它寫在多張紙上，分別存放在2-3個不同的地方。",
+    "plugin_wallet_setup_description_words": "你的秘密備份短語將使備份和復原你的帳戶變得很容易。把這個短語寫在一張紙上，放在安全的地方。如果你想更加安全，把它寫在多張紙上，分別存放在 2-3 個不同的地方。",
     "plugin_wallet_setup_description_verify": "請填入每個空格，以確保它是正確的。",
     "plugin_wallet_setup_back": "上一步",
     "plugin_wallet_setup_create": "建立",
