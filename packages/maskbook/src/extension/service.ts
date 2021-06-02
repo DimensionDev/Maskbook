@@ -38,8 +38,8 @@ export const Services = {
 export default Services
 export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', true)
 
-if (module.hot && isEnvironment(Environment.ManifestBackground)) {
-    module.hot.accept(
+if (import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
+    import.meta.webpackHot.accept(
         [
             './background-script/CryptoService',
             './background-script/IdentityService',
@@ -70,7 +70,7 @@ function add<T>(impl: () => Promise<T>, key: string, generator = false): T {
     const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
     const load = () => getLocalImplementation(`Services.${key}`, impl, channel)
     const localImplementation = load()
-    isBackground && module.hot && document.addEventListener(SERVICE_HMR_EVENT, load)
+    isBackground && import.meta.webpackHot && document.addEventListener(SERVICE_HMR_EVENT, load)
     const service = RPC(localImplementation, {
         key,
         serializer,

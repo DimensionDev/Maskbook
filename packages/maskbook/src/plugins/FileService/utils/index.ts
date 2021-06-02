@@ -2,7 +2,7 @@ import { createPluginMessage } from '../../utils/createPluginMessage'
 import { createPluginRPC, createPluginRPCGenerator } from '../../utils/createPluginRPC'
 import { pluginId } from '../constants'
 
-if (module.hot) module.hot.accept()
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
 const PluginFileServiceMessage = createPluginMessage<{ _: unknown; _2: unknown }>(pluginId)
 export const PluginFileServiceRPC = createPluginRPC(
     pluginId,
