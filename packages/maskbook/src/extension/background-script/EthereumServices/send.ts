@@ -102,6 +102,7 @@ export async function INTERNAL_send(
                 break
             case ProviderType.MetaMask:
                 provider?.send(payload, (error, response) => {
+                    callback(error, response)
                     handleRecentTransaction(account, response)
                 })
                 break
