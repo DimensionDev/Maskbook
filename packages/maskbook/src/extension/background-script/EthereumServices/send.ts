@@ -134,7 +134,6 @@ export async function INTERNAL_send(
     }
 }
 
-
 function handleRecentTransaction(account: string, response: JsonRpcResponse | undefined) {
     const hash = response?.result as string | undefined
     if (typeof hash !== 'string') return
@@ -142,7 +141,7 @@ function handleRecentTransaction(account: string, response: JsonRpcResponse | un
     addRecentTransaction(account, hash)
 }
 
-async function handleNonce(account: string, error: Error | null, response: JsonRpcResponse | undefined)  {
+async function handleNonce(account: string, error: Error | null, response: JsonRpcResponse | undefined) {
     const error_ = (error ?? response?.error) as { message: string } | undefined
     const message = error_?.message ?? ''
     if (/\bnonce\b/im.test(message) && /\b(low|high)\b/im.test(message)) resetNonce(account)

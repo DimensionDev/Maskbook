@@ -1,7 +1,12 @@
 import { ExternalLink, XCircle, RotateCcw, Check } from 'react-feather'
 import { makeStyles, List, ListItem, Typography, Link, Button, Box } from '@material-ui/core'
 import { formatKeccakHash } from '@dimensiondev/maskbook-shared'
-import { useAccount, useChainId, TransactionStatusType, resolveTransactionLinkOnExplorer } from '@dimensiondev/web3-shared'
+import {
+    useAccount,
+    useChainId,
+    TransactionStatusType,
+    resolveTransactionLinkOnExplorer,
+} from '@dimensiondev/web3-shared'
 import { useI18N } from '../../../../utils'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
@@ -73,8 +78,13 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
             <List>
                 {transactions.map((transaction) => (
                     <ListItem className={classes.transaction} key={transaction.hash}>
-                        <Typography className={classes.title} variant="body2">{formatKeccakHash(transaction.hash, 6)}</Typography>
-                        <Link href={resolveTransactionLinkOnExplorer(chainId, transaction.hash)} target="_blank" rel="noopener noreferrer">
+                        <Typography className={classes.title} variant="body2">
+                            {formatKeccakHash(transaction.hash, 6)}
+                        </Typography>
+                        <Link
+                            href={resolveTransactionLinkOnExplorer(chainId, transaction.hash)}
+                            target="_blank"
+                            rel="noopener noreferrer">
                             <ExternalLink className={classes.linkIcon} size={14} />
                         </Link>
                         <Link className={classes.transactionButton} component="button">
