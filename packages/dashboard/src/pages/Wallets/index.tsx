@@ -21,7 +21,7 @@ function Wallets() {
                 <StartUp />
             ) : (
                 <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                    <Balance balance={0.1} onSend={() => {}} onBuy={() => {}} onSwap={() => {}} onReceive={() => {}} />
+                    <Balance balance={0.1} onSend={() => {}} onBuy={() => {}} onSwap={() => {}} />
                     <Switch>
                         <Route exact path={path} children={<TokenAssets />}></Route>
                         <Route exact path={Routes.WalletsTransfer} children={<Transfer />} />

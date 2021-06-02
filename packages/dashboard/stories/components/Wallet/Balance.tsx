@@ -11,6 +11,5 @@ export const Balance = of({
         onBuy: action('onBuy'),
         onSend: action('onSend'),
         onSwap: action('onSwap'),
-        onReceive: action('onReceive'),
     },
 })

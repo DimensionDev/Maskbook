@@ -27,17 +27,21 @@ const useStyles = makeStyles((theme) => ({
 
 export interface ReceiveDialogProps {
     open: boolean
-    tokenName: string
-    tokenAddress: string
+    chainName: string
+    walletAddress: string
     onClose: () => void
 }
 
-export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, tokenName, tokenAddress, onClose }) => {
+export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, walletAddress, onClose }) => {
     const classes = useStyles()
     const t = useDashboardI18N()
 
     const [, copyToClipboard] = useCopyToClipboard()
-    const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
+    const copyWalletAddress = useSnackbarCallback({
+        executor: async (address: string) => copyToClipboard(address),
+        deps: [],
+        successText: 'Address successfully copied',
+    })
 
     return (
         <MaskDialog
@@ -48,12 +52,13 @@ export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, tokenName, tokenA
                 classes: { paper: classes.paper },
             }}>
             <DialogContent className={classes.container}>
-                <Typography sx={{ marginBottom: 3.5 }}>{t.wallets_receive_tips({ tokenName })}</Typography>
+                <Typography sx={{ marginBottom: 3.5 }}>{t.wallets_receive_tips({ chainName })}</Typography>
                 <WalletQRCodeContainer width={286} height={286} borderWidth={15} borderHeight={2}>
                     <QRCode
-                        text={`ethereum:${tokenAddress}`}
+                        text={`ethereum:${walletAddress}`}
+                        options={{ width: 282 }}
                         canvasProps={{
-                            style: { display: 'block', margin: 'auto', width: '100%', height: '100%' },
+                            style: { display: 'block', margin: 'auto' },
                         }}
                     />
                 </WalletQRCodeContainer>
@@ -61,11 +66,11 @@ export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, tokenName, tokenA
                     {t.wallets_address()}
                 </Typography>
                 <Typography variant="body2" className={classes.address}>
-                    {tokenAddress}
+                    {walletAddress}
                 </Typography>
             </DialogContent>
             <DialogActions>
-                <Button size="medium" onClick={() => copyWalletAddress(tokenAddress)}>
+                <Button size="medium" onClick={() => copyWalletAddress(walletAddress)}>
                     copy
                 </Button>
             </DialogActions>

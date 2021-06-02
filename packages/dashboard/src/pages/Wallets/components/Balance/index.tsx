@@ -4,13 +4,13 @@ import { useDashboardI18N } from '../../../../locales'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { MaskWalletIcon, SendIcon, CardIcon, SwapIcon, DownloadIcon } from '@dimensiondev/icons'
 import { ReceiveDialog } from '../ReceiveDialog'
+import { useWallet } from '@dimensiondev/web3-shared'
 
 export interface BalanceCardProps {
     balance: number
     onSend(): void
     onBuy(): void
     onSwap(): void
-    onReceive(): void
 }
 
 const BalanceContainer = styled('div')(
@@ -71,8 +71,9 @@ const ButtonGroup = styled('div')`
     }
 `
 
-export const Balance = memo(({ balance, onSend, onBuy, onSwap, onReceive }: BalanceCardProps) => {
+export const Balance = memo<BalanceCardProps>(({ balance, onSend, onBuy, onSwap }) => {
     const t = useDashboardI18N()
+    const wallet = useWallet()
 
     const [receiveOpen, setReceiveOpen] = useState(false)
 
@@ -111,8 +112,8 @@ export const Balance = memo(({ balance, onSend, onBuy, onSwap, onReceive }: Bala
             </ButtonGroup>
             <ReceiveDialog
                 open={receiveOpen}
-                tokenName="ETH"
-                tokenAddress="0xFD7A5D91AF554ACD8ED07c7911E8556a7D20D88a"
+                chainName="Ethereum"
+                walletAddress={wallet?.address ?? ''}
                 onClose={() => setReceiveOpen(false)}
             />
         </BalanceContainer>

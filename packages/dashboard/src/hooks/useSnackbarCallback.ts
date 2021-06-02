@@ -2,14 +2,21 @@ import { useDashboardI18N } from '../locales'
 import { useSnackbar } from 'notistack'
 import { useCallback } from 'react'
 
-export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>(
-    executor: P,
-    deps: React.DependencyList,
-    onSuccess?: (ret: T) => void,
-    onError?: (err: Error) => void,
-    key?: string,
-    successText?: string,
-) {
+export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>({
+    executor,
+    deps,
+    onSuccess,
+    onError,
+    key,
+    successText,
+}: {
+    executor: P
+    deps: React.DependencyList
+    onSuccess?: (ret: T) => void
+    onError?: (err: Error) => void
+    key?: string
+    successText?: string
+}) {
     const t = useDashboardI18N()
     const { enqueueSnackbar } = useSnackbar()
     return useCallback(

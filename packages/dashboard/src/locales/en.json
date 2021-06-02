@@ -52,7 +52,7 @@
     "wallets_assets_value": "Value",
     "wallets_assets_operation": "Operation",
     "wallets_address": "Wallet Address",
-    "wallets_receive_tips": "Scan the QR code and transfer {{tokenName}} to it",
+    "wallets_receive_tips": "Scan the QR code and transfer {{chainName}} assets to it",
     "personas_setup_connect_tips": "Please connect to your {{type}} account.",
     "personas_setup_connect": "Connect",
     "personas_name_maximum_tips": "Maximum length is {{length}} characters long.",
