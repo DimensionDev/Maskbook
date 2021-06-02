@@ -1,14 +1,24 @@
 import { TabList, TabPanel, TabContext, tabPanelClasses } from '@material-ui/lab'
-import { Tab, experimentalStyled as styled, tabClasses, tabsClasses, InputBase } from '@material-ui/core'
+import {
+    Tab,
+    experimentalStyled as styled,
+    tabClasses,
+    tabsClasses,
+    InputBase,
+    inputBaseClasses,
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { useState } from 'react'
 import ConfirmDialog from '../../../../components/ConfirmDialog'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import FileUpload from '../../../../components/FileUpload'
 import { useAsync } from 'react-use'
+import { Services } from '../../../../API'
+import BackupPreviewCard from '../BackupPreviewCard'
 
 const useStyles = makeStyles(() => ({
     container: { flex: 1 },
+    hide: { display: 'none' },
 }))
 
 const SyledTabList = styled(TabList)(() => ({
@@ -40,9 +50,17 @@ const StyledTab = styled(Tab)(() => ({
 const StyledTabPanel = styled(TabPanel)(({ theme }) => ({
     [`&.${tabPanelClasses.root}`]: {
         marginTop: theme.spacing(2.5),
+        padding: 0,
+    },
+}))
+
+const TextArea = styled(InputBase)(({ theme }) => ({
+    [`&.${inputBaseClasses.root}`]: {
+        height: 180,
+        alignItems: 'flex-start',
         background: MaskColorVar.secondaryBackground,
         borderRadius: 8,
-        height: 180,
+        padding: theme.spacing(2),
     },
 }))
 
@@ -58,31 +76,33 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
     const [tab, setTab] = useState('1')
     // paste text
     const [text, setText] = useState('')
-    // // upload file
-    // const [file, setFile] = useState()
     // backup content
     const [content, setContent] = useState('')
-    const [json, setJSON] = useState(null)
+    const [json, setJSON] = useState<any>(null)
 
     const handleClose = () => {
         onClose()
+        setTab('1')
+        setText('')
+        setContent('')
+        setJSON(null)
     }
     const handleConfirm = async () => {
         if (!json) return
 
-        // const permissions = permission.value ?? []
-        // if (permissions.length) {
-        //     const granted = await browser.permissions.request({ origins: permissions ?? [] })
-        //     if (!granted) return
-        // }
+        const permissions = permission.value ?? []
 
-        // await Services.Welcome.restoreBackup(json)
+        if (permissions.length) {
+            const granted = await Services.Welcome.requestPermissions(permissions)
+            if (!granted) return
+        }
+
+        await Services.Welcome.restoreBackup(json)
     }
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setTab(newValue)
     }
     const handleFileChange = (file: File, content?: string) => {
-        console.log(file, content)
         setContent(content || '')
     }
     const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,14 +111,14 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
 
     const permission = useAsync(async () => {
         const str = tab === '1' ? content : text
-        // TODO: get json
-        // const json = getJSON(str)
+        if (!str) return
 
-        // if (!json) throw new Error('invalid string')
+        const json = await Services.Welcome.parseBackupStr(str)
+        if (!json) throw new Error('invalid string')
 
-        // setJSON(json)
+        setJSON(json)
 
-        // return extraPermissions(json.grantedHostPermissions)
+        return Services.Welcome.extraPermissions(json.grantedHostPermissions)
     }, [tab, text, content])
 
     return (
@@ -116,18 +136,27 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
                         <StyledTab label="Text" value="2" />
                     </SyledTabList>
                     <StyledTabPanel value="1">
-                        <FileUpload readAsText onChange={handleFileChange} />
+                        <div className={json && content ? classes.hide : ''}>
+                            <FileUpload height={180} readAsText onChange={handleFileChange} />
+                        </div>
+                        <div className={json && content ? '' : classes.hide}>
+                            <BackupPreviewCard json={json} />
+                        </div>
                     </StyledTabPanel>
                     <StyledTabPanel value="2">
-                        <InputBase
-                            sx={{ height: 123, alignItems: 'flex-start' }}
-                            value={text}
-                            onChange={handleTextChange}
-                            fullWidth
-                            multiline
-                            maxRows={6}
-                            placeholder="Paste the database backup as text here..."
-                        />
+                        <div className={json && text ? classes.hide : ''}>
+                            <TextArea
+                                value={text}
+                                onChange={handleTextChange}
+                                fullWidth
+                                multiline
+                                maxRows={6}
+                                placeholder="Paste the database backup as text here..."
+                            />
+                        </div>
+                        <div className={json && text ? '' : classes.hide}>
+                            <BackupPreviewCard json={json} />
+                        </div>
                     </StyledTabPanel>
                 </TabContext>
             </div>

@@ -10,6 +10,8 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         position: 'relative',
         height: '100%',
+        background: MaskColorVar.secondaryBackground,
+        borderRadius: 8,
     },
     container: {
         textAlign: 'center',

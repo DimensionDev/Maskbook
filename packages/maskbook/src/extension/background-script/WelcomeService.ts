@@ -12,9 +12,10 @@ import { saveAsFileFromBuffer } from './HelperService'
 import type { DashboardRoute } from '../options-page/Route'
 export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 export * from './WelcomeServices/restoreBackup'
-import type { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
+import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+import { decompressBackupFile } from '../../utils'
 assertEnvironment(Environment.ManifestBackground)
 
 /**
@@ -97,6 +98,20 @@ export async function openOptionsPage(route?: DashboardRoute, search?: string) {
 }
 
 export { createPersonaByMnemonic } from '../../database'
+
+export function parseBackupStr(str: string) {
+    return UpgradeBackupJSONFile(decompressBackupFile(str))
+}
+
+// permissions
 export function queryPermission(permission: browser.permissions.Permissions) {
     return browser.permissions.contains(permission)
+}
+
+export { extraPermissions } from '../../utils/permissions'
+
+export async function requestPermissions(origins: string[]) {
+    const granted = await browser.permissions.request({ origins: origins ?? [] })
+
+    return Promise.resolve(granted)
 }
