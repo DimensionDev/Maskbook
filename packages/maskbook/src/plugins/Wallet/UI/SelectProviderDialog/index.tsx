@@ -1,5 +1,6 @@
-import { useCallback } from 'react'
+import {useCallback,  useState, useEffect } from 'react'
 import {
+    Alert,
     Box,
     makeStyles,
     Theme,
@@ -33,8 +34,6 @@ import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { NetworkIcon } from '../../../../components/shared/NetworkIcon'
 import { currentNetworkSettings, currentProviderSettings } from '../../settings'
 import { Flags } from '../../../../utils'
-import { useState } from 'react'
-import { useEffect } from 'react'
 
 const useStyles = makeStyles((theme: Theme) => ({
     paper: {
@@ -89,8 +88,11 @@ const useStyles = makeStyles((theme: Theme) => ({
         background: '#fff',
         borderRadius: '50%',
     },
-    note: {
-        color: theme.palette.warning.main,
+    alert: {
+        fontSize: 12,
+        display: 'flex',
+        alignItems: 'center',
+        marginTop: theme.spacing(1),
     },
     grid: {
         width: '100%',
@@ -247,9 +249,9 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                         ))}
                     </List>
                     {isWalletConnect && (
-                        <Typography className={classes.note} variant="body1">
+                        <Alert className={classes.alert} severity="warning">
                             {t('plugin_wallet_connect_switch_disabled_note')}
-                        </Typography>
+                        </Alert>
                     )}
                 </Box>
                 <Box className={classes.step}>

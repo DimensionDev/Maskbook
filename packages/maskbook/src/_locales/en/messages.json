@@ -333,7 +333,7 @@
     "plugin_wallet_token_infinite_unlock": "Infinite Unlock",
     "plugin_wallet_connect_dialog_title": "WalletConnect",
     "plugin_wallet_connect_new_ethereum": "New to Ethereum? ",
-    "plugin_wallet_connect_switch_disabled_note": "You are using WalletConnect, please switch network on the connected wallet.",
+    "plugin_wallet_connect_switch_disabled_note": "You are using WalletConnect. Please switch the network on the connected wallet.",
     "plugin_wallet_connect_learn_more_wallets": "Learn more about wallets",
     "plugin_wallet_connect_safari_metamask": "Connect to MetaMask",
     "plugin_wallet_connect_safari_rainbow": "Connect to Rainbow",
