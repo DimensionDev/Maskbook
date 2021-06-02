@@ -25,10 +25,8 @@ import ManifestPlugin from 'webpack-extension-manifest-plugin'
 //#endregion
 
 import git from '@nice-labs/git-rev'
-import rimraf from 'rimraf'
 
 import * as modifiers from './miscs/manifest-modifiers'
-import { promisify } from 'util'
 
 const src = (file: string) => path.join(__dirname, file)
 const root = (file: string) => path.join(__dirname, '../../', file)
@@ -207,6 +205,7 @@ function config(opts: {
             hotUpdateMainFilename: 'hot.[runtime].[fullhash].json',
             globalObject: 'globalThis',
             publicPath: '/',
+            clean: mode === 'production',
         },
         ignoreWarnings: [/Failed to parse source map/],
         // @ts-ignore
@@ -251,7 +250,6 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     const target = getCompilationInfo(cli_env)
     const mode: 'production' | 'development' = argv.mode ?? 'production'
     const dist = mode === 'production' ? root('./build') : root('./dist')
-    if (mode === 'production') await promisify(rimraf)(root('./build'))
     const disableHMR = Boolean(process.env.NO_HMR)
     const isManifestV3 = target.runtimeEnv.manifest === 3
 

@@ -48,7 +48,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     const abort = new AbortController()
     const { signal } = abort
-    if (module.hot) {
+    if (import.meta.webpackHot) {
         console.log('SNS adaptor HMR enabled.')
         ui_deferred.hotModuleReload?.(async (newDefinition) => {
             console.log('SNS adaptor updated. Uninstalling current adaptor.')
@@ -157,7 +157,7 @@ export async function loadSocialNetworkUI(identifier: string): Promise<SocialNet
     if (!define) throw new Error('SNS adaptor not found')
     const ui = (await define.load()).default
     definedSocialNetworkUIsResolved.set(identifier, ui)
-    if (module.hot) {
+    if (import.meta.webpackHot) {
         define.hotModuleReload?.((ui) => definedSocialNetworkUIsResolved.set(identifier, ui))
     }
     return ui

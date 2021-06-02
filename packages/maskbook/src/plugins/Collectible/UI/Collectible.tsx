@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 import { findIndex } from 'lodash-es'
-import { format } from 'date-fns'
+import formatDateTime from 'date-fns/format'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { useI18N, getEnumAsArray, useSettingsSwticher } from '../../../utils'
@@ -302,7 +302,7 @@ export function Collectible(props: CollectibleProps) {
                 <Box sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
                         {t('plugin_collectible_sale_end', {
-                            time: format(new Date(asset.value.end_time), 'yyyy-MM-dd HH:mm:ss'),
+                            time: formatDateTime(asset.value.end_time, 'yyyy-MM-dd HH:mm:ss'),
                         })}
                     </Typography>
                 </Box>

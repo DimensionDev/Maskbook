@@ -1,5 +1,5 @@
 // If the content script runs in https, webpack will connect https://localhost:HMR_PORT
-if (module.hot) {
+if (import.meta.webpackHot) {
     globalThis.WebSocket = new Proxy(WebSocket, {
         construct(target, args, newTarget) {
             args[0] = removeWss(args[0])

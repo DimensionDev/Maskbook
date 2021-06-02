@@ -93,6 +93,6 @@ interface WalletMessage {
     rpc: unknown
 }
 
-if (module.hot) module.hot.accept()
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
 export const WalletMessages = createPluginMessage<WalletMessage>(PLUGIN_IDENTIFIER)
 export const WalletRPC = createPluginRPC(PLUGIN_IDENTIFIER, () => import('./services'), WalletMessages.events.rpc)

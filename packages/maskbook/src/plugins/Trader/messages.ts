@@ -48,7 +48,7 @@ interface PluginTraderMessage {
     rpc: unknown
 }
 
-if (module.hot) module.hot.accept()
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
 export const PluginTraderMessages = createPluginMessage<PluginTraderMessage>(PLUGIN_IDENTIFIER)
 export const PluginTraderRPC = createPluginRPC(
     PLUGIN_IDENTIFIER,

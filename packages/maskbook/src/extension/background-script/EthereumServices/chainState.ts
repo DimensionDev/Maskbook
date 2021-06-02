@@ -19,7 +19,7 @@ import { Flags } from '../../../utils/flags'
 import { getWalletCached, getWalletsCached } from './wallet'
 import { resetAllNonce } from './nonce'
 
-const effect = startEffects(module.hot)
+const effect = startEffects(import.meta.webpackHot)
 
 //#region tracking chain state
 export const updateBlockNumber = debounce(

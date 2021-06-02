@@ -1,6 +1,6 @@
 import { Avatar, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import { CollectibleProvider, NFTOrder } from '../types'
-import { formatDistanceToNow } from 'date-fns'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import BigNumber from 'bignumber.js'
 import { resolveAddressLinkOnExplorer } from '@dimensiondev/web3-shared'
 import { ChainId } from '@dimensiondev/web3-shared'
