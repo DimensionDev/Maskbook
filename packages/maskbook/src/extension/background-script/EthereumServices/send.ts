@@ -1,7 +1,10 @@
 import type { HttpProvider, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { EthereumMethodType, ProviderType } from '@dimensiondev/web3-shared'
+import type { IJsonRpcRequest } from '@walletconnect/types'
+import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 import { createWeb3 } from './web3'
+import * as WalletConnect from './providers/WalletConnect'
 import { currentProviderSettings } from '../../../plugins/Wallet/settings'
 import { commitNonce, getNonce, resetNonce } from './nonce'
 import { getWalletCached } from './wallet'
@@ -39,63 +42,89 @@ export async function INTERNAL_send(
     switch (payload.method) {
         case EthereumMethodType.PERSONAL_SIGN:
             const [data, address] = payload.params as [string, string]
-
             try {
-                if (providerType === ProviderType.Maskbook) {
-                    callback(null, {
-                        jsonrpc: '2.0',
-                        id: payload.id as number,
-                        result: await web3.eth.sign(data, address),
-                    })
-                } else {
-                    provider.send(
-                        {
-                            ...payload,
-                            params: payload.params.concat(''), // concat the password
-                        },
-                        callback,
-                    )
+                switch (providerType) {
+                    case ProviderType.Maskbook:
+                        callback(null, {
+                            jsonrpc: '2.0',
+                            id: payload.id as number,
+                            result: await web3.eth.sign(data, address),
+                        })
+                        break
+                    case ProviderType.MetaMask:
+                        provider.send(
+                            {
+                                ...payload,
+                                params: [data, address, ''],
+                            },
+                            callback,
+                        )
+                        break
+                    case ProviderType.WalletConnect:
+                        callback(null, {
+                            jsonrpc: '2.0',
+                            id: payload.id as number,
+                            result: await WalletConnect.signPersonalMessage(data, address, ''),
+                        })
+                        break
+                    case ProviderType.CustomNetwork:
+                        throw new Error('To be implemented.')
+                    default:
+                        safeUnreachable(providerType)
                 }
             } catch (e) {
                 callback(e)
             }
             break
         case EthereumMethodType.ETH_SEND_TRANSACTION:
-            if (providerType === ProviderType.Maskbook) {
-                const [config] = payload.params as [TransactionConfig]
+            const [config] = payload.params as [TransactionConfig]
+            try {
+                switch (providerType) {
+                    case ProviderType.Maskbook:
+                        const wallet = getWalletCached()
+                        const _private_key_ = wallet?._private_key_
+                        if (!wallet || !_private_key_) throw new Error('Unable to sign transaction.')
 
-                try {
-                    const wallet = getWalletCached()
-                    const _private_key_ = wallet?._private_key_
-                    if (!wallet || !_private_key_) throw new Error('Unable to sign transaction.')
+                        // FIXME: use internal nonce manager to override nonce
+                        config.nonce = await getNonce(wallet.address)
 
-                    // FIXME: use internal nonce manager to override nonce
-                    config.nonce = await getNonce(wallet.address)
+                        // send the signed transaction
+                        const signedTransaction = await web3.eth.accounts.signTransaction(config, _private_key_)
+                        provider.send(
+                            {
+                                ...payload,
+                                method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
+                                params: [signedTransaction.rawTransaction],
+                            },
+                            (error, result) => {
+                                callback(error, result)
 
-                    // send the signed transaction
-                    const signedTransaction = await web3.eth.accounts.signTransaction(config, _private_key_)
-                    provider.send(
-                        {
-                            ...payload,
-                            method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                            params: [signedTransaction.rawTransaction],
-                        },
-                        (error, result) => {
-                            callback(error, result)
-
-                            // handle nonce
-                            const error_ = (error ?? result?.error) as { message: string } | undefined
-                            const message = error_?.message ?? ''
-                            if (/\bnonce\b/im.test(message) && /\b(low|high)\b/im.test(message))
-                                resetNonce(wallet.address)
-                            else commitNonce(wallet.address)
-                        },
-                    )
-                } catch (error) {
-                    callback(error)
+                                // handle nonce
+                                const error_ = (error ?? result?.error) as { message: string } | undefined
+                                const message = error_?.message ?? ''
+                                if (/\bnonce\b/im.test(message) && /\b(low|high)\b/im.test(message))
+                                    resetNonce(wallet.address)
+                                else commitNonce(wallet.address)
+                            },
+                        )
+                        break
+                    case ProviderType.MetaMask:
+                        provider.send(payload, callback)
+                        break
+                    case ProviderType.WalletConnect:
+                        callback(null, {
+                            jsonrpc: '2.0',
+                            id: payload.id as number,
+                            result: await WalletConnect.sendCustomRequest(payload as IJsonRpcRequest),
+                        })
+                        break
+                    case ProviderType.CustomNetwork:
+                        throw new Error('To be implemented.')
+                    default:
+                        safeUnreachable(providerType)
                 }
-            } else {
-                provider.send(payload, callback)
+            } catch (error) {
+                callback(error)
             }
             break
         default:

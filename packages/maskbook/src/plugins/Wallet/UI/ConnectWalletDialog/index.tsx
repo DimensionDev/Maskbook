@@ -108,7 +108,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             try {
                 await Promise.race([
                     (async () => {
-                        await delay(60 /* seconds */ * 1000 /* milliseconds */)
+                        await delay(30 /* seconds */ * 1000 /* milliseconds */)
                         throw new Error('Timeout!')
                     })(),
                     Services.Ethereum.addEthereumChain(account, {

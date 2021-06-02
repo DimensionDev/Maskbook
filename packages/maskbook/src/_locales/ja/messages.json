@@ -333,7 +333,6 @@
     "plugin_wallet_token_infinite_unlock": "永遠にアンロックする",
     "plugin_wallet_connect_dialog_title": "WalletConnect",
     "plugin_wallet_connect_new_ethereum": "Ethereum ははじめてですか?",
-    "plugin_wallet_connect_switch_disabled_note": "",
     "plugin_wallet_connect_learn_more_wallets": "もっとウォレットについて知りましょう",
     "plugin_wallet_connect_safari_metamask": "MetaMask に接続する",
     "plugin_wallet_connect_safari_rainbow": "Rainbow に接続する",

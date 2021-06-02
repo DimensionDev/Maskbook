@@ -1,6 +1,5 @@
 import { useCallback, useState, useEffect } from 'react'
 import {
-    Alert,
     Box,
     makeStyles,
     Theme,
@@ -217,8 +216,6 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
         ],
     )
 
-    const isWalletConnect = ProviderType.WalletConnect === selectedProviderType
-
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
@@ -226,18 +223,13 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     <Typography className={classes.stepTitle} variant="h2" component="h2">
                         1. Choose Network
                     </Typography>
-                    <List
-                        className={classnames(classes.networkList, classes.stepContent, {
-                            [classes.networkDisabled]: isWalletConnect,
-                        })}>
+                    <List className={classnames(classes.networkList, classes.stepContent)}>
                         {networks.map((network) => (
                             <ListItem
                                 className={classes.networkItem}
                                 key={network}
                                 onClick={() => {
-                                    if (!isWalletConnect) {
-                                        setUndeterminedNetworkType(network)
-                                    }
+                                    setUndeterminedNetworkType(network)
                                 }}>
                                 <div className={classes.iconWrapper}>
                                     <NetworkIcon classes={{ icon: classes.networkIcon }} networkType={network} />
@@ -248,11 +240,6 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             </ListItem>
                         ))}
                     </List>
-                    {isWalletConnect && (
-                        <Alert className={classes.alert} severity="warning">
-                            {t('plugin_wallet_connect_switch_disabled_note')}
-                        </Alert>
-                    )}
                 </Box>
                 <Box className={classes.step}>
                     <Typography className={classes.stepTitle} variant="h2" component="h2">
