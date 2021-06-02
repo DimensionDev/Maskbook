@@ -57,7 +57,7 @@ export function WalletInList(props: WalletInListProps) {
                     secondary: classes.overflow,
                 }}
                 primary={wallet.name}
-                secondary={formatEthereumAddress(wallet.address)}
+                secondary={formatEthereumAddress(wallet.address, 16)}
                 secondaryTypographyProps={{
                     component: 'div',
                 }}
