@@ -282,7 +282,7 @@
     "wallet_value": "價值",
     "wallet_confirmation_hint": "我確認我需要建立一個錢包。",
     "wallet_new": "新錢包",
-    "wallet_notification": "這將建立預設認錢包以外的新錢包。你負責保管錢包的私密金鑰。請注意，Mask將無法支付您在乙太坊的交易費用。",
+    "wallet_notification": "這將建立預設認錢包以外的新錢包。你負責保管錢包的私密金鑰。請注意，Mask 將無法支付您在乙太坊的交易費用。",
     "wallets": "錢包",
     "your_message": "你的訊息…",
     "input_length_exceed_prompt": "{{name}} 的長度需小於 {{length}}。",
