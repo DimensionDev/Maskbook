@@ -116,8 +116,10 @@ const onUpdate = async (
 const onDisconnect = async (error: Error | null) => {
     if (connector?.connected) await connector.killSession()
     connector = null
-    if (currentProviderSettings.value === ProviderType.WalletConnect) currentAccountSettings.value = ''
-    currentNetworkSettings.value = NetworkType.Ethereum
+    if (currentProviderSettings.value === ProviderType.WalletConnect) {
+        currentAccountSettings.value = ''
+        currentNetworkSettings.value = NetworkType.Ethereum
+    }
 }
 
 async function updateWalletInDB(address: string, name: string = 'WalletConnect', setAsDefault: boolean = false) {

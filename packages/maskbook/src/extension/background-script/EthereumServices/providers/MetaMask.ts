@@ -35,9 +35,10 @@ function onError(error: string) {
         typeof error === 'string' &&
         /Lost Connection to MetaMask/i.test(error) &&
         currentProviderSettings.value === ProviderType.MetaMask
-    )
+    ) {
         currentAccountSettings.value = ''
-    currentNetworkSettings.value = NetworkType.Ethereum
+        currentNetworkSettings.value = NetworkType.Ethereum
+    }
 }
 
 export function createProvider() {
