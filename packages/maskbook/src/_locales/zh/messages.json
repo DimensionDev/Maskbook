@@ -237,7 +237,7 @@
     "set_up_backup_fail": "備份失敗",
     "settings": "設定",
     "settings_ancient_post_compatibility_mode": "遠古貼文相容模式",
-    "settings_ancient_post_compatibility_mode_desc": "開啟這個選項如果你需要解密遠古貼文 (在2020年一月前建立)。",
+    "settings_ancient_post_compatibility_mode_desc": "開啟這個選項如果你需要解密遠古貼文 (在 2020 年一月前建立)。",
     "settings_enable_debug": "除錯模式",
     "settings_enable_debug_desc": "請參考有關除錯的附加資訊",
     "settings_appearance": "外觀",
