@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 12,
         paddingTop: theme.spacing(0.5),
         paddingRight: theme.spacing(1),
-    }
+    },
 }))
 
 export interface ConnectionProgressProps extends withClasses<never> {
