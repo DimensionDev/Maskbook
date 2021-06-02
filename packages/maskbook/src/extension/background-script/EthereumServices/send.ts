@@ -2,7 +2,7 @@ import type { HttpProvider, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { EthereumMethodType, ProviderType } from '@dimensiondev/web3-shared'
 import { createWeb3 } from './web3'
-import { currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
+import { currentProviderSettings } from '../../../plugins/Wallet/settings'
 import { commitNonce, getNonce, resetNonce } from './nonce'
 import { getWalletCached } from './wallet'
 
@@ -22,7 +22,7 @@ export async function INTERNAL_send(
 
     const web3 = createWeb3()
     const provider = web3.currentProvider as HttpProvider | undefined
-    const providerType = currentSelectedWalletProviderSettings.value
+    const providerType = currentProviderSettings.value
 
     // unable to create provider
     if (!provider) {

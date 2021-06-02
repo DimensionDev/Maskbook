@@ -2,8 +2,8 @@ import { useValueRef } from '@dimensiondev/maskbook-shared'
 import { makeStyles } from '@material-ui/core'
 import type { FC } from 'react'
 import {
-    currentSelectedWalletNetworkSettings,
-    currentSelectedWalletProviderSettings,
+    currentNetworkSettings,
+    currentProviderSettings,
 } from '../../plugins/Wallet/settings'
 import { NetworkIcon } from './NetworkIcon'
 import { ProviderIcon } from './ProviderIcon'
@@ -33,8 +33,8 @@ interface WalletIconProps {
 
 export const WalletIcon: FC<WalletIconProps> = ({ size = 24, badgeSize = 14 }) => {
     const classes = useStyles()
-    const selectedNetwork = useValueRef(currentSelectedWalletNetworkSettings)
-    const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
+    const selectedNetwork = useValueRef(currentNetworkSettings)
+    const selectedWalletProvider = useValueRef(currentProviderSettings)
     return (
         <div
             className={classes.root}

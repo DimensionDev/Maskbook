@@ -3,14 +3,14 @@ import type { provider as Provider } from 'web3-core'
 import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
-import { ChainId, getNetworkTypeFromChainId, ProviderType } from '@dimensiondev/web3-shared'
+import { ChainId, getNetworkTypeFromChainId, NetworkType, ProviderType } from '@dimensiondev/web3-shared'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import {
-    currentMetaMaskChainIdSettings,
-    currentSelectedWalletAddressSettings,
-    currentSelectedWalletProviderSettings,
+    currentChainIdSettings,
+    currentAccountSettings,
+    currentProviderSettings,
     currentIsMetamaskLockedSettings,
-    currentSelectedWalletNetworkSettings,
+    currentNetworkSettings,
 } from '../../../../plugins/Wallet/settings'
 
 let provider: MetaMaskInpageProvider | null = null
@@ -26,17 +26,18 @@ async function onChainIdChanged(id: string) {
     const chainId_ = Number.parseInt(id, 16)
     const chainId = chainId_ === 0 ? ChainId.Mainnet : chainId_
     currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked())
-    currentMetaMaskChainIdSettings.value = chainId
-    currentSelectedWalletNetworkSettings.value = getNetworkTypeFromChainId(chainId)
+    currentChainIdSettings.value = chainId
+    currentNetworkSettings.value = getNetworkTypeFromChainId(chainId)
 }
 
 function onError(error: string) {
     if (
         typeof error === 'string' &&
         /Lost Connection to MetaMask/i.test(error) &&
-        currentSelectedWalletProviderSettings.value === ProviderType.MetaMask
+        currentProviderSettings.value === ProviderType.MetaMask
     )
-        currentSelectedWalletAddressSettings.value = ''
+        currentAccountSettings.value = ''
+        currentNetworkSettings.value = NetworkType.Ethereum
 }
 
 export function createProvider() {
@@ -80,11 +81,11 @@ export async function requestAccounts() {
 }
 
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {
-    const providerType = currentSelectedWalletProviderSettings.value
+    const providerType = currentProviderSettings.value
 
     // validate address
     if (!EthereumAddress.isValid(address)) {
-        if (providerType === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = ''
+        if (providerType === ProviderType.MetaMask) currentAccountSettings.value = ''
         return
     }
 
@@ -92,8 +93,8 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
     await updateExoticWalletFromSource(ProviderType.MetaMask, new Map([[address, { address }]]))
 
     // update the selected wallet provider type
-    if (setAsDefault) currentSelectedWalletProviderSettings.value = ProviderType.MetaMask
+    if (setAsDefault) currentProviderSettings.value = ProviderType.MetaMask
 
     // update the selected wallet address
-    if (setAsDefault || providerType === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = address
+    if (setAsDefault || providerType === ProviderType.MetaMask) currentAccountSettings.value = address
 }

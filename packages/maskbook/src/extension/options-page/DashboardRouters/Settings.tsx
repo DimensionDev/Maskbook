@@ -2,9 +2,9 @@ import { useRef } from 'react'
 import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Appearance, Language } from '@dimensiondev/maskbook-theme'
-import { getChainName, ChainId } from '@dimensiondev/web3-shared'
+import { getChainName, ChainId, ProviderType } from '@dimensiondev/web3-shared'
 
-import { useMatchXS, extendsTheme, useI18N, Flags } from '../../../utils'
+import { useMatchXS, extendsTheme, useI18N, Flags, useValueRef } from '../../../utils'
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
 import {
     debugModeSetting,
@@ -44,7 +44,7 @@ import {
 import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
 import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
 import { PortfolioProvider } from '../../../plugins/Wallet/types'
-import { currentPortfolioDataProviderSettings, currentMaskbookChainIdSettings } from '../../../plugins/Wallet/settings'
+import { currentPortfolioDataProviderSettings, currentChainIdSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -153,6 +153,8 @@ export default function DashboardSettingsRouter() {
     const theme = useTheme()
     const elevation = theme.palette.mode === 'dark' ? 1 : 0
 
+    const providerType = useValueRef(currentProviderSettings)
+
     const [backupDialog, openBackupDialog] = useModal(DashboardBackupDialog)
     const [restoreDialog, openRestoreDialog] = useModal(DashboardRestoreDialog)
 
@@ -194,13 +196,13 @@ export default function DashboardSettingsRouter() {
                                     icon={<PaletteIcon />}
                                     value={appearanceSettings}
                                 />
-                                {Flags.support_eth_network_switch ? (
+                                {Flags.support_eth_network_switch && providerType === ProviderType.Maskbook ? (
                                     <SettingsUIEnum
                                         classes={listStyle}
                                         enumObject={ChainId}
                                         getText={getChainName}
                                         icon={<WifiIcon />}
-                                        value={currentMaskbookChainIdSettings}
+                                        value={currentChainIdSettings}
                                     />
                                 ) : null}
                                 <SettingsUIEnum

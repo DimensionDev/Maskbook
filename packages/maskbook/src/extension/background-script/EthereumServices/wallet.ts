@@ -2,7 +2,7 @@ import { isSameAddress } from '@dimensiondev/web3-shared'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { getWallets } from '../../../plugins/Wallet/services'
-import { currentSelectedWalletAddressSettings } from '../../../plugins/Wallet/settings'
+import { currentAccountSettings } from '../../../plugins/Wallet/settings'
 import { startEffects } from '../../../utils/side-effects'
 
 const effect = startEffects(module.hot)
@@ -16,7 +16,7 @@ effect(() => WalletMessages.events.walletsUpdated.on(revalidateWallets))
 revalidateWallets()
 //#endregion
 
-export function getWalletCached(address = currentSelectedWalletAddressSettings.value) {
+export function getWalletCached(address = currentAccountSettings.value) {
     return wallets.find((x) => isSameAddress(x.address, address))
 }
 

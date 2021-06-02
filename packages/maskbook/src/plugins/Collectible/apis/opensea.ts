@@ -3,12 +3,13 @@ import { OpenSeaPort } from 'opensea-js'
 import type { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
 import { ChainId, getChainName } from '@dimensiondev/web3-shared'
-import { getChainId, request, requestSend } from '../../../extension/background-script/EthereumService'
+import { request, requestSend } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaRinkebyBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
 import { Flags } from '../../../utils/flags'
 import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../types'
 import { OpenSeaEventHistoryQuery } from '../queries/OpenSea'
+import { currentChainIdSettings } from '../../Wallet/settings'
 
 function createExternalProvider() {
     return {
@@ -23,7 +24,7 @@ function createExternalProvider() {
 }
 
 async function createOpenSeaPort() {
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     return new OpenSeaPort(
         createExternalProvider(),
         {
@@ -35,7 +36,7 @@ async function createOpenSeaPort() {
 }
 
 async function createOpenSeaAPI() {
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId))
         throw new Error(`${getChainName(chainId)} is not supported.`)
     return chainId === ChainId.Mainnet ? OpenSeaBaseURL : OpenSeaRinkebyBaseURL

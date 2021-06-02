@@ -1,16 +1,16 @@
 import { noop, pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ChainId, ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
-import Services from '../extension/service'
+import { ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
     currentGasPriceSettings,
     currentBalanceSettings,
     currentNonceSettings,
-    currentSelectedWalletAddressSettings,
-    currentSelectedWalletNetworkSettings,
-    currentSelectedWalletProviderSettings,
+    currentAccountSettings,
+    currentNetworkSettings,
+    currentProviderSettings,
+    currentChainIdSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
@@ -27,19 +27,15 @@ export const Web3Context: Web3ProviderType = {
         getCurrentValue: () => Flags.wallet_allow_test_chain,
         subscribe: () => noop,
     },
-    chainId: createSubscriptionAsync(
-        Services.Ethereum.getChainId,
-        ChainId.Mainnet,
-        WalletMessages.events.chainIdUpdated.on,
-    ),
-    account: createSubscriptionFromSettings(currentSelectedWalletAddressSettings),
+    chainId: createSubscriptionFromSettings(currentChainIdSettings),
+    account: createSubscriptionFromSettings(currentAccountSettings),
     balance: createSubscriptionFromSettings(currentBalanceSettings),
     blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
     nonce: createSubscriptionFromSettings(currentNonceSettings),
     gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
     wallets: createSubscriptionAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
-    providerType: createSubscriptionFromSettings(currentSelectedWalletProviderSettings),
-    networkType: createSubscriptionFromSettings(currentSelectedWalletNetworkSettings),
+    providerType: createSubscriptionFromSettings(currentProviderSettings),
+    networkType: createSubscriptionFromSettings(currentNetworkSettings),
     erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
     erc721Tokens: createSubscriptionAsync(getERC721Tokens, [], WalletMessages.events.erc721TokensUpdated.on),
 }

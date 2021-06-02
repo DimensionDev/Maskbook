@@ -1,7 +1,8 @@
 import { isSameAddress, TransactionStatusType } from '@dimensiondev/web3-shared'
 import { createTransaction } from '../../../database/helpers/openDB'
-import { getChainId, getTransactionReceipt } from '../../../extension/background-script/EthereumService'
+import { getTransactionReceipt } from '../../../extension/background-script/EthereumService'
 import { createWalletDBAccess } from '../database/Wallet.db'
+import { currentChainIdSettings } from '../settings'
 
 const MAX_RECENT_TRANSACTIONS_SIZE = 5
 
@@ -50,7 +51,7 @@ export async function addRecentTransaction(address: string, hash: string) {
     const now = new Date()
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('TransactionChunk', 'Wallet')
 
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     const recordId = `${chainId}_${address}`
 
     // compose transaction record

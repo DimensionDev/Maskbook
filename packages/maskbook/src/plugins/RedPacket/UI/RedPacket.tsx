@@ -19,7 +19,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import Services from '../../../extension/service'
 import {
     currentIsMetamaskLockedSettings,
-    currentSelectedWalletProviderSettings,
+    currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
 import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -147,7 +147,7 @@ export function RedPacket(props: RedPacketProps) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
 
-    const currentSelectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
+    const currentSelectedWalletProvider = useValueRef(currentProviderSettings)
     const isMetamaskRedpacketLocked =
         useValueRef(currentIsMetamaskLockedSettings) && currentSelectedWalletProvider === ProviderType.MetaMask
 

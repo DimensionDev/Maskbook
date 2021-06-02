@@ -42,9 +42,9 @@ export const Web3Context: Web3ProviderType = {
         Messages.events.createInternalSettingsChanged.on,
     ),
     chainId: createSubscriptionAsync(
-        Services.Ethereum.getChainId,
+        Services.Settings.getChainId,
         ChainId.Mainnet,
-        PluginMessages.Wallet.events.chainIdUpdated.on,
+        Messages.events.createInternalSettingsChanged.on,
     ),
     providerType: createSubscriptionAsync(
         Services.Settings.getCurrentSelectedWalletProvider,

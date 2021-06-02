@@ -1,10 +1,10 @@
-import stringify from 'json-stable-stringify'
-import { getChainId } from '../../../../extension/background-script/EthereumService'
 import { getConstant } from '@dimensiondev/web3-shared'
+import stringify from 'json-stable-stringify'
+import { currentChainIdSettings } from '../../../Wallet/settings'
 import { LBP_CONSTANTS } from '../../constants/LBP'
 
 async function fetchFromBalancerPoolSubgraph<T>(query: string) {
-    const response = await fetch(getConstant(LBP_CONSTANTS, 'BALANCER_POOLS_SUBGRAPH_URL', await getChainId()), {
+    const response = await fetch(getConstant(LBP_CONSTANTS, 'BALANCER_POOLS_SUBGRAPH_URL', currentChainIdSettings.value), {
         method: 'POST',
         mode: 'cors',
         body: stringify({

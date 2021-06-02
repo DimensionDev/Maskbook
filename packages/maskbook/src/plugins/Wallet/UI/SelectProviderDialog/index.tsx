@@ -31,7 +31,7 @@ import { WalletMessages } from '../../messages'
 import { DashboardRoute } from '../../../../extension/options-page/Route'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { NetworkIcon } from '../../../../components/shared/NetworkIcon'
-import { currentSelectedWalletNetworkSettings, currentSelectedWalletProviderSettings } from '../../settings'
+import { currentNetworkSettings, currentProviderSettings } from '../../settings'
 import { Flags } from '../../../../utils'
 import { useState } from 'react'
 import { useEffect } from 'react'
@@ -149,8 +149,8 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     //#endregion
 
     const wallets = useWallets(ProviderType.Maskbook)
-    const selectedNetworkType = useValueRef(currentSelectedWalletNetworkSettings)
-    const selectedProviderType = useValueRef(currentSelectedWalletProviderSettings)
+    const selectedNetworkType = useValueRef(currentNetworkSettings)
+    const selectedProviderType = useValueRef(currentProviderSettings)
 
     //#region undetermined network type
     const [undeterminedNetworkType, setUndeterminedNetworkType] = useState(selectedNetworkType)

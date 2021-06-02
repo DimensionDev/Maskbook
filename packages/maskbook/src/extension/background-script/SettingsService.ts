@@ -12,9 +12,10 @@ import { queryMyPersonas } from './IdentityService'
 import {
     currentBalanceSettings,
     currentBlockNumberSettings,
-    currentSelectedWalletAddressSettings,
-    currentSelectedWalletNetworkSettings,
-    currentSelectedWalletProviderSettings,
+    currentAccountSettings,
+    currentNetworkSettings,
+    currentProviderSettings,
+    currentChainIdSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
 
@@ -31,6 +32,7 @@ function create<T>(settings: InternalSettings<T>) {
 }
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
+export const [getChainId, setChainId] = create(currentChainIdSettings)
 export const [getBalance, setBalance] = create(currentBalanceSettings)
 export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentTrendingDataProviderSettings)
@@ -39,14 +41,14 @@ export const [getAncientPostsCompatibiltyMode, setAncientPostsCompatibiltyMode] 
 )
 
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(
-    currentSelectedWalletProviderSettings,
+    currentProviderSettings,
 )
 
 export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(
-    currentSelectedWalletNetworkSettings,
+    currentNetworkSettings,
 )
 
-export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentSelectedWalletAddressSettings)
+export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentAccountSettings)
 
 export async function getWalletAllowTestChain() {
     return Flags.wallet_allow_test_chain

@@ -3,13 +3,12 @@ import { unreachable } from '@dimensiondev/maskbook-shared'
 import * as Maskbook from './providers/Maskbook'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
-import { currentMaskbookChainIdSettings, currentSelectedWalletProviderSettings } from '../../../plugins/Wallet/settings'
+import { currentChainIdSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
 import { getWalletCached } from './wallet'
 
 export function createWeb3({
-    // this parameter only available if a managed wallet was selected
-    chainId = currentMaskbookChainIdSettings.value,
-    providerType = currentSelectedWalletProviderSettings.value,
+    chainId = currentChainIdSettings.value,
+    providerType = currentProviderSettings.value,
 } = {}) {
     switch (providerType) {
         case ProviderType.Maskbook:

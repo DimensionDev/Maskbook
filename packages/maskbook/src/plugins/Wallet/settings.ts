@@ -7,7 +7,7 @@ import { CollectibleProvider, PortfolioProvider } from './types'
 /**
  * The address of the selected wallet
  */
-export const currentSelectedWalletAddressSettings = createGlobalSettings<string>(
+export const currentAccountSettings = createGlobalSettings<string>(
     `${PLUGIN_IDENTIFIER}+selectedWalletAddress`,
     '',
     {
@@ -18,7 +18,7 @@ export const currentSelectedWalletAddressSettings = createGlobalSettings<string>
 /**
  * The network type of the selected wallet
  */
-export const currentSelectedWalletNetworkSettings = createGlobalSettings<NetworkType>(
+export const currentNetworkSettings = createGlobalSettings<NetworkType>(
     `${PLUGIN_IDENTIFIER}+selectedWalletNetwork`,
     NetworkType.Ethereum,
     {
@@ -29,7 +29,7 @@ export const currentSelectedWalletNetworkSettings = createGlobalSettings<Network
 /**
  * The provider type of the selected wallet
  */
-export const currentSelectedWalletProviderSettings = createGlobalSettings<ProviderType>(
+export const currentProviderSettings = createGlobalSettings<ProviderType>(
     `${PLUGIN_IDENTIFIER}+selectedWalletProvider`,
     ProviderType.Maskbook,
     {
@@ -101,46 +101,9 @@ export const currentGasPriceSettings = createGlobalSettings<number>(`${PLUGIN_ID
 })
 
 /**
- * Chain Id of Mask Network
+ * Chain Id
  */
-export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>(
-    `${PLUGIN_IDENTIFIER}+MaskChainId`,
-    ChainId.Mainnet,
-    {
-        primary: () => i18n.t('settings_choose_eth_network'),
-        secondary: () => 'This only affects the built-in wallet.',
-    },
-)
-
-/**
- * Chain Id of MetaMask
- */
-export const currentMetaMaskChainIdSettings = createGlobalSettings<ChainId>(
-    `${PLUGIN_IDENTIFIER}+MetaMaskChainID`,
-    ChainId.Mainnet,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
-
-/**
- * Chain Id of WalletConnect
- */
-export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>(
-    `${PLUGIN_IDENTIFIER}+WalletConnectChainId`,
-    ChainId.Mainnet,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
-
-/**
- * Chain Id of CustomNetwork
- */
-export const currentCustomNetworkChainIdSettings = createGlobalSettings<ChainId>(
-    `${PLUGIN_IDENTIFIER}+CustomNetworkChainId`,
-    ChainId.Mainnet,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
+export const currentChainIdSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+chainId`, ChainId.Mainnet, {
+    primary: () => i18n.t('settings_choose_eth_network'),
+    secondary: () => 'This only affects the built-in wallet.',
+})

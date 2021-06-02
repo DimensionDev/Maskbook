@@ -135,7 +135,6 @@ interface WalletMessage {
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
 
     walletsUpdated: void
-    chainIdUpdated: void
     phrasesUpdated: void
     erc20TokensUpdated: void
     erc721TokensUpdated: void

@@ -1,10 +1,10 @@
 import stringify from 'json-stable-stringify'
 import { first, omit } from 'lodash-es'
-import { getChainId } from '../../../extension/background-script/EthereumService'
 import { getConstant } from '@dimensiondev/web3-shared'
 import { ITO_CONSTANTS } from '../constants'
 import { payloadIntoMask } from '../helpers'
 import type { JSON_PayloadOutMask } from '../types'
+import { currentChainIdSettings } from '../../Wallet/settings'
 
 const TRADER_FIELDS = `
     address
@@ -50,7 +50,7 @@ const POOL_FIELDS = `
 `
 
 export async function getTradeInfo(pid: string, trader: string) {
-    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
+    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', currentChainIdSettings.value), {
         method: 'POST',
         mode: 'cors',
         body: stringify({
@@ -122,7 +122,7 @@ export async function getTradeInfo(pid: string, trader: string) {
 }
 
 export async function getPool(pid: string) {
-    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
+    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', currentChainIdSettings.value), {
         method: 'POST',
         mode: 'cors',
         body: stringify({
@@ -147,7 +147,7 @@ export async function getPool(pid: string) {
 }
 
 export async function getAllPoolsAsSeller(address: string) {
-    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
+    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', currentChainIdSettings.value), {
         method: 'POST',
         mode: 'cors',
         body: stringify({
@@ -185,7 +185,7 @@ export async function getAllPoolsAsSeller(address: string) {
 }
 
 export async function getAllPoolsAsBuyer(address: string) {
-    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', await getChainId()), {
+    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', currentChainIdSettings.value), {
         method: 'POST',
         mode: 'cors',
         body: stringify({

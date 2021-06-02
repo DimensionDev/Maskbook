@@ -13,7 +13,7 @@ import Services from '../../../../extension/service'
 import { useI18N, useRemoteControlledDialog } from '../../../../utils'
 import { useWallet } from '../../hooks/useWallet'
 import { WalletMessages } from '../../messages'
-import { currentSelectedWalletProviderSettings } from '../../settings'
+import { currentProviderSettings } from '../../settings'
 import { RecentTransactionList } from './RecentTransactionList'
 
 const useStyles = makeStyles((theme) => ({
@@ -94,7 +94,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     const selectedWallet = useWallet()
-    const selectedProviderType = useValueRef(currentSelectedWalletProviderSettings)
+    const selectedProviderType = useValueRef(currentProviderSettings)
 
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()

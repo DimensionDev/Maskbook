@@ -10,10 +10,10 @@ import { WalletInList } from '../../../components/shared/SelectWallet/WalletInLi
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
 import {
-    currentMaskbookChainIdSettings,
-    currentSelectedWalletAddressSettings,
-    currentSelectedWalletNetworkSettings,
-    currentSelectedWalletProviderSettings,
+    currentChainIdSettings,
+    currentAccountSettings,
+    currentNetworkSettings,
+    currentProviderSettings,
 } from '../settings'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useState } from 'react'
@@ -33,7 +33,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
 
     const wallets = useWallets(ProviderType.Maskbook)
     const selectedWallet = useWallet()
-    const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
+    const selectedWalletProvider = useValueRef(currentProviderSettings)
 
     //#region remote controlled dialog logic
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
@@ -46,11 +46,11 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const onSelect = useCallback(
         (address: string) => {
             closeDialog()
-            currentSelectedWalletAddressSettings.value = address
-            currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
+            currentAccountSettings.value = address
+            currentProviderSettings.value = ProviderType.Maskbook
             if (networkType) {
-                currentMaskbookChainIdSettings.value = getChainIdFromNetworkType(networkType)
-                currentSelectedWalletNetworkSettings.value = networkType
+                currentChainIdSettings.value = getChainIdFromNetworkType(networkType)
+                currentNetworkSettings.value = networkType
             }
         },
         [networkType, closeDialog],

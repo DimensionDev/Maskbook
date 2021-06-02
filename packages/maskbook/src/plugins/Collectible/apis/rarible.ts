@@ -1,6 +1,9 @@
 import { RaribleMainetURL, RaribleRopstenURL } from '../constants'
-import { Flags } from '../../../utils/flags'
+import { compact, head } from 'lodash-es'
+import { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
+import { ChainId, getChainName } from '@dimensiondev/web3-shared'
+import { Flags } from '../../../utils/flags'
 import type {
     RaribleCollectibleResponse,
     RaribleHistory,
@@ -9,15 +12,12 @@ import type {
     RaribleOfferResponse,
     RaribleProfileResponse,
 } from '../types'
-import { compact, head } from 'lodash-es'
-import { OrderSide } from 'opensea-js/lib/types'
 import { toRaribleImage } from '../helpers'
-import { getChainId } from '../../../extension/background-script/EthereumServices/chainState'
-import { ChainId, getChainName } from '@dimensiondev/web3-shared'
 import { resolveRaribleUserNetwork } from '../pipes'
+import { currentChainIdSettings } from '../../Wallet/settings'
 
 async function createRaribleApi() {
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     if (![ChainId.Mainnet, ChainId.Ropsten].includes(chainId))
         throw new Error(`${getChainName(chainId)} is not supported.`)
     return chainId === ChainId.Mainnet ? RaribleMainetURL : RaribleRopstenURL
@@ -73,7 +73,7 @@ export async function getNFTItem(tokenAddress: string, tokenId: string) {
 export async function getOffersFromRarible(tokenAddress: string, tokenId: string) {
     const orders = await fetchFromRarible<RaribleOfferResponse[]>(`items/${tokenAddress}:${tokenId}/offers`)
     const profiles = await getProfilesFromRarible(orders.map((item) => item.owner))
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     return orders.map((order) => {
         const ownerInfo = profiles.find((owner) => owner.id === order.owner)
         return {
@@ -100,7 +100,7 @@ export async function getListingsFromRarible(tokenAddress: string, tokenId: stri
         },
     })
     const profiles = await getProfilesFromRarible(owners)
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     return assets
         .map((asset) => {
             const ownerInfo = profiles.find((owner) => owner.id === asset.ownership.owner)

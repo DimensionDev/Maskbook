@@ -2,7 +2,7 @@ import type { RedPacketRecord, RedPacketJSONPayload, History } from './types'
 import { RED_PACKET_HISTORY_URL } from './constants'
 import { RedPacketMessage } from './messages'
 import * as database from './database'
-import Services from '../../extension/service'
+import { currentChainIdSettings } from '../Wallet/settings'
 
 export async function discoverRedPacket(from: string, payload: RedPacketJSONPayload) {
     if (!payload.rpid) return
@@ -27,7 +27,7 @@ export function getRedPacketFromDB(rpid: string) {
 
 export async function getRedPacketsFromChain(from: string, startBlock: number) {
     const url = new URL(RED_PACKET_HISTORY_URL)
-    url.searchParams.set('chainId', String(await Services.Ethereum.getChainId(from)))
+    url.searchParams.set('chainId', String(currentChainIdSettings.value))
     url.searchParams.set('from', from)
     url.searchParams.set('startBlock', String(startBlock))
     url.searchParams.set('endBlock', 'latest')

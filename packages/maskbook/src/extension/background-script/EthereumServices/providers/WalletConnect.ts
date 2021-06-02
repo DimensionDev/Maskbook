@@ -7,14 +7,14 @@ import type { HttpProvider, PromiEvent as PromiEventW3 } from 'web3-core'
 import WalletConnect from '@walletconnect/client'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import type { ITxData } from '@walletconnect/types'
-import { ChainId, TransactionEventType, ProviderType, getNetworkTypeFromChainId } from '@dimensiondev/web3-shared'
+import { ChainId, TransactionEventType, ProviderType, getNetworkTypeFromChainId, NetworkType } from '@dimensiondev/web3-shared'
 import * as Maskbook from '../providers/Maskbook'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import {
-    currentWalletConnectChainIdSettings,
-    currentSelectedWalletAddressSettings,
-    currentSelectedWalletProviderSettings,
-    currentSelectedWalletNetworkSettings,
+    currentChainIdSettings,
+    currentAccountSettings,
+    currentProviderSettings,
+    currentNetworkSettings,
 } from '../../../../plugins/Wallet/settings'
 
 let connector: WalletConnect | null = null
@@ -142,7 +142,7 @@ function hijackPersonal(personal: Personal) {
 
 // Wrap promise as PromiEvent because WalletConnect returns transaction hash only
 // docs: https://docs.walletconnect.org/client-api
-export function createWeb3(chainId = currentWalletConnectChainIdSettings.value) {
+export function createWeb3(chainId = currentChainIdSettings.value) {
     const web3 = Maskbook.createWeb3({
         chainId,
     })
@@ -178,8 +178,8 @@ export async function requestAccounts() {
 
 const onConnect = async () => {
     if (!connector?.accounts.length) return
-    currentWalletConnectChainIdSettings.value = connector.chainId
-    currentSelectedWalletNetworkSettings.value = getNetworkTypeFromChainId(connector.chainId)
+    currentChainIdSettings.value = connector.chainId
+    currentNetworkSettings.value = getNetworkTypeFromChainId(connector.chainId)
     await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, true)
 }
 
@@ -194,24 +194,25 @@ const onUpdate = async (
 ) => {
     if (error) return
     if (!connector?.accounts.length) return
-    currentWalletConnectChainIdSettings.value = connector.chainId
-    currentSelectedWalletNetworkSettings.value = getNetworkTypeFromChainId(connector.chainId)
+    currentChainIdSettings.value = connector.chainId
+    currentNetworkSettings.value = getNetworkTypeFromChainId(connector.chainId)
     await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, false)
 }
 
 const onDisconnect = async (error: Error | null) => {
     if (connector?.connected) await connector.killSession()
     connector = null
-    if (currentSelectedWalletProviderSettings.value === ProviderType.WalletConnect)
-        currentSelectedWalletAddressSettings.value = ''
+    if (currentProviderSettings.value === ProviderType.WalletConnect)
+        currentAccountSettings.value = ''
+        currentNetworkSettings.value = NetworkType.Ethereum
 }
 
 async function updateWalletInDB(address: string, name: string = 'WalletConnect', setAsDefault: boolean = false) {
-    const providerType = currentSelectedWalletProviderSettings.value
+    const providerType = currentProviderSettings.value
 
     // validate address
     if (!EthereumAddress.isValid(address)) {
-        if (providerType === ProviderType.WalletConnect) currentSelectedWalletAddressSettings.value = ''
+        if (providerType === ProviderType.WalletConnect) currentAccountSettings.value = ''
         return
     }
 
@@ -219,9 +220,9 @@ async function updateWalletInDB(address: string, name: string = 'WalletConnect',
     await updateExoticWalletFromSource(ProviderType.WalletConnect, new Map([[address, { name, address }]]))
 
     // update the selected wallet provider type
-    if (setAsDefault) currentSelectedWalletProviderSettings.value = ProviderType.WalletConnect
+    if (setAsDefault) currentProviderSettings.value = ProviderType.WalletConnect
 
     // update the selected wallet address
     if (setAsDefault || providerType === ProviderType.WalletConnect)
-        currentSelectedWalletAddressSettings.value = address
+        currentAccountSettings.value = address
 }
