@@ -1,6 +1,6 @@
 import { XCircle, Check } from 'react-feather'
 import { makeStyles, List, ListItem, Typography, Link, Button, Box, CircularProgress } from '@material-ui/core'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { formatKeccakHash } from '@dimensiondev/maskbook-shared'
 import {
     useAccount,

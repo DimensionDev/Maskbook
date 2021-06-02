@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Appearance, Language } from '@dimensiondev/maskbook-theme'
-import { getChainName, ChainId, ProviderType } from '@dimensiondev/web3-shared'
+import { getChainName, ChainId, ProviderType, useAccount } from '@dimensiondev/web3-shared'
 
 import { useMatchXS, extendsTheme, useI18N, Flags, useValueRef } from '../../../utils'
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
@@ -157,6 +157,7 @@ export default function DashboardSettingsRouter() {
     const theme = useTheme()
     const elevation = theme.palette.mode === 'dark' ? 1 : 0
 
+    const account = useAccount()
     const providerType = useValueRef(currentProviderSettings)
 
     const [backupDialog, openBackupDialog] = useModal(DashboardBackupDialog)
@@ -200,7 +201,9 @@ export default function DashboardSettingsRouter() {
                                     icon={<PaletteIcon />}
                                     value={appearanceSettings}
                                 />
-                                {Flags.support_eth_network_switch && providerType === ProviderType.Maskbook ? (
+                                {Flags.support_eth_network_switch &&
+                                account &&
+                                providerType === ProviderType.Maskbook ? (
                                     <SettingsUIEnum
                                         classes={listStyle}
                                         enumObject={ChainId}

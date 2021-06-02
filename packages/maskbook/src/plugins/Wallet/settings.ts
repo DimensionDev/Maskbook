@@ -69,6 +69,14 @@ export const currentCollectibleDataProviderSettings = createGlobalSettings<Colle
 )
 
 /**
+ * Chain Id
+ */
+export const currentChainIdSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+chainId`, ChainId.Mainnet, {
+    primary: () => i18n.t('settings_choose_eth_network'),
+    secondary: () => 'This only affects the built-in wallet.',
+})
+
+/**
  * Block number
  */
 export const currentBlockNumberSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+blockNumber`, 0, {
@@ -94,12 +102,4 @@ export const currentNonceSettings = createGlobalSettings<number>(`${PLUGIN_IDENT
  */
 export const currentGasPriceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+gasPrice`, 0, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
-/**
- * Chain Id
- */
-export const currentChainIdSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+chainId`, ChainId.Mainnet, {
-    primary: () => i18n.t('settings_choose_eth_network'),
-    secondary: () => 'This only affects the built-in wallet.',
 })

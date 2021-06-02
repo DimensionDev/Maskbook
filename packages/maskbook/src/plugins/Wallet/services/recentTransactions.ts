@@ -13,7 +13,10 @@ export async function getRecentTransactionsFromDB(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('TransactionChunk')
     const chunks = await t.objectStore('TransactionChunk').getAll()
     return (
-        chunks.find((x) => isSameAddress(x.address, address))?.transactions.slice(0, MAX_RECENT_TRANSACTIONS_SIZE).reverse() ?? []
+        chunks
+            .find((x) => isSameAddress(x.address, address))
+            ?.transactions.slice(0, MAX_RECENT_TRANSACTIONS_SIZE)
+            .reverse() ?? []
     )
 }
 
