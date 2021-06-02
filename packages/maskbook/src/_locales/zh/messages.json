@@ -275,7 +275,7 @@
     "wallet_add_nft_invalid_address": "錯誤的地址",
     "wallet_add_nft_address_placeholder": "至地址",
     "wallet_add_nft_id": "ID",
-    "wallet_add_nft_id_placeholder": "輸入收藏品ID",
+    "wallet_add_nft_id_placeholder": "輸入收藏品 ID",
     "wallet_assets": "資產",
     "wallet_price": "價格",
     "wallet_balance": "餘額",
