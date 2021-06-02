@@ -458,7 +458,7 @@
     "plugin_ito_swap_unlucky_fail": "你運氣不夠好，請從Etherscan連結查詢原因，然後重試。",
     "plugin_ito_swap_only_once_remind": "每個錢包只能參與一次。",
     "plugin_ito_swap_title": "{{amount}} {{token}} 每 {{swap}} ",
-    "plugin_ito_swap_end_date": "於{{date}}結束。",
+    "plugin_ito_swap_end_date": "於 {{date}} 結束。",
     "plugin_ito_dialog_claim_reminder_agree": "我理解",
     "plugin_ito_dialog_claim_reminder_text1": "任何人都可以用任何名稱在乙太坊上建立 ERC20 代幣，包括建立現有代幣的假版本，以及聲稱代表沒有代幣的項目的代幣。",
     "plugin_ito_dialog_claim_reminder_text2": "此介面可以按代幣地址加載任意代幣。在與任意 ERC20 代幣互動時，請格外小心並了解相關資訊。",
