@@ -191,10 +191,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
     } = useControlledDialog()
     //#endregion
 
-    const { openDialog: openCreateImportDialog } = useRemoteControlledDialog(
-        WalletMessages.events.createImportWalletDialogUpdated,
-    )
-
     const [menu, openMenu] = useMenu(
         [
             <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
@@ -226,10 +222,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
             <MenuItem onClick={onClaimAllDialogOpen} className={classes.menuItem}>
                 <Image src={ToolIconURLs.claim.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.claim.text}</Typography>
-            </MenuItem>,
-            <MenuItem onClick={openCreateImportDialog} className={classes.menuItem}>
-                <Image src={ToolIconURLs.claim.image} width={19} height={19} />
-                <Typography className={classes.text}>create and import</Typography>
             </MenuItem>,
         ],
         false,
