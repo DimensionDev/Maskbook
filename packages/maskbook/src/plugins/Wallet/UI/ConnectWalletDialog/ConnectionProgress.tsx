@@ -13,6 +13,11 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 8,
         backgroundColor: theme.palette.mode === 'dark' ? '#17191D' : '#F7F9FA',
     },
+    error: {
+        fontSize: 12,
+        paddingTop: theme.spacing(0.5),
+        paddingRight: theme.spacing(1),
+    }
 }))
 
 export interface ConnectionProgressProps extends withClasses<never> {
@@ -45,7 +50,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                             </Box>
                         ) : null}
                         {!loading && error ? (
-                            <Typography color="red" variant="body2">
+                            <Typography className={classes.error} color="red" variant="body2">
                                 {error.message}
                             </Typography>
                         ) : null}
