@@ -320,7 +320,7 @@
     "plugin_wallet_setup_verify": "驗證",
     "plugin_wallet_select_provider_dialog_title": "連接錢包",
     "plugin_wallet_qr_code_with_wallet_connect": "使用一個與 WalletConnect 相容的錢包掃描 QR code",
-    "plugin_wallet_metamask_unlock": "解鎖MetaMask",
+    "plugin_wallet_metamask_unlock": "解鎖 MetaMask",
     "plugin_wallet_token_unlock": "特定數量解鎖",
     "plugin_wallet_token_infinite_unlock": "無限解鎖",
     "plugin_wallet_connect_dialog_title": "WalletConnect",
