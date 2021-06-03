@@ -32,6 +32,11 @@ jobs:
   type-check:
     runs-on: ubuntu-20.04
     steps:
+      - name: Get cache date
+        id: get-date
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -41,27 +46,22 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
+      - uses: actions/cache@v2
+        with:
+          path: "**/dist/"
+          # actions/cache will not upload changes in cache if primary key hits
+          # by adding date to the primary key, we can ensure the cache updates on the first build of the day
+          key: ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          # Allow fallback to cache of different dependencies but not allowing fallback to different tsconfig
+          # because that might indicates a structural/flags changes in tsc emit.
+          restore-keys: |
+            ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+            ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}
       - run: npx pnpm install
       - run: npx build -- echo "Check tsc"
-  type-coverage:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - uses: actions/setup-node@v2-beta
-      - uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-node-
-      - run: npx pnpm install
-      # typecoverage computes different coverage rate on the developer's machine and CI and fails on CI. disabled for now
-      # - run: npm run lint:typecoverage
-      #   working-directory: packages/maskbook
   eslint:
     runs-on: ubuntu-20.04
-    needs: [prettier, locale-kit, type-check, type-coverage]
+    needs: [prettier, locale-kit, type-check]
     steps:
       - uses: actions/checkout@v2
         with:

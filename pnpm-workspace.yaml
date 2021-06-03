@@ -12,3 +12,4 @@ packages:
   - 'packages/contracts'
   - 'packages/plugin-infra'
   - 'packages/plugins/example'
+  - 'packages/external-plugin-previewer'
