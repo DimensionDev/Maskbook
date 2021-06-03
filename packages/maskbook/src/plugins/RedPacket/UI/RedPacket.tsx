@@ -4,10 +4,8 @@ import {
     getChainIdFromName,
     isDAI,
     isOKB,
-    ProviderType,
     TransactionStateType,
     useAccount,
-    useChainId,
     useChainIdValid,
     useTokenDetailed,
 } from '@dimensiondev/web3-shared'
@@ -16,12 +14,10 @@ import classNames from 'classnames'
 import { useCallback, useEffect } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import Services from '../../../extension/service'
-import { currentIsMetamaskLockedSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
-import { MetaMaskIcon } from '../../../resources/MetaMaskIcon'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { useI18N, useRemoteControlledDialog, useValueRef } from '../../../utils'
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { WalletMessages } from '../../Wallet/messages'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
@@ -141,12 +137,7 @@ export function RedPacket(props: RedPacketProps) {
 
     // context
     const account = useAccount()
-    const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-
-    const currentSelectedWalletProvider = useValueRef(currentProviderSettings)
-    const isMetamaskRedpacketLocked =
-        useValueRef(currentIsMetamaskLockedSettings) && currentSelectedWalletProvider === ProviderType.MetaMask
 
     //#region token detailed
     const {
@@ -220,35 +211,35 @@ export function RedPacket(props: RedPacketProps) {
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
 
-    if (isMetamaskRedpacketLocked)
-        return (
-            <Card
-                className={classNames(classes.root, {
-                    [classes.metamaskContent]: true,
-                    [classes.cursor]: true,
-                })}
-                onClick={() => Services.Ethereum.connectMetaMask()}
-                component="article"
-                elevation={0}>
-                <MetaMaskIcon className={classes.icon} viewBox="0 0 45 45" />
-                {t('plugin_wallet_metamask_unlock')}
-            </Card>
-        )
-
     // the red packet can fetch without account
     if (!availability || !tokenDetailed)
         return (
-            <Card className={classes.root} component="article" elevation={0}>
-                <Skeleton animation="wave" variant="rectangular" width={'30%'} height={12} style={{ marginTop: 16 }} />
-                <Skeleton animation="wave" variant="rectangular" width={'40%'} height={12} style={{ marginTop: 16 }} />
-                <Skeleton
-                    animation="wave"
-                    variant="rectangular"
-                    width={'70%'}
-                    height={12}
-                    style={{ marginBottom: 16 }}
-                />
-            </Card>
+            <EthereumChainBoundary
+                chainId={payload.network ? getChainIdFromName(payload.network) ?? ChainId.Mainnet : ChainId.Mainnet}>
+                <Card className={classes.root} component="article" elevation={0}>
+                    <Skeleton
+                        animation="wave"
+                        variant="rectangular"
+                        width={'30%'}
+                        height={12}
+                        style={{ marginTop: 16 }}
+                    />
+                    <Skeleton
+                        animation="wave"
+                        variant="rectangular"
+                        width={'40%'}
+                        height={12}
+                        style={{ marginTop: 16 }}
+                    />
+                    <Skeleton
+                        animation="wave"
+                        variant="rectangular"
+                        width={'70%'}
+                        height={12}
+                        style={{ marginBottom: 16 }}
+                    />
+                </Card>
+            </EthereumChainBoundary>
         )
 
     return (
@@ -308,21 +299,23 @@ export function RedPacket(props: RedPacketProps) {
                 />
             </Card>
             {canClaim || canRefund ? (
-                <Box className={classes.footer}>
-                    {!account ? (
-                        <ActionButton variant="contained" size="large" onClick={openSelectProviderDialog}>
-                            {t('plugin_wallet_connect_a_wallet')}
-                        </ActionButton>
-                    ) : !chainIdValid ? (
-                        <ActionButton disabled variant="contained" size="large">
-                            {t('plugin_wallet_invalid_network')}
-                        </ActionButton>
-                    ) : (
-                        <ActionButton variant="contained" size="large" onClick={onClaimOrRefund}>
-                            {canClaim ? t('plugin_red_packet_claim') : t('plugin_red_packet_refund')}
-                        </ActionButton>
-                    )}
-                </Box>
+                <EthereumWalletConnectedBoundary>
+                    <Box className={classes.footer}>
+                        {!account ? (
+                            <ActionButton variant="contained" size="large" onClick={openSelectProviderDialog}>
+                                {t('plugin_wallet_connect_a_wallet')}
+                            </ActionButton>
+                        ) : !chainIdValid ? (
+                            <ActionButton disabled variant="contained" size="large">
+                                {t('plugin_wallet_invalid_network')}
+                            </ActionButton>
+                        ) : (
+                            <ActionButton variant="contained" size="large" onClick={onClaimOrRefund}>
+                                {canClaim ? t('plugin_red_packet_claim') : t('plugin_red_packet_refund')}
+                            </ActionButton>
+                        )}
+                    </Box>
+                </EthereumWalletConnectedBoundary>
             ) : null}
         </EthereumChainBoundary>
     )

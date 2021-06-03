@@ -38,7 +38,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     //#endregion
 
     //#region metamask
-    const currentSelectedWalletProvider = useValueRef(currentProviderSettings)
+    const providerType = useValueRef(currentProviderSettings)
     const currentIsMetamaskLocked = useValueRef(currentIsMetamaskLockedSettings)
     const onConnectMetaMask = useCallback(async () => {
         await Services.Ethereum.connectMetaMask()
@@ -59,7 +59,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    if (currentSelectedWalletProvider === ProviderType.MetaMask && currentIsMetamaskLocked)
+    if (providerType === ProviderType.MetaMask && currentIsMetamaskLocked)
         return (
             <Grid container>
                 <ActionButton

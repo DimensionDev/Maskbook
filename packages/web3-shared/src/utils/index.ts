@@ -55,6 +55,23 @@ export function getChainDetailed(chainId: ChainId = ChainId.Mainnet) {
     return CHAINS.find((x) => x.chainId === chainId)
 }
 
+// Learn more: https://github.com/ChainAgnostic/CAIPs/blob/master/CAIPs/caip-2.md
+export function getChainDetailedCAIP(chainId: ChainId = ChainId.Mainnet) {
+    const chainDetailed = getChainDetailed(chainId)
+    if (!chainDetailed) return
+    return {
+        chainId: `0x${chainDetailed.chainId.toString(16)}`,
+        chainName: chainDetailed.name,
+        nativeCurrency: chainDetailed.nativeCurrency,
+        rpcUrls: chainDetailed.rpc,
+        blockExplorerUrls: [
+            chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
+                ? chainDetailed.explorers[0].url
+                : chainDetailed.infoURL,
+        ],
+    }
+}
+
 export function getChainName(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     return chainDetailed?.name ?? 'Unknown'

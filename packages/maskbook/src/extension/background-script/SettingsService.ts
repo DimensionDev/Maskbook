@@ -47,7 +47,7 @@ export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] 
 export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentAccountSettings)
 
 export async function getWalletAllowTestChain() {
-    return Flags.wallet_allow_test_chain
+    return Flags.wallet_allow_testnet
 }
 
 export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier | undefined> {

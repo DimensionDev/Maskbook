@@ -23,8 +23,8 @@ export const Web3Context: Web3ProviderType = {
         getCurrentValue: () => Web3Provider,
         subscribe: () => noop,
     },
-    allowTestChain: {
-        getCurrentValue: () => Flags.wallet_allow_test_chain,
+    allowTestnet: {
+        getCurrentValue: () => Flags.wallet_allow_testnet,
         subscribe: () => noop,
     },
     chainId: createSubscriptionFromSettings(currentChainIdSettings),

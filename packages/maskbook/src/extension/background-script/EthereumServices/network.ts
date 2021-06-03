@@ -66,10 +66,10 @@ export async function personalSign(dataToSign: string, address: string, password
     })
 }
 
-export async function addEthereumChain(address: string, chainDetailed: EthereumChainDetailed) {
+export async function addEthereumChain(chainDetailed: EthereumChainDetailed, address?: string) {
     return request<boolean>({
         method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
-        params: [chainDetailed, address],
+        params: [chainDetailed, address].filter(Boolean),
     })
 }
 

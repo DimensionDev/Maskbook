@@ -11,6 +11,7 @@ import {
     resolveProviderName,
     ChainId,
     resolveNetworkName,
+    getChainDetailedCAIP,
 } from '@dimensiondev/web3-shared'
 import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
@@ -59,8 +60,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             if (!networkType) throw new Error('Unknown network type.')
 
             // read the chain detailed from the built-in chain list
-            const chainDetailed = CHAINS.find((x) => x.chainId === getChainIdFromNetworkType(networkType))
-            if (!chainDetailed) throw new Error('The selected network is not supported.')
+            const chainDetailedCAIP = getChainDetailedCAIP(getChainIdFromNetworkType(networkType))
+            if (!chainDetailedCAIP) throw new Error('Unknown network type.')
 
             let account: string | undefined
             let chainId: ChainId | undefined
@@ -111,19 +112,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                         await delay(30 /* seconds */ * 1000 /* milliseconds */)
                         throw new Error('Timeout!')
                     })(),
-                    Services.Ethereum.addEthereumChain(account, {
-                        chainId: `0x${chainDetailed.chainId.toString(16)}`,
-                        chainName: chainDetailed.name,
-                        nativeCurrency: chainDetailed.nativeCurrency,
-                        rpcUrls: chainDetailed.rpc,
-                        blockExplorerUrls: [
-                            chainDetailed.explorers &&
-                            chainDetailed.explorers.length > 0 &&
-                            chainDetailed.explorers[0].url
-                                ? chainDetailed.explorers[0].url
-                                : chainDetailed.infoURL,
-                        ],
-                    }),
+                    Services.Ethereum.addEthereumChain(chainDetailedCAIP, account),
                 ])
             } catch (e) {
                 throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)

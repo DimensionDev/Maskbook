@@ -19,7 +19,7 @@ export function useWeb3Context() {
 export function useWeb3State() {
     const _ = useWeb3Context()
     const account = useSubscription(_.account)
-    const allowTestChain = useSubscription(_.allowTestChain)
+    const allowTestnet = useSubscription(_.allowTestnet)
     const balance = useSubscription(_.balance)
     const blockNumber = useSubscription(_.blockNumber)
     const nonce = useSubscription(_.nonce)
@@ -31,6 +31,7 @@ export function useWeb3State() {
     const erc20Tokens = useSubscription(_.erc20Tokens)
     const chainDetailed = CHAINS.find((x) => x.chainId === chainId)
     return {
+        allowTestnet,
         account,
         nonce,
         gasPrice,
@@ -42,7 +43,7 @@ export function useWeb3State() {
         chainId,
         chainDetailed,
         erc20Tokens,
-        chainIdValid: !account || allowTestChain || chainDetailed?.network === 'mainnet',
+        chainIdValid: !account || allowTestnet || chainDetailed?.network === 'mainnet',
     }
 }
 

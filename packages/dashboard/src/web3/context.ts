@@ -11,7 +11,7 @@ export const Web3Context: Web3ProviderType = {
         getCurrentValue: () => Web3Provider,
         subscribe: () => noop,
     },
-    allowTestChain: createSubscriptionAsync(
+    allowTestnet: createSubscriptionAsync(
         Services.Settings.getWalletAllowTestChain,
         false,
         Messages.events.createInternalSettingsChanged.on,
