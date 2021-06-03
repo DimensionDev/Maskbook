@@ -15,10 +15,18 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: ['https://dimensiondev.github.io/Mask-Token-List/mask.json'],
         [ChainId.Kovan]: ['https://irhonin.github.io/kovan-token-list/kovan-token-list.json'],
         [ChainId.Gorli]: [],
-        [ChainId.BSC]: [],
-        [ChainId.BSCT]: [],
-        [ChainId.Matic]: [],
-        [ChainId.Mumbai]: [],
+        [ChainId.BSC]: [
+            'https://dimensiondev.github.io/Mask-Token-List/mask.json'
+        ],
+        [ChainId.BSCT]: [
+            'https://dimensiondev.github.io/Mask-Token-List/mask.json'
+        ],
+        [ChainId.Matic]: [
+            'https://dimensiondev.github.io/Mask-Token-List/mask.json'
+        ],
+        [ChainId.Mumbai]: [
+            'https://dimensiondev.github.io/Mask-Token-List/mask.json'
+        ],
     },
 
     // contracts
