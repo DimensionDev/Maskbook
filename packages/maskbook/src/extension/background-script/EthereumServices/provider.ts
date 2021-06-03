@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import * as Naskbook from './providers/MetaMask'
+import * as Maskbook from './providers/Maskbook'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import * as CustomNetwork from './providers/CustomNetwork'
@@ -37,7 +37,7 @@ export async function connectMetaMask() {
 }
 
 export async function connectMaskbook() {
-    const { accounts, chainId } = await Naskbook.requestAccounts()
+    const { accounts, chainId } = await Maskbook.requestAccounts()
     return {
         account: first(accounts),
         chainId,
