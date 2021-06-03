@@ -10,6 +10,7 @@ import { addRecentTransaction } from '../../../plugins/Wallet/services'
 import { commitNonce, getNonce, resetNonce } from './nonce'
 import { getWalletCached } from './wallet'
 import { getGasPrice } from './network'
+import { EthereumAddress } from 'wallet.ts'
 
 /**
  * This API is only used internally. Please use requestSend instead in order to share the same payload id globally.
@@ -155,6 +156,7 @@ function handleRecentTransaction(account: string, response: JsonRpcResponse | un
 async function handleNonce(account: string, error: Error | null, response: JsonRpcResponse | undefined) {
     const error_ = (error ?? response?.error) as { message: string } | undefined
     const message = error_?.message ?? ''
+    if (!EthereumAddress.isValid(account)) return
     if (/\bnonce\b/im.test(message) && /\b(low|high)\b/im.test(message)) resetNonce(account)
     else commitNonce(account)
 }
