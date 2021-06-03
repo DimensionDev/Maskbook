@@ -2,15 +2,15 @@
 
 ## Principles
 
-- It must be absolutely isolated within the Mask Network extension.
+- No dynamic code should be executed in the Mask Network extension.
 - Developers should be able to develop a working plugin without acquiring "licence" or any form of agreement from the Mask team.
 - It must not harm the data or property (wallet) safety.
 
 ## General design
 
-An external plugin should be an isolated website, which means it should not be loaded or installed onto the Mask Network.
+An external plugin should be hosted on an arbitrary HTTPs URL, it should not be loaded or installed onto the Mask Network.
 
-When Mask Network detects the metadata of an external plugin, it will try to fetch the manifest and display the content in the payload.
+When Mask Network detects the metadata of an external plugin, it will try to fetch the manifest file (a JSON) and render the content in the payload.
 This process **must not** involve dynamic code execution.
 
 When the user decided to interact with the external plugin,
@@ -60,33 +60,54 @@ User interacts with the plugin.
 
 ### Plugin definition
 
-A plugin should be deployed on a static HTTPs URL, for example <https://example.com/my-plugin>, let's call it _base url_.
+A plugin should be accessable on a HTTPs URL, for example <https://example.com/my-plugin/>, let's call it _base url_.
 
 It should provide a manifest file called "mask-plugin-manifest.json".
 For the example above, it should be located at <https://example.com/my-plugin/mask-plugin-manifest.json>.
-It should also be in JSONC (JSON with comment) format.
+
+The manifest file should be JSONC (JSON with comment) format.
 
 The manifest file should match the following shape:
 
 ```typescript
-interface ExternalPluginManifestFile {
-  manifest_version: 1
-  name: string
-  publisher: string
-  description: string
-  code_sign: URL
-  integrity?: Record<URL, string>
+interface ManifestFile {
+  // version
+  manifestVersion: 1
+  targetSdk: 1
+  minSdk?: 1
+
+  // metadata
+  name: I18NString
+  publisher: I18NString
+  description?: I18NString
+  logo?: I18NString
+  // will not be able to load in the stable build of Mask
+  experimental?: boolean
+
+  // security
+  // sign all files mentioned in the manifest
+  // codeSign?: never
+  // integrity?: never
+
+  permissions?: Permission[]
+
+  // resources
   i18n?: Record<Language, URL>
-  metadata?: Record<PayloadMetadataKey, MetadataDetail>
+
+  // metadata & entry
   contribution?: {
+    payload?: Record<PayloadMetadataKey, PayloadDetail>
     composition?: {
-      target: URL | string
+      target: URL
       icon: string | URL
     }
   }
 }
+// Untranslated string ("App") | Translated string with fallback ("@i18n/welcome/Bonjure")
+type I18NString = string | `@i18n/${string}/${string}`
+type Permission = string
 
-interface MetadataDetail {
+interface PayloadDetail {
   // points to the JSON schema to validate if it is valid
   schema?: URL
   preview?: URL
@@ -97,39 +118,38 @@ Here is an example:
 
 ```jsonc
 {
-  "manifest_version": 1,
+  "manifestVersion": 1,
+  "targetSdk": 1,
   // this will look for "name" in the current i18n language
   // If you don't want to do i18n, "name": "My plugin name" is also OK
-  "name": "__locales:name",
-  "description": "__locales:description",
-  "publisher": "__locales:publisher",
-  // Sign this manifest file so people will trust me (if my GPG key is famous)!
-  // If you want to sign other resources, add it to the integrity list below
-  // DISCUSS: I think it's better to have users to sign by their Mask account, aka ECC key pair.
-  "code_sign": "./sign.gpg",
-  "integrity": {
-    // I can provide hash to enforce security
-    // Opt-in feature.
-    "./preview/kind1.html": "sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC"
-    // Now with sign.gpg and this hash, we can make sure ./preview/Card_1.json is trustable
-  },
+  "name": "@i18n/name/My plugin",
+  "publisher": "@i18n/publisher/Jack",
+  "description": "@i18n/description/This is a plugin that can ......",
+  "logo": "@i18n/logo/./logo-en.svg",
+  // This plugin cannot be loaded to the stable version of Mask. experimental API WILL BREAK ANY TIME!! We'd require this before external plugin has officially released.
+  "experimental": true,
+
+  "permission": ["profiles"],
+
   "i18n": {
     "en": "./en.json",
     "zh": "./zh.json",
     "ja": "./ja.json"
   },
-  "metadata": {
-    // In Mask it will be plugin:example.com/my-plugin:kind:1
-    "kind1:1": {
-      "schema": "./kind1-v1.schema.json",
-      "preview": "./preview/kind1.html"
-    }
-  },
   "contribution": {
+    "payload": {
+      // In Mask it will be plugin:example.com/my-plugin:kind:1
+      "kind1:1": {
+        "schema": "./kind1-v1.schema.json",
+        // this file MUST be the same directory of the manifest file!! (Technical limit)
+        "preview": "./kind1.html"
+      }
+    },
     // This allows to add a new badge in
     // the composition dialog once user added the plugin
     "composition": {
       "icon": "./badge.svg",
+      // this file MUST be the same directory of the manifest file!! (Technical limit)
       "target": "./compose.html"
     }
   }
@@ -142,14 +162,18 @@ i18n files should follow the i18next format.
 
 ### Permissions
 
-You might notice that there is no permission in the manifest because all permissions are designed to be requested dynamically.
+Declare permissions here doesn't means it will be granted automatically.
+
+All permissions are runtime permissions.
+
+But if it does not listed here, the request will be rejected automatically.
 
 ### The "payload_preview" part
 
 To avoid code execution in the Mask Network extension itself and still render a plugin UI,
 we can provide some common templates allowing developers to interpolate with.
 
-Here is an example of `./preview/kind1.html`
+Here is an example of `./kind1.html`
 
 ```html
 <!DOCTYPE html>
