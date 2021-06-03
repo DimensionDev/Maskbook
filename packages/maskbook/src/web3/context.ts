@@ -108,7 +108,8 @@ function getEventTarget() {
     const event = new EventTarget()
     const EVENT = 'event'
     function trigger() {
-        event.dispatchEvent(new Event(EVENT))
+        // delay to update state to ensure that all settings to be synced globally
+        setTimeout(() => event.dispatchEvent(new Event(EVENT)), 500)
     }
     function subscribe(f: () => void) {
         event.addEventListener(EVENT, f)
