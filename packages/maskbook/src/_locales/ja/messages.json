@@ -409,6 +409,7 @@
     "plugin_gas_now_dialog_gwei": "",
     "plugin_gas_now_dialog_usd": "",
     "plugin_gas_now_dialog_zero_gas": "",
+    "plugin_gas_now_dialog_gas_price": "",
     "plugin_trader_swap": "スワップ",
     "plugin_trader_wrap": "ラップ",
     "plugin_trader_unwrap": "アンラップ",

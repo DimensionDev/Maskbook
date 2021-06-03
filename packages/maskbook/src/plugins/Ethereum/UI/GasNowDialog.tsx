@@ -7,6 +7,7 @@ import { currentGasNowSettings, currentGasPriceSettings } from '../../Wallet/set
 import { useAssets } from '../../Wallet/hooks/useAssets'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { useValueRef, formatWeiToGwei } from '@dimensiondev/maskbook-shared'
+import type { GasNow } from '@dimensiondev/web3-shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { useMemo, useState, useCallback } from 'react'
@@ -101,7 +102,7 @@ export function GasNowDialog() {
             ? t('plugin_gas_now_dialog_min', { time: 3 })
             : t('plugin_gas_now_dialog_min', { time: '>10' })
         : ''
-    const { open, closeDialog } = useRemoteControlledDialog(
+    const { open, closeDialog, setDialog } = useRemoteControlledDialog(
         EthereumMessages.events.gasPriceDialogUpdated,
         (_ev) => void 0,
     )
@@ -140,8 +141,9 @@ export function GasNowDialog() {
 
     const onConfrim = useCallback(() => {
         currentGasPriceSettings.value = select == 2 ? customGasToWei : options[select].gasPrice
-        closeDialog()
-    }, [customGasToWei, options, select, closeDialog])
+        const type = options[select].type as keyof GasNow
+        setDialog({ open: false, type })
+    }, [customGasToWei, options, select, setDialog])
 
     return (
         <InjectedDialog
@@ -166,7 +168,7 @@ export function GasNowDialog() {
                                     className={classNames(classes.dot, i === select ? classes.dotSelector : undefined)}
                                 />
                             </div>
-                            {gasNow ? (
+                            {gasNow || i === 2 ? (
                                 <>
                                     <div>
                                         {i == 2 ? (

@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
 import { BigNumber } from 'bignumber.js'
-import { makeStyles, Card, Typography, Box, Link, Grid, Theme, Button } from '@material-ui/core'
+import { makeStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import {
     TransactionStateType,
@@ -316,11 +316,6 @@ export function ITO(props: ITO_Props) {
         },
     )
 
-    const { setDialog: setGasPriceDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.gasPriceDialogUpdated,
-        (_ev) => void 0,
-    )
-
     useEffect(() => {
         if (claimState.type === TransactionStateType.UNKNOWN) return
         setClaimTransactionDialog({
@@ -497,12 +492,6 @@ export function ITO(props: ITO_Props) {
     return (
         <div>
             <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${PoolBackground})` }}>
-                <Button
-                    onClick={() => {
-                        setGasPriceDialog({ open: true })
-                    }}>
-                    abcd
-                </Button>
                 <Box className={classes.header}>
                     <Typography variant="h5" className={classes.title}>
                         {title}

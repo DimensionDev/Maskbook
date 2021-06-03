@@ -1,5 +1,5 @@
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import type { TransactionState, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import type { TransactionState, ERC20TokenDetailed, GasNow } from '@dimensiondev/web3-shared'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
@@ -29,6 +29,7 @@ type TransactionDialogEvent =
 
 type GasPriceDialogEvent = {
     open: boolean
+    type?: keyof GasNow
 }
 
 interface EthereumMessage {

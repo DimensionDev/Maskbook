@@ -218,4 +218,5 @@ export type GasNow = {
     fast: number
     standard: number
     slow: number
+    custom: number
 }
