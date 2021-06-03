@@ -1,16 +1,18 @@
 import SettingButton from './SettingButton'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import BackupDialog from './dialogs/BackupDialog'
 import { ModalContext } from '../hooks/VerifyPasswordContext'
 
 export default function BackupSetting() {
     const { verified, verify } = useContext(ModalContext)
-    const [checkVerify, setCheckVerify] = useState(false)
     const [openBackup, setOpenBackup] = useState(false)
     const handleOpenVeify = () => {
         if (!verified) {
-            setCheckVerify(true)
-            verify()
+            verify({
+                onVerified: () => {
+                    setOpenBackup(true)
+                },
+            })
         } else {
             setOpenBackup(true)
         }
@@ -19,12 +21,6 @@ export default function BackupSetting() {
     const handleCloseBackup = () => {
         setOpenBackup(false)
     }
-
-    useEffect(() => {
-        if (checkVerify && verified) {
-            setOpenBackup(true)
-        }
-    }, [verified, checkVerify])
 
     return (
         <>
