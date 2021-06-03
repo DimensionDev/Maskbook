@@ -21,9 +21,9 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
         async () => {
             await WalletRPC.removeWallet(wallet.address)
             currentAccountSettings.value = ''
+            currentChainIdSettings.value = ChainId.Mainnet
             currentNetworkSettings.value = NetworkType.Ethereum
             currentProviderSettings.value = ProviderType.Maskbook
-            currentChainIdSettings.value = ChainId.Mainnet
         },
         [wallet.address],
         props.onClose,
