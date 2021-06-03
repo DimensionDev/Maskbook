@@ -79,6 +79,10 @@ const useStyles = makeStyles((theme: Theme) => ({
         width: 60,
         marginRight: theme.spacing(1),
     },
+    button: {
+        margin: '16px auto',
+        minWidth: 260,
+    },
 }))
 
 export function GasNowDialog() {
@@ -212,7 +216,7 @@ export function GasNowDialog() {
                 <Typography className={classes.intro}>{t('plugin_gas_now_dialog_intro')}</Typography>
                 <EthereumWalletConnectedBoundary>
                     <ActionButton
-                        fullWidth
+                        className={classes.button}
                         size="large"
                         disabled={!!validationMessage}
                         onClick={onConfrim}
