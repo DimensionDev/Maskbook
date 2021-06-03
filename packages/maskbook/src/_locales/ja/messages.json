@@ -649,7 +649,7 @@
     "plugin_snapshot_vote_power": "あなたの投票力",
     "plugin_snapshot_vote_title": "投票する",
     "plugin_snapshot_vote_confirm_dialog_title": "投票の確認",
-    "plugin_snapshot_vote_confirm_dialog_choice": "本当に \"{{ choiceText }}\" に投票しますか？",
+    "plugin_snapshot_vote_confirm_dialog_choice": "本当に 「{{ choiceText }}」 に投票しますか？",
     "plugin_snapshot_vote_confirm_dialog_warning": "このアクションは元に戻すことはできません。",
     "plugin_snapshot_current_result_title": "現在の結果",
     "plugin_snapshot_download_report": "レポートをダウンロードする",
