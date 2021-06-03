@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { experimentalStyled as styled } from '@material-ui/core'
 
 const QRCodeContainer = styled('div')(
-    ({ width, height, borderWidth, borderHeight }: WalletQRCodeProps) => `
+    ({ width, height, border: { borderWidth, borderHeight } }: WalletQRCodeProps) => `
     width: ${width}px;
     height: ${height}px;
     background: linear-gradient(to right, black ${borderHeight}px, transparent ${borderHeight}px) 0 0,
@@ -23,8 +23,10 @@ const QRCodeContainer = styled('div')(
 export interface WalletQRCodeProps extends React.PropsWithChildren<{}> {
     width: number
     height: number
-    borderWidth: number
-    borderHeight: number
+    border: {
+        borderWidth: number
+        borderHeight: number
+    }
 }
 
 export const WalletQRCodeContainer = memo((props: WalletQRCodeProps) => {

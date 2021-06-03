@@ -53,7 +53,7 @@ export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, wallet
             }}>
             <DialogContent className={classes.container}>
                 <Typography sx={{ marginBottom: 3.5 }}>{t.wallets_receive_tips({ chainName })}</Typography>
-                <WalletQRCodeContainer width={286} height={286} borderWidth={15} borderHeight={2}>
+                <WalletQRCodeContainer width={286} height={286} border={{ borderWidth: 15, borderHeight: 2 }}>
                     <QRCode
                         text={`ethereum:${walletAddress}`}
                         options={{ width: 282 }}

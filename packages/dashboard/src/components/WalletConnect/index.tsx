@@ -21,7 +21,7 @@ export const WalletConnect = memo(() => {
     return (
         <Container>
             <Tip color="textSecondary">{t.wallets_wallet_connect_title()}</Tip>
-            <WalletQRCodeContainer width={330} height={330} borderWidth={15} borderHeight={2} />
+            <WalletQRCodeContainer width={330} height={330} border={{ borderWidth: 15, borderHeight: 2 }} />
         </Container>
     )
 })

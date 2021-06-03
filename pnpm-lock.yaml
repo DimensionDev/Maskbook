@@ -168,6 +168,7 @@ importers:
       snowpack: ^3.5.1
       unstated-next: ^1.1.0
       use-subscription: ^1.5.1
+      wallet.ts: ^1.0.1
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/icons': link:../icons
@@ -192,6 +193,7 @@ importers:
       react-use: 17.2.4
       unstated-next: 1.1.0
       use-subscription: 1.5.1
+      wallet.ts: 1.0.1
     devDependencies:
       '@babel/core': 7.14.3
       '@snowpack/plugin-dotenv': 2.1.0

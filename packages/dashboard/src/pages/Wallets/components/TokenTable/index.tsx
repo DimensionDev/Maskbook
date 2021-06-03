@@ -9,6 +9,7 @@ import {
     makeStyles,
     TableBody,
     Pagination,
+    PaginationItem,
 } from '@material-ui/core'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { useDashboardI18N } from '../../../../locales'
@@ -16,6 +17,8 @@ import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../LoadingPlacholder'
 import { TokenTableRow } from '../TokenTableRow'
 import { useAssets, useERC20TokensPaged } from '../../hooks'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -28,13 +31,18 @@ const useStyles = makeStyles((theme) => ({
         color: MaskColorVar.normalText,
         fontWeight: theme.typography.fontWeightRegular,
         padding: '24px 28px',
-        background: MaskColorVar.primaryBackground,
+        backgroundColor: MaskColorVar.primaryBackground,
     },
     footer: {
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    selected: {
+        color: '#ffffff',
+        //TODO: https://github.com/mui-org/material-ui/issues/26565
+        backgroundColor: `${MaskColorVar.blue}!important`,
     },
 }))
 
@@ -51,6 +59,7 @@ export const TokenTable = memo(() => {
         value: detailedTokens,
     } = useAssets(erc20Tokens || [])
 
+    console.log(detailedTokens)
     return (
         <>
             <TableContainer className={classes.container}>
@@ -85,9 +94,22 @@ export const TokenTable = memo(() => {
 
                         {detailedTokens.length ? (
                             <TableBody>
-                                {detailedTokens.map((asset, index) => (
-                                    <TokenTableRow asset={asset} key={index} />
-                                ))}
+                                {detailedTokens
+                                    .sort((first, second) => {
+                                        const firstValue = new BigNumber(
+                                            formatBalance(first.balance, first.token.decimals),
+                                        )
+                                        const secondValue = new BigNumber(
+                                            formatBalance(second.balance, second.token.decimals),
+                                        )
+
+                                        if (firstValue.eq(secondValue)) return 0
+
+                                        return Number(firstValue.lt(secondValue))
+                                    })
+                                    .map((asset, index) => (
+                                        <TokenTableRow asset={asset} key={index} />
+                                    ))}
                             </TableBody>
                         ) : null}
                     </Table>
@@ -101,6 +123,7 @@ export const TokenTable = memo(() => {
                         count={10}
                         page={page}
                         onChange={(event, page) => setPage(page)}
+                        renderItem={(item) => <PaginationItem {...item} classes={{ selected: classes.selected }} />}
                     />
                 </Box>
             ) : null}
