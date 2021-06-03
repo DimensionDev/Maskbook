@@ -71,13 +71,13 @@ interface RestoreDialogProps {
 
 export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
     const classes = useStyles()
-    const [loading, setLoading] = useState(true)
     // tab switch
     const [tab, setTab] = useState('1')
     // paste text
     const [text, setText] = useState('')
-    // backup content
+    // file content
     const [content, setContent] = useState('')
+    // parsed json
     const [json, setJSON] = useState<any>(null)
 
     const handleClose = () => {
