@@ -72,7 +72,7 @@ interface RestoreDialogProps {
 export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
     const classes = useStyles()
     // tab switch
-    const [tab, setTab] = useState('1')
+    const [tab, setTab] = useState('file')
     // paste text
     const [text, setText] = useState('')
     // file content
@@ -82,7 +82,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
 
     const handleClose = () => {
         onClose()
-        setTab('1')
+        setTab('file')
         setText('')
         setContent('')
         setJSON(null)
@@ -99,7 +99,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
 
         await Services.Welcome.restoreBackup(json)
     }
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
         setTab(newValue)
     }
     const handleFileChange = (file: File, content?: string) => {
@@ -110,7 +110,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
     }
 
     const permission = useAsync(async () => {
-        const str = tab === '1' ? content : text
+        const str = tab === 'file' ? content : text
         if (!str) return
 
         const json = await Services.Welcome.parseBackupStr(str)
@@ -131,11 +131,11 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
             onConfirm={handleConfirm}>
             <div className={classes.container}>
                 <TabContext value={tab}>
-                    <SyledTabList onChange={handleChange}>
-                        <StyledTab label="File" value="1" />
-                        <StyledTab label="Text" value="2" />
+                    <SyledTabList onChange={handleTabChange}>
+                        <StyledTab label="File" value="file" />
+                        <StyledTab label="Text" value="text" />
                     </SyledTabList>
-                    <StyledTabPanel value="1">
+                    <StyledTabPanel value="file">
                         <div className={json && content ? classes.hide : ''}>
                             <FileUpload height={180} readAsText onChange={handleFileChange} />
                         </div>
@@ -143,7 +143,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
                             <BackupPreviewCard json={json} />
                         </div>
                     </StyledTabPanel>
-                    <StyledTabPanel value="2">
+                    <StyledTabPanel value="text">
                         <div className={json && text ? classes.hide : ''}>
                             <TextArea
                                 value={text}

@@ -110,8 +110,6 @@ export function queryPermission(permission: browser.permissions.Permissions) {
 
 export { extraPermissions } from '../../utils/permissions'
 
-export async function requestPermissions(origins: string[]) {
-    const granted = await browser.permissions.request({ origins: origins ?? [] })
-
-    return Promise.resolve(granted)
+export function requestPermissions(origins: string[]) {
+    return browser.permissions.request({ origins: origins ?? [] })
 }
