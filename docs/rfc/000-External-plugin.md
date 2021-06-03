@@ -84,10 +84,16 @@ interface ManifestFile {
   // will not be able to load in the stable build of Mask
   experimental?: boolean
 
+  // requirements. Only one of the following can present.
+  // unlisted SNS will not be able to use
+  supportedSNS?: string[]
+  // listed SNS will not be able to use
+  unsupportedSNS?: string[]
+
   // security
-  // sign all files mentioned in the manifest
-  // codeSign?: never
-  // integrity?: never
+  // TODO: sign all files mentioned in the manifest
+  codeSign?: never
+  integrity?: never
 
   permissions?: Permission[]
 
@@ -95,7 +101,7 @@ interface ManifestFile {
   i18n?: Record<Language, URL>
 
   // metadata & entry
-  contribution?: {
+  contributions?: {
     payload?: Record<PayloadMetadataKey, PayloadDetail>
     composition?: {
       target: URL
@@ -107,11 +113,13 @@ interface ManifestFile {
 type I18NString = string | `@i18n/${string}/${string}`
 type Permission = string
 
-interface PayloadDetail {
-  // points to the JSON schema to validate if it is valid
-  schema?: URL
-  preview?: URL
-}
+type PayloadDetail =
+  | URL
+  | {
+      // points to the JSON schema to validate if it is valid
+      schema: URL
+      preview: URL
+    }
 ```
 
 Here is an example:
@@ -136,12 +144,11 @@ Here is an example:
     "zh": "./zh.json",
     "ja": "./ja.json"
   },
-  "contribution": {
+  "contributions": {
     "payload": {
       // In Mask it will be plugin:example.com/my-plugin:kind:1
       "kind1:1": {
         "schema": "./kind1-v1.schema.json",
-        // this file MUST be the same directory of the manifest file!! (Technical limit)
         "preview": "./kind1.html"
       }
     },
