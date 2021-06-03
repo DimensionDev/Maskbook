@@ -19,6 +19,7 @@ import { TokenTableRow } from '../TokenTableRow'
 import { useAssets, useERC20TokensPaged } from '../../hooks'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import BigNumber from 'bignumber.js'
+import { ceil } from 'lodash-es'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -51,15 +52,14 @@ export const TokenTable = memo(() => {
     const t = useDashboardI18N()
     const classes = useStyles()
 
-    const { value: erc20Tokens } = useERC20TokensPaged(page, 50)
+    const { value } = useERC20TokensPaged(page - 1, 50)
 
     const {
         error: detailedTokensError,
         loading: detailedTokensLoading,
         value: detailedTokens,
-    } = useAssets(erc20Tokens || [])
+    } = useAssets(value?.tokens || [])
 
-    console.log(detailedTokens)
     return (
         <>
             <TableContainer className={classes.container}>
@@ -120,7 +120,7 @@ export const TokenTable = memo(() => {
                     <Pagination
                         variant="outlined"
                         shape="rounded"
-                        count={10}
+                        count={ceil(value?.count ?? 0 / 50) ?? 1}
                         page={page}
                         onChange={(event, page) => setPage(page)}
                         renderItem={(item) => <PaginationItem {...item} classes={{ selected: classes.selected }} />}

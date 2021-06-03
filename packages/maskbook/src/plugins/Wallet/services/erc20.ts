@@ -10,6 +10,11 @@ import type { ERC20TokenRecord } from '../database/types'
 import { ERC20TokenDetailed, isSameAddress } from '@dimensiondev/web3-shared'
 import { queryTransactionPaged } from '../../../database/helpers/pagination'
 
+export async function getERC20TokensCount() {
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token', 'Wallet')
+    return t.objectStore('ERC20Token').count()
+}
+
 export async function getERC20Tokens() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token', 'Wallet')
     return t.objectStore('ERC20Token').getAll()
