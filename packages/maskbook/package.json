@@ -82,7 +82,6 @@
     "loglevel": "^1.7.0",
     "millify": "^4.0.0",
     "next-tick": "^1.0.0",
-    "notistack": "^1.0.9",
     "opensea-js": "^1.1.11",
     "promievent": "^0.1.4",
     "pvtsutils": "^1.0.14",
