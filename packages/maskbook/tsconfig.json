@@ -13,7 +13,8 @@
     { "path": "../web3-shared" },
     { "path": "../theme/" },
     { "path": "../icons/" },
-    { "path": "../plugin-infra" }
+    { "path": "../plugin-infra" },
+    { "path": "../external-plugin-previewer" }
   ],
   "ts-node": { "transpileOnly": true, "compilerOptions": { "module": "CommonJS" } }
 }
