@@ -6,7 +6,7 @@ import { Emitter } from '@servie/events'
 import { currentChainIdSettings } from '../plugins/Wallet/settings'
 import { startEffects } from '../utils/side-effects'
 
-const effect = startEffects(module.hot)
+const effect = startEffects(import.meta.webpackHot)
 export function createPluginHost(signal?: AbortSignal): Plugin.__Host.Host {
     return {
         eth: ethStatusReporter,

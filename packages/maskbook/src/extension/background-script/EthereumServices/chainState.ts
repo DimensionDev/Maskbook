@@ -14,7 +14,7 @@ import { startEffects } from '../../../utils/side-effects'
 import { getWalletCached } from './wallet'
 import { resetAllNonce } from './nonce'
 
-const effect = startEffects(module.hot)
+const effect = startEffects(import.meta.webpackHot)
 
 //#region tracking chain state
 const updateChainState = debounce(

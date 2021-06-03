@@ -5,7 +5,7 @@ import { getWallets } from '../../../plugins/Wallet/services'
 import { currentAccountSettings } from '../../../plugins/Wallet/settings'
 import { startEffects } from '../../../utils/side-effects'
 
-const effect = startEffects(module.hot)
+const effect = startEffects(import.meta.webpackHot)
 
 //#region tracking wallets
 let wallets: WalletRecord[] = []

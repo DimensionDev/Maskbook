@@ -5,7 +5,7 @@ interface CollectibleMessage {
     rpc: unknown
 }
 
-if (module.hot) module.hot.accept()
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
 export const PluginCollectibleMessage = createPluginMessage<CollectibleMessage>(PLUGIN_IDENTIFIER)
 export const PluginCollectibleRPC = createPluginRPC(
     PLUGIN_IDENTIFIER,

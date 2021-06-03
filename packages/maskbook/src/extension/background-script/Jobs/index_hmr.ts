@@ -13,10 +13,10 @@ const CancelableJobs: CancelableJob[] = [
     PluginWorker,
 ]
 
-if (module.hot) {
+if (import.meta.webpackHot) {
     const cleanup = CancelableJobs.map(startJob)
-    module.hot.dispose(() => cleanup.forEach((x) => x()))
-    module.hot.accept()
+    import.meta.webpackHot.dispose(() => cleanup.forEach((x) => x()))
+    import.meta.webpackHot.accept()
 } else {
     CancelableJobs.forEach(startJob)
 }

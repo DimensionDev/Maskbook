@@ -30,8 +30,8 @@ addMaskThemeI18N(i18nNextInstance)
 addDashboardI18N(i18nNextInstance)
 i18nNextInstance.languages = ['en', 'zh', 'ko', 'ja']
 
-if (module.hot) {
-    module.hot.accept(
+if (import.meta.webpackHot) {
+    import.meta.webpackHot.accept(
         [
             '../_locales/en/messages.json',
             '../_locales/zh/messages.json',

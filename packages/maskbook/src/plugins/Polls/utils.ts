@@ -10,7 +10,7 @@ import { WorkerChannel } from 'async-call-rpc/utils/web/worker'
 
 export const PollMetadataReader = createTypedMessageMetadataReader<PollMetaData>(POLL_META_KEY_1, schema)
 export const renderWithPollMetadata = createRenderWithMetadata(PollMetadataReader)
-if (module.hot) module.hot.accept()
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
 const PollMessage = createPluginMessage<{ _: unknown }>(identifier)
 export const PluginPollRPC = createPluginRPC(
     identifier,

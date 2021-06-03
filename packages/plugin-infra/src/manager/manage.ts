@@ -101,7 +101,7 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
         const definition = (await loader.load()).default
         resolved.set(id, definition)
 
-        if (module.hot) {
+        if (import.meta.webpackHot) {
             loader.hotModuleReload(async (_) => {
                 resolved.set(id, (await _).default)
 
