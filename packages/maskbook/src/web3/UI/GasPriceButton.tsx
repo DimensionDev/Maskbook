@@ -3,7 +3,7 @@ import { useI18N, useRemoteControlledDialog } from '../../utils'
 import { EthereumMessages } from '../../plugins/Ethereum/messages'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useValueRef, formatWeiToGwei } from '@dimensiondev/maskbook-shared'
-import { GasNow, useGasPrice } from '@dimensiondev/web3-shared'
+import { GasNow, useGasPrice, useNetworkType, NetworkType } from '@dimensiondev/web3-shared'
 import { currentGasNowSettings } from '../../plugins/Wallet/settings'
 import { useState, useCallback, useMemo } from 'react'
 
@@ -16,6 +16,7 @@ interface GasPriceButtonProps extends withClasses<'gasPriceButton'> {
 export function GasPriceButton(props: GasPriceButtonProps) {
     const { t } = useI18N()
     const _gasPrice = useGasPrice()
+    const networkType = useNetworkType()
     const classes = useStylesExtends(useStyles(), props)
     const gasNow = useValueRef(currentGasNowSettings)
     const [type, setType] = useState<keyof GasNow>('fast')
@@ -36,7 +37,7 @@ export function GasPriceButton(props: GasPriceButtonProps) {
         [type, _gasPrice, gasNow],
     )
 
-    return (
+    return networkType === NetworkType.Ethereum ? (
         <Button
             className={classes.gasPriceButton}
             color={props.ButtonProps?.color ?? 'primary'}
@@ -44,5 +45,5 @@ export function GasPriceButton(props: GasPriceButtonProps) {
             onClick={() => setGasPriceDialog({ open: true })}>
             {t('plugin_gas_now_dialog_gas_price')} {t('plugin_gas_now_dialog_gwei', { gasPrice })}
         </Button>
-    )
+    ) : null
 }
