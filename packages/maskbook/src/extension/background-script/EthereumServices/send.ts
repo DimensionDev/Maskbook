@@ -1,6 +1,6 @@
 import type { HttpProvider, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { EthereumMethodType, ProviderType } from '@dimensiondev/web3-shared'
+import { addGasMargin, EthereumMethodType, ProviderType } from '@dimensiondev/web3-shared'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 import { createWeb3 } from './web3'
@@ -78,17 +78,15 @@ export async function INTERNAL_send(
     async function sendTransaction() {
         const [config] = payload.params as [TransactionConfig]
 
-        // fix payload
-        switch (providerType) {
-            case ProviderType.Maskbook:
-                // FIXME: use internal nonce manager to override nonce
-                if (config.from) config.nonce = await getNonce(config.from as string)
-                break
-            default:
-                if (!config.gasPrice || !Number.parseInt((config.gasPrice as string) ?? '0x0', 16))
-                    config.gasPrice = await getGasPrice()
-                break
-        }
+        // add nonce
+        if (providerType === ProviderType.Maskbook && config.from) config.nonce = await getNonce(config.from as string)
+
+        // add gas price
+        if (!config.gasPrice || !Number.parseInt((config.gasPrice as string) ?? '0x0', 16))
+            config.gasPrice = await getGasPrice()
+
+        // add gas margin
+        if (config.gas) config.gas = `0x${addGasMargin(config.gas).toString(16)}`
 
         // send the transaction
         switch (providerType) {

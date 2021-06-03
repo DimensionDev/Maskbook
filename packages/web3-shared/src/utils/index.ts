@@ -28,7 +28,7 @@ export function isNative(address: string) {
     return isSameAddress(address, getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'))
 }
 
-export function addGasMargin(value: BigNumber.Value, scale = 1000) {
+export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
 }
 
