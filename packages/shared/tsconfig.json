@@ -3,7 +3,8 @@
   "compilerOptions": {
     "rootDir": "./src/",
     "outDir": "./dist/",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["./src/"],
   "ts-node": {
