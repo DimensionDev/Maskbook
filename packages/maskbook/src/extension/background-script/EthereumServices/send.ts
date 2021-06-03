@@ -6,9 +6,10 @@ import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 import { createWeb3 } from './web3'
 import * as WalletConnect from './providers/WalletConnect'
 import { currentAccountSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
+import { addRecentTransaction } from '../../../plugins/Wallet/services'
 import { commitNonce, getNonce, resetNonce } from './nonce'
 import { getWalletCached } from './wallet'
-import { addRecentTransaction } from '../../../plugins/Wallet/services'
+import { getGasPrice } from './network'
 
 /**
  * This API is only used internally. Please use requestSend instead in order to share the same payload id globally.
@@ -76,14 +77,24 @@ export async function INTERNAL_send(
 
     async function sendTransaction() {
         const [config] = payload.params as [TransactionConfig]
+
+        // fix payload
+        switch (providerType) {
+            case ProviderType.Maskbook:
+                // FIXME: use internal nonce manager to override nonce
+                if (config.from) config.nonce = await getNonce(config.from as string)
+                break
+            default:
+                if (!config.gasPrice || !Number.parseInt((config.gasPrice as string) ?? '0x0', 16)) config.gasPrice = await getGasPrice()
+                break
+        }
+
+        // send the transaction
         switch (providerType) {
             case ProviderType.Maskbook:
                 const wallet = getWalletCached()
                 const _private_key_ = wallet?._private_key_
                 if (!wallet || !_private_key_) throw new Error('Unable to sign transaction.')
-
-                // FIXME: use internal nonce manager to override nonce
-                config.nonce = await getNonce(wallet.address)
 
                 // send the signed transaction
                 const signedTransaction = await web3.eth.accounts.signTransaction(config, _private_key_)
