@@ -1,5 +1,5 @@
 import { formatBalance } from '@dimensiondev/maskbook-shared'
-import { EthereumTokenType } from '@dimensiondev/web3-shared'
+import { EthereumTokenType, getChainDetailed, getChainIdFromName } from '@dimensiondev/web3-shared'
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { RedPacketInspector } from './UI/RedPacketInspector'
 import { RedPacketMetadataReader } from './helpers'
@@ -33,9 +33,12 @@ export const RedPacketPluginDefine: PluginConfig = {
         [
             RedPacketMetaKey,
             (payload: RedPacketJSONPayload) => {
-                const decimals = payload.token_type === EthereumTokenType.Native ? 18 : payload.token?.decimals
-                return `A Red Packet with ${formatBalance(payload.total, decimals)} $${
-                    payload.token?.name || 'ETH'
+                const chainId = getChainIdFromName(payload.network ?? 'ETH')
+                const chainDetailed = getChainDetailed(chainId)
+                const tokenDetailed =
+                    payload.token_type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token
+                return `A Red Packet with ${formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $${
+                    tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
                 } from ${payload.sender.name}`
             },
         ],

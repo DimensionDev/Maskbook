@@ -85,7 +85,8 @@ export async function INTERNAL_send(
                 if (config.from) config.nonce = await getNonce(config.from as string)
                 break
             default:
-                if (!config.gasPrice || !Number.parseInt((config.gasPrice as string) ?? '0x0', 16)) config.gasPrice = await getGasPrice()
+                if (!config.gasPrice || !Number.parseInt((config.gasPrice as string) ?? '0x0', 16))
+                    config.gasPrice = await getGasPrice()
                 break
         }
 
