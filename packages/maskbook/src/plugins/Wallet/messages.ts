@@ -90,6 +90,11 @@ interface WalletMessage {
     selectWalletDialogUpdated: SelectWalletDialogEvent
 
     /**
+     * Create or import wallet choose dialog
+     */
+    createImportWalletDialogUpdated: CreateImportWalletDialogEvent
+
+    /**
      * Create wallet dialog
      */
     createWalletDialogUpdated: CreateWalletDialogEvent

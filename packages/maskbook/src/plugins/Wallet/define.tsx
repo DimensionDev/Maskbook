@@ -3,6 +3,8 @@ import { GasNowDialog } from '../Ethereum/UI/GasNowDialog'
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { CreateWalletDialog } from './UI/CreateWalletDialog'
+import { CreateImportChooseDialog } from './UI/CreateImportChooseDialog'
+import { ImportWalletDialog } from './UI/ImportWalletDialog'
 import { SelectProviderDialog } from './UI/SelectProviderDialog'
 import { SelectWalletDialog } from './UI/SelectWalletDialog'
 import { WalletConnectQRCodeDialog } from './UI/WalletConnectQRCodeDialog'
@@ -26,6 +28,8 @@ export const WalletPluginDefine: PluginConfig = {
                 <SelectTokenDialog />
                 <GasNowDialog />
                 <CreateWalletDialog />
+                <CreateImportChooseDialog />
+                <ImportWalletDialog />
                 <WalletStatusDialog />
                 <ConnectWalletDialog />
                 <WalletConnectQRCodeDialog />
@@ -41,6 +45,8 @@ export const WalletPluginDefine: PluginConfig = {
                 <SelectTokenDialog />
                 <GasNowDialog />
                 <CreateWalletDialog />
+                <CreateImportChooseDialog />
+                <ImportWalletDialog />
                 <WalletStatusDialog />
                 <ConnectWalletDialog />
                 <WalletConnectQRCodeDialog />
