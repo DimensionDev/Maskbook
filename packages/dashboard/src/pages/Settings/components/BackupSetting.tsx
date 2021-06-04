@@ -4,18 +4,10 @@ import BackupDialog from './dialogs/BackupDialog'
 import { PasswordVerifiedContext } from '../hooks/VerifyPasswordContext'
 
 export default function BackupSetting() {
-    const { isPasswordVerified, requestVerifyPassword } = useContext(PasswordVerifiedContext)
+    const { ensurePasswordVerified: ensurePasswordVerified } = useContext(PasswordVerifiedContext)
     const [openBackup, setOpenBackup] = useState(false)
     const onBackup = () => {
-        if (isPasswordVerified) {
-            setOpenBackup(true)
-        } else {
-            requestVerifyPassword({
-                onVerified: () => {
-                    setOpenBackup(true)
-                },
-            })
-        }
+        ensurePasswordVerified(() => setOpenBackup(true))
     }
 
     const onClose = () => {

@@ -3,42 +3,38 @@ import VerifyPasswordDialog from '../components/dialogs/VerifyPasswordDialog'
 
 export interface PasswordVerifiedContext {
     isPasswordVerified: boolean
-    requestVerifyPassword: (options: VerifyPasswordOption) => void
+    ensurePasswordVerified: (onVerified: VerifyPasswordOnVerified) => void
 }
 
 export const PasswordVerifiedContext = createContext<PasswordVerifiedContext>({
     isPasswordVerified: false,
-    requestVerifyPassword: () => {
+    ensurePasswordVerified: () => {
         throw new Error('Context not provided.')
     },
 })
 
-export interface VerifyPasswordOption {
-    onVerified: () => void
-}
+export type VerifyPasswordOnVerified = () => void
 
 export function PasswordVerifiedProvider({ children }: PropsWithChildren<{}>) {
-    const [open, setOpen] = useState(false)
-    const [verified, setVerified] = useState(false)
-    const [option, setOption] = useState({ onVerified: () => {} })
-    const handleVerifiled = () => {
-        setOpen(false)
+    const [isPasswordVerified, setVerified] = useState(false)
+    // useState will call VerifyPasswordOnVerified directly. have to wrap with something
+    const [callback, setCallback] = useState<[VerifyPasswordOnVerified] | null>(null)
+    const onVerified = () => {
+        callback?.[0]?.()
+        setCallback(null)
         setVerified(true)
-        option?.onVerified && option.onVerified()
     }
-    const handleClose = () => {
-        setOpen(false)
+    const onCancel = () => {
+        setCallback(null)
     }
-    const verify = (opt: VerifyPasswordOption) => {
-        if (!verified) {
-            setOpen(true)
-            if (opt) setOption(opt)
-        }
+    const ensurePasswordVerified = (f: VerifyPasswordOnVerified) => {
+        if (isPasswordVerified) f()
+        else setCallback([f])
     }
     return (
-        <PasswordVerifiedContext.Provider value={{ isPasswordVerified: verified, requestVerifyPassword: verify }}>
+        <PasswordVerifiedContext.Provider value={{ isPasswordVerified, ensurePasswordVerified }}>
             {children}
-            <VerifyPasswordDialog open={open} onVerified={handleVerifiled} onClose={handleClose} />
+            <VerifyPasswordDialog open={!!callback} onVerified={onVerified} onClose={onCancel} />
         </PasswordVerifiedContext.Provider>
     )
 }

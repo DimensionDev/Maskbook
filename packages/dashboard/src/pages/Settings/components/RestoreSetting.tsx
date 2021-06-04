@@ -4,18 +4,10 @@ import SettingButton from './SettingButton'
 import { PasswordVerifiedContext } from '../hooks/VerifyPasswordContext'
 
 export default function RestoreSetting() {
-    const { isPasswordVerified, requestVerifyPassword } = useContext(PasswordVerifiedContext)
+    const { ensurePasswordVerified } = useContext(PasswordVerifiedContext)
     const [openRestore, setOpenRestore] = useState(false)
     const onRecovery = () => {
-        if (!isPasswordVerified) {
-            requestVerifyPassword({
-                onVerified: () => {
-                    setOpenRestore(true)
-                },
-            })
-        } else {
-            setOpenRestore(true)
-        }
+        ensurePasswordVerified(() => setOpenRestore(true))
     }
 
     const onClose = () => {
