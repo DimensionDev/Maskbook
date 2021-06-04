@@ -1,9 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { makeStyles, DialogContent } from '@material-ui/core'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { delay, useI18N, useRemoteControlledDialog } from '../../../../utils'
+import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 import {
     NetworkType,
     ProviderType,
@@ -13,11 +11,12 @@ import {
     resolveNetworkName,
     getChainDetailedCAIP,
 } from '@dimensiondev/web3-shared'
+import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { delay, useRemoteControlledDialog } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
-import CHAINS from '../../../../web3/assets/chains.json'
-import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -28,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
 export interface ConnectWalletDialogProps {}
 
 export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
-    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
@@ -103,8 +101,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                 // it's unable to send a request for switching to ethereum networks
                 if (chainId !== ChainId.Mainnet) throw new Error('Make sure your wallet is on the Ethereum Mainnet.')
                 return true
-            } else if (chainId === Number.parseInt(chainDetailedCAIP.chainId))
-                return true
+            } else if (chainId === Number.parseInt(chainDetailedCAIP.chainId)) return true
 
             // request ethereum-compatiable network
             try {
