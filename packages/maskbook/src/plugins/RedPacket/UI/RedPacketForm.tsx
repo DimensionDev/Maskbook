@@ -16,7 +16,7 @@ import {
     useNativeTokenDetailed,
     useTokenBalance,
 } from '@dimensiondev/web3-shared'
-import { useI18N, useRemoteControlledDialog } from '../../../utils'
+import { Flags, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import {
@@ -326,7 +326,9 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     </ActionButton>
                 </EthereumERC20TokenApprovedBoundary>
             </EthereumWalletConnectedBoundary>
-            <GasPriceButton ButtonProps={{ variant: 'text', color: 'secondary' }} />
+            {Flags.wallet_gas_price_dialog_enable ? (
+                <GasPriceButton ButtonProps={{ variant: 'text', color: 'secondary' }} />
+            ) : null}
         </>
     )
 }

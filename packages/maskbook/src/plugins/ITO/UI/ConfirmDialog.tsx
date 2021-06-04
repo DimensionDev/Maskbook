@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useState } from 'react'
 import { makeStyles, Typography, Grid, Paper, Card, IconButton, Link } from '@material-ui/core'
-import { useI18N } from '../../../utils'
+import { Flags, useI18N } from '../../../utils'
 import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import LaunchIcon from '@material-ui/icons/Launch'
@@ -303,9 +303,11 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         })}
                     </ActionButton>
                 </Grid>
-                <Grid item xs={12} className={classes.gasPriceWrapper}>
-                    <GasPriceButton ButtonProps={{ variant: 'text', color: 'secondary' }} />
-                </Grid>
+                {Flags.wallet_gas_price_dialog_enable ? (
+                    <Grid item xs={12} className={classes.gasPriceWrapper}>
+                        <GasPriceButton ButtonProps={{ variant: 'text', color: 'secondary' }} />
+                    </Grid>
+                ) : null}
             </Grid>
         </Card>
     )

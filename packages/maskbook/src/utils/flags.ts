@@ -49,6 +49,7 @@ export const Flags = {
     toolbox_enabled: webOnly,
     wallet_mnemonic_words_backup_enabled: false,
     wallet_private_key_backup_enabled: true,
+    wallet_gas_price_dialog_enable: false,
     /* construct LBP for all ERC20 tokens */
     LBP_enabled: false,
     LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
