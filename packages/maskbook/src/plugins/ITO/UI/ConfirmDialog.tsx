@@ -4,7 +4,13 @@ import { useI18N } from '../../../utils'
 import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import LaunchIcon from '@material-ui/icons/Launch'
-import { formatAmountPrecision, formatBalance, FormattedAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
+import {
+    formatAmountPrecision,
+    formatBalance,
+    FormattedAddress,
+    FormattedBalance,
+    ONE,
+} from '@dimensiondev/maskbook-shared'
 import formatDateTime from 'date-fns/format'
 import {
     resolveTokenLinkOnExplorer,

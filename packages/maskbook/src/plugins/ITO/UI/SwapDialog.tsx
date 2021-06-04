@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import { makeStyles, Typography, Slider, CircularProgress } from '@material-ui/core'
-import { formatBalance, pow10 } from '@dimensiondev/maskbook-shared'
+import { formatBalance, pow10, ZERO } from '@dimensiondev/maskbook-shared'
 
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
