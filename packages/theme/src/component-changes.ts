@@ -85,7 +85,9 @@ export const Dialog: Theme = {
             },
         },
         MuiDialogActions: {
-            styleOverrides: { root: { justifyContent: 'center', paddingBottom: 24 } },
+            styleOverrides: {
+                root: { justifyContent: 'center', paddingBottom: 24, '&>:not(:first-of-type)': { marginLeft: 18 } },
+            },
         },
     },
 }

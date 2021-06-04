@@ -1,10 +1,10 @@
 import { Dialog, DialogActions, DialogContent, DialogProps } from '@material-ui/core'
 import { memo, ReactNode, useCallback, useState } from 'react'
-import { MaskDialogTitle, MaskDialogTitleProps } from './DialogTitle'
-export interface MaskDialogProps extends React.PropsWithChildren<Omit<MaskDialogTitleProps, 'children'>> {
+import { MaskDialogTitle } from './DialogTitle'
+export interface MaskDialogProps extends React.PropsWithChildren<Omit<DialogProps, 'onClose'>> {
     title: string
-    open: boolean
-    DialogProps?: Omit<DialogProps, 'open'>
+    onBack?: () => React.ReactEventHandler<{}> | void
+    onClose?: () => React.ReactEventHandler<{}> | void
 }
 
 /**
@@ -14,9 +14,9 @@ export interface MaskDialogProps extends React.PropsWithChildren<Omit<MaskDialog
  * Therefore it also OK to not use this component if you need a special one.
  */
 export const MaskDialog = memo((props: MaskDialogProps) => {
-    const { title, onBack, onClose, open, children, DialogProps } = props
+    const { title, onBack, onClose, open, children, ...other } = props
     return (
-        <Dialog onBackdropClick={onClose} onClose={onClose} open={open} {...DialogProps}>
+        <Dialog onBackdropClick={onClose} onClose={onClose} open={open} {...other}>
             <MaskDialogTitle onBack={onBack} onClose={onClose}>
                 {title}
             </MaskDialogTitle>

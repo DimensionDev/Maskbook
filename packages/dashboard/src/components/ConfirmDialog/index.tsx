@@ -1,6 +1,5 @@
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskDialog, MaskColorVar } from '@dimensiondev/maskbook-theme'
 import {
-    Dialog,
     DialogTitle,
     DialogContent,
     DialogActions,
@@ -23,7 +22,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
     const { children, onClose, ...other } = props
 
     return (
-        <DialogTitle disableTypography sx={{ m: 0, p: 2 }} {...other}>
+        <DialogTitle disableTypography {...other}>
             <Typography variant="h6" component="div">
                 {children}
             </Typography>
@@ -65,7 +64,7 @@ const StyledButton = styled(Button)(() => ({
 }))
 
 interface ConfirmDialogProps extends React.PropsWithChildren<{}> {
-    title: React.ReactNode | string
+    title: string
     open: boolean
     cancelText?: React.ReactNode | string
     confirmText?: React.ReactNode | string
@@ -86,8 +85,7 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
         confirmDisabled = false,
     } = props
     return (
-        <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
-            <BootstrapDialogTitle onClose={onClose}>{title}</BootstrapDialogTitle>
+        <MaskDialog title={title} fullWidth maxWidth="sm" open={open} onClose={onClose}>
             <StyledDialogContent>{children}</StyledDialogContent>
             <StyledDialogActions>
                 <StyledButton onClick={onClose} color="secondary">
@@ -97,6 +95,6 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
                     {confirmText}
                 </StyledButton>
             </StyledDialogActions>
-        </Dialog>
+        </MaskDialog>
     )
 }
