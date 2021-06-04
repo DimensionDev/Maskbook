@@ -22,7 +22,7 @@ import { useCurrentIdentity } from '../../../components/DataSource/useActivatedU
 import type { PoolSettings } from '../hooks/useFillCallback'
 import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { formatAmount, formatBalance } from '@dimensiondev/maskbook-shared'
+import { formatAmount, formatBalance, isZero } from '@dimensiondev/maskbook-shared'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { AdvanceSetting } from './AdvanceSetting'
@@ -112,9 +112,7 @@ export function CreateForm(props: CreateFormProps) {
 
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
-        new BigNumber(origin?.limit || '0').isZero()
-            ? ''
-            : formatBalance(origin?.limit || '0', origin?.token?.decimals),
+        isZero(origin?.limit || '0') ? '' : formatBalance(origin?.limit || '0', origin?.token?.decimals),
     )
     const [tokenAndAmount, setTokenAndAmount] = useState<ExchangeTokenAndAmountState>()
     const TAS: ExchangeTokenAndAmountState[] = []
@@ -234,7 +232,7 @@ export function CreateForm(props: CreateFormProps) {
         for (const { amount, token } of tokenAndAmounts) {
             if (!token) return t('plugin_ito_error_select_token')
             if (amount === '') return t('plugin_ito_error_enter_amount')
-            if (new BigNumber(amount).isZero()) return t('plugin_ito_error_enter_amount')
+            if (isZero(amount)) return t('plugin_ito_error_enter_amount')
         }
 
         if (new BigNumber(tokenAndAmount?.amount ?? '0').isGreaterThan(tokenBalance))
@@ -242,8 +240,7 @@ export function CreateForm(props: CreateFormProps) {
                 symbol: tokenAndAmount?.token?.symbol,
             })
 
-        if (!totalOfPerWallet || new BigNumber(totalOfPerWallet).isZero())
-            return t('plugin_ito_error_allocation_absence')
+        if (!totalOfPerWallet || isZero(totalOfPerWallet)) return t('plugin_ito_error_allocation_absence')
 
         if (new BigNumber(totalOfPerWallet).isGreaterThan(tokenAndAmount?.amount ?? '0'))
             return t('plugin_ito_error_allocation_invalid')

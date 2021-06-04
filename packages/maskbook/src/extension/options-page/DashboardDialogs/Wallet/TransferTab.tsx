@@ -2,7 +2,7 @@ import { Button, makeStyles, TextField } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { formatBalance, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatBalance, formatEthereumAddress, isZero } from '@dimensiondev/maskbook-shared'
 import {
     Wallet,
     useTokenBalance,
@@ -105,7 +105,7 @@ export function TransferTab(props: TransferTabProps) {
 
     //#region validation
     const validationMessage = useMemo(() => {
-        if (!transferAmount || new BigNumber(transferAmount).isZero()) return t('wallet_transfer_error_amount_absence')
+        if (!transferAmount || isZero(transferAmount)) return t('wallet_transfer_error_amount_absence')
         if (new BigNumber(transferAmount).isGreaterThan(tokenBalance))
             return t('wallet_transfer_error_insufficent_balance', {
                 token: token.symbol,

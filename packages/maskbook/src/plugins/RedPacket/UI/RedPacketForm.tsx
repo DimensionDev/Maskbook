@@ -4,7 +4,7 @@ import { omit } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import BigNumber from 'bignumber.js'
 
-import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { formatBalance, isZero } from '@dimensiondev/maskbook-shared'
 import {
     EthereumTokenType,
     EthereumNetwork,
@@ -222,9 +222,9 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const validationMessage = useMemo(() => {
         if (!token) return t('plugin_wallet_select_a_token')
         if (!account) return t('plugin_wallet_connect_a_wallet')
-        if (new BigNumber(shares || '0').isZero()) return 'Enter shares'
+        if (isZero(shares || '0')) return 'Enter shares'
         if (new BigNumber(shares || '0').isGreaterThan(255)) return 'At most 255 recipients'
-        if (new BigNumber(amount).isZero()) return t('plugin_dhedge_enter_an_amount')
+        if (isZero(amount)) return t('plugin_dhedge_enter_an_amount')
         if (new BigNumber(totalAmount).isGreaterThan(tokenBalance))
             return t('plugin_gitcoin_insufficient_balance', { symbol: token.symbol })
         return ''

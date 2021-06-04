@@ -8,6 +8,7 @@ import { TransactionStateType, useTransactionState } from './useTransactionState
 import { useWeb3 } from './useWeb3'
 import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
+import { isZero } from '@dimensiondev/maskbook-shared'
 
 export function useNativeTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const web3 = useWeb3()
@@ -18,7 +19,7 @@ export function useNativeTransferCallback(amount?: string, recipient?: string, m
     const [transferState, setTransferState] = useTransactionState()
 
     const transferCallback = useCallback(async () => {
-        if (!account || !recipient || !amount || new BigNumber(amount).isZero()) {
+        if (!account || !recipient || !amount || isZero(amount)) {
             setTransferState({
                 type: TransactionStateType.UNKNOWN,
             })

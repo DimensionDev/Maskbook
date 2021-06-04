@@ -8,6 +8,7 @@ import { TransactionStateType, useTransactionState } from './useTransactionState
 import { TransactionEventType } from '../types'
 import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
+import { isZero } from '@dimensiondev/maskbook-shared'
 
 export function useERC20TokenTransferCallback(address: string, amount?: string, recipient?: string) {
     const nonce = useNonce()
@@ -17,7 +18,7 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
     const [transferState, setTransferState] = useTransactionState()
 
     const transferCallback = useCallback(async () => {
-        if (!account || !recipient || !amount || new BigNumber(amount).isZero() || !erc20Contract) {
+        if (!account || !recipient || !amount || isZero(amount) || !erc20Contract) {
             setTransferState({
                 type: TransactionStateType.UNKNOWN,
             })

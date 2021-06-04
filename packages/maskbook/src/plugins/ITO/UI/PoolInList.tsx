@@ -20,7 +20,7 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { debugModeSetting } from '../../../settings/settings'
-import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
+import { formatBalance, FormattedBalance, isZero } from '@dimensiondev/maskbook-shared'
 import formatDateTime from 'date-fns/format'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { MSG_DELIMITER } from '../constants'
@@ -117,7 +117,7 @@ export function PoolInList(props: PoolInListProps) {
     } = useAvailabilityComputed(pool)
     const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)
     const title = pool.message.split(MSG_DELIMITER)[1] ?? pool.message
-    const noRemain = new BigNumber(pool.total_remaining).isZero()
+    const noRemain = isZero(pool.total_remaining)
     const { listOfStatus } = availabilityComputed
 
     const isWithdrawn = tradeInfo?.destructInfo

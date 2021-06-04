@@ -16,7 +16,7 @@ import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { useRemoteControlledDialog, getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
 import formatDateTime from 'date-fns/format'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import { formatAmountPrecision, formatEthereumAddress, formatBalance } from '@dimensiondev/maskbook-shared'
+import { formatAmountPrecision, formatEthereumAddress, formatBalance, isZero } from '@dimensiondev/maskbook-shared'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SwapGuide, SwapStatus } from './SwapGuide'
@@ -281,7 +281,7 @@ export function ITO(props: ITO_Props) {
         return new BigNumber(buyInfo.amount).minus(buyInfo.amount_sold)
     }, [tradeInfo])
     // out of stock
-    const refundAllAmount = tradeInfo?.buyInfo && new BigNumber(tradeInfo?.buyInfo.amount_sold).isZero()
+    const refundAllAmount = tradeInfo?.buyInfo && isZero(tradeInfo?.buyInfo.amount_sold)
 
     const onShareSuccess = useCallback(async () => {
         window.open(shareSuccessLink, '_blank', 'noopener noreferrer')

@@ -9,7 +9,7 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useAccount, TransactionStateType, ERC20TokenDetailed, useChainId } from '@dimensiondev/web3-shared'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { formatPercentage } from '@dimensiondev/maskbook-shared'
+import { formatPercentage, isZero } from '@dimensiondev/maskbook-shared'
 import { useAirdropPacket } from '../hooks/useAirdropPacket'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
@@ -233,10 +233,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                             <ActionButton
                                 className={classes.button}
                                 variant="contained"
-                                disabled={
-                                    checkState.type !== CheckStateType.YEP ||
-                                    new BigNumber(checkState.claimable).isZero()
-                                }
+                                disabled={checkState.type !== CheckStateType.YEP || isZero(checkState.claimable)}
                                 onClick={onClaimButtonClick}>
                                 Claim
                             </ActionButton>

@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import { makeStyles, Typography, Box } from '@material-ui/core'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { formatBalance, isZero } from '@dimensiondev/maskbook-shared'
 import { useI18N, getAssetAsBlobURL } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
@@ -85,9 +84,7 @@ export function ShareDialog(props: ShareDialogProps) {
                         {token.symbol}
                     </Typography>
                     <Typography variant="body1" className={classes.shareText}>
-                        {new BigNumber(actualSwapAmount).isZero()
-                            ? t('plugin_ito_out_of_stock_hit')
-                            : t('plugin_ito_congratulations')}
+                        {isZero(actualSwapAmount) ? t('plugin_ito_out_of_stock_hit') : t('plugin_ito_congratulations')}
                     </Typography>
                     {shareSuccessLink ? (
                         <ActionButton

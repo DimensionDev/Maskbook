@@ -7,6 +7,7 @@ import { TransactionStateType, useTransactionState } from './useTransactionState
 import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
 import { TransactionEventType } from '../types'
+import { isZero } from '@dimensiondev/maskbook-shared'
 
 export function useNativeTokenWrapperCallback() {
     const nonce = useNonce()
@@ -25,7 +26,7 @@ export function useNativeTokenWrapperCallback() {
             }
 
             // error: invalid deposit amount
-            if (new BigNumber(amount).isZero()) {
+            if (isZero(amount)) {
                 setTransactionState({
                     type: TransactionStateType.FAILED,
                     error: new Error('Invalid deposit amount'),
@@ -96,7 +97,7 @@ export function useNativeTokenWrapperCallback() {
             const wethBalance = await wrapperContract.methods.balanceOf(account).call()
 
             // error: invalid withdraw amount
-            if (all === false && new BigNumber(amount).isZero()) {
+            if (all === false && isZero(amount)) {
                 setTransactionState({
                     type: TransactionStateType.FAILED,
                     error: new Error('Invalid withdraw amount'),

@@ -1,4 +1,4 @@
-import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { formatBalance, isZero } from '@dimensiondev/maskbook-shared'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
@@ -226,7 +226,7 @@ export function InvestDialog() {
                             }}
                         />
                     </form>
-                    {new BigNumber(tokenBalance).isZero() ? (
+                    {isZero(tokenBalance) ? (
                         <ActionButton
                             className={classes.button}
                             fullWidth

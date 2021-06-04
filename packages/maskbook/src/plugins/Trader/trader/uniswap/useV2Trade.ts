@@ -7,6 +7,7 @@ import { TradeStrategy } from '../../types'
 import { useAllCommonPairs } from './useAllCommonPairs'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { MAX_HOP } from '../../constants'
+import { isZero } from '@dimensiondev/maskbook-shared'
 
 export function useV2Trade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
@@ -16,7 +17,7 @@ export function useV2Trade(
     outputToken?: FungibleTokenDetailed,
 ) {
     const isExactIn = strategy === TradeStrategy.ExactIn
-    const isTradable = !new BigNumber(inputAmount).isZero() || !new BigNumber(outputAmount).isZero()
+    const isTradable = !isZero(inputAmount) || !isZero(outputAmount)
     const { value: pairs, ...asyncResult } = useAllCommonPairs(inputToken, outputToken)
     const bestTradeExactIn = useBestTradeExactIn(inputAmount, inputToken, outputToken, pairs)
     const bestTradeExactOut = useBestTradeExactOut(outputAmount, inputToken, outputToken, pairs)
