@@ -4,6 +4,7 @@ import { ChainId, ProviderType, NetworkType, GasNow } from '@dimensiondev/web3-s
 import { PLUGIN_IDENTIFIER } from './constants'
 import { CollectibleProvider, PortfolioProvider } from './types'
 import { isEqual } from 'lodash-es'
+import { connectGasNow } from './apis/gasnow'
 
 export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+selectedWalletAddress`, '', {
     primary: () => 'DO NOT DISPLAY IT IN UI',
@@ -119,20 +120,4 @@ export const currentGasNowSettings = createGlobalSettings<GasNow | null>(
     (a: GasNow | null, b: GasNow | null) => isEqual(a, b),
 )
 
-function connectGasNow() {
-    const GAS_NOW_API = 'wss://www.gasnow.org/ws'
-    const gasNowSocket = new WebSocket(GAS_NOW_API)
-    gasNowSocket.onopen = () => {
-        console.log('GasNow websocket connected.')
-    }
-    gasNowSocket.onmessage = (event) => {
-        const gasNow: GasNow = JSON.parse(event.data).data.gasPrices
-        currentGasNowSettings.value = gasNow
-    }
-    gasNowSocket.onclose = () => {
-        console.log('GasNow websocket closed, try to reconnect...')
-        currentGasNowSettings.value = null
-        setTimeout(connectGasNow, 1000)
-    }
-}
 connectGasNow()

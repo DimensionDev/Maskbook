@@ -7,7 +7,7 @@ import { currentGasNowSettings, currentGasPriceSettings } from '../../Wallet/set
 import { useAssets } from '../../Wallet/hooks/useAssets'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { useValueRef, formatWeiToGwei } from '@dimensiondev/maskbook-shared'
-import type { GasNow } from '@dimensiondev/web3-shared'
+import { GasNow, EthereumTokenType } from '@dimensiondev/web3-shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { useMemo, useState, useCallback } from 'react'
@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         marginRight: theme.spacing(1),
     },
     button: {
-        margin: '16px auto',
+        margin: `${theme.spacing(2)} auto`,
         minWidth: 260,
     },
 }))
@@ -92,23 +92,20 @@ export function GasNowDialog() {
     const gasNow = useValueRef(currentGasNowSettings)
     const rapidGasFirstCache = useMemo(() => gasNow?.rapid, [])
     const [customGas, setCustomGas] = useState(formatWeiToGwei(rapidGasFirstCache ?? 0).toString())
-    const customGasToWei = Number(customGas === '' ? 0 : customGas) * 10 ** 9
+    const customGasToWei = new BigNumber(customGas === '' ? 0 : Number(customGas) * 10 ** 9)
     const customEstimateTime = gasNow
-        ? customGasToWei >= gasNow.rapid
+        ? customGasToWei.isGreaterThan(gasNow.rapid)
             ? t('plugin_gas_now_dialog_sec', { time: 15 })
-            : customGasToWei >= gasNow.fast
+            : customGasToWei.isGreaterThan(gasNow.fast)
             ? t('plugin_gas_now_dialog_min', { time: 1 })
-            : customGasToWei >= gasNow.standard
+            : customGasToWei.isGreaterThan(gasNow.standard)
             ? t('plugin_gas_now_dialog_min', { time: 3 })
             : t('plugin_gas_now_dialog_min', { time: '>10' })
         : ''
-    const { open, closeDialog, setDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.gasPriceDialogUpdated,
-        (_ev) => void 0,
-    )
+    const { open, closeDialog, setDialog } = useRemoteControlledDialog(EthereumMessages.events.gasPriceDialogUpdated)
     const { value: detailedTokens } = useAssets([])
     const [select, setSelect] = useState(gasNow ? 1 : 2)
-    const nativeToken = detailedTokens[0]
+    const nativeToken = detailedTokens.find((t) => t.token.type === EthereumTokenType.Native)
     const usdRate = nativeToken?.price?.usd
     const options = useMemo(
         () => [
@@ -127,7 +124,7 @@ export function GasNowDialog() {
             {
                 title: t('plugin_gas_now_dialog_custom'),
                 type: 'custom',
-                gasPrice: customGasToWei,
+                gasPrice: customGasToWei.toNumber(),
                 time: t('plugin_gas_now_dialog_sec', { time: 15 }),
             },
         ],
@@ -135,12 +132,12 @@ export function GasNowDialog() {
     )
 
     const validationMessage = useMemo(() => {
-        if (select === 2 && customGasToWei === 0) return t('plugin_gas_now_dialog_zero_gas')
+        if (select === 2 && customGasToWei.isEqualTo(0)) return t('plugin_gas_now_dialog_zero_gas')
         return ''
     }, [customGasToWei, options, select])
 
     const onConfrim = useCallback(() => {
-        currentGasPriceSettings.value = select == 2 ? customGasToWei : options[select].gasPrice
+        currentGasPriceSettings.value = select == 2 ? customGasToWei.toNumber() : options[select].gasPrice
         const type = options[select].type as keyof GasNow
         setDialog({ open: false, type })
     }, [customGasToWei, options, select, setDialog])
@@ -216,7 +213,7 @@ export function GasNowDialog() {
                     ))}
                 </List>
                 <Typography className={classes.intro}>{t('plugin_gas_now_dialog_intro')}</Typography>
-                <EthereumWalletConnectedBoundary>
+                <EthereumWalletConnectedBoundary offChain>
                     <ActionButton
                         className={classes.button}
                         size="large"
