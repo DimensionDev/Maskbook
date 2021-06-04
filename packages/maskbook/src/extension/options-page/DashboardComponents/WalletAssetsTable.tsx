@@ -23,11 +23,11 @@ import {
     CurrencyType,
     ERC20TokenDetailed,
     EthereumTokenType,
-    resolveChainId,
     isSameAddress,
     Wallet,
     useStableTokensDebank,
     useChainDetailed,
+    getChainIdFromName,
 } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency, FormattedCurrency, isGreaterThan } from '@dimensiondev/maskbook-shared'
@@ -114,7 +114,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                         classes={{ icon: classes.coin }}
                         name={asset.token.name}
                         address={asset.token.address}
-                        chainId={resolveChainId(asset.chain)}
+                        chainId={getChainIdFromName(asset.chain)}
                     />
                     <Typography className={classes.name}>{asset.token.symbol}</Typography>
                     {asset.chain !== chainDetailed.chain.toLowerCase() ? (

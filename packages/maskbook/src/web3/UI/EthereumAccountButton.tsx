@@ -1,16 +1,23 @@
+import { useCallback } from 'react'
+import classNames from 'classnames'
 import { formatEthereumAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
-import { ChainId, resolveChainColor, useAccount, useChainId, useNativeTokenBalance } from '@dimensiondev/web3-shared'
+import {
+    resolveChainColor,
+    useAccount,
+    useChainDetailed,
+    useChainId,
+    useChainIdValid,
+    useNativeTokenBalance,
+} from '@dimensiondev/web3-shared'
 import { Button, ButtonProps, makeStyles, Typography } from '@material-ui/core'
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-import classNames from 'classnames'
-import { useCallback } from 'react'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import { ProviderIcon } from '../../components/shared/ProviderIcon'
+import { WalletIcon } from '../../components/shared/WalletIcon'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
-import { Flags, useI18N, useRemoteControlledDialog, useValueRef } from '../../utils'
+import { Flags, useI18N, useRemoteControlledDialog } from '../../utils'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -31,11 +38,6 @@ const useStyles = makeStyles((theme) => {
         buttonTransparent: {
             backgroundColor: 'transparent',
         },
-        providerIcon: {
-            fontSize: 18,
-            width: 18,
-            height: 18,
-        },
         chainIcon: {
             fontSize: 18,
             width: 18,
@@ -54,12 +56,13 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const chainId = useChainId()
     const account = useAccount()
+    const chainId = useChainId()
+    const chainIdValid = useChainIdValid()
+    const chainDetailed = useChainDetailed()
     const { value: balance = '0' } = useNativeTokenBalance()
 
     const selectedWallet = useWallet()
-    const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
 
     const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
@@ -68,9 +71,9 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const onOpen = useCallback(() => {
-        if (selectedWallet) openSelectWalletDialog()
+        if (account) openSelectWalletDialog()
         else openSelectProviderDialog()
-    }, [selectedWallet, openSelectWalletDialog, openSelectProviderDialog])
+    }, [account, openSelectWalletDialog, openSelectProviderDialog])
 
     if (Flags.has_native_nav_bar) return <AccountBalanceWalletIcon onClick={onOpen} />
 
@@ -85,22 +88,21 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
                 className={classNames(classes.button, props.disableNativeToken ? classes.buttonTransparent : '')}
                 variant="outlined"
                 startIcon={
-                    selectedWallet ? (
-                        <ProviderIcon
-                            classes={{ icon: classes.providerIcon }}
-                            size={18}
-                            providerType={selectedWalletProvider}
-                        />
-                    ) : null
+                    account && chainIdValid ? (
+                        <WalletIcon size={18} badgeSize={9} />
+                    ) : (
+                        <InfoOutlinedIcon fontSize="medium" />
+                    )
                 }
                 color="primary"
                 onClick={onOpen}
                 {...props.ButtonProps}>
-                {selectedWallet?.name ?? ''}
-                {selectedWallet?.address
-                    ? ` (${formatEthereumAddress(selectedWallet.address, 4)})`
+                {account
+                    ? chainIdValid
+                        ? `${selectedWallet?.name ?? ''} (${formatEthereumAddress(account, 4)})`
+                        : t('plugin_wallet_wrong_network')
                     : t('plugin_wallet_on_connect')}
-                {chainId !== ChainId.Mainnet && selectedWallet ? (
+                {account && chainIdValid && chainDetailed?.network !== 'mainnet' ? (
                     <FiberManualRecordIcon
                         className={classes.chainIcon}
                         style={{

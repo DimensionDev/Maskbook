@@ -18,7 +18,7 @@ import {
     getConstant,
     CONSTANTS,
     getChainDetailed,
-    resolveChainId,
+    getChainIdFromName,
 } from '@dimensiondev/web3-shared'
 
 export async function getAssetsListNFT(
@@ -96,14 +96,14 @@ export async function getAssetsList(address: string, provider: PortfolioProvider
 
 function formatAssetsFromDebank(data: BalanceRecord[]) {
     return data.map((x): Asset => {
-        const chainId = resolveChainId(x.id)
+        const chainId = getChainIdFromName(x.id)
         return {
             chain: x.chain,
             token:
                 chainId && getChainDetailed(chainId)?.network === 'mainnet'
-                    ? createNativeToken(resolveChainId(x.id) ?? ChainId.Mainnet)
+                    ? createNativeToken(getChainIdFromName(x.id) ?? ChainId.Mainnet)
                     : createERC20Token(
-                          resolveChainId(x.chain) ?? ChainId.Mainnet,
+                          getChainIdFromName(x.chain) ?? ChainId.Mainnet,
                           formatEthereumAddress(x.id),
                           x.decimals,
                           x.name,

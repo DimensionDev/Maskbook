@@ -3,10 +3,17 @@
 /* eslint-disable */
 
 import BN from 'bn.js'
-import { Contract, ContractOptions } from 'web3-eth-contract'
+import { ContractOptions } from 'web3-eth-contract'
 import { EventLog } from 'web3-core'
 import { EventEmitter } from 'events'
-import { ContractEvent, Callback, TransactionObject, BlockType } from './types'
+import {
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
+    BaseContract,
+} from './types'
 
 interface EventOptions {
     filter?: object
@@ -14,71 +21,194 @@ interface EventOptions {
     topics?: string[]
 }
 
-export class DHedgePool extends Contract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions)
+export type Approval = ContractEventLog<{
+    owner: string
+    spender: string
+    value: string
+    0: string
+    1: string
+    2: string
+}>
+export type AssetAdded = ContractEventLog<{
+    fundAddress: string
+    manager: string
+    assetKey: string
+    0: string
+    1: string
+    2: string
+}>
+export type AssetRemoved = ContractEventLog<{
+    fundAddress: string
+    manager: string
+    assetKey: string
+    0: string
+    1: string
+    2: string
+}>
+export type Deposit = ContractEventLog<{
+    fundAddress: string
+    investor: string
+    valueDeposited: string
+    fundTokensReceived: string
+    totalInvestorFundTokens: string
+    fundValue: string
+    totalSupply: string
+    time: string
+    0: string
+    1: string
+    2: string
+    3: string
+    4: string
+    5: string
+    6: string
+    7: string
+}>
+export type Exchange = ContractEventLog<{
+    fundAddress: string
+    manager: string
+    sourceKey: string
+    sourceAmount: string
+    destinationKey: string
+    destinationAmount: string
+    time: string
+    0: string
+    1: string
+    2: string
+    3: string
+    4: string
+    5: string
+    6: string
+}>
+export type ManagerFeeMinted = ContractEventLog<{
+    pool: string
+    manager: string
+    available: string
+    daoFee: string
+    managerFee: string
+    tokenPriceAtLastFeeMint: string
+    0: string
+    1: string
+    2: string
+    3: string
+    4: string
+    5: string
+}>
+export type ManagerFeeSet = ContractEventLog<{
+    fundAddress: string
+    manager: string
+    numerator: string
+    denominator: string
+    0: string
+    1: string
+    2: string
+    3: string
+}>
+export type ManagerUpdated = ContractEventLog<{
+    newManager: string
+    newManagerName: string
+    0: string
+    1: string
+}>
+export type PoolPrivacyUpdated = ContractEventLog<{
+    isPoolPrivate: boolean
+    0: boolean
+}>
+export type Transfer = ContractEventLog<{
+    from: string
+    to: string
+    value: string
+    0: string
+    1: string
+    2: string
+}>
+export type Withdrawal = ContractEventLog<{
+    fundAddress: string
+    investor: string
+    valueWithdrawn: string
+    fundTokensWithdrawn: string
+    totalInvestorFundTokens: string
+    fundValue: string
+    totalSupply: string
+    time: string
+    0: string
+    1: string
+    2: string
+    3: string
+    4: string
+    5: string
+    6: string
+    7: string
+}>
+
+export interface DHedgePool extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): DHedgePool
     clone(): DHedgePool
     methods: {
-        addMember(member: string): TransactionObject<void>
+        addMember(member: string): NonPayableTransactionObject<void>
 
-        addMembers(members: string[]): TransactionObject<void>
+        addMembers(members: string[]): NonPayableTransactionObject<void>
 
-        addressResolver(): TransactionObject<string>
+        addressResolver(): NonPayableTransactionObject<string>
 
-        allowance(owner: string, spender: string): TransactionObject<string>
+        allowance(owner: string, spender: string): NonPayableTransactionObject<string>
 
-        approve(spender: string, amount: number | string): TransactionObject<boolean>
+        approve(spender: string, amount: number | string | BN): NonPayableTransactionObject<boolean>
 
-        assetPosition(arg0: string | number[]): TransactionObject<string>
+        assetPosition(arg0: string | number[]): NonPayableTransactionObject<string>
 
-        balanceOf(account: string): TransactionObject<string>
+        balanceOf(account: string): NonPayableTransactionObject<string>
 
-        changeManager(newManager: string, newManagerName: string): TransactionObject<void>
+        changeManager(newManager: string, newManagerName: string): NonPayableTransactionObject<void>
 
-        creationTime(): TransactionObject<string>
+        creationTime(): NonPayableTransactionObject<string>
 
-        creator(): TransactionObject<string>
+        creator(): NonPayableTransactionObject<string>
 
-        decimals(): TransactionObject<string>
+        decimals(): NonPayableTransactionObject<string>
 
-        decreaseAllowance(spender: string, subtractedValue: number | string): TransactionObject<boolean>
+        decreaseAllowance(spender: string, subtractedValue: number | string | BN): NonPayableTransactionObject<boolean>
 
-        factory(): TransactionObject<string>
+        factory(): NonPayableTransactionObject<string>
 
-        getMembers(): TransactionObject<string[]>
+        getMembers(): NonPayableTransactionObject<string[]>
 
-        increaseAllowance(spender: string, addedValue: number | string): TransactionObject<boolean>
+        increaseAllowance(spender: string, addedValue: number | string | BN): NonPayableTransactionObject<boolean>
 
-        isMemberAllowed(member: string): TransactionObject<boolean>
+        isMemberAllowed(member: string): NonPayableTransactionObject<boolean>
 
-        lastDeposit(arg0: string): TransactionObject<string>
+        lastDeposit(arg0: string): NonPayableTransactionObject<string>
 
-        manager(): TransactionObject<string>
+        manager(): NonPayableTransactionObject<string>
 
-        managerName(): TransactionObject<string>
+        managerName(): NonPayableTransactionObject<string>
 
-        name(): TransactionObject<string>
+        name(): NonPayableTransactionObject<string>
 
-        numberOfMembers(): TransactionObject<string>
+        numberOfMembers(): NonPayableTransactionObject<string>
 
-        persistentAsset(arg0: string | number[]): TransactionObject<boolean>
+        persistentAsset(arg0: string | number[]): NonPayableTransactionObject<boolean>
 
-        privatePool(): TransactionObject<boolean>
+        privatePool(): NonPayableTransactionObject<boolean>
 
-        removeMember(member: string): TransactionObject<void>
+        removeMember(member: string): NonPayableTransactionObject<void>
 
-        removeMembers(members: string[]): TransactionObject<void>
+        removeMembers(members: string[]): NonPayableTransactionObject<void>
 
-        supportedAssets(arg0: number | string): TransactionObject<string>
+        supportedAssets(arg0: number | string | BN): NonPayableTransactionObject<string>
 
-        symbol(): TransactionObject<string>
+        symbol(): NonPayableTransactionObject<string>
 
-        tokenPriceAtLastFeeMint(): TransactionObject<string>
+        tokenPriceAtLastFeeMint(): NonPayableTransactionObject<string>
 
-        totalSupply(): TransactionObject<string>
+        totalSupply(): NonPayableTransactionObject<string>
 
-        transfer(recipient: string, amount: number | string): TransactionObject<boolean>
+        transfer(recipient: string, amount: number | string | BN): NonPayableTransactionObject<boolean>
 
-        transferFrom(sender: string, recipient: string, amount: number | string): TransactionObject<boolean>
+        transferFrom(
+            sender: string,
+            recipient: string,
+            amount: number | string | BN,
+        ): NonPayableTransactionObject<boolean>
 
         initialize(
             _factory: string,
@@ -88,39 +218,39 @@ export class DHedgePool extends Contract {
             _fundName: string,
             _addressResolver: string,
             _supportedAssets: (string | number[])[],
-        ): TransactionObject<void>
+        ): NonPayableTransactionObject<void>
 
-        setPoolPrivate(_privatePool: boolean): TransactionObject<void>
+        setPoolPrivate(_privatePool: boolean): NonPayableTransactionObject<void>
 
-        getAssetProxy(key: string | number[]): TransactionObject<string>
+        getAssetProxy(key: string | number[]): NonPayableTransactionObject<string>
 
-        isAssetSupported(key: string | number[]): TransactionObject<boolean>
+        isAssetSupported(key: string | number[]): NonPayableTransactionObject<boolean>
 
-        validateAsset(key: string | number[]): TransactionObject<boolean>
+        validateAsset(key: string | number[]): NonPayableTransactionObject<boolean>
 
-        addToSupportedAssets(key: string | number[]): TransactionObject<void>
+        addToSupportedAssets(key: string | number[]): NonPayableTransactionObject<void>
 
-        removeFromSupportedAssets(key: string | number[]): TransactionObject<void>
+        removeFromSupportedAssets(key: string | number[]): NonPayableTransactionObject<void>
 
-        numberOfSupportedAssets(): TransactionObject<string>
+        numberOfSupportedAssets(): NonPayableTransactionObject<string>
 
         exchange(
             sourceKey: string | number[],
-            sourceAmount: number | string,
+            sourceAmount: number | string | BN,
             destinationKey: string | number[],
-        ): TransactionObject<void>
+        ): NonPayableTransactionObject<void>
 
-        totalFundValue(): TransactionObject<string>
+        totalFundValue(): NonPayableTransactionObject<string>
 
-        assetValue(key: string | number[]): TransactionObject<string>
+        assetValue(key: string | number[]): NonPayableTransactionObject<string>
 
-        deposit(_susdAmount: number | string): TransactionObject<string>
+        deposit(_susdAmount: number | string | BN): NonPayableTransactionObject<string>
 
-        withdraw(_fundTokenAmount: number | string): TransactionObject<void>
+        withdraw(_fundTokenAmount: number | string | BN): NonPayableTransactionObject<void>
 
-        forfeitSuspendedSynthsAndWithdraw(_fundTokenAmount: number | string): TransactionObject<void>
+        forfeitSuspendedSynthsAndWithdraw(_fundTokenAmount: number | string | BN): NonPayableTransactionObject<void>
 
-        getFundSummary(): TransactionObject<{
+        getFundSummary(): NonPayableTransactionObject<{
             0: string
             1: string
             2: string
@@ -134,162 +264,113 @@ export class DHedgePool extends Contract {
             10: string
         }>
 
-        getSupportedAssets(): TransactionObject<string[]>
+        getSupportedAssets(): NonPayableTransactionObject<string[]>
 
-        getFundComposition(): TransactionObject<{
+        getFundComposition(): NonPayableTransactionObject<{
             0: string[]
             1: string[]
             2: string[]
         }>
 
-        getWaitingPeriods(): TransactionObject<{
+        getWaitingPeriods(): NonPayableTransactionObject<{
             0: string[]
             1: string[]
         }>
 
-        getSuspendedAssets(): TransactionObject<{
+        getSuspendedAssets(): NonPayableTransactionObject<{
             0: string[]
             1: boolean[]
         }>
 
-        tokenPrice(): TransactionObject<string>
+        tokenPrice(): NonPayableTransactionObject<string>
 
-        availableManagerFee(): TransactionObject<string>
+        availableManagerFee(): NonPayableTransactionObject<string>
 
-        mintManagerFee(): TransactionObject<void>
+        mintManagerFee(): NonPayableTransactionObject<void>
 
-        getManagerFee(): TransactionObject<{
+        getManagerFee(): NonPayableTransactionObject<{
             0: string
             1: string
         }>
 
-        setManagerFeeNumerator(numerator: number | string): TransactionObject<void>
+        setManagerFeeNumerator(numerator: number | string | BN): NonPayableTransactionObject<void>
 
-        getExitFee(): TransactionObject<{
+        getExitFee(): NonPayableTransactionObject<{
             0: string
             1: string
         }>
 
-        getExitFeeCooldown(): TransactionObject<string>
+        getExitFeeCooldown(): NonPayableTransactionObject<string>
 
-        getExitFeeRemainingCooldown(sender: string): TransactionObject<string>
+        getExitFeeRemainingCooldown(sender: string): NonPayableTransactionObject<string>
     }
     events: {
-        Approval: ContractEvent<{
-            owner: string
-            spender: string
-            value: string
-            0: string
-            1: string
-            2: string
-        }>
-        AssetAdded: ContractEvent<{
-            fundAddress: string
-            manager: string
-            assetKey: string
-            0: string
-            1: string
-            2: string
-        }>
-        AssetRemoved: ContractEvent<{
-            fundAddress: string
-            manager: string
-            assetKey: string
-            0: string
-            1: string
-            2: string
-        }>
-        Deposit: ContractEvent<{
-            fundAddress: string
-            investor: string
-            valueDeposited: string
-            fundTokensReceived: string
-            totalInvestorFundTokens: string
-            fundValue: string
-            totalSupply: string
-            time: string
-            0: string
-            1: string
-            2: string
-            3: string
-            4: string
-            5: string
-            6: string
-            7: string
-        }>
-        Exchange: ContractEvent<{
-            fundAddress: string
-            manager: string
-            sourceKey: string
-            sourceAmount: string
-            destinationKey: string
-            destinationAmount: string
-            time: string
-            0: string
-            1: string
-            2: string
-            3: string
-            4: string
-            5: string
-            6: string
-        }>
-        ManagerFeeMinted: ContractEvent<{
-            pool: string
-            manager: string
-            available: string
-            daoFee: string
-            managerFee: string
-            tokenPriceAtLastFeeMint: string
-            0: string
-            1: string
-            2: string
-            3: string
-            4: string
-            5: string
-        }>
-        ManagerFeeSet: ContractEvent<{
-            fundAddress: string
-            manager: string
-            numerator: string
-            denominator: string
-            0: string
-            1: string
-            2: string
-            3: string
-        }>
-        ManagerUpdated: ContractEvent<{
-            newManager: string
-            newManagerName: string
-            0: string
-            1: string
-        }>
-        PoolPrivacyUpdated: ContractEvent<boolean>
-        Transfer: ContractEvent<{
-            from: string
-            to: string
-            value: string
-            0: string
-            1: string
-            2: string
-        }>
-        Withdrawal: ContractEvent<{
-            fundAddress: string
-            investor: string
-            valueWithdrawn: string
-            fundTokensWithdrawn: string
-            totalInvestorFundTokens: string
-            fundValue: string
-            totalSupply: string
-            time: string
-            0: string
-            1: string
-            2: string
-            3: string
-            4: string
-            5: string
-            6: string
-            7: string
-        }>
-        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
+        Approval(cb?: Callback<Approval>): EventEmitter
+        Approval(options?: EventOptions, cb?: Callback<Approval>): EventEmitter
+
+        AssetAdded(cb?: Callback<AssetAdded>): EventEmitter
+        AssetAdded(options?: EventOptions, cb?: Callback<AssetAdded>): EventEmitter
+
+        AssetRemoved(cb?: Callback<AssetRemoved>): EventEmitter
+        AssetRemoved(options?: EventOptions, cb?: Callback<AssetRemoved>): EventEmitter
+
+        Deposit(cb?: Callback<Deposit>): EventEmitter
+        Deposit(options?: EventOptions, cb?: Callback<Deposit>): EventEmitter
+
+        Exchange(cb?: Callback<Exchange>): EventEmitter
+        Exchange(options?: EventOptions, cb?: Callback<Exchange>): EventEmitter
+
+        ManagerFeeMinted(cb?: Callback<ManagerFeeMinted>): EventEmitter
+        ManagerFeeMinted(options?: EventOptions, cb?: Callback<ManagerFeeMinted>): EventEmitter
+
+        ManagerFeeSet(cb?: Callback<ManagerFeeSet>): EventEmitter
+        ManagerFeeSet(options?: EventOptions, cb?: Callback<ManagerFeeSet>): EventEmitter
+
+        ManagerUpdated(cb?: Callback<ManagerUpdated>): EventEmitter
+        ManagerUpdated(options?: EventOptions, cb?: Callback<ManagerUpdated>): EventEmitter
+
+        PoolPrivacyUpdated(cb?: Callback<PoolPrivacyUpdated>): EventEmitter
+        PoolPrivacyUpdated(options?: EventOptions, cb?: Callback<PoolPrivacyUpdated>): EventEmitter
+
+        Transfer(cb?: Callback<Transfer>): EventEmitter
+        Transfer(options?: EventOptions, cb?: Callback<Transfer>): EventEmitter
+
+        Withdrawal(cb?: Callback<Withdrawal>): EventEmitter
+        Withdrawal(options?: EventOptions, cb?: Callback<Withdrawal>): EventEmitter
+
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
+
+    once(event: 'Approval', cb: Callback<Approval>): void
+    once(event: 'Approval', options: EventOptions, cb: Callback<Approval>): void
+
+    once(event: 'AssetAdded', cb: Callback<AssetAdded>): void
+    once(event: 'AssetAdded', options: EventOptions, cb: Callback<AssetAdded>): void
+
+    once(event: 'AssetRemoved', cb: Callback<AssetRemoved>): void
+    once(event: 'AssetRemoved', options: EventOptions, cb: Callback<AssetRemoved>): void
+
+    once(event: 'Deposit', cb: Callback<Deposit>): void
+    once(event: 'Deposit', options: EventOptions, cb: Callback<Deposit>): void
+
+    once(event: 'Exchange', cb: Callback<Exchange>): void
+    once(event: 'Exchange', options: EventOptions, cb: Callback<Exchange>): void
+
+    once(event: 'ManagerFeeMinted', cb: Callback<ManagerFeeMinted>): void
+    once(event: 'ManagerFeeMinted', options: EventOptions, cb: Callback<ManagerFeeMinted>): void
+
+    once(event: 'ManagerFeeSet', cb: Callback<ManagerFeeSet>): void
+    once(event: 'ManagerFeeSet', options: EventOptions, cb: Callback<ManagerFeeSet>): void
+
+    once(event: 'ManagerUpdated', cb: Callback<ManagerUpdated>): void
+    once(event: 'ManagerUpdated', options: EventOptions, cb: Callback<ManagerUpdated>): void
+
+    once(event: 'PoolPrivacyUpdated', cb: Callback<PoolPrivacyUpdated>): void
+    once(event: 'PoolPrivacyUpdated', options: EventOptions, cb: Callback<PoolPrivacyUpdated>): void
+
+    once(event: 'Transfer', cb: Callback<Transfer>): void
+    once(event: 'Transfer', options: EventOptions, cb: Callback<Transfer>): void
+
+    once(event: 'Withdrawal', cb: Callback<Withdrawal>): void
+    once(event: 'Withdrawal', options: EventOptions, cb: Callback<Withdrawal>): void
 }

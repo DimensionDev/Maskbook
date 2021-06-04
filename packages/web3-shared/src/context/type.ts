@@ -4,7 +4,7 @@ import type { ChainId, ERC20TokenDetailed, ERC721TokenDetailed, NetworkType, Pro
 
 export interface Web3ProviderType {
     provider: Subscription<Provider>
-    allowTestChain: Subscription<boolean>
+    allowTestnet: Subscription<boolean>
     account: Subscription<string>
     nonce: Subscription<number>
     gasPrice: Subscription<number>

@@ -1,9 +1,8 @@
-import { useContext } from 'react'
-import { createContext } from 'react'
+import { useContext, createContext } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
 import type { Web3ProviderType } from './type'
-import CHAINS from '../assets/chains.json'
+import { getChainDetailed } from '../utils'
 
 export type { Web3ProviderType } from './type'
 
@@ -19,7 +18,7 @@ export function useWeb3Context() {
 export function useWeb3State() {
     const _ = useWeb3Context()
     const account = useSubscription(_.account)
-    const allowTestChain = useSubscription(_.allowTestChain)
+    const allowTestnet = useSubscription(_.allowTestnet)
     const balance = useSubscription(_.balance)
     const blockNumber = useSubscription(_.blockNumber)
     const nonce = useSubscription(_.nonce)
@@ -29,8 +28,9 @@ export function useWeb3State() {
     const wallets = useSubscription(_.wallets)
     const chainId = useSubscription(_.chainId)
     const erc20Tokens = useSubscription(_.erc20Tokens)
-    const chainDetailed = CHAINS.find((x) => x.chainId === chainId)
+    const chainDetailed = getChainDetailed(chainId)
     return {
+        allowTestnet,
         account,
         nonce,
         gasPrice,
@@ -42,7 +42,7 @@ export function useWeb3State() {
         chainId,
         chainDetailed,
         erc20Tokens,
-        chainIdValid: !account || allowTestChain || chainDetailed?.network === 'mainnet',
+        chainIdValid: !account || allowTestnet || chainDetailed?.network === 'mainnet',
     }
 }
 

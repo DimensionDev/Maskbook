@@ -2,8 +2,8 @@ import type { JSON_PayloadInMask, PoolRecord } from './types'
 import { PluginITO_Messages } from './messages'
 import * as subgraph from './apis'
 import * as database from './database'
-import { getChainId } from '../../extension/background-script/EthereumService'
 import { getChainDetailed } from '@dimensiondev/web3-shared'
+import { currentChainIdSettings } from '../Wallet/settings'
 
 export async function getTradeInfo(pid: string, trader: string) {
     const tradeInfo = await subgraph.getTradeInfo(pid, trader)
@@ -18,7 +18,7 @@ export async function getPool(pid: string) {
 }
 
 export async function getAllPoolsAsSeller(address: string) {
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     const poolsFromChain = await subgraph.getAllPoolsAsSeller(address)
     const poolsFromDB = await database.getPoolsFromDB(poolsFromChain.map((x) => x.pool.pid))
     return poolsFromChain
@@ -37,7 +37,7 @@ export async function getAllPoolsAsSeller(address: string) {
 }
 
 export async function getAllPoolsAsBuyer(address: string) {
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) return []
     const pools = await subgraph.getAllPoolsAsBuyer(address)

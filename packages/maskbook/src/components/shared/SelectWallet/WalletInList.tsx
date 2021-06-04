@@ -1,10 +1,19 @@
-import { Avatar, ListItem, ListItemText, makeStyles, Theme, ListTypeMap, ListItemAvatar } from '@material-ui/core'
+import {
+    Avatar,
+    ListItem,
+    ListItemText,
+    makeStyles,
+    Theme,
+    ListTypeMap,
+    ListItemAvatar,
+    ListItemIcon,
+} from '@material-ui/core'
+import CheckIcon from '@material-ui/icons/Check'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
-import type { Wallet } from '@dimensiondev/web3-shared'
+import { Wallet, useBlockie } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../custom-ui-helper'
-import { useBlockie } from '../../../web3/hooks/useBlockie'
 
 const useStyle = makeStyles((theme: Theme) => ({
     root: {
@@ -15,11 +24,16 @@ const useStyle = makeStyles((theme: Theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
-    icon: {},
+    icon: {
+        color: '#77E0B5',
+        minWidth: 26,
+        marginLeft: theme.spacing(1),
+    },
 }))
 
 export interface WalletInListProps extends withClasses<never> {
     wallet: Wallet
+    selected?: boolean
     disabled?: boolean
     onClick?: () => void
     ListItemProps?: Partial<DefaultComponentProps<ListTypeMap<{ button: true }, 'div'>>>
@@ -28,7 +42,7 @@ export interface WalletInListProps extends withClasses<never> {
 export function WalletInList(props: WalletInListProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyle(), props)
-    const { wallet, disabled, onClick, ListItemProps } = props
+    const { wallet, selected = false, disabled = false, onClick, ListItemProps } = props
     const blockie = useBlockie(wallet.address)
 
     return (
@@ -43,11 +57,16 @@ export function WalletInList(props: WalletInListProps) {
                     secondary: classes.overflow,
                 }}
                 primary={wallet.name}
-                secondary={formatEthereumAddress(wallet.address)}
+                secondary={formatEthereumAddress(wallet.address, 16)}
                 secondaryTypographyProps={{
                     component: 'div',
                 }}
             />
+            {selected ? (
+                <ListItemIcon className={classes.icon}>
+                    <CheckIcon fontSize="small" />
+                </ListItemIcon>
+            ) : null}
         </ListItem>
     )
 }

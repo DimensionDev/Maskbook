@@ -57,6 +57,7 @@ export function useNativeTransferCallback(amount?: string, recipient?: string, m
             gas: await web3.eth
                 .estimateGas({
                     from: account,
+                    to: recipient,
                     value: amount,
                     data: memo ? toHex(memo) : undefined,
                 })

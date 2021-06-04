@@ -1,5 +1,5 @@
 import type { ERC20TokenRecord } from '../Wallet/database/types'
-import type { EthereumTokenType, EthereumNetwork } from '@dimensiondev/web3-shared'
+import type { EthereumTokenType } from '@dimensiondev/web3-shared'
 import type { Transaction } from 'web3-core'
 
 /**
@@ -51,7 +51,7 @@ export interface RedPacketJSONPayload {
     total: string
     creation_time: number
     duration: number
-    network?: EthereumNetwork
+    network?: string
     token_type: EthereumTokenType.Native | EthereumTokenType.ERC20
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }

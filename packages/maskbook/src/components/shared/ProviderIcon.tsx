@@ -21,14 +21,18 @@ export interface ProviderIconProps extends withClasses<never> {
 export function ProviderIcon(props: ProviderIconProps) {
     const { size = 40, providerType } = props
     const classes = useStylesExtends(useStyles(), props)
+    const style = {
+        height: size,
+        width: size,
+    }
 
     switch (providerType) {
         case ProviderType.Maskbook:
-            return <MaskbookIcon classes={{ root: classes.icon }} viewBox={`0 0 ${size} ${size}`} />
+            return <MaskbookIcon classes={{ root: classes.icon }} style={style} viewBox={`0 0 ${size} ${size}`} />
         case ProviderType.MetaMask:
-            return <MetaMaskIcon classes={{ root: classes.icon }} viewBox={`0 0 ${size} ${size}`} />
+            return <MetaMaskIcon classes={{ root: classes.icon }} style={style} viewBox={`0 0 ${size} ${size}`} />
         case ProviderType.WalletConnect:
-            return <WalletConnectIcon classes={{ root: classes.icon }} viewBox={`0 0 ${size} ${size}`} />
+            return <WalletConnectIcon classes={{ root: classes.icon }} style={style} viewBox={`0 0 ${size} ${size}`} />
         default:
             return null
     }

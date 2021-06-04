@@ -4,7 +4,7 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import type { ERC20TokenRecord } from '../database/types'
 import { ERC20TokenArrayComparer } from '../helpers'
 import { useWallet } from './useWallet'
-import { ERC20TokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, useChainId } from '@dimensiondev/web3-shared'
 
 //#region cache service query result
 const erc20TokensRef = new ValueRef<ERC20TokenRecord[]>([], ERC20TokenArrayComparer)
@@ -34,11 +34,15 @@ export function useERC20TokensFromDB(): ERC20TokenDetailed[] {
  * @param address
  */
 export function useTrustedERC20TokensFromDB() {
+    const chainId = useChainId()
     const wallet = useWallet()
     const tokens = useERC20TokensFromDB()
 
     if (!wallet) return []
     return tokens.filter(
-        (x) => wallet.erc20_token_whitelist.has(x.address) && !wallet.erc20_token_blacklist.has(x.address),
+        (x) =>
+            x.chainId === chainId &&
+            wallet.erc20_token_whitelist.has(x.address) &&
+            !wallet.erc20_token_blacklist.has(x.address),
     )
 }

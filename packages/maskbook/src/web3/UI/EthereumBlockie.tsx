@@ -1,5 +1,5 @@
+import { useBlockie } from '@dimensiondev/web3-shared'
 import { Avatar, AvatarProps, makeStyles } from '@material-ui/core'
-import { useBlockie } from '../hooks/useBlockie'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme) => ({

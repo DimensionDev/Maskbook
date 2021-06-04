@@ -7,17 +7,16 @@ import BigNumber from 'bignumber.js'
 import { formatBalance, isGreaterThan, isZero, pow10 } from '@dimensiondev/maskbook-shared'
 import {
     EthereumTokenType,
-    EthereumNetwork,
     FungibleTokenDetailed,
     useAccount,
     useConstant,
     useChainId,
     TransactionStateType,
-    resolveChainName,
+    getChainName,
     useNativeTokenDetailed,
     useTokenBalance,
 } from '@dimensiondev/web3-shared'
-import { useI18N, useRemoteControlledDialog } from '../../../utils'
+import { Flags, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import {
@@ -34,6 +33,7 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { GasPriceButton } from '../../../web3/UI/GasPriceButton'
 
 const useStyles = makeStyles((theme) => ({
     line: {
@@ -52,6 +52,10 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1.5),
     },
     selectShrinkLabel: {
+        top: 6,
+        backgroundColor: theme.palette.background.paper,
+        paddingLeft: 2,
+        paddingRight: 7,
         transform: 'translate(17px, -10px) scale(0.75) !important',
     },
     inputShrinkLabel: {
@@ -188,7 +192,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 total: CreationSuccess.total,
                 creation_time: Number.parseInt(CreationSuccess.creation_time, 10) * 1000,
                 duration: createSettings.duration,
-                network: resolveChainName(chainId) as EthereumNetwork,
+                network: getChainName(chainId),
                 token_type: createSettings.token.type,
             }
             if (createSettings.token.type === EthereumTokenType.ERC20)
@@ -237,7 +241,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 <FormControl className={classes.input} variant="outlined">
                     <InputLabel className={classes.selectShrinkLabel}>{t('plugin_red_packet_split_mode')}</InputLabel>
                     <Select
-                        variant="standard"
                         value={isRandom ? 1 : 0}
                         onChange={(e) => {
                             // foolproof, reset amount since the meaning of amount changed:
@@ -323,6 +326,9 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     </ActionButton>
                 </EthereumERC20TokenApprovedBoundary>
             </EthereumWalletConnectedBoundary>
+            {Flags.wallet_gas_price_dialog_enable ? (
+                <GasPriceButton ButtonProps={{ variant: 'text', color: 'secondary' }} />
+            ) : null}
         </>
     )
 }
