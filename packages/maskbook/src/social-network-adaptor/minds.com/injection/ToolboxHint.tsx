@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: 4,
         cursor: 'pointer',
         [theme.breakpoints.down('lg')]: {
+            justifyContent: 'unset',
+        },
+        [`@media (max-width: 1220px)`]: {
             justifyContent: 'center',
         },
     },
@@ -25,28 +28,34 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(2),
     },
     title: {
-        color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : '#72727c', // TODO: theme
+        color: theme.palette.mode === 'dark' ? '#b8c1ca' : '#72727c', // TODO: theme
         fontSize: 17,
         fontWeight: 700,
         marginLeft: 24,
         [theme.breakpoints.down('lg')]: {
+            display: 'unset',
+        },
+        [`@media (max-width: 1220px)`]: {
             display: 'none',
         },
     },
     text: {
         marginLeft: 12,
         fontSize: 15,
-        color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : '#72727c', // TODO: theme
+        color: theme.palette.mode === 'dark' ? '#b8c1ca' : '#72727c', // TODO: theme
         paddingRight: theme.spacing(2),
     },
     icon: {
-        color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : '#72727c', // TODO: theme
+        color: theme.palette.mode === 'dark' ? '#b8c1ca' : '#72727c', // TODO: theme
     },
     button: {
         '&:hover': {
             color: theme.palette.mode === 'dark' ? '#1b85d6' : '#1b85d6', // TODO: theme
         },
         [theme.breakpoints.up('lg')]: {
+            paddingLeft: 'unset',
+        },
+        [`@media (min-width: 1220px)`]: {
             paddingLeft: 0,
         },
     },
