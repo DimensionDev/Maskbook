@@ -1,13 +1,12 @@
 import { useMemo } from 'react'
 import { Trade, Pair } from '@uniswap/sdk'
-import BigNumber from 'bignumber.js'
 import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
 import { useChainId } from '@dimensiondev/web3-shared'
 import { TradeStrategy } from '../../types'
 import { useAllCommonPairs } from './useAllCommonPairs'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { MAX_HOP } from '../../constants'
-import { isZero } from '@dimensiondev/maskbook-shared'
+import { isGreaterThan, isZero } from '@dimensiondev/maskbook-shared'
 
 export function useV2Trade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
@@ -49,7 +48,7 @@ export function useBestTradeExactIn(
 ) {
     const chainId = useChainId()
     return useMemo(() => {
-        if (new BigNumber(amount).isGreaterThan('0') && inputToken && outputToken && pairs.length > 0)
+        if (isGreaterThan(amount, '0') && inputToken && outputToken && pairs.length > 0)
             return (
                 Trade.bestTradeExactIn(
                     pairs,
@@ -73,7 +72,7 @@ export function useBestTradeExactOut(
 ) {
     const chainId = useChainId()
     return useMemo(() => {
-        if (new BigNumber(amount).isGreaterThan('0') && inputToken && outputToken && pairs.length > 0)
+        if (isGreaterThan(amount, '0') && inputToken && outputToken && pairs.length > 0)
             return (
                 Trade.bestTradeExactOut(
                     pairs,

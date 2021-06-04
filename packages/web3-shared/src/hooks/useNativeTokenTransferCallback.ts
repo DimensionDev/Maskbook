@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import { toHex } from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
 import { useAccount } from './useAccount'
@@ -8,7 +7,7 @@ import { TransactionStateType, useTransactionState } from './useTransactionState
 import { useWeb3 } from './useWeb3'
 import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
-import { isZero } from '@dimensiondev/maskbook-shared'
+import { isGreaterThan, isZero } from '@dimensiondev/maskbook-shared'
 
 export function useNativeTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const web3 = useWeb3()
@@ -38,7 +37,7 @@ export function useNativeTransferCallback(amount?: string, recipient?: string, m
         // error: insufficent balance
         const balance = await web3.eth.getBalance(account)
 
-        if (new BigNumber(amount).isGreaterThan(balance)) {
+        if (isGreaterThan(amount, balance)) {
             setTransferState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Insufficent balance'),

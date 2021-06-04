@@ -2,7 +2,7 @@ import { Link, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { formatBalance, FormattedAddress } from '@dimensiondev/maskbook-shared'
+import { formatBalance, FormattedAddress, isGreaterThan, pow10 } from '@dimensiondev/maskbook-shared'
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
@@ -21,7 +21,7 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { ITO_CONSTANTS } from '../constants'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
-    return new BigNumber(allowance).isGreaterThan(`100000000000e${decimals}`) // 100 billion
+    return isGreaterThan(allowance, `100000000000e${decimals}`) // 100 billion
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -79,7 +79,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0))
+    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
         token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',

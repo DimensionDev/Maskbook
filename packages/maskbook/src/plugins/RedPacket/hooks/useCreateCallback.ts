@@ -13,6 +13,7 @@ import {
     useNonce,
     useGasPrice,
 } from '@dimensiondev/web3-shared'
+import { isLessThan } from '@dimensiondev/maskbook-shared'
 
 export interface RedPacketSettings {
     password: string
@@ -44,7 +45,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
         }
 
         // error handling
-        if (new BigNumber(total).isLessThan(shares)) {
+        if (isLessThan(total, shares)) {
             setCreateState({
                 type: TransactionStateType.FAILED,
                 error: new Error('At least [number of red packets] tokens to your red packet.'),

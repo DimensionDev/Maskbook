@@ -8,8 +8,7 @@ import {
 } from '@dimensiondev/web3-shared'
 import { SwapQuoteResponse, TradeComputed, TradeProvider } from '../types'
 import { TRADE_CONSTANTS } from '../constants'
-import { safeUnreachable } from '@dimensiondev/maskbook-shared'
-import BigNumber from 'bignumber.js'
+import { safeUnreachable, ZERO } from '@dimensiondev/maskbook-shared'
 
 export function useTradeApproveComputed(
     trade: TradeComputed<unknown> | null,
@@ -34,7 +33,7 @@ export function useTradeApproveComputed(
                           token.symbol ?? '',
                       )
                     : null,
-            approveAmount: trade ? trade.inputAmount : new BigNumber(0),
+            approveAmount: trade ? trade.inputAmount : ZERO,
             approveAddress: (() => {
                 switch (provider) {
                     case TradeProvider.UNISWAP:

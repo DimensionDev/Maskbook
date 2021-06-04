@@ -4,7 +4,7 @@ import { omit } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import BigNumber from 'bignumber.js'
 
-import { formatBalance, isZero } from '@dimensiondev/maskbook-shared'
+import { formatBalance, isGreaterThan, isZero, pow10 } from '@dimensiondev/maskbook-shared'
 import {
     EthereumTokenType,
     EthereumNetwork,
@@ -123,7 +123,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     // amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0))
+    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
     const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares || '0')
 
     // balance
@@ -223,9 +223,9 @@ export function RedPacketForm(props: RedPacketFormProps) {
         if (!token) return t('plugin_wallet_select_a_token')
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (isZero(shares || '0')) return 'Enter shares'
-        if (new BigNumber(shares || '0').isGreaterThan(255)) return 'At most 255 recipients'
+        if (isGreaterThan(shares || '0', 255)) return 'At most 255 recipients'
         if (isZero(amount)) return t('plugin_dhedge_enter_an_amount')
-        if (new BigNumber(totalAmount).isGreaterThan(tokenBalance))
+        if (isGreaterThan(totalAmount, tokenBalance))
             return t('plugin_gitcoin_insufficient_balance', { symbol: token.symbol })
         return ''
     }, [account, amount, totalAmount, shares, token, tokenBalance])

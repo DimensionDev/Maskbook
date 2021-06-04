@@ -20,7 +20,7 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { debugModeSetting } from '../../../settings/settings'
-import { formatBalance, FormattedBalance, isZero } from '@dimensiondev/maskbook-shared'
+import { formatBalance, FormattedBalance, isZero, pow10 } from '@dimensiondev/maskbook-shared'
 import formatDateTime from 'date-fns/format'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { MSG_DELIMITER } from '../constants'
@@ -125,7 +125,7 @@ export function PoolInList(props: PoolInListProps) {
     const canWithdraw = !isWithdrawn && (listOfStatus.includes(ITO_Status.expired) || noRemain)
 
     const canSend = !listOfStatus.includes(ITO_Status.expired) && !noRemain
-    const progress = 100 * Number(new BigNumber(pool.total).minus(pool.total_remaining).div(pool.total))
+    const progress = 100 * Number(new BigNumber(pool.total).minus(pool.total_remaining).dividedBy(pool.total))
 
     const StatusButton = () => {
         return (
@@ -239,14 +239,12 @@ export function PoolInList(props: PoolInListProps) {
                                                     new BigNumber(pool.exchange_amounts[index * 2])
                                                         .dividedBy(pool.exchange_amounts[index * 2 + 1])
                                                         .multipliedBy(
-                                                            new BigNumber(10).pow(
+                                                            pow10(
                                                                 pool.token.decimals -
                                                                     pool.exchange_tokens[index].decimals,
                                                             ),
                                                         )
-                                                        .multipliedBy(
-                                                            new BigNumber(10).pow(pool.exchange_tokens[index].decimals),
-                                                        )
+                                                        .multipliedBy(pow10(pool.exchange_tokens[index].decimals))
                                                         .integerValue(),
                                                     token.decimals,
                                                     6,

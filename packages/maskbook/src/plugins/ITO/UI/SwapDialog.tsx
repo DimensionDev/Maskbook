@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import { makeStyles, Typography, Slider, CircularProgress } from '@material-ui/core'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { formatBalance, pow10 } from '@dimensiondev/maskbook-shared'
 
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -285,18 +285,13 @@ export function SwapDialog(props: SwapDialogProps) {
                 onAmountChange={(value) => {
                     const val =
                         value === '' || value === '0'
-                            ? new BigNumber(0)
-                            : new BigNumber(value).multipliedBy(new BigNumber(10).pow(swapToken.decimals))
+                            ? ZERO
+                            : new BigNumber(value).multipliedBy(pow10(swapToken.decimals))
                     const isMax = value === formatBalance(maxAmount, swapToken.decimals) && !val.isEqualTo(0)
                     const tokenAmount = isMax ? maxSwapAmount : val.dividedBy(ratio)
                     const swapAmount = isMax ? tokenAmount.multipliedBy(ratio) : val.dp(0)
                     setInputAmountForUI(
-                        isMax
-                            ? tokenAmount
-                                  .multipliedBy(ratio)
-                                  .dividedBy(new BigNumber(10).pow(swapToken.decimals))
-                                  .toString()
-                            : value,
+                        isMax ? tokenAmount.multipliedBy(ratio).dividedBy(pow10(swapToken.decimals)).toString() : value,
                     )
                     setTokenAmount(tokenAmount.dp(0))
                     setSwapAmount(swapAmount)

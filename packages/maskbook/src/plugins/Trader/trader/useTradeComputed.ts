@@ -9,7 +9,7 @@ import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
 import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
 import { useTrade as useZrxTrade } from './0x/useTrade'
 import { useTrade as useBalancerTrade } from './balancer/useTrade'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { pow10, unreachable } from '@dimensiondev/maskbook-shared'
 
 export function useTradeComputed(
     provider: TradeProvider,
@@ -19,8 +19,8 @@ export function useTradeComputed(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
-    const inputTokenProduct = new BigNumber(10).pow(inputToken?.decimals ?? 0)
-    const outputTokenProduct = new BigNumber(10).pow(outputToken?.decimals ?? 0)
+    const inputTokenProduct = pow10(inputToken?.decimals ?? 0)
+    const outputTokenProduct = pow10(outputToken?.decimals ?? 0)
     const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
 

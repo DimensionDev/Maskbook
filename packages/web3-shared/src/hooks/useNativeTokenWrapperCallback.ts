@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import type { NonPayableTx, PayableTx } from '@dimensiondev/contracts/types/types'
 import { useNativeTokenWrapperContract } from '../contracts/useWrappedEtherContract'
 import { useAccount } from './useAccount'
@@ -7,7 +6,7 @@ import { TransactionStateType, useTransactionState } from './useTransactionState
 import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
 import { TransactionEventType } from '../types'
-import { isZero } from '@dimensiondev/maskbook-shared'
+import { isLessThan, isZero } from '@dimensiondev/maskbook-shared'
 
 export function useNativeTokenWrapperCallback() {
     const nonce = useNonce()
@@ -106,7 +105,7 @@ export function useNativeTokenWrapperCallback() {
             }
 
             // error: insufficent weth balance
-            if (all === false && new BigNumber(wethBalance).isLessThan(amount)) {
+            if (all === false && isLessThan(wethBalance, amount)) {
                 setTransactionState({
                     type: TransactionStateType.FAILED,
                     error: new Error('Insufficent WETH balance'),

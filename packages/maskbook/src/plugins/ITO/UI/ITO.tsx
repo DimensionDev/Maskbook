@@ -16,7 +16,14 @@ import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { useRemoteControlledDialog, getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
 import formatDateTime from 'date-fns/format'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import { formatAmountPrecision, formatEthereumAddress, formatBalance, isZero } from '@dimensiondev/maskbook-shared'
+import {
+    formatAmountPrecision,
+    formatEthereumAddress,
+    formatBalance,
+    isZero,
+    ZERO,
+    pow10,
+} from '@dimensiondev/maskbook-shared'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SwapGuide, SwapStatus } from './SwapGuide'
@@ -277,7 +284,7 @@ export function ITO(props: ITO_Props) {
 
     const refundAmount = useMemo(() => {
         const buyInfo = tradeInfo?.buyInfo
-        if (!buyInfo) return new BigNumber(0)
+        if (!buyInfo) return ZERO
         return new BigNumber(buyInfo.amount).minus(buyInfo.amount_sold)
     }, [tradeInfo])
     // out of stock
@@ -525,10 +532,8 @@ export function ITO(props: ITO_Props) {
                                     price={formatBalance(
                                         new BigNumber(exchange_amounts[i * 2])
                                             .dividedBy(exchange_amounts[i * 2 + 1])
-                                            .multipliedBy(
-                                                new BigNumber(10).pow(token.decimals - exchange_tokens[i].decimals),
-                                            )
-                                            .multipliedBy(new BigNumber(10).pow(exchange_tokens[i].decimals))
+                                            .multipliedBy(pow10(token.decimals - exchange_tokens[i].decimals))
+                                            .multipliedBy(pow10(exchange_tokens[i].decimals))
                                             .integerValue(),
                                         exchange_tokens[i].decimals,
                                     )}

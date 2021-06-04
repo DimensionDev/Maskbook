@@ -1,4 +1,4 @@
-import { formatBalance, isZero } from '@dimensiondev/maskbook-shared'
+import { formatBalance, isZero, pow10 } from '@dimensiondev/maskbook-shared'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
@@ -101,7 +101,7 @@ export function InvestDialog() {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0))
+    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
     const {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,

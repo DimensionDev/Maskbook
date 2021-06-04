@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import { useAccount } from './useAccount'
@@ -8,7 +7,7 @@ import { TransactionStateType, useTransactionState } from './useTransactionState
 import { TransactionEventType } from '../types'
 import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
-import { isZero } from '@dimensiondev/maskbook-shared'
+import { isGreaterThan, isZero } from '@dimensiondev/maskbook-shared'
 
 export function useERC20TokenTransferCallback(address: string, amount?: string, recipient?: string) {
     const nonce = useNonce()
@@ -37,7 +36,7 @@ export function useERC20TokenTransferCallback(address: string, amount?: string, 
         // error: insufficent balance
         const balance = await erc20Contract.methods.balanceOf(account).call()
 
-        if (new BigNumber(amount).isGreaterThan(balance)) {
+        if (isGreaterThan(amount, balance)) {
             setTransferState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Insufficent balance'),

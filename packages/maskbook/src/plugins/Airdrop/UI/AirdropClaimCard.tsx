@@ -9,7 +9,7 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useAccount, TransactionStateType, ERC20TokenDetailed, useChainId } from '@dimensiondev/web3-shared'
 import { EthereumMessages } from '../../Ethereum/messages'
-import { formatPercentage, isZero } from '@dimensiondev/maskbook-shared'
+import { formatPercentage, isZero, pow10 } from '@dimensiondev/maskbook-shared'
 import { useAirdropPacket } from '../hooks/useAirdropPacket'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
@@ -152,7 +152,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                     ? checkState.claimable
                     : 0,
             )
-                .multipliedBy(new BigNumber(10).pow(token.decimals))
+                .multipliedBy(pow10(token.decimals))
                 .toFixed(),
         )
     }, [checkState, token, onUpdateAmount])

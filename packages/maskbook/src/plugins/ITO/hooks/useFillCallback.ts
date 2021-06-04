@@ -18,6 +18,7 @@ import type { FungibleTokenDetailed, ERC20TokenDetailed } from '@dimensiondev/we
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../constants'
 import type { AdvanceSettingData } from '../UI/AdvanceSetting'
+import { isGreaterThan, ONE, pow10 } from '@dimensiondev/maskbook-shared'
 
 export interface PoolSettings {
     password: string
@@ -150,7 +151,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         }
 
         // error: limit greater than the total supply
-        if (new BigNumber(limit).isGreaterThan(total)) {
+        if (isGreaterThan(limit, total)) {
             setFillState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Limits should less than the total supply.'),
@@ -159,7 +160,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         }
 
         // error: exceed the max available total supply
-        if (new BigNumber(total).isGreaterThan('2e128')) {
+        if (isGreaterThan(total, '2e128')) {
             setFillState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Exceed the max available total supply'),
@@ -177,7 +178,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         }
 
         // error: token amount is not enough for dividing into integral pieces
-        const ONE_TOKEN = new BigNumber(1).multipliedBy(new BigNumber(10).pow(token.decimals ?? 0))
+        const ONE_TOKEN = ONE.multipliedBy(pow10(token.decimals ?? 0))
         const exchangeAmountsDivided = exchangeAmounts.map((x, i) => {
             const amount = new BigNumber(x)
             const divisor = gcd(ONE_TOKEN, amount)

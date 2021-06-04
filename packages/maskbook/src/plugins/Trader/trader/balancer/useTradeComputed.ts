@@ -40,7 +40,7 @@ export function useTradeComputed(
             maximumSold: new BigNumber(tradeAmount),
             minimumReceived: new BigNumber(tradeAmount),
             path: [],
-            fee: new BigNumber(0),
+            fee: ZERO,
             trade_: trade,
         } as TradeComputed<SwapResponse>
     }, [trade, strategy, inputToken, outputToken])
