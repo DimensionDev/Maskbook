@@ -9,8 +9,6 @@ import {
     List,
     ListItem,
     Typography,
-    Link,
-    DialogActions,
 } from '@material-ui/core'
 import { unreachable, useValueRef } from '@dimensiondev/maskbook-shared'
 import { SuccessIcon } from '@dimensiondev/icons'
@@ -276,18 +274,6 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     </ImageList>
                 </Box>
             </DialogContent>
-            <DialogActions>
-                <Typography className={classes.tip} color="textSecondary">
-                    {t('plugin_wallet_connect_new_ethereum')}
-                    <Link
-                        color="primary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href="https://ethereum.org/en/wallets/">
-                        {t('plugin_wallet_connect_learn_more_wallets')}
-                    </Link>
-                </Typography>
-            </DialogActions>
         </InjectedDialog>
     )
 }
