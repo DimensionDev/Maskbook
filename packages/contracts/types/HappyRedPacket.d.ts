@@ -34,6 +34,8 @@ export type ClaimSuccess = ContractEventLog<{
 export type CreationSuccess = ContractEventLog<{
     total: string
     id: string
+    name: string
+    message: string
     creator: string
     creation_time: string
     token_address: string
@@ -42,6 +44,8 @@ export type CreationSuccess = ContractEventLog<{
     2: string
     3: string
     4: string
+    5: string
+    6: string
 }>
 export type RefundSuccess = ContractEventLog<{
     id: string
@@ -56,31 +60,12 @@ export interface HappyRedPacket extends BaseContract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions): HappyRedPacket
     clone(): HappyRedPacket
     methods: {
-        check_availability(id: string | number[]): NonPayableTransactionObject<{
-            token_address: string
-            balance: string
-            total: string
-            claimed: string
-            expired: boolean
-            ifclaimed: boolean
-            0: string
-            1: string
-            2: string
-            3: string
-            4: boolean
-            5: boolean
-        }>
-
-        check_claimed_list(id: string | number[]): NonPayableTransactionObject<string[]>
-
         claim(
             id: string | number[],
             password: string,
-            _recipient: string,
+            recipient: string,
             validation: string | number[],
         ): NonPayableTransactionObject<string>
-
-        contract_creator(): NonPayableTransactionObject<string>
 
         create_red_packet(
             _hash: string | number[],
@@ -97,15 +82,22 @@ export interface HappyRedPacket extends BaseContract {
 
         refund(id: string | number[]): NonPayableTransactionObject<void>
 
-        toBytes(a: string): NonPayableTransactionObject<string>
+        check_availability(id: string | number[]): NonPayableTransactionObject<{
+            token_address: string
+            balance: string
+            total: string
+            claimed: string
+            expired: boolean
+            claimed_amount: string
+            0: string
+            1: string
+            2: string
+            3: string
+            4: boolean
+            5: string
+        }>
 
-        transfer_token(
-            token_type: number | string | BN,
-            token_address: string,
-            sender_address: string,
-            recipient_address: string,
-            amount: number | string | BN,
-        ): PayableTransactionObject<void>
+        contract_creator(): NonPayableTransactionObject<string>
     }
     events: {
         ClaimSuccess(cb?: Callback<ClaimSuccess>): EventEmitter
