@@ -33,6 +33,7 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { GasPriceButton } from '../../../web3/UI/GasPriceButton'
 
 const useStyles = makeStyles((theme) => ({
     line: {
@@ -322,6 +323,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     </ActionButton>
                 </EthereumERC20TokenApprovedBoundary>
             </EthereumWalletConnectedBoundary>
+            <GasPriceButton ButtonProps={{ variant: 'text', color: 'secondary' }} />
         </>
     )
 }
