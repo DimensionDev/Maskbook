@@ -212,3 +212,11 @@ export enum TransactionStatusType {
     SUCCEED,
     FAILED,
 }
+
+export type GasNow = {
+    rapid: number
+    fast: number
+    standard: number
+    slow: number
+    custom: number
+}

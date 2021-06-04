@@ -1,12 +1,11 @@
 import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
-import { ChainId, ProviderType, NetworkType } from '@dimensiondev/web3-shared'
+import { ChainId, ProviderType, NetworkType, GasNow } from '@dimensiondev/web3-shared'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { CollectibleProvider, PortfolioProvider } from './types'
+import { isEqual } from 'lodash-es'
+import { connectGasNow } from './apis/gasnow'
 
-/**
- * The address of the selected wallet
- */
 export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+selectedWalletAddress`, '', {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
@@ -100,6 +99,25 @@ export const currentNonceSettings = createGlobalSettings<number>(`${PLUGIN_IDENT
 /**
  * Gas Price
  */
-export const currentGasPriceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+gasPrice`, 0, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
+export const currentGasPriceSettings = createGlobalSettings<number>(
+    `${PLUGIN_IDENTIFIER}+gasPrice`,
+    0,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+    (a: number, b: number) => isEqual(a, b),
+)
+
+/**
+ * Gas Now
+ */
+export const currentGasNowSettings = createGlobalSettings<GasNow | null>(
+    `${PLUGIN_IDENTIFIER}+gasNow`,
+    null,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+    (a: GasNow | null, b: GasNow | null) => isEqual(a, b),
+)
+
+connectGasNow()

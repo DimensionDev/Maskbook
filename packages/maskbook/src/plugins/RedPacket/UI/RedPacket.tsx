@@ -310,8 +310,21 @@ export function RedPacket(props: RedPacketProps) {
                                 {t('plugin_wallet_invalid_network')}
                             </ActionButton>
                         ) : (
-                            <ActionButton variant="contained" size="large" onClick={onClaimOrRefund}>
-                                {canClaim ? t('plugin_red_packet_claim') : t('plugin_red_packet_refund')}
+                            <ActionButton
+                                disabled={
+                                    claimState.type === TransactionStateType.HASH ||
+                                    refundState.type === TransactionStateType.HASH
+                                }
+                                variant="contained"
+                                size="large"
+                                onClick={onClaimOrRefund}>
+                                {canClaim
+                                    ? claimState.type === TransactionStateType.HASH
+                                        ? t('plugin_red_packet_claiming')
+                                        : t('plugin_red_packet_claim')
+                                    : refundState.type === TransactionStateType.HASH
+                                    ? t('plugin_red_packet_refunding')
+                                    : t('plugin_red_packet_refund')}
                             </ActionButton>
                         )}
                     </Box>
