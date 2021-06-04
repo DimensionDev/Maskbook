@@ -17,9 +17,6 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: 4,
         cursor: 'pointer',
         [theme.breakpoints.down('lg')]: {
-            justifyContent: 'unset',
-        },
-        [`@media (max-width: 1220px)`]: {
             justifyContent: 'center',
         },
     },
@@ -33,9 +30,6 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 700,
         marginLeft: 24,
         [theme.breakpoints.down('lg')]: {
-            display: 'unset',
-        },
-        [`@media (max-width: 1220px)`]: {
             display: 'none',
         },
     },
@@ -53,9 +47,6 @@ const useStyles = makeStyles((theme) => ({
             color: theme.palette.mode === 'dark' ? '#1b85d6' : '#1b85d6', // TODO: theme
         },
         [theme.breakpoints.up('lg')]: {
-            paddingLeft: 'unset',
-        },
-        [`@media (min-width: 1220px)`]: {
             paddingLeft: 0,
         },
     },
