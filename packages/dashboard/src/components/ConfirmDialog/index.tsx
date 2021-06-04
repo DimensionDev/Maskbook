@@ -25,11 +25,11 @@ const StyledDialogContent = styled(DialogContent)(() => ({
     },
 }))
 
-const StyledButton = styled(Button)(() => ({
+const StyledButton: typeof Button = styled(Button)(() => ({
     [`&.${buttonClasses.root}`]: {
         minWidth: 100,
     },
-}))
+})) as any
 
 interface ConfirmDialogProps extends React.PropsWithChildren<{}> {
     title: string

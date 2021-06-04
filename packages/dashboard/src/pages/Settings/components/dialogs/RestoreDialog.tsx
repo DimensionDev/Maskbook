@@ -21,13 +21,13 @@ const useStyles = makeStyles(() => ({
     hide: { display: 'none' },
 }))
 
-const SyledTabList = styled(TabList)(() => ({
+const StyledTabList: typeof TabList = styled(TabList)(() => ({
     [`& .${tabsClasses.indicator}`]: {
         display: 'none',
     },
-}))
+})) as any
 
-const StyledTab = styled(Tab)(() => ({
+const StyledTab: typeof Tab = styled(Tab)(() => ({
     [`&.${tabClasses.root}`]: {
         flex: 1,
         background: MaskColorVar.secondaryBackground,
@@ -45,7 +45,7 @@ const StyledTab = styled(Tab)(() => ({
             background: MaskColorVar.primary,
         },
     },
-}))
+})) as any
 
 const StyledTabPanel = styled(TabPanel)(({ theme }) => ({
     [`&.${tabPanelClasses.root}`]: {
@@ -131,10 +131,10 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
             onConfirm={handleConfirm}>
             <div className={classes.container}>
                 <TabContext value={tab}>
-                    <SyledTabList onChange={handleTabChange}>
+                    <StyledTabList onChange={handleTabChange}>
                         <StyledTab label="File" value="file" />
                         <StyledTab label="Text" value="text" />
-                    </SyledTabList>
+                    </StyledTabList>
                     <StyledTabPanel value="file">
                         <div className={json && content ? classes.hide : ''}>
                             <FileUpload height={180} readAsText onChange={handleFileChange} />
