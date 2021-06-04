@@ -176,7 +176,6 @@ export function GasNowDialog() {
                                                     className={classes.customInput}
                                                     InputProps={{
                                                         inputMode: 'decimal',
-                                                        pattern: '^[0-9]*[.,]?[0-9]*$',
                                                     }}
                                                     value={customGas}
                                                     onChange={(e) => {
