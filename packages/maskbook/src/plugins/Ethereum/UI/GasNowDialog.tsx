@@ -160,7 +160,9 @@ export function GasNowDialog() {
                             )}
                             key={i}>
                             <div className={classes.head}>
-                                <Typography className={classes.title}>{option.title}</Typography>
+                                <Typography color="textPrimary" className={classes.title}>
+                                    {option.title}
+                                </Typography>
                                 <FiberManualRecordIcon
                                     className={classNames(classes.dot, i === select ? classes.dotSelector : undefined)}
                                 />
@@ -172,18 +174,22 @@ export function GasNowDialog() {
                                             <div className={classes.gweiBox}>
                                                 <TextField
                                                     className={classes.customInput}
+                                                    InputProps={{
+                                                        inputMode: 'decimal',
+                                                        pattern: '^[0-9]*[.,]?[0-9]*$',
+                                                    }}
                                                     value={customGas}
                                                     onChange={(e) => {
                                                         const v = e.target.value
                                                         setCustomGas(isNaN(Number(v)) ? '' : v)
                                                     }}
                                                 />
-                                                <Typography className={classes.gwei}>
+                                                <Typography color="textPrimary" className={classes.gwei}>
                                                     {t('plugin_gas_now_dialog_gwei')}
                                                 </Typography>
                                             </div>
                                         ) : (
-                                            <Typography className={classes.gwei}>
+                                            <Typography color="textPrimary" className={classes.gwei}>
                                                 {t('plugin_gas_now_dialog_gwei', {
                                                     gasPrice: formatWeiToGwei(option.gasPrice),
                                                 })}
@@ -200,7 +206,9 @@ export function GasNowDialog() {
                                             </Typography>
                                         ) : null}
                                     </div>
-                                    <Typography>{i == 2 ? customEstimateTime : option.time}</Typography>
+                                    <Typography color="textPrimary">
+                                        {i == 2 ? customEstimateTime : option.time}
+                                    </Typography>
                                 </>
                             ) : (
                                 <>
