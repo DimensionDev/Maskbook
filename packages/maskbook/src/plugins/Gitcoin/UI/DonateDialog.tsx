@@ -19,7 +19,7 @@ import {
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { formatBalance, pow10 } from '@dimensiondev/maskbook-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
@@ -113,7 +113,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0))
+    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
     //#endregion
 
     //#region blocking

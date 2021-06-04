@@ -1,5 +1,4 @@
 import { ChangeEvent, useState, useMemo, useCallback, useEffect } from 'react'
-import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 import { useSnackbar } from 'notistack'
 import {
@@ -22,6 +21,7 @@ import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
 import type { useAsset } from '../hooks/useAsset'
+import { isGreaterThan, isZero } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -77,8 +77,8 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const [privacyChecked, setPrivacyChecked] = useState(false)
 
     const validationMessage = useMemo(() => {
-        if (new BigNumber(amount || '0').isZero()) return t('plugin_collectible_enter_a_price')
-        if (endingPriceChecked && endingAmount && !new BigNumber(amount || '0').isGreaterThan(endingAmount || '0'))
+        if (isZero(amount || '0')) return t('plugin_collectible_enter_a_price')
+        if (endingPriceChecked && endingAmount && !isGreaterThan(amount || '0', endingAmount || '0'))
             return t('plugin_collectible_invalid_ending_price')
         if (futureTimeChecked && Date.now() >= scheduleTime.getTime())
             return t('plugin_collectible_invalid_schedule_date')

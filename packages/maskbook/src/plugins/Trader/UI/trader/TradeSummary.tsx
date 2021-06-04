@@ -14,7 +14,7 @@ import LoopIcon from '@material-ui/icons/Loop'
 import { ONE_BIPS } from '../../constants'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { SwapQuoteResponse, TradeComputed, TradeProvider, TradeStrategy } from '../../types'
-import { formatBalance, formatPercentage } from '@dimensiondev/maskbook-shared'
+import { formatBalance, formatPercentage, isGreaterThan, pow10 } from '@dimensiondev/maskbook-shared'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { resolveUniswapWarningLevel, resolveUniswapWarningLevelColor, resolveZrxTradePoolName } from '../../pipes'
 
@@ -97,10 +97,8 @@ export function TradeSummary(props: TradeSummaryProps) {
                                       {formatBalance(
                                           outputAmount
                                               .dividedBy(inputAmount)
-                                              .multipliedBy(
-                                                  new BigNumber(10).pow(inputToken.decimals - outputToken.decimals),
-                                              )
-                                              .multipliedBy(new BigNumber(10).pow(outputToken.decimals))
+                                              .multipliedBy(pow10(inputToken.decimals - outputToken.decimals))
+                                              .multipliedBy(pow10(outputToken.decimals))
                                               .integerValue(),
                                           outputToken.decimals,
                                           6,
@@ -116,10 +114,8 @@ export function TradeSummary(props: TradeSummaryProps) {
                                       {formatBalance(
                                           inputAmount
                                               .dividedBy(outputAmount)
-                                              .multipliedBy(
-                                                  new BigNumber(10).pow(outputToken.decimals - inputToken.decimals),
-                                              )
-                                              .multipliedBy(new BigNumber(10).pow(inputToken.decimals))
+                                              .multipliedBy(pow10(outputToken.decimals - inputToken.decimals))
+                                              .multipliedBy(pow10(inputToken.decimals))
                                               .integerValue(),
                                           inputToken.decimals,
                                           6,
@@ -226,7 +222,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                             const proportion = new BigNumber(x.proportion)
                             return !proportion.isZero() && proportion.isGreaterThan('1e-5')
                         })
-                        .sort((a, z) => (new BigNumber(a.proportion).isGreaterThan(z.proportion) ? -1 : 1))
+                        .sort((a, z) => (isGreaterThan(a.proportion, z.proportion) ? -1 : 1))
                         .slice(0, 3)
                         .map((y) => `${resolveZrxTradePoolName(y.name)} (${formatPercentage(y.proportion)})`)
                         .join(' + ')}

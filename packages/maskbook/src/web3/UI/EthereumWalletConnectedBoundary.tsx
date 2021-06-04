@@ -1,6 +1,5 @@
 import { Grid, makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import Services from '../../extension/service'
@@ -9,6 +8,7 @@ import { currentIsMetamaskLockedSettings, currentProviderSettings } from '../../
 import { useRemoteControlledDialog, useValueRef, useI18N } from '../../utils'
 import { ProviderType, useAccount, useChainIdValid, useNativeTokenBalance } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../components/custom-ui-helper'
+import { isZero } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -73,7 +73,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    if (new BigNumber(nativeTokenBalance.value ?? '0').isZero() && !offChain)
+    if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (
             <Grid container>
                 <ActionButton

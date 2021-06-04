@@ -30,7 +30,7 @@ import {
     getChainIdFromName,
 } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { formatBalance, formatCurrency, FormattedCurrency } from '@dimensiondev/maskbook-shared'
+import { formatBalance, formatCurrency, FormattedCurrency, isGreaterThan } from '@dimensiondev/maskbook-shared'
 import { useMatchXS, useI18N } from '../../../utils'
 import { TokenIcon } from './TokenIcon'
 import { ActionsBarFT } from './ActionsBarFT'
@@ -234,8 +234,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
 
     const viewDetailedTokens = detailedTokens.filter(
         (x) =>
-            new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(MIN_VALUE) ||
-            x.token.type === EthereumTokenType.Native,
+            isGreaterThan(x.value?.[CurrencyType.USD] || '0', MIN_VALUE) || x.token.type === EthereumTokenType.Native,
     )
 
     return (

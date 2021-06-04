@@ -1,7 +1,7 @@
 import { values } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { unreachable, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { unreachable, formatEthereumAddress, pow10 } from '@dimensiondev/maskbook-shared'
 
 import { Asset, CollectibleProvider, BalanceRecord, PortfolioProvider, ZerionAddressAsset } from '../types'
 import * as OpenSeaAPI from '../apis/opensea'
@@ -115,7 +115,7 @@ function formatAssetsFromDebank(data: BalanceRecord[]) {
             },
             value: {
                 [CurrencyType.USD]: new BigNumber(x.price)
-                    .multipliedBy(new BigNumber(x.balance).dividedBy(new BigNumber(10).pow(x.decimals)))
+                    .multipliedBy(new BigNumber(x.balance).dividedBy(pow10(x.decimals)))
                     .toFixed(),
             },
             logoURL: x.logo_url,
@@ -129,7 +129,7 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
     return data
         .filter(({ asset }) => asset.is_displayable && !filterAssetType.some((type) => type === asset.type))
         .map(({ asset, quantity }) => {
-            const balance = Number(new BigNumber(quantity).dividedBy(new BigNumber(10).pow(asset.decimals)).toString())
+            const balance = Number(new BigNumber(quantity).dividedBy(pow10(asset.decimals)).toString())
             return {
                 token: {
                     name: asset.name,

@@ -7,7 +7,8 @@ import { ROOT_PATH, PKG_PATH } from '../utils'
 
 const SOURCE_PATH = resolve(PKG_PATH, 'maskbook', 'src')
 export const LOCALE_PATH = resolve(SOURCE_PATH, '_locales')
-export const LOCALE_NAMES = readdirSync(LOCALE_PATH)
+// only allow ISO 639-1 two-letter code for locale directory name
+export const LOCALE_NAMES = readdirSync(LOCALE_PATH).filter((name) => /^[a-z]{2}$/.test(name))
 
 export function getMessagePath(name: string) {
     return resolve(LOCALE_PATH, name, 'messages.json')

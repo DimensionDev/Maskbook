@@ -5,6 +5,7 @@ import { createTypedMessageMetadataReader, createRenderWithMetadata } from '../.
 import { PLUGIN_META_KEY, RaribleIPFSURL } from './constants'
 import type { CollectibleJSON_Payload, CollectibleToken } from './types'
 import schema from './schema.json'
+import { pow10 } from '@dimensiondev/maskbook-shared'
 
 export const CollectibleMetadataReader = createTypedMessageMetadataReader<CollectibleJSON_Payload>(
     PLUGIN_META_KEY,
@@ -31,7 +32,7 @@ export function toTokenIdentifier(token?: CollectibleToken) {
 }
 
 export function toDecimalAmount(weiAmount: string, decimals: number) {
-    return new BigNumber(weiAmount).dividedBy(new BigNumber(10).pow(decimals)).toNumber()
+    return new BigNumber(weiAmount).dividedBy(pow10(decimals)).toNumber()
 }
 
 export function toUnixTimestamp(date: Date) {

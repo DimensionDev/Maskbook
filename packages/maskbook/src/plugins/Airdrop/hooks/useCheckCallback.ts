@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress, isGreaterThan, ONE } from '@dimensiondev/maskbook-shared'
 import type { AirdropPacket } from '../apis'
 import { useAirdropContract } from '../contracts/useAirdropContract'
 import { PluginAirdropRPC } from '../messages'
@@ -83,7 +83,7 @@ export function useCheckCallback() {
                         start: 0,
                         end: new Date(2999, 1, 1).getTime(),
                         claimable: packet.amount,
-                        ratio: new BigNumber(1),
+                        ratio: ONE,
                     })
                     return
                 }
@@ -102,14 +102,14 @@ export function useCheckCallback() {
 
                 setCheckState({
                     type:
-                        available && new BigNumber(claimable).isGreaterThan(0) && isStart && !isEnd
+                        available && isGreaterThan(claimable, 0) && isStart && !isEnd
                             ? CheckStateType.YEP
                             : CheckStateType.NOPE,
                     packet,
                     start: start_,
                     end: end_,
-                    claimable: available && new BigNumber(claimable).isGreaterThan(0) && !isEnd ? claimable : '0',
-                    ratio: new BigNumber(claimable).div(amount),
+                    claimable: available && isGreaterThan(claimable, 0) && !isEnd ? claimable : '0',
+                    ratio: new BigNumber(claimable).dividedBy(amount),
                 })
             } catch (error) {
                 if (error.message.includes('Already Claimed')) {

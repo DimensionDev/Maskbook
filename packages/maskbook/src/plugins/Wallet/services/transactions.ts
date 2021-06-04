@@ -11,6 +11,7 @@ import {
 } from '../types'
 import * as DeBankAPI from '../apis/debank'
 import * as ZerionApi from '../apis/zerion'
+import { pow10 } from '@dimensiondev/maskbook-shared'
 
 export async function getTransactionList(
     address: string,
@@ -90,7 +91,7 @@ function fromZerion(data: ZerionTransactionItem[]) {
     return data
         .filter(({ type }) => type !== ZerionRBDTransactionType.AUTHORIZE)
         .map((transaction) => {
-            const ethGasFee = new BigNumber(transaction.fee?.value ?? 0).dividedBy(new BigNumber(10).pow(18)).toString()
+            const ethGasFee = new BigNumber(transaction.fee?.value ?? 0).dividedBy(pow10(18)).toString()
             const usdGasFee = new BigNumber(ethGasFee).multipliedBy(transaction.fee?.price ?? 0).toString()
 
             return {
@@ -106,9 +107,7 @@ function fromZerion(data: ZerionTransactionItem[]) {
                             symbol: asset.symbol,
                             address: asset.asset_code,
                             direction,
-                            amount: Number(
-                                new BigNumber(value).dividedBy(new BigNumber(10).pow(asset.decimals)).toString(),
-                            ),
+                            amount: Number(new BigNumber(value).dividedBy(pow10(asset.decimals)).toString()),
                         }
                     }) ?? [],
                 gasFee: {
