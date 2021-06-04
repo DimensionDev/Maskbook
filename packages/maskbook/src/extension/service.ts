@@ -34,6 +34,7 @@ export const Services = {
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
     SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
     Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
+    ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
 }
 export default Services
 export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', true)
@@ -50,6 +51,7 @@ if (import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
             './background-script/ProviderService',
             './background-script/EthereumService',
             './background-script/SettingsService',
+            './background-script/ThirdPartyPlugin',
             './background-script/SocialNetworkService',
             './service-generator',
         ],

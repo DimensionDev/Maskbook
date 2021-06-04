@@ -37,6 +37,7 @@ importers:
       idb: 5.0.8
       jss: 10.5.1
       lint-staged: ^11.0.0
+      notistack: 1.0.9
       npm-run-all: ^4.1.5
       only-allow: ^1.0.0
       patch-package: ./patches/patch-package-6.4.7.tgz
@@ -61,6 +62,7 @@ importers:
       i18next: 20.3.0
       idb: 5.0.8
       jss: 10.5.1
+      notistack: 1.0.9_540923a9a616e125cfaa594bc3b9f7f0
       react: 0.0.0-experimental-d75105fa9
       react-dom: 0.0.0-experimental-d75105fa9_2805fb2ed7d5ff05b7c72aee23db3b6b
       react-i18next: 11.9.0_2635c239ba114560d1912f72960bc90a
@@ -198,6 +200,17 @@ importers:
       babel-loader: 8.2.2_@babel+core@7.14.3
       snowpack: 3.5.1
 
+  packages/external-plugin-previewer:
+    specifiers:
+      '@dimensiondev/maskbook-shared': workspace:*
+      ef.js: ^0.13.6
+      snowpack: ^3.0.11
+    dependencies:
+      '@dimensiondev/maskbook-shared': link:../shared
+      ef.js: 0.13.7
+    devDependencies:
+      snowpack: 3.5.1
+
   packages/icons:
     specifiers:
       '@dimensiondev/maskbook-theme': workspace:*
@@ -213,6 +226,7 @@ importers:
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/contracts': workspace:*
       '@dimensiondev/dashboard': workspace:*
+      '@dimensiondev/external-plugin-previewer': workspace:*
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/icons': workspace:*
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
@@ -314,7 +328,6 @@ importers:
       loglevel: ^1.7.0
       millify: ^4.0.0
       next-tick: ^1.0.0
-      notistack: ^1.0.9
       opensea-js: ^1.1.11
       openzeppelin-solidity: ^3.2.0
       promievent: ^0.1.4
@@ -372,6 +385,7 @@ importers:
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/contracts': link:../contracts
       '@dimensiondev/dashboard': link:../dashboard
+      '@dimensiondev/external-plugin-previewer': link:../external-plugin-previewer
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c_webextension-polyfill@0.8.0
       '@dimensiondev/icons': link:../icons
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
@@ -442,7 +456,6 @@ importers:
       loglevel: 1.7.1
       millify: 4.0.0
       next-tick: 1.1.0
-      notistack: 1.0.9
       opensea-js: 1.1.11
       promievent: 0.1.5
       pvtsutils: 1.1.2
@@ -11100,6 +11113,21 @@ packages:
   /ee-first/1.1.1:
     resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
 
+  /ef-core/0.13.7:
+    resolution: {integrity: sha512-peBjbdcCapnWvMV/PCz+T58UzfRhCfc+fqqeoOsHs/X0oTgR18QDsmf7EFGwerL8n29Kuzb9OHLNsZVFaA7UWw==}
+    dev: false
+
+  /ef.js/0.13.7:
+    resolution: {integrity: sha512-oxZU47Rx1Xz+YSwSorAwLHsGbspXgV47imO84OtZo4IJLFRb28ULpYjgtl/IIL0XA5fhsUk72vLGcyQNkVzRCA==}
+    dependencies:
+      ef-core: 0.13.7
+      eft-parser: 0.13.5
+    dev: false
+
+  /eft-parser/0.13.5:
+    resolution: {integrity: sha512-Hj+GY0mf2NNBcgg0v6DsV0/EYI5xDLUICZ5BSLVC+8uFEzoWpWw2VR6e3eWKgGjL2YEybUdg89UXDEHaBmi03Q==}
+    dev: false
+
   /electron-to-chromium/1.3.703:
     resolution: {integrity: sha512-SVBVhNB+4zPL+rvtWLw7PZQkw/Eqj1HQZs22xtcqW36+xoifzEOEEDEpkxSMfB6RFeSIOcG00w6z5mSqLr1Y6w==}
     dev: true
@@ -14307,16 +14335,10 @@ packages:
       ci-info: 3.2.0
     dev: true
 
-  /is-core-module/2.2.0:
-    resolution: {integrity: sha512-XRAfAdyyY5F5cOXn7hYQDqh2Xmii+DEfIcQGxK/uNwMHhIkPWO0g8msXcbzLe+MpGoR951MlqM/2iIlU4vKDdQ==}
-    dependencies:
-      has: 1.0.3
-
   /is-core-module/2.4.0:
     resolution: {integrity: sha512-6A2fkfq1rfeQZjxrZJGerpLCTHRNEBiSgnu0+obeJpEPZRUooHgsizvzv0ZjJwOz3iWIHdJtVWJ/tmPr3D21/A==}
     dependencies:
       has: 1.0.3
-    dev: true
 
   /is-data-descriptor/0.1.4:
     resolution: {integrity: sha1-C17mSDiOLIYCgueT8YVv7D8wG1Y=}
@@ -17531,15 +17553,18 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /notistack/1.0.9:
+  /notistack/1.0.9_540923a9a616e125cfaa594bc3b9f7f0:
     resolution: {integrity: sha512-Dal2HtTpWrdYCZ3t0HhJt47NJZwVSPee36WzORRbqUkFR0k9pxFszxBuPSWshBLwF6Av8s86XPP+ED5zRz0CGw==}
     peerDependencies:
       '@material-ui/core': ^4.0.0
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
+      '@material-ui/core': 5.0.0-alpha.34_5dd2980885b390cdc3b919d1c4e5af55
       clsx: 1.1.1
       hoist-non-react-statics: 3.3.2
+      react: 0.0.0-experimental-d75105fa9
+      react-dom: 0.0.0-experimental-d75105fa9_2805fb2ed7d5ff05b7c72aee23db3b6b
     dev: false
 
   /now-and-later/2.0.1:
@@ -19983,7 +20008,7 @@ packages:
   /resolve/1.20.0:
     resolution: {integrity: sha512-wENBPt4ySzg4ybFQW2TT1zMQucPK95HSh/nq2CFTZVOGut2+pQvSsgtda4d26YrYcr067wjbmzOG8byDPBX63A==}
     dependencies:
-      is-core-module: 2.2.0
+      is-core-module: 2.4.0
       path-parse: 1.0.6
 
   /responselike/1.0.2:
@@ -20043,7 +20068,7 @@ packages:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     hasBin: true
     dependencies:
-      glob: 7.1.6
+      glob: 7.1.7
     dev: true
 
   /ripemd160/2.0.2:

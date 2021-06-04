@@ -16,7 +16,6 @@ async function cleanAvatarDB(anotherList: IdentifierMap<ProfileIdentifier | Grou
 export async function cleanProfileWithNoLinkedPersona() {
     setTimeout(cleanProfileWithNoLinkedPersona, 1000 * 60 * 60 * 24 * 7 /** days */)
 
-    console.log('Run cleanProfileWithNoLinkedPersona...')
     const cleanedList = new IdentifierMap<ProfileIdentifier | GroupIdentifier, undefined>(
         new Map(),
         ProfileIdentifier,

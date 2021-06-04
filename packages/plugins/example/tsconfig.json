@@ -1,9 +1,10 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "rootDir": "./src/",
     "outDir": "./dist/",
     "stripInternal": true,
-    "rootDir": "./src/"
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["./src/**/*"],
   "references": [{ "path": "../../plugin-infra" }],
