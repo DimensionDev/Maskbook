@@ -1,45 +1,13 @@
-import { MaskDialog, MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskDialog } from '@dimensiondev/maskbook-theme'
 import {
-    DialogTitle,
     DialogContent,
     DialogActions,
     Button,
-    Typography,
-    IconButton,
     dialogActionsClasses,
     dialogContentClasses,
     experimentalStyled as styled,
     buttonClasses,
 } from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close'
-
-export interface DialogTitleProps {
-    children?: React.ReactNode
-    onClose: () => void
-}
-
-const BootstrapDialogTitle = (props: DialogTitleProps) => {
-    const { children, onClose, ...other } = props
-
-    return (
-        <DialogTitle disableTypography {...other}>
-            <Typography variant="h6" component="div">
-                {children}
-            </Typography>
-            <IconButton
-                aria-label="close"
-                onClick={onClose}
-                sx={{
-                    position: 'absolute',
-                    right: 8,
-                    top: 8,
-                    color: MaskColorVar.textPrimary,
-                }}>
-                <CloseIcon />
-            </IconButton>
-        </DialogTitle>
-    )
-}
 
 const StyledDialogActions = styled(DialogActions)(({ theme }) => ({
     [`&.${dialogActionsClasses.root}>:not(:first-of-type)`]: {
