@@ -28,13 +28,13 @@ import PasswordSetting from './components/PasswordSetting'
 import LogoutSetting from './components/LogoutSetting'
 import DataSourceSetting from './components/DataSourceSetting'
 
-import { ModalProvider } from './hooks/VerifyPasswordContext'
+import { PasswordVerifiedProvider } from './hooks/VerifyPasswordContext'
 
 export default function Settings() {
     const t = useDashboardI18N()
     return (
         <PageFrame title={t.settings()} noBackgroundFill>
-            <ModalProvider>
+            <PasswordVerifiedProvider>
                 <SettingCard title={t.settings_general()}>
                     <SettingItem
                         icon={<LanguageIcon />}
@@ -106,7 +106,7 @@ export default function Settings() {
                         <LogoutSetting />
                     </SettingItem>
                 </SettingCard>
-            </ModalProvider>
+            </PasswordVerifiedProvider>
         </PageFrame>
     )
 }

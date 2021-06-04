@@ -1,14 +1,14 @@
 import { useContext, useState } from 'react'
 import RestoreDialog from './dialogs/RestoreDialog'
 import SettingButton from './SettingButton'
-import { ModalContext } from '../hooks/VerifyPasswordContext'
+import { PasswordVerifiedContext } from '../hooks/VerifyPasswordContext'
 
 export default function RestoreSetting() {
-    const { verified, verify } = useContext(ModalContext)
+    const { isPasswordVerified, requestVerifyPassword } = useContext(PasswordVerifiedContext)
     const [openRestore, setOpenRestore] = useState(false)
-    const handleOpenRestore = () => {
-        if (!verified) {
-            verify({
+    const onRecovery = () => {
+        if (!isPasswordVerified) {
+            requestVerifyPassword({
                 onVerified: () => {
                     setOpenRestore(true)
                 },
@@ -18,14 +18,14 @@ export default function RestoreSetting() {
         }
     }
 
-    const handleCloseRestore = () => {
+    const onClose = () => {
         setOpenRestore(false)
     }
 
     return (
         <>
-            <SettingButton onClick={handleOpenRestore}>Recovery</SettingButton>
-            <RestoreDialog open={openRestore} onClose={handleCloseRestore} />
+            <SettingButton onClick={onRecovery}>Recovery</SettingButton>
+            <RestoreDialog open={openRestore} onClose={onClose} />
         </>
     )
 }

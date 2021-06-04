@@ -1,21 +1,23 @@
 import { createContext, useState, PropsWithChildren } from 'react'
 import VerifyPasswordDialog from '../components/dialogs/VerifyPasswordDialog'
 
-interface ContextState {
-    verified: boolean
-    verify: (opt: Option) => void
+export interface PasswordVerifiedContext {
+    isPasswordVerified: boolean
+    requestVerifyPassword: (options: VerifyPasswordOption) => void
 }
 
-let ModalContext = createContext<ContextState>({
-    verified: false,
-    verify: () => {},
+export const PasswordVerifiedContext = createContext<PasswordVerifiedContext>({
+    isPasswordVerified: false,
+    requestVerifyPassword: () => {
+        throw new Error('Context not provided.')
+    },
 })
 
-interface Option {
+export interface VerifyPasswordOption {
     onVerified: () => void
 }
 
-let ModalProvider = ({ children }: PropsWithChildren<{}>) => {
+export function PasswordVerifiedProvider({ children }: PropsWithChildren<{}>) {
     const [open, setOpen] = useState(false)
     const [verified, setVerified] = useState(false)
     const [option, setOption] = useState({ onVerified: () => {} })
@@ -27,18 +29,16 @@ let ModalProvider = ({ children }: PropsWithChildren<{}>) => {
     const handleClose = () => {
         setOpen(false)
     }
-    const verify = (opt: Option) => {
+    const verify = (opt: VerifyPasswordOption) => {
         if (!verified) {
             setOpen(true)
             if (opt) setOption(opt)
         }
     }
     return (
-        <ModalContext.Provider value={{ verified, verify }}>
+        <PasswordVerifiedContext.Provider value={{ isPasswordVerified: verified, requestVerifyPassword: verify }}>
             {children}
             <VerifyPasswordDialog open={open} onVerified={handleVerifiled} onClose={handleClose} />
-        </ModalContext.Provider>
+        </PasswordVerifiedContext.Provider>
     )
 }
-
-export { ModalContext, ModalProvider }

@@ -1,31 +1,31 @@
 import SettingButton from './SettingButton'
 import { useState, useContext } from 'react'
 import BackupDialog from './dialogs/BackupDialog'
-import { ModalContext } from '../hooks/VerifyPasswordContext'
+import { PasswordVerifiedContext } from '../hooks/VerifyPasswordContext'
 
 export default function BackupSetting() {
-    const { verified, verify } = useContext(ModalContext)
+    const { isPasswordVerified, requestVerifyPassword } = useContext(PasswordVerifiedContext)
     const [openBackup, setOpenBackup] = useState(false)
-    const handleOpenVeify = () => {
-        if (!verified) {
-            verify({
+    const onBackup = () => {
+        if (isPasswordVerified) {
+            setOpenBackup(true)
+        } else {
+            requestVerifyPassword({
                 onVerified: () => {
                     setOpenBackup(true)
                 },
             })
-        } else {
-            setOpenBackup(true)
         }
     }
 
-    const handleCloseBackup = () => {
+    const onClose = () => {
         setOpenBackup(false)
     }
 
     return (
         <>
-            <SettingButton onClick={handleOpenVeify}>Back up</SettingButton>
-            <BackupDialog open={openBackup} onClose={handleCloseBackup} />
+            <SettingButton onClick={onBackup}>Back up</SettingButton>
+            <BackupDialog open={openBackup} onClose={onClose} />
         </>
     )
 }
