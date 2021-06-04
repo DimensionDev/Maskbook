@@ -103,7 +103,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                 // it's unable to send a request for switching to ethereum networks
                 if (chainId !== ChainId.Mainnet) throw new Error('Make sure your wallet is on the Ethereum Mainnet.')
                 return true
-            }
+            } else if (chainId === Number.parseInt(chainDetailedCAIP.chainId))
+                return true
 
             // request ethereum-compatiable network
             try {
