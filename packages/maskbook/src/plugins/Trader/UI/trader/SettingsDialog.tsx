@@ -12,7 +12,8 @@ import {
     Button,
     DialogContent,
 } from '@material-ui/core'
-import { getEnumAsArray, useI18N, useRemoteControlledDialog, useValueRef } from '../../../../utils'
+import { getEnumAsArray } from '@dimensiondev/maskbook-shared'
+import { useI18N, useRemoteControlledDialog, useValueRef } from '../../../../utils'
 import { ZrxTradePool, TradeProvider } from '../../types'
 import { SelectPoolPanel } from './SelectPoolPanel'
 import { SlippageSlider } from './SlippageSlider'

@@ -2,7 +2,13 @@ import { useState, useCallback, useMemo } from 'react'
 import { makeStyles, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { FormattedBalance } from '@dimensiondev/maskbook-shared'
-import { createERC20Token, CONSTANTS, useConstant, useERC20TokenBalance, useChainId } from '@dimensiondev/web3-shared'
+import {
+    createERC20Token,
+    TOKEN_CONSTANTS,
+    useConstant,
+    useERC20TokenBalance,
+    useChainId,
+} from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { BreakdownDialog } from '../../components/InjectedComponents/BreakdownDialog'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
@@ -33,7 +39,7 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
 
     //#region mask token
     const chainId = useChainId()
-    const MASK_ADDRESS = useConstant(CONSTANTS, 'MASK_ADDRESS')
+    const MASK_ADDRESS = useConstant(TOKEN_CONSTANTS, 'MASK_ADDRESS')
     const maskToken = useMemo(
         () => createERC20Token(chainId, MASK_ADDRESS, 18, 'Mask Network', 'MASK'),
         [chainId, MASK_ADDRESS],

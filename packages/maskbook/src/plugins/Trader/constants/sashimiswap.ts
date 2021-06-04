@@ -11,14 +11,14 @@ export const SASHIMISWAP_CUSTOM_BASES: {
     }
 } = {
     [ChainId.Mainnet]: {
-        [AMPL.address]: [DAI, WETH[ChainId.Mainnet]],
+        [AMPL[ChainId.Mainnet].address]: [DAI, WETH].map((x) => x[ChainId.Mainnet]),
     },
 }
 export const SASHIMISWAP_BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
     ...WETH_ONLY,
-    [ChainId.Mainnet]: [...WETH_ONLY[ChainId.Mainnet], ...[DAI, USDC, USDT, COMP, MKR]],
+    [ChainId.Mainnet]: [WETH_ONLY, DAI, USDC, USDT, COMP, MKR].map((x) => x[ChainId.Mainnet] as ERC20TokenDetailed),
 }
 
 export const THEGRAPH_SASHIMISWAP = 'https://api.thegraph.com/subgraphs/name/sashimiproject/sashimi'

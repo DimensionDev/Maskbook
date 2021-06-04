@@ -56,6 +56,8 @@ export function resolveTradeProviderName(tradeProvider: TradeProvider) {
             return 'SashimiSwap'
         case TradeProvider.BALANCER:
             return 'Balancer'
+        case TradeProvider.QUICKSWAP:
+            return 'QuickSwap'
         default:
             unreachable(tradeProvider)
     }
@@ -73,6 +75,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider) {
             return 'https://sashimi.cool/'
         case TradeProvider.BALANCER:
             return 'https://balancer.exchange/'
+        case TradeProvider.QUICKSWAP:
+            return ''
         default:
             unreachable(tradeProvider)
     }
@@ -90,6 +94,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://info.sashimi.cool/pair/${address}`
         case TradeProvider.BALANCER:
             return `https://pools.balancer.exchange/#/pool/${address}/`
+        case TradeProvider.QUICKSWAP:
+            return ''
         default:
             unreachable(tradeProvider)
     }

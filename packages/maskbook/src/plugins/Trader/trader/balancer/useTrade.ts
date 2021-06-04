@@ -1,5 +1,11 @@
 import { useAsyncRetry } from 'react-use'
-import { CONSTANTS, FungibleTokenDetailed, isNative, useConstant, useBlockNumber } from '@dimensiondev/web3-shared'
+import {
+    TOKEN_CONSTANTS,
+    FungibleTokenDetailed,
+    isNative,
+    useConstant,
+    useBlockNumber,
+} from '@dimensiondev/web3-shared'
 import { BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { SwapResponse, TradeStrategy } from '../../types'
@@ -12,8 +18,8 @@ export function useTrade(
     outputToken?: FungibleTokenDetailed,
 ) {
     const blockNumber = useBlockNumber()
-    const WETH_ADDRESS = useConstant(CONSTANTS, 'WETH_ADDRESS')
-    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const WETH_ADDRESS = useConstant(TOKEN_CONSTANTS, 'WETH_ADDRESS')
+    const NATIVE_TOKEN_ADDRESS = useConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     const BALANCER_ETH_ADDRESS = useConstant(TRADE_CONSTANTS, 'BALANCER_ETH_ADDRESS')
 
     return useAsyncRetry(async () => {

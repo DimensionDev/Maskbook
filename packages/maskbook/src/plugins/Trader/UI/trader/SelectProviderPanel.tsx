@@ -1,5 +1,5 @@
 import { makeStyles, Chip } from '@material-ui/core'
-import { getEnumAsArray } from '../../../../utils/enum'
+import { getEnumAsArray } from '@dimensiondev/maskbook-shared'
 import { TradeProvider } from '../../types'
 import { resolveTradeProviderName } from '../../pipes'
 import { TradeProviderIcon } from './TradeProviderIcon'
