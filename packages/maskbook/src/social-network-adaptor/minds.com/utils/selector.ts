@@ -17,9 +17,6 @@ export const themeListItemSelector: () => LiveSelector<HTMLAnchorElement, true> 
         'm-usermenu__v3 > div.m-user-menu.m-dropdown > ul > li:nth-child(5) .ng-star-inserted',
     )
 
-export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('m-composer__topbarbutton .m-icon__assetsFile')
-
 export const composerModalSelector: () => LiveSelector<E, true> = () => querySelector<E>('m-composer__modal')
 
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>

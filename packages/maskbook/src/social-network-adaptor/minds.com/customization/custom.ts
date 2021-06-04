@@ -7,7 +7,7 @@ import type { SocialNetworkUI } from '../../../social-network'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { useClassicMaskTheme } from '../../../utils/theme'
 import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme-tools'
-import { composeAnchorTextSelector, themeListItemSelector } from '../utils/selector'
+import { themeListItemSelector } from '../utils/selector'
 
 // TODO: get this from DOM. But currently Minds has a single primary color
 const primaryColorRef = new ValueRef(toRGB([68, 170, 255]))
@@ -21,7 +21,7 @@ export const PaletteModeProviderMinds: SocialNetworkUI.Customization.PaletteMode
 
 export function startWatchThemeColor(signal: AbortSignal) {
     function updateThemeColor() {
-        const contrastColor = getForegroundColor(composeAnchorTextSelector().evaluate()!)
+        const contrastColor = getForegroundColor(themeListItemSelector().evaluate()!)
         const backgroundColor = getBackgroundColor(document.body)
         PaletteModeProviderMinds.current.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
 
