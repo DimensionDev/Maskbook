@@ -11,9 +11,9 @@ export const RED_PACKET_CONSTANTS = {
         [ChainId.Rinkeby]: '0x575f906db24154977c7361c2319e2b25e897e3b6',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
-        [ChainId.BSC]: '',
+        [ChainId.BSC]: '0x6cc1b1058F9153358278C35E0b2D382f1585854B',
         [ChainId.BSCT]: '0x8440b99B1Df5D4B61957c8Ce0a199487Be3De270',
-        [ChainId.Matic]: '',
+        [ChainId.Matic]: '0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9',
         [ChainId.Mumbai]: '0x6DfC82B48CFd38d4722366Cd6F444a341b8840f5',
     },
 }

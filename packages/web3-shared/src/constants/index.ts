@@ -28,9 +28,9 @@ export const CONSTANTS = {
         [ChainId.Rinkeby]: '0xe3AE8Ae4160680C7Ac0FB0A79F519d7D7eAe06aB',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
-        [ChainId.BSC]: '',
+        [ChainId.BSC]: '0xC119574D5Fb333F5AC018658D4d8b5035E16bf39',
         [ChainId.BSCT]: '0x7f004a42D760Eb68eB95Fa50f739917675181fCA',
-        [ChainId.Matic]: '',
+        [ChainId.Matic]: '0x6cc1b1058F9153358278C35E0b2D382f1585854B',
         [ChainId.Mumbai]: '0xFEd05EE9b7DdbAb97Abc55e27EF95C7c14688Aad',
     },
     MULTICALL_ADDRESS: {
@@ -41,7 +41,7 @@ export const CONSTANTS = {
         [ChainId.Gorli]: '0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e',
         [ChainId.BSC]: '0x59CED6942f5506bc01e5D438e7ce3D4635271659',
         [ChainId.BSCT]: '0x6e5BB1a5Ad6F68A8D7D6A5e47750eC15773d6042',
-        [ChainId.Matic]: '',
+        [ChainId.Matic]: '0xC119574D5Fb333F5AC018658D4d8b5035E16bf39',
         [ChainId.Mumbai]: '0x6B70EC653c4331bdD0D0DCC7C941eb594e69a91d',
     },
 
