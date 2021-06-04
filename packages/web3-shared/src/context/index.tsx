@@ -1,9 +1,8 @@
-import { useContext } from 'react'
-import { createContext } from 'react'
+import { useContext, createContext } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
 import type { Web3ProviderType } from './type'
-import CHAINS from '../assets/chains.json'
+import { getChainDetailed } from '../utils'
 
 export type { Web3ProviderType } from './type'
 
@@ -29,7 +28,7 @@ export function useWeb3State() {
     const wallets = useSubscription(_.wallets)
     const chainId = useSubscription(_.chainId)
     const erc20Tokens = useSubscription(_.erc20Tokens)
-    const chainDetailed = CHAINS.find((x) => x.chainId === chainId)
+    const chainDetailed = getChainDetailed(chainId)
     return {
         allowTestnet,
         account,
