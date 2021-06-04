@@ -4,8 +4,13 @@ import { useI18N } from '../../../utils'
 import type { PoolSettings } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import LaunchIcon from '@material-ui/icons/Launch'
-import { formatAmountPrecision, formatBalance, FormattedAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
-import BigNumber from 'bignumber.js'
+import {
+    formatAmountPrecision,
+    formatBalance,
+    FormattedAddress,
+    FormattedBalance,
+    ONE,
+} from '@dimensiondev/maskbook-shared'
 import formatDateTime from 'date-fns/format'
 import {
     resolveTokenLinkOnExplorer,
@@ -48,7 +53,7 @@ function SwapItem(props: SwapItemProps) {
                 {t('plugin_ito_swap_title', {
                     swap: exchange ? swap?.symbol : token?.symbol,
                     token: exchange ? token?.symbol : swap?.symbol,
-                    amount: exchange ? new BigNumber(1).div(amount_).toFixed() : amount_,
+                    amount: exchange ? ONE.dividedBy(amount_).toFixed() : amount_,
                 })}
             </Typography>
             <div className={classes.icon} onClick={() => setExchange(!exchange)}>

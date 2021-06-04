@@ -6,7 +6,7 @@ import { resolveAddressLinkOnExplorer } from '@dimensiondev/web3-shared'
 import { ChainId } from '@dimensiondev/web3-shared'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
-import { FormattedBalance } from '@dimensiondev/maskbook-shared'
+import { FormattedBalance, isZero } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -137,7 +137,7 @@ export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
                     <TableCell>
                         <Typography className={classes.content}>
                             {order.expirationTime &&
-                                !new BigNumber(order.expirationTime).isZero() &&
+                                !isZero(order.expirationTime) &&
                                 formatDistanceToNow(
                                     new Date(new BigNumber(order.expirationTime ?? 0).multipliedBy(1000).toNumber()),
                                     {

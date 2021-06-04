@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import type { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types'
+import { ZERO } from '@dimensiondev/maskbook-shared'
 
 export function useTradeComputed(
     trade: SwapQuoteResponse | null,
@@ -25,13 +26,13 @@ export function useTradeComputed(
             fee: new BigNumber(trade.minimumProtocolFee),
             maximumSold: new BigNumber(trade.sellAmount),
             minimumReceived: outputAmount,
-            priceImpactWithoutFee: new BigNumber(0),
+            priceImpactWithoutFee: ZERO,
 
             // not supported fields
-            nextMidPrice: new BigNumber(0),
+            nextMidPrice: ZERO,
 
             // minimumProtocolFee
-            priceImpact: new BigNumber(0),
+            priceImpact: ZERO,
 
             trade_: { ...trade, buyAmount: outputAmount.toFixed() },
         } as TradeComputed<SwapQuoteResponse>

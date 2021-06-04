@@ -9,6 +9,7 @@ import type { Route } from '../../types'
 import { getFutureTimestamps } from '../../helpers/blocks'
 import { fetchBlockNumbersByTimestamps } from '../blocks'
 import { fetchLBP_PoolsByTokenAddress, fetchLBP_PoolTokenPrices, fetchLBP_PoolTokens } from '../LBP'
+import { ZERO } from '@dimensiondev/maskbook-shared'
 
 //#region create cached SOR
 const createSOR_ = memoize(
@@ -65,9 +66,7 @@ export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALA
 
     // compose routes
     // learn more: https://github.com/balancer-labs/balancer-frontend/blob/develop/src/components/swap/Routing.vue
-    const totalSwapAmount = swaps.reduce((total, rawHops) => {
-        return total.plus(rawHops[0].swapAmount || '0')
-    }, new BigNumber(0))
+    const totalSwapAmount = swaps.reduce((total, rawHops) => total.plus(rawHops[0].swapAmount || '0'), ZERO)
 
     const pools = sor.onChainCache.pools
     const routes = swaps.map((rawHops) => {

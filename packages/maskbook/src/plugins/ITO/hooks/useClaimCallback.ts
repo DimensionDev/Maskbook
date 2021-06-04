@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import { BigNumber } from 'bignumber.js'
 import stringify from 'json-stable-stringify'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import {
@@ -12,6 +11,7 @@ import {
     useNonce,
 } from '@dimensiondev/web3-shared'
 import { useITO_Contract } from '../contracts/useITO_Contract'
+import { isZero } from '@dimensiondev/maskbook-shared'
 
 export function useClaimCallback(pids: string[], contractAddress?: string) {
     const nonce = useNonce()
@@ -43,7 +43,7 @@ export function useClaimCallback(pids: string[], contractAddress?: string) {
                 ),
             )
 
-            const isClaimed = availabilityList.some((availability) => new BigNumber(availability.swapped).isZero())
+            const isClaimed = availabilityList.some((availability) => isZero(availability.swapped))
 
             if (isClaimed) {
                 setClaimState({

@@ -17,6 +17,7 @@ import {
     fetchBlockNumbersObjectByTimestamps,
 } from '../blocks'
 import { fetchLatestBlocks } from '../uniswap-health'
+import { isGreaterThan } from '@dimensiondev/maskbook-shared'
 
 type Value = string | number | BigNumber | undefined
 
@@ -335,11 +336,7 @@ export async function getBulkPairData(pairList: string[]) {
                     oneDayVolumeUntracked,
                 }
 
-                if (
-                    !oneDayHistory &&
-                    pair &&
-                    new BigNumber(pair.createdAtBlockNumber).isGreaterThan(oneDayBlock ?? 0)
-                ) {
+                if (!oneDayHistory && pair && isGreaterThan(pair.createdAtBlockNumber, oneDayBlock ?? 0)) {
                     result.oneDayVolumeUSD = new BigNumber(pair.volumeUSD).toNumber()
                 }
                 if (!oneDayHistory && pair) {

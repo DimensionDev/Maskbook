@@ -9,6 +9,7 @@ import { TableListPagination } from './Pagination'
 import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
 import { useAccount } from '@dimensiondev/web3-shared'
+import { isZero } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -49,7 +50,7 @@ export function OfferTab() {
                     (item) =>
                         (item.paymentTokenContract?.symbol !== 'WETH' && item.paymentTokenContract?.symbol !== 'ETH') ||
                         (item.quantity && new BigNumber(item.quantity).toString() !== '1'),
-                ) && offers.value.filter((item) => new BigNumber(item.expirationTime ?? 0).isZero()).length === 0
+                ) && offers.value.filter((item) => isZero(item.expirationTime ?? 0)).length === 0
             )
         } else {
             return false
