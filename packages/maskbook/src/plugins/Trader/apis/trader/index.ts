@@ -1,10 +1,10 @@
-import { getChainDetailed } from '@dimensiondev/web3-shared'
+import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@dimensiondev/web3-shared'
 import { TagType, TradeProvider } from '../../types'
 
-export async function getAvailableTraderProviders(type: TagType, keyword: string) {
-    const chainDetailed = getChainDetailed()
+export async function getAvailableTraderProviders(chainId: ChainId, type: TagType, keyword: string) {
+    const networkType = getNetworkTypeFromChainId(chainId)
 
-    if (chainDetailed?.chain === 'ETH')
+    if (networkType === NetworkType.Ethereum)
         return [
             TradeProvider.UNISWAP,
             TradeProvider.SUSHISWAP,
