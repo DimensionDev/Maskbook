@@ -5,7 +5,7 @@ export const ONE = new BigNumber('1')
 
 /** value == 0 */
 export function isZero(value: BigNumber.Value) {
-    return new BigNumber(value).isZero()
+    return value === 0 || value === '0' || new BigNumber(value).isZero()
 }
 
 /** a > b */
@@ -18,6 +18,7 @@ export function isLessThan(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).isLessThan(b)
 }
 
+/** 10 ** n */
 export function pow10(n: BigNumber.Value, m?: BigNumber.Value) {
     return new BigNumber(10).pow(n, m)
 }
