@@ -41,7 +41,7 @@ importers:
       npm-run-all: ^4.1.5
       only-allow: ^1.0.0
       patch-package: ./patches/patch-package-6.4.7.tgz
-      prettier: ^2.3.0
+      prettier: ^2.3.1
       react: '=0.0.0-experimental-d75105fa9'
       react-dom: '=0.0.0-experimental-d75105fa9'
       react-i18next: ^11.9.0
@@ -77,7 +77,7 @@ importers:
       eslint-config-prettier: 8.3.0_eslint@7.27.0
       eslint-plugin-import: 2.23.3_eslint@7.27.0
       eslint-plugin-lodash: 7.2.0_eslint@7.27.0
-      eslint-plugin-prettier: 3.4.0_beb8ddd1fba5378f74976112c7860a07
+      eslint-plugin-prettier: 3.4.0_beb7720e9139e3178536fb97e1a17bf3
       eslint-plugin-react-hooks: 4.2.0_eslint@7.27.0
       eslint-plugin-unused-imports: 1.1.1
       esm: 3.2.25
@@ -86,7 +86,7 @@ importers:
       npm-run-all: 4.1.5
       only-allow: 1.0.0
       patch-package: file:patches/patch-package-6.4.7.tgz
-      prettier: 2.3.0
+      prettier: 2.3.1
       ts-node: 10.0.0_typescript@4.3.2
       ttypescript: 1.5.12_ts-node@10.0.0+typescript@4.3.2
       typescript: 4.3.2
@@ -11716,7 +11716,7 @@ packages:
       lodash: 4.17.21
     dev: true
 
-  /eslint-plugin-prettier/3.4.0_beb8ddd1fba5378f74976112c7860a07:
+  /eslint-plugin-prettier/3.4.0_beb7720e9139e3178536fb97e1a17bf3:
     resolution: {integrity: sha512-UDK6rJT6INSfcOo545jiaOwB701uAIt2/dR7WnFQoGCVl1/EMqdANBmwUaqqQ45aXprsTGzSa39LI1PyuRBxxw==}
     engines: {node: '>=6.0.0'}
     peerDependencies:
@@ -11729,7 +11729,7 @@ packages:
     dependencies:
       eslint: 7.27.0
       eslint-config-prettier: 8.3.0_eslint@7.27.0
-      prettier: 2.3.0
+      prettier: 2.3.1
       prettier-linter-helpers: 1.0.0
     dev: true
 
@@ -18641,6 +18641,13 @@ packages:
     resolution: {integrity: sha512-kXtO4s0Lz/DW/IJ9QdWhAf7/NmPWQXkFr/r/WkR3vyI+0v8amTDxiaQSLzs8NBlytfLWX/7uQUMIW677yLKl4w==}
     engines: {node: '>=10.13.0'}
     hasBin: true
+    dev: false
+
+  /prettier/2.3.1:
+    resolution: {integrity: sha512-p+vNbgpLjif/+D+DwAZAbndtRrR0md0MwfmOVN9N+2RgyACMT+7tfaRnT+WDPkqnuVwleyuBIG2XBxKDme3hPA==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: true
 
   /pretty-error/2.1.2:
     resolution: {integrity: sha512-EY5oDzmsX5wvuynAByrmY0P0hcp+QpnAKbJng2A2MPjVKXCxrDSUkzghVJ4ZGPIv+JC4gX8fPUWscC0RtjsWGw==}
