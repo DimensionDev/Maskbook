@@ -1,6 +1,14 @@
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { Wallet, isNative, FungibleTokenDetailed, useAccount, useChainIdValid } from '@dimensiondev/web3-shared'
+import {
+    Wallet,
+    isNative,
+    FungibleTokenDetailed,
+    useAccount,
+    useChainIdValid,
+    useChainIdMatched,
+    getChainIdFromName,
+} from '@dimensiondev/web3-shared'
 import { useMenu, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
@@ -27,15 +35,15 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
     const classes = useStylesExtends(useStyles(), props)
 
     const chainIdValid = useChainIdValid()
+    const chainIdMatched = useChainIdMatched(getChainIdFromName(chain))
 
     //#region remote controlled buy dialog
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     //#endregion
 
-    const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogFT)
-    const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
-    const [menu, openMenu] = useMenu(
-        [
+    //#region items
+    const items = [
+        chain === 'eth' && chainIdMatched ? (
             <MenuItem
                 onClick={() => {
                     setBuyDialog({
@@ -45,21 +53,26 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
                     })
                 }}>
                 {t('buy')}
-            </MenuItem>,
+            </MenuItem>
+        ) : null,
+        chainIdMatched ? (
             <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ wallet, token })}>
                 {t('transfer')}
-            </MenuItem>,
-            <MenuItem
-                style={{ display: isNative(token.address) ? 'none' : 'initial' }}
-                onClick={() => openHideTokenConfirmDialog({ wallet, token })}>
-                {t('hide')}
-            </MenuItem>,
-        ].slice(chain === 'eth' ? 0 : 1),
-    )
+            </MenuItem>
+        ) : null,
+        !isNative(token.address) ? (
+            <MenuItem onClick={() => openHideTokenConfirmDialog({ wallet, token })}>{t('hide')}</MenuItem>
+        ) : null,
+    ].filter(Boolean)
+    //#endregion
+
+    const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogFT)
+    const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
+    const [menu, openMenu] = useMenu(items)
 
     return (
         <>
-            <IconButton className={classes.more} size="small" onClick={openMenu}>
+            <IconButton className={classes.more} size="small" disabled={!items.length} onClick={openMenu}>
                 <MoreHorizIcon />
             </IconButton>
             {menu}

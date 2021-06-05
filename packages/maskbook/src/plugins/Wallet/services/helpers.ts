@@ -96,7 +96,7 @@ export function ERC1155TokenRecordOutDB(x: ERC1155TokenRecordInDatabase) {
 export function TransactionChunkRecordIntoDB(x: TransactionChunkRecord) {
     const record: TransactionChunkRecordInDatabase = {
         ...x,
-        record_id: `${x.chain_id}_${x.address}`,
+        record_id: `${x.chain_id}_${formatEthereumAddress(x.address)}`,
     }
     return record
 }

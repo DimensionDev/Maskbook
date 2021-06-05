@@ -164,7 +164,9 @@ export function PopperView(props: PopperViewProps) {
         <Tab className={classes.tab} key="market" label={t('plugin_trader_tab_market')} />,
         <Tab className={classes.tab} key="price" label={t('plugin_trader_tab_price')} />,
         <Tab className={classes.tab} key="exchange" label={t('plugin_trader_tab_exchange')} />,
-        isEthereum ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
+        isEthereum && tradeProviders.length ? (
+            <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} />
+        ) : null,
     ].filter(Boolean)
     //#endregion
 
