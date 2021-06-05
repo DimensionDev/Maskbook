@@ -353,6 +353,7 @@
     "plugin_red_packet_refund": "無効",
     "plugin_red_packet_refunding": "",
     "plugin_red_packet_select_existing": "既存の投げ銭を選択",
+    "plugin_red_packet_share_message": "",
     "plugin_red_packet_attached_message": "メッセージを追加",
     "plugin_red_packet_from": "送信者：{{name}}",
     "plugin_red_packet_description_claimed": "既に受け取り済みです",

@@ -4,9 +4,11 @@ import {
     getChainIdFromName,
     isDAI,
     isOKB,
+    resolveNetworkName,
     TransactionStateType,
     useAccount,
     useChainIdValid,
+    useNetworkType,
     useTokenDetailed,
 } from '@dimensiondev/web3-shared'
 import { Box, Card, makeStyles, Skeleton, Typography } from '@material-ui/core'
@@ -138,6 +140,7 @@ export function RedPacket(props: RedPacketProps) {
     // context
     const account = useAccount()
     const chainIdValid = useChainIdValid()
+    const networkType = useNetworkType()
 
     //#region token detailed
     const {
@@ -161,13 +164,11 @@ export function RedPacket(props: RedPacketProps) {
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             canClaim
-                ? [
-                      `I just claimed a red packet from @${payload.sender.name}. Follow @realMaskbook (mask.io) to claim red packets.`,
-                      '#mask_io #RedPacket',
-                      postLink,
-                  ]
-                      .filter(Boolean)
-                      .join('\n')
+                ? t('plugin_red_packet_share_message', {
+                      sender: payload.sender.name,
+                      payload: postLink,
+                      network: resolveNetworkName(networkType),
+                  }).trim()
                 : '',
         )
         .toString()
