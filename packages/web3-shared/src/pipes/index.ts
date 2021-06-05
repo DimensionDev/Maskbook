@@ -21,7 +21,7 @@ export function resolveProviderName(providerType: ProviderType) {
 export function resolveNetworkName(networkType: NetworkType) {
     switch (networkType) {
         case NetworkType.Binance:
-            return 'Binance Smart Chain'
+            return 'Binance'
         case NetworkType.Polygon:
             return 'Polygon'
         case NetworkType.Ethereum:
