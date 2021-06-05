@@ -9,15 +9,15 @@ import { TransactionChunkRecordIntoDB, TransactionChunkRecordOutDB } from './hel
 
 const MAX_RECENT_TRANSACTIONS_SIZE = 5
 
+function getRecordId(address: string) {
+    return `${currentChainIdSettings.value}_${formatEthereumAddress(address)}`
+}
+
 export async function getRecentTransactionsFromDB(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('TransactionChunk')
-    const chunks = await t.objectStore('TransactionChunk').getAll()
-    return (
-        chunks
-            .find((x) => isSameAddress(x.address, address))
-            ?.transactions.slice(0, MAX_RECENT_TRANSACTIONS_SIZE)
-            .reverse() ?? []
-    )
+    const chunk = await t.objectStore('TransactionChunk').get(getRecordId(address))
+    if (!chunk) return []
+    return chunk.transactions.slice(0, MAX_RECENT_TRANSACTIONS_SIZE).reverse() ?? []
 }
 
 export async function getRecentTransactionsFromChain(address: string) {
@@ -72,7 +72,7 @@ export async function addRecentTransaction(address: string, hash: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('TransactionChunk')
 
     const chainId = currentChainIdSettings.value
-    const recordId = `${chainId}_${address}`
+    const recordId = getRecordId(address)
 
     // compose transaction record
     const transactionIntoDB = {
