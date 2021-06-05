@@ -1,4 +1,6 @@
+import type { FC } from 'react'
 import { makeStyles, Link } from '@material-ui/core'
+import { Video } from '../../../components/shared/Video'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 
@@ -8,12 +10,32 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             justifyContent: 'center',
         },
-        img: {
+        player: {
             maxWidth: '100%',
-            maxWeight: '100%',
+            maxHeight: '100%',
+            border: 'none',
         },
     }
 })
+
+interface AssetPlayerProps {
+    src?: string
+    alt: string
+}
+
+// opensea supports: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB, GLTF.
+const AssetPlayer: FC<AssetPlayerProps> = ({ src, alt }) => {
+    const classes = useStyles()
+    if (!src) {
+        return null
+    }
+    const isVideo = src.match(/\.(mp4|webm)$/i)
+    if (isVideo) {
+        return <Video src={src} VideoProps={{ className: classes.player }} />
+    } else {
+        return <img className={classes.player} src={src} alt={alt} />
+    }
+}
 
 export interface ArticleTabProps {}
 
@@ -22,15 +44,16 @@ export function ArticleTab(props: ArticleTabProps) {
     const { asset } = CollectibleState.useContainer()
 
     if (!asset.value) return null
+    const resourceUrl = asset.value.image_url || asset.value.animation_url
     return (
         <CollectibleTab>
             <div className={classes.body}>
                 {asset.value.animation_url ? (
                     <Link href={asset.value.animation_url} target="_blank" rel="noopener noreferrer">
-                        <img src={asset.value.image_url} className={classes.img} alt={asset.value.name ?? ''} />
+                        <AssetPlayer src={resourceUrl} alt={asset.value.name} />
                     </Link>
                 ) : (
-                    <img src={asset.value.image_url} className={classes.img} alt={asset.value.name ?? ''} />
+                    <AssetPlayer src={resourceUrl} alt={asset.value.name} />
                 )}
             </div>
         </CollectibleTab>
