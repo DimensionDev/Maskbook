@@ -1,5 +1,4 @@
 import { safeUnreachable } from '@dimensiondev/maskbook-shared'
-import { capitalize } from 'lodash-es'
 import { ChainId, ERC20Token, ERC721Token, NativeToken, NetworkType, ProviderType } from '../types'
 import { getChainDetailed } from '../utils'
 
@@ -31,11 +30,6 @@ export function resolveNetworkName(networkType: NetworkType) {
             safeUnreachable(networkType)
             return 'Unknown'
     }
-}
-
-export function resolveChainNetwork(chainId: ChainId) {
-    const chainDetailed = getChainDetailed(chainId)
-    return capitalize(chainDetailed?.network ?? 'Unknown')
 }
 
 export function resolveChainName(chainId: ChainId) {

@@ -12,7 +12,7 @@ import {
     useConstant,
     useChainId,
     TransactionStateType,
-    resolveChainNetwork,
+    getChainName,
     useNativeTokenDetailed,
     useTokenBalance,
 } from '@dimensiondev/web3-shared'
@@ -145,7 +145,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     // password should remain the same rather than change each time when createState change,
     //  otherwise password in database would be different from creating red-packet.
     const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback({
-        duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
+        duration: 60 /* seconds */ * 5 /* mins */ * 1 /* hours */,
         isRandom: Boolean(isRandom),
         name: senderName,
         message,
@@ -159,7 +159,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const payload = useRef<RedPacketJSONPayload>({
         contract_address: HAPPY_RED_PACKET_ADDRESS,
         contract_version: RED_PACKET_CONTRACT_VERSION,
-        network: resolveChainNetwork(chainId),
+        network: getChainName(chainId),
     } as RedPacketJSONPayload)
 
     //#region remote controlled transaction dialog

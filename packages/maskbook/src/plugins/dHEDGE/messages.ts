@@ -4,7 +4,6 @@ import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { DHEDGE_PLUGIN_ID } from './constants'
 import type { Pool } from './types'
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
 type InvestDialogUpdated =
     | {
