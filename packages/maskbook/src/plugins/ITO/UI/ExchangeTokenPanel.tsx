@@ -4,7 +4,7 @@ import AddIcon from '@material-ui/icons/AddOutlined'
 import RemoveIcon from '@material-ui/icons/RemoveOutlined'
 import { useCallback, useEffect, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
@@ -71,6 +71,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         onRemove,
         onAdd,
     } = props
+    const { t } = useI18N()
 
     const classes = useStyles()
 
@@ -137,6 +138,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
                 }}
                 TextFieldProps={{
                     disabled: !exchangeToken,
+                    placeholder: !exchangeToken ? t('plugin_ito_placeholder_when_token_unselected') : '0.0',
                 }}
                 {...props.TokenAmountPanelProps}
             />
