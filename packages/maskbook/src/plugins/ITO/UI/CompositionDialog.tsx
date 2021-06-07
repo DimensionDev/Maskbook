@@ -120,7 +120,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
                 const [, title] = payload.message.split(MSG_DELIMITER)
-                payload.password = await Services.Ethereum.sign(Web3Utils.sha3(title) ?? '', account)
+                payload.password = await Services.Ethereum.personalSign(Web3Utils.sha3(title) ?? '', account)
             }
             if (!payload.password) {
                 alert('Failed to sign the password.')

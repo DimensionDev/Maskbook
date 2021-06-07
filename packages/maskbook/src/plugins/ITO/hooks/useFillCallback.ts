@@ -19,6 +19,7 @@ import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../constants'
 import type { AdvanceSettingData } from '../UI/AdvanceSetting'
 import { isGreaterThan, ONE, pow10 } from '@dimensiondev/maskbook-shared'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 export interface PoolSettings {
     password: string
@@ -44,7 +45,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
     const account = useAccount()
     const chainId = useChainId()
     const ITO_Contract = useITO_Contract()
-
+    const { t } = useI18N()
     const [fillState, setFillState] = useTransactionState()
     const [fillSettings, setFillSettings] = useState(poolSettings)
 
@@ -208,7 +209,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         if (!signedPassword) {
             setFillState({
                 type: TransactionStateType.FAILED,
-                error: new Error('Failed to sign password.'),
+                error: new Error(t('plugin_wallet_fail_to_sign')),
             })
             return
         }

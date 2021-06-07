@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, ChangeEvent, useEffect } from 'react'
+import { useState, useRef, useCallback, useMemo, ChangeEvent, useEffect } from 'react'
 import { makeStyles, FormControl, TextField, InputLabel, Select, MenuItem, MenuProps } from '@material-ui/core'
 import { omit } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
@@ -24,16 +24,18 @@ import {
     RED_PACKET_MAX_SHARES,
     RED_PACKET_CONSTANTS,
     RED_PACKET_DEFAULT_SHARES,
+    RED_PACKET_CONTRACT_VERSION,
 } from '../constants'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useCreateCallback } from '../hooks/useCreateCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import type { RedPacketJSONPayload } from '../types'
+import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { GasPriceButton } from '../../../web3/UI/GasPriceButton'
+import { RedPacketRPC } from '../messages'
 
 const useStyles = makeStyles((theme) => ({
     line: {
@@ -44,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
         flex: 1,
         padding: theme.spacing(0.5),
     },
+
     tip: {
         fontSize: 12,
         color: theme.palette.text.secondary,
@@ -72,12 +75,12 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const HAPPY_RED_PACKET_ADDRESS = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
+    const HAPPY_RED_PACKET_ADDRESS = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS_V2')
 
     // context
     const account = useAccount()
     const chainId = useChainId()
-    const RED_PACKET_ADDRESS = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS')
+    const RED_PACKET_ADDRESS = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS_V2')
 
     //#region select token
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
@@ -108,7 +111,8 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#region packet settings
     const [isRandom, setIsRandom] = useState(0)
     const [message, setMessage] = useState('Best Wishes!')
-    const senderName = useCurrentIdentity()?.linkedPersona?.nickname ?? 'Unknown User'
+    const currentIdentity = useCurrentIdentity()
+    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
 
     // shares
     const [shares, setShares] = useState<number | ''>(RED_PACKET_DEFAULT_SHARES)
@@ -137,9 +141,10 @@ export function RedPacketForm(props: RedPacketFormProps) {
     )
     //#endregion
 
-    // send transaction and wait for hash
+    //#region blocking
+    // password should remain the same rather than change each time when createState change,
+    //  otherwise password in database would be different from creating red-packet.
     const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback({
-        password: uuid(),
         duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
         isRandom: Boolean(isRandom),
         name: senderName,
@@ -149,6 +154,13 @@ export function RedPacketForm(props: RedPacketFormProps) {
         total: totalAmount.toFixed(),
     })
     //#endregion
+
+    // assemble JSON payload
+    const payload = useRef<RedPacketJSONPayload>({
+        contract_address: HAPPY_RED_PACKET_ADDRESS,
+        contract_version: RED_PACKET_CONTRACT_VERSION,
+        network: getChainName(chainId),
+    } as RedPacketJSONPayload)
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -176,34 +188,29 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 total: string
             }
 
-            // assemble JSON payload
-            const payload: RedPacketJSONPayload = {
-                contract_version: 1,
-                contract_address: HAPPY_RED_PACKET_ADDRESS,
-                rpid: CreationSuccess.id,
-                password: createSettings.password,
-                shares: createSettings.shares,
-                sender: {
-                    address: account,
-                    name: createSettings.name,
-                    message: createSettings.message,
-                },
-                is_random: createSettings.isRandom,
-                total: CreationSuccess.total,
-                creation_time: Number.parseInt(CreationSuccess.creation_time, 10) * 1000,
-                duration: createSettings.duration,
-                network: getChainName(chainId),
-                token_type: createSettings.token.type,
+            payload.current.sender = {
+                address: account,
+                name: createSettings.name,
+                message: createSettings.message,
             }
+            payload.current.is_random = createSettings.isRandom
+            payload.current.shares = createSettings.shares
+            payload.current.password = createSettings.password
+            payload.current.token_type = createSettings.token.type
+            payload.current.rpid = CreationSuccess.id
+            payload.current.total = CreationSuccess.total
+            payload.current.duration = createSettings.duration
+            payload.current.creation_time = Number.parseInt(CreationSuccess.creation_time, 10) * 1000
+
             if (createSettings.token.type === EthereumTokenType.ERC20)
-                payload.token = {
+                payload.current.token = {
                     name: '',
                     symbol: '',
                     ...omit(createSettings.token, ['type', 'chainId']),
                 }
 
             // output the redpacket as JSON payload
-            props.onCreate?.(payload)
+            props.onCreate?.(payload.current)
 
             // always reset amount
             setRawAmount('0')
@@ -212,6 +219,20 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     // open the transaction dialog
     useEffect(() => {
+        // storing the created red packet in DB, it helps retrieve red packet password later
+        // save to the database early, otherwise red-packet would lose when close the tx dialog or
+        //  web page before create successfully.
+        if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING) {
+            payload.current.txid = createState.hash
+            const record: RedPacketRecord = {
+                id: createState.hash!,
+                from: '',
+                password: createSettings!.password,
+                contract_version: RED_PACKET_CONTRACT_VERSION,
+            }
+            RedPacketRPC.discoverRedPacket(record)
+        }
+
         if (!token || createState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,

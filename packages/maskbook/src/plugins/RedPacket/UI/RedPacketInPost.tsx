@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import type { RedPacketJSONPayload } from '../types'
+import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { RedPacket } from './RedPacket'
 import { RedPacketRPC } from '../messages'
@@ -20,7 +20,14 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
             : undefined
     useEffect(() => {
         if (!fromUrl) return
-        RedPacketRPC.discoverRedPacket(fromUrl, payload)
+        if (!payload.txid && payload.contract_version !== 1) return
+        const record: RedPacketRecord = {
+            id: payload.contract_version === 1 ? payload.rpid : payload.txid!,
+            from: fromUrl,
+            password: payload.password,
+            contract_version: payload.contract_version,
+        }
+        RedPacketRPC.discoverRedPacket(record)
     }, [fromUrl])
     //#endregion
 
