@@ -1,5 +1,5 @@
 import { ChainId, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
-import { AMPL, DAI, USDC, USDT, WETH, WETH_ONLY, COMP, MKR } from './trader'
+import { DAI, USDC, USDT, WETH_ONLY, COMP, MKR } from './trader'
 
 /**
  * Some tokens can only be swapped via certain pairs,
@@ -9,11 +9,8 @@ export const SASHIMISWAP_CUSTOM_BASES: {
     readonly [chainId in ChainId]?: {
         [tokenAddress: string]: ERC20TokenDetailed[]
     }
-} = {
-    [ChainId.Mainnet]: {
-        [AMPL[ChainId.Mainnet].address]: [DAI, WETH].map((x) => x[ChainId.Mainnet]),
-    },
-}
+} = {}
+
 export const SASHIMISWAP_BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
