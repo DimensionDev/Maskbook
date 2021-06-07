@@ -76,7 +76,7 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider) {
         case TradeProvider.BALANCER:
             return 'https://balancer.exchange/'
         case TradeProvider.QUICKSWAP:
-            return ''
+            return 'https://quickswap.exchange/'
         default:
             unreachable(tradeProvider)
     }
@@ -95,7 +95,7 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
         case TradeProvider.BALANCER:
             return `https://pools.balancer.exchange/#/pool/${address}/`
         case TradeProvider.QUICKSWAP:
-            return ''
+            return `https://info.quickswap.exchange/pair${address}`
         default:
             unreachable(tradeProvider)
     }
