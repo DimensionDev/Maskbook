@@ -1,10 +1,9 @@
+import { getEnumAsArray, unreachable } from '@dimensiondev/maskbook-shared'
 import stringify from 'json-stable-stringify'
-import { createInternalSettings, createGlobalSettings } from '../../settings/createSettings'
-import { DataProvider, ZrxTradePool, TradeProvider } from './types'
-import { SLIPPAGE_TOLERANCE_DEFAULT, PLUGIN_IDENTIFIER } from './constants'
+import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
-import { unreachable } from '@dimensiondev/maskbook-shared'
-import { getEnumAsArray } from '@dimensiondev/maskbook-shared'
+import { PLUGIN_IDENTIFIER, SLIPPAGE_TOLERANCE_DEFAULT } from './constants'
+import { DataProvider, TradeProvider, ZrxTradePool } from './types'
 
 /**
  * The slippage tolerance of trader
