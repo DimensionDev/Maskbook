@@ -1,5 +1,5 @@
 import { ChainId, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
-import { SUSHI, DAI, YAM, WBTC, MSKA, MSKB, MSKC, USDC, USDT, WETH_ONLY, RUNE } from './trader'
+import { SUSHI, DAI, YAM, WBTC, MSKA, MSKB, MSKC, USDC, USDT, WETH, WETH_ONLY, RUNE } from './trader'
 
 /**
  * Some tokens can only be swapped via certain pairs,
@@ -15,10 +15,8 @@ export const SUSHISWAP_BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
     ...WETH_ONLY,
-    [ChainId.Mainnet]: [WETH_ONLY, DAI, USDC, USDT, SUSHI, YAM, WBTC, RUNE].map(
-        (x) => x[ChainId.Mainnet] as ERC20TokenDetailed,
-    ),
-    [ChainId.Rinkeby]: [WETH_ONLY, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby] as ERC20TokenDetailed),
+    [ChainId.Mainnet]: [WETH, DAI, USDC, USDT, SUSHI, YAM, WBTC, RUNE].map((x) => x[ChainId.Mainnet]),
+    [ChainId.Rinkeby]: [WETH, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),
 }
 
 export const THEGRAPH_SUSHISWAP_FORK = 'https://api.thegraph.com/subgraphs/name/zippoxer/sushiswap-subgraph-fork'

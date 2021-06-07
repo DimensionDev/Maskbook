@@ -20,10 +20,8 @@ export const UNISWAP_BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
     ...WETH_ONLY,
-    [ChainId.Mainnet]: [WETH_ONLY, DAI, USDC, USDT, COMP, MKR, WBTC].map(
-        (x) => x[ChainId.Mainnet] as ERC20TokenDetailed,
-    ),
-    [ChainId.Rinkeby]: [WETH_ONLY, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby] as ERC20TokenDetailed),
+    [ChainId.Mainnet]: [WETH, DAI, USDC, USDT, COMP, MKR, WBTC].map((x) => x[ChainId.Mainnet]),
+    [ChainId.Rinkeby]: [WETH, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),
 }
 
 export const THEGRAPH_UNISWAP_V2 = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2'
