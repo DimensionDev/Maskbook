@@ -1,20 +1,5 @@
 import { ChainId, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
-import {
-    WETH_ONLY,
-    DAI,
-    USDC,
-    USDT,
-    COMP,
-    QUICK,
-    ETHER,
-    UNITOKEN,
-    EASY,
-    IGG,
-    WBTC,
-    OM,
-    TT01,
-    TT02,
-} from './trader'
+import { WETH_ONLY, DAI, USDC, USDT, COMP, QUICK, ETHER, UNITOKEN, EASY, IGG, WBTC, OM, TT01, TT02 } from './trader'
 
 /**
  * Some tokens can only be swapped via certain pairs,

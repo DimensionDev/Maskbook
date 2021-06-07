@@ -104,6 +104,7 @@ export function useTradeComputed(
                 value: uniswap,
             }
         case TradeProvider.QUICKSWAP:
+            // FIXME: return a quickswap instance
             return {
                 ...balancer_,
                 value: balancer,
