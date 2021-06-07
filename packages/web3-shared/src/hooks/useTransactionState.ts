@@ -23,6 +23,7 @@ export type TransactionState =
       }
     | {
           type: TransactionStateType.WAIT_FOR_CONFIRMING
+          hash?: string
       }
     | {
           type: TransactionStateType.HASH

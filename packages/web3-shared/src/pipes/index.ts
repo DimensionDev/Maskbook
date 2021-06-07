@@ -32,6 +32,16 @@ export function resolveNetworkName(networkType: NetworkType) {
     }
 }
 
+export function resolveChainName(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    return chainDetailed?.name ?? 'Unknown'
+}
+
+export function resolveChainFullName(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    return chainDetailed?.fullName ?? 'Unknown'
+}
+
 export function resolveChainColor(chainId: ChainId) {
     switch (chainId) {
         case ChainId.Mainnet:

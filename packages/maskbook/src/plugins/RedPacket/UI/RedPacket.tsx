@@ -172,18 +172,22 @@ export function RedPacket(props: RedPacketProps) {
                 : '',
         )
         .toString()
-    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(account, payload.rpid, payload.password)
-    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(account, payload.rpid)
+    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
+        payload.contract_version,
+        account,
+        payload.rpid,
+        payload.password,
+    )
+    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
+        payload.contract_version,
+        account,
+        payload.rpid,
+    )
 
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            resetClaimCallback()
-            resetRefundCallback()
-            revalidateAvailability()
-        },
+        (ev) => undefined,
     )
 
     // open the transation dialog
@@ -191,19 +195,25 @@ export function RedPacket(props: RedPacketProps) {
         const state = canClaim ? claimState : refundState
         if (state.type === TransactionStateType.UNKNOWN) return
         if (!availability || !tokenDetailed) return
-        setTransactionDialog({
-            open: true,
-            shareLink,
-            state,
-            summary: canClaim
-                ? t('plugin_red_packet_claiming_from', { name: payload.sender.name })
-                : canRefund
-                ? t('plugin_red_packet_refunding_for', {
-                      balance: formatBalance(availability.balance, tokenDetailed.decimals),
-                      symbol: tokenDetailed.symbol,
-                  })
-                : '',
-        })
+        if (state.type === TransactionStateType.HASH) {
+            setTransactionDialog({
+                open: true,
+                shareLink: shareLink!.toString(),
+                state,
+                summary: canClaim
+                    ? t('plugin_red_packet_claiming_from', { name: payload.sender.name })
+                    : canRefund
+                    ? t('plugin_red_packet_refunding_for', {
+                          balance: formatBalance(availability.balance, tokenDetailed.decimals),
+                          symbol: tokenDetailed.symbol,
+                      })
+                    : '',
+            })
+        } else if (state.type === TransactionStateType.CONFIRMED) {
+            resetClaimCallback()
+            resetRefundCallback()
+            revalidateAvailability()
+        }
     }, [claimState, refundState /* update tx dialog only if state changed */])
     //#endregion
 

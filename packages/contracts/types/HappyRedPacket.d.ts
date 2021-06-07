@@ -80,8 +80,6 @@ export interface HappyRedPacket extends BaseContract {
             _total_tokens: number | string | BN,
         ): PayableTransactionObject<void>
 
-        refund(id: string | number[]): NonPayableTransactionObject<void>
-
         check_availability(id: string | number[]): NonPayableTransactionObject<{
             token_address: string
             balance: string
@@ -97,19 +95,44 @@ export interface HappyRedPacket extends BaseContract {
             5: string
         }>
 
-        contract_creator(): NonPayableTransactionObject<string>
+        refund(id: string | number[]): NonPayableTransactionObject<void>
     }
     events: {
-        ClaimSuccess(cb?: Callback<ClaimSuccess>): EventEmitter
-        ClaimSuccess(options?: EventOptions, cb?: Callback<ClaimSuccess>): EventEmitter
-
-        CreationSuccess(cb?: Callback<CreationSuccess>): EventEmitter
-        CreationSuccess(options?: EventOptions, cb?: Callback<CreationSuccess>): EventEmitter
-
-        RefundSuccess(cb?: Callback<RefundSuccess>): EventEmitter
-        RefundSuccess(options?: EventOptions, cb?: Callback<RefundSuccess>): EventEmitter
-
-        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
+        ClaimSuccess: ContractEventLog<{
+            id: string
+            claimer: string
+            claimed_value: string
+            token_address: string
+            0: string
+            1: string
+            2: string
+            3: string
+        }>
+        CreationSuccess: ContractEventLog<{
+            total: string
+            id: string
+            name: string
+            message: string
+            creator: string
+            creation_time: string
+            token_address: string
+            0: string
+            1: string
+            2: string
+            3: string
+            4: string
+            5: string
+            6: string
+        }>
+        RefundSuccess: ContractEventLog<{
+            id: string
+            token_address: string
+            remaining_balance: string
+            0: string
+            1: string
+            2: string
+        }>
+        allEvents: (options?: EventOptions, cb?: Callback<EventLog>) => EventEmitter
     }
 
     once(event: 'ClaimSuccess', cb: Callback<ClaimSuccess>): void

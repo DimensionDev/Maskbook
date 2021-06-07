@@ -3,13 +3,15 @@ import { DialogContent } from '@material-ui/core'
 import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import type { RedPacketJSONPayload } from '../types'
+import { RedPacketJSONPayload, DialogTabs } from '../types'
 import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { RedPacketMetaKey } from '../constants'
 import { RedPacketForm } from './RedPacketForm'
-import { RedPacketBacklogList } from './RedPacketList'
+import { RedPacketHistoryList } from './RedPacketHistoryList'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { RedPacketRPC } from '../messages'
+import Services from '../../../extension/service'
+import Web3Utils from 'web3-utils'
+import { useAccount, useChainId } from '@dimensiondev/web3-shared'
 
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean
@@ -20,20 +22,42 @@ interface RedPacketDialogProps extends withClasses<never> {
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
     const { onConfirm } = props
+    const chainId = useChainId()
+    const account = useAccount()
 
     const onCreateOrSelect = useCallback(
-        (payload: RedPacketJSONPayload) => {
+        async (payload: RedPacketJSONPayload) => {
+            if (payload.password === '') {
+                if (payload.contract_version === 1) {
+                    alert('Unable to share a red packet without a password. But you can still withdraw the red packet.')
+                    payload.password = prompt('Please enter the password of the red packet:', '') ?? ''
+                }
+
+                if (payload.contract_version === 2) {
+                    payload.password = await Services.Ethereum.personalSign(
+                        Web3Utils.sha3(payload.sender.message) ?? '',
+                        account,
+                    )
+                    payload.password = payload.password!.slice(2)
+                }
+            }
+
             editActivatedPostMetadata((next) =>
                 payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey),
             )
             onConfirm(payload)
-            // storing the created red packet in DB, it helps retrieve red packet password later
-            RedPacketRPC.discoverRedPacket('', payload)
         },
-        [onConfirm],
+        [onConfirm, chainId],
     )
 
-    const state = useState(0)
+    const state = useState(DialogTabs.create)
+
+    const onClose = useCallback(() => {
+        const [, setValue] = state
+        setValue(DialogTabs.create)
+        props.onClose()
+    }, [props, state])
+
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -45,7 +69,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             },
             {
                 label: t('plugin_red_packet_select_existing'),
-                children: <RedPacketBacklogList onSelect={onCreateOrSelect} />,
+                children: <RedPacketHistoryList onSelect={onCreateOrSelect} onClose={onClose} />,
                 sx: { p: 0 },
             },
         ],
@@ -53,7 +77,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }
 
     return (
-        <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={props.onClose}>
+        <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={onClose}>
             <DialogContent>
                 <AbstractTab height={320} {...tabProps} />
             </DialogContent>
