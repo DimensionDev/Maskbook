@@ -11,6 +11,7 @@ export async function getAvailableTraderProviders(chainId: ChainId, type: TagTyp
             TradeProvider.ZRX,
             TradeProvider.BALANCER,
             TradeProvider.SASHIMISWAP,
+            TradeProvider.QUICKSWAP,
         ]
     return []
 }
