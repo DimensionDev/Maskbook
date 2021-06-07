@@ -1,5 +1,21 @@
 import { ChainId, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
-import { WETH_ONLY, DAI, USDC, USDT, COMP, QUICK, ETHER, UNITOKEN, EASY, IGG, WBTC, OM, TT01, TT02 } from './trader'
+import {
+    WETH_ONLY,
+    WETH,
+    DAI,
+    USDC,
+    USDT,
+    COMP,
+    QUICK,
+    ETHER,
+    UNITOKEN,
+    EASY,
+    IGG,
+    WBTC,
+    OM,
+    TT01,
+    TT02,
+} from './trader'
 
 /**
  * Some tokens can only be swapped via certain pairs,
@@ -15,8 +31,8 @@ export const QUICKSWAP_BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
     ...WETH_ONLY,
-    [ChainId.Matic]: [WETH_ONLY, DAI, USDC, USDT, COMP, QUICK, ETHER, UNITOKEN, EASY, IGG, WBTC, OM, TT01, TT02].map(
-        (x) => x[ChainId.Matic] as ERC20TokenDetailed,
+    [ChainId.Matic]: [WETH, DAI, USDC, USDT, COMP, QUICK, ETHER, UNITOKEN, EASY, IGG, WBTC, OM, TT01, TT02].map(
+        (x) => x[ChainId.Matic],
     ),
 }
 

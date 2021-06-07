@@ -8,12 +8,16 @@ import {
     SUSHISWAP_CUSTOM_BASES,
     SUSHISWAP_INIT_CODE_HASH,
     THEGRAPH_SASHIMISWAP,
+    THEGRAPH_QUICKSWAP,
     THEGRAPH_SUSHISWAP_FORK,
     THEGRAPH_UNISWAP_V2,
     TRADE_CONSTANTS,
     UNISWAP_BASE_AGAINST_TOKENS,
     UNISWAP_CUSTOM_BASES,
     UNISWAP_INIT_CODE_HASH,
+    QUICKSWAP_INIT_CODE_HASH,
+    QUICKSWAP_BASE_AGAINST_TOKENS,
+    QUICKSWAP_CUSTOM_BASES,
 } from '../constants'
 import { TradeContext as TradeContext_, TradeProvider } from '../types'
 
@@ -49,6 +53,15 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     FACTORY_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'SASHIMISWAP_FACTORY_ADDRESS', chainId),
                     AGAINST_TOKENS: SASHIMISWAP_BASE_AGAINST_TOKENS,
                     CUSTOM_TOKENS: SASHIMISWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.QUICKSWAP:
+                return {
+                    GRAPH_API: THEGRAPH_QUICKSWAP,
+                    INIT_CODE_HASH: QUICKSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'QUICKSWAP_ROUTER_ADDRESS', chainId),
+                    FACTORY_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'QUICKSWAP_FACTORY_ADDRESS', chainId),
+                    AGAINST_TOKENS: QUICKSWAP_BASE_AGAINST_TOKENS,
+                    CUSTOM_TOKENS: QUICKSWAP_CUSTOM_BASES,
                 }
             default:
                 return null
