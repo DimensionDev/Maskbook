@@ -12,15 +12,14 @@ export function PostRecordToJSONFormat(post: PostRecord): BackupJSONFileLatest['
         identifier: post.identifier.toText(),
         postBy: post.postBy.toText(),
         recipientGroups: post.recipientGroups.map((x) => x.toText()),
-        recipients: Array.from(post.recipients).map(([identifier, detail]): [
-            string,
-            { reason: RecipientReasonJSON[] },
-        ] => [
-            identifier.toText(),
-            {
-                reason: Array.from(detail.reason).map<RecipientReasonJSON>(RecipientReasonToJSON),
-            },
-        ]),
+        recipients: Array.from(post.recipients).map(
+            ([identifier, detail]): [string, { reason: RecipientReasonJSON[] }] => [
+                identifier.toText(),
+                {
+                    reason: Array.from(detail.reason).map<RecipientReasonJSON>(RecipientReasonToJSON),
+                },
+            ],
+        ),
     }
 }
 
