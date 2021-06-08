@@ -6,6 +6,7 @@ import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { TokenTable } from '../TokenTable'
 import { useDashboardI18N } from '../../../../locales'
 import { AddTokenDialog } from '../AddTokenDialog'
+import { CollectibleList } from '../CollectibleList'
 
 const useStyles = makeStyles((theme) => ({
     caption: {
@@ -35,7 +36,7 @@ export enum AssetTab {
     Collections = 'Collections',
 }
 
-const assetTabs = [AssetTab.Token, AssetTab.Investment, AssetTab.Collections] as const
+const assetTabs = [AssetTab.Token, AssetTab.Collections] as const
 
 export const TokenAssets = memo(() => {
     const t = useDashboardI18N()
@@ -69,8 +70,17 @@ export const TokenAssets = memo(() => {
                             + {t.wallets_assets_custom_token()}
                         </Button>
                     </Box>
-                    <TabPanel value={AssetTab.Token} key={AssetTab.Token} className={classes.tab}>
+                    <TabPanel
+                        value={AssetTab.Token}
+                        key={AssetTab.Token}
+                        className={activeTab === AssetTab.Token ? classes.tab : undefined}>
                         <TokenTable />
+                    </TabPanel>
+                    <TabPanel
+                        value={AssetTab.Collections}
+                        key={AssetTab.Collections}
+                        className={activeTab === AssetTab.Collections ? classes.tab : undefined}>
+                        <CollectibleList />
                     </TabPanel>
                 </TabContext>
             </ShapeContainer>

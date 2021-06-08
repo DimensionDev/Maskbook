@@ -40,10 +40,18 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    selected: {
-        color: '#ffffff',
-        //TODO: https://github.com/mui-org/material-ui/issues/26565
-        backgroundColor: `${MaskColorVar.blue}!important`,
+    paginationItem: {
+        borderRadius: 4,
+        border: `1px solid ${MaskColorVar.lineLight}`,
+        color: MaskColorVar.textPrimary,
+        '&.Mui-selected': {
+            backgroundColor: MaskColorVar.blue,
+            color: '#ffffff',
+            border: 'none',
+            '&:hover': {
+                backgroundColor: MaskColorVar.blue,
+            },
+        },
     },
 }))
 
@@ -120,10 +128,10 @@ export const TokenTable = memo(() => {
                     <Pagination
                         variant="outlined"
                         shape="rounded"
-                        count={ceil(value?.count ?? 0 / 50) ?? 1}
+                        count={ceil((value?.count ?? 0) / 50) ?? 1}
                         page={page}
                         onChange={(event, page) => setPage(page)}
-                        renderItem={(item) => <PaginationItem {...item} classes={{ selected: classes.selected }} />}
+                        renderItem={(item) => <PaginationItem {...item} classes={{ root: classes.paginationItem }} />}
                     />
                 </Box>
             ) : null}

@@ -67,7 +67,7 @@ export async function getAssetsListNFT(
                             unreachable(x.asset_contract.schema_name)
                     }
                 }),
-            hasNextPage: assets.length === 50,
+            hasNextPage: assets.length === size,
         }
     }
     return {

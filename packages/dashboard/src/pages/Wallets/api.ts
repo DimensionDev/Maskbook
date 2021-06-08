@@ -5,3 +5,8 @@ export const [useCurrentPortfolioDataProvider] = createGlobalState(
     Services.Settings.getCurrentPortfolioDataProvider,
     (x) => Messages.events.createInternalSettingsChanged.on(x),
 )
+
+export const [useCurrentCollectibleDataProvider] = createGlobalState(
+    Services.Settings.getCurrentCollectibleDataProvider,
+    (x) => Messages.events.createInternalSettingsChanged.on(x),
+)

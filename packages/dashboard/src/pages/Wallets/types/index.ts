@@ -24,3 +24,7 @@ export interface Asset {
     }
     logoURL?: string
 }
+
+export enum CollectibleProvider {
+    OPENSEAN,
+}
