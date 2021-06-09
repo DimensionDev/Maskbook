@@ -2,11 +2,12 @@ import { memo } from 'react'
 import type { Asset } from '../../types'
 import { Box, TableRow, Typography, makeStyles, TableCell, Button } from '@material-ui/core'
 import { TokenIcon } from '../TokenIcon'
-import { formatBalance, formatCurrency } from '@dimensiondev/maskbook-shared'
+import { formatBalance, formatCurrency, FormattedCurrency } from '@dimensiondev/maskbook-shared'
 import { CurrencyType } from '@dimensiondev/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useHistory } from 'react-router'
 import { Routes } from '../../../../type'
+import { getTokenUSDValue } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
     symbol: {
@@ -52,9 +53,11 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
             </TableCell>
             <TableCell className={classes.cell} align="center">
                 <Typography>
-                    {new BigNumber(formatBalance(asset.balance, asset.token.decimals)).isLessThan(0.01)
-                        ? '<0.01'
-                        : new BigNumber(formatBalance(asset.balance, asset.token.decimals)).toFixed(2)}
+                    {getTokenUSDValue(asset) < 0.01 ? (
+                        '<0.01'
+                    ) : (
+                        <FormattedCurrency value={getTokenUSDValue(asset).toFixed(2)} sign={'$'} />
+                    )}
                 </Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
