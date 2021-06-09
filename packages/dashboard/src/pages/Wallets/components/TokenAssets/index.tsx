@@ -7,6 +7,7 @@ import { TokenTable } from '../TokenTable'
 import { useDashboardI18N } from '../../../../locales'
 import { AddTokenDialog } from '../AddTokenDialog'
 import { CollectibleList } from '../CollectibleList'
+import { AddCollectibleDialog } from '../AddCollectibleDialog'
 
 const useStyles = makeStyles((theme) => ({
     caption: {
@@ -51,6 +52,7 @@ export const TokenAssets = memo(() => {
     const [activeTab, setActiveTab] = useState<AssetTab>(assetTabs[0])
 
     const [addTokenOpen, setAddTokenOpen] = useState(false)
+    const [addCollectibleOpen, setAddCollectibleOpen] = useState(false)
 
     return (
         <>
@@ -66,8 +68,13 @@ export const TokenAssets = memo(() => {
                         <Button
                             color="secondary"
                             className={classes.addCustomTokenButton}
-                            onClick={() => setAddTokenOpen(true)}>
-                            + {t.wallets_assets_custom_token()}
+                            onClick={() =>
+                                activeTab === AssetTab.Token ? setAddTokenOpen(true) : setAddCollectibleOpen(true)
+                            }>
+                            +{' '}
+                            {activeTab === AssetTab.Token
+                                ? t.wallets_assets_custom_token()
+                                : t.wallets_assets_custom_collectible()}
                         </Button>
                     </Box>
                     <TabPanel
@@ -85,6 +92,7 @@ export const TokenAssets = memo(() => {
                 </TabContext>
             </ShapeContainer>
             <AddTokenDialog open={addTokenOpen} onClose={() => setAddTokenOpen(false)} />
+            <AddCollectibleDialog open={addCollectibleOpen} onClose={() => setAddCollectibleOpen(false)} />
         </>
     )
 })

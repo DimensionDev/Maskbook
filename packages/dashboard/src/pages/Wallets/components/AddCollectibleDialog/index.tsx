@@ -1,6 +1,10 @@
-import React, { memo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { MaskColorVar, MaskDialog } from '@dimensiondev/maskbook-theme'
-import { Box, DialogContent, makeStyles, TextField } from '@material-ui/core'
+import { Box, Button, DialogActions, DialogContent, makeStyles, TextField } from '@material-ui/core'
+import { useERC721TokenAssetDetailed, useERC721TokenDetailed, useWallet } from '@dimensiondev/web3-shared'
+import { useSnackbarCallback } from '../../../../hooks/useSnackbarCallback'
+import { PluginServices } from '../../../../API'
+import { EthereumAddress } from 'wallet.ts'
 
 export interface AddCollectibleDialogProps {
     open: boolean
@@ -11,21 +15,83 @@ const useStyles = makeStyles((theme) => ({
     title: {
         fontSize: theme.typography.pxToRem(12),
         color: MaskColorVar.textPrimary,
+        fontWeight: 500,
+        marginBottom: 10,
     },
 }))
 
 export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose }) => {
-    const classes = useStyles()
+    const [address, setAddress] = useState('')
+
+    const wallet = useWallet()
+    const tokenDetailed = useERC721TokenDetailed(address)
+    const assetDetailed = useERC721TokenAssetDetailed(tokenDetailed.value)
+
+    const onSubmit = useSnackbarCallback({
+        executor: async () => {
+            if (!tokenDetailed.value || !assetDetailed.value || !wallet) return
+            await Promise.all([
+                PluginServices.Wallet.addERC721Token({
+                    ...tokenDetailed.value,
+                    asset: assetDetailed.value,
+                }),
+                PluginServices.Wallet.trustERC721Token(wallet.address, tokenDetailed.value),
+            ])
+        },
+        deps: [wallet, tokenDetailed, assetDetailed],
+        onSuccess: onClose,
+    })
+
     return (
-        <MaskDialog open={open} title="Add Collectible">
+        <MaskDialog open={open} title="Add Collectible" onClose={onClose}>
+            <AddCollectibleUI
+                address={address}
+                setAddress={setAddress}
+                onSubmit={onSubmit}
+                exclude={Array.from(wallet?.erc721_token_whitelist ?? [])}
+            />
+        </MaskDialog>
+    )
+})
+
+export interface AddCollectibleUIProps {
+    address: string
+    exclude: string[]
+    setAddress: (address: string) => void
+    onSubmit: () => void
+}
+
+export const AddCollectibleUI = memo<AddCollectibleUIProps>(({ address, exclude, setAddress, onSubmit }) => {
+    const classes = useStyles()
+
+    const validateAddressMessage = useMemo(() => {
+        if (address.length && !EthereumAddress.isValid(address)) return 'Incorrect contract address.'
+        if (exclude.find((item) => item === address)) return 'The Collectible has already been added'
+        return ''
+    }, [address])
+
+    return (
+        <>
             <DialogContent>
                 <form>
                     <Box style={{ display: 'flex', flexDirection: 'column' }}>
                         <label className={classes.title}>Collectible Address</label>
-                        <TextField variant="filled" InputProps={{ disableUnderline: true }} />
+                        <TextField
+                            variant="filled"
+                            InputProps={{ disableUnderline: true }}
+                            value={address}
+                            error={!!validateAddressMessage}
+                            helperText={validateAddressMessage}
+                            onChange={(e) => setAddress(e.target.value)}
+                        />
                     </Box>
                 </form>
             </DialogContent>
-        </MaskDialog>
+            <DialogActions>
+                <Button color="primary" onClick={onSubmit}>
+                    Add
+                </Button>
+            </DialogActions>
+        </>
     )
 })
