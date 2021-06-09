@@ -16,6 +16,7 @@ import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { CollectibleCard } from '../CollectibleCard'
 import type { CollectibleProvider } from '../../types'
+import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -56,6 +57,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 export const CollectibleList = memo(() => {
+    const t = useDashboardI18N()
     const classes = useStyles()
 
     const [page, setPage] = useState(0)
@@ -90,7 +92,7 @@ export const CollectibleList = memo(() => {
                 {collectiblesLoading ? (
                     <LoadingPlaceholder />
                 ) : collectiblesError || collectibles.length === 0 ? (
-                    <EmptyPlaceholder prompt="No assets were found. Please add tokens" />
+                    <EmptyPlaceholder prompt={t.wallets_empty_collectible_tip()} />
                 ) : (
                     <CollectibleListUI dataSource={dataSource} chainId={chainId} provider={provider} />
                 )}

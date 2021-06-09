@@ -8,6 +8,7 @@ import BigNumber from 'bignumber.js'
 import { useHistory } from 'react-router'
 import { Routes } from '../../../../type'
 import { getTokenUSDValue } from '../../helpers'
+import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles((theme) => ({
     symbol: {
@@ -24,6 +25,7 @@ export interface TokenTableRowProps {
 }
 
 export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
+    const t = useDashboardI18N()
     const classes = useStyles()
     const history = useHistory()
     return (
@@ -66,10 +68,10 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
                     color="secondary"
                     sx={{ marginRight: 1 }}
                     onClick={() => history.push(Routes.WalletsTransfer)}>
-                    Send
+                    {t.wallets_balance_Send()}
                 </Button>
                 <Button variant="outlined" color="secondary">
-                    Swap
+                    {t.wallets_balance_Swap()}
                 </Button>
             </TableCell>
         </TableRow>

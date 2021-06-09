@@ -75,7 +75,7 @@ export const TokenTable = memo(() => {
                     <Box flex={1}>
                         {detailedTokensLoading ? <LoadingPlaceholder /> : null}
                         {detailedTokensError || !detailedTokens.length ? (
-                            <EmptyPlaceholder prompt="No assets were queried. Please add tokens." />
+                            <EmptyPlaceholder prompt={t.wallets_empty_tokens_tip()} />
                         ) : null}
                     </Box>
                 ) : (

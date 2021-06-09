@@ -7,6 +7,7 @@ import { TokenIcon } from '../TokenIcon'
 import { useUpdateEffect } from 'react-use'
 import { useSnackbarCallback } from '../../../../hooks/useSnackbarCallback'
 import { PluginServices } from '../../../../API'
+import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -59,6 +60,7 @@ enum AddTokenStep {
 }
 
 export const AddTokenDialog = memo<AddTokenDialogProps>(({ open, onClose }) => {
+    const t = useDashboardI18N()
     const [step, setStep] = useState<AddTokenStep>(AddTokenStep.INFORMATION)
     const [address, setAddress] = useState('')
 
@@ -87,7 +89,7 @@ export const AddTokenDialog = memo<AddTokenDialogProps>(({ open, onClose }) => {
     }, [open])
 
     return (
-        <MaskDialog open={open} title="Add Token" onClose={onClose}>
+        <MaskDialog open={open} title={t.wallets_add_token()} onClose={onClose}>
             {step === AddTokenStep.INFORMATION ? (
                 <AddTokenFormUI
                     address={address}
@@ -125,24 +127,25 @@ export interface AddTokenFormUIProps {
 
 export const AddTokenFormUI = memo<AddTokenFormUIProps>(
     ({ address, setAddress, token, open, exclude, onClose, onNext }) => {
+        const t = useDashboardI18N()
         const classes = useStyles()
         const [symbol, setSymbol] = useState('')
         const [decimals, setDecimals] = useState('')
 
         const validateAddressMessage = useMemo(() => {
-            if (address.length && !EthereumAddress.isValid(address)) return 'Incorrect contract address.'
-            if (exclude.find((item) => item === address)) return 'Token has already been added'
+            if (address.length && !EthereumAddress.isValid(address)) return t.wallets_incorrect_address()
+            if (exclude.find((item) => item === address)) return t.wallets_token_been_added()
             return ''
         }, [address])
 
         const validateSymbolMessage = useMemo(() => {
-            if (symbol.length && symbol.length > 11) return 'Symbol must be 11 characters or fewer.'
+            if (symbol.length && symbol.length > 11) return t.wallets_token_symbol_tips()
             return ''
         }, [])
 
         const validateDecimalsMessage = useMemo(() => {
             if (decimals.length && (Number(decimals) < 0 || Number(decimals) > 18))
-                return 'Decimals must be at least 0, and not over 18.'
+                return t.wallets_token_decimals_tips()
             return ''
         }, [decimals])
 
@@ -166,7 +169,7 @@ export const AddTokenFormUI = memo<AddTokenFormUIProps>(
                 <DialogContent className={classes.content}>
                     <form>
                         <div className={classes.item}>
-                            <label className={classes.title}>Token Contract Address</label>
+                            <label className={classes.title}>{t.wallets_add_token_contract_address()}</label>
                             <TextField
                                 variant="filled"
                                 value={address}
@@ -177,7 +180,7 @@ export const AddTokenFormUI = memo<AddTokenFormUIProps>(
                             />
                         </div>
                         <div className={classes.item}>
-                            <label className={classes.title}>Token Symbol</label>
+                            <label className={classes.title}>{t.wallets_add_token_symbol()}</label>
                             <TextField
                                 variant="filled"
                                 value={symbol}
@@ -188,7 +191,7 @@ export const AddTokenFormUI = memo<AddTokenFormUIProps>(
                             />
                         </div>
                         <div className={classes.item}>
-                            <label className={classes.title}>Decimals of Precision</label>
+                            <label className={classes.title}>{t.wallets_add_token_decimals()}</label>
                             <TextField
                                 variant="filled"
                                 type="number"
@@ -205,7 +208,7 @@ export const AddTokenFormUI = memo<AddTokenFormUIProps>(
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button color="secondary" className={classes.button} onClick={onClose}>
-                        Cancel
+                        {t.wallets_add_token_cancel()}
                     </Button>
                     <Button
                         color="primary"
@@ -219,7 +222,7 @@ export const AddTokenFormUI = memo<AddTokenFormUIProps>(
                             !!validateSymbolMessage ||
                             !!validateDecimalsMessage
                         }>
-                        Next
+                        {t.wallets_add_token_next()}
                     </Button>
                 </DialogActions>
             </>
@@ -235,6 +238,7 @@ export interface AddTokenConfirmUIProps {
 }
 
 export const AddTokenConfirmUI = memo<AddTokenConfirmUIProps>(({ token, balance, onBack, onConfirm }) => {
+    const t = useDashboardI18N()
     const classes = useStyles()
 
     return (
@@ -242,8 +246,8 @@ export const AddTokenConfirmUI = memo<AddTokenConfirmUIProps>(({ token, balance,
             <DialogContent className={classes.content}>
                 <Stack spacing={4.5} className={classes.container}>
                     <Box>
-                        <Typography className={classes.confirmTitle}>Token</Typography>
-                        <Typography className={classes.confirmTitle}>Balance</Typography>
+                        <Typography className={classes.confirmTitle}>{t.wallets_assets_token()}</Typography>
+                        <Typography className={classes.confirmTitle}>{t.wallets_assets_balance()}</Typography>
                     </Box>
                     <Box>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -265,10 +269,10 @@ export const AddTokenConfirmUI = memo<AddTokenConfirmUIProps>(({ token, balance,
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <Button color="secondary" className={classes.button} onClick={onBack}>
-                    Cancel
+                    {t.wallets_add_token_cancel()}
                 </Button>
                 <Button color="primary" className={classes.button} onClick={onConfirm}>
-                    Add Token
+                    {t.wallets_add_token()}
                 </Button>
             </DialogActions>
         </>

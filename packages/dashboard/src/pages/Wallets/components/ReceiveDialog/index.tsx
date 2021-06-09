@@ -40,7 +40,7 @@ export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, wallet
     const copyWalletAddress = useSnackbarCallback({
         executor: async (address: string) => copyToClipboard(address),
         deps: [],
-        successText: 'Address successfully copied',
+        successText: t.wallets_address_copied(),
     })
 
     return (
@@ -71,7 +71,7 @@ export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, wallet
             </DialogContent>
             <DialogActions>
                 <Button size="medium" onClick={() => copyWalletAddress(walletAddress)}>
-                    copy
+                    {t.wallets_address_copy()}
                 </Button>
             </DialogActions>
         </MaskDialog>

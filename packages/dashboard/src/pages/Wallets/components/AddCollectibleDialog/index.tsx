@@ -5,6 +5,7 @@ import { useERC721TokenAssetDetailed, useERC721TokenDetailed, useWallet } from '
 import { useSnackbarCallback } from '../../../../hooks/useSnackbarCallback'
 import { PluginServices } from '../../../../API'
 import { EthereumAddress } from 'wallet.ts'
+import { useDashboardI18N } from '../../../../locales'
 
 export interface AddCollectibleDialogProps {
     open: boolean
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose }) => {
+    const t = useDashboardI18N()
     const [address, setAddress] = useState('')
 
     const wallet = useWallet()
@@ -43,7 +45,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     })
 
     return (
-        <MaskDialog open={open} title="Add Collectible" onClose={onClose}>
+        <MaskDialog open={open} title={t.wallets_add_collectible()} onClose={onClose}>
             <AddCollectibleUI
                 address={address}
                 setAddress={setAddress}
@@ -62,11 +64,12 @@ export interface AddCollectibleUIProps {
 }
 
 export const AddCollectibleUI = memo<AddCollectibleUIProps>(({ address, exclude, setAddress, onSubmit }) => {
+    const t = useDashboardI18N()
     const classes = useStyles()
 
     const validateAddressMessage = useMemo(() => {
-        if (address.length && !EthereumAddress.isValid(address)) return 'Incorrect contract address.'
-        if (exclude.find((item) => item === address)) return 'The Collectible has already been added'
+        if (address.length && !EthereumAddress.isValid(address)) return t.wallets_incorrect_address()
+        if (exclude.find((item) => item === address)) return t.wallets_collectible_been_added()
         return ''
     }, [address])
 
@@ -89,7 +92,7 @@ export const AddCollectibleUI = memo<AddCollectibleUIProps>(({ address, exclude,
             </DialogContent>
             <DialogActions>
                 <Button color="primary" onClick={onSubmit}>
-                    Add
+                    {t.wallets_collectible_add()}
                 </Button>
             </DialogActions>
         </>
