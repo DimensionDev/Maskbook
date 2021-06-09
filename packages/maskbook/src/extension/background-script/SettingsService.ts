@@ -18,9 +18,6 @@ import {
     currentProviderSettings,
     currentChainIdSettings,
     currentPortfolioDataProviderSettings,
-    currentSelectedWalletAddressSettings,
-    currentSelectedWalletNetworkSettings,
-    currentSelectedWalletProviderSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
 

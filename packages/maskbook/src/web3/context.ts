@@ -36,8 +36,6 @@ export const Web3Context: Web3ProviderType = {
     wallets: createSubscriptionAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
     providerType: createSubscriptionFromSettings(currentProviderSettings),
     networkType: createSubscriptionFromSettings(currentNetworkSettings),
-    erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
-    erc721Tokens: createSubscriptionAsync(getERC721Tokens, [], WalletMessages.events.erc721TokensUpdated.on),
 }
 
 async function getWallets() {
