@@ -1,4 +1,4 @@
-import type { DataProvider, TagType } from './types'
+import type { TagType, DataProvider, TradeProvider } from './types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { createPluginRPC } from '../utils/createPluginRPC'
@@ -9,6 +9,7 @@ interface CashTagEvent {
     type: TagType
     element: HTMLAnchorElement | null
     dataProviders: DataProvider[]
+    tradeProviders: TradeProvider[]
 }
 
 interface SwapSettingsEvent {

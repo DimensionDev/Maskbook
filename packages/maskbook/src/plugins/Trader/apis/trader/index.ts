@@ -1,9 +1,10 @@
 import { safeUnreachable } from '@dimensiondev/maskbook-shared'
-import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@dimensiondev/web3-shared'
+import { getNetworkTypeFromChainId, NetworkType } from '@dimensiondev/web3-shared'
+import { currentChainIdSettings } from '../../../Wallet/settings'
 import { TagType, TradeProvider } from '../../types'
 
-export async function getAvailableTraderProviders(chainId: ChainId, type: TagType, keyword: string) {
-    const networkType = getNetworkTypeFromChainId(chainId)
+export async function getAvailableTraderProviders(type: TagType, keyword: string) {
+    const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
 
     switch (networkType) {
         case NetworkType.Ethereum:
