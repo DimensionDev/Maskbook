@@ -8,6 +8,7 @@ import { useTradeCallback as useBalancerCallback } from './balancer/useTradeCall
 import { useRouterV2Contract as useUniswapRouterV2Contract } from '../contracts/uniswap/useRouterV2Contract'
 import { useRouterV2Contract as useSushiSwapRouterV2Contract } from '../contracts/sushiswap/useRouterV2Contract'
 import { useRouterV2Contract as useSashimiSwapRouterV2Contract } from '../contracts/sashimiswap/useRouterV2Contract'
+import { useRouterV2Contract as useQuickSwapRouterV2Contract } from '../contracts/quickswap/useRouterV2Contract'
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract'
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { isNativeTokenWrapper } from '../helpers'
@@ -17,6 +18,7 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
     const uniswapRouterV2Contract = useUniswapRouterV2Contract()
     const sushiswapRouterV2Contract = useSushiSwapRouterV2Contract()
     const sashimiswapRouterV2Contract = useSashimiSwapRouterV2Contract()
+    const quickswapRouterV2Contract = useQuickSwapRouterV2Contract()
     const exchangeProxyContract = useExchangeProxyContract()
 
     // create trade callbacks
@@ -42,6 +44,10 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
             : null,
         sashimiswapRouterV2Contract,
     )
+    const quickswap = useUniswapCallback(
+        provider === TradeProvider.QUICKSWAP && !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<Trade>) : null,
+        quickswapRouterV2Contract,
+    )
     const balancer = useBalancerCallback(
         provider === TradeProvider.BALANCER && !isNativeTokenWrapper_
             ? (tradeComputed as TradeComputed<SwapResponse>)
@@ -63,8 +69,7 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         case TradeProvider.SASHIMISWAP:
             return sashimiswap
         case TradeProvider.QUICKSWAP:
-            // FIXME: return a quickswap instane
-            return balancer
+            return quickswap
         case TradeProvider.BALANCER:
             return balancer
         default:
