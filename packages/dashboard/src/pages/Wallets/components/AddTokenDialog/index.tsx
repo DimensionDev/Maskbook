@@ -178,6 +178,17 @@ export const AddTokenFormUI = memo<AddTokenFormUIProps>(
             return ''
         }, [decimals])
 
+        const disableButton = useMemo(
+            () =>
+                !address ||
+                !symbol ||
+                !decimals ||
+                !!validateAddressMessage ||
+                !!validateSymbolMessage ||
+                !!validateDecimalsMessage,
+            [address, symbol, decimals, validateAddressMessage, validateSymbolMessage, validateDecimalsMessage],
+        )
+
         useEffect(() => {
             if (token) {
                 setSymbol(token.symbol ?? '')
@@ -239,18 +250,7 @@ export const AddTokenFormUI = memo<AddTokenFormUIProps>(
                     <Button color="secondary" className={classes.button} onClick={onClose}>
                         {t.wallets_add_token_cancel()}
                     </Button>
-                    <Button
-                        color="primary"
-                        className={classes.button}
-                        onClick={onNext}
-                        disabled={
-                            !address ||
-                            !symbol ||
-                            !decimals ||
-                            !!validateAddressMessage ||
-                            !!validateSymbolMessage ||
-                            !!validateDecimalsMessage
-                        }>
+                    <Button color="primary" className={classes.button} onClick={onNext} disabled={disableButton}>
                         {t.wallets_add_token_next()}
                     </Button>
                 </DialogActions>
