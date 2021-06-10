@@ -1,6 +1,6 @@
 import { createRoot, render as legacyRender, unmountComponentAtNode as legacyUnmount, Root } from 'react-dom'
-import type {} from 'react/experimental'
-import type {} from 'react-dom/experimental'
+import type {} from 'react/next'
+import type {} from 'react-dom/next'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'
 
 export interface RenderInShadowRootConfig {

@@ -1,6 +1,6 @@
 import { setDOMImpl } from 'ef.js'
-import type {} from 'react/experimental'
-import type {} from 'react-dom/experimental'
+import type {} from 'react/next'
+import type {} from 'react-dom/next'
 import { createReactRootShadowedPartial, ReactRootShadowed } from '@dimensiondev/maskbook-shared'
 import * as Components from './Components'
 
