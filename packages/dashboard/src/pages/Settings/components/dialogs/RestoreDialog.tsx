@@ -99,15 +99,6 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
 
         await Services.Welcome.restoreBackup(json)
     }
-    const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
-        setTab(newValue)
-    }
-    const handleFileChange = (file: File, content?: string) => {
-        setContent(content || '')
-    }
-    const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setText(event.target.value)
-    }
 
     const permission = useAsync(async () => {
         const str = tab === 'file' ? content : text
@@ -131,13 +122,13 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
             onConfirm={handleConfirm}>
             <div className={classes.container}>
                 <TabContext value={tab}>
-                    <StyledTabList onChange={handleTabChange}>
+                    <StyledTabList onChange={(_, val) => setTab(val)}>
                         <StyledTab label="File" value="file" />
                         <StyledTab label="Text" value="text" />
                     </StyledTabList>
                     <StyledTabPanel value="file">
                         <div className={json && content ? classes.hide : ''}>
-                            <FileUpload height={180} readAsText onChange={handleFileChange} />
+                            <FileUpload height={180} readAsText onChange={(_, content) => setContent(content || '')} />
                         </div>
                         <div className={json && content ? '' : classes.hide}>
                             <BackupPreviewCard json={json} />
@@ -147,7 +138,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
                         <div className={json && text ? classes.hide : ''}>
                             <TextArea
                                 value={text}
-                                onChange={handleTextChange}
+                                onChange={(event) => setText(event.target.value)}
                                 fullWidth
                                 multiline
                                 maxRows={6}
