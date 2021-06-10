@@ -64,7 +64,7 @@ export function CollectibleList(props: CollectibleListProps) {
         loading: collectiblesLoading,
         retry: collectiblesRetry,
         error: collectiblesError,
-    } = useCollectibles('0x3c6137504c38215fea30605b3e364a23c1d3e14f', provider, page)
+    } = useCollectibles(account, provider, page)
 
     const { collectibles = [], hasNextPage } = value
 
