@@ -23,7 +23,7 @@ import {
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
 import { ITO_CONSTANTS } from '../constants'
-import { GasPriceButton } from '../../../web3/UI/GasPriceButton'
+import { TxFeeEstimation } from '../../../web3/UI/TxFeeEstimation'
 
 const useSwapItemStyles = makeStyles((theme) => ({
     root: {
@@ -305,7 +305,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 </Grid>
                 {Flags.wallet_gas_price_dialog_enable ? (
                     <Grid item xs={12} className={classes.gasPriceWrapper}>
-                        <GasPriceButton ButtonProps={{ variant: 'text', color: 'secondary' }} />
+                        <TxFeeEstimation ButtonProps={{ variant: 'text', color: 'secondary' }} />
                     </Grid>
                 ) : null}
             </Grid>

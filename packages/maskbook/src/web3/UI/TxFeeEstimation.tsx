@@ -9,11 +9,11 @@ import { useState, useCallback, useMemo } from 'react'
 
 const useStyles = makeStyles(() => {})
 
-interface GasPriceButtonProps extends withClasses<'gasPriceButton'> {
+interface TxFeeEstimationProps extends withClasses<'TxFeeEstimation'> {
     ButtonProps?: Partial<ButtonProps>
 }
 
-export function GasPriceButton(props: GasPriceButtonProps) {
+export function TxFeeEstimation(props: TxFeeEstimationProps) {
     const { t } = useI18N()
     const _gasPrice = useGasPrice()
     const networkType = useNetworkType()
@@ -39,7 +39,7 @@ export function GasPriceButton(props: GasPriceButtonProps) {
 
     return networkType === NetworkType.Ethereum ? (
         <Button
-            className={classes.gasPriceButton}
+            className={classes.TxFeeEstimation}
             color={props.ButtonProps?.color ?? 'primary'}
             variant={props.ButtonProps?.variant ?? 'outlined'}
             onClick={() => setGasPriceDialog({ open: true })}>
