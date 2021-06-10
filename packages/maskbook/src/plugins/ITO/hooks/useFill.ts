@@ -269,14 +269,14 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
         ) as Parameters<ITO['methods']['fill_pool']>
 
         let gasError = null as Error | null
-        const gas = await ITO_Contract.methods
+        const gas = (await ITO_Contract.methods
             .fill_pool(...params)
             .estimateGas({
                 from: account,
             })
             .catch((err: Error) => {
                 gasError = err
-            })
+            })) as number | undefined
 
         return { gas, params, paramsObj, gasError }
     }, [poolSettings]).value
