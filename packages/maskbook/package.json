@@ -153,7 +153,6 @@
     "openzeppelin-solidity": "^3.2.0",
     "react-dev-utils": "^11.0.1",
     "react-devtools-core": "^4.13.5",
-    "react-docgen-typescript-loader": "^3.7.2",
     "react-refresh": "^0.10.0",
     "react-refresh-typescript": "^2.0.1",
     "react-test-renderer": "^17.0.1",
