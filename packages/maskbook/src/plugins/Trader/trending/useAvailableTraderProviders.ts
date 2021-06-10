@@ -7,6 +7,6 @@ export function useAvailableTraderProviders(type: TagType, keyword: string) {
     const chainId = useChainId()
     return useAsync(async () => {
         if (!keyword) return []
-        return PluginTraderRPC.getAvailableTraderProviders(chainId, type, keyword)
+        return PluginTraderRPC.getAvailableTraderProviders(type, keyword)
     }, [chainId, type, keyword])
 }
