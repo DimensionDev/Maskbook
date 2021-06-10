@@ -184,6 +184,8 @@ export namespace SocialNetworkUI {
             identityProvider?: IdentityResolveProvider
             /** Maintain all the posts up-to-date. */
             postsProvider?: PostsProvider
+            /** Get searched keyword */
+            getSearchedKeyword?(): string
             /** @deprecated Seems we don't use it anymore. */
             getPostContent?(): Promise<string>
             /** @deprecated Seems we don't use it anymore. */

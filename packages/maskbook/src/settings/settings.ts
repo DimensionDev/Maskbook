@@ -54,7 +54,6 @@ export const enableGroupSharingSettings = createGlobalSettings<boolean>('experim
 
 export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
 export const currentSelectedIdentity = createNetworkSettings('currentSelectedIdentity')
-
 export const currentSetupGuideStatus = createNetworkSettings('currentSetupGuideStatus')
 export const currentImportingBackup = createGlobalSettings<boolean>('importingBackup', false, {
     primary: () => 'DO NOT DISPLAY IT IN UI',

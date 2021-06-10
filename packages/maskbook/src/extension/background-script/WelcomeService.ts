@@ -97,6 +97,3 @@ export async function openOptionsPage(route?: DashboardRoute, search?: string) {
 }
 
 export { createPersonaByMnemonic } from '../../database'
-export function queryPermission(permission: browser.permissions.Permissions) {
-    return browser.permissions.contains(permission)
-}

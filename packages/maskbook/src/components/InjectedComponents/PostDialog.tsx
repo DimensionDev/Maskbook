@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core'
 import { Plugin, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
 import { CompositionEvent, MaskMessage, useValueRef, useI18N, Flags } from '../../utils'
+import { isMinds } from '../../social-network-adaptor/minds.com/base'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
 import { useFriendsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
@@ -94,6 +95,19 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const { t } = useI18N()
     const isDebug = useValueRef(debugModeSetting)
     const [showPostMetadata, setShowPostMetadata] = useState(false)
+    const [clipboardReadPermissionGranted, setClipboardReadPermissionGranted] = useState<boolean | undefined>(undefined)
+
+    useEffect(() => {
+        Services.Helper.queryPermission({ permissions: ['clipboardRead'] }).then((granted) => {
+            setClipboardReadPermissionGranted(granted)
+        })
+    }, [])
+
+    const requestClipboardPermission = useCallback(async () => {
+        const granted = await Services.Helper.requestBrowserPermission({ permissions: ['clipboardRead'] })
+        setClipboardReadPermissionGranted(Boolean(granted))
+    }, [])
+
     const onPostContentChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
         const newText = e.target.value
         const msg = props.postContent
@@ -235,6 +249,16 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         {isTypedMessageText(props.postContent) && props.maxLength ? (
                             <CharLimitIndicator value={props.postContent.content.length} max={props.maxLength} />
                         ) : null}
+                        {isMinds(activatedSocialNetworkUI) &&
+                            currentImagePayloadStatus[activatedSocialNetworkUI.networkIdentifier].value === 'true' &&
+                            !clipboardReadPermissionGranted && (
+                                <Button
+                                    variant="outlined"
+                                    onClick={requestClipboardPermission}
+                                    data-testid="auto_paste_prompt">
+                                    {'Enable auto paste'}
+                                </Button>
+                            )}
                         <Button
                             className={classes.button}
                             variant="contained"

@@ -1,5 +1,6 @@
 import { stateCreator, SocialNetworkUI, globalUIState } from '../../social-network'
 import { twitterBase } from './base'
+import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword'
 import { twitterShared } from './shared'
 import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
@@ -56,6 +57,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderTwitter,
         postsProvider: PostProviderTwitter,
         profilesCollector: profilesCollectorTwitter,
+        getSearchedKeyword: getSearchedKeywordAtTwitter,
     },
     customization: {
         paletteMode: PaletteModeProviderTwitter,

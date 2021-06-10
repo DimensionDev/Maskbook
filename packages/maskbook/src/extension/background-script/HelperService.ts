@@ -64,3 +64,7 @@ export async function requestBrowserPermission(permission: browser.permissions.P
         })
     })
 }
+
+export function queryPermission(permission: browser.permissions.Permissions) {
+    return browser.permissions.contains(permission)
+}
