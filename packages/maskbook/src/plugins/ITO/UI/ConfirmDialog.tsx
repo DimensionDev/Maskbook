@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useState } from 'react'
 import { makeStyles, Typography, Grid, Paper, Card, IconButton, Link } from '@material-ui/core'
 import { Flags, useI18N } from '../../../utils'
-import { PoolSettings, useFillParams } from '../hooks/useFillCallback'
+import { PoolSettings, useFillParams } from '../hooks/useFill'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import LaunchIcon from '@material-ui/icons/Launch'
 import {

@@ -14,7 +14,7 @@ import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
 import Services from '../../../extension/service'
 import { useChainId, useAccount, TransactionStateType, useConstant } from '@dimensiondev/web3-shared'
-import { PoolSettings, useFillCallback } from '../hooks/useFillCallback'
+import { PoolSettings, useFillCallback } from '../hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { EthereumMessages } from '../../Ethereum/messages'
 
