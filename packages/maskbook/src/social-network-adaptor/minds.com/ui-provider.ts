@@ -6,7 +6,7 @@ import { injectPageInspectorDefault } from '../../social-network/defaults/inject
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
 import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
-import { unreachable } from '../../utils/utils'
+import { unreachable } from '@dimensiondev/maskbook-shared'
 import { pasteImageToCompositionMinds } from './automation/AttachImageToComposition'
 import { gotoNewsFeedPageMinds } from './automation/gotoNewsFeedPage'
 import { gotoProfilePageMinds } from './automation/gotoProfilePage'
