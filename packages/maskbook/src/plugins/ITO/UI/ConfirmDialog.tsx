@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useState } from 'react'
 import { makeStyles, Typography, Grid, Paper, Card, IconButton, Link } from '@material-ui/core'
 import { Flags, useI18N } from '../../../utils'
-import type { PoolSettings } from '../hooks/useFillCallback'
+import { PoolSettings, useFillParams } from '../hooks/useFillCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import LaunchIcon from '@material-ui/icons/Launch'
 import {
@@ -120,6 +120,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
         poolSettings?.advanceSettingData.contract &&
         poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION_ADDRESS
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
+    const paramsResult = useFillParams(poolSettings)
 
     return (
         <Card elevation={0}>

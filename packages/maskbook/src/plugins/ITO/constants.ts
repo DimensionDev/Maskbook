@@ -150,3 +150,6 @@ export const QUALIFICATION_HAS_START_TIME_INTERFACE_ID = '0xdf29dfc4'
 export const QUALIFICATION_HAS_LUCKY_INTERFACE_ID = '0xadaa0f8a'
 
 export const MSG_DELIMITER = '2c1aca02'
+
+// for estimate gas
+export const FACK_SIGN_PASSWORD = '0x75466cc969717b172b14253aaeebdc958f2b5037a852c1337650ed4978242dd9'
