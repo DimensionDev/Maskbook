@@ -60,7 +60,7 @@ export default function FileUpload({ width, height, readAsText, onChange }: File
                 onChange(file)
             }
         }
-    }, [file])
+    }, [file, readAsText, onChange])
     return (
         <div className={classes.root} style={{ width, height }}>
             <div className={classes.container}>
