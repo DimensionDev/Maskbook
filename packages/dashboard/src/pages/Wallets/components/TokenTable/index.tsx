@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { Dispatch, memo, SetStateAction, useState } from 'react'
 import {
     Table,
     TableContainer,
@@ -20,6 +20,7 @@ import { useAssets, useERC20TokensPaged } from '../../hooks'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import BigNumber from 'bignumber.js'
 import { ceil } from 'lodash-es'
+import type { Asset } from '../../types'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -57,8 +58,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const TokenTable = memo(() => {
     const [page, setPage] = useState(1)
-    const t = useDashboardI18N()
-    const classes = useStyles()
 
     const { value } = useERC20TokensPaged(page - 1, 50)
 
@@ -69,72 +68,100 @@ export const TokenTable = memo(() => {
     } = useAssets(value?.tokens || [])
 
     return (
-        <>
-            <TableContainer className={classes.container}>
-                {detailedTokensLoading || detailedTokensError || !detailedTokens.length ? (
-                    <Box flex={1}>
-                        {detailedTokensLoading ? <LoadingPlaceholder /> : null}
-                        {detailedTokensError || !detailedTokens.length ? (
-                            <EmptyPlaceholder prompt={t.wallets_empty_tokens_tip()} />
-                        ) : null}
-                    </Box>
-                ) : (
-                    <Table stickyHeader sx={{ padding: '0 44px' }}>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell key="Asset" align="center" variant="head" className={classes.header}>
-                                    {t.wallets_assets_asset()}
-                                </TableCell>
-                                <TableCell key="Balance" align="center" variant="head" className={classes.header}>
-                                    {t.wallets_assets_balance()}
-                                </TableCell>
-                                <TableCell key="Price" align="center" variant="head" className={classes.header}>
-                                    {t.wallets_assets_price()}
-                                </TableCell>
-                                <TableCell key="Value" align="center" variant="head" className={classes.header}>
-                                    {t.wallets_assets_value()}
-                                </TableCell>
-                                <TableCell key="Operation" align="center" variant="head" className={classes.header}>
-                                    {t.wallets_assets_operation()}
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-
-                        {detailedTokens.length ? (
-                            <TableBody>
-                                {detailedTokens
-                                    .sort((first, second) => {
-                                        const firstValue = new BigNumber(
-                                            formatBalance(first.balance, first.token.decimals),
-                                        )
-                                        const secondValue = new BigNumber(
-                                            formatBalance(second.balance, second.token.decimals),
-                                        )
-
-                                        if (firstValue.eq(secondValue)) return 0
-
-                                        return Number(firstValue.lt(secondValue))
-                                    })
-                                    .map((asset, index) => (
-                                        <TokenTableRow asset={asset} key={index} />
-                                    ))}
-                            </TableBody>
-                        ) : null}
-                    </Table>
-                )}
-            </TableContainer>
-            {!detailedTokensLoading && !detailedTokensError && detailedTokens.length ? (
-                <Box className={classes.footer}>
-                    <Pagination
-                        variant="outlined"
-                        shape="rounded"
-                        count={ceil((value?.count ?? 0) / 50) ?? 1}
-                        page={page}
-                        onChange={(event, page) => setPage(page)}
-                        renderItem={(item) => <PaginationItem {...item} classes={{ root: classes.paginationItem }} />}
-                    />
-                </Box>
-            ) : null}
-        </>
+        <TokenTableUI
+            page={page}
+            onPageChange={setPage}
+            isLoading={detailedTokensLoading}
+            isEmpty={!!detailedTokensError || !detailedTokens.length}
+            showPagination={!detailedTokensLoading && !detailedTokensError && !!detailedTokens.length}
+            dataSource={detailedTokens}
+            count={ceil((value?.count ?? 0) / 50) ?? 1}
+        />
     )
 })
+
+export interface TokenTableUIProps {
+    page: number
+    onPageChange: Dispatch<SetStateAction<number>>
+    isLoading: boolean
+    isEmpty: boolean
+    showPagination: boolean
+    dataSource: Asset[]
+    count: number
+}
+
+export const TokenTableUI = memo<TokenTableUIProps>(
+    ({ page, onPageChange, isLoading, isEmpty, showPagination, dataSource, count }) => {
+        const t = useDashboardI18N()
+        const classes = useStyles()
+        return (
+            <>
+                <TableContainer className={classes.container}>
+                    {isLoading || isEmpty ? (
+                        <Box flex={1}>
+                            {isLoading ? <LoadingPlaceholder /> : null}
+                            {isEmpty ? <EmptyPlaceholder prompt={t.wallets_empty_tokens_tip()} /> : null}
+                        </Box>
+                    ) : (
+                        <Table stickyHeader sx={{ padding: '0 44px' }}>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell key="Asset" align="center" variant="head" className={classes.header}>
+                                        {t.wallets_assets_asset()}
+                                    </TableCell>
+                                    <TableCell key="Balance" align="center" variant="head" className={classes.header}>
+                                        {t.wallets_assets_balance()}
+                                    </TableCell>
+                                    <TableCell key="Price" align="center" variant="head" className={classes.header}>
+                                        {t.wallets_assets_price()}
+                                    </TableCell>
+                                    <TableCell key="Value" align="center" variant="head" className={classes.header}>
+                                        {t.wallets_assets_value()}
+                                    </TableCell>
+                                    <TableCell key="Operation" align="center" variant="head" className={classes.header}>
+                                        {t.wallets_assets_operation()}
+                                    </TableCell>
+                                </TableRow>
+                            </TableHead>
+
+                            {dataSource.length ? (
+                                <TableBody>
+                                    {dataSource
+                                        .sort((first, second) => {
+                                            const firstValue = new BigNumber(
+                                                formatBalance(first.balance, first.token.decimals),
+                                            )
+                                            const secondValue = new BigNumber(
+                                                formatBalance(second.balance, second.token.decimals),
+                                            )
+
+                                            if (firstValue.eq(secondValue)) return 0
+
+                                            return Number(firstValue.lt(secondValue))
+                                        })
+                                        .map((asset, index) => (
+                                            <TokenTableRow asset={asset} key={index} />
+                                        ))}
+                                </TableBody>
+                            ) : null}
+                        </Table>
+                    )}
+                </TableContainer>
+                {showPagination ? (
+                    <Box className={classes.footer}>
+                        <Pagination
+                            variant="outlined"
+                            shape="rounded"
+                            count={count}
+                            page={page}
+                            onChange={(event, page) => onPageChange(page)}
+                            renderItem={(item) => (
+                                <PaginationItem {...item} classes={{ root: classes.paginationItem }} />
+                            )}
+                        />
+                    </Box>
+                ) : null}
+            </>
+        )
+    },
+)

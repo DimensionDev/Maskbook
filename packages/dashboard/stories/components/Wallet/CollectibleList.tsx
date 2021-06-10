@@ -1,0 +1,23 @@
+import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { action } from '@storybook/addon-actions'
+import { CollectibleListUI as C } from '../../../src/pages/Wallets/components/CollectibleList'
+import { ChainId, createERC721Token } from '@dimensiondev/web3-shared'
+import { CollectibleProvider } from '../../../src/pages/Wallets/types'
+
+const { meta, of } = story(C)
+
+export default meta({ title: 'Pages/Wallet/Collectible List' })
+
+export const CollectibleList = of({
+    args: {
+        page: 1,
+        onPageChange: action('onPageChange'),
+        hasNextPage: false,
+        isLoading: false,
+        isEmpty: false,
+        showPagination: true,
+        chainId: ChainId.Mainnet,
+        provider: CollectibleProvider.OPENSEAN,
+        dataSource: [createERC721Token(ChainId.Mainnet, '', '', '', '')],
+    },
+})

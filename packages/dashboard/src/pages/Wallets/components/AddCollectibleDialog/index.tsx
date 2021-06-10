@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose }) => {
-    const t = useDashboardI18N()
     const [address, setAddress] = useState('')
 
     const wallet = useWallet()
@@ -45,56 +44,60 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     })
 
     return (
-        <MaskDialog open={open} title={t.wallets_add_collectible()} onClose={onClose}>
-            <AddCollectibleUI
-                address={address}
-                setAddress={setAddress}
-                onSubmit={onSubmit}
-                exclude={Array.from(wallet?.erc721_token_whitelist ?? [])}
-            />
-        </MaskDialog>
+        <AddCollectibleDialogUI
+            open={open}
+            onClose={onClose}
+            address={address}
+            onAddressChange={setAddress}
+            onSubmit={onSubmit}
+            exclude={Array.from(wallet?.erc721_token_whitelist ?? [])}
+        />
     )
 })
 
-export interface AddCollectibleUIProps {
+export interface AddCollectibleDialogUIProps {
+    open: boolean
+    onClose: () => void
     address: string
     exclude: string[]
-    setAddress: (address: string) => void
+    onAddressChange: (address: string) => void
     onSubmit: () => void
 }
 
-export const AddCollectibleUI = memo<AddCollectibleUIProps>(({ address, exclude, setAddress, onSubmit }) => {
-    const t = useDashboardI18N()
-    const classes = useStyles()
+export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
+    ({ open, onClose, address, exclude, onAddressChange, onSubmit }) => {
+        const t = useDashboardI18N()
+        const classes = useStyles()
 
-    const validateAddressMessage = useMemo(() => {
-        if (address.length && !EthereumAddress.isValid(address)) return t.wallets_incorrect_address()
-        if (exclude.find((item) => item === address)) return t.wallets_collectible_been_added()
-        return ''
-    }, [address])
+        const validateAddressMessage = useMemo(() => {
+            if (address.length && !EthereumAddress.isValid(address)) return t.wallets_incorrect_address()
+            if (exclude.find((item) => item === address)) return t.wallets_collectible_been_added()
+            return ''
+        }, [address])
 
-    return (
-        <>
-            <DialogContent>
-                <form>
-                    <Box style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label className={classes.title}>Collectible Address</label>
-                        <TextField
-                            variant="filled"
-                            InputProps={{ disableUnderline: true }}
-                            value={address}
-                            error={!!validateAddressMessage}
-                            helperText={validateAddressMessage}
-                            onChange={(e) => setAddress(e.target.value)}
-                        />
-                    </Box>
-                </form>
-            </DialogContent>
-            <DialogActions>
-                <Button color="primary" onClick={onSubmit}>
-                    {t.wallets_collectible_add()}
-                </Button>
-            </DialogActions>
-        </>
-    )
-})
+        return (
+            <MaskDialog open={open} title={t.wallets_add_collectible()} onClose={onClose}>
+                <DialogContent>
+                    <form>
+                        <Box style={{ display: 'flex', flexDirection: 'column' }}>
+                            <label className={classes.title}>Collectible Address</label>
+                            <TextField
+                                variant="filled"
+                                InputProps={{ disableUnderline: true }}
+                                value={address}
+                                error={!!validateAddressMessage}
+                                helperText={validateAddressMessage}
+                                onChange={(e) => onAddressChange(e.target.value)}
+                            />
+                        </Box>
+                    </form>
+                </DialogContent>
+                <DialogActions>
+                    <Button color="primary" onClick={onSubmit}>
+                        {t.wallets_collectible_add()}
+                    </Button>
+                </DialogActions>
+            </MaskDialog>
+        )
+    },
+)
