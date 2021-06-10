@@ -1,7 +1,5 @@
 import {
-    // @ts-expect-error
     unstable_createMutableSource as createMutableSource,
-    // @ts-expect-error
     unstable_useMutableSource as useMutableSource,
 } from 'react'
 /**

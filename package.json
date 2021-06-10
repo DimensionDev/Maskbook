@@ -36,14 +36,14 @@
     "@material-ui/lab": "5.0.0-alpha.34",
     "@material-ui/styles": "5.0.0-alpha.33",
     "@material-ui/system": "5.0.0-alpha.34",
-    "@types/react": "^17.0.9",
-    "@types/react-dom": "^17.0.6",
+    "@types/react": "^17.0.11",
+    "@types/react-dom": "^17.0.7",
     "i18next": "^20.3.0",
     "idb": "5.0.8",
     "jss": "10.5.1",
     "notistack": "1.0.9",
-    "react": "=0.0.0-experimental-d75105fa9",
-    "react-dom": "=0.0.0-experimental-d75105fa9",
+    "react": "=18.0.0-alpha-aecb3b6d1",
+    "react-dom": "=18.0.0-alpha-aecb3b6d1",
     "react-i18next": "^11.9.0"
   },
   "devDependencies": {
@@ -77,8 +77,8 @@
   },
   "pnpm": {
     "overrides": {
-      "react": "=0.0.0-experimental-d75105fa9",
-      "react-dom": "=0.0.0-experimental-d75105fa9"
+      "react": "=18.0.0-alpha-aecb3b6d1",
+      "react-dom": "=18.0.0-alpha-aecb3b6d1"
     }
   }
 }

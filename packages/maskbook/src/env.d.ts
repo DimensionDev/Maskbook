@@ -1,6 +1,6 @@
 /// <reference types="web-ext-types" />
-/// <reference types="react/experimental" />
-/// <reference types="react-dom/experimental" />
+/// <reference types="react/next" />
+/// <reference types="react-dom/next" />
 /// <reference path="./components/custom-ui.d.ts" />
 
 declare module NodeJS {
