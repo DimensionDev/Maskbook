@@ -1,5 +1,5 @@
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
-import { makeStyles, Typography, Box } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import { File as FileIcon } from '../../../../icons/general/File'
 
@@ -62,12 +62,12 @@ export default function FileUpload({ width, height, readAsText, onChange }: File
         }
     }, [file, readAsText, onChange])
     return (
-        <Box className={classes.root} sx={{ width, height }}>
+        <div className={classes.root} style={{ width, height }}>
             <div className={classes.container}>
                 <FileIcon />
                 <Typography className={classes.text}>Please click or drag the file to here</Typography>
             </div>
             <input type="file" className={classes.file} onChange={handleChange} />
-        </Box>
+        </div>
     )
 }
