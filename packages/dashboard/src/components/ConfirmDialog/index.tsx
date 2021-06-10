@@ -3,17 +3,10 @@ import {
     DialogContent,
     DialogActions,
     Button,
-    dialogActionsClasses,
     dialogContentClasses,
     experimentalStyled as styled,
     buttonClasses,
 } from '@material-ui/core'
-
-const StyledDialogActions = styled(DialogActions)(({ theme }) => ({
-    [`&.${dialogActionsClasses.root}>:not(:first-of-type)`]: {
-        marginLeft: theme.spacing(3),
-    },
-}))
 
 const StyledDialogContent = styled(DialogContent)(() => ({
     [`&.${dialogContentClasses.root}`]: {
@@ -55,14 +48,14 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
     return (
         <MaskDialog title={title} fullWidth maxWidth="sm" open={open} onClose={onClose}>
             <StyledDialogContent>{children}</StyledDialogContent>
-            <StyledDialogActions>
+            <DialogActions>
                 <StyledButton onClick={onClose} color="secondary">
                     {cancelText}
                 </StyledButton>
                 <StyledButton onClick={onConfirm} disabled={confirmDisabled}>
                     {confirmText}
                 </StyledButton>
-            </StyledDialogActions>
+            </DialogActions>
         </MaskDialog>
     )
 }
