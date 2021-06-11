@@ -5,7 +5,15 @@ import { useAssets } from '../../plugins/Wallet/hooks/useAssets'
 import { EthereumMessages } from '../../plugins/Ethereum/messages'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useValueRef, formatWeiToGwei, formatBalance } from '@dimensiondev/maskbook-shared'
-import { GasNow, useGasPrice, useNetworkType, NetworkType, EthereumTokenType } from '@dimensiondev/web3-shared'
+import {
+    GasNow,
+    useGasPrice,
+    useNetworkType,
+    NetworkType,
+    EthereumTokenType,
+    getChainDetailed,
+    useChainId,
+} from '@dimensiondev/web3-shared'
 import { currentGasNowSettings } from '../../plugins/Wallet/settings'
 import { useState, useCallback, useMemo } from 'react'
 
@@ -26,6 +34,8 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
     const classes = useStylesExtends(useStyles(), props)
     const gasNow = useValueRef(currentGasNowSettings)
     const [type, setType] = useState<keyof GasNow>('fast')
+    const chainId = useChainId()
+    const chainDetailed = getChainDetailed(chainId)
 
     const { setDialog: setGasPriceDialog } = useRemoteControlledDialog(
         EthereumMessages.events.gasPriceDialogUpdated,
@@ -59,6 +69,7 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
                         <Typography>
                             {t('plugin_gas_now_dialog_gas_fee', {
                                 fee: formatBalance(gasPrice.times(gas), 9, 5),
+                                symbol: chainDetailed?.nativeCurrency.symbol,
                             })}
                             {usdRate
                                 ? t('plugin_gas_fee_as_usd', {

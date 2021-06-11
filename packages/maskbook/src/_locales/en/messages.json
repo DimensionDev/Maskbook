@@ -420,7 +420,7 @@
     "plugin_gas_now_dialog_gwei": "{{gasPrice}} Gwei",
     "plugin_gas_now_dialog_usd": " ≈ ${{usd}}",
     "plugin_gas_now_dialog_zero_gas": "Invalid: Gas price should be greater than 0",
-    "plugin_gas_now_dialog_gas_fee": "{{fee}} ETH",
+    "plugin_gas_now_dialog_gas_fee": "{{fee}} {{symbol}} ",
     "plugin_gas_fee_as_usd": "≈ ${{usd}}",
     "plugin_trader_swap": "Swap",
     "plugin_trader_wrap": "Wrap",

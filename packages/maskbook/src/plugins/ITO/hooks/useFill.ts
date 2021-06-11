@@ -18,7 +18,7 @@ import {
 import { useITO_Contract } from '../contracts/useITO_Contract'
 import type { FungibleTokenDetailed, ERC20TokenDetailed, TransactionState } from '@dimensiondev/web3-shared'
 import { gcd, sortTokens } from '../helpers'
-import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER, FACK_SIGN_PASSWORD } from '../constants'
+import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER, FAKE_SIGN_PASSWORD } from '../constants'
 import type { AdvanceSettingData } from '../UI/AdvanceSetting'
 import { isGreaterThan, ONE, pow10 } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -232,7 +232,7 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
 
         const paramsObj: paramsObjType = {
             //#region tx function params
-            password: FACK_SIGN_PASSWORD,
+            password: FAKE_SIGN_PASSWORD,
             startTime: startTime_,
             endTime: endTime_,
             message: [name, title, regions].join(MSG_DELIMITER),
