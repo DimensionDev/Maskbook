@@ -5,6 +5,8 @@ import { DialogContent, Typography, makeStyles, DialogActions, Button } from '@m
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
 import { useCopyToClipboard } from 'react-use'
 import { useSnackbarCallback } from '../../../../hooks/useSnackbarCallback'
+import { useCurrentSelectedWalletNetwork } from '../../api'
+import { resolveNetworkName } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -35,7 +37,7 @@ export interface ReceiveDialogProps {
 export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, walletAddress, onClose }) => {
     const classes = useStyles()
     const t = useDashboardI18N()
-
+    const currentSelectedWalletNetwork = useCurrentSelectedWalletNetwork()
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback({
         executor: async (address: string) => copyToClipboard(address),
@@ -43,6 +45,7 @@ export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, wallet
         successText: t.wallets_address_copied(),
     })
 
+    //TODO: The <QRCode /> text prop protocol maybe correct and requires confirmation
     return (
         <MaskDialog
             open={open}
@@ -55,7 +58,7 @@ export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, wallet
                 <Typography sx={{ marginBottom: 3.5 }}>{t.wallets_receive_tips({ chainName })}</Typography>
                 <WalletQRCodeContainer width={286} height={286} border={{ borderWidth: 15, borderHeight: 2 }}>
                     <QRCode
-                        text={`ethereum:${walletAddress}`}
+                        text={`${resolveNetworkName(currentSelectedWalletNetwork).toLowerCase()}:${walletAddress}`}
                         options={{ width: 282 }}
                         canvasProps={{
                             style: { display: 'block', margin: 'auto' },

@@ -1,7 +1,7 @@
 import type { Asset } from './types'
-import { CurrencyType, ChainId, NonFungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import { CurrencyType, ChainId, NonFungibleTokenDetailed, NetworkType } from '@dimensiondev/web3-shared'
 import { CollectibleProvider } from './types'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { safeUnreachable, unreachable } from '@dimensiondev/maskbook-shared'
 
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
 
@@ -25,5 +25,19 @@ export function resolveCollectibleLink(
             return `${resolveCollectibleProviderLink(chainId, provider)}/assets/${token.address}/${token.tokenId}`
         default:
             unreachable(provider)
+    }
+}
+
+export function resolveNetworkName(networkType: NetworkType) {
+    switch (networkType) {
+        case NetworkType.Binance:
+            return 'Binance'
+        case NetworkType.Polygon:
+            return 'Polygon'
+        case NetworkType.Ethereum:
+            return 'Ethereum'
+        default:
+            safeUnreachable(networkType)
+            return 'Unknown'
     }
 }

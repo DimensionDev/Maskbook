@@ -98,7 +98,6 @@ export const CreateWallet = memo(() => {
 
     return (
         <Container>
-            ../dashboard/src/pages/Wallets/index.tsx
             <TabContext value={walletTabs.includes(activeTab) ? activeTab : walletTabs[0]}>
                 <ButtonGroupTabContainer>
                     <ButtonGroupTabList

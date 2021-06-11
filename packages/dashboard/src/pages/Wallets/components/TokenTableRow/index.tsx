@@ -2,7 +2,7 @@ import { memo } from 'react'
 import type { Asset } from '../../types'
 import { Box, TableRow, Typography, makeStyles, TableCell, Button } from '@material-ui/core'
 import { TokenIcon } from '../TokenIcon'
-import { formatBalance, formatCurrency, FormattedCurrency } from '@dimensiondev/maskbook-shared'
+import { formatBalance, formatCurrency, FormattedCurrency, pow10 } from '@dimensiondev/maskbook-shared'
 import { CurrencyType } from '@dimensiondev/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useHistory } from 'react-router'
@@ -47,7 +47,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>
                     {asset.price?.[CurrencyType.USD]
-                        ? new BigNumber(asset.price[CurrencyType.USD]).gt(new BigNumber(10).pow(-6))
+                        ? new BigNumber(asset.price[CurrencyType.USD]).gt(pow10(-6))
                             ? formatCurrency(Number.parseFloat(asset.price[CurrencyType.USD]), '$')
                             : '<0.000001'
                         : '-'}
