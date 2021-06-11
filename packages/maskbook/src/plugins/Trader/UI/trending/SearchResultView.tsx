@@ -100,7 +100,7 @@ export function SearchResultView(props: SearchResultViewProps) {
         loading: loadingTokenDetailed,
     } = useTokenDetailed(
         trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
-        trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.eth_address ?? '',
+        trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.contract_address ?? '',
     )
     const tradeProvider = useCurrentTradeProvider(tradeProviders)
     //#endregion
@@ -160,7 +160,7 @@ export function SearchResultView(props: SearchResultViewProps) {
     //#endregion
 
     //#region is ethereum based coin
-    const isEthereum = !!trending?.coin.eth_address || trending?.coin.symbol.toLowerCase() === 'eth'
+    const isEthereum = !!trending?.coin.contract_address || trending?.coin.symbol.toLowerCase() === 'eth'
     //#endregion
 
     //#region display loading skeleton

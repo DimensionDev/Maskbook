@@ -30,10 +30,10 @@ export function CoinSaftyAlert(props: CoinSaftyAlertProps) {
 
     const { t } = useI18N()
     const classes = useStyles()
-    const { approvedTokens, onApprove } = useApprovedTokens(coin.eth_address)
+    const { approvedTokens, onApprove } = useApprovedTokens(coin.contract_address)
 
-    if (!coin.eth_address) return null
-    if (approvedTokens.some((address) => address === coin.eth_address)) return null
+    if (!coin.contract_address) return null
+    if (approvedTokens.some((address) => address === coin.contract_address)) return null
 
     return (
         <Paper className={classes.root} elevation={0}>
@@ -50,7 +50,7 @@ export function CoinSaftyAlert(props: CoinSaftyAlertProps) {
                         rel="noopener noreferrer"
                         href={resolveTokenLinkOnExplorer({
                             type: EthereumTokenType.Native,
-                            address: coin.eth_address,
+                            address: coin.contract_address,
                             chainId: ChainId.Mainnet,
                         })}>
                         View on Etherscan

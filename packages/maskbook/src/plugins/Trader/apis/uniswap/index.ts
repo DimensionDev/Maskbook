@@ -117,7 +117,7 @@ export async function getAllCoinsByKeyword(keyword: string) {
                 id: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
                 name: 'Mask Network',
                 symbol: 'MASK',
-                eth_address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
+                contract_address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
             } as Coin,
         ]
     }
@@ -129,7 +129,7 @@ export async function getAllCoinsByKeyword(keyword: string) {
             ({
                 ...x,
                 address: x.id,
-                eth_address: x.id,
+                contract_address: x.id,
             } as Coin),
     )
 
@@ -138,7 +138,7 @@ export async function getAllCoinsByKeyword(keyword: string) {
             id: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
             address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
             name: 'ETHer (Wrapped)',
-            eth_address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+            contract_address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
             symbol: 'eth',
             decimals: 18,
         } as Coin)
@@ -147,7 +147,7 @@ export async function getAllCoinsByKeyword(keyword: string) {
             id: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
             address: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
             name: 'Energi',
-            eth_address: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
+            contract_address: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
             symbol: 'NRGT',
             decimals: 18,
         } as Coin)
