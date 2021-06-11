@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { makeStyles, Link, Tab, Tabs } from '@material-ui/core'
-import { useI18N } from '../../../../utils'
+import { useI18N, useSettingsSwticher, useValueRef } from '../../../../utils'
 import { DataProvider, TagType, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
@@ -12,14 +12,16 @@ import { Days, PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
 import { useCurrentTradeProvider } from '../../trending/useCurrentTradeProvider'
 import { TradeView } from '../trader/TradeView'
+import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewError } from './TrendingViewError'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton'
-import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewDeck } from './TrendingViewDeck'
+import { currentTrendingDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType, useTokenDetailed } from '@dimensiondev/web3-shared'
+import { EthereumTokenType, NetworkType, useTokenDetailed } from '@dimensiondev/web3-shared'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
+import { currentNetworkSettings } from '../../../Wallet/settings'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -66,11 +68,13 @@ export function PopperView(props: PopperViewProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
-    //#region trending
     const dataProvider = useCurrentDataProvider(dataProviders)
-    //#endregion
-
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
+
+    //#region track network type
+    const networkType = useValueRef(currentNetworkSettings)
+    useEffect(() => setTabIndex(0), [networkType])
+    //#endregion
 
     //#region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
@@ -117,6 +121,14 @@ export function PopperView(props: PopperViewProps) {
     const tradeContext = useTradeContext(tradeProvider)
     //#endregion
 
+    //#region current data provider switcher
+    const DataProviderSwitcher = useSettingsSwticher(
+        currentTrendingDataProviderSettings,
+        dataProviders,
+        resolveDataProviderName,
+    )
+    //#endregion
+
     //#region api ready callback
     useEffect(() => {
         props.onUpdate?.()
@@ -145,13 +157,16 @@ export function PopperView(props: PopperViewProps) {
                         .
                     </span>
                 }
+                reaction={DataProviderSwitcher}
                 TrendingCardProps={{ classes: { root: classes.root } }}
             />
         )
     //#endregion
 
     //#region is ethereum based coin
-    const isEthereum = !!trending?.coin.eth_address || trending?.coin.symbol.toLowerCase() === 'eth'
+    const isEthereum =
+        (!!trending?.coin.eth_address || trending?.coin.symbol.toLowerCase() === 'eth') &&
+        networkType === NetworkType.Ethereum
     //#endregion
 
     //#region display loading skeleton
