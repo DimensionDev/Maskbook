@@ -3,4 +3,4 @@
     publish = "packages/netlify"
     ignore = "git diff --quiet HEAD^ HEAD packages/dashboard packages/storybook-shared packages/theme packages/netlify packages/shared packages/icons"
 [build.environment]
-    NPM_FLAGS="--prefix=/dev/null"
+    NPM_FLAGS="--prefix=./scripts/empty-project/"

@@ -1,9 +1,9 @@
 import { IconPreview } from './previewer'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { ServerStyleSheets } from '@material-ui/styles'
-import fs from 'fs'
+import { fileURLToPath } from 'url'
 import { resolve } from 'path'
-
+import { writeFileSync } from 'fs'
 import * as General from '../general'
 import * as Brands from '../brands'
 
@@ -19,7 +19,10 @@ svg {
     background: black;
 }
 `
-fs.writeFileSync(resolve(__dirname, '../build.html'), render())
+// This file will output to ./dist/utils/ so target actually points to ../build.html
+const target = resolve(fileURLToPath(import.meta.url), '../../../build.html')
+console.log(target)
+writeFileSync(target, render())
 function render() {
     const css = new ServerStyleSheets()
     const html = renderToStaticMarkup(
