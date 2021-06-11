@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useState } from 'react'
 import { makeStyles, Typography, Grid, Paper, Card, IconButton, Link } from '@material-ui/core'
 import { Flags, useI18N } from '../../../utils'
-import type { PoolSettings } from '../hooks/useFillCallback'
+import { PoolSettings, useFillParams } from '../hooks/useFill'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import LaunchIcon from '@material-ui/icons/Launch'
 import {
@@ -23,7 +23,7 @@ import {
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
 import { ITO_CONSTANTS } from '../constants'
-import { GasPriceButton } from '../../../web3/UI/GasPriceButton'
+import { TxFeeEstimation } from '../../../web3/UI/TxFeeEstimation'
 
 const useSwapItemStyles = makeStyles((theme) => ({
     root: {
@@ -93,15 +93,20 @@ const useStyles = makeStyles((theme) => ({
     button: {
         padding: theme.spacing(2),
     },
-    gasPriceWrapper: {
-        display: 'flex',
-        flexDirection: 'row-reverse',
-        padding: theme.spacing(0, 2),
-    },
     link: {
         padding: 0,
         marginLeft: theme.spacing(0.5),
         marginTop: 2,
+    },
+    gasEstimation: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        cursor: 'pointer',
+        '& > p': {
+            marginRight: 5,
+            color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
+        },
     },
 }))
 export interface ConfirmDialogProps {
@@ -120,6 +125,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
         poolSettings?.advanceSettingData.contract &&
         poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION_ADDRESS
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
+    const fillParamsResult = useFillParams(poolSettings)
 
     return (
         <Card elevation={0}>
@@ -284,7 +290,9 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         </Grid>
                     </>
                 ) : null}
-
+                {Flags.wallet_gas_price_dialog_enable ? (
+                    <TxFeeEstimation classes={classes} gas={fillParamsResult?.gas} />
+                ) : null}
                 <Grid item xs={12}>
                     <Typography variant="h5" className={classes.title} component="p">
                         {t('plugin_ito_send_tip')}
@@ -303,11 +311,6 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         })}
                     </ActionButton>
                 </Grid>
-                {Flags.wallet_gas_price_dialog_enable ? (
-                    <Grid item xs={12} className={classes.gasPriceWrapper}>
-                        <GasPriceButton ButtonProps={{ variant: 'text', color: 'secondary' }} />
-                    </Grid>
-                ) : null}
             </Grid>
         </Card>
     )
