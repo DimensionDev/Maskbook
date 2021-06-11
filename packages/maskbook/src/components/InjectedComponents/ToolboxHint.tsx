@@ -1,6 +1,13 @@
 import { makeStyles, Typography, MenuItem } from '@material-ui/core'
 import classNames from 'classnames'
-import { useAccount, useChainId, resolveChainColor, useChainDetailed, useChainIdValid } from '@dimensiondev/web3-shared'
+import {
+    useAccount,
+    useChainId,
+    resolveChainColor,
+    useChainDetailed,
+    useChainIdValid,
+    NetworkType,
+} from '@dimensiondev/web3-shared'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
@@ -20,8 +27,9 @@ import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
 import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress, useValueRef } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../utils'
+import { currentNetworkSettings } from '../../plugins/Wallet/settings'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -117,6 +125,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
+    const networkType = useValueRef(currentNetworkSettings)
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
@@ -215,10 +224,12 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
                 </MenuItem>
             ) : null,
-            <MenuItem onClick={openSwapDialog} className={classes.menuItem}>
-                <Image src={ToolIconURLs.swap.image} width={19} height={19} />
-                <Typography className={classes.text}>{ToolIconURLs.swap.text}</Typography>
-            </MenuItem>,
+            networkType === NetworkType.Ethereum ? (
+                <MenuItem onClick={openSwapDialog} className={classes.menuItem}>
+                    <Image src={ToolIconURLs.swap.image} width={19} height={19} />
+                    <Typography className={classes.text}>{ToolIconURLs.swap.text}</Typography>
+                </MenuItem>
+            ) : null,
             <MenuItem onClick={onClaimAllDialogOpen} className={classes.menuItem}>
                 <Image src={ToolIconURLs.claim.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.claim.text}</Typography>
