@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles'
 import qr from 'qrcode'
 import { useEffect, useRef, useState } from 'react'
-import { cache } from '@dimensiondev/maskbook-shared'
+import { SessionStorageCache } from '@dimensiondev/maskbook-shared'
 import { Typography } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 import classNames from 'classnames'
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 export function QRCode({ text, options = {}, canvasProps }: QRProps) {
     const ref = useRef<HTMLCanvasElement | null>(null)
     const [error, setError] = useState(false)
-    const image = cache.get(CACHE_SCOPE, text)
+    const image = SessionStorageCache.get(CACHE_SCOPE, text)
     const classes = useStyles()
 
     useEffect(() => {
@@ -39,12 +39,12 @@ export function QRCode({ text, options = {}, canvasProps }: QRProps) {
         qr.toCanvas(ref.current, text, options, (err: Error) => {
             if (err) {
                 setError(true)
-                cache.remove(CACHE_SCOPE, text)
+                SessionStorageCache.remove(CACHE_SCOPE, text)
                 throw err
             }
             const dataURL = ref.current?.toDataURL()
             if (dataURL) {
-                cache.set(CACHE_SCOPE, text, dataURL)
+                SessionStorageCache.set(CACHE_SCOPE, text, dataURL)
             }
         })
     }, [options, text, error])
