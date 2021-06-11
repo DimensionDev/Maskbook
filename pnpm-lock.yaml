@@ -254,7 +254,7 @@ importers:
       '@ethersproject/strings': ^5.1.0
       '@msgpack/msgpack': ^2.7.0
       '@openzeppelin/contracts': ^3.2.0
-      '@pmmmwh/react-refresh-webpack-plugin': ^0.4.3
+      '@pmmmwh/react-refresh-webpack-plugin': ^0.5.0-rc.0
       '@popperjs/core': '*'
       '@servie/events': ^3.0.0
       '@sinonjs/text-encoding': ^0.7.1
@@ -502,7 +502,7 @@ importers:
       z-schema: 5.0.1
     devDependencies:
       '@dimensiondev/webextension-shim': 0.0.3-20201120022530-b318b89
-      '@pmmmwh/react-refresh-webpack-plugin': 0.4.3_dae7018c5b5576f32207b1e2608a9d18
+      '@pmmmwh/react-refresh-webpack-plugin': 0.5.0-rc.0_dae7018c5b5576f32207b1e2608a9d18
       '@sinonjs/text-encoding': 0.7.1
       '@testing-library/react-hooks': 7.0.0_react-test-renderer@17.0.2
       '@types/enzyme': 3.10.8
@@ -4428,16 +4428,16 @@ packages:
       webpack: 4.46.0
     dev: true
 
-  /@pmmmwh/react-refresh-webpack-plugin/0.4.3_dae7018c5b5576f32207b1e2608a9d18:
-    resolution: {integrity: sha512-br5Qwvh8D2OQqSXpd1g/xqXKnK0r+Jz6qVKBbWmpUcrbGOxUrf39V5oZ1876084CGn18uMdR5uvPqBv9UqtBjQ==}
-    engines: {node: '>= 10.x'}
+  /@pmmmwh/react-refresh-webpack-plugin/0.5.0-rc.0_dae7018c5b5576f32207b1e2608a9d18:
+    resolution: {integrity: sha512-oJV/ukrTxm1zjq/D4A3arLSqDMCy4jnIVDYEfe+KX5FX07b0blWmGa3UaqtLYqZsb++V8VnyFlq0OYS3f9yi0g==}
+    engines: {node: '>= 10.13'}
     peerDependencies:
-      '@types/webpack': 4.x
-      react-refresh: '>=0.8.3 <0.10.0'
+      '@types/webpack': 4.x || 5.x
+      react-refresh: ^0.10.0
       sockjs-client: ^1.4.0
-      type-fest: ^0.13.1
+      type-fest: ^1.0.2
       webpack: '>=4.43.0 <6.0.0'
-      webpack-dev-server: 3.x
+      webpack-dev-server: 3.x || >=4.0.0-beta.0
       webpack-hot-middleware: 2.x
       webpack-plugin-serve: 0.x || 1.x
     peerDependenciesMeta:
@@ -4455,11 +4455,12 @@ packages:
         optional: true
     dependencies:
       ansi-html: 0.0.7
+      core-js-pure: 3.11.0
       error-stack-parser: 2.0.6
-      html-entities: 1.4.0
-      native-url: 0.2.6
+      html-entities: 2.3.2
+      loader-utils: 2.0.0
       react-refresh: 0.10.0
-      schema-utils: 2.7.1
+      schema-utils: 3.0.0
       source-map: 0.7.3
       webpack: 5.37.1_webpack-cli@4.7.0
       webpack-dev-server: 3.11.2_webpack-cli@4.7.0+webpack@5.37.1
@@ -13792,6 +13793,10 @@ packages:
 
   /html-entities/1.4.0:
     resolution: {integrity: sha512-8nxjcBcd8wovbeKx7h3wTji4e6+rhaVuPNpMqwWgnHh+N9ToqsCs6XztWRBPQ+UtzsoMAdKZtUENoVzU/EMtZA==}
+    dev: true
+
+  /html-entities/2.3.2:
+    resolution: {integrity: sha512-c3Ab/url5ksaT0WyleslpBEthOzWhrjQbg75y7XUsfSzi3Dgzt0l8w5e7DylRn15MTlMMD58dTfzddNS2kcAjQ==}
     dev: true
 
   /html-escaper/2.0.2:
