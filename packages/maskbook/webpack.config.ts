@@ -97,6 +97,7 @@ function config(opts: {
                 // By aliasing them to the original position, we can speed up the compile because there is no need to wait tsc build them to the dist folder.
                 '@dimensiondev/dashboard': require.resolve('../dashboard/src/entry.tsx'),
                 '@dimensiondev/maskbook-shared': require.resolve('../shared/src/index.ts'),
+                '@dimensiondev/maskbook-theme/constants': require.resolve('../theme/src/constants.ts'),
                 '@dimensiondev/maskbook-theme': require.resolve('../theme/src/theme.ts'),
                 '@dimensiondev/icons': require.resolve('../icons/index.ts'),
                 '@dimensiondev/mask-plugin-infra': require.resolve('../plugin-infra/src/index.ts'),
@@ -245,7 +246,7 @@ function config(opts: {
         // overlay is not working in our environment
         return [
             new HotModuleReplacementPlugin(),
-            !disableReactHMR && new ReactRefreshWebpackPlugin({ overlay: false }),
+            !disableReactHMR && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
         ].filter(nonNullable)
     }
 }
