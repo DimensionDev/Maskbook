@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { SnackbarProvider } from 'notistack'
 import { StylesProvider } from '@material-ui/styles'
@@ -12,19 +11,17 @@ import { buildInfoMarkdown } from './extension/background-script/Jobs/PrintBuild
 
 export function MaskUIRootWithinShadow(JSX: JSX.Element) {
     return (
-        <StrictMode>
-            <Web3Provider value={Web3Context}>
-                <I18nextProvider i18n={i18nNextInstance}>
-                    <ErrorBoundaryBuildInfoContext.Provider value={buildInfoMarkdown}>
-                        <ErrorBoundary>
-                            <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                                <StrictMode>{JSX}</StrictMode>
-                            </SnackbarProvider>
-                        </ErrorBoundary>
-                    </ErrorBoundaryBuildInfoContext.Provider>
-                </I18nextProvider>
-            </Web3Provider>
-        </StrictMode>
+        <Web3Provider value={Web3Context}>
+            <I18nextProvider i18n={i18nNextInstance}>
+                <ErrorBoundaryBuildInfoContext.Provider value={buildInfoMarkdown}>
+                    <ErrorBoundary>
+                        <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                            {JSX}
+                        </SnackbarProvider>
+                    </ErrorBoundary>
+                </ErrorBoundaryBuildInfoContext.Provider>
+            </I18nextProvider>
+        </Web3Provider>
     )
 }
 
