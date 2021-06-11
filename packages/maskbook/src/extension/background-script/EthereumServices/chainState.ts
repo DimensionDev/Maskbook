@@ -7,6 +7,7 @@ import {
     currentChainIdSettings,
     currentProviderSettings,
     currentNetworkSettings,
+    currentAccountSettings,
 } from '../../../plugins/Wallet/settings'
 import { pollingTask } from '../../../utils/utils'
 import { getBalance, getBlockNumber } from './network'
@@ -59,6 +60,15 @@ effect(() =>
         if (currentProviderSettings.value === ProviderType.Maskbook) resetAllNonce()
     }),
 )
+
 // revaldiate if the current wallet was changed
+effect(() =>
+    currentAccountSettings.addListener(() => {
+        updateChainState()
+    }),
+)
+//#endregion
+
+// revaldiate if the current wallet was updated
 effect(() => WalletMessages.events.walletsUpdated.on(() => updateChainState()))
 //#endregion
