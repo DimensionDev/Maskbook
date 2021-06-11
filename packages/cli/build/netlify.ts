@@ -73,4 +73,4 @@ const icons = series(
         return from.pipe(to)
     },
 )
-export const buildNetlify = parallel(icons, series(build, parallel(dashboardSB, themeSB /* , dashboard */)))
+export const buildNetlify = series(build, parallel(icons, dashboardSB, themeSB /* , dashboard */))

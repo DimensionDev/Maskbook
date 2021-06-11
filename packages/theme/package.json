@@ -4,6 +4,11 @@
   "description": "@material-ui/core theme of design system of Mask Network",
   "typings": "./dist/src/theme.d.ts",
   "main": "./dist/src/theme.js",
+  "type": "module",
+  "exports": {
+    ".": "./dist/src/theme.js",
+    "./constants": "./dist/src/constants.js"
+  },
   "scripts": {
     "build-storybook": "build -- build-storybook",
     "start": "dev -- start-storybook -p 6006"

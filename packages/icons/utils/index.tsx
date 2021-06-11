@@ -1,7 +1,5 @@
-import SvgIcon, { SvgIconProps } from '@material-ui/core/SvgIcon'
-import { useTheme } from '@material-ui/core/styles'
+import { useTheme, SvgIcon, SvgIconProps, Theme } from '@material-ui/core'
 import { forwardRef, memo, ForwardedRef } from 'react'
-import type { Theme } from '@material-ui/core'
 
 /** @internal */
 export type Size = [width: number | undefined, height: number | undefined]
@@ -10,7 +8,6 @@ export type SvgIconRaw = JSX.Element | ((theme: Theme) => JSX.Element)
 
 /**
  * Create an icon from svg fragment
- * @internal
  * @param name Name of the Icon
  * @param svg SVG content. Do not include <svg> tag
  * @param viewBox The viewbox
