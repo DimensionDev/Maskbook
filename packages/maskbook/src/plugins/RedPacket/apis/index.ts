@@ -138,7 +138,7 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
                 sender,
                 network,
                 token_type: redPacketSubgraphInMask.token.type,
-                ...(token ? { token } : {}),
+                token: redPacketSubgraphInMask.token as any,
                 ...redPacketBasic,
             } as RedPacketJSONPayload
 
