@@ -197,7 +197,7 @@
         "explorers": [
             {
                 "name": "matic",
-                "url": "https://explorer.matic.network",
+                "url": "https://polygonscan.com",
                 "standard": "EIP3091"
             }
         ],
