@@ -1,6 +1,6 @@
 import { memoizePromise } from '@dimensiondev/kit'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { EthereumTokenType, ChainId, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import { EthereumTokenType, ChainId, ERC20TokenDetailed, getChainDetailed } from '@dimensiondev/web3-shared'
 
 interface TokenList {
     keywords: string[]
@@ -43,7 +43,7 @@ export async function fetchERC20TokensFromTokenList(
             (x) =>
                 x.chainId === chainId &&
                 (process.env.NODE_ENV === 'production' && process.env.build === 'stable'
-                    ? chainId === ChainId.Mainnet
+                    ? getChainDetailed(chainId)?.network === 'mainnet'
                     : true),
         )
         .map((x) => ({
