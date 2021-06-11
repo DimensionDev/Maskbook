@@ -121,7 +121,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     useEffect(() => {
         if (refundState.type === TransactionStateType.UNKNOWN || !availability) return
         if (refundState.type === TransactionStateType.HASH) {
-            console.log({ refundState })
             setTransactionDialogOpen({
                 open: true,
                 state: refundState,
@@ -134,7 +133,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     : '',
             })
         } else if (refundState.type === TransactionStateType.CONFIRMED) {
-            console.log({ refundState }, 'c')
             resetRefundCallback()
             revalidateAvailability()
         }
