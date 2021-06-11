@@ -106,7 +106,7 @@ export const Balance = memo<BalanceCardProps>(({ balance, onSend, onBuy, onSwap 
                 <Button
                     color="secondary"
                     onClick={() => setReceiveOpen(true)}
-                    endIcon={<DownloadIcon fontSize="inherit" />}>
+                    endIcon={<DownloadIcon fontSize="inherit" style={{ stroke: MaskColorVar.textLink }} />}>
                     {t.wallets_balance_Receive()}
                 </Button>
             </ButtonGroup>
