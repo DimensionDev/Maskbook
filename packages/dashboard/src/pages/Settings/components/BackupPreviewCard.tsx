@@ -1,6 +1,15 @@
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
+export interface BackupPreview {
+    email: string
+    personas: number
+    accounts: number
+    posts: number
+    contacts: number
+    files: number
+    wallets: number
+}
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -20,52 +29,44 @@ const useStyles = makeStyles(() => ({
 }))
 
 interface Props {
-    json: {
-        personas: { linkedProfiles: [] }[]
-        posts: {}[]
-        profiles: {}[]
-        wallets: {}[]
-    }
+    json: BackupPreview
 }
 
-export default function BackupPreviewCard(props: any) {
+export default function BackupPreviewCard({ json }: Props) {
     const classes = useStyles()
-    const value = props.json
 
     const records = [
         {
             name: 'Account',
-            // TODO: get email
-            value: 'xxx@mask.io',
+            value: json.email,
         },
         {
             name: 'Personas',
-            value: value?.personas.length ?? 0,
+            value: json.personas,
         },
         {
             name: 'Associated account',
-            value: value?.personas.reduce((a: number, b: { linkedProfiles: [] }) => a + b?.linkedProfiles.length, 0),
+            value: json.accounts,
             sub: true,
         },
         {
             name: 'Encrypted Post',
-            value: value?.posts.length ?? 0,
+            value: json.posts,
             sub: true,
         },
         {
             name: 'Contacts',
-            value: value?.profiles.length ?? 0,
+            value: json.contacts,
             sub: true,
         },
         {
             name: 'File',
-            // TODO: file
-            value: 0,
+            value: json.files,
             sub: true,
         },
         {
             name: 'Local Wallet',
-            value: value?.wallets.length ?? 0,
+            value: json.wallets,
         },
     ]
 

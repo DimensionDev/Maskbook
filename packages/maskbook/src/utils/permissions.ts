@@ -4,3 +4,7 @@ export async function extraPermissions(origins: string[] | null) {
     const extra = origins.filter((i) => !currentOrigins?.includes(i))
     return extra.length ? extra : []
 }
+
+export function requestPermissions(origins: string[]) {
+    return browser.permissions.request({ origins: origins ?? [] })
+}

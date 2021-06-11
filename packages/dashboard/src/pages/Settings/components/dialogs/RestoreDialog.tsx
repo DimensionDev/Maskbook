@@ -9,12 +9,13 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { useState } from 'react'
+import { useAsync } from 'react-use'
 import ConfirmDialog from '../../../../components/ConfirmDialog'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import FileUpload from '../../../../components/FileUpload'
-import { useAsync } from 'react-use'
 import { Services } from '../../../../API'
 import BackupPreviewCard from '../BackupPreviewCard'
+import type { BackupPreview } from '../BackupPreviewCard'
 
 const useStyles = makeStyles(() => ({
     container: { flex: 1 },
@@ -78,7 +79,9 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
     // file content
     const [content, setContent] = useState('')
     // parsed json
-    const [json, setJSON] = useState<any>(null)
+    const [json, setJSON] = useState<BackupPreview | null>(null)
+    // backup id
+    const [id, setId] = useState('')
 
     const handleClose = () => {
         onClose()
@@ -90,26 +93,22 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
     const handleConfirm = async () => {
         if (!json) return
 
-        const permissions = permission.value ?? []
-
-        if (permissions.length) {
-            const granted = await Services.Welcome.requestPermissions(permissions)
-            if (!granted) return
-        }
-
-        await Services.Welcome.restoreBackup(json)
+        await Services.Welcome.checkPermissionsAndRestore(id)
     }
 
-    const permission = useAsync(async () => {
+    useAsync(async () => {
         const str = tab === 'file' ? content : text
-        if (!str) return
 
-        const json = await Services.Welcome.parseBackupStr(str)
-        if (!json) throw new Error('invalid string')
-
-        setJSON(json)
-
-        return Services.Welcome.extraPermissions(json.grantedHostPermissions)
+        if (str) {
+            const obj = await Services.Welcome.parseBackupStr(str)
+            if (obj) {
+                setJSON(obj.info)
+                setId(obj.id)
+            }
+        } else {
+            setJSON(null)
+            setId('')
+        }
     }, [tab, text, content])
 
     return (
@@ -117,7 +116,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
             title="Restore Backups"
             confirmText="Restore"
             open={open}
-            confirmDisabled={!json || permission.loading || !!permission.error}
+            confirmDisabled={!json}
             onClose={handleClose}
             onConfirm={handleConfirm}>
             <div className={classes.container}>
@@ -130,9 +129,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
                         <div className={json && content ? classes.hide : ''}>
                             <FileUpload height={180} readAsText onChange={(_, content) => setContent(content || '')} />
                         </div>
-                        <div className={json && content ? '' : classes.hide}>
-                            <BackupPreviewCard json={json} />
-                        </div>
+                        {json && content ? <BackupPreviewCard json={json} /> : null}
                     </StyledTabPanel>
                     <StyledTabPanel value="text">
                         <div className={json && text ? classes.hide : ''}>
@@ -145,9 +142,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
                                 placeholder="Paste the database backup as text here..."
                             />
                         </div>
-                        <div className={json && text ? '' : classes.hide}>
-                            <BackupPreviewCard json={json} />
-                        </div>
+                        {json && text ? <BackupPreviewCard json={json} /> : null}
                     </StyledTabPanel>
                 </TabContext>
             </div>

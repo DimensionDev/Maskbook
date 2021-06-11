@@ -13,7 +13,7 @@ interface BackupDialogProps {
 export default function BackupDialog({ open, onClose }: BackupDialogProps) {
     const [checked, setChecked] = useState(true)
 
-    const { value, loading } = useAsync(() => Services.Welcome.generateBackupJSON())
+    const { value, loading } = useAsync(() => Services.Welcome.generateBackupPreviewInfo())
 
     const handleClose = () => {
         onClose()
@@ -43,7 +43,7 @@ export default function BackupDialog({ open, onClose }: BackupDialogProps) {
             onClose={handleClose}
             onConfirm={handleConfirm}>
             <div style={{ flex: 1 }}>
-                <BackupPreviewCard json={value} />
+                {value ? <BackupPreviewCard json={value} /> : null}
                 <FormControlLabel
                     control={<Checkbox checked={checked} onChange={handleChange} />}
                     label="Encrypt with account password"
