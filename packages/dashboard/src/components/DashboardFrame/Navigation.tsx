@@ -9,37 +9,41 @@ import {
     experimentalStyled as styled,
     listItemClasses,
     listItemIconClasses,
+    ListItemButton,
+    ListItemButtonProps,
+    listItemButtonClasses,
 } from '@material-ui/core'
 import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@material-ui/icons'
-import { forwardRef, useContext, useMemo } from 'react'
+import { useContext } from 'react'
 import { useMatch } from 'react-router'
 import { Link, LinkProps } from 'react-router-dom'
-import { RoutePaths } from '../../pages/routes'
 import { DashboardContext } from './context'
 import { MaskNotSquareIcon } from '@dimensiondev/icons'
 import { useDashboardI18N } from '../../locales'
-import type { Omit } from '@material-ui/system'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { RoutePaths } from '../../pages/routes'
 
-const ListItemLinkUnStyled = ({ to, ...props }: { to: string; nested?: boolean }) => {
-    const renderLink = useMemo(
-        () =>
-            forwardRef<HTMLAnchorElement | null, Omit<LinkProps, 'to'>>((linkProps, ref) => (
-                <Link to={to} ref={ref} {...linkProps} />
-            )),
-        [to],
+const ListItemLinkUnStyled = ({ to, ...props }: LinkProps & ListItemButtonProps & { to: string; nested?: boolean }) => {
+    //TODO: {...props} will get ref type error, perhaps need mui or react-router fix
+    return (
+        <ListItemButton
+            component={Link}
+            selected={!!useMatch(to)}
+            to={to}
+            className={props.className}
+            onClick={props.onClick}>
+            {props.children}
+        </ListItemButton>
     )
-
-    return <MuiListItem component={renderLink} selected={!!useMatch(to)} {...props} />
 }
 
 const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
     return {
-        [`&.${listItemClasses.root}`]: {
+        [`&.${listItemButtonClasses.root}`]: {
             color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
             paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
         },
-        [`&.${listItemClasses.selected}`]: {
+        [`&.${listItemButtonClasses.selected}`]: {
             color: MaskColorVar.linkText,
             backgroundColor: 'transparent',
             position: 'relative',
@@ -96,19 +100,22 @@ export function Navigation({}: NavigationProps) {
                 </ListItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
-            <ListItemLink to={RoutePaths.Wallets}>
+            <ListItemLink
+                to={RoutePaths.Wallets}
+                selected={!!useMatch(RoutePaths.Wallets)}
+                onClick={toggleNavigationExpand}>
                 <ListItemIcon>
                     <AccountBalanceWallet />
                 </ListItemIcon>
                 <ListItemText>{t.wallets()}</ListItemText>
-                {!!useMatch(RoutePaths.Wallets) ? <ExpandLess /> : <ExpandMore />}
+                {expanded ? <ExpandLess /> : <ExpandMore />}
             </ListItemLink>
-            <Collapse in={!!useMatch(RoutePaths.Wallets)}>
+            <Collapse in={expanded}>
                 <List disablePadding>
                     <ListItemLink nested to={RoutePaths.WalletsTransfer}>
                         <ListItemText primary={t.wallets_transfer()} />
                     </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsHistory}>
+                    <ListItemLink nested to={RoutePaths.WalletsHistory}>
                         <ListItemText primary={t.wallets_history()} />
                     </ListItemLink>
                 </List>
