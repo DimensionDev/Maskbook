@@ -75,7 +75,7 @@ export const TokenTable = memo(() => {
             isEmpty={!!detailedTokensError || !detailedTokens.length}
             showPagination={!detailedTokensLoading && !detailedTokensError && !!detailedTokens.length}
             dataSource={detailedTokens}
-            count={ceil((value?.count ?? 0) / 50) ?? 1}
+            count={ceil((!!value?.count ? value.count : 1) / 50) ?? 1}
         />
     )
 })
@@ -94,6 +94,7 @@ export const TokenTableUI = memo<TokenTableUIProps>(
     ({ page, onPageChange, isLoading, isEmpty, showPagination, dataSource, count }) => {
         const t = useDashboardI18N()
         const classes = useStyles()
+
         return (
             <>
                 <TableContainer className={classes.container}>
