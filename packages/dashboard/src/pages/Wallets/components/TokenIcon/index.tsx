@@ -1,9 +1,14 @@
-import { ChainId, resolveChainFullName, useBlockie, useChainDetailed } from '@dimensiondev/web3-shared'
+import {
+    ChainId,
+    resolveChainFullName,
+    useBlockie,
+    useChainDetailed,
+    resolveTokenIconURL,
+} from '@dimensiondev/web3-shared'
 import type { AvatarProps } from '@material-ui/core'
 import { Avatar } from '@material-ui/core'
 import { memo } from 'react'
 import { useImageFailOver } from '../../../../hooks/useImageFailOver'
-import { resolveTokenIconURL } from '../../../../utils/resolveTokenIconURL'
 
 export interface TokenIconProps {
     address: string
