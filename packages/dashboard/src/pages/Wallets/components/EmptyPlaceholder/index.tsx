@@ -25,16 +25,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface EmptyPlaceholderProps {
-    prompt: string
-}
+export interface EmptyPlaceholderProps extends React.PropsWithChildren<{}> {}
 
-export const EmptyPlaceholder = memo<EmptyPlaceholderProps>(({ prompt }) => {
+export const EmptyPlaceholder = memo<EmptyPlaceholderProps>(({ children }) => {
     const classes = useStyles()
     return (
         <Box className={classes.container}>
             <EmptyIcon className={classes.icon} />
-            <Typography className={classes.prompt}>{prompt}</Typography>
+            <Typography className={classes.prompt}>{children}</Typography>
         </Box>
     )
 })
