@@ -105,7 +105,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                     {isLoading ? (
                         <LoadingPlaceholder />
                     ) : isEmpty ? (
-                        <EmptyPlaceholder prompt={t.wallets_empty_collectible_tip()} />
+                        <EmptyPlaceholder children={t.wallets_empty_collectible_tip()} />
                     ) : (
                         <div className={classes.root}>
                             {dataSource.map((x) => (

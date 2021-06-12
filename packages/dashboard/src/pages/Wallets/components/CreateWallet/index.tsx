@@ -1,7 +1,6 @@
-import { Button, experimentalStyled as styled, FilledInput, Tab, makeStyles } from '@material-ui/core'
-import { ButtonGroupTabList, MaskColorVar } from '@dimensiondev/maskbook-theme'
-import { memo, useState } from 'react'
-import { TabContext, TabPanel } from '@material-ui/lab'
+import { Button, experimentalStyled as styled, FilledInput, makeStyles, Typography } from '@material-ui/core'
+import { MaskColorVar, useTabs } from '@dimensiondev/maskbook-theme'
+import { memo } from 'react'
 import { RefreshIcon } from '@dimensiondev/icons'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { MaskAlert } from '../../../../components/MaskAlert'
@@ -81,47 +80,36 @@ const useTabPanelStyles = makeStyles(() => ({
     },
 }))
 
-const walletTabs = ['mnemonic', 'jsonFile', 'privateKey'] as const
-type TabType = typeof walletTabs[number]
-
 export const CreateWallet = memo(() => {
-    const tabClasses = useTabPanelStyles()
     const t = useDashboardI18N()
 
-    const walletTabsLabel: Record<TabType, string> = {
-        mnemonic: t.wallets_wallet_mnemonic(),
-        jsonFile: t.wallets_wallet_json_file(),
-        privateKey: t.wallets_wallet_private_key(),
-    }
-
-    const [activeTab, setActiveTab] = useState<TabType>(walletTabs[0])
-
-    return (
-        <Container>
-            <TabContext value={walletTabs.includes(activeTab) ? activeTab : walletTabs[0]}>
-                <ButtonGroupTabContainer>
-                    <ButtonGroupTabList
-                        onChange={(e, v: TabType) => setActiveTab(v)}
-                        aria-label={t.wallets_create_wallet_tabs()}
-                        fullWidth>
-                        {walletTabs.map((key) => (
-                            <Tab key={key} value={key} label={walletTabsLabel[key]} />
-                        ))}
-                    </ButtonGroupTabList>
-                </ButtonGroupTabContainer>
-                <TabPanel key="mnemonic" value="mnemonic" classes={tabClasses}>
+    const tabs = useTabs(
+        t.wallets_create_wallet_tabs(),
+        {
+            mnemonic: t.wallets_wallet_mnemonic(),
+            json: t.wallets_wallet_json_file(),
+            privateKey: t.wallets_wallet_private_key(),
+        },
+        {
+            mnemonic: (
+                <>
                     <Refresh>
                         <RefreshIcon />
-                        <span>{t.wallets_create_wallet_refresh()}</span>
+                        <Typography>{t.wallets_create_wallet_refresh()}</Typography>
                     </Refresh>
                     <MnemonicGeneratorContainer>
                         <MnemonicReveal words={[...Array(12).keys()].map((i) => String(i))} />
                     </MnemonicGeneratorContainer>
-                </TabPanel>
-                <TabPanel key="privateKey" value="privateKey" classes={tabClasses}>
-                    <PrivateKeyInput />
-                </TabPanel>
-            </TabContext>
+                </>
+            ),
+            json: 'TODO: ',
+            privateKey: <PrivateKeyInput />,
+        },
+        { variant: 'buttonGroup', tabPanelClasses: useTabPanelStyles() },
+    )
+    return (
+        <Container>
+            {tabs}
             <ControlContainer>
                 <Button color="secondary">{t.wallets_create_wallet_remember_later()}</Button>
                 <Button color="primary">{t.wallets_create_wallet_verification()}</Button>

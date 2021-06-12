@@ -100,7 +100,7 @@ export const TokenTableUI = memo<TokenTableUIProps>(
                     {isLoading || isEmpty ? (
                         <Box flex={1}>
                             {isLoading ? <LoadingPlaceholder /> : null}
-                            {isEmpty ? <EmptyPlaceholder prompt={t.wallets_empty_tokens_tip()} /> : null}
+                            {isEmpty ? <EmptyPlaceholder children={t.wallets_empty_tokens_tip()} /> : null}
                         </Box>
                     ) : (
                         <Table stickyHeader sx={{ padding: '0 44px' }}>

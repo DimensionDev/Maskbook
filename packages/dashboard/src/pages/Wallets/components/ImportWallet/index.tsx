@@ -1,7 +1,6 @@
-import { memo, useState } from 'react'
-import { TabContext, TabPanel } from '@material-ui/lab'
-import { Button, Tab, experimentalStyled as styled, makeStyles, FilledInput } from '@material-ui/core'
-import { ButtonGroupTabList } from '@dimensiondev/maskbook-theme'
+import { memo } from 'react'
+import { Button, experimentalStyled as styled, makeStyles, FilledInput } from '@material-ui/core'
+import { useTabs } from '@dimensiondev/maskbook-theme'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
 import { MaskAlert } from '../../../../components/MaskAlert'
 import { useDashboardI18N } from '../../../../locales'
@@ -11,11 +10,6 @@ const Container = styled('div')`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-`
-
-const ButtonGroupTabContainer = styled('div')`
-    /* TODO: mobile */
-    width: 582px;
 `
 
 const ControlContainer = styled('div')(
@@ -54,8 +48,9 @@ const PasswordInput = styled(FilledInput)(
 `,
 )
 
-const useTabPanelStyles = makeStyles((theme) => ({
-    root: {
+const useStyles = makeStyles((theme) => ({
+    tabs: { width: 582, justifyContent: 'center' },
+    panels: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -66,43 +61,37 @@ const useTabPanelStyles = makeStyles((theme) => ({
     },
 }))
 
-const walletTabs = ['mnemonic', 'jsonFile', 'privateKey'] as const
-type TabType = typeof walletTabs[number]
-
 export const ImportWallet = memo(() => {
-    const tabClasses = useTabPanelStyles()
+    const classes = useStyles()
 
     const t = useDashboardI18N()
-    const walletTabsLabel: Record<TabType, string> = {
-        mnemonic: t.wallets_wallet_mnemonic(),
-        jsonFile: t.wallets_wallet_json_file(),
-        privateKey: t.wallets_wallet_private_key(),
-    }
-
-    const [activeTab, setActiveTab] = useState<TabType>(walletTabs[0])
-
+    const tabs = useTabs(
+        t.wallets_import_wallet_tabs(),
+        {
+            mnemonic: t.wallets_wallet_mnemonic(),
+            json: t.wallets_wallet_json_file(),
+            privateKey: t.wallets_wallet_private_key(),
+        },
+        {
+            mnemonic: <DesktopMnemonicConfirm onChange={() => {}} />,
+            json: 'TBD',
+            privateKey: (
+                <>
+                    <PrivateKeyInput />
+                    <PasswordInput placeholder={t.wallets_import_wallet_password_placeholder()} />
+                </>
+            ),
+        },
+        {
+            variant: 'buttonGroup',
+            tabPanelClasses: { root: classes.panels },
+            buttonTabGroupClasses: { root: classes.tabs },
+        },
+    )
     return (
         <>
             <Container>
-                <TabContext value={walletTabs.includes(activeTab) ? activeTab : walletTabs[0]}>
-                    <ButtonGroupTabContainer>
-                        <ButtonGroupTabList
-                            onChange={(e, v: TabType) => setActiveTab(v)}
-                            aria-label={t.wallets_import_wallet_tabs()}
-                            fullWidth>
-                            {walletTabs.map((key) => (
-                                <Tab key={key} value={key} label={walletTabsLabel[key]} />
-                            ))}
-                        </ButtonGroupTabList>
-                    </ButtonGroupTabContainer>
-                    <TabPanel value="mnemonic" key="Mnemonic" classes={tabClasses}>
-                        <DesktopMnemonicConfirm onChange={() => {}} />
-                    </TabPanel>
-                    <TabPanel value="privateKey" key="privateKey" classes={tabClasses}>
-                        <PrivateKeyInput />
-                        <PasswordInput placeholder={t.wallets_import_wallet_password_placeholder()} />
-                    </TabPanel>
-                </TabContext>
+                {tabs}
                 <ControlContainer>
                     <Button color="secondary">{t.wallets_import_wallet_cancel()}</Button>
                     <Button color="primary">{t.wallets_import_wallet_import()}</Button>

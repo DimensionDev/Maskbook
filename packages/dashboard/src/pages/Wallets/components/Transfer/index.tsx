@@ -1,8 +1,7 @@
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { ShapeContainer } from '../../../../components/ShapeContainer'
-import { TabContext } from '@material-ui/lab'
-import { makeStyles, Box, Tabs, Tab } from '@material-ui/core'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { makeStyles, Box } from '@material-ui/core'
+import { MaskColorVar, useTabs } from '@dimensiondev/maskbook-theme'
 
 const useStyles = makeStyles((theme) => ({
     caption: {
@@ -14,32 +13,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export enum AssetType {
-    Token = 'Token',
-}
-
-const assetTypeTabs = [AssetType.Token] as const
-
 export const Transfer = memo(() => {
     const classes = useStyles()
 
-    const assetTypeLabel: Record<AssetType, string> = {
-        [AssetType.Token]: 'Token',
-    }
-
-    const [activeTab, setActiveTab] = useState<AssetType>(assetTypeTabs[0])
+    const tabs = useTabs(
+        'Tokens',
+        { token: 'Token' },
+        {
+            token: <></>,
+        },
+    )
 
     return (
         <ShapeContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>
-            <TabContext value={activeTab}>
-                <Box className={classes.caption}>
-                    <Tabs value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
-                        {assetTypeTabs.map((key) => (
-                            <Tab key={key} value={key} label={assetTypeLabel[key]} sx={{ textTransform: 'none' }} />
-                        ))}
-                    </Tabs>
-                </Box>
-            </TabContext>
+            <Box className={classes.caption}>{tabs}</Box>
         </ShapeContainer>
     )
 })

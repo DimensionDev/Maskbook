@@ -7,6 +7,6 @@ export default meta({ title: 'Pages/Wallet/Empty Placeholder' })
 
 export const EmptyPlaceholder = of({
     args: {
-        prompt: 'Empty Placeholder',
+        children: 'Empty Placeholder',
     },
 })
