@@ -62,7 +62,7 @@ export const TokenAssets = memo(() => {
                     <Box className={classes.caption}>
                         <Tabs value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
                             {assetTabs.map((key) => (
-                                <Tab key={key} value={key} label={assetTabsLabel[key]} sx={{ textTransform: 'none' }} />
+                                <Tab key={key} value={key} label={assetTabsLabel[key]} />
                             ))}
                         </Tabs>
                         <Button

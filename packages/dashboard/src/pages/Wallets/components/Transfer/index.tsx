@@ -35,7 +35,7 @@ export const Transfer = memo(() => {
                 <Box className={classes.caption}>
                     <Tabs value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
                         {assetTypeTabs.map((key) => (
-                            <Tab key={key} value={key} label={assetTypeLabel[key]} sx={{ textTransform: 'none' }} />
+                            <Tab key={key} value={key} label={assetTypeLabel[key]} />
                         ))}
                     </Tabs>
                 </Box>

@@ -13,9 +13,6 @@ import type { PersonaInformation } from '@dimensiondev/maskbook-shared'
 import { ShapeContainer } from '../../components/ShapeContainer'
 
 const useStyles = makeStyles((theme) => ({
-    wrapper: {
-        textTransform: 'none',
-    },
     tabPanel: {
         padding: 0,
         flex: 1,
@@ -88,7 +85,6 @@ function Personas() {
                                 value={networkIdentifier}
                                 // They should be localized
                                 label={capitalize(networkIdentifier.replace('.com', ''))}
-                                classes={{ wrapper: classes.wrapper }}
                             />
                         ))}
                     </Tabs>

@@ -66,7 +66,10 @@ export const BorderRadius: ThemeOptions = {
  * ? No auto text-transform will be applied in this theme
  */
 export const NoAutoTextTransform: ThemeOptions = {
-    components: { MuiButton: { styleOverrides: { root: { textTransform: 'none' } } } },
+    components: {
+        MuiButton: { styleOverrides: { root: { textTransform: 'initial' } } },
+        MuiTab: { styleOverrides: { root: { textTransform: 'initial' } } },
+    },
 }
 
 /**
