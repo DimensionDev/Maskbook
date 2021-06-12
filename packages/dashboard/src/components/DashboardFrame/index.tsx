@@ -126,7 +126,7 @@ const ShapeHelper = styled('div')(({ theme }) => ({
     flexDirection: 'column',
 }))
 
-const ShapeContainer = styled('div')(({ theme }) => ({
+const ContentContainer = styled('div')(({ theme }) => ({
     height: '100%',
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
@@ -190,10 +190,10 @@ export const PageFrame = memo((props: PageFrameProps) => {
                     </NavigationDrawer>
                 )}
                 <ShapeHelper>
-                    <ShapeContainer
+                    <ContentContainer
                         className={props.noBackgroundFill ? undefined : classes.shapeContainerWithBackground}>
                         <ErrorBoundary>{props.children}</ErrorBoundary>
-                    </ShapeContainer>
+                    </ContentContainer>
                 </ShapeHelper>
                 {showFeaturePromotions ? <FeaturePromotions /> : null}
             </Containment>

@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { ShapeContainer } from '../../../../components/ShapeContainer'
+import { ContentContainer } from '../../../../components/ContentContainer'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { Tab, Tabs, Box, Button, makeStyles } from '@material-ui/core'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
@@ -56,7 +56,7 @@ export const TokenAssets = memo(() => {
 
     return (
         <>
-            <ShapeContainer
+            <ContentContainer
                 sx={{ marginTop: 3, display: 'flex', flexDirection: 'column', maxHeight: 'calc(100% - 114px)' }}>
                 <TabContext value={activeTab}>
                     <Box className={classes.caption}>
@@ -90,7 +90,7 @@ export const TokenAssets = memo(() => {
                         <CollectibleList />
                     </TabPanel>
                 </TabContext>
-            </ShapeContainer>
+            </ContentContainer>
             <AddTokenDialog open={addTokenOpen} onClose={() => setAddTokenOpen(false)} />
             <AddCollectibleDialog open={addCollectibleOpen} onClose={() => setAddCollectibleOpen(false)} />
         </>

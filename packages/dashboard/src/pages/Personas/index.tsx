@@ -10,7 +10,7 @@ import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaContext } from './hooks/usePersonaContext'
 import { useDashboardI18N } from '../../locales'
 import type { PersonaInformation } from '@dimensiondev/maskbook-shared'
-import { ShapeContainer } from '../../components/ShapeContainer'
+import { ContentContainer } from '../../components/ContentContainer'
 
 const useStyles = makeStyles((theme) => ({
     tabPanel: {
@@ -76,7 +76,7 @@ function Personas() {
                     </IconButton>
                 </Box>
             }>
-            <ShapeContainer>
+            <ContentContainer>
                 <TabContext value={activeTab}>
                     <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
                         {definedSocialNetworks.map(({ networkIdentifier }) => (
@@ -104,7 +104,7 @@ function Personas() {
                         )
                     })}
                 </TabContext>
-            </ShapeContainer>
+            </ContentContainer>
             <PersonaDrawer personas={personas} />
         </PageFrame>
     )

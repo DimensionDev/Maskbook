@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { ShapeContainer } from '../../../../components/ShapeContainer'
+import { ContentContainer } from '../../../../components/ContentContainer'
 import { makeStyles, Box } from '@material-ui/core'
 import { MaskColorVar, useTabs } from '@dimensiondev/maskbook-theme'
 
@@ -25,8 +25,8 @@ export const Transfer = memo(() => {
     )
 
     return (
-        <ShapeContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>
+        <ContentContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>
             <Box className={classes.caption}>{tabs}</Box>
-        </ShapeContainer>
+        </ContentContainer>
     )
 })

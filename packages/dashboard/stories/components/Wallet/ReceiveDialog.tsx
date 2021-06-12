@@ -1,12 +1,11 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
-import { ReceiveDialog as C } from '../../../src/pages/Wallets/components/ReceiveDialog'
+import { ReceiveDialogUI as C } from '../../../src/pages/Wallets/components/ReceiveDialog'
 import { action } from '@storybook/addon-actions'
+import { NetworkType } from '@dimensiondev/web3-shared'
 
 const { meta, of } = story(C)
 
-export default meta({
-    title: 'Components/Wallet/Receive Dialog',
-})
+export default meta({ title: 'Components/Wallet/Receive Dialog' })
 
 export const ReceiveDialog = of({
     args: {
@@ -14,5 +13,6 @@ export const ReceiveDialog = of({
         onClose: action('onClose'),
         chainName: 'Ethereum',
         walletAddress: '0xFD7A5D91AF554ACD8ED07c7911E8556a7D20D88a',
+        currentNetworkType: NetworkType.Ethereum,
     },
 })
