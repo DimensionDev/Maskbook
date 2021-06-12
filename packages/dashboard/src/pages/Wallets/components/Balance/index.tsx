@@ -1,16 +1,15 @@
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { experimentalStyled as styled, Typography, Box, Button, buttonClasses } from '@material-ui/core'
 import { useDashboardI18N } from '../../../../locales'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { MaskWalletIcon, SendIcon, CardIcon, SwapIcon, DownloadIcon } from '@dimensiondev/icons'
-import { ReceiveDialog } from '../ReceiveDialog'
-import { useWallet } from '@dimensiondev/web3-shared'
 
 export interface BalanceCardProps {
     balance: number
     onSend(): void
     onBuy(): void
     onSwap(): void
+    onReceive(): void
 }
 
 const BalanceContainer = styled('div')(
@@ -71,27 +70,9 @@ const ButtonGroup = styled('div')`
     }
 `
 
-export const Balance = memo<BalanceCardProps>(({ balance, onSend, onBuy, onSwap }) => {
-    const wallet = useWallet()
-
-    return (
-        <BalanceCardUI
-            balance={balance}
-            onSend={onSend}
-            onBuy={onBuy}
-            onSwap={onSwap}
-            walletAddress={wallet?.address ?? ''}
-        />
-    )
-})
-
-export interface BalanceCardUIProps extends BalanceCardProps {
-    walletAddress: string
-}
-
-export const BalanceCardUI = memo<BalanceCardUIProps>(({ balance, onSend, onBuy, onSwap, walletAddress }) => {
+export const Balance = memo<BalanceCardProps>(({ balance, onSend, onBuy, onSwap, onReceive }) => {
     const t = useDashboardI18N()
-    const [receiveOpen, setReceiveOpen] = useState(false)
+
     return (
         <BalanceContainer>
             <Box display="flex">
@@ -120,17 +101,11 @@ export const BalanceCardUI = memo<BalanceCardUIProps>(({ balance, onSend, onBuy,
                 </Button>
                 <Button
                     color="secondary"
-                    onClick={() => setReceiveOpen(true)}
+                    onClick={onReceive}
                     endIcon={<DownloadIcon fontSize="inherit" style={{ stroke: MaskColorVar.textLink }} />}>
                     {t.wallets_balance_Receive()}
                 </Button>
             </ButtonGroup>
-            <ReceiveDialog
-                open={receiveOpen}
-                chainName="Ethereum"
-                walletAddress={walletAddress}
-                onClose={() => setReceiveOpen(false)}
-            />
         </BalanceContainer>
     )
 })

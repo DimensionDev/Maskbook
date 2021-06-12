@@ -161,7 +161,6 @@ importers:
       color: ^3.1.3
       json-stable-stringify: ^1.0.1
       lodash-es: ^4.17.21
-      notistack: ^1.0.6
       react-router: ^5.2.0
       react-router-dom: ^5.2.0
       react-use: ^17.2.4
@@ -187,7 +186,6 @@ importers:
       color: 3.1.3
       json-stable-stringify: 1.0.1
       lodash-es: 4.17.21
-      notistack: 1.0.9
       react-router: 5.2.0
       react-router-dom: 5.2.0
       react-use: 17.2.4
@@ -17558,17 +17556,6 @@ packages:
   /normalize-url/4.5.1:
     resolution: {integrity: sha512-9UZCFRHQdNrfTpGg8+1INIg93B6zE0aXMVFkw1WFwvO4SlZywU6aLg5Of0Ap/PgcbSw4LNxvMWXMeugwMCX0AA==}
     engines: {node: '>=8'}
-    dev: false
-
-  /notistack/1.0.9:
-    resolution: {integrity: sha512-Dal2HtTpWrdYCZ3t0HhJt47NJZwVSPee36WzORRbqUkFR0k9pxFszxBuPSWshBLwF6Av8s86XPP+ED5zRz0CGw==}
-    peerDependencies:
-      '@material-ui/core': ^4.0.0
-      react: ^16.8.0 || ^17.0.0
-      react-dom: ^16.8.0 || ^17.0.0
-    dependencies:
-      clsx: 1.1.1
-      hoist-non-react-statics: 3.3.2
     dev: false
 
   /notistack/1.0.9_132ff92e0fd7328580f6380de259b809:

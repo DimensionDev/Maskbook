@@ -1,17 +1,20 @@
 import { Box, Button } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
-import { useWallets, useTrustedERC20Tokens, useAssets, getTokenUSDValue } from '@dimensiondev/web3-shared'
+import { useWallets, useTrustedERC20Tokens, useAssets, getTokenUSDValue, useWallet } from '@dimensiondev/web3-shared'
 import { StartUp } from './StartUp'
 import { TokenAssets } from './components/TokenAssets'
 import { Route, Switch, useRouteMatch } from 'react-router'
 import { Balance } from './components/Balance'
 import { Routes } from '../../type'
 import { Transfer } from './components/Transfer'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
+import { ReceiveDialog } from './components/ReceiveDialog'
 
 function Wallets() {
+    const wallet = useWallet()
     const wallets = useWallets()
+    const [receiveOpen, setReceiveOpen] = useState(false)
     const { path } = useRouteMatch()
 
     const erc20Tokens = useTrustedERC20Tokens()
@@ -36,13 +39,27 @@ function Wallets() {
                 <StartUp />
             ) : (
                 <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                    <Balance balance={balance} onSend={() => {}} onBuy={() => {}} onSwap={() => {}} />
+                    <Balance
+                        balance={balance}
+                        onSend={() => {}}
+                        onBuy={() => {}}
+                        onSwap={() => {}}
+                        onReceive={() => setReceiveOpen(true)}
+                    />
                     <Switch>
                         <Route exact path={path} children={<TokenAssets />}></Route>
                         <Route exact path={Routes.WalletsTransfer} children={<Transfer />} />
                     </Switch>
                 </Box>
             )}
+            {wallet ? (
+                <ReceiveDialog
+                    open={receiveOpen}
+                    chainName="Ethereum"
+                    walletAddress={wallet.address ?? ''}
+                    onClose={() => setReceiveOpen(false)}
+                />
+            ) : null}
         </PageFrame>
     )
 }
