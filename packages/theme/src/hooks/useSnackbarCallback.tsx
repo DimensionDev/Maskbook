@@ -16,7 +16,11 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
         (...args) =>
             executor(...args).then(
                 (res) => {
-                    enqueueSnackbar(successText ?? t.done(), { key, variant: 'success', preventDuplicate: true })
+                    enqueueSnackbar(successText ?? t.snackbar_done(), {
+                        key,
+                        variant: 'success',
+                        preventDuplicate: true,
+                    })
                     onSuccess?.(res)
                     return res
                 },
