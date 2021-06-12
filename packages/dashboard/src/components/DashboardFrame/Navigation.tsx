@@ -9,41 +9,39 @@ import {
     experimentalStyled as styled,
     listItemClasses,
     listItemIconClasses,
-    ListItemButton,
-    ListItemButtonProps,
-    listItemButtonClasses,
+    ListItemProps,
 } from '@material-ui/core'
 import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@material-ui/icons'
 import { useContext } from 'react'
-import { useMatch } from 'react-router'
-import { Link, LinkProps } from 'react-router-dom'
+import { useMatch, useNavigate } from 'react-router'
 import { DashboardContext } from './context'
 import { MaskNotSquareIcon } from '@dimensiondev/icons'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { RoutePaths } from '../../pages/routes'
 
-const ListItemLinkUnStyled = ({ to, ...props }: LinkProps & ListItemButtonProps & { to: string; nested?: boolean }) => {
-    //TODO: {...props} will get ref type error, perhaps need mui or react-router fix
+const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string; nested?: boolean }) => {
+    const navigate = useNavigate()
     return (
-        <ListItemButton
-            component={Link}
+        <MuiListItem
+            {...props}
             selected={!!useMatch(to)}
-            to={to}
-            className={props.className}
-            onClick={props.onClick}>
-            {props.children}
-        </ListItemButton>
+            onClick={(event) => {
+                navigate(to)
+                props.onClick?.(event)
+            }}
+        />
     )
 }
 
 const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
     return {
-        [`&.${listItemButtonClasses.root}`]: {
+        [`&.${listItemClasses.root}`]: {
             color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
             paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
+            cursor: 'pointer',
         },
-        [`&.${listItemButtonClasses.selected}`]: {
+        [`&.${listItemClasses.selected}`]: {
             color: MaskColorVar.linkText,
             backgroundColor: 'transparent',
             position: 'relative',
