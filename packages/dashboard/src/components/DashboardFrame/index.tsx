@@ -15,16 +15,16 @@ import {
 import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
 import Color from 'color'
 import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
-import { useState, useContext, useMemo } from 'react'
+import { useState, useContext, useMemo, Suspense } from 'react'
 import { DashboardContext } from './context'
 import { Navigation } from './Navigation'
 import { MaskNotSquareIcon } from '@dimensiondev/icons'
 import { memo } from 'react'
-import { Advertisements } from './Advertisements'
+import { FeaturePromotions } from './FeaturePromotions'
 import { useLocation } from 'react-router'
 import { Routes } from '../../type'
 
-const adsWhiteList = [Routes.Wallets, Routes.WalletsTransfer, Routes.WalletsHistory]
+const featurePromotionsEnabled = [Routes.Wallets, Routes.WalletsTransfer, Routes.WalletsHistory]
 
 const Root = styled(Grid)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -63,7 +63,9 @@ export const DashboardFrame = memo((props: DashboardFrameProps) => {
                     </LeftContainer>
                 )}
                 <Grid container direction="column" item xs={isLargeScreen ? 10 : 12}>
-                    <ErrorBoundary>{props.children}</ErrorBoundary>
+                    <Suspense fallback="Loading...">
+                        <ErrorBoundary>{props.children}</ErrorBoundary>
+                    </Suspense>
                 </Grid>
             </Root>
         </DashboardContext.Provider>
@@ -156,7 +158,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
     const right = props.primaryAction
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
-    const showAdvertisements = adsWhiteList.some((path: string) => path === location.pathname)
+    const showFeaturePromotions = featurePromotionsEnabled.some((path: string) => path === location.pathname)
     const classes = useStyle()
 
     return (
@@ -193,7 +195,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
                         <ErrorBoundary>{props.children}</ErrorBoundary>
                     </ShapeContainer>
                 </ShapeHelper>
-                {showAdvertisements ? <Advertisements /> : null}
+                {showFeaturePromotions ? <FeaturePromotions /> : null}
             </Containment>
         </>
     )
