@@ -1,8 +1,7 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
 import { action } from '@storybook/addon-actions'
 import { CollectibleListUI as C } from '../../../src/pages/Wallets/components/CollectibleList'
-import { ChainId, createERC721Token } from '@dimensiondev/web3-shared'
-import { CollectibleProvider } from '../../../src/pages/Wallets/types'
+import { ChainId, createERC721Token, CollectibleProvider } from '@dimensiondev/web3-shared'
 
 const { meta, of } = story(C)
 

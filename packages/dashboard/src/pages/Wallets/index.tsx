@@ -1,22 +1,20 @@
 import { Box, Button } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
-import { useWallets } from '@dimensiondev/web3-shared'
+import { useWallets, useTrustedERC20Tokens, useAssets, getTokenUSDValue } from '@dimensiondev/web3-shared'
 import { StartUp } from './StartUp'
 import { TokenAssets } from './components/TokenAssets'
 import { Route, Switch, useRouteMatch } from 'react-router'
 import { Balance } from './components/Balance'
 import { Routes } from '../../type'
 import { Transfer } from './components/Transfer'
-import { useAssets, useERC20Tokens } from './hooks'
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { getTokenUSDValue } from './helpers'
 
 function Wallets() {
     const wallets = useWallets()
     const { path } = useRouteMatch()
 
-    const { value: erc20Tokens } = useERC20Tokens()
+    const erc20Tokens = useTrustedERC20Tokens()
 
     const { value: detailedTokens } = useAssets(erc20Tokens || [])
 

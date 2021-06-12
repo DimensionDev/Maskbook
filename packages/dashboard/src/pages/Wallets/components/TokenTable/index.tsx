@@ -16,11 +16,10 @@ import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../LoadingPlacholder'
 import { TokenTableRow } from '../TokenTableRow'
-import { useAssets, useERC20TokensPaged } from '../../hooks'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 import BigNumber from 'bignumber.js'
 import { ceil } from 'lodash-es'
-import type { Asset } from '../../types'
+import { Asset, useAssets, useERC20TokensPaged } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     container: {

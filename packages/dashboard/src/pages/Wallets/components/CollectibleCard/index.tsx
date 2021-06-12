@@ -1,8 +1,12 @@
-import type { CollectibleProvider } from '../../types'
-import type { ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed, ChainId } from '@dimensiondev/web3-shared'
+import {
+    ERC1155TokenAssetDetailed,
+    ERC721TokenAssetDetailed,
+    ChainId,
+    CollectibleProvider,
+    resolveCollectibleLink,
+} from '@dimensiondev/web3-shared'
 import { memo } from 'react'
 import { Link, makeStyles, Typography } from '@material-ui/core'
-import { resolveCollectibleLink } from '../../helpers'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 

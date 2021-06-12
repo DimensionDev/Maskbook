@@ -8,14 +8,14 @@ import {
     useAccount,
     useChainId,
     useWallet,
+    CollectibleProvider,
+    useCollectibles,
 } from '@dimensiondev/web3-shared'
 import { useCurrentCollectibleDataProvider } from '../../api'
-import { useCollectibles } from '../../hooks'
 import { LoadingPlaceholder } from '../LoadingPlacholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { CollectibleCard } from '../CollectibleCard'
-import type { CollectibleProvider } from '../../types'
 import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles(() => ({
@@ -51,7 +51,7 @@ export const CollectibleList = memo(() => {
         value = { collectibles: [], hasNextPage: false },
         loading: collectiblesLoading,
         error: collectiblesError,
-    } = useCollectibles(account, provider, page)
+    } = useCollectibles(account, provider, page, 20)
 
     const { collectibles = [], hasNextPage } = value
 

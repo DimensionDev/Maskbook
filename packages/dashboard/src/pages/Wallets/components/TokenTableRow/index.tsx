@@ -1,13 +1,11 @@
 import { memo } from 'react'
-import type { Asset } from '../../types'
 import { Box, TableRow, Typography, makeStyles, TableCell, Button } from '@material-ui/core'
 import { TokenIcon } from '../TokenIcon'
 import { formatBalance, formatCurrency, FormattedCurrency, pow10 } from '@dimensiondev/maskbook-shared'
-import { CurrencyType } from '@dimensiondev/web3-shared'
+import { CurrencyType, Asset, getTokenUSDValue } from '@dimensiondev/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useHistory } from 'react-router'
 import { Routes } from '../../../../type'
-import { getTokenUSDValue } from '../../helpers'
 import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles((theme) => ({

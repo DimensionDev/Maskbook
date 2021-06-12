@@ -1,5 +1,14 @@
-import { safeUnreachable } from '@dimensiondev/maskbook-shared'
-import { ChainId, ERC20Token, ERC721Token, NativeToken, NetworkType, ProviderType } from '../types'
+import { safeUnreachable, unreachable } from '@dimensiondev/maskbook-shared'
+import {
+    ChainId,
+    CollectibleProvider,
+    ERC20Token,
+    ERC721Token,
+    NativeToken,
+    NetworkType,
+    NonFungibleTokenDetailed,
+    ProviderType,
+} from '../types'
 import { getChainDetailed } from '../utils'
 
 export function resolveProviderName(providerType: ProviderType) {
@@ -85,4 +94,27 @@ export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): str
 
 export function resolveIPFSLink(ipfs: string): string {
     return `https://ipfs.fleek.co/ipfs/${ipfs}`
+}
+
+export function resolveCollectibleProviderLink(chainId: ChainId, provider: CollectibleProvider) {
+    switch (provider) {
+        case CollectibleProvider.OPENSEAN:
+            if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io`
+            return `https://opensea.io`
+        default:
+            unreachable(provider)
+    }
+}
+
+export function resolveCollectibleLink(
+    chainId: ChainId,
+    provider: CollectibleProvider,
+    token: NonFungibleTokenDetailed,
+) {
+    switch (provider) {
+        case CollectibleProvider.OPENSEAN:
+            return `${resolveCollectibleProviderLink(chainId, provider)}/assets/${token.address}/${token.tokenId}`
+        default:
+            unreachable(provider)
+    }
 }

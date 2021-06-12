@@ -6,7 +6,7 @@ import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContai
 import { useCopyToClipboard } from 'react-use'
 import { useSnackbarCallback } from '../../../../hooks/useSnackbarCallback'
 import { useCurrentSelectedWalletNetwork } from '../../api'
-import { resolveNetworkName } from '../../helpers'
+import { resolveNetworkName } from '@dimensiondev/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     paper: {

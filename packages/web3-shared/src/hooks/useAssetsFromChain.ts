@@ -1,7 +1,6 @@
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
-import { useTokensBalance } from '@dimensiondev/web3-shared'
-import { useAssetsMerged } from '.'
-import type { Asset } from '../types'
+import type { Asset, FungibleTokenDetailed } from '../types'
+import { useTokensBalance } from './useTokensBalance'
+import { useAssetsMerged } from './useAssetsMerged'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[]) {
     const { value: listOfBalance = [], loading, error, retry } = useTokensBalance(tokens.map((y) => y.address))
