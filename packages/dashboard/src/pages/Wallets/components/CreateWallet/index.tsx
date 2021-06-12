@@ -112,7 +112,7 @@ export const CreateWallet = memo(() => {
                         ))}
                     </ButtonGroupTabList>
                 </ButtonGroupTabContainer>
-                <TabPanel key="mnemonic" value="mnemonic" classes={tabClasses}>
+                <TabPanel key={WalletTabs.mnemonic} value={WalletTabs.mnemonic} classes={tabClasses}>
                     <Refresh>
                         <RefreshIcon />
                         <Typography>{t.wallets_create_wallet_refresh()}</Typography>
@@ -121,7 +121,10 @@ export const CreateWallet = memo(() => {
                         <MnemonicReveal words={[...Array(12).keys()].map((i) => String(i))} />
                     </MnemonicGeneratorContainer>
                 </TabPanel>
-                <TabPanel key="privateKey" value="privateKey" classes={tabClasses}>
+                <TabPanel key={WalletTabs.json} value={WalletTabs.json} classes={tabClasses}>
+                    TBD
+                </TabPanel>
+                <TabPanel key={WalletTabs.privateKey} value={WalletTabs.privateKey} classes={tabClasses}>
                     <PrivateKeyInput />
                 </TabPanel>
             </TabContext>
