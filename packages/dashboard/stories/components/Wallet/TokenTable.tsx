@@ -6,7 +6,7 @@ const { meta, of } = story(C)
 
 export default meta({ title: 'Components/Wallet/Token Table' })
 
-export const TokenTableUI = of({
+export const TokenTable = of({
     args: {
         page: 1,
         onPageChange: action('onPageChange'),

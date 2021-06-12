@@ -72,11 +72,26 @@ const ButtonGroup = styled('div')`
 `
 
 export const Balance = memo<BalanceCardProps>(({ balance, onSend, onBuy, onSwap }) => {
-    const t = useDashboardI18N()
     const wallet = useWallet()
 
-    const [receiveOpen, setReceiveOpen] = useState(false)
+    return (
+        <BalanceCardUI
+            balance={balance}
+            onSend={onSend}
+            onBuy={onBuy}
+            onSwap={onSwap}
+            walletAddress={wallet?.address ?? ''}
+        />
+    )
+})
 
+export interface BalanceCardUIProps extends BalanceCardProps {
+    walletAddress: string
+}
+
+export const BalanceCardUI = memo<BalanceCardUIProps>(({ balance, onSend, onBuy, onSwap, walletAddress }) => {
+    const t = useDashboardI18N()
+    const [receiveOpen, setReceiveOpen] = useState(false)
     return (
         <BalanceContainer>
             <Box display="flex">
@@ -113,7 +128,7 @@ export const Balance = memo<BalanceCardProps>(({ balance, onSend, onBuy, onSwap 
             <ReceiveDialog
                 open={receiveOpen}
                 chainName="Ethereum"
-                walletAddress={wallet?.address ?? ''}
+                walletAddress={walletAddress}
                 onClose={() => setReceiveOpen(false)}
             />
         </BalanceContainer>

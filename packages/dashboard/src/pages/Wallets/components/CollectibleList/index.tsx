@@ -1,5 +1,5 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react'
-import { Box, makeStyles, filledInputClasses, TablePagination } from '@material-ui/core'
+import { Box, makeStyles, TablePagination } from '@material-ui/core'
 import {
     ChainId,
     ERC1155TokenAssetDetailed,
@@ -24,22 +24,6 @@ const useStyles = makeStyles(() => ({
         height: 'calc(100% - 58px)',
         maxHeight: 'calc(100% - 58px)',
         overflow: 'auto',
-    },
-    search: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        marginBottom: 20,
-    },
-    input: {
-        [`& .${filledInputClasses.root}`]: {
-            width: 298,
-            fontSize: 13,
-            lineHeight: 18,
-        },
-        [`& .${filledInputClasses.input}`]: {
-            paddingTop: 15,
-            paddingBottom: 15,
-        },
     },
     root: {
         display: 'flex',

@@ -209,10 +209,10 @@ export const AddTokenFormUI = memo<AddTokenFormUIProps>(
                 <DialogContent className={classes.content}>
                     <form>
                         <div className={classes.item}>
-                            <label className={classes.title}>{t.wallets_add_token_contract_address()}</label>
                             <TextField
                                 variant="filled"
                                 value={address}
+                                label={t.wallets_add_token_contract_address()}
                                 InputProps={{ disableUnderline: true }}
                                 error={!!validateAddressMessage}
                                 helperText={validateAddressMessage}
@@ -220,10 +220,10 @@ export const AddTokenFormUI = memo<AddTokenFormUIProps>(
                             />
                         </div>
                         <div className={classes.item}>
-                            <label className={classes.title}>{t.wallets_add_token_symbol()}</label>
                             <TextField
                                 variant="filled"
                                 value={symbol}
+                                label={t.wallets_add_token_symbol()}
                                 InputProps={{ disableUnderline: true }}
                                 error={!!validateSymbolMessage}
                                 onChange={(e) => setSymbol(e.target.value)}
@@ -231,11 +231,11 @@ export const AddTokenFormUI = memo<AddTokenFormUIProps>(
                             />
                         </div>
                         <div className={classes.item}>
-                            <label className={classes.title}>{t.wallets_add_token_decimals()}</label>
                             <TextField
                                 variant="filled"
                                 type="number"
                                 value={decimals}
+                                label={t.wallets_add_token_decimals()}
                                 disabled={!!token?.decimals}
                                 inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                                 InputProps={{ disableUnderline: true }}

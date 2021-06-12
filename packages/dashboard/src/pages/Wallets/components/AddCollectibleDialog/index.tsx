@@ -67,8 +67,6 @@ export interface AddCollectibleDialogUIProps {
 export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
     ({ open, onClose, address, exclude, onAddressChange, onSubmit }) => {
         const t = useDashboardI18N()
-        const classes = useStyles()
-
         const validateAddressMessage = useMemo(() => {
             if (address.length && !EthereumAddress.isValid(address)) return t.wallets_incorrect_address()
             if (exclude.find((item) => item === address)) return t.wallets_collectible_been_added()
@@ -80,9 +78,9 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
                 <DialogContent>
                     <form>
                         <Box style={{ display: 'flex', flexDirection: 'column' }}>
-                            <label className={classes.title}>Collectible Address</label>
                             <TextField
                                 variant="filled"
+                                label={t.wallets_collectible_address()}
                                 InputProps={{ disableUnderline: true }}
                                 value={address}
                                 error={!!validateAddressMessage}

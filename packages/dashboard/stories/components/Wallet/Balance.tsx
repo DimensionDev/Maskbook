@@ -1,5 +1,5 @@
 import { story } from '@dimensiondev/maskbook-storybook-shared'
-import { Balance as C } from '../../../src/pages/Wallets/components/Balance'
+import { BalanceCardUI as C } from '../../../src/pages/Wallets/components/Balance'
 import { action } from '@storybook/addon-actions'
 const { meta, of } = story(C)
 
@@ -11,5 +11,6 @@ export const Balance = of({
         onBuy: action('onBuy'),
         onSend: action('onSend'),
         onSwap: action('onSwap'),
+        walletAddress: '',
     },
 })
