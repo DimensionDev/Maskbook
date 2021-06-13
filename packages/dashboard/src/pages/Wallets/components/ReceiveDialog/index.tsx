@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { useDashboardI18N } from '../../../../locales'
-import { MaskColorVar, MaskDialog, QRCode, useDashboardSnackbarCallback } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar, MaskDialog, QRCode, useSnackbarCallback } from '@dimensiondev/maskbook-theme'
 import { DialogContent, Typography, makeStyles, DialogActions, Button } from '@material-ui/core'
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
 import { useCopyToClipboard } from 'react-use'
@@ -55,7 +55,7 @@ export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
         const classes = useStyles()
         const t = useDashboardI18N()
         const [, copyToClipboard] = useCopyToClipboard()
-        const copyWalletAddress = useDashboardSnackbarCallback({
+        const copyWalletAddress = useSnackbarCallback({
             executor: async (address: string) => copyToClipboard(address),
             deps: [],
             successText: t.wallets_address_copied(),

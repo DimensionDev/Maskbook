@@ -2,6 +2,8 @@ import { useMaskThemeI18N } from '../locales'
 import { useSnackbar } from 'notistack'
 import { useCallback } from 'react'
 
+export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>(options: SnackbarCallback<P, T>): P
+/** Prefer the first overload. */
 export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>(
     executor: P,
     deps: React.DependencyList,
@@ -9,9 +11,27 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
     onError?: (err: Error) => void,
     key?: string,
     successText?: string,
+): P
+export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>(
+    opts: SnackbarCallback<P, T> | P,
+    deps?: React.DependencyList,
+    onSuccess?: (ret: T) => void,
+    onError?: (err: Error) => void,
+    key?: string,
+    successText?: string,
 ) {
     const t = useMaskThemeI18N()
     const { enqueueSnackbar } = useSnackbar()
+    const executor = typeof opts === 'function' ? opts : opts.executor
+    if (typeof opts === 'object') {
+        ;[deps, onSuccess, onError, key, successText] = [
+            opts.deps,
+            opts.onSuccess,
+            opts.onError,
+            opts.key,
+            opts.successText,
+        ]
+    }
     return useCallback(
         (...args) =>
             executor(...args).then(
@@ -30,24 +50,15 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                     throw err
                 },
             ),
-        [...deps, enqueueSnackbar, executor, onError, onSuccess, key, successText],
+        [...deps!, enqueueSnackbar, executor, onError, onSuccess, key, successText],
     )
 }
 
-export function useDashboardSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>({
-    executor,
-    deps,
-    onSuccess,
-    onError,
-    key,
-    successText,
-}: {
+export interface SnackbarCallback<P extends (...args: any[]) => Promise<T>, T> {
     executor: P
     deps: React.DependencyList
     onSuccess?: (ret: T) => void
     onError?: (err: Error) => void
     key?: string
     successText?: string
-}) {
-    return useSnackbarCallback(executor, deps, onSuccess, onError, key, successText)
 }

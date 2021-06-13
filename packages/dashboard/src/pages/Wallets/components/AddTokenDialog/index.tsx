@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { MaskDialog, useDashboardSnackbarCallback } from '@dimensiondev/maskbook-theme'
+import { MaskDialog, useSnackbarCallback } from '@dimensiondev/maskbook-theme'
 import { ERC20TokenDetailed, useERC20TokenBalance, useERC20TokenDetailed, useWallet } from '@dimensiondev/web3-shared'
 import { useUpdateEffect } from 'react-use'
 import { PluginServices } from '../../../../API'
@@ -24,7 +24,7 @@ export const AddTokenDialog = memo<AddTokenDialogProps>(({ open, onClose }) => {
     const { value: token } = useERC20TokenDetailed(address)
     const { value: balance } = useERC20TokenBalance(address)
 
-    const onSubmit = useDashboardSnackbarCallback({
+    const onSubmit = useSnackbarCallback({
         executor: async () => {
             if (!token || !wallet) return
             await Promise.all([

@@ -1,5 +1,5 @@
 import { memo, useMemo, useState } from 'react'
-import { MaskColorVar, MaskDialog, useDashboardSnackbarCallback } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar, MaskDialog, useSnackbarCallback } from '@dimensiondev/maskbook-theme'
 import { Box, Button, DialogActions, DialogContent, makeStyles, TextField } from '@material-ui/core'
 import { useERC721TokenAssetDetailed, useERC721TokenDetailed, useWallet } from '@dimensiondev/web3-shared'
 import { PluginServices } from '../../../../API'
@@ -27,7 +27,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     const tokenDetailed = useERC721TokenDetailed(address)
     const assetDetailed = useERC721TokenAssetDetailed(tokenDetailed.value)
 
-    const onSubmit = useDashboardSnackbarCallback({
+    const onSubmit = useSnackbarCallback({
         executor: async () => {
             if (!tokenDetailed.value || !assetDetailed.value || !wallet) return
             await Promise.all([
