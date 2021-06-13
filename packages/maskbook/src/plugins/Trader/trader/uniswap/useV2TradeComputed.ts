@@ -1,10 +1,10 @@
 import { Trade, TradeType } from '@uniswap/sdk'
-import BigNumber from 'bignumber.js'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { uniswapCurrencyAmountTo, uniswapPercentTo, uniswapPriceTo, uniswapTokenTo } from '../../helpers'
 import { TradeComputed, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { useV2TradeBreakdown } from './useV2TradeBreakdown'
+import { ZERO } from '@dimensiondev/maskbook-shared'
 
 export function useV2TradeComputed(
     trade: Trade | null,
@@ -29,8 +29,8 @@ export function useV2TradeComputed(
         minimumReceived: uniswapCurrencyAmountTo(trade.minimumAmountOut(slippage)),
         priceImpactWithoutFee: breakdown?.priceImpactWithoutFee
             ? uniswapPercentTo(breakdown.priceImpactWithoutFee)
-            : new BigNumber(0),
-        fee: breakdown?.realizedLPFee ? uniswapCurrencyAmountTo(breakdown.realizedLPFee) : new BigNumber(0),
+            : ZERO,
+        fee: breakdown?.realizedLPFee ? uniswapCurrencyAmountTo(breakdown.realizedLPFee) : ZERO,
         trade_: trade,
     }
 }

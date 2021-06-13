@@ -1,14 +1,14 @@
 import { Grid, makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import Services from '../../extension/service'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { currentIsMetamaskLockedSettings, currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
+import { currentIsMetamaskLockedSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useRemoteControlledDialog, useValueRef, useI18N } from '../../utils'
 import { ProviderType, useAccount, useChainIdValid, useNativeTokenBalance } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../components/custom-ui-helper'
+import { isZero } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -38,7 +38,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     //#endregion
 
     //#region metamask
-    const currentSelectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
+    const providerType = useValueRef(currentProviderSettings)
     const currentIsMetamaskLocked = useValueRef(currentIsMetamaskLockedSettings)
     const onConnectMetaMask = useCallback(async () => {
         await Services.Ethereum.connectMetaMask()
@@ -59,7 +59,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    if (currentSelectedWalletProvider === ProviderType.MetaMask && currentIsMetamaskLocked)
+    if (providerType === ProviderType.MetaMask && currentIsMetamaskLocked)
         return (
             <Grid container>
                 <ActionButton
@@ -73,7 +73,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    if (new BigNumber(nativeTokenBalance.value ?? '0').isZero() && !offChain)
+    if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (
             <Grid container>
                 <ActionButton

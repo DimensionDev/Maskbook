@@ -77,6 +77,7 @@ export function SearchResultView(props: SearchResultViewProps) {
     //#endregion
 
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
+
     //#region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
     //#endregion
@@ -178,7 +179,9 @@ export function SearchResultView(props: SearchResultViewProps) {
         <Tab className={classes.tab} key="market" label={t('plugin_trader_tab_market')} />,
         <Tab className={classes.tab} key="price" label={t('plugin_trader_tab_price')} />,
         <Tab className={classes.tab} key="exchange" label={t('plugin_trader_tab_exchange')} />,
-        isEthereum ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
+        isEthereum && tradeProviders.length ? (
+            <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} />
+        ) : null,
     ].filter(Boolean)
     //#endregion
 

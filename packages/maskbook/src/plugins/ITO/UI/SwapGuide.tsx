@@ -1,3 +1,4 @@
+import { ZERO } from '@dimensiondev/maskbook-shared'
 import { ERC20TokenDetailed, EthereumTokenType, useAccount, useChainId } from '@dimensiondev/web3-shared'
 import { DialogContent, DialogProps, makeStyles } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
@@ -50,7 +51,7 @@ export function SwapGuide(props: SwapGuideProps) {
         () => BigNumber.min(payload.limit, payload.total_remaining),
         [payload.limit, payload.total_remaining],
     )
-    const initAmount = new BigNumber(0)
+    const initAmount = ZERO
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
     const [actualSwapAmount, setActualSwapAmount] = useState<BigNumber.Value>(0)
     const chainId = useChainId()

@@ -10,11 +10,11 @@ import { buf2hex, hex2buf, assert } from '../../../utils/utils'
 import { ProviderType, resolveProviderName, isSameAddress } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
-import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
+import { currentAccountSettings, currentProviderSettings } from '../settings'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
 
 function sortWallet(a: WalletRecord, b: WalletRecord) {
-    const address = currentSelectedWalletAddressSettings.value
+    const address = currentAccountSettings.value
     if (a.address === address) return -1
     if (b.address === address) return 1
     if (a.updatedAt > b.updatedAt) return -1
@@ -30,7 +30,7 @@ export async function isEmptyWallets() {
     return count === 0
 }
 
-export async function getWallet(address: string = currentSelectedWalletAddressSettings.value) {
+export async function getWallet(address: string = currentAccountSettings.value) {
     const wallets = await getWallets()
     return wallets.find((x) => isSameAddress(x.address, address))
 }
@@ -50,8 +50,8 @@ export async function getWallets(provider?: ProviderType) {
         )
     ).sort(sortWallet)
     if (provider === ProviderType.Maskbook) return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
-    if (provider === currentSelectedWalletProviderSettings.value) {
-        const address_ = currentSelectedWalletAddressSettings.value
+    if (provider === currentProviderSettings.value) {
+        const address_ = currentAccountSettings.value
         return wallets.filter((x) => isSameAddress(x.address, address_))
     }
     if (provider) return []
@@ -168,8 +168,8 @@ export async function importNewWallet(
             await t.objectStore('Wallet').put(WalletRecordIntoDB(record))
     }
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
-    currentSelectedWalletAddressSettings.value = record.address
-    currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
+    currentAccountSettings.value = record.address
+    currentProviderSettings.value = ProviderType.Maskbook
     return address
     async function getWalletAddress() {
         if (rec.address) return rec.address

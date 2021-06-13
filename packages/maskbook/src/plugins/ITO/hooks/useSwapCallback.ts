@@ -1,5 +1,6 @@
 import type { ITO } from '@dimensiondev/contracts/types/ITO'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
+import { isZero } from '@dimensiondev/maskbook-shared'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
@@ -112,7 +113,7 @@ export function useSwapCallback(
             const availability = await ITO_Contract.methods.check_availability(pid).call({
                 from: account,
             })
-            if (new BigNumber(availability.remaining).isZero()) {
+            if (isZero(availability.remaining)) {
                 setSwapState({
                     type: TransactionStateType.FAILED,
                     error: new Error('Out of Stock'),

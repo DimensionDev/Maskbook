@@ -1,8 +1,9 @@
-import { FungibleTokenDetailed, useTokensBalance } from '@dimensiondev/web3-shared'
+import { FungibleTokenDetailed, useChainDetailed, useTokensBalance } from '@dimensiondev/web3-shared'
 import type { Asset } from '../types'
 import { useAssetsMerged } from './useAssetsMerged'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[]) {
+    const chainDetailed = useChainDetailed()
     const { value: listOfBalance = [], loading, error, retry } = useTokensBalance(tokens.map((y) => y.address))
     return {
         value: useAssetsMerged(
@@ -10,7 +11,7 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[]) {
             listOfBalance.length === tokens.length
                 ? listOfBalance.map(
                       (balance, idx): Asset => ({
-                          chain: 'eth',
+                          chain: chainDetailed?.chain.toLowerCase() ?? 'eth',
                           token: tokens[idx],
                           balance,
                       }),

@@ -12,8 +12,10 @@ import type {
     ERC1155TokenRecordInDatabase,
     PhraseRecord,
     PhraseRecordInDatabase,
+    TransactionChunkRecord,
+    TransactionChunkRecordInDatabase,
 } from '../database/types'
-import { ChainId, resolveChainId } from '@dimensiondev/web3-shared'
+import { ChainId, getChainIdFromName } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
@@ -57,7 +59,7 @@ export function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
     {
         // fix: network has been renamed to chainId
         const record_ = record as any
-        if (!record.chainId) record.chainId = resolveChainId(record_.network) ?? ChainId.Mainnet
+        if (!record.chainId) record.chainId = getChainIdFromName(record_.network) ?? ChainId.Mainnet
     }
     record.address = formatEthereumAddress(record.address)
     return record
@@ -88,5 +90,18 @@ export function ERC1155TokenRecordIntoDB(x: ERC1155TokenRecord) {
 
 export function ERC1155TokenRecordOutDB(x: ERC1155TokenRecordInDatabase) {
     const record: ERC1155TokenRecord = omit(x, 'record_id')
+    return record
+}
+
+export function TransactionChunkRecordIntoDB(x: TransactionChunkRecord) {
+    const record: TransactionChunkRecordInDatabase = {
+        ...x,
+        record_id: `${x.chain_id}_${formatEthereumAddress(x.address)}`,
+    }
+    return record
+}
+
+export function TransactionChunkRecordOutDB(x: TransactionChunkRecordInDatabase) {
+    const record: TransactionChunkRecord = omit(x, 'record_id')
     return record
 }

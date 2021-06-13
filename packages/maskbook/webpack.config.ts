@@ -25,8 +25,10 @@ import ManifestPlugin from 'webpack-extension-manifest-plugin'
 //#endregion
 
 import git from '@nice-labs/git-rev'
+import rimraf from 'rimraf'
 
 import * as modifiers from './miscs/manifest-modifiers'
+import { promisify } from 'util'
 
 const src = (file: string) => path.join(__dirname, file)
 const root = (file: string) => path.join(__dirname, '../../', file)
@@ -95,6 +97,7 @@ function config(opts: {
                 // By aliasing them to the original position, we can speed up the compile because there is no need to wait tsc build them to the dist folder.
                 '@dimensiondev/dashboard': require.resolve('../dashboard/src/entry.tsx'),
                 '@dimensiondev/maskbook-shared': require.resolve('../shared/src/index.ts'),
+                '@dimensiondev/maskbook-theme/constants': require.resolve('../theme/src/constants.ts'),
                 '@dimensiondev/maskbook-theme': require.resolve('../theme/src/theme.ts'),
                 '@dimensiondev/icons': require.resolve('../icons/index.ts'),
                 '@dimensiondev/mask-plugin-infra': require.resolve('../plugin-infra/src/index.ts'),
@@ -208,7 +211,9 @@ function config(opts: {
             hotUpdateMainFilename: 'hot.[runtime].[fullhash].json',
             globalObject: 'globalThis',
             publicPath: '/',
-            clean: mode === 'production',
+            // clean: undefined,
+            // do not use output.clean
+            // we're using multiple configs (main and injected script), that will cause injected script output get removed when the main config starts to build.
         },
         ignoreWarnings: [/Failed to parse source map/],
         // @ts-ignore
@@ -241,7 +246,7 @@ function config(opts: {
         // overlay is not working in our environment
         return [
             new HotModuleReplacementPlugin(),
-            !disableReactHMR && new ReactRefreshWebpackPlugin({ overlay: false }),
+            !disableReactHMR && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
         ].filter(nonNullable)
     }
 }
@@ -253,6 +258,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     const target = getCompilationInfo(cli_env)
     const mode: 'production' | 'development' = argv.mode ?? 'production'
     const dist = mode === 'production' ? root('./build') : root('./dist')
+    if (mode === 'production') await promisify(rimraf)(root('./build'))
     const disableHMR = Boolean(process.env.NO_HMR)
     const isManifestV3 = target.runtimeEnv.manifest === 3
 

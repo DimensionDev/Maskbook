@@ -90,7 +90,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 anchorEl={anchorEl}
                 disablePortal
                 transition
-                style={{ zIndex: 1, margin: 4 }}
+                style={{ zIndex: 100, margin: 4 }}
                 popperRef={popperRef}
                 {...props.PopperProps}>
                 {({ TransitionProps }) => (

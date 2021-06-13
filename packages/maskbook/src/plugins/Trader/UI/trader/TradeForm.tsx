@@ -15,7 +15,7 @@ import { FungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-sha
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { isNativeTokenWrapper, toBips } from '../../helpers'
-import { formatPercentage } from '@dimensiondev/maskbook-shared'
+import { formatPercentage, isLessThan, pow10 } from '@dimensiondev/maskbook-shared'
 import { resolveUniswapWarningLevel } from '../../pipes'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -116,12 +116,8 @@ export function TradeForm(props: TradeFormProps) {
 
     //#region form controls
     const isExactIn = strategy === TradeStrategy.ExactIn
-    const inputTokenTradeAmount = new BigNumber(inputAmount || '0').multipliedBy(
-        new BigNumber(10).pow(inputToken?.decimals ?? 0),
-    )
-    const outputTokenTradeAmount = new BigNumber(outputAmount || '0').multipliedBy(
-        new BigNumber(10).pow(outputToken?.decimals ?? 0),
-    )
+    const inputTokenTradeAmount = new BigNumber(inputAmount || '0').multipliedBy(pow10(inputToken?.decimals ?? 0))
+    const outputTokenTradeAmount = new BigNumber(outputAmount || '0').multipliedBy(pow10(outputToken?.decimals ?? 0))
     const inputPanelLabel =
         loading && !isExactIn
             ? t('plugin_trader_finding_price')
@@ -191,10 +187,8 @@ export function TradeForm(props: TradeFormProps) {
     const validationMessage = useMemo(() => {
         if (inputTokenTradeAmount.isZero() && outputTokenTradeAmount.isZero())
             return t('plugin_trader_error_amount_absence')
-        if (new BigNumber(inputAmount).isLessThan(MINIMUM_AMOUNT))
-            return t('plugin_trade_error_input_amount_less_minimum_amount')
-        if (new BigNumber(outputAmount).isLessThan(MINIMUM_AMOUNT))
-            return t('plugin_trade_error_output_amount_less_minimum_amount')
+        if (isLessThan(inputAmount, MINIMUM_AMOUNT)) return t('plugin_trade_error_input_amount_less_minimum_amount')
+        if (isLessThan(outputAmount, MINIMUM_AMOUNT)) return t('plugin_trade_error_output_amount_less_minimum_amount')
         if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
         if (loading) return t('plugin_trader_finding_price')
         if (!trade) return t('plugin_trader_error_insufficient_lp')

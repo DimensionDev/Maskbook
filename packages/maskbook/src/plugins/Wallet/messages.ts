@@ -1,3 +1,4 @@
+import type { NetworkType, ProviderType, Wallet } from '@dimensiondev/web3-shared'
 import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
 import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { createPluginMessage } from '../utils/createPluginMessage'
@@ -13,7 +14,26 @@ export type SelectProviderDialogEvent =
           address?: string
       }
 
-export type SelectWalletDialogEvent = {
+export type ConnectWalletDialogEvent =
+    | {
+          open: true
+          providerType: ProviderType
+          networkType: NetworkType
+      }
+    | {
+          open: false
+      }
+
+export type SelectWalletDialogEvent =
+    | {
+          open: true
+          networkType: NetworkType
+      }
+    | {
+          open: false
+      }
+
+export type CreateImportWalletDialogEvent = {
     open: boolean
 }
 
@@ -22,8 +42,18 @@ export type CreateWalletDialogEvent = {
     open: boolean
 }
 
+export type ImportWalletDialogEvent = {
+    name?: string
+    open: boolean
+}
+
 export type WalletStatusDialogEvent = {
     open: boolean
+}
+
+export type WalletRenameDialogEvent = {
+    open: boolean
+    wallet: Wallet | null
 }
 
 export type WalletConnectQRCodeDialogEvent =
@@ -65,14 +95,29 @@ interface WalletMessage {
     createWalletDialogUpdated: CreateWalletDialogEvent
 
     /**
+     * import wallet dialog
+     */
+    importWalletDialogUpdated: ImportWalletDialogEvent
+
+    /**
      * Select provider dialog
      */
     selectProviderDialogUpdated: SelectProviderDialogEvent
 
     /**
+     * Connect wallet dialog
+     */
+    connectWalletDialogUpdated: ConnectWalletDialogEvent
+
+    /**
      * Wallet status dialog
      */
     walletStatusDialogUpdated: WalletStatusDialogEvent
+
+    /**
+     * Wallet status dialog
+     */
+    walletRenameDialogUpdated: WalletRenameDialogEvent
 
     /**
      * Select token dialog
@@ -85,7 +130,6 @@ interface WalletMessage {
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
 
     walletsUpdated: void
-    chainIdUpdated: void
     phrasesUpdated: void
     erc20TokensUpdated: void
     erc721TokensUpdated: void

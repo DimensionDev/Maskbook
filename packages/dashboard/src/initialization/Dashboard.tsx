@@ -1,4 +1,3 @@
-import React, { StrictMode } from 'react'
 import { HashRouter } from 'react-router-dom'
 import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@material-ui/core'
 import { StylesProvider } from '@material-ui/styles'
@@ -46,24 +45,22 @@ export default function DashboardRoot() {
     applyMaskColorVars(document.body, settings === 'default' ? mode : settings)
 
     return (
-        <StrictMode>
-            <Web3Provider value={Web3Context}>
-                <I18nextProvider i18n={i18n}>
-                    <StyledEngineProvider injectFirst>
-                        <StylesProvider>
-                            <ThemeProvider theme={theme}>
-                                <ErrorBoundary>
-                                    <CssBaseline />
-                                    <HashRouter>
-                                        <Pages />
-                                    </HashRouter>
-                                    <PluginRender />
-                                </ErrorBoundary>
-                            </ThemeProvider>
-                        </StylesProvider>
-                    </StyledEngineProvider>
-                </I18nextProvider>
-            </Web3Provider>
-        </StrictMode>
+        <Web3Provider value={Web3Context}>
+            <I18nextProvider i18n={i18n}>
+                <StyledEngineProvider injectFirst>
+                    <StylesProvider>
+                        <ThemeProvider theme={theme}>
+                            <ErrorBoundary>
+                                <CssBaseline />
+                                <HashRouter>
+                                    <Pages />
+                                </HashRouter>
+                                <PluginRender />
+                            </ErrorBoundary>
+                        </ThemeProvider>
+                    </StylesProvider>
+                </StyledEngineProvider>
+            </I18nextProvider>
+        </Web3Provider>
     )
 }

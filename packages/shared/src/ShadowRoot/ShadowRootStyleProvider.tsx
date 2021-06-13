@@ -158,4 +158,6 @@ function patchJSSDomRenderer() {
         this.element.textContent = `\n${sheet.toString()}\n`
     }
 }
-patchJSSDomRenderer()
+try {
+    patchJSSDomRenderer()
+} catch {}

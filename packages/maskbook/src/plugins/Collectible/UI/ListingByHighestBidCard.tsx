@@ -1,5 +1,4 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import BigNumber from 'bignumber.js'
 import { useSnackbar } from 'notistack'
 import { makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
 import { FungibleTokenDetailed, EthereumTokenType, useAccount, TokenWatched, isNative } from '@dimensiondev/web3-shared'
@@ -11,6 +10,7 @@ import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
+import { isLessThan, isZero } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -55,9 +55,9 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
 
     const validationMessage = useMemo(() => {
-        if (new BigNumber(amount || '0').isZero()) return t('plugin_collectible_enter_minimum_bid')
-        if (new BigNumber(reservePrice || '0').isZero()) return t('plugin_collectible_enter_reserve_price')
-        if (new BigNumber(reservePrice).isLessThan(amount)) return t('plugin_collectible_invalid_reserve_price')
+        if (isZero(amount || '0')) return t('plugin_collectible_enter_minimum_bid')
+        if (isZero(reservePrice || '0')) return t('plugin_collectible_enter_reserve_price')
+        if (isLessThan(reservePrice, amount)) return t('plugin_collectible_invalid_reserve_price')
         if (expirationDateTime.getTime() - Date.now() <= 0) return t('plugin_collectible_invalid_expiration_date')
         return ''
     }, [amount, reservePrice, expirationDateTime])

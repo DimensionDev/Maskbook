@@ -1,5 +1,5 @@
-/// <reference types="react/experimental" />
-/// <reference types="react-dom/experimental" />
+import type {} from 'react/next'
+import type {} from 'react-dom/next'
 import ReactDOM from 'react-dom'
 
 // @ts-ignore in case circle dependency make typescript complains

@@ -6,13 +6,24 @@ import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
 import type { WalletProps } from './types'
+import {
+    currentAccountSettings,
+    currentChainIdSettings,
+    currentNetworkSettings,
+    currentProviderSettings,
+} from '../../../../plugins/Wallet/settings'
+import { ChainId, NetworkType, ProviderType } from '@dimensiondev/web3-shared'
 
 export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
         async () => {
-            return WalletRPC.removeWallet(wallet.address)
+            await WalletRPC.removeWallet(wallet.address)
+            currentAccountSettings.value = ''
+            currentChainIdSettings.value = ChainId.Mainnet
+            currentNetworkSettings.value = NetworkType.Ethereum
+            currentProviderSettings.value = ProviderType.Maskbook
         },
         [wallet.address],
         props.onClose,

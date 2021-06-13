@@ -1,17 +1,15 @@
-import { createRoot, render as legacyRender, unmountComponentAtNode as legacyUnmount, Root } from 'react-dom'
-import type {} from 'react/experimental'
-import type {} from 'react-dom/experimental'
+import { createRoot, Root } from 'react-dom'
+import type {} from 'react/next'
+import type {} from 'react-dom/next'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'
 
 export interface RenderInShadowRootConfig {
     /** Root tag. @default "main" */
-    tag?: string
+    tag?: keyof HTMLElementTagNameMap
     /** Allow to render multiple React root into a same ShadowRoot */
     key?: string
     /** The AbortSignal to stop the render */
     signal?: AbortSignal
-    /** Use ReactDOM.render instead of ReactDOM.createRoot */
-    legacy?: boolean
 }
 export interface CreateRenderInShadowRootConfig {
     onHeadCreate?(head: HTMLHeadElement): void
@@ -92,15 +90,9 @@ function mount(
     }
 
     let root: Root
-    const isLegacy = instanceConfig.legacy
-    if (isLegacy) {
-        legacyRender(jsx, container)
-        undoActions.push(() => legacyUnmount(container))
-    } else {
-        root = createRoot(container)
-        root.render(jsx)
-        undoActions.push(() => root.unmount())
-    }
+    root = createRoot(container)
+    root.render(jsx)
+    undoActions.push(() => root.unmount())
     undoActions.push(() => container.remove())
 
     function undo() {
@@ -115,12 +107,7 @@ function mount(
     return {
         destory: undo,
         render: (jsx) => {
-            jsx = getJSX(jsx)
-            if (isLegacy) {
-                legacyRender(jsx, container)
-            } else {
-                root!.render(jsx)
-            }
+            root!.render(getJSX(jsx))
         },
     }
     function getJSX(jsx: React.ReactChild) {

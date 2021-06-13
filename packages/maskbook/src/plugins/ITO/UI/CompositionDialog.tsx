@@ -14,7 +14,7 @@ import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
 import Services from '../../../extension/service'
 import { useChainId, useAccount, TransactionStateType, useConstant } from '@dimensiondev/web3-shared'
-import { PoolSettings, useFillCallback } from '../hooks/useFillCallback'
+import { PoolSettings, useFillCallback } from '../hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { EthereumMessages } from '../../Ethereum/messages'
 
@@ -120,7 +120,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
                 const [, title] = payload.message.split(MSG_DELIMITER)
-                payload.password = await Services.Ethereum.sign(Web3Utils.sha3(title) ?? '', account)
+                payload.password = await Services.Ethereum.personalSign(Web3Utils.sha3(title) ?? '', account)
             }
             if (!payload.password) {
                 alert('Failed to sign the password.')

@@ -1,17 +1,20 @@
 import { getConstant } from '@dimensiondev/web3-shared'
 import { TRENDING_CONSTANTS } from '../../constants'
-import { getChainId } from '../../../../extension/background-script/EthereumServices/chainState'
 import stringify from 'json-stable-stringify'
 import { first } from 'lodash-es'
+import { currentChainIdSettings } from '../../../Wallet/settings'
 
 async function fetchFromUniswapV2Health<T>(query: string) {
-    const response = await fetch(getConstant(TRENDING_CONSTANTS, 'UNISWAP_V2_HEALTH_URL', await getChainId()), {
-        method: 'POST',
-        mode: 'cors',
-        body: stringify({
-            query,
-        }),
-    })
+    const response = await fetch(
+        getConstant(TRENDING_CONSTANTS, 'UNISWAP_V2_HEALTH_URL', currentChainIdSettings.value),
+        {
+            method: 'POST',
+            mode: 'cors',
+            body: stringify({
+                query,
+            }),
+        },
+    )
 
     const { data } = (await response.json()) as { data: T }
     return data

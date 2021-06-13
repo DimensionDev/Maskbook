@@ -6,18 +6,18 @@ import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutline
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Check from '@material-ui/icons/Check'
-import { Wallet, useChainIdValid, useAccount } from '@dimensiondev/web3-shared'
+import { Wallet, useChainIdValid } from '@dimensiondev/web3-shared'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddERC20TokenDialog,
     DashboardWalletAddERC721TokenDialog,
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
-    DashboardWalletRenameDialog,
 } from '../DashboardDialogs/Wallet'
 import { Flags, useMenu, useI18N, useColorStyles, useMatchXS, useRemoteControlledDialog } from '../../../utils'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
@@ -78,7 +78,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
 
     const history = useHistory()
     const location = useLocation()
-    const account = useAccount()
 
     const color = useColorStyles()
     const xsMatched = useMatchXS()
@@ -89,11 +88,20 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
-    const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
     const [addAsset, , openAddAsset] = useModal(DashboardWalletAddERC721TokenDialog)
+    const { setDialog: setWalletRenameDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletRenameDialogUpdated,
+    )
 
     const [menu, openMenu] = useMenu([
-        <MenuItem key="rename" onClick={() => openWalletRename({ wallet })}>
+        <MenuItem
+            key="rename"
+            onClick={() => {
+                setWalletRenameDialog({
+                    open: true,
+                    wallet,
+                })
+            }}>
             {t('rename')}
         </MenuItem>,
         wallet.hasPrivateKey ? (
@@ -276,7 +284,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
             {addAsset}
             {walletBackup}
             {walletDelete}
-            {walletRename}
         </div>
     )
 })

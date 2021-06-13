@@ -1,5 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
+import { pow10 } from '../utils'
 
 export function formatPercentage(value: BigNumber.Value) {
     const percentage = new BigNumber(value)
@@ -14,14 +15,14 @@ export function formatPrice(price: BigNumber.Value, decimalPlaces = 6) {
 }
 
 export function formatAmount(amount: BigNumber.Value = '0', decimals = 0) {
-    return new BigNumber(amount).multipliedBy(new BigNumber(10).pow(decimals)).toFixed()
+    return new BigNumber(amount).multipliedBy(pow10(decimals)).toFixed()
 }
 
 export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, significant = decimals) {
     let balance = new BigNumber(rawValue)
     if (balance.isNaN()) return '0'
     const negative = balance.isNegative() // balance < 0n
-    const base = new BigNumber(10).pow(decimals) // 10n ** decimals
+    const base = pow10(decimals) // 10n ** decimals
 
     if (negative) balance = balance.absoluteValue() // balance * -1n
 
@@ -95,4 +96,8 @@ export function formatAmountPrecision(
     }
 
     return _amount.toPrecision(_precision)
+}
+
+export function formatWeiToGwei(value: BigNumber.Value) {
+    return new BigNumber(value).idiv(10 ** 9)
 }

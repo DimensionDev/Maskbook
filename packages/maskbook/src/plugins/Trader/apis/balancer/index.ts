@@ -3,12 +3,13 @@ import { first, memoize } from 'lodash-es'
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { getChainDetailed, getConstant, isSameAddress, ChainId } from '@dimensiondev/web3-shared'
-import { getChainId } from '../../../../extension/background-script/EthereumService'
 import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
 import type { Route } from '../../types'
 import { getFutureTimestamps } from '../../helpers/blocks'
 import { fetchBlockNumbersByTimestamps } from '../blocks'
 import { fetchLBP_PoolsByTokenAddress, fetchLBP_PoolTokenPrices, fetchLBP_PoolTokens } from '../LBP'
+import { currentChainIdSettings } from '../../../Wallet/settings'
+import { ZERO } from '@dimensiondev/maskbook-shared'
 
 //#region create cached SOR
 const createSOR_ = memoize(
@@ -38,7 +39,7 @@ function createSOR(chainId: ChainId) {
 //#endregion
 
 export async function updatePools(force = false) {
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     const sor = createSOR(chainId)
 
     // this fetches all pools list from URL in constructor then onChain balances using Multicall
@@ -49,7 +50,7 @@ export async function updatePools(force = false) {
 }
 
 export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALANCER_SWAP_TYPE, amount: string) {
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     const sor = createSOR(chainId)
 
     // this calculates the cost to make a swap which is used as an input to sor to allow it to make gas efficient recommendations.
@@ -65,9 +66,7 @@ export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALA
 
     // compose routes
     // learn more: https://github.com/balancer-labs/balancer-frontend/blob/develop/src/components/swap/Routing.vue
-    const totalSwapAmount = swaps.reduce((total, rawHops) => {
-        return total.plus(rawHops[0].swapAmount || '0')
-    }, new BigNumber(0))
+    const totalSwapAmount = swaps.reduce((total, rawHops) => total.plus(rawHops[0].swapAmount || '0'), ZERO)
 
     const pools = sor.onChainCache.pools
     const routes = swaps.map((rawHops) => {

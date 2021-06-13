@@ -8,6 +8,7 @@ import {
     ERC721TokenAssetDetailed,
     EthereumTokenType,
     NativeTokenDetailed,
+    NetworkType,
     Web3Constants,
 } from '../types'
 
@@ -27,7 +28,7 @@ export function isNative(address: string) {
     return isSameAddress(address, getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'))
 }
 
-export function addGasMargin(value: BigNumber.Value, scale = 1000) {
+export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
 }
 
@@ -53,8 +54,71 @@ export function getConstant<T extends Web3Constants, K extends keyof T>(
 export function getChainDetailed(chainId: ChainId = ChainId.Mainnet) {
     return CHAINS.find((x) => x.chainId === chainId)
 }
+
+// Learn more: https://github.com/ChainAgnostic/CAIPs/blob/master/CAIPs/caip-2.md
+export function getChainDetailedCAIP(chainId: ChainId = ChainId.Mainnet) {
+    const chainDetailed = getChainDetailed(chainId)
+    if (!chainDetailed) return
+    return {
+        chainId: `0x${chainDetailed.chainId.toString(16)}`,
+        chainName: chainDetailed.name,
+        nativeCurrency: chainDetailed.nativeCurrency,
+        rpcUrls: chainDetailed.rpc,
+        blockExplorerUrls: [
+            chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
+                ? chainDetailed.explorers[0].url
+                : chainDetailed.infoURL,
+        ],
+    }
+}
+
+export function getChainName(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    return chainDetailed?.name ?? 'Unknown'
+}
+
+export function getChainFullName(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    return chainDetailed?.fullName ?? 'Unknown'
+}
+
+export function getChainIdFromName(name: string) {
+    const chainDetailed = CHAINS.find((x) =>
+        [x.chain, x.network, x.name, x.shortName, x.fullName].map((y) => y.toLowerCase()).includes(name.toLowerCase()),
+    )
+    return chainDetailed?.chainId as ChainId | undefined
+}
+
+export function getChainIdFromNetworkType(networkType: NetworkType) {
+    switch (networkType) {
+        case NetworkType.Ethereum:
+            return ChainId.Mainnet
+        case NetworkType.Binance:
+            return ChainId.BSC
+        case NetworkType.Polygon:
+            return ChainId.Matic
+        default:
+            safeUnreachable(networkType)
+            return ChainId.Mainnet
+    }
+}
+
+export function getNetworkTypeFromChainId(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    switch (chainDetailed?.chain) {
+        case 'ETH':
+            return NetworkType.Ethereum
+        case 'BSC':
+            return NetworkType.Binance
+        case 'Matic':
+            return NetworkType.Polygon
+        default:
+            throw new Error('Unknown chain id.')
+    }
+}
 //#endregion
 
+//#region tokens
 export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) throw new Error('Unknown chain id.')
@@ -124,9 +188,11 @@ export function createERC1155Token(
         asset,
     }
 }
+//#endregion
 
 import type Web3 from 'web3'
 import type { AbiOutput } from 'web3-utils'
+import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 
 export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
     if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)

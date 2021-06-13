@@ -3,7 +3,7 @@ import { useI18N } from '../../../utils'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { FormattedAddress } from '@dimensiondev/maskbook-shared'
-import { resolveAddressLinkOnExplorer, resolveChainName, ChainId, useChainId } from '@dimensiondev/web3-shared'
+import { resolveAddressLinkOnExplorer, getChainName, ChainId, useChainId } from '@dimensiondev/web3-shared'
 import { Markdown } from '../../Snapshot/UI/Markdown'
 import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea } from '../pipes'
@@ -161,7 +161,7 @@ export function TokenTab(props: TokenTabProps) {
                 </Box>
                 <Box className={classes.chain_row}>
                     <Typography variant="body2">{t('plugin_collectible_block_chain')}</Typography>
-                    <Typography variant="body2">{resolveChainName(chainId)}</Typography>
+                    <Typography variant="body2">{getChainName(chainId)}</Typography>
                 </Box>
             </Box>
         </CollectibleTab>

@@ -79,6 +79,7 @@ const useStyles = makeStyles((theme) => {
             height: 'var(--tabHeight)',
             minHeight: 'unset',
             minWidth: 'unset',
+            whiteSpace: 'nowrap',
         },
         subtitle: {
             fontSize: 12,

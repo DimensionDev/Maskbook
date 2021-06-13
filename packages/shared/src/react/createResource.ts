@@ -1,11 +1,16 @@
-import type {} from 'react/experimental'
+import type {} from 'react/next'
+import type {} from 'react-dom/next'
 // @ts-expect-error
 import { unstable_getCacheForType } from 'react'
-export type Status<T> =
+// Note: this file requires the experimental version feature unstable_getCacheForType
+// which is not included in the current React version we're using
+// Therefore all items in the current file is not exported.
+
+type Status<T> =
     | { type: 'pending'; value: Promise<void> }
     | { type: 'fulfilled'; value: T }
     | { type: 'rejected'; value: unknown }
-export interface Resource<T> {
+interface Resource<T> {
     /** Read the result, might trigger a suspense */
     read(): T
     /** This will not trigger a suspense */
@@ -14,7 +19,7 @@ export interface Resource<T> {
     reload(): Resource<T>
 }
 
-export function createResource<Args extends any[], T>(
+function createResource<Args extends any[], T>(
     f: (...args: Args) => Promise<T>,
     toCacheKey: (...args: Args) => unknown,
     weakMap = false,
@@ -50,3 +55,4 @@ export function createResource<Args extends any[], T>(
     }
     return create
 }
+export {}

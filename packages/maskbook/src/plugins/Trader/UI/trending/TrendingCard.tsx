@@ -20,7 +20,9 @@ const useStyles = makeStyles((theme) => {
                               : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
                       }`,
                   }
-                : null),
+                : {
+                      border: `1px solid ${theme.palette.divider}`,
+                  }),
         },
     }
 })

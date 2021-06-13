@@ -9,6 +9,7 @@ import {
     useNonce,
     useGasPrice,
     addGasMargin,
+    TransactionEventType,
 } from '@dimensiondev/web3-shared'
 import { useDHedgePoolContract } from '../contracts/useDHedgePool'
 
@@ -59,27 +60,25 @@ export function useInvestCallback(address: string, amount: string, token?: Fungi
 
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
-            poolContract.methods.deposit(amount).send(
-                {
-                    gas: addGasMargin(estimatedGas).toFixed(),
-                    ...config,
-                },
-                (error: any, hash: string) => {
-                    if (error) {
-                        setInvestState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
-                        reject(error)
-                    } else {
-                        setInvestState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
-                    }
-                },
-            )
+            const promiEvent = poolContract.methods.deposit(amount).send({
+                gas: addGasMargin(estimatedGas).toFixed(),
+                ...config,
+            })
+            promiEvent
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                    setInvestState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
+                })
+                .on(TransactionEventType.ERROR, (error) => {
+                    setInvestState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                })
         })
     }, [gasPrice, nonce, address, account, amount, token])
 

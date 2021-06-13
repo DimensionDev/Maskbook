@@ -3,13 +3,14 @@ import type { provider as Provider } from 'web3-core'
 import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
-import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
+import { ChainId, getNetworkTypeFromChainId, NetworkType, ProviderType } from '@dimensiondev/web3-shared'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import {
-    currentMetaMaskChainIdSettings,
-    currentSelectedWalletAddressSettings,
-    currentSelectedWalletProviderSettings,
+    currentChainIdSettings,
+    currentAccountSettings,
+    currentProviderSettings,
     currentIsMetamaskLockedSettings,
+    currentNetworkSettings,
 } from '../../../../plugins/Wallet/settings'
 
 let provider: MetaMaskInpageProvider | null = null
@@ -22,18 +23,22 @@ async function onAccountsChanged(accounts: string[]) {
 
 async function onChainIdChanged(id: string) {
     // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
-    const chainId = Number.parseInt(id, 16)
+    const chainId_ = Number.parseInt(id, 16)
+    const chainId = chainId_ === 0 ? ChainId.Mainnet : chainId_
     currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked())
-    currentMetaMaskChainIdSettings.value = chainId === 0 ? ChainId.Mainnet : chainId
+    currentChainIdSettings.value = chainId
+    currentNetworkSettings.value = getNetworkTypeFromChainId(chainId)
 }
 
 function onError(error: string) {
     if (
         typeof error === 'string' &&
         /Lost Connection to MetaMask/i.test(error) &&
-        currentSelectedWalletProviderSettings.value === ProviderType.MetaMask
-    )
-        currentSelectedWalletAddressSettings.value = ''
+        currentProviderSettings.value === ProviderType.MetaMask
+    ) {
+        currentAccountSettings.value = ''
+        currentNetworkSettings.value = NetworkType.Ethereum
+    }
 }
 
 export function createProvider() {
@@ -52,7 +57,7 @@ export function createProvider() {
 
 // MetaMask provider can be wrapped into web3 lib directly.
 // https://github.com/MetaMask/extension-provider
-export async function createWeb3() {
+export function createWeb3() {
     const provider_ = createProvider() as Provider
     if (!web3) web3 = new Web3(provider_)
     else web3.setProvider(provider_)
@@ -60,7 +65,7 @@ export async function createWeb3() {
 }
 
 export async function requestAccounts() {
-    const web3 = await createWeb3()
+    const web3 = createWeb3()
 
     // update accounts
     const accounts = await web3.eth.requestAccounts()
@@ -70,15 +75,18 @@ export async function requestAccounts() {
     const chainId = await web3.eth.getChainId()
     onChainIdChanged(chainId.toString(16))
 
-    return accounts
+    return {
+        chainId,
+        accounts,
+    }
 }
 
 async function updateWalletInDB(address: string, setAsDefault: boolean = false) {
-    const providerType = currentSelectedWalletProviderSettings.value
+    const providerType = currentProviderSettings.value
 
     // validate address
     if (!EthereumAddress.isValid(address)) {
-        if (providerType === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = ''
+        if (providerType === ProviderType.MetaMask) currentAccountSettings.value = ''
         return
     }
 
@@ -86,8 +94,8 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
     await updateExoticWalletFromSource(ProviderType.MetaMask, new Map([[address, { address }]]))
 
     // update the selected wallet provider type
-    if (setAsDefault) currentSelectedWalletProviderSettings.value = ProviderType.MetaMask
+    if (setAsDefault) currentProviderSettings.value = ProviderType.MetaMask
 
     // update the selected wallet address
-    if (setAsDefault || providerType === ProviderType.MetaMask) currentSelectedWalletAddressSettings.value = address
+    if (setAsDefault || providerType === ProviderType.MetaMask) currentAccountSettings.value = address
 }

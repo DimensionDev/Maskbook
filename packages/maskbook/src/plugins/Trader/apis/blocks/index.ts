@@ -2,20 +2,23 @@ import { chunk, first, flatten } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import { getConstant } from '@dimensiondev/web3-shared'
 import { TRENDING_CONSTANTS } from '../../constants'
-import { getChainId } from '../../../../extension/background-script/EthereumService'
+import { currentChainIdSettings } from '../../../Wallet/settings'
 
 interface Block {
     number: string
 }
 
 async function fetchFromEthereumBlocksSubgraph<T>(query: string) {
-    const response = await fetch(getConstant(TRENDING_CONSTANTS, 'ETHEREUM_BLOCKS_SUBGRAPH_URL', await getChainId()), {
-        method: 'POST',
-        mode: 'cors',
-        body: stringify({
-            query,
-        }),
-    })
+    const response = await fetch(
+        getConstant(TRENDING_CONSTANTS, 'ETHEREUM_BLOCKS_SUBGRAPH_URL', currentChainIdSettings.value),
+        {
+            method: 'POST',
+            mode: 'cors',
+            body: stringify({
+                query,
+            }),
+        },
+    )
     const { data } = (await response.json()) as {
         data: T
     }

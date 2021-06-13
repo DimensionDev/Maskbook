@@ -10,6 +10,7 @@ import { useGasPrice } from './useGasPrice'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
+import { isLessThan } from '@dimensiondev/maskbook-shared'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
@@ -49,7 +50,7 @@ export function useERC20TokenApproveCallback(address: string, amount?: string, s
         if (loadingBalance || loadingAllowance) return ApproveStateType.UPDATING
         if (errorBalance || errorAllowance) return ApproveStateType.FAILED
         if (transactionState.type === TransactionStateType.WAIT_FOR_CONFIRMING) return ApproveStateType.PENDING
-        return new BigNumber(allowance).isLessThan(amount) ? ApproveStateType.NOT_APPROVED : ApproveStateType.APPROVED
+        return isLessThan(allowance, amount) ? ApproveStateType.NOT_APPROVED : ApproveStateType.APPROVED
     }, [
         amount,
         spender,

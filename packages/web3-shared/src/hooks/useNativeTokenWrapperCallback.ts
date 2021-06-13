@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import type { NonPayableTx, PayableTx } from '@dimensiondev/contracts/types/types'
 import { useNativeTokenWrapperContract } from '../contracts/useWrappedEtherContract'
 import { useAccount } from './useAccount'
@@ -7,6 +6,7 @@ import { TransactionStateType, useTransactionState } from './useTransactionState
 import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
 import { TransactionEventType } from '../types'
+import { isLessThan, isZero } from '@dimensiondev/maskbook-shared'
 
 export function useNativeTokenWrapperCallback() {
     const nonce = useNonce()
@@ -25,7 +25,7 @@ export function useNativeTokenWrapperCallback() {
             }
 
             // error: invalid deposit amount
-            if (new BigNumber(amount).isZero()) {
+            if (isZero(amount)) {
                 setTransactionState({
                     type: TransactionStateType.FAILED,
                     error: new Error('Invalid deposit amount'),
@@ -96,7 +96,7 @@ export function useNativeTokenWrapperCallback() {
             const wethBalance = await wrapperContract.methods.balanceOf(account).call()
 
             // error: invalid withdraw amount
-            if (all === false && new BigNumber(amount).isZero()) {
+            if (all === false && isZero(amount)) {
                 setTransactionState({
                     type: TransactionStateType.FAILED,
                     error: new Error('Invalid withdraw amount'),
@@ -105,7 +105,7 @@ export function useNativeTokenWrapperCallback() {
             }
 
             // error: insufficent weth balance
-            if (all === false && new BigNumber(wethBalance).isLessThan(amount)) {
+            if (all === false && isLessThan(wethBalance, amount)) {
                 setTransactionState({
                     type: TransactionStateType.FAILED,
                     error: new Error('Insufficent WETH balance'),

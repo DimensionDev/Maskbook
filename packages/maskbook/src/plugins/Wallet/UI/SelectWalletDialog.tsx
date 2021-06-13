@@ -2,15 +2,21 @@ import { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { ProviderType, useWallets, useWallet } from '@dimensiondev/web3-shared'
-import { useValueRef, delay, useI18N, useRemoteControlledDialog } from '../../../utils'
+import { ProviderType, useWallets, useWallet, NetworkType, getChainIdFromNetworkType } from '@dimensiondev/web3-shared'
+import { delay, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { WalletMessages } from '../messages'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
-import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
+import {
+    currentChainIdSettings,
+    currentAccountSettings,
+    currentNetworkSettings,
+    currentProviderSettings,
+} from '../settings'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { useState } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -27,19 +33,26 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
 
     const wallets = useWallets(ProviderType.Maskbook)
     const selectedWallet = useWallet()
-    const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
 
     //#region remote controlled dialog logic
-    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated)
+    const [networkType, setNetworkType] = useState<NetworkType | undefined>()
+    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated, (ev) => {
+        if (!ev.open) return
+        setNetworkType(ev.networkType)
+    })
     //#endregion
 
     const onSelect = useCallback(
         (address: string) => {
             closeDialog()
-            currentSelectedWalletAddressSettings.value = address
-            currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
+            currentAccountSettings.value = address
+            currentProviderSettings.value = ProviderType.Maskbook
+            if (networkType) {
+                currentChainIdSettings.value = getChainIdFromNetworkType(networkType)
+                currentNetworkSettings.value = networkType
+            }
         },
-        [closeDialog],
+        [networkType, closeDialog],
     )
 
     //#region create new wallet
@@ -50,17 +63,6 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
         if (isEnvironment(Environment.ManifestOptions)) history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
         else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
     }, [history, closeDialog])
-    //#endregion
-
-    //#region connect wallet
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
-    const onConnect = useCallback(async () => {
-        closeDialog()
-        await delay(100)
-        openSelectProviderDialog()
-    }, [closeDialog, openSelectProviderDialog])
     //#endregion
 
     return (
@@ -74,10 +76,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
                     <WalletInList
                         key={wallet.address}
                         wallet={wallet}
-                        disabled={
-                            selectedWallet?.address === wallet.address &&
-                            selectedWalletProvider === ProviderType.Maskbook
-                        }
+                        selected={selectedWallet?.address === wallet.address}
                         onClick={() => onSelect(wallet.address)}
                     />
                 ))}
@@ -85,9 +84,6 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
             <DialogActions>
                 <Button variant="text" onClick={onCreate}>
                     {t('plugin_wallet_on_create')}
-                </Button>
-                <Button variant="text" onClick={onConnect}>
-                    {t('plugin_wallet_on_connect')}
                 </Button>
             </DialogActions>
         </InjectedDialog>

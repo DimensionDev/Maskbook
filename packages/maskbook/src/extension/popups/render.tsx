@@ -1,5 +1,5 @@
-/// <reference types="react/experimental" />
-/// <reference types="react-dom/experimental" />
+import type {} from 'react/next'
+import type {} from 'react-dom/next'
 
 import { lazy, Suspense } from 'react'
 import { Route, Switch } from 'react-router'
