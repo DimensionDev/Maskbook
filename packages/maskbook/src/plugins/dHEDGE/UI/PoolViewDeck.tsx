@@ -87,7 +87,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
                     id: inputToken.address,
                     name: inputToken.name ?? '',
                     symbol: inputToken.symbol ?? '',
-                    eth_address: inputToken.address,
+                    contract_address: inputToken.address,
                     decimals: inputToken.decimals,
                 } as Coin,
             },

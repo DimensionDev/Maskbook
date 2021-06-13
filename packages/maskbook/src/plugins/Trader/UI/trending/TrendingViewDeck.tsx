@@ -165,7 +165,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     )
     //#endregion
 
-    const { approvedTokens, onApprove } = useApprovedTokens(trending.coin.eth_address)
+    const { approvedTokens, onApprove } = useApprovedTokens(trending.coin.contract_address)
     return (
         <TrendingCard {...TrendingCardProps}>
             <CardHeader
@@ -173,10 +173,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 avatar={
                     <Linking href={first(coin.home_urls)}>
                         <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
-                            {trending.coin.eth_address ? (
+                            {trending.coin.contract_address ? (
                                 <TokenIcon
                                     classes={{ icon: classes.avatarFallback }}
-                                    address={trending.coin.eth_address}
+                                    address={trending.coin.contract_address}
                                 />
                             ) : null}
                         </Avatar>

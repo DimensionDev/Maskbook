@@ -38,7 +38,7 @@ export interface Coin {
     image_url?: string
     description?: string
     market_cap_rank?: number
-    eth_address?: string
+    contract_address?: string
     facebook_url?: string
     twitter_url?: string
     telegram_url?: string

@@ -138,7 +138,7 @@ export function InvestDialog() {
                     id: token.address,
                     name: token.name ?? '',
                     symbol: token.symbol ?? '',
-                    eth_address: token.address,
+                    contract_address: token.address,
                     decimals: token.decimals,
                 } as Coin,
             },

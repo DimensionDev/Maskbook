@@ -58,9 +58,9 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
 
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopyAddress = useSnackbarCallback(async () => {
-        if (!trending.coin.eth_address) return
-        copyToClipboard(trending.coin.eth_address)
-    }, [trending.coin.eth_address])
+        if (!trending.coin.contract_address) return
+        copyToClipboard(trending.coin.contract_address)
+    }, [trending.coin.contract_address])
 
     const metadataLinks = [
         ['Website', trending.coin.home_urls],
@@ -103,7 +103,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                             </TableRow>
                         )
                     })}
-                    {trending.coin.eth_address ? (
+                    {trending.coin.contract_address ? (
                         <TableRow>
                             <TableCell>
                                 <Typography className={classes.label} variant="body2">
@@ -112,7 +112,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                             </TableCell>
                             <TableCell>
                                 <Typography variant="body2" component="span">
-                                    <FormattedAddress address={trending.coin.eth_address} size={4} />
+                                    <FormattedAddress address={trending.coin.contract_address} size={4} />
                                 </Typography>
                                 <IconButton color="primary" size="small" onClick={onCopyAddress}>
                                     <FileCopyIcon fontSize="small" />

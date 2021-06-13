@@ -95,7 +95,7 @@ export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
                     id: String(x.id),
                     name: x.name,
                     symbol: x.symbol,
-                    eth_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
+                    contract_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
                 }))
         case DataProvider.UNISWAP_INFO:
             // the uniswap has got huge tokens based (more than 2.2k) since we fetch coin info dynamically
@@ -237,7 +237,7 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     facebook_url,
                     twitter_url,
                     telegram_url,
-                    eth_address:
+                    contract_address:
                         resolveCoinAddress(id, DataProvider.COIN_GECKO) ??
                         (info.asset_platform_id === 'ethereum' ? info.contract_address : undefined),
                 },
@@ -293,7 +293,7 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     telegram_url: coinInfo.urls.chat?.find((x) => x.includes('telegram')),
                     market_cap_rank: quotesInfo?.[id]?.cmc_rank,
                     description: coinInfo.description,
-                    eth_address:
+                    contract_address:
                         resolveCoinAddress(id, DataProvider.COIN_MARKET_CAP) ??
                         (coinInfo.platform?.name === 'Ethereum' ? coinInfo.platform?.token_address : undefined),
                 },
@@ -353,7 +353,7 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     blockchain_urls: [`https://info.uniswap.org/token/${id}`, `https://etherscan.io/address/${id}`],
                     image_url: `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${id}/logo.png`,
                     platform_url: `https://info.uniswap.org/token/${id}`,
-                    eth_address: id,
+                    contract_address: id,
                 },
                 tickers: tickersInfo,
                 lastUpdated: '',
@@ -378,7 +378,7 @@ export async function getCoinTrendingByKeyword(
     if (!coins.length) return null
 
     // prefer coins on the etherenum network
-    const coin = coins.find((x) => x.eth_address) ?? first(coins)
+    const coin = coins.find((x) => x.contract_address) ?? first(coins)
     if (!coin) return null
 
     return getCoinTrendingById(

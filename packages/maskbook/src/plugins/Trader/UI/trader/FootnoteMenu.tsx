@@ -42,7 +42,7 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
         <>
             <Link className={classes.link} color="inherit" underline="none" onClick={onOpen}>
                 <Typography className={classes.title} variant="subtitle2">
-                    {options[selectedIndex].name}
+                    {options[selectedIndex]?.name}
                 </Typography>
                 {children}
             </Link>

@@ -11,7 +11,7 @@ const URL = ENV[process.env.NODE_ENV]
 
 export function useTransakAllowanceCoin(coin: Coin): boolean {
     return useAsync(async () => {
-        if (coin.eth_address || coin.symbol.toLowerCase() === 'eth') {
+        if (coin.contract_address || coin.symbol.toLowerCase() === 'eth') {
             const allowanceList = await fetch(URL, { method: 'GET' })
                 .then((res) => res.json())
                 .then((res) => res.response)

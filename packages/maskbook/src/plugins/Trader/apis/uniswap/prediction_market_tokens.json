@@ -4,35 +4,35 @@
         "name": "YES Trump at Inauguration Token",
         "symbol": "yINAUG",
         "decimals": 18,
-        "eth_address": "0x934E03e671E09528A52cb3373dc7Bb7CA475b924"
+        "contract_address": "0x934E03e671E09528A52cb3373dc7Bb7CA475b924"
     },
     {
         "id": "n-inaug",
         "name": "NO Trump at Inauguration Token",
         "symbol": "nINAUG",
         "decimals": 18,
-        "eth_address": "0x55b2969a6D832c6091Ba1AF4ed6d0E6E7c2C0d90"
+        "contract_address": "0x55b2969a6D832c6091Ba1AF4ed6d0E6E7c2C0d90"
     },
     {
         "id": "y-blue",
         "name": "YES Dem Control Token",
         "symbol": "yBLUE",
         "decimals": 18,
-        "eth_address": "0xf732eE9CCbf0Df22F53fBDd9ec88D62df298FBF8"
+        "contract_address": "0xf732eE9CCbf0Df22F53fBDd9ec88D62df298FBF8"
     },
     {
         "id": "n-blue",
         "name": "NO Dem Control Token",
         "symbol": "nBLUE",
         "decimals": 18,
-        "eth_address": "0x542439Eca879E52E03E0d6E87bcdCA165634245D"
+        "contract_address": "0x542439Eca879E52E03E0d6E87bcdCA165634245D"
     },
     {
         "id": "y-kyc",
         "name": "YES KYC Token",
         "symbol": "yKYC",
         "decimals": 18,
-        "eth_address": "0x14de81C71B3F73874659082b971433514E201B27",
+        "contract_address": "0x14de81C71B3F73874659082b971433514E201B27",
         "home_urls": ["https://foundry.finance/"],
         "community_urls": ["https://twitter.com/catnip_exchange", "https://discord.gg/dBN2tHZ"],
         "source_code_urls": ["https://github.com/aug-dao/augur_foundry"],

@@ -85,8 +85,8 @@ export function Trader(props: TraderProps) {
         })
         dispatchTradeStore({
             type: TradeActionType.UPDATE_OUTPUT_TOKEN,
-            token: coin?.eth_address
-                ? createERC20Token(chainId, coin.eth_address, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
+            token: coin?.contract_address
+                ? createERC20Token(chainId, coin.contract_address, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
                 : undefined,
         })
     }, [coin, chainId, decimals])

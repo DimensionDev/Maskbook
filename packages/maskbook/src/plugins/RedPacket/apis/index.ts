@@ -1,5 +1,5 @@
 import { getChainId } from '../../../extension/background-script/SettingsService'
-import { omit, pick } from 'lodash-es'
+import { pick } from 'lodash-es'
 import { tokenIntoMask } from '../../ITO/helpers'
 import { RED_PACKET_CONSTANTS } from '../constants'
 import type {
@@ -8,7 +8,14 @@ import type {
     RedPacketSubgraphInMask,
     RedPacketHistory,
 } from '../types'
-import { EthereumTokenType, ChainId, getConstant, getChainName } from '@dimensiondev/web3-shared'
+import {
+    EthereumTokenType,
+    ChainId,
+    getConstant,
+    getChainName,
+    getChainDetailed,
+    NativeTokenDetailed,
+} from '@dimensiondev/web3-shared'
 
 const redPacketBasicKeys = [
     'contract_address',
@@ -116,20 +123,22 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
                 message: redPacketSubgraphInMask.message,
             }
             const network = getChainName(redPacketSubgraphInMask.chain_id)
-            const token_type = redPacketSubgraphInMask.token.type
+
             let token
-            if (token_type === EthereumTokenType.ERC20) {
+            if (redPacketSubgraphInMask.token.type === EthereumTokenType.Native) {
+                const detailed = getChainDetailed(redPacketSubgraphInMask.token.chainId)
                 token = {
-                    name: '',
-                    symbol: '',
-                    ...omit(redPacketSubgraphInMask.token, ['type', 'chainId']),
-                }
+                    ...redPacketSubgraphInMask.token,
+                    name: detailed?.nativeCurrency.name ?? 'Ether',
+                    symbol: detailed?.nativeCurrency.symbol ?? 'ETH',
+                } as NativeTokenDetailed
+                redPacketSubgraphInMask.token = token
             }
             const payload = {
                 sender,
                 network,
-                token_type,
-                ...(token ? { token } : {}),
+                token_type: redPacketSubgraphInMask.token.type,
+                token: pick(redPacketSubgraphInMask.token, ['symbol', 'address', 'name', 'decimals']),
                 ...redPacketBasic,
             } as RedPacketJSONPayload
 
