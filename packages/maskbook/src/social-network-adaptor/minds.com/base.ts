@@ -8,7 +8,7 @@ export const mindsBase: SocialNetwork.Base = {
     shouldActivate(location) {
         return location.hostname.endsWith('minds.com')
     },
-    notReadyForProduction: true,
+    notReadyForProduction: false,
 }
 
 export function isMinds(ui: SocialNetwork.Base) {

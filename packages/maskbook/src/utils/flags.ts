@@ -40,7 +40,7 @@ export const Flags = {
     election2020_enabled: webOnly,
     election2020_composition_dialog_enabled: false,
     collectibles_enabled: webOnly,
-    dhedge_enabled: webOnly,
+    dhedge_enabled: true,
     airdrop_enabled: webOnly,
     airdrop_composition_dialog_enabled: false,
     snapshot_enabled: webOnly,
