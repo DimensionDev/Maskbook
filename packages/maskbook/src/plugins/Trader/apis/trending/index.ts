@@ -267,6 +267,7 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
             ])
             const trending: Trending = {
                 lastUpdated: status.timestamp,
+                platform: coinInfo.platform,
                 coin: {
                     id,
                     name: coinInfo.name,
@@ -294,8 +295,7 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     market_cap_rank: quotesInfo?.[id]?.cmc_rank,
                     description: coinInfo.description,
                     contract_address:
-                        resolveCoinAddress(id, DataProvider.COIN_MARKET_CAP) ??
-                        (coinInfo.platform?.name === 'Ethereum' ? coinInfo.platform?.token_address : undefined),
+                        resolveCoinAddress(id, DataProvider.COIN_MARKET_CAP) ?? coinInfo.platform?.token_address,
                 },
                 currency,
                 dataProvider,
