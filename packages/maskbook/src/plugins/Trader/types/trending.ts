@@ -1,3 +1,5 @@
+import type { ChainId } from '@dimensiondev/web3-shared'
+
 export interface Settings {
     currency: Currency
 }
@@ -18,6 +20,13 @@ export interface Currency {
     name: string
     symbol?: string
     description?: string
+}
+
+export interface Platform {
+    id: string | number
+    name: string
+    slug: string
+    symbol: string
 }
 
 export interface Coin {
@@ -79,6 +88,7 @@ export interface Trending {
     currency: Currency
     dataProvider: DataProvider
     coin: Coin
+    platform?: Platform
     market?: Market
     tickers: Ticker[]
     lastUpdated: string

@@ -3,8 +3,7 @@ import { CardActions, Link, makeStyles, Typography } from '@material-ui/core'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { MaskbookTextIcon } from '../../../../resources/MaskbookIcon'
-import { getEnumAsArray } from '@dimensiondev/maskbook-shared'
-import { DataProvider, TradeProvider } from '../../types'
+import type { DataProvider, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveTradeProviderName } from '../../pipes'
 import { findIndex } from 'lodash-es'
 import { DataProviderIcon } from '../trader/DataProviderIcon'
@@ -69,12 +68,6 @@ export const TradeFooter: FC<TradeFooterProps> = (props) => {
     } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const dataProviderOptions = showDataProviderIcon
-        ? getEnumAsArray(DataProvider).filter((x) => dataProviders.includes(x.value))
-        : []
-    const tradeProviderOptions = showTradeProviderIcon
-        ? getEnumAsArray(TradeProvider).filter((x) => tradeProviders.includes(x.value))
-        : []
     return (
         <CardActions className={classes.footer}>
             <Typography className={classes.footnote} variant="subtitle2">
@@ -93,16 +86,16 @@ export const TradeFooter: FC<TradeFooterProps> = (props) => {
                 <div className={classes.footMenu}>
                     <Typography className={classes.footnote}>Data Source</Typography>
                     <FootnoteMenu
-                        options={dataProviderOptions.map((x) => ({
+                        options={dataProviders.map((x) => ({
                             name: (
                                 <>
-                                    <DataProviderIcon provider={x.value} />
-                                    <span className={classes.footName}>{resolveDataProviderName(x.value)}</span>
+                                    <DataProviderIcon provider={x} />
+                                    <span className={classes.footName}>{resolveDataProviderName(x)}</span>
                                 </>
                             ),
-                            value: x.value,
+                            value: x,
                         }))}
-                        selectedIndex={findIndex(dataProviderOptions, (x) => x.value === dataProvider)}
+                        selectedIndex={dataProvider ? dataProviders.indexOf(dataProvider) : -1}
                         onChange={onDataProviderChange}
                     />
                     <ArrowDropDownIcon />
@@ -112,16 +105,16 @@ export const TradeFooter: FC<TradeFooterProps> = (props) => {
                 <div className={classes.footMenu}>
                     <Typography className={classes.footnote}>Supported by</Typography>
                     <FootnoteMenu
-                        options={tradeProviderOptions.map((x) => ({
+                        options={tradeProviders.map((x) => ({
                             name: (
                                 <>
-                                    <TradeProviderIcon provider={x.value} />
-                                    <span className={classes.footName}>{resolveTradeProviderName(x.value)}</span>
+                                    <TradeProviderIcon provider={x} />
+                                    <span className={classes.footName}>{resolveTradeProviderName(x)}</span>
                                 </>
                             ),
-                            value: x.value,
+                            value: x,
                         }))}
-                        selectedIndex={findIndex(getEnumAsArray(TradeProvider), (x) => x.value === tradeProvider)}
+                        selectedIndex={tradeProvider ? tradeProviders.indexOf(tradeProvider) : -1}
                         onChange={onTradeProviderChange}>
                         <ArrowDropDownIcon />
                     </FootnoteMenu>
