@@ -125,6 +125,13 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
         closeDialog,
     )
 
+    const backToPrevious = () => {
+        closeDialog()
+        setWords((list) => list.map(() => ''))
+        setName('')
+        openCreateImportDialog()
+    }
+
     const isImportStep = step === ImportStep.Import
 
     const importable: boolean = useMemo(() => {
@@ -150,15 +157,8 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
             }}>
             <DialogContent className={classes.content}>{isImportStep ? importWallet : <ImportResult />}</DialogContent>
             <DialogActions className={classes.dialogActions}>
-                <Button
-                    className={classes.actionButton}
-                    variant="contained"
-                    fullWidth
-                    onClick={() => {
-                        closeDialog()
-                        openCreateImportDialog()
-                    }}>
-                    Previous
+                <Button className={classes.actionButton} variant="contained" fullWidth onClick={backToPrevious}>
+                    {t('plugin_wallet_import_wallet_previous')}
                 </Button>
                 <Button
                     className={classes.actionButton}
@@ -166,7 +166,7 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
                     variant="contained"
                     onClick={handleImport}
                     disabled={isImportStep && !importable}>
-                    {isImportStep ? 'Import' : 'Next'}
+                    {t(isImportStep ? 'plugin_wallet_import_wallet_import' : 'plugin_wallet_import_wallet_next')}
                 </Button>
             </DialogActions>
         </InjectedDialog>
