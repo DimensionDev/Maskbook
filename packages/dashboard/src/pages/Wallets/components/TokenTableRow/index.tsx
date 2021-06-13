@@ -4,8 +4,8 @@ import { TokenIcon } from '../TokenIcon'
 import { formatBalance, formatCurrency, FormattedCurrency, pow10 } from '@dimensiondev/maskbook-shared'
 import { CurrencyType, Asset, getTokenUSDValue } from '@dimensiondev/web3-shared'
 import BigNumber from 'bignumber.js'
-import { useHistory } from 'react-router'
-import { Routes } from '../../../../type'
+import { useNavigate } from 'react-router'
+import { RoutePaths } from '../../../../type'
 import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles((theme) => ({
@@ -25,7 +25,7 @@ export interface TokenTableRowProps {
 export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
     const t = useDashboardI18N()
     const classes = useStyles()
-    const history = useHistory()
+    const navigate = useNavigate()
     return (
         <TableRow>
             <TableCell className={classes.cell} align="center" variant="body">
@@ -65,7 +65,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
                     variant="outlined"
                     color="secondary"
                     sx={{ marginRight: 1 }}
-                    onClick={() => history.push(Routes.WalletsTransfer)}>
+                    onClick={() => navigate(RoutePaths.WalletsTransfer)}>
                     {t.wallets_balance_Send()}
                 </Button>
                 <Button variant="outlined" color="secondary">

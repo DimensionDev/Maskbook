@@ -22,9 +22,9 @@ import { MaskNotSquareIcon } from '@dimensiondev/icons'
 import { memo } from 'react'
 import { FeaturePromotions } from './FeaturePromotions'
 import { useLocation } from 'react-router'
-import { Routes } from '../../type'
+import { RoutePaths } from '../../type'
 
-const featurePromotionsEnabled = [Routes.Wallets, Routes.WalletsTransfer, Routes.WalletsHistory]
+const featurePromotionsEnabled = [RoutePaths.Wallets, RoutePaths.WalletsTransfer, RoutePaths.WalletsHistory]
 
 const Root = styled(Grid)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,

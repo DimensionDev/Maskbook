@@ -3,9 +3,8 @@ import { PageFrame } from '../../components/DashboardFrame'
 import { useWallets, useTrustedERC20Tokens, useAssets, getTokenUSDValue, useWallet } from '@dimensiondev/web3-shared'
 import { StartUp } from './StartUp'
 import { TokenAssets } from './components/TokenAssets'
-import { Route, Switch, useRouteMatch } from 'react-router'
+import { Route, Routes } from 'react-router'
 import { Balance } from './components/Balance'
-import { Routes } from '../../type'
 import { Transfer } from './components/Transfer'
 import { useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
@@ -15,7 +14,6 @@ function Wallets() {
     const wallet = useWallet()
     const wallets = useWallets()
     const [receiveOpen, setReceiveOpen] = useState(false)
-    const { path } = useRouteMatch()
 
     const erc20Tokens = useTrustedERC20Tokens()
 
@@ -46,10 +44,10 @@ function Wallets() {
                         onSwap={() => {}}
                         onReceive={() => setReceiveOpen(true)}
                     />
-                    <Switch>
-                        <Route exact path={path} children={<TokenAssets />}></Route>
-                        <Route exact path={Routes.WalletsTransfer} children={<Transfer />} />
-                    </Switch>
+                    <Routes>
+                        <Route path="/" element={<TokenAssets />} />
+                        <Route path="transfer" element={<Transfer />} />
+                    </Routes>
                 </Box>
             )}
             {wallet ? (

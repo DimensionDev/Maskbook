@@ -1,4 +1,4 @@
-export enum Routes {
+export enum RoutePaths {
     Welcome = '/welcome',
     Personas = '/personas',
     Wallets = '/wallets',

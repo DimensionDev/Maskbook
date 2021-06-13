@@ -22,6 +22,7 @@ import { RoutePaths } from '../../type'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string; nested?: boolean }) => {
     const navigate = useNavigate()
+
     return (
         <MuiListItem
             {...props}
