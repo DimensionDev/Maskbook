@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { makeStyles, Link, Tab, Tabs } from '@material-ui/core'
-import { useI18N, useSettingsSwticher } from '../../../../utils'
+import { useI18N, useSettingsSwticher, useValueRef } from '../../../../utils'
 import { DataProvider, TagType, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
@@ -19,8 +19,9 @@ import { TrendingViewDeck } from './TrendingViewDeck'
 import { currentTrendingDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType, useTokenDetailed } from '@dimensiondev/web3-shared'
+import { EthereumTokenType, NetworkType, useTokenDetailed } from '@dimensiondev/web3-shared'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
+import { currentNetworkSettings } from '../../../Wallet/settings'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -72,11 +73,13 @@ export function SearchResultView(props: SearchResultViewProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
-    //#region trending
     const dataProvider = useCurrentDataProvider(dataProviders)
-    //#endregion
-
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
+
+    //#region track network type
+    const networkType = useValueRef(currentNetworkSettings)
+    useEffect(() => setTabIndex(0), [networkType])
+    //#endregion
 
     //#region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
@@ -160,7 +163,9 @@ export function SearchResultView(props: SearchResultViewProps) {
     //#endregion
 
     //#region is ethereum based coin
-    const isEthereum = !!trending?.coin.contract_address || trending?.coin.symbol.toLowerCase() === 'eth'
+    const isEthereum =
+        (!!trending?.coin.contract_address || trending?.coin.symbol.toLowerCase() === 'eth') &&
+        networkType === NetworkType.Ethereum
     //#endregion
 
     //#region display loading skeleton

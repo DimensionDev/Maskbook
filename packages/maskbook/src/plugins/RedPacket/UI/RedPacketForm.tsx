@@ -7,16 +7,18 @@ import BigNumber from 'bignumber.js'
 import { formatBalance, isGreaterThan, isZero, pow10 } from '@dimensiondev/maskbook-shared'
 import {
     EthereumTokenType,
+    NetworkType,
     FungibleTokenDetailed,
     useAccount,
     useConstant,
     useChainId,
+    useNetworkType,
     TransactionStateType,
     getChainName,
     useNativeTokenDetailed,
     useTokenBalance,
 } from '@dimensiondev/web3-shared'
-import { Flags, useI18N, useRemoteControlledDialog } from '../../../utils'
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import {
@@ -24,7 +26,6 @@ import {
     RED_PACKET_MAX_SHARES,
     RED_PACKET_CONSTANTS,
     RED_PACKET_DEFAULT_SHARES,
-    RED_PACKET_CONTRACT_VERSION,
 } from '../constants'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useCreateCallback } from '../hooks/useCreateCallback'
@@ -34,7 +35,6 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { GasPriceButton } from '../../../web3/UI/GasPriceButton'
 import { RedPacketRPC } from '../messages'
 
 const useStyles = makeStyles((theme) => ({
@@ -75,12 +75,15 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const HAPPY_RED_PACKET_ADDRESS = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS_V2')
-
     // context
     const account = useAccount()
     const chainId = useChainId()
-    const RED_PACKET_ADDRESS = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS_V2')
+    const networkType = useNetworkType()
+    const contract_address = useConstant(
+        RED_PACKET_CONSTANTS,
+        networkType === NetworkType.Ethereum ? 'HAPPY_RED_PACKET_ADDRESS_V2' : 'HAPPY_RED_PACKET_ADDRESS_V3',
+    )
+    const contract_version = networkType === NetworkType.Ethereum ? 2 : 3
 
     //#region select token
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
@@ -144,21 +147,24 @@ export function RedPacketForm(props: RedPacketFormProps) {
     //#region blocking
     // password should remain the same rather than change each time when createState change,
     //  otherwise password in database would be different from creating red-packet.
-    const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback({
-        duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
-        isRandom: Boolean(isRandom),
-        name: senderName,
-        message,
-        shares: shares || 0,
-        token,
-        total: totalAmount.toFixed(),
-    })
+    const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback(
+        {
+            duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
+            isRandom: Boolean(isRandom),
+            name: senderName,
+            message,
+            shares: shares || 0,
+            token,
+            total: totalAmount.toFixed(),
+        },
+        contract_version,
+    )
     //#endregion
 
     // assemble JSON payload
     const payload = useRef<RedPacketJSONPayload>({
-        contract_address: HAPPY_RED_PACKET_ADDRESS,
-        contract_version: RED_PACKET_CONTRACT_VERSION,
+        contract_address,
+        contract_version,
         network: getChainName(chainId),
     } as RedPacketJSONPayload)
 
@@ -228,7 +234,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 id: createState.hash!,
                 from: '',
                 password: createSettings!.password,
-                contract_version: RED_PACKET_CONTRACT_VERSION,
+                contract_version,
             }
             RedPacketRPC.discoverRedPacket(record)
         }
@@ -332,7 +338,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 <EthereumERC20TokenApprovedBoundary
                     amount={totalAmount.toFixed()}
                     token={token?.type === EthereumTokenType.ERC20 ? token : undefined}
-                    spender={RED_PACKET_ADDRESS}>
+                    spender={contract_address}>
                     <ActionButton
                         variant="contained"
                         size="large"
@@ -347,9 +353,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     </ActionButton>
                 </EthereumERC20TokenApprovedBoundary>
             </EthereumWalletConnectedBoundary>
-            {Flags.wallet_gas_price_dialog_enable ? (
-                <GasPriceButton ButtonProps={{ variant: 'text', color: 'secondary' }} />
-            ) : null}
         </>
     )
 }

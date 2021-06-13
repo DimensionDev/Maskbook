@@ -13,11 +13,12 @@ import {
     useTransactionState,
     useNonce,
     useGasPrice,
+    useConstant,
+    CONSTANTS,
 } from '@dimensiondev/web3-shared'
 import { isLessThan } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { TransactionReceipt } from 'web3-core'
-import { RED_PACKET_CONTRACT_VERSION } from '../constants'
 import type { HappyRedPacketV2 } from '@dimensiondev/contracts/types/HappyRedPacketV2'
 import Services from '../../../extension/service'
 
@@ -32,15 +33,16 @@ export interface RedPacketSettings {
     token?: FungibleTokenDetailed
 }
 
-export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'password'>) {
+export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'password'>, version: number) {
     const nonce = useNonce()
     const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const { t } = useI18N()
     const [createState, setCreateState] = useTransactionState()
-    const redPacketContract = useRedPacketContract(RED_PACKET_CONTRACT_VERSION)
+    const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
+    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
 
     const createCallback = useCallback(async () => {
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
@@ -113,7 +115,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
             message,
             name,
             token.type === EthereumTokenType.Native ? 0 : 1,
-            token.type === EthereumTokenType.Native ? account : token.address, // this field must be a valid address
+            token.type === EthereumTokenType.Native ? NATIVE_TOKEN_ADDRESS : token.address, // this field must be a valid address
             total,
         ]
 

@@ -22,10 +22,21 @@ export const RED_PACKET_CONSTANTS = {
         [ChainId.Rinkeby]: '0x575f906db24154977c7361c2319e2b25e897e3b6',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
-        [ChainId.BSC]: '0x6cc1b1058F9153358278C35E0b2D382f1585854B',
-        [ChainId.BSCT]: '0x8440b99B1Df5D4B61957c8Ce0a199487Be3De270',
-        [ChainId.Matic]: '0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9',
-        [ChainId.Mumbai]: '0x6DfC82B48CFd38d4722366Cd6F444a341b8840f5',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
+    HAPPY_RED_PACKET_ADDRESS_V3: {
+        [ChainId.Mainnet]: '',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '0x913975af2bb8a6be4100d7dc5e9765b77f6a5d6c',
+        [ChainId.Mumbai]: '0x0061E06c9f640a03C4981f43762d2AE5e03873c5',
     },
     SUBGRAPH_URL: {
         [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mainnet',
@@ -33,14 +44,12 @@ export const RED_PACKET_CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
-        [ChainId.BSC]: '',
+        [ChainId.BSC]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-bsc-mainnet',
         [ChainId.BSCT]: '',
-        [ChainId.Matic]: '',
-        [ChainId.Mumbai]: '',
+        [ChainId.Matic]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-polygon',
+        [ChainId.Mumbai]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mumbai',
     },
 }
-
-export const RED_PACKET_CONTRACT_VERSION = 2
 
 export const RED_PACKET_DEFAULT_SHARES = 5
 export const RED_PACKET_MIN_SHARES = 1
