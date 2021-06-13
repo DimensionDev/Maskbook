@@ -23,7 +23,7 @@ async function Suspender(identifier: ProposalIdentifier) {
     const voters = Object.keys(rawVotes)
     const scores = await PluginSnapshotRPC.getScores(message, voters, blockNumber)
     const profiles = await PluginSnapshotRPC.fetch3BoxProfiles(voters)
-    const profileEntries = Object.fromEntries(profiles.map((p) => [p.eth_address, p]))
+    const profileEntries = Object.fromEntries(profiles.map((p) => [p.contract_address, p]))
 
     const votes = Object.fromEntries(
         Object.entries(rawVotes)

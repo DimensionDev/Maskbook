@@ -27,7 +27,7 @@ export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Bo
                 ids: addresses,
             },
             name: true,
-            eth_address: true,
+            contract_address: true,
             image: true,
         },
     })
