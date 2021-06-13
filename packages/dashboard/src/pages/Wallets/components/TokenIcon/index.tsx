@@ -69,7 +69,7 @@ export const TokenIconUI = memo<TokenIconUIProps>(
 
         return (
             <Avatar src={loading ? '' : resolveTokenIconURL(address, baseURI)} {...AvatarProps}>
-                <Avatar src={tokenBlockie}>name?.substr(0,1).toLocaleUpperCase()</Avatar>
+                <Avatar src={tokenBlockie}>{name?.substr(0, 1).toLocaleUpperCase()}</Avatar>
             </Avatar>
         )
     },
