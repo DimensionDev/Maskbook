@@ -1,5 +1,5 @@
 import { createIcon } from '../utils'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@dimensiondev/maskbook-theme/constants'
 
 export const SearchIcon = createIcon(
     'Search',

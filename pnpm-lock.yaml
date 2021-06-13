@@ -157,10 +157,11 @@ importers:
       babel-loader: ^8.2.2
       classnames: ^2.3.1
       color: ^3.1.3
+      history: ^5.0.0
       json-stable-stringify: ^1.0.1
       lodash-es: ^4.17.21
-      react-router: ^5.2.0
-      react-router-dom: ^5.2.0
+      react-router: ^6.0.0-beta.0
+      react-router-dom: ^6.0.0-beta.0
       react-use: ^17.2.4
       snowpack: ^3.5.1
       unstated-next: ^1.1.0
@@ -179,10 +180,11 @@ importers:
       async-call-rpc: 5.1.0
       classnames: 2.3.1
       color: 3.1.3
+      history: 5.0.0
       json-stable-stringify: 1.0.1
       lodash-es: 4.17.21
-      react-router: 5.2.0
-      react-router-dom: 5.2.0
+      react-router: 6.0.0-beta.0_history@5.0.0
+      react-router-dom: 6.0.0-beta.0_history@5.0.0
       react-use: 17.2.4
       unstated-next: 1.1.0
       use-subscription: 1.5.1
@@ -246,7 +248,7 @@ importers:
       '@ethersproject/strings': ^5.1.0
       '@msgpack/msgpack': ^2.7.0
       '@openzeppelin/contracts': ^3.2.0
-      '@pmmmwh/react-refresh-webpack-plugin': ^0.4.3
+      '@pmmmwh/react-refresh-webpack-plugin': ^0.5.0-rc.0
       '@popperjs/core': '*'
       '@servie/events': ^3.0.0
       '@sinonjs/text-encoding': ^0.7.1
@@ -494,7 +496,7 @@ importers:
       z-schema: 5.0.1
     devDependencies:
       '@dimensiondev/webextension-shim': 0.0.3-20201120022530-b318b89
-      '@pmmmwh/react-refresh-webpack-plugin': 0.4.3_dae7018c5b5576f32207b1e2608a9d18
+      '@pmmmwh/react-refresh-webpack-plugin': 0.5.0-rc.0_dae7018c5b5576f32207b1e2608a9d18
       '@sinonjs/text-encoding': 0.7.1
       '@testing-library/react-hooks': 7.0.0_react-test-renderer@17.0.2
       '@types/enzyme': 3.10.8
@@ -4412,16 +4414,16 @@ packages:
       webpack: 4.46.0
     dev: true
 
-  /@pmmmwh/react-refresh-webpack-plugin/0.4.3_dae7018c5b5576f32207b1e2608a9d18:
-    resolution: {integrity: sha512-br5Qwvh8D2OQqSXpd1g/xqXKnK0r+Jz6qVKBbWmpUcrbGOxUrf39V5oZ1876084CGn18uMdR5uvPqBv9UqtBjQ==}
-    engines: {node: '>= 10.x'}
+  /@pmmmwh/react-refresh-webpack-plugin/0.5.0-rc.0_dae7018c5b5576f32207b1e2608a9d18:
+    resolution: {integrity: sha512-oJV/ukrTxm1zjq/D4A3arLSqDMCy4jnIVDYEfe+KX5FX07b0blWmGa3UaqtLYqZsb++V8VnyFlq0OYS3f9yi0g==}
+    engines: {node: '>= 10.13'}
     peerDependencies:
-      '@types/webpack': 4.x
-      react-refresh: '>=0.8.3 <0.10.0'
+      '@types/webpack': 4.x || 5.x
+      react-refresh: ^0.10.0
       sockjs-client: ^1.4.0
-      type-fest: ^0.13.1
+      type-fest: ^1.0.2
       webpack: '>=4.43.0 <6.0.0'
-      webpack-dev-server: 3.x
+      webpack-dev-server: 3.x || >=4.0.0-beta.0
       webpack-hot-middleware: 2.x
       webpack-plugin-serve: 0.x || 1.x
     peerDependenciesMeta:
@@ -4439,11 +4441,12 @@ packages:
         optional: true
     dependencies:
       ansi-html: 0.0.7
+      core-js-pure: 3.11.0
       error-stack-parser: 2.0.6
-      html-entities: 1.4.0
-      native-url: 0.2.6
+      html-entities: 2.3.2
+      loader-utils: 2.0.0
       react-refresh: 0.10.0
-      schema-utils: 2.7.1
+      schema-utils: 3.0.0
       source-map: 0.7.3
       webpack: 5.37.1_webpack-cli@4.7.0
       webpack-dev-server: 3.11.2_webpack-cli@4.7.0+webpack@5.37.1
@@ -6491,7 +6494,7 @@ packages:
     resolution: {integrity: sha512-D5mHD6TbdV/DNHYsnwBTv+y73ei+mMjrkGrla86HthE4/PVvL1J94Bu3qABU+COXzpL23T1EZapVVpwHuBXiUg==}
     dependencies:
       '@types/history': 4.7.8
-      '@types/react': 17.0.3
+      '@types/react': 17.0.11
       '@types/react-router': 5.1.13
     dev: false
 
@@ -6499,7 +6502,7 @@ packages:
     resolution: {integrity: sha512-ZIuaO9Yrln54X6elg8q2Ivp6iK6p4syPsefEYAhRDAoqNh48C8VYUmB9RkXjKSQAJSJV0mbIFCX7I4vZDcHrjg==}
     dependencies:
       '@types/history': 4.7.8
-      '@types/react': 17.0.3
+      '@types/react': 17.0.11
     dev: false
 
   /@types/react-syntax-highlighter/11.0.5:
@@ -13694,12 +13697,18 @@ packages:
   /history/4.10.1:
     resolution: {integrity: sha512-36nwAD620w12kuzPAsyINPWJqlNbij+hpK1k9XRloDtym8mxzGYl2c17LnV6IAGB2Dmg4tEa7G7DlawS0+qjew==}
     dependencies:
-      '@babel/runtime': 7.13.10
+      '@babel/runtime': 7.14.0
       loose-envify: 1.4.0
       resolve-pathname: 3.0.0
       tiny-invariant: 1.1.0
       tiny-warning: 1.0.3
       value-equal: 1.0.1
+    dev: false
+
+  /history/5.0.0:
+    resolution: {integrity: sha512-3NyRMKIiFSJmIPdq7FxkNMJkQ7ZEtVblOQ38VtKaA0zZMW1Eo6Q6W8oDKEflr1kNNTItSnk4JMCO1deeSgbLLg==}
+    dependencies:
+      '@babel/runtime': 7.14.0
     dev: false
 
   /hmac-drbg/1.0.1:
@@ -13769,6 +13778,10 @@ packages:
 
   /html-entities/1.4.0:
     resolution: {integrity: sha512-8nxjcBcd8wovbeKx7h3wTji4e6+rhaVuPNpMqwWgnHh+N9ToqsCs6XztWRBPQ+UtzsoMAdKZtUENoVzU/EMtZA==}
+    dev: true
+
+  /html-entities/2.3.2:
+    resolution: {integrity: sha512-c3Ab/url5ksaT0WyleslpBEthOzWhrjQbg75y7XUsfSzi3Dgzt0l8w5e7DylRn15MTlMMD58dTfzddNS2kcAjQ==}
     dev: true
 
   /html-escaper/2.0.2:
@@ -16993,7 +17006,7 @@ packages:
       prop-types: ^15.0.0
       react: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@babel/runtime': 7.13.10
+      '@babel/runtime': 7.14.0
       prop-types: 15.7.2
       tiny-warning: 1.0.3
     dev: false
@@ -19250,7 +19263,7 @@ packages:
     peerDependencies:
       react: '>=15'
     dependencies:
-      '@babel/runtime': 7.13.10
+      '@babel/runtime': 7.14.0
       history: 4.10.1
       loose-envify: 1.4.0
       prop-types: 15.7.2
@@ -19259,12 +19272,24 @@ packages:
       tiny-warning: 1.0.3
     dev: false
 
+  /react-router-dom/6.0.0-beta.0_history@5.0.0:
+    resolution: {integrity: sha512-36yNNGMT8RB9FRPL9nKJi6HKDkgOakU+o/2hHpSzR6e37gN70MpOU6QQlmif4oAWWBwjyGc3ZNOMFCsFuHUY5w==}
+    peerDependencies:
+      history: '>=5'
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      history: 5.0.0
+      prop-types: 15.7.2
+      react-router: 6.0.0-beta.0_history@5.0.0
+    dev: false
+
   /react-router/5.2.0:
     resolution: {integrity: sha512-smz1DUuFHRKdcJC0jobGo8cVbhO3x50tCL4icacOlcwDOEQPq4TMqwx3sY1TP+DvtTgz4nm3thuo7A+BK2U0Dw==}
     peerDependencies:
       react: '>=15'
     dependencies:
-      '@babel/runtime': 7.13.10
+      '@babel/runtime': 7.14.0
       history: 4.10.1
       hoist-non-react-statics: 3.3.2
       loose-envify: 1.4.0
@@ -19274,6 +19299,16 @@ packages:
       react-is: 16.13.1
       tiny-invariant: 1.1.0
       tiny-warning: 1.0.3
+    dev: false
+
+  /react-router/6.0.0-beta.0_history@5.0.0:
+    resolution: {integrity: sha512-VgMdfpVcmFQki/LZuLh8E/MNACekDetz4xqft+a6fBZvvJnVqKbLqebF7hyoawGrV1HcO5tVaUang2Og4W2j1Q==}
+    peerDependencies:
+      history: '>=5'
+      react: '>=16.8'
+    dependencies:
+      history: 5.0.0
+      prop-types: 15.7.2
     dev: false
 
   /react-shallow-renderer/16.14.1:
