@@ -1,11 +1,11 @@
 import { makeStyles, TextField, TextFieldProps } from '@material-ui/core'
 import formatDateTime from 'date-fns/format'
 
-export interface DateTimePanelProps {
-    label: string
+export interface DateTimePanelProps extends Omit<TextFieldProps, 'onChange'> {
     date: Date
     onChange: (date: Date) => void
-    TextFieldProps?: Partial<TextFieldProps>
+    min?: string
+    max?: string
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -18,22 +18,22 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export function DateTimePanel(props: DateTimePanelProps) {
-    const { label, date, onChange, TextFieldProps } = props
+    const { label, date, onChange, min, max, inputProps, ...rest } = props
     const GMT = (new Date().getTimezoneOffset() / 60) * -1
     const classes = useStyles()
 
     return (
         <TextField
+            {...rest}
             label={`${label} ${GMT >= 0 ? `(UTC +${GMT})` : `(UTC ${GMT})`}`}
-            type="datetime-local"
             value={formatDateTime(date, "yyyy-MM-dd'T'HH:mm")}
             onChange={(e) => {
                 const date = new Date(e.currentTarget.value)
                 onChange(date)
             }}
             InputLabelProps={{ shrink: true }}
-            inputProps={{ className: classes.datetime }}
-            {...TextFieldProps}
+            inputProps={{ className: classes.datetime, ...inputProps, min, max }}
+            type="datetime-local"
         />
     )
 }

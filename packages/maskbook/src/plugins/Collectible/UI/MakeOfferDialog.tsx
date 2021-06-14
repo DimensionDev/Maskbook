@@ -21,6 +21,7 @@ import {
     isNative,
     useTokenWatched,
 } from '@dimensiondev/web3-shared'
+import { format as formatDateTime } from 'date-fns'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
@@ -166,11 +167,10 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             <DateTimePanel
                                 label={t('plugin_collectible_expiration_date')}
                                 date={expirationDateTime}
+                                min={formatDateTime(new Date(), "yyyy-MM-dd'T00:00")}
                                 onChange={setExpirationDateTime}
-                                TextFieldProps={{
-                                    className: classes.panel,
-                                    fullWidth: true,
-                                }}
+                                className={classes.panel}
+                                fullWidth
                             />
                         ) : null}
                         <Box sx={{ padding: 2, paddingBottom: 0 }}>
