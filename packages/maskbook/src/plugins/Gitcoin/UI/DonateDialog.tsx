@@ -178,7 +178,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     return (
         <div className={classes.root}>
-            <InjectedDialog open={open} onClose={closeDonationDialog} title={title} DialogProps={{ maxWidth: 'xs' }}>
+            <InjectedDialog open={open} onClose={closeDonationDialog} title={title} maxWidth="xs">
                 <DialogContent>
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel

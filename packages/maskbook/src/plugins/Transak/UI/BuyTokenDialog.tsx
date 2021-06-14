@@ -62,10 +62,8 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
             <InjectedDialog
                 open={open}
                 onClose={closeDialog}
-                DialogProps={{
-                    classes: {
-                        paper: classes.dialogPaper,
-                    },
+                classes={{
+                    paper: classes.dialogPaper,
                 }}
                 disableBackdropClick>
                 <DialogContent className={classes.content}>

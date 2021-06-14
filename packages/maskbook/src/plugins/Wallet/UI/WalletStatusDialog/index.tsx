@@ -145,11 +145,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     if (!selectedWallet) return null
 
     return (
-        <InjectedDialog
-            title={t('wallet_status_title')}
-            open={open}
-            onClose={closeDialog}
-            DialogProps={{ maxWidth: 'sm' }}>
+        <InjectedDialog title={t('wallet_status_title')} open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
                 <section className={classes.currentAccount}>
                     <WalletIcon size={48} badgeSize={18}></WalletIcon>

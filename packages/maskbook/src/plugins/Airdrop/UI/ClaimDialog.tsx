@@ -1,14 +1,5 @@
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import {
-    DialogContent,
-    Box,
-    Theme,
-    makeStyles,
-    DialogActions,
-    Button,
-    DialogProps,
-    Typography,
-} from '@material-ui/core'
+import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
+import { DialogContent, Box, Theme, makeStyles, DialogActions, Button, Typography } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared'
@@ -33,13 +24,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
-interface ClaimDialogUIProps extends withClasses<never> {
-    open: boolean
+interface ClaimDialogUIProps extends withClasses<never>, InjectedDialogProps {
     amount: string
     token?: ERC20TokenDetailed
     onClaim: () => void
-    onClose: () => void
-    DialogProps?: Partial<DialogProps>
 }
 
 function ClaimDialogUI(props: ClaimDialogUIProps) {
@@ -49,13 +37,7 @@ function ClaimDialogUI(props: ClaimDialogUIProps) {
     if (!token) return null
 
     return (
-        <InjectedDialog
-            open={open}
-            onClose={onClose}
-            DialogProps={{
-                maxWidth: 'xs',
-            }}
-            title="Claim Airdrop">
+        <InjectedDialog open={open} onClose={onClose} maxWidth="xs" title="Claim Airdrop">
             <DialogContent className={classes.content}>
                 <Box className={classes.token}>
                     <Box display="flex" alignItems="center">

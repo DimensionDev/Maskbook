@@ -50,11 +50,7 @@ export function PostListingDialog(props: PostListingDialogProps) {
     ]
 
     return (
-        <InjectedDialog
-            title={t('plugin_collectible_post_listing')}
-            open={open}
-            onClose={onClose}
-            DialogProps={{ maxWidth: 'md' }}>
+        <InjectedDialog title={t('plugin_collectible_post_listing')} open={open} onClose={onClose} maxWidth="md">
             <DialogContent className={classes.content}>
                 <Tabs
                     indicatorColor="primary"

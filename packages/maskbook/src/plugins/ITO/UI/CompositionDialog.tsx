@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
-import { DialogContent, DialogProps } from '@material-ui/core'
+import { DialogContent } from '@material-ui/core'
 import { formatBalance, usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
 import { ITO_CONSTANTS, ITO_MetaKey, MSG_DELIMITER } from '../constants'
 import { DialogTabs, JSON_PayloadInMask } from '../types'
 import { CreateForm } from './CreateForm'
@@ -23,11 +23,9 @@ export enum ITOCreateFormPageStep {
     ConfirmItoPage = 'confirm-item',
 }
 
-export interface CompositionDialogProps extends withClasses<'root'> {
-    open: boolean
+export interface CompositionDialogProps extends withClasses<'root'>, Omit<InjectedDialogProps, 'classes' | 'onClose'> {
     onConfirm(payload: JSON_PayloadInMask): void
     onClose: () => void
-    DialogProps?: Partial<DialogProps>
 }
 
 export function CompositionDialog(props: CompositionDialogProps) {
@@ -144,12 +142,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             {
                 label: t('plugin_ito_create_new'),
                 children: usePortalShadowRoot((container) => (
-                    <CreateForm
-                        onNext={onNext}
-                        origin={poolSettings}
-                        onChangePoolSettings={setPoolSettings}
-                        dateDialogProps={{ container }}
-                    />
+                    <CreateForm onNext={onNext} origin={poolSettings} onChangePoolSettings={setPoolSettings} />
                 )),
                 sx: { p: 0 },
             },
@@ -167,7 +160,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         const [, setValue] = state
         setValue(DialogTabs.create)
         props.onClose()
-    }, [props, state])
+    }, [props.onClose, state])
 
     // open the transaction dialog
     useEffect(() => {
