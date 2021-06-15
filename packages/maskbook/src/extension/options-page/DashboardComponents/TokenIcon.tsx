@@ -11,16 +11,23 @@ import {
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useImageFailover } from '../../../utils'
 
+const SPECIAL_ICON_ASSET_MAP: { [key: string]: string } = {
+    '0x04abEdA201850aC0124161F037Efd70c74ddC74C': 'https://s2.coinmarketcap.com/static/img/coins/64x64/5841.png', // NEST
+    '0x14de81C71B3F73874659082b971433514E201B27': 'https://etherscan.io/token/images/ykyctoken_32.png', // Yes KYC
+}
+
 //#region fix icon image
-function resolveTokenIconURL(address: string, baseURI: string, chainId: ChainId) {
-    const iconMap = {
-        [constantOfChain(CONSTANTS, chainId).NATIVE_TOKEN_ADDRESS]: `${baseURI}/info/logo.png`,
-        '0x04abEdA201850aC0124161F037Efd70c74ddC74C': 'https://s2.coinmarketcap.com/static/img/coins/64x64/5841.png', // NEST
-        '0x14de81C71B3F73874659082b971433514E201B27': 'https://etherscan.io/token/images/ykyctoken_32.png', // Yes KYC
+function resolveTokenIconURLs(address: string, baseURIs: string[], chainId: ChainId, logoURI?: string) {
+    const checkSummedAddress = formatEthereumAddress(address)
+
+    if (constantOfChain(CONSTANTS, chainId).NATIVE_TOKEN_ADDRESS === checkSummedAddress) {
+        return baseURIs.map((x) => `${x}/info/logo.png`)
     }
-    const checksummedAddress = formatEthereumAddress(address)
-    if (iconMap[checksummedAddress]) return iconMap[checksummedAddress]
-    return `${baseURI}/assets/${checksummedAddress}/logo.png`
+
+    if (SPECIAL_ICON_ASSET_MAP[checkSummedAddress]) return [SPECIAL_ICON_ASSET_MAP[checkSummedAddress]]
+
+    const fullIconAssetURIs = baseURIs.map((x) => `${x}/assets/${checkSummedAddress}/logo.png`)
+    return logoURI ? [logoURI] : fullIconAssetURIs
 }
 //#endregion
 
@@ -35,33 +42,25 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export interface TokenIconProps extends withClasses<never> {
     name?: string
-    logoURL?: string
+    logoURI?: string
     chainId?: ChainId
     address: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURL, name, chainId, AvatarProps } = props
+    const { address, logoURI, name, chainId, AvatarProps } = props
 
     const classes = useStylesExtends(useStyles(), props)
     const chainDetailed = useChainDetailed()
     const tokenBlockie = useBlockie(address)
     const tokenAssetBaseURI = useConstant(CONSTANTS, 'TOKEN_ASSET_BASE_URI')
 
-    const { value: baseURI, loading } = useImageFailover(chainDetailed ? tokenAssetBaseURI : [], '/info/logo.png')
+    const tokenURIs = resolveTokenIconURLs(address, tokenAssetBaseURI, chainId ?? ChainId.Mainnet, logoURI)
+    const { value: baseURI, loading } = useImageFailover(chainDetailed ? tokenURIs : [], '')
 
-    if (logoURL)
-        return (
-            <Avatar className={classes.icon} src={logoURL} {...AvatarProps}>
-                {name?.substr(0, 1).toLocaleUpperCase()}
-            </Avatar>
-        )
     return (
-        <Avatar
-            className={classes.icon}
-            src={loading ? '' : resolveTokenIconURL(address, baseURI!, chainId ?? ChainId.Mainnet)}
-            {...AvatarProps}>
+        <Avatar className={classes.icon} src={loading ? '' : baseURI} {...AvatarProps}>
             <Avatar className={classes.icon} src={tokenBlockie}>
                 {name?.substr(0, 1).toLocaleUpperCase()}
             </Avatar>
