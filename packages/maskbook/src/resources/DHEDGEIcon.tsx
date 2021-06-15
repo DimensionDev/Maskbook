@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from '@material-ui/core'
 import type { FC } from 'react'
 
-export const PluginIcon: FC<SvgIconProps> = (props) => (
+export const DHEDGEIcon: FC<SvgIconProps> = (props) => (
     <SvgIcon {...props}>
         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
