@@ -139,9 +139,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
         WalletMessages.events.walletStatusDialogUpdated,
     )
 
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
     const { openDialog: openCreateImportDialog } = useRemoteControlledDialog(
         WalletMessages.events.createImportWalletDialogUpdated,
     )
@@ -149,7 +146,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
         if (account) {
             openSelectWalletDialog()
         } else {
-            // openSelectProviderDialog()
             openCreateImportDialog()
         }
     }, [account])
@@ -237,10 +233,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
             <MenuItem onClick={onClaimAllDialogOpen} className={classes.menuItem}>
                 <Image src={ToolIconURLs.claim.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.claim.text}</Typography>
-            </MenuItem>,
-            <MenuItem onClick={openCreateImportDialog} className={classes.menuItem}>
-                <Image src={ToolIconURLs.claim.image} width={19} height={19} />
-                <Typography className={classes.text}>create and import</Typography>
             </MenuItem>,
         ],
         false,

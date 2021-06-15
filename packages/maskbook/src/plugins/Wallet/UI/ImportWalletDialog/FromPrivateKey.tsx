@@ -1,6 +1,7 @@
 import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react'
 import { Box, TextField, makeStyles } from '@material-ui/core'
 import { debounce } from 'lodash-es'
+import { useI18N } from '../../../../utils'
 import { WalletRPC } from '../../messages'
 
 const useStyles = makeStyles((theme) => ({
@@ -25,12 +26,12 @@ interface FromPrivateKeyProps {
 
 export const FromPrivateKey: FC<FromPrivateKeyProps> = ({ onRecover }) => {
     const classes = useStyles()
+    const { t } = useI18N()
     const [valid, setValid] = useState(true)
     const [recovering, setRecovering] = useState(false)
     const [privateKey, setPrivateKey] = useState('')
     const handleChange = useCallback((evt: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         const text = evt.target.value
-        console.log('text', text)
         setPrivateKey(text)
     }, [])
     useEffect(() => {
@@ -43,7 +44,6 @@ export const FromPrivateKey: FC<FromPrivateKeyProps> = ({ onRecover }) => {
             setRecovering(true)
             WalletRPC.recoverWalletFromPrivateKey(privateKey)
                 .then(({ address, privateKeyValid }) => {
-                    console.log('valid', privateKeyValid)
                     setValid(privateKeyValid)
                     onRecover({
                         address,
@@ -63,8 +63,8 @@ export const FromPrivateKey: FC<FromPrivateKeyProps> = ({ onRecover }) => {
                 className={classes.textField}
                 multiline
                 error={!valid}
-                helperText={!valid ? 'The Private key is incorrect' : ''}
-                placeholder="Input your private key"
+                helperText={!valid ? t('plugin_wallet_import_private_key_invalid_warning') : ''}
+                placeholder={t('plugin_wallet_import_private_key_placeholder')}
                 value={privateKey}
                 onChange={handleChange}
             />

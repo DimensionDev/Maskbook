@@ -320,6 +320,8 @@
     "plugin_wallet_import_wallet_previous": "",
     "plugin_wallet_import_wallet_next": "",
     "plugin_wallet_import_wallet_import": "",
+    "plugin_wallet_import_private_key_invalid_warning": "",
+    "plugin_wallet_import_private_key_placeholder": "",
     "plugin_wallet_setup_description_verify": "정확한지 확인하기 위해 빈 phrase를 각각 채워주세요.",
     "plugin_wallet_setup_back": "뒤로",
     "plugin_wallet_setup_create": "만들기",

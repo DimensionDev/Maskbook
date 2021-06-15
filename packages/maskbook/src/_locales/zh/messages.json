@@ -320,6 +320,8 @@
     "plugin_wallet_import_wallet_previous": "",
     "plugin_wallet_import_wallet_next": "",
     "plugin_wallet_import_wallet_import": "",
+    "plugin_wallet_import_private_key_invalid_warning": "",
+    "plugin_wallet_import_private_key_placeholder": "",
     "plugin_wallet_setup_description_verify": "請填入每個空格，以確保它是正確的。",
     "plugin_wallet_setup_back": "上一步",
     "plugin_wallet_setup_create": "建立",
