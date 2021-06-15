@@ -5,23 +5,18 @@ import {
     useBlockie,
     useChainDetailed,
     ChainId,
-    getConstant,
-    getChainFullName,
+    useConstant,
+    constantOfChain,
 } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { useImageFailover } from '../../../utils/hooks/useImageFailover'
+import { useImageFailover } from '../../../utils'
 
 //#region fix icon image
-function resolveTokenIconURL(address: string, baseURI: string) {
+function resolveTokenIconURL(address: string, baseURI: string, chainId: ChainId) {
     const iconMap = {
-        [getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')]: `${baseURI}/info/logo.png`,
-        '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074':
-            'https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg', // MASK
-        '0x32a7C02e79c4ea1008dD6564b35F131428673c41': 'https://s2.coinmarketcap.com/static/img/coins/64x64/6747.png', // CRUST
+        [constantOfChain(CONSTANTS, chainId).NATIVE_TOKEN_ADDRESS]: `${baseURI}/info/logo.png`,
         '0x04abEdA201850aC0124161F037Efd70c74ddC74C': 'https://s2.coinmarketcap.com/static/img/coins/64x64/5841.png', // NEST
         '0x14de81C71B3F73874659082b971433514E201B27': 'https://etherscan.io/token/images/ykyctoken_32.png', // Yes KYC
-        '0x3B73c1B2ea59835cbfcADade5462b6aB630D9890':
-            'https://raw.githubusercontent.com/chainswap/chainswap-assets/main/logo_white_256.png', // TOKEN
     }
     const checksummedAddress = formatEthereumAddress(address)
     if (iconMap[checksummedAddress]) return iconMap[checksummedAddress]
@@ -52,17 +47,9 @@ export function TokenIcon(props: TokenIconProps) {
     const classes = useStylesExtends(useStyles(), props)
     const chainDetailed = useChainDetailed()
     const tokenBlockie = useBlockie(address)
+    const tokenAssetBaseURI = useConstant(CONSTANTS, 'TOKEN_ASSET_BASE_URI')
 
-    const fullName = chainDetailed ? getChainFullName(chainId ?? chainDetailed.chainId) : ''
-    const { value: baseURI, loading } = useImageFailover(
-        chainDetailed
-            ? [
-                  `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${fullName.toLowerCase()}`,
-                  `https://rawcdn.githack.com/trustwallet/assets/master/blockchains/${fullName.toLowerCase()}`,
-              ]
-            : [],
-        '/info/logo.png',
-    )
+    const { value: baseURI, loading } = useImageFailover(chainDetailed ? tokenAssetBaseURI : [], '/info/logo.png')
 
     if (logoURL)
         return (
@@ -73,7 +60,7 @@ export function TokenIcon(props: TokenIconProps) {
     return (
         <Avatar
             className={classes.icon}
-            src={loading ? '' : resolveTokenIconURL(address, baseURI as string)}
+            src={loading ? '' : resolveTokenIconURL(address, baseURI!, chainId ?? ChainId.Mainnet)}
             {...AvatarProps}>
             <Avatar className={classes.icon} src={tokenBlockie}>
                 {name?.substr(0, 1).toLocaleUpperCase()}

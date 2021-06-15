@@ -1,5 +1,14 @@
 import { ChainId } from '../types'
 
+const ETHEREUM_TOKEN_ASSET_BASE_URIS = [
+    'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum',
+    'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum',
+]
+const SMARTCHAIN_TOKEN_ASSET_BASE_URIS = [
+    'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain',
+    'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/smartchain',
+]
+
 export const CONSTANTS = {
     // token lists
     ERC20_TOKEN_LISTS: {
@@ -309,5 +318,17 @@ export const CONSTANTS = {
         [ChainId.BSCT]: '0x0000000000000000000000000000000000000000',
         [ChainId.Matic]: '0x0000000000000000000000000000000000000000',
         [ChainId.Mumbai]: '0x0000000000000000000000000000000000000000',
+    },
+
+    TOKEN_ASSET_BASE_URI: {
+        [ChainId.Mainnet]: ETHEREUM_TOKEN_ASSET_BASE_URIS,
+        [ChainId.Ropsten]: ETHEREUM_TOKEN_ASSET_BASE_URIS,
+        [ChainId.Rinkeby]: ETHEREUM_TOKEN_ASSET_BASE_URIS,
+        [ChainId.Kovan]: ETHEREUM_TOKEN_ASSET_BASE_URIS,
+        [ChainId.Gorli]: ETHEREUM_TOKEN_ASSET_BASE_URIS,
+        [ChainId.BSC]: SMARTCHAIN_TOKEN_ASSET_BASE_URIS,
+        [ChainId.BSCT]: SMARTCHAIN_TOKEN_ASSET_BASE_URIS,
+        [ChainId.Matic]: [],
+        [ChainId.Mumbai]: [],
     },
 }
