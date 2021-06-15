@@ -1,85 +1,9 @@
-import { CONSTANTS, createERC20Token, getConstant, ChainId } from '@dimensiondev/web3-shared'
+import { ChainId } from '@dimensiondev/web3-shared'
 
 export const ITO_MetaKey = 'com.maskbook.ito:1'
 export const ITO_PluginID = 'com.maskbook.ito'
 
 export const ITO_EXCHANGE_RATION_MAX = 6
-
-// Mainnet
-
-const DAI = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'DAI_ADDRESS', ChainId.Mainnet),
-    18,
-    'Dai Stablecoin',
-    'DAI',
-)
-const USDC = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'USDC_ADDRESS', ChainId.Mainnet),
-    6,
-    'USD Coin',
-    'USDC',
-)
-const USDT = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'USDT_ADDRESS', ChainId.Mainnet),
-    6,
-    'Tether USD',
-    'USDT',
-)
-const HUSD = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'HUSD_ADDRESS', ChainId.Mainnet),
-    6,
-    'HUSD',
-    'HUSD',
-)
-const BUSD = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'BUSD_ADDRESS', ChainId.Mainnet),
-    6,
-    'Binance USD',
-    'BUSD',
-)
-
-// Ropsten
-
-const MSKA = createERC20Token(
-    ChainId.Ropsten,
-    getConstant(CONSTANTS, 'MSKA_ADDRESS', ChainId.Ropsten),
-    18,
-    'Mask Token A',
-    'MSKA',
-)
-const MSKB = createERC20Token(
-    ChainId.Ropsten,
-    getConstant(CONSTANTS, 'MSKB_ADDRESS', ChainId.Ropsten),
-    18,
-    'Mask Token B',
-    'MSKB',
-)
-const MSKC = createERC20Token(
-    ChainId.Ropsten,
-    getConstant(CONSTANTS, 'MSKC_ADDRESS', ChainId.Ropsten),
-    18,
-    'Mask Token C',
-    'MSKC',
-)
-const MSKD = createERC20Token(
-    ChainId.Ropsten,
-    getConstant(CONSTANTS, 'MSKD_ADDRESS', ChainId.Ropsten),
-    18,
-    'Mask Token D',
-    'MSKD',
-)
-const MSKE = createERC20Token(
-    ChainId.Ropsten,
-    getConstant(CONSTANTS, 'MSKE_ADDRESS', ChainId.Ropsten),
-    18,
-    'Mask Token E',
-    'MSKE',
-)
 
 export const ITO_CONSTANTS = {
     ITO_CONTRACT_ADDRESS: {
@@ -125,17 +49,6 @@ export const ITO_CONSTANTS = {
         [ChainId.BSCT]: '',
         [ChainId.Matic]: '',
         [ChainId.Mumbai]: '',
-    },
-    EXCHANGE_TOKENS: {
-        [ChainId.Mainnet]: [DAI, USDC, USDT, HUSD, BUSD].map((x) => x.address),
-        [ChainId.Ropsten]: [MSKA, MSKB, MSKC, MSKD, MSKE].map((x) => x.address),
-        [ChainId.Rinkeby]: [],
-        [ChainId.Kovan]: [],
-        [ChainId.Gorli]: [],
-        [ChainId.BSC]: [],
-        [ChainId.BSCT]: [],
-        [ChainId.Matic]: [],
-        [ChainId.Mumbai]: [],
     },
 }
 
