@@ -1,17 +1,36 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { DialogContent } from '@material-ui/core'
-import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
-import { useI18N } from '../../../utils'
+import { formatBalance, usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { RedPacketJSONPayload, DialogTabs } from '../types'
+import { RedPacketJSONPayload, DialogTabs, RedPacketRecord } from '../types'
 import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
-import { RedPacketMetaKey } from '../constants'
+import { RedPacketMetaKey, RED_PACKET_CONSTANTS } from '../constants'
 import { RedPacketForm } from './RedPacketForm'
 import { RedPacketHistoryList } from './RedPacketHistoryList'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import Services from '../../../extension/service'
 import Web3Utils from 'web3-utils'
-import { useAccount, useChainId } from '@dimensiondev/web3-shared'
+import {
+    EthereumTokenType,
+    getChainName,
+    NetworkType,
+    TransactionStateType,
+    useAccount,
+    useChainId,
+    useConstant,
+    useNetworkType,
+} from '@dimensiondev/web3-shared'
+import { ConfirmRedPacketForm } from './confirmRedPacketForm'
+import { RedPacketSettings, useCreateCallback } from '../hooks/useCreateCallback'
+import { EthereumMessages } from '../../Ethereum/messages'
+import { omit } from 'lodash-es'
+import { RedPacketRPC } from '../messages'
+
+enum CreateRedPacketPageStep {
+    NewRedPacketPage = 'new',
+    ConfirmPage = 'confirm',
+}
 
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean
@@ -24,6 +43,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { onConfirm } = props
     const chainId = useChainId()
     const account = useAccount()
+    const networkType = useNetworkType()
+    const contract_version = networkType === NetworkType.Ethereum ? 2 : 3
+    const contract_address = useConstant(
+        RED_PACKET_CONSTANTS,
+        networkType === NetworkType.Ethereum ? 'HAPPY_RED_PACKET_ADDRESS_V2' : 'HAPPY_RED_PACKET_ADDRESS_V3',
+    )
+    const [settings, setSettings] = useState<Omit<RedPacketSettings, 'password'>>()
 
     const onCreateOrSelect = useCallback(
         async (payload: RedPacketJSONPayload) => {
@@ -51,20 +77,135 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         [onConfirm, chainId],
     )
 
+    //#region blocking
+    // password should remain the same rather than change each time when createState change,
+    //  otherwise password in database would be different from creating red-packet.
+    const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback(
+        settings!,
+        contract_version,
+    )
+    //#endregion
+
+    // assemble JSON payload
+    const payload = useRef<RedPacketJSONPayload>({
+        contract_address,
+        contract_version,
+        network: getChainName(chainId),
+    } as RedPacketJSONPayload)
+
+    //#region remote controlled transaction dialog
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
+        EthereumMessages.events.transactionDialogUpdated,
+        (ev) => {
+            if (ev.open) return
+
+            // reset state
+            resetCreateCallback()
+
+            // the settings is not available
+            if (!createSettings?.token) return
+
+            // TODO:
+            // earily return happended
+            // we should guide user to select the red packet in the existing list
+            if (createState.type !== TransactionStateType.CONFIRMED) return
+
+            const { receipt } = createState
+            const CreationSuccess = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
+                creation_time: string
+                creator: string
+                id: string
+                token_address: string
+                total: string
+            }
+
+            payload.current.sender = {
+                address: account,
+                name: createSettings.name,
+                message: createSettings.message,
+            }
+            payload.current.is_random = createSettings.isRandom
+            payload.current.shares = createSettings.shares
+            payload.current.password = createSettings.password
+            payload.current.token_type = createSettings.token.type
+            payload.current.rpid = CreationSuccess.id
+            payload.current.total = CreationSuccess.total
+            payload.current.duration = createSettings.duration
+            payload.current.creation_time = Number.parseInt(CreationSuccess.creation_time, 10) * 1000
+
+            if (createSettings.token.type === EthereumTokenType.ERC20)
+                payload.current.token = {
+                    name: '',
+                    symbol: '',
+                    ...omit(createSettings.token, ['type', 'chainId']),
+                }
+
+            setSettings(undefined)
+            // output the redpacket as JSON payload
+            onCreateOrSelect(payload.current)
+        },
+    )
+
+    // open the transaction dialog
+    useEffect(() => {
+        // storing the created red packet in DB, it helps retrieve red packet password later
+        // save to the database early, otherwise red-packet would lose when close the tx dialog or
+        //  web page before create successfully.
+        if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING) {
+            payload.current.txid = createState.hash
+            const record: RedPacketRecord = {
+                id: createState.hash!,
+                from: '',
+                password: createSettings!.password,
+                contract_version,
+            }
+            RedPacketRPC.discoverRedPacket(record)
+        }
+
+        if (!createSettings?.token || createState.type === TransactionStateType.UNKNOWN) return
+        setTransactionDialog({
+            open: true,
+            state: createState,
+            summary: t('plugin_red_packet_create_with_token', {
+                symbol: `${formatBalance(createSettings?.total, createSettings?.token?.decimals)} ${
+                    createSettings?.token.symbol
+                }`,
+            }),
+        })
+    }, [createState /* update tx dialog only if state changed */])
+    //#endregion
+
+    const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
+    const onBack = useCallback(() => {
+        if (step === CreateRedPacketPageStep.ConfirmPage) setStep(CreateRedPacketPageStep.NewRedPacketPage)
+    }, [step])
+    const onNext = useCallback(() => {
+        if (step === CreateRedPacketPageStep.NewRedPacketPage) setStep(CreateRedPacketPageStep.ConfirmPage)
+    }, [step])
     const state = useState(DialogTabs.create)
 
     const onClose = useCallback(() => {
+        setStep(CreateRedPacketPageStep.NewRedPacketPage)
         const [, setValue] = state
         setValue(DialogTabs.create)
         props.onClose()
     }, [props, state])
+
+    const onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
+        setSettings(val)
+    }, [])
 
     const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: t('plugin_red_packet_create_new'),
                 children: usePortalShadowRoot((container) => (
-                    <RedPacketForm onCreate={onCreateOrSelect} SelectMenuProps={{ container }} />
+                    <RedPacketForm
+                        origin={settings}
+                        onNext={onNext}
+                        onChange={onChange}
+                        SelectMenuProps={{ container }}
+                    />
                 )),
                 sx: { p: 0 },
             },
@@ -80,7 +221,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     return (
         <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={onClose}>
             <DialogContent>
-                <AbstractTab height={320} {...tabProps} />
+                {step === CreateRedPacketPageStep.NewRedPacketPage ? <AbstractTab height={320} {...tabProps} /> : null}
+                {step === CreateRedPacketPageStep.ConfirmPage ? (
+                    <ConfirmRedPacketForm onBack={onBack} onCreate={createCallback} settings={settings} />
+                ) : null}
             </DialogContent>
         </InjectedDialog>
     )
