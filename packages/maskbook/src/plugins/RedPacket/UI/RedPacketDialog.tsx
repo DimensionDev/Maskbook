@@ -34,6 +34,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 }
 
                 if (payload.contract_version !== 1) {
+                    // just sign out the password if it is lost.
                     payload.password = await Services.Ethereum.personalSign(
                         Web3Utils.sha3(payload.sender.message) ?? '',
                         account,
