@@ -70,6 +70,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 label: t('plugin_red_packet_select_existing'),
                 children: <RedPacketHistoryList onSelect={onCreateOrSelect} onClose={onClose} />,
                 sx: { p: 0 },
+                disabled: !account,
             },
         ],
         state,

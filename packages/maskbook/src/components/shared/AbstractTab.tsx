@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface TabPanelProps extends BoxProps {
     id?: string
     label: string
+    disabled?: boolean
 }
 
 export interface AbstractTabProps {
@@ -43,6 +44,7 @@ export default function AbstractTab({ tabs, state, height = 200 }: AbstractTabPr
                             label={tab.label}
                             key={tab.label}
                             data-testid={`${tab.id?.toLowerCase()}_tab`}
+                            disabled={tab.disabled ?? false}
                         />
                     ))}
                 </Tabs>
