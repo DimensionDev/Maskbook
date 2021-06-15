@@ -9,10 +9,11 @@ import { DHEDGE_PLUGIN_ID } from './constants'
 import { usePoolUrlPattern, useIsPoolUrl } from './hooks/useUrl'
 import { PoolView } from './UI/PoolView'
 import { InvestDialog } from './UI/InvestDialog'
+import { DHEDGEIcon } from '../../resources/DHEDGEIcon'
 
 export const DHedgePluginDefine: PluginConfig = {
     id: DHEDGE_PLUGIN_ID,
-    pluginIcon: '',
+    pluginIcon: <DHEDGEIcon />,
     pluginName: 'dHEDGE',
     pluginDescription: 'Decentralized hedge funds on Ethereum.',
     identifier: DHEDGE_PLUGIN_ID,

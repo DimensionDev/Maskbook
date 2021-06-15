@@ -30,7 +30,7 @@ export type MessageProcessor = (message: TypedMessageTuple) => TypedMessageTuple
 
 export interface PluginConfig {
     id: string
-    pluginIcon: string
+    pluginIcon: React.ReactNode
     pluginName: string
     pluginDescription: string
     identifier: string
