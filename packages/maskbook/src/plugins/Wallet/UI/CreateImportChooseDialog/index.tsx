@@ -67,13 +67,7 @@ export function CreateImportChooseDialog(props: CreateImportChooseDialogProps) {
     }
 
     return (
-        <InjectedDialog
-            open={open}
-            onClose={closeDialog}
-            title={t('plugin_wallet_create_import_choose')}
-            DialogProps={{
-                maxWidth: 'sm',
-            }}>
+        <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_wallet_create_import_choose')} maxWidth="sm">
             <DialogContent className={classes.content}>
                 <Box className={classes.walletOption}>
                     <Image

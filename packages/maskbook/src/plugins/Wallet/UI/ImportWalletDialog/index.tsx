@@ -148,13 +148,7 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
     }, [name, tabState[0], words, walletFromPrivateKey.privateKeyValid])
 
     return (
-        <InjectedDialog
-            open={open}
-            onClose={closeDialog}
-            title={t('import_wallet')}
-            DialogProps={{
-                maxWidth: 'sm',
-            }}>
+        <InjectedDialog open={open} onClose={closeDialog} title={t('import_wallet')} maxWidth="sm">
             <DialogContent className={classes.content}>{isImportStep ? importWallet : <ImportResult />}</DialogContent>
             <DialogActions className={classes.dialogActions}>
                 <Button className={classes.actionButton} variant="contained" fullWidth onClick={backToPrevious}>
