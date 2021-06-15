@@ -9,7 +9,6 @@ import { FromPrivateKey, RecoverResult } from './FromPrivateKey'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../constants'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { ImportResult } from './ImportResult'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -41,17 +40,11 @@ const useStyles = makeStyles((theme) => ({
 
 const BLANK_WORDS = Array.from({ length: 12 }).fill('') as string[]
 
-enum ImportStep {
-    Import = 0,
-    Result,
-}
-
 export interface ImportWalletDialogProps extends withClasses<never> {}
 
 export function ImportWalletDialog(props: ImportWalletDialogProps) {
     const { t } = useI18N()
     const [name, setName] = useState('')
-    const [step, setStep] = useState<ImportStep>(ImportStep.Import)
     const classes = useStylesExtends(useStyles(), props)
     const [walletFromPrivateKey, setWalletFromPrivateKey] = useState<Partial<RecoverResult>>({})
 
@@ -65,11 +58,11 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
     const tabs: AbstractTabProps['tabs'] = useMemo(
         () => [
             {
-                label: 'Mnemonic Words',
+                label: t('mnemonic_words'),
                 children: <MnemonicTab words={words} onChange={setWords} />,
             },
             {
-                label: 'Private Key',
+                label: t('private_key'),
                 children: <FromPrivateKey onRecover={setWalletFromPrivateKey} />,
             },
         ],
@@ -92,6 +85,17 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
         </Box>
     )
 
+    const resetState = () => {
+        setWords((list) => list.map(() => ''))
+        setName('')
+    }
+
+    const backToPrevious = () => {
+        closeDialog()
+        resetState()
+        openCreateImportDialog()
+    }
+
     const handleImport = useSnackbarCallback(
         async () => {
             switch (tabState[0]) {
@@ -102,11 +106,17 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
                         mnemonic: words,
                         passphrase: '',
                     })
-                    await WalletRPC.addPhrase({
-                        path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
-                        mnemonic: words,
-                        passphrase: '',
-                    })
+                    try {
+                        await WalletRPC.addPhrase({
+                            path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
+                            mnemonic: words,
+                            passphrase: '',
+                        })
+                    } catch (err) {
+                        if (err.message !== 'Add exists phrase.') {
+                            throw err
+                        }
+                    }
                     break
                 case 1:
                     if (!walletFromPrivateKey.privateKeyValid) {
@@ -119,20 +129,13 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
                     })
                     break
             }
-            setStep(ImportStep.Result)
         },
         [tabState[0], name, words, walletFromPrivateKey.privateKeyValid, walletFromPrivateKey.privateKey],
-        closeDialog,
+        () => {
+            closeDialog()
+            resetState()
+        },
     )
-
-    const backToPrevious = () => {
-        closeDialog()
-        setWords((list) => list.map(() => ''))
-        setName('')
-        openCreateImportDialog()
-    }
-
-    const isImportStep = step === ImportStep.Import
 
     const importable: boolean = useMemo(() => {
         if (!name) {
@@ -149,7 +152,7 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
 
     return (
         <InjectedDialog open={open} onClose={closeDialog} title={t('import_wallet')} maxWidth="sm">
-            <DialogContent className={classes.content}>{isImportStep ? importWallet : <ImportResult />}</DialogContent>
+            <DialogContent className={classes.content}>{importWallet}</DialogContent>
             <DialogActions className={classes.dialogActions}>
                 <Button className={classes.actionButton} variant="contained" fullWidth onClick={backToPrevious}>
                     {t('plugin_wallet_import_wallet_previous')}
@@ -159,8 +162,8 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
                     fullWidth
                     variant="contained"
                     onClick={handleImport}
-                    disabled={isImportStep && !importable}>
-                    {t(isImportStep ? 'plugin_wallet_import_wallet_import' : 'plugin_wallet_import_wallet_next')}
+                    disabled={!importable}>
+                    {t('plugin_wallet_import_wallet_import')}
                 </Button>
             </DialogActions>
         </InjectedDialog>
