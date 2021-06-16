@@ -202,7 +202,7 @@ export async function fetchTokenDayData(address: string, date: Date) {
         }
     }>(`
         {
-            tokenDayDatas(first: 1000, orderBy: date, date: ${utcTimestamp}, where: { token: ${address} }) {
+            tokenDayDatas(first: 10000, orderBy: date, date: ${utcTimestamp}, where: { token: ${address} }) {
                 id
                 date
                 priceUSD
