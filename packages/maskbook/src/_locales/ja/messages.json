@@ -358,7 +358,7 @@
     "plugin_red_packet_share_message": "",
     "plugin_red_packet_attached_message": "メッセージを追加",
     "plugin_red_packet_from": "送信者：{{name}}",
-    "plugin_red_packet_description_claimed": "既に受け取り済みです",
+    "plugin_red_packet_description_claimed": "",
     "plugin_red_packet_description_expired": "期限切れです",
     "plugin_red_packet_description_refunded": "無効です",
     "plugin_red_packet_description_refund": "{{balance}}{{symbol}}を受け取れます",

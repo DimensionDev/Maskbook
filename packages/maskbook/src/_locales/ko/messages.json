@@ -16,7 +16,7 @@
     "auto_paste_failed_dialog_image_caption": "새로운 탭에서 열기",
     "auto_paste_failed_snackbar": "암호화된 내용을 수동으로 붙여넣으세요?",
     "auto_paste_failed_snackbar_action": "방법을 알려주세요.",
-    "automation_request_click_post_button": "「게시」 버튼을 눌러 편집창을 여세요.",
+    "automation_request_click_post_button": "",
     "new_avatar_url": "새로운 프로필사진 URL",
     "new_avatar_url_placeholder": "변경하지 않으면 비워 두면 됩니다",
     "backup": "백업",
