@@ -165,7 +165,9 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const onClose = useCallback(() => {
         const [, setValue] = state
         setValue(DialogTabs.create)
-        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
+        // After close this tx dialog, it should set the gas price to zero
+        //  to let Metamask to determine the gas price for the further tx.
+        currentGasPriceSettings.value = 0
         props.onClose()
     }, [props.onClose, state, currentGasPriceSettings])
 
