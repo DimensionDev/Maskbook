@@ -4,12 +4,4 @@ module.exports = {
     reactOptions: {
         fastRefresh: true,
     },
-    typescript: {
-        // todo, fixme:
-        //  temporary workaround is disable doc gen
-        //  related to PR:
-        //      https://github.com/DimensionDev/Maskbook/issues/3253
-        //      https://github.com/styleguidist/react-docgen-typescript/issues/356
-        reactDocgen: 'none',
-    },
 }
