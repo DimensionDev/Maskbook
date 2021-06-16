@@ -48,7 +48,7 @@ export function WalletRenameWalletDialog() {
     )
 
     return (
-        <InjectedDialog title={t('wallet_rename')} open={open} onClose={handleClose} DialogProps={{ maxWidth: 'xs' }}>
+        <InjectedDialog title={t('wallet_rename')} open={open} onClose={handleClose} maxWidth="xs">
             <DialogContent className={classes.content}>
                 <TextField
                     label={t('wallet_rename')}

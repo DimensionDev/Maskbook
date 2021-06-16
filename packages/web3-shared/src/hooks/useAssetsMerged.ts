@@ -14,6 +14,7 @@ import { getChainIdFromName, getTokenUSDValue, isSameAddress } from '../utils'
 export function useAssetsMerged(...listOfTokens: Asset[][]) {
     const chainId = useChainId()
     const NATIVE_TOKEN_ADDRESS = useConstantNext(CONSTANTS).NATIVE_TOKEN_ADDRESS
+    if (!NATIVE_TOKEN_ADDRESS) return []
     return uniqBy(
         listOfTokens.flatMap((x) => x),
         (x) => `${x.chain}_${formatEthereumAddress(x.token.address)}`,

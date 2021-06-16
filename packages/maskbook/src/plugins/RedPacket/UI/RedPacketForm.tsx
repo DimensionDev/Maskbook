@@ -168,6 +168,10 @@ export function RedPacketForm(props: RedPacketFormProps) {
         network: getChainName(chainId),
     } as RedPacketJSONPayload)
 
+    useEffect(() => {
+        payload.current.network = getChainName(chainId)
+    }, [chainId])
+
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         EthereumMessages.events.transactionDialogUpdated,

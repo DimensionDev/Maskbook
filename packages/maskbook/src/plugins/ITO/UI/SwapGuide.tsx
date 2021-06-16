@@ -1,9 +1,9 @@
 import { ZERO } from '@dimensiondev/maskbook-shared'
 import { ERC20TokenDetailed, EthereumTokenType, useAccount, useChainId } from '@dimensiondev/web3-shared'
-import { DialogContent, DialogProps, makeStyles } from '@material-ui/core'
+import { DialogContent, makeStyles } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils'
 import { RemindDialog } from './RemindDialog'
 import { ShareDialog } from './ShareDialog'
@@ -25,15 +25,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-interface SwapGuideProps extends Pick<SwapDialogProps, 'exchangeTokens' | 'payload'> {
-    open: boolean
+interface SwapGuideProps
+    extends Pick<SwapDialogProps, 'exchangeTokens' | 'payload'>,
+        Omit<InjectedDialogProps, 'onClose'> {
     status: SwapStatus
     shareSuccessLink: string | undefined
     isBuyer: boolean
     retryPayload: () => void
-    onUpdate: (status: SwapStatus) => void
     onClose: () => void
-    DialogProps?: Partial<DialogProps>
+    onUpdate: (status: SwapStatus) => void
 }
 
 export function SwapGuide(props: SwapGuideProps) {
@@ -73,7 +73,7 @@ export function SwapGuide(props: SwapGuideProps) {
             open={open}
             title={SwapTitle[status]}
             onClose={status === SwapStatus.Share ? onCloseShareDialog : onClose}
-            DialogProps={{ maxWidth: status === SwapStatus.Swap || status === SwapStatus.Unlock ? 'xs' : 'sm' }}>
+            maxWidth={SwapStatus.Swap || status === SwapStatus.Unlock ? 'xs' : 'sm'}>
             <DialogContent className={classes.content}>
                 {(() => {
                     switch (status) {

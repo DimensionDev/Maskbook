@@ -1,10 +1,11 @@
-import { makeStyles, Box, TextField, DialogProps, CircularProgress, Typography } from '@material-ui/core'
+import { makeStyles, Box, TextField, CircularProgress, Typography } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
 import UnCheckIcon from '@material-ui/icons/Close'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
 import classNames from 'classnames'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
+import { format as formatDateTime } from 'date-fns'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N, sliceTextByUILength } from '../../../utils'
 import {
@@ -94,7 +95,6 @@ export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
     onNext: () => void
     origin?: PoolSettings
-    dateDialogProps: Partial<DialogProps>
 }
 
 export function CreateForm(props: CreateFormProps) {
@@ -296,7 +296,14 @@ export function CreateForm(props: CreateFormProps) {
 
     const StartTime = <DateTimePanel label={t('plugin_ito_begin_time')} onChange={handleStartTime} date={startTime} />
 
-    const EndTime = <DateTimePanel label={t('plugin_ito_end_time')} onChange={handleEndTime} date={endTime} />
+    const EndTime = (
+        <DateTimePanel
+            label={t('plugin_ito_end_time')}
+            onChange={handleEndTime}
+            min={formatDateTime(startTime, "yyyy-MM-dd'T00:00")}
+            date={endTime}
+        />
+    )
 
     const UnlockTime = (
         <DateTimePanel label={t('plugin_ito_unlock_time')} onChange={handleUnlockTime} date={unlockTime} />

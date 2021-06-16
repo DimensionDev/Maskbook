@@ -247,7 +247,7 @@
     "settings_language_secondary": "選擇你想使用的語言。",
     "settings_choose_eth_network": "選擇乙太坊網路",
     "settings_post_replacement": "取代貼文",
-    "settings_post_replacement_desc": "網頁上的所有貼文都將通過 Mask 呈現，包括那些不是由 Mask 建立的咧文。",
+    "settings_post_replacement_desc": "網頁上的所有貼文都將通過 Mask 呈現，包括那些不是由 Mask 建立的貼文。",
     "settings_title_general": "一般",
     "settings_title_advanced_options": "進階",
     "settings_title_database_management": "資料庫管理",

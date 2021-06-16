@@ -48,10 +48,8 @@ export function PoolStats(props: PoolStatsProps) {
     const classes = useStyles()
 
     //#region process stats
-    const valueManaged = formatAmountPostfix(formatBalance(new BigNumber(pool?.totalValue), DIGIT_LENGTH))
-    const lifeTimeReturn = new BigNumber(formatBalance(new BigNumber(pool.performance), DIGIT_LENGTH))
-        .minus(1)
-        .multipliedBy(100)
+    const valueManaged = formatAmountPostfix(formatBalance(pool?.totalValue, DIGIT_LENGTH))
+    const lifeTimeReturn = new BigNumber(formatBalance(pool.performance, DIGIT_LENGTH)).minus(1).multipliedBy(100)
 
     const riskFactor = pool && pool?.riskFactor != -1 ? pool?.riskFactor : '-'
     // pool detail contains raw html and need to sanitize before use
