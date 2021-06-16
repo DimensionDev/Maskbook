@@ -8,6 +8,10 @@ const SMARTCHAIN_TOKEN_ASSET_BASE_URIS = [
     'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain',
     'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/smartchain',
 ]
+const POLYGON_TOKEN_ASSET_BASE_URIS = [
+    'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon',
+    'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/polygon',
+]
 
 export const CONSTANTS = {
     // token lists
@@ -328,7 +332,7 @@ export const CONSTANTS = {
         [ChainId.Gorli]: ETHEREUM_TOKEN_ASSET_BASE_URIS,
         [ChainId.BSC]: SMARTCHAIN_TOKEN_ASSET_BASE_URIS,
         [ChainId.BSCT]: SMARTCHAIN_TOKEN_ASSET_BASE_URIS,
-        [ChainId.Matic]: [],
-        [ChainId.Mumbai]: [],
+        [ChainId.Matic]: POLYGON_TOKEN_ASSET_BASE_URIS,
+        [ChainId.Mumbai]: POLYGON_TOKEN_ASSET_BASE_URIS,
     },
 }
