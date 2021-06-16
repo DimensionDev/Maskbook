@@ -120,4 +120,8 @@ export const currentGasNowSettings = createGlobalSettings<GasNow | null>(
     (a: GasNow | null, b: GasNow | null) => isEqual(a, b),
 )
 
-connectGasNow()
+try {
+    connectGasNow()
+} catch {
+    // fails on iOS
+}
