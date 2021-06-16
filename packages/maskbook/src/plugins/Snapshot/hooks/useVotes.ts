@@ -31,6 +31,7 @@ async function Suspender(identifier: ProposalIdentifier) {
                 voteEntry[1].scores = message.payload.metadata.strategies.map(
                     (_strategy, i) => scores[i][voteEntry[1].address] || 0,
                 )
+                voteEntry[1].strategySymbol = message.payload.metadata.strategies[0].params.symbol
                 voteEntry[1].balance = voteEntry[1].scores.reduce((a: number, b: number) => a + b, 0)
                 voteEntry[1].choice = message.payload.choices[voteEntry[1].msg.payload.choice - 1]
                 voteEntry[1].authorAvatar = profileEntries[voteEntry[0].toLowerCase()]?.image
