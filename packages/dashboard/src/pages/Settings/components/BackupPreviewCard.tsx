@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-interface Props {
+export interface Props {
     json: BackupPreview
 }
 

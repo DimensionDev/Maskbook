@@ -65,7 +65,7 @@ const TextArea = styled(InputBase)(({ theme }) => ({
     },
 }))
 
-interface RestoreDialogProps {
+export interface RestoreDialogProps {
     open: boolean
     onClose(): void
 }

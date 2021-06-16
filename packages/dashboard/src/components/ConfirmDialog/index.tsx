@@ -24,7 +24,7 @@ const StyledButton: typeof Button = styled(Button)(() => ({
     },
 })) as any
 
-interface ConfirmDialogProps extends React.PropsWithChildren<{}> {
+export interface ConfirmDialogProps extends React.PropsWithChildren<{}> {
     title: string
     open: boolean
     cancelText?: React.ReactNode | string

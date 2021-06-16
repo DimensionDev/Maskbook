@@ -5,7 +5,7 @@ import { Services } from '../../../../API'
 import { useAsync } from 'react-use'
 import BackupPreviewCard from '../BackupPreviewCard'
 
-interface BackupDialogProps {
+export interface BackupDialogProps {
     open: boolean
     onClose(): void
 }
