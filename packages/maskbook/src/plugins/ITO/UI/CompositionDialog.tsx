@@ -16,6 +16,7 @@ import Services from '../../../extension/service'
 import { useChainId, useAccount, TransactionStateType, useConstant } from '@dimensiondev/web3-shared'
 import { PoolSettings, useFillCallback } from '../hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
+import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
 import { EthereumMessages } from '../../Ethereum/messages'
 
 export enum ITOCreateFormPageStep {
@@ -45,13 +46,18 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const onBack = useCallback(() => {
         if (step === ITOCreateFormPageStep.ConfirmItoPage) setStep(ITOCreateFormPageStep.NewItoPage)
-    }, [step])
+        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
+    }, [step, currentGasPriceSettings])
     //#endregion
 
     const [poolSettings, setPoolSettings] = useState<PoolSettings>()
 
     //#region blocking
     const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings)
+    const onDone = useCallback(() => {
+        fillCallback()
+        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
+    }, [fillCallback, currentGasPriceSettings])
     //#endregion
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -159,8 +165,9 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const onClose = useCallback(() => {
         const [, setValue] = state
         setValue(DialogTabs.create)
+        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
         props.onClose()
-    }, [props.onClose, state])
+    }, [props.onClose, state, currentGasPriceSettings])
 
     // open the transaction dialog
     useEffect(() => {
@@ -185,7 +192,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 <DialogContent>
                     {step === ITOCreateFormPageStep.NewItoPage ? <AbstractTab height={540} {...tabProps} /> : null}
                     {step === ITOCreateFormPageStep.ConfirmItoPage ? (
-                        <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={fillCallback} />
+                        <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={onDone} />
                     ) : null}
                 </DialogContent>
             </InjectedDialog>
