@@ -58,7 +58,7 @@
     "dashboard_mobile_test_link": "https://mask.io/download-links/#mobile",
     "dashboard_bounty_list": "상금 리스트",
     "dashboard_bounty_list_link": "https://github.com/DimensionDev/Maskbook/issues?q=is%3Aissue+is%3Aopen+label%3A%22Bounty%3A+Open%22",
-    "dashboard_paste_database_base64_hint": "The Base64 붙여넣기...",
+    "dashboard_paste_database_base64_hint": "Base64 붙여넣기...",
     "dashboard_paste_database_backup_hint": "여기서 데이터베이스 백업을 텍스트로 붙여넣기..",
     "dashboard_persona_import_dialog_hint": "다음의 방법으로 페르소나 백업을 불어올 수 있습니다.",
     "dashboard_restoration_successful_hint": "{{time}}에 백업을 복원할 수 있습니다.",
