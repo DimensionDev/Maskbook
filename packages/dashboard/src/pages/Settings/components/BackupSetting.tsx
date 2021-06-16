@@ -16,7 +16,7 @@ export default function BackupSetting() {
 
     return (
         <>
-            <SettingButton onClick={onBackup}>Back up</SettingButton>
+            <SettingButton onClick={onBackup}>Backup</SettingButton>
             <BackupDialog open={openBackup} onClose={onClose} />
         </>
     )
