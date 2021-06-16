@@ -4,6 +4,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { useUpdateEffect } from 'react-use'
 import { Button, DialogActions, DialogContent, makeStyles, TextField } from '@material-ui/core'
 import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import { isSameAddress } from '@dimensiondev/web3-shared'
 
 export interface AddTokenFormUIProps {
     open: boolean
@@ -48,7 +49,7 @@ export const AddTokenFormUI = memo<AddTokenFormUIProps>(
 
         const validateAddressMessage = useMemo(() => {
             if (address.length && !EthereumAddress.isValid(address)) return t.wallets_incorrect_address()
-            if (exclude.find((item) => item === address)) return t.wallets_token_been_added()
+            if (exclude.find((item) => isSameAddress(item, address))) return t.wallets_token_been_added()
             return ''
         }, [address])
 
