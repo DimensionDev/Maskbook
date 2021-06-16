@@ -69,6 +69,7 @@ export interface VoteItem {
     balance: number
     /** the consist detail of voting power */
     scores: number[]
+    strategySymbol: string
     sig: string
     authorName: string | null
     authorAvatar: string | null
