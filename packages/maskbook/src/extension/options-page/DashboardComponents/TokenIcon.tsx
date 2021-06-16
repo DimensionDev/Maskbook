@@ -7,6 +7,7 @@ import {
     ChainId,
     useConstant,
     constantOfChain,
+    isSameAddress,
 } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useImageFailover } from '../../../utils'
@@ -52,7 +53,7 @@ const SPECIAL_ICON_ASSET_MAP: { [key: string]: string } = {
 function resolveTokenIconURLs(address: string, baseURIs: string[], chainId: ChainId, logoURI?: string) {
     const checkSummedAddress = formatEthereumAddress(address)
 
-    if (constantOfChain(CONSTANTS, chainId).NATIVE_TOKEN_ADDRESS === checkSummedAddress) {
+    if (isSameAddress(constantOfChain(CONSTANTS, chainId).NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
         return baseURIs.map((x) => `${x}/info/logo.png`)
     }
 
