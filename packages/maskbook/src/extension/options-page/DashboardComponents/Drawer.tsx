@@ -6,8 +6,6 @@ import { Link, useRouteMatch } from 'react-router-dom'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
 import { useI18N, useMatchXS, extendsTheme } from '../../../utils'
-import { useModal } from '../DashboardDialogs/Base'
-import { DashboardFeedbackDialog } from '../DashboardDialogs/Feedback'
 import Logo from './MaskbookLogo'
 import { Carousel } from './Carousel'
 import { makeNewBugIssueURL } from '../../debug-page/issue'
@@ -126,7 +124,10 @@ export default function Drawer(props: DrawerProps) {
     const xsMatched = useMatchXS()
 
     const { routers } = props
-    const [feedback, openFeedback] = useModal(DashboardFeedbackDialog)
+
+    const openFeedback = () => {
+        open('https://forms.gle/Tb26MEcE3kLar6CFA')
+    }
 
     const onDebugPage = (event: React.MouseEvent) => {
         if (event.shiftKey) {
@@ -208,7 +209,6 @@ export default function Drawer(props: DrawerProps) {
                                 </ListItem>
                                 {xsMatched ? <Divider /> : null}
                             </List>
-                            {feedback}
                         </>
                     )}
                 </Box>
