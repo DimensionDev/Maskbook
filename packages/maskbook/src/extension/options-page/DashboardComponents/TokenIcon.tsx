@@ -53,7 +53,7 @@ export function TokenIcon(props: TokenIconProps) {
     const classes = useStylesExtends(useStyles(), props)
     const chainDetailed = useChainDetailed()
     const tokenBlockie = useBlockie(address)
-    const tokenAssetBaseURI = useConstant(CONSTANTS, 'TOKEN_ASSET_BASE_URI')
+    const tokenAssetBaseURI = useConstant(CONSTANTS, 'TOKEN_ASSET_BASE_URI', chainId)
 
     const tokenURIs = resolveTokenIconURLs(address, tokenAssetBaseURI, chainId ?? ChainId.Mainnet, logoURI)
     const { value: baseURI, loading } = useImageFailover(chainDetailed ? tokenURIs : [], '')
