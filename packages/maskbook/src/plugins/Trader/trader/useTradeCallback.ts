@@ -62,6 +62,9 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
             return sushiswap
         case TradeProvider.SASHIMISWAP:
             return sashimiswap
+        case TradeProvider.QUICKSWAP:
+            // FIXME: return a quickswap instane
+            return balancer
         case TradeProvider.BALANCER:
             return balancer
         default:

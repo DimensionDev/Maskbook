@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { useStylesExtends } from '../custom-ui-helper'
-import { getEnumAsArray } from '../../utils/enum'
+import { getEnumAsArray } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     container: { listStyleType: 'none', width: '100%' },

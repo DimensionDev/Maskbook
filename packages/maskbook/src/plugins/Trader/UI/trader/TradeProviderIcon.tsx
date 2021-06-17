@@ -51,6 +51,8 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
             return <SashimiSwapIcon classes={{ root: classes.sashimiswap }} />
         case TradeProvider.BALANCER:
             return <BalancerIcon classes={{ root: classes.balancer }} />
+        case TradeProvider.QUICKSWAP:
+            return <p>QUICKSWAP - REPLACE IT INTO A LOGO!</p>
         default:
             unreachable(props.provider)
     }
