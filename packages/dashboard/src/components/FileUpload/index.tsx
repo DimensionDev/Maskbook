@@ -31,7 +31,7 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-interface FileUploadProps {
+export interface FileUploadProps {
     width?: number
     height?: number
     readAsText?: boolean
