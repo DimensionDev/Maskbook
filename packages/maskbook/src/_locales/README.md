@@ -10,12 +10,12 @@ Maintainers: first-party
 
 Dialect: [Taiwanese Hokkien](https://en.wikipedia.org/wiki/Taiwanese_Hokkien)
 
-Maintainers: @touhonoob
+Maintainers: [@touhonoob](https://github.com/touhonoob) (from community)
 
 ## Koreanese (ko)
 
-Maintainers: @Charliegu396
+Maintainers: [@Charliegu396](https://github.com/Charliegu396)
 
 ## Japanese (jp)
 
-Maintainers: @blank71
+Maintainers: [@blank71](https://github.com/blank71) (from community)
