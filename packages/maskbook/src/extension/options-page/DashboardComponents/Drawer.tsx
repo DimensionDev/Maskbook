@@ -125,7 +125,8 @@ export default function Drawer(props: DrawerProps) {
 
     const { routers } = props
 
-    const openFeedback = () => {
+    const onFeedback = () => {
+        // see #3384
         open('https://forms.gle/Tb26MEcE3kLar6CFA')
     }
 
@@ -191,7 +192,7 @@ export default function Drawer(props: DrawerProps) {
                                 <ListItem
                                     className={classNames(classes.drawerItem, classes.drawerFeedback)}
                                     button
-                                    onClick={openFeedback}>
+                                    onClick={onFeedback}>
                                     <ListItemIcon
                                         className={classes.drawerItemIcon}
                                         children={<SentimentSatisfiedOutlinedIcon fontSize="small" />}
