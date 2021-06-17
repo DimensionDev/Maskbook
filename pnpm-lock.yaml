@@ -359,6 +359,7 @@ importers:
       react-window: ^1.8.6
       remarkable: ^2.0.1
       rimraf: ^3.0.2
+      scrypt-js: ^3.0.1
       socket.io-client: 2.4.0
       source-map-loader: ^3.0.0
       stream-browserify: ^3.0.0
@@ -481,6 +482,7 @@ importers:
       react-virtualized-auto-sizer: 1.0.5
       react-window: 1.8.6
       remarkable: 2.0.1
+      scrypt-js: 3.0.1
       socket.io-client: 2.4.0
       stream-browserify: 3.0.0
       stream-http: 2.8.3
@@ -2858,6 +2860,7 @@ packages:
 
   /@dimensiondev/uniswap-sdk/3.0.4-20210619092641-a270dc0_418b2ad04426b02e1076b55b7e1862e2:
     resolution: {integrity: sha512-gBqLEIubW2wE94zvuJLE36bybUMF75MLbrUihzLlk0vwGcvvweKWbnDtN1iLcFWqVy5e7G2+z+1xxm9bNRDaRg==, tarball: download/@dimensiondev/uniswap-sdk/3.0.4-20210619092641-a270dc0/56ed8ddc9e83283599390103198780fd19cf8fc411155518d6367c3bb5eaffc1}
+    engines: {node: '>=10'}
     peerDependencies:
       '@ethersproject/address': ^5.0.0-beta
       '@ethersproject/contracts': ^5.0.0-beta
