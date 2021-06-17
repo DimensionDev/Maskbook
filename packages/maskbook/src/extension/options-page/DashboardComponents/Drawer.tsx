@@ -126,7 +126,7 @@ export default function Drawer(props: DrawerProps) {
     const { routers } = props
 
     const onFeedback = () => {
-        // see https://github.com/DimensionDev/Maskbook/issues/3384
+        // see #3384
         open('https://forms.gle/Tb26MEcE3kLar6CFA')
     }
 
