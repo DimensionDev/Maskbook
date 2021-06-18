@@ -84,20 +84,20 @@ export function useClaimCallback(pids: string[], contractAddress?: string) {
             const promiEvent = ITO_Contract.methods.claim(pids).send(config as NonPayableTx)
 
             promiEvent
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                .once(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     setClaimState({
                         type: TransactionStateType.HASH,
                         hash,
                     })
                 })
-                .on(TransactionEventType.RECEIPT, (receipt) => {
+                .once(TransactionEventType.RECEIPT, (receipt) => {
                     setClaimState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
                         receipt,
                     })
                 })
-                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                .once(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setClaimState({
                         type: TransactionStateType.CONFIRMED,
                         no,
