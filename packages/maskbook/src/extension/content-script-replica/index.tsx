@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom'
 import { Route, Switch } from 'react-router'
 import { HashRouter } from 'react-router-dom'
 import { MaskUIRoot } from '../../UIRoot'
-import { ReplicaRoot } from './types'
+import { ReplicaRoute } from './types'
 
 const root = document.createElement('div')
 document.body.insertBefore(root, document.body.children[0] || null)
@@ -19,7 +19,7 @@ function Replica() {
         <Suspense fallback="">
             <HashRouter>
                 <Switch>
-                    <Route path={ReplicaRoot.PostInspector + '/:SNSAdaptor/:author/:id'}>
+                    <Route path={ReplicaRoute.PostInspector + '/:SNSAdaptor/'}>
                         <PostInspector />
                     </Route>
                 </Switch>

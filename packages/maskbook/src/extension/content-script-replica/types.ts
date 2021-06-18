@@ -1,3 +1,3 @@
-export enum ReplicaRoot {
+export enum ReplicaRoute {
     PostInspector = '/post-inspector',
 }
