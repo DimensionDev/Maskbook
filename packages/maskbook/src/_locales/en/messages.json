@@ -299,7 +299,7 @@
     "wallet_transfer_error_insufficent_balance": "Insufficient {{symbol}} balance",
     "wallet_import_keystore_label": "Keystore JSON",
     "wallet_import_keystore_content_label": "Ethereum Keystore JSON",
-    "wallet_import_keystore_content_placeholder": "Paste the Base64 here…",
+    "wallet_import_keystore_content_placeholder": "Paste the Keystore JSON here…",
     "wallet_import_keystore_password_label": "The Keystore Password",
     "wallet_import_keystore_password_placeholder": "Enter Keystore Password",
     "input_length_exceed_prompt": "The length of {{name}} should be less than {{length}}.",
