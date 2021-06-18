@@ -243,6 +243,7 @@ interface DashboardDialogWrapperProps {
     size?: 'small' | 'medium'
     content?: React.ReactNode
     footer?: React.ReactNode
+    wrapperClassName?: string
 }
 
 export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
@@ -250,7 +251,7 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
     const classes = useDashboardDialogWrapperStyles(props)
     return (
         <ThemeProvider theme={dialogTheme}>
-            <DialogContent className={classes.wrapper}>
+            <DialogContent className={classNames(classes.wrapper, props.wrapperClassName)}>
                 <section className={classes.header}>
                     {icon && cloneElement(icon, { width: 64, height: 64, stroke: iconColor })}
                     <Typography className={classes.primary} variant="h5">

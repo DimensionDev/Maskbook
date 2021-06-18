@@ -19,12 +19,13 @@ import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, Wrapp
 import type { FC } from 'react'
 
 const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({
+    wrapper: {
+        width: 550,
+    },
     confirmation: {
         fontSize: 16,
         lineHeight: 1.75,
-        [theme.breakpoints.down('sm')]: {
-            fontSize: 14,
-        },
+        [theme.breakpoints.down('sm')]: { fontSize: 14 },
     },
     notification: {
         fontSize: 12,
@@ -50,11 +51,18 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
 
     const hdWallet = useWalletHD()
 
-    const [name, setName] = useState('') // wallet name
-    const [mnemonic, setMnemonic] = useState('') // mnemonic only
-    const [privKey, setPrivKey] = useState('') // private key only
-    const [confirmed, setConfirmed] = useState(false) // new wallet only
-    const [showNotification, setShowNotification] = useState(false) // new wallet only
+    // wallet name
+    const [name, setName] = useState('')
+    // mnemonic
+    const [mnemonic, setMnemonic] = useState('')
+    // private key
+    const [privateKey, setPrivateKey] = useState('')
+    // new wallet
+    const [confirmed, setConfirmed] = useState(false)
+    const [showNotification, setShowNotification] = useState(false)
+    // keystore
+    const [keystoreContent, setKeystoreContent] = useState('')
+    const [keystorePassword, setKeystorePassword] = useState('')
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -64,11 +72,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                     <>
                         <WalletName name={name} onChange={setName} />
                         <br />
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                            }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <FormControlLabel
                                 control={
                                     <Checkbox
@@ -78,11 +82,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                                     />
                                 }
                                 label={
-                                    <Box
-                                        sx={{
-                                            display: 'inline-flex',
-                                            alignItems: 'center',
-                                        }}>
+                                    <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
                                         <Typography className={classes.confirmation} variant="body2">
                                             {t('wallet_confirmation_hint')}
                                         </Typography>
@@ -102,6 +102,33 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                             <Typography className={classes.notification}>{t('wallet_notification')}</Typography>
                         ) : null}
                     </>
+                ),
+            },
+            {
+                label: t('wallet_import_keystore_label'),
+                children: (
+                    <div>
+                        <WalletName name={name} onChange={setName} />
+                        <TextField
+                            required
+                            multiline={true}
+                            rows={6}
+                            variant="outlined"
+                            label={t('wallet_import_keystore_content_label')}
+                            placeholder={t('wallet_import_keystore_content_placeholder')}
+                            value={keystoreContent}
+                            onChange={(e) => setKeystoreContent(e.target.value)}
+                        />
+                        <TextField
+                            required
+                            type="password"
+                            variant="outlined"
+                            label={t('wallet_import_keystore_password_label')}
+                            placeholder={t('wallet_import_keystore_password_placeholder')}
+                            value={keystorePassword}
+                            onChange={(e) => setKeystorePassword(e.target.value)}
+                        />
+                    </div>
                 ),
             },
             {
@@ -129,8 +156,8 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                             type="password"
                             required
                             label={t('private_key')}
-                            value={privKey}
-                            onChange={(e) => setPrivKey(e.target.value)}
+                            value={privateKey}
+                            onChange={(e) => setPrivateKey(e.target.value)}
                             variant="outlined"
                         />
                     </div>
@@ -164,6 +191,17 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                     await WalletRPC.deriveWalletFromPhrase(name, hdWallet.mnemonic, hdWallet.passphrase)
                     break
                 case 1:
+                    const { address: addr, privateKey } = await WalletRPC.fromKeyStore(
+                        keystoreContent,
+                        Buffer.from(keystorePassword, 'utf-8'),
+                    )
+                    await WalletRPC.importNewWallet({
+                        name,
+                        address: addr,
+                        _private_key_: privateKey,
+                    })
+                    break
+                case 2:
                     const words = mnemonic.split(' ')
                     await WalletRPC.importNewWallet({
                         name,
@@ -177,20 +215,20 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                         passphrase: '',
                     })
                     break
-                case 2:
-                    const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privKey)
+                case 3:
+                    const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privateKey)
                     if (!privateKeyValid) throw new Error(t('import_failed'))
                     await WalletRPC.importNewWallet({
                         name,
                         address,
-                        _private_key_: privKey,
+                        _private_key_: privateKey,
                     })
                     break
                 default:
                     break
             }
         },
-        [state[0], name, mnemonic, privKey, hdWallet?.address],
+        [state[0], name, mnemonic, privateKey, hdWallet?.address],
         props.onClose,
     )
     const onSubmit = useCallback(async () => {
@@ -202,26 +240,27 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
         onCreate(name)
     }, [state[0], name, hdWallet?.address, onCreate, onDeriveOrImport])
 
+    const disabled = (() => {
+        const isFill =
+            !(state[0] === 1 && name && keystoreContent && keystorePassword) &&
+            !(state[0] === 2 && name && mnemonic) &&
+            !(state[0] === 3 && name && privateKey)
+        return isFill || checkInputLengthExceed(name)
+    })()
+
     return (
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
                 icon={<CreditCardIcon />}
                 iconColor="#4EE0BC"
                 primary={t(state[0] === 0 ? 'plugin_wallet_on_create' : 'import_wallet')}
-                content={<AbstractTab {...tabProps}></AbstractTab>}
+                content={<AbstractTab {...tabProps} />}
                 footer={
-                    <DebounceButton
-                        variant="contained"
-                        onClick={onSubmit}
-                        disabled={
-                            (!(state[0] === 0 && name && confirmed) &&
-                                !(state[0] === 1 && name && mnemonic) &&
-                                !(state[0] === 2 && name && privKey)) ||
-                            checkInputLengthExceed(name)
-                        }>
+                    <DebounceButton variant="contained" onClick={onSubmit} disabled={disabled}>
                         {t(state[0] === 0 ? 'create' : 'import')}
                     </DebounceButton>
                 }
+                wrapperClassName={classes.wrapper}
             />
         </DashboardDialogCore>
     )
