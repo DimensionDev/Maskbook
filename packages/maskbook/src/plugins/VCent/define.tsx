@@ -13,7 +13,7 @@ export const VCentPluginDefine: PluginConfig = {
     scope: PluginScope.Internal,
 
     postInspector: function Component(): JSX.Element | null {
-        const tweetAddress = usePostInfoDetails('postID')
+        const tweetAddress = usePostInfoDetails.postID()
         if (!tweetAddress) return null
         return <VCentDialog tweetAddress={tweetAddress} />
     },
