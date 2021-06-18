@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { makeStyles, Link, Tab, Tabs } from '@material-ui/core'
+import { makeStyles, Link, Tab, Tabs, Theme } from '@material-ui/core'
 import { useI18N, useSettingsSwticher, useValueRef } from '../../../../utils'
 import { DataProvider, TagType, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
@@ -23,9 +23,17 @@ import { EthereumTokenType, NetworkType, useTokenDetailed } from '@dimensiondev/
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles<Theme, { isPopper: boolean }>((theme) => {
     return {
-        root: {},
+        root: {
+            width: '100%',
+            boxShadow: 'none',
+            borderRadius: 0,
+            marginBottom: theme.spacing(2),
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
         header: {},
         body: {
             minHeight: 303,
@@ -34,14 +42,27 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             flexDirection: 'column',
         },
-        footer: {},
+        footer: {
+            borderTop: `solid 1px ${theme.palette.divider}`,
+            borderBottom: `solid 1px ${theme.palette.divider}`,
+        },
+        skeletonFooter: {
+            borderBottom: `solid 1px ${theme.palette.divider}`,
+        },
         tabs: {
-            height: 35,
+            height: (props) => (props.isPopper ? 35 : 'auto'),
             width: '100%',
             minHeight: 'unset',
+
+            borderTop: (props) => (props.isPopper ? 'unset' : `solid 1px ${theme.palette.divider}`),
+            borderBottom: (props) => (props.isPopper ? 'unset' : `solid 1px ${theme.palette.divider}`),
+        },
+        content: {
+            padding: 0,
+            border: 'none',
         },
         tab: {
-            height: 35,
+            height: (props) => (props.isPopper ? 35 : 'auto'),
             minHeight: 'unset',
             minWidth: 'unset',
         },
@@ -60,13 +81,14 @@ export interface PopperViewProps {
     dataProviders: DataProvider[]
     tradeProviders: TradeProvider[]
     onUpdate?: () => void
+    isPopper?: boolean
 }
 
 export function PopperView(props: PopperViewProps) {
-    const { name, tagType, dataProviders, tradeProviders } = props
+    const { name, tagType, dataProviders, tradeProviders, isPopper = true } = props
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const classes = useStyles({ isPopper })
 
     const dataProvider = useCurrentDataProvider(dataProviders)
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
@@ -158,7 +180,7 @@ export function PopperView(props: PopperViewProps) {
                     </span>
                 }
                 reaction={DataProviderSwitcher}
-                TrendingCardProps={{ classes: { root: classes.root } }}
+                TrendingCardProps={{ classes: { root: isPopper ? '' : classes.root } }}
             />
         )
     //#endregion
@@ -170,7 +192,13 @@ export function PopperView(props: PopperViewProps) {
     //#endregion
 
     //#region display loading skeleton
-    if (!currency || !trending || loadingTrending) return <TrendingViewSkeleton />
+    if (!currency || !trending || loadingTrending)
+        return (
+            <TrendingViewSkeleton
+                classes={{ footer: isPopper ? '' : classes.skeletonFooter }}
+                TrendingCardProps={{ classes: { root: isPopper ? '' : classes.root } }}
+            />
+        )
     //#endregion
 
     //#region tabs
@@ -188,7 +216,12 @@ export function PopperView(props: PopperViewProps) {
     return (
         <TradeContext.Provider value={tradeContext}>
             <TrendingViewDeck
-                classes={{ header: classes.header, body: classes.body, footer: classes.footer }}
+                classes={{
+                    header: classes.header,
+                    body: isPopper ? classes.body : '',
+                    footer: isPopper ? '' : classes.footer,
+                    content: isPopper ? '' : classes.content,
+                }}
                 stats={stats}
                 coins={coins}
                 currency={currency}
@@ -197,6 +230,7 @@ export function PopperView(props: PopperViewProps) {
                 tradeProvider={tradeProvider}
                 showDataProviderIcon={tabIndex < 3}
                 showTradeProviderIcon={tabIndex === 3}
+                TrendingCardProps={{ classes: { root: isPopper ? '' : classes.root } }}
                 dataProviders={dataProviders}
                 tradeProviders={tradeProviders}>
                 <Tabs
@@ -218,7 +252,7 @@ export function PopperView(props: PopperViewProps) {
                     <>
                         {market ? <PriceChangedTable market={market} /> : null}
                         <PriceChart
-                            classes={{ root: classes.priceChartRoot }}
+                            classes={{ root: isPopper ? classes.priceChartRoot : '' }}
                             coin={coin}
                             currency={currency}
                             stats={stats}
@@ -231,7 +265,7 @@ export function PopperView(props: PopperViewProps) {
                 {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
                 {tabIndex === 3 && isEthereum ? (
                     <TradeView
-                        classes={{ root: classes.tradeViewRoot }}
+                        classes={{ root: isPopper ? classes.tradeViewRoot : '' }}
                         TraderProps={{
                             coin,
                             tokenDetailed,
