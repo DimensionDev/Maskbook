@@ -22,8 +22,8 @@ export async function INTERNAL_send(
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
 ) {
     if (process.env.NODE_ENV === 'development') {
-        // console.table(payload)
-        // console.log(new Error().stack)
+        console.table(payload)
+        console.log(new Error().stack)
     }
 
     const web3 = createWeb3()
