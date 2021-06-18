@@ -281,7 +281,7 @@ export function RedPacket(props: RedPacketProps) {
                                 })
                             if (listOfStatus.includes(RedPacketStatus.claimed))
                                 return t('plugin_red_packet_description_claimed', {
-                                    amount: formatBalance(availability.claimed_amount, tokenDetailed.decimals),
+                                    amount: formatBalance(availability.claimed, tokenDetailed.decimals),
                                     symbol: tokenDetailed.symbol,
                                 })
                             if (listOfStatus.includes(RedPacketStatus.refunded))
