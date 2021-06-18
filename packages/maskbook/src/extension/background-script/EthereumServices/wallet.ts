@@ -17,8 +17,7 @@ revalidateWallets()
 //#endregion
 
 export function getWalletCached(address = currentAccountSettings.value) {
-    const matchAddress = MatchAddress(address)
-    return wallets.find((x) => matchAddress(x.address))
+    return wallets.find(MatchAddress(address))
 }
 
 export function getWalletsCached() {
