@@ -10,9 +10,11 @@ issue: <https://github.com/DimensionDev/Maskbook/issues/2661>
 4. validate `mac` field correctness
 5. decrypt ciphertext
 
-## Backup Wallet as Key Store format (Workflow)
+## Backup Wallet as Keystore format (Workflow)
 
-issue: TODO
+issue: <https://github.com/DimensionDev/Maskbook/issues/2662>
+
+Inactive rationale: No mainstream wallet implementation
 
 ## References
 
