@@ -23,11 +23,11 @@ import {
     CurrencyType,
     ERC20TokenDetailed,
     EthereumTokenType,
-    isSameAddress,
     Wallet,
     useStableTokensDebank,
     useChainDetailed,
     getChainIdFromName,
+    MatchAddress,
 } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency, FormattedCurrency, isGreaterThan } from '@dimensiondev/maskbook-shared'
@@ -100,6 +100,7 @@ function ViewDetailed(props: ViewDetailedProps) {
 
     const stableTokens = useStableTokensDebank()
     const chainDetailed = useChainDetailed()
+    const matchTokenAddress = MatchAddress(asset.token.address)
 
     if (!chainDetailed) return null
 
@@ -139,9 +140,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                     }}>
                     <Typography className={classes.name} color="textPrimary" component="span">
                         {new BigNumber(formatBalance(asset.balance, asset.token.decimals)).toFixed(
-                            stableTokens.some((y: ERC20TokenDetailed) => isSameAddress(y.address, asset.token.address))
-                                ? 2
-                                : 6,
+                            stableTokens.some((y: ERC20TokenDetailed) => matchTokenAddress(y.address)) ? 2 : 6,
                         )}
                     </Typography>
                 </Box>,

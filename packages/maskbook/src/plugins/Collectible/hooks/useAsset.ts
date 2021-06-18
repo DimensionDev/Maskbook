@@ -16,6 +16,7 @@ import {
     useChainId,
     useConstant,
     CONSTANTS,
+    MatchAddress,
 } from '@dimensiondev/web3-shared'
 
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
@@ -35,15 +36,17 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                             new BigNumber(getOrderUnitPrice(b) ?? 0).toNumber(),
                     ),
                 )
+                const matchAccountAddress = MatchAddress(account)
+                const matchWETHAddress = MatchAddress(WETH_ADDRESS)
                 return {
                     is_verified: ['approved', 'verified'].includes(
                         openSeaResponse.collection?.safelist_request_status ?? '',
                     ),
                     is_order_weth: isSameAddress(desktopOrder?.paymentToken ?? '', WETH_ADDRESS),
                     is_collection_weth: openSeaResponse.collection.payment_tokens.some((x) =>
-                        isSameAddress(x.address, WETH_ADDRESS),
+                        matchWETHAddress(x.address),
                     ),
-                    is_owner: openSeaResponse.top_ownerships.some((item) => isSameAddress(item.owner.address, account)),
+                    is_owner: openSeaResponse.top_ownerships.some((item) => matchAccountAddress(item.owner.address)),
                     // it's an IOS string as my inspection
                     is_auction: Date.parse(`${openSeaResponse.endTime ?? ''}Z`) > Date.now(),
                     image_url: openSeaResponse.imageUrl,

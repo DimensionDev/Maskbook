@@ -7,7 +7,7 @@ import { createWalletDBAccess } from '../database/Wallet.db'
 import type { WalletRecord } from '../database/types'
 import { WalletMessages } from '../messages'
 import { buf2hex, hex2buf, assert } from '../../../utils/utils'
-import { ProviderType, resolveProviderName, isSameAddress } from '@dimensiondev/web3-shared'
+import { ProviderType, resolveProviderName, MatchAddress } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
 import { currentAccountSettings, currentProviderSettings } from '../settings'
@@ -32,7 +32,8 @@ export async function isEmptyWallets() {
 
 export async function getWallet(address: string = currentAccountSettings.value) {
     const wallets = await getWallets()
-    return wallets.find((x) => isSameAddress(x.address, address))
+    const matchAddress = MatchAddress(address)
+    return wallets.find((x) => matchAddress(x.address))
 }
 
 export async function getWallets(provider?: ProviderType) {
@@ -51,8 +52,8 @@ export async function getWallets(provider?: ProviderType) {
     ).sort(sortWallet)
     if (provider === ProviderType.Maskbook) return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
     if (provider === currentProviderSettings.value) {
-        const address_ = currentAccountSettings.value
-        return wallets.filter((x) => isSameAddress(x.address, address_))
+        const matchAddress = MatchAddress(currentAccountSettings.value)
+        return wallets.filter((x) => matchAddress(x.address))
     }
     if (provider) return []
     return wallets

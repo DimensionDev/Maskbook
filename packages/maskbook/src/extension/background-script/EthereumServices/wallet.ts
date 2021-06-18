@@ -1,4 +1,4 @@
-import { isSameAddress } from '@dimensiondev/web3-shared'
+import { MatchAddress } from '@dimensiondev/web3-shared'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { getWallets } from '../../../plugins/Wallet/services'
@@ -17,7 +17,8 @@ revalidateWallets()
 //#endregion
 
 export function getWalletCached(address = currentAccountSettings.value) {
-    return wallets.find((x) => isSameAddress(x.address, address))
+    const matchAddress = MatchAddress(address)
+    return wallets.find((x) => matchAddress(x.address))
 }
 
 export function getWalletsCached() {

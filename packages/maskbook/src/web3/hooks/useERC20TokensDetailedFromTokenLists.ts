@@ -1,4 +1,4 @@
-import { EthereumTokenType, isSameAddress, useChainId, useERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import { EthereumTokenType, MatchAddress, useChainId, useERC20TokenDetailed } from '@dimensiondev/web3-shared'
 import Fuse from 'fuse.js'
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
@@ -39,10 +39,9 @@ export function useERC20TokensDetailedFromTokenLists(lists: string[], keyword: s
     //#region create searched tokens
     const searchedTokens = useMemo(() => {
         if (!keyword) return allTokens
+        const matchAddress = MatchAddress(keyword)
         return [
-            ...(EthereumAddress.isValid(keyword)
-                ? allTokens.filter((token) => isSameAddress(token.address, keyword))
-                : []),
+            ...(EthereumAddress.isValid(keyword) ? allTokens.filter((token) => matchAddress(token.address)) : []),
             ...fuse.search(keyword).map((x) => x.item),
         ]
     }, [keyword, fuse, allTokens])

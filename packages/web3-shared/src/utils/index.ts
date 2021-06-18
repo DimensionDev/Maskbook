@@ -12,9 +12,9 @@ import {
     Web3Constants,
 } from '../types'
 
-export function isSameAddress(addrA: string, addrB: string) {
-    return addrA.toLowerCase() === addrB.toLowerCase()
-}
+export const isSameAddress = (addrA: string, addrB: string) => addrA.toLowerCase() === addrB.toLowerCase()
+
+export const MatchAddress = (a: string) => (b: string) => isSameAddress(a, b)
 
 export function isDAI(address: string) {
     return isSameAddress(address, getConstant(CONSTANTS, 'DAI_ADDRESS'))
