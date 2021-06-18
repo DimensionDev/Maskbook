@@ -41,7 +41,7 @@ export function UpgradeBackupJSONFile(json: object, identity?: ProfileIdentifier
 
 export function getBackupPreviewInfo(json: BackupJSONFileLatest): BackupPreview {
     return {
-        email: 'xxx', // TODO: email
+        email: 'alice@example.com', // TODO: email
         personas: json.personas.length,
         accounts: json.personas.reduce((a, b) => a + b.linkedProfiles.length, 0),
         posts: json.posts.length,

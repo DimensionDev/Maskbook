@@ -4,7 +4,7 @@ import BackupDialog from './dialogs/BackupDialog'
 import { PasswordVerifiedContext } from '../hooks/VerifyPasswordContext'
 
 export default function BackupSetting() {
-    const { ensurePasswordVerified: ensurePasswordVerified } = useContext(PasswordVerifiedContext)
+    const { ensurePasswordVerified } = useContext(PasswordVerifiedContext)
     const [openBackup, setOpenBackup] = useState(false)
     const onBackup = () => {
         ensurePasswordVerified(() => setOpenBackup(true))

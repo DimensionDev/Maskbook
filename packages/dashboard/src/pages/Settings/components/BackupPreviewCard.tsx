@@ -1,4 +1,5 @@
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
 export interface BackupPreview {
@@ -74,8 +75,8 @@ export default function BackupPreviewCard({ json }: Props) {
         <div className={classes.root}>
             {records.map((record, idx) => (
                 <div className={classNames(classes.item, record.sub ? classes.sub : '')} key={idx}>
-                    <span>{record.name}</span>
-                    <span>{record.value}</span>
+                    <Typography>{record.name}</Typography>
+                    <Typography>{record.value}</Typography>
                 </div>
             ))}
         </div>
