@@ -290,7 +290,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         </Grid>
                     </>
                 ) : null}
-                {Flags.wallet_gas_price_dialog_enable ? (
+                {Flags.wallet_gas_price_dialog_enable && fillParamsResult?.gas ? (
                     <TxFeeEstimation classes={classes} gas={fillParamsResult?.gas} />
                 ) : null}
                 <Grid item xs={12}>
