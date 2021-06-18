@@ -17,3 +17,4 @@ issue: TODO
 ## References
 
 - <https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition>
+- <https://archive.is/q1zut>
