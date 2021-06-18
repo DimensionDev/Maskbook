@@ -82,23 +82,27 @@ export function ConfirmRedPacketForm(props: ConfirmRedPacketFormProps) {
                 </Typography>
             </Grid>
 
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textSecondary">
-                    {t('plugin_red_packet_amount_per_share')}
-                </Typography>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textPrimary" align="right">
-                    {`${
-                        settings?.isRandom
-                            ? formatBalance(new BigNumber(settings?.total || 0), settings?.token?.decimals ?? 0)
-                            : formatBalance(
-                                  new BigNumber(settings?.total || 0).div(settings?.shares || 1),
-                                  settings?.token?.decimals ?? 18,
-                              )
-                    } ${settings?.token?.symbol}`}
-                </Typography>
-            </Grid>
+            {settings?.isRandom ? null : (
+                <>
+                    <Grid item xs={6}>
+                        <Typography variant="body1" color="textSecondary">
+                            {t('plugin_red_packet_amount_per_share')}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography variant="body1" color="textPrimary" align="right">
+                            {`${
+                                settings?.isRandom
+                                    ? formatBalance(new BigNumber(settings?.total || 0), settings?.token?.decimals ?? 0)
+                                    : formatBalance(
+                                          new BigNumber(settings?.total || 0).div(settings?.shares || 1),
+                                          settings?.token?.decimals ?? 18,
+                                      )
+                            } ${settings?.token?.symbol}`}
+                        </Typography>
+                    </Grid>
+                </>
+            )}
 
             <Grid item xs={6}>
                 <Typography variant="body1" color="textSecondary">

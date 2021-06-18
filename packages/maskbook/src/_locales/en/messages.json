@@ -366,7 +366,7 @@
     "plugin_red_packet_refunding_for": "Refunding red packet for {{balance}} {{symbol}}",
     "plugin_red_packet_amount_per_share": "Amount per Share",
     "plugin_red_packet_send_symbol": "Send {{amount}} {{symbol}}",
-    "plugin_red_packet_amount_total": "Amount Totals",
+    "plugin_red_packet_amount_total": "Amount Total",
     "plugin_red_packet_next": "Next",
     "plugin_red_packet_back": "Back",
     "plugin_red_packet_create_with_token": "Creating red packet with {{symbol}}",
