@@ -169,7 +169,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         //  to let Metamask to determine the gas price for the further tx.
         currentGasPriceSettings.value = 0
         props.onClose()
-    }, [props.onClose, state, currentGasPriceSettings])
+    }, [props, state, currentGasPriceSettings])
 
     // open the transaction dialog
     useEffect(() => {
