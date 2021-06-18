@@ -49,12 +49,11 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
 
     const hdWallet = useWalletHD()
 
-    const [name, setName] = useState('')
-    const [passphrase] = useState('')
-    const [mnemonic, setMnemonic] = useState('')
-    const [privKey, setPrivKey] = useState('')
-    const [confirmed, setConfirmed] = useState(false)
-    const [showNotification, setShowNotification] = useState(false)
+    const [name, setName] = useState('') // wallet name
+    const [mnemonic, setMnemonic] = useState('') // mnemonic only
+    const [privKey, setPrivKey] = useState('') // private key only
+    const [confirmed, setConfirmed] = useState(false) // new wallet only
+    const [showNotification, setShowNotification] = useState(false) // new wallet only
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -237,7 +236,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                     break
             }
         },
-        [state[0], name, passphrase, mnemonic, privKey, hdWallet?.address],
+        [state[0], name, mnemonic, privKey, hdWallet?.address],
         props.onClose,
     )
     const onSubmit = useCallback(async () => {
