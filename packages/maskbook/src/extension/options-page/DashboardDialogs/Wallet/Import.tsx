@@ -16,6 +16,7 @@ import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
+import type { FC } from 'react'
 
 const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({
     confirmation: {
@@ -61,24 +62,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                 label: t('wallet_new'),
                 children: (
                     <>
-                        <form>
-                            <TextField
-                                helperText={
-                                    checkInputLengthExceed(name)
-                                        ? t('input_length_exceed_prompt', {
-                                              name: t('wallet_name').toLowerCase(),
-                                              length: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                                          })
-                                        : undefined
-                                }
-                                required
-                                autoFocus
-                                label={t('wallet_name')}
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                variant="outlined"
-                            />
-                        </form>
+                        <WalletName name={name} onChange={setName} />
                         <br />
                         <Box
                             sx={{
@@ -124,22 +108,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                 label: t('mnemonic_words'),
                 children: (
                     <div>
-                        <TextField
-                            helperText={
-                                checkInputLengthExceed(name)
-                                    ? t('input_length_exceed_prompt', {
-                                          name: t('wallet_name').toLowerCase(),
-                                          length: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                                      })
-                                    : undefined
-                            }
-                            required
-                            autoFocus
-                            label={t('wallet_name')}
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            variant="outlined"
-                        />
+                        <WalletName name={name} onChange={setName} />
                         <TextField
                             required
                             label={t('mnemonic_words')}
@@ -155,22 +124,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                 label: t('private_key'),
                 children: (
                     <div>
-                        <TextField
-                            helperText={
-                                checkInputLengthExceed(name)
-                                    ? t('input_length_exceed_prompt', {
-                                          name: t('wallet_name').toLowerCase(),
-                                          length: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                                      })
-                                    : undefined
-                            }
-                            required
-                            autoFocus
-                            label={t('wallet_name')}
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            variant="outlined"
-                        />
+                        <WalletName name={name} onChange={setName} />
                         <TextField
                             type="password"
                             required
@@ -272,6 +226,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
         </DashboardDialogCore>
     )
 }
+
 /** Return the wallet with mnemonic words */
 function useWalletHD() {
     const selectedWallet = useWallet()?.address
@@ -281,4 +236,25 @@ function useWalletHD() {
         const all = await WalletRPC.getWallets()
         return first(all.filter((x) => x.mnemonic.length).sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime()))
     }, [selectedWallet]).value
+}
+
+const WalletName: FC<{ name: string; onChange(name: string): void }> = ({ name, onChange }) => {
+    const { t } = useI18N()
+    const text = checkInputLengthExceed(name)
+        ? t('input_length_exceed_prompt', {
+              name: t('wallet_name').toLowerCase(),
+              length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+          })
+        : undefined
+    return (
+        <TextField
+            helperText={text}
+            required
+            autoFocus
+            label={t('wallet_name')}
+            value={name}
+            onChange={(e) => onChange(e.target.value)}
+            variant="outlined"
+        />
+    )
 }
