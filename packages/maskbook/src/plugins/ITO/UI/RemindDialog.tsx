@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold',
         fontSize: '1.1rem',
     },
+    container: {
+        padding: theme.spacing(2, 0),
+    },
     wrapper: {
         padding: theme.spacing(2),
         background: theme.palette.mode === 'dark' ? '#17191D' : '#F7F9FA',
@@ -45,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         marginTop: theme.spacing(2),
+        padding: theme.spacing(2.5, 0, 3.5, 2),
     },
     tokenIcon: {
         display: 'flex',
@@ -124,7 +128,7 @@ export function RemindDialog(props: RemindDialogProps) {
     const [agreeReminder, setAgreeReminder] = useState(false)
 
     return (
-        <>
+        <div className={classes.container}>
             <section className={classes.wrapper}>
                 <Typography variant="body1" className={classNames(classes.reminderText, classes.reminderTextFirst)}>
                     {t('plugin_ito_dialog_claim_reminder_text1')}
@@ -179,6 +183,6 @@ export function RemindDialog(props: RemindDialogProps) {
                 disabled={!agreeReminder}>
                 {t('plugin_ito_continue')}
             </ActionButton>
-        </>
+        </div>
     )
 }
