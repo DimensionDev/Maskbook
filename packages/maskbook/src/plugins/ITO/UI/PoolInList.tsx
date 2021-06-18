@@ -15,7 +15,7 @@ import {
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useAccount } from '@dimensiondev/web3-shared'
+import { useAccount, useConstant, CONSTANTS, isSameAddress, getChainDetailed } from '@dimensiondev/web3-shared'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
@@ -109,12 +109,9 @@ export function PoolInList(props: PoolInListProps) {
     const classes = useStyles()
     const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onWithdraw } = props
 
+    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     const account = useAccount()
-    const {
-        value: availability,
-        computed: availabilityComputed,
-        loading: loadingAvailability,
-    } = useAvailabilityComputed(pool)
+    const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)
     const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)
     const title = pool.message.split(MSG_DELIMITER)[1] ?? pool.message
     const noRemain = isZero(pool.total_remaining)
@@ -232,7 +229,9 @@ export function PoolInList(props: PoolInListProps) {
                                                 align="center"
                                                 size="small"
                                                 style={{ whiteSpace: 'nowrap' }}>
-                                                {token.symbol}
+                                                {isSameAddress(token.address, NATIVE_TOKEN_ADDRESS)
+                                                    ? getChainDetailed(token.chainId)?.nativeCurrency.symbol
+                                                    : token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 {formatBalance(
@@ -249,7 +248,10 @@ export function PoolInList(props: PoolInListProps) {
                                                     token.decimals,
                                                     6,
                                                 )}{' '}
-                                                {token.symbol} / {pool.token.symbol}
+                                                {isSameAddress(token.address, NATIVE_TOKEN_ADDRESS)
+                                                    ? getChainDetailed(token.chainId)?.nativeCurrency.symbol
+                                                    : token.symbol}{' '}
+                                                / {pool.token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 <FormattedBalance
