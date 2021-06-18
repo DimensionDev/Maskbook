@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        margin: theme.spacing(2, 0),
     },
     shareAmount: {
         fontSize: 36,
