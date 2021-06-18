@@ -37,7 +37,7 @@ export function useRefundCallback(version: number, from: string, id?: string) {
                 .estimateGas({
                     from,
                 })
-                .catch((error: any) => {
+                .catch((error) => {
                     setRefundState({
                         type: TransactionStateType.FAILED,
                         error,

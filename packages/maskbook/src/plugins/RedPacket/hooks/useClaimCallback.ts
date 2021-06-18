@@ -48,7 +48,7 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                 .estimateGas({
                     from,
                 })
-                .catch((error: any) => {
+                .catch((error) => {
                     setClaimState({
                         type: TransactionStateType.FAILED,
                         error,
