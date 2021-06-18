@@ -1,5 +1,5 @@
 import { postsContentSelector } from '../utils/selector'
-import { IntervalWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
+import { DOMProxy, IntervalWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import { PostInfo } from '../../../social-network/PostInfo'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
@@ -22,6 +22,18 @@ import {
 import type { Result } from 'ts-results'
 import { twitterBase } from '../base'
 import { twitterEncoding } from '../encoding'
+
+class TwitterPostInfo extends PostInfo {
+    constructor(public rootNodeProxy: DOMProxy<HTMLElement, HTMLSpanElement, HTMLSpanElement>) {
+        super()
+    }
+    get rootNode() {
+        return this.rootNodeProxy.current
+    }
+    commentsSelector = undefined
+    commentBoxSelector = undefined
+    postContentNode = undefined
+}
 
 function registerPostCollectorInner(
     postStore: Next.CollectingCapabilities.PostsProvider['posts'],
@@ -50,15 +62,7 @@ function registerPostCollectorInner(
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
-            const info: PostInfo = new (class extends PostInfo {
-                get rootNode() {
-                    return proxy.current
-                }
-                rootNodeProxy = proxy
-                commentsSelector = undefined
-                commentBoxSelector = undefined
-                postContentNode = undefined
-            })()
+            const info = new TwitterPostInfo(proxy)
             function run() {
                 collectPostInfo(tweetNode, info, cancel)
                 collectLinks(tweetNode, info, cancel)

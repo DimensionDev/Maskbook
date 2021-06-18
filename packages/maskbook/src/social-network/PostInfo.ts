@@ -1,1 +1,1 @@
-export { PostInfo, emptyPostInfo } from '@dimensiondev/mask-plugin-infra'
+export { PostInfo } from '@dimensiondev/mask-plugin-infra'

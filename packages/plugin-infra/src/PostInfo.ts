@@ -35,6 +35,7 @@ export abstract class PostInfo {
             if (payload.ok) this.iv.value = payload.val.iv
         })
     }
+
     readonly nickname = new ValueRef<string | null>(null)
     readonly avatarURL = new ValueRef<string | null>(null)
     readonly postBy = new ValueRef(ProfileIdentifier.unknown, Identifier.equals)
@@ -48,19 +49,19 @@ export abstract class PostInfo {
      * It MUST be the original result (but can be updated by the original parser).
      */
     readonly postMessage = new ValueRef<TypedMessageTuple>(makeTypedMessageTuple([]), isTypedMessageEqual)
-    /** @deprecated It should appear in the transformedPostContent */
+    /** It should appear in the transformedPostContent */
     readonly postPayload = new ValueRef<Result<Payload, Error>>(Err(new Error('Empty')))
     readonly decryptedPayloadForImage = new ValueRef<Payload | null>(null)
-    abstract readonly commentsSelector?: LiveSelector<HTMLElement, false>
-    abstract readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
+    declare abstract readonly commentsSelector?: LiveSelector<HTMLElement, false>
+    declare abstract readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
     /**
      * The un-decrypted post content after transformation.
      */
     readonly transformedPostContent = new ValueRef<TypedMessageTuple>(makeTypedMessageTuple([]), isTypedMessageEqual)
     readonly iv = new ValueRef<string | null>(null)
-    abstract readonly rootNode: HTMLElement
-    abstract readonly rootNodeProxy: DOMProxy
-    abstract readonly postContentNode?: HTMLElement
+    declare abstract readonly rootNode: HTMLElement
+    declare abstract readonly rootNodeProxy: DOMProxy
+    declare abstract readonly postContentNode?: HTMLElement
     /** The links appears in the post content */
     readonly postMentionedLinks = new ObservableSet<string>()
     /**
@@ -74,7 +75,7 @@ export abstract class PostInfo {
      */
     readonly postMetadataMentionedLinks = new ObservableMap<HTMLAnchorElement, string>()
 }
-export const emptyPostInfo: PostInfo = new (class extends PostInfo {
+const emptyPostInfo: PostInfo = new (class extends PostInfo {
     commentBoxSelector = undefined
     commentsSelector = undefined
     rootNode = undefined!

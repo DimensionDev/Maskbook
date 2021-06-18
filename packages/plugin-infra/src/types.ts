@@ -151,7 +151,12 @@ export namespace Plugin.Utils {
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
     export interface Definition extends Shared.DefinitionWithInit {
-        /** This UI will be rendered for each post found. */
+        /**
+         * This UI will be rendered for each post found.
+         *
+         * Note: You MUST NOT assume there is an SNSAdaptor activated in this hook
+         * because it will be also used in the content scripts replica.
+         */
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
