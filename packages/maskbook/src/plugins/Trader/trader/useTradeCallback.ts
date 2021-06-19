@@ -29,11 +29,6 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         provider === TradeProvider.UNISWAP && !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<Trade>) : null,
         uniswapRouterV2Contract,
     )
-    const zrx = useZrxCallback(
-        provider === TradeProvider.ZRX && !isNativeTokenWrapper_
-            ? (tradeComputed as TradeComputed<SwapQuoteResponse>)
-            : null,
-    )
     const sushiswap = useUniswapCallback(
         provider === TradeProvider.SUSHISWAP && !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<Trade>) : null,
         sushiswapRouterV2Contract,
@@ -47,6 +42,11 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
     const quickswap = useUniswapCallback(
         provider === TradeProvider.QUICKSWAP && !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<Trade>) : null,
         quickswapRouterV2Contract,
+    )
+    const zrx = useZrxCallback(
+        provider === TradeProvider.ZRX && !isNativeTokenWrapper_
+            ? (tradeComputed as TradeComputed<SwapQuoteResponse>)
+            : null,
     )
     const balancer = useBalancerCallback(
         provider === TradeProvider.BALANCER && !isNativeTokenWrapper_

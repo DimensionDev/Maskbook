@@ -92,11 +92,6 @@ export function useTradeComputed(
                 ...uniswap_,
                 value: uniswap,
             }
-        case TradeProvider.ZRX:
-            return {
-                ...zrx_,
-                value: zrx,
-            }
         case TradeProvider.SUSHISWAP:
             return {
                 ...uniswap_,
@@ -111,6 +106,11 @@ export function useTradeComputed(
             return {
                 ...uniswap_,
                 value: uniswap,
+            }
+        case TradeProvider.ZRX:
+            return {
+                ...zrx_,
+                value: zrx,
             }
         case TradeProvider.BALANCER:
             return {

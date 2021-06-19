@@ -9,7 +9,7 @@ export function useCurrentTradeProvider(availableTradeProviders: TradeProvider[]
     )
     const currentTradeProvider = useValueRef(currentTradeProviderSettings)
 
-    // sync trade provider
+    // sync the trade provider
     useEffect(() => {
         // cached trade provider unavailable
         if (!availableTradeProviders.includes(currentTradeProvider)) return

@@ -74,6 +74,8 @@ export enum TokenPanelType {
 }
 
 export interface TradeContext {
+    TYPE: TradeProvider
+    IS_UNISWAP_LIKE: boolean
     GRAPH_API: string
     INIT_CODE_HASH: string
     ROUTER_CONTRACT_ADDRESS: string

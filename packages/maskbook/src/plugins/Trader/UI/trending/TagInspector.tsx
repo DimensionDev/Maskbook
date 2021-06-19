@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { TrendingPopper } from '../trending/TrendingPopper'
 import { DataProvider, TradeProvider, TagType } from '../../types'
-import { PopperView } from '../trending/PopperView'
+import { TraderView } from './TraderView'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'
 
 export interface TagInspectorProps {}
@@ -19,7 +19,7 @@ export function TagInspector(props: TagInspectorProps) {
             reposition?: () => void,
         ) => {
             return (
-                <PopperView
+                <TraderView
                     name={name}
                     tagType={type}
                     dataProviders={dataProviders}

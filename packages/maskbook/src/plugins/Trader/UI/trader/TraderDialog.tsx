@@ -21,12 +21,14 @@ export function TraderDialog() {
         if (ev?.traderProps) setTraderProps(ev.traderProps)
     })
 
-    const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentTradeProviderSettings.value = option.value as TradeProvider
-    }, [])
     const { value: tradeProviders = [] } = useAvailableTraderProviders(TagType.CASH, 'MASK')
     const tradeProvider = useCurrentTradeProvider(tradeProviders)
     const tradeContext = useTradeContext(tradeProvider)
+
+    const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {
+        currentTradeProviderSettings.value = option.value as TradeProvider
+    }, [])
+
     return (
         <TradeContext.Provider value={tradeContext}>
             <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_trader_swap')}>

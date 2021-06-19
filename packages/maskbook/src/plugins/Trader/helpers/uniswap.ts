@@ -10,33 +10,12 @@ import {
     TokenAmount,
     ETHER,
 } from '@uniswap/sdk'
-import { formatEthereumAddress, unreachable } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { WETH } from '../constants'
 import { ChainId, EthereumTokenType, FungibleTokenDetailed, isNative } from '@dimensiondev/web3-shared'
 
 export function toUniswapChainId(chainId: ChainId): UniswapChainId {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return UniswapChainId.MAINNET
-        case ChainId.Ropsten:
-            return UniswapChainId.ROPSTEN
-        case ChainId.Rinkeby:
-            return UniswapChainId.RINKEBY
-        case ChainId.Kovan:
-            return UniswapChainId.KOVAN
-        case ChainId.Gorli:
-            return UniswapChainId.GÖRLI
-        case ChainId.BSC:
-            return UniswapChainId.MAINNET
-        case ChainId.BSCT:
-            return UniswapChainId.MAINNET
-        case ChainId.Matic:
-            return UniswapChainId.MAINNET
-        case ChainId.Mumbai:
-            return UniswapChainId.MAINNET
-        default:
-            unreachable(chainId)
-    }
+    return chainId as unknown as UniswapChainId
 }
 
 export function toUniswapPercent(numerator: number, denominator: number) {
@@ -66,20 +45,7 @@ export function toUniswapCurrencyAmount(chainId: ChainId, token: FungibleTokenDe
 }
 
 export function uniswapChainIdTo(chainId: UniswapChainId) {
-    switch (chainId) {
-        case UniswapChainId.MAINNET:
-            return ChainId.Mainnet
-        case UniswapChainId.ROPSTEN:
-            return ChainId.Ropsten
-        case UniswapChainId.RINKEBY:
-            return ChainId.Rinkeby
-        case UniswapChainId.KOVAN:
-            return ChainId.Kovan
-        case UniswapChainId.GÖRLI:
-            return ChainId.Gorli
-        default:
-            unreachable(chainId)
-    }
+    return chainId as unknown as ChainId
 }
 
 export function uniswapPercentTo(percent: UniswapPercent) {
