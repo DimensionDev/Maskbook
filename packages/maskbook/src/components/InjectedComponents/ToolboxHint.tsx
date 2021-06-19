@@ -15,7 +15,7 @@ import { Image } from '../shared/Image'
 import { useMenu } from '../../utils/hooks/useMenu'
 import { useCallback } from 'react'
 import { MaskMessage } from '../../utils/messages'
-import { RedPacketCompositionEntry } from '../../plugins/RedPacket/define'
+import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { FileServiceCompositionEntry } from '../../plugins/FileService/UI-define'
 import { ITO_CompositionEntry } from '../../plugins/ITO/define'
 import { useControlledDialog } from '../../plugins/Collectible/UI/useControlledDialog'
@@ -155,7 +155,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const openRedPacket = useCallback(() => {
         openEncryptedMessage()
         setTimeout(() => {
-            RedPacketCompositionEntry.onClick()
+            MaskMessage.events.activatePluginCompositionEntry.sendToLocal(RedPacketPluginID)
         })
     }, [openEncryptedMessage])
     //#endregion

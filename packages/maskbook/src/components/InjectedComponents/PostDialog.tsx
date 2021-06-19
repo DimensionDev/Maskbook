@@ -521,9 +521,9 @@ function PluginRenderer() {
             return (
                 <ErrorBoundary subject={`Plugin "${plugin.name.fallback}"`} key={plugin.ID}>
                     {'onClick' in entry ? (
-                        <PluginKindCustom {...entry} unstable={unstable} />
+                        <PluginKindCustom {...entry} unstable={unstable} id={plugin.ID} />
                     ) : (
-                        <PluginKindDialog {...entry} unstable={unstable} />
+                        <PluginKindDialog {...entry} unstable={unstable} id={plugin.ID} />
                     )}
                 </ErrorBoundary>
             )
@@ -597,39 +597,43 @@ function renderLabel(label: Plugin.SNSAdaptor.CompositionDialogEntry['label']): 
     if (typeof label === 'object' && 'fallback' in label) return label.fallback
     return label
 }
-function PluginKindCustom(props: Plugin.SNSAdaptor.CompositionDialogEntryCustom & { unstable: boolean }) {
+type ExtraPluginProps = { unstable: boolean; id: string }
+function PluginKindCustom(props: Plugin.SNSAdaptor.CompositionDialogEntryCustom & ExtraPluginProps) {
     const classes = useStyles()
+    const { id, label, onClick, unstable } = props
+    useActivatePluginCompositionEntryEvent(id, onClick)
     return (
         <ClickableChip
             label={
                 <>
-                    {renderLabel(props.label)}
-                    {props.unstable && <sup className={classes.sup}>(Beta)</sup>}
+                    {renderLabel(label)}
+                    {unstable && <sup className={classes.sup}>(Beta)</sup>}
                 </>
             }
-            onClick={props.onClick}
+            onClick={onClick}
         />
     )
 }
 
-function PluginKindDialog(props: Plugin.SNSAdaptor.CompositionDialogEntryDialog & { unstable: boolean }) {
+function PluginKindDialog(props: Plugin.SNSAdaptor.CompositionDialogEntryDialog & ExtraPluginProps) {
     const classes = useStyles()
-    const { dialog: Dialog } = props
+    const { dialog: Dialog, id, label, unstable, keepMounted } = props
     const [open, setOpen] = useState(false)
     const opener = useCallback(() => setOpen(true), [])
     const close = useCallback(() => setOpen(false), [])
+    useActivatePluginCompositionEntryEvent(id, opener)
     const chip = (
         <ClickableChip
             label={
                 <>
-                    {renderLabel(props.label)}
-                    {props.unstable && <sup className={classes.sup}>(Beta)</sup>}
+                    {renderLabel(label)}
+                    {unstable && <sup className={classes.sup}>(Beta)</sup>}
                 </>
             }
             onClick={opener}
         />
     )
-    if (props.keepMounted || open)
+    if (keepMounted || open)
         return (
             <>
                 {chip}
@@ -640,4 +644,13 @@ function PluginKindDialog(props: Plugin.SNSAdaptor.CompositionDialogEntryDialog 
             </>
         )
     return chip
+}
+function useActivatePluginCompositionEntryEvent(id: string, onActivate: () => void) {
+    useEffect(
+        () =>
+            MaskMessage.events.activatePluginCompositionEntry.on((request) => {
+                if (request === id) onActivate()
+            }),
+        [onActivate, id],
+    )
 }

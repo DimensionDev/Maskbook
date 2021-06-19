@@ -58,6 +58,8 @@ export interface MaskMessages {
         appendText: string
         context: ThirdPartyPopupContextIdentifier
     }
+    /** Plugin ID */
+    activatePluginCompositionEntry: string
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })
