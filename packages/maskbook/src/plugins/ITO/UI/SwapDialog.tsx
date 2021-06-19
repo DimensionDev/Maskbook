@@ -41,9 +41,6 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         marginTop: theme.spacing(2),
     },
-    wrapper: {
-        padding: theme.spacing(2, 0),
-    },
     swapLimitText: {
         color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
         fontSize: 14,
@@ -253,7 +250,7 @@ export function SwapDialog(props: SwapDialogProps) {
     }, [swapAmount, tokenBalance, maxSwapAmount, swapToken, ratio])
 
     return (
-        <div className={classes.wrapper}>
+        <>
             <section className={classes.swapLimitWrap}>
                 <Typography variant="body1" className={classes.swapLimitText}>
                     0 {token.symbol}
@@ -330,6 +327,6 @@ export function SwapDialog(props: SwapDialogProps) {
                     </EthereumERC20TokenApprovedBoundary>
                 </EthereumWalletConnectedBoundary>
             </section>
-        </div>
+        </>
     )
 }
