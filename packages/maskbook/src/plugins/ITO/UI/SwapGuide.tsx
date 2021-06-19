@@ -21,10 +21,7 @@ const useStyles = makeStyles((theme) => ({
     content: {
         display: 'flex',
         flexDirection: 'column',
-        padding: theme.spacing(0, 3),
-    },
-    unlockWrapper: {
-        padding: theme.spacing(2, 0),
+        padding: theme.spacing(2, 3),
     },
 }))
 
@@ -84,15 +81,13 @@ export function SwapGuide(props: SwapGuideProps) {
                             return <RemindDialog token={payload.token} chainId={chainId} setStatus={onUpdate} />
                         case SwapStatus.Unlock:
                             return (
-                                <div className={classes.unlockWrapper}>
-                                    <UnlockDialog
-                                        tokens={
-                                            payload.exchange_tokens.filter(
-                                                (x) => x.type === EthereumTokenType.ERC20,
-                                            ) as ERC20TokenDetailed[]
-                                        }
-                                    />
-                                </div>
+                                <UnlockDialog
+                                    tokens={
+                                        payload.exchange_tokens.filter(
+                                            (x) => x.type === EthereumTokenType.ERC20,
+                                        ) as ERC20TokenDetailed[]
+                                    }
+                                />
                             )
                         case SwapStatus.Swap:
                             return (

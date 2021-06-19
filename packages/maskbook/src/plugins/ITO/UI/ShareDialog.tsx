@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        margin: theme.spacing(2, 0),
     },
     shareAmount: {
         fontSize: 36,
@@ -72,31 +73,29 @@ export function ShareDialog(props: ShareDialogProps) {
     }, [shareSuccessLink, onClose])
 
     return (
-        <>
-            <Box className={classes.shareWrapper}>
-                <div
-                    className={classes.shareImage}
-                    style={{ backgroundImage: `url(${ShareBackground})`, borderRadius: 12 }}>
-                    <Typography variant="body1" className={classes.shareAmount}>
-                        {amount}
-                    </Typography>
-                    <Typography variant="body1" className={classes.shareToken}>
-                        {token.symbol}
-                    </Typography>
-                    <Typography variant="body1" className={classes.shareText}>
-                        {isZero(actualSwapAmount) ? t('plugin_ito_out_of_stock_hit') : t('plugin_ito_congratulations')}
-                    </Typography>
-                    {shareSuccessLink ? (
-                        <ActionButton
-                            onClick={onShareSuccess}
-                            variant="contained"
-                            color="primary"
-                            className={classes.shareButton}>
-                            {t('plugin_ito_dialog_swap_share_title')}
-                        </ActionButton>
-                    ) : null}
-                </div>
-            </Box>
-        </>
+        <Box className={classes.shareWrapper}>
+            <div
+                className={classes.shareImage}
+                style={{ backgroundImage: `url(${ShareBackground})`, borderRadius: 12 }}>
+                <Typography variant="body1" className={classes.shareAmount}>
+                    {amount}
+                </Typography>
+                <Typography variant="body1" className={classes.shareToken}>
+                    {token.symbol}
+                </Typography>
+                <Typography variant="body1" className={classes.shareText}>
+                    {isZero(actualSwapAmount) ? t('plugin_ito_out_of_stock_hit') : t('plugin_ito_congratulations')}
+                </Typography>
+                {shareSuccessLink ? (
+                    <ActionButton
+                        onClick={onShareSuccess}
+                        variant="contained"
+                        color="primary"
+                        className={classes.shareButton}>
+                        {t('plugin_ito_dialog_swap_share_title')}
+                    </ActionButton>
+                ) : null}
+            </div>
+        </Box>
     )
 }
