@@ -14,7 +14,7 @@ import {
 } from '@dimensiondev/maskbook-shared'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import { Result, Err } from 'ts-results'
-import { Context, createContext, createElement, memo, useContext, useRef } from 'react'
+import { Context, createContext, createElement, memo, useContext } from 'react'
 export abstract class PostInfo {
     constructor() {
         const calc = () => {
@@ -89,34 +89,37 @@ export const PostInfoProvider = memo((props: React.PropsWithChildren<{ post: Pos
 export function usePostInfo() {
     return useContext(Context)
 }
-type ValidKeys = {
-    [key in keyof PostInfo]: PostInfo[key] extends ObservableMap<any, any> | ObservableSet<any> | ValueRef<any>
-        ? key
-        : never
-}[keyof PostInfo]
-
-export function usePostInfoDetails<K extends ValidKeys>(
-    key: K,
-): K extends keyof PostInfo
-    ? PostInfo[K] extends ValueRef<infer T>
+export const usePostInfoDetails: {
+    // Change to use* when https://github.com/microsoft/TypeScript/issues/44643 fixed
+    [key in keyof PostInfo]: () => PostInfo[key] extends ValueRef<infer T>
         ? T
-        : PostInfo[K] extends ObservableMap<any, infer T> | ObservableSet<infer T>
+        : PostInfo[key] extends ObservableSet<infer T>
         ? T[]
-        : never
-    : never {
-    const post = usePostInfo()
-    const k: any = post[useRef(key).current as keyof typeof post]
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    if (k instanceof ValueRef) return useValueRef(k)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    if (k instanceof ObservableMap) return useObservableValues(k) as any
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    if (k instanceof ObservableSet) return useObservableValues(k) as any
-    throw new Error()
-}
+        : PostInfo[key] extends ObservableMap<any, infer T>
+        ? T[]
+        : PostInfo[key]
+} = new Proxy({ __proto__: null } as any, {
+    get(_, key) {
+        if (typeof key === 'symbol') throw new Error()
+        if (_[key]) return _[key]
+        _[key] = function usePostInfoDetails() {
+            const postInfo = usePostInfo()
+            if (!(key in postInfo)) throw new TypeError()
+            const k = postInfo[key as keyof PostInfo]
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            if (k instanceof ValueRef) return useValueRef<any>(k)
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            if (k instanceof ObservableMap) return useObservableValues<any>(k)
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            if (k instanceof ObservableSet) return useObservableValues<any>(k)
+            return k
+        }
+        return _[key]
+    },
+})
 
 export function usePostInfoSharedPublic(): boolean {
-    const info = usePostInfoDetails('postPayload')
+    const info = usePostInfoDetails.postPayload()
     if (info.err) return false
     const payload = info.val
     if (payload.version !== -38) return false

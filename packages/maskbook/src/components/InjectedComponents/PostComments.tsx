@@ -46,9 +46,9 @@ export interface PostCommentProps {
 export function PostComment(props: PostCommentProps) {
     const { failedComponent: Fail, waitingComponent: Wait, needZip } = props
     const comment = useValueRef(props.comment)
-    const postContent = usePostInfoDetails('transformedPostContent')
-    const postPayload = usePostInfoDetails('postPayload')
-    const iv = usePostInfoDetails('iv')
+    const postContent = usePostInfoDetails.transformedPostContent()
+    const postPayload = usePostInfoDetails.postPayload()
+    const iv = usePostInfoDetails.iv()
     const postIV = postPayload.map((x) => x.iv).unwrapOr(iv)
 
     const dec = useAsync(async () => {

@@ -21,8 +21,8 @@ export interface PostReplacerProps {
 
 export function PostReplacer(props: PostReplacerProps) {
     const classes = useStlyes()
-    const postMessage = usePostInfoDetails('postMessage')
-    const postPayload = usePostInfoDetails('postPayload')
+    const postMessage = usePostInfoDetails.postMessage()
+    const postPayload = usePostInfoDetails.postPayload()
     const allPostReplacement = useValueRef(allPostReplacementSettings)
 
     const plugins = [...PluginUI.values()]

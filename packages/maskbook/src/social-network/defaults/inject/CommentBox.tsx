@@ -28,10 +28,10 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
         const info = usePostInfo()
-        const payload = usePostInfoDetails('postPayload')
-        const postContent = usePostInfoDetails('transformedPostContent')
+        const payload = usePostInfoDetails.postPayload()
+        const postContent = usePostInfoDetails.transformedPostContent()
         const styles = useCustomStyles()
-        const iv = usePostInfoDetails('iv')
+        const iv = usePostInfoDetails.iv()
         const props = additionPropsToCommentBox(styles)
         const onCallback = useCallback(
             async (content) => {
