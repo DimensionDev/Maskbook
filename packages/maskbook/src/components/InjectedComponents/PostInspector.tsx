@@ -31,12 +31,12 @@ export interface PostInspectorProps {
     slotPosition?: 'before' | 'after'
 }
 export function PostInspector(props: PostInspectorProps) {
-    const postBy = usePostInfoDetails('postBy')
-    const postContent = usePostInfoDetails('postContent')
-    const encryptedPost = usePostInfoDetails('postPayload')
-    const postId = usePostInfoDetails('postIdentifier')
-    const decryptedPayloadForImage = usePostInfoDetails('decryptedPayloadForImage')
-    const postImages = usePostInfoDetails('postMetadataImages')
+    const postBy = usePostInfoDetails.postBy()
+    const postContent = usePostInfoDetails.postContent()
+    const encryptedPost = usePostInfoDetails.postPayload()
+    const postId = usePostInfoDetails.postIdentifier()
+    const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
+    const postImages = usePostInfoDetails.postMetadataImages()
     const isDebugging = useValueRef(debugModeSetting)
     const whoAmI = useCurrentIdentity()
     const friends = useFriendsList()
@@ -63,7 +63,7 @@ export function PostInspector(props: PostInspectorProps) {
                 ['My fingerprint', whoAmI?.linkedPersona?.fingerprint ?? 'Unknown'],
                 ['Post ID', postId?.toText() || 'Unknown'],
                 ['Post Content', postContent],
-                ['Post Attachment Links', JSON.stringify(postImages.values())],
+                ['Post Attachment Links', JSON.stringify(postImages)],
             ]}
         />
     ) : null

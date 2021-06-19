@@ -19,8 +19,9 @@ export const NFT_PluginsDefine: PluginConfig = {
         return nftUrl ? <NFTInPost nftUrl={nftUrl} /> : null
     },
     postInspector: function Component(): JSX.Element | null {
-        const nftUrl = usePostInfoDetails('postMetadataMentionedLinks')
-            .concat(usePostInfoDetails('postMentionedLinks'))
+        const nftUrl = usePostInfoDetails
+            .postMetadataMentionedLinks()
+            .concat(usePostInfoDetails.postMentionedLinks())
             .map(getRelevantUrl)
             .find((url) => Boolean(url))
 
