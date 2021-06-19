@@ -1,13 +1,13 @@
-import { getChainId } from '../../../extension/background-script/SettingsService'
+import { getChainId } from '../../../../extension/background-script/SettingsService'
 import { pick } from 'lodash-es'
-import { tokenIntoMask } from '../../ITO/helpers'
-import { RED_PACKET_CONSTANTS } from '../constants'
+import { tokenIntoMask } from '../../../ITO/helpers'
+import { RED_PACKET_CONSTANTS } from '../../constants'
 import type {
     RedPacketJSONPayload,
     RedPacketSubgraphOutMask,
     RedPacketSubgraphInMask,
     RedPacketHistory,
-} from '../types'
+} from '../../types'
 import {
     EthereumTokenType,
     ChainId,

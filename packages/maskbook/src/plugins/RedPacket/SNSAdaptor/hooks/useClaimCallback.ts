@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
-import { useRedPacketContract } from '../contracts/useRedPacketContract'
+import { useRedPacketContract } from './useRedPacketContract'
 import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
 import {
     useTransactionState,

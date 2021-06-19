@@ -1,5 +1,5 @@
 import type { AbiItem } from 'web3-utils'
-import { RED_PACKET_CONSTANTS } from '../constants'
+import { RED_PACKET_CONSTANTS } from '../../constants'
 import { useConstantNext, useContract } from '@dimensiondev/web3-shared'
 import HappyRedPacketV1ABI from '@dimensiondev/contracts/abis/HappyRedPacketV1.json'
 import type { HappyRedPacketV1 } from '@dimensiondev/contracts/types/HappyRedPacketV1'

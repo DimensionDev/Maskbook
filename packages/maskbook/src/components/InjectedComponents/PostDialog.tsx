@@ -34,8 +34,8 @@ import {
     isTypedMessageText,
 } from '../../protocols/typed-message'
 import { EthereumTokenType, isDAI, isOKB } from '@dimensiondev/web3-shared'
-import { PluginRedPacketTheme } from '../../plugins/RedPacket/theme'
-import { RedPacketMetadataReader } from '../../plugins/RedPacket/helpers'
+import { PluginRedPacketTheme } from '../../plugins/RedPacket/SNSAdaptor/RedPacketThemeOverride'
+import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
 import { PluginUI } from '../../plugins/PluginUI'
 import { Result } from 'ts-results'
 import { ErrorBoundary } from '../shared/ErrorBoundary'

@@ -4,10 +4,10 @@ import { EthereumTokenType, getChainDetailed, getChainIdFromName } from '@dimens
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { base } from '../base'
 import { RedPacketMetaKey } from '../constants'
-import { RedPacketMetadataReader, renderWithRedPacketMetadata } from '../helpers'
+import { RedPacketMetadataReader, renderWithRedPacketMetadata } from './helpers'
 import type { RedPacketJSONPayload } from '../types'
-import RedPacketDialog from '../UI/RedPacketDialog'
-import { RedPacketInPost } from '../UI/RedPacketInPost'
+import RedPacketDialog from './RedPacketDialog'
+import { RedPacketInPost } from './RedPacketInPost'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
-import { useRedPacketContract } from '../contracts/useRedPacketContract'
+import { useRedPacketContract } from './useRedPacketContract'
 import {
     FungibleTokenDetailed,
     EthereumTokenType,
@@ -17,10 +17,10 @@ import {
     CONSTANTS,
 } from '@dimensiondev/web3-shared'
 import { isLessThan } from '@dimensiondev/maskbook-shared'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 import type { TransactionReceipt } from 'web3-core'
 import type { HappyRedPacketV2 } from '@dimensiondev/contracts/types/HappyRedPacketV2'
-import Services from '../../../extension/service'
+import Services from '../../../../extension/service'
 
 export interface RedPacketSettings {
     password: string
