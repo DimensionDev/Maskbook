@@ -2,6 +2,13 @@ import { useMemo } from 'react'
 import { ChainId, Web3Constants } from '../types'
 import { useChainId } from './useChainId'
 
+/**
+ * @deprecated Use useConstantNext from @dimensiondev/web3-shared package
+ *
+ * Before: `useConstant(T, "a")`
+ *
+ * After: `useConstantNext(T).a`
+ */
 export function useConstant<T extends Web3Constants, K extends keyof T>(constant: T, key: K, chainId?: ChainId) {
     const chainId_ = useChainId()
     return pick(constant, key, chainId ?? chainId_)

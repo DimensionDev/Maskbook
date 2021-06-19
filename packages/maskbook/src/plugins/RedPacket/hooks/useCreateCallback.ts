@@ -13,7 +13,7 @@ import {
     useTransactionState,
     useNonce,
     useGasPrice,
-    useConstant,
+    useConstantNext,
     CONSTANTS,
 } from '@dimensiondev/web3-shared'
 import { isLessThan } from '@dimensiondev/maskbook-shared'
@@ -42,7 +42,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
-    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const NATIVE_TOKEN_ADDRESS = useConstantNext(CONSTANTS).NATIVE_TOKEN_ADDRESS
 
     const createCallback = useCallback(async () => {
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
