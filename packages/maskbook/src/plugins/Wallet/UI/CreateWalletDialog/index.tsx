@@ -72,43 +72,69 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+interface CreateWalletUIProps {
+    onSubmit: (words: string[], name: string) => Promise<void>
+}
+
+export function CreateWalletUI({ onSubmit }: CreateWalletUIProps) {
+    const [name, setName] = useState('')
+    const [step, setStep] = useState(CreateWalletStep.NameAndWords)
+    const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
+
+    const backToNameAndWords = useCallback(() => {
+        setStep(CreateWalletStep.NameAndWords)
+        resetCallback()
+    }, [resetCallback])
+
+    const goVerify = useCallback(() => {
+        setStep(CreateWalletStep.Verify)
+    }, [])
+
+    const handleSubmit = useCallback(async () => {
+        await onSubmit(words, name)
+        resetCallback()
+    }, [words, name])
+
+    if (step === CreateWalletStep.NameAndWords) {
+        return (
+            <StepNameAndWords
+                name={name}
+                words={words}
+                onNameChange={setName}
+                onRefreshWords={refreshCallback}
+                onSubmit={goVerify}
+            />
+        )
+    }
+    return (
+        <StepVerify
+            wordsMatched={words.join(' ') === puzzleWords.join(' ')}
+            puzzleWords={puzzleWords}
+            indexes={indexes}
+            onUpdateAnswerWords={answerCallback}
+            onBack={backToNameAndWords}
+            onSubmit={handleSubmit}
+        />
+    )
+}
+
 export interface CreateWalletDialogProps extends withClasses<never> {}
 
 export function CreateWalletDialog(props: CreateWalletDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const [step, setStep] = useState(CreateWalletStep.NameAndWords)
-    const [name, setName] = useState('')
-
-    //#region create mnemonic words
-    const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
-    //#endregion
 
     //#region remote controlled dialog logic
-    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated, (ev) => {
-        if (!ev.open) return
-        if (!ev.name) return
-        setName(ev.name)
-    })
+    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
     const onClose = useCallback(async () => {
         closeDialog()
         await delay(300)
-        setName('')
-        setStep(CreateWalletStep.NameAndWords)
-        refreshCallback()
-    }, [refreshCallback])
+    }, [])
     //#endregion
 
-    const goVerify = useCallback(() => {
-        setStep(CreateWalletStep.Verify)
-    }, [])
-    const backToNameAndWords = useCallback(() => {
-        setStep(CreateWalletStep.NameAndWords)
-        resetCallback()
-    }, [resetCallback])
-    const onSubmit = useSnackbarCallback(
-        async () => {
+    const onSubmit = useSnackbarCallback<(words: string[], name: string) => Promise<void>, void>(
+        async (words, name) => {
             await WalletRPC.importNewWallet({
                 name,
                 path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
@@ -121,32 +147,14 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
                 passphrase: '',
             })
         },
-        [name, words],
+        [],
         onClose,
     )
 
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_setup_title_create')} maxWidth="sm">
             <DialogContent className={classes.content}>
-                {step === CreateWalletStep.NameAndWords && (
-                    <StepNameAndWords
-                        name={name}
-                        words={words}
-                        onNameChange={setName}
-                        onRefreshWords={refreshCallback}
-                        onSubmit={goVerify}
-                    />
-                )}
-                {step === CreateWalletStep.Verify && (
-                    <StepVerify
-                        wordsMatched={words.join(' ') === puzzleWords.join(' ')}
-                        puzzleWords={puzzleWords}
-                        indexes={indexes}
-                        onUpdateAnswerWords={answerCallback}
-                        onBack={backToNameAndWords}
-                        onSubmit={onSubmit}
-                    />
-                )}
+                <CreateWalletUI onSubmit={onSubmit}></CreateWalletUI>
             </DialogContent>
         </InjectedDialog>
     )
