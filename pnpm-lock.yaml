@@ -574,10 +574,12 @@ importers:
   packages/shared:
     specifiers:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
+      '@dimensiondev/maskbook-theme': workspace:*
       '@servie/events': ^3.0.0
       anchorme: ^2.1.2
       async-call-rpc: ^5.1.0
       bignumber.js: ^9.0.1
+      fuse.js: ^6.4.6
       immer: ^9.0.2
       lodash-es: ^4.17.21
       ts-results: ^3.3.0
@@ -587,10 +589,12 @@ importers:
       wallet.ts: ^1.0.1
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
+      '@dimensiondev/maskbook-theme': link:../theme
       '@servie/events': 3.0.0
       anchorme: 2.1.2
       async-call-rpc: 5.1.0
       bignumber.js: 9.0.1
+      fuse.js: 6.4.6
       immer: 9.0.2
       lodash-es: 4.17.21
       ts-results: 3.3.0
