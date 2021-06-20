@@ -13,8 +13,10 @@ import {
     isBlockedId,
     isBlockedKeyword,
     isMirroredKeyword,
+    resolveNetworkType,
 } from './hotfix'
 import { unreachable } from '@dimensiondev/maskbook-shared'
+import { currentNetworkSettings } from '../../../Wallet/settings'
 
 /**
  * Get supported currencies of specific data provider
@@ -239,7 +241,11 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     telegram_url,
                     contract_address:
                         resolveCoinAddress(id, DataProvider.COIN_GECKO) ??
-                        (info.asset_platform_id === 'ethereum' ? info.contract_address : undefined),
+                        info.platforms[
+                            Object.keys(info.platforms).find(
+                                (x) => resolveNetworkType(x, DataProvider.COIN_GECKO) === currentNetworkSettings.value,
+                            ) ?? ''
+                        ],
                 },
                 market: Object.entries(info.market_data).reduce((accumulated, [key, value]) => {
                     if (value && typeof value === 'object') accumulated[key] = value[currency.id] ?? 0
@@ -295,7 +301,12 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     market_cap_rank: quotesInfo?.[id]?.cmc_rank,
                     description: coinInfo.description,
                     contract_address:
-                        resolveCoinAddress(id, DataProvider.COIN_MARKET_CAP) ?? coinInfo.platform?.token_address,
+                        resolveCoinAddress(id, DataProvider.COIN_MARKET_CAP) ??
+                        coinInfo.contract_address.find(
+                            (x) =>
+                                resolveNetworkType(x.platform.coin.id, DataProvider.COIN_MARKET_CAP) ===
+                                currentNetworkSettings.value,
+                        )?.contract_address,
                 },
                 currency,
                 dataProvider,

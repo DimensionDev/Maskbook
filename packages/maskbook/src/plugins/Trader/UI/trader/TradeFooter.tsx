@@ -95,7 +95,7 @@ export const TradeFooter: FC<TradeFooterProps> = (props) => {
                             ),
                             value: x,
                         }))}
-                        selectedIndex={dataProvider ? dataProviders.indexOf(dataProvider) : -1}
+                        selectedIndex={typeof dataProvider !== 'undefined' ? dataProviders.indexOf(dataProvider) : -1}
                         onChange={onDataProviderChange}
                     />
                     <ArrowDropDownIcon />
@@ -114,7 +114,9 @@ export const TradeFooter: FC<TradeFooterProps> = (props) => {
                             ),
                             value: x,
                         }))}
-                        selectedIndex={tradeProvider ? tradeProviders.indexOf(tradeProvider) : -1}
+                        selectedIndex={
+                            typeof tradeProvider !== 'undefined' ? tradeProviders.indexOf(tradeProvider) : -1
+                        }
                         onChange={onTradeProviderChange}>
                         <ArrowDropDownIcon />
                     </FootnoteMenu>

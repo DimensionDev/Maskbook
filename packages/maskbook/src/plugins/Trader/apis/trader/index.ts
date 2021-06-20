@@ -3,7 +3,7 @@ import { getNetworkTypeFromChainId, NetworkType } from '@dimensiondev/web3-share
 import { currentChainIdSettings } from '../../../Wallet/settings'
 import { TagType, TradeProvider } from '../../types'
 
-export async function getAvailableTraderProviders(type: TagType, keyword: string) {
+export async function getAvailableTraderProviders(type?: TagType, keyword?: string) {
     const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
 
     switch (networkType) {

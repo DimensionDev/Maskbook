@@ -19,7 +19,7 @@ import { TrendingViewDeck } from './TrendingViewDeck'
 import { currentTrendingDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType, NetworkType, useTokenDetailed } from '@dimensiondev/web3-shared'
+import { EthereumTokenType, useTokenDetailed } from '@dimensiondev/web3-shared'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 
@@ -75,7 +75,7 @@ const useStyles = makeStyles<Theme, { isPopper: boolean }>((theme) => {
     }
 })
 
-export interface PopperViewProps {
+export interface TraderViewProps {
     name: string
     tagType: TagType
     dataProviders: DataProvider[]
@@ -84,13 +84,14 @@ export interface PopperViewProps {
     isPopper?: boolean
 }
 
-export function PopperView(props: PopperViewProps) {
+export function TraderView(props: TraderViewProps) {
     const { name, tagType, dataProviders, tradeProviders, isPopper = true } = props
 
     const { t } = useI18N()
     const classes = useStyles({ isPopper })
 
     const dataProvider = useCurrentDataProvider(dataProviders)
+    const tradeProvider = useCurrentTradeProvider(tradeProviders)
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
 
     //#region track network type
@@ -122,7 +123,6 @@ export function PopperView(props: PopperViewProps) {
         trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
         trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.contract_address ?? '',
     )
-    const tradeProvider = useCurrentTradeProvider(tradeProviders)
     //#endregion
 
     //#region stats
@@ -185,10 +185,9 @@ export function PopperView(props: PopperViewProps) {
         )
     //#endregion
 
-    //#region is ethereum based coin
-    const isEthereum =
-        (!!trending?.coin.contract_address || trending?.coin.symbol.toLowerCase() === 'eth') &&
-        networkType === NetworkType.Ethereum
+    //#region if the coin is a native token or contract address exists
+    const isSwapable =
+        !!trending?.coin.contract_address || ['eth', 'matic', 'bnb'].includes(trending?.coin.symbol.toLowerCase() ?? '')
     //#endregion
 
     //#region display loading skeleton
@@ -207,7 +206,7 @@ export function PopperView(props: PopperViewProps) {
         <Tab className={classes.tab} key="market" label={t('plugin_trader_tab_market')} />,
         <Tab className={classes.tab} key="price" label={t('plugin_trader_tab_price')} />,
         <Tab className={classes.tab} key="exchange" label={t('plugin_trader_tab_exchange')} />,
-        isEthereum && tradeProviders.length ? (
+        isSwapable && tradeProviders.length ? (
             <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} />
         ) : null,
     ].filter(Boolean)
@@ -263,7 +262,7 @@ export function PopperView(props: PopperViewProps) {
                     </>
                 ) : null}
                 {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
-                {tabIndex === 3 && isEthereum ? (
+                {tabIndex === 3 && isSwapable ? (
                     <TradeView
                         classes={{ root: isPopper ? classes.tradeViewRoot : '' }}
                         TraderProps={{

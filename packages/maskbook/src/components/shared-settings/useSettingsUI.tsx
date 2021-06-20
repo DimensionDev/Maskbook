@@ -160,6 +160,7 @@ function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectP
         }
         ref.value = value
     }
+
     return (
         <Select
             fullWidth
