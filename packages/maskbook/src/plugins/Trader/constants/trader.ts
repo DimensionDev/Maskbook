@@ -3,7 +3,7 @@ import { ChainId, ERC20TokenDetailed, createERC20Tokens, getChainDetailed } from
 import { ONE } from '@dimensiondev/maskbook-shared'
 
 export const TRADE_CONSTANTS = {
-    UNISWAP_V2_ROUTER_ADDRESS: {
+    UNISWAP_ROUTER_ADDRESS: {
         [ChainId.Mainnet]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
         [ChainId.Ropsten]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
         [ChainId.Rinkeby]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
@@ -25,6 +25,28 @@ export const TRADE_CONSTANTS = {
         [ChainId.Matic]: '',
         [ChainId.Mumbai]: '',
     },
+    UNISWAP_THEGRAPH: {
+        [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
+    UNISWAP_INIT_CODE_HASH: {
+        [ChainId.Mainnet]: '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f',
+        [ChainId.Ropsten]: '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f',
+        [ChainId.Rinkeby]: '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f',
+        [ChainId.Kovan]: '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f',
+        [ChainId.Gorli]: '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
     SUSHISWAP_ROUTER_ADDRESS: {
         [ChainId.Mainnet]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
         [ChainId.Ropsten]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
@@ -38,6 +60,28 @@ export const TRADE_CONSTANTS = {
     },
     SUSHISWAP_FACTORY_ADDRESS: {
         [ChainId.Mainnet]: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
+    SUSHISWAP_THEGRAPH: {
+        [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/zippoxer/sushiswap-subgraph-fork',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
+    SUSHISWAP_INIT_CODE_HASH: {
+        [ChainId.Mainnet]: '0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303',
         [ChainId.Ropsten]: '',
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
@@ -69,6 +113,28 @@ export const TRADE_CONSTANTS = {
         [ChainId.Matic]: '',
         [ChainId.Mumbai]: '',
     },
+    SASHIMISWAP_THEGRAPH: {
+        [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/sashimiproject/sashimi',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
+    SASHIMISWAP_INIT_CODE_HASH: {
+        [ChainId.Mainnet]: '0xb465bbe4edb8c9b0da8ff0b2b36ce0065de9fcd5a33f32c6856ea821779c8b72',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
     QUICKSWAP_ROUTER_ADDRESS: {
         [ChainId.Mainnet]: '',
         [ChainId.Ropsten]: '',
@@ -89,6 +155,72 @@ export const TRADE_CONSTANTS = {
         [ChainId.BSC]: '',
         [ChainId.BSCT]: '',
         [ChainId.Matic]: '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32',
+        [ChainId.Mumbai]: '',
+    },
+    QUICKSWAP_THEGRAPH: {
+        [ChainId.Mainnet]: '',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: 'https://api.thegraph.com/subgraphs/name/sameepsi/quickswap',
+        [ChainId.Mumbai]: '',
+    },
+    QUICKSWAP_INIT_CODE_HASH: {
+        [ChainId.Mainnet]: '',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f',
+        [ChainId.Mumbai]: '',
+    },
+    PANCAKESWAP_ROUTER_ADDRESS: {
+        [ChainId.Mainnet]: '',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '0x10ed43c718714eb63d5aa57b78b54704e256024e',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
+    PANCAKESWAP_FACTORY_ADDRESS: {
+        [ChainId.Mainnet]: '',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
+    PANCAKESWAP_THEGRAPH: {
+        [ChainId.Mainnet]: '',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: 'https://thegraph.com/explorer/subgraph/pancakeswap/exchange',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
+    PANCAKESWAP_INIT_CODE_HASH: {
+        [ChainId.Mainnet]: '',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '0x00fb7f630766e6a796048ea87d01acd3068e8ff67d078148a3fa3f4a84f69bd5',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
         [ChainId.Mumbai]: '',
     },
     BALANCER_ETH_ADDRESS: {
@@ -146,6 +278,7 @@ export const EASY = createERC20Tokens('EASY_ADDRESS', 'EASY', 'EASY', 18)
 export const eUSDC = createERC20Tokens('eUSDC_ADDRESS', 'Easy USDC', 'eUSDC', 18)
 export const eUSDT = createERC20Tokens('eUSDT_ADDRESS', 'Easy USDT', 'eUSDT', 18)
 export const eDAI = createERC20Tokens('eDAI_ADDRESS', 'Easy DAI', 'eDAI', 18)
+export const sUSD = createERC20Tokens('sUSD_ADDRESS', 'Synth sUSD', 'sUSD', 18)
 export const UNITOKEN = createERC20Tokens('UNITOKEN_ADDRESS', 'Uniswap', 'UNI', 18)
 export const TT01 = createERC20Tokens('TT01_ADDRESS', 'Test Token 01', 'TT01', 18)
 export const TT02 = createERC20Tokens('TT02_ADDRESS', 'Test Token 02', 'TT02', 18)
@@ -158,7 +291,8 @@ export const SUSHI = createERC20Tokens('SUSHI_ADDRESS', 'SushiToken', 'SUSHI', 1
 export const YAM = createERC20Tokens('YAM_ADDRESS', 'YAM', 'YAM', 18)
 export const RUNE = createERC20Tokens('RUNE_ADDRESS', 'RUNE.ETH', 'RUNE', 18)
 export const YFI = createERC20Tokens('YFI_ADDRESS', 'Yearn', 'YFI', 18)
-export const SUSD = createERC20Tokens('SUSD_ADDRESS', 'Yearn', 'SUSD', 18)
+export const BTCB = createERC20Tokens('BTCB_ADDRESS', 'Binance BTC', 'BTCB', 18)
+export const CAKE = createERC20Tokens('CAKE_ADDRESS', 'PancakeSwap Token', 'CAKE', 18)
 
 export const WETH = createERC20Tokens(
     'WETH_ADDRESS',

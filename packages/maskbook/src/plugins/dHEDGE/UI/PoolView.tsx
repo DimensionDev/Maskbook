@@ -110,13 +110,13 @@ export function PoolView(props: PoolViewProps) {
     const classes = useStyles()
 
     //#region susd token
-    const SUSD_ADDRESS = useConstant(TOKEN_CONSTANTS, 'SUSD_ADDRESS')
+    const sUSD_ADDRESS = useConstant(TOKEN_CONSTANTS, 'sUSD_ADDRESS')
     const {
         value: susdTokenDetailed,
         loading: loadingToken,
         retry: retryToken,
         error: errorToken,
-    } = useERC20TokenDetailed(SUSD_ADDRESS)
+    } = useERC20TokenDetailed(sUSD_ADDRESS)
     //#endregion
 
     //#region fetch pool
