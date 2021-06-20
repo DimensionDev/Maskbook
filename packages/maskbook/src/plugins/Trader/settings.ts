@@ -55,6 +55,7 @@ const zrxSettings = createInternalSettings<string>(
 const sushiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sushiswap`, '')
 const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sashimiswap`, '')
 const qucikswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
+const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+pancakeswap`, '')
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+balancer`, '')
 
 /**
@@ -72,6 +73,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return sashimiswapSettings
         case TradeProvider.QUICKSWAP:
             return qucikswapSettings
+        case TradeProvider.PANCAKESWAP:
+            return pancakeswapSettings
         case TradeProvider.BALANCER:
             return balancerSettings
         default:
