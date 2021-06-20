@@ -1,14 +1,14 @@
-import { useMemo, createElement } from 'react'
-import { ValueRef, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { unstable_createMuiStrictModeTheme, ThemeProvider, makeStyles, PaletteMode } from '@material-ui/core'
-import { useClassicMaskTheme } from '../../../utils/theme'
-import type { SocialNetworkUI } from '../../../social-network'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
-import { toRGB, getBackgroundColor, fromRGB, shade, isDark, getForegroundColor } from '../../../utils/theme-tools'
+import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
+import { useValueRef } from '@dimensiondev/maskbook-shared'
 import { Appearance } from '@dimensiondev/maskbook-theme'
+import { makeStyles, PaletteMode, ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core'
 import produce, { setAutoFreeze } from 'immer'
+import { createElement, useMemo } from 'react'
+import type { SocialNetworkUI } from '../../../social-network'
+import { useClassicMaskTheme } from '../../../utils/theme'
+import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme-tools'
 import { isMobileTwitter } from '../utils/isMobile'
+import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))

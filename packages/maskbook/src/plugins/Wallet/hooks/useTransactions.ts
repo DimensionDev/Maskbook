@@ -1,10 +1,9 @@
+import { unreachable, useValueRef } from '@dimensiondev/maskbook-shared'
 import { useAsyncRetry } from 'react-use'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { WalletRPC } from '../messages'
 import { currentPortfolioDataProviderSettings } from '../settings'
 import { PortfolioProvider, Transaction } from '../types'
-import { unreachable } from '@dimensiondev/maskbook-shared'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export function useTransactions(
     address: string,

@@ -1,14 +1,14 @@
-import { useEffect } from 'react'
-import { Chip, makeStyles } from '@material-ui/core'
-import Lock from '@material-ui/icons/Lock'
-import Services from '../../extension/service'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '../../utils/hooks/useValueRef'
+import { useValueRef } from '@dimensiondev/maskbook-shared'
+import { Chip, makeStyles } from '@material-ui/core'
 import type { ChipProps } from '@material-ui/core/Chip'
-import { useStylesExtends } from '../custom-ui-helper'
+import Lock from '@material-ui/icons/Lock'
+import { useEffect } from 'react'
 import { useAsync } from 'react-use'
-import { usePostInfoDetails } from '../DataSource/usePostInfo'
+import Services from '../../extension/service'
 import { extractTextFromTypedMessage } from '../../protocols/typed-message'
+import { useStylesExtends } from '../custom-ui-helper'
+import { usePostInfoDetails } from '../DataSource/usePostInfo'
 
 const useStyle = makeStyles({
     root: {

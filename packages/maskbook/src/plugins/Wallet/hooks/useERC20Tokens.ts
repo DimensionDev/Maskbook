@@ -1,10 +1,10 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { WalletMessages, WalletRPC } from '../messages'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { useValueRef } from '@dimensiondev/maskbook-shared'
+import { ERC20TokenDetailed, EthereumTokenType, useChainId } from '@dimensiondev/web3-shared'
 import type { ERC20TokenRecord } from '../database/types'
 import { ERC20TokenArrayComparer } from '../helpers'
+import { WalletMessages, WalletRPC } from '../messages'
 import { useWallet } from './useWallet'
-import { ERC20TokenDetailed, EthereumTokenType, useChainId } from '@dimensiondev/web3-shared'
 
 //#region cache service query result
 const erc20TokensRef = new ValueRef<ERC20TokenRecord[]>([], ERC20TokenArrayComparer)
