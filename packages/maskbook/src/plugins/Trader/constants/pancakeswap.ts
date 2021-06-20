@@ -1,21 +1,5 @@
 import { ChainId, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
-import {
-    WETH_ONLY,
-    WETH,
-    DAI,
-    USDC,
-    USDT,
-    COMP,
-    QUICK,
-    ETHER,
-    UNITOKEN,
-    EASY,
-    IGG,
-    WBTC,
-    OM,
-    TT01,
-    TT02,
-} from './trader'
+import { WETH_ONLY, WETH, DAI, BUSD, UST, BTCB, ETHER } from './trader'
 
 /**
  * Some tokens can only be swapped via certain pairs,
@@ -31,11 +15,9 @@ export const PANCAKESWAP_BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
     ...WETH_ONLY,
-    [ChainId.Matic]: [WETH, DAI, USDC, USDT, COMP, QUICK, ETHER, UNITOKEN, EASY, IGG, WBTC, OM, TT01, TT02].map(
-        (x) => x[ChainId.Matic],
-    ),
+    [ChainId.BSC]: [WETH, DAI, BUSD, BTCB, UST, ETHER].map((x) => x[ChainId.BSC]),
 }
 
-export const THEGRAPH_PANCAKESWAP = 'https://api.thegraph.com/subgraphs/name/sameepsi/quickswap'
+export const THEGRAPH_PANCAKESWAP = 'https://thegraph.com/explorer/subgraph/pancakeswap/exchange'
 
-export const PANCAKESWAP_INIT_CODE_HASH = '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f'
+export const PANCAKESWAP_INIT_CODE_HASH = '0x00fb7f630766e6a796048ea87d01acd3068e8ff67d078148a3fa3f4a84f69bd5'

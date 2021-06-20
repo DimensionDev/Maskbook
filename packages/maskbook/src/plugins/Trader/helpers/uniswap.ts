@@ -36,7 +36,10 @@ export function toUniswapToken(chainId: ChainId, token: FungibleTokenDetailed): 
 }
 
 export function toUniswapCurrencyAmount(chainId: ChainId, token: FungibleTokenDetailed, amount: string) {
-    return new TokenAmount(toUniswapToken(chainId, isNative(token.address) ? WETH[chainId] : token), JSBI.BigInt(amount))
+    return new TokenAmount(
+        toUniswapToken(chainId, isNative(token.address) ? WETH[chainId] : token),
+        JSBI.BigInt(amount),
+    )
 }
 
 export function uniswapChainIdTo(chainId: UniswapChainId) {

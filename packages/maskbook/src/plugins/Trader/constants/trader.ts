@@ -97,7 +97,7 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
-        [ChainId.BSC]: '',
+        [ChainId.BSC]: '0x10ed43c718714eb63d5aa57b78b54704e256024e',
         [ChainId.BSCT]: '',
         [ChainId.Matic]: '',
         [ChainId.Mumbai]: '',
@@ -108,7 +108,7 @@ export const TRADE_CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
-        [ChainId.BSC]: '',
+        [ChainId.BSC]: '0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73',
         [ChainId.BSCT]: '',
         [ChainId.Matic]: '',
         [ChainId.Mumbai]: '',
@@ -168,6 +168,7 @@ export const EASY = createERC20Tokens('EASY_ADDRESS', 'EASY', 'EASY', 18)
 export const eUSDC = createERC20Tokens('eUSDC_ADDRESS', 'Easy USDC', 'eUSDC', 18)
 export const eUSDT = createERC20Tokens('eUSDT_ADDRESS', 'Easy USDT', 'eUSDT', 18)
 export const eDAI = createERC20Tokens('eDAI_ADDRESS', 'Easy DAI', 'eDAI', 18)
+export const sUSD = createERC20Tokens('sUSD_ADDRESS', 'Synth sUSD', 'sUSD', 18)
 export const UNITOKEN = createERC20Tokens('UNITOKEN_ADDRESS', 'Uniswap', 'UNI', 18)
 export const TT01 = createERC20Tokens('TT01_ADDRESS', 'Test Token 01', 'TT01', 18)
 export const TT02 = createERC20Tokens('TT02_ADDRESS', 'Test Token 02', 'TT02', 18)
@@ -180,7 +181,8 @@ export const SUSHI = createERC20Tokens('SUSHI_ADDRESS', 'SushiToken', 'SUSHI', 1
 export const YAM = createERC20Tokens('YAM_ADDRESS', 'YAM', 'YAM', 18)
 export const RUNE = createERC20Tokens('RUNE_ADDRESS', 'RUNE.ETH', 'RUNE', 18)
 export const YFI = createERC20Tokens('YFI_ADDRESS', 'Yearn', 'YFI', 18)
-export const SUSD = createERC20Tokens('SUSD_ADDRESS', 'Yearn', 'SUSD', 18)
+export const BTCB = createERC20Tokens('BTCB_ADDRESS', 'Binance BTC', 'BTCB', 18)
+export const CAKE = createERC20Tokens('CAKE_ADDRESS', 'PancakeSwap Token', 'CAKE', 18)
 
 export const WETH = createERC20Tokens(
     'WETH_ADDRESS',

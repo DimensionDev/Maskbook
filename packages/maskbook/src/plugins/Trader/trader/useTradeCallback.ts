@@ -46,7 +46,9 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         quickswapRouterV2Contract,
     )
     const pancakeswap = useUniswapCallback(
-        provider === TradeProvider.PANCAKESWAP && !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<Trade>) : null,
+        provider === TradeProvider.PANCAKESWAP && !isNativeTokenWrapper_
+            ? (tradeComputed as TradeComputed<Trade>)
+            : null,
         pancakeswapRouterV2Contract,
     )
     const zrx = useZrxCallback(
@@ -75,8 +77,7 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         case TradeProvider.QUICKSWAP:
             return quickswap
         case TradeProvider.PANCAKESWAP:
-            // TODO: pancakeswap impl
-            return quickswap
+            return pancakeswap
         case TradeProvider.ZRX:
             return zrx
         case TradeProvider.BALANCER:
