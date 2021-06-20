@@ -27,5 +27,5 @@ export function useTradeApproveComputed(trade: TradeComputed<unknown> | null, to
                 return context?.ROUTER_CONTRACT_ADDRESS ?? ''
             })(),
         }
-    }, [chainId, trade, token])
+    }, [chainId, trade, token, context])
 }
