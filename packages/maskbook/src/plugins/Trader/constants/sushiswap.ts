@@ -18,7 +18,3 @@ export const SUSHISWAP_BASE_AGAINST_TOKENS: {
     [ChainId.Mainnet]: [WETH, DAI, USDC, USDT, SUSHI, YAM, WBTC, RUNE].map((x) => x[ChainId.Mainnet]),
     [ChainId.Rinkeby]: [WETH, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),
 }
-
-export const THEGRAPH_SUSHISWAP_FORK = 'https://api.thegraph.com/subgraphs/name/zippoxer/sushiswap-subgraph-fork'
-
-export const SUSHISWAP_INIT_CODE_HASH = '0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303'

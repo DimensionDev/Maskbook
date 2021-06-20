@@ -17,7 +17,3 @@ export const PANCAKESWAP_BASE_AGAINST_TOKENS: {
     ...WETH_ONLY,
     [ChainId.BSC]: [WETH, DAI, BUSD, BTCB, UST, ETHER].map((x) => x[ChainId.BSC]),
 }
-
-export const THEGRAPH_PANCAKESWAP = 'https://thegraph.com/explorer/subgraph/pancakeswap/exchange'
-
-export const PANCAKESWAP_INIT_CODE_HASH = '0x00fb7f630766e6a796048ea87d01acd3068e8ff67d078148a3fa3f4a84f69bd5'
