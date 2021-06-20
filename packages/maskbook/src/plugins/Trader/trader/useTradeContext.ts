@@ -10,6 +10,7 @@ import {
     SUSHISWAP_INIT_CODE_HASH,
     THEGRAPH_SASHIMISWAP,
     THEGRAPH_QUICKSWAP,
+    THEGRAPH_PANCAKESWAP,
     THEGRAPH_SUSHISWAP_FORK,
     THEGRAPH_UNISWAP_V2,
     TRADE_CONSTANTS,
@@ -19,6 +20,9 @@ import {
     QUICKSWAP_INIT_CODE_HASH,
     QUICKSWAP_BASE_AGAINST_TOKENS,
     QUICKSWAP_CUSTOM_BASES,
+    PANCAKESWAP_INIT_CODE_HASH,
+    PANCAKESWAP_BASE_AGAINST_TOKENS,
+    PANCAKESWAP_CUSTOM_BASES,
 } from '../constants'
 import { TradeContext as TradeContext_, TradeProvider } from '../types'
 
@@ -71,6 +75,17 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     FACTORY_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'QUICKSWAP_FACTORY_ADDRESS', chainId),
                     AGAINST_TOKENS: QUICKSWAP_BASE_AGAINST_TOKENS,
                     CUSTOM_TOKENS: QUICKSWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.PANCAKESWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_LIKE: true,
+                    GRAPH_API: THEGRAPH_PANCAKESWAP,
+                    INIT_CODE_HASH: PANCAKESWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'PANCAKESWAP_ROUTER_ADDRESS', chainId),
+                    FACTORY_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'PANCAKESWAP_FACTORY_ADDRESS', chainId),
+                    AGAINST_TOKENS: PANCAKESWAP_BASE_AGAINST_TOKENS,
+                    CUSTOM_TOKENS: PANCAKESWAP_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {

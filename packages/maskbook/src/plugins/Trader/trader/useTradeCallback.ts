@@ -9,6 +9,7 @@ import { useRouterV2Contract as useUniswapRouterV2Contract } from '../contracts/
 import { useRouterV2Contract as useSushiSwapRouterV2Contract } from '../contracts/sushiswap/useRouterV2Contract'
 import { useRouterV2Contract as useSashimiSwapRouterV2Contract } from '../contracts/sashimiswap/useRouterV2Contract'
 import { useRouterV2Contract as useQuickSwapRouterV2Contract } from '../contracts/quickswap/useRouterV2Contract'
+import { useRouterV2Contract as usePancakeSwapRouterV2Contract } from '../contracts/pancakeswap/useRouterV2Contract'
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract'
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { isNativeTokenWrapper } from '../helpers'
@@ -19,6 +20,7 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
     const sushiswapRouterV2Contract = useSushiSwapRouterV2Contract()
     const sashimiswapRouterV2Contract = useSashimiSwapRouterV2Contract()
     const quickswapRouterV2Contract = useQuickSwapRouterV2Contract()
+    const pancakeswapRouterV2Contract = usePancakeSwapRouterV2Contract()
     const exchangeProxyContract = useExchangeProxyContract()
 
     // create trade callbacks
@@ -43,6 +45,10 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         provider === TradeProvider.QUICKSWAP && !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<Trade>) : null,
         quickswapRouterV2Contract,
     )
+    const pancakeswap = useUniswapCallback(
+        provider === TradeProvider.PANCAKESWAP && !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<Trade>) : null,
+        pancakeswapRouterV2Contract,
+    )
     const zrx = useZrxCallback(
         provider === TradeProvider.ZRX && !isNativeTokenWrapper_
             ? (tradeComputed as TradeComputed<SwapQuoteResponse>)
@@ -62,14 +68,17 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
     switch (provider) {
         case TradeProvider.UNISWAP:
             return uniswap
-        case TradeProvider.ZRX:
-            return zrx
         case TradeProvider.SUSHISWAP:
             return sushiswap
         case TradeProvider.SASHIMISWAP:
             return sashimiswap
         case TradeProvider.QUICKSWAP:
             return quickswap
+        case TradeProvider.PANCAKESWAP:
+            // TODO: pancakeswap impl
+            return quickswap
+        case TradeProvider.ZRX:
+            return zrx
         case TradeProvider.BALANCER:
             return balancer
         default:

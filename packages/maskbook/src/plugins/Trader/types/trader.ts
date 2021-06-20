@@ -9,6 +9,7 @@ export enum TradeProvider {
     SASHIMISWAP,
     BALANCER,
     QUICKSWAP,
+    PANCAKESWAP,
 }
 
 export enum WarningLevel {

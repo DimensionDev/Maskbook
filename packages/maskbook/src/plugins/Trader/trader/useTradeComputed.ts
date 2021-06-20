@@ -107,6 +107,11 @@ export function useTradeComputed(
                 ...uniswap_,
                 value: uniswap,
             }
+        case TradeProvider.PANCAKESWAP:
+            return {
+                ...uniswap_,
+                value: uniswap,
+            }
         case TradeProvider.ZRX:
             return {
                 ...zrx_,

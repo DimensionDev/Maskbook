@@ -8,6 +8,7 @@ import { ZRXIcon } from '../../../../resources/ZRXIcon'
 import { TradeProvider } from '../../types'
 
 const quickswapIcon = new URL('../../../../resources/quickswap.png', import.meta.url).toString()
+const pancakeswapIcon = new URL('../../../../resources/pancakeswap.png', import.meta.url).toString()
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -35,6 +36,8 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
             return <BalancerIcon classes={{ root: classes.icon }} />
         case TradeProvider.QUICKSWAP:
             return <img src={quickswapIcon} alt="Quickswap" className={classes.icon} />
+        case TradeProvider.PANCAKESWAP:
+            return <img src={pancakeswapIcon} alt="Quickswap" className={classes.icon} />
         default:
             unreachable(props.provider)
     }
