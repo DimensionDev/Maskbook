@@ -251,6 +251,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     return (
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
+                classes={classes}
                 icon={<CreditCardIcon />}
                 iconColor="#4EE0BC"
                 primary={t(state[0] === 0 ? 'plugin_wallet_on_create' : 'import_wallet')}
@@ -260,7 +261,6 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                         {t(state[0] === 0 ? 'create' : 'import')}
                     </DebounceButton>
                 }
-                wrapperClassName={classes.wrapper}
             />
         </DashboardDialogCore>
     )
