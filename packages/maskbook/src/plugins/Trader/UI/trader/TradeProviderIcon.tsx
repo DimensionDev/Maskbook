@@ -36,9 +36,21 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
         case TradeProvider.BALANCER:
             return <BalancerIcon classes={{ root: classes.icon }} />
         case TradeProvider.QUICKSWAP:
-            return <img src={quickswapIcon} alt={resolveTradeProviderName(TradeProvider.QUICKSWAP)} className={classes.icon} />
+            return (
+                <img
+                    src={quickswapIcon}
+                    alt={resolveTradeProviderName(TradeProvider.QUICKSWAP)}
+                    className={classes.icon}
+                />
+            )
         case TradeProvider.PANCAKESWAP:
-            return <img src={pancakeswapIcon} alt={resolveTradeProviderName(TradeProvider.PANCAKESWAP)} className={classes.icon} />
+            return (
+                <img
+                    src={pancakeswapIcon}
+                    alt={resolveTradeProviderName(TradeProvider.PANCAKESWAP)}
+                    className={classes.icon}
+                />
+            )
         default:
             unreachable(props.provider)
     }
