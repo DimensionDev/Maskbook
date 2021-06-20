@@ -1,8 +1,9 @@
-import { useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
+import { FixedSizeList } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
 import { MaskDialog } from '@dimensiondev/maskbook-theme'
-import { TextField, DialogActions, DialogContent, DialogContentText, Button, InputAdornment } from '@material-ui/core'
+import { TextField, DialogActions, DialogContent, Button, InputAdornment } from '@material-ui/core'
 import { Search } from '@material-ui/icons'
 
 export interface MaskSearchableListProps<T> extends React.PropsWithChildren<{}> {
@@ -54,6 +55,9 @@ export const SearchableList = <T,>({
     }, [keyword, fuse, data])
     //#endregion
 
+    const ItemInList = (itemData: T) =>
+        React.createElement(children as React.FunctionComponent<{ data: T }>, { data: itemData })
+
     return (
         <MaskDialog title={title} onClose={() => {}} open={open}>
             <DialogContent>
@@ -70,7 +74,18 @@ export const SearchableList = <T,>({
                     }}
                     onChange={(e) => setKeyword(e.currentTarget.value)}
                 />
-                <DialogContentText>{children}</DialogContentText>
+                <FixedSizeList
+                    width="100%"
+                    height={100}
+                    overscanCount={4}
+                    itemSize={50}
+                    itemData={{
+                        data: searchedData,
+                        onSelect: onSelect,
+                    }}
+                    itemCount={searchedData.length}>
+                    {({ index }) => ItemInList(data[index])}
+                </FixedSizeList>
             </DialogContent>
             <DialogActions>
                 <Button>Confirm</Button>
