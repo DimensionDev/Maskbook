@@ -162,3 +162,7 @@ export async function loadSocialNetworkUI(identifier: string): Promise<SocialNet
     }
     return ui
 }
+export function loadSocialNetworkUISync(identifier: string): SocialNetworkUI.Definition | null {
+    if (definedSocialNetworkUIsResolved.has(identifier)) return definedSocialNetworkUIsResolved.get(identifier)!
+    return null
+}
