@@ -4,7 +4,7 @@ import { DataProvider, ZrxTradePool, TradeProvider } from './types'
 import { SLIPPAGE_TOLERANCE_DEFAULT, PLUGIN_IDENTIFIER } from './constants'
 import { i18n } from '../../utils/i18n-next'
 import { unreachable } from '@dimensiondev/maskbook-shared'
-import { getEnumAsArray } from '../../utils/enum'
+import { getEnumAsArray } from '@dimensiondev/maskbook-shared'
 
 /**
  * The slippage tolerance of trader
@@ -55,6 +55,7 @@ const zrxSettings = createInternalSettings<string>(
 )
 const sushiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sushiswap`, '')
 const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sashimiswap`, '')
+const qucikswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+balancer`, '')
 
 /**
@@ -70,6 +71,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return sushiswapSettings
         case TradeProvider.SASHIMISWAP:
             return sashimiswapSettings
+        case TradeProvider.QUICKSWAP:
+            return qucikswapSettings
         case TradeProvider.BALANCER:
             return balancerSettings
         default:

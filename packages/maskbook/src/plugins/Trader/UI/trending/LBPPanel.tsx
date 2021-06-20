@@ -6,7 +6,7 @@ import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared'
 import { usePoolTokenPrices } from '../../LBP/usePoolTokenPrices'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { CONSTANTS, useConstant } from '@dimensiondev/web3-shared'
+import { TOKEN_CONSTANTS, useConstant } from '@dimensiondev/web3-shared'
 import { usePools } from '../../LBP/usePools'
 import type { Currency } from '../../types'
 
@@ -60,7 +60,7 @@ export function LBPPanel(props: LBPPanelProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(props), props)
 
-    const USDC_ADDRESS = useConstant(CONSTANTS, 'USDC_ADDRESS')
+    const USDC_ADDRESS = useConstant(TOKEN_CONSTANTS, 'USDC_ADDRESS')
     const { value: pools = [], loading: poolsLoading, error: poolsError } = usePools(token.address)
     const {
         value: prices = [],

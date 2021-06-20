@@ -103,6 +103,11 @@ export function useTradeComputed(
                 ...uniswap_,
                 value: uniswap,
             }
+        case TradeProvider.QUICKSWAP:
+            return {
+                ...balancer_,
+                value: balancer,
+            }
         case TradeProvider.BALANCER:
             return {
                 ...balancer_,

@@ -1,7 +1,13 @@
 import { difference } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
-import { CONSTANTS, useBlockNumber, useConstant, FungibleTokenDetailed, isNative } from '@dimensiondev/web3-shared'
-import { getEnumAsArray } from '../../../../utils/enum'
+import {
+    TOKEN_CONSTANTS,
+    useBlockNumber,
+    useConstant,
+    FungibleTokenDetailed,
+    isNative,
+} from '@dimensiondev/web3-shared'
+import { getEnumAsArray } from '@dimensiondev/maskbook-shared'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy, ZrxTradePool } from '../../types'
@@ -15,7 +21,7 @@ export function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
-    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const NATIVE_TOKEN_ADDRESS = useConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     const blockNumber = useBlockNumber()
 
     const slippage = useSlippageTolerance()

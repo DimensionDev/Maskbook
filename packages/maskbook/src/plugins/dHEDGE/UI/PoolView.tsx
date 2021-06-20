@@ -1,5 +1,5 @@
 import { RefreshIcon } from '@dimensiondev/icons'
-import { CONSTANTS, useConstant, useERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import { TOKEN_CONSTANTS, useConstant, useERC20TokenDetailed } from '@dimensiondev/web3-shared'
 import {
     Card,
     CardActions,
@@ -110,7 +110,7 @@ export function PoolView(props: PoolViewProps) {
     const classes = useStyles()
 
     //#region susd token
-    const SUSD_ADDRESS = useConstant(CONSTANTS, 'SUSD_ADDRESS')
+    const SUSD_ADDRESS = useConstant(TOKEN_CONSTANTS, 'SUSD_ADDRESS')
     const {
         value: susdTokenDetailed,
         loading: loadingToken,

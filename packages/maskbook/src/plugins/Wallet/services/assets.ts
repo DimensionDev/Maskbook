@@ -16,7 +16,7 @@ import {
     createERC721Token,
     createNativeToken,
     getConstant,
-    CONSTANTS,
+    TOKEN_CONSTANTS,
     getChainDetailed,
     getChainIdFromName,
 } from '@dimensiondev/web3-shared'
@@ -135,7 +135,10 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
                     name: asset.name,
                     symbol: asset.symbol,
                     decimals: asset.decimals,
-                    address: asset.name === 'Ether' ? getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS') : asset.asset_code,
+                    address:
+                        asset.name === 'Ether'
+                            ? getConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+                            : asset.asset_code,
                     chainId: ChainId.Mainnet,
                     type: asset.name === 'Ether' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                 },

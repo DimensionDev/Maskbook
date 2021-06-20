@@ -19,6 +19,7 @@ export function useTradeApproveComputed(
     const UNISWAP_V2_ROUTER_ADDRESS = useConstant(TRADE_CONSTANTS, 'UNISWAP_V2_ROUTER_ADDRESS')
     const SUSHISWAP_ROUTER_ADDRESS = useConstant(TRADE_CONSTANTS, 'SUSHISWAP_ROUTER_ADDRESS')
     const SASHIMISWAP_ROUTER_ADDRESS = useConstant(TRADE_CONSTANTS, 'SASHIMISWAP_ROUTER_ADDRESS')
+    const QUICKSWAP_ROUTER_ADDRESS = useConstant(TRADE_CONSTANTS, 'QUICKSWAP_ROUTER_ADDRESS')
     const BALANCER_EXCHANGE_PROXY_ADDRESS = useConstant(TRADE_CONSTANTS, 'BALANCER_EXCHANGE_PROXY_ADDRESS')
 
     return useMemo(() => {
@@ -42,6 +43,8 @@ export function useTradeApproveComputed(
                         return SUSHISWAP_ROUTER_ADDRESS
                     case TradeProvider.SASHIMISWAP:
                         return SASHIMISWAP_ROUTER_ADDRESS
+                    case TradeProvider.QUICKSWAP:
+                        return QUICKSWAP_ROUTER_ADDRESS
                     case TradeProvider.ZRX:
                         return trade?.trade_ ? (trade.trade_ as SwapQuoteResponse).allowanceTarget : ''
                     case TradeProvider.BALANCER:

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { CONSTANTS, createERC20Token, getConstant, ChainId, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import { ChainId, ERC20TokenDetailed, createERC20Tokens, getChainDetailed } from '@dimensiondev/web3-shared'
 import { ONE } from '@dimensiondev/maskbook-shared'
 
 export const TRADE_CONSTANTS = {
@@ -69,6 +69,28 @@ export const TRADE_CONSTANTS = {
         [ChainId.Matic]: '',
         [ChainId.Mumbai]: '',
     },
+    QUICKSWAP_ROUTER_ADDRESS: {
+        [ChainId.Mainnet]: '0xA97788A1b51938216305dBe8B16670C4aCfec612',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
+    QUICKSWAP_FACTORY_ADDRESS: {
+        [ChainId.Mainnet]: '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: '',
+        [ChainId.Mumbai]: '',
+    },
     BALANCER_ETH_ADDRESS: {
         [ChainId.Mainnet]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         [ChainId.Ropsten]: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -105,74 +127,45 @@ export const TRADE_CONSTANTS = {
     },
 }
 
-// WETH
-export const WETH: {
-    readonly [chainId in ChainId]: ERC20TokenDetailed
-} = {
-    [ChainId.Mainnet]: createERC20Token(
-        ChainId.Mainnet,
-        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Mainnet),
-        18,
-        'Wrapped Ether',
-        'WETH',
-    ),
-    [ChainId.Ropsten]: createERC20Token(
-        ChainId.Ropsten,
-        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Ropsten),
-        18,
-        'Wrapped Ether',
-        'WETH',
-    ),
-    [ChainId.Rinkeby]: createERC20Token(
-        ChainId.Rinkeby,
-        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Rinkeby),
-        18,
-        'Wrapped Ether',
-        'WETH',
-    ),
-    [ChainId.Kovan]: createERC20Token(
-        ChainId.Kovan,
-        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Kovan),
-        18,
-        'Wrapped Ether',
-        'WETH',
-    ),
-    [ChainId.Gorli]: createERC20Token(
-        ChainId.Gorli,
-        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Gorli),
-        18,
-        'Wrapped Ether',
-        'WETH',
-    ),
-    [ChainId.BSC]: createERC20Token(
-        ChainId.BSC,
-        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.BSC),
-        18,
-        'Wrapped Ether',
-        'WETH',
-    ),
-    [ChainId.BSCT]: createERC20Token(
-        ChainId.BSCT,
-        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.BSCT),
-        18,
-        'Wrapped Ether',
-        'WETH',
-    ),
-    [ChainId.Matic]: createERC20Token(
-        ChainId.Matic,
-        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Matic),
-        18,
-        'Wrapped Ether',
-        'WETH',
-    ),
-    [ChainId.Mumbai]: createERC20Token(
-        ChainId.Mumbai,
-        getConstant(CONSTANTS, 'WETH_ADDRESS', ChainId.Mumbai),
-        18,
-        'Wrapped Ether',
-        'WETH',
-    ),
-}
+export const USDC = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDC', 6)
+export const USDT = createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)
+export const HUSD = createERC20Tokens('HUSD_ADDRESS', 'Huobi USD', 'HUSD', 6)
+export const BUSD = createERC20Tokens('BUSD_ADDRESS', 'Huobi USD', 'BUSD', 6)
+export const COMP = createERC20Tokens('COMP_ADDRESS', 'Compound', 'COMP', 18)
+export const MKR = createERC20Tokens('MKR_ADDRESS', 'Maker', 'MKR', 18)
+export const MSKA = createERC20Tokens('MSKA_ADDRESS', 'Mask A', 'MSKA', 18)
+export const MSKB = createERC20Tokens('MSKB_ADDRESS', 'Mask B', 'MSKB', 18)
+export const MSKC = createERC20Tokens('MSKC_ADDRESS', 'Mask C', 'MSKC', 18)
+export const MSKD = createERC20Tokens('MSKC_ADDRESS', 'Mask C', 'MSKD', 18)
+export const MSKE = createERC20Tokens('MSKC_ADDRESS', 'Mask C', 'MSKE', 18)
+export const DAI = createERC20Tokens('DAI_ADDRESS', 'Dai Stablecoin', 'DAI', 18)
+export const AMPL = createERC20Tokens('AMPL_ADDRESS', 'Ampleforth', 'AMPL', 18)
+export const OKB = createERC20Tokens('OKB_ADDRESS', 'Ampleforth', 'OKB', 18)
+export const UST = createERC20Tokens('UST_ADDRESS', 'Wrapped UST Token', 'UST', 18)
+export const EASY = createERC20Tokens('EASY_ADDRESS', 'EASY', 'EASY', 18)
+export const eUSDC = createERC20Tokens('eUSDC_ADDRESS', 'Easy USDC', 'eUSDC', 18)
+export const eUSDT = createERC20Tokens('eUSDT_ADDRESS', 'Easy USDT', 'eUSDT', 18)
+export const eDAI = createERC20Tokens('eDAI_ADDRESS', 'Easy DAI', 'eDAI', 18)
+export const UNITOKEN = createERC20Tokens('UNITOKEN_ADDRESS', 'Uniswap', 'UNI', 18)
+export const TT01 = createERC20Tokens('TT01_ADDRESS', 'Test Token 01', 'TT01', 18)
+export const TT02 = createERC20Tokens('TT02_ADDRESS', 'Test Token 02', 'TT02', 18)
+export const ETHER = createERC20Tokens('ETHER_ADDRESS', 'Ether', 'ETH', 18)
+export const QUICK = createERC20Tokens('QUICK_ADDRESS', 'Quickswap', 'QUICK', 18)
+export const WBTC = createERC20Tokens('WBTC_ADDRESS', 'Wrapped Bitcoin', 'WBTC', 18)
+export const IGG = createERC20Tokens('IGG_ADDRESS', 'IG Gold', 'IGG', 18)
+export const OM = createERC20Tokens('OM_ADDRESS', 'OM Token', 'OM', 18)
+export const SUSHI = createERC20Tokens('SUSHI_ADDRESS', 'SushiToken', 'SUSHI', 18)
+export const YAM = createERC20Tokens('YAM_ADDRESS', 'YAM', 'YAM', 18)
+export const RUNE = createERC20Tokens('RUNE_ADDRESS', 'RUNE.ETH', 'RUNE', 18)
+export const YFI = createERC20Tokens('YFI_ADDRESS', 'Yearn', 'YFI', 18)
+export const SUSD = createERC20Tokens('SUSD_ADDRESS', 'Yearn', 'SUSD', 18)
+
+export const WETH = createERC20Tokens(
+    'WETH_ADDRESS',
+    (chainId) => `Wrapped ${getChainDetailed(chainId)?.nativeCurrency.name ?? 'Ether'}`,
+    (chainId) => `W${getChainDetailed(chainId)?.nativeCurrency.symbol ?? 'ETH'}`,
+    18,
+)
 
 export const WETH_ONLY: {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
@@ -184,94 +177,9 @@ export const WETH_ONLY: {
     [ChainId.Gorli]: [],
     [ChainId.BSC]: [],
     [ChainId.BSCT]: [],
-    [ChainId.Matic]: [],
-    [ChainId.Mumbai]: [],
+    [ChainId.Matic]: [WETH[ChainId.Matic]],
+    [ChainId.Mumbai]: [WETH[ChainId.Mumbai]],
 }
-
-// Mainnet
-export const DAI = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'DAI_ADDRESS', ChainId.Mainnet),
-    18,
-    'Dai Stablecoin',
-    'DAI',
-)
-export const USDC = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'USDC_ADDRESS', ChainId.Mainnet),
-    6,
-    'USD Coin',
-    'USDC',
-)
-export const USDT = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'USDT_ADDRESS', ChainId.Mainnet),
-    6,
-    'Tether USD',
-    'USDT',
-)
-export const COMP = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'COMP_ADDRESS', ChainId.Mainnet),
-    18,
-    'Compound',
-    'COMP',
-)
-export const MKR = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'MKR_ADDRESS', ChainId.Mainnet),
-    18,
-    'Maker',
-    'MKR',
-)
-export const AMPL = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'AMPL_ADDRESS', ChainId.Mainnet),
-    18,
-    'Ampleforth',
-    'AMPL',
-)
-export const UST = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'UST_ADDRESS'),
-    18,
-    'Wrapped UST Token',
-    'UST',
-)
-export const SUSHI = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'SUSHI_ADDRESS'),
-    18,
-    'SushiToken',
-    'SUSHI',
-)
-export const YAM = createERC20Token(ChainId.Mainnet, getConstant(CONSTANTS, 'YAM_ADDRESS'), 18, 'YAM', 'YAM')
-export const WBTC = createERC20Token(ChainId.Mainnet, getConstant(CONSTANTS, 'WBTC_ADDRESS'), 18, 'Wrapped BTC', 'WBTC')
-export const RUNE = createERC20Token(ChainId.Mainnet, getConstant(CONSTANTS, 'RUNE_ADDRESS'), 18, 'RUNE.ETH', 'RUNE')
-export const YFI = createERC20Token(ChainId.Mainnet, getConstant(CONSTANTS, 'YFI_ADDRESS'), 18, 'Yearn', 'YFI')
-
-// Rinkeby
-export const MSKA = createERC20Token(
-    ChainId.Rinkeby,
-    getConstant(CONSTANTS, 'MSKA_ADDRESS', ChainId.Rinkeby),
-    18,
-    'Mask A',
-    'MSKA',
-)
-export const MSKB = createERC20Token(
-    ChainId.Rinkeby,
-    getConstant(CONSTANTS, 'MSKB_ADDRESS', ChainId.Rinkeby),
-    18,
-    'Mask B',
-    'MSKB',
-)
-export const MSKC = createERC20Token(
-    ChainId.Rinkeby,
-    getConstant(CONSTANTS, 'MSKC_ADDRESS', ChainId.Rinkeby),
-    18,
-    'Mask C',
-    'MSKC',
-)
 
 export const BIPS_BASE = new BigNumber(10000)
 export const ONE_BIPS = ONE.dividedBy(BIPS_BASE)

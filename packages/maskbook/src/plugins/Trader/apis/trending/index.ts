@@ -4,7 +4,7 @@ import * as coinGeckoAPI from '../coingecko'
 import * as coinMarketCapAPI from '../coinmarketcap'
 import * as uniswapAPI from '../uniswap'
 import { Days } from '../../UI/trending/PriceChartDaysControl'
-import { getEnumAsArray } from '../../../../utils/enum'
+import { getEnumAsArray } from '@dimensiondev/maskbook-shared'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import {
     resolveCoinId,
