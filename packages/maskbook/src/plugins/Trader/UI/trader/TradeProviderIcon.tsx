@@ -5,6 +5,7 @@ import { SashimiSwapIcon } from '../../../../resources/SashimiSwapIcon'
 import { SushiSwapIcon } from '../../../../resources/SushiSwapIcon'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { ZRXIcon } from '../../../../resources/ZRXIcon'
+import { resolveTradeProviderName } from '../../pipes'
 import { TradeProvider } from '../../types'
 
 const quickswapIcon = new URL('../../../../resources/quickswap.png', import.meta.url).toString()
@@ -35,9 +36,9 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
         case TradeProvider.BALANCER:
             return <BalancerIcon classes={{ root: classes.icon }} />
         case TradeProvider.QUICKSWAP:
-            return <img src={quickswapIcon} alt="Quickswap" className={classes.icon} />
+            return <img src={quickswapIcon} alt={resolveTradeProviderName(TradeProvider.QUICKSWAP)} className={classes.icon} />
         case TradeProvider.PANCAKESWAP:
-            return <img src={pancakeswapIcon} alt="Quickswap" className={classes.icon} />
+            return <img src={pancakeswapIcon} alt={resolveTradeProviderName(TradeProvider.PANCAKESWAP)} className={classes.icon} />
         default:
             unreachable(props.provider)
     }
