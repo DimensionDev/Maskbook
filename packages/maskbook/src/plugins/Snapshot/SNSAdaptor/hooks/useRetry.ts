@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useUpdate } from 'react-use'
-import { votesRetry } from '../hooks/useVotes'
-import { resultsRetry } from '../hooks/useResults'
+import { votesRetry } from './useVotes'
+import { resultsRetry } from './useResults'
 
 export function useRetry() {
     const forceUpdate = useUpdate()

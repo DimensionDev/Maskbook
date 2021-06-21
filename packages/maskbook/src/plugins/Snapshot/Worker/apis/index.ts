@@ -1,7 +1,7 @@
 import ss from '@snapshot-labs/snapshot.js'
 import { ChainId } from '@dimensiondev/web3-shared'
-import type { VoteItemList, Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess } from '../types'
-import Services from '../../../extension/service'
+import type { VoteItemList, Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess } from '../../types'
+import Services from '../../../../extension/service'
 
 export async function fetchProposal(id: string) {
     const response = await fetch(`https://ipfs.io/ipfs/${id}`, {

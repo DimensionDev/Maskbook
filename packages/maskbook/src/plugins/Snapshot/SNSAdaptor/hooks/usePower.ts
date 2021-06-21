@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { useAccount, useBlockNumber } from '@dimensiondev/web3-shared'
-import { PluginSnapshotRPC } from '../messages'
-import type { ProposalIdentifier } from '../types'
+import { PluginSnapshotRPC } from '../../messages'
+import type { ProposalIdentifier } from '../../types'
 import { useProposal } from './useProposal'
 
 export function usePower(identifier: ProposalIdentifier) {

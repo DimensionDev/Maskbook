@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { useRemarkable } from '../hooks/useRemarkable'
+import { useRemarkable } from './hooks/useRemarkable'
 
 const useStyles = makeStyles((theme) => ({
     root: {

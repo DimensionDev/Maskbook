@@ -13,7 +13,7 @@ import { TokenIcon } from '../../../extension/options-page/DashboardComponents/T
 import { useI18N } from '../../../utils'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
 import { SnapshotContext } from '../context'
-import { useProposal } from '../hooks/useProposal'
+import { useProposal } from './hooks/useProposal'
 import { SnapshotCard } from './SnapshotCard'
 
 export interface InformationCardProps {}

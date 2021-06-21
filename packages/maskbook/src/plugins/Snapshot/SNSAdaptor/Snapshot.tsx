@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react'
 import { makeStyles, Box, Card, CardHeader, CardContent, Typography, Tab, Tabs, Chip, Paper } from '@material-ui/core'
 import { SnapshotContext } from '../context'
-import { useProposal } from '../hooks/useProposal'
+import { useProposal } from './hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
 
