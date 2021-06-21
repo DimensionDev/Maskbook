@@ -1,0 +1,51 @@
+{
+    "UNISWAP_V2_ROUTER_ADDRESS": {
+        "Mainnet": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+        "Ropsten": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+        "Rinkeby": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+        "Kovan": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+        "Gorli": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
+    },
+    "UNISWAP_FACTORY_ADDRESS": {
+        "Mainnet": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+        "Ropsten": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+        "Rinkeby": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+        "Kovan": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+        "Gorli": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
+    },
+    "SUSHISWAP_ROUTER_ADDRESS": {
+        "Mainnet": "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",
+        "Ropsten": "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",
+        "Rinkeby": "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",
+        "Kovan": "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",
+        "Gorli": "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F"
+    },
+    "SUSHISWAP_FACTORY_ADDRESS": {
+        "Mainnet": "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac"
+    },
+    "SASHIMISWAP_ROUTER_ADDRESS": {
+        "Mainnet": " 0x31db862df7be09718a860c46ab17ca57966e69ed",
+        "Ropsten": "0xe4fe6a45f354e845f954cddee6084603cedb9410",
+        "Rinkeby": "0xe4fe6a45f354e845f954cddee6084603cedb9410",
+        "Kovan": "0xe4fe6a45f354e845f954cddee6084603cedb9410",
+        "Gorli": "0xe4fe6a45f354e845f954cddee6084603cedb9410"
+    },
+    "SASHIMISWAP_FACTORY_ADDRESS": {
+        "Mainnet": "0xF028F723ED1D0fE01cC59973C49298AA95c57472"
+    },
+    "BALANCER_ETH_ADDRESS": {
+        "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Ropsten": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Rinkeby": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Kovan": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Gorli": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+    },
+    "BALANCER_EXCHANGE_PROXY_ADDRESS": {
+        "Mainnet": "0x3E66B66Fd1d0b02fDa6C811Da9E0547970DB2f21",
+        "Kovan": "0x4e67bf5bD28Dd4b570FBAFe11D0633eCbA2754Ec"
+    },
+    "BALANCER_POOLS_URL": {
+        "Mainnet": "https://ipfs.fleek.co/ipns/balancer-bucket.storage.fleek.co/balancer-exchange/pools",
+        "Kovan": "https://ipfs.fleek.co/ipns/balancer-team-bucket.storage.fleek.co/balancer-exchange-kovan/pools"
+    }
+}
