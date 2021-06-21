@@ -13,6 +13,7 @@ import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@dimensiondev/icons'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import classNames from 'classnames'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     type: {
@@ -90,9 +91,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                 <Link
                     href={`${resolveLinkOnExplorer(chainId)}/address/${transaction.toAddress}`}
                     className={classes.link}>
-                    <span>{transaction.toAddress.slice(0, 5)}</span>
-                    <span>...</span>
-                    <span>{transaction.toAddress?.slice(transaction.toAddress.length - 5)}</span>
+                    <span>{formatEthereumAddress(transaction.toAddress, 5)}</span>
                     <LinkOutIcon className={classes.linkIcon} />
                 </Link>
             </TableCell>

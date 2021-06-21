@@ -102,7 +102,7 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(
                     {isLoading || isEmpty ? (
                         <Box flex={1}>
                             {isLoading ? <LoadingPlaceholder /> : null}
-                            {isEmpty ? <EmptyPlaceholder children="No Transaction history" /> : null}
+                            {isEmpty ? <EmptyPlaceholder children={t.wallets_empty_history_tips()} /> : null}
                         </Box>
                     ) : (
                         <Table stickyHeader sx={{ padding: '0 44px' }}>

@@ -164,7 +164,10 @@ function isCacheExipred(dataProvider: DataProvider) {
 export async function checkAvailabilityOnDataProvider(keyword: string, type: TagType, dataProvider: DataProvider) {
     if (isBlockedKeyword(type, keyword)) return false
     // for uniswap we check availability by fetching token info dynamically
-    if (dataProvider === DataProvider.UNISWAP_INFO) await updateCache(dataProvider, keyword)
+    if (dataProvider === DataProvider.UNISWAP_INFO) {
+        console.log('done')
+        await updateCache(dataProvider, keyword)
+    }
     // cache never built before update in blocking way
     else if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
     // data fetched before update in nonblocking way

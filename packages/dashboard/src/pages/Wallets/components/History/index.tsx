@@ -6,7 +6,7 @@ import { HistoryTable } from '../HistoryTable'
 const useStyles = makeStyles((theme) => ({
     container: {
         flex: 1,
-        padding: '0px',
+        padding: 0,
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',

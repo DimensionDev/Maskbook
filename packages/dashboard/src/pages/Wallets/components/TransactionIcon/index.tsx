@@ -6,8 +6,9 @@ import {
     ReceiveTransactionIcon,
     SwapTransactionIcon,
 } from '@dimensiondev/icons'
-import { FilterTransactionType, isSameAddress, useRedPacketAddress } from '@dimensiondev/web3-shared'
+import { FilterTransactionType, isSameAddress } from '@dimensiondev/web3-shared'
 import { makeStyles } from '@material-ui/styles'
+import { useRedPacketAddress } from '../../../../hooks/useRedPacketAddress'
 
 const useStyles = makeStyles(() => ({
     icon: {
