@@ -121,7 +121,7 @@ export function resolveCollectibleLink(
 
 export function resolveTokenIconURL(address: string, baseURI: string) {
     const iconMap = {
-        [constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).NATIVE_TOKEN_ADDRESS]: `${baseURI}/info/logo.png`,
+        [constantOfChain(TOKEN_CONSTANTS).NATIVE_TOKEN_ADDRESS]: `${baseURI}/info/logo.png`,
         '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074':
             'https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg', // MASK
         '0x32a7C02e79c4ea1008dD6564b35F131428673c41': 'https://s2.coinmarketcap.com/static/img/coins/64x64/6747.png', // CRUST
