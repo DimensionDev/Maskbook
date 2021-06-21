@@ -20,7 +20,7 @@
     "@dimensiondev/metamask-extension-provider": "3.0.6-20210519045409-1835d4d",
     "@dimensiondev/plugin-example": "workspace:*",
     "@dimensiondev/stego-js": "=0.11.1-20201027083223-8ab41be",
-    "@dimensiondev/uniswap-sdk": "3.0.4-20210619092641-a270dc0",
+    "@dimensiondev/uniswap-sdk": "=3.0.4-20210619092641-a270dc0",
     "@dimensiondev/web3-shared": "workspace:*",
     "@ethersproject/address": "^5.0.4",
     "@ethersproject/contracts": "^5.0.4",
