@@ -9,6 +9,7 @@ import {
     isSameAddress,
     FungibleTokenDetailed,
     EthereumTokenType,
+    currySameAddress,
 } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { TokenInList } from './TokenInList'
@@ -71,8 +72,8 @@ export function FixedTokenList(props: FixedTokenListProps) {
 
     const filteredTokens = erc20TokensDetailed.filter(
         (x) =>
-            (!includeTokens.length || includeTokens.some((y) => isSameAddress(y, x.address))) &&
-            (!excludeTokens.length || !excludeTokens.some((y) => isSameAddress(y, x.address))),
+            (!includeTokens.length || includeTokens.some(currySameAddress(x.address))) &&
+            (!excludeTokens.length || !excludeTokens.some(currySameAddress(x.address))),
     )
     const renderTokens = uniqBy([...tokens, ...filteredTokens], (x) => x.address.toLowerCase()).sort((a, z) => {
         if (a.type === EthereumTokenType.Native) return -1
@@ -93,7 +94,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
                 tokens: renderTokens,
                 selected: [address, ...selectedTokens],
                 onSelect(address: string) {
-                    const token = renderTokens.find((token) => isSameAddress(token.address, address))
+                    const token = renderTokens.find(currySameAddress(address))
                     if (!token) return
                     setAddress(token.address)
                     onSubmit?.(token)

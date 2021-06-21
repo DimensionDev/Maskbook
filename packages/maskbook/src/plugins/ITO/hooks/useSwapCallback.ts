@@ -2,9 +2,9 @@ import type { ITO } from '@dimensiondev/contracts/types/ITO'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
 import { isZero } from '@dimensiondev/maskbook-shared'
 import {
+    currySameAddress,
     EthereumTokenType,
     FungibleTokenDetailed,
-    isSameAddress,
     TransactionEventType,
     TransactionStateType,
     useAccount,
@@ -74,7 +74,7 @@ export function useSwapCallback(
         }
 
         // error: invalid token
-        const swapTokenAt = payload.exchange_tokens.findIndex((x) => isSameAddress(x.address, token.address))
+        const swapTokenAt = payload.exchange_tokens.findIndex(currySameAddress(token.address))
         if (swapTokenAt === -1) {
             setSwapState({
                 type: TransactionStateType.FAILED,

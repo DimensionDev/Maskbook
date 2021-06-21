@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js'
 import { getEnumAsArray, safeUnreachable } from '@dimensiondev/maskbook-shared'
 import CHAINS from '../assets/chains.json'
 import { TOKEN_CONSTANTS } from '../constants'
+import { constantOfChain } from '../hooks'
 import {
     Asset,
     ChainId,
@@ -19,17 +20,22 @@ export function isSameAddress(addrA: string, addrB: string) {
     return addrA.toLowerCase() === addrB.toLowerCase()
 }
 
-export function isDAI(address: string) {
-    return isSameAddress(address, getConstant(TOKEN_CONSTANTS, 'DAI_ADDRESS'))
+export function currySameAddress(base: string) {
+    return (target: string | { address: string }) => {
+        if (typeof target === 'string') {
+            return isSameAddress(base, target)
+        } else if (typeof target === 'object' && typeof target.address === 'string') {
+            return isSameAddress(base, target.address)
+        }
+        throw new Error('Unsupported `target` address format')
+    }
 }
 
-export function isOKB(address: string) {
-    return isSameAddress(address, getConstant(TOKEN_CONSTANTS, 'OKB_ADDRESS'))
-}
+export const isDAI = currySameAddress(constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).DAI_ADDRESS)
 
-export function isNative(address: string) {
-    return isSameAddress(address, getConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS'))
-}
+export const isOKB = currySameAddress(constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).OKB_ADDRESS)
+
+export const isNative = currySameAddress(constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).NATIVE_TOKEN_ADDRESS)
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)

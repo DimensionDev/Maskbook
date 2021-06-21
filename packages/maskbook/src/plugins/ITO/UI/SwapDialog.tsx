@@ -17,7 +17,7 @@ import {
     resolveTransactionLinkOnExplorer,
     useChainId,
     isNative,
-    isSameAddress,
+    currySameAddress,
 } from '@dimensiondev/web3-shared'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -135,7 +135,7 @@ export function SwapDialog(props: SwapDialogProps) {
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return
-                const at = exchangeTokens.findIndex((x) => isSameAddress(x.address, ev.token!.address))
+                const at = exchangeTokens.findIndex(currySameAddress(ev.token!.address))
                 const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(
                     payload.exchange_amounts[at * 2 + 1],
                 )
