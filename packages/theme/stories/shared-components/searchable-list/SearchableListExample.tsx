@@ -19,9 +19,5 @@ export function SearchableListItemExample({ data }: IItemProps) {
 }
 
 export function SearchableListExample() {
-    return (
-        <SearchableList<IDemoData> title={'SearchableList'} open data={demoData} onSelect={() => {}}>
-            {SearchableListItemExample}
-        </SearchableList>
-    )
+    return <SearchableList<IDemoData> data={demoData} onSelect={() => {}} itemRender={SearchableListItemExample} />
 }

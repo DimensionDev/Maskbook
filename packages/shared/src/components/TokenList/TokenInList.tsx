@@ -5,6 +5,7 @@ import { TokenIcon } from './TokenIcon'
 import type { MaskSearchableListItemProps } from '../SearchableList'
 import { formatBalance } from '../../wallet'
 
+// todo: remove unused style
 const useStyles = makeStyles((theme: Theme) => ({
     icon: {
         width: 28,
@@ -24,8 +25,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     name: {
         display: 'block',
+        lineHeight: '20px',
+        fontSize: 14,
     },
     secondary: {
+        fontSize: 14,
         lineHeight: 1,
         paddingRight: theme.spacing(3),
         position: 'relative',
@@ -44,13 +48,10 @@ const useStyles = makeStyles((theme: Theme) => ({
         height: 16,
         marginLeft: theme.spacing(0.5),
     },
-    address: {
-        color: theme.palette.text.disabled,
-        fontSize: 12,
-        display: 'block',
-        marginTop: theme.spacing(0.25),
+    symbol: {
+        lineHeight: '20px',
+        fontSize: 14,
     },
-    symbol: {},
 }))
 
 export function TokenInList({ data, onSelect }: MaskSearchableListItemProps<Asset>) {

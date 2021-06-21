@@ -1,20 +1,19 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, ReactNode } from 'react'
 import { FixedSizeList } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
-import { MaskDialog } from '@dimensiondev/maskbook-theme'
-import { TextField, DialogContent, InputAdornment } from '@material-ui/core'
+import { TextField, InputAdornment } from '@material-ui/core'
 import { Search } from '@material-ui/icons'
+import { makeStyles, Theme } from '@material-ui/core/styles'
 
-export interface MaskSearchableListProps<T> extends React.PropsWithChildren<{}> {
+export interface MaskSearchableListProps<T> {
     data: T[]
     key?: keyof T
-    title: string
-    open: boolean
     loading?: boolean
     onSelect(selected: T): void
     onSearch?(data: T[], key: string): T[]
     searchKey?: string[]
+    itemRender: ReactNode
 }
 
 export interface MaskSearchableListItemProps<T> extends React.PropsWithChildren<{}> {
@@ -43,6 +42,36 @@ export const ItemInList = <T,>({ children, data, index, style }: FixSizeListItem
     )
 }
 
+const useStyles = makeStyles((theme: Theme) => ({
+    container: {
+        paddingBottom: '30px',
+    },
+    textField: {
+        // todo: move color to theme
+        '&>div': {
+            borderRadius: '8px',
+            background: '#F3F3F4',
+        },
+    },
+    searchInput: {
+        padding: '-6px',
+    },
+    list: {
+        marginTop: '6px',
+        '& > div::-webkit-scrollbar': {
+            width: '7px',
+        },
+        '& > div::-webkit-scrollbar-track': {
+            boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+            webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+        },
+        '& > div::-webkit-scrollbar-thumb': {
+            borderRadius: '4px',
+            backgroundColor: '#F3F3F4',
+        },
+    },
+}))
+
 // todo: add i18n
 // todo: import search icon
 // todo: handle address search
@@ -50,15 +79,14 @@ export const ItemInList = <T,>({ children, data, index, style }: FixSizeListItem
 export const SearchableList = <T,>({
     key,
     data,
-    title,
-    open,
     loading,
-    children,
     onSelect,
     onSearch,
     searchKey,
+    itemRender,
 }: MaskSearchableListProps<T>) => {
     const [keyword, setKeyword] = useState('')
+    const classes = useStyles()
 
     //#region fuse
     const fuse = useMemo(
@@ -82,34 +110,36 @@ export const SearchableList = <T,>({
     //#endregion
 
     return (
-        <MaskDialog title={title} onClose={() => {}} open={open}>
-            <DialogContent>
-                <TextField
-                    placeholder={'Search'}
-                    autoFocus
-                    fullWidth
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <Search />
-                            </InputAdornment>
-                        ),
-                    }}
-                    onChange={(e) => setKeyword(e.currentTarget.value)}
-                />
+        <div className={classes.container}>
+            <TextField
+                className={classes.textField}
+                placeholder={'Search'}
+                autoFocus
+                fullWidth
+                InputProps={{
+                    className: classes.searchInput,
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <Search />
+                        </InputAdornment>
+                    ),
+                }}
+                onChange={(e) => setKeyword(e.currentTarget.value)}
+            />
+            <div className={classes.list}>
                 <FixedSizeList
                     width="100%"
-                    height={100}
-                    overscanCount={4}
-                    itemSize={50}
+                    height={300}
+                    overscanCount={5}
+                    itemSize={60}
                     itemData={{
                         dataSet: searchedData,
                         onSelect: onSelect,
                     }}
                     itemCount={searchedData.length}>
-                    {(props) => <ItemInList<T> {...props}>{children}</ItemInList>}
+                    {(props) => <ItemInList<T> {...props}>{itemRender}</ItemInList>}
                 </FixedSizeList>
-            </DialogContent>
-        </MaskDialog>
+            </div>
+        </div>
     )
 }

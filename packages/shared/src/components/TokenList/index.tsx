@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { SearchableList } from '../SearchableList'
 import { TokenInList } from './TokenInList'
 import {
@@ -10,12 +10,8 @@ import {
     useERC20TokensDetailedFromTokenLists,
 } from '@dimensiondev/web3-shared'
 
-interface IProps {
-    open: boolean
-}
-
 //todo: add retryAssetsDetailedChain
-export const TokenList: React.FC<IProps> = memo(({ open }) => {
+export const TokenList: React.FC = memo(() => {
     const ERC20_TOKEN_LISTS = useConstant(CONSTANTS, 'ERC20_TOKEN_LISTS')
     const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS)
 
@@ -33,12 +29,10 @@ export const TokenList: React.FC<IProps> = memo(({ open }) => {
 
     return (
         <SearchableList<Asset>
-            title={'Add token'}
             onSelect={handleSelect}
             data={assetsDetailedChain}
             searchKey={['token.address', 'token.symbol']}
-            open={open}>
-            {TokenInList}
-        </SearchableList>
+            itemRender={TokenInList}
+        />
     )
 })

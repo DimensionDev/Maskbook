@@ -28,16 +28,20 @@ function resolveTokenIconURL(address: string, baseURI: string) {
 }
 //#endregion
 
+interface withClasses<ClassKeys extends string> {
+    classes?: Partial<Record<ClassKeys, string>>
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
     icon: {
-        width: 16,
-        height: 16,
+        width: 36,
+        height: 36,
         backgroundColor: theme.palette.common.white,
         margin: 0,
     },
 }))
 
-export interface TokenIconProps {
+export interface TokenIconProps extends withClasses<never> {
     name?: string
     logoURL?: string
     chainId?: ChainId
