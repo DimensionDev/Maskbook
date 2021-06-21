@@ -1,8 +1,8 @@
 import type { Wallet } from '../types'
-import { isSameAddress } from '../utils'
 import { useWeb3StateContext } from '../context'
+import { currySameAddress } from '../utils'
 
 export function useWallet(address?: string): Wallet | undefined {
     const { account: address_, wallets } = useWeb3StateContext()
-    return wallets.find((x) => isSameAddress(x.address, address ?? address_))
+    return wallets.find(currySameAddress(address ?? address_))
 }

@@ -18,17 +18,22 @@ export function isSameAddress(addrA: string, addrB: string) {
     return addrA.toLowerCase() === addrB.toLowerCase()
 }
 
-export function isDAI(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'DAI_ADDRESS'))
+export function currySameAddress(base: string) {
+    return (target: string | { address: string }) => {
+        if (typeof target === 'string') {
+            return isSameAddress(base, target)
+        } else if (typeof target === 'object' && typeof target.address === 'string') {
+            return isSameAddress(base, target.address)
+        }
+        throw new Error('Unsupported `target` address format')
+    }
 }
 
-export function isOKB(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'OBK_ADDRESS'))
-}
+export const isDAI = currySameAddress(constantOfChain(CONSTANTS, ChainId.Mainnet).DAI_ADDRESS)
 
-export function isNative(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'))
-}
+export const isOKB = currySameAddress(constantOfChain(CONSTANTS, ChainId.Mainnet).OBK_ADDRESS)
+
+export const isNative = currySameAddress(constantOfChain(CONSTANTS, ChainId.Mainnet).NATIVE_TOKEN_ADDRESS)
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
@@ -195,6 +200,7 @@ export function createERC1155Token(
 import type Web3 from 'web3'
 import type { AbiOutput } from 'web3-utils'
 import { safeUnreachable } from '@dimensiondev/maskbook-shared'
+import { constantOfChain } from '../hooks'
 
 export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
     if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)
