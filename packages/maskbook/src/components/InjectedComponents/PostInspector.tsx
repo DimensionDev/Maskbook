@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useAsync } from 'react-use'
-import { DecryptPost, DecryptPostProps } from './DecryptedPost/DecryptedPost'
-import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
+import { DecryptPost } from './DecryptedPost/DecryptedPost'
+import { AddToKeyStore } from './AddToKeyStore'
 import Services from '../../extension/service'
 import { ProfileIdentifier } from '../../database/type'
 import type { Profile } from '../../database'
@@ -23,10 +23,6 @@ const PluginHooksRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdap
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessageTuple): void
     needZip(): void
-    DecryptPostProps?: Partial<DecryptPostProps>
-    DecryptPostComponent?: React.ComponentType<DecryptPostProps>
-    AddToKeyStoreProps?: Partial<AddToKeyStoreProps>
-    AddToKeyStoreComponent?: React.ComponentType<AddToKeyStoreProps>
     /** @default 'before' */
     slotPosition?: 'before' | 'after'
 }
@@ -70,9 +66,8 @@ export function PostInspector(props: PostInspectorProps) {
 
     if (encryptedPost.ok || postImages.length) {
         if (!isDebugging) props.needZip()
-        const DecryptPostX = props.DecryptPostComponent || DecryptPost
         return withAdditionalContent(
-            <DecryptPostX
+            <DecryptPost
                 onDecrypted={props.onDecrypted}
                 requestAppendRecipients={
                     // So should not create new data on version -40
@@ -101,15 +96,10 @@ export function PostInspector(props: PostInspectorProps) {
                 alreadySelectedPreviously={alreadySelectedPreviously}
                 profiles={friends}
                 whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown}
-                {...props.DecryptPostProps}
             />,
         )
     } else if (provePost.length) {
-        const AddToKeyStoreX = props.AddToKeyStoreComponent || AddToKeyStore
-        if (!AddToKeyStoreX) return null
-        return withAdditionalContent(
-            <AddToKeyStoreX postBy={postBy} provePost={postContent} {...props.AddToKeyStoreProps} />,
-        )
+        return withAdditionalContent(<AddToKeyStore postBy={postBy} provePost={postContent} />)
     }
     return withAdditionalContent(null)
     function withAdditionalContent(x: JSX.Element | null) {
