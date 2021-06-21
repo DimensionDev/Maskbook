@@ -70,6 +70,7 @@ export interface NativeTokenDetailed extends NativeToken {
     name: string
     symbol: string
     decimals: number
+    logoURI?: string
 }
 //#endregion
 
@@ -84,6 +85,7 @@ export interface ERC20TokenDetailed extends ERC20Token {
     name?: string
     symbol?: string
     decimals: number
+    logoURI?: string
 }
 //#endregion
 

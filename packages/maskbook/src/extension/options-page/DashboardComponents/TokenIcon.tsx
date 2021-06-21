@@ -5,27 +5,28 @@ import {
     useBlockie,
     useChainDetailed,
     ChainId,
-    getConstant,
-    getChainFullName,
+    useConstant,
+    constantOfChain,
+    isSameAddress,
 } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { useImageFailover } from '../../../utils/hooks/useImageFailover'
+import { useImageFailover } from '../../../utils'
+import SPECIAL_ICON_LIST from './TokenIconSpeialIconList.json'
 
 //#region fix icon image
-function resolveTokenIconURL(address: string, baseURI: string) {
-    const iconMap = {
-        [getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')]: `${baseURI}/info/logo.png`,
-        '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074':
-            'https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg', // MASK
-        '0x32a7C02e79c4ea1008dD6564b35F131428673c41': 'https://s2.coinmarketcap.com/static/img/coins/64x64/6747.png', // CRUST
-        '0x04abEdA201850aC0124161F037Efd70c74ddC74C': 'https://s2.coinmarketcap.com/static/img/coins/64x64/5841.png', // NEST
-        '0x14de81C71B3F73874659082b971433514E201B27': 'https://etherscan.io/token/images/ykyctoken_32.png', // Yes KYC
-        '0x3B73c1B2ea59835cbfcADade5462b6aB630D9890':
-            'https://raw.githubusercontent.com/chainswap/chainswap-assets/main/logo_white_256.png', // TOKEN
+function resolveTokenIconURLs(address: string, baseURIs: string[], chainId: ChainId, logoURI?: string) {
+    const checkSummedAddress = formatEthereumAddress(address)
+
+    if (isSameAddress(constantOfChain(CONSTANTS, chainId).NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
+        return baseURIs.map((x) => `${x}/info/logo.png`)
     }
-    const checksummedAddress = formatEthereumAddress(address)
-    if (iconMap[checksummedAddress]) return iconMap[checksummedAddress]
-    return `${baseURI}/assets/${checksummedAddress}/logo.png`
+
+    const specialIcon = SPECIAL_ICON_LIST.find((item) => item.address === address)
+
+    if (specialIcon) return [specialIcon.logo_url]
+
+    const fullIconAssetURIs = baseURIs.map((x) => `${x}/assets/${checkSummedAddress}/logo.png`)
+    return logoURI ? [logoURI] : fullIconAssetURIs
 }
 //#endregion
 
@@ -40,41 +41,25 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export interface TokenIconProps extends withClasses<never> {
     name?: string
-    logoURL?: string
+    logoURI?: string
     chainId?: ChainId
     address: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURL, name, chainId, AvatarProps } = props
+    const { address, logoURI, name, chainId, AvatarProps } = props
 
     const classes = useStylesExtends(useStyles(), props)
     const chainDetailed = useChainDetailed()
     const tokenBlockie = useBlockie(address)
+    const tokenAssetBaseURI = useConstant(CONSTANTS, 'TOKEN_ASSET_BASE_URI', chainId)
 
-    const fullName = chainDetailed ? getChainFullName(chainId ?? chainDetailed.chainId) : ''
-    const { value: baseURI, loading } = useImageFailover(
-        chainDetailed
-            ? [
-                  `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${fullName.toLowerCase()}`,
-                  `https://rawcdn.githack.com/trustwallet/assets/master/blockchains/${fullName.toLowerCase()}`,
-              ]
-            : [],
-        '/info/logo.png',
-    )
+    const tokenURIs = resolveTokenIconURLs(address, tokenAssetBaseURI, chainId ?? ChainId.Mainnet, logoURI)
+    const { value: baseURI, loading } = useImageFailover(chainDetailed ? tokenURIs : [], '')
 
-    if (logoURL)
-        return (
-            <Avatar className={classes.icon} src={logoURL} {...AvatarProps}>
-                {name?.substr(0, 1).toLocaleUpperCase()}
-            </Avatar>
-        )
     return (
-        <Avatar
-            className={classes.icon}
-            src={loading ? '' : resolveTokenIconURL(address, baseURI as string)}
-            {...AvatarProps}>
+        <Avatar className={classes.icon} src={loading ? '' : baseURI} {...AvatarProps}>
             <Avatar className={classes.icon} src={tokenBlockie}>
                 {name?.substr(0, 1).toLocaleUpperCase()}
             </Avatar>
