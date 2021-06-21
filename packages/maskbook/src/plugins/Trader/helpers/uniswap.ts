@@ -8,35 +8,13 @@ import {
     Price as UniswapPrice,
     JSBI,
     TokenAmount,
-    ETHER,
 } from '@uniswap/sdk'
-import { formatEthereumAddress, unreachable } from '@dimensiondev/maskbook-shared'
-import { WETH } from '../constants'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { ChainId, EthereumTokenType, FungibleTokenDetailed, isNative } from '@dimensiondev/web3-shared'
+import { WETH } from '../constants'
 
 export function toUniswapChainId(chainId: ChainId): UniswapChainId {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return UniswapChainId.MAINNET
-        case ChainId.Ropsten:
-            return UniswapChainId.ROPSTEN
-        case ChainId.Rinkeby:
-            return UniswapChainId.RINKEBY
-        case ChainId.Kovan:
-            return UniswapChainId.KOVAN
-        case ChainId.Gorli:
-            return UniswapChainId.GÖRLI
-        case ChainId.BSC:
-            return UniswapChainId.MAINNET
-        case ChainId.BSCT:
-            return UniswapChainId.MAINNET
-        case ChainId.Matic:
-            return UniswapChainId.MAINNET
-        case ChainId.Mumbai:
-            return UniswapChainId.MAINNET
-        default:
-            unreachable(chainId)
-    }
+    return chainId as unknown as UniswapChainId
 }
 
 export function toUniswapPercent(numerator: number, denominator: number) {
@@ -44,42 +22,28 @@ export function toUniswapPercent(numerator: number, denominator: number) {
 }
 
 export function toUniswapCurrency(chainId: ChainId, token: FungibleTokenDetailed): UniswapCurrency {
-    if (isNative(token.address)) return ETHER
     return toUniswapToken(chainId, token)
 }
 
 export function toUniswapToken(chainId: ChainId, token: FungibleTokenDetailed): UniswapToken {
-    if (isNative(token.address)) return toUniswapToken(chainId, WETH[chainId])
     return new UniswapToken(
         toUniswapChainId(chainId),
         formatEthereumAddress(token.address),
-        token.decimals ?? 0,
+        token.decimals,
         token.symbol,
         token.name,
     )
 }
 
 export function toUniswapCurrencyAmount(chainId: ChainId, token: FungibleTokenDetailed, amount: string) {
-    return isNative(token.address)
-        ? UniswapCurrencyAmount.ether(JSBI.BigInt(amount))
-        : new TokenAmount(toUniswapToken(chainId, token), JSBI.BigInt(amount))
+    return new TokenAmount(
+        toUniswapToken(chainId, isNative(token.address) ? WETH[chainId] : token),
+        JSBI.BigInt(amount),
+    )
 }
 
 export function uniswapChainIdTo(chainId: UniswapChainId) {
-    switch (chainId) {
-        case UniswapChainId.MAINNET:
-            return ChainId.Mainnet
-        case UniswapChainId.ROPSTEN:
-            return ChainId.Ropsten
-        case UniswapChainId.RINKEBY:
-            return ChainId.Rinkeby
-        case UniswapChainId.KOVAN:
-            return ChainId.Kovan
-        case UniswapChainId.GÖRLI:
-            return ChainId.Gorli
-        default:
-            unreachable(chainId)
-    }
+    return chainId as unknown as ChainId
 }
 
 export function uniswapPercentTo(percent: UniswapPercent) {
@@ -92,7 +56,9 @@ export function uniswapPriceTo(price: UniswapPrice) {
 
 export function uniswapTokenTo(token: UniswapToken) {
     return {
-        type: token.name === 'ETH' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+        type: ['eth', 'matic', 'bnb'].includes(token.name?.toLowerCase() ?? '')
+            ? EthereumTokenType.Native
+            : EthereumTokenType.ERC20,
         name: token.name,
         symbol: token.symbol,
         decimals: token.decimals,

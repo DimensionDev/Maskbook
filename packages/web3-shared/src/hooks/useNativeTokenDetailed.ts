@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { CONSTANTS } from '../constants'
+import { TOKEN_CONSTANTS } from '../constants'
 import { NativeTokenDetailed, EthereumTokenType } from '../types'
 import { getChainDetailed } from '../utils'
 import { useChainId } from './useChainId'
@@ -7,7 +7,7 @@ import { useConstant } from './useConstant'
 
 export function useNativeTokenDetailed() {
     const chainId = useChainId()
-    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const NATIVE_TOKEN_ADDRESS = useConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     return useAsyncRetry(async (): Promise<NativeTokenDetailed> => {
         const nativeCurrency = getChainDetailed(chainId)?.nativeCurrency
         return {

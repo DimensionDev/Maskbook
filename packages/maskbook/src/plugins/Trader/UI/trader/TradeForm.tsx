@@ -102,7 +102,7 @@ export function TradeForm(props: TradeFormProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     //#region approve token
-    const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(trade, provider, inputToken)
+    const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(trade, inputToken)
     //#endregion
 
     //#region token balance

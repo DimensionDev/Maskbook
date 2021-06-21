@@ -4,7 +4,7 @@ import { ListItem, ListItemText, Typography, ListItemIcon, Link } from '@materia
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import {
     useConstant,
-    CONSTANTS,
+    TOKEN_CONSTANTS,
     resolveTokenLinkOnExplorer,
     FungibleTokenDetailed,
     currySameAddress,
@@ -72,7 +72,7 @@ export interface TokenInListProps {
 
 export function TokenInList({ data, index, style }: TokenInListProps) {
     const classes = useStyles()
-    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const NATIVE_TOKEN_ADDRESS = useConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
 
     const token = data.tokens[index]

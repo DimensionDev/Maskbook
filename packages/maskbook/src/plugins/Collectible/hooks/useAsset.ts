@@ -15,14 +15,14 @@ import {
     useAccount,
     useChainId,
     useConstant,
-    CONSTANTS,
+    TOKEN_CONSTANTS,
     currySameAddress,
 } from '@dimensiondev/web3-shared'
 
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
     const account = useAccount()
     const chainId = useChainId()
-    const WETH_ADDRESS = useConstant(CONSTANTS, 'WETH_ADDRESS')
+    const WETH_ADDRESS = useConstant(TOKEN_CONSTANTS, 'WETH_ADDRESS')
 
     return useAsyncRetry(async () => {
         if (!token) return

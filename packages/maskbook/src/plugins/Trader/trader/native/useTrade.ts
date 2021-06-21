@@ -1,5 +1,5 @@
 import {
-    CONSTANTS,
+    TOKEN_CONSTANTS,
     EthereumTokenType,
     FungibleTokenDetailed,
     isSameAddress,
@@ -8,7 +8,7 @@ import {
 import { useAsyncRetry } from 'react-use'
 
 export function useTrade(inputToken?: FungibleTokenDetailed, outputToken?: FungibleTokenDetailed) {
-    const WETH_ADDRESS = useConstant(CONSTANTS, 'WETH_ADDRESS')
+    const WETH_ADDRESS = useConstant(TOKEN_CONSTANTS, 'WETH_ADDRESS')
 
     // to mimic the same interface with other trade providers
     return useAsyncRetry(async () => {

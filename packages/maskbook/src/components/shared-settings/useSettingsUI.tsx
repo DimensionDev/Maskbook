@@ -1,5 +1,5 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '@dimensiondev/maskbook-shared'
+import { useValueRef, getEnumAsArray } from '@dimensiondev/maskbook-shared'
 import {
     ListItem,
     ListItemIcon,
@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { texts } from '../../settings/createSettings'
-import { getEnumAsArray, useMatchXS } from '../../utils'
+import { useMatchXS } from '../../utils'
 import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles((theme) => ({
@@ -160,6 +160,7 @@ function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectP
         }
         ref.value = value
     }
+
     return (
         <Select
             fullWidth

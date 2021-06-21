@@ -36,12 +36,14 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
                 const { name, category } = props.message
                 const type = category === 'cash' ? TagType.CASH : TagType.HASH
                 const dataProviders = await PluginTraderRPC.getAvailableDataProviders(type, name)
+                const tradeProviders = await PluginTraderRPC.getAvailableTraderProviders(type, name)
                 if (!dataProviders.length) return
                 PluginTraderMessages.events.cashTagObserved.sendToLocal({
                     name,
                     type,
                     element,
                     dataProviders,
+                    tradeProviders,
                 })
             }, 500),
         )

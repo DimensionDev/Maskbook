@@ -49,6 +49,7 @@ import {
     currentChainIdSettings,
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
+import { useAvailableTraderProviders } from '../../../plugins/Trader/trending/useAvailableTraderProviders'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -168,6 +169,9 @@ export default function DashboardSettingsRouter() {
         listItemRoot: classes.listItemRoot,
         listItemIcon: classes.listItemIcon,
     }
+
+    const { value: tradeProviders = [] } = useAvailableTraderProviders()
+
     return (
         <DashboardRouterContainer title={t('settings')}>
             <ThemeProvider theme={settingsTheme}>
@@ -212,13 +216,24 @@ export default function DashboardSettingsRouter() {
                                         value={currentChainIdSettings}
                                     />
                                 ) : null}
-                                <SettingsUIEnum
-                                    classes={listStyle}
-                                    enumObject={TradeProvider}
-                                    getText={resolveTradeProviderName}
-                                    icon={<SwapHorizIcon />}
-                                    value={currentTradeProviderSettings}
-                                />
+                                {tradeProviders.length ? (
+                                    <SettingsUIEnum
+                                        classes={listStyle}
+                                        enumObject={tradeProviders.reduce(
+                                            (accumulator, x) => {
+                                                accumulator[TradeProvider[x]] = x
+                                                return accumulator
+                                            },
+                                            {} as {
+                                                [key: string]: TradeProvider
+                                            },
+                                        )}
+                                        getText={resolveTradeProviderName}
+                                        icon={<SwapHorizIcon />}
+                                        value={currentTradeProviderSettings}
+                                    />
+                                ) : null}
+
                                 {/* TODO: A singe 'Plugins' tab should be added for listing plugin bio and settings. */}
                                 <SettingsUIEnum
                                     classes={listStyle}

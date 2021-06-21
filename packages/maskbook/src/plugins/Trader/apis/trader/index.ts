@@ -1,16 +1,26 @@
-import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@dimensiondev/web3-shared'
+import { safeUnreachable } from '@dimensiondev/maskbook-shared'
+import { getNetworkTypeFromChainId, NetworkType } from '@dimensiondev/web3-shared'
+import { currentChainIdSettings } from '../../../Wallet/settings'
 import { TagType, TradeProvider } from '../../types'
 
-export async function getAvailableTraderProviders(chainId: ChainId, type: TagType, keyword: string) {
-    const networkType = getNetworkTypeFromChainId(chainId)
+export async function getAvailableTraderProviders(type?: TagType, keyword?: string) {
+    const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
 
-    if (networkType === NetworkType.Ethereum)
-        return [
-            TradeProvider.UNISWAP,
-            TradeProvider.SUSHISWAP,
-            TradeProvider.ZRX,
-            TradeProvider.BALANCER,
-            TradeProvider.SASHIMISWAP,
-        ]
-    return []
+    switch (networkType) {
+        case NetworkType.Ethereum:
+            return [
+                TradeProvider.UNISWAP,
+                TradeProvider.SUSHISWAP,
+                TradeProvider.SASHIMISWAP,
+                TradeProvider.ZRX,
+                TradeProvider.BALANCER,
+            ]
+        case NetworkType.Polygon:
+            return [TradeProvider.QUICKSWAP]
+        case NetworkType.Binance:
+            return [TradeProvider.PANCAKESWAP]
+        default:
+            safeUnreachable(networkType)
+            return []
+    }
 }

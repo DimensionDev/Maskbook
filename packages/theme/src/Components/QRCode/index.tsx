@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import { SessionStorageCache } from '@dimensiondev/maskbook-shared'
 import { Typography } from '@material-ui/core'
 import { Trans } from 'react-i18next'
-import classNames from 'classnames'
 import { blue } from '@material-ui/core/colors'
 
 interface QRProps {
@@ -21,9 +20,10 @@ const useStyles = makeStyles((theme) => ({
     text: {
         paddingTop: 50,
     },
-    tryAgainText: { textDecoration: 'underline', cursor: 'pointer' },
     info: {
         color: theme.palette.mode === 'dark' ? blue[500] : blue[800],
+        extDecoration: 'underline',
+        cursor: 'pointer',
     },
 }))
 
@@ -60,7 +60,7 @@ export function QRCode({ text, options = {}, canvasProps }: QRProps) {
                                 onClick={() => {
                                     setError(false)
                                 }}
-                                className={classNames(classes.info, classes.tryAgainText)}
+                                className={classes.info}
                             />
                         ),
                     }}

@@ -5,6 +5,7 @@ import { makeStyles, Typography } from '@material-ui/core'
 import {
     useConstant,
     CONSTANTS,
+    TOKEN_CONSTANTS,
     isSameAddress,
     FungibleTokenDetailed,
     EthereumTokenType,
@@ -54,7 +55,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     //#endregion
 
     //#region mask token
-    const MASK_ADDRESS = useConstant(CONSTANTS, 'MASK_ADDRESS')
+    const MASK_ADDRESS = useConstant(TOKEN_CONSTANTS, 'MASK_ADDRESS')
     //#endregion
 
     //#region UI helpers
