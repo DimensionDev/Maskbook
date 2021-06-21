@@ -50,7 +50,7 @@ export function useInvestCallback(address: string, amount: string, token?: Fungi
         const estimatedGas = await poolContract.methods
             .deposit(amount)
             .estimateGas(config)
-            .catch((error: any) => {
+            .catch((error) => {
                 setInvestState({
                     type: TransactionStateType.FAILED,
                     error,

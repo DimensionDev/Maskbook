@@ -29,8 +29,9 @@ export const DHedgePluginDefine: PluginConfig = {
     },
     postInspector: function Component(): JSX.Element | null {
         const isPoolUrl = useIsPoolUrl()
-        const link = usePostInfoDetails('postMetadataMentionedLinks')
-            .concat(usePostInfoDetails('postMentionedLinks'))
+        const link = usePostInfoDetails
+            .postMetadataMentionedLinks()
+            .concat(usePostInfoDetails.postMentionedLinks())
             .find(isPoolUrl)
         if (!link) return null
         return <Renderer url={link} />

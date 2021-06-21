@@ -26,7 +26,7 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
 import { resolveRedPacketStatus } from '../pipes'
-import type { RedPacketJSONPayload } from '../types'
+import type { RedPacketJSONPayload, RedPacketAvailability } from '../types'
 import { RedPacketStatus } from '../types'
 
 const useStyles = makeStyles((theme) => ({
@@ -280,7 +280,18 @@ export function RedPacket(props: RedPacketProps) {
                                     symbol: tokenDetailed.symbol,
                                 })
                             if (listOfStatus.includes(RedPacketStatus.claimed))
-                                return t('plugin_red_packet_description_claimed')
+                                return t(
+                                    'plugin_red_packet_description_claimed',
+                                    (availability as RedPacketAvailability).claimed_amount
+                                        ? {
+                                              amount: formatBalance(
+                                                  (availability as RedPacketAvailability).claimed_amount,
+                                                  tokenDetailed.decimals,
+                                              ),
+                                              symbol: tokenDetailed.symbol,
+                                          }
+                                        : { amount: '', symbol: '' },
+                                )
                             if (listOfStatus.includes(RedPacketStatus.refunded))
                                 return t('plugin_red_packet_description_refunded')
                             if (listOfStatus.includes(RedPacketStatus.expired))

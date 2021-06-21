@@ -4,7 +4,7 @@ import { useAvailableDataProviders } from '../../trending/useAvailableDataProvid
 import { useAvailableTraderProviders } from '../../trending/useAvailableTraderProviders'
 import { useSearchedKeyword } from '../../trending/useSearchedKeyword'
 import { TagType } from '../../types'
-import { SearchResultView } from './SearchResultView'
+import { PopperView } from './PopperView'
 
 const useStyles = makeStyles({
     root: {},
@@ -23,7 +23,8 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     if (!name || !dataProviders?.length) return null
     return (
         <div className={classes.root}>
-            <SearchResultView
+            <PopperView
+                isPopper={false}
                 name={name}
                 tagType={type_}
                 dataProviders={dataProviders}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
+import { useValueRef } from '@dimensiondev/maskbook-shared'
 import type { DataProvider, Currency, Settings } from '../types'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { getCurrentDataProviderGeneralSettings } from '../settings'
 import { PluginTraderRPC } from '../messages'
 
