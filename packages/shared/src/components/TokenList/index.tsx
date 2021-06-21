@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { SearchableList } from '../SearchableList'
 import { TokenInList } from './TokenInList'
 import {
@@ -12,6 +12,7 @@ import {
 
 //todo: add retryAssetsDetailedChain
 export const TokenList: React.FC = memo(() => {
+    const [status, setStatus] = useState<string>()
     const ERC20_TOKEN_LISTS = useConstant(CONSTANTS, 'ERC20_TOKEN_LISTS')
     const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS)
 
@@ -23,9 +24,27 @@ export const TokenList: React.FC = memo(() => {
 
     const handleSelect = (token: any) => {}
 
-    // todo: update loading status
-    if (state == TokenListsState.LOADING_TOKEN_LISTS || assetsDetailedChainLoading) return <span>'Loading'</span>
-    if (assetsDetailedChainError) return <span>'Load error'</span>
+    // todo: convert to status to i18n
+    useEffect(() => {
+        if (state == TokenListsState.LOADING_TOKEN_LISTS) {
+            setStatus('Loading Token List')
+            return
+        }
+        if (state == TokenListsState.LOADING_SEARCHED_TOKEN) {
+            setStatus('Searching Token List')
+            return
+        }
+        if (assetsDetailedChainLoading) {
+            setStatus('Loading Token Balance')
+            return
+        }
+        if (assetsDetailedChainError) {
+            setStatus('Loading Token Balance Failed')
+            return
+        }
+
+        setStatus('')
+    }, [state, assetsDetailedChainLoading, assetsDetailedChainError])
 
     return (
         <SearchableList<Asset>
@@ -33,6 +52,7 @@ export const TokenList: React.FC = memo(() => {
             data={assetsDetailedChain}
             searchKey={['token.address', 'token.symbol']}
             itemRender={TokenInList}
+            status={status}
         />
     )
 })

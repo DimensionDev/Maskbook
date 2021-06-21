@@ -2,14 +2,14 @@ import React, { useState, useMemo, ReactNode } from 'react'
 import { FixedSizeList } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
-import { TextField, InputAdornment } from '@material-ui/core'
+import { TextField, InputAdornment, Typography } from '@material-ui/core'
 import { Search } from '@material-ui/icons'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
 export interface MaskSearchableListProps<T> {
     data: T[]
     key?: keyof T
-    loading?: boolean
+    status?: ReactNode
     onSelect(selected: T): void
     onSearch?(data: T[], key: string): T[]
     searchKey?: string[]
@@ -70,6 +70,13 @@ const useStyles = makeStyles((theme: Theme) => ({
             backgroundColor: '#F3F3F4',
         },
     },
+    placeholder: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '300px',
+        fontSize: 16,
+    },
 }))
 
 // todo: add i18n
@@ -79,7 +86,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 export const SearchableList = <T,>({
     key,
     data,
-    loading,
+    status,
     onSelect,
     onSearch,
     searchKey,
@@ -126,20 +133,27 @@ export const SearchableList = <T,>({
                 }}
                 onChange={(e) => setKeyword(e.currentTarget.value)}
             />
-            <div className={classes.list}>
-                <FixedSizeList
-                    width="100%"
-                    height={300}
-                    overscanCount={5}
-                    itemSize={60}
-                    itemData={{
-                        dataSet: searchedData,
-                        onSelect: onSelect,
-                    }}
-                    itemCount={searchedData.length}>
-                    {(props) => <ItemInList<T> {...props}>{itemRender}</ItemInList>}
-                </FixedSizeList>
-            </div>
+            {status && (
+                <Typography className={classes.placeholder} color="textSecondary">
+                    {status}
+                </Typography>
+            )}
+            {!status && (
+                <div className={classes.list}>
+                    <FixedSizeList
+                        width="100%"
+                        height={300}
+                        overscanCount={5}
+                        itemSize={60}
+                        itemData={{
+                            dataSet: searchedData,
+                            onSelect: onSelect,
+                        }}
+                        itemCount={searchedData.length}>
+                        {(props) => <ItemInList<T> {...props}>{itemRender}</ItemInList>}
+                    </FixedSizeList>
+                </div>
+            )}
         </div>
     )
 }
