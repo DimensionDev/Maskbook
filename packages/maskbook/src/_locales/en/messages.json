@@ -24,7 +24,6 @@
     "backup_persona": "Backup Your Persona",
     "backup_wallet": "Backup Wallet",
     "backup_wallet_hint": "Keep the <strong>private key</strong> below <strong>carefully</strong> in a safe place. You will need them to restore this wallet.",
-    "backup_qrcode_error": "Unknown Error; please <again>try again</again>.",
     "block_number": "Block number",
     "cancel": "Cancel",
     "comment_box__placeholder": "Add an encrypted comment…",

@@ -24,6 +24,7 @@ import { Pages } from '../pages/routes'
 import { useAppearance } from '../pages/Personas/api'
 import { Web3Provider } from '@dimensiondev/web3-shared'
 import { Web3Context } from '../web3/context'
+import { CustomSnackbarProvider } from '../components/CustomSnackbarProvider'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -52,10 +53,12 @@ export default function DashboardRoot() {
                         <ThemeProvider theme={theme}>
                             <ErrorBoundary>
                                 <CssBaseline />
-                                <HashRouter>
-                                    <Pages />
-                                </HashRouter>
-                                <PluginRender />
+                                <CustomSnackbarProvider>
+                                    <HashRouter>
+                                        <Pages />
+                                    </HashRouter>
+                                    <PluginRender />
+                                </CustomSnackbarProvider>
                             </ErrorBoundary>
                         </ThemeProvider>
                     </StylesProvider>

@@ -1,4 +1,4 @@
-export const cache = {
+export const SessionStorageCache = {
     get(scope: string, key: string) {
         return sessionStorage.getItem(`${scope}:${key}`)
     },

@@ -3,7 +3,9 @@ import { getEnumAsArray, safeUnreachable } from '@dimensiondev/maskbook-shared'
 import CHAINS from '../assets/chains.json'
 import { TOKEN_CONSTANTS } from '../constants'
 import {
+    Asset,
     ChainId,
+    CurrencyType,
     ERC1155TokenAssetDetailed,
     ERC20TokenDetailed,
     ERC721TokenAssetDetailed,
@@ -222,4 +224,5 @@ export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string
     if (abis.length > 1) return web3.eth.abi.decodeParameters(abis, output)
     return
 }
-//#endregion
+
+export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
