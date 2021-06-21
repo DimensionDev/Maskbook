@@ -1,0 +1,11 @@
+{
+  "name": "@dimensiondev/constants",
+  "private": true,
+  "scripts": {
+    "start": "ts-node compile-constants.ts"
+  },
+  "devDependencies": {
+  },
+  "dependencies": {
+  }
+}
