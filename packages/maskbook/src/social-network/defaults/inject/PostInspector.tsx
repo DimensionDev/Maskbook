@@ -7,6 +7,9 @@ import { makeStyles } from '@material-ui/core'
 import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-es'
 import { AppendRecipients, useAppendRecipients } from '../../../components/DataSource/useAppendRecipients'
+import { decodePublicKeyUI } from '../../utils/text-payload-ui'
+import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 
 export function injectPostInspectorDefault<T extends string>(
     config: InjectPostInspectorDefaultConfig = {},
@@ -23,7 +26,13 @@ export function injectPostInspectorDefault<T extends string>(
 
         return (
             <AppendRecipients.Provider value={useAppendRecipients()}>
-                <PostInspector onDecrypted={onDecrypted} needZip={zipPost} {...additionalProps} />
+                <PostInspector
+                    currentIdentity={useCurrentIdentity()?.identifier ?? ProfileIdentifier.unknown}
+                    publicKeyUIDecoder={decodePublicKeyUI}
+                    onDecrypted={onDecrypted}
+                    needZip={zipPost}
+                    {...additionalProps}
+                />
             </AppendRecipients.Provider>
         )
     })

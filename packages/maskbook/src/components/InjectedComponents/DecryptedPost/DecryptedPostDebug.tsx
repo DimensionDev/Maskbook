@@ -13,7 +13,7 @@ import { DebugList } from '../../DebugModeUI/DebugList'
 import { DebugModeUI_PostHashDialog } from '../../DebugModeUI/PostHashDialog'
 
 interface DebugDisplayProps {
-    whoAmI: ProfileIdentifier
+    currentIdentity: ProfileIdentifier
     debugHash: string
     decryptedResult: SuccessDecryption | FailureDecryption | null
 }
@@ -24,14 +24,14 @@ export function DecryptedPostDebug(props: Partial<DebugDisplayProps>) {
     const setting = useValueRef(debugModeSetting)
     const isDebugging = isEnvironment(Environment.ManifestOptions) ? true : setting
 
-    const { debugHash, decryptedResult, whoAmI } = props
+    const { debugHash, decryptedResult, currentIdentity } = props
     if (!isDebugging) return null
     const postByMyself = <DebugModeUI_PostHashDialog network={postBy.network} post={postContent} />
     if (payloadResult.err)
         return (
             <DebugList
                 items={[
-                    postBy.equals(whoAmI) ? postByMyself : (['Hash of this post', debugHash] as const),
+                    postBy.equals(currentIdentity) ? postByMyself : (['Hash of this post', debugHash] as const),
                     ['Payload Error', payloadResult.val.message],
                 ]}
             />
@@ -41,7 +41,7 @@ export function DecryptedPostDebug(props: Partial<DebugDisplayProps>) {
     return (
         <DebugList
             items={[
-                postBy.equals(whoAmI) ? postByMyself : (['Hash of this post', debugHash] as const),
+                postBy.equals(currentIdentity) ? postByMyself : (['Hash of this post', debugHash] as const),
                 [
                     'Decrypt reason',
                     decryptedResult && decryptedResult.type !== 'error' ? decryptedResult.through.join(',') : 'Unknown',

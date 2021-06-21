@@ -1,17 +1,12 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { DecryptPost } from './DecryptedPost/DecryptedPost'
 import { AddToKeyStore } from './AddToKeyStore'
-import { ProfileIdentifier } from '../../database/type'
-import { useCurrentIdentity } from '../DataSource/useActivatedUI'
-import { useValueRef } from '../../utils/hooks/useValueRef'
-import { debugModeSetting } from '../../settings/settings'
-import { DebugList } from '../DebugModeUI/DebugList'
+import type { ProfileIdentifier } from '../../database/type'
 import type { TypedMessageTuple } from '@dimensiondev/maskbook-shared'
 import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/PluginUI'
 import { usePostInfoDetails, usePostInfo } from '../DataSource/usePostInfo'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
-import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
 
 const PluginHooksRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (plugin) => plugin.PostInspector)
@@ -19,45 +14,28 @@ const PluginHooksRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdap
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessageTuple): void
     needZip(): void
+    publicKeyUIDecoder(x: string): string[]
     /** @default 'before' */
     slotPosition?: 'before' | 'after'
+    currentIdentity: ProfileIdentifier
 }
-export function PostInspector(props: PostInspectorProps) {
+/**
+ * This component and it's decedents MUST ONLY rely on PostInfo.
+ * SNS Adaptor might not be available.
+ */
+export function PostInspector(_props: PostInspectorProps) {
+    const { needZip, onDecrypted, publicKeyUIDecoder, slotPosition, currentIdentity } = _props
     const postBy = usePostInfoDetails.postBy()
     const postContent = usePostInfoDetails.postContent()
     const encryptedPost = usePostInfoDetails.postPayload()
-    const postId = usePostInfoDetails.postIdentifier()
     const postImages = usePostInfoDetails.postMetadataImages()
-    const isDebugging = useValueRef(debugModeSetting)
-    const whoAmI = useCurrentIdentity()
-    const provePost = useMemo(() => decodePublicKeyUI(postContent), [postContent])
+    const provePost = useMemo(() => publicKeyUIDecoder(postContent), [postContent, publicKeyUIDecoder])
 
     if (postBy.isUnknown) return <slot />
 
-    const debugInfo = isDebugging ? (
-        <DebugList
-            items={[
-                ['Post by', postBy.userId],
-                [
-                    'Who am I',
-                    whoAmI ? `Nickname ${whoAmI.nickname || 'unknown'}, UserID ${whoAmI.identifier.userId}` : 'Unknown',
-                ],
-                ['My fingerprint', whoAmI?.linkedPersona?.fingerprint ?? 'Unknown'],
-                ['Post ID', postId?.toText() || 'Unknown'],
-                ['Post Content', postContent],
-                ['Post Attachment Links', JSON.stringify(postImages)],
-            ]}
-        />
-    ) : null
-
     if (encryptedPost.ok || postImages.length) {
-        if (!isDebugging) props.needZip()
-        return withAdditionalContent(
-            <DecryptPost
-                onDecrypted={props.onDecrypted}
-                whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown}
-            />,
-        )
+        needZip()
+        return withAdditionalContent(<DecryptPost onDecrypted={onDecrypted} currentIdentity={currentIdentity} />)
     } else if (provePost.length) {
         return withAdditionalContent(<AddToKeyStore postBy={postBy} provePost={postContent} />)
     }
@@ -66,12 +44,11 @@ export function PostInspector(props: PostInspectorProps) {
         const slot = encryptedPost.ok ? null : <slot />
         return (
             <>
-                {props.slotPosition !== 'after' && slot}
+                {slotPosition !== 'after' && slot}
                 {x}
                 <PluginHooksRenderer />
                 <OldPluginPostInspector />
-                {debugInfo}
-                {props.slotPosition !== 'before' && slot}
+                {slotPosition === 'after' && slot}
             </>
         )
     }
