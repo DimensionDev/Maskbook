@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import type { PayableTx } from '@dimensiondev/contracts/types/types'
-import { useRedPacketContract } from '../contracts/useRedPacketContract'
+import { useRedPacketContract } from './useRedPacketContract'
 import {
     FungibleTokenDetailed,
     EthereumTokenType,
@@ -13,14 +13,14 @@ import {
     useTransactionState,
     useNonce,
     useGasPrice,
-    useConstant,
+    useConstantNext,
     CONSTANTS,
 } from '@dimensiondev/web3-shared'
 import { isLessThan } from '@dimensiondev/maskbook-shared'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 import type { TransactionReceipt } from 'web3-core'
 import type { HappyRedPacketV2 } from '@dimensiondev/contracts/types/HappyRedPacketV2'
-import Services from '../../../extension/service'
+import Services from '../../../../extension/service'
 
 export interface RedPacketSettings {
     password: string
@@ -42,7 +42,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
-    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const NATIVE_TOKEN_ADDRESS = useConstantNext(CONSTANTS).NATIVE_TOKEN_ADDRESS
 
     const createCallback = useCallback(async () => {
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings

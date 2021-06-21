@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useRedPacketContract } from '../contracts/useRedPacketContract'
+import { useRedPacketContract } from './useRedPacketContract'
 
 export function useAvailability(version: number, from: string, id?: string) {
     const redPacketContract = useRedPacketContract(version)

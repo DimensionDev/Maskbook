@@ -1,3 +1,5 @@
+// Plugin defined in new infra is registered in
+// packages/maskbook/src/plugin-infra/register.ts
 // Please make sure you have registered your plugin service (if it need one) at ./PluginService
 import type { PluginConfig } from './types'
 
@@ -8,7 +10,6 @@ import { Flags } from '../utils/flags'
 import { EthereumPluginDefine } from './Ethereum/define'
 import { WalletPluginDefine } from './Wallet/define'
 import { GitcoinPluginDefine } from './Gitcoin/define'
-import { RedPacketPluginDefine } from './RedPacket/define'
 import { PollsPluginDefine } from './Polls/define'
 import { StorybookPluginDefine } from './Storybook/define'
 import { FileServicePluginDefine } from './FileService/UI-define'
@@ -26,7 +27,6 @@ import { DHedgePluginDefine } from './dHEDGE/define'
 sideEffect.then(() => {
     plugins.add(EthereumPluginDefine)
     plugins.add(WalletPluginDefine)
-    plugins.add(RedPacketPluginDefine)
     plugins.add(FileServicePluginDefine)
     // plugins.add(NFT_PluginsDefine)
     if (Flags.ito_enabled) plugins.add(ITO_PluginDefine)

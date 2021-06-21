@@ -1,6 +1,6 @@
 import { compact } from 'lodash-es'
 import { isSameAddress, useChainId, getChainIdFromName, ChainId } from '@dimensiondev/web3-shared'
-import { RedPacketJSONPayload, RedPacketStatus, RedPacketAvailability } from '../types'
+import { RedPacketJSONPayload, RedPacketStatus, RedPacketAvailability } from '../../types'
 import { useAvailability } from './useAvailability'
 
 /**

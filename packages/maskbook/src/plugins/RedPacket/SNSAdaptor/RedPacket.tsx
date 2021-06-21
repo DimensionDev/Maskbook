@@ -22,10 +22,9 @@ import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumMessages } from '../../Ethereum/messages'
 import { WalletMessages } from '../../Wallet/messages'
-import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
-import { useClaimCallback } from '../hooks/useClaimCallback'
-import { useRefundCallback } from '../hooks/useRefundCallback'
-import { resolveRedPacketStatus } from '../pipes'
+import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
+import { useClaimCallback } from './hooks/useClaimCallback'
+import { useRefundCallback } from './hooks/useRefundCallback'
 import type { RedPacketJSONPayload, RedPacketAvailability } from '../types'
 import { RedPacketStatus } from '../types'
 
@@ -354,4 +353,12 @@ export function RedPacket(props: RedPacketProps) {
             ) : null}
         </EthereumChainBoundary>
     )
+}
+
+function resolveRedPacketStatus(listOfStatus: RedPacketStatus[]) {
+    if (listOfStatus.includes(RedPacketStatus.claimed)) return 'Claimed'
+    if (listOfStatus.includes(RedPacketStatus.refunded)) return 'Refunded'
+    if (listOfStatus.includes(RedPacketStatus.expired)) return 'Expired'
+    if (listOfStatus.includes(RedPacketStatus.empty)) return 'Empty'
+    return ''
 }

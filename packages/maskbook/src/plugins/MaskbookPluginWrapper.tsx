@@ -4,9 +4,8 @@ import { MaskbookIcon } from '../resources/MaskbookIcon'
 import { Suspense, useRef } from 'react'
 import { isTwitter } from '../social-network-adaptor/twitter.com/base'
 
-interface PluginWrapperProps {
+interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     pluginName: string
-    children?: JSX.Element | string
     width?: number
 }
 

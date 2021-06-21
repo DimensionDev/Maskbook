@@ -12,8 +12,8 @@ import { TokenIcon } from '../../../extension/options-page/DashboardComponents/T
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { StyledLinearProgress } from '../../ITO/UI/StyledLinearProgress'
-import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
-import { useRefundCallback } from '../hooks/useRefundCallback'
+import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
+import { useRefundCallback } from './hooks/useRefundCallback'
 import { EthereumMessages } from '../../Ethereum/messages'
 
 const useStyles = makeStyles((theme: Theme) => ({
