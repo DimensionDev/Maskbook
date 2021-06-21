@@ -9,10 +9,8 @@ import {
     NonFungibleTokenDetailed,
     ProviderType,
 } from '../types'
-import { getChainDetailed } from '../utils'
-import { constantOfChain } from '../hooks'
+import { getChainDetailed, constantOfChain } from '../utils'
 import { TOKEN_CONSTANTS } from '../constants'
-
 export function resolveProviderName(providerType: ProviderType) {
     switch (providerType) {
         case ProviderType.Maskbook:
