@@ -4,7 +4,6 @@ import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostCont
 import { useShareMenu } from '../SelectPeopleDialog'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from '@material-ui/core'
-import type { Profile } from '../../../database'
 import { useStylesExtends } from '../../custom-ui-helper'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import { PluginUI } from '../../../plugins/PluginUI'
@@ -14,13 +13,12 @@ import type { ProfileIdentifier } from '../../../database/type'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 import { ErrorBoundary } from '../../shared/ErrorBoundary'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
+import { useContext } from 'react'
+import { AppendRecipients } from '../../DataSource/useAppendRecipients'
 
 const PluginRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => x.DecryptedInspector)
 export interface DecryptPostSuccessProps extends withClasses<never> {
     data: { content: TypedMessage }
-    requestAppendRecipients?(to: Profile[]): Promise<void>
-    alreadySelectedPreviously: Profile[]
-    profiles: Profile[]
     sharedPublic?: boolean
     AdditionalContentProps?: Partial<AdditionalContentProps>
     /** The author in the payload */
@@ -39,20 +37,18 @@ const useSuccessStyles = makeStyles((theme) => {
 })
 
 export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
-    const {
-        data: { content },
-        profiles,
-        author,
-        postedBy,
-    } = props
     const classes = useStylesExtends(useSuccessStyles(), props)
     const { t } = useI18N()
-    const shareMenu = useShareMenu(
-        profiles,
-        props.requestAppendRecipients || (async () => {}),
-        props.alreadySelectedPreviously,
-    )
-    const rightActions = props.requestAppendRecipients && !props.sharedPublic && (
+    const { author, postedBy } = props
+    const { content } = props.data
+    const {
+        alreadySelectedPreviously,
+        enabled: requestAppendRecipientsEnabled,
+        friends: profiles,
+        requestAppend: requestAppendRecipients,
+    } = useContext(AppendRecipients)
+    const shareMenu = useShareMenu(profiles, requestAppendRecipients || (() => {}), alreadySelectedPreviously)
+    const rightActions = requestAppendRecipientsEnabled && !props.sharedPublic && (
         <Link color="primary" onClick={shareMenu.showShare} className={classes.addRecipientsLink}>
             {t('decrypted_postbox_add_recipients')}
         </Link>

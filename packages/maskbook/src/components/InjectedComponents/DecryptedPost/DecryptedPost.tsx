@@ -1,9 +1,7 @@
-import { useMemo, useState, useEffect, useReducer, Fragment } from 'react'
+import { useState, useEffect, useReducer, Fragment } from 'react'
 import { unreachable, makeTypedMessageTuple, TypedMessageTuple } from '@dimensiondev/maskbook-shared'
 
-import { delay } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
-import type { Profile } from '../../../database'
 import type { ProfileIdentifier } from '../../../database/type'
 import type {
     DecryptionProgress,
@@ -51,9 +49,6 @@ function progressReducer(
 export interface DecryptPostProps {
     onDecrypted: (post: TypedMessageTuple) => void
     whoAmI: ProfileIdentifier
-    profiles: Profile[]
-    alreadySelectedPreviously: Profile[]
-    requestAppendRecipients?(to: Profile[]): Promise<void>
     successComponent?: React.ComponentType<DecryptPostSuccessProps>
     successComponentProps?: Partial<DecryptPostSuccessProps>
     waitingComponent?: React.ComponentType<DecryptPostAwaitingProps>
@@ -62,7 +57,7 @@ export interface DecryptPostProps {
     failedComponentProps?: Partial<DecryptPostFailedProps>
 }
 export function DecryptPost(props: DecryptPostProps) {
-    const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
+    const { whoAmI, onDecrypted } = props
     const deconstructedPayload = usePostInfoDetails.postPayload()
     const authorInPayload = usePostClaimedAuthor()
     const current = usePostInfo()
@@ -73,15 +68,6 @@ export function DecryptPost(props: DecryptPostProps) {
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
     const Failed = props.failedComponent || DecryptPostFailed
-
-    const requestAppendRecipientsWrapped = useMemo(() => {
-        if (!postBy.equals(whoAmI)) return undefined
-        if (!props.requestAppendRecipients) return undefined
-        return async (people: Profile[]) => {
-            await props.requestAppendRecipients!(people)
-            await delay(1500)
-        }
-    }, [props.requestAppendRecipients, postBy, whoAmI])
 
     //#region Debug info
     const [debugHash, setDebugHash] = useState<string>('Unknown')
@@ -197,9 +183,6 @@ export function DecryptPost(props: DecryptPostProps) {
                     return (
                         <Success
                             data={progress}
-                            alreadySelectedPreviously={alreadySelectedPreviously}
-                            requestAppendRecipients={requestAppendRecipientsWrapped}
-                            profiles={profiles}
                             sharedPublic={sharedPublic}
                             author={authorInPayload}
                             postedBy={currentPostBy}
