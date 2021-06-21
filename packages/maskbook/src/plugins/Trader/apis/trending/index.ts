@@ -187,7 +187,7 @@ export async function getAvailableDataProviders(type: TagType, keyword: string) 
                     ] as const,
             ),
     )
-    return checked.filter(([_, y]) => y).map(([x]) => x)
+    return checked.filter(([, y]) => y).map(([x]) => x)
 }
 
 export async function getAvailableCoins(keyword: string, type: TagType, dataProvider: DataProvider) {
