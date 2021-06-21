@@ -15,7 +15,7 @@ import {
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useAccount, useConstant, TOKEN_CONSTANTS, isSameAddress, getChainDetailed } from '@dimensiondev/web3-shared'
+import { useAccount, useConstant, CONSTANTS, isSameAddress, getChainDetailed } from '@dimensiondev/web3-shared'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
@@ -109,7 +109,7 @@ export function PoolInList(props: PoolInListProps) {
     const classes = useStyles()
     const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onWithdraw } = props
 
-    const NATIVE_TOKEN_ADDRESS = useConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     const account = useAccount()
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)
     const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)
