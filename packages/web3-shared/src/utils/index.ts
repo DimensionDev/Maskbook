@@ -48,24 +48,6 @@ export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
 }
 
-//#region constants
-
-/**
- * @deprecated Use constantOfChain from @dimensiondev/web3-shared package
- *
- * Before: `getConstant(T, "a", ChainId.Mainnet)`
- *
- * After: `constantOfChain(T, ChainId.Mainnet).a`
- */
-export function getConstant<T extends Web3Constants, K extends keyof T>(
-    constants: T,
-    key: K,
-    chainId = ChainId.Mainnet,
-): T[K][ChainId.Mainnet] {
-    return constants[key][chainId]
-}
-//#endregion
-
 //#region chain detailed
 export function getChainDetailed(chainId: ChainId = ChainId.Mainnet) {
     return CHAINS.find((x) => x.chainId === chainId)
