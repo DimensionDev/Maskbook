@@ -1,2 +1,3 @@
-// All enabled plugin list
+// Please make sure it is also added in
+// packages/maskbook/src/plugin-infra/register.ts
 import '@dimensiondev/plugin-example'

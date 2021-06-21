@@ -28,7 +28,7 @@ import {
     RED_PACKET_DEFAULT_SHARES,
 } from '../constants'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { useCreateCallback } from '../hooks/useCreateCallback'
+import { useCreateCallback } from './hooks/useCreateCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'

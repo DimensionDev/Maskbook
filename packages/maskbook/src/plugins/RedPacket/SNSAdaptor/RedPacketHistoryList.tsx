@@ -2,7 +2,7 @@ import { makeStyles, Typography, List } from '@material-ui/core'
 import type { RedPacketJSONPayload } from '../types'
 import { useAccount, useChainId } from '@dimensiondev/web3-shared'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList'
-import { useRedPacketHistory } from '../hooks/useRedPacketHistory'
+import { useRedPacketHistory } from './hooks/useRedPacketHistory'
 import { useEffect } from 'react'
 
 const useStyles = makeStyles((theme) => ({

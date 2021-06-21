@@ -203,9 +203,7 @@ export namespace Plugin.SNSAdaptor {
         | CompositionMetadataBadgeRenderStatic
         | CompositionMetadataBadgeRenderDynamic
     export type CompositionMetadataBadgeRenderStatic = ReadonlyMap<string, CompositionMetadataBadgeRenderStaticMapper>
-    export type CompositionMetadataBadgeRenderStaticMapper<T = unknown> = (
-        metadata: T,
-    ) => string | BadgeDescriptor | null
+    export type CompositionMetadataBadgeRenderStaticMapper<T = any> = (metadata: T) => string | BadgeDescriptor | null
     export type CompositionMetadataBadgeRenderDynamic = (
         key: string,
         metadata: unknown,

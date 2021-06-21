@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useRedPacketContract } from '../contracts/useRedPacketContract'
+import { useRedPacketContract } from './useRedPacketContract'
 import {
     TransactionEventType,
     TransactionStateType,

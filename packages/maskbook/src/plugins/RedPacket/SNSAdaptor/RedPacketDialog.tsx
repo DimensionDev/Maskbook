@@ -15,15 +15,21 @@ import { useAccount, useChainId } from '@dimensiondev/web3-shared'
 
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean
-    onConfirm: (opt?: RedPacketJSONPayload | null) => void
     onClose: () => void
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
-    const { onConfirm } = props
     const chainId = useChainId()
     const account = useAccount()
+
+    const state = useState(DialogTabs.create)
+
+    const onClose = useCallback(() => {
+        const [, setValue] = state
+        setValue(DialogTabs.create)
+        props.onClose()
+    }, [props, state])
 
     const onCreateOrSelect = useCallback(
         async (payload: RedPacketJSONPayload) => {
@@ -46,18 +52,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             editActivatedPostMetadata((next) =>
                 payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey),
             )
-            onConfirm(payload)
+            onClose()
         },
-        [onConfirm, chainId],
+        [onClose, chainId],
     )
-
-    const state = useState(DialogTabs.create)
-
-    const onClose = useCallback(() => {
-        const [, setValue] = state
-        setValue(DialogTabs.create)
-        props.onClose()
-    }, [props, state])
 
     const tabProps: AbstractTabProps = {
         tabs: [

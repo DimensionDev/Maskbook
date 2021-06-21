@@ -1,7 +1,13 @@
 import { ChainId } from '@dimensiondev/web3-shared'
 
-/** DON'T CHANGE IT. */
+/**
+ * !! Change this key cause a breaking change in the red packet plugin.
+ * !! Please make sure it also be able to recognize the old key.
+ */
 export const RedPacketMetaKey = 'com.maskbook.red_packet:1'
+/**
+ * !! This ID is used to identify the stored plugin data. Change it will cause data lost.
+ */
 export const RedPacketPluginID = 'com.maskbook.red_packet'
 
 export const RED_PACKET_CONSTANTS = {
