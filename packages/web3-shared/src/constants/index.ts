@@ -39,3 +39,16 @@ export const useTrendingConstants = hookTransform(getTrendingConstants)
 
 export const getURLConstants = transform(URL)
 export const useURLConstants = hookTransform(getURLConstants)
+
+const ETHEREUM_TOKEN_ASSET_BASE_URIS = [
+    'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum',
+    'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum',
+]
+const SMARTCHAIN_TOKEN_ASSET_BASE_URIS = [
+    'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain',
+    'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/smartchain',
+]
+const POLYGON_TOKEN_ASSET_BASE_URIS = [
+    'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon',
+    'https://rawcdn.githack.com/trustwallet/assets/master/blockchains/polygon',
+]
