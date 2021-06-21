@@ -203,6 +203,9 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                     break
                 case 2:
                     const words = mnemonic.split(' ')
+                    if (words.length !== 12) {
+                        throw new Error(t('import_failed'))
+                    }
                     await WalletRPC.importNewWallet({
                         name,
                         path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
