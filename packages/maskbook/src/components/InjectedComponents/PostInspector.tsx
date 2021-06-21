@@ -1,12 +1,9 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
-import { useAsync } from 'react-use'
+import { useEffect, useMemo, useRef } from 'react'
 import { DecryptPost } from './DecryptedPost/DecryptedPost'
 import { AddToKeyStore } from './AddToKeyStore'
-import Services from '../../extension/service'
 import { ProfileIdentifier } from '../../database/type'
-import type { Profile } from '../../database'
-import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
-import { useValueRef } from '@masknet/shared'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI'
+import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../../settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
 import type { TypedMessageTuple } from '@masknet/shared'
@@ -14,7 +11,6 @@ import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/PluginUI'
 import { usePostInfoDetails, usePostInfo } from '../DataSource/usePostInfo'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
-import type { PayloadAlpha40_Or_Alpha39, PayloadAlpha38 } from '../../utils/type-transform/Payload'
 import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
@@ -31,20 +27,10 @@ export function PostInspector(props: PostInspectorProps) {
     const postContent = usePostInfoDetails.postContent()
     const encryptedPost = usePostInfoDetails.postPayload()
     const postId = usePostInfoDetails.postIdentifier()
-    const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postImages = usePostInfoDetails.postMetadataImages()
     const isDebugging = useValueRef(debugModeSetting)
     const whoAmI = useCurrentIdentity()
-    const friends = useFriendsList()
-    const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
     const provePost = useMemo(() => decodePublicKeyUI(postContent), [postContent])
-
-    const { value: sharedListOfPost } = useAsync(async () => {
-        if (!whoAmI || !whoAmI.identifier.equals(postBy) || !encryptedPost.ok) return []
-        const { iv, version } = encryptedPost.val
-        return Services.Crypto.getSharedListOfPost(version, iv, postBy)
-    }, [postBy, whoAmI, encryptedPost])
-    useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
 
     if (postBy.isUnknown) return <slot />
 
@@ -69,32 +55,6 @@ export function PostInspector(props: PostInspectorProps) {
         return withAdditionalContent(
             <DecryptPost
                 onDecrypted={props.onDecrypted}
-                requestAppendRecipients={
-                    // So should not create new data on version -40
-                    (encryptedPost.ok && encryptedPost.val.version !== -40) || decryptedPayloadForImage
-                        ? async (profile) => {
-                              const val = (postImages ? decryptedPayloadForImage : encryptedPost.val) as
-                                  | PayloadAlpha40_Or_Alpha39
-                                  | PayloadAlpha38
-
-                              const { iv, version } = val
-                              const ownersAESKeyEncrypted =
-                                  val.version === -38 ? val.AESKeyEncrypted : val.ownersAESKeyEncrypted
-
-                              setAlreadySelectedPreviously(alreadySelectedPreviously.concat(profile))
-                              return Services.Crypto.appendShareTarget(
-                                  version,
-                                  ownersAESKeyEncrypted,
-                                  iv,
-                                  profile.map((x) => x.identifier),
-                                  whoAmI!.identifier,
-                                  { type: 'direct', at: new Date() },
-                              )
-                          }
-                        : undefined
-                }
-                alreadySelectedPreviously={alreadySelectedPreviously}
-                profiles={friends}
                 whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown}
             />,
         )
