@@ -30,9 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     secondary: {
         fontSize: 14,
-        lineHeight: 1,
-        paddingRight: theme.spacing(3),
-        position: 'relative',
+        textAlign: 'right',
     },
     link: {
         top: 0,

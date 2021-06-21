@@ -4,23 +4,43 @@ import { TokenInList } from './TokenInList'
 import {
     Asset,
     CONSTANTS,
+    EthereumTokenType,
+    isSameAddress,
     TokenListsState,
     useAssetsFromChain,
     useConstant,
     useERC20TokensDetailedFromTokenLists,
+    useNativeTokenDetailed,
 } from '@dimensiondev/web3-shared'
+import { uniqBy } from 'lodash-es'
 
 //todo: add retryAssetsDetailedChain
 export const TokenList: React.FC = memo(() => {
     const [status, setStatus] = useState<string>()
     const ERC20_TOKEN_LISTS = useConstant(CONSTANTS, 'ERC20_TOKEN_LISTS')
+    const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS)
+
+    //#region mask token
+    const MASK_ADDRESS = useConstant(CONSTANTS, 'MASK_ADDRESS')
+    //#endregion
+
+    const renderAsset = uniqBy(
+        nativeTokenDetailed ? [nativeTokenDetailed, ...erc20TokensDetailed] : [...erc20TokensDetailed],
+        (x) => x.address.toLowerCase(),
+    ).sort((a, z) => {
+        if (a.type === EthereumTokenType.Native) return -1
+        if (z.type === EthereumTokenType.Native) return 1
+        if (isSameAddress(a.address, MASK_ADDRESS)) return -1
+        if (isSameAddress(z.address, MASK_ADDRESS)) return 1
+        return 0
+    })
 
     const {
         value: assetsDetailedChain = [],
         loading: assetsDetailedChainLoading,
         error: assetsDetailedChainError,
-    } = useAssetsFromChain(erc20TokensDetailed)
+    } = useAssetsFromChain(renderAsset)
 
     const handleSelect = (token: any) => {}
 
