@@ -1,8 +1,10 @@
 import { uniqBy } from 'lodash-es'
-import { CONSTANTS, getChainIdFromName, isSameAddress, useChainId, useConstant } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { getTokenUSDValue } from '../helpers'
 import type { Asset } from '../types'
+import { useChainId } from './useChainId'
+import { CONSTANTS } from '../constants'
+import { getChainIdFromName, getTokenUSDValue, isSameAddress } from '../utils'
+import { useConstant } from './useConstant'
 
 /**
  * Merge multiple token lists into one which sorted by balance.

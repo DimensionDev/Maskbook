@@ -2,7 +2,9 @@ import BigNumber from 'bignumber.js'
 import CHAINS from '../assets/chains.json'
 import { CONSTANTS } from '../constants'
 import {
+    Asset,
     ChainId,
+    CurrencyType,
     ERC1155TokenAssetDetailed,
     ERC20TokenDetailed,
     ERC721TokenAssetDetailed,
@@ -31,6 +33,8 @@ export function isNative(address: string) {
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
 }
+
+export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
 
 //#region constants
 

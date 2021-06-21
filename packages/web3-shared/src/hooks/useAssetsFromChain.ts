@@ -1,5 +1,6 @@
-import { FungibleTokenDetailed, useChainDetailed, useTokensBalance } from '@dimensiondev/web3-shared'
-import type { Asset } from '../types'
+import type { Asset, FungibleTokenDetailed } from '../types'
+import { useChainDetailed } from './useChainDetailed'
+import { useTokensBalance } from './useTokensBalance'
 import { useAssetsMerged } from './useAssetsMerged'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[]) {
