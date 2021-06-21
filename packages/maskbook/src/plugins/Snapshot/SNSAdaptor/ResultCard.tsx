@@ -76,10 +76,10 @@ function Content() {
     const classes = useStyles()
     const { t } = useI18N()
     const listRef = useRef<HTMLSpanElement[]>([])
-    const [tooltipVisibles, setTooltipVisibles] = useState<boolean[]>(new Array(results.length).fill(false))
+    const [tooltipsVisible, setTooltipsVisible] = useState<readonly boolean[]>(new Array(results.length).fill(false))
 
     useEffect(() => {
-        setTooltipVisibles(listRef.current.map((element) => (element.offsetWidth === choiceMaxWidth ? true : false)))
+        setTooltipsVisible(listRef.current.map((element) => (element.offsetWidth === choiceMaxWidth ? true : false)))
     }, [])
 
     const dataForCsv = useMemo(
@@ -109,7 +109,7 @@ function Content() {
                                 }}
                                 title={<Typography color="textPrimary">{result.choice}</Typography>}
                                 placement="top"
-                                disableHoverListener={!tooltipVisibles[i]}
+                                disableHoverListener={!tooltipsVisible[i]}
                                 arrow>
                                 <Typography
                                     ref={(ref) => {

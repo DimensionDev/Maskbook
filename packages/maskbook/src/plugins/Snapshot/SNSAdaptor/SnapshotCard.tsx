@@ -1,5 +1,4 @@
 import { Card, makeStyles, CardContent, CardHeader, Typography } from '@material-ui/core'
-import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -40,7 +39,6 @@ export interface SnapshotCardProps {
 export function SnapshotCard(props: SnapshotCardProps) {
     const { title, children } = props
 
-    const { t } = useI18N()
     const classes = useStyles()
 
     return (
