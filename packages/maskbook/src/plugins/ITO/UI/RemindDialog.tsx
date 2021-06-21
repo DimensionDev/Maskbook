@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         marginTop: theme.spacing(2),
+        padding: theme.spacing(2.5, 0, 3.5, 2),
     },
     tokenIcon: {
         display: 'flex',
