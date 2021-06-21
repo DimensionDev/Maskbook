@@ -27,6 +27,8 @@ import {
     UpgradeBackupJSONFile,
     BackupJSONFileLatest,
     decompressBackupFile,
+    WALLET_OR_PERSONA_NAME_MAX_LEN,
+    checkInputLengthExceed,
 } from '../../../utils'
 import ActionButton from '../DashboardComponents/ActionButton'
 import DashboardRouterContainer from './Container'
@@ -261,9 +263,17 @@ export function CreatePersona() {
                             }
                         }}
                         label={t('name')}
-                        helperText={' '}
+                        helperText={
+                            checkInputLengthExceed(name)
+                                ? t('input_length_exceed_prompt', {
+                                      name: t('persona_name').toLowerCase(),
+                                      length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                  })
+                                : undefined
+                        }
                         inputProps={{
                             'data-testid': 'username_input',
+                            maxlength: WALLET_OR_PERSONA_NAME_MAX_LEN,
                         }}
                         variant="outlined"
                     />
@@ -275,7 +285,7 @@ export function CreatePersona() {
                         className={setupFormClasses.button}
                         variant="contained"
                         onClick={createPersonaAndNext}
-                        disabled={!name}
+                        disabled={!name || checkInputLengthExceed(name)}
                         data-testid="next_button">
                         {t('set_up_button_next')}
                     </ActionButton>
