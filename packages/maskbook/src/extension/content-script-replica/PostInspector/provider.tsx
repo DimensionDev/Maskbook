@@ -1,4 +1,4 @@
-import { CurrentSNSNetwork, PostInfo, PostInfoProvider } from '@dimensiondev/mask-plugin-infra'
+import { CurrentSNSNetwork, PostInfo, PostInfoProvider, startPluginSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
 import { useMemo } from 'react'
 import { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { useEffect } from 'react'
@@ -7,6 +7,7 @@ import { PostInspector } from '../../../components/InjectedComponents/PostInspec
 import { noop } from 'lodash-es'
 import { twitterEncoding } from '../../../social-network-adaptor/twitter.com/encoding'
 import { deconstructPayload } from '../../../utils'
+import { createPluginHost } from '../../../plugin-infra/host'
 
 export type PostInfoItems = {
     author: string | null
@@ -67,6 +68,11 @@ export function MockPostInfoProvider({ snsAdaptor, author, content, id, image, c
         postInfo.postMetadataImages.clear()
         image && postInfo.postMetadataImages.add(image)
     }, [postInfo, image])
+    useEffect(() => {
+        const signal = new AbortController()
+        startPluginSNSAdaptor(snsAdaptor, createPluginHost(signal.signal))
+        return () => signal.abort()
+    }, [snsAdaptor])
     return (
         <PostInfoProvider post={postInfo}>
             <PostInspector
