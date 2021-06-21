@@ -50,7 +50,6 @@ import {
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
 import { useAvailableTraderProviders } from '../../../plugins/Trader/trending/useAvailableTraderProviders'
-import { getEnumAsArray } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {

@@ -1,5 +1,3 @@
-import type { ChainId } from '@dimensiondev/web3-shared'
-
 export interface Settings {
     currency: Currency
 }
