@@ -1,7 +1,5 @@
 import { TOKEN_CONSTANTS } from '../constants'
-import {
-    ChainId,
-} from '../types'
+import { ChainId } from '../types'
 import { constantOfChain } from './constant'
 
 export function isSameAddress(addrA: string, addrB: string) {

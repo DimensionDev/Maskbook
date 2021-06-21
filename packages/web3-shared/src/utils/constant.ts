@@ -1,7 +1,4 @@
-import {
-    ChainId,
-    Web3Constants,
-} from '../types'
+import { ChainId, Web3Constants } from '../types'
 
 /**
  * @deprecated Use constantOfChain from @dimensiondev/web3-shared package
@@ -10,7 +7,7 @@ import {
  *
  * After: `constantOfChain(T, ChainId.Mainnet).a`
  */
- export function getConstant<T extends Web3Constants, K extends keyof T>(
+export function getConstant<T extends Web3Constants, K extends keyof T>(
     constants: T,
     key: K,
     chainId = ChainId.Mainnet,

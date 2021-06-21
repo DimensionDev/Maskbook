@@ -1,10 +1,6 @@
-import {  safeUnreachable } from '@dimensiondev/maskbook-shared'
+import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 import CHAINS from '../assets/chains.json'
-import {
-    ChainId,
-    NetworkType,
-} from '../types'
-
+import { ChainId, NetworkType } from '../types'
 
 export function getChainDetailed(chainId: ChainId = ChainId.Mainnet) {
     return CHAINS.find((x) => x.chainId === chainId)
