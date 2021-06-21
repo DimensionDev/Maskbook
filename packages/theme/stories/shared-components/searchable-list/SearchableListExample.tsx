@@ -20,7 +20,7 @@ export function SearchableListItemExample({ data }: IItemProps) {
 
 export function SearchableListExample() {
     return (
-        <SearchableList<IDemoData> title={'Search demo'} open data={demoData} onSelect={() => {}}>
+        <SearchableList<IDemoData> title={'SearchableList'} open data={demoData} onSelect={() => {}}>
             {SearchableListItemExample}
         </SearchableList>
     )

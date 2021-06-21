@@ -574,6 +574,7 @@ importers:
   packages/shared:
     specifiers:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
+      '@dimensiondev/kit': ^0.0.0-20210221102734-0b4a937
       '@dimensiondev/maskbook-theme': workspace:*
       '@dimensiondev/web3-shared': workspace:*
       '@servie/events': ^3.0.0
@@ -584,6 +585,7 @@ importers:
       fuse.js: ^6.4.6
       immer: ^9.0.2
       lodash-es: ^4.17.21
+      react-use: ^17.2.4
       react-window: ^1.8.6
       ts-results: ^3.3.0
       typeson: ^6.1.0
@@ -592,6 +594,7 @@ importers:
       wallet.ts: ^1.0.1
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
+      '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
       '@dimensiondev/maskbook-theme': link:../theme
       '@dimensiondev/web3-shared': link:../web3-shared
       '@servie/events': 3.0.0
@@ -601,6 +604,7 @@ importers:
       fuse.js: 6.4.6
       immer: 9.0.2
       lodash-es: 4.17.21
+      react-use: 17.2.4
       react-window: 1.8.6
       ts-results: 3.3.0
       typeson: 6.1.0
@@ -19411,13 +19415,13 @@ packages:
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
     dev: false
 
-  /react-universal-interface/0.6.2_tslib@2.2.0:
+  /react-universal-interface/0.6.2_tslib@2.3.0:
     resolution: {integrity: sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==}
     peerDependencies:
       react: '*'
       tslib: '*'
     dependencies:
-      tslib: 2.2.0
+      tslib: 2.3.0
     dev: false
 
   /react-use/17.2.4:
@@ -19433,13 +19437,13 @@ packages:
       fast-shallow-equal: 1.0.0
       js-cookie: 2.2.1
       nano-css: 5.3.1
-      react-universal-interface: 0.6.2_tslib@2.2.0
+      react-universal-interface: 0.6.2_tslib@2.3.0
       resize-observer-polyfill: 1.5.1
       screenfull: 5.1.0
       set-harmonic-interval: 1.0.1
       throttle-debounce: 3.0.1
       ts-easing: 0.2.0
-      tslib: 2.2.0
+      tslib: 2.3.0
     dev: false
 
   /react-virtualized-auto-sizer/1.0.5:
@@ -20128,7 +20132,7 @@ packages:
   /rtl-css-js/1.14.1:
     resolution: {integrity: sha512-G9N1s/6329FpJr8k9e1U/Lg0IDWThv99sb7k0IrXHjSnubxe01h52/ajsPRafJK1/2Vqrhz3VKLe3E1dx6jS9Q==}
     dependencies:
-      '@babel/runtime': 7.14.0
+      '@babel/runtime': 7.14.6
     dev: false
 
   /run-async/2.4.1:
@@ -21997,6 +22001,10 @@ packages:
 
   /tslib/2.2.0:
     resolution: {integrity: sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==}
+
+  /tslib/2.3.0:
+    resolution: {integrity: sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==}
+    dev: false
 
   /tslint-eslint-rules/4.1.1_tslint@5.20.1+typescript@2.9.2:
     resolution: {integrity: sha1-fDDniC8mvCdr/5HSOEl1xp2viLo=}

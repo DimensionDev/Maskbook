@@ -2,6 +2,7 @@
   "name": "@dimensiondev/maskbook-shared",
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.8.0-20210317064617-6c4792c",
+    "@dimensiondev/kit": "^0.0.0-20210221102734-0b4a937",
     "@dimensiondev/maskbook-theme": "workspace:*",
     "@dimensiondev/web3-shared": "workspace:*",
     "@servie/events": "^3.0.0",
@@ -11,6 +12,7 @@
     "fuse.js": "^6.4.6",
     "immer": "^9.0.2",
     "lodash-es": "^4.17.21",
+    "react-use": "^17.2.4",
     "react-window": "^1.8.6",
     "ts-results": "^3.3.0",
     "typeson": "^6.1.0",

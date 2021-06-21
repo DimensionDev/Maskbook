@@ -3,7 +3,7 @@ import { FixedSizeList } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
 import { MaskDialog } from '@dimensiondev/maskbook-theme'
-import { TextField, DialogActions, DialogContent, Button, InputAdornment } from '@material-ui/core'
+import { TextField, DialogContent, InputAdornment } from '@material-ui/core'
 import { Search } from '@material-ui/icons'
 
 export interface MaskSearchableListProps<T> extends React.PropsWithChildren<{}> {
@@ -15,6 +15,32 @@ export interface MaskSearchableListProps<T> extends React.PropsWithChildren<{}> 
     onSelect(selected: T): void
     onSearch?(data: T[], key: string): T[]
     searchKey?: string[]
+}
+
+export interface MaskSearchableListItemProps<T> extends React.PropsWithChildren<{}> {
+    data: T
+    index: number
+    onSelect(item: T): void
+}
+
+interface FixSizeListItemProps<T> extends React.PropsWithChildren<{}> {
+    data: {
+        dataSet: T[]
+        onSelect: any
+    }
+    index: number
+    style: any
+}
+
+export const ItemInList = <T,>({ children, data, index, style }: FixSizeListItemProps<T>) => {
+    return (
+        <div style={style}>
+            {React.createElement<MaskSearchableListItemProps<T>>(
+                children as React.FunctionComponent<MaskSearchableListItemProps<T>>,
+                { data: data.dataSet[index], index: index, onSelect: data.onSelect },
+            )}
+        </div>
+    )
 }
 
 // todo: add i18n
@@ -50,13 +76,10 @@ export const SearchableList = <T,>({
     //#region create searched data
     const searchedData = useMemo(() => {
         if (!keyword) return data
-        const filtered = [...(onSearch ? onSearch(data, keyword) : []), ...fuse.search(keyword).map((x) => x.item)]
+        const filtered = [...(onSearch ? onSearch(data, keyword) : []), ...fuse.search(keyword).map((x: any) => x.item)]
         return key ? uniqBy(filtered, (x) => x[key]) : filtered
     }, [keyword, fuse, data])
     //#endregion
-
-    const ItemInList = (itemData: T) =>
-        React.createElement(children as React.FunctionComponent<{ data: T }>, { data: itemData })
 
     return (
         <MaskDialog title={title} onClose={() => {}} open={open}>
@@ -80,16 +103,13 @@ export const SearchableList = <T,>({
                     overscanCount={4}
                     itemSize={50}
                     itemData={{
-                        data: searchedData,
+                        dataSet: searchedData,
                         onSelect: onSelect,
                     }}
                     itemCount={searchedData.length}>
-                    {({ index }) => ItemInList(data[index])}
+                    {(props) => <ItemInList<T> {...props}>{children}</ItemInList>}
                 </FixedSizeList>
             </DialogContent>
-            <DialogActions>
-                <Button>Confirm</Button>
-            </DialogActions>
         </MaskDialog>
     )
 }
