@@ -30,15 +30,15 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const allowTestnet = useAllowTestnet()
     const providerType = useValueRef(currentProviderSettings)
 
-    // if false then the user should switch network manually
-    const isSwitchable = providerType === ProviderType.Maskbook || chainDetailed?.chain !== 'ETH'
-
     // if testnets were not allowed it will not guide the user to switch the network
     const isAllowed = allowTestnet || chainDetailed?.network === 'mainnet'
 
     const expectedChainId = props.chainId
     const actualNetwork = getChainName(chainId)
-    const expectedNetwork = getChainName(props.chainId)
+    const expectedNetwork = getChainName(expectedChainId)
+
+    // if false then the user should switch network manually
+    const isSwitchable = providerType === ProviderType.Maskbook || expectedChainId !== ChainId.Mainnet
 
     const onSwitch = useCallback(async () => {
         // a short time loading makes the user fells better
