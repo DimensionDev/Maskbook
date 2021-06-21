@@ -18,17 +18,22 @@ export function isSameAddress(addrA: string, addrB: string) {
     return addrA.toLowerCase() === addrB.toLowerCase()
 }
 
-export function isDAI(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'DAI_ADDRESS'))
+export function SameAddress(base: string) {
+    return (target: string | { address: string }) => {
+        if (typeof target === 'string') {
+            return isSameAddress(base, target)
+        } else if (typeof target === 'object' && typeof target.address === 'string') {
+            return isSameAddress(base, target.address)
+        }
+        throw new Error('Unsupported `target` address format')
+    }
 }
 
-export function isOKB(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'OBK_ADDRESS'))
-}
+export const isDAI = SameAddress(getConstant(CONSTANTS, 'DAI_ADDRESS'))
 
-export function isNative(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'))
-}
+export const isOKB = SameAddress(getConstant(CONSTANTS, 'OBK_ADDRESS'))
+
+export const isNative = SameAddress(getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'))
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)

@@ -7,7 +7,7 @@ import {
     CONSTANTS,
     resolveTokenLinkOnExplorer,
     FungibleTokenDetailed,
-    isSameAddress,
+    SameAddress,
 } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { TokenIcon } from './TokenIcon'
@@ -82,7 +82,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
         <ListItem
             button
             style={style}
-            disabled={data.selected.some((x) => isSameAddress(x, address))}
+            disabled={data.selected.some(SameAddress(address))}
             onClick={() => data.onSelect(address)}>
             <ListItemIcon>
                 <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} />

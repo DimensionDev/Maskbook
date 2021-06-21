@@ -4,7 +4,7 @@ import { isZero } from '@dimensiondev/maskbook-shared'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
-    isSameAddress,
+    SameAddress,
     TransactionEventType,
     TransactionStateType,
     useAccount,
@@ -74,7 +74,7 @@ export function useSwapCallback(
         }
 
         // error: invalid token
-        const swapTokenAt = payload.exchange_tokens.findIndex((x) => isSameAddress(x.address, token.address))
+        const swapTokenAt = payload.exchange_tokens.findIndex(SameAddress(token.address))
         if (swapTokenAt === -1) {
             setSwapState({
                 type: TransactionStateType.FAILED,
