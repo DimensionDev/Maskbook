@@ -32,17 +32,17 @@ export function currySameAddress(base: string) {
     }
 }
 
-export function constantOfChain<T extends Web3Constants>(constants: T, chainId: ChainId) {
+export function constantOfChain<T extends Web3Constants>(constants: T, chainId = ChainId.Mainnet) {
     const chainSpecifiedConstant = {} as { [key in keyof T]: T[key][ChainId.Mainnet] }
     for (const i in constants) chainSpecifiedConstant[i] = constants[i][chainId]
     return chainSpecifiedConstant
 }
 
-export const isDAI = currySameAddress(constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).DAI_ADDRESS)
+export const isDAI = currySameAddress(constantOfChain(TOKEN_CONSTANTS).DAI_ADDRESS)
 
-export const isOKB = currySameAddress(constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).OKB_ADDRESS)
+export const isOKB = currySameAddress(constantOfChain(TOKEN_CONSTANTS).OKB_ADDRESS)
 
-export const isNative = currySameAddress(constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).NATIVE_TOKEN_ADDRESS)
+export const isNative = currySameAddress(constantOfChain(TOKEN_CONSTANTS).NATIVE_TOKEN_ADDRESS)
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
@@ -141,7 +141,7 @@ export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     return {
         type: EthereumTokenType.Native,
         chainId,
-        address: getConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS'),
+        address: constantOfChain(TOKEN_CONSTANTS).NATIVE_TOKEN_ADDRESS,
         ...chainDetailed.nativeCurrency,
     }
 }
