@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
     },
     info: {
         color: theme.palette.mode === 'dark' ? blue[500] : blue[800],
-        extDecoration: 'underline', cursor: 'pointer',
+        extDecoration: 'underline',
+        cursor: 'pointer',
     },
 }))
 
