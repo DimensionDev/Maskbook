@@ -166,5 +166,5 @@ export function createRefsForCreatePostContext() {
         postMessage,
         postMetadataMentionedLinks,
         postMetadataImages,
-    }
+    } as const
 }

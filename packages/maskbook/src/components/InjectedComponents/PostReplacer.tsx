@@ -7,7 +7,7 @@ import { allPostReplacementSettings } from '../../settings/settings'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
 
-const useStlyes = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
         overflowWrap: 'break-word',
     },
@@ -16,10 +16,11 @@ const useStlyes = makeStyles((theme: Theme) => ({
 export interface PostReplacerProps {
     zip?: () => void
     unzip?: () => void
+    shouldReplace?: boolean
 }
 
 export function PostReplacer(props: PostReplacerProps) {
-    const classes = useStlyes()
+    const classes = useStyles()
     const postMessage = usePostInfoDetails.postMessage()
     const postPayload = usePostInfoDetails.postPayload()
     const allPostReplacement = useValueRef(allPostReplacementSettings)
@@ -34,12 +35,14 @@ export function PostReplacer(props: PostReplacerProps) {
         [plugins.map((x) => x.identifier).join(), postMessage],
     )
     const shouldReplacePost =
-        // replace all posts
-        allPostReplacement ||
-        // replace posts which enhanced by plugins
-        processedPostMessage.items.some((x) => !isWellKnownTypedMessages(x)) ||
-        // replace posts which encrypted by Mask
-        postPayload.ok
+        props.shouldReplace !== undefined
+            ? props.shouldReplace
+            : // replace all posts
+              allPostReplacement ||
+              // replace posts which enhanced by plugins
+              processedPostMessage.items.some((x) => !isWellKnownTypedMessages(x)) ||
+              // replace posts which encrypted by Mask
+              postPayload.ok
 
     // zip/unzip original post
     useEffect(() => {

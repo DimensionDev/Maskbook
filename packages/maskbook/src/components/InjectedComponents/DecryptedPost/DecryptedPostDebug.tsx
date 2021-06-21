@@ -1,13 +1,12 @@
 import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared'
-import { useMemo } from 'react'
 import type { ProfileIdentifier } from '../../../database/type'
 import type {
     FailureDecryption,
     SuccessDecryption,
 } from '../../../extension/background-script/CryptoServices/decryptFrom'
 import { debugModeSetting } from '../../../settings/settings'
-import { deconstructPayload, PayloadAlpha38 } from '../../../utils/type-transform/Payload'
+import type { PayloadAlpha38 } from '../../../utils/type-transform/Payload'
 import { usePostInfoDetails } from '../../DataSource/usePostInfo'
 import { DebugList } from '../../DebugModeUI/DebugList'
 import { DebugModeUI_PostHashDialog } from '../../DebugModeUI/PostHashDialog'
@@ -20,7 +19,7 @@ interface DebugDisplayProps {
 export function DecryptedPostDebug(props: Partial<DebugDisplayProps>) {
     const postBy = usePostInfoDetails.postBy()
     const postContent = usePostInfoDetails.postContent()
-    const payloadResult = useMemo(() => deconstructPayload(postContent), [postContent])
+    const payloadResult = usePostInfoDetails.postPayload()
     const setting = useValueRef(debugModeSetting)
     const isDebugging = isEnvironment(Environment.ManifestOptions) ? true : setting
 
@@ -32,7 +31,7 @@ export function DecryptedPostDebug(props: Partial<DebugDisplayProps>) {
             <DebugList
                 items={[
                     postBy.equals(currentIdentity) ? postByMyself : (['Hash of this post', debugHash] as const),
-                    ['Payload Error', payloadResult.val.message],
+                    ['Payload Error', String(payloadResult.val)],
                 ]}
             />
         )

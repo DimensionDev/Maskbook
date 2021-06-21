@@ -5,14 +5,15 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
-import { useFriendsList } from '../DataSource/useActivatedUI'
 import { Avatar } from '../../utils/components/Avatar'
 import type { Profile } from '../../database'
 import Services from '../../extension/service'
 import { PostIVIdentifier } from '../../database/type'
-import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { DialogContent, DialogContentText } from '@material-ui/core'
 import { InjectedDialog } from '../shared/InjectedDialog'
+import { useContext } from 'react'
+import { AppendRecipients } from '../DataSource/useAppendRecipients'
+import { usePostInfoDetails } from '@masknet/plugin-infra'
 
 export interface SimpleDialogProps {
     open: boolean
@@ -74,8 +75,8 @@ function PostHashDialog(props: SimpleDialogProps) {
 
 export function DebugModeUI_PostHashDialog(props: { post: string; network: string }) {
     const [open, setOpen] = useState(false)
-    const payload = deconstructPayload(props.post, null)
-    const friends = useFriendsList()
+    const payload = usePostInfoDetails.postPayload()
+    const { friends } = useContext(AppendRecipients)
     const { value: hashMap = [] } = useAsync(async () => {
         if (!payload.ok) return []
         const ivID = new PostIVIdentifier(props.network, payload.val.iv)
