@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { experimentalStyled as styled, Typography, Box, Button, buttonClasses } from '@material-ui/core'
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../../../locales'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { MaskWalletIcon, SendIcon, CardIcon, SwapIcon, DownloadIcon } from '@dimensiondev/icons'
 
@@ -70,7 +70,7 @@ const ButtonGroup = styled('div')`
     }
 `
 
-export const Balance = memo(({ balance, onSend, onBuy, onSwap, onReceive }: BalanceCardProps) => {
+export const Balance = memo<BalanceCardProps>(({ balance, onSend, onBuy, onSwap, onReceive }) => {
     const t = useDashboardI18N()
 
     return (
@@ -99,7 +99,10 @@ export const Balance = memo(({ balance, onSend, onBuy, onSwap, onReceive }: Bala
                 <Button onClick={onSwap} endIcon={<SwapIcon fontSize="inherit" />}>
                     {t.wallets_balance_Swap()}
                 </Button>
-                <Button color="secondary" onClick={onReceive} endIcon={<DownloadIcon fontSize="inherit" />}>
+                <Button
+                    color="secondary"
+                    onClick={onReceive}
+                    endIcon={<DownloadIcon fontSize="inherit" style={{ stroke: MaskColorVar.textLink }} />}>
                     {t.wallets_balance_Receive()}
                 </Button>
             </ButtonGroup>

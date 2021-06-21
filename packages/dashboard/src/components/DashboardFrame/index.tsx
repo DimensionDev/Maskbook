@@ -15,11 +15,16 @@ import {
 import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
 import Color from 'color'
 import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
-import { useState, useContext, useMemo } from 'react'
+import { useState, useContext, useMemo, Suspense } from 'react'
 import { DashboardContext } from './context'
 import { Navigation } from './Navigation'
 import { MaskNotSquareIcon } from '@dimensiondev/icons'
 import { memo } from 'react'
+import { FeaturePromotions } from './FeaturePromotions'
+import { useLocation } from 'react-router'
+import { RoutePaths } from '../../type'
+
+const featurePromotionsEnabled = [RoutePaths.Wallets, RoutePaths.WalletsTransfer, RoutePaths.WalletsHistory]
 
 const Root = styled(Grid)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -58,7 +63,9 @@ export const DashboardFrame = memo((props: DashboardFrameProps) => {
                     </LeftContainer>
                 )}
                 <Grid container direction="column" item xs={isLargeScreen ? 10 : 12}>
-                    <ErrorBoundary>{props.children}</ErrorBoundary>
+                    <Suspense fallback="Loading...">
+                        <ErrorBoundary>{props.children}</ErrorBoundary>
+                    </Suspense>
                 </Grid>
             </Root>
         </DashboardContext.Provider>
@@ -89,6 +96,7 @@ const PageTitle = styled(Grid)(({ theme }) => ({
 
 const Containment = styled(Grid)(({ theme }) => ({
     contain: 'strict',
+    display: 'flex',
     [theme.breakpoints.down('lg')]: {
         minHeight: `calc(100vh - 64px)`,
     },
@@ -113,9 +121,12 @@ const ShapeHelper = styled('div')(({ theme }) => ({
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
     backgroundColor: theme.palette.background.default,
     overflow: 'auto',
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
 }))
 
-const ShapeContainer = styled('div')(({ theme }) => ({
+const ContentContainer = styled('div')(({ theme }) => ({
     height: '100%',
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
@@ -142,10 +153,12 @@ export interface PageFrameProps extends React.PropsWithChildren<{}> {
 }
 
 export const PageFrame = memo((props: PageFrameProps) => {
+    const location = useLocation()
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
+    const showFeaturePromotions = featurePromotionsEnabled.some((path: string) => path === location.pathname)
     const classes = useStyle()
 
     return (
@@ -177,11 +190,12 @@ export const PageFrame = memo((props: PageFrameProps) => {
                     </NavigationDrawer>
                 )}
                 <ShapeHelper>
-                    <ShapeContainer
+                    <ContentContainer
                         className={props.noBackgroundFill ? undefined : classes.shapeContainerWithBackground}>
                         <ErrorBoundary>{props.children}</ErrorBoundary>
-                    </ShapeContainer>
+                    </ContentContainer>
                 </ShapeHelper>
+                {showFeaturePromotions ? <FeaturePromotions /> : null}
             </Containment>
         </>
     )

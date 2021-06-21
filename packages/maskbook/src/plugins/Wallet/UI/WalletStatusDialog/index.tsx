@@ -99,7 +99,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopy = useSnackbarCallback(
-        async (ev: React.MouseEvent<HTMLDivElement>) => {
+        async (ev: React.MouseEvent<HTMLAnchorElement>) => {
             ev.stopPropagation()
             copyToClipboard(selectedWallet?.address ?? '')
         },

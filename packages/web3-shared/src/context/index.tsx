@@ -27,8 +27,10 @@ export function useWeb3State() {
     const networkType = useSubscription(_.networkType)
     const wallets = useSubscription(_.wallets)
     const chainId = useSubscription(_.chainId)
-    const erc20Tokens = useSubscription(_.erc20Tokens)
     const chainDetailed = getChainDetailed(chainId)
+    const erc20Tokens = useSubscription(_.erc20Tokens)
+    const erc20TokensCount = useSubscription(_.erc20TokensCount)
+    const portfolioProvider = useSubscription(_.portfolioProvider)
     return {
         allowTestnet,
         account,
@@ -42,6 +44,8 @@ export function useWeb3State() {
         chainId,
         chainDetailed,
         erc20Tokens,
+        erc20TokensCount,
+        portfolioProvider,
         chainIdValid: !account || allowTestnet || chainDetailed?.network === 'mainnet',
     }
 }

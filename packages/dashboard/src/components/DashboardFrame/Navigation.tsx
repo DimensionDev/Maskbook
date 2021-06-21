@@ -18,10 +18,11 @@ import { DashboardContext } from './context'
 import { MaskNotSquareIcon } from '@dimensiondev/icons'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
-import { RoutePaths } from '../../pages/routes'
+import { RoutePaths } from '../../type'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string; nested?: boolean }) => {
     const navigate = useNavigate()
+
     return (
         <MuiListItem
             {...props}
@@ -42,11 +43,11 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
             cursor: 'pointer',
         },
         [`&.${listItemClasses.selected}`]: {
-            color: MaskColorVar.linkText,
+            color: MaskColorVar.textLink,
             backgroundColor: 'transparent',
             position: 'relative',
             [`${listItemIconClasses.root}`]: {
-                color: MaskColorVar.linkText,
+                color: MaskColorVar.textLink,
             },
             '&:after': {
                 content: '""',
@@ -55,7 +56,7 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
                 height: 40,
                 boxShadow: '-2px 0px 10px 2px rgba(0, 56, 255, 0.15)',
                 borderRadius: 50,
-                background: MaskColorVar.linkText,
+                background: MaskColorVar.textLink,
                 position: 'absolute',
                 right: 0,
             },

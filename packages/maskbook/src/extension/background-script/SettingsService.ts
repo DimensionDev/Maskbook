@@ -12,10 +12,12 @@ import { queryMyPersonas } from './IdentityService'
 import {
     currentBalanceSettings,
     currentBlockNumberSettings,
+    currentCollectibleDataProviderSettings,
     currentAccountSettings,
     currentNetworkSettings,
     currentProviderSettings,
     currentChainIdSettings,
+    currentPortfolioDataProviderSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
 
@@ -45,6 +47,14 @@ export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider
 export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(currentNetworkSettings)
 
 export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentAccountSettings)
+
+export const [getCurrentPortfolioDataProvider, setCurrentPortfolioDataProvider] = create(
+    currentPortfolioDataProviderSettings,
+)
+
+export const [getCurrentCollectibleDataProvider, setCurrentCollectibleDataProvider] = create(
+    currentCollectibleDataProviderSettings,
+)
 
 export async function getWalletAllowTestChain() {
     return Flags.wallet_allow_testnet
