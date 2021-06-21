@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import {
     ChainId,
+    getChainDetailed,
     getChainDetailedCAIP,
     getChainName,
     ProviderType,
@@ -30,15 +31,16 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const allowTestnet = useAllowTestnet()
     const providerType = useValueRef(currentProviderSettings)
 
+    const expectedChainId = props.chainId
+    const expectedNetwork = getChainName(expectedChainId)
+    const acutalChainId = chainId
+    const actualNetwork = getChainName(acutalChainId)
+
     // if false then the user should switch network manually
-    const isSwitchable = providerType === ProviderType.Maskbook || chainDetailed?.chain !== 'ETH'
+    const isSwitchable = providerType === ProviderType.Maskbook || getChainDetailed(expectedChainId)?.chain !== 'ETH'
 
     // if testnets were not allowed it will not guide the user to switch the network
     const isAllowed = allowTestnet || chainDetailed?.network === 'mainnet'
-
-    const expectedChainId = props.chainId
-    const actualNetwork = getChainName(chainId)
-    const expectedNetwork = getChainName(props.chainId)
 
     const onSwitch = useCallback(async () => {
         // a short time loading makes the user fells better
@@ -61,7 +63,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         await Services.Ethereum.addEthereumChain(chainDetailedCAIP, account)
     }, [account, isAllowed, isSwitchable, providerType, expectedChainId])
 
-    if (chainId === expectedChainId) return <>{props.children}</>
+    if (acutalChainId === expectedChainId) return <>{props.children}</>
 
     if (!isAllowed)
         return (
