@@ -1,8 +1,9 @@
 import BigNumber from 'bignumber.js'
 import { getEnumAsArray, safeUnreachable } from '@dimensiondev/maskbook-shared'
+import type Web3 from 'web3'
+import type { AbiOutput } from 'web3-utils'
 import CHAINS from '../assets/chains.json'
 import { TOKEN_CONSTANTS } from '../constants'
-import { constantOfChain } from '../hooks'
 import {
     Asset,
     ChainId,
@@ -29,6 +30,12 @@ export function currySameAddress(base: string) {
         }
         throw new Error('Unsupported `target` address format')
     }
+}
+
+export function constantOfChain<T extends Web3Constants>(constants: T, chainId: ChainId) {
+    const chainSpecifiedConstant = {} as { [key in keyof T]: T[key][ChainId.Mainnet] }
+    for (const i in constants) chainSpecifiedConstant[i] = constants[i][chainId]
+    return chainSpecifiedConstant
 }
 
 export const isDAI = currySameAddress(constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).DAI_ADDRESS)
@@ -220,10 +227,6 @@ export function createERC20Tokens(
     }, {} as { [chainId in ChainId]: ERC20TokenDetailed })
 }
 //#endregion
-
-//#region web3
-import type Web3 from 'web3'
-import type { AbiOutput } from 'web3-utils'
 
 export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
     if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)
