@@ -34,7 +34,12 @@ export abstract class PostInfo {
         this.postPayload.addListener((payload) => {
             if (payload.ok) this.iv.value = payload.val.iv
         })
+        this.postPayload.value = this.parsePayload(this.postContent.value)
+        this.postContent.addListener((content) => {
+            if (this.postPayload.value.err) this.postPayload.value = this.parsePayload(content)
+        })
     }
+    abstract parsePayload(str: string): Result<Payload, TypeError>
 
     readonly nickname = new ValueRef<string | null>(null)
     readonly avatarURL = new ValueRef<string | null>(null)
@@ -49,7 +54,7 @@ export abstract class PostInfo {
      * It MUST be the original result (but can be updated by the original parser).
      */
     readonly postMessage = new ValueRef<TypedMessageTuple>(makeTypedMessageTuple([]), isTypedMessageEqual)
-    /** It should appear in the transformedPostContent */
+    /** This property is auto computed. */
     readonly postPayload = new ValueRef<Result<Payload, Error>>(Err(new Error('Empty')))
     readonly decryptedPayloadForImage = new ValueRef<Payload | null>(null)
     declare abstract readonly commentsSelector?: LiveSelector<HTMLElement, false>
@@ -66,12 +71,10 @@ export abstract class PostInfo {
     readonly postMentionedLinks = new ObservableSet<string>()
     /**
      * The images as attachment of post
-     * @deprecated it should appear in postMessage
      */
     readonly postMetadataImages = new ObservableSet<string>()
     /**
      * The links does not appear in the post content
-     * TODO: move it somewhere else
      */
     readonly postMetadataMentionedLinks = new ObservableMap<HTMLAnchorElement, string>()
 }
@@ -81,6 +84,9 @@ const emptyPostInfo: PostInfo = new (class extends PostInfo {
     rootNode = undefined!
     rootNodeProxy = undefined!
     postContentNode = undefined
+    parsePayload(x: string) {
+        return Err(new TypeError())
+    }
 })()
 
 const Context = createContext<PostInfo>(emptyPostInfo)

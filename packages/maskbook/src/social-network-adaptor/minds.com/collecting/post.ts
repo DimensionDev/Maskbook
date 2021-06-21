@@ -25,6 +25,12 @@ export const PostProviderMinds: Next.CollectingCapabilities.PostsProvider = {
     },
 }
 
+abstract class MindsPostInfo extends PostInfo {
+    parsePayload(x: string) {
+        return deconstructPayload(x)
+    }
+}
+
 function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider['posts'], signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(postContentSelector()).useForeach((node, key, metadata) => {
@@ -44,7 +50,7 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
                 .querySelectorAll<HTMLFormElement>('.m-commentPoster__form')
                 .map((x) => x.parentElement)
 
-            const info: PostInfo = new (class extends PostInfo {
+            const info: PostInfo = new (class extends MindsPostInfo {
                 commentsSelector = commentSelector
                 commentBoxSelector = commentBoxSelector
                 rootNodeProxy = metadata

@@ -6,10 +6,19 @@ import { TypedMessage, makeTypedMessageImage, makeTypedMessageTuple } from '../.
 import { startWatch } from '../../../utils/watcher'
 import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
 import { instagramBase } from '../base'
+import { deconstructPayload } from '../../../utils'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     'main[role="main"] article[role="presentation"][tabindex="-1"]',
 )
+
+abstract class InstagramPostInfo extends PostInfo {
+    commentsSelector = undefined
+    commentBoxSelector = undefined
+    parsePayload(x: string) {
+        return deconstructPayload(x)
+    }
+}
 
 export const PostProviderInstagram: SocialNetworkUI.CollectingCapabilities.PostsProvider = {
     posts: creator.PostProviderStore(),
@@ -23,9 +32,7 @@ function collectPostsInstagramInner(
 ) {
     startWatch(
         new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
-            const info: PostInfo = new (class extends PostInfo {
-                commentsSelector = undefined
-                commentBoxSelector = undefined
+            const info: PostInfo = new (class extends InstagramPostInfo {
                 get rootNode() {
                     return node
                 }

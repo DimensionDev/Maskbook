@@ -25,6 +25,13 @@ export const PostProviderFacebook: Next.CollectingCapabilities.PostsProvider = {
         collectPostsFacebookInner(this.posts, signal)
     },
 }
+
+abstract class FacebookPostInfo extends PostInfo {
+    parsePayload(x: string) {
+        return deconstructPayload(x, facebookShared.utils.textPayloadPostProcessor?.decoder)
+    }
+}
+
 function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvider['posts'], signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
@@ -67,7 +74,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
 
             const commentBoxSelector = isMobileFacebook ? commentBoxSelectorMobile : commentBoxSelectorPC
 
-            const info: PostInfo = new (class extends PostInfo {
+            const info: PostInfo = new (class extends FacebookPostInfo {
                 commentsSelector = commentSelector
                 commentBoxSelector = commentBoxSelector
                 get rootNode() {
@@ -96,16 +103,6 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 info.postMessage.value = makeTypedMessageTuple(nextTypedMessage)
             }
             collectPostInfo()
-            info.postPayload.value = deconstructPayload(
-                info.postContent.value,
-                facebookShared.utils.textPayloadPostProcessor?.decoder,
-            )
-            info.postContent.addListener((newVal) => {
-                info.postPayload.value = deconstructPayload(
-                    newVal,
-                    facebookShared.utils.textPayloadPostProcessor?.decoder,
-                )
-            })
             return {
                 onNodeMutation: collectPostInfo,
                 onTargetChanged: collectPostInfo,

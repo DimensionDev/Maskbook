@@ -33,6 +33,9 @@ class TwitterPostInfo extends PostInfo {
     commentsSelector = undefined
     commentBoxSelector = undefined
     postContentNode = undefined
+    parsePayload(x: string) {
+        return deconstructPayload(x, twitterEncoding.payloadDecoder)
+    }
 }
 
 function registerPostCollectorInner(

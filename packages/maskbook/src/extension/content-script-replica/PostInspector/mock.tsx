@@ -14,6 +14,8 @@ export interface MockProps {
     onContentChanged: (newVal: string) => void
     image: string
     onImageChanged: (newVal: string) => void
+    currentIdentity: string
+    onCurrentIdentityChanged: (newVal: string) => void
 }
 export function Mock(props: MockProps) {
     const isDebugging = useValueRef(debugModeSetting)
@@ -66,6 +68,12 @@ export function Mock(props: MockProps) {
                 type="url"
                 value={props.image}
                 onChange={(e) => props.onImageChanged(e.currentTarget.value)}
+            />
+            <TextField
+                variant="standard"
+                label="Current identity"
+                value={props.currentIdentity}
+                onChange={(e) => props.onCurrentIdentityChanged(e.currentTarget.value)}
             />
         </Box>
     )
