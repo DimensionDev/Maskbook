@@ -8,7 +8,7 @@ export function loadKeyStore(input: string): KeyStore {
     try {
         store = JSON.parse(input)
     } catch {
-        throw new Error('We donot support non-json format keystore!')
+        throw new Error('JSON file is incorrect')
     }
     const validator = new ZSchema({
         strictMode: true,
@@ -22,6 +22,6 @@ export function assertKeyDerivation(keystore: CryptoKeyStore, derivedKey: Uint8A
     const payload = Buffer.concat([derivedKey.slice(16, 32), Buffer.from(keystore.ciphertext, 'hex')])
     const valid = sha3(`0x${payload.toString('hex')}`) === `0x${keystore.mac}`
     if (!valid) {
-        throw new Error('Key derivation failed - possibly wrong passphrase')
+        throw new Error('Password is incorrect')
     }
 }
