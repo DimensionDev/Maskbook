@@ -218,7 +218,7 @@ export function createERC20Tokens(
         accumulator[chainId] = {
             type: EthereumTokenType.ERC20,
             chainId,
-            address: getConstant(TOKEN_CONSTANTS, key, chainId) as string,
+            address: constantOfChain(TOKEN_CONSTANTS, chainId)[key],
             name: evaludator(name),
             symbol: evaludator(symbol),
             decimals: evaludator(decimals),
