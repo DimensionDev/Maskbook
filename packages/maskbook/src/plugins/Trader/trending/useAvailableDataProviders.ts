@@ -1,10 +1,12 @@
 import { useAsync } from 'react-use'
+import { useChainId } from '@dimensiondev/web3-shared'
 import { PluginTraderRPC } from '../messages'
 import type { TagType } from '../types'
 
 export function useAvailableDataProviders(type: TagType, keyword: string) {
+    const chainId = useChainId()
     return useAsync(async () => {
         if (!keyword) return []
         return PluginTraderRPC.getAvailableDataProviders(type, keyword)
-    }, [type, keyword])
+    }, [chainId, type, keyword])
 }

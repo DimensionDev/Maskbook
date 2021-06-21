@@ -1,5 +1,5 @@
-import { useChainId } from '@dimensiondev/web3-shared'
 import { useAsync } from 'react-use'
+import { useChainId } from '@dimensiondev/web3-shared'
 import { PluginTraderRPC } from '../messages'
 import type { TagType } from '../types'
 
