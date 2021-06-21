@@ -1,10 +1,10 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { WalletMessages, WalletRPC } from '../messages'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { useValueRef } from '@dimensiondev/maskbook-shared'
+import { ERC721TokenDetailed, EthereumTokenType, useChainId } from '@dimensiondev/web3-shared'
 import type { ERC721TokenRecord } from '../database/types'
 import { ERC721TokenArrayComparer } from '../helpers'
+import { WalletMessages, WalletRPC } from '../messages'
 import { useWallet } from './useWallet'
-import { ERC721TokenDetailed, EthereumTokenType, useChainId } from '@dimensiondev/web3-shared'
 
 //#region cache service query result
 const erc721TokensRef = new ValueRef<ERC721TokenRecord[]>([], ERC721TokenArrayComparer)

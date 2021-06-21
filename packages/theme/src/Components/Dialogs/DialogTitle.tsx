@@ -6,7 +6,7 @@ const Title = styled(DialogTitle)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     // gap: theme.spacing(1), // ? Safari doesn't support it
-    '& > *:first-child': { marginRight: theme.spacing(1) },
+    '& > *:first-of-type': { marginRight: theme.spacing(1) },
 }))
 export interface MaskDialogTitleProps {
     children: string

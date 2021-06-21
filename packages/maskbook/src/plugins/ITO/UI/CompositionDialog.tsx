@@ -169,8 +169,9 @@ export function CompositionDialog(props: CompositionDialogProps) {
         // After close this tx dialog, it should set the gas price to zero
         //  to let Metamask to determine the gas price for the further tx.
         currentGasPriceSettings.value = 0
+        setPoolSettings(undefined)
         props.onClose()
-    }, [props.onClose, state, currentGasPriceSettings])
+    }, [props, state, currentGasPriceSettings])
 
     // open the transaction dialog
     useEffect(() => {

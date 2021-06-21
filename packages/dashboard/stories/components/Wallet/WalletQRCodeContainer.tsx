@@ -8,7 +8,9 @@ export const WalletQRCodeContainer = of({
     args: {
         width: 330,
         height: 330,
-        borderHeight: 2,
-        borderWidth: 15,
+        border: {
+            borderHeight: 2,
+            borderWidth: 15,
+        },
     },
 })

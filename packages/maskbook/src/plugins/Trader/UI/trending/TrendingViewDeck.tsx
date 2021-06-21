@@ -4,8 +4,8 @@ import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutline
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-es'
-import { FormattedCurrency } from '@dimensiondev/maskbook-shared'
-import { useRemoteControlledDialog, useI18N, useValueRef, Flags } from '../../../../utils'
+import { FormattedCurrency, useValueRef } from '@dimensiondev/maskbook-shared'
+import { useRemoteControlledDialog, useI18N, Flags } from '../../../../utils'
 import { Coin, Currency, DataProvider, Stat, TradeProvider, Trending } from '../../types'
 import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
@@ -225,7 +225,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             {market ? (
                                 <>
                                     {typeof coin.market_cap_rank === 'number' ? (
-                                        <span className={classes.rank} title="Market Cap Rank">
+                                        <span className={classes.rank} title="Index Cap Rank">
                                             #{coin.market_cap_rank}
                                         </span>
                                     ) : null}
