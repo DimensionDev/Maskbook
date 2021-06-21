@@ -56,6 +56,7 @@ export const Web3Context: Web3ProviderType = {
     getAssetsListNFT: WalletRPC.getAssetsListNFT,
     getERC721TokensPaged,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+    getTransactionList: WalletRPC.getTransactionList,
     createMnemonicWords: WalletRPC.createMnemonicWords,
 }
 

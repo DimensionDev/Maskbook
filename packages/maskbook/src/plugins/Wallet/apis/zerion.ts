@@ -50,14 +50,14 @@ function subscribeFromZerion(socketNamespace: SocketNameSpace, requestBody: Sock
     })
 }
 
-export async function getTransactionList(address: string, page?: number) {
+export async function getTransactionList(address: string, page?: number, size = 30) {
     return (await subscribeFromZerion(addressSocket, {
         scope: ['transactions'],
         payload: {
             address,
             currency: 'usd',
-            transactions_limit: 30,
-            transactions_offset: (page ?? 0) * 30,
+            transactions_limit: size,
+            transactions_offset: (page ?? 0) * size,
             transactions_search_query: '',
         },
     })) as ZerionTransactionResponseBody

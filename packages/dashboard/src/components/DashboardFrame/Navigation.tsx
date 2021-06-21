@@ -19,13 +19,14 @@ import { MaskNotSquareIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { RoutePaths } from '../../type'
+import { omit } from 'lodash-es'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
     const navigate = useNavigate()
 
     return (
         <MuiListItem
-            {...props}
+            {...omit(props, 'nested')}
             selected={!!useMatch(to)}
             onClick={(event) => {
                 navigate(to)

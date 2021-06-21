@@ -17,6 +17,7 @@ export async function getTransactionList(
     address: string,
     provider: PortfolioProvider,
     page?: number,
+    size = 30,
 ): Promise<{
     transactions: Transaction[]
     hasNextPage: boolean
@@ -29,11 +30,11 @@ export async function getTransactionList(
             hasNextPage: false,
         }
     } else if (provider === PortfolioProvider.ZERION) {
-        const { payload, meta } = await ZerionApi.getTransactionList(address, page)
+        const { payload, meta } = await ZerionApi.getTransactionList(address, page, size)
         if (meta.status !== 'ok') throw new Error('Fail to load transactions.')
         return {
             transactions: fromZerion(payload.transactions),
-            hasNextPage: payload.transactions.length === 30,
+            hasNextPage: payload.transactions.length === size,
         }
     }
     return {
