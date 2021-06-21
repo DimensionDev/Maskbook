@@ -26,7 +26,7 @@ import {
     useStableTokensDebank,
     useChainDetailed,
     getChainIdFromName,
-    SameAddress,
+    currySameAddress,
 } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency, FormattedCurrency, isGreaterThan } from '@dimensiondev/maskbook-shared'
@@ -138,7 +138,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                     }}>
                     <Typography className={classes.name} color="textPrimary" component="span">
                         {new BigNumber(formatBalance(asset.balance, asset.token.decimals)).toFixed(
-                            stableTokens.some(SameAddress(asset.token.address)) ? 2 : 6,
+                            stableTokens.some(currySameAddress(asset.token.address)) ? 2 : 6,
                         )}
                     </Typography>
                 </Box>,

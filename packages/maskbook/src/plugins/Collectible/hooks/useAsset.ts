@@ -16,7 +16,7 @@ import {
     useChainId,
     useConstant,
     CONSTANTS,
-    SameAddress,
+    currySameAddress,
 } from '@dimensiondev/web3-shared'
 
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
@@ -41,7 +41,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                         openSeaResponse.collection?.safelist_request_status ?? '',
                     ),
                     is_order_weth: isSameAddress(desktopOrder?.paymentToken ?? '', WETH_ADDRESS),
-                    is_collection_weth: openSeaResponse.collection.payment_tokens.some(SameAddress(WETH_ADDRESS)),
+                    is_collection_weth: openSeaResponse.collection.payment_tokens.some(currySameAddress(WETH_ADDRESS)),
                     is_owner: openSeaResponse.top_ownerships.some((item) => isSameAddress(item.owner.address, account)),
                     // it's an IOS string as my inspection
                     is_auction: Date.parse(`${openSeaResponse.endTime ?? ''}Z`) > Date.now(),
