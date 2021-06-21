@@ -11,9 +11,10 @@ export function useCurrentDataProvider(availableDataProviders: DataProvider[]) {
 
     // sync data provider
     useEffect(() => {
-        // cached data provider unavailable
-        if (!availableDataProviders.includes(currentDataProvider)) return
-        setDataProvider(currentDataProvider)
-    }, [availableDataProviders.sort().join(','), currentDataProvider])
+        if (!availableDataProviders.length) return
+        setDataProvider(
+            availableDataProviders.includes(currentDataProvider) ? currentDataProvider : availableDataProviders[0],
+        )
+    }, [availableDataProviders.sort().join(), currentDataProvider])
     return dataProvider
 }

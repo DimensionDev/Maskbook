@@ -23,7 +23,6 @@ import {
 } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
-import { useApprovedTokens } from '../../trending/useApprovedTokens'
 import { CoinSaftyAlert } from './CoinSaftyAlert'
 
 const useStyles = makeStyles((theme) => {
@@ -165,7 +164,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     )
     //#endregion
 
-    const { approvedTokens, onApprove } = useApprovedTokens(trending.coin.contract_address)
     return (
         <TrendingCard {...TrendingCardProps}>
             <CardHeader

@@ -18,7 +18,7 @@ import { findIndex } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
-import { useI18N, getEnumAsArray, useSettingsSwticher } from '../../../utils'
+import { useI18N, useSettingsSwticher } from '../../../utils'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
@@ -36,6 +36,7 @@ import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pi
 import { Markdown } from '../../Snapshot/UI/Markdown'
 import { ActionBar } from './ActionBar'
 import { useChainId } from '@dimensiondev/web3-shared'
+import { getEnumAsArray } from '@dimensiondev/maskbook-shared'
 
 const useStyles = makeStyles((theme) => {
     return {

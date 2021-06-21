@@ -4,10 +4,10 @@ import { ListItem, ListItemText, Typography, ListItemIcon, Link } from '@materia
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import {
     useConstant,
-    CONSTANTS,
+    TOKEN_CONSTANTS,
     resolveTokenLinkOnExplorer,
     FungibleTokenDetailed,
-    isSameAddress,
+    currySameAddress,
 } from '@dimensiondev/web3-shared'
 import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { TokenIcon } from './TokenIcon'
@@ -72,7 +72,7 @@ export interface TokenInListProps {
 
 export function TokenInList({ data, index, style }: TokenInListProps) {
     const classes = useStyles()
-    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const NATIVE_TOKEN_ADDRESS = useConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
 
     const token = data.tokens[index]
@@ -82,7 +82,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
         <ListItem
             button
             style={style}
-            disabled={data.selected.some((x) => isSameAddress(x, address))}
+            disabled={data.selected.some(currySameAddress(address))}
             onClick={() => data.onSelect(address)}>
             <ListItemIcon>
                 <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} />

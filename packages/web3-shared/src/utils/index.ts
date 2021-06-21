@@ -1,6 +1,8 @@
 import BigNumber from 'bignumber.js'
+import { getEnumAsArray, safeUnreachable } from '@dimensiondev/maskbook-shared'
 import CHAINS from '../assets/chains.json'
-import { CONSTANTS } from '../constants'
+import { TOKEN_CONSTANTS } from '../constants'
+import { constantOfChain } from '../hooks'
 import {
     Asset,
     ChainId,
@@ -18,17 +20,22 @@ export function isSameAddress(addrA: string, addrB: string) {
     return addrA.toLowerCase() === addrB.toLowerCase()
 }
 
-export function isDAI(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'DAI_ADDRESS'))
+export function currySameAddress(base: string) {
+    return (target: string | { address: string }) => {
+        if (typeof target === 'string') {
+            return isSameAddress(base, target)
+        } else if (typeof target === 'object' && typeof target.address === 'string') {
+            return isSameAddress(base, target.address)
+        }
+        throw new Error('Unsupported `target` address format')
+    }
 }
 
-export function isOKB(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'OBK_ADDRESS'))
-}
+export const isDAI = currySameAddress(constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).DAI_ADDRESS)
 
-export function isNative(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'))
-}
+export const isOKB = currySameAddress(constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).OKB_ADDRESS)
+
+export const isNative = currySameAddress(constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).NATIVE_TOKEN_ADDRESS)
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
@@ -127,7 +134,7 @@ export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     return {
         type: EthereumTokenType.Native,
         chainId,
-        address: getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'),
+        address: getConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS'),
         ...chainDetailed.nativeCurrency,
     }
 }
@@ -190,11 +197,33 @@ export function createERC1155Token(
         asset,
     }
 }
+
+export function createERC20Tokens(
+    key: keyof typeof TOKEN_CONSTANTS,
+    name: string | ((chainId: ChainId) => string),
+    symbol: string | ((chainId: ChainId) => string),
+    decimals: number | ((chainId: ChainId) => number),
+) {
+    return getEnumAsArray(ChainId).reduce((accumulator, { value: chainId }) => {
+        const evaludator: <T>(f: T | ((chainId: ChainId) => T)) => T = (f) =>
+            typeof f === 'function' ? (f as any)(chainId) : f
+
+        accumulator[chainId] = {
+            type: EthereumTokenType.ERC20,
+            chainId,
+            address: getConstant(TOKEN_CONSTANTS, key, chainId) as string,
+            name: evaludator(name),
+            symbol: evaludator(symbol),
+            decimals: evaludator(decimals),
+        }
+        return accumulator
+    }, {} as { [chainId in ChainId]: ERC20TokenDetailed })
+}
 //#endregion
 
+//#region web3
 import type Web3 from 'web3'
 import type { AbiOutput } from 'web3-utils'
-import { safeUnreachable } from '@dimensiondev/maskbook-shared'
 
 export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
     if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)

@@ -1,4 +1,9 @@
-import { formatBalance, useValueRef } from '@dimensiondev/maskbook-shared'
+import { useState, useContext, useCallback, useEffect, useRef } from 'react'
+import { useAsyncRetry, useTimeoutFn } from 'react-use'
+import { makeStyles } from '@material-ui/core'
+import type { Trade } from '@uniswap/sdk'
+
+import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import {
     ChainId,
     createERC20Token,
@@ -9,30 +14,26 @@ import {
     useChainId,
     useTokenBalance,
 } from '@dimensiondev/web3-shared'
-import { makeStyles } from '@material-ui/core'
-import type { Trade } from '@uniswap/sdk'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { useAsyncRetry, useTimeoutFn } from 'react-use'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { TradeForm } from './TradeForm'
+import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
+import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
+import { TradeSummary } from '../trader/TradeSummary'
+import { ConfirmDialog } from './ConfirmDialog'
+import { TradeActionType } from '../../trader/useTradeState'
+import { SwapResponse, TokenPanelType, TradeComputed, TradeProvider, Coin } from '../../types'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { TradePairViewer } from '../uniswap/TradePairViewer'
+import { useTradeCallback } from '../../trader/useTradeCallback'
+import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
-import { delay, useRemoteControlledDialog } from '../../../../utils'
 import { EthereumMessages } from '../../../Ethereum/messages'
 import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
 import { isNativeTokenWrapper } from '../../helpers'
+import { TradeContext } from '../../trader/useTradeContext'
 import { PluginTraderRPC } from '../../messages'
-import { currentTradeProviderSettings } from '../../settings'
-import { useTradeCallback } from '../../trader/useTradeCallback'
-import { TradeActionType } from '../../trader/useTradeState'
-import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
-import { Coin, SwapResponse, TokenPanelType, TradeComputed, TradeProvider } from '../../types'
-import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
-import { TradeSummary } from '../trader/TradeSummary'
-import { TradePairViewer } from '../uniswap/TradePairViewer'
-import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
-import { ConfirmDialog } from './ConfirmDialog'
-import { TradeForm } from './TradeForm'
+import { delay, useRemoteControlledDialog } from '../../../../utils'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -66,7 +67,8 @@ export function Trader(props: TraderProps) {
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
 
-    const provider = useValueRef(currentTradeProviderSettings)
+    const context = useContext(TradeContext)
+    const provider = context?.TYPE ?? TradeProvider.UNISWAP
 
     //#region trade state
     const {
@@ -78,7 +80,7 @@ export function Trader(props: TraderProps) {
     useEffect(() => {
         dispatchTradeStore({
             type: TradeActionType.UPDATE_INPUT_TOKEN,
-            token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST : createNativeToken(chainId),
+            token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST[ChainId.Mainnet] : createNativeToken(chainId),
         })
         dispatchTradeStore({
             type: TradeActionType.UPDATE_OUTPUT_TOKEN,
@@ -326,7 +328,7 @@ export function Trader(props: TraderProps) {
                         inputToken={inputToken}
                         outputToken={outputToken}
                     />
-                    {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider) ? (
+                    {context?.IS_UNISWAP_LIKE ? (
                         <UniswapTradeRoute classes={{ root: classes.router }} trade={trade} />
                     ) : null}
                     {[TradeProvider.BALANCER].includes(provider) ? (
@@ -335,7 +337,7 @@ export function Trader(props: TraderProps) {
                             trade={trade as TradeComputed<SwapResponse>}
                         />
                     ) : null}
-                    {[TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider) ? (
+                    {context?.IS_UNISWAP_LIKE ? (
                         <TradePairViewer trade={trade as TradeComputed<Trade>} provider={provider} />
                     ) : null}
                 </>

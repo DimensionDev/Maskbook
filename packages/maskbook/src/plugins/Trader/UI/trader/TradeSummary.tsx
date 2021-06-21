@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import BigNumber from 'bignumber.js'
 import {
     makeStyles,
@@ -11,12 +11,13 @@ import {
     IconButton,
 } from '@material-ui/core'
 import LoopIcon from '@material-ui/icons/Loop'
+import { formatBalance, formatPercentage, isGreaterThan, pow10 } from '@dimensiondev/maskbook-shared'
+import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { ONE_BIPS } from '../../constants'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { SwapQuoteResponse, TradeComputed, TradeProvider, TradeStrategy } from '../../types'
-import { formatBalance, formatPercentage, isGreaterThan, pow10 } from '@dimensiondev/maskbook-shared'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { resolveUniswapWarningLevel, resolveUniswapWarningLevelColor, resolveZrxTradePoolName } from '../../pipes'
+import { TradeContext } from '../../trader/useTradeContext'
 
 type SummaryRecord = {
     title: string
@@ -72,6 +73,7 @@ export function TradeSummary(props: TradeSummaryProps) {
 
     const classes = useStylesExtends(useStyles(), props)
     const [priceReversed, setPriceReversed] = useState(false)
+    const context = useContext(TradeContext)
 
     const {
         strategy,
@@ -83,6 +85,7 @@ export function TradeSummary(props: TradeSummaryProps) {
         priceImpactWithoutFee,
         fee,
     } = trade
+
     const isExactIn = strategy === TradeStrategy.ExactIn
 
     const records: SummaryRecord[] = [
@@ -236,9 +239,7 @@ export function TradeSummary(props: TradeSummaryProps) {
             <List className={classes.list} component="ul">
                 {[
                     ...records,
-                    ...([TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider)
-                        ? uniswapRecords
-                        : []),
+                    ...(context?.IS_UNISWAP_LIKE ? uniswapRecords : []),
                     ...(provider === TradeProvider.BALANCER ? balancerRecords : []),
                     ...(provider === TradeProvider.ZRX ? zrxRecords : []),
                 ].map((record) =>

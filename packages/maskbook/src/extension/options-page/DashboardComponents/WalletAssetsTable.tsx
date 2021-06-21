@@ -21,13 +21,12 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import {
     CurrencyType,
-    ERC20TokenDetailed,
     EthereumTokenType,
-    isSameAddress,
     Wallet,
     useStableTokensDebank,
     useChainDetailed,
     getChainIdFromName,
+    currySameAddress,
 } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { formatBalance, formatCurrency, FormattedCurrency, isGreaterThan } from '@dimensiondev/maskbook-shared'
@@ -139,9 +138,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                     }}>
                     <Typography className={classes.name} color="textPrimary" component="span">
                         {new BigNumber(formatBalance(asset.balance, asset.token.decimals)).toFixed(
-                            stableTokens.some((y: ERC20TokenDetailed) => isSameAddress(y.address, asset.token.address))
-                                ? 2
-                                : 6,
+                            stableTokens.some(currySameAddress(asset.token.address)) ? 2 : 6,
                         )}
                     </Typography>
                 </Box>,
