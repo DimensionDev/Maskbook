@@ -30,7 +30,7 @@ function Dialogs() {
                     <Route path={PopupRoutes.ThirdPartyRequestPermission} exact>
                         <ThirdPartyRequestPermission />
                     </Route>
-                    <Route path={PopupRoutes.PostInspector + '/:SNSAdaptor/:author/:id'}>
+                    <Route path={PopupRoutes.PostInspector + '/:SNSAdaptor/'}>
                         <PostInspectorReplica />
                     </Route>
                 </Switch>
