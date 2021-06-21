@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { ChainId, Web3Constants } from '../types'
+import { constantOfChain } from '../utils/constant'
 import { useChainId } from './useChainId'
 
 /**
@@ -18,12 +19,6 @@ export function useConstantNext<T extends Web3Constants>(constants: T, chainId?:
     const current = useChainId()
     const finalChain = chainId ?? current
     return useMemo(() => constantOfChain(constants, finalChain), [constants, finalChain])
-}
-
-export function constantOfChain<T extends Web3Constants>(constants: T, chainId: ChainId) {
-    const chainSpecifiedConstant = {} as { [key in keyof T]: T[key][ChainId.Mainnet] }
-    for (const i in constants) chainSpecifiedConstant[i] = constants[i][chainId]
-    return chainSpecifiedConstant
 }
 
 function pick<T extends Web3Constants, K extends keyof T>(
