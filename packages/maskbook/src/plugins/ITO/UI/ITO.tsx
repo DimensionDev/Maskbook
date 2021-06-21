@@ -11,7 +11,7 @@ import {
     useChainIdValid,
     useAccount,
     useConstant,
-    CONSTANTS,
+    TOKEN_CONSTANTS,
     isSameAddress,
     getChainDetailed,
 } from '@dimensiondev/web3-shared'
@@ -184,7 +184,7 @@ interface TokenItemProps {
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
     const classes = useStyles({})
-    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const NATIVE_TOKEN_ADDRESS = useConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
 
     return (
         <>
