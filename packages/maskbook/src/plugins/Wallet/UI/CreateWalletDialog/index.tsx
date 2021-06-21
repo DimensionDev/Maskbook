@@ -73,10 +73,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface CreateWalletUIProps {
-    onSubmit: (words: string[], name: string) => Promise<void>
+    onCreated: () => void
 }
 
-export function CreateWalletUI({ onSubmit }: CreateWalletUIProps) {
+export function CreateWalletUI({ onCreated }: CreateWalletUIProps) {
     const [name, setName] = useState('')
     const [step, setStep] = useState(CreateWalletStep.NameAndWords)
     const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
@@ -90,10 +90,28 @@ export function CreateWalletUI({ onSubmit }: CreateWalletUIProps) {
         setStep(CreateWalletStep.Verify)
     }, [])
 
-    const handleSubmit = useCallback(async () => {
-        await onSubmit(words, name)
+    const onSuccess = useCallback(() => {
         resetCallback()
-    }, [words, name])
+        onCreated()
+    }, [resetCallback, onCreated])
+
+    const onSubmit = useSnackbarCallback(
+        async () => {
+            await WalletRPC.importNewWallet({
+                name,
+                path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+                mnemonic: words,
+                passphrase: '',
+            })
+            await WalletRPC.addPhrase({
+                path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
+                mnemonic: words,
+                passphrase: '',
+            })
+        },
+        [words, name],
+        onSuccess,
+    )
 
     if (step === CreateWalletStep.NameAndWords) {
         return (
@@ -113,7 +131,7 @@ export function CreateWalletUI({ onSubmit }: CreateWalletUIProps) {
             indexes={indexes}
             onUpdateAnswerWords={answerCallback}
             onBack={backToNameAndWords}
-            onSubmit={handleSubmit}
+            onSubmit={onSubmit}
         />
     )
 }
@@ -124,7 +142,6 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-
     //#region remote controlled dialog logic
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.createWalletDialogUpdated)
     const onClose = useCallback(async () => {
@@ -133,28 +150,10 @@ export function CreateWalletDialog(props: CreateWalletDialogProps) {
     }, [])
     //#endregion
 
-    const onSubmit = useSnackbarCallback<(words: string[], name: string) => Promise<void>, void>(
-        async (words, name) => {
-            await WalletRPC.importNewWallet({
-                name,
-                path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-                mnemonic: words,
-                passphrase: '',
-            })
-            await WalletRPC.addPhrase({
-                path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
-                mnemonic: words,
-                passphrase: '',
-            })
-        },
-        [],
-        onClose,
-    )
-
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_setup_title_create')} maxWidth="sm">
             <DialogContent className={classes.content}>
-                <CreateWalletUI onSubmit={onSubmit}></CreateWalletUI>
+                <CreateWalletUI onCreated={onClose} />
             </DialogContent>
         </InjectedDialog>
     )
