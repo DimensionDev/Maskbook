@@ -139,14 +139,14 @@ export function ToolboxHint(props: ToolboxHintProps) {
         WalletMessages.events.walletStatusDialogUpdated,
     )
 
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
+    const { openDialog: openCreateImportDialog } = useRemoteControlledDialog(
+        WalletMessages.events.createImportWalletDialogUpdated,
     )
     const openWallet = useCallback(() => {
         if (account) {
             openSelectWalletDialog()
         } else {
-            openSelectProviderDialog()
+            openCreateImportDialog()
         }
     }, [account])
     //#endregion
