@@ -1,4 +1,5 @@
 declare class BarcodeDetector {
+    static getSupportedFormats(): Promise<string[]>
     constructor(options: { formats: string[] })
     public async detect(mediaSource: CanvasImageSource): Promise<DetectedBarcode[]>
 }
@@ -10,6 +11,6 @@ declare class DetectedBarcode {
 }
 
 interface Window {
-    BarcodeDetector: BarcodeDetector
-    DetectedBarcode: DetectedBarcode
+    BarcodeDetector?: typeof BarcodeDetector
+    DetectedBarcode?: typeof DetectedBarcode
 }
