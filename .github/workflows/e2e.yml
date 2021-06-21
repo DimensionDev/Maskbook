@@ -4,11 +4,11 @@ name: E2E
 # events but only for the master branch
 on:
   push:
-    # branches: [master, released]
+    # branches: [master, develop, released]
     branches-ignore:
       - '**'
   pull_request:
-    # branches: [master, released]
+    # branches: [master, develop, released]
     branches-ignore:
       - '**'
 
