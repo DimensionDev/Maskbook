@@ -32,39 +32,21 @@ export function currySameAddress(base: string) {
     }
 }
 
-export function constantOfChain<T extends Web3Constants>(constants: T, chainId: ChainId) {
+export function constantOfChain<T extends Web3Constants>(constants: T, chainId = ChainId.Mainnet) {
     const chainSpecifiedConstant = {} as { [key in keyof T]: T[key][ChainId.Mainnet] }
     for (const i in constants) chainSpecifiedConstant[i] = constants[i][chainId]
     return chainSpecifiedConstant
 }
 
-export const isDAI = currySameAddress(constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).DAI_ADDRESS)
+export const isDAI = currySameAddress(constantOfChain(TOKEN_CONSTANTS).DAI_ADDRESS)
 
-export const isOKB = currySameAddress(constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).OKB_ADDRESS)
+export const isOKB = currySameAddress(constantOfChain(TOKEN_CONSTANTS).OKB_ADDRESS)
 
-export const isNative = currySameAddress(constantOfChain(TOKEN_CONSTANTS, ChainId.Mainnet).NATIVE_TOKEN_ADDRESS)
+export const isNative = currySameAddress(constantOfChain(TOKEN_CONSTANTS).NATIVE_TOKEN_ADDRESS)
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
 }
-
-//#region constants
-
-/**
- * @deprecated Use constantOfChain from @dimensiondev/web3-shared package
- *
- * Before: `getConstant(T, "a", ChainId.Mainnet)`
- *
- * After: `constantOfChain(T, ChainId.Mainnet).a`
- */
-export function getConstant<T extends Web3Constants, K extends keyof T>(
-    constants: T,
-    key: K,
-    chainId = ChainId.Mainnet,
-): T[K][ChainId.Mainnet] {
-    return constants[key][chainId]
-}
-//#endregion
 
 //#region chain detailed
 export function getChainDetailed(chainId: ChainId = ChainId.Mainnet) {
@@ -141,7 +123,7 @@ export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     return {
         type: EthereumTokenType.Native,
         chainId,
-        address: getConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS'),
+        address: constantOfChain(TOKEN_CONSTANTS).NATIVE_TOKEN_ADDRESS,
         ...chainDetailed.nativeCurrency,
     }
 }
@@ -218,7 +200,7 @@ export function createERC20Tokens(
         accumulator[chainId] = {
             type: EthereumTokenType.ERC20,
             chainId,
-            address: getConstant(TOKEN_CONSTANTS, key, chainId) as string,
+            address: constantOfChain(TOKEN_CONSTANTS, chainId)[key],
             name: evaludator(name),
             symbol: evaludator(symbol),
             decimals: evaludator(decimals),
