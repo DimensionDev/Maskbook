@@ -10,6 +10,7 @@ packages:
   - 'packages/theme'
   - 'packages/icons'
   - 'packages/contracts'
+  - 'packages/constants'
   - 'packages/plugin-infra'
   - 'packages/plugins/example'
   - 'packages/external-plugin-previewer'
