@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@dimensiondev/maskbook-theme'
 import { Grid, makeStyles } from '@material-ui/core'
 import { formatBalance, unreachable } from '@dimensiondev/maskbook-shared'
 import { useI18N } from '../../utils'

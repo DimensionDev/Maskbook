@@ -1,7 +1,7 @@
 import { Box, makeStyles, Theme } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
 import classNames from 'classnames'
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@dimensiondev/maskbook-theme'
 import { useState } from 'react'
 import { Database as DatabaseIcon } from 'react-feather'
 import { useI18N, BackupJSONFileLatest } from '../../../../utils'

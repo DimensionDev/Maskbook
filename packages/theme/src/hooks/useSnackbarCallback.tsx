@@ -1,6 +1,6 @@
-import { useMaskThemeI18N } from '../locales'
 import { useSnackbar } from 'notistack'
 import { useCallback } from 'react'
+import { useMaskThemeI18N } from '../locales'
 
 export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>(options: SnackbarCallback<P, T>): P
 /** Prefer the first overload. */

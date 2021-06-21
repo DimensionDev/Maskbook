@@ -1,6 +1,6 @@
 import { ChangeEvent, useState, useMemo, useCallback, useEffect } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@dimensiondev/maskbook-theme'
 import {
     makeStyles,
     Box,

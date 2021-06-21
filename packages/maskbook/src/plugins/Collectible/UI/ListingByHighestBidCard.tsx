@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@dimensiondev/maskbook-theme'
 import { makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
 import { FungibleTokenDetailed, EthereumTokenType, useAccount, TokenWatched, isNative } from '@dimensiondev/web3-shared'
 import { format as formatDateTime } from 'date-fns'

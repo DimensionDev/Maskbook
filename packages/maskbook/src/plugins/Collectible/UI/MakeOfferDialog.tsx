@@ -12,7 +12,7 @@ import {
     Link,
 } from '@material-ui/core'
 import { first } from 'lodash-es'
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@dimensiondev/maskbook-theme'
 import BigNumber from 'bignumber.js'
 import {
     FungibleTokenDetailed,
