@@ -23,7 +23,7 @@ export const CollectiblesPluginDefine: PluginConfig = {
     },
     postInspector: function Component() {
         const link = uniq(
-            usePostInfoDetails('postMetadataMentionedLinks').concat(usePostInfoDetails('postMentionedLinks')),
+            usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks()),
         ).find(checkUrl)
         const asset = getAssetInfoFromURL(link)
 

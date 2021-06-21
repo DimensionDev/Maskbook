@@ -16,6 +16,6 @@ export function useRedPacketContract(version: number) {
 
     const addressV3 = useConstant(RED_PACKET_CONSTANTS, 'HAPPY_RED_PACKET_ADDRESS_V3')
     const v3 = useContract<HappyRedPacketV3>(addressV3, HappyRedPacketV3ABI as AbiItem[])
-    const versions = [v1, v2, v3]
+    const versions = [v1, v2, v3] as const
     return versions[version - 1]
 }

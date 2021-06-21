@@ -130,7 +130,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
                     from: account,
                     value,
                 })
-                .catch((error: any) => {
+                .catch((error) => {
                     setCreateState({
                         type: TransactionStateType.FAILED,
                         error,

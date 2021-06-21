@@ -1,5 +1,5 @@
 import type { Persona } from '../../../database'
-import { definedSocialNetworkUIs, loadSocialNetworkUI } from '../../../social-network'
+import { definedSocialNetworkUIs, loadSocialNetworkUI, loadSocialNetworkUISync } from '../../../social-network'
 
 import ProviderLine, { ProviderLineProps } from './ProviderLine'
 import { currentSetupGuideStatus } from '../../../settings/settings'
@@ -11,6 +11,7 @@ import { delay } from '../../../utils/utils'
 import { SetupGuideStep } from '../../../components/InjectedComponents/SetupGuide'
 import { Flags } from '../../../utils/flags'
 import { requestSNSAdaptorPermission } from '../../../social-network/utils/permissions'
+import { useEffect } from 'react'
 
 interface ProfileBoxProps {
     persona: Persona | null
@@ -35,8 +36,13 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
         .filter((x) => x)
     const [detachProfile, , setDetachProfile] = useModal(DashboardPersonaUnlinkConfirmDialog)
 
+    useEffect(() => {
+        providers.forEach((provider) => loadSocialNetworkUI(provider.internalName))
+    }, [providers])
+
     const onConnect = async (provider: typeof providers[0]) => {
-        const ui = await loadSocialNetworkUI(provider.internalName)
+        const ui = loadSocialNetworkUISync(provider.internalName)
+        if (!ui) throw new Error('This process must be sync')
         // TODO: what if it does not have a (single?) home page? (e.g. mastdon)
         // TODO: maybe add a new action "onConnect"?
         const home = ui.utils.getHomePage?.()
@@ -65,7 +71,8 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
                     key={index}
                     onAction={() => (provider.connected ? onDisconnect(provider) : onConnect(provider))}
                     {...provider}
-                    {...ProviderLineProps}></ProviderLine>
+                    {...ProviderLineProps}
+                />
             ))}
             {detachProfile}
         </>

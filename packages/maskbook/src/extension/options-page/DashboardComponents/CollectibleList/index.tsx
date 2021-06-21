@@ -1,13 +1,12 @@
-import { createContext, useState } from 'react'
+import { formatEthereumAddress, useValueRef } from '@dimensiondev/maskbook-shared'
+import { EthereumTokenType, useAccount, Wallet } from '@dimensiondev/web3-shared'
 import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
-import { Wallet, EthereumTokenType, useAccount } from '@dimensiondev/web3-shared'
-import { CollectibleCard } from './CollectibleCard'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { useValueRef } from '../../../../utils/hooks/useValueRef'
-import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
-import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
+import { createContext, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
+import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
+import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
+import { CollectibleCard } from './CollectibleCard'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void

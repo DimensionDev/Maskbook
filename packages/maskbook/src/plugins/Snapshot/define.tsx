@@ -38,8 +38,9 @@ export const SnapShotPluginDefine: PluginConfig = {
         return <Renderer url={link} />
     },
     postInspector: function Component(): JSX.Element | null {
-        const link = usePostInfoDetails('postMetadataMentionedLinks')
-            .concat(usePostInfoDetails('postMentionedLinks'))
+        const link = usePostInfoDetails
+            .postMetadataMentionedLinks()
+            .concat(usePostInfoDetails.postMentionedLinks())
             .find(isSnaphotURL)
         if (!link) return null
         return <Renderer url={link} />

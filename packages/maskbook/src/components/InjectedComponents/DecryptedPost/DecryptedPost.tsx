@@ -63,13 +63,13 @@ export interface DecryptPostProps {
 }
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
-    const deconstructedPayload = usePostInfoDetails('postPayload')
+    const deconstructedPayload = usePostInfoDetails.postPayload()
     const authorInPayload = usePostClaimedAuthor()
     const current = usePostInfo()
-    const currentPostBy = usePostInfoDetails('postBy')
-    const decryptedPayloadForImage = usePostInfoDetails('decryptedPayloadForImage')
+    const currentPostBy = usePostInfoDetails.postBy()
+    const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postBy = or(authorInPayload, currentPostBy)
-    const postMetadataImages = usePostInfoDetails('postMetadataImages')
+    const postMetadataImages = usePostInfoDetails.postMetadataImages()
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
     const Failed = props.failedComponent || DecryptPostFailed

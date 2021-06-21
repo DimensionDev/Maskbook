@@ -6,7 +6,7 @@ import Services from '../../extension/service'
 import { ProfileIdentifier } from '../../database/type'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
-import { useValueRef } from '../../utils/hooks/useValueRef'
+import { useValueRef } from '@dimensiondev/maskbook-shared'
 import { debugModeSetting } from '../../settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
 import type { TypedMessageTuple } from '@dimensiondev/maskbook-shared'
@@ -31,12 +31,12 @@ export interface PostInspectorProps {
     slotPosition?: 'before' | 'after'
 }
 export function PostInspector(props: PostInspectorProps) {
-    const postBy = usePostInfoDetails('postBy')
-    const postContent = usePostInfoDetails('postContent')
-    const encryptedPost = usePostInfoDetails('postPayload')
-    const postId = usePostInfoDetails('postIdentifier')
-    const decryptedPayloadForImage = usePostInfoDetails('decryptedPayloadForImage')
-    const postImages = usePostInfoDetails('postMetadataImages')
+    const postBy = usePostInfoDetails.postBy()
+    const postContent = usePostInfoDetails.postContent()
+    const encryptedPost = usePostInfoDetails.postPayload()
+    const postId = usePostInfoDetails.postIdentifier()
+    const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
+    const postImages = usePostInfoDetails.postMetadataImages()
     const isDebugging = useValueRef(debugModeSetting)
     const whoAmI = useCurrentIdentity()
     const friends = useFriendsList()
@@ -63,7 +63,7 @@ export function PostInspector(props: PostInspectorProps) {
                 ['My fingerprint', whoAmI?.linkedPersona?.fingerprint ?? 'Unknown'],
                 ['Post ID', postId?.toText() || 'Unknown'],
                 ['Post Content', postContent],
-                ['Post Attachment Links', JSON.stringify(postImages.values())],
+                ['Post Attachment Links', JSON.stringify(postImages)],
             ]}
         />
     ) : null
