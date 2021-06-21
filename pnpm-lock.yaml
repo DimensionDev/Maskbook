@@ -575,6 +575,7 @@ importers:
     specifiers:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/maskbook-theme': workspace:*
+      '@dimensiondev/web3-shared': workspace:*
       '@servie/events': ^3.0.0
       '@types/react-window': ^1.8.3
       anchorme: ^2.1.2
@@ -592,6 +593,7 @@ importers:
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/maskbook-theme': link:../theme
+      '@dimensiondev/web3-shared': link:../web3-shared
       '@servie/events': 3.0.0
       anchorme: 2.1.2
       async-call-rpc: 5.1.0
@@ -656,6 +658,7 @@ importers:
       '@types/use-subscription': ^1.0.0
       bignumber.js: 9.0.1
       ethereum-blockies: ^0.1.1
+      fuse.js: ^6.4.6
       lodash-es: ^4.17.21
       react-use: ^17.2.4
       unstated-next: ^1.1.0
@@ -670,6 +673,7 @@ importers:
       '@types/use-subscription': 1.0.0
       bignumber.js: 9.0.1
       ethereum-blockies: 0.1.1
+      fuse.js: 6.4.6
       lodash-es: 4.17.21
       react-use: 17.2.4
       unstated-next: 1.1.0

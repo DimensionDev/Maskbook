@@ -16,4 +16,5 @@ export interface Web3ProviderType {
     networkType: Subscription<NetworkType>
     erc20Tokens: Subscription<ERC20TokenDetailed[]>
     erc721Tokens: Subscription<ERC721TokenDetailed[]>
+    fetchERC20TokensFromTokenLists(urls: string[], chainId: ChainId): Promise<ERC20TokenDetailed[]>
 }
