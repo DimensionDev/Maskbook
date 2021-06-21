@@ -4,18 +4,18 @@ import * as coinGeckoAPI from '../coingecko'
 import * as coinMarketCapAPI from '../coinmarketcap'
 import * as uniswapAPI from '../uniswap'
 import { Days } from '../../UI/trending/PriceChartDaysControl'
-import { getEnumAsArray } from '@dimensiondev/maskbook-shared'
+import { getEnumAsArray, unreachable } from '@dimensiondev/maskbook-shared'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import {
+    resolveAlias,
     resolveCoinId,
     resolveCoinAddress,
-    resolveAlias,
+    resolveNetworkType,
     isBlockedId,
     isBlockedKeyword,
     isMirroredKeyword,
-    resolveNetworkType,
 } from './hotfix'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { NetworkType } from '@dimensiondev/web3-shared'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 
 /**
@@ -175,15 +175,19 @@ export async function checkAvailabilityOnDataProvider(keyword: string, type: Tag
 
 export async function getAvailableDataProviders(type: TagType, keyword: string) {
     const checked = await Promise.all(
-        getEnumAsArray(DataProvider).map(
-            async (x) =>
-                [
-                    x.value,
-                    await checkAvailabilityOnDataProvider(resolveAlias(keyword, x.value), type, x.value),
-                ] as const,
-        ),
+        getEnumAsArray(DataProvider)
+            .filter((x) =>
+                x.value === DataProvider.UNISWAP_INFO ? currentNetworkSettings.value === NetworkType.Ethereum : true,
+            )
+            .map(
+                async (x) =>
+                    [
+                        x.value,
+                        await checkAvailabilityOnDataProvider(resolveAlias(keyword, x.value), type, x.value),
+                    ] as const,
+            ),
     )
-    return checked.filter(([_, y]) => y).map(([x]) => x)
+    return checked.filter(([, y]) => y).map(([x]) => x)
 }
 
 export async function getAvailableCoins(keyword: string, type: TagType, dataProvider: DataProvider) {
