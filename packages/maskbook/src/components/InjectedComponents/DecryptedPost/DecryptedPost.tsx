@@ -48,7 +48,7 @@ function progressReducer(
 
 export interface DecryptPostProps {
     onDecrypted: (post: TypedMessageTuple) => void
-    whoAmI: ProfileIdentifier
+    currentIdentity: ProfileIdentifier
     successComponent?: React.ComponentType<DecryptPostSuccessProps>
     successComponentProps?: Partial<DecryptPostSuccessProps>
     waitingComponent?: React.ComponentType<DecryptPostAwaitingProps>
@@ -57,7 +57,7 @@ export interface DecryptPostProps {
     failedComponentProps?: Partial<DecryptPostFailedProps>
 }
 export function DecryptPost(props: DecryptPostProps) {
-    const { whoAmI, onDecrypted } = props
+    const { currentIdentity, onDecrypted } = props
     const deconstructedPayload = usePostInfoDetails.postPayload()
     const authorInPayload = usePostClaimedAuthor()
     const current = usePostInfo()!
@@ -128,11 +128,11 @@ export function DecryptPost(props: DecryptPostProps) {
         if (deconstructedPayload.ok)
             makeProgress(
                 'post text',
-                ServicesWithProgress.decryptFromText(deconstructedPayload.val, postBy, whoAmI, sharedPublic),
+                ServicesWithProgress.decryptFromText(deconstructedPayload.val, postBy, currentIdentity, sharedPublic),
             )
         postMetadataImages.forEach((url) => {
             if (signal.signal.aborted) return
-            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI))
+            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, currentIdentity))
         })
         return () => signal.abort()
     }, [
@@ -142,7 +142,7 @@ export function DecryptPost(props: DecryptPostProps) {
         postBy.toText(),
         postMetadataImages.join(),
         sharedPublic,
-        whoAmI.toText(),
+        currentIdentity.toText(),
     ])
 
     // pass 2:
@@ -218,7 +218,7 @@ export function DecryptPost(props: DecryptPostProps) {
                 {rendered}
                 <DecryptedPostDebug
                     debugHash={debugHash}
-                    whoAmI={whoAmI}
+                    currentIdentity={currentIdentity}
                     decryptedResult={progress.type === 'progress' ? null : progress}
                 />
             </>
