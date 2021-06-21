@@ -3,7 +3,7 @@ import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
 export interface BackupPreview {
-    email: string
+    email?: string
     personas: number
     accounts: number
     posts: number

@@ -14,7 +14,7 @@ import {
 } from './version-2'
 
 export interface BackupPreview {
-    email: string
+    email?: string
     personas: number
     accounts: number
     posts: number
