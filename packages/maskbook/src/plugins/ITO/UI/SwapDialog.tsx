@@ -13,7 +13,6 @@ import {
     ChainId,
     TransactionStateType,
     useTokenBalance,
-    useConstant,
     resolveTransactionLinkOnExplorer,
     useChainId,
     isNative,
@@ -24,9 +23,9 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useSwapCallback } from '../hooks/useSwapCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { JSON_PayloadInMask } from '../types'
-import { ITO_CONSTANTS } from '../constants'
 import { SwapStatus } from './SwapGuide'
 import { EthereumMessages } from '../../Ethereum/messages'
+import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { useQualificationVerify } from '../hooks/useQualificationVerify'
@@ -117,7 +116,7 @@ export function SwapDialog(props: SwapDialogProps) {
 
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
-    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const ITO_CONTRACT_ADDRESS = useITO_ContractAddress()
 
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),

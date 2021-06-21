@@ -10,6 +10,10 @@ import {
     useChainId,
     useChainIdValid,
     useAccount,
+    useConstant,
+    TOKEN_CONSTANTS,
+    isSameAddress,
+    getChainDetailed,
 } from '@dimensiondev/web3-shared'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_Status, JSON_PayloadInMask } from '../types'
@@ -180,11 +184,17 @@ interface TokenItemProps {
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
     const classes = useStyles({})
+    const NATIVE_TOKEN_ADDRESS = useConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+
     return (
         <>
             <TokenIcon classes={{ icon: classes.tokenIcon }} address={exchangeToken.address} />
             <Typography component="span">
-                <strong>{price}</strong> {exchangeToken.symbol} / {token.symbol}
+                <strong>{price}</strong>{' '}
+                {isSameAddress(exchangeToken.address, NATIVE_TOKEN_ADDRESS)
+                    ? getChainDetailed(exchangeToken.chainId)?.nativeCurrency.symbol
+                    : exchangeToken.symbol}{' '}
+                / {token.symbol}
             </Typography>
         </>
     )
