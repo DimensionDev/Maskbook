@@ -77,7 +77,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
 
     const token = data.tokens[index]
     if (!token) return null
-    const { address, name, symbol } = token
+    const { address, name, symbol, logoURI } = token
     return (
         <ListItem
             button
@@ -85,7 +85,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
             disabled={data.selected.some((x) => isSameAddress(x, address))}
             onClick={() => data.onSelect(address)}>
             <ListItemIcon>
-                <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} />
+                <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURI={logoURI} />
             </ListItemIcon>
             <ListItemText classes={{ primary: classes.text }}>
                 <Typography className={classes.primary} color="textPrimary" component="span">
