@@ -21,6 +21,7 @@ export interface Proposal {
     status: string
     authorName: string | null
     authorAvatar: string | null
+    network: string
 }
 
 /**

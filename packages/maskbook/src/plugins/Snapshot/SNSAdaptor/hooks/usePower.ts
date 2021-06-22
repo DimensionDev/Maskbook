@@ -6,14 +6,14 @@ import { useProposal } from './useProposal'
 
 export function usePower(identifier: ProposalIdentifier) {
     const {
-        payload: { message },
+        payload: { message, proposal },
     } = useProposal(identifier.id)
 
     const account = useAccount()
     const blockNumber = useBlockNumber()
     return useAsyncRetry(async () => {
         if (!account) return 0
-        const scores = await PluginSnapshotRPC.getScores(message, [account], blockNumber)
+        const scores = await PluginSnapshotRPC.getScores(message, [account], blockNumber, proposal.network)
         return scores[0]![account]!
     }, [blockNumber, account])
 }

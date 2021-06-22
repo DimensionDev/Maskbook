@@ -107,7 +107,7 @@ function Content() {
                             <Typography>
                                 {millify(voteEntry[1].balance, { precision: 2, lowercase: true }) +
                                     ' ' +
-                                    voteEntry[1].strategySymbol.toUpperCase()}
+                                    (voteEntry[1].strategySymbol ? voteEntry[1].strategySymbol.toUpperCase() : '')}
                             </Typography>
                         </ListItem>
                     )
