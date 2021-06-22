@@ -15,6 +15,7 @@ import {
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import { Result, Err } from 'ts-results'
 import { Context, createContext, createElement, memo, useContext } from 'react'
+import { Subscription, useSubscription } from 'use-subscription'
 export abstract class PostInfo {
     constructor() {
         const calc = () => {
@@ -97,6 +98,8 @@ export const usePostInfoDetails: {
         ? T[]
         : PostInfo[key] extends ObservableMap<any, infer T>
         ? T[]
+        : PostInfo[key] extends Subscription<infer T>
+        ? T
         : PostInfo[key]
 } = new Proxy({ __proto__: null } as any, {
     get(_, key) {
@@ -112,11 +115,20 @@ export const usePostInfoDetails: {
             if (k instanceof ObservableMap) return useObservableValues<any>(k)
             // eslint-disable-next-line react-hooks/rules-of-hooks
             if (k instanceof ObservableSet) return useObservableValues<any>(k)
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            if (isSubscription(k)) return useSubscription<any>(k)
             return k
         }
         return _[key]
     },
 })
+function isSubscription(x: any): x is Subscription<any> {
+    return (
+        typeof x === 'object' &&
+        x !== null &&
+        Boolean((x as Subscription<any>).getCurrentValue && (x as Subscription<any>).subscribe)
+    )
+}
 
 export function usePostInfoSharedPublic(): boolean {
     const info = usePostInfoDetails.postPayload()
