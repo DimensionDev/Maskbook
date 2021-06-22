@@ -18,15 +18,6 @@ import { Context, createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
 export abstract class PostInfo {
     constructor() {
-        const calc = () => {
-            const by = this.postBy.value
-            const id = this.postID.value
-            if (by.isUnknown || id === null) this.postIdentifier.value = null
-            else this.postIdentifier.value = new PostIdentifier(by, id)
-        }
-        this.postID.addListener(calc)
-        this.postBy.addListener(calc)
-
         // update in-post links automatically
         this.postContent.addListener((post) => {
             this.postMentionedLinks.clear()
@@ -40,8 +31,19 @@ export abstract class PostInfo {
     readonly avatarURL = new ValueRef<string | null>(null)
     readonly postBy = new ValueRef(ProfileIdentifier.unknown, Identifier.equals)
     readonly postID = new ValueRef<string | null>(null)
-    /** This property is auto computed. */
-    readonly postIdentifier = new ValueRef<null | PostIdentifier<ProfileIdentifier>>(null, Identifier.equals)
+    readonly postIdentifier: Subscription<null | PostIdentifier<ProfileIdentifier>> = {
+        getCurrentValue: () => {
+            const by = this.postBy.value
+            const id = this.postID.value
+            if (by.isUnknown || id === null) return null
+            return new PostIdentifier(by, id)
+        },
+        subscribe: (sub) => {
+            const a = this.postBy.addListener(sub)
+            const b = this.postID.addListener(sub)
+            return () => void [a(), b()]
+        },
+    }
     /** The post message in plain text */
     readonly postContent = new ValueRef('')
     /**
