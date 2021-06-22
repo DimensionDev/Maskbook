@@ -1,7 +1,7 @@
 import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/PluginUI'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
+import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
 const PluginRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => x.SearchBoxComponent)
 export interface SearchResultBoxProps {}

@@ -1,6 +1,6 @@
 import { ChangeEvent, useState, useMemo, useCallback, useEffect } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { useSnackbar } from '@dimensiondev/maskbook-theme'
+import { useSnackbar } from '@masknet/theme'
 import {
     makeStyles,
     Box,
@@ -12,7 +12,7 @@ import {
     Typography,
     TextField,
 } from '@material-ui/core'
-import { FungibleTokenDetailed, EthereumTokenType, useAccount, TokenWatched, isNative } from '@dimensiondev/web3-shared'
+import { FungibleTokenDetailed, EthereumTokenType, useAccount, TokenWatched, isNative } from '@masknet/web3-shared'
 import { format as formatDateTime } from 'date-fns'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -22,7 +22,7 @@ import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
 import type { useAsset } from '../hooks/useAsset'
-import { isGreaterThan, isZero } from '@dimensiondev/maskbook-shared'
+import { isGreaterThan, isZero } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => {
     return {

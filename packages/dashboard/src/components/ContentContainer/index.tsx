@@ -1,5 +1,5 @@
 import { experimentalStyled as styled } from '@material-ui/core/styles'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 
 export const ContentContainer = styled('div')(({ theme }) => ({
     flex: 1,

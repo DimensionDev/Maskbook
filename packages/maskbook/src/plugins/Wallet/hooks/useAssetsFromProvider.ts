@@ -1,1 +1,1 @@
-export { useAssetsFromProvider } from '@dimensiondev/web3-shared'
+export { useAssetsFromProvider } from '@masknet/web3-shared'

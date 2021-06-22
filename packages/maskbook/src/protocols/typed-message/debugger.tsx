@@ -8,7 +8,7 @@ import {
     isTypedMessageTuple,
     isTypedMessageText,
     isTypedMessageImage,
-} from '@dimensiondev/maskbook-shared'
+} from '@masknet/shared'
 
 class TypedMessageFormatter {
     isTypedMessage(obj: unknown): obj is TypedMessage {

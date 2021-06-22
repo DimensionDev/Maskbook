@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { PluginCollectibleRPC } from '../messages'
 import { CollectibleToken, CollectibleProvider } from '../types'
 import { getOrderUnitPrice } from '../utils'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 import { toDate, toRaribleImage, toTokenDetailed, toTokenIdentifier } from '../helpers'
 import { OpenSeaAccountURL } from '../constants'
 import { resolveRaribleUserNetwork } from '../pipes'
@@ -17,7 +17,7 @@ import {
     useConstant,
     TOKEN_CONSTANTS,
     currySameAddress,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
     const account = useAccount()

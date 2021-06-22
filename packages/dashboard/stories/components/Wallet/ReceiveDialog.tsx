@@ -1,7 +1,7 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { ReceiveDialogUI as C } from '../../../src/pages/Wallets/components/ReceiveDialog'
 import { action } from '@storybook/addon-actions'
-import { NetworkType } from '@dimensiondev/web3-shared'
+import { NetworkType } from '@masknet/web3-shared'
 
 const { meta, of } = story(C)
 

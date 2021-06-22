@@ -1,12 +1,12 @@
 import type { AbiItem } from 'web3-utils'
 import { RED_PACKET_CONSTANTS } from '../../constants'
-import { useConstantNext, useContract } from '@dimensiondev/web3-shared'
-import HappyRedPacketV1ABI from '@dimensiondev/contracts/abis/HappyRedPacketV1.json'
-import type { HappyRedPacketV1 } from '@dimensiondev/contracts/types/HappyRedPacketV1'
-import HappyRedPacketV2ABI from '@dimensiondev/contracts/abis/HappyRedPacketV2.json'
-import type { HappyRedPacketV2 } from '@dimensiondev/contracts/types/HappyRedPacketV2'
-import HappyRedPacketV3ABI from '@dimensiondev/contracts/abis/HappyRedPacketV3.json'
-import type { HappyRedPacketV3 } from '@dimensiondev/contracts/types/HappyRedPacketV3'
+import { useConstantNext, useContract } from '@masknet/web3-shared'
+import HappyRedPacketV1ABI from '@masknet/contracts/abis/HappyRedPacketV1.json'
+import type { HappyRedPacketV1 } from '@masknet/contracts/types/HappyRedPacketV1'
+import HappyRedPacketV2ABI from '@masknet/contracts/abis/HappyRedPacketV2.json'
+import type { HappyRedPacketV2 } from '@masknet/contracts/types/HappyRedPacketV2'
+import HappyRedPacketV3ABI from '@masknet/contracts/abis/HappyRedPacketV3.json'
+import type { HappyRedPacketV3 } from '@masknet/contracts/types/HappyRedPacketV3'
 
 export function useRedPacketContract(version: number) {
     const {

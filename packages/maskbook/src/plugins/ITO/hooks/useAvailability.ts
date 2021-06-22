@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '@dimensiondev/web3-shared'
+import { useAccount } from '@masknet/web3-shared'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 
 export function useAvailability(id?: string, contract_address?: string) {

@@ -33,5 +33,5 @@ export interface Transaction {
     transactionType: string
 }
 
-export { PortfolioProvider, CollectibleProvider } from '@dimensiondev/web3-shared'
-export type { Asset } from '@dimensiondev/web3-shared'
+export { PortfolioProvider, CollectibleProvider } from '@masknet/web3-shared'
+export type { Asset } from '@masknet/web3-shared'

@@ -1,4 +1,4 @@
-import type { Plugin } from '@dimensiondev/mask-plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { RedPacketPluginID } from './constants'
 
 export const base: Plugin.Shared.Definition = {

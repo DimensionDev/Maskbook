@@ -1,4 +1,4 @@
-import { FungibleTokenDetailed, resolveAddressLinkOnExplorer, useChainId } from '@dimensiondev/web3-shared'
+import { FungibleTokenDetailed, resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared'
 import { Avatar, Button, Chip, Grid, Link, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'

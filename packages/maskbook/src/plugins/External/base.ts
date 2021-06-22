@@ -1,4 +1,4 @@
-import type { Plugin } from '@dimensiondev/mask-plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 
 export const base: Plugin.Shared.Definition = {
     ID: 'io.maskbook.external',

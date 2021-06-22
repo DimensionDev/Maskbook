@@ -8,8 +8,8 @@ import {
     resolveTokenLinkOnExplorer,
     FungibleTokenDetailed,
     currySameAddress,
-} from '@dimensiondev/web3-shared'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+} from '@masknet/web3-shared'
+import { formatEthereumAddress } from '@masknet/shared'
 import { TokenIcon } from './TokenIcon'
 
 const useStyles = makeStyles((theme: Theme) => ({

@@ -1,5 +1,5 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 import { ERC20TokenDetailed, ERC721TokenDetailed, EthereumTokenType, EthereumTokenDetailedType } from '../types'
 import { useERC20TokenDetailed } from './useERC20TokenDetailed'
 import { useERC721TokenDetailed } from './useERC721TokenDetailed'

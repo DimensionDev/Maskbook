@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { experimentalStyled as styled, Typography, Box, Button, buttonClasses } from '@material-ui/core'
 import { useDashboardI18N } from '../../../../locales'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
-import { MaskWalletIcon, SendIcon, CardIcon, SwapIcon, DownloadIcon } from '@dimensiondev/icons'
+import { MaskColorVar } from '@masknet/theme'
+import { MaskWalletIcon, SendIcon, CardIcon, SwapIcon, DownloadIcon } from '@masknet/icons'
 
 export interface BalanceCardProps {
     balance: number

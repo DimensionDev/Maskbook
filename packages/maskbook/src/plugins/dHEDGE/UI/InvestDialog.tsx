@@ -1,11 +1,11 @@
-import { formatBalance, isZero, pow10 } from '@dimensiondev/maskbook-shared'
+import { formatBalance, isZero, pow10 } from '@masknet/shared'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
     TransactionStateType,
     useAccount,
     useTokenBalance,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { DialogContent, makeStyles } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'

@@ -1,5 +1,5 @@
 {
-  "name": "@dimensiondev/cli",
+  "name": "@masknet/cli",
   "private": true,
   "bin": {
     "build": "./build/build.ts",

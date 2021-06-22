@@ -7,7 +7,7 @@ import { TransactionStateType, useTransactionState } from './useTransactionState
 import { useWeb3 } from './useWeb3'
 import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
-import { isGreaterThan, isZero } from '@dimensiondev/maskbook-shared'
+import { isGreaterThan, isZero } from '@masknet/shared'
 
 export function useNativeTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const web3 = useWeb3()

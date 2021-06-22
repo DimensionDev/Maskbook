@@ -1,4 +1,4 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { LoadingPlaceholder as C } from '../../../src/pages/Wallets/components/LoadingPlacholder'
 
 const { meta, of } = story(C)

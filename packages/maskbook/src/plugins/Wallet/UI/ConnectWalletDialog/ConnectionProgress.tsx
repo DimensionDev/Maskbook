@@ -1,5 +1,5 @@
 import { makeStyles, Box, Card, CircularProgress, Typography, Paper } from '@material-ui/core'
-import { resolveProviderName, ProviderType } from '@dimensiondev/web3-shared'
+import { resolveProviderName, ProviderType } from '@masknet/web3-shared'
 import { ProviderIcon } from '../../../../components/shared/ProviderIcon'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'

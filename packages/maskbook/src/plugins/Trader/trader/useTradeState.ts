@@ -1,5 +1,5 @@
 import { useReducer } from 'react'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { TradeStrategy } from '../types'
 
 export interface TradeState {

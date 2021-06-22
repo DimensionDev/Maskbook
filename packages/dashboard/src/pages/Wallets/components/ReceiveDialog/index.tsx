@@ -1,11 +1,11 @@
 import { memo } from 'react'
 import { useDashboardI18N } from '../../../../locales'
-import { MaskColorVar, MaskDialog, QRCode, useSnackbarCallback } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar, MaskDialog, QRCode, useSnackbarCallback } from '@masknet/theme'
 import { DialogContent, Typography, makeStyles, DialogActions, Button } from '@material-ui/core'
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
 import { useCopyToClipboard } from 'react-use'
 import { useCurrentSelectedWalletNetwork } from '../../api'
-import { NetworkType, resolveNetworkName } from '@dimensiondev/web3-shared'
+import { NetworkType, resolveNetworkName } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     paper: {

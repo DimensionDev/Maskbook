@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useValueRef } from '@dimensiondev/maskbook-shared'
+import { useValueRef } from '@masknet/shared'
 import stringify from 'json-stable-stringify'
 import { approvedTokensFromUniSwap } from '../settings'
 import { APPROVED_TOKENS_MAX } from '../constants'

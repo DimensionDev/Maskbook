@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { ContentContainer } from '../../../../components/ContentContainer'
 import { makeStyles, Box } from '@material-ui/core'
-import { MaskColorVar, useTabs } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar, useTabs } from '@masknet/theme'
 
 const useStyles = makeStyles((theme) => ({
     caption: {

@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { Paper, Typography, makeStyles, TypographyProps } from '@material-ui/core'
-import { useSnackbar } from '@dimensiondev/maskbook-theme'
+import { useSnackbar } from '@masknet/theme'
 import { selectElementContents, useI18N, useMatchXS } from '../../../utils'
 
 const useStyle = makeStyles((theme) => ({

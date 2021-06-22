@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import { makeStyles, Typography, Slider, CircularProgress } from '@material-ui/core'
-import { formatBalance, pow10, ZERO } from '@dimensiondev/maskbook-shared'
+import { formatBalance, pow10, ZERO } from '@masknet/shared'
 
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -17,7 +17,7 @@ import {
     useChainId,
     isNative,
     currySameAddress,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useSwapCallback } from '../hooks/useSwapCallback'

@@ -14,20 +14,13 @@ import {
     TOKEN_CONSTANTS,
     isSameAddress,
     getChainDetailed,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { useRemoteControlledDialog, getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
 import formatDateTime from 'date-fns/format'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import {
-    formatAmountPrecision,
-    formatEthereumAddress,
-    formatBalance,
-    isZero,
-    ZERO,
-    pow10,
-} from '@dimensiondev/maskbook-shared'
+import { formatAmountPrecision, formatEthereumAddress, formatBalance, isZero, ZERO, pow10 } from '@masknet/shared'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SwapGuide, SwapStatus } from './SwapGuide'

@@ -7,10 +7,10 @@ import {
     TransactionStateType,
     TransactionEventType,
     useAccount,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
 import type { TradeComputed } from '../../types'
-import type { RouterV2 } from '@dimensiondev/contracts/types/RouterV2'
+import type { RouterV2 } from '@masknet/contracts/types/RouterV2'
 
 interface SuccessfulCall {
     parameters: SwapParameters

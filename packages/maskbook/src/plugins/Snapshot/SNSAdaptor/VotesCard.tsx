@@ -1,5 +1,5 @@
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { resolveAddressLinkOnExplorer, resolveIPFSLink, useChainId } from '@dimensiondev/web3-shared'
+import { formatEthereumAddress } from '@masknet/shared'
+import { resolveAddressLinkOnExplorer, resolveIPFSLink, useChainId } from '@masknet/web3-shared'
 import { Avatar, Badge, Box, Link, List, ListItem, makeStyles, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import millify from 'millify'

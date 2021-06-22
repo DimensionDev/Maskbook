@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, useReducer, Fragment } from 'react'
-import { unreachable, makeTypedMessageTuple, TypedMessageTuple } from '@dimensiondev/maskbook-shared'
+import { unreachable, makeTypedMessageTuple, TypedMessageTuple } from '@masknet/shared'
 
 import { delay } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'

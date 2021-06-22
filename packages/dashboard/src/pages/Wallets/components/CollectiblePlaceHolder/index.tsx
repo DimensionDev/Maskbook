@@ -1,7 +1,7 @@
 import { memo } from 'react'
-import { MiniMaskIcon } from '@dimensiondev/icons'
+import { MiniMaskIcon } from '@masknet/icons'
 import { makeStyles } from '@material-ui/core'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 
 const useStyles = makeStyles(() => ({
     container: {

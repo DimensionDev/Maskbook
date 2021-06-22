@@ -1,6 +1,6 @@
 import type BigNumber from 'bignumber.js'
 import { Currency, DataProvider, TradeProvider, WarningLevel, ZrxTradePool } from './types'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 import {
     BIPS_BASE,
     PRICE_IMPACT_HIGH,

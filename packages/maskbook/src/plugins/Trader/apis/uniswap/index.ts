@@ -17,7 +17,7 @@ import {
     fetchBlockNumbersObjectByTimestamps,
 } from '../blocks'
 import { fetchLatestBlocks } from '../uniswap-health'
-import { isGreaterThan } from '@dimensiondev/maskbook-shared'
+import { isGreaterThan } from '@masknet/shared'
 
 type Value = string | number | BigNumber | undefined
 

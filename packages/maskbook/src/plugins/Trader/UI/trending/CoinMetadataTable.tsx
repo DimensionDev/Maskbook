@@ -14,7 +14,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy'
 import type { DataProvider, Trending } from '../../types'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import { Linking } from './Linking'
-import { FormattedAddress } from '@dimensiondev/maskbook-shared'
+import { FormattedAddress } from '@masknet/shared'
 import { CoinMetadataTags } from './CoinMetadataTags'
 
 const useStyles = makeStyles((theme) => ({

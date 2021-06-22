@@ -1,4 +1,4 @@
-import { ChainId } from '@dimensiondev/web3-shared'
+import { ChainId } from '@masknet/web3-shared'
 
 export const PLUGIN_META_KEY = 'com.maskbook.airdrop:1'
 export const PLUGIN_ID = 'com.maskbook.airdrop'

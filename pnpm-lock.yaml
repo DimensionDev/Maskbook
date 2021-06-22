@@ -10,12 +10,12 @@ importers:
     specifiers:
       '@commitlint/cli': ^12.1.4
       '@commitlint/config-conventional': ^12.1.4
-      '@dimensiondev/cli': workspace:*
       '@emotion/cache': ^11.4.0
       '@emotion/react': ^11.4.0
       '@emotion/styled': ^11.3.0
       '@magic-works/commonjs-import.meta': ^1.0.1
       '@magic-works/i18n-codegen': ^0.0.6
+      '@masknet/cli': workspace:*
       '@material-ui/core': 5.0.0-alpha.34
       '@material-ui/icons': 5.0.0-alpha.34
       '@material-ui/lab': 5.0.0-alpha.34
@@ -69,9 +69,9 @@ importers:
     devDependencies:
       '@commitlint/cli': 12.1.4
       '@commitlint/config-conventional': 12.1.4
-      '@dimensiondev/cli': link:packages/cli
       '@magic-works/commonjs-import.meta': 1.0.1_typescript@4.3.2
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.3.2
+      '@masknet/cli': link:packages/cli
       '@nice-labs/git-rev': 3.5.0
       eslint: 7.27.0
       eslint-config-prettier: 8.3.0_eslint@7.27.0
@@ -135,14 +135,14 @@ importers:
     specifiers:
       '@babel/core': ^7.14.3
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
-      '@dimensiondev/icons': workspace:*
       '@dimensiondev/kit': ^0.0.0-20210221102734-0b4a937
-      '@dimensiondev/mask-plugin-infra': workspace:*
-      '@dimensiondev/maskbook-shared': workspace:*
-      '@dimensiondev/maskbook-storybook-shared': workspace:*
-      '@dimensiondev/maskbook-theme': workspace:*
-      '@dimensiondev/plugin-example': workspace:*
-      '@dimensiondev/web3-shared': workspace:*
+      '@masknet/icons': workspace:*
+      '@masknet/plugin-example': workspace:*
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/storybook-shared': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/web3-shared': workspace:*
       '@servie/events': ^3.0.0
       '@snowpack/plugin-dotenv': ^2.1.0
       '@snowpack/plugin-react-refresh': ^2.5.0
@@ -171,14 +171,14 @@ importers:
       wallet.ts: ^1.0.1
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
-      '@dimensiondev/icons': link:../icons
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
-      '@dimensiondev/mask-plugin-infra': link:../plugin-infra
-      '@dimensiondev/maskbook-shared': link:../shared
-      '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
-      '@dimensiondev/maskbook-theme': link:../theme
-      '@dimensiondev/plugin-example': link:../plugins/example
-      '@dimensiondev/web3-shared': link:../web3-shared
+      '@masknet/icons': link:../icons
+      '@masknet/plugin-example': link:../plugins/example
+      '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/shared': link:../shared
+      '@masknet/storybook-shared': link:../storybook-shared
+      '@masknet/theme': link:../theme
+      '@masknet/web3-shared': link:../web3-shared
       '@servie/events': 3.0.0
       '@types/color': 3.0.1
       async-call-rpc: 5.1.0
@@ -210,21 +210,21 @@ importers:
 
   packages/external-plugin-previewer:
     specifiers:
-      '@dimensiondev/maskbook-shared': workspace:*
+      '@masknet/shared': workspace:*
       ef.js: ^0.13.6
       snowpack: ^3.0.11
     dependencies:
-      '@dimensiondev/maskbook-shared': link:../shared
+      '@masknet/shared': link:../shared
       ef.js: 0.13.7
     devDependencies:
       snowpack: 3.5.1
 
   packages/icons:
     specifiers:
-      '@dimensiondev/maskbook-theme': workspace:*
+      '@masknet/theme': workspace:*
       snowpack: ^3.5.1
     dependencies:
-      '@dimensiondev/maskbook-theme': link:../theme
+      '@masknet/theme': link:../theme
     devDependencies:
       snowpack: 3.5.1
 
@@ -232,20 +232,11 @@ importers:
     specifiers:
       '@balancer-labs/sor': ^1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
-      '@dimensiondev/contracts': workspace:*
-      '@dimensiondev/dashboard': workspace:*
-      '@dimensiondev/external-plugin-previewer': workspace:*
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
-      '@dimensiondev/icons': workspace:*
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
-      '@dimensiondev/mask-plugin-infra': workspace:*
-      '@dimensiondev/maskbook-shared': workspace:*
-      '@dimensiondev/maskbook-theme': workspace:*
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
-      '@dimensiondev/plugin-example': workspace:*
       '@dimensiondev/stego-js': '=0.11.1-20201027083223-8ab41be'
       '@dimensiondev/uniswap-sdk': '=3.0.4-20210619092641-a270dc0'
-      '@dimensiondev/web3-shared': workspace:*
       '@dimensiondev/webextension-shim': 0.0.3-20201120022530-b318b89
       '@ethersproject/address': ^5.0.4
       '@ethersproject/contracts': ^5.0.4
@@ -253,6 +244,15 @@ importers:
       '@ethersproject/providers': ^5.0.9
       '@ethersproject/solidity': ^5.0.4
       '@ethersproject/strings': ^5.1.0
+      '@masknet/contracts': workspace:*
+      '@masknet/dashboard': workspace:*
+      '@masknet/external-plugin-previewer': workspace:*
+      '@masknet/icons': workspace:*
+      '@masknet/plugin-example': workspace:*
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/web3-shared': workspace:*
       '@msgpack/msgpack': ^2.7.0
       '@openzeppelin/contracts': ^3.2.0
       '@pmmmwh/react-refresh-webpack-plugin': ^0.5.0-rc.0
@@ -394,26 +394,26 @@ importers:
     dependencies:
       '@balancer-labs/sor': 1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
-      '@dimensiondev/contracts': link:../contracts
-      '@dimensiondev/dashboard': link:../dashboard
-      '@dimensiondev/external-plugin-previewer': link:../external-plugin-previewer
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c_webextension-polyfill@0.8.0
-      '@dimensiondev/icons': link:../icons
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
-      '@dimensiondev/mask-plugin-infra': link:../plugin-infra
-      '@dimensiondev/maskbook-shared': link:../shared
-      '@dimensiondev/maskbook-theme': link:../theme
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
-      '@dimensiondev/plugin-example': link:../plugins/example
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@dimensiondev/uniswap-sdk': 3.0.4-20210619092641-a270dc0_418b2ad04426b02e1076b55b7e1862e2
-      '@dimensiondev/web3-shared': link:../web3-shared
       '@ethersproject/address': 5.1.0
       '@ethersproject/contracts': 5.1.0
       '@ethersproject/networks': 5.1.0
       '@ethersproject/providers': 5.1.0
       '@ethersproject/solidity': 5.1.0
       '@ethersproject/strings': 5.1.0
+      '@masknet/contracts': link:../contracts
+      '@masknet/dashboard': link:../dashboard
+      '@masknet/external-plugin-previewer': link:../external-plugin-previewer
+      '@masknet/icons': link:../icons
+      '@masknet/plugin-example': link:../plugins/example
+      '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/shared': link:../shared
+      '@masknet/theme': link:../theme
+      '@masknet/web3-shared': link:../web3-shared
       '@msgpack/msgpack': 2.7.0
       '@openzeppelin/contracts': 3.4.1
       '@popperjs/core': 2.9.2
@@ -558,18 +558,18 @@ importers:
   packages/plugin-infra:
     specifiers:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
-      '@dimensiondev/maskbook-shared': workspace:*
-      '@dimensiondev/maskbook-theme': workspace:*
-      '@dimensiondev/web3-shared': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/web3-shared': workspace:*
       '@servie/events': ^3.0.0
       '@types/use-subscription': ^1.0.0
       ts-results: ^3.3.0
       use-subscription: ^1.5.1
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
-      '@dimensiondev/maskbook-shared': link:../shared
-      '@dimensiondev/maskbook-theme': link:../theme
-      '@dimensiondev/web3-shared': link:../web3-shared
+      '@masknet/shared': link:../shared
+      '@masknet/theme': link:../theme
+      '@masknet/web3-shared': link:../web3-shared
       '@servie/events': 3.0.0
       '@types/use-subscription': 1.0.0
       ts-results: 3.3.0
@@ -577,9 +577,9 @@ importers:
 
   packages/plugins/example:
     specifiers:
-      '@dimensiondev/mask-plugin-infra': workspace:*
+      '@masknet/plugin-infra': workspace:*
     dependencies:
-      '@dimensiondev/mask-plugin-infra': link:../../plugin-infra
+      '@masknet/plugin-infra': link:../../plugin-infra
 
   packages/shared:
     specifiers:
@@ -620,15 +620,14 @@ importers:
   packages/theme:
     specifiers:
       '@babel/core': ^7.14.3
-      '@dimensiondev/maskbook-shared': workspace:*
-      '@dimensiondev/maskbook-storybook-shared': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/storybook-shared': workspace:*
       '@storybook/addon-actions': ^6.2.9
       '@storybook/addon-essentials': ^6.2.9
       '@storybook/addon-links': ^6.2.9
       '@storybook/addons': ^6.2.9
       '@storybook/react': ^6.2.9
       '@storybook/theming': ^6.2.9
-      '@types/classnames': ^2.3.1
       '@types/qrcode': ^1.3.5
       '@types/tinycolor2': ^1.4.2
       babel-loader: ^8.2.2
@@ -639,11 +638,8 @@ importers:
       storybook-addon-matrix: ^1.6.0
       tinycolor2: ^1.4.2
     dependencies:
-      '@dimensiondev/maskbook-shared': link:../shared
-      '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
-      '@types/classnames': 2.3.1
-      '@types/qrcode': 1.4.0
-      '@types/tinycolor2': 1.4.2
+      '@masknet/shared': link:../shared
+      '@masknet/storybook-shared': link:../storybook-shared
       classnames: 2.3.1
       lodash-es: 4.17.21
       notistack: 1.0.9
@@ -657,13 +653,15 @@ importers:
       '@storybook/addons': 6.2.9
       '@storybook/react': 6.2.9_@babel+core@7.14.3
       '@storybook/theming': 6.2.9
+      '@types/qrcode': 1.4.0
+      '@types/tinycolor2': 1.4.2
       babel-loader: 8.2.2_@babel+core@7.14.3
       storybook-addon-matrix: 1.6.0
 
   packages/web3-shared:
     specifiers:
-      '@dimensiondev/contracts': workspace:*
-      '@dimensiondev/maskbook-shared': workspace:*
+      '@masknet/contracts': workspace:*
+      '@masknet/shared': workspace:*
       '@types/use-subscription': ^1.0.0
       bignumber.js: 9.0.1
       ethereum-blockies: ^0.1.1
@@ -676,9 +674,8 @@ importers:
       web3-core: ^1.3.6
       web3-utils: ^1.3.6
     dependencies:
-      '@dimensiondev/contracts': link:../contracts
-      '@dimensiondev/maskbook-shared': link:../shared
-      '@types/use-subscription': 1.0.0
+      '@masknet/contracts': link:../contracts
+      '@masknet/shared': link:../shared
       bignumber.js: 9.0.1
       ethereum-blockies: 0.1.1
       lodash-es: 4.17.21
@@ -689,6 +686,8 @@ importers:
       web3: 1.3.6
       web3-core: 1.3.6
       web3-utils: 1.3.6
+    devDependencies:
+      '@types/use-subscription': 1.0.0
 
 packages:
 
@@ -5935,13 +5934,6 @@ packages:
       '@types/har-format': 1.2.5
     dev: false
 
-  /@types/classnames/2.3.1:
-    resolution: {integrity: sha512-zeOWb0JGBoVmlQoznvqXbE0tEC/HONsnoUNH19Hc96NFsTAwTXbTqb8FMYkru1F/iqp7a18Ws3nWJvtA1sHD1A==}
-    deprecated: This is a stub types definition. classnames provides its own type definitions, so you do not need this installed.
-    dependencies:
-      classnames: 2.3.1
-    dev: false
-
   /@types/color-convert/2.0.0:
     resolution: {integrity: sha512-m7GG7IKKGuJUXvkZ1qqG3ChccdIM/qBBo913z+Xft0nKCX4hAU/IxKwZBU4cpRZ7GS5kV4vOblUkILtSShCPXQ==}
     dependencies:
@@ -6526,7 +6518,6 @@ packages:
     resolution: {integrity: sha512-BwDnCjdZKVOyy6+SPJ4ph+0DAftZGn5JFCY/MhetdEQ8yF6+YndhJWlfdBP8vtMe0w5/FH29Xi6bnEwVWkU1LQ==}
     dependencies:
       '@types/node': 14.14.37
-    dev: false
 
   /@types/qs/6.9.6:
     resolution: {integrity: sha512-0/HnwIfW4ki2D8L8c9GVcG5I72s9jP5GSLVF0VIXDW00kmIpA6O33G7a8n59Tmh7Nz0WUC3rSb7PTY/sdW2JzA==}
@@ -6704,7 +6695,7 @@ packages:
 
   /@types/tinycolor2/1.4.2:
     resolution: {integrity: sha512-PeHg/AtdW6aaIO2a+98Xj7rWY4KC1E6yOy7AFknJQ7VXUGNrMlyxDFxJo7HqLtjQms/ZhhQX52mLVW/EX3JGOw==}
-    dev: false
+    dev: true
 
   /@types/trusted-types/2.0.0:
     resolution: {integrity: sha512-I8MnZqNXsOLHsU111oHbn3khtvKMi5Bn4qVFsIWSJcCP1KKDiXX5AEw8UPk0nSopeC+Hvxt6yAy1/a5PailFqg==}
@@ -6734,7 +6725,6 @@ packages:
 
   /@types/use-subscription/1.0.0:
     resolution: {integrity: sha512-0WWZ5GUDKMXUY/1zy4Ur5/zsC0s/B+JjXfHdkvx6JgDNZzZV5eW+KKhDqsTGyqX56uh99gwGwbsKbVwkcVIKQA==}
-    dev: false
 
   /@types/uuid/8.3.0:
     resolution: {integrity: sha512-eQ9qFW/fhfGJF8WKHGEHZEyVWfZxrT+6CLIJGBcZPfxUh/+BnEj+UCGYMlr9qZuX/2AltsvwrGqp0LhEW8D0zQ==}

@@ -1,4 +1,4 @@
-import type { Plugin } from '@dimensiondev/mask-plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { PLUGIN_DESCRIPTION, PLUGIN_ICON, PLUGIN_IDENTIFIER, PLUGIN_NAME } from './constants'
 
 export const base: Plugin.Shared.Definition = {

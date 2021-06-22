@@ -31,7 +31,7 @@ import { pasteImageToCompositionDefault } from '../../social-network/defaults/au
 import { currentSelectedIdentity } from '../../settings/settings'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { ProfileIdentifier } from '../../database/type'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 
 const twitterUI: SocialNetworkUI.Definition = {
     ...twitterBase,

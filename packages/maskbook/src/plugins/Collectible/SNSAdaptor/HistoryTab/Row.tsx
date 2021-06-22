@@ -1,6 +1,6 @@
 import { Avatar, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import LinkIcon from '@material-ui/icons/Link'
-import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
+import { formatBalance, FormattedBalance } from '@masknet/shared'
 import { formatElapsed } from '../../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'

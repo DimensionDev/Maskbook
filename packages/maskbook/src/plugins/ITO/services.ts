@@ -2,7 +2,7 @@ import type { JSON_PayloadInMask, PoolRecord } from './types'
 import { PluginITO_Messages } from './messages'
 import * as subgraph from './apis'
 import * as database from './database'
-import { getChainDetailed } from '@dimensiondev/web3-shared'
+import { getChainDetailed } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../Wallet/settings'
 
 export async function getTradeInfo(pid: string, trader: string) {

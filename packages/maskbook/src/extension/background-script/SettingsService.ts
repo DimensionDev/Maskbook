@@ -1,4 +1,4 @@
-import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@dimensiondev/maskbook-shared'
+import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@masknet/shared'
 import { head } from 'lodash-es'
 import type { InternalSettings } from '../../settings/createSettings'
 import {

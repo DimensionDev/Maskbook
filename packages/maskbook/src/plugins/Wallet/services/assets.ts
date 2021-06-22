@@ -1,7 +1,7 @@
 import { values } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { unreachable, formatEthereumAddress, pow10 } from '@dimensiondev/maskbook-shared'
+import { unreachable, formatEthereumAddress, pow10 } from '@masknet/shared'
 
 import { Asset, CollectibleProvider, BalanceRecord, PortfolioProvider, ZerionAddressAsset } from '../types'
 import * as OpenSeaAPI from '../apis/opensea'
@@ -19,7 +19,7 @@ import {
     getChainDetailed,
     getChainIdFromName,
     constantOfChain,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 
 export async function getAssetsListNFT(
     address: string,

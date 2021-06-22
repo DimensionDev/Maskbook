@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
-import { Wallet, useBlockie } from '@dimensiondev/web3-shared'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { Wallet, useBlockie } from '@masknet/web3-shared'
+import { formatEthereumAddress } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../custom-ui-helper'
 

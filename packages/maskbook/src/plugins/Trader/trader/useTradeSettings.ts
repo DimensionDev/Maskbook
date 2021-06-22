@@ -1,4 +1,4 @@
-import { useValueRef } from '@dimensiondev/maskbook-shared'
+import { useValueRef } from '@masknet/shared'
 import {
     currentTradeProviderSettings,
     getCurrentTradeProviderGeneralSettings,

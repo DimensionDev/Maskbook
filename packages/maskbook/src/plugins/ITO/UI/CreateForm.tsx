@@ -8,13 +8,7 @@ import Web3Utils from 'web3-utils'
 import { format as formatDateTime } from 'date-fns'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N, sliceTextByUILength } from '../../../utils'
-import {
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    useAccount,
-    useConstant,
-    useTokenBalance,
-} from '@dimensiondev/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, useAccount, useConstant, useTokenBalance } from '@masknet/web3-shared'
 import { useQualificationVerify } from '../hooks/useQualificationVerify'
 import { ITO_CONSTANTS } from '../constants'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
@@ -22,7 +16,7 @@ import { useCurrentIdentity } from '../../../components/DataSource/useActivatedU
 import type { PoolSettings } from '../hooks/useFill'
 import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { formatAmount, formatBalance, isGreaterThan, isZero } from '@dimensiondev/maskbook-shared'
+import { formatAmount, formatBalance, isGreaterThan, isZero } from '@masknet/shared'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { AdvanceSetting } from './AdvanceSetting'

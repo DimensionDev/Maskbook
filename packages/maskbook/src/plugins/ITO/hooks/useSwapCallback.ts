@@ -1,6 +1,6 @@
-import type { ITO } from '@dimensiondev/contracts/types/ITO'
-import type { PayableTx } from '@dimensiondev/contracts/types/types'
-import { isZero } from '@dimensiondev/maskbook-shared'
+import type { ITO } from '@masknet/contracts/types/ITO'
+import type { PayableTx } from '@masknet/contracts/types/types'
+import { isZero } from '@masknet/shared'
 import {
     currySameAddress,
     EthereumTokenType,
@@ -11,7 +11,7 @@ import {
     useGasPrice,
     useNonce,
     useTransactionState,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'

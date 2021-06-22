@@ -19,8 +19,8 @@
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
     "preinstall": "npx only-allow pnpm",
-    "prepare": "husky install",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
@@ -49,9 +49,9 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
-    "@dimensiondev/cli": "workspace:*",
     "@magic-works/commonjs-import.meta": "^1.0.1",
     "@magic-works/i18n-codegen": "^0.0.6",
+    "@masknet/cli": "workspace:*",
     "@nice-labs/git-rev": "^3.5.0",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",

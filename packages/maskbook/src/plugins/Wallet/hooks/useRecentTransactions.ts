@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAsyncRetry, useInterval } from 'react-use'
-import { useAccount, useChainId } from '@dimensiondev/web3-shared'
+import { useAccount, useChainId } from '@masknet/web3-shared'
 import { WalletRPC } from '../messages'
 
 const UPDATE_TRANSACTION_LATENCY = 30 /* seconds */ * 1000 /* milliseconds  */

@@ -1,4 +1,4 @@
-import { formatEthereumAddress, safeUnreachable, unreachable } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress, safeUnreachable, unreachable } from '@masknet/shared'
 import {
     ChainId,
     CollectibleProvider,

@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { useDashboardI18N } from '../../../../locales'
 import { Box, Button, DialogActions, DialogContent, makeStyles, Stack, Typography } from '@material-ui/core'
 import { TokenIcon } from '../TokenIcon'
-import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 
 export interface AddTokenConfirmUIProps {
     onBack: () => void

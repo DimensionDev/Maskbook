@@ -1,5 +1,5 @@
-import { formatWeiToGwei, useValueRef } from '@dimensiondev/maskbook-shared'
-import { EthereumTokenType, GasNow } from '@dimensiondev/web3-shared'
+import { formatWeiToGwei, useValueRef } from '@masknet/shared'
+import { EthereumTokenType, GasNow } from '@masknet/web3-shared'
 import { DialogContent, List, ListItem, makeStyles, Skeleton, TextField, Theme, Typography } from '@material-ui/core'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import BigNumber from 'bignumber.js'

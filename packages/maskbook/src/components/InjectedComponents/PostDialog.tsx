@@ -15,8 +15,8 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
-import { Plugin, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
-import { useValueRef } from '@dimensiondev/maskbook-shared'
+import { Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { useValueRef } from '@masknet/shared'
 import { CompositionEvent, MaskMessage, useI18N, Flags } from '../../utils'
 import { isMinds } from '../../social-network-adaptor/minds.com/base'
 import { useStylesExtends, or } from '../custom-ui-helper'
@@ -34,7 +34,7 @@ import {
     makeTypedMessageText,
     isTypedMessageText,
 } from '../../protocols/typed-message'
-import { EthereumTokenType, isDAI, isOKB } from '@dimensiondev/web3-shared'
+import { EthereumTokenType, isDAI, isOKB } from '@masknet/web3-shared'
 import { PluginRedPacketTheme } from '../../plugins/RedPacket/SNSAdaptor/RedPacketThemeOverride'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
 import { PluginUI } from '../../plugins/PluginUI'

@@ -1,4 +1,4 @@
-import type { Plugin } from '@dimensiondev/mask-plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { useMemo, Suspense } from 'react'
 import { Skeleton, makeStyles } from '@material-ui/core'
@@ -6,7 +6,7 @@ import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { PostInspector } from './PostInspector'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
-import { parseURL } from '@dimensiondev/maskbook-shared'
+import { parseURL } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => {
     return {

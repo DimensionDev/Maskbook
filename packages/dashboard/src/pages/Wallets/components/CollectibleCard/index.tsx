@@ -4,10 +4,10 @@ import {
     ChainId,
     CollectibleProvider,
     resolveCollectibleLink,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { memo } from 'react'
 import { Link, makeStyles, Typography } from '@material-ui/core'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 
 const useStyles = makeStyles(() => ({

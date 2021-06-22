@@ -1,4 +1,4 @@
-import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { formatBalance } from '@masknet/shared'
 import {
     ChainId,
     getChainIdFromName,
@@ -10,7 +10,7 @@ import {
     useChainIdValid,
     useNetworkType,
     useTokenDetailed,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { Box, Card, makeStyles, Skeleton, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { useCallback, useEffect } from 'react'

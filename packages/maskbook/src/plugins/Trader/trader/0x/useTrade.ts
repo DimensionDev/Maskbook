@@ -1,13 +1,7 @@
 import { difference } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
-import {
-    TOKEN_CONSTANTS,
-    useBlockNumber,
-    useConstant,
-    FungibleTokenDetailed,
-    isNative,
-} from '@dimensiondev/web3-shared'
-import { getEnumAsArray } from '@dimensiondev/maskbook-shared'
+import { TOKEN_CONSTANTS, useBlockNumber, useConstant, FungibleTokenDetailed, isNative } from '@masknet/web3-shared'
+import { getEnumAsArray } from '@masknet/shared'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy, ZrxTradePool } from '../../types'

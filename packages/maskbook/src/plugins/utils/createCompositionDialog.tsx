@@ -1,5 +1,5 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '@dimensiondev/maskbook-shared'
+import { useValueRef } from '@masknet/shared'
 import type { PluginConfig } from '../types'
 
 export function createCompositionDialog(

@@ -1,4 +1,4 @@
-import type { Plugin } from '@dimensiondev/mask-plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { base } from '../base'
 import { AirdropMetadataReader } from '../helpers'

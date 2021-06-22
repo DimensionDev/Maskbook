@@ -5,7 +5,7 @@ import {
     experimentalStyled as styled,
     listItemTextClasses,
 } from '@material-ui/core'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 
 export interface SettingItemProps extends React.PropsWithChildren<{}> {
     title: React.ReactNode | string

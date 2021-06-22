@@ -1,4 +1,4 @@
-import { TransactionStateType, useAccount } from '@dimensiondev/web3-shared'
+import { TransactionStateType, useAccount } from '@masknet/web3-shared'
 import { Box, CircularProgress, makeStyles, Typography } from '@material-ui/core'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { useAllPoolsAsSeller } from '../hooks/useAllPoolsAsSeller'

@@ -3,8 +3,8 @@ import { useDashboardI18N } from '../../../../locales'
 import { EthereumAddress } from 'wallet.ts'
 import { useUpdateEffect } from 'react-use'
 import { Button, DialogActions, DialogContent, makeStyles, TextField } from '@material-ui/core'
-import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared'
-import { isSameAddress } from '@dimensiondev/web3-shared'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared'
+import { isSameAddress } from '@masknet/web3-shared'
 
 export interface AddTokenFormUIProps {
     open: boolean

@@ -1,4 +1,4 @@
-import { Plugin, usePostInfoDetails } from '@dimensiondev/mask-plugin-infra'
+import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import { getTypedMessageContent } from '../../../protocols/typed-message'
 import { base } from '../base'
 import { getRelevantUrl } from '../utils'

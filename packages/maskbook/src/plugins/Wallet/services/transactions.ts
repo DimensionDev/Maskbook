@@ -11,7 +11,7 @@ import {
 } from '../types'
 import * as DeBankAPI from '../apis/debank'
 import * as ZerionApi from '../apis/zerion'
-import { pow10 } from '@dimensiondev/maskbook-shared'
+import { pow10 } from '@masknet/shared'
 
 export async function getTransactionList(
     address: string,

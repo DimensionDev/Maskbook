@@ -2,7 +2,7 @@ import { PluginSnapshotRPC } from '../../messages'
 import type { VoteItemList, ProposalIdentifier, VoteItem } from '../../types'
 import { useSuspense } from '../../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
-import { useBlockNumber } from '@dimensiondev/web3-shared'
+import { useBlockNumber } from '@masknet/web3-shared'
 
 const cache = new Map<string, [0, Promise<void>] | [1, VoteItemList] | [2, Error]>()
 export function votesRetry() {

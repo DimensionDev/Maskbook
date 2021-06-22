@@ -1,5 +1,5 @@
 import { makeStyles, Avatar, Theme, AvatarProps } from '@material-ui/core'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress } from '@masknet/shared'
 import {
     TOKEN_CONSTANTS,
     useBlockie,
@@ -7,7 +7,7 @@ import {
     ChainId,
     getChainFullName,
     constantOfChain,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useImageFailover } from '../../../utils/hooks/useImageFailover'
 

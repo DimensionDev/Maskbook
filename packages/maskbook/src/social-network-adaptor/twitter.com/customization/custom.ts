@@ -1,6 +1,6 @@
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '@dimensiondev/maskbook-shared'
-import { Appearance } from '@dimensiondev/maskbook-theme'
+import { useValueRef } from '@masknet/shared'
+import { Appearance } from '@masknet/theme'
 import { makeStyles, PaletteMode, ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core'
 import produce, { setAutoFreeze } from 'immer'
 import { createElement, useMemo } from 'react'

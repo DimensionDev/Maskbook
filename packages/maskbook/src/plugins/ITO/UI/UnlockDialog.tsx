@@ -2,7 +2,7 @@ import { Link, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { formatBalance, FormattedAddress, isGreaterThan, pow10 } from '@dimensiondev/maskbook-shared'
+import { formatBalance, FormattedAddress, isGreaterThan, pow10 } from '@masknet/shared'
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
@@ -11,7 +11,7 @@ import {
     resolveAddressLinkOnExplorer,
     ERC20TokenDetailed,
     EthereumTokenType,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'

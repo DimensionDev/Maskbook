@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 import millify from 'millify'
 import OpenInNew from '@material-ui/icons/OpenInNew'
-import { resolveBlockLinkOnExplorer, ChainId } from '@dimensiondev/web3-shared'
+import { resolveBlockLinkOnExplorer, ChainId } from '@masknet/web3-shared'
 import type { ProposalMessage } from '../types'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'

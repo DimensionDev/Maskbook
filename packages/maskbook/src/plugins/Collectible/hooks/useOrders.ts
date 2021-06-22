@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { OrderSide } from 'opensea-js/lib/types'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 import type { CollectibleToken, NFTOrder, OpenSeaCustomAccount } from '../types'
 import { CollectibleProvider } from '../types'
 import { PluginCollectibleRPC } from '../messages'

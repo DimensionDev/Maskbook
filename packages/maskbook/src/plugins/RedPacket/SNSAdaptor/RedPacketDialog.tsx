@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { DialogContent } from '@material-ui/core'
-import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
+import { usePortalShadowRoot } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { RedPacketJSONPayload, DialogTabs } from '../types'
@@ -11,7 +11,7 @@ import { RedPacketHistoryList } from './RedPacketHistoryList'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import Services from '../../../extension/service'
 import Web3Utils from 'web3-utils'
-import { useAccount, useChainId } from '@dimensiondev/web3-shared'
+import { useAccount, useChainId } from '@masknet/web3-shared'
 
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean

@@ -2,7 +2,7 @@ import type { FullPersonaDBTransaction } from './Persona.db'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
 import type { IdentifierMap } from '../IdentifierMap'
 import { restorePrototype } from '../../utils/type'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 
 type ReadwriteFullPersonaDBTransaction = FullPersonaDBTransaction<'readwrite'>
 

@@ -16,7 +16,7 @@ import { Children, cloneElement } from 'react'
 import { useI18N, usePortalShadowRoot } from '../../utils'
 import { mergeClasses, useStylesExtends } from '../custom-ui-helper'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
-import { ErrorBoundary } from '@dimensiondev/maskbook-theme'
+import { ErrorBoundary } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../../social-network'
 
 const useStyles = makeStyles((theme) => ({

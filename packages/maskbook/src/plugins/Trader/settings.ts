@@ -1,4 +1,4 @@
-import { getEnumAsArray, unreachable } from '@dimensiondev/maskbook-shared'
+import { getEnumAsArray, unreachable } from '@masknet/shared'
 import stringify from 'json-stable-stringify'
 import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'

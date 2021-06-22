@@ -6,8 +6,8 @@ import {
     useGasPrice,
     useNonce,
     useTransactionState,
-} from '@dimensiondev/web3-shared'
-import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+} from '@masknet/web3-shared'
+import type { NonPayableTx } from '@masknet/contracts/types/types'
 import type { TransactionReceipt } from 'web3-core'
 
 export function useRefundCallback(version: number, from: string, id?: string) {

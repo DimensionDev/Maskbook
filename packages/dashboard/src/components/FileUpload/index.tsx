@@ -1,7 +1,7 @@
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 import { makeStyles, Typography } from '@material-ui/core'
 import { useEffect, useState } from 'react'
-import { File as FileIcon } from '@dimensiondev/icons'
+import { File as FileIcon } from '@masknet/icons'
 
 const useStyles = makeStyles(() => ({
     root: {

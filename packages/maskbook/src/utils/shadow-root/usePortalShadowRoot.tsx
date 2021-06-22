@@ -2,4 +2,4 @@ export {
     usePortalShadowRoot,
     createShadowRootForwardedComponent,
     createShadowRootForwardedPopperComponent,
-} from '@dimensiondev/maskbook-shared'
+} from '@masknet/shared'

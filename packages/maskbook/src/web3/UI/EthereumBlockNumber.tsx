@@ -1,4 +1,4 @@
-import { useBlockNumber } from '@dimensiondev/web3-shared'
+import { useBlockNumber } from '@masknet/web3-shared'
 import { makeStyles, Typography, TypographyProps } from '@material-ui/core'
 import { useI18N } from '../../utils'
 

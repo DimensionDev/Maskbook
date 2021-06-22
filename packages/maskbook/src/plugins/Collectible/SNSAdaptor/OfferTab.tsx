@@ -8,8 +8,8 @@ import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
-import { useAccount } from '@dimensiondev/web3-shared'
-import { isZero } from '@dimensiondev/maskbook-shared'
+import { useAccount } from '@masknet/web3-shared'
+import { isZero } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => {
     return {

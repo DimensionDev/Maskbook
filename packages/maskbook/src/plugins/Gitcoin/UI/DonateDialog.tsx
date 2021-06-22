@@ -15,11 +15,11 @@ import {
     TransactionStateType,
     useConstant,
     useTokenBalance,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { formatBalance, pow10 } from '@dimensiondev/maskbook-shared'
+import { formatBalance, pow10 } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'

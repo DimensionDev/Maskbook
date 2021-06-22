@@ -1,5 +1,5 @@
 import { debounce } from 'lodash-es'
-import { ChainId, ProviderType, getNetworkTypeFromChainId } from '@dimensiondev/web3-shared'
+import { ChainId, ProviderType, getNetworkTypeFromChainId } from '@masknet/web3-shared'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,

@@ -1,6 +1,6 @@
 import { Box, Button } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
-import { useWallets, useTrustedERC20Tokens, useAssets, getTokenUSDValue, useWallet } from '@dimensiondev/web3-shared'
+import { useWallets, useTrustedERC20Tokens, useAssets, getTokenUSDValue, useWallet } from '@masknet/web3-shared'
 import { StartUp } from './StartUp'
 import { TokenAssets } from './components/TokenAssets'
 import { Route, Routes } from 'react-router'

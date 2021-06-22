@@ -1,4 +1,4 @@
-import type { GasNow } from '@dimensiondev/web3-shared'
+import type { GasNow } from '@masknet/web3-shared'
 import { currentGasNowSettings } from '../settings'
 
 export function connectGasNow() {

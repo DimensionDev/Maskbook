@@ -1,5 +1,5 @@
 import stringify from 'json-stable-stringify'
-import { constantOfChain } from '@dimensiondev/web3-shared'
+import { constantOfChain } from '@masknet/web3-shared'
 import { TRENDING_CONSTANTS } from '../../constants'
 import { chunk, first, flatten } from 'lodash-es'
 import { currentChainIdSettings } from '../../../Wallet/settings'

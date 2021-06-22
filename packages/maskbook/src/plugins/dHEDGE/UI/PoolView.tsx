@@ -1,5 +1,5 @@
-import { RefreshIcon } from '@dimensiondev/icons'
-import { TOKEN_CONSTANTS, useConstant, useERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import { RefreshIcon } from '@masknet/icons'
+import { TOKEN_CONSTANTS, useConstant, useERC20TokenDetailed } from '@masknet/web3-shared'
 import {
     Card,
     CardActions,

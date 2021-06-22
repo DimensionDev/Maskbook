@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
-import { ChainId, ERC20TokenDetailed, createERC20Tokens, getChainDetailed } from '@dimensiondev/web3-shared'
-import { ONE } from '@dimensiondev/maskbook-shared'
+import { ChainId, ERC20TokenDetailed, createERC20Tokens, getChainDetailed } from '@masknet/web3-shared'
+import { ONE } from '@masknet/shared'
 
 export const TRADE_CONSTANTS = {
     UNISWAP_ROUTER_ADDRESS: {

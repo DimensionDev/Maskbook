@@ -1,1 +1,1 @@
-export { useAssets } from '@dimensiondev/web3-shared'
+export { useAssets } from '@masknet/web3-shared'

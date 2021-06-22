@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
-import { MaskDialog, useSnackbarCallback } from '@dimensiondev/maskbook-theme'
-import { ERC20TokenDetailed, useERC20TokenBalance, useERC20TokenDetailed, useWallet } from '@dimensiondev/web3-shared'
+import { MaskDialog, useSnackbarCallback } from '@masknet/theme'
+import { ERC20TokenDetailed, useERC20TokenBalance, useERC20TokenDetailed, useWallet } from '@masknet/web3-shared'
 import { useUpdateEffect } from 'react-use'
 import { PluginServices } from '../../../../API'
 import { useDashboardI18N } from '../../../../locales'

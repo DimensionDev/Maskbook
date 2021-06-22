@@ -1,4 +1,4 @@
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 import { makeStyles } from '@material-ui/core'
 import { BalancerIcon } from '../../../../resources/BalancerIcon'
 import { SashimiSwapIcon } from '../../../../resources/SashimiSwapIcon'

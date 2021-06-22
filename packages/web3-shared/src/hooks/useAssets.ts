@@ -5,7 +5,7 @@ import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsFromProvider } from './useAssetsFromProvider'
 import { useCallback } from 'react'
 import { useAssetsMerged } from './useAssetsMerged'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress } from '@masknet/shared'
 
 export function useAssets(tokens: FungibleTokenDetailed[]) {
     const wallet = useWallet()

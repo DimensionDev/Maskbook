@@ -1,6 +1,6 @@
 import { Box, InputBase, makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
-import { useSnackbar } from '@dimensiondev/maskbook-theme'
+import { useSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { Database as DatabaseIcon } from 'react-feather'
 import { useAsync } from 'react-use'

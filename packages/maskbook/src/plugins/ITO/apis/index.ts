@@ -4,7 +4,7 @@ import { ITO_CONSTANTS } from '../constants'
 import { payloadIntoMask } from '../helpers'
 import type { JSON_PayloadOutMask } from '../types'
 import { currentChainIdSettings } from '../../Wallet/settings'
-import { constantOfChain } from '@dimensiondev/web3-shared'
+import { constantOfChain } from '@masknet/web3-shared'
 
 const TRADER_FIELDS = `
     address

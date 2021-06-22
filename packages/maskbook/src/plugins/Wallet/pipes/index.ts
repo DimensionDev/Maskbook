@@ -1,4 +1,4 @@
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 import { PortfolioProvider } from '../types'
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
@@ -12,4 +12,4 @@ export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
     }
 }
 
-export { resolveCollectibleProviderLink, resolveCollectibleLink } from '@dimensiondev/web3-shared'
+export { resolveCollectibleProviderLink, resolveCollectibleLink } from '@masknet/web3-shared'

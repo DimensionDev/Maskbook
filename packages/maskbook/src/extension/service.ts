@@ -9,7 +9,7 @@ import {
     EventBasedChannel,
 } from 'async-call-rpc/full'
 import { isEnvironment, Environment, WebExtensionMessage, MessageTarget } from '@dimensiondev/holoflows-kit'
-import { serializer } from '@dimensiondev/maskbook-shared'
+import { serializer } from '@masknet/shared'
 import { getLocalImplementation } from '../utils/getLocalImplementation'
 
 const SERVICE_HMR_EVENT = 'service-hmr'

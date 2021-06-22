@@ -1,5 +1,7 @@
 {
-  "name": "@dimensiondev/maskbook-shared",
+  "name": "@masknet/shared",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.8.0-20210317064617-6c4792c",
     "@servie/events": "^3.0.0",
@@ -13,7 +15,5 @@
     "typeson-registry": "^1.0.0-alpha.38",
     "use-subscription": "^1.5.1",
     "wallet.ts": "^1.0.1"
-  },
-  "typings": "./dist/index.d.ts",
-  "main": "./dist/index.js"
+  }
 }

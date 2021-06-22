@@ -1,6 +1,6 @@
-import type { NetworkType, ProviderType, Wallet } from '@dimensiondev/web3-shared'
+import type { NetworkType, ProviderType, Wallet } from '@masknet/web3-shared'
 import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'

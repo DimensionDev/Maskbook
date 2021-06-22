@@ -4,7 +4,7 @@ import {
     FungibleTokenDetailed,
     isSameAddress,
     useConstant,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useAsyncRetry } from 'react-use'
 
 export function useTrade(inputToken?: FungibleTokenDetailed, outputToken?: FungibleTokenDetailed) {

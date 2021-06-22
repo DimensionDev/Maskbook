@@ -5,14 +5,14 @@ import { Result, Ok, Err } from 'ts-results'
 import { Identifier, ProfileIdentifier } from '../../database/type'
 import { decodeTextPayloadUI, encodeTextPayloadUI } from '../../social-network/utils/text-payload-ui'
 
-import type { Payload, PayloadAlpha38 } from '@dimensiondev/maskbook-shared'
+import type { Payload, PayloadAlpha38 } from '@masknet/shared'
 export type {
     Payload,
     PayloadAlpha38,
     PayloadAlpha40_Or_Alpha39,
     PayloadLatest,
     PayloadVersions as Versions,
-} from '@dimensiondev/maskbook-shared'
+} from '@masknet/shared'
 
 /**
  * Detect if there is version -40, -39 or -38 payload

@@ -2,7 +2,7 @@ import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/
 import { DialogContent, Box, Theme, makeStyles, DialogActions, Button, Typography } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
-import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme: Theme) => ({
     content: {

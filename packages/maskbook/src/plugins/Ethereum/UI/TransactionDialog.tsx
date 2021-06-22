@@ -16,7 +16,7 @@ import {
     TransactionState,
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'

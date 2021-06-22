@@ -1,4 +1,4 @@
-import { ChainId } from '@dimensiondev/web3-shared'
+import { ChainId } from '@masknet/web3-shared'
 
 export const ITO_MetaKey = 'com.maskbook.ito:1'
 export const ITO_PluginID = 'com.maskbook.ito'

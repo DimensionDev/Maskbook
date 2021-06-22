@@ -1,5 +1,5 @@
-import { unreachable } from '@dimensiondev/maskbook-shared'
-import { constantOfChain, useChainId } from '@dimensiondev/web3-shared'
+import { unreachable } from '@masknet/shared'
+import { constantOfChain, useChainId } from '@masknet/web3-shared'
 import { createContext, useMemo } from 'react'
 import {
     TRADE_CONSTANTS,

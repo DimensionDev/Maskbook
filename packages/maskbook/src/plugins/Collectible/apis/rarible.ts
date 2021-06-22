@@ -2,7 +2,7 @@ import { RaribleMainetURL, RaribleRopstenURL } from '../constants'
 import { compact, head } from 'lodash-es'
 import { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
-import { ChainId, getChainName } from '@dimensiondev/web3-shared'
+import { ChainId, getChainName } from '@masknet/web3-shared'
 import { Flags } from '../../../utils/flags'
 import type {
     RaribleCollectibleResponse,

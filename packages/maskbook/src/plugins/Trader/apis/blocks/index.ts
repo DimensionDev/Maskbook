@@ -2,7 +2,7 @@ import { chunk, first, flatten } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import { TRENDING_CONSTANTS } from '../../constants'
 import { currentChainIdSettings } from '../../../Wallet/settings'
-import { constantOfChain } from '@dimensiondev/web3-shared'
+import { constantOfChain } from '@masknet/web3-shared'
 
 interface Block {
     number: string

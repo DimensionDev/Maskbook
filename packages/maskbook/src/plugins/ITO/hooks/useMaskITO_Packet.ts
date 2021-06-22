@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '@dimensiondev/web3-shared'
+import { useAccount } from '@masknet/web3-shared'
 import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
 
 export function useMaskITO_Packet() {
