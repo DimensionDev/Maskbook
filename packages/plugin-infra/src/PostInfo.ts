@@ -18,11 +18,6 @@ import { Context, createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
 export abstract class PostInfo {
     constructor() {
-        // update in-post links automatically
-        this.postContent.addListener((post) => {
-            this.postMentionedLinks.clear()
-            this.postMentionedLinks.add(...parseURL(post))
-        })
         this.postPayload.addListener((payload) => {
             if (payload.ok) this.iv.value = payload.val.iv
         })
@@ -65,7 +60,10 @@ export abstract class PostInfo {
     abstract readonly rootNodeProxy: DOMProxy
     abstract readonly postContentNode?: HTMLElement
     /** The links appears in the post content */
-    readonly postMentionedLinks = new ObservableSet<string>()
+    readonly postMentionedLinks: Subscription<string[]> = {
+        getCurrentValue: () => parseURL(this.postContent.value),
+        subscribe: (sub) => this.postContent.addListener(sub),
+    }
     /**
      * The images as attachment of post
      * @deprecated it should appear in postMessage
