@@ -3,6 +3,7 @@ import * as IsolatedDashboardBridge from './IsolatedDashboardBridge'
 import * as InjectContentScripts from './InjectContentScripts'
 import * as NewInstalled from './NewInstalled'
 import * as PluginWorker from './StartPluginWorker'
+import * as SettingListeners from './SettingListeners'
 
 type CancelableJob = { default: () => () => void }
 const CancelableJobs: CancelableJob[] = [
@@ -11,6 +12,7 @@ const CancelableJobs: CancelableJob[] = [
     AutoShareToFriends,
     IsolatedDashboardBridge,
     PluginWorker,
+    SettingListeners,
 ]
 
 if (import.meta.webpackHot) {
