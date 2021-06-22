@@ -2,7 +2,6 @@ import { noop, pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
-import Services from '../extension/service'
 import {
     currentBlockNumberSettings,
     currentGasPriceSettings,
@@ -39,7 +38,6 @@ export const Web3Context: Web3ProviderType = {
     networkType: createSubscriptionFromSettings(currentNetworkSettings),
     erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
     erc721Tokens: createSubscriptionAsync(getERC721Tokens, [], WalletMessages.events.erc721TokensUpdated.on),
-    fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
 }
 
 async function getWallets() {

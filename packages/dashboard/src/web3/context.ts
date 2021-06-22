@@ -59,7 +59,6 @@ export const Web3Context: Web3ProviderType = {
     wallets: createSubscriptionAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
     erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
     erc721Tokens: createSubscriptionAsync(getERC721Tokens, [], PluginMessages.Wallet.events.erc721TokensUpdated.on),
-    fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
 }
 
 export function createExternalProvider() {

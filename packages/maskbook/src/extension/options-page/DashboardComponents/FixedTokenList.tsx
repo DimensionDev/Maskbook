@@ -8,11 +8,13 @@ import {
     isSameAddress,
     FungibleTokenDetailed,
     EthereumTokenType,
-    useERC20TokensDetailedFromTokenLists,
-    TokenListsState,
 } from '@dimensiondev/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { TokenInList } from './TokenInList'
+import {
+    TokenListsState,
+    useERC20TokensDetailedFromTokenLists,
+} from '../../../web3/hooks/useERC20TokensDetailedFromTokenLists'
 
 const useStyles = makeStyles((theme) => ({
     list: {},
