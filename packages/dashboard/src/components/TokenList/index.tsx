@@ -21,23 +21,23 @@ const isImportedToken = (token: FungibleTokenDetailed, tokens: FungibleTokenDeta
 
 export const TokenList: React.FC<IProps> = memo(({ onSelect }) => {
     const t = useDashboardI18N()
-    const [status, setStatus] = useState('')
+    const [placeholder, setPlaceholder] = useState('')
     const tokens = useTrustedERC20TokensFromDB()
 
     const { loading, value: assets } = useERC20TokensDetailed()
     const renderAsset = assets.map((x) => ({ ...x, isImported: isImportedToken(x.token, tokens) }))
 
     useEffect(() => {
-        setStatus(loading ? t.wallets_loading_token() : '')
+        setPlaceholder(loading ? t.wallets_loading_token() : '')
     }, [loading])
 
     return (
         <SearchableList<Asset & { isImported: boolean }>
             onSelect={onSelect}
             data={renderAsset}
-            searchKey={['token.address', 'token.symbol']}
+            searchKey={['token.address', 'token.symbol', 'token.name']}
             itemRender={TokenListItem}
-            status={status}
+            placeholder={placeholder}
         />
     )
 })

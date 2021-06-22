@@ -1,92 +1,57 @@
-import React, { useState, useMemo, ReactNode } from 'react'
-import { FixedSizeList } from 'react-window'
+import React, { ReactNode, useMemo, useState } from 'react'
+import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
-import { TextField, InputAdornment, Typography } from '@material-ui/core'
+import { InputAdornment, makeStyles, TextField, Typography } from '@material-ui/core'
 import { Search } from '@material-ui/icons'
-import { makeStyles, Theme } from '@material-ui/core/styles'
+import { MaskColorVar } from '../../constants'
+import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 
 export interface MaskSearchableListProps<T> {
+    /** The list data should be render */
     data: T[]
+    /** The identity of list data item for remove duplicates item */
     key?: keyof T
-    status?: ReactNode
-    onSelect(selected: T): void
-    onSearch?(data: T[], key: string): T[]
+    /** Intermediate state when data is loaded */
+    placeholder?: ReactNode
+    /** The key of list item for search */
     searchKey?: string[]
+    /** Renderer for each list item */
     itemRender: ReactNode
+    /** The props to react-window */
+    FixedSizeListProps?: Partial<FixedSizeListProps>
+    /** The callback when clicked someone list item */
+    onSelect(selected: T): void
+    /** The hook when search */
+    onSearch?(data: T[], key: string): T[]
 }
 
-export interface MaskSearchableListItemProps<T> extends React.PropsWithChildren<{}> {
-    data: T
-    index: number
-    onSelect(item: T): void
-}
-
-interface FixSizeListItemProps<T> extends React.PropsWithChildren<{}> {
-    data: {
-        dataSet: T[]
-        onSelect: any
-    }
-    index: number
-    style: any
-}
-
-export const ItemInList = <T,>({ children, data, index, style }: FixSizeListItemProps<T>) => {
-    return (
-        <div style={style}>
-            {React.createElement<MaskSearchableListItemProps<T>>(
-                children as React.FunctionComponent<MaskSearchableListItemProps<T>>,
-                { data: data.dataSet[index], index: index, onSelect: data.onSelect },
-            )}
-        </div>
-    )
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-    container: {
-        paddingBottom: '30px',
-    },
-    textField: {
-        // todo: move color to theme
-        '&>div': {
-            borderRadius: '8px',
-            background: '#F3F3F4',
-        },
-    },
-    searchInput: {
-        padding: '-6px',
-    },
-    list: {
-        marginTop: '6px',
-        '& > div::-webkit-scrollbar': {
-            width: '7px',
-        },
-        '& > div::-webkit-scrollbar-track': {
-            boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-            webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-        },
-        '& > div::-webkit-scrollbar-thumb': {
-            borderRadius: '4px',
-            backgroundColor: '#F3F3F4',
-        },
-    },
-    placeholder: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '300px',
-        fontSize: 16,
-    },
-}))
-
+/**
+ * This component is used to provide a searchable list in Mask design.
+ *
+ * @example
+ * interface IListDate { name: string }
+ * const ListItem = ({ name }: IListDate) => <div>{ name }</div>
+ * const onSelect = () => {}
+ *
+ * return (
+ *      <SearchableList<IListDate>
+ *           onSelect={onSelect}
+ *           data={ListData}
+ *           searchKey={['name']}
+ *           itemRender={ListItem}
+ *      />
+ * )
+ */
 export const SearchableList = <T,>({
     key,
     data,
-    status,
+    placeholder,
     onSelect,
     onSearch,
     searchKey,
     itemRender,
+    FixedSizeListProps,
 }: MaskSearchableListProps<T>) => {
     const [keyword, setKeyword] = useState('')
     const classes = useStyles()
@@ -105,7 +70,7 @@ export const SearchableList = <T,>({
     //#endregion
 
     //#region create searched data
-    const searchedData = useMemo(() => {
+    const readyToRenderData = useMemo(() => {
         if (!keyword) return data
         const filtered = [...(onSearch ? onSearch(data, keyword) : []), ...fuse.search(keyword).map((x: any) => x.item)]
         return key ? uniqBy(filtered, (x) => x[key]) : filtered
@@ -129,12 +94,12 @@ export const SearchableList = <T,>({
                 }}
                 onChange={(e) => setKeyword(e.currentTarget.value)}
             />
-            {status && (
+            {placeholder && (
                 <Typography className={classes.placeholder} color="textSecondary">
-                    {status}
+                    {placeholder}
                 </Typography>
             )}
-            {!status && (
+            {!placeholder && (
                 <div className={classes.list}>
                     <FixedSizeList
                         width="100%"
@@ -142,14 +107,51 @@ export const SearchableList = <T,>({
                         overscanCount={5}
                         itemSize={60}
                         itemData={{
-                            dataSet: searchedData,
+                            dataSet: readyToRenderData,
                             onSelect: onSelect,
                         }}
-                        itemCount={searchedData.length}>
-                        {(props) => <ItemInList<T> {...props}>{itemRender}</ItemInList>}
+                        itemCount={readyToRenderData.length}
+                        {...FixedSizeListProps}>
+                        {(props) => <MaskSearchableItemInList<T> {...props}>{itemRender}</MaskSearchableItemInList>}
                     </FixedSizeList>
                 </div>
             )}
         </div>
     )
 }
+
+const useStyles = makeStyles((theme) => ({
+    container: {
+        paddingBottom: theme.spacing(4),
+    },
+    textField: {
+        '&>div': {
+            borderRadius: theme.spacing(1),
+            background: MaskColorVar.normalBackground,
+        },
+    },
+    searchInput: {
+        padding: '-6px',
+    },
+    list: {
+        marginTop: theme.spacing(1),
+        '& > div::-webkit-scrollbar': {
+            width: '7px',
+        },
+        '& > div::-webkit-scrollbar-track': {
+            boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+            webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+        },
+        '& > div::-webkit-scrollbar-thumb': {
+            borderRadius: '4px',
+            backgroundColor: MaskColorVar.normalBackground,
+        },
+    },
+    placeholder: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '300px',
+        fontSize: 16,
+    },
+}))
