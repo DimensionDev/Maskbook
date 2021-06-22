@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
-export function TokenListItem({ data, onSelect }: MaskSearchableListItemProps<Asset & { isImported: boolean }>) {
+export function TokenListItem({ data, onSelect }: MaskSearchableListItemProps<Asset & { isAddedToken: boolean }>) {
     const classes = useStyles()
     const token = data.token
 
@@ -63,7 +63,7 @@ export function TokenListItem({ data, onSelect }: MaskSearchableListItemProps<As
                     <span className={classes.name}>{name}</span>
                 </Typography>
                 <Typography className={classes.secondary} color="textSecondary" component="span">
-                    {data.isImported ? (
+                    {data.isAddedToken ? (
                         <span>{formatBalance(data.balance, token.decimals)} </span>
                     ) : (
                         <Button
