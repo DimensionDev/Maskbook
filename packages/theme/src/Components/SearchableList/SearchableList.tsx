@@ -79,10 +79,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
-// todo: add i18n
-// todo: import search icon
-// todo: handle address search
-// todo: improve getting data item keys for Fuse search key
 export const SearchableList = <T,>({
     key,
     data,

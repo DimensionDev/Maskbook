@@ -7,8 +7,8 @@ import {
     getConstant,
     getChainFullName,
 } from '@dimensiondev/web3-shared'
-import { formatEthereumAddress } from '../../wallet'
-import { useImageFailover } from '../../hooks'
+import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { useImageFailover } from './useImageFailover'
 
 //#region fix icon image
 function resolveTokenIconURL(address: string, baseURI: string) {

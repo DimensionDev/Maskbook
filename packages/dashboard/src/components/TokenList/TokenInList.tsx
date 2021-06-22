@@ -1,12 +1,15 @@
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { ListItem, ListItemText, Typography, ListItemIcon } from '@material-ui/core'
+import { ListItem, ListItemText, Typography, ListItemIcon, Button } from '@material-ui/core'
 import type { Asset } from '@dimensiondev/web3-shared'
 import { TokenIcon } from './TokenIcon'
-import type { MaskSearchableListItemProps } from '../SearchableList'
-import { formatBalance } from '../../wallet'
+import type { MaskSearchableListItemProps } from '@dimensiondev/maskbook-theme'
+import { formatBalance } from '@dimensiondev/maskbook-shared'
 
 // todo: remove unused style
 const useStyles = makeStyles((theme: Theme) => ({
+    list: {
+        paddingLeft: 4,
+    },
     icon: {
         width: 28,
         height: 28,
@@ -50,20 +53,29 @@ const useStyles = makeStyles((theme: Theme) => ({
         lineHeight: '20px',
         fontSize: 14,
     },
+    import: {
+        borderRadius: '30px',
+    },
 }))
 
-export function TokenInList({ data, onSelect }: MaskSearchableListItemProps<Asset>) {
+export function TokenInList({ data, onSelect }: MaskSearchableListItemProps<Asset & { isImported: boolean }>) {
     const classes = useStyles()
     const token = data.token
 
     if (!token) return null
     const { address, name, symbol } = token
 
+    const handleTokenSelect = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        onSelect(data)
+    }
+
     return (
         <ListItem
             button
+            className={classes.list}
             // disabled={data.selected.some((x) => isSameAddress(x, address))}
-            onClick={() => onSelect(data)}>
+            onClick={handleTokenSelect}>
             <ListItemIcon>
                 <TokenIcon address={address} name={name} />
             </ListItemIcon>
@@ -73,7 +85,13 @@ export function TokenInList({ data, onSelect }: MaskSearchableListItemProps<Asse
                     <span className={classes.name}>{name}</span>
                 </Typography>
                 <Typography className={classes.secondary} color="textSecondary" component="span">
-                    <span>{formatBalance(data.balance, token.decimals)} </span>
+                    {data.isImported ? (
+                        <span>{formatBalance(data.balance, token.decimals)} </span>
+                    ) : (
+                        <Button className={classes.import} color={'primary'} onClick={handleTokenSelect} size={'small'}>
+                            Import
+                        </Button>
+                    )}
                 </Typography>
             </ListItemText>
         </ListItem>

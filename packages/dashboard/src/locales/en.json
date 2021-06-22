@@ -41,6 +41,7 @@
     "wallets_balance_Buy": "Buy",
     "wallets_balance_Swap": "Swap",
     "wallets_balance_Receive": "Receive",
+    "wallets_loading_token": "Loading Token",
     "personas_setup_connect_tips": "Please connect to your {{type}} account.",
     "personas_setup_connect": "Connect",
     "personas_name_maximum_tips": "Maximum length is {{length}} characters long.",

@@ -17,7 +17,9 @@
     "@dimensiondev/maskbook-shared": "workspace:*",
     "@dimensiondev/maskbook-storybook-shared": "workspace:*",
     "@types/tinycolor2": "^1.4.2",
+    "fuse.js": "^6.4.6",
     "lodash-es": "^4.17.20",
+    "react-window": "^1.8.6",
     "tinycolor2": "^1.4.2"
   },
   "devDependencies": {

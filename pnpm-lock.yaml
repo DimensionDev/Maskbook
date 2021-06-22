@@ -136,6 +136,7 @@ importers:
       '@babel/core': ^7.14.3
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/icons': workspace:*
+      '@dimensiondev/kit': ^0.0.0-20210221102734-0b4a937
       '@dimensiondev/mask-plugin-infra': workspace:*
       '@dimensiondev/maskbook-shared': workspace:*
       '@dimensiondev/maskbook-storybook-shared': workspace:*
@@ -169,6 +170,7 @@ importers:
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/icons': link:../icons
+      '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
       '@dimensiondev/mask-plugin-infra': link:../plugin-infra
       '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
@@ -574,19 +576,12 @@ importers:
   packages/shared:
     specifiers:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
-      '@dimensiondev/kit': ^0.0.0-20210221102734-0b4a937
-      '@dimensiondev/maskbook-theme': workspace:*
-      '@dimensiondev/web3-shared': workspace:*
       '@servie/events': ^3.0.0
-      '@types/react-window': ^1.8.3
       anchorme: ^2.1.2
       async-call-rpc: ^5.1.0
       bignumber.js: ^9.0.1
-      fuse.js: ^6.4.6
       immer: ^9.0.2
       lodash-es: ^4.17.21
-      react-use: ^17.2.4
-      react-window: ^1.8.6
       ts-results: ^3.3.0
       typeson: ^6.1.0
       typeson-registry: ^1.0.0-alpha.38
@@ -594,25 +589,17 @@ importers:
       wallet.ts: ^1.0.1
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
-      '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
-      '@dimensiondev/maskbook-theme': link:../theme
-      '@dimensiondev/web3-shared': link:../web3-shared
       '@servie/events': 3.0.0
       anchorme: 2.1.2
       async-call-rpc: 5.1.0
       bignumber.js: 9.0.1
-      fuse.js: 6.4.6
       immer: 9.0.2
       lodash-es: 4.17.21
-      react-use: 17.2.4
-      react-window: 1.8.6
       ts-results: 3.3.0
       typeson: 6.1.0
       typeson-registry: 1.0.0-alpha.39
       use-subscription: 1.5.1
       wallet.ts: 1.0.1
-    devDependencies:
-      '@types/react-window': 1.8.3
 
   packages/storybook-shared:
     specifiers:
@@ -635,14 +622,18 @@ importers:
       '@storybook/theming': ^6.2.9
       '@types/tinycolor2': ^1.4.2
       babel-loader: ^8.2.2
+      fuse.js: ^6.4.6
       lodash-es: ^4.17.20
+      react-window: ^1.8.6
       storybook-addon-matrix: ^1.6.0
       tinycolor2: ^1.4.2
     dependencies:
       '@dimensiondev/maskbook-shared': link:../shared
       '@dimensiondev/maskbook-storybook-shared': link:../storybook-shared
       '@types/tinycolor2': 1.4.2
+      fuse.js: 6.4.6
       lodash-es: 4.17.21
+      react-window: 1.8.6
       tinycolor2: 1.4.2
     devDependencies:
       '@babel/core': 7.14.3
@@ -6557,6 +6548,7 @@ packages:
     resolution: {integrity: sha512-Xf+IR2Zyiyh/6z1CM8kv1aQba3S3X/hBXt4tH+T9bDSIGwFhle0GZFZGTSU8nw2cUT3UNbCHDjhxVQVZPtE8cA==}
     dependencies:
       '@types/react': 17.0.11
+    dev: false
 
   /@types/react/17.0.11:
     resolution: {integrity: sha512-yFRQbD+whVonItSk7ZzP/L+gPTJVBkL/7shLEF+i9GC/1cV3JmUxEQz6+9ylhUpWSDuqo1N9qEvqS6vTj4USUA==}
@@ -6564,6 +6556,7 @@ packages:
       '@types/prop-types': 15.7.3
       '@types/scheduler': 0.16.1
       csstype: 3.0.8
+    dev: false
 
   /@types/react/17.0.3:
     resolution: {integrity: sha512-wYOUxIgs2HZZ0ACNiIayItyluADNbONl7kt8lkLjVK8IitMH5QMyAh75Fwhmo37r1m7L2JaFj03sIfxBVDvRAg==}
