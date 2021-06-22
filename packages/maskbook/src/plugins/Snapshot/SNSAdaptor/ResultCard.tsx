@@ -4,12 +4,12 @@ import { makeStyles, Box, List, ListItem, Typography, LinearProgress, withStyles
 import { ShadowRootTooltip, useI18N } from '../../../utils'
 import millify from 'millify'
 import { SnapshotContext } from '../context'
-import { useProposal } from '../hooks/useProposal'
-import { useVotes } from '../hooks/useVotes'
-import { useResults } from '../hooks/useResults'
+import { useProposal } from './hooks/useProposal'
+import { useVotes } from './hooks/useVotes'
+import { useResults } from './hooks/useResults'
 import { SnapshotCard } from './SnapshotCard'
 import { parse } from 'json2csv'
-import { useRetry } from '../hooks/useRetry'
+import { useRetry } from './hooks/useRetry'
 import { LoadingFailCard } from './LoadingFailCard'
 import { LoadingCard } from './LoadingCard'
 
@@ -76,10 +76,10 @@ function Content() {
     const classes = useStyles()
     const { t } = useI18N()
     const listRef = useRef<HTMLSpanElement[]>([])
-    const [tooltipVisibles, setTooltipVisibles] = useState<boolean[]>(new Array(results.length).fill(false))
+    const [tooltipsVisible, setTooltipsVisible] = useState<readonly boolean[]>(new Array(results.length).fill(false))
 
     useEffect(() => {
-        setTooltipVisibles(listRef.current.map((element) => (element.offsetWidth === choiceMaxWidth ? true : false)))
+        setTooltipsVisible(listRef.current.map((element) => (element.offsetWidth === choiceMaxWidth ? true : false)))
     }, [])
 
     const dataForCsv = useMemo(
@@ -109,7 +109,7 @@ function Content() {
                                 }}
                                 title={<Typography color="textPrimary">{result.choice}</Typography>}
                                 placement="top"
-                                disableHoverListener={!tooltipVisibles[i]}
+                                disableHoverListener={!tooltipsVisible[i]}
                                 arrow>
                                 <Typography
                                     ref={(ref) => {

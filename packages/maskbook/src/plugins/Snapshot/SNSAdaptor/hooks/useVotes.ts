@@ -1,6 +1,6 @@
-import { PluginSnapshotRPC } from '../messages'
-import type { VoteItemList, ProposalIdentifier, VoteItem } from '../types'
-import { useSuspense } from '../../../utils/hooks/useSuspense'
+import { PluginSnapshotRPC } from '../../messages'
+import type { VoteItemList, ProposalIdentifier, VoteItem } from '../../types'
+import { useSuspense } from '../../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
 import { useBlockNumber } from '@dimensiondev/web3-shared'
 

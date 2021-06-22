@@ -1,5 +1,5 @@
-import type { ProposalIdentifier, ProposalResult, VoteItemList } from '../types'
-import { useSuspense } from '../../../utils/hooks/useSuspense'
+import type { ProposalIdentifier, ProposalResult, VoteItemList } from '../../types'
+import { useSuspense } from '../../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
 import { useVotes } from './useVotes'
 

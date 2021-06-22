@@ -6,12 +6,12 @@ import { SnapshotContext } from '../context'
 import { useAccount } from '@dimensiondev/web3-shared'
 import { PluginSnapshotRPC } from '../messages'
 import { SnapshotCard } from './SnapshotCard'
-import { useProposal } from '../hooks/useProposal'
-import { usePower } from '../hooks/usePower'
+import { useProposal } from './hooks/useProposal'
+import { usePower } from './hooks/usePower'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { VoteConfirmDialog } from './VoteConfirmDialog'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
-import { useRetry } from '../hooks/useRetry'
+import { useRetry } from './hooks/useRetry'
 
 const useStyles = makeStyles((theme) => {
     return {

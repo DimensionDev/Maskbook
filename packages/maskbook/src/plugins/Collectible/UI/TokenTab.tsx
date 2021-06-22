@@ -4,7 +4,7 @@ import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { FormattedAddress } from '@dimensiondev/maskbook-shared'
 import { resolveAddressLinkOnExplorer, getChainName, ChainId, useChainId } from '@dimensiondev/web3-shared'
-import { Markdown } from '../../Snapshot/UI/Markdown'
+import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea } from '../pipes'
 

@@ -1,6 +1,6 @@
-import { PluginSnapshotRPC } from '../messages'
-import type { Proposal, ProposalMessage } from '../types'
-import { useSuspense } from '../../../utils/hooks/useSuspense'
+import { PluginSnapshotRPC } from '../../messages'
+import type { Proposal, ProposalMessage } from '../../types'
+import { useSuspense } from '../../../../utils/hooks/useSuspense'
 
 const cache = new Map<string, [0, Promise<void>] | [1, { proposal: Proposal; message: ProposalMessage }] | [2, Error]>()
 export function proposalRetry() {
@@ -23,7 +23,7 @@ async function Suspender(id: string) {
 
     proposal.isStart = now > message.payload.start * 1000
     proposal.isEnd = now > message.payload.end * 1000
-    proposal.status = !proposal.isStart ? 'Pending' : proposal.isEnd ? 'Close' : 'Active'
+    proposal.status = !proposal.isStart ? 'Pending' : proposal.isEnd ? 'Closed' : 'Active'
     proposal.authorName = profiles[0]?.name
     proposal.authorAvatar = profiles[0]?.image
     return { proposal, message }

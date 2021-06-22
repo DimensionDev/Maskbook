@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { VotingCard } from './VotingCard'
-import { useProposal } from '../hooks/useProposal'
+import { useProposal } from './hooks/useProposal'
 import { SnapshotTab } from './SnapshotTab'
 import { ReadMeCard } from './ReadmeCard'
 import { SnapshotContext } from '../context'
