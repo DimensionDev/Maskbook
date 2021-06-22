@@ -12,3 +12,4 @@ import './social-network-adaptor' // setup social network providers
 import './extension/background-script/Jobs' // start jobs
 import './plugins/PluginSerivce' // setup plugins
 import './utils/debug/general'
+import './settings/listener'

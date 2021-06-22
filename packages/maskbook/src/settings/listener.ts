@@ -1,6 +1,24 @@
 import { Environment, isEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { MaskMessage, sideEffect, startEffect } from '../utils'
-import { allPostReplacementSettings, appearanceSettings, languageSettings, debugModeSetting } from './settings'
+import {
+    allPostReplacementSettings,
+    appearanceSettings,
+    languageSettings,
+    debugModeSetting,
+    disableOpenNewTabInBackgroundSettings,
+    currentPersonaIdentifier,
+} from './settings'
+import {
+    currentAccountSettings,
+    currentBalanceSettings,
+    currentBlockNumberSettings,
+    currentChainIdSettings,
+    currentCollectibleDataProviderSettings,
+    currentNetworkSettings,
+    currentPortfolioDataProviderSettings,
+    currentProviderSettings,
+} from '../plugins/Wallet/settings'
+import { currentTrendingDataProviderSettings } from '../plugins/Trader/settings'
 
 export function ToBeListened() {
     return {
@@ -8,6 +26,17 @@ export function ToBeListened() {
         appearanceSettings,
         languageSettings,
         debugModeSetting,
+        currentChainIdSettings,
+        currentBalanceSettings,
+        currentBlockNumberSettings,
+        currentTrendingDataProviderSettings,
+        disableOpenNewTabInBackgroundSettings,
+        currentProviderSettings,
+        currentNetworkSettings,
+        currentAccountSettings,
+        currentPortfolioDataProviderSettings,
+        currentCollectibleDataProviderSettings,
+        currentPersonaIdentifier,
     }
 }
 type SettingsEventName = ReturnType<typeof ToBeListened>

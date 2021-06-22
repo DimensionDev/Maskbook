@@ -18,9 +18,9 @@ export const [useOwnedPersonas, , currentPersonas] = createGlobalState(
 )
 
 export const [useAppearance] = createGlobalState(Services.Settings.getTheme, (x) =>
-    Messages.events.createInternalSettingsChanged.on(x),
+    Messages.events.appearanceSettings.on(x),
 )
 
 export const [useCurrentPersonaIdentifier] = createGlobalState(Services.Settings.getCurrentPersonaIdentifier, (x) =>
-    Messages.events.createInternalSettingsChanged.on(x),
+    Messages.events.currentPersonaIdentifier.on(x),
 )
