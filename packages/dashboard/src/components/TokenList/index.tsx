@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from 'react'
 import { SearchableList } from '@dimensiondev/maskbook-theme'
-import { TokenInList } from './TokenInList'
+import { TokenListItem } from './TokenListItem'
 import {
     Asset,
     EthereumTokenType,
@@ -36,7 +36,7 @@ export const TokenList: React.FC<IProps> = memo(({ onSelect }) => {
             onSelect={onSelect}
             data={renderAsset}
             searchKey={['token.address', 'token.symbol']}
-            itemRender={TokenInList}
+            itemRender={TokenListItem}
             status={status}
         />
     )

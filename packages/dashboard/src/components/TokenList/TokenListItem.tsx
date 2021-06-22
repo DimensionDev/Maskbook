@@ -5,14 +5,10 @@ import { TokenIcon } from './TokenIcon'
 import type { MaskSearchableListItemProps } from '@dimensiondev/maskbook-theme'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 
-// todo: remove unused style
+// todo: change Typography from global theme
 const useStyles = makeStyles((theme: Theme) => ({
     list: {
-        paddingLeft: 4,
-    },
-    icon: {
-        width: 28,
-        height: 28,
+        paddingLeft: theme.spacing(1),
     },
     text: {
         display: 'flex',
@@ -35,30 +31,16 @@ const useStyles = makeStyles((theme: Theme) => ({
         fontSize: 14,
         textAlign: 'right',
     },
-    link: {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 'auto',
-        margin: 'auto',
-        position: 'absolute',
-    },
-    openIcon: {
-        fontSize: 16,
-        width: 16,
-        height: 16,
-        marginLeft: theme.spacing(0.5),
-    },
     symbol: {
         lineHeight: '20px',
         fontSize: 14,
     },
-    import: {
+    importButton: {
         borderRadius: '30px',
     },
 }))
 
-export function TokenInList({ data, onSelect }: MaskSearchableListItemProps<Asset & { isImported: boolean }>) {
+export function TokenListItem({ data, onSelect }: MaskSearchableListItemProps<Asset & { isImported: boolean }>) {
     const classes = useStyles()
     const token = data.token
 
@@ -71,11 +53,7 @@ export function TokenInList({ data, onSelect }: MaskSearchableListItemProps<Asse
     }
 
     return (
-        <ListItem
-            button
-            className={classes.list}
-            // disabled={data.selected.some((x) => isSameAddress(x, address))}
-            onClick={handleTokenSelect}>
+        <ListItem button className={classes.list} onClick={handleTokenSelect}>
             <ListItemIcon>
                 <TokenIcon address={address} name={name} />
             </ListItemIcon>
@@ -88,7 +66,11 @@ export function TokenInList({ data, onSelect }: MaskSearchableListItemProps<Asse
                     {data.isImported ? (
                         <span>{formatBalance(data.balance, token.decimals)} </span>
                     ) : (
-                        <Button className={classes.import} color={'primary'} onClick={handleTokenSelect} size={'small'}>
+                        <Button
+                            className={classes.importButton}
+                            color={'primary'}
+                            onClick={handleTokenSelect}
+                            size={'small'}>
                             Import
                         </Button>
                     )}
