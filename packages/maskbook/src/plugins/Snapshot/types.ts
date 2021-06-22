@@ -45,6 +45,7 @@ export interface ProposalPayload {
     name: string
     metadata: {
         strategies: Strategy[]
+        network: string
     }
 }
 

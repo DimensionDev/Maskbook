@@ -1,5 +1,4 @@
 import ss from '@snapshot-labs/snapshot.js'
-import { ChainId } from '@masknet/web3-shared'
 import type { VoteItemList, Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess } from '../../types'
 import Services from '../../../../extension/service'
 
@@ -38,7 +37,7 @@ export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Bo
 export async function getScores(message: ProposalMessage, voters: string[], blockNumber: number) {
     const spaceKey = message.space
     const strategies = message.payload.metadata.strategies
-    const network = ChainId.Mainnet.toString()
+    const network = message.payload.metadata.network
     const provider = ss.utils.getProvider(network)
     const snapshot = Number(message.payload.snapshot)
     const blockTag = snapshot > blockNumber ? 'latest' : snapshot
