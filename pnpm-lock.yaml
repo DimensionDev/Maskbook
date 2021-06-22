@@ -114,6 +114,12 @@ importers:
       gulp: 4.0.2
       ts-node: 10.0.0
 
+  packages/constants:
+    specifiers:
+      '@dimensiondev/web3-shared': workspace:*
+    dependencies:
+      '@dimensiondev/web3-shared': link:../web3-shared
+
   packages/contracts:
     specifiers:
       '@typechain/web3-v1': ^3.0.0

@@ -2,10 +2,9 @@
   "name": "@dimensiondev/constants",
   "private": true,
   "scripts": {
-    "start": "ts-node compile-constants.ts"
-  },
-  "devDependencies": {
+    "test": "ts-node validate-constants.ts"
   },
   "dependencies": {
+    "@dimensiondev/web3-shared": "workspace:*"
   }
 }
