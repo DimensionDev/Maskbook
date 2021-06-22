@@ -39,7 +39,6 @@ export const Flags = {
     ito_enabled: webOnly,
     election2020_enabled: webOnly,
     election2020_composition_dialog_enabled: false,
-    collectibles_enabled: webOnly,
     dhedge_enabled: webOnly,
     airdrop_enabled: webOnly,
     airdrop_composition_dialog_enabled: false,
