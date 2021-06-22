@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react'
+import { FC, useState, useMemo } from 'react'
 import { Box, Button, DialogContent, makeStyles, TextField, DialogActions } from '@material-ui/core'
-import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
+import { useSnackbarCallback } from '@dimensiondev/maskbook-theme'
 import { useI18N, useRemoteControlledDialog } from '../../../../utils'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
@@ -9,6 +9,8 @@ import { FromPrivateKey, RecoverResult } from './FromPrivateKey'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../constants'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+
+export type { RecoverResult } from './FromPrivateKey'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -38,9 +40,114 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const BLANK_WORDS = Array.from({ length: 12 }).fill('') as string[]
+export const BLANK_WORDS = Array.from({ length: 12 }).fill('') as string[]
+
+interface ImportWalletUIProps {
+    name: string
+    onNameChange: (name: string) => void
+    words: string[]
+    onWordsChange: (words: string[]) => void
+    onRecover: (result: Partial<RecoverResult>) => void
+    tabState: AbstractTabProps['state']
+}
+
+export const ImportWalletUI: FC<ImportWalletUIProps> = ({
+    name,
+    onNameChange,
+    words,
+    onWordsChange,
+    onRecover,
+    tabState,
+}) => {
+    const { t } = useI18N()
+    const classes = useStyles()
+
+    const tabs: AbstractTabProps['tabs'] = useMemo(
+        () => [
+            {
+                label: t('mnemonic_words'),
+                children: <MnemonicTab words={words} onChange={onWordsChange} />,
+            },
+            {
+                label: t('private_key'),
+                children: <FromPrivateKey onRecover={onRecover} />,
+            },
+        ],
+        [words],
+    )
+    return (
+        <Box>
+            <Box>
+                <TextField
+                    className={classes.walletName}
+                    inputProps={{
+                        maxLength: 12,
+                    }}
+                    label={t('wallet_name')}
+                    placeholder={t('plugin_wallet_name_placeholder')}
+                    value={name}
+                    onChange={(e) => onNameChange(e.target.value)}
+                />
+                <AbstractTab tabs={tabs} state={tabState} />
+            </Box>
+        </Box>
+    )
+}
+
+enum ImportMode {
+    Mnemonic,
+    PrivateKey,
+}
+
+interface Options {
+    name: string
+    mode: ImportMode
+    words?: string[]
+    privateKey?: Partial<RecoverResult>
+}
+
+export async function importWallet({ mode, name, words, privateKey }: Options) {
+    switch (mode) {
+        case ImportMode.Mnemonic:
+            await WalletRPC.importNewWallet({
+                name,
+                path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+                mnemonic: words!,
+                passphrase: '',
+            })
+            try {
+                await WalletRPC.addPhrase({
+                    path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
+                    mnemonic: words!,
+                    passphrase: '',
+                })
+            } catch (err) {
+                if (err.message !== 'Add exists phrase.') {
+                    throw err
+                }
+            }
+            break
+        case ImportMode.PrivateKey:
+            if (!privateKey!.privateKeyValid) {
+                return
+            }
+            await WalletRPC.importNewWallet({
+                name,
+                address: privateKey!.address,
+                _private_key_: privateKey!.privateKey,
+            })
+            break
+    }
+}
 
 export interface ImportWalletDialogProps extends withClasses<never> {}
+
+export const TabIndexMap = {
+    0: ImportMode.Mnemonic,
+    1: ImportMode.PrivateKey,
+}
+
+export type TabIndex = keyof typeof TabIndexMap
 
 export function ImportWalletDialog(props: ImportWalletDialogProps) {
     const { t } = useI18N()
@@ -55,38 +162,10 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
 
     const [words, setWords] = useState<string[]>(BLANK_WORDS)
     const tabState = useState(0)
-    const tabs: AbstractTabProps['tabs'] = useMemo(
-        () => [
-            {
-                label: t('mnemonic_words'),
-                children: <MnemonicTab words={words} onChange={setWords} />,
-            },
-            {
-                label: t('private_key'),
-                children: <FromPrivateKey onRecover={setWalletFromPrivateKey} />,
-            },
-        ],
-        [words],
-    )
-
-    const importWallet = (
-        <Box>
-            <TextField
-                className={classes.walletName}
-                inputProps={{
-                    maxLength: 12,
-                }}
-                label={t('wallet_name')}
-                placeholder={t('plugin_wallet_name_placeholder')}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-            />
-            <AbstractTab tabs={tabs} state={tabState} />
-        </Box>
-    )
+    const importMode = TabIndexMap[tabState[0] as TabIndex]
 
     const resetState = () => {
-        setWords((list) => list.map(() => ''))
+        setWords(BLANK_WORDS)
         setName('')
     }
 
@@ -98,39 +177,14 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
 
     const handleImport = useSnackbarCallback(
         async () => {
-            switch (tabState[0]) {
-                case 0:
-                    await WalletRPC.importNewWallet({
-                        name,
-                        path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-                        mnemonic: words,
-                        passphrase: '',
-                    })
-                    try {
-                        await WalletRPC.addPhrase({
-                            path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
-                            mnemonic: words,
-                            passphrase: '',
-                        })
-                    } catch (err) {
-                        if (err.message !== 'Add exists phrase.') {
-                            throw err
-                        }
-                    }
-                    break
-                case 1:
-                    if (!walletFromPrivateKey.privateKeyValid) {
-                        return
-                    }
-                    await WalletRPC.importNewWallet({
-                        name,
-                        address: walletFromPrivateKey.address,
-                        _private_key_: walletFromPrivateKey.privateKey,
-                    })
-                    break
-            }
+            await importWallet({
+                mode: importMode,
+                name,
+                words,
+                privateKey: walletFromPrivateKey,
+            })
         },
-        [tabState[0], name, words, walletFromPrivateKey.privateKeyValid, walletFromPrivateKey.privateKey],
+        [importMode, name, words, walletFromPrivateKey.privateKeyValid, walletFromPrivateKey.privateKey],
         () => {
             closeDialog()
             resetState()
@@ -141,18 +195,26 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
         if (!name) {
             return false
         }
-        switch (tabState[0]) {
+        switch (tabState[0] as TabIndex) {
             case 0:
                 return words.filter(Boolean).length === 12
             case 1:
                 return !!walletFromPrivateKey.privateKeyValid
         }
-        return false
     }, [name, tabState[0], words, walletFromPrivateKey.privateKeyValid])
 
     return (
         <InjectedDialog open={open} onClose={closeDialog} title={t('import_wallet')} maxWidth="sm">
-            <DialogContent className={classes.content}>{importWallet}</DialogContent>
+            <DialogContent className={classes.content}>
+                <ImportWalletUI
+                    name={name}
+                    onNameChange={setName}
+                    words={words}
+                    onWordsChange={setWords}
+                    onRecover={setWalletFromPrivateKey}
+                    tabState={tabState}
+                />
+            </DialogContent>
             <DialogActions className={classes.dialogActions}>
                 <Button className={classes.actionButton} variant="contained" fullWidth onClick={backToPrevious}>
                     {t('plugin_wallet_import_wallet_previous')}

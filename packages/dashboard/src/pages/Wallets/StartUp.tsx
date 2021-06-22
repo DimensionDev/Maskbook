@@ -2,6 +2,7 @@ import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { Route, Routes, useNavigate } from 'react-router'
 import { WalletCreationChooseUI } from '../../../../maskbook/src/plugins/Wallet/UI/CreateImportChooseDialog'
 import { CreateWallet } from './CreateWallet'
+import { ImportWallet } from './ImportWallet'
 
 const Container = styled('div')`
     display: flex;
@@ -48,7 +49,7 @@ export function StartUp() {
                     <CreateWallet />
                 </Route>
                 <Route path={CreateWalletRoutes.Import}>
-                    <h1>import</h1>
+                    <ImportWallet />
                 </Route>
                 <Route>
                     <div>nothing</div>
