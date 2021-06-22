@@ -49,12 +49,12 @@ export function addGasMargin(value: BigNumber.Value, scale = 3000) {
 }
 
 //#region chain detailed
-export function getChainDetailed(chainId: ChainId = ChainId.Mainnet) {
+export function getChainDetailed(chainId = ChainId.Mainnet) {
     return CHAINS.find((x) => x.chainId === chainId)
 }
 
 // Learn more: https://github.com/ChainAgnostic/CAIPs/blob/master/CAIPs/caip-2.md
-export function getChainDetailedCAIP(chainId: ChainId = ChainId.Mainnet) {
+export function getChainDetailedCAIP(chainId = ChainId.Mainnet) {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) return
     return {

@@ -36,7 +36,7 @@ const fetchTokenList = memoizePromise(
  */
 export async function fetchERC20TokensFromTokenList(
     url: string,
-    chainId: ChainId = ChainId.Mainnet,
+    chainId = ChainId.Mainnet,
 ): Promise<ERC20TokenDetailed[]> {
     return (await fetchTokenList(url)).tokens
         .filter(
@@ -59,7 +59,7 @@ export async function fetchERC20TokensFromTokenList(
  */
 export async function fetchERC20TokensFromTokenLists(
     urls: string[],
-    chainId: ChainId = ChainId.Mainnet,
+    chainId = ChainId.Mainnet,
 ): Promise<ERC20TokenDetailed[]> {
     const uniqueSet = new Set<string>()
     const tokens = (await Promise.allSettled(urls.map((x) => fetchERC20TokensFromTokenList(x, chainId)))).flatMap((x) =>
