@@ -1,4 +1,4 @@
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@dimensiondev/maskbook-theme'
 import { useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import Close from '@material-ui/icons/Close'

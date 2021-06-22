@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import { uniq, flatten } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
-import { useSnackbar, VariantType } from 'notistack'
+import { useSnackbar, VariantType } from '@dimensiondev/maskbook-theme'
 import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
 import { makeStyles, DialogContent, CircularProgress, Typography, List, ListItem } from '@material-ui/core'
 import { TransactionStateType, resolveTransactionLinkOnExplorer, useChainId } from '@dimensiondev/web3-shared'

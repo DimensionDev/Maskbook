@@ -11,7 +11,7 @@ import {
     Typography,
     Link,
 } from '@material-ui/core'
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@dimensiondev/maskbook-theme'
 import { Trans } from 'react-i18next'
 import { useAccount } from '@dimensiondev/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'

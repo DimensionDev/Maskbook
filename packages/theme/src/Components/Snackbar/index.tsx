@@ -1,8 +1,11 @@
-import { createRef, memo } from 'react'
+import { useRef, memo } from 'react'
 import { SnackbarProvider } from 'notistack'
 import { makeStyles, IconButton } from '@material-ui/core'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { Close as CloseIcon } from '@material-ui/icons'
+import { MaskColorVar } from '../../constants'
+
+export { SnackbarProvider, useSnackbar } from 'notistack'
+export type { VariantType } from 'notistack'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -28,7 +31,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 export const CustomSnackbarProvider = memo(({ children }) => {
-    const ref = createRef<SnackbarProvider>()
+    const ref = useRef<SnackbarProvider>(null)
     const classes = useStyles()
 
     const onDismiss = (key: string | number) => () => {

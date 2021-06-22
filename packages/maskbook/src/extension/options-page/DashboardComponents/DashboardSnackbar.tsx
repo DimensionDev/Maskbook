@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { useSnackbar, SnackbarProvider } from 'notistack'
+import { useSnackbar, SnackbarProvider } from '@dimensiondev/maskbook-theme'
 import { makeStyles, useTheme } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
