@@ -16,7 +16,6 @@ import { FileServicePluginDefine } from './FileService/UI-define'
 import { TraderPluginDefine } from './Trader/define'
 import { TransakPluginDefine } from './Transak/define'
 import { ITO_PluginDefine } from './ITO/define'
-// import { NFTPluginsDefine } from './NFT/define'
 import { AirdropPluginDefine } from './Airdrop/define'
 import { sideEffect } from '../utils/side-effects'
 import { VCentPluginDefine } from './VCent/define'
@@ -26,7 +25,6 @@ sideEffect.then(() => {
     plugins.add(EthereumPluginDefine)
     plugins.add(WalletPluginDefine)
     plugins.add(FileServicePluginDefine)
-    // plugins.add(NFT_PluginsDefine)
     if (Flags.ito_enabled) plugins.add(ITO_PluginDefine)
     if (Flags.vcent_enabled) plugins.add(VCentPluginDefine)
     if (Flags.gitcoin_enabled) plugins.add(GitcoinPluginDefine)
