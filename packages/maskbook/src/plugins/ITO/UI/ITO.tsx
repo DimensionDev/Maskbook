@@ -208,7 +208,7 @@ export function ITO(props: ITO_Props) {
     const postLink = usePostLink()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
+    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(props.payload.contract_address)
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
     const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)
 
@@ -251,9 +251,8 @@ export function ITO(props: ITO_Props) {
     const {
         value: ifQualified = false,
         loading: loadingIfQualified,
-        error: errorIfQualified,
         retry: retryIfQualified,
-    } = useIfQualified(payload.qualification_address)
+    } = useIfQualified(payload.qualification_address, payload.contract_address)
     //#endregion
 
     const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime } = availabilityComputed
@@ -271,9 +270,10 @@ export function ITO(props: ITO_Props) {
     //#region buy info
     const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
-        chainId === payload.chain_id &&
-        (payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase()) ||
-            tradeInfo?.buyInfo?.buyer.address.toLowerCase() === account.toLowerCase())
+        (chainId === payload.chain_id &&
+            (payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase()) ||
+                tradeInfo?.buyInfo?.buyer.address.toLowerCase() === account.toLowerCase())) ||
+        new BigNumber(availability ? availability.swapped : 0).isGreaterThan(0)
     const shareSuccessLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             t('plugin_ito_claim_success_share', {

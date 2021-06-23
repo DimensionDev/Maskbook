@@ -14,7 +14,7 @@ export interface SwappedToken {
 export function useClaimAll() {
     const account = useAccount()
     const chainId = useChainId()
-    const ITO_Contract = useITO_Contract()
+    const { contract: ITO_Contract } = useITO_Contract()
     const { value: pools = [], loading } = useAllPoolsAsBuyer(account)
 
     return useAsyncRetry(async () => {
