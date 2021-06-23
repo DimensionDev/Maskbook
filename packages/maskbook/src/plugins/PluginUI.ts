@@ -16,7 +16,6 @@ import { FileServicePluginDefine } from './FileService/UI-define'
 import { TraderPluginDefine } from './Trader/define'
 import { TransakPluginDefine } from './Transak/define'
 import { ITO_PluginDefine } from './ITO/define'
-import { AirdropPluginDefine } from './Airdrop/define'
 import { sideEffect } from '../utils/side-effects'
 import { VCentPluginDefine } from './VCent/define'
 import { DHedgePluginDefine } from './dHEDGE/define'
@@ -31,7 +30,6 @@ sideEffect.then(() => {
     if (Flags.poll_enabled) plugins.add(PollsPluginDefine)
     if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
     if (Flags.transak_enabled) plugins.add(TransakPluginDefine)
-    if (Flags.airdrop_enabled) plugins.add(AirdropPluginDefine)
     if (Flags.dhedge_enabled) plugins.add(DHedgePluginDefine)
     if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)
 })

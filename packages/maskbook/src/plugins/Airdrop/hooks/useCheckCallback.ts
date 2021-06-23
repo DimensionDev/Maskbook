@@ -4,7 +4,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { formatEthereumAddress, isGreaterThan, ONE } from '@dimensiondev/maskbook-shared'
 import type { AirdropPacket } from '../apis'
 import { useAirdropContract } from '../contracts/useAirdropContract'
-import { PluginAirdropRPC } from '../messages'
+import { AirdropRPC } from '../messages'
 
 export enum CheckStateType {
     UNKNOWN,
@@ -66,7 +66,7 @@ export function useCheckCallback() {
                 const address_ = formatEthereumAddress(checkAddress.trim())
 
                 // read airdrop packet
-                const packet = await PluginAirdropRPC.getMaskAirdropPacket(address_)
+                const packet = await AirdropRPC.getMaskAirdropPacket(address_)
                 if (!packet) {
                     setCheckState({
                         type: CheckStateType.FAILED,
