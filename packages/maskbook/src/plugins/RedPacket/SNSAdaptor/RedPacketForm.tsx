@@ -79,10 +79,9 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const account = useAccount()
     const chainId = useChainId()
     const networkType = useNetworkType()
+    const { HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } = useConstant(RED_PACKET_CONSTANTS)
     const contract_address =
-        useConstant(RED_PACKET_CONSTANTS)[
-            networkType === NetworkType.Ethereum ? 'HAPPY_RED_PACKET_ADDRESS_V2' : 'HAPPY_RED_PACKET_ADDRESS_V3'
-        ]
+        networkType === NetworkType.Ethereum ? HAPPY_RED_PACKET_ADDRESS_V2 : HAPPY_RED_PACKET_ADDRESS_V3
     const contract_version = networkType === NetworkType.Ethereum ? 2 : 3
 
     //#region select token

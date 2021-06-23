@@ -22,7 +22,7 @@ import {
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
     const account = useAccount()
     const chainId = useChainId()
-    const WETH_ADDRESS = useConstant(TOKEN_CONSTANTS).WETH_ADDRESS
+    const { WETH_ADDRESS } = useConstant(TOKEN_CONSTANTS)
 
     return useAsyncRetry(async () => {
         if (!token) return

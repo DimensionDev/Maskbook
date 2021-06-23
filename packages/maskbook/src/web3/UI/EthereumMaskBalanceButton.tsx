@@ -33,7 +33,7 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
 
     //#region mask token
     const chainId = useChainId()
-    const MASK_ADDRESS = useConstant(TOKEN_CONSTANTS).MASK_ADDRESS
+    const { MASK_ADDRESS } = useConstant(TOKEN_CONSTANTS)
     const maskToken = useMemo(
         () => createERC20Token(chainId, MASK_ADDRESS, 18, 'Mask Network', 'MASK'),
         [chainId, MASK_ADDRESS],

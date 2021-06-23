@@ -7,8 +7,7 @@ import { ITO_CONSTANTS } from '../constants'
 import { useConstant, useContract, useNetworkType, NetworkType } from '@masknet/web3-shared'
 
 export function useITO_Contract(contractAddress?: string) {
-    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS).ITO_CONTRACT_ADDRESS
-    const ITO_BSC_POLYGON_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS).ITO_BSC_POLYGON_CONTRACT_ADDRESS
+    const { ITO_CONTRACT_ADDRESS, ITO_BSC_POLYGON_CONTRACT_ADDRESS } = useConstant(ITO_CONSTANTS)
     const ITO_CONTRACT = useContract<ITO>(contractAddress ?? ITO_CONTRACT_ADDRESS, ITO_ABI as AbiItem[])
     const ITO_BSC_POLYGON_CONTRACT = useContract<BscPolygonITO>(
         contractAddress ?? ITO_BSC_POLYGON_CONTRACT_ADDRESS,

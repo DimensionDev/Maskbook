@@ -109,7 +109,7 @@ export function PoolInList(props: PoolInListProps) {
     const classes = useStyles()
     const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onWithdraw } = props
 
-    const NATIVE_TOKEN_ADDRESS = useConstant(TOKEN_CONSTANTS).NATIVE_TOKEN_ADDRESS
+    const { NATIVE_TOKEN_ADDRESS } = useConstant(TOKEN_CONSTANTS)
     const account = useAccount()
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)
     const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)

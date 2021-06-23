@@ -60,7 +60,7 @@ export function LBPPanel(props: LBPPanelProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(props), props)
 
-    const USDC_ADDRESS = useConstant(TOKEN_CONSTANTS).USDC_ADDRESS
+    const { USDC_ADDRESS } = useConstant(TOKEN_CONSTANTS)
     const { value: pools = [], loading: poolsLoading, error: poolsError } = usePools(token.address)
     const {
         value: prices = [],
