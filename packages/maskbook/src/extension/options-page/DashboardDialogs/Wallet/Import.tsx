@@ -52,7 +52,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     const hdWallet = useWalletHD()
 
     // wallet name
-    const [name, setName] = useState('')
+    const [walletName, setWalletName] = useState('')
     // mnemonic
     const [mnemonic, setMnemonic] = useState('')
     // private key
@@ -70,7 +70,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                 label: t('wallet_new'),
                 children: (
                     <>
-                        <WalletName name={name} onChange={setName} />
+                        <WalletName name={walletName} onChange={setWalletName} />
                         <br />
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <FormControlLabel
@@ -108,7 +108,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                 label: t('wallet_import_keystore_label'),
                 children: (
                     <div>
-                        <WalletName name={name} onChange={setName} />
+                        <WalletName name={walletName} onChange={setWalletName} />
                         <TextField
                             required
                             multiline={true}
@@ -135,7 +135,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                 label: t('mnemonic_words'),
                 children: (
                     <div>
-                        <WalletName name={name} onChange={setName} />
+                        <WalletName name={walletName} onChange={setWalletName} />
                         <TextField
                             required
                             label={t('mnemonic_words')}
@@ -151,7 +151,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                 label: t('private_key'),
                 children: (
                     <div>
-                        <WalletName name={name} onChange={setName} />
+                        <WalletName name={walletName} onChange={setWalletName} />
                         <TextField
                             type="password"
                             required
@@ -188,7 +188,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
             switch (state[0]) {
                 case 0:
                     if (!hdWallet) return
-                    await WalletRPC.deriveWalletFromPhrase(name, hdWallet.mnemonic, hdWallet.passphrase)
+                    await WalletRPC.deriveWalletFromPhrase(walletName, hdWallet.mnemonic, hdWallet.passphrase)
                     break
                 case 1:
                     const { address: addr, privateKey } = await WalletRPC.fromKeyStore(
@@ -196,7 +196,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                         Buffer.from(keystorePassword, 'utf-8'),
                     )
                     await WalletRPC.importNewWallet({
-                        name,
+                        name: walletName,
                         address: addr,
                         _private_key_: privateKey,
                     })
@@ -207,7 +207,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                         throw new Error(t('import_failed'))
                     }
                     await WalletRPC.importNewWallet({
-                        name,
+                        name: walletName,
                         path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
                         mnemonic: words,
                         passphrase: '',
@@ -222,7 +222,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                     const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privateKey)
                     if (!privateKeyValid) throw new Error(t('import_failed'))
                     await WalletRPC.importNewWallet({
-                        name,
+                        name: walletName,
                         address,
                         _private_key_: privateKey,
                     })
@@ -231,7 +231,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                     break
             }
         },
-        [state[0], name, mnemonic, privateKey, hdWallet?.address],
+        [state[0], walletName, mnemonic, privateKey, hdWallet?.address],
         props.onClose,
     )
     const onSubmit = useCallback(async () => {
@@ -240,15 +240,15 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
             return
         }
         props.onClose()
-        onCreate(name)
-    }, [state[0], name, hdWallet?.address, onCreate, onDeriveOrImport])
+        onCreate(walletName)
+    }, [state[0], walletName, hdWallet?.address, onCreate, onDeriveOrImport])
 
     const disabled = (() => {
         const isFill =
-            !(state[0] === 1 && name && keystoreContent && keystorePassword) &&
-            !(state[0] === 2 && name && mnemonic) &&
-            !(state[0] === 3 && name && privateKey)
-        return isFill || checkInputLengthExceed(name)
+            !(state[0] === 1 && walletName && keystoreContent && keystorePassword) &&
+            !(state[0] === 2 && walletName && mnemonic) &&
+            !(state[0] === 3 && walletName && privateKey)
+        return isFill || checkInputLengthExceed(walletName)
     })()
 
     return (
