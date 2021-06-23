@@ -74,8 +74,6 @@ export async function getScores(message: ProposalMessage, voters: string[], bloc
     const provider = ss.utils.getProvider(network)
     const snapshot = Number(message.payload.snapshot)
     const blockTag = snapshot > blockNumber ? 'latest' : snapshot
-    console.log({ provider, network, strategies, spaceKey, snapshot, blockTag })
-
     const scores: { [key in string]: number }[] = await ss.utils.getScores(
         spaceKey,
         strategies,
