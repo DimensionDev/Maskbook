@@ -8,7 +8,7 @@ import {
     useConstantNext,
     useERC20TokensDetailedFromTokenLists,
     useNativeTokenDetailed,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { uniqBy } from 'lodash-es'
 import { useMemo } from 'react'
 

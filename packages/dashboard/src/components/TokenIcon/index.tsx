@@ -8,11 +8,11 @@ import {
     isSameAddress,
     useConstantNext,
     TOKEN_CONSTANTS,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useImageFailover } from '../TokenList/useImageFailover'
 import SPECIAL_ICON_LIST from './TokenIconSpeialIconList.json'
-import { useStylesExtends } from '@dimensiondev/maskbook-shared'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { useStylesExtends } from '@masknet/shared'
+import { formatEthereumAddress } from '@masknet/shared'
 
 //#region fix icon image
 function resolveTokenIconURLs(address: string, baseURIs: string[], chainId: ChainId, logoURI?: string) {

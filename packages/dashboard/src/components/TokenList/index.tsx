@@ -1,13 +1,7 @@
 import React, { memo, useEffect, useState } from 'react'
-import { SearchableList } from '@dimensiondev/maskbook-theme'
+import { SearchableList } from '@masknet/theme'
 import { TokenListItem } from './TokenListItem'
-import {
-    Asset,
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    isSameAddress,
-    useERC20Tokens,
-} from '@dimensiondev/web3-shared'
+import { Asset, EthereumTokenType, FungibleTokenDetailed, isSameAddress, useERC20Tokens } from '@masknet/web3-shared'
 import { some } from 'lodash-es'
 import { useDashboardI18N } from '../../locales'
 import { useERC20TokensDetailed } from '../../pages/Wallets/hooks/useERC20TokensDetailed'
