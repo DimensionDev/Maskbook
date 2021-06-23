@@ -16,15 +16,14 @@ export function useVotes(identifier: ProposalIdentifier) {
 async function Suspender(identifier: ProposalIdentifier) {
     const blockNumber = useBlockNumber()
     const {
-        payload: { message },
+        payload: { message, proposal },
     } = useProposal(identifier.id)
 
     const rawVotes = await PluginSnapshotRPC.fetchAllVotesOfProposal(identifier.id, identifier.space)
     const voters = Object.keys(rawVotes)
-    const scores = await PluginSnapshotRPC.getScores(message, voters, blockNumber)
+    const scores = await PluginSnapshotRPC.getScores(message, voters, blockNumber, proposal.network)
     const profiles = await PluginSnapshotRPC.fetch3BoxProfiles(voters)
     const profileEntries = Object.fromEntries(profiles.map((p) => [p.contract_address, p]))
-
     const votes = Object.fromEntries(
         Object.entries(rawVotes)
             .map((voteEntry: [string, VoteItem]) => {
