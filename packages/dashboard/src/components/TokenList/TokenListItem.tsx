@@ -1,7 +1,7 @@
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { ListItem, ListItemText, Typography, ListItemIcon, Button } from '@material-ui/core'
 import type { Asset } from '@dimensiondev/web3-shared'
-import { TokenIcon } from './TokenIcon'
+import { TokenIcon } from '../TokenIcon'
 import type { MaskSearchableListItemProps } from '@dimensiondev/maskbook-theme'
 import { formatBalance } from '@dimensiondev/maskbook-shared'
 
