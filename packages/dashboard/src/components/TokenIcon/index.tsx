@@ -1,4 +1,6 @@
 import { makeStyles, Avatar, Theme, AvatarProps } from '@material-ui/core'
+import { useStylesExtends } from '@masknet/shared'
+import { formatEthereumAddress } from '@masknet/shared'
 import {
     CONSTANTS,
     useBlockie,
@@ -10,9 +12,7 @@ import {
     TOKEN_CONSTANTS,
 } from '@masknet/web3-shared'
 import { useImageFailover } from '../TokenList/useImageFailover'
-import SPECIAL_ICON_LIST from './TokenIconSpeialIconList.json'
-import { useStylesExtends } from '@masknet/shared'
-import { formatEthereumAddress } from '@masknet/shared'
+import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 
 //#region fix icon image
 function resolveTokenIconURLs(address: string, baseURIs: string[], chainId: ChainId, logoURI?: string) {
