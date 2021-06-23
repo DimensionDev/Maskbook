@@ -10,7 +10,6 @@ registerPlugin({
     },
     Worker: {
         load: () => import('./Worker'),
-        hotModuleReload: (hot) =>
-            import.meta.webpackHot && import.meta.webpackHot.accept('./Worker/index', () => hot(import('./Worker'))),
+        hotModuleReload: (hot) => import.meta.webpackHot?.accept('./Worker/index', () => hot(import('./Worker'))),
     },
 })
