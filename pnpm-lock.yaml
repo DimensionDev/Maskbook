@@ -673,6 +673,7 @@ importers:
       '@types/use-subscription': ^1.0.0
       bignumber.js: 9.0.1
       ethereum-blockies: ^0.1.1
+      fuse.js: ^6.4.6
       lodash-es: ^4.17.21
       react-use: ^17.2.4
       unstated-next: ^1.1.0
@@ -687,6 +688,7 @@ importers:
       '@masknet/contracts': link:../contracts
       bignumber.js: 9.0.1
       ethereum-blockies: 0.1.1
+      fuse.js: 6.4.6
       lodash-es: 4.17.21
       react-use: 17.2.4_f991c289939c8299bed5e4a6a5a79a62
       unstated-next: 1.1.0

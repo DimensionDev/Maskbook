@@ -3,13 +3,14 @@ import {
     EthereumTokenType,
     isSameAddress,
     TOKEN_CONSTANTS,
+    TokenListsState,
     useAssetsFromChain,
     useConstantNext,
+    useERC20TokensDetailedFromTokenLists,
     useNativeTokenDetailed,
 } from '@dimensiondev/web3-shared'
 import { uniqBy } from 'lodash-es'
 import { useMemo } from 'react'
-import { TokenListsState, useERC20TokensDetailedFromTokenLists } from './useERC20TokensDetailedFromTokenLists'
 
 export function useERC20TokensDetailed() {
     const ERC20_TOKEN_LISTS = useConstantNext(CONSTANTS).ERC20_TOKEN_LISTS

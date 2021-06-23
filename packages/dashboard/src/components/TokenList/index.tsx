@@ -10,7 +10,7 @@ import {
 } from '@dimensiondev/web3-shared'
 import { some } from 'lodash-es'
 import { useDashboardI18N } from '../../locales'
-import { useERC20TokensDetailed } from '../../hooks/useERC20TokensDetailed'
+import { useERC20TokensDetailed } from '../../pages/Wallets/hooks/useERC20TokensDetailed'
 
 interface IProps {
     onSelect(asset: Asset): void
