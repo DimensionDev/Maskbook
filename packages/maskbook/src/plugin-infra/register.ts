@@ -4,4 +4,5 @@
 import '@dimensiondev/plugin-example'
 import '../plugins/RedPacket'
 import '../plugins/Snapshot'
+import '../plugins/Collectible'
 import '../plugins/External'

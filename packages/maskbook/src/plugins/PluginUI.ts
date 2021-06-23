@@ -18,7 +18,6 @@ import { TransakPluginDefine } from './Transak/define'
 import { ITO_PluginDefine } from './ITO/define'
 // import { NFTPluginsDefine } from './NFT/define'
 import { AirdropPluginDefine } from './Airdrop/define'
-import { CollectiblesPluginDefine } from './Collectible/define'
 import { sideEffect } from '../utils/side-effects'
 import { VCentPluginDefine } from './VCent/define'
 import { DHedgePluginDefine } from './dHEDGE/define'
@@ -35,7 +34,6 @@ sideEffect.then(() => {
     if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
     if (Flags.transak_enabled) plugins.add(TransakPluginDefine)
     if (Flags.airdrop_enabled) plugins.add(AirdropPluginDefine)
-    if (Flags.collectibles_enabled) plugins.add(CollectiblesPluginDefine)
     if (Flags.dhedge_enabled) plugins.add(DHedgePluginDefine)
     if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)
 })

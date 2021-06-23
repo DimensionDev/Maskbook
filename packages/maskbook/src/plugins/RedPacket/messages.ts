@@ -1,7 +1,7 @@
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { RedPacketPluginID } from './constants'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
 export interface RedPacketMessages {
     redPacketUpdated: void
