@@ -166,3 +166,38 @@ export const Paper: Theme = (mode, colors) => ({
         },
     },
 })
+
+export const Typography: Theme = (mode, colors) => ({
+    components: {
+        MuiTypography: {
+            styleOverrides: {},
+            variants: [
+                {
+                    props: { variant: 'h3' },
+                    style: {
+                        fontSize: 24,
+                        lineHeight: '30px',
+                        color: colors.textPrimary,
+                    },
+                },
+                {
+                    props: { variant: 'h4' },
+                    style: {
+                        fontSize: 18,
+                        lineHeight: '24px',
+                        fontStyle: 'normal',
+                        color: colors.textPrimary,
+                    },
+                },
+                {
+                    props: { variant: 'h5' },
+                    style: {
+                        fontSize: 16,
+                        lineHeight: '22px',
+                        color: colors.textPrimary,
+                    },
+                },
+            ],
+        },
+    },
+})

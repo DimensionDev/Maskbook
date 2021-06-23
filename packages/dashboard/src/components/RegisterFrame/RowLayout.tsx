@@ -24,7 +24,7 @@ const RightContent = styled('div')(
 `,
 )
 
-export const RegisterFrame: React.FC<{}> = ({ children }) => {
+export const RowLayout: React.FC<{}> = ({ children }) => {
     return (
         <Container>
             <LeftSide>

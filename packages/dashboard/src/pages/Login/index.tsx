@@ -1,10 +1,10 @@
-import { RegisterFrame } from '../../components/RegisterFrame'
+import { RowLayout } from '../../components/RegisterFrame/RowLayout'
 import { ContentLayout } from '../../components/RegisterFrame/ContentLayout'
 
 export default function Login() {
     return (
-        <RegisterFrame>
+        <RowLayout>
             <ContentLayout>form info</ContentLayout>
-        </RegisterFrame>
+        </RowLayout>
     )
 }

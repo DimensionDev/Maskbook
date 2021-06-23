@@ -1,9 +1,9 @@
-import { RegisterFrame } from '../../components/RegisterFrame'
+import { RowLayout } from '../../components/RegisterFrame/RowLayout'
 
 export default function Register() {
     return (
-        <RegisterFrame>
+        <RowLayout>
             <div>content</div>
-        </RegisterFrame>
+        </RowLayout>
     )
 }
