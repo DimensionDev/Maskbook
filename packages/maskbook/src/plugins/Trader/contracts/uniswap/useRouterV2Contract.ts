@@ -5,6 +5,6 @@ import { TRADE_CONSTANTS } from '../../constants'
 import type { RouterV2 } from '@masknet/contracts/types/RouterV2'
 
 export function useRouterV2Contract() {
-    const address = useConstant(TRADE_CONSTANTS).UNISWAP_ROUTER_ADDRESS
-    return useContract<RouterV2>(address, RouterV2ABI as AbiItem[])
+    const { UNISWAP_ROUTER_ADDRESS } = useConstant(TRADE_CONSTANTS)
+    return useContract<RouterV2>(UNISWAP_ROUTER_ADDRESS, RouterV2ABI as AbiItem[])
 }

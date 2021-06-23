@@ -5,6 +5,6 @@ import AirdropABI from '@masknet/contracts/abis/Airdrop.json'
 import { useConstant, useContract } from '@masknet/web3-shared'
 
 export function useAirdropContract() {
-    const address = useConstant(AIRDROP_CONSTANTS).AIRDROP_CONTRACT_ADDRESS
-    return useContract<Airdrop>(address, AirdropABI as AbiItem[])
+    const { AIRDROP_CONTRACT_ADDRESS } = useConstant(AIRDROP_CONSTANTS)
+    return useContract<Airdrop>(AIRDROP_CONTRACT_ADDRESS, AirdropABI as AbiItem[])
 }
