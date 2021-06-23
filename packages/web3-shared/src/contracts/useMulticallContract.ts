@@ -6,6 +6,6 @@ import { useConstant } from '../hooks/useConstant'
 import type { Multicall } from '@masknet/contracts/types/Multicall'
 
 export function useMulticallContract() {
-    const address = useConstant(CONSTANTS, 'MULTICALL_ADDRESS')
+    const address = useConstant(CONSTANTS).MULTICALL_ADDRESS
     return useContract<Multicall>(address, MulticallABI as AbiItem[])
 }

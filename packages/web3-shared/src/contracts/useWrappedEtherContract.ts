@@ -6,6 +6,6 @@ import { useConstant } from '../hooks/useConstant'
 import type { WETH } from '@masknet/contracts/types/WETH'
 
 export function useNativeTokenWrapperContract() {
-    const address = useConstant(TOKEN_CONSTANTS, 'WETH_ADDRESS')
+    const address = useConstant(TOKEN_CONSTANTS).WETH_ADDRESS
     return useContract<WETH>(address, WETH_ABI as AbiItem[])
 }

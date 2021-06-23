@@ -5,6 +5,6 @@ import { GITCOIN_CONSTANT } from '../constants'
 import { useConstant, useContract } from '@masknet/web3-shared'
 
 export function useBulkCheckoutContract() {
-    const address = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
+    const address = useConstant(GITCOIN_CONSTANT).BULK_CHECKOUT_ADDRESS
     return useContract<BulkCheckout>(address, BulkCheckoutABI as AbiItem[])
 }

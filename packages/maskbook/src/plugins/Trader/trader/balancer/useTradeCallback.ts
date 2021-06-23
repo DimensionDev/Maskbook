@@ -25,7 +25,7 @@ export function useTradeCallback(
     const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
-    const BALANCER_ETH_ADDRESS = useConstant(TRADE_CONSTANTS, 'BALANCER_ETH_ADDRESS')
+    const BALANCER_ETH_ADDRESS = useConstant(TRADE_CONSTANTS).BALANCER_ETH_ADDRESS
 
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,

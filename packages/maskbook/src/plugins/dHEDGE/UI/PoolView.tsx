@@ -110,7 +110,7 @@ export function PoolView(props: PoolViewProps) {
     const classes = useStyles()
 
     //#region susd token
-    const sUSD_ADDRESS = useConstant(TOKEN_CONSTANTS, 'sUSD_ADDRESS')
+    const sUSD_ADDRESS = useConstant(TOKEN_CONSTANTS).sUSD_ADDRESS
     const {
         value: susdTokenDetailed,
         loading: loadingToken,
