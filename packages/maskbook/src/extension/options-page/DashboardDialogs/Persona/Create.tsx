@@ -52,9 +52,6 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                                         createPersonaAndNext()
                                     }
                                 }}
-                                inputProps={{
-                                    maxlength: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                                }}
                                 variant="outlined"
                             />
                         </form>
