@@ -7,7 +7,7 @@ const Wallets = lazy(() => import('./Wallets'))
 const Welcome = lazy(() => import('./Welcome'))
 const Personas = lazy(() => import('./Personas'))
 const Settings = lazy(() => import('./Settings'))
-const Plugins = lazy(() => import('./Plugins'))
+const Labs = lazy(() => import('./Labs'))
 export function Pages() {
     return (
         <Suspense fallback="loading...">
@@ -16,7 +16,7 @@ export function Pages() {
                 <Route path={RoutePaths.Personas} element={frame(<Personas />)} />
                 <Route path={`${RoutePaths.Wallets}/*`} element={frame(<Wallets />)} />
                 <Route path={RoutePaths.Settings} element={frame(<Settings />)} />
-                <Route path={RoutePaths.Plugins} element={frame(<Plugins />)} />
+                <Route path={RoutePaths.Labs} element={frame(<Labs />)} />
                 <Route element={<Navigate to={RoutePaths.Personas} />} />
             </Routes>
         </Suspense>

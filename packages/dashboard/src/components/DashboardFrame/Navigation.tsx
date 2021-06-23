@@ -119,6 +119,12 @@ export function Navigation({}: NavigationProps) {
                     </ListItemLink>
                 </List>
             </Collapse>
+            <ListItemLink to={RoutePaths.Labs}>
+                <ListItemIcon>
+                    <Settings />
+                </ListItemIcon>
+                <ListItemText primary={t.labs()} />
+            </ListItemLink>
             <ListItemLink to={RoutePaths.Settings}>
                 <ListItemIcon>
                     <Settings />
