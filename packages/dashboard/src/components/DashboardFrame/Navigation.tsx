@@ -98,6 +98,13 @@ export function Navigation({}: NavigationProps) {
                 </ListItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
+
+            <ListItemLink to={RoutePaths.Welcome}>
+                <ListItemIcon>
+                    <Masks />
+                </ListItemIcon>
+                <ListItemText>Welcom</ListItemText>
+            </ListItemLink>
             <ListItemLink
                 to={RoutePaths.Wallets}
                 selected={!!useMatch(RoutePaths.Wallets)}
