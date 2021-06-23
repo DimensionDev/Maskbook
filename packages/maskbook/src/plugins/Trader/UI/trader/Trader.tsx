@@ -27,7 +27,6 @@ import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
-import { EthereumMessages } from '../../../Ethereum/messages'
 import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
 import { isNativeTokenWrapper } from '../../helpers'
@@ -247,7 +246,7 @@ export function Trader(props: TraderProps) {
 
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             setFreezed(false)

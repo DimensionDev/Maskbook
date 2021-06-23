@@ -7,8 +7,6 @@ const plugins = new Set<PluginConfig>()
 export const PluginUI: ReadonlySet<PluginConfig> = plugins
 
 import { Flags } from '../utils/flags'
-import { EthereumPluginDefine } from './Ethereum/define'
-import { WalletPluginDefine } from './Wallet/define'
 import { GitcoinPluginDefine } from './Gitcoin/define'
 import { PollsPluginDefine } from './Polls/define'
 import { StorybookPluginDefine } from './Storybook/define'
@@ -21,8 +19,6 @@ import { VCentPluginDefine } from './VCent/define'
 import { DHedgePluginDefine } from './dHEDGE/define'
 
 sideEffect.then(() => {
-    plugins.add(EthereumPluginDefine)
-    plugins.add(WalletPluginDefine)
     plugins.add(FileServicePluginDefine)
     if (Flags.ito_enabled) plugins.add(ITO_PluginDefine)
     if (Flags.vcent_enabled) plugins.add(VCentPluginDefine)

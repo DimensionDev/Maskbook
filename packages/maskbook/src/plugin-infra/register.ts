@@ -2,6 +2,7 @@
 // packages/dashboard/src/initialization/plugins.ts
 
 import '@masknet/plugin-example'
+import '../plugins/Wallet'
 import '../plugins/RedPacket'
 import '../plugins/Snapshot'
 import '../plugins/Collectible'

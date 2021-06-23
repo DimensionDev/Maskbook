@@ -8,7 +8,7 @@ import { TransactionStateType, resolveTransactionLinkOnExplorer, useChainId } fr
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useClaimAll } from '../hooks/useClaimAll'
-import { EthereumMessages } from '../../Ethereum/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -112,7 +112,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     }, [claimCallback])
 
     const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (claimState.type === TransactionStateType.FAILED) popEnqueueSnackbar('error')

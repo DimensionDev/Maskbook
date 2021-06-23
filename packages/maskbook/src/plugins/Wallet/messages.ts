@@ -1,9 +1,45 @@
-import type { NetworkType, ProviderType, Wallet } from '@masknet/web3-shared'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import type {
+    ERC20TokenDetailed,
+    FungibleTokenDetailed,
+    GasNow,
+    NetworkType,
+    ProviderType,
+    TransactionState,
+    Wallet,
+} from '@masknet/web3-shared'
 import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
+
+export type UnlockERC20TokenDialogEvent =
+    | {
+          open: true
+          token: ERC20TokenDetailed
+          amount: string
+          spender: string
+      }
+    | {
+          open: false
+      }
+
+export type TransactionDialogEvent =
+    | {
+          open: true
+          state: TransactionState
+          shareLink?: string
+          summary?: string
+          title?: string
+      }
+    | {
+          open: false
+      }
+
+export type GasPriceDialogEvent = {
+    open: boolean
+    type?: keyof GasNow
+}
 
 export type SelectProviderDialogEvent =
     | {
@@ -83,7 +119,22 @@ export type SelectTokenDialogEvent =
           token?: FungibleTokenDetailed
       }
 
-interface WalletMessage {
+export interface WalletMessage {
+    /**
+     * Unlock token dialog
+     */
+    unlockERC20TokenDialogUpdated: UnlockERC20TokenDialogEvent
+
+    /**
+     * Transaction dialog
+     */
+    transactionDialogUpdated: TransactionDialogEvent
+
+    /**
+     * Gas price dialog
+     */
+    gasPriceDialogUpdated: GasPriceDialogEvent
+
     /**
      * Select wallet dialog
      */
@@ -143,5 +194,5 @@ interface WalletMessage {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const WalletMessages = createPluginMessage<WalletMessage>(PLUGIN_IDENTIFIER)
+export const WalletMessages: WebExtensionMessage<WalletMessage> = createPluginMessage<WalletMessage>(PLUGIN_IDENTIFIER)
 export const WalletRPC = createPluginRPC(PLUGIN_IDENTIFIER, () => import('./services'), WalletMessages.events.rpc)
