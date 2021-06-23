@@ -197,6 +197,13 @@ export const Typography: Theme = (mode, colors) => ({
                         color: colors.textPrimary,
                     },
                 },
+                {
+                    props: { variant: 'body2', paragraph: true },
+                    style: {
+                        fontSize: 14,
+                        color: colors.textSecondary,
+                    },
+                },
             ],
         },
     },

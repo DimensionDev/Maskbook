@@ -29,11 +29,8 @@ const Subtitle = styled('div')(
 `,
 )
 
-const Paragraph = styled('p')(
+const Paragraph = styled(Typography)(
     ({ theme }) => `
-    font-size: 14;
-    color: ${theme.palette.text.secondary};
-
     & > p {
         margin: ${theme.spacing(0.5)} 0
     }
@@ -59,18 +56,18 @@ export default function Welcome() {
                     <Typography variant="h3">Help Us Improve Mask Network</Typography>
                 </Title>
                 <Introduce>
-                    <Paragraph>
+                    <Typography variant={'body2'} paragraph>
                         Mask Network aims to build an encrypted and decentralized social network, you (all Internet
                         users) could send or browse encrypted posts with the ‘Mask Network’ extension or App.
-                    </Paragraph>
-                    <Paragraph>
+                    </Typography>
+                    <Typography variant={'body2'} paragraph>
                         Send encrypted red packets, purchase cryptocurrencies, share encrypted files, etc. More
                         functions are ready to be launched.
-                    </Paragraph>
+                    </Typography>
                     <Subtitle>
                         <Typography variant="h5">Mask Network never collects</Typography>
                     </Subtitle>
-                    <Paragraph>
+                    <Paragraph variant={'body2'} paragraph>
                         <p>users’ accounts and passwords. Unless users authorized us to host accounts and passwords.</p>
                         <p>users’ related information and browsing histories of their social accounts.</p>
                         <p>
@@ -79,7 +76,7 @@ export default function Welcome() {
                         </p>
                         <p>users’ complete IP address.</p>
                     </Paragraph>
-                    <Paragraph>
+                    <Paragraph variant={'body2'} paragraph>
                         <p>
                             Mask Network keeps users’ encrypted information in users’ browser, please keep it safe and
                             make sure to back up constantly.
@@ -90,7 +87,7 @@ export default function Welcome() {
                 </Introduce>
                 <ButtonGroup>
                     <Button color={'secondary'}>Cancel</Button>
-                    <Button color={'primary'} onClick={() => navigate(RoutePaths.SignUp)}>
+                    <Button color={'primary'} onClick={() => navigate(RoutePaths.Setup)}>
                         Agree
                     </Button>
                 </ButtonGroup>
