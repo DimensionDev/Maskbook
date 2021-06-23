@@ -186,22 +186,24 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     const onDeriveOrImport = useSnackbarCallback(
         async () => {
             switch (state[0]) {
-                case 0:
+                case 0: {
                     if (!hdWallet) return
                     await WalletRPC.deriveWalletFromPhrase(walletName, hdWallet.mnemonic, hdWallet.passphrase)
                     break
-                case 1:
-                    const { address: addr, privateKey } = await WalletRPC.fromKeyStore(
+                }
+                case 1: {
+                    const { address, privateKey: _private_key_ } = await WalletRPC.fromKeyStore(
                         keystoreContent,
                         Buffer.from(keystorePassword, 'utf-8'),
                     )
                     await WalletRPC.importNewWallet({
                         name: walletName,
-                        address: addr,
-                        _private_key_: privateKey,
+                        address,
+                        _private_key_,
                     })
                     break
-                case 2:
+                }
+                case 2: {
                     const words = mnemonic.split(' ')
                     if (words.length !== 12) {
                         throw new Error(t('import_failed'))
@@ -218,7 +220,8 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                         passphrase: '',
                     })
                     break
-                case 3:
+                }
+                case 3: {
                     const { address, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(privateKey)
                     if (!privateKeyValid) throw new Error(t('import_failed'))
                     await WalletRPC.importNewWallet({
@@ -227,6 +230,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                         _private_key_: privateKey,
                     })
                     break
+                }
                 default:
                     break
             }
