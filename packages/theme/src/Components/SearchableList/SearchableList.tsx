@@ -85,7 +85,6 @@ export const SearchableList = <T,>({
                 autoFocus
                 fullWidth
                 InputProps={{
-                    className: classes.searchInput,
                     startAdornment: (
                         <InputAdornment position="start">
                             <Search />
@@ -129,9 +128,6 @@ const useStyles = makeStyles((theme) => ({
             borderRadius: theme.spacing(1),
             background: MaskColorVar.normalBackground,
         },
-    },
-    searchInput: {
-        padding: '-6px',
     },
     list: {
         marginTop: theme.spacing(1),
