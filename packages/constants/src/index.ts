@@ -1,26 +1,9 @@
-import { ChainId, useChainId } from '@masknet/web3-shared'
-import { useMemo } from 'react'
-import trade from './trade-constants.json'
+import TRADE_CONSTANTS from './trade-constants.json'
+import TOKEN_CONSTANTS from './token-constants.json'
+import { hookTransform, transform } from './utils'
 
-export const getTradeConstants = (chainId = ChainId.Mainnet) => {
-    type Constants = typeof trade
-    type Table = { [key in keyof Constants]: Constants[key]['Mainnet'] }
-
-    const table = {} as Table
-    const chainName = ChainId[chainId] as keyof typeof ChainId
-    for (const name in trade) {
-        const key = name as keyof Constants
-        table[key] = trade[key][chainName]
-    }
-    return Object.freeze(table)
-}
-
+export const getTradeConstants = transform(TRADE_CONSTANTS)
 export const useTradeConstants = hookTransform(getTradeConstants)
 
-function hookTransform<T>(getConstants: (chainId: ChainId) => T) {
-    return function useConstants(chainId = ChainId.Mainnet) {
-        const current = useChainId()
-        const finalChain = chainId ?? current
-        return useMemo(() => getConstants(finalChain), [finalChain])
-    }
-}
+export const getTokenConstants = transform(TOKEN_CONSTANTS)
+export const useTokenConstants = hookTransform(getTokenConstants)
