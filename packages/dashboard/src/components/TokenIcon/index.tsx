@@ -10,6 +10,7 @@ import {
     isSameAddress,
     useConstantNext,
     TOKEN_CONSTANTS,
+    currySameAddress,
 } from '@masknet/web3-shared'
 import { useImageFailover } from '../TokenList/useImageFailover'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
@@ -22,7 +23,7 @@ function resolveTokenIconURLs(address: string, baseURIs: string[], chainId: Chai
         return baseURIs.map((x) => `${x}/info/logo.png`)
     }
 
-    const specialIcon = SPECIAL_ICON_LIST.find((item) => item.address === address)
+    const specialIcon = SPECIAL_ICON_LIST.find(currySameAddress(address))
 
     if (specialIcon) return [specialIcon.logo_url]
 
