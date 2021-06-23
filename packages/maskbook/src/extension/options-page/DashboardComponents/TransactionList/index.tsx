@@ -13,7 +13,7 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core'
-import { useAccount, useChainId } from '@dimensiondev/web3-shared'
+import { useAccount, useChainId } from '@masknet/web3-shared'
 import { useTransactions } from '../../../../plugins/Wallet/hooks/useTransactions'
 import { Row } from './Row'
 import { FilterTransactionType } from '../../../../plugins/Wallet/types'

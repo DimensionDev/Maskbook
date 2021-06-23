@@ -1,10 +1,10 @@
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress } from '@masknet/shared'
 import {
     resolveAddressLinkOnExplorer,
     resolveBlockLinkOnExplorer,
     resolveIPFSLink,
     useChainId,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { Avatar, Box, Link, makeStyles, Typography } from '@material-ui/core'
 import OpenInNew from '@material-ui/icons/OpenInNew'
 import formatDateTime from 'date-fns/format'

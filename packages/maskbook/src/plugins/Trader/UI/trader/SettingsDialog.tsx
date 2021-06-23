@@ -12,7 +12,7 @@ import {
     Button,
     DialogContent,
 } from '@material-ui/core'
-import { useValueRef, getEnumAsArray } from '@dimensiondev/maskbook-shared'
+import { useValueRef, getEnumAsArray } from '@masknet/shared'
 import { useI18N, useRemoteControlledDialog } from '../../../../utils'
 import { ZrxTradePool, TradeProvider } from '../../types'
 import { SelectPoolPanel } from './SelectPoolPanel'

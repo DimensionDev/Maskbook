@@ -1,5 +1,5 @@
-import { safeUnreachable } from '@dimensiondev/maskbook-shared'
-import { getNetworkTypeFromChainId, NetworkType } from '@dimensiondev/web3-shared'
+import { safeUnreachable } from '@masknet/shared'
+import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 import { TagType, TradeProvider } from '../../types'
 

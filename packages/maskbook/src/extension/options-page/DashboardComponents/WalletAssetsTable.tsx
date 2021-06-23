@@ -27,9 +27,9 @@ import {
     useChainDetailed,
     getChainIdFromName,
     currySameAddress,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { formatBalance, formatCurrency, FormattedCurrency, isGreaterThan } from '@dimensiondev/maskbook-shared'
+import { formatBalance, formatCurrency, FormattedCurrency, isGreaterThan } from '@masknet/shared'
 import { useMatchXS, useI18N } from '../../../utils'
 import { TokenIcon } from './TokenIcon'
 import { ActionsBarFT } from './ActionsBarFT'

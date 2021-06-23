@@ -35,8 +35,8 @@ import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
-import { useChainId } from '@dimensiondev/web3-shared'
-import { getEnumAsArray } from '@dimensiondev/maskbook-shared'
+import { useChainId } from '@masknet/web3-shared'
+import { getEnumAsArray } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => {
     return {

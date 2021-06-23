@@ -1,4 +1,4 @@
-import { currySameAddress, EthereumTokenType, useChainId, useERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import { currySameAddress, EthereumTokenType, useChainId, useERC20TokenDetailed } from '@masknet/web3-shared'
 import Fuse from 'fuse.js'
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'

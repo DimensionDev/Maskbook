@@ -1,4 +1,4 @@
-import type { Wallet } from '@dimensiondev/web3-shared'
+import type { Wallet } from '@masknet/web3-shared'
 
 export interface WalletProps {
     wallet: Wallet

@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Button, experimentalStyled as styled, makeStyles, FilledInput } from '@material-ui/core'
-import { useTabs } from '@dimensiondev/maskbook-theme'
+import { useTabs } from '@masknet/theme'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
 import { MaskAlert } from '../../../../components/MaskAlert'
 import { useDashboardI18N } from '../../../../locales'

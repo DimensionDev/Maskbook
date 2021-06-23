@@ -1,12 +1,12 @@
 {
-  "name": "@dimensiondev/icons",
+  "name": "@masknet/icons",
   "private": true,
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
   "sideEffects": false,
   "type": "module",
   "dependencies": {
-    "@dimensiondev/maskbook-theme": "workspace:*"
+    "@masknet/theme": "workspace:*"
   },
   "devDependencies": {
     "snowpack": "^3.5.1"

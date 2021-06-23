@@ -1,4 +1,4 @@
-import { ChainId } from '@dimensiondev/web3-shared'
+import { ChainId } from '@masknet/web3-shared'
 
 /**
  * !! Change this key cause a breaking change in the red packet plugin.

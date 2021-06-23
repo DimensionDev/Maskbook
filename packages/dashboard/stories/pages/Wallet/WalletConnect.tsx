@@ -1,4 +1,4 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { WalletConnect as C } from '../../../src/components/WalletConnect'
 const { meta, of } = story(C)
 

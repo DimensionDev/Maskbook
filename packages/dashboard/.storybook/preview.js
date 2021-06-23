@@ -1,7 +1,7 @@
 import React from 'react'
 import { ThemeProvider, StyledEngineProvider } from '@material-ui/core'
 import { StylesProvider } from '@material-ui/styles'
-import { MaskLightTheme, addMaskThemeI18N, applyMaskColorVars } from '@dimensiondev/maskbook-theme'
+import { MaskLightTheme, addMaskThemeI18N, applyMaskColorVars } from '@masknet/theme'
 import { withMatrix } from 'storybook-addon-matrix'
 import { addDashboardI18N } from '../src/locales'
 import { I18nextProvider, initReactI18next } from 'react-i18next'

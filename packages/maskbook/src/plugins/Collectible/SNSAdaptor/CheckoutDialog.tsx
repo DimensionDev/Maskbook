@@ -11,9 +11,9 @@ import {
     Typography,
     Link,
 } from '@material-ui/core'
-import { useSnackbar } from '@dimensiondev/maskbook-theme'
+import { useSnackbar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import { useAccount } from '@dimensiondev/web3-shared'
+import { useAccount } from '@masknet/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'

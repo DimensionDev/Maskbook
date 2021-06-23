@@ -1,5 +1,5 @@
 import { Emitter } from '@servie/events'
-import { ALL_EVENTS } from '@dimensiondev/maskbook-shared'
+import { ALL_EVENTS } from '@masknet/shared'
 import type { Plugin } from '../types'
 import { __meetEthChainRequirement } from '../utils/internal'
 import { getPluginDefine, registeredPluginIDs } from './store'

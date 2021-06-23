@@ -1,5 +1,5 @@
 import { clamp } from 'lodash-es'
-import { useValueRef } from '@dimensiondev/maskbook-shared'
+import { useValueRef } from '@masknet/shared'
 import { SLIPPAGE_TOLERANCE_MAX, SLIPPAGE_TOLERANCE_MIN } from '../../constants'
 import { toUniswapPercent } from '../../helpers'
 import { currentSlippageTolerance } from '../../settings'

@@ -1,5 +1,5 @@
 import type BigNumber from 'bignumber.js'
-import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@masknet/web3-shared'
 
 export enum TradeProvider {
     UNISWAP,

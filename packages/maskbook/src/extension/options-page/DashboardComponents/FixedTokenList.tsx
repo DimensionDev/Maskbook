@@ -10,7 +10,7 @@ import {
     FungibleTokenDetailed,
     EthereumTokenType,
     currySameAddress,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { TokenInList } from './TokenInList'
 import {

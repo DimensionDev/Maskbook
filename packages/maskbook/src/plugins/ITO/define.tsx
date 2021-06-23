@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core'
-import { formatBalance, formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatBalance, formatEthereumAddress } from '@masknet/shared'
 import { PostInspector } from './UI/PostInspector'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { ITO_MetaKey, ITO_PluginID } from './constants'

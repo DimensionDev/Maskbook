@@ -1,4 +1,4 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { MnemonicReveal as C } from '../../../src/components/Mnemonic'
 
 const { meta, of } = story(C)

@@ -4,7 +4,7 @@ import { omit } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import BigNumber from 'bignumber.js'
 
-import { formatBalance, isGreaterThan, isZero, pow10 } from '@dimensiondev/maskbook-shared'
+import { formatBalance, isGreaterThan, isZero, pow10 } from '@masknet/shared'
 import {
     EthereumTokenType,
     NetworkType,
@@ -17,7 +17,7 @@ import {
     getChainName,
     useNativeTokenDetailed,
     useTokenBalance,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'

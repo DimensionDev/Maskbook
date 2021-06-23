@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useValueRef } from '@dimensiondev/maskbook-shared'
+import { useValueRef } from '@masknet/shared'
 import { getCurrentPreferredCoinIdSettings } from '../settings'
 import type { DataProvider } from '../types'
 

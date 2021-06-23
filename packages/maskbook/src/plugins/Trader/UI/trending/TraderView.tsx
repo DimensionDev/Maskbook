@@ -19,7 +19,7 @@ import { TrendingViewDeck } from './TrendingViewDeck'
 import { currentTrendingDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType, useTokenDetailed } from '@dimensiondev/web3-shared'
+import { EthereumTokenType, useTokenDetailed } from '@masknet/web3-shared'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 

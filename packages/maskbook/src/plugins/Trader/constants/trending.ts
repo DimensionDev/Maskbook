@@ -1,4 +1,4 @@
-import { ChainId } from '@dimensiondev/web3-shared'
+import { ChainId } from '@masknet/web3-shared'
 
 //#region plugin settings
 export const PLUGIN_IDENTIFIER = 'com.maskbook.trader'

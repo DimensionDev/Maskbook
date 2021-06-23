@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { experimentalStyled as styled, Typography } from '@material-ui/core'
 import { WalletQRCodeContainer } from '../WalletQRCodeContainer'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 const Container = styled('div')`
     display: flex;

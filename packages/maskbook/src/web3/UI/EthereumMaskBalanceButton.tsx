@@ -1,14 +1,8 @@
 import { useState, useCallback, useMemo } from 'react'
 import { makeStyles, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
-import { FormattedBalance } from '@dimensiondev/maskbook-shared'
-import {
-    createERC20Token,
-    TOKEN_CONSTANTS,
-    useConstant,
-    useERC20TokenBalance,
-    useChainId,
-} from '@dimensiondev/web3-shared'
+import { FormattedBalance } from '@masknet/shared'
+import { createERC20Token, TOKEN_CONSTANTS, useConstant, useERC20TokenBalance, useChainId } from '@masknet/web3-shared'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { BreakdownDialog } from '../../components/InjectedComponents/BreakdownDialog'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'

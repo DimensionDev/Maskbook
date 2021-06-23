@@ -1,4 +1,4 @@
-import { ChainId } from '@dimensiondev/web3-shared'
+import { ChainId } from '@masknet/web3-shared'
 
 export const GITCOIN_PLUGIN_ID = 'co.gitcoin'
 

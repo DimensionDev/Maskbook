@@ -1,4 +1,4 @@
-import { createGlobalState } from '@dimensiondev/maskbook-shared'
+import { createGlobalState } from '@masknet/shared'
 import { Services, Messages } from '../../API'
 
 export const [useLanguage] = createGlobalState(Services.Settings.getLanguage, (x) =>

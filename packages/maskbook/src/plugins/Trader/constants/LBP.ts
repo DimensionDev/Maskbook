@@ -1,4 +1,4 @@
-import { ChainId } from '@dimensiondev/web3-shared'
+import { ChainId } from '@masknet/web3-shared'
 
 export const LBP_CONSTANTS = {
     BALANCER_POOLS_SUBGRAPH_URL: {

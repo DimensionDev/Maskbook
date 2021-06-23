@@ -1,5 +1,5 @@
 import { experimentalStyled as styled, Typography } from '@material-ui/core'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 const Container = styled('div')`
     display: inline-grid;
     grid-template-columns: repeat(6, 1fr);

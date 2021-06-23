@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { makeStyles, DialogContent } from '@material-ui/core'
-import { safeUnreachable } from '@dimensiondev/maskbook-shared'
+import { safeUnreachable } from '@masknet/shared'
 import {
     NetworkType,
     ProviderType,
@@ -10,7 +10,7 @@ import {
     ChainId,
     resolveNetworkName,
     getChainDetailedCAIP,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { delay, useRemoteControlledDialog } from '../../../../utils'

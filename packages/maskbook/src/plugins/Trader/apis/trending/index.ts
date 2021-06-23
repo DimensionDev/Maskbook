@@ -4,7 +4,7 @@ import * as coinGeckoAPI from '../coingecko'
 import * as coinMarketCapAPI from '../coinmarketcap'
 import * as uniswapAPI from '../uniswap'
 import { Days } from '../../UI/trending/PriceChartDaysControl'
-import { getEnumAsArray, unreachable } from '@dimensiondev/maskbook-shared'
+import { getEnumAsArray, unreachable } from '@masknet/shared'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import {
     resolveAlias,
@@ -15,7 +15,7 @@ import {
     isBlockedKeyword,
     isMirroredKeyword,
 } from './hotfix'
-import { NetworkType } from '@dimensiondev/web3-shared'
+import { NetworkType } from '@masknet/web3-shared'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 
 /**

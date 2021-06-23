@@ -1,4 +1,4 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { Balance as C } from '../../../src/pages/Wallets/components/Balance'
 import { action } from '@storybook/addon-actions'
 const { meta, of } = story(C)

@@ -1,5 +1,5 @@
 import { uniq } from 'lodash-es'
-import { Plugin, usePostInfoDetails } from '@dimensiondev/mask-plugin-infra'
+import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import { getTypedMessageContent } from '../../../protocols/typed-message'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { PostInspector } from './PostInspector'

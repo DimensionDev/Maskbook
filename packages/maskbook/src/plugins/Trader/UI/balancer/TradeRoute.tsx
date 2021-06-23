@@ -11,7 +11,7 @@ import {
     TableBody,
 } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
-import { formatPercentage } from '@dimensiondev/maskbook-shared'
+import { formatPercentage } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { SwapResponse, TradeComputed } from '../../types'

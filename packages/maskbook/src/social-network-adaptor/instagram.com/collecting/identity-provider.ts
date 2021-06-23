@@ -1,5 +1,5 @@
 import { SocialNetworkUI, creator } from '../../../social-network'
-import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { ProfileIdentifier } from '@masknet/shared'
 import { instagramBase } from '../base'
 import { openDB } from 'idb'
 export const IdentityProviderInstagram: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {

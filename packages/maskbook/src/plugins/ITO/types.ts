@@ -1,4 +1,4 @@
-import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@masknet/web3-shared'
 
 export interface JSON_PayloadInMask {
     contract_address: string

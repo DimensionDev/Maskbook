@@ -1,4 +1,4 @@
-import { MaskDialog } from '@dimensiondev/maskbook-theme'
+import { MaskDialog } from '@masknet/theme'
 import {
     DialogContent,
     DialogActions,

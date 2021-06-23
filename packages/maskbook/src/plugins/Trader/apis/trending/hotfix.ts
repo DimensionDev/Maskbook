@@ -1,4 +1,4 @@
-import { NetworkType } from '@dimensiondev/web3-shared'
+import { NetworkType } from '@masknet/web3-shared'
 import { DataProvider, TagType } from '../../types'
 import MIRRORED_TOKENS from './mirrored_tokens.json'
 import STOCKS_KEYWORDS from './stocks.json'

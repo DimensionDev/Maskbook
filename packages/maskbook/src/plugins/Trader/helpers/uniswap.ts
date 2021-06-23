@@ -9,8 +9,8 @@ import {
     JSBI,
     TokenAmount,
 } from '@uniswap/sdk'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { ChainId, EthereumTokenType, FungibleTokenDetailed, isNative } from '@dimensiondev/web3-shared'
+import { formatEthereumAddress } from '@masknet/shared'
+import { ChainId, EthereumTokenType, FungibleTokenDetailed, isNative } from '@masknet/web3-shared'
 import { WETH } from '../constants'
 
 export function toUniswapChainId(chainId: ChainId): UniswapChainId {

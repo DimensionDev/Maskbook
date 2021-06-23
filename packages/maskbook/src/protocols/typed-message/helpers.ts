@@ -4,7 +4,7 @@ import {
     isTypedMessageTuple,
     TypedMessageTuple,
     isTypedMessageAnchor,
-} from '@dimensiondev/maskbook-shared'
+} from '@masknet/shared'
 import { Result, Ok, Err } from 'ts-results'
 import { eq } from 'lodash-es'
 /**

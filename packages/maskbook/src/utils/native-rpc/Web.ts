@@ -3,7 +3,7 @@ import Services from '../../extension/service'
 import { definedSocialNetworkWorkers } from '../../social-network/define'
 import { launchPageSettings } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 
 export const WebviewAPI: WebviewAPIs = {
     web_echo: async (arg) => arg,

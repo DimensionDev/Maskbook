@@ -1,6 +1,6 @@
 import { memo, MouseEvent } from 'react'
 import { Link, Typography } from '@material-ui/core'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 
 export interface UnconnectedPersonaLineProps {

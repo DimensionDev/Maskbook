@@ -2,10 +2,10 @@ import { memo, useState } from 'react'
 import { Box, Button, Drawer, makeStyles } from '@material-ui/core'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PersonaCard } from '../PersonaCard'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 import { AddPersonaCard } from '../AddPersonaCard'
 import { useDashboardI18N } from '../../../../locales'
-import type { PersonaIdentifier, PersonaInformation } from '@dimensiondev/maskbook-shared'
+import type { PersonaIdentifier, PersonaInformation } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {

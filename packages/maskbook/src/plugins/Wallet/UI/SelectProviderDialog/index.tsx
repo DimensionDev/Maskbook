@@ -10,13 +10,13 @@ import {
     ListItem,
     Typography,
 } from '@material-ui/core'
-import { unreachable, useValueRef } from '@dimensiondev/maskbook-shared'
-import { SuccessIcon } from '@dimensiondev/icons'
+import { unreachable, useValueRef } from '@masknet/shared'
+import { SuccessIcon } from '@masknet/icons'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { useWallets, useAccount, getChainIdFromNetworkType, ProviderType, NetworkType } from '@dimensiondev/web3-shared'
+import { useWallets, useAccount, getChainIdFromNetworkType, ProviderType, NetworkType } from '@masknet/web3-shared'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
-import { useChainId } from '@dimensiondev/web3-shared'
+import { useChainId } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { Provider } from '../Provider'

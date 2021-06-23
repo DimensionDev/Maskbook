@@ -7,7 +7,7 @@ import type { Asset } from '../types'
 import { useChainId } from './useChainId'
 import { useConstantNext } from './useConstant'
 import { TOKEN_CONSTANTS } from '../constants'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress } from '@masknet/shared'
 import { uniqBy } from 'lodash-es'
 import { getChainIdFromName, getTokenUSDValue, isSameAddress } from '../utils'
 

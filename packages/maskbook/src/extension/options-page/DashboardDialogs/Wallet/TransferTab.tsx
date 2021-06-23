@@ -2,7 +2,7 @@ import { Button, makeStyles, TextField } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { formatBalance, formatEthereumAddress, isGreaterThan, isZero, pow10 } from '@dimensiondev/maskbook-shared'
+import { formatBalance, formatEthereumAddress, isGreaterThan, isZero, pow10 } from '@masknet/shared'
 import {
     Wallet,
     useTokenBalance,
@@ -10,7 +10,7 @@ import {
     TransactionStateType,
     FungibleTokenDetailed,
     EthereumTokenType,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useRemoteControlledDialog, useI18N } from '../../../../utils'
 import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'

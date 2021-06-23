@@ -15,7 +15,7 @@ import {
     getChainName,
     getChainDetailed,
     NativeTokenDetailed,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 
 const redPacketBasicKeys = [
     'contract_address',

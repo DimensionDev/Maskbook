@@ -1,4 +1,4 @@
-import type { Plugin } from '@dimensiondev/mask-plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { Suspense } from 'react'
 import { ExternalPluginLoader } from '../components/Container'
 import type { ExternalPluginLoadDetails } from '../types'

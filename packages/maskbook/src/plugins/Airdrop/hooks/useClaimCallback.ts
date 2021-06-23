@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
-import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+import type { NonPayableTx } from '@masknet/contracts/types/types'
 import {
     TransactionEventType,
     TransactionStateType,
@@ -8,7 +8,7 @@ import {
     useGasPrice,
     useNonce,
     useTransactionState,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import type { AirdropPacket } from '../apis'
 import { useAirdropContract } from '../contracts/useAirdropContract'
 

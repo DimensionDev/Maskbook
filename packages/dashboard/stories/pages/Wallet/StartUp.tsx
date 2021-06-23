@@ -1,4 +1,4 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { StartUp as C } from '../../../src/pages/Wallets/StartUp'
 const { meta, of } = story(C)
 

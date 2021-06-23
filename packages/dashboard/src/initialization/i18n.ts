@@ -1,5 +1,5 @@
 import i18n from 'i18next'
-import { addMaskThemeI18N } from '@dimensiondev/maskbook-theme'
+import { addMaskThemeI18N } from '@masknet/theme'
 import { addDashboardI18N } from '../locales'
 import { initReactI18next } from 'react-i18next'
 

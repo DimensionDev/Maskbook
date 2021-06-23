@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { Wallet, NonFungibleTokenDetailed, EthereumTokenType, useChainIdValid } from '@dimensiondev/web3-shared'
+import { Wallet, NonFungibleTokenDetailed, EthereumTokenType, useChainIdValid } from '@masknet/web3-shared'
 import { useMenu, useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'

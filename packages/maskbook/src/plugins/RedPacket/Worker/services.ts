@@ -1,7 +1,7 @@
 import type { RedPacketRecord } from '../types'
 import { RedPacketMessage } from '../messages'
 import * as database from './database'
-import type { ChainId } from '@dimensiondev/web3-shared'
+import type { ChainId } from '@masknet/web3-shared'
 import * as subgraph from './apis'
 
 export async function discoverRedPacket(record: RedPacketRecord) {

@@ -4,7 +4,7 @@ import { useChainId } from './useChainId'
 import { constantOfChain } from '../utils'
 
 /**
- * @deprecated Use useConstantNext from `@dimensiondev/web3-shared` package
+ * @deprecated Use useConstantNext from `@masknet/web3-shared` package
  *
  * Before: `useConstant(T, "a")`
  *

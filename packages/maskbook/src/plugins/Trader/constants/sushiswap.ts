@@ -1,4 +1,4 @@
-import { ChainId, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import { ChainId, ERC20TokenDetailed } from '@masknet/web3-shared'
 import { SUSHI, DAI, YAM, WBTC, MSKA, MSKB, MSKC, USDC, USDT, WETH, WETH_ONLY, RUNE } from './trader'
 
 /**

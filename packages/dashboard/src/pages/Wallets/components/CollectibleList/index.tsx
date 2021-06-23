@@ -10,11 +10,11 @@ import {
     useWallet,
     CollectibleProvider,
     useCollectibles,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useCurrentCollectibleDataProvider } from '../../api'
 import { LoadingPlaceholder } from '../LoadingPlacholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress } from '@masknet/shared'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
 

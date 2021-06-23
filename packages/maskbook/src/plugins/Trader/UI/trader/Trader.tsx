@@ -13,7 +13,7 @@ import {
     TransactionStateType,
     useChainId,
     useTokenBalance,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { TradeForm } from './TradeForm'
 import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
 import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
@@ -21,7 +21,7 @@ import { TradeSummary } from '../trader/TradeSummary'
 import { ConfirmDialog } from './ConfirmDialog'
 import { TradeActionType } from '../../trader/useTradeState'
 import { SwapResponse, TokenPanelType, TradeComputed, TradeProvider, Coin } from '../../types'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { formatBalance } from '@masknet/shared'
 import { TradePairViewer } from '../uniswap/TradePairViewer'
 import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'

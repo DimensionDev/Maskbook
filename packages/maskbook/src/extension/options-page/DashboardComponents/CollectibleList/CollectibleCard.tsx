@@ -1,5 +1,5 @@
 import { Card, Link, makeStyles } from '@material-ui/core'
-import { Wallet, useChainId, ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '@dimensiondev/web3-shared'
+import { Wallet, useChainId, ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '@masknet/web3-shared'
 import { Image } from '../../../../components/shared/Image'
 import { resolveCollectibleLink } from '../../../../plugins/Wallet/pipes'
 import type { CollectibleProvider } from '../../../../plugins/Wallet/types'

@@ -1,5 +1,5 @@
 import { Box, Button, Link } from '@material-ui/core'
-import { useSnackbar } from '@dimensiondev/maskbook-theme'
+import { useSnackbar } from '@masknet/theme'
 import { Database as DatabaseIcon } from 'react-feather'
 import { useAsync } from 'react-use'
 import { useI18N } from '../../../../utils'

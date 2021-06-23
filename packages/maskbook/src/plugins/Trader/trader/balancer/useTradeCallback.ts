@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import type { PayableTx } from '@dimensiondev/contracts/types/types'
+import type { PayableTx } from '@masknet/contracts/types/types'
 import {
     EthereumTokenType,
     TransactionEventType,
@@ -10,9 +10,9 @@ import {
     useConstant,
     useGasPrice,
     useNonce,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
-import type { ExchangeProxy } from '@dimensiondev/contracts/types/ExchangeProxy'
+import type { ExchangeProxy } from '@masknet/contracts/types/ExchangeProxy'
 import { SLIPPAGE_TOLERANCE_DEFAULT, TRADE_CONSTANTS } from '../../constants'
 import { useTradeAmount } from './useTradeAmount'
 

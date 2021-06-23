@@ -11,7 +11,7 @@ import {
     checkInputLengthExceed,
 } from '../../../../utils'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../../../plugins/Wallet/constants'
-import { useWallet } from '@dimensiondev/web3-shared'
+import { useWallet } from '@masknet/web3-shared'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'

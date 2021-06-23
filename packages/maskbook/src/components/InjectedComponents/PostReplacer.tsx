@@ -1,9 +1,4 @@
-import {
-    isTypedMessagePromise,
-    isWellKnownTypedMessages,
-    makeTypedMessageTuple,
-    useValueRef,
-} from '@dimensiondev/maskbook-shared'
+import { isTypedMessagePromise, isWellKnownTypedMessages, makeTypedMessageTuple, useValueRef } from '@masknet/shared'
 import { makeStyles, Theme } from '@material-ui/core'
 import { useEffect, useMemo } from 'react'
 import { Result } from 'ts-results'

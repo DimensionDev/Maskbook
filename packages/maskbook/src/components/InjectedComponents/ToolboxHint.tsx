@@ -7,7 +7,7 @@ import {
     useChainDetailed,
     useChainIdValid,
     NetworkType,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
@@ -27,7 +27,7 @@ import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
 import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
-import { formatEthereumAddress, useValueRef } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress, useValueRef } from '@masknet/shared'
 import { useI18N } from '../../utils'
 import { currentNetworkSettings } from '../../plugins/Wallet/settings'
 

@@ -6,11 +6,11 @@ import {
     TransactionStateType,
     ERC1155TokenAssetDetailed,
     ERC721TokenAssetDetailed,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useRemoteControlledDialog, useI18N } from '../../../../utils'
 import { Image } from '../../../../components/shared/Image'
 import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress } from '@masknet/shared'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'

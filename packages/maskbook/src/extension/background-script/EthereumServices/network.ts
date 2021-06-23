@@ -1,5 +1,5 @@
 import type { SignedTransaction, Transaction, TransactionConfig, TransactionReceipt } from 'web3-core'
-import { EthereumChainDetailed, EthereumMethodType } from '@dimensiondev/web3-shared'
+import { EthereumChainDetailed, EthereumMethodType } from '@masknet/web3-shared'
 import { request } from './request'
 
 export async function getGasPrice() {

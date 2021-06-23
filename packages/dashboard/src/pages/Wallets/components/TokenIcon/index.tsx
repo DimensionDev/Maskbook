@@ -1,10 +1,4 @@
-import {
-    ChainId,
-    resolveChainFullName,
-    useBlockie,
-    useChainDetailed,
-    resolveTokenIconURL,
-} from '@dimensiondev/web3-shared'
+import { ChainId, resolveChainFullName, useBlockie, useChainDetailed, resolveTokenIconURL } from '@masknet/web3-shared'
 import type { AvatarProps } from '@material-ui/core'
 import { Avatar } from '@material-ui/core'
 import { memo } from 'react'

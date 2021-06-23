@@ -1,4 +1,4 @@
-import { FungibleTokenDetailed, useChainId } from '@dimensiondev/web3-shared'
+import { FungibleTokenDetailed, useChainId } from '@masknet/web3-shared'
 import type { Pair } from '@uniswap/sdk'
 import { flatMap } from 'lodash-es'
 import { useContext, useMemo } from 'react'

@@ -4,7 +4,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ErrorIcon from '@material-ui/icons/Error'
 import { noop } from 'lodash-es'
 import { TokenIcon } from '../../extension/options-page/DashboardComponents/TokenIcon'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { useI18N } from '../../utils'
 
 const useStyles = makeStyles((theme: Theme) => {

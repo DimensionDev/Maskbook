@@ -12,7 +12,7 @@ import {
     currentNetworkSettings,
     currentProviderSettings,
 } from '../../../../plugins/Wallet/settings'
-import { ChainId, NetworkType, ProviderType } from '@dimensiondev/web3-shared'
+import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared'
 
 export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()

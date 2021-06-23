@@ -23,7 +23,7 @@ import { injectPageInspectorDefault } from '../../social-network/defaults/inject
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
 import { currentSelectedIdentity } from '../../settings/settings'
-import { ProfileIdentifier, unreachable } from '@dimensiondev/maskbook-shared'
+import { ProfileIdentifier, unreachable } from '@masknet/shared'
 import { globalUIState } from '../../social-network'
 
 const facebookUI: SocialNetworkUI.Definition = {

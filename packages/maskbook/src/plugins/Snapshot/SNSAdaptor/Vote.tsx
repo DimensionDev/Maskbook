@@ -1,4 +1,4 @@
-import { useBlockie } from '@dimensiondev/web3-shared'
+import { useBlockie } from '@masknet/web3-shared'
 import { Avatar, Box, makeStyles } from '@material-ui/core'
 import type { VoteItem as VoteType } from '../types'
 

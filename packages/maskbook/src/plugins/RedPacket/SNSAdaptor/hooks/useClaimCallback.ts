@@ -1,17 +1,17 @@
 import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
-import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+import type { NonPayableTx } from '@masknet/contracts/types/types'
 import {
     useTransactionState,
     TransactionStateType,
     TransactionEventType,
     useGasPrice,
     useNonce,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import type { TransactionReceipt } from 'web3-core'
-import type { HappyRedPacketV1 } from '@dimensiondev/contracts/types/HappyRedPacketV1'
-import type { HappyRedPacketV2 } from '@dimensiondev/contracts/types/HappyRedPacketV2'
+import type { HappyRedPacketV1 } from '@masknet/contracts/types/HappyRedPacketV1'
+import type { HappyRedPacketV2 } from '@masknet/contracts/types/HappyRedPacketV2'
 
 export function useClaimCallback(version: number, from: string, id?: string, password?: string) {
     const nonce = useNonce()

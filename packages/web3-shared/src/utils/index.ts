@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { getEnumAsArray, safeUnreachable } from '@dimensiondev/maskbook-shared'
+import { getEnumAsArray, safeUnreachable } from '@masknet/shared'
 import type Web3 from 'web3'
 import type { AbiOutput } from 'web3-utils'
 import CHAINS from '../assets/chains.json'

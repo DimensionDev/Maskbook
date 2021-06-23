@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import { useReducer } from 'react'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 
 export interface ExchangeTokenAndAmountState {
     key: string

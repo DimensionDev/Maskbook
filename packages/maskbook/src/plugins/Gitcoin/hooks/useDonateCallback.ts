@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import type { PayableTx } from '@dimensiondev/contracts/types/types'
+import type { PayableTx } from '@masknet/contracts/types/types'
 import {
     FungibleTokenDetailed,
     EthereumTokenType,
@@ -12,7 +12,7 @@ import {
     useWeb3,
     useNonce,
     useGasPrice,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { GITCOIN_CONSTANT } from '../constants'
 import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
 

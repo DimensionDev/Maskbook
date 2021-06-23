@@ -6,7 +6,7 @@ import {
     EthereumTokenType,
     Wallet,
     Web3ProviderType,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,

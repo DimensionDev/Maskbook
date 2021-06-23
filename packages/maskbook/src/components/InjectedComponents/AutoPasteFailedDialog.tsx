@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
 import { Image } from '../shared/Image'
-import { useSnackbar } from '@dimensiondev/maskbook-theme'
+import { useSnackbar } from '@masknet/theme'
 import { DraggableDiv } from '../shared/DraggableDiv'
 import Download from '@material-ui/icons/CloudDownload'
 import CloseIcon from '@material-ui/icons/Close'

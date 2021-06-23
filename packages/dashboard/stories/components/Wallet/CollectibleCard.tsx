@@ -1,6 +1,6 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { CollectibleCard as C } from '../../../src/pages/Wallets/components/CollectibleCard'
-import { ChainId, createERC721Token, CollectibleProvider } from '@dimensiondev/web3-shared'
+import { ChainId, createERC721Token, CollectibleProvider } from '@masknet/web3-shared'
 
 const { meta, of } = story(C)
 

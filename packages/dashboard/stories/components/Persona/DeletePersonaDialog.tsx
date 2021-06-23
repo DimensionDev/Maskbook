@@ -1,4 +1,4 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { DeletePersonaDialog as C } from '../../../src/pages/Personas/components/DeletePersonaDialog'
 import { action } from '@storybook/addon-actions'
 

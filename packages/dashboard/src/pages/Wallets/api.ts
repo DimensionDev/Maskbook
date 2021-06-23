@@ -1,4 +1,4 @@
-import { createGlobalState } from '@dimensiondev/maskbook-shared'
+import { createGlobalState } from '@masknet/shared'
 import { Messages, Services } from '../../API'
 
 export const [useCurrentCollectibleDataProvider] = createGlobalState(

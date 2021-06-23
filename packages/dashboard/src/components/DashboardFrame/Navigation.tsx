@@ -15,9 +15,9 @@ import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@
 import { useContext } from 'react'
 import { useMatch, useNavigate } from 'react-router'
 import { DashboardContext } from './context'
-import { MaskNotSquareIcon } from '@dimensiondev/icons'
+import { MaskNotSquareIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 import { RoutePaths } from '../../type'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string; nested?: boolean }) => {

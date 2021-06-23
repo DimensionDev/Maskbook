@@ -1,5 +1,5 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '@dimensiondev/maskbook-shared'
+import { useValueRef } from '@masknet/shared'
 import { Chip, makeStyles } from '@material-ui/core'
 import type { ChipProps } from '@material-ui/core/Chip'
 import Lock from '@material-ui/icons/Lock'

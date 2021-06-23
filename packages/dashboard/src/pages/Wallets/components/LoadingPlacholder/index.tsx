@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Box, makeStyles, Typography } from '@material-ui/core'
-import { SynchronizeIcon } from '@dimensiondev/icons'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { SynchronizeIcon } from '@masknet/icons'
+import { MaskColorVar } from '@masknet/theme'
 
 const useStyles = makeStyles((theme) => ({
     container: {

@@ -1,11 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import {
-    TOKEN_CONSTANTS,
-    FungibleTokenDetailed,
-    isNative,
-    useConstant,
-    useBlockNumber,
-} from '@dimensiondev/web3-shared'
+import { TOKEN_CONSTANTS, FungibleTokenDetailed, isNative, useConstant, useBlockNumber } from '@masknet/web3-shared'
 import { BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { SwapResponse, TradeStrategy } from '../../types'

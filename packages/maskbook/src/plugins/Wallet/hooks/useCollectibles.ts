@@ -1,1 +1,1 @@
-export { useCollectibles } from '@dimensiondev/web3-shared'
+export { useCollectibles } from '@masknet/web3-shared'

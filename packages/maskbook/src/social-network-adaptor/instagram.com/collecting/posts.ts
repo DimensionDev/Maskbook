@@ -4,7 +4,7 @@ import { creator } from '../../../social-network/utils'
 import { PostInfo } from '../../../social-network/PostInfo'
 import { TypedMessage, makeTypedMessageImage, makeTypedMessageTuple } from '../../../protocols/typed-message'
 import { startWatch } from '../../../utils/watcher'
-import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { ProfileIdentifier } from '@masknet/shared'
 import { instagramBase } from '../base'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(

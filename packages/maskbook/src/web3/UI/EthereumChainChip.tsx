@@ -1,6 +1,6 @@
 import { Chip, makeStyles, ChipProps } from '@material-ui/core'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-import { ChainId, getChainName, resolveChainColor } from '@dimensiondev/web3-shared'
+import { ChainId, getChainName, resolveChainColor } from '@masknet/web3-shared'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme) => {

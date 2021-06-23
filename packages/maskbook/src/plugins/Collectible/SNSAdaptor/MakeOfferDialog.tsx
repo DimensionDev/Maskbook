@@ -12,15 +12,9 @@ import {
     Link,
 } from '@material-ui/core'
 import { first } from 'lodash-es'
-import { useSnackbar } from '@dimensiondev/maskbook-theme'
+import { useSnackbar } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
-import {
-    FungibleTokenDetailed,
-    EthereumTokenType,
-    useAccount,
-    isNative,
-    useTokenWatched,
-} from '@dimensiondev/web3-shared'
+import { FungibleTokenDetailed, EthereumTokenType, useAccount, isNative, useTokenWatched } from '@masknet/web3-shared'
 import { format as formatDateTime } from 'date-fns'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'

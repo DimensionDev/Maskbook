@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
-import type { PayableTx } from '@dimensiondev/contracts/types/types'
+import type { PayableTx } from '@masknet/contracts/types/types'
 import { useRedPacketContract } from './useRedPacketContract'
 import {
     FungibleTokenDetailed,
@@ -15,11 +15,11 @@ import {
     useGasPrice,
     useConstantNext,
     TOKEN_CONSTANTS,
-} from '@dimensiondev/web3-shared'
-import { isLessThan } from '@dimensiondev/maskbook-shared'
+} from '@masknet/web3-shared'
+import { isLessThan } from '@masknet/shared'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import type { TransactionReceipt } from 'web3-core'
-import type { HappyRedPacketV2 } from '@dimensiondev/contracts/types/HappyRedPacketV2'
+import type { HappyRedPacketV2 } from '@masknet/contracts/types/HappyRedPacketV2'
 import Services from '../../../../extension/service'
 
 export interface RedPacketSettings {

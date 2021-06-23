@@ -1,5 +1,5 @@
 {
-  "name": "@dimensiondev/contracts",
+  "name": "@masknet/contracts",
   "private": true,
   "scripts": {
     "start": "ts-node compile-contracts.ts"

@@ -1,1 +1,1 @@
-export { IdentifierMap, ReadonlyIdentifierMap } from '@dimensiondev/maskbook-shared'
+export { IdentifierMap, ReadonlyIdentifierMap } from '@masknet/shared'
