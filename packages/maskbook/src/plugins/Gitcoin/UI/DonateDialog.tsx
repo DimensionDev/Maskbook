@@ -22,7 +22,6 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { formatBalance, pow10 } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { PluginGitcoinMessages } from '../messages'
 import { EthereumMessages } from '../../Ethereum/messages'
@@ -122,7 +121,6 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             token
@@ -131,7 +129,6 @@ export function DonateDialog(props: DonateDialogProps) {
                           token.symbol
                       }. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
                       '#mask_io',
-                      postLink,
                   ].join('\n')
                 : '',
         )

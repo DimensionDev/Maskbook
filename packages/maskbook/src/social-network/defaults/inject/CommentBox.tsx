@@ -38,7 +38,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
                 const postIV = iv || payload.unwrap().iv
                 const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
                 const encryptedComment = await Services.Crypto.encryptComment(postIV, decryptedText, content)
-                onPasteToCommentBox(encryptedComment, info, dom).catch(console.error)
+                onPasteToCommentBox(encryptedComment, info!, dom).catch(console.error)
             },
             [payload, postContent, info, dom, iv],
         )

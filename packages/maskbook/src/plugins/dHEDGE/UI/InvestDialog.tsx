@@ -10,7 +10,6 @@ import { DialogContent, makeStyles } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -148,7 +147,6 @@ export function InvestDialog() {
 
     //#region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             token
@@ -157,7 +155,6 @@ export function InvestDialog() {
                           pool?.name
                       }. Follow @realMaskbook (mask.io) to invest dHEDGE pools.`,
                       '#mask_io',
-                      postLink,
                   ].join('\n')
                 : '',
         )
