@@ -1,1 +1,1 @@
-export { PostInfo, emptyPostInfo } from '@masknet/plugin-infra'
+export type { PostInfo } from '@masknet/mask-plugin-infra'

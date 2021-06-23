@@ -50,7 +50,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         if (!current.commentBoxSelector) return noop
         const commentBoxWatcher = new MutationObserverWatcher(
             current.commentBoxSelector.clone(),
-            current.rootNode,
+            current.rootNode || void 0,
         ).useForeach((node, key, meta) => {
             const root = createReactRootShadowed(meta.afterShadow, { signal })
             root.render(

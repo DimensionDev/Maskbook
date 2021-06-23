@@ -12,13 +12,13 @@ function getShadowRoot(node: HTMLElement) {
     return dom
 }
 export function injectPostInspectorFacebook(signal: AbortSignal, current: PostInfo) {
-    clickSeeMore(current.rootNodeProxy.current.parentElement!)
+    clickSeeMore(current.rootNodeProxy.current?.parentElement)
     return injectPostInspectorDefault({
         zipPost(node) {
             zipEncryptedPostContent(node)
             zipPostLinkPreview(node)
         },
-        injectionPoint: (post) => getShadowRoot(post.postContentNode!),
+        injectionPoint: (post) => getShadowRoot(post.postContentNode),
     })(current, signal)
 }
 function zipPostLinkPreview(node: DOMProxy) {
@@ -70,7 +70,8 @@ padding: 0px 10px;`,
         }
     }
 }
-export function clickSeeMore(node: HTMLElement) {
+export function clickSeeMore(node: HTMLElement | undefined | null) {
+    if (!node) return
     const more = node.querySelector<HTMLDivElement | HTMLSpanElement>(
         isMobileFacebook ? '[data-sigil="more"] a' : '[role=article] span[dir="auto"] div[dir="auto"] [role="button"]',
     )
