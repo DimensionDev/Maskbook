@@ -78,7 +78,7 @@ export async function getRedPacketTxid(rpid: string) {
         body: JSON.stringify({
             query: `
             {
-                redPackets (where: { rpid: "${rpid.toLowerCase()}" }) {
+                redPackets (where: { rpid: "${rpid.toLowerCase()}" } first: 1000) {
                     ${RED_PACKET_FIELDS}
                 }
             }
@@ -100,7 +100,7 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
         body: JSON.stringify({
             query: `
             {
-                redPackets (where: { creator: "${address.toLowerCase()}" }) {
+                redPackets (where: { creator: "${address.toLowerCase()}" } first: 1000) {
                     ${RED_PACKET_FIELDS}
                 }
             }
