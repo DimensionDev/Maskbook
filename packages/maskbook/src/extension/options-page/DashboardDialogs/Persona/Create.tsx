@@ -49,7 +49,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                         e.preventDefault()
-                                        if (!checkInputLengthExceed(name) && name.length !== 0) {
+                                        if (!checkInputLengthExceed(name) && name.length > 0) {
                                             createPersonaAndNext()
                                         }
                                     }
