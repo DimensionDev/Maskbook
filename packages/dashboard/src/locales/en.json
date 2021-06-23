@@ -72,6 +72,7 @@
     "wallets_empty_collectible_tip": "No collectibles were found. Please add Collectibles.",
     "wallets_address_copied": "Address successfully copied",
     "wallets_address_copy": "Copy",
+    "wallets_loading_token": "Loading Token",
     "personas_setup_connect_tips": "Please connect to your {{type}} account.",
     "personas_setup_connect": "Connect",
     "personas_name_maximum_tips": "Maximum length is {{length}} characters long.",

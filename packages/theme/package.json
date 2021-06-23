@@ -17,9 +17,11 @@
     "@masknet/shared": "workspace:*",
     "@masknet/storybook-shared": "workspace:*",
     "classnames": "^2.3.1",
+    "fuse.js": "^6.4.6",
     "lodash-es": "^4.17.20",
     "notistack": "^1.0.9",
     "qrcode": "^1.4.4",
+    "react-window": "^1.8.6",
     "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
