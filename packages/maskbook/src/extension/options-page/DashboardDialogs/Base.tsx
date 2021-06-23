@@ -234,7 +234,7 @@ const dialogTheme = extendsTheme((theme) => ({
     },
 }))
 
-interface DashboardDialogWrapperProps {
+interface DashboardDialogWrapperProps extends withClasses<'wrapper'> {
     icon?: React.ReactElement
     iconColor?: string
     primary: string
