@@ -20,7 +20,7 @@ import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { RoutePaths } from '../../type'
 
-const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string; nested?: boolean }) => {
+const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
     const navigate = useNavigate()
 
     return (
@@ -35,11 +35,11 @@ const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string; ne
     )
 }
 
-const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
+const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
     return {
         [`&.${listItemClasses.root}`]: {
             color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
-            paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
+            paddingLeft: theme.spacing(2),
             cursor: 'pointer',
         },
         [`&.${listItemClasses.selected}`]: {
@@ -111,11 +111,11 @@ export function Navigation({}: NavigationProps) {
             </ListItemLink>
             <Collapse in={expanded}>
                 <List disablePadding>
-                    <ListItemLink nested to={RoutePaths.WalletsTransfer}>
-                        <ListItemText primary={t.wallets_transfer()} />
+                    <ListItemLink to={RoutePaths.WalletsTransfer}>
+                        <ListItemText inset primary={t.wallets_transfer()} />
                     </ListItemLink>
-                    <ListItemLink nested to={RoutePaths.WalletsHistory}>
-                        <ListItemText primary={t.wallets_history()} />
+                    <ListItemLink to={RoutePaths.WalletsHistory}>
+                        <ListItemText inset primary={t.wallets_history()} />
                     </ListItemLink>
                 </List>
             </Collapse>
