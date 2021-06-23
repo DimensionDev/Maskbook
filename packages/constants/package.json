@@ -1,10 +1,10 @@
 {
-  "name": "@dimensiondev/constants",
+  "name": "@masknet/constants",
   "private": true,
   "scripts": {
     "test": "ts-node validate-constants.ts"
   },
   "dependencies": {
-    "@dimensiondev/web3-shared": "workspace:*"
+    "@masknet/web3-shared": "workspace:*"
   }
 }

@@ -116,9 +116,9 @@ importers:
 
   packages/constants:
     specifiers:
-      '@dimensiondev/web3-shared': workspace:*
+      '@masknet/web3-shared': workspace:*
     dependencies:
-      '@dimensiondev/web3-shared': link:../web3-shared
+      '@masknet/web3-shared': link:../web3-shared
 
   packages/contracts:
     specifiers:

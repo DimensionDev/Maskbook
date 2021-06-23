@@ -1,4 +1,4 @@
-import { ChainId, useChainId } from '@dimensiondev/web3-shared'
+import { ChainId, useChainId } from '@masknet/web3-shared'
 import { useMemo } from 'react'
 import trade from './trade-constants.json'
 
