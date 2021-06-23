@@ -1,4 +1,4 @@
-export { MaskDialog } from './Dialog'
+export { MaskDialog, useMaskDialog } from './Dialog'
 export type { MaskDialogProps } from './Dialog'
 
 export { MaskDialogTitle } from './DialogTitle'

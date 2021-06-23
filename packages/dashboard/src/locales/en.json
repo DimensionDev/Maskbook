@@ -1,4 +1,5 @@
 {
+    "about": "About",
     "wallets": "Wallets",
     "personas": "Personas",
     "wallets_transfer": "Transfer",
@@ -111,5 +112,17 @@
     "settings_email_hosting_service_title": "Email Hosting Service",
     "settings_email_hosting_service_desc": "Unauthorized",
     "settings_log_out_title": "Log Out",
-    "settings_log_out_desc": "Please make sure your data is backed up and log out"
+    "settings_log_out_desc": "Please make sure your data is backed up and log out",
+    "dashboard_mobile_test": "Join Tests for Mobile",
+    "dashboard_source_code": "Source Code",
+    "privacy_policy": "Privacy Policy",
+    "version_of_stable": "Version {{version}}",
+    "version_of_unstable": "Version {{version}}-{{build}}-{{hash}}",
+    "register_restore_backups": "Restore Backups",
+    "register_restore_backups_cancel": "Cancel",
+    "register_restore_backups_confirm": "Restore",
+    "register_restore_backups_hint": "Please click or drag the file here",
+    "register_restore_backups_file": "File",
+    "register_restore_backups_text": "Text",
+    "register_restore_backups_tabs": "Restore Backup Tabs"
 }

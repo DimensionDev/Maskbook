@@ -133,3 +133,36 @@ export const List: Theme = (mode, colors) => ({
         },
     },
 })
+
+export const Card: Theme = (mode, colors) => ({
+    components: {
+        MuiCard: {
+            styleOverrides: {},
+            variants: [
+                {
+                    props: { variant: 'outlined' },
+                    style: {
+                        border: `1px solid ${colors.lineLight}`,
+                    },
+                },
+            ],
+        },
+    },
+})
+
+export const Paper: Theme = (mode, colors) => ({
+    components: {
+        MuiCard: {
+            styleOverrides: {},
+            variants: [
+                {
+                    props: { variant: 'outlined' },
+                    style: {
+                        border: `1px solid ${colors.lineLight}`,
+                        borderRadius: 12,
+                    },
+                },
+            ],
+        },
+    },
+})
