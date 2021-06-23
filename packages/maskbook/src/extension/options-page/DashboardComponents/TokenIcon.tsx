@@ -3,8 +3,8 @@ import {
     useChainDetailed,
     ChainId,
     formatEthereumAddress,
-    getChainFullName,
     getTokenConstants,
+    currySameAddress,
 } from '@masknet/web3-shared'
 import { Avatar, AvatarProps, makeStyles, Theme } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -19,7 +19,7 @@ function resolveTokenIconURLs(address: string, baseURIs: string[], chainId: Chai
         return baseURIs.map((x) => `${x}/info/logo.png`)
     }
 
-    const specialIcon = SPECIAL_ICON_LIST.find((item) => item.address === address)
+    const specialIcon = SPECIAL_ICON_LIST.find(currySameAddress(address))
 
     if (specialIcon) return [specialIcon.logo_url]
 

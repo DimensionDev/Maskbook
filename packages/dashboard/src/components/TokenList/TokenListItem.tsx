@@ -64,7 +64,7 @@ export function TokenListItem({ data, onSelect }: MaskSearchableListItemProps<As
                 </Typography>
                 <Typography className={classes.secondary} color="textSecondary" component="span">
                     {data.isAddedToken ? (
-                        <span>{formatBalance(data.balance, token.decimals)} </span>
+                        <span>{formatBalance(data.balance, token.decimals)}</span>
                     ) : (
                         <Button
                             className={classes.importButton}
