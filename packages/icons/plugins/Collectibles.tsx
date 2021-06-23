@@ -206,8 +206,8 @@ export const CollectiblesIcon: typeof SvgIcon = createIcon(
                 width="3.867"
                 height="3.867"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB">
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                colorInterpolationFilters="sRGB">
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feGaussianBlur in="BackgroundImage" stdDeviation=".5" />
                 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
@@ -219,8 +219,8 @@ export const CollectiblesIcon: typeof SvgIcon = createIcon(
                 width="3.867"
                 height="3.867"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB">
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                colorInterpolationFilters="sRGB">
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feGaussianBlur in="BackgroundImage" stdDeviation=".5" />
                 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
