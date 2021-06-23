@@ -1,6 +1,6 @@
 import { FC, useState, useMemo } from 'react'
 import { Box, Button, DialogContent, makeStyles, TextField, DialogActions } from '@material-ui/core'
-import { useSnackbarCallback } from '@dimensiondev/maskbook-theme'
+import { useSnackbarCallback } from '@masknet/theme'
 import { useI18N, useRemoteControlledDialog } from '../../../../utils'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'

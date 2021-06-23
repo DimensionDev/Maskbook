@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { Button } from '@material-ui/core'
-import { useSnackbarCallback } from '@dimensiondev/maskbook-theme'
+import { useSnackbarCallback } from '@masknet/theme'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import {
     ImportWalletUI,
