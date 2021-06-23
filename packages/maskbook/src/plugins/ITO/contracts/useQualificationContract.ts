@@ -1,8 +1,8 @@
 import type { AbiItem } from 'web3-utils'
-import type { Qualification } from '@dimensiondev/contracts/types/Qualification'
-import type { Qualification2 } from '@dimensiondev/contracts/types/Qualification2'
-import QualificationABI from '@dimensiondev/contracts/abis/Qualification.json'
-import Qualification2ABI from '@dimensiondev/contracts/abis/Qualification2.json'
+import type { Qualification } from '@masknet/contracts/types/Qualification'
+import type { Qualification2 } from '@masknet/contracts/types/Qualification2'
+import QualificationABI from '@masknet/contracts/abis/Qualification.json'
+import Qualification2ABI from '@masknet/contracts/abis/Qualification2.json'
 import { ITO_CONSTANTS } from '../constants'
 import { useContract, isSameAddress, useConstantNext } from '@masknet/web3-shared'
 

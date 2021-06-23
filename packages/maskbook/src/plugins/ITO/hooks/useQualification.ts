@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '@dimensiondev/web3-shared'
+import { useAccount } from '@masknet/web3-shared'
 import { useQualificationContract } from '../contracts/useQualificationContract'
 
 export function useQualification(qualification_address: string, ito_address: string) {

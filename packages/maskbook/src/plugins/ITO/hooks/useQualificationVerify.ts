@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import type { Qualification } from '@dimensiondev/contracts/types/Qualification'
-import type { Qualification2 } from '@dimensiondev/contracts/types/Qualification2'
+import type { Qualification } from '@masknet/contracts/types/Qualification'
+import type { Qualification2 } from '@masknet/contracts/types/Qualification2'
 import {
     QUALIFICATION_INTERFACE_ID,
     QUALIFICATION2_INTERFACE_ID,
