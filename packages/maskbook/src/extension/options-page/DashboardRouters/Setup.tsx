@@ -259,7 +259,9 @@ export function CreatePersona() {
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                                 e.preventDefault()
-                                createPersonaAndNext()
+                                if (!checkInputLengthExceed(name) && name.length > 0) {
+                                    createPersonaAndNext()
+                                }
                             }
                         }}
                         label={t('name')}
