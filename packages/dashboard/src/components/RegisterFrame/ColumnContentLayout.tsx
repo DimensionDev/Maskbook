@@ -28,7 +28,6 @@ const Body = styled('div')(
     ({ theme }) => `
     flex: 2;
     width: 60%;
-    text-align: right;
 `,
 )
 
