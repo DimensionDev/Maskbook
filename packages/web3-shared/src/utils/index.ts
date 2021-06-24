@@ -32,6 +32,9 @@ export function currySameAddress(base: string) {
     }
 }
 
+/**
+ * @deprecated Use get[name]Constants from `@masknet/constants` package`
+ */
 export function constantOfChain<T extends Web3Constants>(constants: T, chainId = ChainId.Mainnet) {
     const chainSpecifiedConstant = {} as { [key in keyof T]: T[key][ChainId.Mainnet] }
     for (const i in constants) chainSpecifiedConstant[i] = constants[i][chainId]

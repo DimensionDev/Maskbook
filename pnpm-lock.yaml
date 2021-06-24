@@ -114,6 +114,12 @@ importers:
       gulp: 4.0.2
       ts-node: 10.0.0
 
+  packages/constants:
+    specifiers:
+      '@masknet/web3-shared': workspace:*
+    dependencies:
+      '@masknet/web3-shared': link:../web3-shared
+
   packages/contracts:
     specifiers:
       '@typechain/web3-v1': ^3.0.0
@@ -136,6 +142,7 @@ importers:
       '@babel/core': ^7.14.3
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/kit': ^0.0.0-20210221102734-0b4a937
+      '@masknet/constants': workspace:*
       '@masknet/icons': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-infra': workspace:*
@@ -172,6 +179,7 @@ importers:
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
       '@dimensiondev/kit': 0.0.0-20210221102734-0b4a937
+      '@masknet/constants': link:../constants
       '@masknet/icons': link:../icons
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-infra': link:../plugin-infra
@@ -244,6 +252,7 @@ importers:
       '@ethersproject/providers': ^5.0.9
       '@ethersproject/solidity': ^5.0.4
       '@ethersproject/strings': ^5.1.0
+      '@masknet/constants': workspace:*
       '@masknet/contracts': workspace:*
       '@masknet/dashboard': workspace:*
       '@masknet/external-plugin-previewer': workspace:*
@@ -405,6 +414,7 @@ importers:
       '@ethersproject/providers': 5.1.0
       '@ethersproject/solidity': 5.1.0
       '@ethersproject/strings': 5.1.0
+      '@masknet/constants': link:../constants
       '@masknet/contracts': link:../contracts
       '@masknet/dashboard': link:../dashboard
       '@masknet/external-plugin-previewer': link:../external-plugin-previewer
@@ -9055,8 +9065,8 @@ packages:
     resolution: {integrity: sha512-WHVocJYavUwVgVViC0ORikPHQquXwVh939TaelZ4WDqpWgTX/FsGhl/+P4qBUAGcRvtOgDgC+xftNWWp2RUTAQ==}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001238
-      electron-to-chromium: 1.3.752
+      caniuse-lite: 1.0.30001239
+      electron-to-chromium: 1.3.756
     dev: false
 
   /browserslist/4.14.2:
@@ -9345,8 +9355,8 @@ packages:
     resolution: {integrity: sha512-QQmLOGJ3DEgokHbMSA8cj2a+geXqmnpyOFT0lhQV6P3/YOJvGDEwoedcwxEQ30gJIwIIunHIicunJ2rzK5gB2A==}
     dev: true
 
-  /caniuse-lite/1.0.30001238:
-    resolution: {integrity: sha512-bZGam2MxEt7YNsa2VwshqWQMwrYs5tR5WZQRYSuFxsBQunWjBuXhN4cS9nV5FFb1Z9y+DoQcQ0COyQbv6A+CKw==}
+  /caniuse-lite/1.0.30001239:
+    resolution: {integrity: sha512-cyBkXJDMeI4wthy8xJ2FvDU6+0dtcZSJW3voUF8+e9f1bBeuvyZfc3PNbkOETyhbR+dGCPzn9E7MA3iwzusOhQ==}
     dev: false
 
   /capture-exit/2.0.0:
@@ -11193,8 +11203,8 @@ packages:
     resolution: {integrity: sha512-P/B84AgUSQXaum7a8m11HUsYL8tj9h/Pt5f7Hg7Ty6bm5DxlFq+e5+ouHUoNQMsKDJ7u4yGfI8mOErCmSH9wyg==}
     dev: true
 
-  /electron-to-chromium/1.3.752:
-    resolution: {integrity: sha512-2Tg+7jSl3oPxgsBsWKh5H83QazTkmWG/cnNwJplmyZc7KcN61+I10oUgaXSVk/NwfvN3BdkKDR4FYuRBQQ2v0A==}
+  /electron-to-chromium/1.3.756:
+    resolution: {integrity: sha512-WsmJym1TMeHVndjPjczTFbnRR/c4sbzg8fBFtuhlb2Sru3i/S1VGpzDSrv/It8ctMU2bj8G7g7/O3FzYMGw6eA==}
     dev: false
 
   /element-resize-detector/1.2.2:

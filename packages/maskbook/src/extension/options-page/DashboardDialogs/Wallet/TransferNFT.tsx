@@ -9,7 +9,7 @@ import {
 } from '@masknet/web3-shared'
 import { useRemoteControlledDialog, useI18N } from '../../../../utils'
 import { Image } from '../../../../components/shared/Image'
-import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
+import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { formatEthereumAddress } from '@masknet/shared'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
@@ -56,7 +56,7 @@ export function DashboardWalletTransferDialogNFT(
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         useCallback(
             (ev) => {
                 if (ev.open) return

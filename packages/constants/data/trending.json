@@ -1,0 +1,35 @@
+{
+    "UNISWAP_V2_SUBGRAPH_URL": {
+        "Mainnet": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": ""
+    },
+    "UNISWAP_V2_HEALTH_URL": {
+        "Mainnet": "https://api.thegraph.com/index-node/graphql",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": ""
+    },
+    "ETHEREUM_BLOCKS_SUBGRAPH_URL": {
+        "Mainnet": "https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": ""
+    }
+}

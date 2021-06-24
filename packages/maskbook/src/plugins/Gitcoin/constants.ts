@@ -1,6 +1,11 @@
 import { ChainId } from '@masknet/web3-shared'
 
 export const GITCOIN_PLUGIN_ID = 'co.gitcoin'
+export const PLUGIN_META_KEY = 'co.gitcoin:1'
+export const PLUGIN_ID = 'co.gitcoin'
+export const PLUGIN_NAME = 'Gitcoin'
+export const PLUGIN_ICON = '🔗'
+export const PLUGIN_DESCRIPTION = 'Gitcoin grants sustain web3 projects with quadratic funding.'
 
 export const GITCOIN_CONSTANT = {
     GITCOIN_MAINTAINER_ADDRESS: {
