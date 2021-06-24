@@ -4,35 +4,22 @@
 
 ```typescript
 const CONSTANTS = {
-  CONST: {
-    [ChainId.Mainnet]: '',
-    [ChainId.Ropsten]: '',
-    [ChainId.Rinkeby]: '',
-    [ChainId.Kovan]: '',
-    [ChainId.Gorli]: '',
-    [ChainId.BSC]: '',
-    [ChainId.BSCT]: '',
-    [ChainId.Matic]: '',
-    [ChainId.Mumbai]: '',
+  ADDRESS: {
+    [ChainId.Mainnet]: '0x0000000000000000000000000000000000000000',
+    [ChainId.Ropsten]: '0x0000000000000000000000000000000000000000',
+    [ChainId.Rinkeby]: '0x0000000000000000000000000000000000000000',
+    [ChainId.Kovan]: '0x0000000000000000000000000000000000000000',
+    [ChainId.Gorli]: '0x0000000000000000000000000000000000000000',
+    [ChainId.BSC]: '0x0000000000000000000000000000000000000000',
+    [ChainId.BSCT]: '0x0000000000000000000000000000000000000000',
+    [ChainId.Matic]: '0x0000000000000000000000000000000000000000',
+    [ChainId.Mumbai]: '0x0000000000000000000000000000000000000000',
   },
 }
 
 // use constant in the JS runtime
-const CONST = constantOfChain(CONSTANTS, ChainId.Mainnet)
+const ADDRESS = constantOfChain(CONSTANTS, ChainId.Mainnet)
 
 // use constant in React hooks
-const CONST = useConstantNext(CONSTANTS).CONST
-```
-
-## Automation
-
-```console
-# create a chunk of constants which will be stored as `TOKENS.ts`
-ts-node ./constants.ts create TOKENS
-
-# add one field in CONSTANTS.ts
-ts-node ./constants.ts add TOKENS DAI
-
-# add many fileds in CONSTANST.ts
-ts-node ./constants.ts add TOKENS DAI USDT USDC
+const { ADDRESS } = useConstant(CONSTANTS)
 ```
