@@ -1,10 +1,5 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import type {
-    PostContext,
-    PostContextAuthor,
-    PostContextCreation,
-    PostContextSNSActions,
-} from '@dimensiondev/mask-plugin-infra'
+import type { PostContext, PostContextAuthor, PostContextCreation, PostContextSNSActions } from '@masknet/plugin-infra'
 import {
     ALL_EVENTS,
     extractTextFromTypedMessage,
@@ -19,7 +14,7 @@ import {
     SubscriptionFromValueRef,
     TypedMessage,
     TypedMessageTuple,
-} from '@dimensiondev/maskbook-shared'
+} from '@masknet/shared'
 import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
 

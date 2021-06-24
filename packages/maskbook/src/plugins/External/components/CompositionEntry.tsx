@@ -1,6 +1,6 @@
-import type { Plugin } from '@masknet/mask-plugin-infra'
-import { usePortalShadowRoot } from '@masknet/maskbook-shared'
-import { MaskDialog } from '@masknet/maskbook-theme'
+import type { Plugin } from '@masknet/plugin-infra'
+import { usePortalShadowRoot } from '@masknet/shared'
+import { MaskDialog } from '@masknet/theme'
 import { DialogContent } from '@material-ui/core'
 import { PluginLoader } from './PluginLoader'
 

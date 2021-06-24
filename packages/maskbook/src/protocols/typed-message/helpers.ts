@@ -1,1 +1,1 @@
-export { isTypedMessageEqual, extractTextFromTypedMessage } from '@masknet/maskbook-shared'
+export { isTypedMessageEqual, extractTextFromTypedMessage } from '@masknet/shared'

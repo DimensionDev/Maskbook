@@ -7,7 +7,7 @@ import {
     TypedMessageTuple,
     useObservableValues,
     useValueRef,
-} from '@dimensiondev/maskbook-shared'
+} from '@masknet/shared'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { Result } from 'ts-results'
 import { Context, createContext, createElement, memo, useContext } from 'react'
