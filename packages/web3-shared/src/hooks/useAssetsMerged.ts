@@ -1,19 +1,18 @@
+import type { Asset } from '../types'
+import { useChainId } from './useChainId'
+import { formatEthereumAddress } from '@masknet/shared'
+import { uniqBy } from 'lodash-es'
+import { getChainIdFromName, getTokenUSDValue, isSameAddress } from '../utils'
+import { useTokensConstants } from '@masknet/constants'
+
 /**
  * Merge multiple token lists into one which sorted by balance.
  * The order of result values is determined by the order they occur in the array.
  * @param listOfTokens
  */
-import type { Asset } from '../types'
-import { useChainId } from './useChainId'
-import { useConstant } from './useConstant'
-import { TOKEN_CONSTANTS } from '../constants'
-import { formatEthereumAddress } from '@masknet/shared'
-import { uniqBy } from 'lodash-es'
-import { getChainIdFromName, getTokenUSDValue, isSameAddress } from '../utils'
-
 export function useAssetsMerged(...listOfTokens: Asset[][]) {
     const chainId = useChainId()
-    const { NATIVE_TOKEN_ADDRESS } = useConstant(TOKEN_CONSTANTS)
+    const { NATIVE_TOKEN_ADDRESS } = useTokensConstants()
     if (!NATIVE_TOKEN_ADDRESS) return []
     return uniqBy(
         listOfTokens.flatMap((x) => x),

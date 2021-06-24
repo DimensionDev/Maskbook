@@ -5,7 +5,6 @@ import {
     FungibleTokenDetailed,
     EthereumTokenType,
     TransactionEventType,
-    useConstant,
     TransactionStateType,
     useTransactionState,
     useAccount,
@@ -13,8 +12,8 @@ import {
     useNonce,
     useGasPrice,
 } from '@masknet/web3-shared'
-import { GITCOIN_CONSTANT } from '../constants'
 import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
+import { useGitcoinConstants } from '@masknet/constants'
 
 /**
  * A callback for donate gitcoin grant
@@ -23,7 +22,7 @@ import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
  * @param token
  */
 export function useDonateCallback(address: string, amount: string, token?: FungibleTokenDetailed) {
-    const { GITCOIN_ETH_ADDRESS, GITCOIN_TIP_PERCENTAGE } = useConstant(GITCOIN_CONSTANT)
+    const { GITCOIN_ETH_ADDRESS, GITCOIN_TIP_PERCENTAGE } = useGitcoinConstants()
     const bulkCheckoutContract = useBulkCheckoutContract()
 
     const web3 = useWeb3()

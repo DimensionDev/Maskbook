@@ -6,7 +6,7 @@
     "./utils": "./dist/src/utils.js"
   },
   "main": "./dist/src/index.js",
-  "typings": "./dist/src/index.d.ts",
+  "types": "./dist/src/index.d.ts",
   "scripts": {
     "start": "ts-node compile-constants.ts"
   },

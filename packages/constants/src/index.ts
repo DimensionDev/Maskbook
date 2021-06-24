@@ -10,6 +10,10 @@ import LBP_CONSTANTS from '../data/LBP.json'
 export const getLBPConstants = transform(LBP_CONSTANTS)
 export const useLBPConstants = hookTransform(getLBPConstants)
 
+import URL_CONSTANTS from '../data/URL.json'
+export const getURLConstants = transform(URL_CONSTANTS)
+export const useURLConstants = hookTransform(getURLConstants)
+
 import AIRDROP_CONSTANTS from '../data/airdrop.json'
 export const getAirdropConstants = transform(AIRDROP_CONSTANTS)
 export const useAirdropConstants = hookTransform(getAirdropConstants)
@@ -17,6 +21,10 @@ export const useAirdropConstants = hookTransform(getAirdropConstants)
 import ETHEREUM_CONSTANTS from '../data/ethereum.json'
 export const getEthereumConstants = transform(ETHEREUM_CONSTANTS)
 export const useEthereumConstants = hookTransform(getEthereumConstants)
+
+import GITCOIN_CONSTANTS from '../data/gitcoin.json'
+export const getGitcoinConstants = transform(GITCOIN_CONSTANTS)
+export const useGitcoinConstants = hookTransform(getGitcoinConstants)
 
 import REDPACKET_CONSTANTS from '../data/red-packet.json'
 export const getRedPacketConstants = transform(REDPACKET_CONSTANTS)

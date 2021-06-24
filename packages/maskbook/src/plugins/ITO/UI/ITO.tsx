@@ -1,39 +1,38 @@
-import { useCallback, useState, useEffect, useMemo } from 'react'
-import classNames from 'classnames'
-import { BigNumber } from 'bignumber.js'
-import { makeStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import { useTokensConstants } from '@masknet/constants'
+import { formatAmountPrecision, formatBalance, formatEthereumAddress, isZero, pow10, ZERO } from '@masknet/shared'
 import {
-    TransactionStateType,
     FungibleTokenDetailed,
+    getChainDetailed,
+    isSameAddress,
     resolveLinkOnExplorer,
+    TransactionStateType,
+    useAccount,
     useChainId,
     useChainIdValid,
-    useAccount,
-    useConstant,
-    TOKEN_CONSTANTS,
-    isSameAddress,
-    getChainDetailed,
 } from '@masknet/web3-shared'
-import { WalletMessages } from '../../Wallet/messages'
-import { ITO_Status, JSON_PayloadInMask } from '../types'
-import { useRemoteControlledDialog, getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
+import { Box, Card, Grid, Link, makeStyles, Theme, Typography } from '@material-ui/core'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import { BigNumber } from 'bignumber.js'
+import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import { StyledLinearProgress } from './StyledLinearProgress'
-import { formatAmountPrecision, formatEthereumAddress, formatBalance, isZero, ZERO, pow10 } from '@masknet/shared'
-import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { SwapGuide, SwapStatus } from './SwapGuide'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
-import { sortTokens } from '../helpers'
-import { ITO_EXCHANGE_RATION_MAX, TIME_WAIT_BLOCKCHAIN, MSG_DELIMITER } from '../constants'
-import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
-import { useDestructCallback } from '../hooks/useDestructCallback'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { getAssetAsBlobURL, getTextUILength, useI18N, useRemoteControlledDialog } from '../../../utils'
+import { WalletMessages } from '../../Wallet/messages'
+import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants'
+import { sortTokens } from '../helpers'
+import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { useClaimCallback } from '../hooks/useClaimCallback'
-import { useIPRegion, decodeRegionCode, checkRegionRestrict } from '../hooks/useRegion'
+import { useDestructCallback } from '../hooks/useDestructCallback'
 import { useIfQualified } from '../hooks/useIfQualified'
+import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
+import { checkRegionRestrict, decodeRegionCode, useIPRegion } from '../hooks/useRegion'
+import { ITO_Status, JSON_PayloadInMask } from '../types'
+import { StyledLinearProgress } from './StyledLinearProgress'
+import { SwapGuide, SwapStatus } from './SwapGuide'
 
 export interface IconProps {
     size?: number
@@ -176,7 +175,7 @@ interface TokenItemProps {
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
     const classes = useStyles({})
-    const { NATIVE_TOKEN_ADDRESS } = useConstant(TOKEN_CONSTANTS)
+    const { NATIVE_TOKEN_ADDRESS } = useTokensConstants()
 
     return (
         <>

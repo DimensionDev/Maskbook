@@ -1,5 +1,3 @@
-import { ChainId } from '@masknet/web3-shared'
-
 //#region plugin settings
 export const PLUGIN_IDENTIFIER = 'com.maskbook.trader'
 //#endregion
@@ -21,42 +19,3 @@ export const CRYPTOCURRENCY_MAP_EXPIRES_AT = 60 /* seconds */ * 1000 /* millisec
 
 // the max length of approved tokens
 export const APPROVED_TOKENS_MAX = 10
-
-/**
- * @deprecated Use @masknet/constants
- */
-export const TRENDING_CONSTANTS = {
-    UNISWAP_V2_SUBGRAPH_URL: {
-        [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-        [ChainId.Ropsten]: '',
-        [ChainId.Rinkeby]: '',
-        [ChainId.Kovan]: '',
-        [ChainId.Gorli]: '',
-        [ChainId.BSC]: '',
-        [ChainId.BSCT]: '',
-        [ChainId.Matic]: '',
-        [ChainId.Mumbai]: '',
-    },
-    UNISWAP_V2_HEALTH_URL: {
-        [ChainId.Mainnet]: 'https://api.thegraph.com/index-node/graphql',
-        [ChainId.Ropsten]: '',
-        [ChainId.Rinkeby]: '',
-        [ChainId.Kovan]: '',
-        [ChainId.Gorli]: '',
-        [ChainId.BSC]: '',
-        [ChainId.BSCT]: '',
-        [ChainId.Matic]: '',
-        [ChainId.Mumbai]: '',
-    },
-    ETHEREUM_BLOCKS_SUBGRAPH_URL: {
-        [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks',
-        [ChainId.Ropsten]: '',
-        [ChainId.Rinkeby]: '',
-        [ChainId.Kovan]: '',
-        [ChainId.Gorli]: '',
-        [ChainId.BSC]: '',
-        [ChainId.BSCT]: '',
-        [ChainId.Matic]: '',
-        [ChainId.Mumbai]: '',
-    },
-}

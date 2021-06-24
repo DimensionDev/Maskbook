@@ -2,14 +2,15 @@ import BigNumber from 'bignumber.js'
 import { first, memoize } from 'lodash-es'
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
-import { getChainDetailed, isSameAddress, ChainId, constantOfChain } from '@masknet/web3-shared'
-import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
+import { getChainDetailed, isSameAddress, ChainId } from '@masknet/web3-shared'
+import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE } from '../../constants'
 import type { Route } from '../../types'
 import { getFutureTimestamps } from '../../helpers/blocks'
 import { fetchBlockNumbersByTimestamps } from '../blocks'
 import { fetchLBP_PoolsByTokenAddress, fetchLBP_PoolTokenPrices, fetchLBP_PoolTokens } from '../LBP'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 import { ZERO } from '@masknet/shared'
+import { getTraderConstants } from '@masknet/constants'
 
 //#region create cached SOR
 const createSOR_ = memoize(
@@ -32,7 +33,7 @@ function createSOR(chainId: ChainId) {
     const sor = createSOR_(chainId)
 
     // update pools url when sor object was created or reused
-    sor.poolsUrl = `${constantOfChain(TRADE_CONSTANTS, chainId).BALANCER_POOLS_URL}?timestamp=${Date.now()}`
+    sor.poolsUrl = `${getTraderConstants(chainId).BALANCER_POOLS_URL}?timestamp=${Date.now()}`
 
     return sor
 }
@@ -44,7 +45,7 @@ export async function updatePools(force = false) {
 
     // this fetches all pools list from URL in constructor then onChain balances using Multicall
     if (!sor.isAllFetched || force) {
-        sor.poolsUrl = `${constantOfChain(TRADE_CONSTANTS, chainId).BALANCER_POOLS_URL}?timestamp=${Date.now()}`
+        sor.poolsUrl = `${getTraderConstants(chainId).BALANCER_POOLS_URL}?timestamp=${Date.now()}`
         await sor.fetchPools()
     }
 }

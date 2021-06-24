@@ -1,5 +1,6 @@
+import { useTokensConstants } from '@masknet/constants'
 import { RefreshIcon } from '@masknet/icons'
-import { TOKEN_CONSTANTS, useConstant, useERC20TokenDetailed } from '@masknet/web3-shared'
+import { useERC20TokenDetailed } from '@masknet/web3-shared'
 import {
     Card,
     CardActions,
@@ -110,7 +111,7 @@ export function PoolView(props: PoolViewProps) {
     const classes = useStyles()
 
     //#region susd token
-    const { sUSD_ADDRESS } = useConstant(TOKEN_CONSTANTS)
+    const { sUSD_ADDRESS } = useTokensConstants()
     const {
         value: susdTokenDetailed,
         loading: loadingToken,

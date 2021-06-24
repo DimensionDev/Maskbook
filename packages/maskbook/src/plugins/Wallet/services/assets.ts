@@ -15,11 +15,10 @@ import {
     createERC20Token,
     createERC721Token,
     createNativeToken,
-    TOKEN_CONSTANTS,
     getChainDetailed,
     getChainIdFromName,
-    constantOfChain,
 } from '@masknet/web3-shared'
+import { getTokensConstants } from '@masknet/constants'
 
 export async function getAssetsListNFT(
     address: string,
@@ -135,10 +134,7 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
                     name: asset.name,
                     symbol: asset.symbol,
                     decimals: asset.decimals,
-                    address:
-                        asset.name === 'Ether'
-                            ? constantOfChain(TOKEN_CONSTANTS).NATIVE_TOKEN_ADDRESS
-                            : asset.asset_code,
+                    address: asset.name === 'Ether' ? getTokensConstants().NATIVE_TOKEN_ADDRESS : asset.asset_code,
                     chainId: ChainId.Mainnet,
                     type: asset.name === 'Ether' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                 },
