@@ -1,17 +1,17 @@
-import type { ITO } from '@dimensiondev/contracts/types/ITO'
-import type { PayableTx } from '@dimensiondev/contracts/types/types'
-import { isZero } from '@dimensiondev/maskbook-shared'
+import type { ITO } from '@masknet/contracts/types/ITO'
+import type { PayableTx } from '@masknet/contracts/types/types'
+import { isZero } from '@masknet/shared'
 import {
+    currySameAddress,
     EthereumTokenType,
     FungibleTokenDetailed,
-    isSameAddress,
     TransactionEventType,
     TransactionStateType,
     useAccount,
     useGasPrice,
     useNonce,
     useTransactionState,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
@@ -74,7 +74,7 @@ export function useSwapCallback(
         }
 
         // error: invalid token
-        const swapTokenAt = payload.exchange_tokens.findIndex((x) => isSameAddress(x.address, token.address))
+        const swapTokenAt = payload.exchange_tokens.findIndex(currySameAddress(token.address))
         if (swapTokenAt === -1) {
             setSwapState({
                 type: TransactionStateType.FAILED,

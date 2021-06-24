@@ -1,6 +1,6 @@
 import { Environment, UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { AsyncCall } from 'async-call-rpc'
-import { serializer } from '@dimensiondev/maskbook-shared'
+import { serializer } from '@masknet/shared'
 import { PluginMessages, setPluginServices, setService } from '../API'
 
 class WebExtensionExternalChannel extends WebExtensionMessage<any> {

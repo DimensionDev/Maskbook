@@ -1,6 +1,12 @@
 import { noop, pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
+import {
+    createERC721Token,
+    ERC20TokenDetailed,
+    EthereumTokenType,
+    Wallet,
+    Web3ProviderType,
+} from '@masknet/web3-shared'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
@@ -11,6 +17,7 @@ import {
     currentNetworkSettings,
     currentProviderSettings,
     currentChainIdSettings,
+    currentPortfolioDataProviderSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
@@ -37,7 +44,16 @@ export const Web3Context: Web3ProviderType = {
     providerType: createSubscriptionFromSettings(currentProviderSettings),
     networkType: createSubscriptionFromSettings(currentNetworkSettings),
     erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
-    erc721Tokens: createSubscriptionAsync(getERC721Tokens, [], WalletMessages.events.erc721TokensUpdated.on),
+    erc20TokensCount: createSubscriptionAsync(
+        WalletRPC.getERC20TokensCount,
+        0,
+        WalletMessages.events.erc20TokensUpdated.on,
+    ),
+    getERC20TokensPaged,
+    portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
+    getAssetList: WalletRPC.getAssetsList,
+    getAssetsListNFT: WalletRPC.getAssetsListNFT,
+    getERC721TokensPaged,
 }
 
 async function getWallets() {
@@ -63,6 +79,25 @@ async function getERC20Tokens() {
         type: EthereumTokenType.ERC20,
         ...x,
     }))
+}
+
+async function getERC20TokensPaged(index: number, count: number, query?: string) {
+    const raw = await WalletRPC.getERC20TokensPaged(index, count, query)
+    return raw.map<ERC20TokenDetailed>((x) => ({
+        type: EthereumTokenType.ERC20,
+        ...x,
+    }))
+}
+
+async function getERC721TokensPaged(index: number, count: number, query?: string) {
+    const raw = await WalletRPC.getERC721TokensPaged(index, count, query)
+    return raw.map((x) =>
+        createERC721Token(x.chainId, x.tokenId, x.address, x.name, x.symbol, x.baseURI, x.tokenURI, {
+            name: x.assetName,
+            description: x.assetDescription,
+            image: x.assetImage,
+        }),
+    )
 }
 
 async function getERC721Tokens() {

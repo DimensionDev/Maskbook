@@ -3,7 +3,7 @@ import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import WalletConnect from '@walletconnect/client'
 import type { IJsonRpcRequest } from '@walletconnect/types'
-import { ProviderType, getNetworkTypeFromChainId, NetworkType, ChainId } from '@dimensiondev/web3-shared'
+import { ProviderType, getNetworkTypeFromChainId, NetworkType, ChainId } from '@masknet/web3-shared'
 import * as Maskbook from '../providers/Maskbook'
 import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import {

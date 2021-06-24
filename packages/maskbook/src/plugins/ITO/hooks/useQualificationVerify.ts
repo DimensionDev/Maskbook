@@ -1,13 +1,13 @@
 import { useAsyncRetry } from 'react-use'
 import type { AbiItem } from 'web3-utils'
-import type { Qualification } from '@dimensiondev/contracts/types/Qualification'
-import QualificationABI from '@dimensiondev/contracts/abis/Qualification.json'
+import type { Qualification } from '@masknet/contracts/types/Qualification'
+import QualificationABI from '@masknet/contracts/abis/Qualification.json'
 import {
     QUALIFICATION_INTERFACE_ID,
     QUALIFICATION_HAS_START_TIME_INTERFACE_ID,
     QUALIFICATION_HAS_LUCKY_INTERFACE_ID,
 } from '../constants'
-import { useAccount, useContract, useERC165 } from '@dimensiondev/web3-shared'
+import { useAccount, useContract, useERC165 } from '@masknet/web3-shared'
 
 export function useQualificationVerify(address: string) {
     const account = useAccount()

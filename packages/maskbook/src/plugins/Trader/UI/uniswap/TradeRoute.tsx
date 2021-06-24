@@ -3,7 +3,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { TradeComputed } from '../../types'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {

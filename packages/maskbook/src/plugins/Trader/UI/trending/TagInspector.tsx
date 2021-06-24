@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { TrendingPopper } from '../trending/TrendingPopper'
-import { DataProvider, TagType, TradeProvider } from '../../types'
-import { PopperView } from '../trending/PopperView'
+import { DataProvider, TradeProvider, TagType } from '../../types'
+import { TraderView } from './TraderView'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'
 
 export interface TagInspectorProps {}
@@ -11,19 +11,19 @@ export function TagInspector(props: TagInspectorProps) {
     useAvailableDataProviders(TagType.CASH, 'BTC')
 
     const createTrendingView = useCallback(
-        (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => {
+        (
+            name: string,
+            type: TagType,
+            dataProviders: DataProvider[],
+            tradeProviders: TradeProvider[],
+            reposition?: () => void,
+        ) => {
             return (
-                <PopperView
+                <TraderView
                     name={name}
                     tagType={type}
                     dataProviders={dataProviders}
-                    tradeProviders={[
-                        TradeProvider.UNISWAP,
-                        TradeProvider.SUSHISWAP,
-                        TradeProvider.ZRX,
-                        TradeProvider.SASHIMISWAP,
-                        TradeProvider.BALANCER,
-                    ]}
+                    tradeProviders={tradeProviders}
                     onUpdate={reposition}
                 />
             )

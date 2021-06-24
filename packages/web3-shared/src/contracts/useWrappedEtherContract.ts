@@ -1,11 +1,11 @@
+import WETH_ABI from '@masknet/contracts/abis/WETH.json'
+import type { WETH } from '@masknet/contracts/types/WETH'
 import type { AbiItem } from 'web3-utils'
-import WETH_ABI from '@dimensiondev/contracts/abis/WETH.json'
-import { useContract } from '../hooks/useContract'
-import { CONSTANTS } from '../constants'
+import { TOKEN_CONSTANTS } from '../constants'
 import { useConstant } from '../hooks/useConstant'
-import type { WETH } from '@dimensiondev/contracts/types/WETH'
+import { useContract } from '../hooks/useContract'
 
 export function useNativeTokenWrapperContract() {
-    const address = useConstant(CONSTANTS, 'WETH_ADDRESS')
-    return useContract<WETH>(address, WETH_ABI as AbiItem[])
+    const { WETH_ADDRESS } = useConstant(TOKEN_CONSTANTS)
+    return useContract<WETH>(WETH_ADDRESS, WETH_ABI as AbiItem[])
 }

@@ -1,5 +1,5 @@
-import { formatEthereumAddress, useValueRef } from '@dimensiondev/maskbook-shared'
-import { EthereumTokenType, useAccount, Wallet } from '@dimensiondev/web3-shared'
+import { formatEthereumAddress, useValueRef } from '@masknet/shared'
+import { EthereumTokenType, useAccount, Wallet } from '@masknet/web3-shared'
 import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
 import { createContext, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
@@ -63,7 +63,7 @@ export function CollectibleList(props: CollectibleListProps) {
         loading: collectiblesLoading,
         retry: collectiblesRetry,
         error: collectiblesError,
-    } = useCollectibles(account, provider, page)
+    } = useCollectibles(account, provider, page, 50)
 
     const { collectibles = [], hasNextPage } = value
 

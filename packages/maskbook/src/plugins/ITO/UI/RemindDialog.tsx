@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import classNames from 'classnames'
 import { Typography, Link, Checkbox, makeStyles, FormControlLabel } from '@material-ui/core'
-import { FormattedAddress } from '@dimensiondev/maskbook-shared'
+import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
-import { resolveLinkOnExplorer, FungibleTokenDetailed, ChainId } from '@dimensiondev/web3-shared'
+import { resolveLinkOnExplorer, FungibleTokenDetailed, ChainId } from '@masknet/web3-shared'
 import { SwapStatus } from './SwapGuide'
 
 const useStyles = makeStyles((theme) => ({
@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         marginTop: theme.spacing(2),
+        padding: theme.spacing(2.5, 0, 3.5, 2),
     },
     tokenIcon: {
         display: 'flex',

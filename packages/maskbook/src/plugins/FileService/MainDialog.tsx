@@ -1,6 +1,6 @@
 import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { isNil } from 'lodash-es'
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { useBeforeUnload } from 'react-use'
 import { useI18N } from '../../utils'

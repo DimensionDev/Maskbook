@@ -1,4 +1,4 @@
-import { useBlockie } from '@dimensiondev/web3-shared'
+import { useBlockie } from '@masknet/web3-shared'
 import { BLOCKIES_OPTIONS } from '../constants'
 
 export function useAvatar(address: string) {

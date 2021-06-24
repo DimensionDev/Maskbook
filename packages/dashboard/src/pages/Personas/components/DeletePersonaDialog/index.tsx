@@ -1,6 +1,6 @@
 import { Button, DialogActions, DialogContent, Typography, TextField } from '@material-ui/core'
 import { memo } from 'react'
-import { MaskColorVar, MaskDialog } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar, MaskDialog } from '@masknet/theme'
 import { useDashboardI18N, DashboardTrans } from '../../../../locales'
 
 export interface DeletePersonaDialogProps {

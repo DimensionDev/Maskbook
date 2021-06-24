@@ -1,5 +1,5 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { ProfileIdentifier, useValueRef } from '@dimensiondev/maskbook-shared'
+import { ProfileIdentifier, useValueRef } from '@masknet/shared'
 import { useMemo } from 'react'
 import type { Profile } from '../../database'
 import { currentSelectedIdentity } from '../../settings/settings'

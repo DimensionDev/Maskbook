@@ -1,9 +1,10 @@
 {
-  "name": "@dimensiondev/web3-shared",
+  "name": "@masknet/web3-shared",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "dependencies": {
-    "@dimensiondev/contracts": "workspace:*",
-    "@dimensiondev/maskbook-shared": "workspace:*",
-    "@types/use-subscription": "^1.0.0",
+    "@masknet/contracts": "workspace:*",
+    "@masknet/shared": "workspace:*",
     "bignumber.js": "9.0.1",
     "ethereum-blockies": "^0.1.1",
     "lodash-es": "^4.17.21",
@@ -15,6 +16,7 @@
     "web3-core": "^1.3.6",
     "web3-utils": "^1.3.6"
   },
-  "typings": "./dist/index.d.ts",
-  "main": "./dist/index.js"
+  "devDependencies": {
+    "@types/use-subscription": "^1.0.0"
+  }
 }

@@ -1,6 +1,6 @@
 import type { RefObject } from 'react'
 import type { Dimension } from './useDimension'
-import { formatCurrency } from '@dimensiondev/maskbook-shared'
+import { formatCurrency } from '@masknet/shared'
 import { useLineChart } from './useLineChart'
 
 export function usePriceLineChart(

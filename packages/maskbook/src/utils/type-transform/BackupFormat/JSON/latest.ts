@@ -13,6 +13,16 @@ import {
     patchNonBreakingUpgradeForBackupJSONFileVersion2,
 } from './version-2'
 
+export interface BackupPreview {
+    email?: string
+    personas: number
+    accounts: number
+    posts: number
+    contacts: number
+    files: number
+    wallets: number
+}
+
 /**
  * Always use this interface in other code.
  */
@@ -27,4 +37,16 @@ export function UpgradeBackupJSONFile(json: object, identity?: ProfileIdentifier
         return upgradeFromBackupJSONFileVersion1(upgraded)
     }
     return null
+}
+
+export function getBackupPreviewInfo(json: BackupJSONFileLatest): BackupPreview {
+    return {
+        email: 'alice@example.com', // TODO: email
+        personas: json.personas.length,
+        accounts: json.personas.reduce((a, b) => a + b.linkedProfiles.length, 0),
+        posts: json.posts.length,
+        contacts: json.profiles.length,
+        files: 0, // TODO: file
+        wallets: json.wallets.length,
+    }
 }

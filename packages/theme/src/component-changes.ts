@@ -69,8 +69,12 @@ export const Button: Theme = (mode, colors): ThemeOptions => ({
                     style: { [button.light]: colors.secondary, [button.main]: colors.primary },
                 },
                 {
-                    props: { color: 'error' as any },
-                    style: { [button.main]: colors.redMain, [button.contrast]: colors.redContrastText },
+                    props: { color: 'error' },
+                    style: { [button.main]: colors.redMain, [button.contrast]: colors.primaryContrastText },
+                },
+                {
+                    props: { color: 'warning' },
+                    style: { [button.main]: colors.warning, [button.contrast]: colors.primaryContrastText },
                 },
             ],
         },
@@ -85,7 +89,9 @@ export const Dialog: Theme = {
             },
         },
         MuiDialogActions: {
-            styleOverrides: { root: { justifyContent: 'center', paddingBottom: 24 } },
+            styleOverrides: {
+                root: { justifyContent: 'center', paddingBottom: 24, '&>:not(:first-of-type)': { marginLeft: 18 } },
+            },
         },
     },
 }

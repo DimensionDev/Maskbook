@@ -1,5 +1,5 @@
-import { formatBalance } from '@dimensiondev/maskbook-shared'
-import { ERC20TokenDetailed, TransactionStateType } from '@dimensiondev/web3-shared'
+import { formatBalance } from '@masknet/shared'
+import { ERC20TokenDetailed, TransactionStateType } from '@masknet/web3-shared'
 import { Alert, Box, Skeleton, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useCallback, useEffect } from 'react'

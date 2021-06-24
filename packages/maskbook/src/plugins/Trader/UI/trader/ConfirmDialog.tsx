@@ -8,8 +8,8 @@ import { TokenPanel } from './TokenPanel'
 import { PriceStaleWarnning } from './PriceStaleWarnning'
 import type { TradeComputed, TradeProvider } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import { formatBalance } from '@masknet/shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     reverseIcon: {

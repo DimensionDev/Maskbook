@@ -1,4 +1,4 @@
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 import { Select, experimentalStyled as styled, selectClasses, outlinedInputClasses } from '@material-ui/core'
 
 export default styled(Select)(() => ({

@@ -10,7 +10,7 @@ import {
     Link,
     Typography,
 } from '@material-ui/core'
-import { formatEthereumAddress, FormattedCurrency } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress, FormattedCurrency } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { Ticker, DataProvider } from '../../types'
 import { formatElapsed } from '../../../Wallet/formatter'

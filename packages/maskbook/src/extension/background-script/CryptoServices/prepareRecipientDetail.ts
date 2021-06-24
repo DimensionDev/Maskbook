@@ -4,7 +4,7 @@ import { IdentifierMap } from '../../../database/IdentifierMap'
 import type { RecipientDetail, RecipientReason } from '../../../database/post'
 import { queryUserGroup } from '../UserGroupService'
 import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 
 export async function prepareRecipientDetail(to: (ProfileIdentifier | GroupIdentifier)[]) {
     const recipients = new IdentifierMap<ProfileIdentifier, RecipientDetail>(new Map(), ProfileIdentifier)

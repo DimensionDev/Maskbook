@@ -5,4 +5,4 @@ export type {
     EC_Private_JsonWebKey,
     AESJsonWebKey,
     PBKDF2UnknownKey,
-} from '@dimensiondev/maskbook-shared'
+} from '@masknet/shared'

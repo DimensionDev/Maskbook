@@ -1,8 +1,13 @@
 import BigNumber from 'bignumber.js'
+import { getEnumAsArray, safeUnreachable } from '@masknet/shared'
+import type Web3 from 'web3'
+import type { AbiOutput } from 'web3-utils'
 import CHAINS from '../assets/chains.json'
-import { CONSTANTS } from '../constants'
+import { TOKEN_CONSTANTS } from '../constants'
 import {
+    Asset,
     ChainId,
+    CurrencyType,
     ERC1155TokenAssetDetailed,
     ERC20TokenDetailed,
     ERC721TokenAssetDetailed,
@@ -16,47 +21,40 @@ export function isSameAddress(addrA: string, addrB: string) {
     return addrA.toLowerCase() === addrB.toLowerCase()
 }
 
-export function isDAI(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'DAI_ADDRESS'))
+export function currySameAddress(base: string) {
+    return (target: string | { address: string }) => {
+        if (typeof target === 'string') {
+            return isSameAddress(base, target)
+        } else if (typeof target === 'object' && typeof target.address === 'string') {
+            return isSameAddress(base, target.address)
+        }
+        throw new Error('Unsupported `target` address format')
+    }
 }
 
-export function isOKB(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'OBK_ADDRESS'))
+export function constantOfChain<T extends Web3Constants>(constants: T, chainId = ChainId.Mainnet) {
+    const chainSpecifiedConstant = {} as { [key in keyof T]: T[key][ChainId.Mainnet] }
+    for (const i in constants) chainSpecifiedConstant[i] = constants[i][chainId]
+    return chainSpecifiedConstant
 }
 
-export function isNative(address: string) {
-    return isSameAddress(address, getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'))
-}
+export const isDAI = currySameAddress(constantOfChain(TOKEN_CONSTANTS).DAI_ADDRESS)
+
+export const isOKB = currySameAddress(constantOfChain(TOKEN_CONSTANTS).OKB_ADDRESS)
+
+export const isNative = currySameAddress(constantOfChain(TOKEN_CONSTANTS).NATIVE_TOKEN_ADDRESS)
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
 }
 
-//#region constants
-
-/**
- * @deprecated Use constantOfChain from @dimensiondev/web3-shared package
- *
- * Before: `getConstant(T, "a", ChainId.Mainnet)`
- *
- * After: `constantOfChain(T, ChainId.Mainnet).a`
- */
-export function getConstant<T extends Web3Constants, K extends keyof T>(
-    constants: T,
-    key: K,
-    chainId = ChainId.Mainnet,
-): T[K][ChainId.Mainnet] {
-    return constants[key][chainId]
-}
-//#endregion
-
 //#region chain detailed
-export function getChainDetailed(chainId: ChainId = ChainId.Mainnet) {
+export function getChainDetailed(chainId = ChainId.Mainnet) {
     return CHAINS.find((x) => x.chainId === chainId)
 }
 
 // Learn more: https://github.com/ChainAgnostic/CAIPs/blob/master/CAIPs/caip-2.md
-export function getChainDetailedCAIP(chainId: ChainId = ChainId.Mainnet) {
+export function getChainDetailedCAIP(chainId = ChainId.Mainnet) {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) return
     return {
@@ -125,7 +123,7 @@ export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     return {
         type: EthereumTokenType.Native,
         chainId,
-        address: getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS'),
+        address: constantOfChain(TOKEN_CONSTANTS).NATIVE_TOKEN_ADDRESS,
         ...chainDetailed.nativeCurrency,
     }
 }
@@ -188,14 +186,34 @@ export function createERC1155Token(
         asset,
     }
 }
-//#endregion
 
-import type Web3 from 'web3'
-import type { AbiOutput } from 'web3-utils'
-import { safeUnreachable } from '@dimensiondev/maskbook-shared'
+export function createERC20Tokens(
+    key: keyof typeof TOKEN_CONSTANTS,
+    name: string | ((chainId: ChainId) => string),
+    symbol: string | ((chainId: ChainId) => string),
+    decimals: number | ((chainId: ChainId) => number),
+) {
+    return getEnumAsArray(ChainId).reduce((accumulator, { value: chainId }) => {
+        const evaludator: <T>(f: T | ((chainId: ChainId) => T)) => T = (f) =>
+            typeof f === 'function' ? (f as any)(chainId) : f
+
+        accumulator[chainId] = {
+            type: EthereumTokenType.ERC20,
+            chainId,
+            address: constantOfChain(TOKEN_CONSTANTS, chainId)[key],
+            name: evaludator(name),
+            symbol: evaludator(symbol),
+            decimals: evaludator(decimals),
+        }
+        return accumulator
+    }, {} as { [chainId in ChainId]: ERC20TokenDetailed })
+}
+//#endregion
 
 export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
     if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)
     if (abis.length > 1) return web3.eth.abi.decodeParameters(abis, output)
     return
 }
+
+export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)

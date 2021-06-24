@@ -10,20 +10,17 @@ import {
     useChainId,
     useChainIdValid,
     useAccount,
-} from '@dimensiondev/web3-shared'
+    useConstant,
+    TOKEN_CONSTANTS,
+    isSameAddress,
+    getChainDetailed,
+} from '@masknet/web3-shared'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { useRemoteControlledDialog, getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
 import formatDateTime from 'date-fns/format'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import {
-    formatAmountPrecision,
-    formatEthereumAddress,
-    formatBalance,
-    isZero,
-    ZERO,
-    pow10,
-} from '@dimensiondev/maskbook-shared'
+import { formatAmountPrecision, formatEthereumAddress, formatBalance, isZero, ZERO, pow10 } from '@masknet/shared'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SwapGuide, SwapStatus } from './SwapGuide'
@@ -180,11 +177,17 @@ interface TokenItemProps {
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
     const classes = useStyles({})
+    const { NATIVE_TOKEN_ADDRESS } = useConstant(TOKEN_CONSTANTS)
+
     return (
         <>
             <TokenIcon classes={{ icon: classes.tokenIcon }} address={exchangeToken.address} />
             <Typography component="span">
-                <strong>{price}</strong> {exchangeToken.symbol} / {token.symbol}
+                <strong>{price}</strong>{' '}
+                {isSameAddress(exchangeToken.address, NATIVE_TOKEN_ADDRESS)
+                    ? getChainDetailed(exchangeToken.chainId)?.nativeCurrency.symbol
+                    : exchangeToken.symbol}{' '}
+                / {token.symbol}
             </Typography>
         </>
     )

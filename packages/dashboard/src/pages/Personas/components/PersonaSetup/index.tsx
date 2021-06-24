@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Button, makeStyles, Typography } from '@material-ui/core'
-import { LinkIcon } from '@dimensiondev/icons'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { LinkIcon } from '@masknet/icons'
+import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles((theme) => ({

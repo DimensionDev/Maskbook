@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { PluginCollectibleRPC } from '../messages'
 import { CollectibleToken, CollectibleProvider } from '../types'
 import { getOrderUnitPrice } from '../utils'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 import { toDate, toRaribleImage, toTokenDetailed, toTokenIdentifier } from '../helpers'
 import { OpenSeaAccountURL } from '../constants'
 import { resolveRaribleUserNetwork } from '../pipes'
@@ -15,13 +15,14 @@ import {
     useAccount,
     useChainId,
     useConstant,
-    CONSTANTS,
-} from '@dimensiondev/web3-shared'
+    TOKEN_CONSTANTS,
+    currySameAddress,
+} from '@masknet/web3-shared'
 
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
     const account = useAccount()
     const chainId = useChainId()
-    const WETH_ADDRESS = useConstant(CONSTANTS, 'WETH_ADDRESS')
+    const { WETH_ADDRESS } = useConstant(TOKEN_CONSTANTS)
 
     return useAsyncRetry(async () => {
         if (!token) return
@@ -40,9 +41,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                         openSeaResponse.collection?.safelist_request_status ?? '',
                     ),
                     is_order_weth: isSameAddress(desktopOrder?.paymentToken ?? '', WETH_ADDRESS),
-                    is_collection_weth: openSeaResponse.collection.payment_tokens.some((x) =>
-                        isSameAddress(x.address, WETH_ADDRESS),
-                    ),
+                    is_collection_weth: openSeaResponse.collection.payment_tokens.some(currySameAddress(WETH_ADDRESS)),
                     is_owner: openSeaResponse.top_ownerships.some((item) => isSameAddress(item.owner.address, account)),
                     // it's an IOS string as my inspection
                     is_auction: Date.parse(`${openSeaResponse.endTime ?? ''}Z`) > Date.now(),

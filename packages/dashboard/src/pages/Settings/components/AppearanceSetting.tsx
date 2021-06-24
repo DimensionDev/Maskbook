@@ -1,7 +1,7 @@
 import { MenuItem } from '@material-ui/core'
 import { Services } from '../../../API'
 import { useAppearance } from '../../Personas/api'
-import { Appearance } from '@dimensiondev/maskbook-theme'
+import { Appearance } from '@masknet/theme'
 
 import SettingSelect from './SettingSelect'
 

@@ -1,4 +1,4 @@
-import { useValueRef } from '@dimensiondev/maskbook-shared'
+import { useValueRef } from '@masknet/shared'
 import { makeStyles } from '@material-ui/core'
 import type { FC } from 'react'
 import { currentNetworkSettings, currentProviderSettings } from '../../plugins/Wallet/settings'

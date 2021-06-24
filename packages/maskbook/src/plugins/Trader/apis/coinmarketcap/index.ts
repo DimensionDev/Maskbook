@@ -103,8 +103,23 @@ export async function getQuotesInfo(id: string, currency: string) {
 //#endregion
 
 //#region get coin info
+export interface PlatformInfo {
+    coin: {
+        id: string
+        name: string
+        slug: string
+        symbol: string
+    }
+    name: string
+}
+
+export interface ContractInfo {
+    contract_address: string
+    platform: PlatformInfo
+}
 export interface CoinInfo {
     category: string
+    contract_address: ContractInfo[]
     date_added: string
     date_launched: string | null
     description: string

@@ -4,13 +4,7 @@ import { Flags, useI18N } from '../../../utils'
 import { PoolSettings, useFillParams } from '../hooks/useFill'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import LaunchIcon from '@material-ui/icons/Launch'
-import {
-    formatAmountPrecision,
-    formatBalance,
-    FormattedAddress,
-    FormattedBalance,
-    ONE,
-} from '@dimensiondev/maskbook-shared'
+import { formatAmountPrecision, formatBalance, FormattedAddress, FormattedBalance, ONE } from '@masknet/shared'
 import formatDateTime from 'date-fns/format'
 import {
     resolveTokenLinkOnExplorer,
@@ -19,7 +13,7 @@ import {
     FungibleTokenDetailed,
     useConstant,
     useChainId,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 import RepeatIcon from '@material-ui/icons/Repeat'
 import { ITO_CONSTANTS } from '../constants'
@@ -120,7 +114,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const classes = useStyles()
     const { t } = useI18N()
     const chainId = useChainId()
-    const DEFAULT_QUALIFICATION_ADDRESS = useConstant(ITO_CONSTANTS, 'DEFAULT_QUALIFICATION_ADDRESS')
+    const { DEFAULT_QUALIFICATION_ADDRESS } = useConstant(ITO_CONSTANTS)
     const showQualification =
         poolSettings?.advanceSettingData.contract &&
         poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION_ADDRESS

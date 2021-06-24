@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import { makeStyles, Typography, Slider, CircularProgress } from '@material-ui/core'
-import { formatBalance, pow10, ZERO } from '@dimensiondev/maskbook-shared'
+import { formatBalance, pow10, ZERO } from '@masknet/shared'
 
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -13,20 +13,19 @@ import {
     ChainId,
     TransactionStateType,
     useTokenBalance,
-    useConstant,
     resolveTransactionLinkOnExplorer,
     useChainId,
     isNative,
-    isSameAddress,
-} from '@dimensiondev/web3-shared'
+    currySameAddress,
+} from '@masknet/web3-shared'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useSwapCallback } from '../hooks/useSwapCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { JSON_PayloadInMask } from '../types'
-import { ITO_CONSTANTS } from '../constants'
 import { SwapStatus } from './SwapGuide'
 import { EthereumMessages } from '../../Ethereum/messages'
+import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { useQualificationVerify } from '../hooks/useQualificationVerify'
@@ -117,7 +116,7 @@ export function SwapDialog(props: SwapDialogProps) {
 
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
-    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const ITO_CONTRACT_ADDRESS = useITO_ContractAddress()
 
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),
@@ -135,7 +134,7 @@ export function SwapDialog(props: SwapDialogProps) {
         useCallback(
             (ev: SelectTokenDialogEvent) => {
                 if (ev.open || !ev.token || ev.uuid !== id) return
-                const at = exchangeTokens.findIndex((x) => isSameAddress(x.address, ev.token!.address))
+                const at = exchangeTokens.findIndex(currySameAddress(ev.token!.address))
                 const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(
                     payload.exchange_amounts[at * 2 + 1],
                 )

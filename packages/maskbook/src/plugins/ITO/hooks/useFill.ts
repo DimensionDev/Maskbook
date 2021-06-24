@@ -3,8 +3,8 @@ import { useAsync } from 'react-use'
 import { omit } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
-import type { ITO } from '@dimensiondev/contracts/types/ITO'
-import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+import type { ITO } from '@masknet/contracts/types/ITO'
+import type { NonPayableTx } from '@masknet/contracts/types/types'
 import {
     TransactionEventType,
     TransactionStateType,
@@ -14,13 +14,13 @@ import {
     useGasPrice,
     useNonce,
     useWeb3,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import type { FungibleTokenDetailed, ERC20TokenDetailed, TransactionState } from '@dimensiondev/web3-shared'
+import type { FungibleTokenDetailed, ERC20TokenDetailed, TransactionState } from '@masknet/web3-shared'
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER, FAKE_SIGN_PASSWORD } from '../constants'
 import type { AdvanceSettingData } from '../UI/AdvanceSetting'
-import { isGreaterThan, ONE, pow10 } from '@dimensiondev/maskbook-shared'
+import { isGreaterThan, ONE, pow10 } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 export interface PoolSettings {

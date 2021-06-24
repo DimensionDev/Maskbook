@@ -1,7 +1,7 @@
 import { pick, noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ChainId, ProviderType } from '@dimensiondev/web3-shared'
-import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Wallet, Web3ProviderType } from '@dimensiondev/web3-shared'
+import { ChainId, createERC721Token, PortfolioProvider, ProviderType } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Wallet, Web3ProviderType } from '@masknet/web3-shared'
 import { Messages, PluginMessages, PluginServices, Services } from '../API'
 
 const Web3Provider = createExternalProvider()
@@ -58,7 +58,20 @@ export const Web3Context: Web3ProviderType = {
     ),
     wallets: createSubscriptionAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
     erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
-    erc721Tokens: createSubscriptionAsync(getERC721Tokens, [], PluginMessages.Wallet.events.erc721TokensUpdated.on),
+    erc20TokensCount: createSubscriptionAsync(
+        PluginServices.Wallet.getERC20TokensCount,
+        0,
+        PluginMessages.Wallet.events.erc20TokensUpdated.on,
+    ),
+    getERC20TokensPaged,
+    portfolioProvider: createSubscriptionAsync(
+        Services.Settings.getCurrentPortfolioDataProvider,
+        PortfolioProvider.DEBANK,
+        Messages.events.createInternalSettingsChanged.on,
+    ),
+    getAssetList: PluginServices.Wallet.getAssetsList,
+    getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,
+    getERC721TokensPaged,
 }
 
 export function createExternalProvider() {
@@ -96,6 +109,25 @@ async function getERC20Tokens() {
         type: EthereumTokenType.ERC20,
         ...x,
     }))
+}
+
+async function getERC20TokensPaged(index: number, count: number, query?: string) {
+    const raw = await PluginServices.Wallet.getERC20TokensPaged(index, count, query)
+    return raw.map<ERC20TokenDetailed>((x) => ({
+        type: EthereumTokenType.ERC20,
+        ...x,
+    }))
+}
+
+async function getERC721TokensPaged(index: number, count: number, query?: string) {
+    const raw = await PluginServices.Wallet.getERC721TokensPaged(index, count, query)
+    return raw.map((x) =>
+        createERC721Token(x.chainId, x.tokenId, x.address, x.name, x.symbol, x.baseURI, x.tokenURI, {
+            name: x.assetName,
+            description: x.assetDescription,
+            image: x.assetImage,
+        }),
+    )
 }
 
 async function getERC721Tokens() {

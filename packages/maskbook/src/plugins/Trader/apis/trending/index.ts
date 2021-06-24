@@ -4,17 +4,19 @@ import * as coinGeckoAPI from '../coingecko'
 import * as coinMarketCapAPI from '../coinmarketcap'
 import * as uniswapAPI from '../uniswap'
 import { Days } from '../../UI/trending/PriceChartDaysControl'
-import { getEnumAsArray } from '../../../../utils/enum'
+import { getEnumAsArray, unreachable } from '@masknet/shared'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import {
+    resolveAlias,
     resolveCoinId,
     resolveCoinAddress,
-    resolveAlias,
+    resolveNetworkType,
     isBlockedId,
     isBlockedKeyword,
     isMirroredKeyword,
 } from './hotfix'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { NetworkType } from '@masknet/web3-shared'
+import { currentNetworkSettings } from '../../../Wallet/settings'
 
 /**
  * Get supported currencies of specific data provider
@@ -173,15 +175,19 @@ export async function checkAvailabilityOnDataProvider(keyword: string, type: Tag
 
 export async function getAvailableDataProviders(type: TagType, keyword: string) {
     const checked = await Promise.all(
-        getEnumAsArray(DataProvider).map(
-            async (x) =>
-                [
-                    x.value,
-                    await checkAvailabilityOnDataProvider(resolveAlias(keyword, x.value), type, x.value),
-                ] as const,
-        ),
+        getEnumAsArray(DataProvider)
+            .filter((x) =>
+                x.value === DataProvider.UNISWAP_INFO ? currentNetworkSettings.value === NetworkType.Ethereum : true,
+            )
+            .map(
+                async (x) =>
+                    [
+                        x.value,
+                        await checkAvailabilityOnDataProvider(resolveAlias(keyword, x.value), type, x.value),
+                    ] as const,
+            ),
     )
-    return checked.filter(([_, y]) => y).map(([x]) => x)
+    return checked.filter(([, y]) => y).map(([x]) => x)
 }
 
 export async function getAvailableCoins(keyword: string, type: TagType, dataProvider: DataProvider) {
@@ -239,7 +245,11 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     telegram_url,
                     contract_address:
                         resolveCoinAddress(id, DataProvider.COIN_GECKO) ??
-                        (info.asset_platform_id === 'ethereum' ? info.contract_address : undefined),
+                        info.platforms[
+                            Object.keys(info.platforms).find(
+                                (x) => resolveNetworkType(x, DataProvider.COIN_GECKO) === currentNetworkSettings.value,
+                            ) ?? ''
+                        ],
                 },
                 market: Object.entries(info.market_data).reduce((accumulated, [key, value]) => {
                     if (value && typeof value === 'object') accumulated[key] = value[currency.id] ?? 0
@@ -267,6 +277,7 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
             ])
             const trending: Trending = {
                 lastUpdated: status.timestamp,
+                platform: coinInfo.platform,
                 coin: {
                     id,
                     name: coinInfo.name,
@@ -295,7 +306,11 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     description: coinInfo.description,
                     contract_address:
                         resolveCoinAddress(id, DataProvider.COIN_MARKET_CAP) ??
-                        (coinInfo.platform?.name === 'Ethereum' ? coinInfo.platform?.token_address : undefined),
+                        coinInfo.contract_address.find(
+                            (x) =>
+                                resolveNetworkType(x.platform.coin.id, DataProvider.COIN_MARKET_CAP) ===
+                                currentNetworkSettings.value,
+                        )?.contract_address,
                 },
                 currency,
                 dataProvider,

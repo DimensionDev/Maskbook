@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+import type { NonPayableTx } from '@masknet/contracts/types/types'
 import {
     TransactionEventType,
     TransactionStateType,
@@ -8,7 +8,7 @@ import {
     useChainId,
     useGasPrice,
     useNonce,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useMaskITO_Contract } from '../contracts/useMaskITO_Contract'
 
 export function useMaskClaimCallback() {

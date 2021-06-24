@@ -37,11 +37,7 @@ import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/PluginUI'
 import { ErrorBoundary, withErrorBoundary } from '../../components/shared/ErrorBoundary'
 import { MaskUIRoot } from '../../UIRoot'
-import {
-    createInjectHooksRenderer,
-    startPluginDashboard,
-    useActivatedPluginsDashboard,
-} from '@dimensiondev/mask-plugin-infra'
+import { createInjectHooksRenderer, startPluginDashboard, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
 
 const useStyles = makeStyles((theme) => {

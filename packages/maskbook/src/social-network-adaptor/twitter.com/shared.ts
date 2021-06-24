@@ -1,4 +1,4 @@
-import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { ProfileIdentifier } from '@masknet/shared'
 import type { SocialNetwork } from '../../social-network/types'
 import { twitterBase } from './base'
 import { twitterEncoding } from './encoding'

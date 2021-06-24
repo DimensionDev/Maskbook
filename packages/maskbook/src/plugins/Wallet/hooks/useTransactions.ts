@@ -1,4 +1,4 @@
-import { unreachable, useValueRef } from '@dimensiondev/maskbook-shared'
+import { unreachable, useValueRef } from '@masknet/shared'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { WalletRPC } from '../messages'

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import stringify from 'json-stable-stringify'
-import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+import type { NonPayableTx } from '@masknet/contracts/types/types'
 import {
     TransactionEventType,
     TransactionStateType,
@@ -9,9 +9,9 @@ import {
     useTransactionState,
     useGasPrice,
     useNonce,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import { isZero } from '@dimensiondev/maskbook-shared'
+import { isZero } from '@masknet/shared'
 
 export function useClaimCallback(pids: string[], contractAddress?: string) {
     const nonce = useNonce()

@@ -1,6 +1,6 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '@dimensiondev/maskbook-shared'
-import { ERC721TokenDetailed, EthereumTokenType, useChainId } from '@dimensiondev/web3-shared'
+import { useValueRef } from '@masknet/shared'
+import { ERC721TokenDetailed, EthereumTokenType, useChainId } from '@masknet/web3-shared'
 import type { ERC721TokenRecord } from '../database/types'
 import { ERC721TokenArrayComparer } from '../helpers'
 import { WalletMessages, WalletRPC } from '../messages'

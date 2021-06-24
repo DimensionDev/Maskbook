@@ -1,6 +1,6 @@
 import type BigNumber from 'bignumber.js'
 import { Currency, DataProvider, TradeProvider, WarningLevel, ZrxTradePool } from './types'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 import {
     BIPS_BASE,
     PRICE_IMPACT_HIGH,
@@ -56,6 +56,10 @@ export function resolveTradeProviderName(tradeProvider: TradeProvider) {
             return 'SashimiSwap'
         case TradeProvider.BALANCER:
             return 'Balancer'
+        case TradeProvider.QUICKSWAP:
+            return 'QuickSwap'
+        case TradeProvider.PANCAKESWAP:
+            return 'PancakeSwap'
         default:
             unreachable(tradeProvider)
     }
@@ -73,6 +77,10 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider) {
             return 'https://sashimi.cool/'
         case TradeProvider.BALANCER:
             return 'https://balancer.exchange/'
+        case TradeProvider.QUICKSWAP:
+            return 'https://quickswap.exchange/'
+        case TradeProvider.PANCAKESWAP:
+            return 'https://exchange.pancakeswap.finance/#/swap'
         default:
             unreachable(tradeProvider)
     }
@@ -90,6 +98,10 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://info.sashimi.cool/pair/${address}`
         case TradeProvider.BALANCER:
             return `https://pools.balancer.exchange/#/pool/${address}/`
+        case TradeProvider.QUICKSWAP:
+            return `https://info.quickswap.exchange/pair${address}`
+        case TradeProvider.PANCAKESWAP:
+            return `https://pancakeswap.info/pool/${address}`
         default:
             unreachable(tradeProvider)
     }

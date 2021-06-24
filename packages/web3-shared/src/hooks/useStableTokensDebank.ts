@@ -1,4 +1,4 @@
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress } from '@masknet/shared'
 import { useChainId } from './useChainId'
 import STABLE_COINS from '../assets/stable_coins.json'
 import { ChainId } from '../types'

@@ -1,7 +1,7 @@
 import { values } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { unreachable, formatEthereumAddress, pow10 } from '@dimensiondev/maskbook-shared'
+import { unreachable, formatEthereumAddress, pow10 } from '@masknet/shared'
 
 import { Asset, CollectibleProvider, BalanceRecord, PortfolioProvider, ZerionAddressAsset } from '../types'
 import * as OpenSeaAPI from '../apis/opensea'
@@ -15,11 +15,11 @@ import {
     createERC20Token,
     createERC721Token,
     createNativeToken,
-    getConstant,
-    CONSTANTS,
+    TOKEN_CONSTANTS,
     getChainDetailed,
     getChainIdFromName,
-} from '@dimensiondev/web3-shared'
+    constantOfChain,
+} from '@masknet/web3-shared'
 
 export async function getAssetsListNFT(
     address: string,
@@ -67,7 +67,7 @@ export async function getAssetsListNFT(
                             unreachable(x.asset_contract.schema_name)
                     }
                 }),
-            hasNextPage: assets.length === 50,
+            hasNextPage: assets.length === size,
         }
     }
     return {
@@ -135,7 +135,10 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
                     name: asset.name,
                     symbol: asset.symbol,
                     decimals: asset.decimals,
-                    address: asset.name === 'Ether' ? getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS') : asset.asset_code,
+                    address:
+                        asset.name === 'Ether'
+                            ? constantOfChain(TOKEN_CONSTANTS).NATIVE_TOKEN_ADDRESS
+                            : asset.asset_code,
                     chainId: ChainId.Mainnet,
                     type: asset.name === 'Ether' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                 },

@@ -70,7 +70,7 @@
     "settings_sync_with_mobile_title": "Sync With Mobile",
     "settings_sync_with_mobile_desc": "You can sync your accounts and information with your mobile device. Open the Mask Network mobile app, go to Settings and tap on Sync With Plug-ins",
     "settings_global_backup_title": "Global Backup",
-    "settings_global_backup_desc": "Back up your personas, social, and local wallet data",
+    "settings_global_backup_desc": "Backup your personas, social, and local wallet data",
     "settings_restore_database_title": "Restore Database",
     "settings_restore_database_desc": "Restore from a previous database backup",
     "settigns_email_title": "Email",

@@ -8,7 +8,7 @@ import {
     useChainIdValid,
     useChainIdMatched,
     getChainIdFromName,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useMenu, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'

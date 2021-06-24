@@ -6,7 +6,7 @@ import type {
     ERC1155TokenRecord,
     PhraseRecord,
 } from './database/types'
-import { isSameAddress, CurrencyType } from '@dimensiondev/web3-shared'
+import { isSameAddress, CurrencyType } from '@masknet/web3-shared'
 import type { Asset } from './types'
 
 function serializeWalletRecord(record: WalletRecord) {

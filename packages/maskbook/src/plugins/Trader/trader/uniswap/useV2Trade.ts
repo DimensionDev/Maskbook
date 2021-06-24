@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
 import { Trade, Pair } from '@uniswap/sdk'
 import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
-import { useChainId } from '@dimensiondev/web3-shared'
+import { useChainId } from '@masknet/web3-shared'
 import { TradeStrategy } from '../../types'
 import { useAllCommonPairs } from './useAllCommonPairs'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { MAX_HOP } from '../../constants'
-import { isGreaterThan, isZero } from '@dimensiondev/maskbook-shared'
+import { isGreaterThan, isZero } from '@masknet/shared'
 
 export function useV2Trade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,

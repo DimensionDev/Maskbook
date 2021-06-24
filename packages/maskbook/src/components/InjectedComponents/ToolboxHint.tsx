@@ -7,7 +7,7 @@ import {
     useChainDetailed,
     useChainIdValid,
     NetworkType,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
@@ -15,10 +15,10 @@ import { Image } from '../shared/Image'
 import { useMenu } from '../../utils/hooks/useMenu'
 import { useCallback } from 'react'
 import { MaskMessage } from '../../utils/messages'
-import { RedPacketCompositionEntry } from '../../plugins/RedPacket/define'
+import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { FileServiceCompositionEntry } from '../../plugins/FileService/UI-define'
 import { ITO_CompositionEntry } from '../../plugins/ITO/define'
-import { useControlledDialog } from '../../plugins/Collectible/UI/useControlledDialog'
+import { useControlledDialog } from '../../plugins/Collectible/SNSAdaptor/useControlledDialog'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
@@ -27,7 +27,7 @@ import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
 import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
-import { formatEthereumAddress, useValueRef } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress, useValueRef } from '@masknet/shared'
 import { useI18N } from '../../utils'
 import { currentNetworkSettings } from '../../plugins/Wallet/settings'
 
@@ -139,14 +139,14 @@ export function ToolboxHint(props: ToolboxHintProps) {
         WalletMessages.events.walletStatusDialogUpdated,
     )
 
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
+    const { openDialog: openCreateImportDialog } = useRemoteControlledDialog(
+        WalletMessages.events.createImportWalletDialogUpdated,
     )
     const openWallet = useCallback(() => {
         if (account) {
             openSelectWalletDialog()
         } else {
-            openSelectProviderDialog()
+            openCreateImportDialog()
         }
     }, [account])
     //#endregion
@@ -155,7 +155,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const openRedPacket = useCallback(() => {
         openEncryptedMessage()
         setTimeout(() => {
-            RedPacketCompositionEntry.onClick()
+            MaskMessage.events.activatePluginCompositionEntry.sendToLocal(RedPacketPluginID)
         })
     }, [openEncryptedMessage])
     //#endregion

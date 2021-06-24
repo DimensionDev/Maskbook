@@ -5,7 +5,7 @@ import {
     makeTypedMessageTuple,
     makeTypedMessageTupleFromList,
     ProfileIdentifier,
-} from '@dimensiondev/maskbook-shared'
+} from '@masknet/shared'
 import { extractTextFromTypedMessage, makeTypedMessageImage } from '../../../protocols/typed-message'
 import { PostInfo } from '../../../social-network/PostInfo'
 import type { SocialNetworkUI as Next } from '../../../social-network/types'

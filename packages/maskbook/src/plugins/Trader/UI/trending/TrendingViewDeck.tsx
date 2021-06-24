@@ -4,14 +4,14 @@ import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutline
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-es'
-import { FormattedCurrency, useValueRef } from '@dimensiondev/maskbook-shared'
+import { FormattedCurrency, useValueRef } from '@masknet/shared'
 import { useRemoteControlledDialog, useI18N, Flags } from '../../../../utils'
 import { Coin, Currency, DataProvider, Stat, TradeProvider, Trending } from '../../types'
 import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
-import { useAccount } from '@dimensiondev/web3-shared'
+import { useAccount } from '@masknet/web3-shared'
 import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
@@ -23,7 +23,6 @@ import {
 } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
-import { useApprovedTokens } from '../../trending/useApprovedTokens'
 import { CoinSaftyAlert } from './CoinSaftyAlert'
 
 const useStyles = makeStyles((theme) => {
@@ -165,7 +164,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     )
     //#endregion
 
-    const { approvedTokens, onApprove } = useApprovedTokens(trending.coin.contract_address)
     return (
         <TrendingCard {...TrendingCardProps}>
             <CardHeader
@@ -225,7 +223,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             {market ? (
                                 <>
                                     {typeof coin.market_cap_rank === 'number' ? (
-                                        <span className={classes.rank} title="Market Cap Rank">
+                                        <span className={classes.rank} title="Index Cap Rank">
                                             #{coin.market_cap_rank}
                                         </span>
                                     ) : null}

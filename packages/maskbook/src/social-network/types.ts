@@ -6,7 +6,7 @@ import type {
     ProfileIdentifier,
     ReadonlyIdentifierMap,
     ObservableWeakMap,
-} from '@dimensiondev/maskbook-shared'
+} from '@masknet/shared'
 import type { PaletteMode, Theme } from '@material-ui/core'
 import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'

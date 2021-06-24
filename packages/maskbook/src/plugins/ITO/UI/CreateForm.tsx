@@ -8,13 +8,7 @@ import Web3Utils from 'web3-utils'
 import { format as formatDateTime } from 'date-fns'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N, sliceTextByUILength } from '../../../utils'
-import {
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    useAccount,
-    useConstant,
-    useTokenBalance,
-} from '@dimensiondev/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, useAccount, useConstant, useTokenBalance } from '@masknet/web3-shared'
 import { useQualificationVerify } from '../hooks/useQualificationVerify'
 import { ITO_CONSTANTS } from '../constants'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
@@ -22,11 +16,12 @@ import { useCurrentIdentity } from '../../../components/DataSource/useActivatedU
 import type { PoolSettings } from '../hooks/useFill'
 import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { formatAmount, formatBalance, isGreaterThan, isZero } from '@dimensiondev/maskbook-shared'
+import { formatAmount, formatBalance, isGreaterThan, isZero } from '@masknet/shared'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { AdvanceSetting } from './AdvanceSetting'
 import type { AdvanceSettingData } from './AdvanceSetting'
+import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
 import { useRegionSelect, regionCodes, encodeRegionCode, decodeRegionCode } from '../hooks/useRegion'
 import { RegionSelect } from './RegionSelect'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
@@ -103,8 +98,8 @@ export function CreateForm(props: CreateFormProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
-    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
-    const DEFAULT_QUALIFICATION_ADDRESS = useConstant(ITO_CONSTANTS, 'DEFAULT_QUALIFICATION_ADDRESS')
+    const ITO_CONTRACT_ADDRESS = useITO_ContractAddress()
+    const { DEFAULT_QUALIFICATION_ADDRESS } = useConstant(ITO_CONSTANTS)
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'

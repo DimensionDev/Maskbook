@@ -1,4 +1,4 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { actions } from '@storybook/addon-actions'
 import { DesktopMnemonicConfirm as C } from '../../../src/components/Mnemonic/DesktopMnemonicConfirm'
 

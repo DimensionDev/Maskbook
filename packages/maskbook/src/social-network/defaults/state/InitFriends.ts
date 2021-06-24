@@ -1,4 +1,4 @@
-import { IdentifierMap, ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { IdentifierMap, ProfileIdentifier } from '@masknet/shared'
 import produce from 'immer'
 import type { Profile } from '../../../database'
 import Services from '../../../extension/service'

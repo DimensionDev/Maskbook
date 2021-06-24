@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import { makeStyles, Typography, Box } from '@material-ui/core'
-import { formatBalance, isZero } from '@dimensiondev/maskbook-shared'
+import { formatBalance, isZero } from '@masknet/shared'
 import { useI18N, getAssetAsBlobURL } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { BigNumber } from 'bignumber.js'
 
@@ -73,31 +73,29 @@ export function ShareDialog(props: ShareDialogProps) {
     }, [shareSuccessLink, onClose])
 
     return (
-        <>
-            <Box className={classes.shareWrapper}>
-                <div
-                    className={classes.shareImage}
-                    style={{ backgroundImage: `url(${ShareBackground})`, borderRadius: 12 }}>
-                    <Typography variant="body1" className={classes.shareAmount}>
-                        {amount}
-                    </Typography>
-                    <Typography variant="body1" className={classes.shareToken}>
-                        {token.symbol}
-                    </Typography>
-                    <Typography variant="body1" className={classes.shareText}>
-                        {isZero(actualSwapAmount) ? t('plugin_ito_out_of_stock_hit') : t('plugin_ito_congratulations')}
-                    </Typography>
-                    {shareSuccessLink ? (
-                        <ActionButton
-                            onClick={onShareSuccess}
-                            variant="contained"
-                            color="primary"
-                            className={classes.shareButton}>
-                            {t('plugin_ito_dialog_swap_share_title')}
-                        </ActionButton>
-                    ) : null}
-                </div>
-            </Box>
-        </>
+        <Box className={classes.shareWrapper}>
+            <div
+                className={classes.shareImage}
+                style={{ backgroundImage: `url(${ShareBackground})`, borderRadius: 12 }}>
+                <Typography variant="body1" className={classes.shareAmount}>
+                    {amount}
+                </Typography>
+                <Typography variant="body1" className={classes.shareToken}>
+                    {token.symbol}
+                </Typography>
+                <Typography variant="body1" className={classes.shareText}>
+                    {isZero(actualSwapAmount) ? t('plugin_ito_out_of_stock_hit') : t('plugin_ito_congratulations')}
+                </Typography>
+                {shareSuccessLink ? (
+                    <ActionButton
+                        onClick={onShareSuccess}
+                        variant="contained"
+                        color="primary"
+                        className={classes.shareButton}>
+                        {t('plugin_ito_dialog_swap_share_title')}
+                    </ActionButton>
+                ) : null}
+            </div>
+        </Box>
     )
 }

@@ -1,4 +1,4 @@
-import { ChainId } from '@dimensiondev/web3-shared'
+import { ChainId } from '@masknet/web3-shared'
 
 export const DHEDGE_PLUGIN_ID = 'co.dhedge'
 export const POOL_DESCRIPTION_LIMIT = 210

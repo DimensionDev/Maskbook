@@ -1,4 +1,4 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { CreateSuccessfully as C } from '../../../src/components/CreatSuccessfully'
 const { meta, of } = story(C)
 

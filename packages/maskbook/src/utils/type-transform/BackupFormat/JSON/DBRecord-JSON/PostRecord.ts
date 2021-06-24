@@ -3,7 +3,7 @@ import type { BackupJSONFileLatest } from '../latest'
 import type { RecipientReasonJSON } from '../version-2'
 import { Identifier, GroupIdentifier, PostIVIdentifier, ProfileIdentifier } from '../../../../../database/type'
 import { IdentifierMap } from '../../../../../database/IdentifierMap'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 
 export function PostRecordToJSONFormat(post: PostRecord): BackupJSONFileLatest['posts'][0] {
     return {

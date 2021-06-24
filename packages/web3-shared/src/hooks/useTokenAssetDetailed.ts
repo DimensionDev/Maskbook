@@ -7,7 +7,7 @@ import {
 import { useERC721TokenAssetDetailed } from './useERC721TokenAssetDetailed'
 import { useERC1155TokenAssetDetailed } from './useERC1155TokenAssetDetailed'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 
 export function useTokenAssetDetailed(token?: NonFungibleTokenDetailed) {
     const r1 = useERC721TokenAssetDetailed(token?.type === EthereumTokenType.ERC721 ? token : undefined)

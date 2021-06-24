@@ -3,8 +3,8 @@ import { Copy, ExternalLink, Edit3 } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import classNames from 'classnames'
 import ErrorIcon from '@material-ui/icons/Error'
-import { FormattedAddress, useValueRef } from '@dimensiondev/maskbook-shared'
-import { ProviderType, resolveAddressLinkOnExplorer, useChainId, useChainIdValid } from '@dimensiondev/web3-shared'
+import { FormattedAddress, useValueRef } from '@masknet/shared'
+import { ProviderType, resolveAddressLinkOnExplorer, useChainId, useChainIdValid } from '@masknet/web3-shared'
 import { Button, DialogActions, DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletIcon } from '../../../../components/shared/WalletIcon'
@@ -99,7 +99,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopy = useSnackbarCallback(
-        async (ev: React.MouseEvent<HTMLDivElement>) => {
+        async (ev: React.MouseEvent<HTMLAnchorElement>) => {
             ev.stopPropagation()
             copyToClipboard(selectedWallet?.address ?? '')
         },

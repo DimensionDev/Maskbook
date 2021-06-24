@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { TransactionState, TransactionStateType } from '@dimensiondev/web3-shared'
+import { TransactionState, TransactionStateType } from '@masknet/web3-shared'
 import { EthereumMessages } from '../../plugins/Ethereum/messages'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
 

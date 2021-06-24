@@ -1,4 +1,4 @@
-import { useChainId } from '@dimensiondev/web3-shared'
+import { useChainId } from '@masknet/web3-shared'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { isCompactPayload } from '../helpers'
 import { usePoolPayload } from '../hooks/usePoolPayload'

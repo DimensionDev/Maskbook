@@ -3,13 +3,13 @@ import type {} from 'react-dom/next'
 import ReactDOM from 'react-dom'
 
 // @ts-ignore in case circle dependency make typescript complains
-import { IntergratedDashboard } from '@dimensiondev/dashboard'
+import { IntergratedDashboard } from '@masknet/dashboard'
 // @ts-ignore
-import { setService, setPluginMessages, setMessages, setPluginServices } from '@dimensiondev/dashboard'
+import { setService, setPluginMessages, setMessages, setPluginServices } from '@masknet/dashboard'
 import Services from '../service'
 import { WalletRPC, WalletMessages } from '../../plugins/Wallet/messages'
 import { MaskMessage } from '../../utils/messages'
-import { startPluginDashboard } from '@dimensiondev/mask-plugin-infra'
+import { startPluginDashboard } from '@masknet/plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
 setService(Services)
 setMessages(MaskMessage)

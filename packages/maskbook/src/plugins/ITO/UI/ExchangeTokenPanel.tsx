@@ -1,4 +1,4 @@
-import { EthereumTokenType, FungibleTokenDetailed, useTokenBalance } from '@dimensiondev/web3-shared'
+import { EthereumTokenType, FungibleTokenDetailed, useTokenBalance } from '@masknet/web3-shared'
 import { IconButton, makeStyles, Paper } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/AddOutlined'
 import RemoveIcon from '@material-ui/icons/RemoveOutlined'

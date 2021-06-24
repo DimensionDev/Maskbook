@@ -1,19 +1,18 @@
-import { getConstant, useChainId } from '@dimensiondev/web3-shared'
+import { unreachable } from '@masknet/shared'
+import { constantOfChain, useChainId } from '@masknet/web3-shared'
 import { createContext, useMemo } from 'react'
 import {
-    SASHIMISWAP_BASE_AGAINST_TOKENS,
-    SASHIMISWAP_CUSTOM_BASES,
-    SASHIMISWAP_INIT_CODE_HASH,
-    SUSHISWAP_BASE_AGAINST_TOKENS,
-    SUSHISWAP_CUSTOM_BASES,
-    SUSHISWAP_INIT_CODE_HASH,
-    THEGRAPH_SASHIMISWAP,
-    THEGRAPH_SUSHISWAP_FORK,
-    THEGRAPH_UNISWAP_V2,
     TRADE_CONSTANTS,
     UNISWAP_BASE_AGAINST_TOKENS,
     UNISWAP_CUSTOM_BASES,
-    UNISWAP_INIT_CODE_HASH,
+    SUSHISWAP_BASE_AGAINST_TOKENS,
+    SUSHISWAP_CUSTOM_BASES,
+    SASHIMISWAP_BASE_AGAINST_TOKENS,
+    SASHIMISWAP_CUSTOM_BASES,
+    QUICKSWAP_BASE_AGAINST_TOKENS,
+    QUICKSWAP_CUSTOM_BASES,
+    PANCAKESWAP_BASE_AGAINST_TOKENS,
+    PANCAKESWAP_CUSTOM_BASES,
 } from '../constants'
 import { TradeContext as TradeContext_, TradeProvider } from '../types'
 
@@ -25,33 +24,83 @@ export function useTradeContext(tradeProvider: TradeProvider) {
         switch (tradeProvider) {
             case TradeProvider.UNISWAP:
                 return {
-                    GRAPH_API: THEGRAPH_UNISWAP_V2,
-                    INIT_CODE_HASH: UNISWAP_INIT_CODE_HASH,
-                    ROUTER_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'UNISWAP_V2_ROUTER_ADDRESS', chainId),
-                    FACTORY_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'UNISWAP_FACTORY_ADDRESS', chainId),
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_LIKE: true,
+                    GRAPH_API: constantOfChain(TRADE_CONSTANTS, chainId).UNISWAP_THEGRAPH,
+                    INIT_CODE_HASH: constantOfChain(TRADE_CONSTANTS, chainId).UNISWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: constantOfChain(TRADE_CONSTANTS, chainId).UNISWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: constantOfChain(TRADE_CONSTANTS, chainId).UNISWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: UNISWAP_BASE_AGAINST_TOKENS,
                     CUSTOM_TOKENS: UNISWAP_CUSTOM_BASES,
                 }
             case TradeProvider.SUSHISWAP:
                 return {
-                    GRAPH_API: THEGRAPH_SUSHISWAP_FORK,
-                    INIT_CODE_HASH: SUSHISWAP_INIT_CODE_HASH,
-                    ROUTER_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'SUSHISWAP_ROUTER_ADDRESS', chainId),
-                    FACTORY_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'SUSHISWAP_FACTORY_ADDRESS', chainId),
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_LIKE: true,
+                    GRAPH_API: constantOfChain(TRADE_CONSTANTS, chainId).SUSHISWAP_THEGRAPH,
+                    INIT_CODE_HASH: constantOfChain(TRADE_CONSTANTS, chainId).SUSHISWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: constantOfChain(TRADE_CONSTANTS, chainId).SUSHISWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: constantOfChain(TRADE_CONSTANTS, chainId).SUSHISWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: SUSHISWAP_BASE_AGAINST_TOKENS,
                     CUSTOM_TOKENS: SUSHISWAP_CUSTOM_BASES,
                 }
             case TradeProvider.SASHIMISWAP:
                 return {
-                    GRAPH_API: THEGRAPH_SASHIMISWAP,
-                    INIT_CODE_HASH: SASHIMISWAP_INIT_CODE_HASH,
-                    ROUTER_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'SASHIMISWAP_ROUTER_ADDRESS', chainId),
-                    FACTORY_CONTRACT_ADDRESS: getConstant(TRADE_CONSTANTS, 'SASHIMISWAP_FACTORY_ADDRESS', chainId),
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_LIKE: true,
+                    GRAPH_API: constantOfChain(TRADE_CONSTANTS, chainId).SASHIMISWAP_THEGRAPH,
+                    INIT_CODE_HASH: constantOfChain(TRADE_CONSTANTS, chainId).SASHIMISWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: constantOfChain(TRADE_CONSTANTS, chainId).SASHIMISWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: constantOfChain(TRADE_CONSTANTS, chainId).SASHIMISWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: SASHIMISWAP_BASE_AGAINST_TOKENS,
                     CUSTOM_TOKENS: SASHIMISWAP_CUSTOM_BASES,
                 }
+            case TradeProvider.QUICKSWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_LIKE: true,
+                    GRAPH_API: constantOfChain(TRADE_CONSTANTS, chainId).QUICKSWAP_THEGRAPH,
+                    INIT_CODE_HASH: constantOfChain(TRADE_CONSTANTS, chainId).QUICKSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: constantOfChain(TRADE_CONSTANTS, chainId).QUICKSWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: constantOfChain(TRADE_CONSTANTS, chainId).QUICKSWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: QUICKSWAP_BASE_AGAINST_TOKENS,
+                    CUSTOM_TOKENS: QUICKSWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.PANCAKESWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_LIKE: true,
+                    GRAPH_API: constantOfChain(TRADE_CONSTANTS, chainId).PANCAKESWAP_THEGRAPH,
+                    INIT_CODE_HASH: constantOfChain(TRADE_CONSTANTS, chainId).PANCAKESWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: constantOfChain(TRADE_CONSTANTS, chainId).PANCAKESWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: constantOfChain(TRADE_CONSTANTS, chainId).PANCAKESWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: PANCAKESWAP_BASE_AGAINST_TOKENS,
+                    CUSTOM_TOKENS: PANCAKESWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.ZRX:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_LIKE: false,
+                    GRAPH_API: '',
+                    INIT_CODE_HASH: '',
+                    ROUTER_CONTRACT_ADDRESS: '',
+                    FACTORY_CONTRACT_ADDRESS: '',
+                    AGAINST_TOKENS: {},
+                    CUSTOM_TOKENS: {},
+                } as TradeContext_
+            case TradeProvider.BALANCER:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_LIKE: false,
+                    GRAPH_API: '',
+                    INIT_CODE_HASH: '',
+                    ROUTER_CONTRACT_ADDRESS: constantOfChain(TRADE_CONSTANTS, chainId).BALANCER_EXCHANGE_PROXY_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: '',
+                    AGAINST_TOKENS: {},
+                    CUSTOM_TOKENS: {},
+                } as TradeContext_
             default:
-                return null
+                unreachable(tradeProvider)
         }
     }, [chainId, tradeProvider])
 }

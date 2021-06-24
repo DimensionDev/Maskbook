@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { Button, DialogContent, DialogActions, makeStyles, TextField } from '@material-ui/core'
-import type { Wallet } from '@dimensiondev/web3-shared'
+import type { Wallet } from '@masknet/web3-shared'
 import { WalletMessages, WalletRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'

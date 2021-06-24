@@ -2,23 +2,21 @@ import { Link, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { formatBalance, FormattedAddress, isGreaterThan, pow10 } from '@dimensiondev/maskbook-shared'
+import { formatBalance, FormattedAddress, isGreaterThan, pow10 } from '@masknet/shared'
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
-    useAccount,
     useChainId,
-    useConstant,
     useTokenBalance,
     resolveAddressLinkOnExplorer,
     ERC20TokenDetailed,
     EthereumTokenType,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { ITO_CONSTANTS } from '../constants'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
     return isGreaterThan(allowance, `100000000000e${decimals}`) // 100 billion
@@ -43,10 +41,8 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const { tokens } = props
     const { t } = useI18N()
     const classes = useStyles()
-    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const ITO_CONTRACT_ADDRESS = useITO_ContractAddress()
     const recipientAddress = ITO_CONTRACT_ADDRESS
-
-    const account = useAccount()
     const chainId = useChainId()
 
     //#region select token

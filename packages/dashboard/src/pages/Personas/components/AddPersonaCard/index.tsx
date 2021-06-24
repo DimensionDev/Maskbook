@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { makeStyles, Button, TextField } from '@material-ui/core'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { isPersonaNameLengthValid, PERSONA_NAME_MAX_LENGTH } from '../../../../utils/checkLengthExceed'
 

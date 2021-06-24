@@ -15,8 +15,8 @@ import type {
     TransactionChunkRecord,
     TransactionChunkRecordInDatabase,
 } from '../database/types'
-import { ChainId, getChainIdFromName } from '@dimensiondev/web3-shared'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { ChainId, getChainIdFromName } from '@masknet/web3-shared'
+import { formatEthereumAddress } from '@masknet/shared'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatEthereumAddress(address))

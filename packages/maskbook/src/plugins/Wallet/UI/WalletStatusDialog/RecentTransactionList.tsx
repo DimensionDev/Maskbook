@@ -1,13 +1,8 @@
 import { XCircle, Check } from 'react-feather'
 import { makeStyles, List, ListItem, Typography, Link, Button, Box, CircularProgress } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import { formatKeccakHash } from '@dimensiondev/maskbook-shared'
-import {
-    useAccount,
-    useChainId,
-    TransactionStatusType,
-    resolveTransactionLinkOnExplorer,
-} from '@dimensiondev/web3-shared'
+import { formatKeccakHash } from '@masknet/shared'
+import { useAccount, useChainId, TransactionStatusType, resolveTransactionLinkOnExplorer } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
@@ -48,7 +43,7 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
 
     //#region clear the most recent transactions
     const onClear = useSnackbarCallback(
-        async (ev) => {
+        async () => {
             await WalletRPC.clearRecentTransactions(account)
             retry()
         },

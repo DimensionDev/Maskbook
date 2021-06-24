@@ -4,7 +4,7 @@ import type {
     BaseContract,
     NonPayableTransactionObject,
     PayableTransactionObject,
-} from '@dimensiondev/contracts/types/types'
+} from '@masknet/contracts/types/types'
 import { useMulticallContract } from '../contracts/useMulticallContract'
 import { decodeOutputString } from '../utils'
 import { useWeb3 } from './useWeb3'

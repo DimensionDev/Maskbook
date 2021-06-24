@@ -1,5 +1,5 @@
 import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '@dimensiondev/maskbook-shared'
+import { useValueRef } from '@masknet/shared'
 import { useMemo } from 'react'
 import type { ProfileIdentifier } from '../../../database/type'
 import type {

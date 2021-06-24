@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@masknet/theme'
 import { Grid, makeStyles } from '@material-ui/core'
-import { formatBalance, unreachable } from '@dimensiondev/maskbook-shared'
+import { formatBalance, unreachable } from '@masknet/shared'
 import { useI18N } from '../../utils'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import {
@@ -9,7 +9,7 @@ import {
     ERC20TokenDetailed,
     TransactionStateType,
     useERC20TokenApproveCallback,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     button: {

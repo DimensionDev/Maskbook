@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useInterval } from 'react-use'
 import { compact } from 'lodash-es'
-import { useChainId } from '@dimensiondev/web3-shared'
+import { useChainId } from '@masknet/web3-shared'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { useAvailability } from './useAvailability'
 import { useQualification } from './useQualification'
