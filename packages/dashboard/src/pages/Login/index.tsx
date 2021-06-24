@@ -1,10 +1,10 @@
 import { RowLayout } from '../../components/RegisterFrame/RowLayout'
-import { ContentLayout } from '../../components/RegisterFrame/ContentLayout'
+import { ColumnContentLayout } from '../../components/RegisterFrame/ColumnContentLayout'
 
 export default function Login() {
     return (
         <RowLayout>
-            <ContentLayout>form info</ContentLayout>
+            <ColumnContentLayout>form info</ColumnContentLayout>
         </RowLayout>
     )
 }

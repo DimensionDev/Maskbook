@@ -13,6 +13,7 @@ const Header = styled('header')(
     padding-bottom: ${theme.spacing(4)};
 `,
 )
+
 const Title = styled('div')(
     ({ theme }) => `
     text-align: center;
@@ -87,6 +88,7 @@ const SetupActionCard: React.FC<ISetupActionCardProps> = ({ icon, title, subtitl
     )
 }
 
+// todo: dark theme style
 const Setup = () => {
     return (
         <ColumnLayout>

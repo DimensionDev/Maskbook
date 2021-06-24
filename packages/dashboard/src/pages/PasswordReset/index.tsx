@@ -1,12 +1,12 @@
 import { RowLayout } from '../../components/RegisterFrame/RowLayout'
-import { ContentLayout } from '../../components/RegisterFrame/ContentLayout'
+import { ColumnContentLayout } from '../../components/RegisterFrame/ColumnContentLayout'
 
 const PasswordReset = () => {
     return (
         <RowLayout>
-            <ContentLayout>
+            <ColumnContentLayout>
                 <div>Password reset</div>
-            </ContentLayout>
+            </ColumnContentLayout>
         </RowLayout>
     )
 }
