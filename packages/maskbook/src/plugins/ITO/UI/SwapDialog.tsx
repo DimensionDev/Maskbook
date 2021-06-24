@@ -24,7 +24,6 @@ import { useSwapCallback } from '../hooks/useSwapCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { JSON_PayloadInMask } from '../types'
 import { SwapStatus } from './SwapGuide'
-import { EthereumMessages } from '../../Ethereum/messages'
 import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -206,7 +205,7 @@ export function SwapDialog(props: SwapDialogProps) {
     }, [swapCallback, payload.token.address])
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (swapState.type === TransactionStateType.CONFIRMED && !swapState.receipt.status) resetSwapCallback()

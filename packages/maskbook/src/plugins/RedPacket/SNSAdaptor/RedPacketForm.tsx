@@ -26,7 +26,6 @@ import { useCreateCallback } from './hooks/useCreateCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { RedPacketRPC } from '../messages'
@@ -168,7 +167,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
 

@@ -2,7 +2,7 @@ import { Grid, Paper, Typography, makeStyles, useTheme } from '@material-ui/core
 import { useI18N, useRemoteControlledDialog } from '../../utils'
 import { Image } from '../../components/shared/Image'
 import { useAssets } from '../../plugins/Wallet/hooks/useAssets'
-import { EthereumMessages } from '../../plugins/Ethereum/messages'
+import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useValueRef, formatWeiToGwei, formatBalance } from '@masknet/shared'
 import { GasNow, ChainId, useGasPrice, EthereumTokenType, getChainDetailed, useChainId } from '@masknet/web3-shared'
@@ -29,7 +29,7 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
     const chainDetailed = getChainDetailed(chainId)
 
     const { setDialog: setGasPriceDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.gasPriceDialogUpdated,
+        WalletMessages.events.gasPriceDialogUpdated,
         useCallback(
             (ev) => {
                 if (ev.open || !ev.type) return

@@ -7,7 +7,6 @@ import { WalletMessages } from '../../../Wallet/messages'
 import type { DataProvider, TradeProvider, TagType } from '../../types'
 import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../../Transak/messages'
-import { EthereumMessages } from '../../../Ethereum/messages'
 
 export interface TrendingPopperProps {
     children?: (
@@ -32,7 +31,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
 
     //#region select token and provider dialog could be open by trending view
     const onFreezed = useCallback((ev) => setFreezed(ev.open), [])
-    useRemoteControlledDialog(EthereumMessages.events.transactionDialogUpdated, onFreezed)
+    useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, onFreezed)

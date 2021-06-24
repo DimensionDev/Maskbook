@@ -20,7 +20,7 @@ import {
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { EthereumMessages } from '../messages'
+import { WalletMessages } from '../messages'
 import { JSON_RPC_ErrorCode } from '../constants'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -61,7 +61,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
     const [shareLink, setShareLink] = useState('')
     const [summary, setSummary] = useState('')
     const [title, setTitle] = useState(t('plugin_wallet_transaction'))
-    const { open, closeDialog } = useRemoteControlledDialog(EthereumMessages.events.transactionDialogUpdated, (ev) => {
+    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, (ev) => {
         if (ev.open) {
             setState(ev.state)
             setSummary(ev.summary ?? '')

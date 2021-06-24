@@ -18,7 +18,7 @@ import { PoolSettings, useFillCallback } from '../hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
 import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
-import { EthereumMessages } from '../../Ethereum/messages'
+import { WalletMessages } from '../../Wallet/messages'
 
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',
@@ -62,7 +62,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     //#endregion
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
 

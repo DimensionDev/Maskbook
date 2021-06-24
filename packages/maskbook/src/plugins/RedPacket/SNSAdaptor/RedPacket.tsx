@@ -20,7 +20,6 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumMessages } from '../../Ethereum/messages'
 import { WalletMessages } from '../../Wallet/messages'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useClaimCallback } from './hooks/useClaimCallback'
@@ -185,7 +184,7 @@ export function RedPacket(props: RedPacketProps) {
 
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => undefined,
     )
 

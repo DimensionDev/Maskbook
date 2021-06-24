@@ -9,9 +9,9 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { useAssets } from '../../Wallet/hooks/useAssets'
-import { currentGasNowSettings, currentGasPriceSettings } from '../../Wallet/settings'
-import { EthereumMessages } from '../messages'
+import { useAssets } from '../hooks/useAssets'
+import { currentGasNowSettings, currentGasPriceSettings } from '../settings'
+import { WalletMessages } from '../../Wallet/messages'
 
 const useStyles = makeStyles((theme: Theme) => ({
     content: {},
@@ -102,7 +102,7 @@ export function GasNowDialog() {
             ? t('plugin_gas_now_dialog_min', { time: 3 })
             : t('plugin_gas_now_dialog_min', { time: '>10' })
         : ''
-    const { open, closeDialog, setDialog } = useRemoteControlledDialog(EthereumMessages.events.gasPriceDialogUpdated)
+    const { open, closeDialog, setDialog } = useRemoteControlledDialog(WalletMessages.events.gasPriceDialogUpdated)
     const { value: detailedTokens } = useAssets([])
     const [select, setSelect] = useState(gasNow ? 1 : 2)
     const nativeToken = detailedTokens.find((t) => t.token.type === EthereumTokenType.Native)
