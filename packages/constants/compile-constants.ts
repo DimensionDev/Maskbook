@@ -69,7 +69,10 @@ async function main() {
         .reduce(
             (code, data) => {
                 if (data.ext.toLowerCase() !== '.json') return code
-                const name = data.name.split(/[_-\s]+/).map(captialized).join('')
+                const name = data.name
+                    .split(/[_-\s]+/)
+                    .map(captialized)
+                    .join('')
                 const constantName = `${name.toUpperCase()}_CONSTANTS`
                 const vallinaName = `get${captialized(name)}Constants`
                 const hookName = `use${captialized(name)}Constants`

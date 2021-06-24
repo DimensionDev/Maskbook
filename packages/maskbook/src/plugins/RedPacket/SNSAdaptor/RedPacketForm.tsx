@@ -20,11 +20,7 @@ import {
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import {
-    RED_PACKET_MIN_SHARES,
-    RED_PACKET_MAX_SHARES,
-    RED_PACKET_DEFAULT_SHARES,
-} from '../constants'
+import { RED_PACKET_MIN_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_DEFAULT_SHARES } from '../constants'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useCreateCallback } from './hooks/useCreateCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'

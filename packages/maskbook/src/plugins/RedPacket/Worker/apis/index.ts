@@ -7,13 +7,7 @@ import type {
     RedPacketSubgraphInMask,
     RedPacketHistory,
 } from '../../types'
-import {
-    EthereumTokenType,
-    ChainId,
-    getChainName,
-    getChainDetailed,
-    NativeTokenDetailed,
-} from '@masknet/web3-shared'
+import { EthereumTokenType, ChainId, getChainName, getChainDetailed, NativeTokenDetailed } from '@masknet/web3-shared'
 import { getRedPacketConstants } from '@masknet/constants'
 
 const redPacketBasicKeys = [
