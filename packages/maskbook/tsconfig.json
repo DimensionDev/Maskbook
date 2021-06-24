@@ -15,7 +15,8 @@
     { "path": "../theme" },
     { "path": "../icons" },
     { "path": "../plugin-infra" },
-    { "path": "../external-plugin-previewer" }
+    { "path": "../external-plugin-previewer" },
+    { "path": "../constants" }
   ],
   "ts-node": { "transpileOnly": true, "compilerOptions": { "module": "CommonJS" } }
 }

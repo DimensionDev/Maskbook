@@ -1,8 +1,7 @@
-import { useConstant } from '@masknet/web3-shared'
-import { RED_PACKET_CONSTANTS } from '../constants'
+import { useRedPacketConstants } from '@masknet/constants'
 
 export function useRedPacketAddress() {
-    const { HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } = useConstant(RED_PACKET_CONSTANTS)
+    const { HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } = useRedPacketConstants()
 
     return HAPPY_RED_PACKET_ADDRESS_V2 ?? HAPPY_RED_PACKET_ADDRESS_V3
 }
