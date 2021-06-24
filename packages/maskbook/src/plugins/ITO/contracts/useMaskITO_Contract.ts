@@ -5,6 +5,6 @@ import { ITO_CONSTANTS } from '../constants'
 import { useConstant, useContract } from '@masknet/web3-shared'
 
 export function useMaskITO_Contract() {
-    const MASK_ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'MASK_ITO_CONTRACT_ADDRESS')
+    const { MASK_ITO_CONTRACT_ADDRESS } = useConstant(ITO_CONSTANTS)
     return useContract<MaskITO>(MASK_ITO_CONTRACT_ADDRESS, MaskITO_ABI as AbiItem[])
 }

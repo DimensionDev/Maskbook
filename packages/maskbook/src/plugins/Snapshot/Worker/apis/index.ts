@@ -1,5 +1,4 @@
 import ss from '@snapshot-labs/snapshot.js'
-import { ChainId } from '@masknet/web3-shared'
 import type { VoteItemList, Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess } from '../../types'
 import Services from '../../../../extension/service'
 
@@ -7,7 +6,39 @@ export async function fetchProposal(id: string) {
     const response = await fetch(`https://ipfs.io/ipfs/${id}`, {
         method: 'GET',
     })
-    return (await response.json()) as Proposal
+    const network = await fetchProposalNetwork(id)
+    const result = await response.json()
+
+    return { ...result, network } as Proposal
+}
+
+async function fetchProposalNetwork(id: string) {
+    const response = await fetch(`https://hub.snapshot.org/graphql`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            operationName: 'Proposal',
+            query: `query Proposal($id: String!) {
+                proposal(id: $id) {
+                    network
+                }
+            }`,
+            variables: {
+                id,
+            },
+        }),
+    })
+
+    const {
+        data: {
+            proposal: { network },
+        },
+    } = await response.json()
+
+    return network as string
 }
 
 export function fetchAllProposalsOfSpace() {}
@@ -35,10 +66,11 @@ export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Bo
     return profiles ?? []
 }
 
-export async function getScores(message: ProposalMessage, voters: string[], blockNumber: number) {
+export async function getScores(message: ProposalMessage, voters: string[], blockNumber: number, _network: string) {
     const spaceKey = message.space
     const strategies = message.payload.metadata.strategies
-    const network = ChainId.Mainnet.toString()
+    // Sometimes `message.payload.metadata.network` is absent, this is maybe a snapshot api issue.
+    const network = message.payload.metadata.network ?? _network
     const provider = ss.utils.getProvider(network)
     const snapshot = Number(message.payload.snapshot)
     const blockTag = snapshot > blockNumber ? 'latest' : snapshot

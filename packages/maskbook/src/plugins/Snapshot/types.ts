@@ -21,6 +21,7 @@ export interface Proposal {
     status: string
     authorName: string | null
     authorAvatar: string | null
+    network: string
 }
 
 /**
@@ -45,6 +46,7 @@ export interface ProposalPayload {
     name: string
     metadata: {
         strategies: Strategy[]
+        network: string
     }
 }
 

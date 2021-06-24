@@ -78,16 +78,18 @@ export function InformationCard(props: InformationCardProps) {
             <Typography component="div">
                 <InfoField title={t('plugin_snapshot_info_strategy')}>
                     <Box sx={{ display: 'flex' }}>
-                        {message.payload.metadata.strategies.map((strategy, i) => (
-                            <Link
-                                key={i.toString()}
-                                className={classes.link}
-                                target="_blank"
-                                rel="noopener"
-                                href={resolveAddressLinkOnExplorer(chainId, strategy.params.address)}>
-                                <TokenIcon address={strategy.params.address} />
-                            </Link>
-                        ))}
+                        {message.payload.metadata.strategies
+                            .filter((strategy) => Boolean(strategy.params.address))
+                            .map((strategy, i) => (
+                                <Link
+                                    key={i.toString()}
+                                    className={classes.link}
+                                    target="_blank"
+                                    rel="noopener"
+                                    href={resolveAddressLinkOnExplorer(chainId, strategy.params.address)}>
+                                    <TokenIcon address={strategy.params.address} />
+                                </Link>
+                            ))}
                     </Box>
                 </InfoField>
                 <InfoField title={t('plugin_snapshot_info_author')}>

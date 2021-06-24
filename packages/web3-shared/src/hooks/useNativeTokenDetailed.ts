@@ -7,7 +7,7 @@ import { useConstant } from './useConstant'
 
 export function useNativeTokenDetailed() {
     const chainId = useChainId()
-    const NATIVE_TOKEN_ADDRESS = useConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const { NATIVE_TOKEN_ADDRESS } = useConstant(TOKEN_CONSTANTS)
     return useAsyncRetry(async (): Promise<NativeTokenDetailed> => {
         const nativeCurrency = getChainDetailed(chainId)?.nativeCurrency
         return {

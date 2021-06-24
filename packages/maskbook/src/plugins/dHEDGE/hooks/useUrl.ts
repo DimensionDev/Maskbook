@@ -3,11 +3,11 @@ import { useConstant } from '@masknet/web3-shared'
 import { CONSTANT } from '../constants'
 
 export function useBaseUrl() {
-    return useConstant(CONSTANT, 'URL')
+    return useConstant(CONSTANT).URL
 }
 
 export function useApiURL() {
-    return useConstant(CONSTANT, 'API_URL')
+    return useConstant(CONSTANT).API_URL
 }
 
 export function usePoolURL(address: string) {
