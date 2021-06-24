@@ -9,7 +9,6 @@ export const PluginUI: ReadonlySet<PluginConfig> = plugins
 import { Flags } from '../utils/flags'
 import { EthereumPluginDefine } from './Ethereum/define'
 import { WalletPluginDefine } from './Wallet/define'
-import { GitcoinPluginDefine } from './Gitcoin/define'
 import { PollsPluginDefine } from './Polls/define'
 import { StorybookPluginDefine } from './Storybook/define'
 import { FileServicePluginDefine } from './FileService/UI-define'
@@ -26,7 +25,6 @@ sideEffect.then(() => {
     plugins.add(FileServicePluginDefine)
     if (Flags.ito_enabled) plugins.add(ITO_PluginDefine)
     if (Flags.vcent_enabled) plugins.add(VCentPluginDefine)
-    if (Flags.gitcoin_enabled) plugins.add(GitcoinPluginDefine)
     if (Flags.poll_enabled) plugins.add(PollsPluginDefine)
     if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
     if (Flags.transak_enabled) plugins.add(TransakPluginDefine)
