@@ -18,7 +18,7 @@ export function transform<T extends Constants>(constants: T) {
 }
 
 export function hookTransform<T>(getConstants: (chainId: ChainId) => T) {
-    return function useConstants(chainId = ChainId.Mainnet) {
+    return function useConstants(chainId?: ChainId.Mainnet) {
         const current = useChainId()
         const finalChain = chainId ?? current
         return useMemo(() => getConstants(finalChain), [finalChain])
