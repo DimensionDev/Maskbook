@@ -245,7 +245,8 @@ export function ITO(props: ITO_Props) {
     const { value: currentRegion, loading: loadingRegion } = useIPRegion()
     const allowRegions = decodeRegionCode(regions)
     const isRegionRestrict = checkRegionRestrict(allowRegions)
-    const isRegionAllow = !isRegionRestrict || (!loadingRegion && allowRegions.includes(currentRegion!.code))
+    const isRegionAllow =
+        !isRegionRestrict || !currentRegion || (!loadingRegion && allowRegions.includes(currentRegion.code))
 
     //#region if qualified
     const {
