@@ -9,7 +9,7 @@ const files = fs.readdirSync(DATA_PATH)
 
 async function main() {
     // complete constants
-    files.forEach(x => {
+    files.forEach((x) => {
         const filePaths = path.resolve(DATA_PATH, x)
         const data = fs.readFileSync(filePaths).toString()
 
@@ -20,11 +20,16 @@ async function main() {
                 const typeOfValue = Array.isArray(value) ? 'array' : typeof value
                 const defaultOfValue = (() => {
                     switch (typeOfValue) {
-                        case 'string': return ''
-                        case 'number': return 0
-                        case 'boolean': return false
-                        case 'array': return []
-                        default: return null
+                        case 'string':
+                            return ''
+                        case 'number':
+                            return 0
+                        case 'boolean':
+                            return false
+                        case 'array':
+                            return []
+                        default:
+                            return null
                     }
                 })()
                 accumulator[key] = {
@@ -36,10 +41,10 @@ async function main() {
                     BSC: constants[key]['BSC'] ?? defaultOfValue,
                     BSCT: constants[key]['BSCT'] ?? defaultOfValue,
                     Matic: constants[key]['Matic'] ?? defaultOfValue,
-                    Mumbai: constants[key]['Mumbai'] ?? defaultOfValue
+                    Mumbai: constants[key]['Mumbai'] ?? defaultOfValue,
                 }
                 return accumulator
-            }, {} as {[key: string]: any})
+            }, {} as { [key: string]: any })
 
             fs.writeFileSync(filePaths, JSON.stringify(validatedConstants, null, 4))
         } catch (e) {
