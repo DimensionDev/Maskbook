@@ -1,5 +1,5 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react'
-import { Transaction, useAccount, useChainId, useTransactions } from '@dimensiondev/web3-shared'
+import { Transaction, useAccount, useChainId, useTransactions } from '@masknet/web3-shared'
 import { useUpdateEffect } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import {
@@ -13,7 +13,7 @@ import {
     TablePagination,
     TableRow,
 } from '@material-ui/core'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 import { LoadingPlaceholder } from '../LoadingPlacholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { HistoryTableRow } from '../HistoryTableRow'

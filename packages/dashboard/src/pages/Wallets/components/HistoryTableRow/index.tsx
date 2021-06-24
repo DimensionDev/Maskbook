@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import format from 'date-fns/format'
-import type { Transaction } from '@dimensiondev/web3-shared'
+import type { Transaction } from '@masknet/web3-shared'
 import { Box, TableCell, TableRow, Typography, makeStyles, Link } from '@material-ui/core'
 import {
     ChainId,
@@ -8,12 +8,12 @@ import {
     resolveLinkOnExplorer,
     useChainId,
     ZerionTransactionDirection,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { TransactionIcon } from '../TransactionIcon'
-import { LinkOutIcon } from '@dimensiondev/icons'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { LinkOutIcon } from '@masknet/icons'
+import { MaskColorVar } from '@masknet/theme'
 import classNames from 'classnames'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { formatEthereumAddress } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     type: {

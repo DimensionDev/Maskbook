@@ -5,8 +5,8 @@ import {
     SendTransactionIcon,
     ReceiveTransactionIcon,
     SwapTransactionIcon,
-} from '@dimensiondev/icons'
-import { FilterTransactionType, isSameAddress } from '@dimensiondev/web3-shared'
+} from '@masknet/icons'
+import { FilterTransactionType, isSameAddress } from '@masknet/web3-shared'
 import { makeStyles } from '@material-ui/styles'
 import { useRedPacketAddress } from '../../../../hooks/useRedPacketAddress'
 

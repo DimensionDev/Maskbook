@@ -1,1 +1,1 @@
-export { useTransactions } from '@dimensiondev/web3-shared'
+export { useTransactions } from '@masknet/web3-shared'

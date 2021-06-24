@@ -1,7 +1,7 @@
 import { useWeb3Context, useWeb3State } from '../context'
 import { useAsyncRetry } from 'react-use'
 import { PortfolioProvider } from '../types'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@masknet/shared'
 
 export function useTransactions(address: string, page?: number, size?: number) {
     const { getTransactionList } = useWeb3Context()

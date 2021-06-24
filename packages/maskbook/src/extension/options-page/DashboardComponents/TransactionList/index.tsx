@@ -13,10 +13,8 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core'
-import { useAccount, useChainId } from '@masknet/web3-shared'
-import { useTransactions } from '../../../../plugins/Wallet/hooks/useTransactions'
+import { useAccount, useChainId, useTransactions, FilterTransactionType } from '@masknet/web3-shared'
 import { Row } from './Row'
-import { FilterTransactionType } from '../../../../plugins/Wallet/types'
 
 const useStyles = makeStyles(() => ({
     fixed: { height: 'calc(100% - 52px)' },

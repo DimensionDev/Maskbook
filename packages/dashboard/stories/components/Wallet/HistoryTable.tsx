@@ -1,7 +1,7 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { HistoryTableUI as C } from '../../../src/pages/Wallets/components/HistoryTable'
 import { action } from '@storybook/addon-actions'
-import { ZerionTransactionDirection } from '@dimensiondev/web3-shared'
+import { ZerionTransactionDirection } from '@masknet/web3-shared'
 
 const { meta, of } = story(C)
 
