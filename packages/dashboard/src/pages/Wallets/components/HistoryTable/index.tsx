@@ -61,7 +61,7 @@ export const HistoryTable = memo(() => {
         value = { transactions: [], hasNextPage: false },
         loading: transactionLoading,
         error: transactionError,
-    } = useTransactions(account, page, 50)
+    } = useTransactions('0x0d09dc9a840b1b4ea25194998fd90bb50fc2008a', page, 50)
 
     const { transactions = [], hasNextPage } = value
 
