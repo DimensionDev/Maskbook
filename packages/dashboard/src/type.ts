@@ -4,6 +4,7 @@ export enum RoutePaths {
     Register = '/register',
     SignUp = '/sign-up',
     Login = '/login',
+    PrivacyPolicy = '/privacy-policy',
     PasswordReset = '/password-reset',
     Personas = '/personas',
     Wallets = '/wallets',

@@ -8,6 +8,7 @@ const Wallets = lazy(() => import('./Wallets'))
 const Setup = lazy(() => import('./Setup'))
 const SignUp = lazy(() => import('./SignUp'))
 const Login = lazy(() => import('./Login'))
+const PrivacyPolicy = lazy(() => import('./PrivacyPolicy'))
 const PasswordReset = lazy(() => import('./PasswordReset'))
 const InputAccountEmail = lazy(() => import('./PasswordReset/InputAccountEmail'))
 const VerificationCodeSending = lazy(() => import('./PasswordReset/VerificationCodeSending'))
@@ -26,6 +27,7 @@ export function Pages() {
                 <Route path={RoutePaths.Setup} element={<Setup />} />
                 <Route path={RoutePaths.SignUp} element={<SignUp />} />
                 <Route path={RoutePaths.Login} element={<Login />} />
+                <Route path={RoutePaths.PrivacyPolicy} element={<PrivacyPolicy />} />
                 <Route path={RoutePaths.PasswordReset} element={<PasswordReset />}>
                     <Route path={ResetPasswordRoutePaths.InputAccountEmail} element={<InputAccountEmail />} />
                     <Route
