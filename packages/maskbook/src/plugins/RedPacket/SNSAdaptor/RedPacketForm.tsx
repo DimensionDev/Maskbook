@@ -10,7 +10,6 @@ import {
     NetworkType,
     FungibleTokenDetailed,
     useAccount,
-    useConstant,
     useChainId,
     useNetworkType,
     TransactionStateType,
@@ -24,7 +23,6 @@ import { useCurrentIdentity } from '../../../components/DataSource/useActivatedU
 import {
     RED_PACKET_MIN_SHARES,
     RED_PACKET_MAX_SHARES,
-    RED_PACKET_CONSTANTS,
     RED_PACKET_DEFAULT_SHARES,
 } from '../constants'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -36,6 +34,7 @@ import { EthereumMessages } from '../../Ethereum/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { RedPacketRPC } from '../messages'
+import { useRedPacketConstants } from '@masknet/constants'
 
 const useStyles = makeStyles((theme) => ({
     line: {
@@ -79,7 +78,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const account = useAccount()
     const chainId = useChainId()
     const networkType = useNetworkType()
-    const { HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } = useConstant(RED_PACKET_CONSTANTS)
+    const { HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } = useRedPacketConstants()
     const contract_address =
         networkType === NetworkType.Ethereum ? HAPPY_RED_PACKET_ADDRESS_V2 : HAPPY_RED_PACKET_ADDRESS_V3
     const contract_version = networkType === NetworkType.Ethereum ? 2 : 3
