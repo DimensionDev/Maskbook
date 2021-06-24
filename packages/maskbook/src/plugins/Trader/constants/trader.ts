@@ -2,6 +2,9 @@ import BigNumber from 'bignumber.js'
 import { ChainId, ERC20TokenDetailed, createERC20Tokens, getChainDetailed } from '@masknet/web3-shared'
 import { ONE } from '@masknet/shared'
 
+/**
+ * @deprecated Use @masknet/constants
+ */
 export const TRADE_CONSTANTS = {
     UNISWAP_ROUTER_ADDRESS: {
         [ChainId.Mainnet]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',

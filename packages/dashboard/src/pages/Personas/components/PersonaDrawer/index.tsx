@@ -106,8 +106,7 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                 )}
                 <Box className={classes.buttons}>
                     <Button onClick={() => setShowAddPersonaCard(true)}>{t.personas_add_persona()}</Button>
-                    {/* TODO: replace className to color prop */}
-                    <Button className={classes.backup}>{t.personas_back_up()}</Button>
+                    <Button color="warning">{t.personas_back_up()}</Button>
                 </Box>
             </Drawer>
         )

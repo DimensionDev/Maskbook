@@ -66,7 +66,7 @@ export function DonateDialog(props: DonateDialogProps) {
     const account = useAccount()
     const chainId = useChainId()
     const nativeTokenDetailed = useNativeTokenDetailed()
-    const BULK_CHECKOUT_ADDRESS = useConstant(GITCOIN_CONSTANT, 'BULK_CHECKOUT_ADDRESS')
+    const { BULK_CHECKOUT_ADDRESS } = useConstant(GITCOIN_CONSTANT)
 
     //#region remote controlled dialog
     const { open, closeDialog: closeDonationDialog } = useRemoteControlledDialog(

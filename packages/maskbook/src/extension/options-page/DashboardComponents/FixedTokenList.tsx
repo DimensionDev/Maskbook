@@ -46,7 +46,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     } = props
 
     //#region search tokens
-    const ERC20_TOKEN_LISTS = useConstant(CONSTANTS, 'ERC20_TOKEN_LISTS')
+    const { ERC20_TOKEN_LISTS } = useConstant(CONSTANTS)
     const [address, setAddress] = useState('')
     const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(
         ERC20_TOKEN_LISTS,
@@ -55,7 +55,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     //#endregion
 
     //#region mask token
-    const MASK_ADDRESS = useConstant(TOKEN_CONSTANTS, 'MASK_ADDRESS')
+    const { MASK_ADDRESS } = useConstant(TOKEN_CONSTANTS)
     //#endregion
 
     //#region UI helpers

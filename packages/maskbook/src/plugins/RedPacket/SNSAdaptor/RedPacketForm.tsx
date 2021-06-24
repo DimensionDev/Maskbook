@@ -10,7 +10,6 @@ import {
     NetworkType,
     FungibleTokenDetailed,
     useAccount,
-    useConstant,
     useChainId,
     useNetworkType,
     TransactionStateType,
@@ -21,12 +20,7 @@ import {
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import {
-    RED_PACKET_MIN_SHARES,
-    RED_PACKET_MAX_SHARES,
-    RED_PACKET_CONSTANTS,
-    RED_PACKET_DEFAULT_SHARES,
-} from '../constants'
+import { RED_PACKET_MIN_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_DEFAULT_SHARES } from '../constants'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useCreateCallback } from './hooks/useCreateCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -35,6 +29,7 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { RedPacketRPC } from '../messages'
+import { useRedPacketConstants } from '@masknet/constants'
 
 const useStyles = makeStyles((theme) => ({
     line: {
@@ -78,10 +73,9 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const account = useAccount()
     const chainId = useChainId()
     const networkType = useNetworkType()
-    const contract_address = useConstant(
-        RED_PACKET_CONSTANTS,
-        networkType === NetworkType.Ethereum ? 'HAPPY_RED_PACKET_ADDRESS_V2' : 'HAPPY_RED_PACKET_ADDRESS_V3',
-    )
+    const { HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } = useRedPacketConstants()
+    const contract_address =
+        networkType === NetworkType.Ethereum ? HAPPY_RED_PACKET_ADDRESS_V2 : HAPPY_RED_PACKET_ADDRESS_V3
     const contract_version = networkType === NetworkType.Ethereum ? 2 : 3
 
     //#region select token

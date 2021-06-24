@@ -18,6 +18,10 @@
         {
             "fileMatch": ["/packages/maskbook/src/_locales/*/messages.json"],
             "url": "/.vscode/schema/locale.json"
+        },
+        {
+            "fileMatch": ["/packages/constants/src/*-constants.json"],
+            "url": "/.vscode/schema/constants.json"
         }
     ],
     "cSpell.words": ["Reificated"],

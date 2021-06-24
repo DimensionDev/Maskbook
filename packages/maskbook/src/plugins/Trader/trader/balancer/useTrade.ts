@@ -12,9 +12,8 @@ export function useTrade(
     outputToken?: FungibleTokenDetailed,
 ) {
     const blockNumber = useBlockNumber()
-    const WETH_ADDRESS = useConstant(TOKEN_CONSTANTS, 'WETH_ADDRESS')
-    const NATIVE_TOKEN_ADDRESS = useConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
-    const BALANCER_ETH_ADDRESS = useConstant(TRADE_CONSTANTS, 'BALANCER_ETH_ADDRESS')
+    const { WETH_ADDRESS, NATIVE_TOKEN_ADDRESS } = useConstant(TOKEN_CONSTANTS)
+    const { BALANCER_ETH_ADDRESS } = useConstant(TRADE_CONSTANTS)
 
     return useAsyncRetry(async () => {
         if (!inputToken || !outputToken) return null

@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./dist/",
+    "resolveJsonModule": true
+  },
+  "include": ["./src/**/*.ts", "./data/**/*.json"],
+  "references": [{ "path": "../web3-shared/" }],
+  "ts-node": {
+    "compilerOptions": { "module": "CommonJS" }
+  }
+}

@@ -97,6 +97,7 @@ function config(opts: {
                 // By aliasing them to the original position, we can speed up the compile because there is no need to wait tsc build them to the dist folder.
                 '@masknet/dashboard': require.resolve('../dashboard/src/entry.tsx'),
                 '@masknet/shared': require.resolve('../shared/src/index.ts'),
+                '@masknet/constants': require.resolve('../constants/src/index.ts'),
                 '@masknet/theme/constants': require.resolve('../theme/src/constants.ts'),
                 '@masknet/theme': require.resolve('../theme/src/theme.ts'),
                 '@masknet/icons': require.resolve('../icons/index.ts'),

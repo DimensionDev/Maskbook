@@ -1,8 +1,8 @@
 {
   "name": "@masknet/plugin-example",
   "private": true,
-  "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@masknet/plugin-infra": "workspace:*"
   }

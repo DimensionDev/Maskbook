@@ -15,7 +15,7 @@ export function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
-    const NATIVE_TOKEN_ADDRESS = useConstant(TOKEN_CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const { NATIVE_TOKEN_ADDRESS } = useConstant(TOKEN_CONSTANTS)
     const blockNumber = useBlockNumber()
 
     const slippage = useSlippageTolerance()
