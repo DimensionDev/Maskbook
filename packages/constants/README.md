@@ -20,6 +20,6 @@ const CONSTANTS = {
 // use constant in the JS runtime
 const ADDRESS = constantOfChain(CONSTANTS, ChainId.Mainnet)
 
-// use constant in React hooks
+// use constant in React **hooks**
 const { ADDRESS } = useConstant(CONSTANTS)
 ```

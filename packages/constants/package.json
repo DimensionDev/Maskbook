@@ -2,7 +2,7 @@
   "name": "@masknet/constants",
   "private": true,
   "scripts": {
-    "test": "ts-node validate-constants.ts"
+    "start": "ts-node compile-constants.ts"
   },
   "dependencies": {
     "@masknet/web3-shared": "workspace:*"
