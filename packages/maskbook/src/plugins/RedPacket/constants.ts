@@ -10,6 +10,9 @@ export const RedPacketMetaKey = 'com.maskbook.red_packet:1'
  */
 export const RedPacketPluginID = 'com.maskbook.red_packet'
 
+/**
+ * @deprecated Use @masknet/constants
+ */
 export const RED_PACKET_CONSTANTS = {
     HAPPY_RED_PACKET_ADDRESS_V1: {
         [ChainId.Mainnet]: '0x26760783c12181efa3c435aee4ae686c53bdddbb',

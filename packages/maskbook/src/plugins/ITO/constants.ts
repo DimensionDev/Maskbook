@@ -5,6 +5,9 @@ export const ITO_PluginID = 'com.maskbook.ito'
 
 export const ITO_EXCHANGE_RATION_MAX = 6
 
+/**
+ * @deprecated Use @masknet/constants
+ */
 export const ITO_CONSTANTS = {
     ITO_CONTRACT_ADDRESS: {
         [ChainId.Mainnet]: '0xf110fec3075d7531141b6bf16b11604cb028a17b',

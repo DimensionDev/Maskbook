@@ -7,6 +7,8 @@ const INDEX_PAYH = path.join(__dirname, 'src', 'index.ts')
 
 const files = fs.readdirSync(DATA_PATH)
 
+const captialized = (x: string) => `${x.charAt(0).toUpperCase()}${x.substr(1)}`
+
 async function main() {
     // complete constants
     files.forEach((x) => {
@@ -67,9 +69,10 @@ async function main() {
         .reduce(
             (code, data) => {
                 if (data.ext.toLowerCase() !== '.json') return code
-                const constantName = `${data.name.toUpperCase()}_CONSTANTS`
-                const vallinaName = `get${data.name.charAt(0).toUpperCase()}${data.name.substr(1)}Constants`
-                const hookName = `use${data.name.charAt(0).toUpperCase()}${data.name.substr(1)}Constants`
+                const name = data.name.split(/[_-\s]+/).map(captialized).join('')
+                const constantName = `${name.toUpperCase()}_CONSTANTS`
+                const vallinaName = `get${captialized(name)}Constants`
+                const hookName = `use${captialized(name)}Constants`
                 code.push(`import ${constantName} from '../data/${data.name}${data.ext}'`)
                 code.push(`export const ${vallinaName} = transform(${constantName})`)
                 code.push(`export const ${hookName} = hookTransform(${vallinaName})`)
