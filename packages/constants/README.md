@@ -3,23 +3,9 @@
 ## Usage
 
 ```typescript
-const CONSTANTS = {
-  ADDRESS: {
-    [ChainId.Mainnet]: '0x0000000000000000000000000000000000000000',
-    [ChainId.Ropsten]: '0x0000000000000000000000000000000000000000',
-    [ChainId.Rinkeby]: '0x0000000000000000000000000000000000000000',
-    [ChainId.Kovan]: '0x0000000000000000000000000000000000000000',
-    [ChainId.Gorli]: '0x0000000000000000000000000000000000000000',
-    [ChainId.BSC]: '0x0000000000000000000000000000000000000000',
-    [ChainId.BSCT]: '0x0000000000000000000000000000000000000000',
-    [ChainId.Matic]: '0x0000000000000000000000000000000000000000',
-    [ChainId.Mumbai]: '0x0000000000000000000000000000000000000000',
-  },
-}
-
 // use constant in the JS runtime
-const ADDRESS = constantOfChain(CONSTANTS, ChainId.Mainnet)
+const { ETHER_ADDRESS } = getEthereumConstants(ChainId.Mainnet)
 
 // use constant in React **hooks**
-const { ADDRESS } = useConstant(CONSTANTS)
+const { ETHER_ADDRESS } = useEthereumConstants(ChainId.Mainnet)
 ```
