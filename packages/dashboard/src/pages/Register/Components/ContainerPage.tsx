@@ -2,7 +2,7 @@ import { InfoIcon, MaskTransparentLogo } from '@dimensiondev/icons'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { Link, makeStyles, Typography } from '@material-ui/core'
 import { memo } from 'react'
-import { useDashboardI18N } from '../../../../locales/i18n_generated'
+import { useDashboardI18N } from '../../../locales/i18n_generated'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -10,11 +10,15 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
     },
     leftContainer: {
-        width: 500,
+        maxWidth: 500,
+        width: '100%',
         backgroundColor: MaskColorVar.blue,
         paddingTop: theme.spacing(4),
-        paddingLeft: theme.spacing(2),
-        fontSize: 72,
+        paddingLeft: theme.spacing(4),
+        '& > svg': {
+            width: 128,
+            height: 'auto',
+        },
     },
     rightContainer: {
         width: '100%',

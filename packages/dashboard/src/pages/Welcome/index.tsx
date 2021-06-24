@@ -1,5 +1,5 @@
-import { ConnectSocialNetwork } from '../Register/Components/CreatePersona/ConnectSocialNetwork'
+import { CreatePersona } from '../Register/CreatePersona'
 
 export default function Welcome() {
-    return <ConnectSocialNetwork />
+    return <CreatePersona />
 }

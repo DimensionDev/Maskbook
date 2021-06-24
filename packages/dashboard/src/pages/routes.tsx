@@ -12,9 +12,14 @@ export enum RoutePaths {
     WalletsHistory = '/wallets/history',
     Settings = '/settings',
     Plugins = '/plugins',
+
+    CreatePersona = '/create-persona',
+    ConnectNetwork = '/connect-network',
 }
 const Wallets = lazy(() => import('./Wallets'))
 const Welcome = lazy(() => import('./Welcome'))
+const CreatePersona = lazy(() => import('./Register/CreatePersona'))
+const ConnectNetwork = lazy(() => import('./Register/ConnectNetwork'))
 const Personas = lazy(() => import('./Personas'))
 const Settings = lazy(() => import('./Settings'))
 const Plugins = lazy(() => import('./Plugins'))

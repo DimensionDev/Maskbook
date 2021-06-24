@@ -1,16 +1,16 @@
 import { memo } from 'react'
-import { StartupActionList, StartupActionListItem } from '../../../../components/StartupActionList'
-import { useDashboardI18N } from '../../../../locales/i18n_generated'
 import { FacebookIcon, TwitterIcon, InstagramIcon } from '@dimensiondev/icons'
-import { ContainerPage } from './ContainerPage'
 import { makeStyles, Typography } from '@material-ui/core'
+import { useDashboardI18N } from '../../../locales'
 import {
     SocialNetwork,
     useCurrentPersonaIdentifier,
     useDefinedSocialNetworkUIs,
     useOwnedPersonas,
-} from '../../../Personas/api'
-import { useConnectSocialNetwork } from '../../../Personas/hooks/useConnectSocialNetwork'
+} from '../../Personas/api'
+import { useConnectSocialNetwork } from '../../Personas/hooks/useConnectSocialNetwork'
+import { ContainerPage } from '../Components/ContainerPage'
+import { StartupActionList, StartupActionListItem } from '../../../components/StartupActionList'
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -58,3 +58,5 @@ export const ConnectSocialNetwork = memo(() => {
         </ContainerPage>
     )
 })
+
+export default ConnectSocialNetwork

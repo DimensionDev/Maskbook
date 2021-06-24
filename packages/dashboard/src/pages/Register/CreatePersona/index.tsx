@@ -1,9 +1,10 @@
+import { delay } from '@dimensiondev/maskbook-shared'
 import { Button, makeStyles, TextField, Typography } from '@material-ui/core'
 import { memo, useState } from 'react'
-import { Services } from '../../../../API'
-import { useDashboardI18N } from '../../../../locales/i18n_generated'
-import { isPersonaNameLengthValid, PERSONA_NAME_MAX_LENGTH } from '../../../../utils/checkLengthExceed'
-import { ContainerPage } from './ContainerPage'
+import { Messages, Services } from '../../../API'
+import { useDashboardI18N } from '../../../locales/i18n_generated'
+import { isPersonaNameLengthValid, PERSONA_NAME_MAX_LENGTH } from '../../../utils/checkLengthExceed'
+import { ContainerPage } from '../Components/ContainerPage'
 
 const useStyles = makeStyles((theme) => ({
     create: {
@@ -24,7 +25,9 @@ export const CreatePersona = memo(() => {
     const [name, setName] = useState('')
 
     const createPersonaAndNext = async () => {
-        const persona = await Services.Identity.createPersonaByMnemonic(name, '')
+        const identifier = await Services.Identity.createPersonaByMnemonic(name, '')
+        await delay(300)
+        Messages.events.personaChanged.sendToAll([{ of: identifier, owned: true, reason: 'new' }])
     }
     return (
         <ContainerPage>
@@ -76,3 +79,5 @@ export const CreatePersona = memo(() => {
         </ContainerPage>
     )
 })
+
+export default CreatePersona
