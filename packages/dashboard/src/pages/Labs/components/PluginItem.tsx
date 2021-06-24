@@ -1,3 +1,4 @@
+import { SettingsIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import {
     Avatar,
@@ -26,11 +27,17 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
+        paddingTop: 0,
     },
     avatar: {
         background: MaskColorVar.primaryBackground,
         width: '44px',
         height: '44px',
+    },
+    settings: {
+        alignSelf: 'flex-start',
+        paddingTop: theme.spacing(1),
+        cursor: 'pointer',
     },
     actions: {
         display: 'flex',
@@ -57,6 +64,7 @@ export interface PluginItemProps {
     onTwitter?: (name: string) => void
     onFacebook?: (name: string) => void
     onExplore?: (name: string) => void
+    onSetting?: (name: string) => void
 }
 
 export function PluginItemPlaceHodler() {
@@ -65,7 +73,7 @@ export function PluginItemPlaceHodler() {
 }
 
 export default function PluginItem(props: PluginItemProps) {
-    const { name, title, desc, icon, onSwitch, onTwitter, onFacebook, onExplore } = props
+    const { name, title, desc, icon, onSwitch, onTwitter, onFacebook, onExplore, onSetting } = props
     const classes = useStyles()
     const [checked, setChecked] = useState(true)
 
@@ -80,6 +88,11 @@ export default function PluginItem(props: PluginItemProps) {
                     <Avatar className={classes.avatar}>{icon}</Avatar>
                 </ListItemAvatar>
                 <TextWrapper primary={title} secondary={desc}></TextWrapper>
+                {onSetting ? (
+                    <Box className={classes.settings}>
+                        <SettingsIcon onClick={() => onSetting(name)} />
+                    </Box>
+                ) : null}
             </ListItem>
             <Box className={classes.actions}>
                 <Box sx={{ flex: 1 }}>

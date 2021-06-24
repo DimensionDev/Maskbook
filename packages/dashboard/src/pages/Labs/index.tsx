@@ -1,8 +1,11 @@
+import { useState } from 'react'
 import { makeStyles, Box } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
 import PluginItem, { PluginItemPlaceHodler } from './components/PluginItem'
 import { pluginIcons } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
+import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
+import SwapSettingDialog from './components/SwapSettingDialog'
 
 const {
     FileServiceIcon,
@@ -34,6 +37,9 @@ export default function Plugins() {
     const t = useDashboardI18N()
     const classes = useStyles()
 
+    const [openTrendSetting, setOpenTrendSetting] = useState(false)
+    const [openSwapSetting, setOpenSwapSetting] = useState(false)
+
     function onSwitch(name: string, checked: boolean) {
         // TODO: sync setting
         console.log(`switch ${name}`, checked)
@@ -49,6 +55,14 @@ export default function Plugins() {
 
     function onExplore(name: string) {
         console.log('explore', name)
+    }
+
+    function onSetting(name: string) {
+        if (name === 'marketTrend') {
+            setOpenTrendSetting(true)
+        } else if (name === 'swap') {
+            setOpenSwapSetting(true)
+        }
     }
 
     return (
@@ -87,6 +101,7 @@ export default function Plugins() {
                         desc={t.labs_swap_desc()}
                         onSwitch={onSwitch}
                         onExplore={onExplore}
+                        onSetting={onSetting}
                         icon={<SwapIcon />}></PluginItem>
                     <PluginItem
                         name="transak"
@@ -109,6 +124,7 @@ export default function Plugins() {
                         title={t.labs_market_trend()}
                         desc={t.labs_market_trend_desc()}
                         icon={<MarketTrendIcon />}
+                        onSetting={onSetting}
                         onSwitch={onSwitch}></PluginItem>
                     <PluginItem
                         name="collectibles"
@@ -138,6 +154,9 @@ export default function Plugins() {
                         onSwitch={onSwitch}></PluginItem>
                 </Box>
             </Box>
+
+            <SwapSettingDialog open={openSwapSetting} onClose={() => setOpenSwapSetting(false)} />
+            <MarketTrendSettingDialog open={openTrendSetting} onClose={() => setOpenTrendSetting(false)} />
         </PageFrame>
     )
 }

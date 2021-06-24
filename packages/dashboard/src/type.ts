@@ -10,3 +10,9 @@ export enum RoutePaths {
     Settings = '/settings',
     Labs = '/labs',
 }
+
+export enum MarketTrendProvider {
+    COIN_GECKO,
+    COIN_MARKET_CAP,
+    UNISWAP_INFO,
+}
