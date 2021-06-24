@@ -6,7 +6,6 @@ import { FormattedAddress } from '@masknet/shared'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
-    useConstantNext,
     ERC20TokenDetailed,
     EthereumTokenType,
     formatBalance,
@@ -46,7 +45,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const ITO_CONTRACT_ADDRESS = useConstantNext(ITO_CONSTANTS).ITO2_CONTRACT_ADDRESS
+    const { ITO2_CONTRACT_ADDRESS } = useConstant(ITO_CONSTANTS)
     const chainId = useChainId()
 
     //#region select token
@@ -108,15 +107,15 @@ export function UnlockDialog(props: UnlockDialogProps) {
                 <Link
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={resolveAddressLinkOnExplorer(chainId, ITO_CONTRACT_ADDRESS)}>
-                    <FormattedAddress address={ITO_CONTRACT_ADDRESS} size={4} />
+                    href={resolveAddressLinkOnExplorer(chainId, ITO2_CONTRACT_ADDRESS)}>
+                    <FormattedAddress address={ITO2_CONTRACT_ADDRESS} size={4} />
                 </Link>{' '}
                 to use your {token.symbol ?? 'Token'} tokens when a new ITO round starts later.
             </Typography>
             <EthereumWalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
                     amount={amount.toFixed()}
-                    spender={ITO_CONTRACT_ADDRESS}
+                    spender={ITO2_CONTRACT_ADDRESS}
                     token={token}>
                     {(allowance: string) => (
                         <ActionButton className={classes.button} size="large" fullWidth disabled variant="contained">
