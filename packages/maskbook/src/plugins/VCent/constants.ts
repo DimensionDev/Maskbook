@@ -7,6 +7,6 @@ export const VALUABLES_VCENT_URL = 'https://v.cent.co/tweet/'
 
 export const PLUGIN_META_KEY = 'com.maskbook.tweet:1'
 export const PLUGIN_ID = 'com.maskbook.tweet'
-export const PLUGIN_NAME = 'Gitcoin'
+export const PLUGIN_NAME = 'vCent'
 export const PLUGIN_ICON = '🔓'
 export const PLUGIN_DESCRIPTION = 'A Plugin for https://v.cent.co/'
