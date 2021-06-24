@@ -79,5 +79,7 @@
     "settings_email_hosting_service_title": "Email Hosting Service",
     "settings_email_hosting_service_desc": "Unauthorized",
     "settings_log_out_title": "Log Out",
-    "settings_log_out_desc": "Please make sure your data is backed up and log out"
+    "settings_log_out_desc": "Please make sure your data is backed up and log out",
+
+    "register_login_connect": "Connect"
 }
