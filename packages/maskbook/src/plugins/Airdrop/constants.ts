@@ -6,6 +6,9 @@ export const PLUGIN_NAME = 'Airdrop'
 export const PLUGIN_ICON = '🪂'
 export const PLUGIN_DESCRIPTION = ''
 
+/**
+ * @deprecated Use @masknet/constants
+ */
 export const AIRDROP_CONSTANTS = {
     AIRDROP_CONTRACT_ADDRESS: {
         // token: 0x5B966f3a32Db9C180843bCb40267A66b73E4f022
