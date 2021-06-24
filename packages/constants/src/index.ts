@@ -18,7 +18,7 @@ import ETHEREUM_CONSTANTS from '../data/ethereum.json'
 export const getEthereumConstants = transform(ETHEREUM_CONSTANTS)
 export const useEthereumConstants = hookTransform(getEthereumConstants)
 
-import REDPACKET_CONSTANTS from '../data/redPacket.json'
+import REDPACKET_CONSTANTS from '../data/red-packet.json'
 export const getRedPacketConstants = transform(REDPACKET_CONSTANTS)
 export const useRedPacketConstants = hookTransform(getRedPacketConstants)
 
