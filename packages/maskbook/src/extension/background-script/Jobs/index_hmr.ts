@@ -3,23 +3,21 @@ import * as IsolatedDashboardBridge from './IsolatedDashboardBridge'
 import * as InjectContentScripts from './InjectContentScripts'
 import * as NewInstalled from './NewInstalled'
 import * as PluginWorker from './StartPluginWorker'
+import * as SettingListeners from './SettingListeners'
 
-type CancelableJob = { default: () => () => void }
+type CancelableJob = { default: (signal: AbortSignal) => void }
 const CancelableJobs: CancelableJob[] = [
     InjectContentScripts,
     NewInstalled,
     AutoShareToFriends,
     IsolatedDashboardBridge,
     PluginWorker,
+    SettingListeners,
 ]
 
+const abort = new AbortController()
+CancelableJobs.map((x) => x.default(abort.signal))
 if (import.meta.webpackHot) {
-    const cleanup = CancelableJobs.map(startJob)
-    import.meta.webpackHot.dispose(() => cleanup.forEach((x) => x()))
+    import.meta.webpackHot.dispose(() => abort.abort())
     import.meta.webpackHot.accept()
-} else {
-    CancelableJobs.forEach(startJob)
-}
-function startJob(x: CancelableJob) {
-    return x.default()
 }

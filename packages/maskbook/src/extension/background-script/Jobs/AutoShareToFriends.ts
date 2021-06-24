@@ -35,7 +35,7 @@ async function appendShare(
     }
 }
 
-export default function () {
+export default function (signal: AbortSignal) {
     const undo1 = MaskMessage.events.profileJoinedGroup.on(async (data) => {
         if (currentImportingBackup.value) return
         if (data.group.isReal) return
@@ -84,8 +84,6 @@ export default function () {
             )
         }
     })
-    return () => {
-        undo1()
-        undo2()
-    }
+    signal.addEventListener('abort', undo1)
+    signal.addEventListener('abort', undo2)
 }
