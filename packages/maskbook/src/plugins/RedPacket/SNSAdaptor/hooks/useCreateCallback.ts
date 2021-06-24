@@ -13,8 +13,8 @@ import {
     useTransactionState,
     useNonce,
     useGasPrice,
-    useConstantNext,
     TOKEN_CONSTANTS,
+    useConstant,
 } from '@masknet/web3-shared'
 import { isLessThan } from '@masknet/shared'
 import { useI18N } from '../../../../utils/i18n-next-ui'
@@ -42,7 +42,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
-    const NATIVE_TOKEN_ADDRESS = useConstantNext(TOKEN_CONSTANTS).NATIVE_TOKEN_ADDRESS
+    const { NATIVE_TOKEN_ADDRESS } = useConstant(TOKEN_CONSTANTS)
 
     const createCallback = useCallback(async () => {
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
