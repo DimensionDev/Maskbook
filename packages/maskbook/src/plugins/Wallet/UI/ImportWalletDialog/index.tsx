@@ -30,10 +30,6 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(3, 5),
     },
     actionButton: {},
-    headCell: {
-        borderBottom: 'none',
-        backgroundColor: '#F3F3F4',
-    },
     bodyCell: {
         borderBottom: 'none',
         padding: '0 10px',
@@ -77,19 +73,17 @@ export const ImportWalletUI: FC<ImportWalletUIProps> = ({
     )
     return (
         <Box>
-            <Box>
-                <TextField
-                    className={classes.walletName}
-                    inputProps={{
-                        maxLength: 12,
-                    }}
-                    label={t('wallet_name')}
-                    placeholder={t('plugin_wallet_name_placeholder')}
-                    value={name}
-                    onChange={(e) => onNameChange(e.target.value)}
-                />
-                <AbstractTab tabs={tabs} state={tabState} />
-            </Box>
+            <TextField
+                className={classes.walletName}
+                inputProps={{
+                    maxLength: 12,
+                }}
+                label={t('wallet_name')}
+                placeholder={t('plugin_wallet_name_placeholder')}
+                value={name}
+                onChange={(e) => onNameChange(e.target.value)}
+            />
+            <AbstractTab tabs={tabs} state={tabState} />
         </Box>
     )
 }

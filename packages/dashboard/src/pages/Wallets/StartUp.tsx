@@ -40,19 +40,11 @@ export function StartUp() {
                         />
                     </ChooseOptions>
                 </Route>
-                <Route path={CreateWalletRoutes.Choose}>
-                    <ChooseOptions>
-                        <WalletCreationChooseUI onImportClick={() => {}} onCreateClick={() => {}} />
-                    </ChooseOptions>
-                </Route>
                 <Route path={CreateWalletRoutes.Create}>
                     <CreateWallet />
                 </Route>
                 <Route path={CreateWalletRoutes.Import}>
                     <ImportWallet />
-                </Route>
-                <Route>
-                    <div>nothing</div>
                 </Route>
             </Routes>
         </Container>

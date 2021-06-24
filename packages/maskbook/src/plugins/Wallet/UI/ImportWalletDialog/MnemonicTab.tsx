@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
         flexFlow: 'row wrap',
         alignContent: 'flex-start',
         justifyContent: 'space-evenly',
+        borderRadius: 0,
     },
     cardButton: {
         padding: theme.spacing(1, 2, 3),

@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
         padding: 20,
         border: `1px solid ${theme.palette.divider}`,
         borderRadius: 12,
+        backgroundColor: theme.palette.background.paper,
         '& + &': {
             marginTop: 20,
         },
@@ -25,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
     },
     button: {
         width: 90,
-        flexShink: 0,
+        flexShirnk: 0,
+        borderRadius: 30,
     },
     optionName: {
         fontSize: 16,
