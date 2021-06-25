@@ -1,7 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { FileServicePluginID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
-    ID: 'com.maskbook.fileservice',
+    ID: FileServicePluginID,
     icon: '📃',
     name: { fallback: 'File Service' },
     description: { fallback: 'Upload and share files on top of Arweave network. Store data, permanently.' },
