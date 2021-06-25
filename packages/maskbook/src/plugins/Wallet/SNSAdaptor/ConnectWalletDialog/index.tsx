@@ -61,6 +61,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             const chainDetailedCAIP = getChainDetailedCAIP(getChainIdFromNetworkType(networkType))
             if (!chainDetailedCAIP) throw new Error('Unknown network type.')
 
+            // a short time loading makes the user fells better
+            await delay(1000)
+
             let account: string | undefined
             let chainId: ChainId | undefined
 
@@ -71,11 +74,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                     ;({ account, chainId } = await Services.Ethereum.connectMetaMask())
                     break
                 case ProviderType.WalletConnect:
-                    // a short time loading makes the user fells better
-                    const [uri_] = await Promise.allSettled([Services.Ethereum.createConnectionURI(), delay(1000)])
-
                     // create wallet connect QR code URI
-                    const uri = uri_.status === 'fulfilled' ? uri_.value : ''
+                    const uri = await Services.Ethereum.createConnectionURI()
                     if (!uri) throw new Error('Failed to create connection URI.')
 
                     // open the QR code dialog
