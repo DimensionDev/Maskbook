@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import {
     makeStyles,
     DialogContent,
-    DialogProps,
     Typography,
     IconButton,
     Button,
@@ -121,7 +120,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
         return usePortalShadowRoot((container) => (
             <Select
                 variant="standard"
-                MenuProps={{ container: props.DialogProps?.container ?? container }}
+                MenuProps={{ container }}
                 value={defaultIndex}
                 onChange={(e) => fn(e.target.value as number)}>
                 {options.map((item, index) => (
@@ -246,13 +245,10 @@ const useStyles = makeStyles((theme) => {
 
 interface PollsDialogProps extends withClasses<'wrapper'> {
     open: boolean
-    onConfirm: (opt?: any) => void
-    onDecline: () => void
-    DialogProps?: Partial<DialogProps>
+    onClose: () => void
 }
 
 export default function PollsDialog(props: PollsDialogProps) {
-    const classes = useStylesExtends(useStyles(), props)
     const state = useState(0)
     const [, setTabState] = state
     const loading = useState(false)
@@ -265,7 +261,7 @@ export default function PollsDialog(props: PollsDialogProps) {
 
     const insertPoll = (data?: PollMetaData | null) => {
         editActivatedPostMetadata((next) => (data ? next.set(POLL_META_KEY_1, data) : next.delete(POLL_META_KEY_1)))
-        props.onConfirm()
+        props.onClose()
     }
 
     const senderName = useCurrentIdentity()?.linkedPersona?.nickname
@@ -302,7 +298,7 @@ export default function PollsDialog(props: PollsDialogProps) {
     }
 
     return (
-        <InjectedDialog open={props.open} onClose={props.onDecline} title={t('plugin_poll_display_name')}>
+        <InjectedDialog open={props.open} onClose={props.onClose} title={t('plugin_poll_display_name')}>
             <DialogContent>
                 <AbstractTab height={450} {...tabProps} />
             </DialogContent>
