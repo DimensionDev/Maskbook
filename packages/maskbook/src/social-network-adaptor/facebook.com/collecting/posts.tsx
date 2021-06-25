@@ -167,7 +167,7 @@ function getMetadataImages(node: DOMProxy): string[] {
     if (!parent) return []
     const imgNodes = isMobileFacebook
         ? parent.querySelectorAll<HTMLImageElement>('div>div>div>a>div>div>i.img')
-        : parent.nextElementSibling?.querySelectorAll('img') || []
+        : parent.querySelectorAll('img') || []
     if (!imgNodes.length) return []
     const imgUrls = isMobileFacebook
         ? (getComputedStyle(imgNodes[0]).backgroundImage || '')
