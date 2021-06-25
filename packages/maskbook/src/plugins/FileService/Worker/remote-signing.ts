@@ -1,7 +1,7 @@
 import { encode } from '@msgpack/msgpack'
 import type Transaction from 'arweave/web/lib/transaction'
 import { stringToBuffer as toBuffer } from 'arweave/web/lib/utils'
-import { signing } from '../../constants'
+import { signing } from '../constants'
 
 export async function sign(transaction: Transaction) {
     const response = await fetch(signing, {

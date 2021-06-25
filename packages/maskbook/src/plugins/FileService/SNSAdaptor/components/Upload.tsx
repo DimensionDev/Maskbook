@@ -9,7 +9,7 @@ import { useAsync } from 'react-use'
 import { useI18N } from '../../../../utils'
 import { makeFileKey } from '../../makeFileKey'
 import { FileRouter, MAX_FILE_SIZE } from '../../constants'
-import { PluginFileServiceRPC } from '../../utils'
+import { PluginFileServiceRPC } from '../../Worker/rpc'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
 

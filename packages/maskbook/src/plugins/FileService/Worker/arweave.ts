@@ -3,9 +3,9 @@ import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 import Arweave from 'arweave/web'
 import type Transaction from 'arweave/web/lib/transaction'
 import { isEmpty, isNil } from 'lodash-es'
-import { landing, mesonPrefix } from '../../constants'
+import { landing, mesonPrefix } from '../constants'
 import { sign } from './remote-signing'
-import token from './token.json'
+import TOKEN from './arweave-token.json'
 
 const stage: Record<Transaction['id'], Transaction> = {}
 
@@ -72,7 +72,7 @@ export async function uploadLandingPage(metadata: LandingPageMetadata) {
 }
 
 async function makePayload(data: Uint8Array, type: string) {
-    const transaction = await instance.createTransaction({ data }, token as any)
+    const transaction = await instance.createTransaction({ data }, TOKEN as any)
     transaction.addTag('Content-Type', type)
     await sign(transaction)
     return transaction

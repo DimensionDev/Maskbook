@@ -8,12 +8,12 @@ const PluginFileServiceMessage = createPluginMessage<{ _: unknown; _2: unknown }
 
 export const PluginFileServiceRPC = createPluginRPC(
     FileServicePluginID,
-    () => import('../Worker/service'),
+    () => import('./service'),
     PluginFileServiceMessage.events._,
 )
 
 export const PluginFileServiceRPCGenerator = createPluginRPCGenerator(
     FileServicePluginID,
-    () => import('../Worker/service').then(({ upload }) => ({ upload })),
+    () => import('./service').then(({ upload }) => ({ upload })),
     PluginFileServiceMessage.events._2,
 )
