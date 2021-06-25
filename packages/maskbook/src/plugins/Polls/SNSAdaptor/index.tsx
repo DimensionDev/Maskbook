@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { POLL_META_KEY_1 } from '../constants'
 import type { PollMetaData } from '../types'
-import { PollMetadataReader } from '../utils'
+import { PollMetadataReader } from '../helpers'
 import PollsDialog from './PollsDialog'
 import PollsInPost from './PollsInPost'
 

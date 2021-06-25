@@ -26,7 +26,7 @@ import { PollCardUI } from './Polls'
 import type { PollMetaData } from '../types'
 import { POLL_META_KEY_1 } from '../constants'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { PluginPollRPC } from '../utils'
+import { PluginPollRPC } from '../messages'
 
 const useNewPollStyles = makeStyles((theme) => ({
     line: {
