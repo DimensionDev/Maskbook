@@ -1,7 +1,7 @@
-import { useEthereumConstants } from '@masknet/constants'
 import MulticallABI from '@masknet/contracts/abis/Multicall.json'
 import type { Multicall } from '@masknet/contracts/types/Multicall'
 import type { AbiItem } from 'web3-utils'
+import { useEthereumConstants } from '../constants'
 import { useContract } from '../hooks/useContract'
 
 export function useMulticallContract() {

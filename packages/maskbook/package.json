@@ -19,7 +19,6 @@
     "@ethersproject/providers": "^5.0.9",
     "@ethersproject/solidity": "^5.0.4",
     "@ethersproject/strings": "^5.1.0",
-    "@masknet/constants": "workspace:*",
     "@masknet/contracts": "workspace:*",
     "@masknet/dashboard": "workspace:*",
     "@masknet/external-plugin-previewer": "workspace:*",

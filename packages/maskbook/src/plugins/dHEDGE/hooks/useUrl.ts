@@ -1,4 +1,4 @@
-import { useURLConstants } from '@masknet/constants'
+import { useURLConstants } from '@masknet/web3-shared'
 import { escapeRegExp } from 'lodash-es'
 
 export function useBaseUrl() {

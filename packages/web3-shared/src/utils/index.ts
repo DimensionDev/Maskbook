@@ -1,9 +1,9 @@
-import { getTokensConstants } from '@masknet/constants'
 import { getEnumAsArray, safeUnreachable } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
 import type Web3 from 'web3'
 import type { AbiOutput } from 'web3-utils'
 import CHAINS from '../assets/chains.json'
+import { getTokensConstants } from '../constants'
 import {
     Asset,
     ChainId,

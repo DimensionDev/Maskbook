@@ -1,4 +1,3 @@
-import { useTokensConstants } from '@masknet/constants'
 import { formatAmountPrecision, formatBalance, formatEthereumAddress, isZero, pow10, ZERO } from '@masknet/shared'
 import {
     FungibleTokenDetailed,
@@ -9,6 +8,7 @@ import {
     useAccount,
     useChainId,
     useChainIdValid,
+    useTokensConstants,
 } from '@masknet/web3-shared'
 import { Box, Card, Grid, Link, makeStyles, Theme, Typography } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'

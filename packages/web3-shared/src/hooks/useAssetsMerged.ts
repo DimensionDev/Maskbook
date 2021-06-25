@@ -3,7 +3,7 @@ import { useChainId } from './useChainId'
 import { formatEthereumAddress } from '@masknet/shared'
 import { uniqBy } from 'lodash-es'
 import { getChainIdFromName, getTokenUSDValue, isSameAddress } from '../utils'
-import { useTokensConstants } from '@masknet/constants'
+import { useTokensConstants } from '../constants'
 
 /**
  * Merge multiple token lists into one which sorted by balance.

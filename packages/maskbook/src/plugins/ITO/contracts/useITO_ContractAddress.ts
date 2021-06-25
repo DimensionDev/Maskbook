@@ -1,5 +1,4 @@
-import { useITOConstants } from '@masknet/constants'
-import { NetworkType, useNetworkType } from '@masknet/web3-shared'
+import { NetworkType, useITOConstants, useNetworkType } from '@masknet/web3-shared'
 
 export function useITO_ContractAddress() {
     const { ITO_CONTRACT_ADDRESS, ITO_BSC_POLYGON_CONTRACT_ADDRESS } = useITOConstants()

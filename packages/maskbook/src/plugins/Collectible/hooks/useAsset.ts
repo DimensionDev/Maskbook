@@ -1,4 +1,3 @@
-import { useTokensConstants } from '@masknet/constants'
 import { unreachable } from '@masknet/shared'
 import {
     currySameAddress,
@@ -7,6 +6,7 @@ import {
     isSameAddress,
     useAccount,
     useChainId,
+    useTokensConstants,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { head, uniqBy } from 'lodash-es'

@@ -1,4 +1,3 @@
-import { useTraderConstants } from '@masknet/constants'
 import type { ExchangeProxy } from '@masknet/contracts/types/ExchangeProxy'
 import type { PayableTx } from '@masknet/contracts/types/types'
 import {
@@ -10,6 +9,7 @@ import {
     useChainId,
     useGasPrice,
     useNonce,
+    useTraderConstants,
 } from '@masknet/web3-shared'
 import { useCallback, useState } from 'react'
 import { SLIPPAGE_TOLERANCE_DEFAULT } from '../../constants'

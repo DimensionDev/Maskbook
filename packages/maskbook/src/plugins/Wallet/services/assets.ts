@@ -1,24 +1,23 @@
-import { values } from 'lodash-es'
-import BigNumber from 'bignumber.js'
-import { EthereumAddress } from 'wallet.ts'
-import { unreachable, formatEthereumAddress, pow10 } from '@masknet/shared'
-
-import { Asset, CollectibleProvider, BalanceRecord, PortfolioProvider, ZerionAddressAsset } from '../types'
-import * as OpenSeaAPI from '../apis/opensea'
-import * as ZerionAPI from '../apis/zerion'
-import * as DebankAPI from '../apis/debank'
+import { formatEthereumAddress, pow10, unreachable } from '@masknet/shared'
 import {
-    CurrencyType,
     ChainId,
-    EthereumTokenType,
     createERC1155Token,
     createERC20Token,
     createERC721Token,
     createNativeToken,
+    CurrencyType,
+    EthereumTokenType,
     getChainDetailed,
     getChainIdFromName,
+    getTokensConstants,
 } from '@masknet/web3-shared'
-import { getTokensConstants } from '@masknet/constants'
+import BigNumber from 'bignumber.js'
+import { values } from 'lodash-es'
+import { EthereumAddress } from 'wallet.ts'
+import * as DebankAPI from '../apis/debank'
+import * as OpenSeaAPI from '../apis/opensea'
+import * as ZerionAPI from '../apis/zerion'
+import { Asset, BalanceRecord, CollectibleProvider, PortfolioProvider, ZerionAddressAsset } from '../types'
 
 export async function getAssetsListNFT(
     address: string,

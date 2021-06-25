@@ -1,4 +1,3 @@
-import { useITOConstants } from '@masknet/constants'
 import { formatAmountPrecision, formatBalance, FormattedAddress, FormattedBalance, ONE } from '@masknet/shared'
 import {
     FungibleTokenDetailed,
@@ -6,6 +5,7 @@ import {
     resolveAddressLinkOnExplorer,
     resolveTokenLinkOnExplorer,
     useChainId,
+    useITOConstants,
 } from '@masknet/web3-shared'
 import { Card, Grid, IconButton, Link, makeStyles, Paper, Typography } from '@material-ui/core'
 import LaunchIcon from '@material-ui/icons/Launch'

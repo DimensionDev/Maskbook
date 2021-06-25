@@ -1,6 +1,10 @@
-import { useTokensConstants } from '@masknet/constants'
 import { formatEthereumAddress } from '@masknet/shared'
-import { currySameAddress, FungibleTokenDetailed, resolveTokenLinkOnExplorer } from '@masknet/web3-shared'
+import {
+    currySameAddress,
+    FungibleTokenDetailed,
+    resolveTokenLinkOnExplorer,
+    useTokensConstants,
+} from '@masknet/web3-shared'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'

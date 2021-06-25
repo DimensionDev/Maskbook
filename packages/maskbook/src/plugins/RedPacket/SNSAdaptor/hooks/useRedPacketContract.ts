@@ -1,11 +1,10 @@
-import { useRedPacketConstants } from '@masknet/constants'
 import HappyRedPacketV1ABI from '@masknet/contracts/abis/HappyRedPacketV1.json'
 import HappyRedPacketV2ABI from '@masknet/contracts/abis/HappyRedPacketV2.json'
 import HappyRedPacketV3ABI from '@masknet/contracts/abis/HappyRedPacketV3.json'
 import type { HappyRedPacketV1 } from '@masknet/contracts/types/HappyRedPacketV1'
 import type { HappyRedPacketV2 } from '@masknet/contracts/types/HappyRedPacketV2'
 import type { HappyRedPacketV3 } from '@masknet/contracts/types/HappyRedPacketV3'
-import { useContract } from '@masknet/web3-shared'
+import { useContract, useRedPacketConstants } from '@masknet/web3-shared'
 import type { AbiItem } from 'web3-utils'
 
 export function useRedPacketContract(version: number) {

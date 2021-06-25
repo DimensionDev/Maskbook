@@ -1,7 +1,7 @@
+import { getTrendingConstants } from '@masknet/web3-shared'
 import stringify from 'json-stable-stringify'
 import { first } from 'lodash-es'
 import { currentChainIdSettings } from '../../../Wallet/settings'
-import { getTrendingConstants } from '@masknet/constants'
 
 async function fetchFromUniswapV2Health<T>(query: string) {
     const response = await fetch(getTrendingConstants(currentChainIdSettings.value).UNISWAP_V2_HEALTH_URL, {

@@ -1,6 +1,5 @@
-import { useTokensConstants } from '@masknet/constants'
 import { formatBalance, FormattedBalance, isZero, pow10 } from '@masknet/shared'
-import { getChainDetailed, isSameAddress, useAccount } from '@masknet/web3-shared'
+import { getChainDetailed, isSameAddress, useAccount, useTokensConstants } from '@masknet/web3-shared'
 import {
     Box,
     Card,

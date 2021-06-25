@@ -1,15 +1,21 @@
-import { useState } from 'react'
-import { uniqBy } from 'lodash-es'
-import { FixedSizeList, FixedSizeListProps } from 'react-window'
+import {
+    currySameAddress,
+    EthereumTokenType,
+    FungibleTokenDetailed,
+    isSameAddress,
+    useEthereumConstants,
+    useTokensConstants,
+} from '@masknet/web3-shared'
 import { makeStyles, Typography } from '@material-ui/core'
-import { isSameAddress, FungibleTokenDetailed, EthereumTokenType, currySameAddress } from '@masknet/web3-shared'
+import { uniqBy } from 'lodash-es'
+import { useState } from 'react'
+import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { TokenInList } from './TokenInList'
 import {
     TokenListsState,
     useERC20TokensDetailedFromTokenLists,
 } from '../../../web3/hooks/useERC20TokensDetailedFromTokenLists'
-import { useEthereumConstants, useTokensConstants } from '@masknet/constants'
+import { TokenInList } from './TokenInList'
 
 const useStyles = makeStyles((theme) => ({
     list: {},

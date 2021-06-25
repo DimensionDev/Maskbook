@@ -1,7 +1,6 @@
-import { useTraderConstants } from '@masknet/constants'
 import RouterV2ABI from '@masknet/contracts/abis/RouterV2.json'
 import type { RouterV2 } from '@masknet/contracts/types/RouterV2'
-import { useContract } from '@masknet/web3-shared'
+import { useContract, useTraderConstants } from '@masknet/web3-shared'
 import type { AbiItem } from 'web3-utils'
 
 export function useRouterV2Contract() {

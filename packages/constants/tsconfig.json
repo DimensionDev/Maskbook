@@ -6,7 +6,6 @@
     "resolveJsonModule": true
   },
   "include": ["./src/**/*.ts", "./data/**/*.json"],
-  "references": [{ "path": "../web3-shared/" }],
   "ts-node": {
     "compilerOptions": { "module": "CommonJS" }
   }

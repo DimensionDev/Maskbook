@@ -1,7 +1,7 @@
+import { getTrendingConstants } from '@masknet/web3-shared'
 import stringify from 'json-stable-stringify'
 import { chunk, first, flatten } from 'lodash-es'
 import { currentChainIdSettings } from '../../../Wallet/settings'
-import { getTrendingConstants } from '@masknet/constants'
 
 const TokenFields = `
   fragment TokenFields on Token {

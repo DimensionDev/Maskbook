@@ -1,7 +1,6 @@
-import { useITOConstants } from '@masknet/constants'
 import MaskITO_ABI from '@masknet/contracts/abis/MaskITO.json'
 import type { MaskITO } from '@masknet/contracts/types/MaskITO'
-import { useContract } from '@masknet/web3-shared'
+import { useContract, useITOConstants } from '@masknet/web3-shared'
 import type { AbiItem } from 'web3-utils'
 
 export function useMaskITO_Contract() {

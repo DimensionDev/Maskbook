@@ -1,6 +1,5 @@
-import { getTraderConstants } from '@masknet/constants'
 import { unreachable } from '@masknet/shared'
-import { useChainId } from '@masknet/web3-shared'
+import { getTraderConstants, useChainId } from '@masknet/web3-shared'
 import { createContext, useMemo } from 'react'
 import {
     PANCAKESWAP_BASE_AGAINST_TOKENS,

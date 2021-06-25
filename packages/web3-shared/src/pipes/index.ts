@@ -1,4 +1,5 @@
 import { formatEthereumAddress, safeUnreachable, unreachable } from '@masknet/shared'
+import { getTokensConstants } from '../constants'
 import {
     ChainId,
     CollectibleProvider,
@@ -10,7 +11,7 @@ import {
     ProviderType,
 } from '../types'
 import { getChainDetailed } from '../utils'
-import { getTokensConstants } from '@masknet/constants'
+
 export function resolveProviderName(providerType: ProviderType) {
     switch (providerType) {
         case ProviderType.Maskbook:

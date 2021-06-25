@@ -13,7 +13,6 @@
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.8.0-20210317064617-6c4792c",
     "@dimensiondev/kit": "^0.0.0-20210221102734-0b4a937",
-    "@masknet/constants": "workspace:*",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-example": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",

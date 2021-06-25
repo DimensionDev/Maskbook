@@ -1,6 +1,5 @@
-import { useTokensConstants } from '@masknet/constants'
 import { RefreshIcon } from '@masknet/icons'
-import { useERC20TokenDetailed } from '@masknet/web3-shared'
+import { useERC20TokenDetailed, useTokensConstants } from '@masknet/web3-shared'
 import {
     Card,
     CardActions,

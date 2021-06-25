@@ -1,6 +1,11 @@
-import { useITOConstants } from '@masknet/constants'
 import { formatAmount, formatBalance, isGreaterThan, isZero } from '@masknet/shared'
-import { ERC20TokenDetailed, EthereumTokenType, useAccount, useTokenBalance } from '@masknet/web3-shared'
+import {
+    ERC20TokenDetailed,
+    EthereumTokenType,
+    useAccount,
+    useITOConstants,
+    useTokenBalance,
+} from '@masknet/web3-shared'
 import { Box, CircularProgress, makeStyles, TextField, Typography } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
 import UnCheckIcon from '@material-ui/icons/Close'

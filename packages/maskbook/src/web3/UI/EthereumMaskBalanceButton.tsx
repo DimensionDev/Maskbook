@@ -1,6 +1,5 @@
-import { useTokensConstants } from '@masknet/constants'
 import { FormattedBalance } from '@masknet/shared'
-import { createERC20Token, useChainId, useERC20TokenBalance } from '@masknet/web3-shared'
+import { createERC20Token, useChainId, useERC20TokenBalance, useTokensConstants } from '@masknet/web3-shared'
 import { makeStyles, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { useCallback, useMemo, useState } from 'react'

@@ -1,16 +1,8 @@
 {
-  "name": "@masknet/constants",
+  "name": "@masknet/web3-shared",
   "private": true,
-  "exports": {
-    ".": "./dist/src/index.js",
-    "./utils": "./dist/src/utils.js"
-  },
   "main": "./dist/src/index.js",
-  "types": "./dist/src/index.d.ts",
   "scripts": {
     "start": "ts-node compile-constants.ts"
-  },
-  "dependencies": {
-    "@masknet/web3-shared": "workspace:*"
   }
 }

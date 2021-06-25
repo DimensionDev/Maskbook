@@ -1,8 +1,7 @@
 import BulkCheckoutABI from '@masknet/contracts/abis/BulkCheckout.json'
 import type { BulkCheckout } from '@masknet/contracts/types/BulkCheckout'
-import { useContract } from '@masknet/web3-shared'
+import { useContract, useGitcoinConstants } from '@masknet/web3-shared'
 import type { AbiItem } from 'web3-utils'
-import { useGitcoinConstants } from '@masknet/constants'
 
 export function useBulkCheckoutContract() {
     const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants()

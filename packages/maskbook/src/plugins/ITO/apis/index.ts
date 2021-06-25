@@ -1,9 +1,9 @@
+import { getITOConstants } from '@masknet/web3-shared'
 import stringify from 'json-stable-stringify'
 import { first, omit } from 'lodash-es'
+import { currentChainIdSettings } from '../../Wallet/settings'
 import { payloadIntoMask } from '../helpers'
 import type { JSON_PayloadOutMask } from '../types'
-import { currentChainIdSettings } from '../../Wallet/settings'
-import { getITOConstants } from '@masknet/constants'
 
 const TRADER_FIELDS = `
     address

@@ -1,4 +1,3 @@
-import { useGitcoinConstants } from '@masknet/constants'
 import { formatBalance, pow10 } from '@masknet/shared'
 import {
     EthereumTokenType,
@@ -6,6 +5,7 @@ import {
     TransactionStateType,
     useAccount,
     useChainId,
+    useGitcoinConstants,
     useNativeTokenDetailed,
     useTokenBalance,
 } from '@masknet/web3-shared'

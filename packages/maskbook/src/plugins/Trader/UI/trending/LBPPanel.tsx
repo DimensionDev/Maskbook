@@ -1,6 +1,6 @@
-import { useTokensConstants } from '@masknet/constants'
 import { formatEthereumAddress } from '@masknet/shared'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
+import { useTokensConstants } from '@masknet/web3-shared'
 import { Button, CircularProgress, IconButton, Link, makeStyles, Theme, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'

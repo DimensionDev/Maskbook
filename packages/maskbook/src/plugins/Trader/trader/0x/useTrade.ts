@@ -1,6 +1,5 @@
-import { useTokensConstants } from '@masknet/constants'
 import { getEnumAsArray } from '@masknet/shared'
-import { FungibleTokenDetailed, isNative, useBlockNumber } from '@masknet/web3-shared'
+import { FungibleTokenDetailed, isNative, useBlockNumber, useTokensConstants } from '@masknet/web3-shared'
 import { difference } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
