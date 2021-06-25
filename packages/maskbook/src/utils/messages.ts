@@ -1,8 +1,12 @@
+// This file should be free of side effects
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
+
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import Serialization from './type-transform/Serialization'
 import type { ProfileIdentifier, GroupIdentifier, PersonaIdentifier } from '../database/type'
 import type { TypedMessage } from '../protocols/typed-message'
 import type { ThirdPartyPopupContextIdentifier } from '../plugins/External/popup-context'
+import type { SettingsEvents } from '../settings/listener'
 
 export interface UpdateEvent<Data> {
     readonly reason: 'update' | 'delete' | 'new'
@@ -26,7 +30,7 @@ export interface SettingsUpdateEvent {
     initial: boolean
 }
 
-export interface MaskMessages {
+export interface MaskMessages extends SettingsEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: { text: string; image?: Blob }
     /**

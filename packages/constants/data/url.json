@@ -1,0 +1,24 @@
+{
+    "BASE_URL": {
+        "Mainnet": "https://app.dhedge.org",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "https://dh-1111.web.app",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": ""
+    },
+    "API_URL": {
+        "Mainnet": "https://api.dhedge.org/graphql",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "https://dev.dhedge.org/graphql",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": ""
+    }
+}

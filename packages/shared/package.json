@@ -1,7 +1,7 @@
 {
   "name": "@masknet/shared",
   "main": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.8.0-20210317064617-6c4792c",
     "@servie/events": "^3.0.0",
