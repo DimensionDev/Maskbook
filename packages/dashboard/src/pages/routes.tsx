@@ -1,6 +1,7 @@
 import { Route, Routes, Navigate } from 'react-router'
 import React, { lazy, Suspense } from 'react'
 import { DashboardFrame } from '../components/DashboardFrame'
+//import { useRouteMatch } from 'react-router-dom'
 export enum RoutePaths {
     Welcome = '/welcome',
     Personas = '/personas',
@@ -24,6 +25,7 @@ const Personas = lazy(() => import('./Personas'))
 const Settings = lazy(() => import('./Settings'))
 const Plugins = lazy(() => import('./Plugins'))
 export function Pages() {
+    //   const { path } = useRouteMatch()
     return (
         <Suspense fallback="loading...">
             <Routes>

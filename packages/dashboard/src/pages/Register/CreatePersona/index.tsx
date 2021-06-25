@@ -56,8 +56,7 @@ export const CreatePersona = memo(() => {
                         }}
                         error={!isPersonaNameLengthValid(name)}
                         inputProps={{
-                            maxlength: PERSONA_NAME_MAX_LENGTH,
-                            'data-testid': 'username_input',
+                            maxLength: PERSONA_NAME_MAX_LENGTH,
                         }}
                         helperText={
                             !isPersonaNameLengthValid(name)
