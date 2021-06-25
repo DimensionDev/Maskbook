@@ -1,9 +1,11 @@
 import { delay } from '@dimensiondev/maskbook-shared'
 import { Button, makeStyles, TextField, Typography } from '@material-ui/core'
 import { memo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Messages, Services } from '../../../API'
 import { useDashboardI18N } from '../../../locales/i18n_generated'
 import { isPersonaNameLengthValid, PERSONA_NAME_MAX_LENGTH } from '../../../utils/checkLengthExceed'
+import { RoutePaths } from '../../routes'
 import { ContainerPage } from '../Components/ContainerPage'
 
 const useStyles = makeStyles((theme) => ({
@@ -23,11 +25,13 @@ export const CreatePersona = memo(() => {
     const classes = useStyles()
     const t = useDashboardI18N()
     const [name, setName] = useState('')
+    const navigate = useNavigate()
 
     const createPersonaAndNext = async () => {
         const identifier = await Services.Identity.createPersonaByMnemonic(name, '')
         await delay(300)
         Messages.events.personaChanged.sendToAll([{ of: identifier, owned: true, reason: 'new' }])
+        navigate(`${RoutePaths.ConnectNetwork}?identifier=${encodeURIComponent(identifier.toText())}`)
     }
     return (
         <ContainerPage>

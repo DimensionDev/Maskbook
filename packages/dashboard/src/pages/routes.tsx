@@ -29,6 +29,8 @@ export function Pages() {
     return (
         <Suspense fallback="loading...">
             <Routes>
+                <Route path={RoutePaths.CreatePersona} element={<CreatePersona />} />
+                <Route path={RoutePaths.ConnectNetwork} element={<ConnectNetwork />} />
                 <Route path={RoutePaths.Welcome} element={<Welcome />} />
                 <Route path={RoutePaths.Personas} element={frame(<Personas />)} />
                 <Route path={`${RoutePaths.Wallets}/*`} element={frame(<Wallets />)} />
