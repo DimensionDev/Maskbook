@@ -1,8 +1,8 @@
-import { createPluginDatabase } from '../../database/Plugin/wrap-plugin-database'
-import { asyncIteratorToArray } from '../../utils/type-transform/asyncIteratorHelpers'
-import { base } from './base'
-import { FileInfoV1ToV2 } from './define'
-import type { FileInfo, FileInfoV1 } from './types'
+import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
+import { asyncIteratorToArray } from '../../../utils/type-transform/asyncIteratorHelpers'
+import { base } from '../base'
+import { FileInfoV1ToV2 } from '../define'
+import type { FileInfo, FileInfoV1 } from '../types'
 
 type TaggedTypes = FileInfo | FileInfoV1
 
