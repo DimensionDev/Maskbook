@@ -6,7 +6,7 @@ export const base: Plugin.Shared.Definition = {
     icon: PLUGIN_ICON,
     name: { fallback: PLUGIN_NAME },
     description: { fallback: PLUGIN_DESCRIPTION },
-    publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
+    publisher: { name: { fallback: 'xichi' }, link: 'https://github.com/xichi' },
     enableRequirement: {
         architecture: { app: false, web: true },
         networks: { type: 'opt-out', networks: {} },
