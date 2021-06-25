@@ -13,6 +13,7 @@ import {
     FungibleTokenDetailed,
     TransactionStateType,
     useChainId,
+    useChainIdValid,
     useTokenBalance,
 } from '@masknet/web3-shared'
 import { TradeForm } from './TradeForm'
@@ -64,6 +65,7 @@ export function Trader(props: TraderProps) {
     const { decimals } = tokenDetailed ?? coin ?? {}
 
     const chainId = useChainId()
+    const chainIdValid = useChainIdValid()
     const classes = useStylesExtends(useStyles(), props)
 
     const context = useContext(TradeContext)
@@ -77,6 +79,7 @@ export function Trader(props: TraderProps) {
     const { inputToken, outputToken } = tradeStore
 
     useEffect(() => {
+        if (!chainIdValid) return
         dispatchTradeStore({
             type: TradeActionType.UPDATE_INPUT_TOKEN,
             token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST[ChainId.Mainnet] : createNativeToken(chainId),
@@ -87,7 +90,7 @@ export function Trader(props: TraderProps) {
                 ? createERC20Token(chainId, coin.contract_address, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
                 : undefined,
         })
-    }, [coin, chainId, decimals])
+    }, [coin, chainId, chainIdValid, decimals])
     //#endregion
 
     //#region switch tokens

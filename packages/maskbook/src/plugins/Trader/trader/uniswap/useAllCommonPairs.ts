@@ -1,4 +1,4 @@
-import { FungibleTokenDetailed, useChainId } from '@masknet/web3-shared'
+import { FungibleTokenDetailed, useChainId, useChainIdValid } from '@masknet/web3-shared'
 import type { Pair } from '@dimensiondev/uniswap-sdk'
 import { flatMap } from 'lodash-es'
 import { useContext, useMemo } from 'react'
@@ -6,17 +6,23 @@ import { toUniswapChainId, toUniswapToken } from '../../helpers'
 import { TradeContext } from '../useTradeContext'
 import { PairState, TokenPair, usePairs } from './usePairs'
 import { useUniswapToken } from './useUniswapToken'
+import { EthereumAddress } from 'wallet.ts'
 
 export function useAllCommonPairs(tokenA?: FungibleTokenDetailed, tokenB?: FungibleTokenDetailed) {
     const chainId = useChainId()
+    const chainIdValid = useChainIdValid()
     const context = useContext(TradeContext)
     const uniswapTokenA = useUniswapToken(tokenA)
     const uniswapTokenB = useUniswapToken(tokenB)
 
-    const bases = useMemo(
-        () => context?.AGAINST_TOKENS[chainId].map((t) => toUniswapToken(t.chainId, t)) ?? [],
-        [chainId, context],
-    )
+    const bases = useMemo(() => {
+        if (!chainIdValid) return []
+        return (
+            context?.AGAINST_TOKENS[chainId]
+                .filter((t) => EthereumAddress.isValid(t.address))
+                .map((t) => toUniswapToken(t.chainId, t)) ?? []
+        )
+    }, [chainId, chainIdValid, context])
     const basePairs = useMemo(
         () =>
             flatMap(bases, (base) => bases.map((otherBase) => [base, otherBase] as TokenPair)).filter(
@@ -53,6 +59,7 @@ export function useAllCommonPairs(tokenA?: FungibleTokenDetailed, tokenB?: Fungi
                           if (
                               customBasesA &&
                               !customBasesA
+                                  .filter((t) => EthereumAddress.isValid(t.address))
                                   .map((t) => toUniswapToken(t.chainId, t))
                                   .find((base) => uniswapTokenB!.equals(base))
                           )
@@ -60,6 +67,7 @@ export function useAllCommonPairs(tokenA?: FungibleTokenDetailed, tokenB?: Fungi
                           if (
                               customBasesB &&
                               !customBasesB
+                                  .filter((t) => EthereumAddress.isValid(t.address))
                                   .map((t) => toUniswapToken(t.chainId, t))
                                   .find((base) => uniswapTokenA!.equals(base))
                           )
