@@ -6,6 +6,7 @@ import { resolve } from 'path'
 import { writeFileSync } from 'fs'
 import * as General from '../general'
 import * as Brands from '../brands'
+import * as Plugins from '../plugins'
 
 const CSS = `
 body {
@@ -40,6 +41,9 @@ function render() {
                     </main>
                     <main id="general">
                         <IconPreview icons={General} title="General" />
+                    </main>
+                    <main id="plugins">
+                        <IconPreview icons={Plugins} title="Glugins" />
                     </main>
                 </body>
             </html>,

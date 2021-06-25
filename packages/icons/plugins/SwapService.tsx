@@ -1,8 +1,8 @@
 import { createIcon } from '../utils'
 import type { SvgIcon } from '@material-ui/core'
 
-export const SwapIcon: typeof SvgIcon = createIcon(
-    'Swap',
+export const SwapServiceIcon: typeof SvgIcon = createIcon(
+    'SwapService',
     <>
         <circle cx="14" cy="14" r="14" fill="#FFB915" fillOpacity=".15" />
         <g clipPath="url(#clip0)" stroke="#FFB915" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">

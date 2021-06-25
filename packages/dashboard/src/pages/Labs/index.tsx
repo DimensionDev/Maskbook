@@ -2,16 +2,11 @@ import { useState } from 'react'
 import { makeStyles, Box } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
 import PluginItem, { PluginItemPlaceHodler } from './components/PluginItem'
-import { pluginIcons } from '@masknet/icons'
-import { useDashboardI18N } from '../../locales'
-import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
-import SwapSettingDialog from './components/SwapSettingDialog'
-
-const {
+import {
     FileServiceIcon,
     MarketsIcon,
     RedPacketIcon,
-    SwapIcon,
+    SwapServiceIcon,
     TransakIcon,
     SnapshotIcon,
     MarketTrendIcon,
@@ -19,7 +14,10 @@ const {
     GitcoinIcon,
     ValuablesIcon,
     DhedgeIcon,
-} = pluginIcons
+} from '@masknet/icons'
+import { useDashboardI18N } from '../../locales'
+import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
+import SwapSettingDialog from './components/SwapSettingDialog'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -102,7 +100,7 @@ export default function Plugins() {
                         onSwitch={onSwitch}
                         onExplore={onExplore}
                         onSetting={onSetting}
-                        icon={<SwapIcon />}></PluginItem>
+                        icon={<SwapServiceIcon />}></PluginItem>
                     <PluginItem
                         name="transak"
                         title={t.labs_transak()}
