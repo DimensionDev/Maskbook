@@ -100,6 +100,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                 type: TransactionStateType.FAILED,
                 error: gasError,
             })
+            return
         }
         if (!checkParams(paramsObj, setFillState)) return
 
