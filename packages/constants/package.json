@@ -1,7 +1,6 @@
 {
-  "name": "@masknet/web3-shared",
+  "name": "@masknet/constants",
   "private": true,
-  "main": "./dist/src/index.js",
   "scripts": {
     "start": "ts-node compile-constants.ts"
   }
