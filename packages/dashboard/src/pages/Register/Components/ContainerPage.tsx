@@ -1,7 +1,7 @@
 import { InfoIcon, MaskTransparentLogo } from '@dimensiondev/icons'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { Link, makeStyles, Typography } from '@material-ui/core'
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import { useDashboardI18N } from '../../../locales/i18n_generated'
 import { useNavigate } from 'react-router-dom'
 
@@ -73,10 +73,6 @@ export const ContainerPage = memo<ContainerPageProps>(({ children, goback }) => 
     const t = useDashboardI18N()
     const Navigate = useNavigate()
 
-    const goBack = useCallback(() => {
-        Navigate(-1)
-    }, [Navigate])
-
     return (
         <div className={classes.container}>
             <div className={classes.leftContainer}>
@@ -86,7 +82,7 @@ export const ContainerPage = memo<ContainerPageProps>(({ children, goback }) => 
                 <div className={classes.goback}>
                     {
                         <Link href="#" onClick={() => Navigate(-1)} underline="none">
-                            Go back
+                            {t.register_go_back()}
                         </Link>
                     }
                 </div>
@@ -98,11 +94,7 @@ export const ContainerPage = memo<ContainerPageProps>(({ children, goback }) => 
                         </div>
                         <div>
                             <Typography variant="body2" color="textSecondary">
-                                As the defender of open-source software and user data privacy, Mask Network does not
-                                collect your private data such as account and password. If you need to retrieve your
-                                password, please authorize us to host your account and password. Please rest assured
-                                that we simply host your account and password. We do not save any of your private data.
-                                Consequently, we cannot restore your data or any other information.
+                                {t.register_info()}
                             </Typography>
                         </div>
                     </div>

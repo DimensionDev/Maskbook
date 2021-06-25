@@ -70,7 +70,9 @@ export const ConnectSocialNetwork = memo(() => {
         <ContainerPage>
             <>
                 <div className={classes.title}>
-                    <Typography variant="h5">Connect Socail Media Profile from "{persona?.nickname}"</Typography>
+                    <Typography variant="h5">
+                        {t.register_connect_network_title({ name: persona?.nickname })}
+                    </Typography>
                 </div>
                 <StartupActionList>
                     {definedSocialNetworks.map(({ networkIdentifier }) => {
@@ -79,7 +81,7 @@ export const ConnectSocialNetwork = memo(() => {
                                 key={networkIdentifier}
                                 icon={NetworkIcon(networkIdentifier)}
                                 title={t.personas_connect_to({ internalName: networkIdentifier })}
-                                description={''}
+                                description=""
                                 action={t.register_login_connect()}
                                 onClick={() => onClick(networkIdentifier)}
                             />

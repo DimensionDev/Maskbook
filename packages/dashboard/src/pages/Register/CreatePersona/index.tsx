@@ -36,7 +36,7 @@ export const CreatePersona = memo(() => {
     return (
         <ContainerPage>
             <div className={classes.create}>
-                <Typography variant="h6" color="textPrimary" align="left">
+                <Typography variant="h5" color="textPrimary" align="left">
                     Welcom to Mask Network
                 </Typography>
                 <Typography variant="body2" color="textSecondary" align="left">
