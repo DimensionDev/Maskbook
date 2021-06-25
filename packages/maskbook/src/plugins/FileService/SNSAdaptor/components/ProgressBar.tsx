@@ -1,6 +1,6 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { makeStyles, Typography, LinearProgress, Box } from '@material-ui/core'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles({
     container: {

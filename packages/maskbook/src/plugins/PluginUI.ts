@@ -9,7 +9,6 @@ export const PluginUI: ReadonlySet<PluginConfig> = plugins
 import { Flags } from '../utils/flags'
 import { PollsPluginDefine } from './Polls/define'
 import { StorybookPluginDefine } from './Storybook/define'
-import { FileServicePluginDefine } from './FileService/UI-define'
 import { TraderPluginDefine } from './Trader/define'
 import { TransakPluginDefine } from './Transak/define'
 import { ITO_PluginDefine } from './ITO/define'
@@ -18,7 +17,6 @@ import { VCentPluginDefine } from './VCent/define'
 import { DHedgePluginDefine } from './dHEDGE/define'
 
 sideEffect.then(() => {
-    plugins.add(FileServicePluginDefine)
     if (Flags.ito_enabled) plugins.add(ITO_PluginDefine)
     if (Flags.vcent_enabled) plugins.add(VCentPluginDefine)
     if (Flags.poll_enabled) plugins.add(PollsPluginDefine)

@@ -11,6 +11,7 @@ export interface FileInfo {
     payloadTxID: string
     landingTxID: string
 }
+
 export type FileInfoV1 = Omit<FileInfo, 'type' | 'provider'> & {
     type: 'arweave'
 }

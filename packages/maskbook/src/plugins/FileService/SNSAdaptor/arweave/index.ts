@@ -3,7 +3,7 @@ import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 import Arweave from 'arweave/web'
 import type Transaction from 'arweave/web/lib/transaction'
 import { isEmpty, isNil } from 'lodash-es'
-import { landing, mesonPrefix } from '../constants'
+import { landing, mesonPrefix } from '../../constants'
 import { sign } from './remote-signing'
 import token from './token.json'
 

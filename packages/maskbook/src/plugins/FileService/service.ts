@@ -1,2 +1,2 @@
-export * from './arweave'
+export * from './SNSAdaptor/arweave'
 export * from './database'
