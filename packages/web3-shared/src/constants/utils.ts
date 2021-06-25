@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { ChainId, Primitive, useChainId } from '@masknet/web3-shared'
+import { useChainId } from '../hooks'
+import { ChainId, Primitive } from '../types'
 
 export interface Constants {
     [K: string]: { [K in keyof typeof ChainId]: Primitive | Primitive[] }
