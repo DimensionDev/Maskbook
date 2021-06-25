@@ -1,4 +1,4 @@
-import Airdrop from '@masknet/constants/data/Airdrop.json'
+import Airdrop from '@masknet/constants/data/airdrop.json'
 import Ethereum from '@masknet/constants/data/ethereum.json'
 import Gitcoin from '@masknet/constants/data/gitcoin.json'
 import ITO from '@masknet/constants/data/ITO.json'
