@@ -18,10 +18,11 @@ async function main() {
         for (const name of Object.keys(constants)) {
             const values = constants[name]
             const defaultValue = getDefaultValue(Object.values(values)[0])
-            constants[name] = {}
+            const pairs: [string, unknown][] = []
             for (const chainName of chainNames) {
-                constants[name][chainName] = values[chainName] ?? defaultValue
+                pairs.push([chainName, values[chainName] ?? defaultValue])
             }
+            constants[name] = Object.fromEntries(pairs)
         }
         await fs.writeFile(filePath, JSON.stringify(constants, null, 4), 'utf-8')
     }
