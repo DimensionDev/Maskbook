@@ -1,5 +1,3 @@
-import { ChainId } from '@masknet/web3-shared'
-
 /**
  * !! Change this key cause a breaking change in the red packet plugin.
  * !! Please make sure it also be able to recognize the old key.
