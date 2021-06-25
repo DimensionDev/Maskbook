@@ -4,7 +4,7 @@ import { DialogContent } from '@material-ui/core'
 import { usePortalShadowRoot } from '@masknet/shared'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
-import { ITO_MetaKey, MSG_DELIMITER, ITO_CONSTANTS } from '../constants'
+import { ITO_MetaKey, MSG_DELIMITER } from '../constants'
 import { DialogTabs, JSON_PayloadInMask } from '../types'
 import { CreateForm } from './CreateForm'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
@@ -13,7 +13,7 @@ import { payloadOutMask } from '../helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
 import Services from '../../../extension/service'
-import { formatBalance, useChainId, useAccount, TransactionStateType } from '@masknet/web3-shared'
+import { formatBalance, useChainId, useAccount, TransactionStateType, useITOConstants } from '@masknet/web3-shared'
 import { PoolSettings, useFillCallback } from '../hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
@@ -35,7 +35,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const account = useAccount()
     const chainId = useChainId()
 
-    const { ITO2_CONTRACT_ADDRESS } = useConstant(ITO_CONSTANTS)
+    const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
 
     //#region step
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)

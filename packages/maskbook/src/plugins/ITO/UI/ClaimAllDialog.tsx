@@ -9,7 +9,7 @@ import {
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
     useChainId,
-    useConstant,
+    useITOConstants,
     ChainId,
 } from '@masknet/web3-shared'
 import { useRemoteControlledDialog, useI18N } from '../../../utils'
@@ -19,7 +19,6 @@ import { WalletMessages } from '../../Wallet/messages'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { ITO_CONSTANTS } from '../constants'
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
@@ -103,7 +102,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
     const { value: swappedTokens, loading, retry } = useClaimAll()
-    const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useConstant(ITO_CONSTANTS, ChainId.Mainnet)
+    const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
     // Todo: Remove the code after the period that old ITO is being used and continues to be used for a while
     const { value: swappedTokensOld, loading: loadingOld, retry: retryOld } = useClaimAll(true)
     const classes = useStyles()

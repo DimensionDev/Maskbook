@@ -4,10 +4,9 @@ import {
     useAccount,
     useChainId,
     FungibleTokenDetailed,
-    useConstant,
+    useITOConstants,
     ChainId,
 } from '@masknet/web3-shared'
-import { ITO_CONSTANTS } from '../constants'
 import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 
@@ -22,7 +21,7 @@ export interface SwappedToken {
 export function useClaimAll(isMainnetOld = false) {
     const account = useAccount()
     const chainId = useChainId()
-    const { ITO_CONTRACT_ADDRESS } = useConstant(ITO_CONSTANTS, ChainId.Mainnet)
+    const { ITO_CONTRACT_ADDRESS } = useITOConstants()
     // Todo: Remove the code after the period that old ITO is being used and continues to be used for a while
     const { contract: ITO_Contract } = useITO_Contract(isMainnetOld ? ITO_CONTRACT_ADDRESS : undefined)
     const { value: pools = [], loading } = useAllPoolsAsBuyer(account)

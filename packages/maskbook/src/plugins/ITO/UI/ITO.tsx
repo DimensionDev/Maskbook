@@ -285,7 +285,11 @@ export function ITO(props: ITO_Props) {
         )
         .toString()
     const canWithdraw = useMemo(
-        () => isAccountSeller && !tradeInfo?.destructInfo && (listOfStatus.includes(ITO_Status.expired) || noRemain),
+        () =>
+            isAccountSeller &&
+            !tradeInfo?.destructInfo &&
+            !availability?.exchanged_tokens.every((t) => t === '0') &&
+            (listOfStatus.includes(ITO_Status.expired) || noRemain),
         [tradeInfo, listOfStatus, isAccountSeller, noRemain],
     )
 

@@ -6,6 +6,7 @@ import { FormattedAddress } from '@masknet/shared'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
+    useITOConstants,
     ERC20TokenDetailed,
     EthereumTokenType,
     formatBalance,
@@ -15,7 +16,6 @@ import {
     useChainId,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import { ITO_CONSTANTS } from '../constants'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -45,7 +45,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const { ITO2_CONTRACT_ADDRESS } = useConstant(ITO_CONSTANTS)
+    const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
     const chainId = useChainId()
 
     //#region select token
