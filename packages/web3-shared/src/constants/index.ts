@@ -1,13 +1,13 @@
 import Airdrop from '@masknet/constants/data/airdrop.json'
 import Ethereum from '@masknet/constants/data/ethereum.json'
 import Gitcoin from '@masknet/constants/data/gitcoin.json'
-import ITO from '@masknet/constants/data/ITO.json'
-import LBP from '@masknet/constants/data/LBP.json'
+import ITO from '@masknet/constants/data/ito.json'
+import LBP from '@masknet/constants/data/lbp.json'
 import RedPacket from '@masknet/constants/data/red-packet.json'
 import Token from '@masknet/constants/data/token.json'
 import Trader from '@masknet/constants/data/trader.json'
 import Trending from '@masknet/constants/data/trending.json'
-import URL from '@masknet/constants/data/URL.json'
+import URL from '@masknet/constants/data/url.json'
 import { hookTransform, transform } from './utils'
 
 export const getAirdropConstants = transform(Airdrop)
