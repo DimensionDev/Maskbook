@@ -1,5 +1,5 @@
 import { experimentalStyled as styled } from '@material-ui/core/styles'
-import { FooterLine } from '../FooterLine/FooterLine'
+import { FooterLine } from '../FooterLine'
 import { makeStyles, Paper, Typography } from '@material-ui/core'
 import { MaskNotSquareIcon } from '@masknet/icons'
 

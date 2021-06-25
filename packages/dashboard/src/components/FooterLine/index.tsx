@@ -1,7 +1,11 @@
-import { makeStyles } from '@material-ui/core/styles'
+import { experimentalStyled as styled, makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
-import { Breadcrumbs, Theme, Typography, Link as MuiLink } from '@material-ui/core'
+import { Breadcrumbs, Dialog, IconButton, Link as MuiLink, Theme, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
+import { useState } from 'react'
+import { About } from './About'
+import { Close } from '@material-ui/icons'
+import { Version } from './Version'
 
 const useStyles = makeStyles((theme: Theme) => ({
     footerButtons: {
@@ -16,7 +20,20 @@ const useStyles = makeStyles((theme: Theme) => ({
             fontSize: 12,
         },
     },
+    closeButton: {
+        color: theme.palette.text.secondary,
+        position: 'absolute',
+        right: 12,
+        top: 0,
+    },
 }))
+
+const AboutDialog = styled(Dialog)(
+    ({ theme }) => `
+    padding: 0;
+    overflow: hidden;
+`,
+)
 
 type FooterLinkBaseProps = { title?: string }
 type FooterLinkLinkProps = FooterLinkBaseProps & { to: string }
@@ -62,6 +79,7 @@ const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
 export function FooterLine() {
     const t = useDashboardI18N()
     const classes = useStyles()
+    const [isOpen, setOpen] = useState(false)
     // todo: fix type error
     // @ts-ignore
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
@@ -77,21 +95,20 @@ export function FooterLine() {
         <>
             <Breadcrumbs className={classes.footerButtons} separator="-" aria-label="breadcrumb">
                 <FooterLink href="https://mask.io">Mask.io</FooterLink>
-                {/*<FooterLink onClick={openAboutDialog}>{t.about()}</FooterLink>*/}
+                <FooterLink onClick={() => setOpen(true)}>{t.about()}</FooterLink>
                 <FooterLink onClick={openVersionLink} title={process.env.VERSION}>
-                    {process.env.build === 'stable'
-                        ? t.version_of_stable({ version })
-                        : t.version_of_unstable({
-                              version,
-                              build: process.env.build ?? '',
-                              hash: process.env.COMMIT_HASH ?? '',
-                          })}
+                    <Version />
                 </FooterLink>
                 <FooterLink href="https://mask.io/download-links/#mobile">{t.dashboard_mobile_test()}</FooterLink>
                 <FooterLink href="https://github.com/DimensionDev/Maskbook">{t.dashboard_source_code()}</FooterLink>
-                <FooterLink href="https://legal.mask.io/maskbook/">{t.privacy_policy()}</FooterLink>
+                <FooterLink to="/privacy-policy">{t.privacy_policy()}</FooterLink>
             </Breadcrumbs>
-            {/*{aboutDialog}*/}
+            <AboutDialog open={isOpen} title={''} onClose={() => setOpen(false)}>
+                <About />
+                <IconButton className={classes.closeButton} onClick={() => setOpen(false)} edge="end" color="inherit">
+                    <Close />
+                </IconButton>
+            </AboutDialog>
         </>
     )
 }

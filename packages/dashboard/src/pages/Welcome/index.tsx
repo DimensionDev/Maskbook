@@ -1,4 +1,4 @@
-import { Typography, Button } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
@@ -31,7 +31,8 @@ const Subtitle = styled('div')(
 
 const Paragraph = styled(Typography)(
     ({ theme }) => `
-    & > p {
+    & > span {
+        display: block;
         margin: ${theme.spacing(0.5)} 0
     }
 `,
@@ -68,21 +69,23 @@ export default function Welcome() {
                         <Typography variant="h5">Mask Network never collects</Typography>
                     </Subtitle>
                     <Paragraph variant={'body2'} paragraph>
-                        <p>users’ accounts and passwords. Unless users authorized us to host accounts and passwords.</p>
-                        <p>users’ related information and browsing histories of their social accounts.</p>
-                        <p>
+                        <span>
+                            users’ accounts and passwords. Unless users authorized us to host accounts and passwords.
+                        </span>
+                        <span>users’ related information and browsing histories of their social accounts.</span>
+                        <span>
                             users’ private keys, addresses, balances, purchase histories, hash, or any personal
                             information.
-                        </p>
-                        <p>users’ complete IP address.</p>
+                        </span>
+                        <span>users’ complete IP address.</span>
                     </Paragraph>
                     <Paragraph variant={'body2'} paragraph>
-                        <p>
+                        <span>
                             Mask Network keeps users’ encrypted information in users’ browser, please keep it safe and
                             make sure to back up constantly.
-                        </p>
-                        <p>Previous users of Mask Network are required to register with email accounts.</p>
-                        <p>For more information about privacy protection, please read our privacy policy.</p>
+                        </span>
+                        <span>Previous users of Mask Network are required to register with email accounts.</span>
+                        <span>For more information about privacy protection, please read our privacy policy.</span>
                     </Paragraph>
                 </Introduce>
                 <ButtonGroup>

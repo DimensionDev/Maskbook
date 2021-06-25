@@ -1,5 +1,5 @@
-import { FooterLine } from '../../components/FooterLine/FooterLine'
-import { Typography, makeStyles, Paper, Card } from '@material-ui/core'
+import { FooterLine } from '../../components/FooterLine'
+import { Card, makeStyles, Paper, Typography } from '@material-ui/core'
 import { MaskNotSquareIcon } from '@masknet/icons'
 
 const useStyles = makeStyles((theme) => ({
