@@ -3,7 +3,7 @@ import { useChainId } from './useChainId'
 import { formatEthereumAddress } from '@masknet/shared'
 import { uniqBy } from 'lodash-es'
 import { getChainIdFromName, getTokenUSDValue, isSameAddress } from '../utils'
-import { useTokensConstants } from '../constants'
+import { useTokenConstants } from '../constants'
 
 /**
  * Merge multiple token lists into one which sorted by balance.
@@ -12,7 +12,7 @@ import { useTokensConstants } from '../constants'
  */
 export function useAssetsMerged(...listOfTokens: Asset[][]) {
     const chainId = useChainId()
-    const { NATIVE_TOKEN_ADDRESS } = useTokensConstants()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     if (!NATIVE_TOKEN_ADDRESS) return []
     return uniqBy(
         listOfTokens.flatMap((x) => x),

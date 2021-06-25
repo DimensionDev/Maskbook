@@ -6,7 +6,7 @@ import {
     isSameAddress,
     useAccount,
     useChainId,
-    useTokensConstants,
+    useTokenConstants,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { head, uniqBy } from 'lodash-es'
@@ -21,7 +21,7 @@ import { getOrderUnitPrice } from '../utils'
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
     const account = useAccount()
     const chainId = useChainId()
-    const { WETH_ADDRESS } = useTokensConstants()
+    const { WETH_ADDRESS } = useTokenConstants()
 
     return useAsyncRetry(async () => {
         if (!token) return

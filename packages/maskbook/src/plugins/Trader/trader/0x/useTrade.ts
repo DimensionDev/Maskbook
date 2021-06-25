@@ -1,5 +1,5 @@
 import { getEnumAsArray } from '@masknet/shared'
-import { FungibleTokenDetailed, isNative, useBlockNumber, useTokensConstants } from '@masknet/web3-shared'
+import { FungibleTokenDetailed, isNative, useBlockNumber, useTokenConstants } from '@masknet/web3-shared'
 import { difference } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
@@ -15,7 +15,7 @@ export function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
-    const { NATIVE_TOKEN_ADDRESS } = useTokensConstants()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const blockNumber = useBlockNumber()
 
     const slippage = useSlippageTolerance()

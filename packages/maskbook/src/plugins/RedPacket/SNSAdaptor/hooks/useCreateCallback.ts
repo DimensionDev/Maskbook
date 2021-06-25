@@ -10,7 +10,7 @@ import {
     useChainId,
     useGasPrice,
     useNonce,
-    useTokensConstants,
+    useTokenConstants,
     useTransactionState,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
@@ -41,7 +41,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
-    const { NATIVE_TOKEN_ADDRESS } = useTokensConstants()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     const createCallback = useCallback(async () => {
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings

@@ -9,7 +9,7 @@ import {
     EthereumTokenType,
     getChainDetailed,
     getChainIdFromName,
-    getTokensConstants,
+    getTokenConstants,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-es'
@@ -133,7 +133,7 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
                     name: asset.name,
                     symbol: asset.symbol,
                     decimals: asset.decimals,
-                    address: asset.name === 'Ether' ? getTokensConstants().NATIVE_TOKEN_ADDRESS : asset.asset_code,
+                    address: asset.name === 'Ether' ? getTokenConstants().NATIVE_TOKEN_ADDRESS : asset.asset_code,
                     chainId: ChainId.Mainnet,
                     type: asset.name === 'Ether' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                 },

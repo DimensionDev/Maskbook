@@ -4,7 +4,7 @@ import {
     FungibleTokenDetailed,
     isSameAddress,
     useEthereumConstants,
-    useTokensConstants,
+    useTokenConstants,
 } from '@masknet/web3-shared'
 import { makeStyles, Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
@@ -54,7 +54,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     //#endregion
 
     //#region mask token
-    const { MASK_ADDRESS } = useTokensConstants()
+    const { MASK_ADDRESS } = useTokenConstants()
     //#endregion
 
     //#region UI helpers

@@ -1,5 +1,5 @@
 import { FormattedBalance } from '@masknet/shared'
-import { createERC20Token, useChainId, useERC20TokenBalance, useTokensConstants } from '@masknet/web3-shared'
+import { createERC20Token, useChainId, useERC20TokenBalance, useTokenConstants } from '@masknet/web3-shared'
 import { makeStyles, Typography } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { useCallback, useMemo, useState } from 'react'
@@ -33,7 +33,7 @@ export function EthereumMaskBalanceButton(props: EthereumMaskBalanceButtonProps)
 
     //#region mask token
     const chainId = useChainId()
-    const { MASK_ADDRESS } = useTokensConstants()
+    const { MASK_ADDRESS } = useTokenConstants()
     const maskToken = useMemo(
         () => createERC20Token(chainId, MASK_ADDRESS, 18, 'Mask Network', 'MASK'),
         [chainId, MASK_ADDRESS],

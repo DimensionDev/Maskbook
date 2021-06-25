@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import type Web3 from 'web3'
 import type { AbiOutput } from 'web3-utils'
 import CHAINS from '../assets/chains.json'
-import { getTokensConstants } from '../constants'
+import { getTokenConstants } from '../constants'
 import {
     Asset,
     ChainId,
@@ -31,11 +31,11 @@ export function currySameAddress(base: string) {
     }
 }
 
-export const isDAI = currySameAddress(getTokensConstants().DAI_ADDRESS)
+export const isDAI = currySameAddress(getTokenConstants().DAI_ADDRESS)
 
-export const isOKB = currySameAddress(getTokensConstants().OKB_ADDRESS)
+export const isOKB = currySameAddress(getTokenConstants().OKB_ADDRESS)
 
-export const isNative = currySameAddress(getTokensConstants().NATIVE_TOKEN_ADDRESS)
+export const isNative = currySameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS)
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
@@ -116,7 +116,7 @@ export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     return {
         type: EthereumTokenType.Native,
         chainId,
-        address: getTokensConstants().NATIVE_TOKEN_ADDRESS,
+        address: getTokenConstants().NATIVE_TOKEN_ADDRESS,
         ...chainDetailed.nativeCurrency,
     }
 }
@@ -181,7 +181,7 @@ export function createERC1155Token(
 }
 
 export function createERC20Tokens(
-    key: keyof ReturnType<typeof getTokensConstants>,
+    key: keyof ReturnType<typeof getTokenConstants>,
     name: string | ((chainId: ChainId) => string),
     symbol: string | ((chainId: ChainId) => string),
     decimals: number | ((chainId: ChainId) => number),
@@ -193,7 +193,7 @@ export function createERC20Tokens(
         accumulator[chainId] = {
             type: EthereumTokenType.ERC20,
             chainId,
-            address: getTokensConstants(chainId)[key],
+            address: getTokenConstants(chainId)[key],
             name: evaludator(name),
             symbol: evaludator(symbol),
             decimals: evaludator(decimals),

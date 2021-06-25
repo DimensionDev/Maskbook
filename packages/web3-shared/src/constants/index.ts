@@ -4,7 +4,7 @@ import Gitcoin from '@masknet/constants/data/gitcoin.json'
 import ITO from '@masknet/constants/data/ITO.json'
 import LBP from '@masknet/constants/data/LBP.json'
 import RedPacket from '@masknet/constants/data/red-packet.json'
-import Tokens from '@masknet/constants/data/tokens.json'
+import Token from '@masknet/constants/data/token.json'
 import Trader from '@masknet/constants/data/trader.json'
 import Trending from '@masknet/constants/data/trending.json'
 import URL from '@masknet/constants/data/URL.json'
@@ -31,8 +31,8 @@ export const useGitcoinConstants = hookTransform(getGitcoinConstants)
 export const getRedPacketConstants = transform(RedPacket)
 export const useRedPacketConstants = hookTransform(getRedPacketConstants)
 
-export const getTokensConstants = transform(Tokens)
-export const useTokensConstants = hookTransform(getTokensConstants)
+export const getTokenConstants = transform(Token)
+export const useTokenConstants = hookTransform(getTokenConstants)
 
 export const getTraderConstants = transform(Trader)
 export const useTraderConstants = hookTransform(getTraderConstants)

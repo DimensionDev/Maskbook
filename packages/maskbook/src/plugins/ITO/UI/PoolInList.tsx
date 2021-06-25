@@ -1,5 +1,5 @@
 import { formatBalance, FormattedBalance, isZero, pow10 } from '@masknet/shared'
-import { getChainDetailed, isSameAddress, useAccount, useTokensConstants } from '@masknet/web3-shared'
+import { getChainDetailed, isSameAddress, useAccount, useTokenConstants } from '@masknet/web3-shared'
 import {
     Box,
     Card,
@@ -109,7 +109,7 @@ export function PoolInList(props: PoolInListProps) {
     const classes = useStyles()
     const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onWithdraw } = props
 
-    const { NATIVE_TOKEN_ADDRESS } = useTokensConstants()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const account = useAccount()
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)
     const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)

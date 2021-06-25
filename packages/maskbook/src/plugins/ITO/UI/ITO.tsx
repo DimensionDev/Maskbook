@@ -8,7 +8,7 @@ import {
     useAccount,
     useChainId,
     useChainIdValid,
-    useTokensConstants,
+    useTokenConstants,
 } from '@masknet/web3-shared'
 import { Box, Card, Grid, Link, makeStyles, Theme, Typography } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
@@ -175,7 +175,7 @@ interface TokenItemProps {
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
     const classes = useStyles({})
-    const { NATIVE_TOKEN_ADDRESS } = useTokensConstants()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     return (
         <>

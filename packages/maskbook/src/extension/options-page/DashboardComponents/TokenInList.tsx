@@ -3,7 +3,7 @@ import {
     currySameAddress,
     FungibleTokenDetailed,
     resolveTokenLinkOnExplorer,
-    useTokensConstants,
+    useTokenConstants,
 } from '@masknet/web3-shared'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
@@ -71,7 +71,7 @@ export interface TokenInListProps {
 
 export function TokenInList({ data, index, style }: TokenInListProps) {
     const classes = useStyles()
-    const { NATIVE_TOKEN_ADDRESS } = useTokensConstants()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
 
     const token = data.tokens[index]

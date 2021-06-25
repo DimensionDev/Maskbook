@@ -2,7 +2,7 @@ import {
     FungibleTokenDetailed,
     isNative,
     useBlockNumber,
-    useTokensConstants,
+    useTokenConstants,
     useTraderConstants,
 } from '@masknet/web3-shared'
 import { useAsyncRetry } from 'react-use'
@@ -18,7 +18,7 @@ export function useTrade(
     outputToken?: FungibleTokenDetailed,
 ) {
     const blockNumber = useBlockNumber()
-    const { WETH_ADDRESS, NATIVE_TOKEN_ADDRESS } = useTokensConstants()
+    const { WETH_ADDRESS, NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const { BALANCER_ETH_ADDRESS } = useTraderConstants()
 
     return useAsyncRetry(async () => {
