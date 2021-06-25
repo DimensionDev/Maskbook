@@ -14,7 +14,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { StyledLinearProgress } from '../../ITO/UI/StyledLinearProgress'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useRefundCallback } from './hooks/useRefundCallback'
-import { EthereumMessages } from '../../Ethereum/messages'
+import { WalletMessages } from '../../Wallet/messages'
 
 const useStyles = makeStyles((theme: Theme) => ({
     primary: {
@@ -114,7 +114,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => undefined,
     )
 

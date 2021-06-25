@@ -1,3 +1,0 @@
-# Plugin: Ethereum Wallet
-
-TODO

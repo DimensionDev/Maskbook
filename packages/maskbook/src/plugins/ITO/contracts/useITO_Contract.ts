@@ -1,13 +1,12 @@
-import type { AbiItem } from 'web3-utils'
-import ITO_ABI from '@masknet/contracts/abis/ITO.json'
 import ITO_BSC_POLYGON_ABI from '@masknet/contracts/abis/BscPolygonITO.json'
-import type { ITO } from '@masknet/contracts/types/ITO'
+import ITO_ABI from '@masknet/contracts/abis/ITO.json'
 import type { BscPolygonITO } from '@masknet/contracts/types/BscPolygonITO'
-import { ITO_CONSTANTS } from '../constants'
-import { useConstant, useContract, useNetworkType, NetworkType } from '@masknet/web3-shared'
+import type { ITO } from '@masknet/contracts/types/ITO'
+import { NetworkType, useContract, useITOConstants, useNetworkType } from '@masknet/web3-shared'
+import type { AbiItem } from 'web3-utils'
 
 export function useITO_Contract(contractAddress?: string) {
-    const { ITO_CONTRACT_ADDRESS, ITO_BSC_POLYGON_CONTRACT_ADDRESS } = useConstant(ITO_CONSTANTS)
+    const { ITO_CONTRACT_ADDRESS, ITO_BSC_POLYGON_CONTRACT_ADDRESS } = useITOConstants()
     const ITO_CONTRACT = useContract<ITO>(contractAddress ?? ITO_CONTRACT_ADDRESS, ITO_ABI as AbiItem[])
     const ITO_BSC_POLYGON_CONTRACT = useContract<BscPolygonITO>(
         contractAddress ?? ITO_BSC_POLYGON_CONTRACT_ADDRESS,

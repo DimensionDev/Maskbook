@@ -1,0 +1,13 @@
+{
+    "BALANCER_POOLS_SUBGRAPH_URL": {
+        "Mainnet": "https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-beta",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": ""
+    }
+}

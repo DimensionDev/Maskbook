@@ -8,7 +8,7 @@ import { AirdropIcon } from '../../../resources/AirdropIcon'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useAccount, TransactionStateType, ERC20TokenDetailed, useChainId } from '@masknet/web3-shared'
-import { EthereumMessages } from '../../Ethereum/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { formatPercentage, isZero, pow10 } from '@masknet/shared'
 import { useAirdropPacket } from '../hooks/useAirdropPacket'
 import { useClaimCallback } from '../hooks/useClaimCallback'
@@ -121,7 +121,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
 
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             onUpdateBalance()

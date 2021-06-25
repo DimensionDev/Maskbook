@@ -1,8 +1,9 @@
 {
   "name": "@masknet/web3-shared",
   "main": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "dependencies": {
+    "@masknet/constants": "workspace:*",
     "@masknet/contracts": "workspace:*",
     "@masknet/shared": "workspace:*",
     "bignumber.js": "9.0.1",

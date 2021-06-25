@@ -1,44 +1,38 @@
-import { PluginConfig, PluginStage, PluginScope } from '../types'
 import { Suspense, useMemo } from 'react'
+import type { Plugin } from '@masknet/plugin-infra'
 import { SnackbarContent } from '@material-ui/core'
-import { parseURL } from '../../utils/utils'
-import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
-import { extractTextFromTypedMessage } from '../../protocols/typed-message'
-import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
-import { GITCOIN_PLUGIN_ID } from './constants'
-import { DonateDialog } from './UI/DonateDialog'
-import { PreviewCard } from './UI/PreviewCard'
+import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
+import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
+import { PreviewCard } from './PreviewCard'
+import { base } from '../base'
+import { PLUGIN_NAME, PLUGIN_META_KEY } from '../constants'
+import { DonateDialog } from './DonateDialog'
+import { parseURL } from '../../../utils/utils'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
-export const GitcoinPluginDefine: PluginConfig = {
-    id: GITCOIN_PLUGIN_ID,
-    pluginIcon: '🔗',
-    pluginName: 'Gitcoin',
-    pluginDescription: 'Gitcoin grants sustain web3 projects with quadratic funding.',
-    identifier: GITCOIN_PLUGIN_ID,
-    stage: PluginStage.Production,
-    scope: PluginScope.Public,
-    successDecryptionInspector: function Component(props): JSX.Element | null {
+const sns: Plugin.SNSAdaptor.Definition = {
+    ...base,
+    init(signal) {},
+    DecryptedInspector: function Comp(props) {
         const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
         const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isGitcoin)
         if (!text.ok) return null
         if (!link) return null
         return <Renderer url={link} />
     },
-    postInspector: function Component(): JSX.Element | null {
+    CompositionDialogMetadataBadgeRender: new Map([[PLUGIN_META_KEY, () => PLUGIN_NAME]]),
+    GlobalInjection() {
+        return <DonateDialog />
+    },
+    PostInspector() {
         const link = usePostInfoDetails
             .postMetadataMentionedLinks()
             .concat(usePostInfoDetails.postMentionedLinks())
             .find(isGitcoin)
         if (!link) return null
         return <Renderer url={link} />
-    },
-    PageComponent() {
-        return <DonateDialog />
-    },
-    DashboardComponent() {
-        return <DonateDialog />
     },
 }
 
@@ -52,3 +46,5 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
         </MaskbookPluginWrapper>
     )
 }
+
+export default sns

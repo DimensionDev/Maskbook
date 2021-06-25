@@ -1,0 +1,46 @@
+{
+    "GITCOIN_MAINTAINER_ADDRESS": {
+        "Mainnet": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
+        "Ropsten": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
+        "Rinkeby": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": ""
+    },
+    "BULK_CHECKOUT_ADDRESS": {
+        "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
+        "Ropsten": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
+        "Rinkeby": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": ""
+    },
+    "GITCOIN_ETH_ADDRESS": {
+        "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Ropsten": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Rinkeby": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": ""
+    },
+    "GITCOIN_TIP_PERCENTAGE": {
+        "Mainnet": 5,
+        "Ropsten": 5,
+        "Rinkeby": 5,
+        "Kovan": 5,
+        "Gorli": 5,
+        "BSC": 5,
+        "BSCT": 5,
+        "Matic": 5,
+        "Mumbai": 5
+    }
+}

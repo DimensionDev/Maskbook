@@ -1,30 +1,35 @@
-import { makeStyles, Box, TextField, CircularProgress, Typography } from '@material-ui/core'
+import { formatAmount, formatBalance, isGreaterThan, isZero } from '@masknet/shared'
+import {
+    ERC20TokenDetailed,
+    EthereumTokenType,
+    useAccount,
+    useITOConstants,
+    useTokenBalance,
+} from '@masknet/web3-shared'
+import { Box, CircularProgress, makeStyles, TextField, Typography } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
 import UnCheckIcon from '@material-ui/icons/Close'
-import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
 import classNames from 'classnames'
+import { format as formatDateTime } from 'date-fns'
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
-import { format as formatDateTime } from 'date-fns'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { useI18N, sliceTextByUILength } from '../../../utils'
-import { ERC20TokenDetailed, EthereumTokenType, useAccount, useConstant, useTokenBalance } from '@masknet/web3-shared'
-import { useQualificationVerify } from '../hooks/useQualificationVerify'
-import { ITO_CONSTANTS } from '../constants'
-import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import type { PoolSettings } from '../hooks/useFill'
-import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { formatAmount, formatBalance, isGreaterThan, isZero } from '@masknet/shared'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { AdvanceSetting } from './AdvanceSetting'
-import type { AdvanceSettingData } from './AdvanceSetting'
-import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
-import { useRegionSelect, regionCodes, encodeRegionCode, decodeRegionCode } from '../hooks/useRegion'
-import { RegionSelect } from './RegionSelect'
+import { sliceTextByUILength, useI18N } from '../../../utils'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
+import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
+import type { PoolSettings } from '../hooks/useFill'
+import { useQualificationVerify } from '../hooks/useQualificationVerify'
+import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from '../hooks/useRegion'
+import type { AdvanceSettingData } from './AdvanceSetting'
+import { AdvanceSetting } from './AdvanceSetting'
+import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
+import { RegionSelect } from './RegionSelect'
 
 const useStyles = makeStyles((theme) => ({
     line: {
@@ -99,7 +104,7 @@ export function CreateForm(props: CreateFormProps) {
 
     const account = useAccount()
     const ITO_CONTRACT_ADDRESS = useITO_ContractAddress()
-    const { DEFAULT_QUALIFICATION_ADDRESS } = useConstant(ITO_CONSTANTS)
+    const { DEFAULT_QUALIFICATION_ADDRESS } = useITOConstants()
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'

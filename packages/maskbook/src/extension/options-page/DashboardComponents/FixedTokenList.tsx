@@ -1,22 +1,21 @@
-import { useState } from 'react'
-import { uniqBy } from 'lodash-es'
-import { FixedSizeList, FixedSizeListProps } from 'react-window'
-import { makeStyles, Typography } from '@material-ui/core'
 import {
-    useConstant,
-    CONSTANTS,
-    TOKEN_CONSTANTS,
-    isSameAddress,
-    FungibleTokenDetailed,
-    EthereumTokenType,
     currySameAddress,
+    EthereumTokenType,
+    FungibleTokenDetailed,
+    isSameAddress,
+    useEthereumConstants,
+    useTokenConstants,
 } from '@masknet/web3-shared'
+import { makeStyles, Typography } from '@material-ui/core'
+import { uniqBy } from 'lodash-es'
+import { useState } from 'react'
+import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { TokenInList } from './TokenInList'
 import {
     TokenListsState,
     useERC20TokensDetailedFromTokenLists,
 } from '../../../web3/hooks/useERC20TokensDetailedFromTokenLists'
+import { TokenInList } from './TokenInList'
 
 const useStyles = makeStyles((theme) => ({
     list: {},
@@ -46,7 +45,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     } = props
 
     //#region search tokens
-    const { ERC20_TOKEN_LISTS } = useConstant(CONSTANTS)
+    const { ERC20_TOKEN_LISTS } = useEthereumConstants()
     const [address, setAddress] = useState('')
     const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(
         ERC20_TOKEN_LISTS,
@@ -55,7 +54,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     //#endregion
 
     //#region mask token
-    const { MASK_ADDRESS } = useConstant(TOKEN_CONSTANTS)
+    const { MASK_ADDRESS } = useTokenConstants()
     //#endregion
 
     //#region UI helpers

@@ -2,7 +2,7 @@ import { Environment, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { newDashboardConnection } from '../../../settings/settings'
 
 let disconnected = false
-export default function () {
+export default function (signal: AbortSignal) {
     // Listen to API request from dashboard
     if (
         (process.env.NODE_ENV === 'development' || process.env.build !== 'stable') &&
@@ -18,5 +18,5 @@ export default function () {
             return { acceptAs: Environment.HasBrowserAPI }
         })
     }
-    return () => (disconnected = true)
+    signal.addEventListener('abort', () => (disconnected = true))
 }

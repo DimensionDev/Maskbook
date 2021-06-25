@@ -1,15 +1,14 @@
-import { useCallback } from 'react'
-import { makeStyles, Theme } from '@material-ui/core/styles'
-import { ListItem, ListItemText, Typography, ListItemIcon, Link } from '@material-ui/core'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import {
-    useConstant,
-    TOKEN_CONSTANTS,
-    resolveTokenLinkOnExplorer,
-    FungibleTokenDetailed,
-    currySameAddress,
-} from '@masknet/web3-shared'
 import { formatEthereumAddress } from '@masknet/shared'
+import {
+    currySameAddress,
+    FungibleTokenDetailed,
+    resolveTokenLinkOnExplorer,
+    useTokenConstants,
+} from '@masknet/web3-shared'
+import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core/styles'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import { useCallback } from 'react'
 import { TokenIcon } from './TokenIcon'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -72,7 +71,7 @@ export interface TokenInListProps {
 
 export function TokenInList({ data, index, style }: TokenInListProps) {
     const classes = useStyles()
-    const { NATIVE_TOKEN_ADDRESS } = useConstant(TOKEN_CONSTANTS)
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
 
     const token = data.tokens[index]
