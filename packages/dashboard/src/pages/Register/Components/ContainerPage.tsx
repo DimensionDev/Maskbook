@@ -1,8 +1,9 @@
 import { InfoIcon, MaskTransparentLogo } from '@dimensiondev/icons'
 import { MaskColorVar } from '@dimensiondev/maskbook-theme'
 import { Link, makeStyles, Typography } from '@material-ui/core'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { useDashboardI18N } from '../../../locales/i18n_generated'
+import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -70,6 +71,11 @@ export interface ContainerPageProps {
 export const ContainerPage = memo<ContainerPageProps>(({ children, goback }) => {
     const classes = useStyles()
     const t = useDashboardI18N()
+    const Navigate = useNavigate()
+
+    const goBack = useCallback(() => {
+        Navigate(-1)
+    }, [Navigate])
 
     return (
         <div className={classes.container}>
@@ -77,7 +83,13 @@ export const ContainerPage = memo<ContainerPageProps>(({ children, goback }) => 
                 <MaskTransparentLogo fontSize="inherit" />
             </div>
             <div className={classes.rightContainer}>
-                <div className={classes.goback}>{goback ?? <Link>Go back</Link>}</div>
+                <div className={classes.goback}>
+                    {
+                        <Link href="#" onClick={() => Navigate(-1)} underline="none">
+                            Go back
+                        </Link>
+                    }
+                </div>
                 <div className={classes.wrapper}>{children}</div>
                 <div className={classes.footer}>
                     <div className={classes.tip}>
