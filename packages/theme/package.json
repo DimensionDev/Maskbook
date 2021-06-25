@@ -8,7 +8,7 @@
     "./constants": "./dist/src/constants.js"
   },
   "main": "./dist/src/theme.js",
-  "typings": "./dist/src/theme.d.ts",
+  "types": "./dist/src/theme.d.ts",
   "scripts": {
     "build-storybook": "build -- build-storybook",
     "start": "dev -- start-storybook -p 6006"

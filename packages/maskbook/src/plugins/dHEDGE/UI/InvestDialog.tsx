@@ -19,7 +19,6 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { EthereumMessages } from '../../Ethereum/messages'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
@@ -162,7 +161,7 @@ export function InvestDialog() {
 
     // on close transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         useCallback(
             (ev) => {
                 if (!ev.open) {
