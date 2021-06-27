@@ -258,11 +258,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
             <div className={classes.wrapper} onClick={openWallet}>
                 <div className={classes.button}>
-                    {account && chainIdValid ? (
-                        <WalletIcon />
-                    ) : (
-                        <WalletSharp classes={{ root: classes.icon }} />
-                    )}
+                    {account && chainIdValid ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} />}
 
                     <Typography className={classes.title}>
                         {account
