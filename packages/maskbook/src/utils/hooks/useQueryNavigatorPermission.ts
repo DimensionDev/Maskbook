@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { hasIn } from 'lodash-es'
 import { Flags } from '../flags'
 
-const q = <const>['query', 'request', 'revoke']
+const q = ['query', 'request', 'revoke'] as const
 
 export function checkPermissionApiUsability(type?: typeof q[number]) {
     const r: Partial<{ [T in typeof q[number]]: boolean }> = {}
