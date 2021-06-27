@@ -131,12 +131,14 @@ export function batchReplace(source: string, group: Array<[string | RegExp, stri
 export function pollingTask(
     task: () => Promise<boolean>,
     {
+        autoStart = true,
         delay = 30 * 1000,
     }: {
+        autoStart?: boolean
         delay?: number
     } = {},
 ) {
-    let canceled = false
+    let canceled = !autoStart
     let timer: NodeJS.Timeout
     const runTask = async () => {
         if (canceled) return
@@ -150,8 +152,11 @@ export function pollingTask(
     }
     runTask()
     return {
-        cancel: () => (canceled = true),
+        cancel: () => {
+            canceled = true
+        },
         reset: () => {
+            canceled = false
             clearTimeout(timer)
             timer = setTimeout(runTask, delay)
         },

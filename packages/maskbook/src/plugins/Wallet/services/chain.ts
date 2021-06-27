@@ -1,8 +1,7 @@
-import { debounce } from 'lodash-es'
 import { ChainId, getNetworkTypeFromChainId, ProviderType } from '@dimensiondev/web3-shared'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
 import { getWalletCached } from '../../../extension/background-script/EthereumServices/wallet'
-import { startEffects } from '../../../utils'
+import { pollingTask, startEffects } from '../../../utils'
 import {
     currentAccountSettings,
     currentBalanceSettings,
@@ -11,9 +10,18 @@ import {
     currentNetworkSettings,
     currentProviderSettings,
 } from '../settings'
+import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 
-async function updateChainState(chainId?: ChainId) {
-    console.log('DEBUG: update chain state')
+const beats: true[] = []
+
+export async function kickToUpdateChainState() {
+    beats.push(true)
+}
+
+export async function updateChainState(chainId?: ChainId) {
+    // forget those passed beats
+    beats.length = 0
+
     // update network type
     if (chainId) currentNetworkSettings.value = getNetworkTypeFromChainId(chainId)
 
@@ -21,20 +29,34 @@ async function updateChainState(chainId?: ChainId) {
     const wallet = getWalletCached()
     if (chainId) currentBlockNumberSettings.value = await getBlockNumber()
     if (wallet) currentBalanceSettings.value = await getBalance(wallet.address)
+
+    // reset the polling if chain state updated successfully
+    resetPoolTask()
 }
 
-export const updateChainStateDebounced = debounce(updateChainState, 30 /* seconds */ * 1000 /* milliseconds */, {
-    leading: true,
-    trailing: true,
-})
-
 const effect = startEffects(import.meta.webpackHot)
+
+// polling the newest chain state
+let resetPoolTask: () => void = () => {}
+effect(() => {
+    const { reset } = pollingTask(
+        async () => {
+            if (beats.length <= 0) return false
+            await updateChainState()
+            return false
+        },
+        {
+            delay: UPDATE_CHAIN_STATE_DELAY,
+        },
+    )
+    resetPoolTask = reset
+    return reset
+})
 
 // revalidate chain state if the chainId of current provider was changed
 effect(() =>
     currentChainIdSettings.addListener((chainId) => {
-        updateChainStateDebounced.cancel()
-        updateChainStateDebounced(chainId)
+        updateChainState(chainId)
         if (currentProviderSettings.value === ProviderType.Maskbook) resetAllNonce()
     }),
 )
@@ -42,7 +64,6 @@ effect(() =>
 // revalidate chain state if the current wallet was changed
 effect(() =>
     currentAccountSettings.addListener(() => {
-        updateChainStateDebounced.cancel()
-        updateChainStateDebounced()
+        updateChainState()
     }),
 )
