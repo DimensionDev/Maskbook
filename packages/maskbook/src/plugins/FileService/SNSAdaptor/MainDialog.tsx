@@ -4,7 +4,6 @@ import { useSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { useBeforeUnload } from 'react-use'
 import { useI18N } from '../../../utils'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
 import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { Entry } from './components'
@@ -12,7 +11,7 @@ import { META_KEY_2 } from '../constants'
 import { Exchange } from './hooks/Exchange'
 import type { FileInfo } from '../types'
 
-interface Props extends withClasses<never>, InjectedDialogProps {
+interface Props extends InjectedDialogProps {
     onConfirm: (file: FileInfo | undefined) => void
     onDecline: () => void
 }
@@ -32,7 +31,7 @@ const useStyles = makeStyles({
 })
 const FileServiceDialog: React.FC<Props> = (props) => {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const classes = useStyles()
     const snackbar = useSnackbar()
     const [uploading, setUploading] = useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = useState<FileInfo | null>(null)

@@ -5,10 +5,6 @@ import { useI18N } from '../../../utils'
 import { CopyableCode } from './components/Copyable'
 import type { FileInfo } from '../types'
 
-interface Props {
-    info: FileInfo
-}
-
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
