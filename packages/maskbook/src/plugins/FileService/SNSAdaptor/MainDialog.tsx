@@ -2,7 +2,6 @@ import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/c
 import { isNil } from 'lodash-es'
 import { useSnackbar } from '@masknet/theme'
 import { useState } from 'react'
-import { useBeforeUnload } from 'react-use'
 import { useI18N } from '../../../utils'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
 import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
@@ -35,7 +34,6 @@ const FileServiceDialog: React.FC<Props> = (props) => {
     const snackbar = useSnackbar()
     const [uploading, setUploading] = useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = useState<FileInfo | null>(null)
-    useBeforeUnload(uploading)
     const onInsert = () => {
         if (isNil(selectedFileInfo)) {
             return
