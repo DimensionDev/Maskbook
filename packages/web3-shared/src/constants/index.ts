@@ -51,7 +51,7 @@ export const CONSTANTS = {
         [ChainId.Ropsten]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
         [ChainId.Rinkeby]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
         [ChainId.Kovan]: '0xd0A1E359811322d97991E03f863a0C30C2cF029C',
-        [ChainId.Gorli]: '',
+        [ChainId.Gorli]: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
         [ChainId.BSC]: '',
         [ChainId.BSCT]: '',
         [ChainId.Matic]: '',
