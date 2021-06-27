@@ -78,7 +78,6 @@ export abstract class Identifier {
         return ax.join(',')
     }
 }
-@serialize('ProfileIdentifier')
 export class ProfileIdentifier extends Identifier {
     static getUserName(x: string | ProfileIdentifier): string | null {
         if (typeof x === 'string') {
@@ -114,12 +113,12 @@ export class ProfileIdentifier extends Identifier {
         return new ProfileIdentifier(network, userId)
     }
 }
+serialize('ProfileIdentifier')(ProfileIdentifier)
 export enum PreDefinedVirtualGroupNames {
     friends = '_default_friends_group_',
     followers = '_followers_group_',
     following = '_following_group_',
 }
-@serialize('GroupIdentifier')
 export class GroupIdentifier extends Identifier {
     static getFriendsGroupIdentifier(who: ProfileIdentifier, groupId: string) {
         return new GroupIdentifier(who.network, who.userId, groupId)
@@ -156,7 +155,7 @@ export class GroupIdentifier extends Identifier {
         return new GroupIdentifier(network, belongs, groupID)
     }
 }
-@serialize('PostIdentifier')
+serialize('GroupIdentifier')(GroupIdentifier)
 export class PostIdentifier<T extends Identifier = Identifier> extends Identifier {
     static readonly unknown = new PostIdentifier(ProfileIdentifier.unknown, '$unknown')
     get isUnknown() {
@@ -180,7 +179,7 @@ export class PostIdentifier<T extends Identifier = Identifier> extends Identifie
         return new PostIdentifier(id.val, postId)
     }
 }
-@serialize('PostIVIdentifier')
+serialize('PostIdentifier')(PostIdentifier)
 export class PostIVIdentifier extends Identifier {
     constructor(public readonly network: string, public readonly postIV: string) {
         super()
@@ -194,12 +193,12 @@ export class PostIVIdentifier extends Identifier {
         return new PostIVIdentifier(network, iv)
     }
 }
+serialize('PostIVIdentifier')(PostIVIdentifier)
 
 /**
  * This class identify the point on an EC curve.
  * ec_key:secp256k1/CompressedPoint
  */
-@serialize('ECKeyIdentifier')
 export class ECKeyIdentifier extends Identifier {
     public readonly type = 'ec_key'
     constructor(public readonly curve: 'secp256k1', public readonly compressedPoint: string) {
@@ -217,6 +216,7 @@ export class ECKeyIdentifier extends Identifier {
         return new ECKeyIdentifier(curve, point)
     }
 }
+serialize('ECKeyIdentifier')(ECKeyIdentifier)
 export type PersonaIdentifier = ECKeyIdentifier
 // eslint-disable-next-line no-redeclare
 export const PersonaIdentifier = [ECKeyIdentifier]
