@@ -13,7 +13,6 @@ import type { Configuration as DevServerConfiguration } from 'webpack-dev-server
 
 //#region Development plugins
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
-import ReactRefreshTypeScriptTransformer from 'react-refresh-typescript'
 import WatchMissingModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin'
 import NotifierPlugin from 'webpack-notifier'
 //#endregion
@@ -129,18 +128,30 @@ function config(opts: {
                     parser: { worker: ['OnDemandWorker', '...'] },
                     // Compile all ts files in the workspace
                     include: src('../'),
-                    loader: require.resolve('ts-loader'),
+                    loader: require.resolve('swc-loader'),
                     options: {
-                        transpileOnly: true,
-                        compilerOptions: {
-                            importsNotUsedAsValues: 'remove',
-                            jsx: mode === 'production' ? 'react-jsx' : 'react-jsxdev',
+                        jsc: {
+                            parser: {
+                                syntax: 'typescript',
+                                dynamicImport: true,
+                                tsx: true,
+                                importAssertions: true,
+                            },
+                            target: 'es2019',
+                            externalHelpers: true,
+                            transform: {
+                                react: {
+                                    runtime: 'automatic',
+                                    useBuiltins: true,
+                                    development: disableReactHMR ? false : mode === 'development',
+                                    refresh: {
+                                        refreshReg: '$RefreshReg$',
+                                        refreshSig: '$RefreshSig$',
+                                        emitFullSignatures: true,
+                                    },
+                                },
+                            },
                         },
-                        getCustomTransformers: () => ({
-                            before: [!disableHMR && !disableReactHMR && ReactRefreshTypeScriptTransformer()].filter(
-                                Boolean,
-                            ),
-                        }),
                     },
                 },
             ],
