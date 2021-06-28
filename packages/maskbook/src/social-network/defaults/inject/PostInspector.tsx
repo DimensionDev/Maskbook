@@ -22,7 +22,7 @@ export function injectPostInspectorDefault<T extends string>(
         return <PostInspector onDecrypted={onDecrypted} needZip={zipPost} {...additionalProps} />
     })
 
-    const { zipPost } = config
+    const { zipPost, injectionPoint } = config
     const zipPostF = zipPost || noop
     return function injectPostInspector(current: PostInfo, signal: AbortSignal) {
         const jsx = (
@@ -36,12 +36,7 @@ export function injectPostInspectorDefault<T extends string>(
                 />
             </PostInfoProvider>
         )
-        if (config.render) {
-            const undo = config.render(jsx, current)
-            signal.addEventListener('abort', undo)
-            return undo
-        }
-        const root = createReactRootShadowed(current.rootNodeProxy.afterShadow, {
+        const root = createReactRootShadowed(injectionPoint?.(current) ?? current.rootNodeProxy.afterShadow, {
             key: 'post-inspector',
             signal,
         })
@@ -52,5 +47,5 @@ export function injectPostInspectorDefault<T extends string>(
 
 interface InjectPostInspectorDefaultConfig {
     zipPost?(node: DOMProxy): void
-    render?(node: React.ReactChild, postInfo: PostInfo): () => void
+    injectionPoint?: (postInfo: PostInfo) => ShadowRoot
 }

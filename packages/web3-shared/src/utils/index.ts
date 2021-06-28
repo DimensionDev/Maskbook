@@ -1,9 +1,9 @@
-import BigNumber from 'bignumber.js'
 import { getEnumAsArray, safeUnreachable } from '@masknet/shared'
+import BigNumber from 'bignumber.js'
 import type Web3 from 'web3'
 import type { AbiOutput } from 'web3-utils'
 import CHAINS from '../assets/chains.json'
-import { TOKEN_CONSTANTS } from '../constants'
+import { getTokenConstants } from '../constants'
 import {
     Asset,
     ChainId,
@@ -14,7 +14,6 @@ import {
     EthereumTokenType,
     NativeTokenDetailed,
     NetworkType,
-    Web3Constants,
 } from '../types'
 
 export function isSameAddress(addrA: string, addrB: string) {
@@ -32,20 +31,11 @@ export function currySameAddress(base: string) {
     }
 }
 
-/**
- * @deprecated Use get[name]Constants from `@masknet/constants` package`
- */
-export function constantOfChain<T extends Web3Constants>(constants: T, chainId = ChainId.Mainnet) {
-    const chainSpecifiedConstant = {} as { [key in keyof T]: T[key][ChainId.Mainnet] }
-    for (const i in constants) chainSpecifiedConstant[i] = constants[i][chainId]
-    return chainSpecifiedConstant
-}
+export const isDAI = currySameAddress(getTokenConstants().DAI_ADDRESS)
 
-export const isDAI = currySameAddress(constantOfChain(TOKEN_CONSTANTS).DAI_ADDRESS)
+export const isOKB = currySameAddress(getTokenConstants().OKB_ADDRESS)
 
-export const isOKB = currySameAddress(constantOfChain(TOKEN_CONSTANTS).OKB_ADDRESS)
-
-export const isNative = currySameAddress(constantOfChain(TOKEN_CONSTANTS).NATIVE_TOKEN_ADDRESS)
+export const isNative = currySameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS)
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
@@ -126,7 +116,7 @@ export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     return {
         type: EthereumTokenType.Native,
         chainId,
-        address: constantOfChain(TOKEN_CONSTANTS).NATIVE_TOKEN_ADDRESS,
+        address: getTokenConstants().NATIVE_TOKEN_ADDRESS,
         ...chainDetailed.nativeCurrency,
     }
 }
@@ -191,7 +181,7 @@ export function createERC1155Token(
 }
 
 export function createERC20Tokens(
-    key: keyof typeof TOKEN_CONSTANTS,
+    key: keyof ReturnType<typeof getTokenConstants>,
     name: string | ((chainId: ChainId) => string),
     symbol: string | ((chainId: ChainId) => string),
     decimals: number | ((chainId: ChainId) => number),
@@ -203,7 +193,7 @@ export function createERC20Tokens(
         accumulator[chainId] = {
             type: EthereumTokenType.ERC20,
             chainId,
-            address: constantOfChain(TOKEN_CONSTANTS, chainId)[key],
+            address: getTokenConstants(chainId)[key],
             name: evaludator(name),
             symbol: evaludator(symbol),
             decimals: evaludator(decimals),

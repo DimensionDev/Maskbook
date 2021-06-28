@@ -1,14 +1,20 @@
-import { getChainId } from '../../../../extension/background-script/SettingsService'
+import {
+    ChainId,
+    EthereumTokenType,
+    getChainDetailed,
+    getChainName,
+    getRedPacketConstants,
+    NativeTokenDetailed,
+} from '@masknet/web3-shared'
 import { pick } from 'lodash-es'
+import { getChainId } from '../../../../extension/background-script/SettingsService'
 import { tokenIntoMask } from '../../../ITO/helpers'
 import type {
-    RedPacketJSONPayload,
-    RedPacketSubgraphOutMask,
-    RedPacketSubgraphInMask,
     RedPacketHistory,
+    RedPacketJSONPayload,
+    RedPacketSubgraphInMask,
+    RedPacketSubgraphOutMask,
 } from '../../types'
-import { EthereumTokenType, ChainId, getChainName, getChainDetailed, NativeTokenDetailed } from '@masknet/web3-shared'
-import { getRedPacketConstants } from '@masknet/constants'
 
 const redPacketBasicKeys = [
     'contract_address',

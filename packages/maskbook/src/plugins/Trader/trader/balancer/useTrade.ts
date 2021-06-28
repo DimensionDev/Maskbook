@@ -1,6 +1,12 @@
+import {
+    FungibleTokenDetailed,
+    isNative,
+    useBlockNumber,
+    useTokenConstants,
+    useTraderConstants,
+} from '@masknet/web3-shared'
 import { useAsyncRetry } from 'react-use'
-import { TOKEN_CONSTANTS, FungibleTokenDetailed, isNative, useConstant, useBlockNumber } from '@masknet/web3-shared'
-import { BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
+import { BALANCER_SWAP_TYPE } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { SwapResponse, TradeStrategy } from '../../types'
 
@@ -12,8 +18,8 @@ export function useTrade(
     outputToken?: FungibleTokenDetailed,
 ) {
     const blockNumber = useBlockNumber()
-    const { WETH_ADDRESS, NATIVE_TOKEN_ADDRESS } = useConstant(TOKEN_CONSTANTS)
-    const { BALANCER_ETH_ADDRESS } = useConstant(TRADE_CONSTANTS)
+    const { WETH_ADDRESS, NATIVE_TOKEN_ADDRESS } = useTokenConstants()
+    const { BALANCER_ETH_ADDRESS } = useTraderConstants()
 
     return useAsyncRetry(async () => {
         if (!inputToken || !outputToken) return null

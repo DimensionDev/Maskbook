@@ -1,13 +1,13 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
+import formatDateTime from 'date-fns/format'
 import { useEffect } from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
-import { useI18N } from '../../../utils'
-import formatDateTime from 'date-fns/format'
-import { FileRouter } from '../constants'
 import { useExchange } from '../hooks/Exchange'
-import type { FileInfo } from '../types'
+import { useI18N } from '../../../../utils'
+import { FileRouter } from '../../constants'
+import type { FileInfo } from '../../types'
 import { FileName } from './FileName'
 
 const useStyles = makeStyles({

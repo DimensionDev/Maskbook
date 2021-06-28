@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import type { ExchangeProxy } from '@masknet/contracts/types/ExchangeProxy'
 import type { PayableTx } from '@masknet/contracts/types/types'
 import {
     EthereumTokenType,
@@ -7,13 +7,13 @@ import {
     TransactionStateType,
     useAccount,
     useChainId,
-    useConstant,
     useGasPrice,
     useNonce,
+    useTraderConstants,
 } from '@masknet/web3-shared'
+import { useCallback, useState } from 'react'
+import { SLIPPAGE_TOLERANCE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
-import type { ExchangeProxy } from '@masknet/contracts/types/ExchangeProxy'
-import { SLIPPAGE_TOLERANCE_DEFAULT, TRADE_CONSTANTS } from '../../constants'
 import { useTradeAmount } from './useTradeAmount'
 
 export function useTradeCallback(
@@ -25,7 +25,7 @@ export function useTradeCallback(
     const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
-    const { BALANCER_ETH_ADDRESS } = useConstant(TRADE_CONSTANTS)
+    const { BALANCER_ETH_ADDRESS } = useTraderConstants()
 
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,

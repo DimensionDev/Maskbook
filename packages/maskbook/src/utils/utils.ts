@@ -200,7 +200,7 @@ export function assert(x: any, ...args: any): asserts x {
 }
 
 export function checkInputLengthExceed(name: string) {
-    return Array.from(name).length >= WALLET_OR_PERSONA_NAME_MAX_LEN
+    return name.length >= WALLET_OR_PERSONA_NAME_MAX_LEN
 }
 
 export function nonNullable<T>(x: undefined | null | T): x is T {

@@ -1,11 +1,11 @@
 import { formatFileSize } from '@dimensiondev/kit'
+import { useSnackbar } from '@masknet/theme'
 import { makeStyles, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { isNil } from 'lodash-es'
-import { useSnackbar } from '@masknet/theme'
 import { UploadCloud } from 'react-feather'
 import { useDropArea } from 'react-use'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles((theme) => ({
     label: {

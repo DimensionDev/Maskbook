@@ -8,7 +8,6 @@
  */
 
 // Please make sure you have registered your plugin UI at ./PluginUI
-import './FileService/utils'
 import './Transak/messages'
 import './Trader/messages'
 import './ITO/messages'

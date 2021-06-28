@@ -1,34 +1,31 @@
-import { useState, useCallback, useMemo, useEffect } from 'react'
-import { makeStyles, Typography, DialogContent, Link } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
-import { Trans } from 'react-i18next'
-import { v4 as uuid } from 'uuid'
-
-import { useI18N, useRemoteControlledDialog } from '../../../utils'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { formatBalance, pow10 } from '@masknet/shared'
 import {
-    FungibleTokenDetailed,
     EthereumTokenType,
-    useAccount,
-    useNativeTokenDetailed,
-    useChainId,
+    FungibleTokenDetailed,
     TransactionStateType,
-    useConstant,
+    useAccount,
+    useChainId,
+    useGitcoinConstants,
+    useNativeTokenDetailed,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useDonateCallback } from '../hooks/useDonateCallback'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { formatBalance, pow10 } from '@masknet/shared'
+import { DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
+import BigNumber from 'bignumber.js'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Trans } from 'react-i18next'
+import { v4 as uuid } from 'uuid'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { PluginGitcoinMessages } from '../messages'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { GITCOIN_CONSTANT } from '../constants'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { useDonateCallback } from '../hooks/useDonateCallback'
+import { PluginGitcoinMessages } from '../messages'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -66,7 +63,7 @@ export function DonateDialog(props: DonateDialogProps) {
     const account = useAccount()
     const chainId = useChainId()
     const nativeTokenDetailed = useNativeTokenDetailed()
-    const { BULK_CHECKOUT_ADDRESS } = useConstant(GITCOIN_CONSTANT)
+    const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants()
 
     //#region remote controlled dialog
     const { open, closeDialog: closeDonationDialog } = useRemoteControlledDialog(
@@ -121,7 +118,6 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             token
@@ -130,7 +126,6 @@ export function DonateDialog(props: DonateDialogProps) {
                           token.symbol
                       }. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
                       '#mask_io',
-                      postLink,
                   ].join('\n')
                 : '',
         )
