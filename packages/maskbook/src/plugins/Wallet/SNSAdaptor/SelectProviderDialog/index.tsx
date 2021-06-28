@@ -1,22 +1,29 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
     Box,
-    makeStyles,
-    Theme,
     DialogContent,
     ImageList,
     ImageListItem,
     List,
     ListItem,
+    makeStyles,
+    Theme,
     Typography,
 } from '@material-ui/core'
-import { unreachable, useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
-import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { useWallets, useAccount, getChainIdFromNetworkType, ProviderType, NetworkType } from '@masknet/web3-shared'
+import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
+import {
+    getChainIdFromNetworkType,
+    NetworkType,
+    ProviderType,
+    useAccount,
+    useChainId,
+    useWallets,
+} from '@masknet/web3-shared'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
-import { useChainId } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { Provider } from '../Provider'

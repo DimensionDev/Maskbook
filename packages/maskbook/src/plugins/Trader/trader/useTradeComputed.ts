@@ -10,7 +10,8 @@ import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
 import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
 import { useTrade as useZrxTrade } from './0x/useTrade'
 import { useTrade as useBalancerTrade } from './balancer/useTrade'
-import { pow10, unreachable } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
+import { pow10 } from '@masknet/shared'
 import { TradeContext } from './useTradeContext'
 
 export function useTradeComputed(

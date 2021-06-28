@@ -1,4 +1,5 @@
-import { formatEthereumAddress, safeUnreachable, unreachable } from '@masknet/shared'
+import { formatEthereumAddress } from '@masknet/shared'
+import { safeUnreachable, unreachable } from '@dimensiondev/kit'
 import { getTokenConstants } from '../constants'
 import {
     ChainId,

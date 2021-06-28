@@ -1,4 +1,4 @@
-import { unreachable } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
 import { getTraderConstants, useChainId } from '@masknet/web3-shared'
 import { createContext, useMemo } from 'react'
 import {

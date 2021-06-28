@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from 'react'
 import { useSnackbar } from '@masknet/theme'
 import { Grid, makeStyles } from '@material-ui/core'
-import { formatBalance, unreachable } from '@masknet/shared'
+import { formatBalance } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import {

@@ -1,4 +1,5 @@
-import { formatEthereumAddress, pow10, unreachable } from '@masknet/shared'
+import { formatEthereumAddress, pow10 } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
 import {
     ChainId,
     createERC1155Token,

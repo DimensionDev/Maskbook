@@ -1,4 +1,4 @@
-import { unreachable } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
 import { PortfolioProvider } from '../types'
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
