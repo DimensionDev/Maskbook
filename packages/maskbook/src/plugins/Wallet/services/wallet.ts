@@ -139,7 +139,7 @@ export function createMnemonicWords() {
 
 export async function importNewWallet(
     rec: PartialRequired<Omit<WalletRecord, 'id' | 'eth_balance' | 'createdAt' | 'updatedAt'>, 'name'>,
-    slient = false
+    slient = false,
 ) {
     const { name, path, mnemonic = [], passphrase = '' } = rec
     const address = await getWalletAddress()

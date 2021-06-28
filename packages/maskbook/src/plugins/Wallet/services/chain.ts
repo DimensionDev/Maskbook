@@ -10,7 +10,6 @@ import {
     currentProviderSettings,
 } from '../settings'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
-import { WalletMessages } from '../messages'
 import { getWallet } from './wallet'
 
 const beats: true[] = []
@@ -20,6 +19,9 @@ export async function kickToUpdateChainState() {
 }
 
 export async function updateChainState(chainId?: ChainId) {
+    // reset the polling task cause it will be called from service call
+    resetPoolTask()
+
     // forget those passed beats
     beats.length = 0
 
@@ -27,20 +29,27 @@ export async function updateChainState(chainId?: ChainId) {
     if (chainId) currentNetworkSettings.value = getNetworkTypeFromChainId(chainId)
 
     // update chain state
-    const wallet = await getWallet()
-    if (chainId) currentBlockNumberSettings.value = await getBlockNumber()
-    if (wallet) currentBalanceSettings.value = await getBalance(wallet.address)
-
-    // reset the polling if chain state updated successfully
-    resetPoolTask()
+    try {
+        const wallet = await getWallet()
+        ;[currentBlockNumberSettings.value, currentBalanceSettings.value] = await Promise.all([
+            getBlockNumber(),
+            wallet ? getBalance(wallet.address) : currentBalanceSettings.value,
+        ])
+    } catch (error) {
+        // do nothing
+    } finally {
+        // reset the polling if chain state updated successfully
+        resetPoolTask()
+    }
 }
+
+let resetPoolTask: () => void = () => {}
 
 const effect = startEffects(import.meta.webpackHot)
 
 // poll the newest chain state
-let resetPoolTask: () => void = () => {}
 effect(() => {
-    const { reset } = pollingTask(
+    const { reset, cancel } = pollingTask(
         async () => {
             if (beats.length <= 0) return false
             await updateChainState()
@@ -51,7 +60,7 @@ effect(() => {
         },
     )
     resetPoolTask = reset
-    return reset
+    return cancel
 })
 
 // revalidate chain state if the chainId of current provider was changed
@@ -63,6 +72,4 @@ effect(() =>
 )
 
 // revalidate chain state if the current wallet was changed
-effect(() =>
-    currentAccountSettings.addListener(() => updateChainState()),
-)
+effect(() => currentAccountSettings.addListener(() => updateChainState()))

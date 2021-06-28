@@ -19,9 +19,6 @@ export function useStartWatchChainState() {
     useAsync(async () => {
         // emit an updating request immediately
         await WalletRPC.updateChainState()
-
-        // emit a new beat in the next polling round
-        await WalletRPC.kickToUpdateChainState()
     }, [])
     return useEffect(() => {
         // start the polling task
