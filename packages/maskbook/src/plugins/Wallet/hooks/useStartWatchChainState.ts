@@ -24,5 +24,5 @@ export function useStartWatchChainState() {
         // start the polling task
         task.reset()
         return () => task.cancel()
-    }, [task])
+    }, [])
 }
