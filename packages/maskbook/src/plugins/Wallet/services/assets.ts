@@ -1,4 +1,3 @@
-import { formatEthereumAddress, pow10 } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 import {
     ChainId,
@@ -8,9 +7,11 @@ import {
     createNativeToken,
     CurrencyType,
     EthereumTokenType,
+    formatEthereumAddress,
     getChainDetailed,
     getChainIdFromName,
     getTokenConstants,
+    pow10,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-es'

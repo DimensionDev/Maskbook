@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core'
-import { formatBalance, formatEthereumAddress } from '@masknet/shared'
+import { formatBalance, formatEthereumAddress } from '@masknet/web3-shared'
 import { PostInspector } from './UI/PostInspector'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
 import { ITO_MetaKey, ITO_PluginID } from './constants'

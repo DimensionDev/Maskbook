@@ -1,16 +1,21 @@
 import BigNumber from 'bignumber.js'
 import {
-    Token as UniswapToken,
     ChainId as UniswapChainId,
     Currency as UniswapCurrency,
     CurrencyAmount as UniswapCurrencyAmount,
+    JSBI,
     Percent as UniswapPercent,
     Price as UniswapPrice,
-    JSBI,
+    Token as UniswapToken,
     TokenAmount,
 } from '@uniswap/sdk'
-import { formatEthereumAddress } from '@masknet/shared'
-import { ChainId, EthereumTokenType, FungibleTokenDetailed, isNative } from '@masknet/web3-shared'
+import {
+    ChainId,
+    EthereumTokenType,
+    formatEthereumAddress,
+    FungibleTokenDetailed,
+    isNative,
+} from '@masknet/web3-shared'
 import { WETH } from '../constants'
 
 export function toUniswapChainId(chainId: ChainId): UniswapChainId {

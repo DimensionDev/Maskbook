@@ -1,7 +1,15 @@
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSnackbar } from '@masknet/theme'
-import { makeStyles, Card, CardContent, CardActions } from '@material-ui/core'
-import { FungibleTokenDetailed, EthereumTokenType, useAccount, TokenWatched, isNative } from '@masknet/web3-shared'
+import { Card, CardActions, CardContent, makeStyles } from '@material-ui/core'
+import {
+    EthereumTokenType,
+    FungibleTokenDetailed,
+    isLessThan,
+    isNative,
+    isZero,
+    TokenWatched,
+    useAccount,
+} from '@masknet/web3-shared'
 import { format as formatDateTime } from 'date-fns'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -11,7 +19,6 @@ import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
-import { isLessThan, isZero } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => {
     return {

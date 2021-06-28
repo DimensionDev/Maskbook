@@ -1,25 +1,24 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react'
 import {
+    Box,
+    makeStyles,
+    Pagination,
+    PaginationItem,
     Table,
+    TableBody,
+    TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    TableCell,
-    Box,
-    makeStyles,
-    TableBody,
-    Pagination,
-    PaginationItem,
 } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../LoadingPlacholder'
 import { TokenTableRow } from '../TokenTableRow'
-import { formatBalance } from '@masknet/shared'
+import { Asset, formatBalance, useAssets, useERC20TokensPaged } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { ceil } from 'lodash-es'
-import { Asset, useAssets, useERC20TokensPaged } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     container: {

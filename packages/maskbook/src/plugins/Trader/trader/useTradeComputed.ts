@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import BigNumber from 'bignumber.js'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { pow10 } from '@masknet/web3-shared'
 import { TradeProvider, TradeStrategy } from '../types'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
@@ -11,7 +12,6 @@ import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTrad
 import { useTrade as useZrxTrade } from './0x/useTrade'
 import { useTrade as useBalancerTrade } from './balancer/useTrade'
 import { unreachable } from '@dimensiondev/kit'
-import { pow10 } from '@masknet/shared'
 import { TradeContext } from './useTradeContext'
 
 export function useTradeComputed(
