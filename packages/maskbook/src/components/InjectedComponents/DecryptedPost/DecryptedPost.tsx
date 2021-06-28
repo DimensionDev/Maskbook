@@ -65,7 +65,7 @@ export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
     const deconstructedPayload = usePostInfoDetails.postPayload()
     const authorInPayload = usePostClaimedAuthor()
-    const current = usePostInfo()
+    const current = usePostInfo()!
     const currentPostBy = usePostInfoDetails.postBy()
     const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postBy = or(authorInPayload, currentPostBy)

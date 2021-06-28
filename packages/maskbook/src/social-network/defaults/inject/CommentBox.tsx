@@ -38,7 +38,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
                 const postIV = iv || payload.unwrap().iv
                 const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
                 const encryptedComment = await Services.Crypto.encryptComment(postIV, decryptedText, content)
-                onPasteToCommentBox(encryptedComment, info, dom).catch(console.error)
+                onPasteToCommentBox(encryptedComment, info!, dom).catch(console.error)
             },
             [payload, postContent, info, dom, iv],
         )
@@ -50,7 +50,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         if (!current.commentBoxSelector) return noop
         const commentBoxWatcher = new MutationObserverWatcher(
             current.commentBoxSelector.clone(),
-            current.rootNode,
+            current.rootNode || void 0,
         ).useForeach((node, key, meta) => {
             const root = createReactRootShadowed(meta.afterShadow, { signal })
             root.render(

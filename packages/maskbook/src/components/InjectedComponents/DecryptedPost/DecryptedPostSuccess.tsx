@@ -90,7 +90,7 @@ function OldPluginSuccessDecryptionPostInspectorForEach(props: { pluginConfig: P
     const post = usePostInfo()
     useEffect(() => {
         if (!ref.current || !F || typeof F === 'function') return
-        return F.init(post, { message }, ref.current)
+        return F.init(post!, { message }, ref.current)
     }, [F, post, message])
     if (!F) return null
     if (typeof F === 'function') return <F {...post} message={message} />

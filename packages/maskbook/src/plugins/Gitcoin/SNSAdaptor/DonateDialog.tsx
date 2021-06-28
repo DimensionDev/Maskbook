@@ -15,7 +15,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -119,7 +118,6 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             token
@@ -128,7 +126,6 @@ export function DonateDialog(props: DonateDialogProps) {
                           token.symbol
                       }. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
                       '#mask_io',
-                      postLink,
                   ].join('\n')
                 : '',
         )
