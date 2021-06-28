@@ -1,6 +1,5 @@
 import { ChainId, getNetworkTypeFromChainId, ProviderType } from '@dimensiondev/web3-shared'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
-import { getWalletCached } from '../../../extension/background-script/EthereumServices/wallet'
 import { pollingTask, startEffects } from '../../../utils'
 import {
     currentAccountSettings,
@@ -11,6 +10,8 @@ import {
     currentProviderSettings,
 } from '../settings'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
+import { WalletMessages } from '../messages'
+import { getWallet } from './wallet'
 
 const beats: true[] = []
 
@@ -25,8 +26,8 @@ export async function updateChainState(chainId?: ChainId) {
     // update network type
     if (chainId) currentNetworkSettings.value = getNetworkTypeFromChainId(chainId)
 
-    // update chat state
-    const wallet = getWalletCached()
+    // update chain state
+    const wallet = await getWallet()
     if (chainId) currentBlockNumberSettings.value = await getBlockNumber()
     if (wallet) currentBalanceSettings.value = await getBalance(wallet.address)
 
@@ -36,7 +37,7 @@ export async function updateChainState(chainId?: ChainId) {
 
 const effect = startEffects(import.meta.webpackHot)
 
-// polling the newest chain state
+// poll the newest chain state
 let resetPoolTask: () => void = () => {}
 effect(() => {
     const { reset } = pollingTask(
@@ -63,7 +64,5 @@ effect(() =>
 
 // revalidate chain state if the current wallet was changed
 effect(() =>
-    currentAccountSettings.addListener(() => {
-        updateChainState()
-    }),
+    currentAccountSettings.addListener(() => updateChainState()),
 )
