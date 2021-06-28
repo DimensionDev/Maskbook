@@ -1,14 +1,19 @@
-import { formatAmountPrecision, formatBalance, formatEthereumAddress, isZero, pow10, ZERO } from '@masknet/shared'
 import {
+    formatAmountPrecision,
+    formatBalance,
+    formatEthereumAddress,
     FungibleTokenDetailed,
     getChainDetailed,
     isSameAddress,
+    isZero,
+    pow10,
     resolveLinkOnExplorer,
     TransactionStateType,
     useAccount,
     useChainId,
     useChainIdValid,
     useTokenConstants,
+    ZERO,
 } from '@masknet/web3-shared'
 import { Box, Card, Grid, Link, makeStyles, Theme, Typography } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'

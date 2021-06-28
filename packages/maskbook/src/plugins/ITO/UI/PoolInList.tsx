@@ -1,5 +1,13 @@
-import { formatBalance, FormattedBalance, isZero, pow10 } from '@masknet/shared'
-import { getChainDetailed, isSameAddress, useAccount, useTokenConstants } from '@masknet/web3-shared'
+import { FormattedBalance } from '@masknet/shared'
+import {
+    formatBalance,
+    getChainDetailed,
+    isSameAddress,
+    isZero,
+    pow10,
+    useAccount,
+    useTokenConstants,
+} from '@masknet/web3-shared'
 import {
     Box,
     Card,

@@ -6,7 +6,7 @@ import { TransactionStateType, useTransactionState } from './useTransactionState
 import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
 import { TransactionEventType } from '../types'
-import { isLessThan, isZero } from '@masknet/shared'
+import { isLessThan, isZero } from '../utils'
 
 export function useNativeTokenWrapperCallback() {
     const nonce = useNonce()

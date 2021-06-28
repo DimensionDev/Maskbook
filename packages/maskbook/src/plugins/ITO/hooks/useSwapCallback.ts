@@ -1,10 +1,10 @@
 import type { ITO } from '@masknet/contracts/types/ITO'
 import type { PayableTx } from '@masknet/contracts/types/types'
-import { isZero } from '@masknet/shared'
 import {
     currySameAddress,
     EthereumTokenType,
     FungibleTokenDetailed,
+    isZero,
     TransactionEventType,
     TransactionStateType,
     useAccount,

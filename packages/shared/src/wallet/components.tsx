@@ -1,6 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import { FC, Fragment } from 'react'
-import { formatBalance, formatCurrency, formatEthereumAddress } from './formatter'
+import { formatBalance, formatCurrency, formatEthereumAddress } from '@masknet/web3-shared'
 
 export interface FormattedBalanceProps {
     value: BigNumber.Value | undefined

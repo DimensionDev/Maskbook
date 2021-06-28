@@ -1,9 +1,9 @@
 import type { HappyRedPacketV2 } from '@masknet/contracts/types/HappyRedPacketV2'
 import type { PayableTx } from '@masknet/contracts/types/types'
-import { isLessThan } from '@masknet/shared'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
+    isLessThan,
     TransactionEventType,
     TransactionStateType,
     useAccount,

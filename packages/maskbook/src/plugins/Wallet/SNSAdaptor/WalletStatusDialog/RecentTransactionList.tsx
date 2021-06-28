@@ -1,8 +1,13 @@
-import { XCircle, Check } from 'react-feather'
-import { makeStyles, List, ListItem, Typography, Link, Button, Box, CircularProgress } from '@material-ui/core'
+import { Check, XCircle } from 'react-feather'
+import { Box, Button, CircularProgress, Link, List, ListItem, makeStyles, Typography } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import { formatKeccakHash } from '@masknet/shared'
-import { useAccount, useChainId, TransactionStatusType, resolveTransactionLinkOnExplorer } from '@masknet/web3-shared'
+import {
+    formatKeccakHash,
+    resolveTransactionLinkOnExplorer,
+    TransactionStatusType,
+    useAccount,
+    useChainId,
+} from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'

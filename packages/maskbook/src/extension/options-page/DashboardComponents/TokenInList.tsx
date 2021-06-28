@@ -1,6 +1,6 @@
-import { formatEthereumAddress } from '@masknet/shared'
 import {
     currySameAddress,
+    formatEthereumAddress,
     FungibleTokenDetailed,
     resolveTokenLinkOnExplorer,
     useTokenConstants,

@@ -9,7 +9,7 @@
     "@balancer-labs/sor": "^1.0.0",
     "@dimensiondev/common-protocols": "1.6.0-20201027083702-d0ae6e2",
     "@dimensiondev/holoflows-kit": "0.8.0-20210317064617-6c4792c",
-    "@dimensiondev/kit": "0.0.0-20210221102734-0b4a937",
+    "@dimensiondev/kit": "=0.0.0-20210624142900-972fd05",
     "@dimensiondev/metamask-extension-provider": "3.0.6-20210519045409-1835d4d",
     "@dimensiondev/stego-js": "=0.11.1-20201027083223-8ab41be",
     "@dimensiondev/uniswap-sdk": "=3.0.4-20210619092641-a270dc0",

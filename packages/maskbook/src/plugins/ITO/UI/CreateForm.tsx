@@ -1,7 +1,10 @@
-import { formatAmount, formatBalance, isGreaterThan, isZero } from '@masknet/shared'
 import {
     ERC20TokenDetailed,
     EthereumTokenType,
+    formatAmount,
+    formatBalance,
+    isGreaterThan,
+    isZero,
     useAccount,
     useITOConstants,
     useTokenBalance,

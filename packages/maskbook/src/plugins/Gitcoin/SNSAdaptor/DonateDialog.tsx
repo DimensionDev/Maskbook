@@ -1,7 +1,8 @@
-import { formatBalance, pow10 } from '@masknet/shared'
 import {
     EthereumTokenType,
+    formatBalance,
     FungibleTokenDetailed,
+    pow10,
     TransactionStateType,
     useAccount,
     useChainId,
