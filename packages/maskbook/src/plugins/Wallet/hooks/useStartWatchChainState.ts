@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { useAsync } from 'react-use'
 import { pollingTask } from '../../../utils'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 import { WalletRPC } from '../messages'
@@ -16,9 +15,9 @@ const task = pollingTask(
 )
 
 export function useStartWatchChainState() {
-    useAsync(async () => {
+    useEffect(() => {
         // emit an updating request immediately
-        await WalletRPC.updateChainState()
+        WalletRPC.updateChainState()
     }, [])
     return useEffect(() => {
         // start the polling task
