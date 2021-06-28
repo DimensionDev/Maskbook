@@ -1,16 +1,19 @@
 import { createPluginMessage } from '../../utils/createPluginMessage'
 import { createPluginRPC, createPluginRPCGenerator } from '../../utils/createPluginRPC'
-import { pluginId } from '../constants'
+import { FileServicePluginID } from '../constants'
 
-if (import.meta.webpackHot) import.meta.webpackHot.accept()
-const PluginFileServiceMessage = createPluginMessage<{ _: unknown; _2: unknown }>(pluginId)
+import.meta.webpackHot?.accept()
+
+const PluginFileServiceMessage = createPluginMessage<{ _: unknown; _2: unknown }>(FileServicePluginID)
+
 export const PluginFileServiceRPC = createPluginRPC(
-    pluginId,
-    () => import('../service'),
+    FileServicePluginID,
+    () => import('./service'),
     PluginFileServiceMessage.events._,
 )
+
 export const PluginFileServiceRPCGenerator = createPluginRPCGenerator(
-    pluginId,
-    () => import('../service').then(({ upload }) => ({ upload })),
+    FileServicePluginID,
+    () => import('./service').then(({ upload }) => ({ upload })),
     PluginFileServiceMessage.events._2,
 )

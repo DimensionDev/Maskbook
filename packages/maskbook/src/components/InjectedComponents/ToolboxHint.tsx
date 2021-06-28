@@ -16,7 +16,7 @@ import { useMenu } from '../../utils/hooks/useMenu'
 import { useCallback } from 'react'
 import { MaskMessage } from '../../utils/messages'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
-import { FileServiceCompositionEntry } from '../../plugins/FileService/UI-define'
+import { FileServicePluginID } from '../../plugins/FileService/constants'
 import { ITO_CompositionEntry } from '../../plugins/ITO/define'
 import { useControlledDialog } from '../../plugins/Collectible/SNSAdaptor/useControlledDialog'
 import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
@@ -164,7 +164,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const openFileService = useCallback(() => {
         openEncryptedMessage()
         setTimeout(() => {
-            FileServiceCompositionEntry.onClick()
+            MaskMessage.events.activatePluginCompositionEntry.sendToLocal(FileServicePluginID)
         })
     }, [openEncryptedMessage])
     //#endregion

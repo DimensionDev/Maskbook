@@ -11,7 +11,6 @@
 import './Wallet/messages'
 import './RedPacket/messages'
 import './Gitcoin/messages'
-import './FileService/utils'
 import './Polls/utils'
 import './Transak/messages'
 import './Trader/messages'

@@ -1,6 +1,6 @@
 import { noop, omit } from 'lodash-es'
 import { createContext, useContext } from 'react'
-import type { FileInfo } from '../types'
+import type { FileInfo } from '../../types'
 
 export interface Props {
     onInsert(info: FileInfo | null): void
