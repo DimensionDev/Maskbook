@@ -2,8 +2,8 @@
 
 ## Principles
 
-- Based-zip archive format
-- Based-zip standard file encryption
+- Based-zip64 format (compression level: archive)
+- Based-zip64 standard file encryption
 - Structured tree structure
 
 ## General design
@@ -31,4 +31,9 @@ user-groups.json # original backup file "userGroups" field.
 posts.json       # original backup file "posts" field.
 profiles.json    # original backup file "profiles" field.
 personas.json    # original backup file "personas" field.
+resources/*      # binary resource
 ```
+
+## References
+
+- <https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html>
