@@ -511,6 +511,7 @@
     "plugin_ito_unlocking_symbol": "{{symbol}} をアンロック中",
     "plugin_ito_continue": "再開",
     "plugin_ito_view_on_explorer": "Explorer で見る",
+    "plugin_ito_placeholder_when_token_unselected": "",
     "plugin_collectible_you": "あなた",
     "plugin_collectible_done": "完了",
     "plugin_collectible_retry": "リトライ",

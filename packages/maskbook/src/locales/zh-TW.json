@@ -520,6 +520,7 @@
     "plugin_ito_unlocking_symbol": "解鎖中 {{symbol}}",
     "plugin_ito_continue": "繼續",
     "plugin_ito_view_on_explorer": "在區塊鏈瀏覽器上查看",
+    "plugin_ito_placeholder_when_token_unselected": "",
     "plugin_collectible_you": "你",
     "plugin_collectible_done": "完成",
     "plugin_collectible_retry": "重試",

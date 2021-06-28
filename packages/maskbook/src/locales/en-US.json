@@ -324,7 +324,6 @@
     "plugin_wallet_transaction_rejected": "Transaction was rejected!",
     "plugin_wallet_transaction_server_error": "Transaction was failed due to an internal JSON-RPC server error.",
     "plugin_wallet_view_on_explorer": "View on Explorer",
-    "plugin_ito_placeholder_when_token_unselected": "Please Select a Token first",
     "plugin_wallet_wrong_network_tip": "Please connect to an appropriate network.",
     "plugin_wallet_recent_transaction": "Recent Transactions",
     "plugin_wallet_clear_all": "Clear All",
@@ -608,6 +607,7 @@
     "plugin_ito_unlocking_symbol": "Unlocking {{symbol}}",
     "plugin_ito_continue": "Continue",
     "plugin_ito_view_on_explorer": "View on Explorer",
+    "plugin_ito_placeholder_when_token_unselected": "Please Select a Token first",
     "plugin_collectible_you": "You",
     "plugin_collectible_done": "Done",
     "plugin_collectible_retry": "Retry",
@@ -805,5 +805,11 @@
     "plugin_good_ghosting_view_on_explorer": "View on Explorer",
     "plugin_good_ghosting_checking_balance": "Checking Balance...",
     "plugin_good_ghosting_insufficient_balance": "You need at least {{amount}} {{token}} in your wallet to do this.",
-    "plugin_good_ghosting_balance_error": "Failed to check balance. Click to retry."
+    "plugin_good_ghosting_balance_error": "Failed to check balance. Click to retry.",
+    "plugin_voicechat_title": "Voicechat",
+    "plugin_voicechat_activate_switch": "Activate Voicechat for this tweet",
+    "plugin_voicechat_save": "Save",
+    "plugin_voicechat_join_conversation": "Join conversation",
+    "plugin_voicechat_you": "You",
+    "plugin_voicechat_custom_server_url": "Custom voice server url (optional)"
 }
