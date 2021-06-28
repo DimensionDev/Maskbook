@@ -6,11 +6,9 @@ import {
     Checkbox,
     Button,
     makeStyles,
-    createStyles,
     TextField,
     Box,
 } from '@material-ui/core'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useState, useEffect } from 'react'
 import type { VoiceChatMetadata } from '../types'
@@ -18,17 +16,15 @@ import { VOICECHAT_META_KEY_1 } from '../constants'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { globalTypedMessageMetadata, editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 
-const useNewStyles = makeStyles((theme) =>
-    createStyles({
-        line: {
-            display: 'flex',
-            margin: theme.spacing(1),
-        },
-        whiteColor: {
-            color: '#fff',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    line: {
+        display: 'flex',
+        margin: theme.spacing(1),
+    },
+    whiteColor: {
+        color: '#fff',
+    },
+}))
 
 interface VoicechatDialogProps extends withClasses<'wrapper'> {
     open: boolean
@@ -38,7 +34,7 @@ interface VoicechatDialogProps extends withClasses<'wrapper'> {
 }
 
 export const VoicechatDialog = (props: VoicechatDialogProps) => {
-    const classes = useStylesExtends(useNewStyles(), props)
+    const classes = useStyles()
 
     const { t } = useI18N()
 
@@ -67,11 +63,7 @@ export const VoicechatDialog = (props: VoicechatDialogProps) => {
     }, [props.open])
 
     return (
-        <InjectedDialog
-            open={props.open}
-            onClose={props.onDecline}
-            title={t('plugin_voicechat_title')}
-            DialogProps={{ maxWidth: 'xs' }}>
+        <InjectedDialog open={props.open} onClose={props.onDecline} title={t('plugin_voicechat_title')}>
             <DialogContent>
                 <FormControlLabel
                     control={

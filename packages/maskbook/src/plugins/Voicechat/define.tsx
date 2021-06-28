@@ -1,18 +1,20 @@
-import { PluginConfig, PluginStage, PluginScope } from '../types'
-import { PLUGIN_IDENTIFIER } from './constants'
+import { PluginConfig, PluginScope, PluginStage } from '../types'
+import { createCompositionDialog } from '../utils/createCompositionDialog'
+import { PLUGIN_IDENTIFIER, VOICECHAT_META_KEY_1 } from './constants'
+import type { VoiceChatMetadata } from './types'
 import { VoicechatDialog } from './UI/VoicechatDialog'
 import { VoicechatInlay } from './UI/VoicechatInlay'
-import { createCompositionDialog } from '../utils/createCompositionDialog'
 import { VoicechatMetadataReader } from './utils'
-import { VOICECHAT_META_KEY_1 } from './constants'
-import type { VoiceChatMetadata } from './types'
 
 const [VoicechatCompositionEntry, VoicechatDialogUI] = createCompositionDialog('🔊 Voicechat', (props) => (
     <VoicechatDialog open={props.open} onConfirm={props.onClose} onDecline={props.onClose} />
 ))
 
 export const VoicechatPluginDefine: PluginConfig = {
+    id: PLUGIN_IDENTIFIER,
+    pluginIcon: '👩‍🍼',
     pluginName: 'Voicechat',
+    pluginDescription: 'Voice chat',
     identifier: PLUGIN_IDENTIFIER,
     stage: PluginStage.Beta,
     scope: PluginScope.Internal,

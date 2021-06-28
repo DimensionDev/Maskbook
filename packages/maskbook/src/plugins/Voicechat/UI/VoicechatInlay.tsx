@@ -176,8 +176,8 @@ function Settings(props: SettingsProps) {
 }
 
 export function VoicechatInlay(props: VoicechatInlayProps) {
-    const postIdentifier = usePostInfoDetails('postIdentifier')
-    const postBy = usePostInfoDetails('postBy')
+    const postIdentifier = usePostInfoDetails.postIdentifier()
+    const postBy = usePostInfoDetails.postBy()
 
     const [peerMediaElements, setPeerMediaElements] = useState<Record<string, PeerMediaElement>>()
     const [localPeerMediaElement, setLocalPeerMediaElement] = useState<PeerMediaElement | null>()
