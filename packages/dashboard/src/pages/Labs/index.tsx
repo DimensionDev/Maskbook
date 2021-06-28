@@ -44,14 +44,17 @@ export default function Plugins() {
     }
 
     function onTwitter(name: string) {
+        // TODO: open twitter
         console.log('twitter', name)
     }
 
     function onFacebook(name: string) {
+        // TODO: open facebook
         console.log('facebook', name)
     }
 
     function onExplore(name: string) {
+        // TODO: open dialog
         console.log('explore', name)
     }
 

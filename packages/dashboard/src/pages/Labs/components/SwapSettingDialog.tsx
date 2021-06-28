@@ -18,6 +18,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
 
     const t = useDashboardI18N()
 
+    // TODO: save setting
     const [ethValue, setEthValue] = useState(0)
 
     const polygonOptions = [{ label: 'QuickSwap', value: 0 }]
@@ -31,7 +32,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
                     legend={t.labs_settings_swap_eth()}
                     value={ethValue}
                     options={ethOptions}
-                    onChange={(value) => setEthValue(value)}
+                    onChange={(value) => setEthValue(+value)}
                 />
                 <SettingItem legend={t.labs_settings_swap_polygon()} value={0} options={polygonOptions} />
                 <SettingItem legend={t.labs_settings_swap_bsc()} value={0} options={bscOptions} />
