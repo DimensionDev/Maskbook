@@ -1,17 +1,18 @@
 import type { ThirdPartyPopupContextIdentifier } from '../../plugins/External/popup-context'
 
-export enum DialogRoutes {
+export enum PopupRoutes {
     PermissionAwareRedirect = '/redirect',
     RequestPermission = '/request-permission',
     ThirdPartyRequestPermission = '/3rd-request-permission',
+    PostInspector = '/post-inspector',
 }
 
-export function getRouteURLWithNoParam(kind: DialogRoutes) {
+export function getRouteURLWithNoParam(kind: PopupRoutes) {
     return browser.runtime.getURL(`/popups.html#${kind}`)
 }
 export function PermissionAwareRedirectOf(url: string, context: ThirdPartyPopupContextIdentifier) {
     return (
-        getRouteURLWithNoParam(DialogRoutes.PermissionAwareRedirect) +
+        getRouteURLWithNoParam(PopupRoutes.PermissionAwareRedirect) +
         `?url=${encodeURIComponent(url)}&context=${context}`
     )
 }

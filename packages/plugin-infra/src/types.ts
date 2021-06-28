@@ -278,6 +278,7 @@ export enum CurrentSNSNetwork {
     Facebook,
     Twitter,
     Instagram,
+    Minds,
 }
 
 /**
