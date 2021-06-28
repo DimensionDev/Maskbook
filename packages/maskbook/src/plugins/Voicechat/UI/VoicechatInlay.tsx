@@ -154,15 +154,8 @@ function DisconnectButton(props: DisconnectButtonProps) {
 }
 
 function Settings(props: SettingsProps) {
-    const {
-        mediaDevices,
-        activeMediaDevice,
-        localPeerMediaElement,
-        isMuted,
-        setIsMuted,
-        setMuted,
-        disconnectVoice,
-    } = props
+    const { mediaDevices, activeMediaDevice, localPeerMediaElement, isMuted, setIsMuted, setMuted, disconnectVoice } =
+        props
 
     return localPeerMediaElement ? (
         <Box
