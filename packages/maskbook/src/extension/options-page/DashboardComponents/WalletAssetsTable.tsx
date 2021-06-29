@@ -34,9 +34,8 @@ import {
     Wallet,
 } from '@masknet/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { FormattedCurrency } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { useI18N, useMatchXS } from '../../../utils'
-import { TokenIcon } from './TokenIcon'
 import { ActionsBarFT } from './ActionsBarFT'
 import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'

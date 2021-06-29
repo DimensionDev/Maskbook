@@ -6,7 +6,7 @@
     "experimentalDecorators": true,
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./src/"],
+  "include": ["./src/**/*", "./src/**/*.json"],
   "ts-node": {
     "compilerOptions": { "module": "CommonJS" }
   },

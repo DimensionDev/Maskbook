@@ -1,6 +1,6 @@
 import { makeStyles, Typography } from '@material-ui/core'
 import type { FC } from 'react'
-import { TokenIcon } from '../TokenIcon'
+import { TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
 import type { Transaction } from '../../../../plugins/Wallet/types'
 import { DebankTransactionDirection, ZerionTransactionDirection } from '../../../../plugins/Wallet/types'

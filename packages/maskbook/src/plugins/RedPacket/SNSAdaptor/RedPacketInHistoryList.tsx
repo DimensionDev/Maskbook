@@ -7,7 +7,7 @@ import { RedPacketHistory, RedPacketJSONPayload, RedPacketStatus } from '../type
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { formatBalance, TransactionStateType, useAccount } from '@masknet/web3-shared'
-import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
+import { TokenIcon } from '@masknet/shared'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { StyledLinearProgress } from '../../ITO/UI/StyledLinearProgress'

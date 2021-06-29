@@ -9,12 +9,12 @@ import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@materia
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { useCallback } from 'react'
-import { TokenIcon } from './TokenIcon'
+import { TokenIcon } from '@masknet/shared'
 
 const useStyles = makeStyles((theme: Theme) => ({
     icon: {
-        width: 28,
-        height: 28,
+        width: 36,
+        height: 36,
     },
     text: {
         display: 'flex',
