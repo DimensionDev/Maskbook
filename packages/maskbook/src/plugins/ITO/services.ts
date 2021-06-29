@@ -17,9 +17,9 @@ export async function getPool(pid: string) {
     return poolFromChain
 }
 
-export async function getAllPoolsAsSeller(address: string) {
+export async function getAllPoolsAsSeller(address: string, page: number) {
     const chainId = currentChainIdSettings.value
-    const poolsFromChain = await subgraph.getAllPoolsAsSeller(address)
+    const poolsFromChain = await subgraph.getAllPoolsAsSeller(address, page)
     const poolsFromDB = await database.getPoolsFromDB(poolsFromChain.map((x) => x.pool.pid))
     return poolsFromChain
         .map((x) => {

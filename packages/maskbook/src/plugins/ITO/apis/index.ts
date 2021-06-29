@@ -145,14 +145,17 @@ export async function getPool(pid: string) {
     return payloadIntoMask(data.pool)
 }
 
-export async function getAllPoolsAsSeller(address: string) {
+export async function getAllPoolsAsSeller(address: string, page: number) {
     const response = await fetch(getITOConstants(currentChainIdSettings.value).SUBGRAPH_URL, {
         method: 'POST',
         mode: 'cors',
         body: stringify({
+            // Todo: 3 entities once convenience for Test.
             query: `
             {
-                sellInfos (where: { seller: "${address.toLowerCase()}" }) {
+                sellInfos ( orderBy: timestamp, orderDirection: desc, first: 3, skip: ${
+                    page * 3
+                }, where: { seller: "${address.toLowerCase()}" }) {
                     pool {
                         ${POOL_FIELDS}
                         exchange_in_volumes

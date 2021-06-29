@@ -32,6 +32,12 @@ export interface JSON_PayloadInMask {
     test_nums?: number[]
 }
 
+export interface PoolSubgraph {
+    pool: JSON_PayloadInMask
+    exchange_in_volumes: string[]
+    exchange_out_volumes: string[]
+}
+
 //#region TokenOutMask
 export type TokenOutMask = Omit<NativeTokenDetailed | ERC20TokenDetailed, 'chainId'> & {
     chain_id: ChainId

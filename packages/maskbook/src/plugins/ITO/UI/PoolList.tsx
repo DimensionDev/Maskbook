@@ -1,10 +1,10 @@
 import { useAccount } from '@masknet/web3-shared'
 import { Box, CircularProgress, makeStyles, Typography } from '@material-ui/core'
 import { useAllPoolsAsSeller } from '../hooks/useAllPoolsAsSeller'
-import { useScrollBottomLoading } from '../hooks/useScrollBottomLoading'
+import { useScrollBottomEvent } from '../hooks/useScrollBottomEvent'
 import type { JSON_PayloadInMask } from '../types'
 import { PoolInList } from './PoolInList'
-import { useRef } from 'react'
+import { useRef, useState, useCallback } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,14 +30,16 @@ export interface PoolListProps {
 export function PoolList(props: PoolListProps) {
     const classes = useStyles()
     const account = useAccount()
-    const { value: pools = [], loading, retry } = useAllPoolsAsSeller(account)
-    const containerRef = useRef<HTMLDivElement>(null)
+    const [page, setPage] = useState(0)
+    const { value: pools = [], loading, retry } = useAllPoolsAsSeller(account, page)
 
-    useScrollBottomLoading(containerRef)
+    const containerRef = useRef<HTMLDivElement>(null)
+    const addPage = useCallback(() => setPage(page + 1), [page])
+    useScrollBottomEvent(containerRef, addPage)
 
     return (
         <div className={classes.root} ref={containerRef}>
-            {loading ? (
+            {loading && page === 0 ? (
                 <Box className={classes.content}>
                     <CircularProgress />
                 </Box>
@@ -50,6 +52,7 @@ export function PoolList(props: PoolListProps) {
                     {pools.map((x) => (
                         <PoolInList key={x.pool.pid} {...x} onSend={props.onSend} onRetry={retry} />
                     ))}
+                    {loading && page > 0 ? <CircularProgress /> : null}
                 </div>
             )}
         </div>
