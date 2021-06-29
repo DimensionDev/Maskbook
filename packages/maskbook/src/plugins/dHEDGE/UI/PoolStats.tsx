@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import type { Pool } from '../types'
-import { makeStyles, Typography, Grid, Divider } from '@material-ui/core'
+import { Divider, Grid, makeStyles, Typography } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 import { formatAmountPostfix } from '../utils'
 import { MaskColorVar } from '@masknet/theme'
 import DOMPurify from 'isomorphic-dompurify'
 import { POOL_DESCRIPTION_LIMIT } from '../constants'
 import BigNumber from 'bignumber.js'
-import { formatBalance } from '@masknet/shared'
+import { formatBalance } from '@masknet/web3-shared'
 
 const DIGIT_LENGTH = 18
 

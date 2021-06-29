@@ -1,6 +1,6 @@
-import { formatBalance } from '@masknet/shared'
 import {
     ChainId,
+    formatBalance,
     getChainIdFromName,
     isDAI,
     isOKB,
@@ -24,7 +24,7 @@ import { WalletMessages } from '../../Wallet/messages'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useClaimCallback } from './hooks/useClaimCallback'
 import { useRefundCallback } from './hooks/useRefundCallback'
-import type { RedPacketJSONPayload, RedPacketAvailability } from '../types'
+import type { RedPacketAvailability, RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
 
 const useStyles = makeStyles((theme) => ({
@@ -229,21 +229,21 @@ export function RedPacket(props: RedPacketProps) {
                     <Skeleton
                         animation="wave"
                         variant="rectangular"
-                        width={'30%'}
+                        width="30%"
                         height={12}
                         style={{ marginTop: 16 }}
                     />
                     <Skeleton
                         animation="wave"
                         variant="rectangular"
-                        width={'40%'}
+                        width="40%"
                         height={12}
                         style={{ marginTop: 16 }}
                     />
                     <Skeleton
                         animation="wave"
                         variant="rectangular"
-                        width={'70%'}
+                        width="70%"
                         height={12}
                         style={{ marginBottom: 16 }}
                     />

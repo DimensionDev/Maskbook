@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { ChainId, ERC20TokenDetailed, createERC20Tokens, getChainDetailed } from '@masknet/web3-shared'
-import { ONE } from '@masknet/shared'
+import { ChainId, createERC20Tokens, ERC20TokenDetailed, getChainDetailed, ONE } from '@masknet/web3-shared'
 
 export const USDC = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDC', 6)
 export const USDT = createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)

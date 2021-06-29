@@ -1,5 +1,6 @@
-import { useState, useEffect, useReducer, Fragment } from 'react'
-import { unreachable, makeTypedMessageTuple, TypedMessageTuple } from '@masknet/shared'
+import { Fragment, useEffect, useMemo, useReducer, useState } from 'react'
+import { unreachable } from '@dimensiondev/kit'
+import { makeTypedMessageTuple, TypedMessageTuple } from '@masknet/shared'
 
 import { ServicesWithProgress } from '../../../extension/service'
 import type { ProfileIdentifier } from '../../../database/type'
@@ -9,8 +10,8 @@ import type {
     SuccessDecryption,
 } from '../../../extension/background-script/CryptoServices/decryptFrom'
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
-import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwaiting'
-import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'
+import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
+import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
 import { usePostClaimedAuthor, usePostInfoDetails, usePostInfoSharedPublic } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'

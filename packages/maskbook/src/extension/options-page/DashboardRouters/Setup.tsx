@@ -260,7 +260,7 @@ export function CreatePersona() {
                             }
                         }}
                         label={t('name')}
-                        helperText={' '}
+                        helperText=" "
                         inputProps={{
                             'data-testid': 'username_input',
                         }}

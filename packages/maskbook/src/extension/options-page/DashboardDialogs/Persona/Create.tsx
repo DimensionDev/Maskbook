@@ -27,7 +27,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                 icon={<UserPlus />}
                 iconColor="#5FDD97"
                 primary={t('create_a_persona')}
-                secondary={' '}
+                secondary=" "
                 content={
                     <>
                         <form>

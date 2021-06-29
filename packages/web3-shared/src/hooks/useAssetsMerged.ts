@@ -1,8 +1,7 @@
 import type { Asset } from '../types'
 import { useChainId } from './useChainId'
-import { formatEthereumAddress } from '@masknet/shared'
 import { uniqBy } from 'lodash-es'
-import { getChainIdFromName, getTokenUSDValue, isSameAddress } from '../utils'
+import { formatEthereumAddress, getChainIdFromName, getTokenUSDValue, isSameAddress } from '../utils'
 import { useTokenConstants } from '../constants'
 
 /**

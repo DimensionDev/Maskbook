@@ -1,12 +1,13 @@
-import { makeStyles, Typography, MenuItem } from '@material-ui/core'
+import { makeStyles, MenuItem, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import {
-    useAccount,
-    useChainId,
-    resolveChainColor,
-    useChainDetailed,
-    useChainIdValid,
+    formatEthereumAddress,
     NetworkType,
+    resolveChainColor,
+    useAccount,
+    useChainDetailed,
+    useChainId,
+    useChainIdValid,
 } from '@masknet/web3-shared'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
@@ -27,7 +28,7 @@ import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
 import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
-import { formatEthereumAddress, useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared'
 import { useI18N } from '../../utils'
 import { currentNetworkSettings } from '../../plugins/Wallet/settings'
 

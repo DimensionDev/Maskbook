@@ -19,24 +19,27 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import type { Asset } from '@masknet/web3-shared'
 import {
     CurrencyType,
-    EthereumTokenType,
-    Wallet,
-    useStableTokensDebank,
-    useChainDetailed,
-    getChainIdFromName,
     currySameAddress,
+    EthereumTokenType,
+    formatBalance,
+    formatCurrency,
+    getChainIdFromName,
+    isGreaterThan,
+    useAssets,
+    useChainDetailed,
+    useStableTokensDebank,
+    Wallet,
 } from '@masknet/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { formatBalance, formatCurrency, FormattedCurrency, isGreaterThan } from '@masknet/shared'
-import { useMatchXS, useI18N } from '../../../utils'
+import { FormattedCurrency } from '@masknet/shared'
+import { useI18N, useMatchXS } from '../../../utils'
 import { TokenIcon } from './TokenIcon'
 import { ActionsBarFT } from './ActionsBarFT'
 import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
-import type { Asset } from '../../../plugins/Wallet/types'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
-import { useAssets } from '../../../plugins/Wallet/hooks/useAssets'
 
 const useStyles = makeStyles<
     Theme,

@@ -1,15 +1,15 @@
 import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { makeStyles, DialogContent } from '@material-ui/core'
-import { safeUnreachable } from '@masknet/shared'
+import { DialogContent, makeStyles } from '@material-ui/core'
+import { safeUnreachable } from '@dimensiondev/kit'
 import {
+    ChainId,
+    getChainDetailedCAIP,
+    getChainIdFromNetworkType,
     NetworkType,
     ProviderType,
-    getChainIdFromNetworkType,
-    resolveProviderName,
-    ChainId,
     resolveNetworkName,
-    getChainDetailedCAIP,
+    resolveProviderName,
 } from '@masknet/web3-shared'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'

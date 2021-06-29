@@ -1,5 +1,4 @@
-import { formatEthereumAddress } from '@masknet/shared'
-import { isSameAddress, TransactionStateType, TransactionStatusType } from '@masknet/web3-shared'
+import { formatEthereumAddress, isSameAddress, TransactionStateType, TransactionStatusType } from '@masknet/web3-shared'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { getTransactionReceipt } from '../../../extension/background-script/EthereumService'
 import type { TransactionRecord } from '../database/types'

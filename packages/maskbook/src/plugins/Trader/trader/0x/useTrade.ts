@@ -1,4 +1,4 @@
-import { getEnumAsArray } from '@masknet/shared'
+import { getEnumAsArray } from '@dimensiondev/kit'
 import { FungibleTokenDetailed, isNative, useBlockNumber, useTokenConstants } from '@masknet/web3-shared'
 import { difference } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'

@@ -1,7 +1,10 @@
-import { formatAmountPrecision, formatBalance, FormattedAddress, FormattedBalance, ONE } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import {
+    formatAmountPrecision,
+    formatBalance,
     FungibleTokenDetailed,
     isNative,
+    ONE,
     resolveAddressLinkOnExplorer,
     resolveTokenLinkOnExplorer,
     useChainId,

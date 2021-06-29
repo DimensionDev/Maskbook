@@ -1,5 +1,5 @@
-import { formatEthereumAddress } from '@masknet/shared'
 import {
+    formatEthereumAddress,
     resolveAddressLinkOnExplorer,
     resolveBlockLinkOnExplorer,
     resolveIPFSLink,

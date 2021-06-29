@@ -1,5 +1,11 @@
-import { formatEthereumAddress } from '@masknet/shared'
-import { ChainId, getChainFullName, getTokenConstants, useBlockie, useChainDetailed } from '@masknet/web3-shared'
+import {
+    ChainId,
+    formatEthereumAddress,
+    getChainFullName,
+    getTokenConstants,
+    useBlockie,
+    useChainDetailed,
+} from '@masknet/web3-shared'
 import { Avatar, AvatarProps, makeStyles, Theme } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useImageFailover } from '../../../utils/hooks/useImageFailover'
