@@ -1,6 +1,7 @@
 import { Avatar, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
 import LinkIcon from '@material-ui/icons/Link'
-import { formatBalance, FormattedBalance } from '@masknet/shared'
+import { FormattedBalance } from '@masknet/shared'
+import { formatBalance } from '@masknet/web3-shared'
 import { formatElapsed } from '../../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'

@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { difference } from 'lodash-es'
-import { makeStyles, Checkbox, FormControlLabel } from '@material-ui/core'
+import { Checkbox, FormControlLabel, makeStyles } from '@material-ui/core'
 import { ZrxTradePool } from '../../types'
-import { getEnumAsArray } from '@masknet/shared'
+import { getEnumAsArray } from '@dimensiondev/kit'
 import { resolveZrxTradePoolName } from '../../pipes'
 
 const useStyles = makeStyles((theme) => {

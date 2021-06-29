@@ -1,17 +1,17 @@
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeArrayBuffer } from '@dimensiondev/kit'
-import { Checkbox, FormControlLabel, makeStyles, Typography, Link } from '@material-ui/core'
+import { Checkbox, FormControlLabel, Link, makeStyles, Typography } from '@material-ui/core'
 import { isNil } from 'lodash-es'
+import { useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useHistory } from 'react-router'
 import { useAsync } from 'react-use'
-import { useI18N } from '../../../utils'
-import { PluginFileServiceRPC } from '../utils'
-import { makeFileKey } from '../arweave/makeFileKey'
-import { FileRouter, MAX_FILE_SIZE } from '../constants'
+import { useI18N } from '../../../../utils'
+import { makeFileKey } from '../../file-key'
+import { FileRouter, MAX_FILE_SIZE } from '../../constants'
+import { PluginFileServiceRPC } from '../../Worker/rpc'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
-import { useState } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     container: {

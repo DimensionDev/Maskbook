@@ -1,9 +1,12 @@
-import { formatBalance, isGreaterThan, isZero, pow10 } from '@masknet/shared'
 import {
     EthereumTokenType,
+    formatBalance,
     FungibleTokenDetailed,
     getChainName,
+    isGreaterThan,
+    isZero,
     NetworkType,
+    pow10,
     TransactionStateType,
     useAccount,
     useChainId,

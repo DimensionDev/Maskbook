@@ -1,5 +1,5 @@
-import { formatEthereumAddress, useValueRef } from '@masknet/shared'
-import { EthereumTokenType, useAccount, Wallet } from '@masknet/web3-shared'
+import { useValueRef } from '@masknet/shared'
+import { EthereumTokenType, formatEthereumAddress, useAccount, Wallet } from '@masknet/web3-shared'
 import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
 import { createContext, useState } from 'react'
 import { useUpdateEffect } from 'react-use'

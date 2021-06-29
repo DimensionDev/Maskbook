@@ -29,7 +29,7 @@ export function injectPostCommentsDefault<T extends string>(
     return function injectPostComments(signal: AbortSignal, current: PostInfo) {
         const selector = current.commentsSelector
         if (!selector) return noop
-        const commentWatcher = new MutationObserverWatcher(selector, current.rootNode).useForeach(
+        const commentWatcher = new MutationObserverWatcher(selector, current.rootNode || void 0).useForeach(
             (commentNode, key, meta) => {
                 const commentRef = new ValueRef(collectNodeText(commentNode))
                 const needZipF =
@@ -41,7 +41,7 @@ export function injectPostCommentsDefault<T extends string>(
                 const root = createReactRootShadowed(meta.afterShadow, { signal })
                 root.render(
                     <PostInfoProvider post={current}>
-                        <PostCommentDefault needZip={needZipF} comment={commentRef} {...current} />
+                        <PostCommentDefault needZip={needZipF} comment={commentRef} />
                     </PostInfoProvider>,
                 )
                 return {

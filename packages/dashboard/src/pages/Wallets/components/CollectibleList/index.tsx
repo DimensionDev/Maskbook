@@ -2,19 +2,19 @@ import { Dispatch, memo, SetStateAction, useState } from 'react'
 import { Box, makeStyles, TablePagination } from '@material-ui/core'
 import {
     ChainId,
+    CollectibleProvider,
     ERC1155TokenAssetDetailed,
     ERC721TokenAssetDetailed,
     EthereumTokenType,
+    formatEthereumAddress,
     useAccount,
     useChainId,
-    useWallet,
-    CollectibleProvider,
     useCollectibles,
+    useWallet,
 } from '@masknet/web3-shared'
 import { useCurrentCollectibleDataProvider } from '../../api'
 import { LoadingPlaceholder } from '../LoadingPlacholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
-import { formatEthereumAddress } from '@masknet/shared'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
 

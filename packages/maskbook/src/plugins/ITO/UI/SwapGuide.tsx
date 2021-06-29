@@ -1,5 +1,4 @@
-import { ZERO } from '@masknet/shared'
-import { ERC20TokenDetailed, EthereumTokenType, useAccount, useChainId } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, useAccount, useChainId, ZERO } from '@masknet/web3-shared'
 import { DialogContent, makeStyles } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'

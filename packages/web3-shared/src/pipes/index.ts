@@ -1,4 +1,4 @@
-import { formatEthereumAddress, safeUnreachable, unreachable } from '@masknet/shared'
+import { safeUnreachable, unreachable } from '@dimensiondev/kit'
 import { getTokenConstants } from '../constants'
 import {
     ChainId,
@@ -10,7 +10,7 @@ import {
     NonFungibleTokenDetailed,
     ProviderType,
 } from '../types'
-import { getChainDetailed } from '../utils'
+import { formatEthereumAddress, getChainDetailed } from '../utils'
 
 export function resolveProviderName(providerType: ProviderType) {
     switch (providerType) {

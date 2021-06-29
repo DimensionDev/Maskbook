@@ -1,5 +1,6 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef, getEnumAsArray } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared'
+import { getEnumAsArray } from '@dimensiondev/kit'
 import {
     ListItem,
     ListItemIcon,
