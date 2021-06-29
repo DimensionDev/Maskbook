@@ -86,7 +86,6 @@ const facebookUI: SocialNetworkUI.Definition = {
             },
         },
         // Not supported yet
-        toolbar: undefined,
         enhancedPostRenderer: undefined,
         userBadge: undefined,
         searchResult: undefined,

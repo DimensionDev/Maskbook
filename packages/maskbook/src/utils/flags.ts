@@ -42,7 +42,6 @@ export const Flags = {
     dhedge_enabled: webOnly,
     snapshot_enabled: webOnly,
     metamask_support_enabled: webOnly,
-    toolbar_enabled: webOnly,
     toolbox_enabled: webOnly,
     wallet_mnemonic_words_backup_enabled: false,
     wallet_private_key_backup_enabled: true,

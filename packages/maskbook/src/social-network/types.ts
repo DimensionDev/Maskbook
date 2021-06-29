@@ -109,8 +109,6 @@ export namespace SocialNetworkUI {
             enhancedPostRenderer?(signal: AbortSignal, current: PostInfo): void
             /** Display the additional content (decrypted, plugin, ...) below the post */
             postInspector?(signal: AbortSignal, current: PostInfo): void
-            /** Inject a toolbar that displayed on the top of the page */
-            toolbar?(signal: AbortSignal): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */
             toolBoxInNavBar?(signal: AbortSignal): void
             /** Inject the UI that used to notify if the user has not completely setup the current network. */
