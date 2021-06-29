@@ -109,7 +109,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { enqueueSnackbar } = useSnackbar()
     const popEnqueueSnackbar = useCallback(
         (variant: VariantType) =>
-            enqueueSnackbar('Claim Token', {
+            enqueueSnackbar(t('plugin_ito_claim_all_title'), {
                 variant,
                 preventDuplicate: true,
                 anchorOrigin: {
@@ -179,7 +179,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         setClaimTransactionDialog({
             open: true,
             state: claimStateOld,
-            title: 'Claim Token',
+            title: t('plugin_ito_claim_all_title'),
             summary,
         })
     }, [claimStateOld, swappedTokensOld /* update tx dialog only if state changed */])
@@ -203,7 +203,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         setClaimTransactionDialog({
             open: true,
             state: claimState,
-            title: 'Claim Token',
+            title: t('plugin_ito_claim_all_title'),
             summary,
         })
     }, [claimState, swappedTokens /* update tx dialog only if state changed */])

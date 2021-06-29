@@ -515,6 +515,7 @@
     "plugin_ito_dialog_claim_reminder_text4": "該等權利並未在司法管轄區內全部或部分提供或出售，也不得直接或間接提供或出售，或向其提供或出售該等權利將是非法的。",
     "plugin_ito_expired": "已過期",
     "plugin_ito_create_new": "新增",
+    "plugin_ito_claim_all_title": "",
     "plugin_ito_claim_all_status_unclaimed": "未被認領",
     "plugin_ito_claim_all_status_locked": "已鎖定",
     "plugin_ito_claim_all_unlock_time": "解鎖時間：{{time}}",
