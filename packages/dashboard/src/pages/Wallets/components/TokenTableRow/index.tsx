@@ -56,7 +56,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
                     {getTokenUSDValue(asset) < 0.01 ? (
                         '<0.01'
                     ) : (
-                        <FormattedCurrency value={getTokenUSDValue(asset).toFixed(2)} sign={'$'} />
+                        <FormattedCurrency value={getTokenUSDValue(asset).toFixed(2)} sign="$" />
                     )}
                 </Typography>
             </TableCell>

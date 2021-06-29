@@ -19,7 +19,7 @@ function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>, signal: AbortSigna
     watcher.useForeach((node, key, meta) => {
         createReactRootShadowed(watcher.firstDOMProxy.afterShadow, {
             signal,
-        }).render(<PostDialogHintAtMinds reason={'popup'} />)
+        }).render(<PostDialogHintAtMinds reason="popup" />)
     })
 }
 
