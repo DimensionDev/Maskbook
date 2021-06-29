@@ -39,14 +39,12 @@ export function init(
     console.log('connecting to signaling server')
     signalingSocket = io(customServer ? customServer : SIGNALING_SERVER, { transports: ['websocket'] })
 
-    signalingSocket.on('connect', function () {
+    signalingSocket.on('connect', () => {
         console.log('connected to signaling server')
 
-        setup_local_media(
-            () => {
-                join_chat_channel(id, { username })
-            },
-            () => {},
+        setupLocalMedia(
+            () => join_chat_channel(id, { username }),
+            () => console.log('Access denied for audio/video'),
             username,
         )
     })
@@ -58,7 +56,7 @@ export function init(
         }
     }, 3000)
 
-    signalingSocket.on('disconnect', function () {
+    signalingSocket.on('disconnect', () => {
         console.log('Disconnected from signaling server')
 
         disconnectVoice()
@@ -192,9 +190,9 @@ interface Config {
 }
 
 // Local Media
-function setup_local_media(callback: () => void, errorback: () => void, username: string) {
+function setupLocalMedia(callback: () => void, onError: () => void, username: string) {
     if (localMediaStream != null) {
-        if (callback) callback()
+        callback()
         return
     }
 
@@ -221,13 +219,9 @@ function setup_local_media(callback: () => void, errorback: () => void, username
             }
             updateState()
 
-            if (callback) callback()
+            callback?.()
         },
-        () => {
-            console.log('Access denied for audio/video')
-
-            if (errorback) errorback()
-        },
+        onError,
     )
 }
 
