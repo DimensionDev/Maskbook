@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { useDashboardI18N } from '../../../../locales'
-import { MaskColorVar, MaskDialog, QRCode, useSnackbarCallback } from '@masknet/theme'
+import { MaskColorVar, MaskDialog } from '@masknet/theme'
+import { QRCode, useSnackbarCallback } from '@masknet/shared'
 import { DialogContent, Typography, makeStyles, DialogActions, Button } from '@material-ui/core'
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
 import { useCopyToClipboard } from 'react-use'
