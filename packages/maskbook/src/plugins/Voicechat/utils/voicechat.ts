@@ -43,7 +43,7 @@ export function init(
         console.log('connected to signaling server')
 
         setupLocalMedia(
-            () => join_chat_channel(id, { username }),
+            () => joinChatChannel(id, { username }),
             () => console.log('Access denied for audio/video'),
             username,
         )
@@ -62,7 +62,7 @@ export function init(
         disconnectVoice()
     })
 
-    function join_chat_channel(channel: string, userdata: Object) {
+    function joinChatChannel(channel: string, userdata: Object) {
         signalingSocket?.emit('join', { channel, userdata })
     }
 
