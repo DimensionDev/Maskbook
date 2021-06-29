@@ -74,7 +74,7 @@ function ChannelUsers(props: ChannelUsersProps) {
                 const SpeakIcon = () => (isSpeaking ? <VolumeUpOutlined /> : <VolumeMuteOutlined />)
 
                 return (
-                    <Box key={peerMedia.username + peerMedia.isLocal} display={'flex'} alignItems={'center'}>
+                    <Box key={peerMedia.username + peerMedia.isLocal} display="flex" alignItems="center">
                         <Box marginRight={0.5} style={{ marginTop: '6px' }}>
                             <SpeakIcon />
                         </Box>
@@ -133,7 +133,7 @@ function MuteSwitch(props: MuteSwitchProps) {
             }}
             variant="outlined"
             style={{ minHeight: '33px', minWidth: '20px' }}>
-            {props.isMuted ? <VolumeOffOutlined fontSize={'small'} /> : <VolumeUpOutlined fontSize={'small'} />}
+            {props.isMuted ? <VolumeOffOutlined fontSize="small" /> : <VolumeUpOutlined fontSize="small" />}
         </Button>
     )
 }
@@ -148,7 +148,7 @@ function DisconnectButton(props: DisconnectButtonProps) {
             variant="outlined"
             style={{ minHeight: '33px', minWidth: '20px', marginLeft: '5px' }}
             color="secondary">
-            <CloseOutlined fontSize={'small'} />
+            <CloseOutlined fontSize="small" />
         </Button>
     )
 }
@@ -161,13 +161,13 @@ function Settings(props: SettingsProps) {
         <Box
             paddingX={2}
             paddingY={1}
-            bgcolor={'#eee'}
+            bgcolor="#eee"
             borderTop={1}
-            borderColor={'#ccc'}
-            display={'flex'}
-            justifyContent={'space-between'}>
+            borderColor="#ccc"
+            display="flex"
+            justifyContent="space-between">
             <MediaSelection {...{ mediaDevices, activeMediaDevice, localPeerMediaElement }} />
-            <Box display={'flex'}>
+            <Box display="flex">
                 <MuteSwitch {...{ isMuted, setIsMuted, setMuted }} />
                 <DisconnectButton {...{ setIsMuted, disconnectVoice }} />
             </Box>
@@ -219,12 +219,7 @@ export function VoicechatInlay(props: VoicechatInlayProps) {
     return (
         <div>
             <MaskbookPluginWrapper pluginName="Voicechat">
-                <Box
-                    borderRadius={0.5}
-                    bgcolor={'#fff'}
-                    border={1}
-                    borderColor={'rgb(196, 207, 214)'}
-                    overflow={'hidden'}>
+                <Box borderRadius={0.5} bgcolor="#fff" border={1} borderColor="rgb(196, 207, 214)" overflow="hidden">
                     <Box padding={2}>
                         <ChannelUsers {...{ peerMediaElements, localPeerMediaElement }} />
                         <JoinButton {...{ joinChat, isJoining, localPeerMediaElement }} />
