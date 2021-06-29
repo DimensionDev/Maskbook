@@ -1,8 +1,6 @@
-import { TransactionStateType, useAccount } from '@masknet/web3-shared'
+import { useAccount } from '@masknet/web3-shared'
 import { Box, CircularProgress, makeStyles, Typography } from '@material-ui/core'
-import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { useAllPoolsAsSeller } from '../hooks/useAllPoolsAsSeller'
-import { useDestructCallback } from '../hooks/useDestructCallback'
 import type { JSON_PayloadInMask } from '../types'
 import { PoolInList } from './PoolInList'
 
@@ -32,14 +30,6 @@ export function PoolList(props: PoolListProps) {
     const account = useAccount()
     const { value: pools = [], loading, retry } = useAllPoolsAsSeller(account)
 
-    //#region withdraw
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
-    useTransactionDialog(null, destructState, TransactionStateType.CONFIRMED, () => {
-        retry()
-        resetDestructCallback()
-    })
-    //#endregion
-
     return (
         <div className={classes.root}>
             {loading ? (
@@ -53,14 +43,7 @@ export function PoolList(props: PoolListProps) {
             ) : (
                 <div className={classes.content}>
                     {pools.map((x) => (
-                        <PoolInList
-                            key={x.pool.pid}
-                            {...x}
-                            onSend={props.onSend}
-                            onWithdraw={(payload: JSON_PayloadInMask) => {
-                                destructCallback(payload.pid)
-                            }}
-                        />
+                        <PoolInList key={x.pool.pid} {...x} onSend={props.onSend} onRetry={retry} />
                     ))}
                 </div>
             )}

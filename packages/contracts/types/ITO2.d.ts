@@ -44,9 +44,9 @@ export type DestructSuccess = ContractEventLog<{
     3: string[]
 }>
 export type FillSuccess = ContractEventLog<{
-    total: string
-    id: string
     creator: string
+    id: string
+    total: string
     creation_time: string
     token_address: string
     message: string
@@ -94,10 +94,12 @@ export type WithdrawSuccess = ContractEventLog<{
     2: string
 }>
 
-export interface BscPolygonITO extends BaseContract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): BscPolygonITO
-    clone(): BscPolygonITO
+export interface ITO2 extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): ITO2
+    clone(): ITO2
     methods: {
+        base_time(): NonPayableTransactionObject<string>
+
         check_availability(id: string | number[]): NonPayableTransactionObject<{
             exchange_addrs: string[]
             remaining: string
@@ -135,14 +137,16 @@ export interface BscPolygonITO extends BaseContract {
             _qualification: string,
         ): PayableTransactionObject<void>
 
+        initialize(_base_time: number | string | BN): NonPayableTransactionObject<void>
+
         setUnlockTime(id: string | number[], _unlock_time: number | string | BN): NonPayableTransactionObject<void>
 
         swap(
-            _id: string | number[],
+            id: string | number[],
             verification: string | number[],
-            validation: string | number[],
             exchange_addr_i: number | string | BN,
-            _input_total: number | string | BN,
+            input_total: number | string | BN,
+            data: (string | number[])[],
         ): PayableTransactionObject<string>
 
         withdraw(id: string | number[], addr_i: number | string | BN): NonPayableTransactionObject<void>

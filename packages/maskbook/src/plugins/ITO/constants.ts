@@ -6,6 +6,8 @@ export const ITO_CONTRACT_BASE_TIMESTAMP = new Date('2021-03-29T00:00:00.000Z').
 export const TIME_WAIT_BLOCKCHAIN = 30000
 // Keccak-256(ifQualified(address)) XOR Keccak-256(logQualified(address,uint256))
 export const QUALIFICATION_INTERFACE_ID = '0xfb036a85'
+// Keccak-256(ifQualified(address,bytes32[])) XOR Keccak-256(logQualified(address,bytes32[]))
+export const QUALIFICATION2_INTERFACE_ID = '0x6762aec5'
 // Keccak-256(get_start_time())
 export const QUALIFICATION_HAS_START_TIME_INTERFACE_ID = '0xdf29dfc4'
 // Keccak-256(isLucky(address))

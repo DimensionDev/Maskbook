@@ -26,7 +26,6 @@ import { useSwapCallback } from '../hooks/useSwapCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { JSON_PayloadInMask } from '../types'
 import { SwapStatus } from './SwapGuide'
-import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { useQualificationVerify } from '../hooks/useQualificationVerify'
@@ -117,12 +116,12 @@ export function SwapDialog(props: SwapDialogProps) {
 
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
-    const ITO_CONTRACT_ADDRESS = useITO_ContractAddress()
 
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),
     )
     const [swapToken, setSwapToken] = useState<FungibleTokenDetailed>(payload.exchange_tokens[0])
+
     const [swapAmount, setSwapAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
     const [inputAmountForUI, setInputAmountForUI] = useState(
         swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken.decimals),
@@ -191,6 +190,7 @@ export function SwapDialog(props: SwapDialogProps) {
     //#region swap
     const { value: qualificationInfo, loading: loadingQualification } = useQualificationVerify(
         payload.qualification_address,
+        payload.contract_address,
     )
 
     const [swapState, swapCallback, resetSwapCallback] = useSwapCallback(
@@ -310,7 +310,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={swapAmount.toFixed()}
-                        spender={ITO_CONTRACT_ADDRESS}
+                        spender={payload.contract_address}
                         token={swapToken.type === EthereumTokenType.ERC20 ? swapToken : undefined}>
                         <ActionButton
                             className={classes.button}
