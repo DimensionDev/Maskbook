@@ -85,7 +85,6 @@ const mindsUI: SocialNetworkUI.Definition = {
             commentInspector: injectCommentBoxAtMinds(),
         },
         // NOT SUPPORTED YET
-        toolbar: undefined,
         userBadge: undefined,
     },
     configuration: {
