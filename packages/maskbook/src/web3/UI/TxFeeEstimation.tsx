@@ -7,8 +7,9 @@ import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useValueRef, formatWeiToGwei, formatBalance } from '@dimensiondev/maskbook-shared'
 import {
     GasNow,
-    ChainId,
     useGasPrice,
+    useNetworkType,
+    NetworkType,
     EthereumTokenType,
     getChainDetailed,
     useChainId,
@@ -29,6 +30,7 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
     const theme = useTheme()
     const { gas } = props
     const _gasPrice = useGasPrice()
+    const networkType = useNetworkType()
     const classes = useStylesExtends(useStyles(), props)
     const gasNow = useValueRef(currentGasNowSettings)
     const [type, setType] = useState<keyof GasNow>('fast')
@@ -54,7 +56,7 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
     const { value: detailedTokens } = useAssets([])
     const nativeToken = detailedTokens.find((t) => t.token.type === EthereumTokenType.Native)
     const usdRate = nativeToken?.price?.usd
-    return chainId === ChainId.Mainnet && gas ? (
+    return networkType === NetworkType.Ethereum && gas ? (
         <>
             <Grid item xs={6}>
                 <Paper className={classes.label}>
