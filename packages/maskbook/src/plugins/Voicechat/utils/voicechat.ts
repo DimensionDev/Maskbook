@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-import { SIGNALING_SERVER, ICE_SERVERS } from '../constants'
+import { ICE_SERVERS, SIGNALING_SERVER } from '../constants'
 import type { PeerMediaElement } from '../types'
 import { VolumeMeter } from './volumeMeter'
 
@@ -66,9 +66,6 @@ export function init(
 
     function join_chat_channel(channel: string, userdata: Object) {
         signalingSocket?.emit('join', { channel, userdata })
-    }
-    function part_chat_channel(channel: string) {
-        signalingSocket?.emit('part', channel)
     }
 
     signalingSocket.on('addPeer', async (config: Config) => {
@@ -319,14 +316,17 @@ function createFeat(stream: MediaStream, username: string, isLocal: boolean) {
 
     //- Meter
     const src = audioContext.createMediaStreamSource(stream)
-    const meter = VolumeMeter(audioContext, {}, (volume: number) => {
-        if (volume >= 0.3 && !speakingUsers.includes(username)) {
-            speakingUsers.push(username)
-            updateSpeakingUsers()
-        } else if (volume < 0.3 && speakingUsers.includes(username)) {
-            speakingUsers = speakingUsers.filter((u) => u !== username)
-            updateSpeakingUsers()
-        }
+    const meter = VolumeMeter({
+        context: audioContext,
+        onEnterFrame(volume) {
+            if (volume >= 0.3 && !speakingUsers.includes(username)) {
+                speakingUsers.push(username)
+                updateSpeakingUsers()
+            } else if (volume < 0.3 && speakingUsers.includes(username)) {
+                speakingUsers = speakingUsers.filter((u) => u !== username)
+                updateSpeakingUsers()
+            }
+        },
     })
     src.connect(meter)
     //- Meter END

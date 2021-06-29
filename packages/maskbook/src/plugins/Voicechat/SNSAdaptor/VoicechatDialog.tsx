@@ -1,20 +1,20 @@
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import {
+    Box,
+    Button,
+    Checkbox,
     DialogContent,
     DialogProps,
     FormControlLabel,
-    Checkbox,
-    Button,
     makeStyles,
     TextField,
-    Box,
 } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useState, useEffect } from 'react'
-import type { VoiceChatMetadata } from '../types'
-import { VOICECHAT_META_KEY_1 } from '../constants'
+import { useEffect, useState } from 'react'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { editActivatedPostMetadata, globalTypedMessageMetadata } from '../../../protocols/typed-message/global-state'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { globalTypedMessageMetadata, editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { VOICECHAT_META_KEY_1 } from '../constants'
+import type { VoiceChatMetadata } from '../types'
 
 const useStyles = makeStyles((theme) => ({
     line: {

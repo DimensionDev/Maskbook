@@ -1,16 +1,18 @@
 import type { VoiceChatExtendedAnalyserNode as Analyser } from '../types'
 
-export interface Opts {
+export interface Options {
+    context: AudioContext
     fftSize?: number
     tweenIn?: number
     tweenOut?: number
+    onEnterFrame(next: number): void
 }
-export function VolumeMeter(context: AudioContext, opts: Opts, onEnterFrame: (next: number) => void): Analyser {
-    opts.fftSize = opts.fftSize ?? 32
-    opts.tweenIn = opts.tweenIn ?? 1.618
-    opts.tweenOut = opts.tweenOut ?? opts.tweenIn * 3
 
-    const { fftSize, tweenIn, tweenOut } = opts as Required<Opts>
+export function VolumeMeter(options: Options): Analyser {
+    const { context, onEnterFrame } = options
+    const fftSize = options.fftSize ?? 32
+    const tweenIn = options.tweenIn ?? 1.618
+    const tweenOut = options.tweenOut ?? tweenIn * 3
 
     let range,
         next: number,
@@ -24,8 +26,8 @@ export function VolumeMeter(context: AudioContext, opts: Opts, onEnterFrame: (ne
         window.cancelAnimationFrame(handle)
     }
 
-    analyser.fftSize = opts.fftSize
-    const buffer = new Uint8Array(opts.fftSize)
+    analyser.fftSize = fftSize
+    const buffer = new Uint8Array(fftSize)
 
     function render() {
         if (analyser.ended) return
