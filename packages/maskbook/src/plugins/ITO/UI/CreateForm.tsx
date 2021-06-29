@@ -27,6 +27,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { AdvanceSetting } from './AdvanceSetting'
 import type { AdvanceSettingData } from './AdvanceSetting'
+import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
 import { useRegionSelect, regionCodes, encodeRegionCode, decodeRegionCode } from '../hooks/useRegion'
 import { RegionSelect } from './RegionSelect'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
@@ -103,7 +104,7 @@ export function CreateForm(props: CreateFormProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
-    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const ITO_CONTRACT_ADDRESS = useITO_ContractAddress()
     const DEFAULT_QUALIFICATION_ADDRESS = useConstant(ITO_CONSTANTS, 'DEFAULT_QUALIFICATION_ADDRESS')
 
     const currentIdentity = useCurrentIdentity()

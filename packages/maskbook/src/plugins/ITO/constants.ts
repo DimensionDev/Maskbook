@@ -1,85 +1,9 @@
-import { CONSTANTS, createERC20Token, getConstant, ChainId } from '@dimensiondev/web3-shared'
+import { ChainId } from '@dimensiondev/web3-shared'
 
 export const ITO_MetaKey = 'com.maskbook.ito:1'
 export const ITO_PluginID = 'com.maskbook.ito'
 
 export const ITO_EXCHANGE_RATION_MAX = 6
-
-// Mainnet
-
-const DAI = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'DAI_ADDRESS', ChainId.Mainnet),
-    18,
-    'Dai Stablecoin',
-    'DAI',
-)
-const USDC = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'USDC_ADDRESS', ChainId.Mainnet),
-    6,
-    'USD Coin',
-    'USDC',
-)
-const USDT = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'USDT_ADDRESS', ChainId.Mainnet),
-    6,
-    'Tether USD',
-    'USDT',
-)
-const HUSD = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'HUSD_ADDRESS', ChainId.Mainnet),
-    6,
-    'HUSD',
-    'HUSD',
-)
-const BUSD = createERC20Token(
-    ChainId.Mainnet,
-    getConstant(CONSTANTS, 'BUSD_ADDRESS', ChainId.Mainnet),
-    6,
-    'Binance USD',
-    'BUSD',
-)
-
-// Ropsten
-
-const MSKA = createERC20Token(
-    ChainId.Ropsten,
-    getConstant(CONSTANTS, 'MSKA_ADDRESS', ChainId.Ropsten),
-    18,
-    'Mask Token A',
-    'MSKA',
-)
-const MSKB = createERC20Token(
-    ChainId.Ropsten,
-    getConstant(CONSTANTS, 'MSKB_ADDRESS', ChainId.Ropsten),
-    18,
-    'Mask Token B',
-    'MSKB',
-)
-const MSKC = createERC20Token(
-    ChainId.Ropsten,
-    getConstant(CONSTANTS, 'MSKC_ADDRESS', ChainId.Ropsten),
-    18,
-    'Mask Token C',
-    'MSKC',
-)
-const MSKD = createERC20Token(
-    ChainId.Ropsten,
-    getConstant(CONSTANTS, 'MSKD_ADDRESS', ChainId.Ropsten),
-    18,
-    'Mask Token D',
-    'MSKD',
-)
-const MSKE = createERC20Token(
-    ChainId.Ropsten,
-    getConstant(CONSTANTS, 'MSKE_ADDRESS', ChainId.Ropsten),
-    18,
-    'Mask Token E',
-    'MSKE',
-)
 
 export const ITO_CONSTANTS = {
     ITO_CONTRACT_ADDRESS: {
@@ -89,9 +13,9 @@ export const ITO_CONSTANTS = {
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
         [ChainId.BSC]: '',
-        [ChainId.BSCT]: '0x153466dc03dd36b85c06cb51973a2e81397fca51',
+        [ChainId.BSCT]: '',
         [ChainId.Matic]: '',
-        [ChainId.Mumbai]: '0x153466dC03DD36b85c06Cb51973a2E81397fcA51',
+        [ChainId.Mumbai]: '',
     },
     MASK_ITO_CONTRACT_ADDRESS: {
         [ChainId.Mainnet]: '0x86812da3A623ab9606976078588b80C315E55FA3',
@@ -104,16 +28,27 @@ export const ITO_CONSTANTS = {
         [ChainId.Matic]: '',
         [ChainId.Mumbai]: '',
     },
+    ITO_BSC_POLYGON_CONTRACT_ADDRESS: {
+        [ChainId.Mainnet]: '',
+        [ChainId.Ropsten]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: '0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B',
+        [ChainId.BSCT]: '0x981be454a930479d92C91a0092D204b64845A5D6',
+        [ChainId.Matic]: '0x981be454a930479d92C91a0092D204b64845A5D6',
+        [ChainId.Mumbai]: '0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B',
+    },
     DEFAULT_QUALIFICATION_ADDRESS: {
         [ChainId.Mainnet]: '0x81b6ae377e360dcad63611846a2516f4ba8c88ac',
         [ChainId.Ropsten]: '0x050745919acaa000e5b116b2c499e6f4ed5ce5b6',
         [ChainId.Rinkeby]: '0x88AA0AB3B7cDE263073e1cBa1D06473adeC1b38E',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
-        [ChainId.BSC]: '',
-        [ChainId.BSCT]: '0x0061E06c9f640a03C4981f43762d2AE5e03873c5',
-        [ChainId.Matic]: '',
-        [ChainId.Mumbai]: '0xe7a945e915E7c17f3263b03ac1bb84fb89410c3a',
+        [ChainId.BSC]: '0x5B966f3a32Db9C180843bCb40267A66b73E4f022',
+        [ChainId.BSCT]: '0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B',
+        [ChainId.Matic]: '0x02Ea0720254F7fa4eca7d09A1b9C783F1020EbEF',
+        [ChainId.Mumbai]: '0x5B966f3a32Db9C180843bCb40267A66b73E4f022',
     },
     SUBGRAPH_URL: {
         [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-mainnet',
@@ -121,21 +56,10 @@ export const ITO_CONSTANTS = {
         [ChainId.Rinkeby]: '',
         [ChainId.Kovan]: '',
         [ChainId.Gorli]: '',
-        [ChainId.BSC]: '',
+        [ChainId.BSC]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-bsc-mainnet',
         [ChainId.BSCT]: '',
-        [ChainId.Matic]: '',
+        [ChainId.Matic]: 'https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-polygon',
         [ChainId.Mumbai]: '',
-    },
-    EXCHANGE_TOKENS: {
-        [ChainId.Mainnet]: [DAI, USDC, USDT, HUSD, BUSD].map((x) => x.address),
-        [ChainId.Ropsten]: [MSKA, MSKB, MSKC, MSKD, MSKE].map((x) => x.address),
-        [ChainId.Rinkeby]: [],
-        [ChainId.Kovan]: [],
-        [ChainId.Gorli]: [],
-        [ChainId.BSC]: [],
-        [ChainId.BSCT]: [],
-        [ChainId.Matic]: [],
-        [ChainId.Mumbai]: [],
     },
 }
 

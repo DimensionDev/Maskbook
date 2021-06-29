@@ -4,7 +4,7 @@ import { DialogContent } from '@material-ui/core'
 import { formatBalance, usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
-import { ITO_CONSTANTS, ITO_MetaKey, MSG_DELIMITER } from '../constants'
+import { ITO_MetaKey, MSG_DELIMITER } from '../constants'
 import { DialogTabs, JSON_PayloadInMask } from '../types'
 import { CreateForm } from './CreateForm'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
@@ -13,11 +13,12 @@ import { payloadOutMask } from '../helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
 import Services from '../../../extension/service'
-import { useChainId, useAccount, TransactionStateType, useConstant } from '@dimensiondev/web3-shared'
 import { PoolSettings, useFillCallback } from '../hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
+import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
 import { EthereumMessages } from '../../Ethereum/messages'
+import { TransactionStateType, useAccount, useChainId } from '@dimensiondev/web3-shared'
 
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',
@@ -35,7 +36,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const account = useAccount()
     const chainId = useChainId()
 
-    const ITO_CONTRACT_ADDRESS = useConstant(ITO_CONSTANTS, 'ITO_CONTRACT_ADDRESS')
+    const ITO_CONTRACT_ADDRESS = useITO_ContractAddress()
 
     //#region step
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
@@ -165,9 +166,11 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const onClose = useCallback(() => {
         const [, setValue] = state
         setValue(DialogTabs.create)
+        setStep(ITOCreateFormPageStep.NewItoPage)
         // After close this tx dialog, it should set the gas price to zero
         //  to let Metamask to determine the gas price for the further tx.
         currentGasPriceSettings.value = 0
+        setPoolSettings(undefined)
         props.onClose()
     }, [props.onClose, state, currentGasPriceSettings])
 

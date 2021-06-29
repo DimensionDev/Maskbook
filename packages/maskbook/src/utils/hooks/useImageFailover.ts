@@ -10,5 +10,5 @@ export function useImageFailover(urls: readonly string[], suffix: string) {
         } catch {
             return ''
         }
-    })
+    }, [urls.join(''), suffix])
 }
