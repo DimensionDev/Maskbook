@@ -1,5 +1,7 @@
-import { makeStyles, Grid } from '@material-ui/core'
-import type { PlayerStandings } from '../types'
+import { makeStyles, Grid, Box, Typography, Button } from '@material-ui/core'
+import { useOtherPlayerInfo } from '../hooks/useOtherPlayerInfo'
+import type { GoodGhostingInfo, PlayerStandings } from '../types'
+import { getPlayerStatus, PlayerStatus } from '../utils'
 import { CircularDataDisplay } from './CircularDataDisplay'
 
 const useStyles = makeStyles((theme) => ({
@@ -20,34 +22,71 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface OtherPlayersViewProps {
-    standings: PlayerStandings
+    info: GoodGhostingInfo
 }
 
 export function OtherPlayersView(props: OtherPlayersViewProps) {
     const classes = useStyles()
+    const { value: players, loading, error, retry } = useOtherPlayerInfo(props.info.numberOfPlayers)
+
+    if (loading) {
+        return (
+            <Typography variant="h6" color="textSecondary">
+                Loading other players' stats
+            </Typography>
+        )
+    } else if (error || !players) {
+        return (
+            <Box display="flex" flexDirection="column" alignItems="center">
+                <Typography color="textPrimary">Something went wrong.</Typography>
+                <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
+                    Retry
+                </Button>
+            </Box>
+        )
+    }
+
+    let playerInfo: PlayerStandings = {
+        winning: 0,
+        waiting: 0,
+        ghosts: 0,
+        dropouts: 0,
+    }
+
+    if (players.length) {
+        players.forEach((player, i) => {
+            const playerStatus = getPlayerStatus(player, props.info.currentSegment)
+
+            if (playerStatus === PlayerStatus.Dropout) playerInfo.dropouts += 1
+            else if (playerStatus === PlayerStatus.Ghost) playerInfo.ghosts += 1
+            else if (playerStatus === PlayerStatus.Waiting) playerInfo.waiting += 1
+            else if (playerStatus === PlayerStatus.Winning) playerInfo.winning += 1
+        })
+    }
+
     return (
         <div className={classes.circularDataSection}>
             <Grid className={classes.infoRow} container justifyContent={'center'}>
-                <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
+                <Grid className={classes.circularDataWrapper} item xs={6}>
                     <div className={classes.circularData}>
-                        <CircularDataDisplay header={'Winning'} title={`${props.standings.winning}`} />
+                        <CircularDataDisplay header={'Winning'} title={`${playerInfo.winning}`} />
                     </div>
                 </Grid>
-                <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
+                <Grid className={classes.circularDataWrapper} item xs={6}>
                     <div className={classes.circularData}>
-                        <CircularDataDisplay header={'Waiting'} title={`${props.standings.waiting}`} />
+                        <CircularDataDisplay header={'Waiting'} title={`${playerInfo.waiting}`} />
                     </div>
                 </Grid>
             </Grid>
             <Grid className={classes.infoRow} container justifyContent={'center'}>
-                <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
+                <Grid className={classes.circularDataWrapper} item xs={6}>
                     <div className={classes.circularData}>
-                        <CircularDataDisplay header={'Ghosts'} title={`${props.standings.ghosts}`} />
+                        <CircularDataDisplay header={'Ghosts'} title={`${playerInfo.ghosts}`} />
                     </div>
                 </Grid>
-                <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
+                <Grid className={classes.circularDataWrapper} item xs={6}>
                     <div className={classes.circularData}>
-                        <CircularDataDisplay header={'Drop-outs'} title={`${props.standings.dropouts}`} />
+                        <CircularDataDisplay header={'Drop-outs'} title={`${playerInfo.dropouts}`} />
                     </div>
                 </Grid>
             </Grid>
