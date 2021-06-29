@@ -13,11 +13,10 @@ import { payloadOutMask } from '../helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
 import Services from '../../../extension/service'
-import { formatBalance, TransactionStateType, useAccount, useChainId } from '@masknet/web3-shared'
+import { formatBalance, useChainId, useAccount, TransactionStateType, useITOConstants } from '@masknet/web3-shared'
 import { PoolSettings, useFillCallback } from '../hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
-import { currentGasNowSettings, currentGasPriceSettings } from '../../Wallet/settings'
-import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
+import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
 import { WalletMessages } from '../../Wallet/messages'
 
 export enum ITOCreateFormPageStep {
@@ -36,7 +35,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const account = useAccount()
     const chainId = useChainId()
 
-    const ITO_CONTRACT_ADDRESS = useITO_ContractAddress()
+    const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
 
     //#region step
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
@@ -88,7 +87,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
             // assemble JSON payload
             const payload: JSON_PayloadInMask = {
-                contract_address: ITO_CONTRACT_ADDRESS,
+                contract_address: ITO2_CONTRACT_ADDRESS,
                 pid: FillSuccess.id,
                 password: fillSettings.password,
                 message: FillSuccess.message,

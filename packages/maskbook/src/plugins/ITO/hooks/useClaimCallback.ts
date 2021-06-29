@@ -18,7 +18,7 @@ export function useClaimCallback(pids: string[], contractAddress?: string) {
     const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
-    const ITO_Contract = useITO_Contract(contractAddress)
+    const { contract: ITO_Contract } = useITO_Contract(contractAddress)
     const [claimState, setClaimState] = useTransactionState()
 
     const claimCallback = useCallback(async () => {
