@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { DialogContent } from '@material-ui/core'
-import { formatBalance, usePortalShadowRoot } from '@masknet/shared'
+import { usePortalShadowRoot } from '@masknet/shared'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
 import { ITO_MetaKey, MSG_DELIMITER } from '../constants'
@@ -13,12 +13,12 @@ import { payloadOutMask } from '../helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
 import Services from '../../../extension/service'
-import { useChainId, useAccount, TransactionStateType } from '@masknet/web3-shared'
+import { formatBalance, TransactionStateType, useAccount, useChainId } from '@masknet/web3-shared'
 import { PoolSettings, useFillCallback } from '../hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
-import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
+import { currentGasNowSettings, currentGasPriceSettings } from '../../Wallet/settings'
 import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
-import { EthereumMessages } from '../../Ethereum/messages'
+import { WalletMessages } from '../../Wallet/messages'
 
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',
@@ -62,7 +62,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     //#endregion
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
 

@@ -18,6 +18,7 @@ import {
     currentProviderSettings,
     currentChainIdSettings,
     currentPortfolioDataProviderSettings,
+    currentGasNowSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
 
@@ -37,6 +38,7 @@ export const [getLanguage, setLanguage] = create(languageSettings)
 export const [getChainId, setChainId] = create(currentChainIdSettings)
 export const [getBalance, setBalance] = create(currentBalanceSettings)
 export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
+export const [getGasNow, setGasNow] = create(currentGasNowSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentTrendingDataProviderSettings)
 export const [getAncientPostsCompatibiltyMode, setAncientPostsCompatibiltyMode] = create(
     disableOpenNewTabInBackgroundSettings,

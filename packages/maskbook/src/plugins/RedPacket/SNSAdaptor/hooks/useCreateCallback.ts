@@ -1,26 +1,25 @@
-import { useCallback, useState } from 'react'
-import BigNumber from 'bignumber.js'
-import Web3Utils from 'web3-utils'
+import type { HappyRedPacketV2 } from '@masknet/contracts/types/HappyRedPacketV2'
 import type { PayableTx } from '@masknet/contracts/types/types'
-import { useRedPacketContract } from './useRedPacketContract'
 import {
-    FungibleTokenDetailed,
     EthereumTokenType,
+    FungibleTokenDetailed,
+    isLessThan,
     TransactionEventType,
     TransactionStateType,
     useAccount,
     useChainId,
-    useTransactionState,
-    useNonce,
     useGasPrice,
-    TOKEN_CONSTANTS,
-    useConstant,
+    useNonce,
+    useTokenConstants,
+    useTransactionState,
 } from '@masknet/web3-shared'
-import { isLessThan } from '@masknet/shared'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import BigNumber from 'bignumber.js'
+import { useCallback, useState } from 'react'
 import type { TransactionReceipt } from 'web3-core'
-import type { HappyRedPacketV2 } from '@masknet/contracts/types/HappyRedPacketV2'
+import Web3Utils from 'web3-utils'
 import Services from '../../../../extension/service'
+import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useRedPacketContract } from './useRedPacketContract'
 
 export interface RedPacketSettings {
     password: string
@@ -42,7 +41,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
-    const { NATIVE_TOKEN_ADDRESS } = useConstant(TOKEN_CONSTANTS)
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     const createCallback = useCallback(async () => {
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings

@@ -1,7 +1,7 @@
 import { Flags } from '../../../utils/flags'
 
 type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never
-export default function () {
+export default function (signal: AbortSignal) {
     const injectedScript = fetchInjectedScript()
     const contentScripts = fetchInjectContentScript('/generated__content__script.html')
     async function onCommittedListener(arg: Args): Promise<void> {
@@ -33,7 +33,7 @@ export default function () {
         contentScripts(arg.tabId, arg.frameId).catch(HandleError(arg))
     }
     browser.webNavigation.onCommitted.addListener(onCommittedListener)
-    return () => browser.webNavigation.onCommitted.removeListener(onCommittedListener)
+    signal.addEventListener('abort', () => browser.webNavigation.onCommitted.removeListener(onCommittedListener))
 }
 
 function fetchInjectContentScript(entryHTML: string) {

@@ -1,20 +1,19 @@
 import { useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
-import { ListItem, makeStyles, Theme, Typography, Box } from '@material-ui/core'
+import { Box, ListItem, makeStyles, Theme, Typography } from '@material-ui/core'
 import { Trans } from 'react-i18next'
-import { RedPacketJSONPayload, RedPacketHistory, RedPacketStatus } from '../types'
+import { RedPacketHistory, RedPacketJSONPayload, RedPacketStatus } from '../types'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatBalance } from '@masknet/shared'
-import { useAccount, TransactionStateType } from '@masknet/web3-shared'
+import { formatBalance, TransactionStateType, useAccount } from '@masknet/web3-shared'
 import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { StyledLinearProgress } from '../../ITO/UI/StyledLinearProgress'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useRefundCallback } from './hooks/useRefundCallback'
-import { EthereumMessages } from '../../Ethereum/messages'
+import { WalletMessages } from '../../Wallet/messages'
 
 const useStyles = makeStyles((theme: Theme) => ({
     primary: {
@@ -114,7 +113,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => undefined,
     )
 

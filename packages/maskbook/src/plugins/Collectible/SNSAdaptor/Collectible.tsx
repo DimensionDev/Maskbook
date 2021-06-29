@@ -1,13 +1,13 @@
 import { useCallback } from 'react'
 import {
-    makeStyles,
     Avatar,
     Box,
     Button,
-    CardHeader,
-    CardContent,
     CardActions,
+    CardContent,
+    CardHeader,
     Link,
+    makeStyles,
     Paper,
     Tab,
     Tabs,
@@ -36,7 +36,7 @@ import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pi
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
 import { useChainId } from '@masknet/web3-shared'
-import { getEnumAsArray } from '@masknet/shared'
+import { getEnumAsArray } from '@dimensiondev/kit'
 
 const useStyles = makeStyles((theme) => {
     return {

@@ -1,9 +1,11 @@
 {
   "name": "@masknet/shared",
   "main": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.8.0-20210317064617-6c4792c",
+    "@dimensiondev/kit": "=0.0.0-20210624142900-972fd05",
+    "@masknet/web3-shared": "workspace:*",
     "@servie/events": "^3.0.0",
     "anchorme": "^2.1.2",
     "async-call-rpc": "^5.1.0",

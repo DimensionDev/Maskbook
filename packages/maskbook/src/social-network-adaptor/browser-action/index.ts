@@ -24,7 +24,7 @@ const define: SocialNetworkUI.Definition = {
             return true
         },
     },
-    utils: {},
+    utils: { createPostContext: null! },
     async init(signal) {
         const state: Readonly<SocialNetworkUI.AutonomousState> = {
             profiles: new ValueRef([]),

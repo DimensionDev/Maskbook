@@ -1,5 +1,4 @@
-import { formatBalance } from '@masknet/shared'
-import { ERC20TokenDetailed, TransactionStateType } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, formatBalance, TransactionStateType } from '@masknet/web3-shared'
 import { Alert, Box, Skeleton, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useCallback, useEffect } from 'react'
@@ -9,7 +8,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { EthereumMessages } from '../../Ethereum/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { useMaskClaimCallback } from '../hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from '../hooks/useMaskITO_Packet'
 
@@ -87,7 +86,7 @@ export function ITO_Card(props: ITO_CardProps) {
 
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             onUpdateBalance()

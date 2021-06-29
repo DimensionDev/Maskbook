@@ -7,7 +7,7 @@ import { TransactionStateType, useTransactionState } from './useTransactionState
 import { TransactionEventType } from '../types'
 import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
-import { isGreaterThan, isZero } from '@masknet/shared'
+import { isGreaterThan, isZero } from '../utils'
 
 export function useERC20TokenTransferCallback(address: string, amount?: string, recipient?: string) {
     const nonce = useNonce()

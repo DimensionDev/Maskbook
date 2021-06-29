@@ -1,22 +1,24 @@
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
-import { makeStyles, Typography, Slider, CircularProgress } from '@material-ui/core'
-import { formatBalance, pow10, ZERO } from '@masknet/shared'
+import { CircularProgress, makeStyles, Slider, Typography } from '@material-ui/core'
 
-import { useRemoteControlledDialog, useI18N } from '../../../utils'
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
-    FungibleTokenDetailed,
+    ChainId,
+    currySameAddress,
     ERC20TokenDetailed,
     EthereumTokenType,
-    ChainId,
-    TransactionStateType,
-    useTokenBalance,
-    resolveTransactionLinkOnExplorer,
-    useChainId,
+    formatBalance,
+    FungibleTokenDetailed,
     isNative,
-    currySameAddress,
+    pow10,
+    resolveTransactionLinkOnExplorer,
+    TransactionStateType,
+    useChainId,
+    useTokenBalance,
+    ZERO,
 } from '@masknet/web3-shared'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -24,7 +26,6 @@ import { useSwapCallback } from '../hooks/useSwapCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { JSON_PayloadInMask } from '../types'
 import { SwapStatus } from './SwapGuide'
-import { EthereumMessages } from '../../Ethereum/messages'
 import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -206,7 +207,7 @@ export function SwapDialog(props: SwapDialogProps) {
     }, [swapCallback, payload.token.address])
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (swapState.type === TransactionStateType.CONFIRMED && !swapState.receipt.status) resetSwapCallback()

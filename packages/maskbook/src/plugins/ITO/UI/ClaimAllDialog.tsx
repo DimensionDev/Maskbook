@@ -1,14 +1,14 @@
 import { useCallback, useEffect } from 'react'
-import { uniq, flatten } from 'lodash-es'
+import { flatten, uniq } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
 import { useSnackbar, VariantType } from '@masknet/theme'
-import { formatBalance, FormattedBalance } from '@masknet/shared'
-import { makeStyles, DialogContent, CircularProgress, Typography, List, ListItem } from '@material-ui/core'
-import { TransactionStateType, resolveTransactionLinkOnExplorer, useChainId } from '@masknet/web3-shared'
-import { useRemoteControlledDialog, useI18N } from '../../../utils'
+import { FormattedBalance } from '@masknet/shared'
+import { CircularProgress, DialogContent, List, ListItem, makeStyles, Typography } from '@material-ui/core'
+import { formatBalance, resolveTransactionLinkOnExplorer, TransactionStateType, useChainId } from '@masknet/web3-shared'
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useClaimAll } from '../hooks/useClaimAll'
-import { EthereumMessages } from '../../Ethereum/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -112,7 +112,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     }, [claimCallback])
 
     const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (claimState.type === TransactionStateType.FAILED) popEnqueueSnackbar('error')

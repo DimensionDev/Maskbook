@@ -2,15 +2,15 @@ import { Button, makeStyles, TextField } from '@material-ui/core'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import {
-    useTokenTransferCallback,
-    TransactionStateType,
     ERC1155TokenAssetDetailed,
     ERC721TokenAssetDetailed,
+    formatEthereumAddress,
+    TransactionStateType,
+    useTokenTransferCallback,
 } from '@masknet/web3-shared'
-import { useRemoteControlledDialog, useI18N } from '../../../../utils'
+import { useI18N, useRemoteControlledDialog } from '../../../../utils'
 import { Image } from '../../../../components/shared/Image'
-import { EthereumMessages } from '../../../../plugins/Ethereum/messages'
-import { formatEthereumAddress } from '@masknet/shared'
+import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
@@ -56,7 +56,7 @@ export function DashboardWalletTransferDialogNFT(
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         useCallback(
             (ev) => {
                 if (ev.open) return

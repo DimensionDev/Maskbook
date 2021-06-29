@@ -9,5 +9,6 @@
   "include": ["./src/"],
   "ts-node": {
     "compilerOptions": { "module": "CommonJS" }
-  }
+  },
+  "references": [{ "path": "../web3-shared" }]
 }

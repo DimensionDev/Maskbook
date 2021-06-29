@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback, useEffect, useRef } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/sdk'
@@ -9,6 +9,7 @@ import {
     createERC20Token,
     createNativeToken,
     EthereumTokenType,
+    formatBalance,
     FungibleTokenDetailed,
     TransactionStateType,
     useChainId,
@@ -20,14 +21,12 @@ import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
 import { TradeSummary } from '../trader/TradeSummary'
 import { ConfirmDialog } from './ConfirmDialog'
 import { TradeActionType } from '../../trader/useTradeState'
-import { SwapResponse, TokenPanelType, TradeComputed, TradeProvider, Coin } from '../../types'
-import { formatBalance } from '@masknet/shared'
+import { Coin, SwapResponse, TokenPanelType, TradeComputed, TradeProvider } from '../../types'
 import { TradePairViewer } from '../uniswap/TradePairViewer'
 import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
-import { EthereumMessages } from '../../../Ethereum/messages'
 import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
 import { isNativeTokenWrapper } from '../../helpers'
@@ -247,7 +246,7 @@ export function Trader(props: TraderProps) {
 
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             setFreezed(false)

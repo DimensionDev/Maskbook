@@ -1,14 +1,13 @@
-import { Theme, makeStyles, Link, Button, Typography, CircularProgress, IconButton } from '@material-ui/core'
-import RefreshIcon from '@material-ui/icons/Refresh'
-import { useI18N } from '../../../../utils'
-import { LBPPriceChart } from './LBPPriceChart'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
-import { usePoolTokenPrices } from '../../LBP/usePoolTokenPrices'
-import { formatEthereumAddress } from '@masknet/shared'
-import { TOKEN_CONSTANTS, useConstant } from '@masknet/web3-shared'
+import { formatEthereumAddress, useTokenConstants } from '@masknet/web3-shared'
+import { Button, CircularProgress, IconButton, Link, makeStyles, Theme, Typography } from '@material-ui/core'
+import RefreshIcon from '@material-ui/icons/Refresh'
+import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useI18N } from '../../../../utils'
 import { usePools } from '../../LBP/usePools'
+import { usePoolTokenPrices } from '../../LBP/usePoolTokenPrices'
 import type { Currency } from '../../types'
+import { LBPPriceChart } from './LBPPriceChart'
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -60,7 +59,7 @@ export function LBPPanel(props: LBPPanelProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(props), props)
 
-    const { USDC_ADDRESS } = useConstant(TOKEN_CONSTANTS)
+    const { USDC_ADDRESS } = useTokenConstants()
     const { value: pools = [], loading: poolsLoading, error: poolsError } = usePools(token.address)
     const {
         value: prices = [],
