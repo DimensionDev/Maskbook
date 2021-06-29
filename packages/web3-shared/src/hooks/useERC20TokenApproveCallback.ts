@@ -10,7 +10,7 @@ import { useGasPrice } from './useGasPrice'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
-import { isLessThan } from '@masknet/shared'
+import { isLessThan } from '../utils'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 

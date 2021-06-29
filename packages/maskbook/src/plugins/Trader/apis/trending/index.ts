@@ -1,19 +1,19 @@
 import { first, groupBy } from 'lodash-es'
-import { DataProvider, Currency, Coin, Trending, Stat, TagType } from '../../types'
+import { Coin, Currency, DataProvider, Stat, TagType, Trending } from '../../types'
 import * as coinGeckoAPI from '../coingecko'
 import * as coinMarketCapAPI from '../coinmarketcap'
 import * as uniswapAPI from '../uniswap'
 import { Days } from '../../UI/trending/PriceChartDaysControl'
-import { getEnumAsArray, unreachable } from '@masknet/shared'
+import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import {
-    resolveAlias,
-    resolveCoinId,
-    resolveCoinAddress,
-    resolveNetworkType,
     isBlockedId,
     isBlockedKeyword,
     isMirroredKeyword,
+    resolveAlias,
+    resolveCoinAddress,
+    resolveCoinId,
+    resolveNetworkType,
 } from './hotfix'
 import { NetworkType } from '@masknet/web3-shared'
 import { currentNetworkSettings } from '../../../Wallet/settings'

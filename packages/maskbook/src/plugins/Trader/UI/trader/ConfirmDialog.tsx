@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Button, makeStyles, DialogActions, DialogContent, Typography } from '@material-ui/core'
+import { useEffect, useState } from 'react'
+import { Button, DialogActions, DialogContent, makeStyles, Typography } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import type BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
@@ -8,8 +8,8 @@ import { TokenPanel } from './TokenPanel'
 import { PriceStaleWarnning } from './PriceStaleWarnning'
 import type { TradeComputed, TradeProvider } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { formatBalance } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { formatBalance } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     reverseIcon: {

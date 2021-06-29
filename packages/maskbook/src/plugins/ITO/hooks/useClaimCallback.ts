@@ -2,23 +2,23 @@ import { useCallback } from 'react'
 import stringify from 'json-stable-stringify'
 import type { NonPayableTx } from '@masknet/contracts/types/types'
 import {
+    isZero,
     TransactionEventType,
     TransactionStateType,
     useAccount,
     useChainId,
-    useTransactionState,
     useGasPrice,
     useNonce,
+    useTransactionState,
 } from '@masknet/web3-shared'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import { isZero } from '@masknet/shared'
 
 export function useClaimCallback(pids: string[], contractAddress?: string) {
     const nonce = useNonce()
     const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
-    const ITO_Contract = useITO_Contract(contractAddress)
+    const { contract: ITO_Contract } = useITO_Contract(contractAddress)
     const [claimState, setClaimState] = useTransactionState()
 
     const claimCallback = useCallback(async () => {

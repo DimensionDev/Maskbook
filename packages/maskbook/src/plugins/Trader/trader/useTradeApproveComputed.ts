@@ -1,7 +1,6 @@
 import { useContext, useMemo } from 'react'
-import { useChainId, createERC20Token, FungibleTokenDetailed, EthereumTokenType } from '@masknet/web3-shared'
+import { createERC20Token, EthereumTokenType, FungibleTokenDetailed, useChainId, ZERO } from '@masknet/web3-shared'
 import { SwapQuoteResponse, TradeComputed, TradeProvider } from '../types'
-import { ZERO } from '@masknet/shared'
 import { TradeContext } from './useTradeContext'
 
 export function useTradeApproveComputed(trade: TradeComputed<unknown> | null, token?: FungibleTokenDetailed) {

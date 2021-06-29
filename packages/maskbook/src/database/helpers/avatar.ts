@@ -18,11 +18,12 @@ export const queryAvatarDataURL = memoizePromise(
 )
 
 function ArrayBufferToBase64(buffer: ArrayBuffer) {
-    const f = new Blob([buffer], { type: 'image/png' })
-    const fr = new FileReader()
-    return new Promise<string>((resolve) => {
-        fr.onload = () => resolve(fr.result as string)
-        fr.readAsDataURL(f)
+    const blob = new Blob([buffer], { type: 'image/png' })
+    return new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.addEventListener('load', () => resolve(reader.result as string))
+        reader.addEventListener('error', reject)
+        reader.readAsDataURL(blob)
     })
 }
 

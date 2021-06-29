@@ -3,24 +3,28 @@ import { useAsync } from 'react-use'
 import { omit } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
-import type { ITO } from '@masknet/contracts/types/ITO'
+import type { ITO2 } from '@masknet/contracts/types/ITO2'
 import type { NonPayableTx } from '@masknet/contracts/types/types'
 import {
+    isGreaterThan,
+    ONE,
+    pow10,
     TransactionEventType,
     TransactionStateType,
     useAccount,
     useChainId,
-    useTransactionState,
     useGasPrice,
     useNonce,
+    useTransactionState,
     useWeb3,
+    FungibleTokenDetailed,
+    ERC20TokenDetailed,
+    TransactionState,
 } from '@masknet/web3-shared'
 import { useITO_Contract } from '../contracts/useITO_Contract'
-import type { FungibleTokenDetailed, ERC20TokenDetailed, TransactionState } from '@masknet/web3-shared'
 import { gcd, sortTokens } from '../helpers'
-import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER, FAKE_SIGN_PASSWORD } from '../constants'
+import { FAKE_SIGN_PASSWORD, ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../constants'
 import type { AdvanceSettingData } from '../UI/AdvanceSetting'
-import { isGreaterThan, ONE, pow10 } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 export interface PoolSettings {
@@ -66,7 +70,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
     const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
-    const ITO_Contract = useITO_Contract()
+    const { contract: ITO_Contract } = useITO_Contract()
     const { t } = useI18N()
     const [fillState, setFillState] = useTransactionState()
     const [fillSettings, setFillSettings] = useState(poolSettings)
@@ -96,6 +100,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                 type: TransactionStateType.FAILED,
                 error: gasError,
             })
+            return
         }
         if (!checkParams(paramsObj, setFillState)) return
 
@@ -139,7 +144,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = ITO_Contract.methods.fill_pool(...params).send(config as NonPayableTx)
+            const promiEvent = (ITO_Contract as ITO2).methods.fill_pool(...params).send(config as NonPayableTx)
 
             promiEvent
                 .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
@@ -171,7 +176,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                     reject(error)
                 })
         })
-    }, [web3, gasPrice, nonce, account, chainId, ITO_Contract, poolSettings, paramResult])
+    }, [web3, gasPrice, nonce, account, chainId, ITO_Contract, poolSettings, paramResult, setFillState])
 
     const resetCallback = useCallback(() => {
         setFillState({
@@ -183,7 +188,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 }
 
 export function useFillParams(poolSettings: PoolSettings | undefined) {
-    const ITO_Contract = useITO_Contract()
+    const { contract: ITO_Contract } = useITO_Contract()
     const account = useAccount()
 
     return useAsync(async () => {
@@ -266,10 +271,10 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
                 'exchangeTokens',
                 'token',
             ]),
-        ) as Parameters<ITO['methods']['fill_pool']>
+        ) as Parameters<ITO2['methods']['fill_pool']>
 
         let gasError = null as Error | null
-        const gas = (await ITO_Contract.methods
+        const gas = (await (ITO_Contract as ITO2).methods
             .fill_pool(...params)
             .estimateGas({
                 from: account,

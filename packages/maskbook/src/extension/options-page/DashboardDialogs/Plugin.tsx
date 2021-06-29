@@ -73,7 +73,7 @@ export function DashboardPluginDetailDialog({ ComponentProps, ...rest }: Wrapped
             <DashboardDialogWrapper
                 icon={<span className={classes.logo}>{ComponentProps?.plugin.pluginIcon}</span>}
                 primary={ComponentProps?.plugin.pluginName ?? '-'}
-                secondary={' '}
+                secondary=" "
                 content={
                     <Paper className={classes.section} component="section" elevation={0}>
                         <Card elevation={0}>

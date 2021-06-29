@@ -1,5 +1,6 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { safeUnreachable, useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared'
+import { safeUnreachable } from '@dimensiondev/kit'
 import { Appearance, Language } from '@masknet/theme'
 import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@material-ui/core'
 import { blue, green, grey, orange, red } from '@material-ui/core/colors'
