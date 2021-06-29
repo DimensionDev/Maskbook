@@ -1,8 +1,10 @@
 import { useAccount } from '@masknet/web3-shared'
 import { Box, CircularProgress, makeStyles, Typography } from '@material-ui/core'
 import { useAllPoolsAsSeller } from '../hooks/useAllPoolsAsSeller'
+import { useScrollBottomLoading } from '../hooks/useScrollBottomLoading'
 import type { JSON_PayloadInMask } from '../types'
 import { PoolInList } from './PoolInList'
+import { useRef } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,9 +31,12 @@ export function PoolList(props: PoolListProps) {
     const classes = useStyles()
     const account = useAccount()
     const { value: pools = [], loading, retry } = useAllPoolsAsSeller(account)
+    const containerRef = useRef<HTMLDivElement>(null)
+
+    useScrollBottomLoading(containerRef)
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} ref={containerRef}>
             {loading ? (
                 <Box className={classes.content}>
                     <CircularProgress />
