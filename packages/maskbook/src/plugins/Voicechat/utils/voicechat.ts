@@ -81,7 +81,7 @@ export function init(
         const peerConnection = new RTCPeerConnection({ iceServers: ICE_SERVERS })
         peers[peerID] = peerConnection
 
-        peerConnection.onicecandidate = function (event: RTCPeerConnectionIceEvent) {
+        peerConnection.addEventListener('icecandidate', (event: RTCPeerConnectionIceEvent) => {
             if (event.candidate) {
                 signalingSocket?.emit('relayICECandidate', {
                     peer_id: peerID,
@@ -91,9 +91,9 @@ export function init(
                     },
                 })
             }
-        }
+        })
 
-        peerConnection.ontrack = function (event: RTCTrackEvent) {
+        peerConnection.addEventListener('track', (event) => {
             console.log('onAddTrack', event)
 
             const meter = createFeat(event.streams[0], config.userdata.username, false)!
@@ -105,7 +105,7 @@ export function init(
             }
 
             updateState()
-        }
+        })
 
         localMediaStream?.getTracks().forEach((track) => {
             peerConnection.addTrack(track, localMediaStream as MediaStream)
@@ -157,13 +157,13 @@ export function init(
         console.log('Description Object: ', desc)
     })
 
-    signalingSocket.on('iceCandidate', function (config: Config) {
+    signalingSocket.on('iceCandidate', (config: Config) => {
         const peer = peers[config.peer_id]
         const ice_candidate = config.ice_candidate
         peer.addIceCandidate(new RTCIceCandidate(ice_candidate))
     })
 
-    signalingSocket.on('removePeer', function (config: Config) {
+    signalingSocket.on('removePeer', (config: Config) => {
         console.log('Signaling server said to remove peer:', config)
 
         const peerID = config.peer_id

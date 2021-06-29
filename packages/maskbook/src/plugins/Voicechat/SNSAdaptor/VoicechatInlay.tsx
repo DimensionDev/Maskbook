@@ -6,7 +6,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import type { PeerMediaElement, VoiceChatMetadata } from '../types'
-import { changeMediaDevice, disconnectVoice, init, registerSpeakingUsernames, setMuted } from '../utils/voicechat'
+import { changeMediaDevice, disconnectVoice, init, registerSpeakingUsernames } from '../utils/voicechat'
 
 interface VoicechatInlayProps {
     metadata: VoiceChatMetadata
@@ -182,9 +182,9 @@ export function VoicechatInlay(props: VoicechatInlayProps) {
     const [peerMediaElements, setPeerMediaElements] = useState<Record<string, PeerMediaElement>>()
     const [localPeerMediaElement, setLocalPeerMediaElement] = useState<PeerMediaElement | null>()
     const [mediaDevices, setMediaDevices] = useState<MediaDeviceInfo[]>([])
-    const [activeMediaDevice, setActiveMediaDevice] = useState<string>('')
-    const [isMuted, setIsMuted] = useState<boolean>(false)
-    const [isJoining, setIsJoining] = useState<boolean>(false)
+    const [activeMediaDevice, setActiveMediaDevice] = useState('')
+    const [isMuted, setMuted] = useState(false)
+    const [isJoining, setJoining] = useState(false)
 
     const { t } = useI18N()
 
@@ -193,7 +193,7 @@ export function VoicechatInlay(props: VoicechatInlayProps) {
     }
 
     const joinChat = () => {
-        setIsJoining(true)
+        setJoining(true)
 
         navigator.mediaDevices.enumerateDevices().then((devices) => {
             setMediaDevices([...devices.filter((d) => d.kind === 'audioinput')])
@@ -208,7 +208,7 @@ export function VoicechatInlay(props: VoicechatInlayProps) {
             (peerMedia, localPeer) => {
                 setPeerMediaElements({ ...peerMedia })
                 setLocalPeerMediaElement(localPeer)
-                setIsJoining(false)
+                setJoining(false)
             },
             (activeMediaDevice: string) => {
                 setActiveMediaDevice(activeMediaDevice)
@@ -230,7 +230,7 @@ export function VoicechatInlay(props: VoicechatInlayProps) {
                             activeMediaDevice,
                             mediaDevices,
                             isMuted,
-                            setIsMuted,
+                            setIsMuted: setMuted,
                             setMuted,
                             disconnectVoice,
                         }}
