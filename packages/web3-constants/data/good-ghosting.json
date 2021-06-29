@@ -1,0 +1,13 @@
+{
+    "GOOD_GHOSTING_CONTRACT_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "0x360BBC11322C77Dadc1DDCdb26224271C96CFD47",
+        "Mumbai": ""
+    }
+}
