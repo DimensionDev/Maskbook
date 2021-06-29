@@ -21,7 +21,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
         [META_KEY_2, onAttachedFile],
     ]),
     CompositionDialogEntry: {
-        label: FileServiceDialog,
+        label: '📃 File Service',
         dialog({ open, onClose }) {
             return <FileServiceDialog open={open} onConfirm={onClose} onDecline={onClose} />
         },
