@@ -1,7 +1,7 @@
 import { useAccount } from '@masknet/web3-shared'
 import { Box, CircularProgress, makeStyles, Typography } from '@material-ui/core'
 import { useAllPoolsAsSeller } from '../hooks/useAllPoolsAsSeller'
-import { useScrollBottomEvent } from '../hooks/useScrollBottomEvent'
+import { useScrollBottomEvent } from '@masknet/shared'
 import type { JSON_PayloadInMask } from '../types'
 import { PoolInList } from './PoolInList'
 import { useRef, useState, useCallback } from 'react'
