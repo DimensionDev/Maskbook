@@ -133,6 +133,7 @@ export const useInjectedDialogClassesOverwriteTwitter = makeStyles((theme) => ({
     },
     paper: {
         width: '600px !important',
+        maxWidth: 'none',
         boxShadow: 'none',
         backgroundImage: 'none',
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {

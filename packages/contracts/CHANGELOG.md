@@ -29,6 +29,15 @@ Mainnet 0xf110fec3075d7531141b6bf16b11604cb028a17b
 Ropsten 0x37c2f41085ff45f54652c359a7de4deb9d125bf2
 ```
 
+> Jun-18-2021
+> branch: <https://github.com/DimensionDev/InitialTwitterOffering/tree/bsc_matic_ito>
+> commit: a6bf007f8cbe024920f32c31479287b79fe53601
+
+```plain
+Bsc 0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B
+Polygon 0x981be454a930479d92C91a0092D204b64845A5D6
+```
+
 ## MaskITO
 
 > Feb-21-2021
