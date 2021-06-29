@@ -131,13 +131,16 @@ export function batchReplace(source: string, group: Array<[string | RegExp, stri
 export function pollingTask(
     task: () => Promise<boolean>,
     {
+        autoStart = true,
         delay = 30 * 1000,
     }: {
+        autoStart?: boolean
         delay?: number
     } = {},
 ) {
-    let canceled = false
+    let canceled = !autoStart
     let timer: NodeJS.Timeout
+
     const runTask = async () => {
         if (canceled) return
         let stop = false
@@ -146,15 +149,21 @@ export function pollingTask(
         } catch (e) {
             console.error(e)
         }
-        if (!stop) timer = setTimeout(runTask, delay)
+        if (!stop) resetTask()
     }
-    runTask()
+    const resetTask = () => {
+        canceled = false
+        clearTimeout(timer)
+        timer = setTimeout(runTask, delay)
+    }
+    const cancelTask = () => {
+        canceled = true
+    }
+
+    if (!canceled) runTask()
     return {
-        cancel: () => (canceled = true),
-        reset: () => {
-            clearTimeout(timer)
-            timer = setTimeout(runTask, delay)
-        },
+        reset: resetTask,
+        cancel: cancelTask,
     }
 }
 export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {

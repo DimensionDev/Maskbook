@@ -9,6 +9,7 @@ import { WalletConnectQRCodeDialog } from './UI/WalletConnectQRCodeDialog'
 import { WalletStatusDialog } from './UI/WalletStatusDialog'
 import { WalletRenameWalletDialog } from './UI/RenameWalletDialog'
 import { ConnectWalletDialog } from './UI/ConnectWalletDialog'
+import { useStartWatchChainState } from './hooks/useStartWatchChainState'
 
 export const WalletPluginDefine: PluginConfig = {
     id: PLUGIN_IDENTIFIER,
@@ -19,6 +20,7 @@ export const WalletPluginDefine: PluginConfig = {
     stage: PluginStage.Production,
     scope: PluginScope.Internal,
     PageComponent() {
+        useStartWatchChainState()
         return (
             <>
                 <SelectWalletDialog />
@@ -34,6 +36,7 @@ export const WalletPluginDefine: PluginConfig = {
         )
     },
     DashboardComponent() {
+        useStartWatchChainState()
         return (
             <>
                 <SelectWalletDialog />
