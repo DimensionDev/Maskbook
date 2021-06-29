@@ -26,5 +26,5 @@ const definition: Plugin.SNSAdaptor.Definition = {
 export default definition
 
 function isActive(payload: VoiceChatMetadata) {
-    return !!payload ? 'Voicechat enabled' : 'Voicechat disabled'
+    return !!payload ? 'VoiceChat enabled' : 'VoiceChat disabled'
 }

@@ -4,8 +4,8 @@ import { VoiceChatPluginID } from './constants'
 export const base: Plugin.Shared.Definition = {
     ID: VoiceChatPluginID,
     icon: '🔊',
-    name: { fallback: 'Voicechat' },
-    description: { fallback: 'Voicechat.' },
+    name: { fallback: 'VoiceChat' },
+    description: { fallback: 'VoiceChat' },
     publisher: { name: { fallback: 'venarius' }, link: 'https://github.com/venarius' },
     enableRequirement: {
         architecture: { app: false, web: true },

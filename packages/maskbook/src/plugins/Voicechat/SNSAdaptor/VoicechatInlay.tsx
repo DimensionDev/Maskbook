@@ -218,8 +218,8 @@ export function VoicechatInlay(props: VoicechatInlayProps) {
 
     return (
         <div>
-            <MaskbookPluginWrapper pluginName="Voicechat">
-                <Box borderRadius={0.5} bgcolor="#fff" border={1} borderColor="rgb(196, 207, 214)" overflow="hidden">
+            <MaskbookPluginWrapper pluginName="VoiceChat">
+                <Box borderRadius={0.5} bgcolor="#fff" border={1} borderColor="#c4cfd6" overflow="hidden">
                     <Box padding={2}>
                         <ChannelUsers {...{ peerMediaElements, localPeerMediaElement }} />
                         <JoinButton {...{ joinChat, isJoining, localPeerMediaElement }} />
