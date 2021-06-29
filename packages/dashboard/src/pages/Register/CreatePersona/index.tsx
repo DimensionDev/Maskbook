@@ -37,10 +37,10 @@ export const CreatePersona = memo(() => {
         <ContainerPage>
             <div className={classes.create}>
                 <Typography variant="h5" color="textPrimary" align="left">
-                    Welcom to Mask Network
+                    {t.register_welcome()}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" align="left">
-                    You can create personas and connect social accounts
+                    {t.register_welcome_tip()}
                 </Typography>
 
                 <div className={classes.name}>
@@ -75,7 +75,7 @@ export const CreatePersona = memo(() => {
                         fullWidth
                         onClick={createPersonaAndNext}
                         disabled={name.length === 0 || !isPersonaNameLengthValid(name)}>
-                        Next
+                        {t.register_next()}
                     </Button>
                 </div>
             </div>

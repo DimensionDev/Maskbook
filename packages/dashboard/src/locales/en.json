@@ -84,5 +84,8 @@
     "register_login_connect": "Connect",
     "register_go_back": "Go back",
     "register_info": "As the defender of open-source software and user data privacy, Mask Network does not collect your private data such as account and password. If you need to retrieve your password, please authorize us to host your account and password. Please rest assured that we simply host your account and password. We do not save any of your private data. Consequently, we cannot restore your data or any other information.",
-    "register_connect_network_title": "Connect Socail Media Profile from \"{{name}}\""
+    "register_connect_network_title": "Connect Socail Media Profile from \"{{name}}\"",
+    "register_welcome": " Welcom to Mask Network",
+    "register_welcome_tip": "You can create personas and connect social accounts",
+    "register_next": "Next"
 }
