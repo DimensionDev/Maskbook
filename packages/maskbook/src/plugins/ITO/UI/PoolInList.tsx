@@ -1,12 +1,13 @@
 import { FormattedBalance } from '@masknet/shared'
 import {
     formatBalance,
-    getChainDetailed,
-    isSameAddress,
     isZero,
     pow10,
+    getChainDetailed,
+    isSameAddress,
     useAccount,
     useTokenConstants,
+    TransactionStateType,
 } from '@masknet/web3-shared'
 import {
     Box,
@@ -32,6 +33,8 @@ import { MSG_DELIMITER } from '../constants'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
 import { ITO_Status, JSON_PayloadInMask } from '../types'
+import { useDestructCallback } from '../hooks/useDestructCallback'
+import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 
 const useStyles = makeStyles((theme) => ({
     top: {
@@ -109,14 +112,21 @@ export interface PoolInListProps {
     exchange_in_volumes: string[]
     exchange_out_volumes: string[]
     onSend?: (pool: JSON_PayloadInMask) => void
-    onWithdraw?: (payload: JSON_PayloadInMask) => void
+    onRetry: () => void
 }
 
 export function PoolInList(props: PoolInListProps) {
     const { t } = useI18N()
     const classes = useStyles()
-    const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onWithdraw } = props
+    const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onRetry } = props
 
+    //#region withdraw
+    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(pool.contract_address)
+    useTransactionDialog(null, destructState, TransactionStateType.CONFIRMED, () => {
+        onRetry()
+        resetDestructCallback()
+    })
+    //#endregion
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const account = useAccount()
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)
@@ -136,7 +146,7 @@ export function PoolInList(props: PoolInListProps) {
         return (
             <>
                 {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
-                    <ActionButton size="small" variant="contained" onClick={() => onWithdraw?.(pool)}>
+                    <ActionButton size="small" variant="contained" onClick={() => destructCallback(pool.pid)}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : canSend ? (

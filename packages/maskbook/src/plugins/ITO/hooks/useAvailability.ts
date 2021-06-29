@@ -4,7 +4,7 @@ import { useITO_Contract } from '../contracts/useITO_Contract'
 
 export function useAvailability(id?: string, contract_address?: string) {
     const account = useAccount()
-    const ITO_Contract = useITO_Contract(contract_address)
+    const { contract: ITO_Contract } = useITO_Contract(contract_address)
 
     return useAsyncRetry(async () => {
         if (!id) return null

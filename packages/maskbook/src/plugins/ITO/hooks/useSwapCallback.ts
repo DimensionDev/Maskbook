@@ -1,4 +1,7 @@
 import type { ITO } from '@masknet/contracts/types/ITO'
+import type { ITO2 } from '@masknet/contracts/types/ITO2'
+import type { Qualification } from '@masknet/contracts/types/Qualification'
+import type { Qualification2 } from '@masknet/contracts/types/Qualification2'
 import type { PayableTx } from '@masknet/contracts/types/types'
 import {
     currySameAddress,
@@ -32,9 +35,12 @@ export function useSwapCallback(
     const nonce = useNonce()
     const gasPrice = useGasPrice()
     const account = useAccount()
-    const ITO_Contract = useITO_Contract()
+    const { contract: ITO_Contract, version } = useITO_Contract(payload.contract_address)
     const [swapState, setSwapState] = useTransactionState()
-    const qualificationContract = useQualificationContract(payload.qualification_address)
+    const { contract: qualificationContract } = useQualificationContract(
+        payload.qualification_address,
+        payload.contract_address,
+    )
 
     const swapCallback = useCallback(async () => {
         if (!ITO_Contract || !qualificationContract || !payload) {
@@ -85,7 +91,10 @@ export function useSwapCallback(
 
         // error: not qualified
         try {
-            const ifQualified = await qualificationContract.methods.ifQualified(account).call({
+            const ifQualified = await (version === 1
+                ? (qualificationContract as Qualification).methods.ifQualified(account)
+                : (qualificationContract as Qualification2).methods.ifQualified(account, [])
+            ).call({
                 from: account,
             })
             if (!ifQualified) {
@@ -128,7 +137,7 @@ export function useSwapCallback(
             return
         }
 
-        const swapParams = [
+        const swapParamsV1 = [
             pid,
             Web3Utils.soliditySha3(
                 Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 5))}`),
@@ -139,14 +148,27 @@ export function useSwapCallback(
             total,
         ] as Parameters<ITO['methods']['swap']>
 
+        const swapParamsV2 = [
+            pid,
+            Web3Utils.soliditySha3(
+                Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 5))}`),
+                account,
+            )!,
+            swapTokenAt,
+            total,
+            [],
+        ] as Parameters<ITO2['methods']['swap']>
+
         // estimate gas and compose transaction
         const value = new BigNumber(token.type === EthereumTokenType.Native ? total : '0').toFixed()
         const config = {
             from: account,
             gas: isQualificationHasLucky
                 ? 200000
-                : await ITO_Contract.methods
-                      .swap(...swapParams)
+                : await (version === 1
+                      ? (ITO_Contract as ITO).methods.swap(...swapParamsV1)
+                      : (ITO_Contract as ITO2).methods.swap(...swapParamsV2)
+                  )
                       .estimateGas({
                           from: account,
                           value,
@@ -188,7 +210,11 @@ export function useSwapCallback(
                 })
                 resolve()
             }
-            const promiEvent = ITO_Contract.methods.swap(...swapParams).send(config as PayableTx)
+            const promiEvent = (
+                version === 1
+                    ? (ITO_Contract as ITO).methods.swap(...swapParamsV1)
+                    : (ITO_Contract as ITO2).methods.swap(...swapParamsV2)
+            ).send(config as PayableTx)
 
             promiEvent
                 .on(TransactionEventType.TRANSACTION_HASH, onHash)
