@@ -1,23 +1,23 @@
 import {
     EthereumTokenType,
-    getEthereumConstants,
-    getTokenConstants,
     isSameAddress,
     TokenListsState,
     useAssetsFromChain,
     useERC20TokensDetailedFromTokenLists,
+    useEthereumConstants,
     useNativeTokenDetailed,
+    useTokenConstants,
 } from '@masknet/web3-shared'
 import { uniqBy } from 'lodash-es'
 import { useMemo } from 'react'
 
 export function useERC20TokensDetailed() {
-    const ERC20_TOKEN_LISTS = getEthereumConstants().ERC20_TOKEN_LISTS
+    const { ERC20_TOKEN_LISTS } = useEthereumConstants()
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS)
 
     //#region mask token
-    const MASK_ADDRESS = getTokenConstants().MASK_ADDRESS
+    const { MASK_ADDRESS } = useTokenConstants()
     //#endregion
 
     const tokens = useMemo(
