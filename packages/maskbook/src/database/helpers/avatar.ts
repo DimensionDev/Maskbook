@@ -3,6 +3,7 @@ import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB } from '../avatar'
 import { memoizePromise } from '../../utils/memoize'
 import { MaskMessage } from '../../utils/messages'
 import { downloadUrl } from '../../utils/utils'
+import { toDataURL } from '@dimensiondev/kit'
 
 /**
  * Get a (cached) blob url for an identifier.
@@ -12,20 +13,10 @@ export const queryAvatarDataURL = memoizePromise(
     async function (identifier: ProfileIdentifier | GroupIdentifier): Promise<string | undefined> {
         const buffer = await queryAvatarDB(identifier)
         if (!buffer) throw new Error('Avatar not found')
-        return ArrayBufferToBase64(buffer)
+        return toDataURL(new Blob([buffer], { type: 'image/png' }))
     },
     (id) => id.toText(),
 )
-
-function ArrayBufferToBase64(buffer: ArrayBuffer) {
-    const blob = new Blob([buffer], { type: 'image/png' })
-    return new Promise<string>((resolve, reject) => {
-        const reader = new FileReader()
-        reader.addEventListener('load', () => resolve(reader.result as string))
-        reader.addEventListener('error', reject)
-        reader.readAsDataURL(blob)
-    })
-}
 
 /**
  * Store an avatar with a url for an identifier.

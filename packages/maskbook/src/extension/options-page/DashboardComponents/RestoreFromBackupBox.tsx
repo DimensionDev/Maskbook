@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { RestoreBox } from './RestoreBox'
+import { toText } from '@dimensiondev/kit'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,9 +37,7 @@ export function RestoreFromBackupBox(props: RestoreFromBackupBoxProps) {
     // invoke callback
     useEffect(() => {
         if (file) {
-            const fr = new FileReader()
-            fr.readAsText(file)
-            fr.addEventListener('loadend', () => props.onChange?.(file, fr.result as string))
+            toText(file).then((result) => props.onChange?.(file, result))
         }
     }, [file, props.onChange])
 
