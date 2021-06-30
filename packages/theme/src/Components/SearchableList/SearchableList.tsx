@@ -11,7 +11,7 @@ export interface MaskSearchableListProps<T> {
     /** The list data should be render */
     data: T[]
     /** The identity of list data item for remove duplicates item */
-    key?: keyof T
+    itemKey?: keyof T
     /** Intermediate state when data is loaded */
     placeholder?: ReactNode
     /** The key of list item for search */
@@ -44,7 +44,7 @@ export interface MaskSearchableListProps<T> {
  * )
  */
 export const SearchableList = <T,>({
-    key,
+    itemKey,
     data,
     placeholder,
     onSelect,
@@ -73,7 +73,7 @@ export const SearchableList = <T,>({
     const readyToRenderData = useMemo(() => {
         if (!keyword) return data
         const filtered = [...(onSearch ? onSearch(data, keyword) : []), ...fuse.search(keyword).map((x: any) => x.item)]
-        return key ? uniqBy(filtered, (x) => x[key]) : filtered
+        return itemKey ? uniqBy(filtered, (x) => x[itemKey]) : filtered
     }, [keyword, fuse, data])
     //#endregion
 
