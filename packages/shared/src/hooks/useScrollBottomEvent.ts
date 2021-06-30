@@ -8,6 +8,11 @@ export function useScrollBottomEvent(ref: RefObject<HTMLDivElement>, cb: () => v
             const ev = _ev as Event & { path: HTMLDivElement[] }
             const element = ev.path[0]
             const isBottomArrived = element.scrollTop === element.scrollHeight - element.offsetHeight
+            console.log({
+                scrollTop: element.scrollTop,
+                scrollHeight: element.scrollHeight,
+                offsetHeight: element.offsetHeight,
+            })
             if (isBottomArrived) cb()
         }, 300),
         [cb],
