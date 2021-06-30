@@ -10,9 +10,13 @@ export let PluginServices: PluginServices = null!
 export let PluginMessages: PluginMessages = null!
 export interface PluginServices {
     Wallet: typeof import('../../maskbook/dist/plugins/Wallet/messages').WalletRPC
+    Transak: typeof import('../../maskbook/dist/plugins/Transak/messages').TransakRPC
+    Swap: typeof import('../../maskbook/dist/plugins/Trader/messages').PluginTraderRPC
 }
 export interface PluginMessages {
     Wallet: typeof import('../../maskbook/dist/plugins/Wallet/messages').WalletMessages
+    Transak: typeof import('../../maskbook/dist/plugins/Transak/messages').PluginTransakMessages
+    Swap: typeof import('../../maskbook/dist/plugins/Trader/messages').PluginTraderMessages
 }
 export function setService(x: typeof ServiceType) {
     Services = x

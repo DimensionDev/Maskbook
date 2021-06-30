@@ -22,10 +22,14 @@ function installService() {
 function installPluginService() {
     const channelOf = (id: string) => new WebExtensionExternalChannel('@plugin/' + id)
     const Wallet = channelOf('com.maskbook.wallet')
+    const Transak = channelOf('com.maskbook.transak')
+    const Swap = channelOf('com.maskbook.trader')
     // @ts-expect-error 2345
-    setPluginMessages({ Wallet })
+    setPluginMessages({ Wallet, Transak, Swap })
     setPluginServices({
         Wallet: initRPCBridge(PluginMessages.Wallet.events.rpc),
+        Transak: initRPCBridge(PluginMessages.Transak.events.rpc),
+        Swap: initRPCBridge(PluginMessages.Swap.events.rpc),
     })
 }
 

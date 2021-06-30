@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { makeStyles, Box } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
 import PluginItem, { PluginItemPlaceHodler } from './components/PluginItem'
@@ -18,6 +18,9 @@ import {
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
 import SwapSettingDialog from './components/SwapSettingDialog'
+import { useAccount } from '@masknet/web3-shared'
+import { PluginMessages } from '../../API'
+import { useRemoteControlledDialog } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,10 +36,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Plugins() {
     const t = useDashboardI18N()
+
     const classes = useStyles()
 
     const [openTrendSetting, setOpenTrendSetting] = useState(false)
     const [openSwapSetting, setOpenSwapSetting] = useState(false)
+
+    const account = useAccount()
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.events.buyTokenDialogUpdated)
+    const openTransakDialog = useCallback(() => {
+        setBuyDialog({
+            open: true,
+            address: account,
+        })
+    }, [])
+
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.events.swapDialogUpdated)
 
     function onSwitch(name: string, checked: boolean) {
         // TODO: sync setting
@@ -54,8 +69,11 @@ export default function Plugins() {
     }
 
     function onExplore(name: string) {
-        // TODO: open dialog
-        console.log('explore', name)
+        if (name === 'transak') {
+            openTransakDialog()
+        } else if (name === 'swap') {
+            openSwapDialog()
+        }
     }
 
     function onSetting(name: string) {
