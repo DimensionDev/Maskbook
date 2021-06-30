@@ -5,7 +5,7 @@ import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
+import { TokenIcon } from '@masknet/shared'
 import { resolveLinkOnExplorer, FungibleTokenDetailed, ChainId } from '@masknet/web3-shared'
 import { SwapStatus } from './SwapGuide'
 

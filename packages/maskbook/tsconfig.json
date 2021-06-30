@@ -10,11 +10,11 @@
   // !       but dashboard/ depends maskbook/ on type level
   // !       do not add dashboard/ as a reference otherwise there is a circular dependency on the type level.
   "references": [
-    { "path": "../shared/" },
+    { "path": "../shared" },
     { "path": "../web3-shared" },
     { "path": "../constants" },
-    { "path": "../theme/" },
-    { "path": "../icons/" },
+    { "path": "../theme" },
+    { "path": "../icons" },
     { "path": "../plugin-infra" },
     { "path": "../external-plugin-previewer" }
   ],

@@ -1,5 +1,5 @@
-import { CrashUI as C } from '../../src/Components/ErrorBoundary'
-import { story } from '../utils'
+import { CrashUI as C } from '@masknet/shared'
+import { story } from '@masknet/storybook-shared'
 
 const { meta, of } = story(C)
 export default meta({

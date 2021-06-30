@@ -1,5 +1,5 @@
 import { Component, forwardRef } from 'react'
-import { CrashUIProps, CrashUI, ErrorBoundaryError } from '.'
+import { CrashUIProps, CrashUI, ErrorBoundaryError } from './index'
 
 const map = new WeakMap<React.ComponentType<any>, React.ForwardRefExoticComponent<any>>()
 /**

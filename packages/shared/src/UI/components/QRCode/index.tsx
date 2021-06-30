@@ -1,10 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles'
 import qr from 'qrcode'
 import { useEffect, useRef, useState } from 'react'
-import { SessionStorageCache } from '@masknet/shared'
 import { Typography } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 import { blue } from '@material-ui/core/colors'
+import { SessionStorageCache } from '../../../utils'
 
 interface QRProps {
     text: string

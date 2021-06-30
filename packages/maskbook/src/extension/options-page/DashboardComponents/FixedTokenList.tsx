@@ -1,7 +1,9 @@
 import {
     currySameAddress,
-    EthereumTokenType,
+    useERC20TokensDetailedFromTokenLists,
+    TokenListsState,
     FungibleTokenDetailed,
+    EthereumTokenType,
     isSameAddress,
     useEthereumConstants,
     useTokenConstants,
@@ -11,10 +13,6 @@ import { uniqBy } from 'lodash-es'
 import { useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import {
-    TokenListsState,
-    useERC20TokensDetailedFromTokenLists,
-} from '../../../web3/hooks/useERC20TokensDetailedFromTokenLists'
 import { TokenInList } from './TokenInList'
 
 const useStyles = makeStyles((theme) => ({

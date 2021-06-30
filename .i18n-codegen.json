@@ -15,8 +15,8 @@
             }
         },
         {
-            "input": "./packages/theme/src/locales/en.json",
-            "output": "./packages/theme/src/locales/i18n_generated",
+            "input": "./packages/shared/src/locales/en.json",
+            "output": "./packages/shared/src/locales/i18n_generated",
             "parser": "i18next",
             "generator": {
                 "type": "i18next/react-hooks",

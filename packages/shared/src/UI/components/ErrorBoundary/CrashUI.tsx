@@ -3,9 +3,9 @@ import { Alert, AlertTitle, experimentalStyled as styled } from '@material-ui/co
 import { useMemo, useState } from 'react'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
-import { useMaskThemeI18N } from '../../locales'
 import { useContext } from 'react'
 import { ErrorBoundaryBuildInfoContext, ErrorBoundaryError } from './context'
+import { useMaskThemeI18N } from '../../../locales'
 
 export type CrashUIProps = ErrorBoundaryError & {
     /** Type of the Error */

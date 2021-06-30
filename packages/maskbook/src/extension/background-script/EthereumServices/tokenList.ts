@@ -18,6 +18,7 @@ interface TokenList {
         name: string
         symbol: string
         decimals: number
+        logoURI?: string
     }[]
     version: {
         major: number

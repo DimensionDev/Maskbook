@@ -1,7 +1,7 @@
 import React from 'react'
 import { ThemeProvider, StyledEngineProvider } from '@material-ui/core'
 import { StylesProvider } from '@material-ui/styles'
-import { MaskLightTheme, addMaskThemeI18N, applyMaskColorVars } from '@masknet/theme'
+import { MaskLightTheme, addMaskSharedI18N, applyMaskColorVars } from '@masknet/theme'
 import { withMatrix } from 'storybook-addon-matrix'
 import { addDashboardI18N } from '../src/locales'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
@@ -15,7 +15,7 @@ i18n.init({
 })
 i18n.use(initReactI18next)
 addDashboardI18N(i18n)
-addMaskThemeI18N(i18n)
+addMaskSharedI18N(i18n)
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
 }
