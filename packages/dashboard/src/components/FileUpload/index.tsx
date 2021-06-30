@@ -2,7 +2,7 @@ import { MaskColorVar } from '@masknet/theme'
 import { makeStyles, Typography } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import { File as FileIcon } from '@masknet/icons'
-import { toText } from '@dimensiondev/kit'
+import { blobToText } from '@dimensiondev/kit'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -52,7 +52,7 @@ export default function FileUpload({ width, height, readAsText, onChange }: File
     useEffect(() => {
         if (file) {
             if (readAsText) {
-                toText(file).then((result) => onChange(file, result))
+                blobToText(file).then((result) => onChange(file, result))
             } else {
                 onChange(file)
             }

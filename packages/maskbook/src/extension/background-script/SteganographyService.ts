@@ -5,10 +5,10 @@ import type { EncodeOptions, DecodeOptions } from '@dimensiondev/stego-js/cjs/st
 import { downloadUrl } from '../../utils/utils'
 import { memoizePromise } from '../../utils/memoize'
 import { getDimension } from '../../utils/image'
-import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
-
+import { decodeArrayBuffer, encodeArrayBuffer, blobToArrayBuffer } from '@dimensiondev/kit'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { ImageTemplateTypes } from '../../resources/image-payload'
+
 assertEnvironment(Environment.ManifestBackground)
 
 type Mask = 'v1' | 'v2' | 'v4' | 'transparent'
@@ -62,7 +62,7 @@ const images: Record<Mask, string> = {
     v4: new URL('./SteganographyResources/mask-v4.png', import.meta.url).toString(),
     transparent: new URL('./SteganographyResources/mask-transparent.png', import.meta.url).toString(),
 }
-const getMaskBuf = memoizePromise(async (type: Mask) => (await downloadUrl(images[type])).arrayBuffer(), void 0)
+const getMaskBuf = memoizePromise(async (type: Mask) => blobToArrayBuffer(await downloadUrl(images[type])), void 0)
 
 type EncodeImageOptions = {
     template?: ImageTemplateTypes
@@ -99,5 +99,5 @@ export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImag
 }
 
 export async function decodeImageUrl(url: string, options: DecodeImageOptions) {
-    return decodeImage(await (await downloadUrl(url)).arrayBuffer(), options)
+    return decodeImage(await blobToArrayBuffer(await downloadUrl(url)), options)
 }

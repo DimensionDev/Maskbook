@@ -5,7 +5,7 @@ import { useI18N } from '../../../utils'
 import { RestoreBox } from './RestoreBox'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { QRCodeImageScanner } from './QRCodeImageScanner'
-import { toDataURL } from '@dimensiondev/kit'
+import { blobToDataURL } from '@dimensiondev/kit'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -59,7 +59,7 @@ export function RestoreFromQRCodeImageBox(props: RestoreFromQRCodeImageBoxProps)
     // read file as data URL
     useEffect(() => {
         if (file) {
-            toDataURL(file).then(setDataURL, () => setDataURL(''))
+            blobToDataURL(file).then(setDataURL, () => setDataURL(''))
         } else {
             setDataURL('')
         }

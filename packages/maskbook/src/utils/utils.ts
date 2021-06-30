@@ -41,7 +41,7 @@ export function dispatchCustomEvents<T extends keyof CustomEvents>(
  * @param image
  */
 export async function pasteImageToActiveElements(image: File | Blob): Promise<void> {
-    const bytes = new Uint8Array(await image.arrayBuffer())
+    const bytes = new Uint8Array(await blobToArrayBuffer(image))
     dispatchCustomEvents(document.activeElement, 'paste', { type: 'image', value: Array.from(bytes) })
 }
 
@@ -167,6 +167,7 @@ export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
 }
 
 import Services from '../extension/service'
+import { blobToArrayBuffer } from '@dimensiondev/kit'
 export { parseURL } from '@masknet/shared'
 /**
  * !!!! Please use the Promise constructor if possible
