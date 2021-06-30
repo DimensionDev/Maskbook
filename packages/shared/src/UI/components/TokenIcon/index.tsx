@@ -53,9 +53,9 @@ export function TokenIcon(props: TokenIconProps) {
 
     const chainDetailed = useChainDetailed()
     const tokenBlockie = useBlockie(address)
-    const tokenAssetBaseURI = getTokenAssetBaseURLConstants().TOKEN_ASSET_BASE_URI
+    const { TOKEN_ASSET_BASE_URI } = getTokenAssetBaseURLConstants()
 
-    const tokenURIs = resolveTokenIconURLs(address, tokenAssetBaseURI, chainId ?? ChainId.Mainnet, logoURI)
+    const tokenURIs = resolveTokenIconURLs(address, TOKEN_ASSET_BASE_URI, chainId ?? ChainId.Mainnet, logoURI)
     const { value: logoURL, loading } = useImageFailOver(chainDetailed ? tokenURIs : [], '')
 
     return (
