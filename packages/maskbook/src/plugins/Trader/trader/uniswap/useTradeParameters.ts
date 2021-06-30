@@ -6,7 +6,7 @@ import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../
 import { useAccount } from '@masknet/web3-shared'
 import type { TradeComputed } from '../../types'
 
-const UNISWAP_BIPS_BASE = JSBI.BigInt(10000)
+const UNISWAP_BIPS_BASE = JSBI.BigInt(10_000)
 
 /**
  * Returns the swap calls that can be used to make the trade
@@ -23,23 +23,24 @@ export function useSwapParameters(
     return useMemo(() => {
         if (!trade?.trade_ || !account) return []
         const { trade_ } = trade
-        const calls = [
+        const allowedSlippage_ = new Percent(JSBI.BigInt(allowedSlippage), UNISWAP_BIPS_BASE)
+        const parameters = [
             Router.swapCallParameters(trade_, {
                 feeOnTransfer: false,
-                allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), UNISWAP_BIPS_BASE),
+                allowedSlippage: allowedSlippage_,
                 recipient: account,
                 ttl: deadline,
             }),
         ]
         if (trade_.tradeType === TradeType.EXACT_INPUT)
-            calls.push(
+            parameters.push(
                 Router.swapCallParameters(trade_, {
                     feeOnTransfer: true,
-                    allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), UNISWAP_BIPS_BASE),
+                    allowedSlippage: allowedSlippage_,
                     recipient: account,
                     ttl: deadline,
                 }),
             )
-        return calls
+        return parameters
     }, [account, allowedSlippage, deadline, trade])
 }
