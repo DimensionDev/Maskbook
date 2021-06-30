@@ -4,6 +4,7 @@ import { addSeconds, differenceInDays, formatDuration } from 'date-fns/esm'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import type { GoodGhostingInfo, LendingPoolData } from '../types'
 import { CircularDataDisplay } from './CircularDataDisplay'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) => ({
     infoRow: {
@@ -123,7 +124,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={'Pool APY'}
-                                title={financialData.poolAPY.toFormat(1)}
+                                title={financialData.poolAPY.toFixed(1)}
                                 subtitle={'%'}
                             />
                         </div>
@@ -132,7 +133,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={'Pool Earnings'}
-                                title={formatBalance(financialData.poolEarnings, 18, 1)}
+                                title={new BigNumber(formatBalance(financialData.poolEarnings, 18)).toFixed(1)}
                                 subtitle={'DAI'}
                             />
                         </div>
@@ -143,7 +144,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={'Extra Rewards'}
-                                title={formatBalance(financialData.reward, 18, 4)}
+                                title={new BigNumber(formatBalance(financialData.reward, 18)).toFixed(4)}
                                 subtitle={'wMATIC'}
                             />
                         </div>
