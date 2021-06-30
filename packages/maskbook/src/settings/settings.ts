@@ -4,13 +4,14 @@ import { sideEffect } from '../utils/side-effects'
 import { LaunchPage } from './types'
 import { Appearance, Language } from '@masknet/theme'
 
-
-
-
+/**
+ * Does the debug mode on
+ */
 export const debugModeSetting = createGlobalSettings<boolean>('debugMode', false, {
     primary: () => i18n.t('settings_enable_debug'),
     secondary: () => i18n.t('settings_enable_debug_desc'),
 })
+
 /**
  * Never open a new tab in the background
  */
