@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo } from 'react'
 import { TokenListItem } from './TokenListItem'
 import { some } from 'lodash-es'
 import type { Asset, FungibleTokenDetailed } from '@masknet/web3-shared'
@@ -16,14 +16,9 @@ const checkAddedToken = (token: FungibleTokenDetailed, tokens: FungibleTokenDeta
     token.type === EthereumTokenType.Native || some(tokens, (t: any) => isSameAddress(token.address, t.address))
 
 export const TokenList: React.FC<TokenListProps> = memo(({ onSelect, placeholder, assets, loading }) => {
-    const [loadingPlaceholder, setLoadingPlaceholder] = useState(placeholder)
     const tokens = useERC20Tokens()
 
     const renderAsset = assets.map((x: Asset) => ({ ...x, isAddedToken: checkAddedToken(x.token, tokens) }))
-
-    useEffect(() => {
-        setLoadingPlaceholder(loading && loadingPlaceholder ? loadingPlaceholder : '')
-    }, [loading])
 
     return (
         <SearchableList<Asset & { isAddedToken: boolean }>
@@ -31,7 +26,7 @@ export const TokenList: React.FC<TokenListProps> = memo(({ onSelect, placeholder
             data={renderAsset}
             searchKey={['token.address', 'token.symbol', 'token.name']}
             itemRender={TokenListItem}
-            placeholder={loadingPlaceholder}
+            placeholder={loading ? placeholder : undefined}
         />
     )
 })
