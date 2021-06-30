@@ -1,3 +1,5 @@
+import type BigNumber from 'bignumber.js'
+
 export interface GoodGhostingInfo {
     segmentPayment: string
     firstSegmentStart: number
@@ -30,4 +32,10 @@ export interface TimelineEvent {
     date: Date
     eventOnDate: string
     ongoingEvent: string
+}
+
+export interface LendingPoolData {
+    reward: string
+    poolAPY: BigNumber
+    poolEarnings: BigNumber
 }

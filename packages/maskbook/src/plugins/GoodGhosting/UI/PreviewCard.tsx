@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { Tab, Tabs, makeStyles, Card, Typography, Button, Box } from '@material-ui/core'
 import { TabContext, TabPanel } from '@material-ui/lab'
-import { useI18N } from '../../../utils'
-import { useAccount } from '@masknet/web3-shared'
 import { TimelineView } from './TimelineView'
 import { GameStatsView } from './GameStatsView'
 import { OtherPlayersView } from './OtherPlayersView'
 import { PersonalView } from './PersonalView'
 import { useGameInfo } from '../hooks/useGameInfo'
+import type { GoodGhostingInfo } from '../types'
+import { useGoodGhostingPoolData } from '../hooks/useGoodGhostingPoolData'
+import { useOtherPlayerInfo } from '../hooks/useOtherPlayerInfo'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -56,12 +57,6 @@ enum GoodGhostingTab {
 }
 
 export function PreviewCard(props: PreviewCardProps) {
-    const { t } = useI18N()
-    const classes = useStyles()
-
-    const [activeTab, setActiveTab] = useState(GoodGhostingTab.Game)
-    const account = useAccount()
-
     const { value: info, error, loading, retry } = useGameInfo()
 
     if (loading) {
@@ -76,6 +71,20 @@ export function PreviewCard(props: PreviewCardProps) {
             </Box>
         )
     }
+
+    return <PreviewCardWithGameInfo info={info} />
+}
+
+interface PreviewCardWithGameInfoProps {
+    info: GoodGhostingInfo
+}
+
+function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
+    const classes = useStyles()
+    const [activeTab, setActiveTab] = useState(GoodGhostingTab.Game)
+
+    const finDataResult = useGoodGhostingPoolData(props.info)
+    const otherPlayerResult = useOtherPlayerInfo(props.info.numberOfPlayers)
 
     return (
         <Card variant="outlined" className={classes.root} elevation={0}>
@@ -97,16 +106,16 @@ export function PreviewCard(props: PreviewCardProps) {
                     ))}
                 </Tabs>
                 <TabPanel value={GoodGhostingTab.Game} sx={{ flex: 1 }}>
-                    <GameStatsView info={info} />
+                    <GameStatsView info={props.info} finDataResult={finDataResult} />
                 </TabPanel>
                 <TabPanel value={GoodGhostingTab.Timeline} sx={{ flex: 1 }}>
-                    <TimelineView info={info}></TimelineView>
+                    <TimelineView info={props.info}></TimelineView>
                 </TabPanel>
                 <TabPanel value={GoodGhostingTab.Personal} sx={{ flex: 1 }}>
-                    <PersonalView info={info} />
+                    <PersonalView info={props.info} />
                 </TabPanel>
                 <TabPanel value={GoodGhostingTab.Everyone} sx={{ flex: 1 }}>
-                    <OtherPlayersView info={info} />
+                    <OtherPlayersView info={props.info} otherPlayerResult={otherPlayerResult} />
                 </TabPanel>
             </TabContext>
         </Card>

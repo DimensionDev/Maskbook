@@ -1,6 +1,6 @@
 import { makeStyles, Grid, Box, Typography, Button } from '@material-ui/core'
-import { useOtherPlayerInfo } from '../hooks/useOtherPlayerInfo'
-import type { GoodGhostingInfo, PlayerStandings } from '../types'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { GoodGhostingInfo, Player, PlayerStandings } from '../types'
 import { getPlayerStatus, PlayerStatus } from '../utils'
 import { CircularDataDisplay } from './CircularDataDisplay'
 
@@ -23,11 +23,12 @@ const useStyles = makeStyles((theme) => ({
 
 interface OtherPlayersViewProps {
     info: GoodGhostingInfo
+    otherPlayerResult: AsyncStateRetry<Player[]>
 }
 
 export function OtherPlayersView(props: OtherPlayersViewProps) {
     const classes = useStyles()
-    const { value: players, loading, error, retry } = useOtherPlayerInfo(props.info.numberOfPlayers)
+    const { value: players, loading, error, retry } = props.otherPlayerResult
 
     if (loading) {
         return (

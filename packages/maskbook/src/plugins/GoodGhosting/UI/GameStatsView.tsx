@@ -1,9 +1,9 @@
 import { formatBalance } from '@masknet/web3-shared'
 import { makeStyles, Grid, Typography, Box, Button } from '@material-ui/core'
 import { addSeconds, differenceInDays, formatDuration } from 'date-fns/esm'
-import type { GoodGhostingInfo } from '../types'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { GoodGhostingInfo, LendingPoolData } from '../types'
 import { CircularDataDisplay } from './CircularDataDisplay'
-import { useGoodGhostingFinancialData } from '../hooks/useGoodGhostingFinancialData'
 
 const useStyles = makeStyles((theme) => ({
     infoRow: {
@@ -24,11 +24,12 @@ const useStyles = makeStyles((theme) => ({
 
 interface GameStatsViewProps {
     info: GoodGhostingInfo
+    finDataResult: AsyncStateRetry<LendingPoolData>
 }
 
 export function GameStatsView(props: GameStatsViewProps) {
     const classes = useStyles()
-    const { value: financialData, loading, error, retry } = useGoodGhostingFinancialData(props.info)
+    const { value: financialData, loading, error, retry } = props.finDataResult
 
     if (loading) {
         return (

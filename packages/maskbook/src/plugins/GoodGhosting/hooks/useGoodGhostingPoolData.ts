@@ -1,12 +1,13 @@
 import { useERC20TokenContract, useGoodGhostingConstants, useTokenConstants } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useAsyncRetry } from 'react-use'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useAaveLendingPoolContract } from '../contracts/useAaveLendingPoolContract'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
 import { useGoodGhostingIncentiveContract } from '../contracts/useGoodGhostingIncentivesContract'
-import type { GoodGhostingInfo } from '../types'
+import type { GoodGhostingInfo, LendingPoolData } from '../types'
 
-export function useGoodGhostingFinancialData(info: GoodGhostingInfo) {
+export function useGoodGhostingPoolData(info: GoodGhostingInfo) {
     const contract = useGoodGhostingContract()
     const lendingPoolContract = useAaveLendingPoolContract(info.lendingPoolAddress)
     const adaiContract = useERC20TokenContract(info.adaiTokenAddress)
@@ -40,5 +41,5 @@ export function useGoodGhostingFinancialData(info: GoodGhostingInfo) {
         }
     })
 
-    return asyncResult
+    return asyncResult as AsyncStateRetry<LendingPoolData>
 }
