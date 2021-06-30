@@ -26,6 +26,7 @@ function resolveTokenIconURLs(address: string, baseURIs: string[], chainId: Chai
 
     if (specialIcon) return [specialIcon.logo_url]
 
+    // load from remote
     const fullIconAssetURIs = baseURIs.map((x) => `${x}/assets/${checkSummedAddress}/logo.png`)
     return logoURI ? [logoURI] : fullIconAssetURIs
 }
