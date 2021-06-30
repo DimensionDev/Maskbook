@@ -9,5 +9,16 @@
         "BSCT": "",
         "Matic": "0x360BBC11322C77Dadc1DDCdb26224271C96CFD47",
         "Mumbai": ""
+    },
+    "GOOD_GHOSTING_INCENTIVES_CONTRACT_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "0x357D51124f59836DeD84c8a1730D72B749d8BC23",
+        "Mumbai": ""
     }
 }

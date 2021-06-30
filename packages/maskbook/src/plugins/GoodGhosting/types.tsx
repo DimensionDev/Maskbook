@@ -4,12 +4,11 @@ export interface GoodGhostingInfo {
     currentSegment: number
     lastSegment: number
     segmentLength: number
-    gameLengthFormatted: string
-    segmentLengthFormatted: string
     numberOfPlayers: number
     totalGameInterest: string
     totalGamePrincipal: string
-    timeline: TimelineEvent[]
+    adaiTokenAddress: string
+    lendingPoolAddress: string
 }
 
 export interface Player {

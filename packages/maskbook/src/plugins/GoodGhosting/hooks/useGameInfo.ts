@@ -17,6 +17,8 @@ export function useGameInfo() {
             'getNumberOfPlayers',
             'totalGameInterest',
             'totalGamePrincipal',
+            'adaiToken',
+            'lendingPool',
         ] as any
         return {
             names,
@@ -40,22 +42,26 @@ export function useGameInfo() {
             numberOfPlayers,
             totalGameInterest,
             totalGamePrincipal,
+            adaiToken,
+            lendingPool,
         ] = results.map((x) => {
             if (x.error) failedToGetInfo = true
-            return x.error ? undefined : (x.value as string)
+            return x.error ? '' : (x.value as string)
         })
 
         if (failedToGetInfo) return
 
         return {
             segmentPayment,
-            firstSegmentStart: firstSegmentStart && Number.parseInt(firstSegmentStart),
-            currentSegment: currentSegment && Number.parseInt(currentSegment),
-            lastSegment: lastSegment && Number.parseInt(lastSegment),
-            segmentLength: segmentLength && Number.parseInt(segmentLength),
-            numberOfPlayers: numberOfPlayers && Number.parseInt(numberOfPlayers),
+            firstSegmentStart: Number.parseInt(firstSegmentStart),
+            currentSegment: Number.parseInt(currentSegment),
+            lastSegment: Number.parseInt(lastSegment),
+            segmentLength: Number.parseInt(segmentLength),
+            numberOfPlayers: Number.parseInt(numberOfPlayers),
             totalGameInterest,
             totalGamePrincipal,
+            adaiTokenAddress: adaiToken,
+            lendingPoolAddress: lendingPool,
         } as GoodGhostingInfo
     }, [results, contract])
 

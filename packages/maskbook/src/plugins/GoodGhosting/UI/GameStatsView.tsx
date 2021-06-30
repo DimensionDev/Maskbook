@@ -1,7 +1,9 @@
 import { formatBalance } from '@masknet/web3-shared'
-import { makeStyles, Grid, Typography } from '@material-ui/core'
+import { makeStyles, Grid, Typography, Box, Button } from '@material-ui/core'
+import { addSeconds, differenceInDays, formatDuration } from 'date-fns/esm'
 import type { GoodGhostingInfo } from '../types'
 import { CircularDataDisplay } from './CircularDataDisplay'
+import { useGoodGhostingFinancialData } from '../hooks/useGoodGhostingFinancialData'
 
 const useStyles = makeStyles((theme) => ({
     infoRow: {
@@ -26,6 +28,39 @@ interface GameStatsViewProps {
 
 export function GameStatsView(props: GameStatsViewProps) {
     const classes = useStyles()
+    const { value: financialData, loading, error, retry } = useGoodGhostingFinancialData(props.info)
+
+    if (loading) {
+        return (
+            <Typography variant="h6" color="textSecondary">
+                Loading game stats
+            </Typography>
+        )
+    } else if (error || !financialData) {
+        return (
+            <Box display="flex" flexDirection="column" alignItems="center">
+                <Typography color="textPrimary">Something went wrong.</Typography>
+                <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
+                    Retry
+                </Button>
+            </Box>
+        )
+    }
+
+    const getReadableInterval = (roundLength: number) => {
+        const baseDate = new Date(0)
+        const dateAfterDuration = addSeconds(baseDate, roundLength)
+        const dayDifference = differenceInDays(dateAfterDuration, baseDate)
+        const weeks = Math.floor(dayDifference / 7)
+        const days = Math.floor(dayDifference - weeks * 7)
+        return formatDuration({
+            weeks,
+            days,
+        })
+    }
+    const gameLengthFormatted = getReadableInterval(props.info.segmentLength)
+    const segmentLengthFormatted = getReadableInterval(props.info.segmentLength * (props.info.lastSegment + 1))
+
     return (
         <>
             <Grid className={classes.infoRow} container spacing={2}>
@@ -37,7 +72,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" color="textSecondary">
-                            {props.info.gameLengthFormatted}
+                            {gameLengthFormatted}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -75,7 +110,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" color="textSecondary">
-                            {props.info.segmentLengthFormatted}
+                            {segmentLengthFormatted}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -86,17 +121,17 @@ export function GameStatsView(props: GameStatsViewProps) {
                     <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
                         <div className={classes.circularData}>
                             <CircularDataDisplay
-                                header={'Total Saved'}
-                                title={formatBalance(props.info.totalGamePrincipal, 18)}
-                                subtitle={'DAI'}
+                                header={'Pool APY'}
+                                title={financialData.poolAPY.toFormat(1)}
+                                subtitle={'%'}
                             />
                         </div>
                     </Grid>
                     <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
                         <div className={classes.circularData}>
                             <CircularDataDisplay
-                                header={'Total Saved'}
-                                title={formatBalance(props.info.totalGamePrincipal, 18)}
+                                header={'Pool Earnings'}
+                                title={formatBalance(financialData.poolEarnings, 18, 1)}
                                 subtitle={'DAI'}
                             />
                         </div>
@@ -106,9 +141,9 @@ export function GameStatsView(props: GameStatsViewProps) {
                     <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
                         <div className={classes.circularData}>
                             <CircularDataDisplay
-                                header={'Total Saved'}
-                                title={formatBalance(props.info.totalGamePrincipal, 18)}
-                                subtitle={'DAI'}
+                                header={'Extra Rewards'}
+                                title={formatBalance(financialData.reward, 18, 4)}
+                                subtitle={'wMATIC'}
                             />
                         </div>
                     </Grid>
