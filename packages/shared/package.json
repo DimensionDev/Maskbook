@@ -13,6 +13,7 @@
     "bignumber.js": "^9.0.1",
     "immer": "^9.0.2",
     "lodash-es": "^4.17.21",
+    "notistack": "^1.0.9",
     "qrcode": "^1.4.4",
     "react-use": "^17.2.4",
     "ts-results": "^3.3.0",
