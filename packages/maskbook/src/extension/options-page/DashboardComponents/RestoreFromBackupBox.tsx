@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { RestoreBox } from './RestoreBox'
-import { toText } from '@dimensiondev/kit'
+import { blobToText } from '@dimensiondev/kit'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,7 +37,7 @@ export function RestoreFromBackupBox(props: RestoreFromBackupBoxProps) {
     // invoke callback
     useEffect(() => {
         if (file) {
-            toText(file).then((result) => props.onChange?.(file, result))
+            blobToText(file).then((result) => props.onChange?.(file, result))
         }
     }, [file, props.onChange])
 
