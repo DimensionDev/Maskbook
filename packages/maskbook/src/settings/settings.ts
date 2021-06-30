@@ -1,13 +1,12 @@
-import { createGlobalSettings, createNetworkSettings } from './createSettings'
+import { createGlobalSettings, createNetworkSettings, NetworkSettingsCache } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { LaunchPage } from './types'
 import { Appearance, Language } from '@masknet/theme'
-import type { ValueRef } from '@dimensiondev/holoflows-kit'
 
-/**
- * Does the debug mode on
- */
+
+
+
 export const debugModeSetting = createGlobalSettings<boolean>('debugMode', false, {
     primary: () => i18n.t('settings_enable_debug'),
     secondary: () => i18n.t('settings_enable_debug_desc'),
@@ -53,21 +52,27 @@ export const enableGroupSharingSettings = createGlobalSettings<boolean>('experim
     secondary: () => '(Unstable) Automatically share posts to a group',
 })
 
-// Work around the issue:
-// https://github.com/microsoft/TypeScript/issues/42873
-// https://github.com/microsoft/TypeScript/issues/30858
-export const currentImagePayloadStatus: {
-    [p: string]: ValueRef<string> & { ready: boolean; readyPromise: Promise<string> }
-} = createNetworkSettings('currentImagePayloadStatus')
-export const currentSelectedIdentity: {
-    [p: string]: ValueRef<string> & { ready: boolean; readyPromise: Promise<string> }
-} = createNetworkSettings('currentSelectedIdentity')
-export const currentSetupGuideStatus: {
-    [p: string]: ValueRef<string> & { ready: boolean; readyPromise: Promise<string> }
-} = createNetworkSettings('currentSetupGuideStatus')
+//#region network setting
+
+/**
+ * Expected Usage：export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
+ *
+ * Work around the issue:
+ *      https://github.com/microsoft/TypeScript/issues/42873
+ *      https://github.com/microsoft/TypeScript/issues/30858
+ *
+ * References:
+ *      PluginGitcoinMessages: packages/maskbook/src/plugins/Gitcoin/messages.ts
+ *      PluginTraderMessages: packages/maskbook/src/plugins/Trader/messages.ts
+ *      PluginTransakMessages: packages/maskbook/src/plugins/Transak/messages.ts
+ */
+export const currentImagePayloadStatus: NetworkSettingsCache = createNetworkSettings('currentImagePayloadStatus')
+export const currentSelectedIdentity: NetworkSettingsCache = createNetworkSettings('currentSelectedIdentity')
+export const currentSetupGuideStatus: NetworkSettingsCache = createNetworkSettings('currentSetupGuideStatus')
 export const currentImportingBackup = createGlobalSettings<boolean>('importingBackup', false, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
+//#endregion
 
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard, {
     primary: () => i18n.t('settings_launch_page'),
