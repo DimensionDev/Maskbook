@@ -150,11 +150,10 @@ export async function getAllPoolsAsSeller(address: string, page: number) {
         method: 'POST',
         mode: 'cors',
         body: stringify({
-            // Todo: 3 entities once convenience for Test.
             query: `
             {
-                sellInfos ( orderBy: timestamp, orderDirection: desc, first: 3, skip: ${
-                    page * 3
+                sellInfos ( orderBy: timestamp, orderDirection: desc, first: 50, skip: ${
+                    page * 50
                 }, where: { seller: "${address.toLowerCase()}" }) {
                     pool {
                         ${POOL_FIELDS}
