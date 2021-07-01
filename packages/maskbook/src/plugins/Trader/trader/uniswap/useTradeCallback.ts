@@ -54,8 +54,11 @@ export function useTradeCallback(
             tradeParameters.map(async (x) => {
                 const { methodName, args, value } = x
                 const config = !value || /^0x0*$/.test(value) ? {} : { value }
+
                 // @ts-ignore
-                return routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args)
+                const tx = routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args)
+
+                return tx
                     .estimateGas({
                         from: account,
                         to: routerV2Contract.options.address,
@@ -68,13 +71,28 @@ export function useTradeCallback(
                                 gasEstimated,
                             } as SuccessfulCall),
                     )
-                    .catch(
-                        (error) =>
-                            ({
-                                parameters: x,
-                                error,
-                            } as FailedCall),
-                    )
+                    .catch(() => {
+                        return tx
+                            .call({
+                                from: account,
+                                to: routerV2Contract.options.address,
+                                ...config,
+                            })
+                            .then(
+                                () =>
+                                    ({
+                                        parameters: x,
+                                        error: new Error('Unexpected issue with estimating the gas. Please try again.'),
+                                    } as FailedCall),
+                            )
+                            .catch(
+                                (error) =>
+                                    ({
+                                        parameters: x,
+                                        error,
+                                    } as FailedCall),
+                            )
+                    })
             }),
         )
 
