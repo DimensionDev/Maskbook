@@ -28,7 +28,6 @@ function installPluginService() {
     setPluginMessages({ Wallet, Transak, Swap })
     setPluginServices({
         Wallet: initRPCBridge(PluginMessages.Wallet.events.rpc),
-        Transak: initRPCBridge(PluginMessages.Transak.events.rpc),
         Swap: initRPCBridge(PluginMessages.Swap.events.rpc),
     })
 }
