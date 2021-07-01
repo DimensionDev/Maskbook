@@ -63,6 +63,7 @@ export const Web3Context: Web3ProviderType = {
     getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,
     getERC721TokensPaged,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+    createMnemonicWords: PluginServices.Wallet.createMnemonicWords,
 }
 
 export function createExternalProvider() {
