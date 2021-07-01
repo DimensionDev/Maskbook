@@ -3,7 +3,7 @@ import type { TagType, DataProvider, TradeProvider } from './types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { createPluginRPC } from '../utils/createPluginRPC'
-import type { TraderProps } from './UI/trader/Trader'
+import type { TraderProps } from './SNSAdaptor/trader/Trader'
 
 interface CashTagEvent {
     name: string
