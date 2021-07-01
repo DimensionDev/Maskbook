@@ -1,6 +1,13 @@
 import { makeStyles, MenuItem, Typography } from '@material-ui/core'
 import classNames from 'classnames'
-import { useAccount, useChainId, resolveChainColor, useChainDetailed, useChainIdValid, formatEthereumAddress } from '@masknet/web3-shared'
+import {
+    useAccount,
+    useChainId,
+    resolveChainColor,
+    useChainDetailed,
+    useChainIdValid,
+    formatEthereumAddress,
+} from '@masknet/web3-shared'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'

@@ -1,4 +1,3 @@
-
 export function getEnumAsObject<T>(enumArray: T[], getKey: (v: T) => string) {
     return enumArray.reduce(
         (accumulator, x) => {
