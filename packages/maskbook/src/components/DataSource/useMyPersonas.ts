@@ -1,10 +1,10 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
+import { useValueRef } from '@masknet/shared'
 import Services from '../../extension/service'
 import { PersonaArrayComparer } from '../../utils/comparer'
 import { MaskMessage } from '../../utils/messages'
 import type { Persona } from '../../database'
 import { setStorage } from '../../extension/background-script/StorageService'
-import { useValueRef } from '../../utils/hooks/useValueRef'
 import { sideEffect } from '../../utils/side-effects'
 import { debounce } from 'lodash-es'
 

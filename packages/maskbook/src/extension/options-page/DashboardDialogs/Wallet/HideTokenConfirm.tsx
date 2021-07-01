@@ -1,15 +1,15 @@
 import { Trash2 as TrashIcon } from 'react-feather'
 import { Button } from '@material-ui/core'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@dimensiondev/kit'
 import {
-    isNative,
     ERC1155TokenDetailed,
     ERC20TokenDetailed,
     ERC721TokenDetailed,
-    FungibleTokenDetailed,
-    NonFungibleTokenDetailed,
     EthereumTokenType,
-} from '@dimensiondev/web3-shared'
+    FungibleTokenDetailed,
+    isNative,
+    NonFungibleTokenDetailed,
+} from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'

@@ -1,4 +1,4 @@
-import { registerPlugin } from '@dimensiondev/mask-plugin-infra'
+import { registerPlugin } from '@masknet/plugin-infra'
 import { base } from './base'
 
 registerPlugin({

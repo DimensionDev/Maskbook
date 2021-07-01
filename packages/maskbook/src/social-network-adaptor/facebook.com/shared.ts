@@ -1,7 +1,9 @@
 import type { SocialNetwork } from '../../social-network/types'
 import { facebookBase } from './base'
 import { getPostUrlAtFacebook, isValidFacebookUsername } from './utils/parse-username'
-import { PostIdentifier, ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { PostIdentifier, ProfileIdentifier } from '@masknet/shared'
+import { deconstructPayload } from '../../utils'
+import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
 
 export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
     ...facebookBase,
@@ -21,5 +23,8 @@ export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
             url.searchParams.set('u', 'mask.io')
             return url
         },
+        createPostContext: createSNSAdaptorSpecializedPostContext({
+            payloadParser: deconstructPayload,
+        }),
     },
 }

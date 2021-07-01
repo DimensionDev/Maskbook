@@ -222,3 +222,37 @@ export type GasNow = {
     slow: number
     custom: number
 }
+
+export interface Asset {
+    token: FungibleTokenDetailed
+    /**
+     * The chain name of assets
+     */
+    chain: 'eth' | string
+    /**
+     * The total balance of token
+     */
+    balance: string
+    /**
+     * The estimated price
+     */
+    price?: {
+        [key in CurrencyType]: string
+    }
+    /**
+     * The estimated value
+     */
+    value?: {
+        [key in CurrencyType]: string
+    }
+    logoURL?: string
+}
+
+export enum PortfolioProvider {
+    ZERION,
+    DEBANK,
+}
+
+export enum CollectibleProvider {
+    OPENSEAN,
+}

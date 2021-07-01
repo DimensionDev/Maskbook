@@ -1,14 +1,15 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
-import { formatEthereumAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
+import { FormattedBalance } from '@masknet/shared'
 import {
+    formatEthereumAddress,
     resolveChainColor,
     useAccount,
     useChainDetailed,
     useChainId,
     useChainIdValid,
     useNativeTokenBalance,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { Button, ButtonProps, makeStyles, Typography } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'

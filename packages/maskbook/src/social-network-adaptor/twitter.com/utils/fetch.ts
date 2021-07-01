@@ -12,7 +12,7 @@ import {
     isTypedMessageEmpty,
     isTypedMessageText,
     TypedMessageText,
-} from '@dimensiondev/maskbook-shared'
+} from '@masknet/shared'
 
 /**
  * @example

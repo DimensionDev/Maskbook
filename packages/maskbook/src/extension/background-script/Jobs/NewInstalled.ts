@@ -8,5 +8,4 @@ export default function () {
             browser.tabs.create({ url: getWelcomePageURL() })
         }
     })
-    return () => {}
 }

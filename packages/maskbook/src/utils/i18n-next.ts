@@ -3,10 +3,10 @@ import en from '../_locales/en/messages.json' // english
 import zh from '../_locales/zh/messages.json' // traditional chinese
 import ko from '../_locales/ko/messages.json' // korean
 import ja from '../_locales/ja/messages.json' // japanese
-import { addMaskThemeI18N } from '@dimensiondev/maskbook-theme'
+import { addMaskSharedI18N } from '@masknet/shared'
 import type { I18NFunction } from './i18n-next-ui'
 // @ts-ignore in case circle dependency make typescript complains
-import { addDashboardI18N } from '@dimensiondev/dashboard'
+import { addDashboardI18N } from '@masknet/dashboard'
 export type I18NStrings = typeof en
 
 function removeEmpty(lang: Record<string, string>) {
@@ -26,7 +26,7 @@ i18nNextInstance.init({
     },
     fallbackLng: 'en',
 })
-addMaskThemeI18N(i18nNextInstance)
+addMaskSharedI18N(i18nNextInstance)
 addDashboardI18N(i18nNextInstance)
 i18nNextInstance.languages = ['en', 'zh', 'ko', 'ja']
 

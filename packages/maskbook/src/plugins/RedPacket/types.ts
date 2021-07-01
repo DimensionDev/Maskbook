@@ -1,5 +1,5 @@
 import type { ERC20TokenRecord } from '../Wallet/database/types'
-import type { EthereumTokenType, NativeTokenDetailed, ERC20TokenDetailed, ChainId } from '@dimensiondev/web3-shared'
+import type { EthereumTokenType, NativeTokenDetailed, ERC20TokenDetailed, ChainId } from '@masknet/web3-shared'
 
 /**
  * @see https://github.com/DimensionDev/Tessercube-iOS/wiki/Red-Packet-Data-Dictionary

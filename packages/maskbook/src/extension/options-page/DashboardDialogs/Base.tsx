@@ -13,8 +13,7 @@ import {
 } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
-import { useSnackbar } from 'notistack'
-import { useI18N, extendsTheme, useClassicMaskTheme, useMatchXS } from '../../../utils'
+import { extendsTheme, useClassicMaskTheme, useMatchXS } from '../../../utils'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -235,7 +234,7 @@ const dialogTheme = extendsTheme((theme) => ({
     },
 }))
 
-interface DashboardDialogWrapperProps {
+interface DashboardDialogWrapperProps extends withClasses<'wrapper'> {
     icon?: React.ReactElement
     iconColor?: string
     primary: string
@@ -273,31 +272,4 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
     )
 }
 
-export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>(
-    executor: P,
-    deps: React.DependencyList,
-    onSuccess?: (ret: T) => void,
-    onError?: (err: Error) => void,
-    key?: string,
-    successText?: string,
-) {
-    const { t } = useI18N()
-    const { enqueueSnackbar } = useSnackbar()
-    return useCallback(
-        (...args) =>
-            executor(...args).then(
-                (res) => {
-                    enqueueSnackbar(successText ?? t('done'), { key, variant: 'success', preventDuplicate: true })
-                    onSuccess?.(res)
-                    return res
-                },
-                (err) => {
-                    enqueueSnackbar(`Error: ${err.message || err}`, { key, preventDuplicate: true })
-                    onError?.(err)
-                    throw err
-                },
-            ),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [...deps, enqueueSnackbar, executor, onError, onSuccess, key, successText],
-    )
-}
+export { useSnackbarCallback } from '@masknet/shared'

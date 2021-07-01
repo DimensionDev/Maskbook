@@ -19,25 +19,26 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import type { Asset } from '@masknet/web3-shared'
 import {
     CurrencyType,
-    ERC20TokenDetailed,
+    currySameAddress,
     EthereumTokenType,
-    isSameAddress,
-    Wallet,
-    useStableTokensDebank,
-    useChainDetailed,
+    formatBalance,
+    formatCurrency,
     getChainIdFromName,
-} from '@dimensiondev/web3-shared'
+    isGreaterThan,
+    useAssets,
+    useChainDetailed,
+    useStableTokensDebank,
+    Wallet,
+} from '@masknet/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { formatBalance, formatCurrency, FormattedCurrency, isGreaterThan } from '@dimensiondev/maskbook-shared'
-import { useMatchXS, useI18N } from '../../../utils'
-import { TokenIcon } from './TokenIcon'
+import { FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { useI18N, useMatchXS } from '../../../utils'
 import { ActionsBarFT } from './ActionsBarFT'
 import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
-import type { Asset } from '../../../plugins/Wallet/types'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
-import { useAssets } from '../../../plugins/Wallet/hooks/useAssets'
 
 const useStyles = makeStyles<
     Theme,
@@ -139,9 +140,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                     }}>
                     <Typography className={classes.name} color="textPrimary" component="span">
                         {new BigNumber(formatBalance(asset.balance, asset.token.decimals)).toFixed(
-                            stableTokens.some((y: ERC20TokenDetailed) => isSameAddress(y.address, asset.token.address))
-                                ? 2
-                                : 6,
+                            stableTokens.some(currySameAddress(asset.token.address)) ? 2 : 6,
                         )}
                     </Typography>
                 </Box>,

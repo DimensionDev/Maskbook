@@ -2,20 +2,19 @@ import { useMemo } from 'react'
 import classNames from 'classnames'
 import { noop } from 'lodash-es'
 import BigNumber from 'bignumber.js'
-import { makeStyles, Typography, IconButton } from '@material-ui/core'
+import { IconButton, makeStyles, Typography } from '@material-ui/core'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import TuneIcon from '@material-ui/icons/Tune'
 import RefreshOutlined from '@material-ui/icons/RefreshOutlined'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { TradeStrategy, TokenPanelType, TradeComputed, WarningLevel, TradeProvider } from '../../types'
+import { TokenPanelType, TradeComputed, TradeProvider, TradeStrategy, WarningLevel } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
-import { useRemoteControlledDialog, useI18N } from '../../../../utils'
-import { FungibleTokenDetailed, EthereumTokenType } from '@dimensiondev/web3-shared'
+import { useI18N, useRemoteControlledDialog } from '../../../../utils'
+import { EthereumTokenType, formatPercentage, FungibleTokenDetailed, isLessThan, pow10 } from '@masknet/web3-shared'
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { isNativeTokenWrapper, toBips } from '../../helpers'
-import { formatPercentage, isLessThan, pow10 } from '@dimensiondev/maskbook-shared'
 import { resolveUniswapWarningLevel } from '../../pipes'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -102,7 +101,7 @@ export function TradeForm(props: TradeFormProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     //#region approve token
-    const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(trade, provider, inputToken)
+    const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(trade, inputToken)
     //#endregion
 
     //#region token balance

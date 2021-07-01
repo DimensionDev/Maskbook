@@ -1,11 +1,10 @@
+import MulticallABI from '@masknet/contracts/abis/Multicall.json'
+import type { Multicall } from '@masknet/contracts/types/Multicall'
 import type { AbiItem } from 'web3-utils'
-import MulticallABI from '@dimensiondev/contracts/abis/Multicall.json'
+import { useEthereumConstants } from '../constants'
 import { useContract } from '../hooks/useContract'
-import { CONSTANTS } from '../constants'
-import { useConstant } from '../hooks/useConstant'
-import type { Multicall } from '@dimensiondev/contracts/types/Multicall'
 
 export function useMulticallContract() {
-    const address = useConstant(CONSTANTS, 'MULTICALL_ADDRESS')
-    return useContract<Multicall>(address, MulticallABI as AbiItem[])
+    const { MULTICALL_ADDRESS } = useEthereumConstants()
+    return useContract<Multicall>(MULTICALL_ADDRESS, MulticallABI as AbiItem[])
 }

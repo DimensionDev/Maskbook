@@ -1,19 +1,21 @@
 import { useCallback } from 'react'
 import {
-    makeStyles,
     Accordion,
-    AccordionSummary,
-    Typography,
     AccordionDetails,
-    Paper,
-    Card,
-    CardContent,
-    CardActions,
+    AccordionSummary,
     Button,
+    Card,
+    CardActions,
+    CardContent,
     DialogContent,
+    makeStyles,
+    Paper,
+    Typography,
 } from '@material-ui/core'
-import { getEnumAsArray, useI18N, useRemoteControlledDialog, useValueRef } from '../../../../utils'
-import { ZrxTradePool, TradeProvider } from '../../types'
+import { useValueRef } from '@masknet/shared'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { useI18N, useRemoteControlledDialog } from '../../../../utils'
+import { TradeProvider, ZrxTradePool } from '../../types'
 import { SelectPoolPanel } from './SelectPoolPanel'
 import { SlippageSlider } from './SlippageSlider'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'

@@ -1,11 +1,10 @@
-import type { Profile } from '../../database'
-import { useValueRef } from '../../utils/hooks/useValueRef'
-import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
-import { currentSelectedIdentity } from '../../settings/settings'
-import { useMemo } from 'react'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
+import { ProfileIdentifier, useValueRef } from '@masknet/shared'
+import { useMemo } from 'react'
+import type { Profile } from '../../database'
+import { currentSelectedIdentity } from '../../settings/settings'
 import type { SocialNetworkUI } from '../../social-network'
-import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 
 export function useFriendsList() {
     const ref = useValueRef(globalUIState.friends)

@@ -1,7 +1,7 @@
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { FungibleTokenDetailed, isNative, useBlockNumber, useTokenConstants } from '@masknet/web3-shared'
 import { difference } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
-import { CONSTANTS, useBlockNumber, useConstant, FungibleTokenDetailed, isNative } from '@dimensiondev/web3-shared'
-import { getEnumAsArray } from '../../../../utils/enum'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy, ZrxTradePool } from '../../types'
@@ -15,7 +15,7 @@ export function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
-    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const blockNumber = useBlockNumber()
 
     const slippage = useSlippageTolerance()

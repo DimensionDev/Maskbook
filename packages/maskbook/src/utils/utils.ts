@@ -7,7 +7,7 @@ import type { CustomEvents } from '../extension/injected-script/CustomEvents'
 
 import { isNull, noop } from 'lodash-es'
 
-export { timeout, delay } from '@dimensiondev/maskbook-shared'
+export { timeout, delay } from '@masknet/shared'
 /**
  * Download given url return as Blob
  */
@@ -41,7 +41,7 @@ export function dispatchCustomEvents<T extends keyof CustomEvents>(
  * @param image
  */
 export async function pasteImageToActiveElements(image: File | Blob): Promise<void> {
-    const bytes = new Uint8Array(await image.arrayBuffer())
+    const bytes = new Uint8Array(await blobToArrayBuffer(image))
     dispatchCustomEvents(document.activeElement, 'paste', { type: 'image', value: Array.from(bytes) })
 }
 
@@ -176,7 +176,8 @@ export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
 }
 
 import Services from '../extension/service'
-export { parseURL } from '@dimensiondev/maskbook-shared'
+import { blobToArrayBuffer } from '@dimensiondev/kit'
+export { parseURL } from '@masknet/shared'
 /**
  * !!!! Please use the Promise constructor if possible
  * If you don't understand https://groups.google.com/forum/#!topic/bluebird-js/mUiX2-vXW2s
@@ -209,7 +210,7 @@ export function assert(x: any, ...args: any): asserts x {
 }
 
 export function checkInputLengthExceed(name: string) {
-    return Array.from(name).length >= WALLET_OR_PERSONA_NAME_MAX_LEN
+    return name.length >= WALLET_OR_PERSONA_NAME_MAX_LEN
 }
 
 export function nonNullable<T>(x: undefined | null | T): x is T {

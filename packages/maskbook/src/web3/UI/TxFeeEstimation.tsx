@@ -1,20 +1,22 @@
-import { Grid, Paper, Typography, makeStyles, useTheme } from '@material-ui/core'
-import { useI18N, useRemoteControlledDialog } from '../../utils'
-import { Image } from '../../components/shared/Image'
-import { useAssets } from '../../plugins/Wallet/hooks/useAssets'
-import { EthereumMessages } from '../../plugins/Ethereum/messages'
-import { useStylesExtends } from '../../components/custom-ui-helper'
-import { useValueRef, formatWeiToGwei, formatBalance } from '@dimensiondev/maskbook-shared'
+import { useCallback, useMemo, useState } from 'react'
+import { Grid, makeStyles, Paper, Typography, useTheme } from '@material-ui/core'
+import { useValueRef } from '@masknet/shared'
 import {
-    GasNow,
-    ChainId,
-    useGasPrice,
+    formatBalance,
+    formatWeiToGwei,
     EthereumTokenType,
     getChainDetailed,
     useChainId,
-} from '@dimensiondev/web3-shared'
+    useGasPrice,
+    GasNow,
+    ChainId,
+} from '@masknet/web3-shared'
+import { useI18N, useRemoteControlledDialog } from '../../utils'
+import { Image } from '../../components/shared/Image'
+import { useAssets } from '../../plugins/Wallet/hooks/useAssets'
+import { WalletMessages } from '../../plugins/Wallet/messages'
+import { useStylesExtends } from '../../components/custom-ui-helper'
 import { currentGasNowSettings } from '../../plugins/Wallet/settings'
-import { useState, useCallback, useMemo } from 'react'
 
 const useStyles = makeStyles(() => {})
 
@@ -36,7 +38,7 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
     const chainDetailed = getChainDetailed(chainId)
 
     const { setDialog: setGasPriceDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.gasPriceDialogUpdated,
+        WalletMessages.events.gasPriceDialogUpdated,
         useCallback(
             (ev) => {
                 if (ev.open || !ev.type) return

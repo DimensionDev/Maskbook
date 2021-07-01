@@ -1,5 +1,5 @@
-import { ProviderType } from '@dimensiondev/web3-shared'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { ProviderType } from '@masknet/web3-shared'
+import { unreachable } from '@dimensiondev/kit'
 import * as Maskbook from './providers/Maskbook'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import * as shared from '@dimensiondev/maskbook-shared'
+import * as shared from '@masknet/shared'
 import * as kit from '@dimensiondev/holoflows-kit'
 
 // Run this file multiple times should be safe

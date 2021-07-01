@@ -1,7 +1,8 @@
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
-import { makeStyles, Typography } from '@material-ui/core'
 import { useEffect, useState } from 'react'
-import { File as FileIcon } from '@dimensiondev/icons'
+import { File as FileIcon } from '@masknet/icons'
+import { MaskColorVar } from '@masknet/theme'
+import { blobToText } from '@dimensiondev/kit'
+import { makeStyles, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -51,11 +52,7 @@ export default function FileUpload({ width, height, readAsText, onChange }: File
     useEffect(() => {
         if (file) {
             if (readAsText) {
-                const reader = new FileReader()
-                reader.readAsText(file)
-                reader.addEventListener('loadend', () => {
-                    onChange(file, reader.result as string)
-                })
+                blobToText(file).then((result) => onChange(file, result))
             } else {
                 onChange(file)
             }

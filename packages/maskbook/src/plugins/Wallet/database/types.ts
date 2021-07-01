@@ -1,4 +1,4 @@
-import type { ChainId, TransactionStatusType } from '@dimensiondev/web3-shared'
+import type { ChainId, TransactionStatusType } from '@masknet/web3-shared'
 
 export interface ERC20TokenRecord {
     /** contract address */

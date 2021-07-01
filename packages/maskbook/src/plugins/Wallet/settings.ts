@@ -1,6 +1,6 @@
 import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
-import { ChainId, ProviderType, NetworkType, GasNow } from '@dimensiondev/web3-shared'
+import { ChainId, ProviderType, NetworkType, GasNow } from '@masknet/web3-shared'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { CollectibleProvider, PortfolioProvider } from './types'
 import { isEqual } from 'lodash-es'

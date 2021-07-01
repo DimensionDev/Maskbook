@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+import type { NonPayableTx } from '@masknet/contracts/types/types'
 import { TransactionEventType } from '../types'
 import { isSameAddress } from '../utils'
 import { useAccount } from './useAccount'

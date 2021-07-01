@@ -1,25 +1,25 @@
-import { values } from 'lodash-es'
-import BigNumber from 'bignumber.js'
-import { EthereumAddress } from 'wallet.ts'
-import { unreachable, formatEthereumAddress, pow10 } from '@dimensiondev/maskbook-shared'
-
-import { Asset, CollectibleProvider, BalanceRecord, PortfolioProvider, ZerionAddressAsset } from '../types'
-import * as OpenSeaAPI from '../apis/opensea'
-import * as ZerionAPI from '../apis/zerion'
-import * as DebankAPI from '../apis/debank'
+import { unreachable } from '@dimensiondev/kit'
 import {
-    CurrencyType,
     ChainId,
-    EthereumTokenType,
     createERC1155Token,
     createERC20Token,
     createERC721Token,
     createNativeToken,
-    getConstant,
-    CONSTANTS,
+    CurrencyType,
+    EthereumTokenType,
+    formatEthereumAddress,
     getChainDetailed,
     getChainIdFromName,
-} from '@dimensiondev/web3-shared'
+    getTokenConstants,
+    pow10,
+} from '@masknet/web3-shared'
+import BigNumber from 'bignumber.js'
+import { values } from 'lodash-es'
+import { EthereumAddress } from 'wallet.ts'
+import * as DebankAPI from '../apis/debank'
+import * as OpenSeaAPI from '../apis/opensea'
+import * as ZerionAPI from '../apis/zerion'
+import { Asset, BalanceRecord, CollectibleProvider, PortfolioProvider, ZerionAddressAsset } from '../types'
 
 export async function getAssetsListNFT(
     address: string,
@@ -67,7 +67,7 @@ export async function getAssetsListNFT(
                             unreachable(x.asset_contract.schema_name)
                     }
                 }),
-            hasNextPage: assets.length === 50,
+            hasNextPage: assets.length === size,
         }
     }
     return {
@@ -135,7 +135,7 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
                     name: asset.name,
                     symbol: asset.symbol,
                     decimals: asset.decimals,
-                    address: asset.name === 'Ether' ? getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS') : asset.asset_code,
+                    address: asset.name === 'Ether' ? getTokenConstants().NATIVE_TOKEN_ADDRESS : asset.asset_code,
                     chainId: ChainId.Mainnet,
                     type: asset.name === 'Ether' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                 },

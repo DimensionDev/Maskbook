@@ -1,6 +1,6 @@
 import { useState, ChangeEvent } from 'react'
 import { v4 as uuid } from 'uuid'
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@masknet/theme'
 import classNames from 'classnames'
 import {
     Typography,

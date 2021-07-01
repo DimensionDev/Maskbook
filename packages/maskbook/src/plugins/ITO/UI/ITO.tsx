@@ -1,47 +1,43 @@
-import { useCallback, useState, useEffect, useMemo } from 'react'
-import classNames from 'classnames'
-import { BigNumber } from 'bignumber.js'
-import { makeStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import {
-    TransactionStateType,
+    ZERO,
+    formatAmountPrecision,
+    formatBalance,
+    formatEthereumAddress,
+    isZero,
+    pow10,
     FungibleTokenDetailed,
+    getChainDetailed,
+    isSameAddress,
     resolveLinkOnExplorer,
+    TransactionStateType,
+    useAccount,
     useChainId,
     useChainIdValid,
-    useAccount,
-    useConstant,
-    CONSTANTS,
-    isSameAddress,
-    getChainDetailed,
-} from '@dimensiondev/web3-shared'
-import { WalletMessages } from '../../Wallet/messages'
-import { ITO_Status, JSON_PayloadInMask } from '../types'
-import { useRemoteControlledDialog, getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
+    useTokenConstants,
+} from '@masknet/web3-shared'
+import { TokenIcon } from '@masknet/shared'
+import { Box, Card, Grid, Link, makeStyles, Theme, Typography } from '@material-ui/core'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import { BigNumber } from 'bignumber.js'
+import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import { StyledLinearProgress } from './StyledLinearProgress'
-import {
-    formatAmountPrecision,
-    formatEthereumAddress,
-    formatBalance,
-    isZero,
-    ZERO,
-    pow10,
-} from '@dimensiondev/maskbook-shared'
-import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { SwapGuide, SwapStatus } from './SwapGuide'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
-import { sortTokens } from '../helpers'
-import { ITO_EXCHANGE_RATION_MAX, TIME_WAIT_BLOCKCHAIN, MSG_DELIMITER } from '../constants'
-import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
-import { useDestructCallback } from '../hooks/useDestructCallback'
-import { EthereumMessages } from '../../Ethereum/messages'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { getAssetAsBlobURL, getTextUILength, useI18N, useRemoteControlledDialog } from '../../../utils'
+import { WalletMessages } from '../../Wallet/messages'
+import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants'
+import { sortTokens } from '../helpers'
+import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { useClaimCallback } from '../hooks/useClaimCallback'
-import { useIPRegion, decodeRegionCode, checkRegionRestrict } from '../hooks/useRegion'
+import { useDestructCallback } from '../hooks/useDestructCallback'
 import { useIfQualified } from '../hooks/useIfQualified'
+import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
+import { checkRegionRestrict, decodeRegionCode, useIPRegion } from '../hooks/useRegion'
+import { ITO_Status, JSON_PayloadInMask } from '../types'
+import { StyledLinearProgress } from './StyledLinearProgress'
+import { SwapGuide, SwapStatus } from './SwapGuide'
 
 export interface IconProps {
     size?: number
@@ -184,7 +180,7 @@ interface TokenItemProps {
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
     const classes = useStyles({})
-    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     return (
         <>
@@ -212,7 +208,7 @@ export function ITO(props: ITO_Props) {
     const postLink = usePostLink()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
+    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(props.payload.contract_address)
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
     const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)
 
@@ -249,15 +245,15 @@ export function ITO(props: ITO_Props) {
     const { value: currentRegion, loading: loadingRegion } = useIPRegion()
     const allowRegions = decodeRegionCode(regions)
     const isRegionRestrict = checkRegionRestrict(allowRegions)
-    const isRegionAllow = !isRegionRestrict || (!loadingRegion && allowRegions.includes(currentRegion!.code))
+    const isRegionAllow =
+        !isRegionRestrict || !currentRegion || (!loadingRegion && allowRegions.includes(currentRegion.code))
 
     //#region if qualified
     const {
         value: ifQualified = false,
         loading: loadingIfQualified,
-        error: errorIfQualified,
         retry: retryIfQualified,
-    } = useIfQualified(payload.qualification_address)
+    } = useIfQualified(payload.qualification_address, payload.contract_address)
     //#endregion
 
     const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime } = availabilityComputed
@@ -275,9 +271,10 @@ export function ITO(props: ITO_Props) {
     //#region buy info
     const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
-        chainId === payload.chain_id &&
-        (payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase()) ||
-            tradeInfo?.buyInfo?.buyer.address.toLowerCase() === account.toLowerCase())
+        (chainId === payload.chain_id &&
+            (payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase()) ||
+                tradeInfo?.buyInfo?.buyer.address.toLowerCase() === account.toLowerCase())) ||
+        new BigNumber(availability ? availability.swapped : 0).isGreaterThan(0)
     const shareSuccessLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             t('plugin_ito_claim_success_share', {
@@ -288,7 +285,11 @@ export function ITO(props: ITO_Props) {
         )
         .toString()
     const canWithdraw = useMemo(
-        () => isAccountSeller && !tradeInfo?.destructInfo && (listOfStatus.includes(ITO_Status.expired) || noRemain),
+        () =>
+            isAccountSeller &&
+            !tradeInfo?.destructInfo &&
+            !availability?.exchanged_tokens.every((t) => t === '0') &&
+            (listOfStatus.includes(ITO_Status.expired) || noRemain),
         [tradeInfo, listOfStatus, isAccountSeller, noRemain],
     )
 
@@ -317,7 +318,7 @@ export function ITO(props: ITO_Props) {
     }, [claimCallback])
 
     const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (claimState.type !== TransactionStateType.CONFIRMED) return
@@ -362,7 +363,7 @@ export function ITO(props: ITO_Props) {
 
     //#region withdraw
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (destructState.type !== TransactionStateType.CONFIRMED) return

@@ -1,16 +1,17 @@
-import { formatBalance, isZero, pow10 } from '@dimensiondev/maskbook-shared'
 import {
     EthereumTokenType,
+    formatBalance,
     FungibleTokenDetailed,
+    isZero,
+    pow10,
     TransactionStateType,
     useAccount,
     useTokenBalance,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { DialogContent, makeStyles } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -20,7 +21,6 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { EthereumMessages } from '../../Ethereum/messages'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
@@ -148,7 +148,6 @@ export function InvestDialog() {
 
     //#region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             token
@@ -157,7 +156,6 @@ export function InvestDialog() {
                           pool?.name
                       }. Follow @realMaskbook (mask.io) to invest dHEDGE pools.`,
                       '#mask_io',
-                      postLink,
                   ].join('\n')
                 : '',
         )
@@ -165,7 +163,7 @@ export function InvestDialog() {
 
     // on close transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         useCallback(
             (ev) => {
                 if (!ev.open) {

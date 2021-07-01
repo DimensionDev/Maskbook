@@ -1,4 +1,4 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { UnconnectedPersonaLine as C } from '../../../src/pages/Personas/components/PersonaLine'
 import { action } from '@storybook/addon-actions'
 

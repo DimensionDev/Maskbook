@@ -1,4 +1,4 @@
-import type { ValueRef } from '@dimensiondev/holoflows-kit'
+import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { Subscription, useSubscription } from 'use-subscription'
 import { useMemo } from 'react'
 
@@ -28,4 +28,17 @@ export function useValueRefDelayed<T>(ref: ValueRef<T>, latency = 500) {
     )
 
     return useSubscription(subscription)
+}
+
+export function SubscriptionFromValueRef<T>(ref: ValueRef<T>): Subscription<T> {
+    return {
+        getCurrentValue: () => ref.value,
+        subscribe: (sub) => ref.addListener(sub),
+    }
+}
+
+export function ValueRefFromSubscription<T>(sub: Subscription<T>, eq?: (a: T, b: T) => boolean): ValueRef<T> {
+    const ref = new ValueRef(sub.getCurrentValue(), eq)
+    sub.subscribe(() => (ref.value = sub.getCurrentValue()))
+    return ref
 }

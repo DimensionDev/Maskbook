@@ -1,4 +1,4 @@
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'

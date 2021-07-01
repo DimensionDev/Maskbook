@@ -1,6 +1,11 @@
 import { memoizePromise } from '@dimensiondev/kit'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { EthereumTokenType, ChainId, ERC20TokenDetailed, getChainDetailed } from '@dimensiondev/web3-shared'
+import {
+    ChainId,
+    ERC20TokenDetailed,
+    EthereumTokenType,
+    formatEthereumAddress,
+    getChainDetailed,
+} from '@masknet/web3-shared'
 
 interface TokenList {
     keywords: string[]
@@ -37,7 +42,7 @@ const fetchTokenList = memoizePromise(
  */
 export async function fetchERC20TokensFromTokenList(
     url: string,
-    chainId: ChainId = ChainId.Mainnet,
+    chainId = ChainId.Mainnet,
 ): Promise<ERC20TokenDetailed[]> {
     return (await fetchTokenList(url)).tokens
         .filter(
@@ -60,7 +65,7 @@ export async function fetchERC20TokensFromTokenList(
  */
 export async function fetchERC20TokensFromTokenLists(
     urls: string[],
-    chainId: ChainId = ChainId.Mainnet,
+    chainId = ChainId.Mainnet,
 ): Promise<ERC20TokenDetailed[]> {
     const uniqueSet = new Set<string>()
     const tokens = (await Promise.allSettled(urls.map((x) => fetchERC20TokensFromTokenList(x, chainId)))).flatMap((x) =>

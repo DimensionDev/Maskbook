@@ -39,7 +39,7 @@ export function CoinMetadataTags(props: CoinMetadataTagsProps) {
             ))}
             {tags.length > 4 ? (
                 <>
-                    <Linking key={tags.length + 1} href={'View all'} LinkProps={{ className: classes.tag }}>
+                    <Linking key={tags.length + 1} href="View all" LinkProps={{ className: classes.tag }}>
                         <Chip
                             style={{ marginTop: 2, marginBottom: 2 }}
                             label="View all"

@@ -10,7 +10,7 @@ import {
     useGasPrice,
     addGasMargin,
     TransactionEventType,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useDHedgePoolContract } from '../contracts/useDHedgePool'
 
 /**

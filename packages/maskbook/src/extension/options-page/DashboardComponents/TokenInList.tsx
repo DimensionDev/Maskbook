@@ -1,21 +1,20 @@
 import { useCallback } from 'react'
-import { makeStyles, Theme } from '@material-ui/core/styles'
-import { ListItem, ListItemText, Typography, ListItemIcon, Link } from '@material-ui/core'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import { TokenIcon } from '@masknet/shared'
 import {
-    useConstant,
-    CONSTANTS,
-    resolveTokenLinkOnExplorer,
+    currySameAddress,
+    formatEthereumAddress,
     FungibleTokenDetailed,
-    isSameAddress,
-} from '@dimensiondev/web3-shared'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { TokenIcon } from './TokenIcon'
+    resolveTokenLinkOnExplorer,
+    useTokenConstants,
+} from '@masknet/web3-shared'
+import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core/styles'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 
 const useStyles = makeStyles((theme: Theme) => ({
     icon: {
-        width: 28,
-        height: 28,
+        width: 36,
+        height: 36,
     },
     text: {
         display: 'flex',
@@ -72,7 +71,7 @@ export interface TokenInListProps {
 
 export function TokenInList({ data, index, style }: TokenInListProps) {
     const classes = useStyles()
-    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
 
     const token = data.tokens[index]
@@ -82,7 +81,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
         <ListItem
             button
             style={style}
-            disabled={data.selected.some((x) => isSameAddress(x, address))}
+            disabled={data.selected.some(currySameAddress(address))}
             onClick={() => data.onSelect(address)}>
             <ListItemIcon>
                 <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURI={logoURI} />

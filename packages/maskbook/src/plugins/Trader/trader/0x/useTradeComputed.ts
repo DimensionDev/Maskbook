@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { ZERO } from '@masknet/web3-shared'
 import type { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types'
-import { ZERO } from '@dimensiondev/maskbook-shared'
 
 export function useTradeComputed(
     trade: SwapQuoteResponse | null,

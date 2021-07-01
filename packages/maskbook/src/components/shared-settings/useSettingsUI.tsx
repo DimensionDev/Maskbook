@@ -1,21 +1,21 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '../../utils/hooks/useValueRef'
-import { useMatchXS } from '../../utils/hooks/useMatchXS'
-import { texts } from '../../settings/createSettings'
+import { useValueRef } from '@masknet/shared'
+import { getEnumAsArray } from '@dimensiondev/kit'
 import {
     ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
-    Switch,
-    Select,
-    MenuItem,
-    makeStyles,
     ListItemIcon,
+    ListItemSecondaryAction,
+    ListItemText,
+    makeStyles,
+    MenuItem,
+    Select,
     SelectProps,
+    Switch,
 } from '@material-ui/core'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
+import { texts } from '../../settings/createSettings'
+import { useMatchXS } from '../../utils'
 import { useStylesExtends } from '../custom-ui-helper'
-import { getEnumAsArray } from '../../utils/enum'
 
 const useStyles = makeStyles((theme) => ({
     container: { listStyleType: 'none', width: '100%' },
@@ -161,6 +161,7 @@ function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectP
         }
         ref.value = value
     }
+
     return (
         <Select
             fullWidth

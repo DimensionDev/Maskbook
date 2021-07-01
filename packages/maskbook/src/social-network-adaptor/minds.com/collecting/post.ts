@@ -5,13 +5,12 @@ import {
     makeTypedMessageTuple,
     makeTypedMessageTupleFromList,
     ProfileIdentifier,
-} from '@dimensiondev/maskbook-shared'
-import { extractTextFromTypedMessage, makeTypedMessageImage } from '../../../protocols/typed-message'
-import { PostInfo } from '../../../social-network/PostInfo'
+} from '@masknet/shared'
+import { makeTypedMessageImage } from '../../../protocols/typed-message'
 import type { SocialNetworkUI as Next } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
+import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
 import { untilElementAvailable } from '../../../utils/dom'
-import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { startWatch } from '../../../utils/watcher'
 import { mindsBase } from '../base'
 import { mindsShared } from '../shared'
@@ -34,7 +33,7 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
             const activityNode = activitySelector.evaluate()[0]! as HTMLElement
 
             // ? inject after comments
-            const commentSelector = activitySelector
+            const commentsSelector = activitySelector
                 .clone()
                 .querySelectorAll<HTMLElement>('m-comment .m-comment__message')
 
@@ -44,18 +43,15 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
                 .querySelectorAll<HTMLFormElement>('.m-commentPoster__form')
                 .map((x) => x.parentElement)
 
-            const info: PostInfo = new (class extends PostInfo {
-                commentsSelector = commentSelector
-                commentBoxSelector = commentBoxSelector
-                rootNodeProxy = metadata
-                postContentNode = node
+            const { subscriptions, ...info } = createRefsForCreatePostContext()
+            const postInfo = mindsShared.utils.createPostContext({
+                comments: { commentBoxSelector, commentsSelector },
+                rootElement: metadata,
+                suggestedInjectionPoint: node,
+                ...subscriptions,
+            })
 
-                get rootNode() {
-                    return activityNode
-                }
-            })()
-
-            store.set(metadata, info)
+            store.set(metadata, postInfo)
 
             function collectPostInfo() {
                 const { pid, messages, handle, name, avatar } = postParser(activityNode)
@@ -64,13 +60,6 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
                     ? new ProfileIdentifier(mindsBase.networkIdentifier, handle)
                     : ProfileIdentifier.unknown
                 info.postID.value = pid
-                info.postContent.value = messages
-                    .map((x) => {
-                        const extracted = extractTextFromTypedMessage(x)
-                        return extracted.ok ? extracted.val : ''
-                    })
-                    // add space between anchor and plain text
-                    .join(' ')
                 if (!info.postBy.value.equals(postBy)) info.postBy.value = postBy
                 info.nickname.value = name
                 info.avatarURL.value = avatar || null
@@ -96,13 +85,6 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
             }
 
             collectPostInfo()
-            info.postPayload.value = deconstructPayload(
-                info.postContent.value,
-                mindsShared.utils.textPayloadPostProcessor?.decoder,
-            )
-            info.postContent.addListener((newVal) => {
-                info.postPayload.value = deconstructPayload(newVal, mindsShared.utils.textPayloadPostProcessor?.decoder)
-            })
             return {
                 onNodeMutation: collectPostInfo,
                 onTargetChanged: collectPostInfo,

@@ -1,19 +1,18 @@
-import { useCallback, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
-import type { PayableTx } from '@dimensiondev/contracts/types/types'
+import type { PayableTx } from '@masknet/contracts/types/types'
 import {
-    FungibleTokenDetailed,
     EthereumTokenType,
+    FungibleTokenDetailed,
     TransactionEventType,
-    useConstant,
     TransactionStateType,
-    useTransactionState,
     useAccount,
-    useWeb3,
-    useNonce,
     useGasPrice,
-} from '@dimensiondev/web3-shared'
-import { GITCOIN_CONSTANT } from '../constants'
+    useGitcoinConstants,
+    useNonce,
+    useTransactionState,
+    useWeb3,
+} from '@masknet/web3-shared'
+import BigNumber from 'bignumber.js'
+import { useCallback, useMemo } from 'react'
 import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
 
 /**
@@ -23,8 +22,7 @@ import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
  * @param token
  */
 export function useDonateCallback(address: string, amount: string, token?: FungibleTokenDetailed) {
-    const GITCOIN_ETH_ADDRESS = useConstant(GITCOIN_CONSTANT, 'GITCOIN_ETH_ADDRESS')
-    const GITCOIN_TIP_PERCENTAGE = useConstant(GITCOIN_CONSTANT, 'GITCOIN_TIP_PERCENTAGE')
+    const { GITCOIN_ETH_ADDRESS, GITCOIN_TIP_PERCENTAGE } = useGitcoinConstants()
     const bulkCheckoutContract = useBulkCheckoutContract()
 
     const web3 = useWeb3()

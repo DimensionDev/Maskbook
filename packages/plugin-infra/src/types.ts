@@ -1,5 +1,5 @@
-import type { TypedMessage } from '@dimensiondev/maskbook-shared'
-import type { ChainId } from '@dimensiondev/web3-shared'
+import type { TypedMessage } from '@masknet/shared'
+import type { ChainId } from '@masknet/web3-shared'
 import type { Emitter } from '@servie/events'
 
 export namespace Plugin {
@@ -12,7 +12,7 @@ export namespace Plugin {
      * ```ts
      * const loader = {
      *     load: () => import('./code'),
-     *     hotModuleReload: hot => import.meta.webpackHot && import.meta.webpackHot.accept('./code', () => hot(import('./code')))
+     *     hotModuleReload: hot => import.meta.webpackHot?.accept('./code', () => hot(import('./code')))
      * }
      * ```
      *
@@ -31,7 +31,7 @@ export namespace Plugin {
         /**
          * This provides the functionality for hot module reload on the plugin.
          * When the callback is called, the old instance of the plugin will be unloaded, then the new instance will be init.
-         * @example hotModuleReload: hot => import.meta.webpackHot && import.meta.webpackHot.accept('./path', () => hot(import('./path')))
+         * @example hotModuleReload: hot => import.meta.webpackHot?.accept('./path', () => hot(import('./path')))
          */
         hotModuleReload(onHot: (hot: Promise<{ default: DeferredModule }>) => void): void
     }
@@ -203,9 +203,7 @@ export namespace Plugin.SNSAdaptor {
         | CompositionMetadataBadgeRenderStatic
         | CompositionMetadataBadgeRenderDynamic
     export type CompositionMetadataBadgeRenderStatic = ReadonlyMap<string, CompositionMetadataBadgeRenderStaticMapper>
-    export type CompositionMetadataBadgeRenderStaticMapper<T = unknown> = (
-        metadata: T,
-    ) => string | BadgeDescriptor | null
+    export type CompositionMetadataBadgeRenderStaticMapper<T = any> = (metadata: T) => string | BadgeDescriptor | null
     export type CompositionMetadataBadgeRenderDynamic = (
         key: string,
         metadata: unknown,

@@ -1,6 +1,5 @@
 export * from './useAsyncTimes'
 export * from './useForms'
-export * from './useImageFailover'
 export * from './useIsWindowVisible'
 export * from './useMatchXS'
 export * from './useMenu'

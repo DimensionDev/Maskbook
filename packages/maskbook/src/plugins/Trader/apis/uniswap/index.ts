@@ -1,23 +1,23 @@
 import BigNumber from 'bignumber.js'
 import type { Coin, Currency, Stat } from '../../types'
+import type { Pair } from '../uniswap-v2-subgraph'
 import {
-    fetchTokensByKeyword,
-    fetchTokenData,
+    fetchEtherPriceByBlockNumber,
+    fetchEtherPricesByBlockNumbers,
+    fetchPairData,
     fetchPairsBulk,
     fetchPairsHistoricalBulk,
-    fetchPairData,
     fetchPricesByBlocks,
-    fetchEtherPricesByBlockNumbers,
-    fetchEtherPriceByBlockNumber,
+    fetchTokenData,
+    fetchTokensByKeyword,
 } from '../uniswap-v2-subgraph'
-import type { Pair } from '../uniswap-v2-subgraph'
 import {
     fetchBlockNumberByTimestamp,
     fetchBlockNumbersByTimestamps,
     fetchBlockNumbersObjectByTimestamps,
 } from '../blocks'
 import { fetchLatestBlocks } from '../uniswap-health'
-import { isGreaterThan } from '@dimensiondev/maskbook-shared'
+import { isGreaterThan } from '@masknet/web3-shared'
 
 type Value = string | number | BigNumber | undefined
 

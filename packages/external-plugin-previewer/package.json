@@ -1,17 +1,17 @@
 {
-  "name": "@dimensiondev/external-plugin-previewer",
+  "name": "@masknet/external-plugin-previewer",
   "version": "0.0.0",
   "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist",
   "scripts": {
     "start": "dev -- snowpack dev"
   },
   "dependencies": {
-    "@dimensiondev/maskbook-shared": "workspace:*",
+    "@masknet/shared": "workspace:*",
     "ef.js": "^0.13.6"
   },
   "devDependencies": {
     "snowpack": "^3.0.11"
-  },
-  "main": "./dist/index.js",
-  "types": "./dist"
+  }
 }

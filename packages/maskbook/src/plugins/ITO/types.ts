@@ -1,4 +1,4 @@
-import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@masknet/web3-shared'
 
 export interface JSON_PayloadInMask {
     contract_address: string
@@ -30,6 +30,12 @@ export interface JSON_PayloadInMask {
     is_mask?: boolean
     // @deprecated
     test_nums?: number[]
+}
+
+export interface PoolSubgraph {
+    pool: JSON_PayloadInMask
+    exchange_in_volumes: string[]
+    exchange_out_volumes: string[]
 }
 
 //#region TokenOutMask

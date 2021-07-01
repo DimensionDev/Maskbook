@@ -1,10 +1,9 @@
+import { getITOConstants } from '@masknet/web3-shared'
 import stringify from 'json-stable-stringify'
 import { first, omit } from 'lodash-es'
-import { getConstant } from '@dimensiondev/web3-shared'
-import { ITO_CONSTANTS } from '../constants'
+import { currentChainIdSettings } from '../../Wallet/settings'
 import { payloadIntoMask } from '../helpers'
 import type { JSON_PayloadOutMask } from '../types'
-import { currentChainIdSettings } from '../../Wallet/settings'
 
 const TRADER_FIELDS = `
     address
@@ -50,7 +49,7 @@ const POOL_FIELDS = `
 `
 
 export async function getTradeInfo(pid: string, trader: string) {
-    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', currentChainIdSettings.value), {
+    const response = await fetch(getITOConstants(currentChainIdSettings.value).SUBGRAPH_URL, {
         method: 'POST',
         mode: 'cors',
         body: stringify({
@@ -122,7 +121,7 @@ export async function getTradeInfo(pid: string, trader: string) {
 }
 
 export async function getPool(pid: string) {
-    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', currentChainIdSettings.value), {
+    const response = await fetch(getITOConstants(currentChainIdSettings.value).SUBGRAPH_URL, {
         method: 'POST',
         mode: 'cors',
         body: stringify({
@@ -146,14 +145,16 @@ export async function getPool(pid: string) {
     return payloadIntoMask(data.pool)
 }
 
-export async function getAllPoolsAsSeller(address: string) {
-    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', currentChainIdSettings.value), {
+export async function getAllPoolsAsSeller(address: string, page: number) {
+    const response = await fetch(getITOConstants(currentChainIdSettings.value).SUBGRAPH_URL, {
         method: 'POST',
         mode: 'cors',
         body: stringify({
             query: `
             {
-                sellInfos (where: { seller: "${address.toLowerCase()}" } first: 1000) {
+                sellInfos ( orderBy: timestamp, orderDirection: desc, first: 1000, skip: ${
+                    page * 50
+                }, where: { seller: "${address.toLowerCase()}" }) {
                     pool {
                         ${POOL_FIELDS}
                         exchange_in_volumes
@@ -185,7 +186,7 @@ export async function getAllPoolsAsSeller(address: string) {
 }
 
 export async function getAllPoolsAsBuyer(address: string) {
-    const response = await fetch(getConstant(ITO_CONSTANTS, 'SUBGRAPH_URL', currentChainIdSettings.value), {
+    const response = await fetch(getITOConstants(currentChainIdSettings.value).SUBGRAPH_URL, {
         method: 'POST',
         mode: 'cors',
         body: stringify({
@@ -212,12 +213,14 @@ export async function getAllPoolsAsBuyer(address: string) {
             }[]
         }
     }
-    return data.buyInfos.map((x) => {
-        const pool = payloadIntoMask(omit(x.pool, ['exchange_in_volumes', 'exchange_out_volumes']))
-        return {
-            pool,
-            exchange_in_volumes: x.pool.exchange_in_volumes,
-            exchange_out_volumes: x.pool.exchange_out_volumes,
-        }
-    })
+    return data
+        ? data.buyInfos.map((x) => {
+              const pool = payloadIntoMask(omit(x.pool, ['exchange_in_volumes', 'exchange_out_volumes']))
+              return {
+                  pool,
+                  exchange_in_volumes: x.pool.exchange_in_volumes,
+                  exchange_out_volumes: x.pool.exchange_out_volumes,
+              }
+          })
+        : []
 }

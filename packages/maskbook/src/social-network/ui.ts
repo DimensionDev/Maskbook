@@ -9,9 +9,9 @@ import { managedStateCreator } from './utils'
 import { delay } from '../utils/utils'
 import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
-import { ECKeyIdentifier, Identifier } from '@dimensiondev/maskbook-shared'
+import { ECKeyIdentifier, Identifier } from '@masknet/shared'
 import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
-import { startPluginSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
+import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
@@ -32,7 +32,7 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     injection: {},
     networkIdentifier: 'localhost',
     shouldActivate: () => false,
-    utils: {},
+    utils: { createPostContext: null! },
     notReadyForProduction: true,
     declarativePermissions: { origins: [] },
 }
@@ -73,7 +73,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     ui.collecting.profilesCollector?.(signal)
     ui.injection.pageInspector?.(signal)
-    if (Flags.toolbar_enabled) ui.injection.toolbar?.(signal)
     if (Flags.toolbox_enabled) ui.injection.toolBoxInNavBar?.(signal)
     ui.injection.setupPrompt?.(signal)
     ui.injection.newPostComposition?.start?.(signal)

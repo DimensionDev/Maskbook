@@ -1,12 +1,8 @@
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
-import { applyMaskColorVars } from '@dimensiondev/maskbook-theme'
+import { applyMaskColorVars } from '@masknet/theme'
 import { appearanceSettings } from '../../settings/settings'
 import { getMaskbookTheme } from '../theme'
-import {
-    createReactRootShadowedPartial,
-    disableJSSDisconnectedWarning,
-    setupPortalShadowRoot,
-} from '@dimensiondev/maskbook-shared'
+import { createReactRootShadowedPartial, disableJSSDisconnectedWarning, setupPortalShadowRoot } from '@masknet/shared'
 import { untilDomLoaded } from '../dom'
 import { Flags } from '../flags'
 import { MaskInShadow } from './MaskInShadow'

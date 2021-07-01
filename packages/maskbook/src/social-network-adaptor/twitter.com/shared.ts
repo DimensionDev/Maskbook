@@ -1,5 +1,7 @@
-import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { ProfileIdentifier } from '@masknet/shared'
 import type { SocialNetwork } from '../../social-network/types'
+import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
+import { deconstructPayload } from '../../utils'
 import { twitterBase } from './base'
 import { twitterEncoding } from './encoding'
 import { usernameValidator } from './utils/user'
@@ -32,5 +34,9 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
         getShareLinkURL(message) {
             return new URL(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`)
         },
+        createPostContext: createSNSAdaptorSpecializedPostContext({
+            payloadParser: deconstructPayload,
+            payloadDecoder: twitterEncoding.payloadDecoder,
+        }),
     },
 }

@@ -1,10 +1,11 @@
-import { useCallback, ChangeEvent, useMemo } from 'react'
-import { makeStyles, TextField, Typography, Box, Chip, InputProps, ChipProps, TextFieldProps } from '@material-ui/core'
+import { ChangeEvent, useCallback, useMemo } from 'react'
+import { Box, Chip, ChipProps, InputProps, makeStyles, TextField, TextFieldProps, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
-import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
+import { FormattedBalance } from '@masknet/shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { formatBalance } from '@masknet/web3-shared'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
 import { useI18N } from '../../utils'
 
 const MIN_AMOUNT_LENGTH = 1

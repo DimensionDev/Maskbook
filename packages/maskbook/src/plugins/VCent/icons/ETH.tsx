@@ -1,4 +1,4 @@
-import { createIcon } from '@dimensiondev/icons'
+import { createIcon } from '@masknet/icons'
 
 export const ETHIcon = createIcon(
     'ETH',

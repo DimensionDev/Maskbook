@@ -95,17 +95,15 @@ function config(opts: {
                 // Monorepo building speed optimization
                 // Those packages are also installed as dependencies so they appears in node_modules
                 // By aliasing them to the original position, we can speed up the compile because there is no need to wait tsc build them to the dist folder.
-                '@dimensiondev/dashboard': require.resolve('../dashboard/src/entry.tsx'),
-                '@dimensiondev/maskbook-shared': require.resolve('../shared/src/index.ts'),
-                '@dimensiondev/maskbook-theme/constants': require.resolve('../theme/src/constants.ts'),
-                '@dimensiondev/maskbook-theme': require.resolve('../theme/src/theme.ts'),
-                '@dimensiondev/icons': require.resolve('../icons/index.ts'),
-                '@dimensiondev/mask-plugin-infra': require.resolve('../plugin-infra/src/index.ts'),
-                '@dimensiondev/plugin-example': require.resolve('../plugins/example/src/index.ts'),
-                '@dimensiondev/external-plugin-previewer': require.resolve(
-                    '../external-plugin-previewer/src/index.tsx',
-                ),
-                '@dimensiondev/web3-shared': require.resolve('../web3-shared/src/index.ts'),
+                '@masknet/dashboard': require.resolve('../dashboard/src/entry.tsx'),
+                '@masknet/shared': require.resolve('../shared/src/index.ts'),
+                '@masknet/theme/constants': require.resolve('../theme/src/constants.ts'),
+                '@masknet/theme': require.resolve('../theme/src/theme.ts'),
+                '@masknet/icons': require.resolve('../icons/index.ts'),
+                '@masknet/plugin-infra': require.resolve('../plugin-infra/src/index.ts'),
+                '@masknet/plugin-example': require.resolve('../plugins/example/src/index.ts'),
+                '@masknet/external-plugin-previewer': require.resolve('../external-plugin-previewer/src/index.tsx'),
+                '@masknet/web3-shared': require.resolve('../web3-shared/src/index.ts'),
             },
             // Polyfill those Node built-ins
             fallback: {

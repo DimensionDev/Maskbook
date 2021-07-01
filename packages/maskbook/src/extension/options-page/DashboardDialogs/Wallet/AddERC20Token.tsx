@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { ERC20TokenDetailed } from '@dimensiondev/web3-shared'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 import { Hexagon as HexagonIcon } from 'react-feather'
 import { useI18N } from '../../../../utils'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'

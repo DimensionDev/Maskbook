@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { approvedTokensFromUniSwap } from '../settings'
+import { useValueRef } from '@masknet/shared'
 import stringify from 'json-stable-stringify'
+import { approvedTokensFromUniSwap } from '../settings'
 import { APPROVED_TOKENS_MAX } from '../constants'
 
 export function useApprovedTokens(token_address: string | undefined) {

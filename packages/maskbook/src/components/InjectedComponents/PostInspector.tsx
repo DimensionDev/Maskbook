@@ -6,17 +6,17 @@ import Services from '../../extension/service'
 import { ProfileIdentifier } from '../../database/type'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
-import { useValueRef } from '../../utils/hooks/useValueRef'
+import { useValueRef } from '@masknet/shared'
 import { debugModeSetting } from '../../settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
-import type { TypedMessageTuple } from '@dimensiondev/maskbook-shared'
+import type { TypedMessageTuple } from '@masknet/shared'
 import type { PluginConfig } from '../../plugins/types'
 import { PluginUI } from '../../plugins/PluginUI'
 import { usePostInfoDetails, usePostInfo } from '../DataSource/usePostInfo'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
 import type { PayloadAlpha40_Or_Alpha39, PayloadAlpha38 } from '../../utils/type-transform/Payload'
 import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
+import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
 const PluginHooksRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (plugin) => plugin.PostInspector)
 
@@ -31,12 +31,12 @@ export interface PostInspectorProps {
     slotPosition?: 'before' | 'after'
 }
 export function PostInspector(props: PostInspectorProps) {
-    const postBy = usePostInfoDetails('postBy')
-    const postContent = usePostInfoDetails('postContent')
-    const encryptedPost = usePostInfoDetails('postPayload')
-    const postId = usePostInfoDetails('postIdentifier')
-    const decryptedPayloadForImage = usePostInfoDetails('decryptedPayloadForImage')
-    const postImages = usePostInfoDetails('postMetadataImages')
+    const postBy = usePostInfoDetails.postBy()
+    const postContent = usePostInfoDetails.postContent()
+    const encryptedPost = usePostInfoDetails.postPayload()
+    const postId = usePostInfoDetails.postIdentifier()
+    const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
+    const postImages = usePostInfoDetails.postMetadataImages()
     const isDebugging = useValueRef(debugModeSetting)
     const whoAmI = useCurrentIdentity()
     const friends = useFriendsList()
@@ -63,7 +63,7 @@ export function PostInspector(props: PostInspectorProps) {
                 ['My fingerprint', whoAmI?.linkedPersona?.fingerprint ?? 'Unknown'],
                 ['Post ID', postId?.toText() || 'Unknown'],
                 ['Post Content', postContent],
-                ['Post Attachment Links', JSON.stringify(postImages.values())],
+                ['Post Attachment Links', JSON.stringify(postImages)],
             ]}
         />
     ) : null
@@ -143,7 +143,7 @@ function PluginPostInspectorForEach({ config }: { config: PluginConfig }) {
     const post = usePostInfo()
     useEffect(() => {
         if (!ref.current || !F || typeof F === 'function') return
-        return F.init(post, {}, ref.current)
+        return F.init(post!, {}, ref.current)
     }, [F, post])
     if (!F) return null
     if (typeof F === 'function') return <F />

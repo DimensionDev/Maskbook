@@ -2,21 +2,20 @@ import { omit } from 'lodash-es'
 import type { IDBPSafeTransaction } from '../../../database/helpers/openDB'
 import type { WalletDB } from '../database/Wallet.db'
 import type {
-    WalletRecord,
+    ERC1155TokenRecord,
+    ERC1155TokenRecordInDatabase,
     ERC20TokenRecord,
-    WalletRecordInDatabase,
     ERC20TokenRecordInDatabase,
     ERC721TokenRecord,
     ERC721TokenRecordInDatabase,
-    ERC1155TokenRecord,
-    ERC1155TokenRecordInDatabase,
     PhraseRecord,
     PhraseRecordInDatabase,
     TransactionChunkRecord,
     TransactionChunkRecordInDatabase,
+    WalletRecord,
+    WalletRecordInDatabase,
 } from '../database/types'
-import { ChainId, getChainIdFromName } from '@dimensiondev/web3-shared'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
+import { ChainId, formatEthereumAddress, getChainIdFromName } from '@masknet/web3-shared'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatEthereumAddress(address))

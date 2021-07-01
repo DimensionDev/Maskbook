@@ -15,13 +15,14 @@ import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@
 import { useContext } from 'react'
 import { useMatch, useNavigate } from 'react-router'
 import { DashboardContext } from './context'
-import { MaskNotSquareIcon } from '@dimensiondev/icons'
+import { MaskNotSquareIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
-import { RoutePaths } from '../../pages/routes'
+import { MaskColorVar } from '@masknet/theme'
+import { RoutePaths } from '../../type'
 
-const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string; nested?: boolean }) => {
+const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
     const navigate = useNavigate()
+
     return (
         <MuiListItem
             {...props}
@@ -34,19 +35,19 @@ const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string; ne
     )
 }
 
-const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
+const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
     return {
         [`&.${listItemClasses.root}`]: {
             color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
-            paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
+            paddingLeft: theme.spacing(2),
             cursor: 'pointer',
         },
         [`&.${listItemClasses.selected}`]: {
-            color: MaskColorVar.linkText,
+            color: MaskColorVar.textLink,
             backgroundColor: 'transparent',
             position: 'relative',
             [`${listItemIconClasses.root}`]: {
-                color: MaskColorVar.linkText,
+                color: MaskColorVar.textLink,
             },
             '&:after': {
                 content: '""',
@@ -55,7 +56,7 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
                 height: 40,
                 boxShadow: '-2px 0px 10px 2px rgba(0, 56, 255, 0.15)',
                 borderRadius: 50,
-                background: MaskColorVar.linkText,
+                background: MaskColorVar.textLink,
                 position: 'absolute',
                 right: 0,
             },
@@ -110,11 +111,11 @@ export function Navigation({}: NavigationProps) {
             </ListItemLink>
             <Collapse in={expanded}>
                 <List disablePadding>
-                    <ListItemLink nested to={RoutePaths.WalletsTransfer}>
-                        <ListItemText primary={t.wallets_transfer()} />
+                    <ListItemLink to={RoutePaths.WalletsTransfer}>
+                        <ListItemText inset primary={t.wallets_transfer()} />
                     </ListItemLink>
-                    <ListItemLink nested to={RoutePaths.WalletsHistory}>
-                        <ListItemText primary={t.wallets_history()} />
+                    <ListItemLink to={RoutePaths.WalletsHistory}>
+                        <ListItemText inset primary={t.wallets_history()} />
                     </ListItemLink>
                 </List>
             </Collapse>

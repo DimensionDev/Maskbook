@@ -1,10 +1,10 @@
 import { Trade, TradeType } from '@uniswap/sdk'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { ZERO } from '@masknet/web3-shared'
 import { uniswapCurrencyAmountTo, uniswapPercentTo, uniswapPriceTo, uniswapTokenTo } from '../../helpers'
 import { TradeComputed, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { useV2TradeBreakdown } from './useV2TradeBreakdown'
-import { ZERO } from '@dimensiondev/maskbook-shared'
 
 export function useV2TradeComputed(
     trade: Trade | null,

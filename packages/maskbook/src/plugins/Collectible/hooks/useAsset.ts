@@ -1,27 +1,27 @@
-import { useAsyncRetry } from 'react-use'
-import { head, uniqBy } from 'lodash-es'
-import BigNumber from 'bignumber.js'
-import { PluginCollectibleRPC } from '../messages'
-import { CollectibleToken, CollectibleProvider } from '../types'
-import { getOrderUnitPrice } from '../utils'
-import { unreachable } from '@dimensiondev/maskbook-shared'
-import { toDate, toRaribleImage, toTokenDetailed, toTokenIdentifier } from '../helpers'
-import { OpenSeaAccountURL } from '../constants'
-import { resolveRaribleUserNetwork } from '../pipes'
+import { unreachable } from '@dimensiondev/kit'
 import {
-    FungibleTokenDetailed,
+    currySameAddress,
     EthereumTokenType,
+    FungibleTokenDetailed,
     isSameAddress,
     useAccount,
     useChainId,
-    useConstant,
-    CONSTANTS,
-} from '@dimensiondev/web3-shared'
+    useTokenConstants,
+} from '@masknet/web3-shared'
+import BigNumber from 'bignumber.js'
+import { head, uniqBy } from 'lodash-es'
+import { useAsyncRetry } from 'react-use'
+import { OpenSeaAccountURL } from '../constants'
+import { toDate, toRaribleImage, toTokenDetailed, toTokenIdentifier } from '../helpers'
+import { PluginCollectibleRPC } from '../messages'
+import { resolveRaribleUserNetwork } from '../pipes'
+import { CollectibleProvider, CollectibleToken } from '../types'
+import { getOrderUnitPrice } from '../utils'
 
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
     const account = useAccount()
     const chainId = useChainId()
-    const WETH_ADDRESS = useConstant(CONSTANTS, 'WETH_ADDRESS')
+    const { WETH_ADDRESS } = useTokenConstants()
 
     return useAsyncRetry(async () => {
         if (!token) return
@@ -40,9 +40,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                         openSeaResponse.collection?.safelist_request_status ?? '',
                     ),
                     is_order_weth: isSameAddress(desktopOrder?.paymentToken ?? '', WETH_ADDRESS),
-                    is_collection_weth: openSeaResponse.collection.payment_tokens.some((x) =>
-                        isSameAddress(x.address, WETH_ADDRESS),
-                    ),
+                    is_collection_weth: openSeaResponse.collection.payment_tokens.some(currySameAddress(WETH_ADDRESS)),
                     is_owner: openSeaResponse.top_ownerships.some((item) => isSameAddress(item.owner.address, account)),
                     // it's an IOS string as my inspection
                     is_auction: Date.parse(`${openSeaResponse.endTime ?? ''}Z`) > Date.now(),

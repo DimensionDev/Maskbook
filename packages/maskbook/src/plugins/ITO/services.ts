@@ -2,7 +2,7 @@ import type { JSON_PayloadInMask, PoolRecord } from './types'
 import { PluginITO_Messages } from './messages'
 import * as subgraph from './apis'
 import * as database from './database'
-import { getChainDetailed } from '@dimensiondev/web3-shared'
+import { getChainDetailed } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../Wallet/settings'
 
 export async function getTradeInfo(pid: string, trader: string) {
@@ -17,9 +17,9 @@ export async function getPool(pid: string) {
     return poolFromChain
 }
 
-export async function getAllPoolsAsSeller(address: string) {
+export async function getAllPoolsAsSeller(address: string, page: number) {
     const chainId = currentChainIdSettings.value
-    const poolsFromChain = await subgraph.getAllPoolsAsSeller(address)
+    const poolsFromChain = await subgraph.getAllPoolsAsSeller(address, page)
     const poolsFromDB = await database.getPoolsFromDB(poolsFromChain.map((x) => x.pool.pid))
     return poolsFromChain
         .map((x) => {

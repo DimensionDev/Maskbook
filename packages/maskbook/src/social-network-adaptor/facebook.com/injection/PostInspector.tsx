@@ -3,7 +3,6 @@ import { isMobileFacebook } from '../utils/isMobile'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector'
 import { Flags } from '../../../utils/flags'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 
 const map = new WeakMap<HTMLElement, ShadowRoot>()
 function getShadowRoot(node: HTMLElement) {
@@ -13,17 +12,13 @@ function getShadowRoot(node: HTMLElement) {
     return dom
 }
 export function injectPostInspectorFacebook(signal: AbortSignal, current: PostInfo) {
-    clickSeeMore(current.rootNodeProxy.current.parentElement!)
+    clickSeeMore(current.rootNodeProxy.current?.parentElement)
     return injectPostInspectorDefault({
         zipPost(node) {
             zipEncryptedPostContent(node)
             zipPostLinkPreview(node)
         },
-        render(jsx, postInfo) {
-            const root = createReactRootShadowed(getShadowRoot(postInfo.postContentNode!), { signal })
-            root.render(jsx)
-            return root.destory
-        },
+        injectionPoint: (post) => getShadowRoot(post.postContentNode),
     })(current, signal)
 }
 function zipPostLinkPreview(node: DOMProxy) {
@@ -75,7 +70,8 @@ padding: 0px 10px;`,
         }
     }
 }
-export function clickSeeMore(node: HTMLElement) {
+export function clickSeeMore(node: HTMLElement | undefined | null) {
+    if (!node) return
     const more = node.querySelector<HTMLDivElement | HTMLSpanElement>(
         isMobileFacebook ? '[data-sigil="more"] a' : '[role=article] span[dir="auto"] div[dir="auto"] [role="button"]',
     )

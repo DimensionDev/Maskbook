@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useInterval } from 'react-use'
 import { compact } from 'lodash-es'
-import { useChainId } from '@dimensiondev/web3-shared'
+import { useChainId } from '@masknet/web3-shared'
 import { JSON_PayloadInMask, ITO_Status } from '../types'
 import { useAvailability } from './useAvailability'
 import { useQualification } from './useQualification'
@@ -10,7 +10,10 @@ import { ITO_CONTRACT_BASE_TIMESTAMP } from '../constants'
 export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
     const chainId = useChainId()
     const asyncResult = useAvailability(payload.pid, payload.contract_address)
-    const { value: qualification_start_time } = useQualification(payload.qualification_address)
+    const { value: qualification_start_time } = useQualification(
+        payload.qualification_address,
+        payload.contract_address,
+    )
 
     //#region ticker
     const [_, setTicker] = useState(0)

@@ -1,4 +1,4 @@
-import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@dimensiondev/maskbook-shared'
+import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@masknet/shared'
 import { head } from 'lodash-es'
 import type { InternalSettings } from '../../settings/createSettings'
 import {
@@ -12,10 +12,13 @@ import { queryMyPersonas } from './IdentityService'
 import {
     currentBalanceSettings,
     currentBlockNumberSettings,
+    currentCollectibleDataProviderSettings,
     currentAccountSettings,
     currentNetworkSettings,
     currentProviderSettings,
     currentChainIdSettings,
+    currentPortfolioDataProviderSettings,
+    currentGasNowSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
 
@@ -35,6 +38,7 @@ export const [getLanguage, setLanguage] = create(languageSettings)
 export const [getChainId, setChainId] = create(currentChainIdSettings)
 export const [getBalance, setBalance] = create(currentBalanceSettings)
 export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
+export const [getGasNow, setGasNow] = create(currentGasNowSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentTrendingDataProviderSettings)
 export const [getAncientPostsCompatibiltyMode, setAncientPostsCompatibiltyMode] = create(
     disableOpenNewTabInBackgroundSettings,
@@ -45,6 +49,14 @@ export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider
 export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(currentNetworkSettings)
 
 export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentAccountSettings)
+
+export const [getCurrentPortfolioDataProvider, setCurrentPortfolioDataProvider] = create(
+    currentPortfolioDataProviderSettings,
+)
+
+export const [getCurrentCollectibleDataProvider, setCurrentCollectibleDataProvider] = create(
+    currentCollectibleDataProviderSettings,
+)
 
 export async function getWalletAllowTestChain() {
     return Flags.wallet_allow_testnet

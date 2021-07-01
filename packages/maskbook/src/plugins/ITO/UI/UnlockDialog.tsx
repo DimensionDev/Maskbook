@@ -2,16 +2,18 @@ import { Link, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { formatBalance, FormattedAddress, isGreaterThan, pow10 } from '@dimensiondev/maskbook-shared'
-import { useRemoteControlledDialog, useI18N } from '../../../utils'
+import { FormattedAddress } from '@masknet/shared'
+import { formatBalance, isGreaterThan, pow10 } from '@masknet/web3-shared'
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
-    useChainId,
-    useTokenBalance,
-    resolveAddressLinkOnExplorer,
+    useITOConstants,
     ERC20TokenDetailed,
     EthereumTokenType,
-} from '@dimensiondev/web3-shared'
+    resolveAddressLinkOnExplorer,
+    useChainId,
+    useTokenBalance,
+} from '@masknet/web3-shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -41,8 +43,8 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const { tokens } = props
     const { t } = useI18N()
     const classes = useStyles()
-    const ITO_CONTRACT_ADDRESS = useITO_ContractAddress()
-    const recipientAddress = ITO_CONTRACT_ADDRESS
+
+    const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
     const chainId = useChainId()
 
     //#region select token
@@ -104,13 +106,16 @@ export function UnlockDialog(props: UnlockDialogProps) {
                 <Link
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={resolveAddressLinkOnExplorer(chainId, recipientAddress)}>
-                    <FormattedAddress address={recipientAddress} size={4} />
+                    href={resolveAddressLinkOnExplorer(chainId, ITO2_CONTRACT_ADDRESS)}>
+                    <FormattedAddress address={ITO2_CONTRACT_ADDRESS} size={4} />
                 </Link>{' '}
                 to use your {token.symbol ?? 'Token'} tokens when a new ITO round starts later.
             </Typography>
             <EthereumWalletConnectedBoundary>
-                <EthereumERC20TokenApprovedBoundary amount={amount.toFixed()} spender={recipientAddress} token={token}>
+                <EthereumERC20TokenApprovedBoundary
+                    amount={amount.toFixed()}
+                    spender={ITO2_CONTRACT_ADDRESS}
+                    token={token}>
                     {(allowance: string) => (
                         <ActionButton className={classes.button} size="large" fullWidth disabled variant="contained">
                             {isMoreThanMillion(allowance, token.decimals)

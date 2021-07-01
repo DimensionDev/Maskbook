@@ -2,9 +2,9 @@ name: Linters and tests
 
 on:
   push:
-    branches: [master, released]
+    branches: [master, develop, released]
   pull_request:
-    branches: [master, released]
+    branches: [master, develop, released]
 
 jobs:
   prettier:
@@ -48,15 +48,15 @@ jobs:
           restore-keys: ${{ runner.os }}-node-
       - uses: actions/cache@v2
         with:
-          path: "**/dist/"
+          path: "packages/**/dist/"
           # actions/cache will not upload changes in cache if primary key hits
           # by adding date to the primary key, we can ensure the cache updates on the first build of the day
-          key: ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
           # Allow fallback to cache of different dependencies but not allowing fallback to different tsconfig
           # because that might indicates a structural/flags changes in tsc emit.
           restore-keys: |
-            ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-            ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}
+            ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}
       - run: npx pnpm install
       - run: npx build -- echo "Check tsc"
   eslint:
@@ -73,7 +73,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm install
-      - run: npm run lint:ci
+      - run: npm run lint:ci -- --max-warnings=0
       - run: npm run lint:ci -- --format junit -o reports/junit/eslint-results.xml
       - name: Upload eslint report
         uses: actions/upload-artifact@v2

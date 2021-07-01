@@ -1,8 +1,7 @@
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
 import { useChainId } from './useChainId'
 import STABLE_COINS from '../assets/stable_coins.json'
 import { ChainId } from '../types'
-import { createERC20Token } from '../utils'
+import { createERC20Token, formatEthereumAddress } from '../utils'
 
 export function useStableTokensDebank() {
     const chainId = useChainId()

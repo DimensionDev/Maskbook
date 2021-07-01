@@ -1,5 +1,7 @@
+import { useContext } from 'react'
 import BigNumber from 'bignumber.js'
-import type { FungibleTokenDetailed } from '@dimensiondev/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { pow10 } from '@masknet/web3-shared'
 import { TradeProvider, TradeStrategy } from '../types'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
@@ -9,7 +11,8 @@ import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
 import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
 import { useTrade as useZrxTrade } from './0x/useTrade'
 import { useTrade as useBalancerTrade } from './balancer/useTrade'
-import { pow10, unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@dimensiondev/kit'
+import { TradeContext } from './useTradeContext'
 
 export function useTradeComputed(
     provider: TradeProvider,
@@ -23,6 +26,9 @@ export function useTradeComputed(
     const outputTokenProduct = pow10(outputToken?.decimals ?? 0)
     const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
+
+    // trade conetxt
+    const context = useContext(TradeContext)
 
     // NATIVE-WNATIVE pair
     const nativeToken_ = useNativeTokenTrade(inputToken, outputToken)
@@ -38,12 +44,8 @@ export function useTradeComputed(
     // uniswap like providers
     const uniswap_ = useUniswapTrade(
         strategy,
-        [TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider)
-            ? inputAmount_
-            : '0',
-        [TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider)
-            ? outputAmount_
-            : '0',
+        context?.IS_UNISWAP_LIKE ? inputAmount_ : '0',
+        context?.IS_UNISWAP_LIKE ? outputAmount_ : '0',
         inputToken,
         outputToken,
     )
@@ -88,11 +90,6 @@ export function useTradeComputed(
                 ...uniswap_,
                 value: uniswap,
             }
-        case TradeProvider.ZRX:
-            return {
-                ...zrx_,
-                value: zrx,
-            }
         case TradeProvider.SUSHISWAP:
             return {
                 ...uniswap_,
@@ -102,6 +99,21 @@ export function useTradeComputed(
             return {
                 ...uniswap_,
                 value: uniswap,
+            }
+        case TradeProvider.QUICKSWAP:
+            return {
+                ...uniswap_,
+                value: uniswap,
+            }
+        case TradeProvider.PANCAKESWAP:
+            return {
+                ...uniswap_,
+                value: uniswap,
+            }
+        case TradeProvider.ZRX:
+            return {
+                ...zrx_,
+                value: zrx,
             }
         case TradeProvider.BALANCER:
             return {

@@ -1,14 +1,16 @@
-import type { DataProvider, TagType } from './types'
+import type { TagType, DataProvider, TradeProvider } from './types'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import type { TraderProps } from './UI/trader/Trader'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
 interface CashTagEvent {
     name: string
     type: TagType
     element: HTMLAnchorElement | null
     dataProviders: DataProvider[]
+    tradeProviders: TradeProvider[]
 }
 
 interface SwapSettingsEvent {
@@ -49,7 +51,8 @@ interface PluginTraderMessage {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const PluginTraderMessages = createPluginMessage<PluginTraderMessage>(PLUGIN_IDENTIFIER)
+export const PluginTraderMessages: WebExtensionMessage<PluginTraderMessage> =
+    createPluginMessage<PluginTraderMessage>(PLUGIN_IDENTIFIER)
 export const PluginTraderRPC = createPluginRPC(
     PLUGIN_IDENTIFIER,
     () => import('./services'),

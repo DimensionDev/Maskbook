@@ -1,4 +1,4 @@
-import { stateCreator, SocialNetworkUI, globalUIState } from '../../social-network'
+import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-network'
 import { twitterBase } from './base'
 import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword'
 import { twitterShared } from './shared'
@@ -31,7 +31,7 @@ import { pasteImageToCompositionDefault } from '../../social-network/defaults/au
 import { currentSelectedIdentity } from '../../settings/settings'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { ProfileIdentifier } from '../../database/type'
-import { unreachable } from '@dimensiondev/maskbook-shared'
+import { unreachable } from '@dimensiondev/kit'
 
 const twitterUI: SocialNetworkUI.Definition = {
     ...twitterBase,

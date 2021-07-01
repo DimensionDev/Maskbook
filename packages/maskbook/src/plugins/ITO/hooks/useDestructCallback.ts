@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
-import type { NonPayableTx } from '@dimensiondev/contracts/types/types'
+import type { NonPayableTx } from '@masknet/contracts/types/types'
 import {
     TransactionEventType,
     TransactionStateType,
@@ -8,14 +8,14 @@ import {
     useGasPrice,
     useNonce,
     useTransactionState,
-} from '@dimensiondev/web3-shared'
+} from '@masknet/web3-shared'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 
-export function useDestructCallback() {
+export function useDestructCallback(ito_address: string) {
     const nonce = useNonce()
     const gasPrice = useGasPrice()
     const account = useAccount()
-    const ITO_Contract = useITO_Contract()
+    const { contract: ITO_Contract } = useITO_Contract(ito_address)
     const [destructState, setDestructState] = useTransactionState()
 
     const destructCallback = useCallback(

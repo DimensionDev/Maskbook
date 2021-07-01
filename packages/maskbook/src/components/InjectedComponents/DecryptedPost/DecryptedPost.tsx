@@ -1,5 +1,6 @@
-import { useMemo, useState, useEffect, useReducer, Fragment } from 'react'
-import { unreachable, makeTypedMessageTuple, TypedMessageTuple } from '@dimensiondev/maskbook-shared'
+import { Fragment, useEffect, useMemo, useReducer, useState } from 'react'
+import { makeTypedMessageTuple, TypedMessageTuple } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
 
 import { delay } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
@@ -11,8 +12,8 @@ import type {
     SuccessDecryption,
 } from '../../../extension/background-script/CryptoServices/decryptFrom'
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
-import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwaiting'
-import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'
+import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
+import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
 import { usePostClaimedAuthor, usePostInfoDetails, usePostInfoSharedPublic } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
@@ -63,13 +64,13 @@ export interface DecryptPostProps {
 }
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
-    const deconstructedPayload = usePostInfoDetails('postPayload')
+    const deconstructedPayload = usePostInfoDetails.postPayload()
     const authorInPayload = usePostClaimedAuthor()
-    const current = usePostInfo()
-    const currentPostBy = usePostInfoDetails('postBy')
-    const decryptedPayloadForImage = usePostInfoDetails('decryptedPayloadForImage')
+    const current = usePostInfo()!
+    const currentPostBy = usePostInfoDetails.postBy()
+    const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postBy = or(authorInPayload, currentPostBy)
-    const postMetadataImages = usePostInfoDetails('postMetadataImages')
+    const postMetadataImages = usePostInfoDetails.postMetadataImages()
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
     const Failed = props.failedComponent || DecryptPostFailed

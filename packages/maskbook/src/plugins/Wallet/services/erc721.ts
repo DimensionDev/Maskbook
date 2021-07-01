@@ -1,13 +1,17 @@
 import Fuse from 'fuse.js'
 import { EthereumAddress } from 'wallet.ts'
 import { omit } from 'lodash-es'
-import { ERC721TokenAssetDetailed, ERC721TokenDetailed, isSameAddress } from '@dimensiondev/web3-shared'
+import {
+    ERC721TokenAssetDetailed,
+    ERC721TokenDetailed,
+    formatEthereumAddress,
+    isSameAddress,
+} from '@masknet/web3-shared'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { WalletRecordIntoDB, ERC721TokenRecordIntoDB, getWalletByAddress, ERC721TokenRecordOutDB } from './helpers'
+import { ERC721TokenRecordIntoDB, ERC721TokenRecordOutDB, getWalletByAddress, WalletRecordIntoDB } from './helpers'
 import type { ERC721TokenRecord } from '../database/types'
 import { queryTransactionPaged } from '../../../database/helpers/pagination'
 

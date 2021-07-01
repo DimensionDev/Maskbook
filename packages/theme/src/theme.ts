@@ -33,7 +33,7 @@ function MaskTheme(mode: PaletteMode) {
 export const MaskLightTheme = MaskTheme('light')
 export const MaskDarkTheme = MaskTheme('dark')
 export * from './Components/index'
-export { addMaskThemeI18N } from './locales'
+export * from './hooks/index'
 export { getMaskColor, useMaskColor, MaskColorVar, applyMaskColorVars } from './constants'
 
 const query = '(prefers-color-scheme: dark)'

@@ -1,16 +1,16 @@
+import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
+import { useValueRef } from '@masknet/shared'
 import { useMemo } from 'react'
 import type { ProfileIdentifier } from '../../../database/type'
 import type {
-    SuccessDecryption,
     FailureDecryption,
+    SuccessDecryption,
 } from '../../../extension/background-script/CryptoServices/decryptFrom'
+import { debugModeSetting } from '../../../settings/settings'
+import { deconstructPayload, PayloadAlpha38 } from '../../../utils/type-transform/Payload'
+import { usePostInfoDetails } from '../../DataSource/usePostInfo'
 import { DebugList } from '../../DebugModeUI/DebugList'
 import { DebugModeUI_PostHashDialog } from '../../DebugModeUI/PostHashDialog'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { debugModeSetting } from '../../../settings/settings'
-import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { usePostInfoDetails } from '../../DataSource/usePostInfo'
-import { deconstructPayload, PayloadAlpha38 } from '../../../utils/type-transform/Payload'
 
 interface DebugDisplayProps {
     whoAmI: ProfileIdentifier
@@ -18,8 +18,8 @@ interface DebugDisplayProps {
     decryptedResult: SuccessDecryption | FailureDecryption | null
 }
 export function DecryptedPostDebug(props: Partial<DebugDisplayProps>) {
-    const postBy = usePostInfoDetails('postBy')
-    const postContent = usePostInfoDetails('postContent')
+    const postBy = usePostInfoDetails.postBy()
+    const postContent = usePostInfoDetails.postContent()
     const payloadResult = useMemo(() => deconstructPayload(postContent), [postContent])
     const setting = useValueRef(debugModeSetting)
     const isDebugging = isEnvironment(Environment.ManifestOptions) ? true : setting

@@ -2,7 +2,7 @@ import type Web3 from 'web3'
 import { useMemo } from 'react'
 import type { AbiItem } from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
-import type { BaseContract } from '@dimensiondev/contracts/types/types'
+import type { BaseContract } from '@masknet/contracts/types/types'
 import { useWeb3 } from './useWeb3'
 
 function createContract<T extends BaseContract>(web3: Web3, address: string, ABI: AbiItem[]) {

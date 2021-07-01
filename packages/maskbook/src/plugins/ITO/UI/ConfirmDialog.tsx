@@ -1,29 +1,25 @@
-import { Fragment, useCallback, useState } from 'react'
-import { makeStyles, Typography, Grid, Paper, Card, IconButton, Link } from '@material-ui/core'
-import { Flags, useI18N } from '../../../utils'
-import { PoolSettings, useFillParams } from '../hooks/useFill'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import LaunchIcon from '@material-ui/icons/Launch'
+import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import {
     formatAmountPrecision,
     formatBalance,
-    FormattedAddress,
-    FormattedBalance,
-    ONE,
-} from '@dimensiondev/maskbook-shared'
-import formatDateTime from 'date-fns/format'
-import {
-    resolveTokenLinkOnExplorer,
-    resolveAddressLinkOnExplorer,
-    isNative,
     FungibleTokenDetailed,
-    useConstant,
+    isNative,
+    ONE,
+    resolveAddressLinkOnExplorer,
+    resolveTokenLinkOnExplorer,
     useChainId,
-} from '@dimensiondev/web3-shared'
-import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
+    useITOConstants,
+} from '@masknet/web3-shared'
+import { Card, Grid, IconButton, Link, makeStyles, Paper, Typography } from '@material-ui/core'
+import LaunchIcon from '@material-ui/icons/Launch'
 import RepeatIcon from '@material-ui/icons/Repeat'
-import { ITO_CONSTANTS } from '../constants'
+import formatDateTime from 'date-fns/format'
+import { Fragment, useCallback, useState } from 'react'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { Flags, useI18N } from '../../../utils'
 import { TxFeeEstimation } from '../../../web3/UI/TxFeeEstimation'
+import { PoolSettings, useFillParams } from '../hooks/useFill'
+import { decodeRegionCode, regionCodes } from '../hooks/useRegion'
 
 const useSwapItemStyles = makeStyles((theme) => ({
     root: {
@@ -120,10 +116,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const classes = useStyles()
     const { t } = useI18N()
     const chainId = useChainId()
-    const DEFAULT_QUALIFICATION_ADDRESS = useConstant(ITO_CONSTANTS, 'DEFAULT_QUALIFICATION_ADDRESS')
+    const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
     const showQualification =
         poolSettings?.advanceSettingData.contract &&
-        poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION_ADDRESS
+        poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION2_ADDRESS
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
     const fillParamsResult = useFillParams(poolSettings)
 

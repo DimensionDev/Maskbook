@@ -1,7 +1,7 @@
 import type { ExternalPluginLoadDetails } from '../types'
 import { Card, CardHeader, CardContent, Typography, Link, Button } from '@material-ui/core'
 import Services from '../../../extension/service'
-import { MaskExternalPluginPreviewRenderer, setHostConfig } from '@dimensiondev/external-plugin-previewer'
+import { MaskExternalPluginPreviewRenderer, setHostConfig } from '@masknet/external-plugin-previewer'
 import { PermissionAwareRedirectOf } from '../../../extension/popups'
 import { createThirdPartyPopupContext } from '../popup-context'
 import { useExternalPluginManifest, useExternalPluginTemplate } from '../loader'

@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { EthereumTokenType, ERC721TokenDetailed } from '../types'
+import { ERC721TokenDetailed, EthereumTokenType } from '../types'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useChainId } from './useChainId'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { useSingleContractMultipleData } from './useMulticall'
+import { formatEthereumAddress } from '../utils'
 
 export function useERC721TokenDetailed(address: string, token?: Partial<ERC721TokenDetailed>) {
     const chainId = useChainId()

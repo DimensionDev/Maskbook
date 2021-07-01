@@ -13,7 +13,7 @@ import { usePostInfo } from '../../DataSource/usePostInfo'
 import type { ProfileIdentifier } from '../../../database/type'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 import { ErrorBoundary } from '../../shared/ErrorBoundary'
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
+import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
 const PluginRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => x.DecryptedInspector)
 export interface DecryptPostSuccessProps extends withClasses<never> {
@@ -90,7 +90,7 @@ function OldPluginSuccessDecryptionPostInspectorForEach(props: { pluginConfig: P
     const post = usePostInfo()
     useEffect(() => {
         if (!ref.current || !F || typeof F === 'function') return
-        return F.init(post, { message }, ref.current)
+        return F.init(post!, { message }, ref.current)
     }, [F, post, message])
     if (!F) return null
     if (typeof F === 'function') return <F {...post} message={message} />

@@ -1,1 +1,1 @@
-export { useWallets, useWallet } from '@dimensiondev/web3-shared'
+export { useWallets, useWallet } from '@masknet/web3-shared'

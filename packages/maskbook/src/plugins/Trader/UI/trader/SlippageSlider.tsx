@@ -1,6 +1,6 @@
 import { Slider } from '@material-ui/core'
-import { formatPercentage } from '@dimensiondev/maskbook-shared'
-import { SLIPPAGE_TOLERANCE_DEFAULT, SLIPPAGE_TOLERANCE_MIN, SLIPPAGE_TOLERANCE_MAX } from '../../constants'
+import { formatPercentage } from '@masknet/web3-shared'
+import { SLIPPAGE_TOLERANCE_DEFAULT, SLIPPAGE_TOLERANCE_MAX, SLIPPAGE_TOLERANCE_MIN } from '../../constants'
 import { toBips } from '../../helpers'
 
 export interface SlippageSliderProps {

@@ -1,5 +1,5 @@
 import { TextField } from '@material-ui/core'
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { UserCheck } from 'react-feather'
 import { useHistory } from 'react-router-dom'

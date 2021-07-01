@@ -1,5 +1,5 @@
-import { makeStyles, Chip } from '@material-ui/core'
-import { getEnumAsArray } from '../../../../utils/enum'
+import { Chip, makeStyles } from '@material-ui/core'
+import { getEnumAsArray } from '@dimensiondev/kit'
 import { TradeProvider } from '../../types'
 import { resolveTradeProviderName } from '../../pipes'
 import { TradeProviderIcon } from './TradeProviderIcon'

@@ -1,7 +1,7 @@
 // All plugin manager need to call createPluginHost so let's register plugins implicitly.
 import './register'
 
-import type { Plugin } from '@dimensiondev/mask-plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
 import { currentChainIdSettings } from '../plugins/Wallet/settings'
 import { startEffects } from '../utils/side-effects'

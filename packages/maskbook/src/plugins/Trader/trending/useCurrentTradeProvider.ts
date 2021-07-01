@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { useValueRef } from '@masknet/shared'
 import { currentTradeProviderSettings } from '../settings'
 import { TradeProvider } from '../types'
 
@@ -9,11 +9,12 @@ export function useCurrentTradeProvider(availableTradeProviders: TradeProvider[]
     )
     const currentTradeProvider = useValueRef(currentTradeProviderSettings)
 
-    // sync trade provider
+    // sync the trade provider
     useEffect(() => {
-        // cached trade provider unavailable
-        if (!availableTradeProviders.includes(currentTradeProvider)) return
-        setTradeProvider(currentTradeProvider)
-    }, [availableTradeProviders.sort().join(','), currentTradeProvider])
+        if (!availableTradeProviders.length) return
+        setTradeProvider(
+            availableTradeProviders.includes(currentTradeProvider) ? currentTradeProvider : availableTradeProviders[0],
+        )
+    }, [availableTradeProviders.sort().join(), currentTradeProvider])
     return tradeProvider
 }

@@ -1,18 +1,19 @@
 import {
-    TableContainer,
-    Table,
+    Link,
     makeStyles,
-    Theme,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
     TableHead,
     TableRow,
-    TableCell,
-    TableBody,
-    Link,
+    Theme,
     Typography,
 } from '@material-ui/core'
-import { formatEthereumAddress, FormattedCurrency } from '@dimensiondev/maskbook-shared'
+import { FormattedCurrency } from '@masknet/shared'
+import { formatEthereumAddress } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
-import { Ticker, DataProvider } from '../../types'
+import { DataProvider, Ticker } from '../../types'
 import { formatElapsed } from '../../../Wallet/formatter'
 
 const useStyles = makeStyles((theme: Theme) => ({
