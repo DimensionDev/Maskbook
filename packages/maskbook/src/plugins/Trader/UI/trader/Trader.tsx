@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/v2-sdk'
@@ -151,17 +151,6 @@ export function Trader(props: TraderProps) {
     //#region the best trade
     const { inputAmount, outputAmount, inputTokenBalance, outputTokenBalance, strategy } = tradeStore
 
-    // the cached trade will freeze UI from updating when transaction was just confirmed
-    const [freezed, setFreezed] = useState(false)
-    const tradeCached_ = useRef<TradeComputed<unknown> | null>(tradeComputed)
-    useEffect(() => {
-        if (freezed) tradeCached_.current = tradeComputed
-    }, [freezed /* update trade computed if the update button was clicked */])
-
-    // the real tread for UI
-    const trade = freezed ? tradeCached_.current : tradeComputed
-    //#endregion
-
     //#region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
     const [focusedTokenPanelType, setFocusedTokenPanelType] = useState(TokenPanelType.Input)
@@ -198,12 +187,11 @@ export function Trader(props: TraderProps) {
     //#endregion
 
     //#region blocking (swap)
-    const [tradeState, tradeCallback, resetTradeCallback] = useTradeCallback(provider, trade)
+    const [tradeState, tradeCallback, resetTradeCallback] = useTradeCallback(provider, tradeComputed)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const onConfirmDialogConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
         await delay(100)
-        setFreezed(true)
         await tradeCallback()
     }, [tradeCallback])
     const onConfirmDialogClose = useCallback(() => {
@@ -235,11 +223,11 @@ export function Trader(props: TraderProps) {
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            trade && inputToken && outputToken
+            tradeComputed && inputToken && outputToken
                 ? [
-                      `I just swapped ${formatBalance(trade.inputAmount, inputToken.decimals, 6)} ${cashTag}${
+                      `I just swapped ${formatBalance(tradeComputed.inputAmount, inputToken.decimals, 6)} ${cashTag}${
                           inputToken.symbol
-                      } for ${formatBalance(trade.outputAmount, outputToken.decimals, 6)} ${cashTag}${
+                      } for ${formatBalance(tradeComputed.outputAmount, outputToken.decimals, 6)} ${cashTag}${
                           outputToken.symbol
                       }. Follow @realMaskbook (mask.io) to swap cryptocurrencies on Twitter.`,
                       '#mask_io',
@@ -253,7 +241,6 @@ export function Trader(props: TraderProps) {
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-            setFreezed(false)
             if (tradeState.type === TransactionStateType.HASH) {
                 dispatchTradeStore({
                     type: TradeActionType.UPDATE_INPUT_AMOUNT,
@@ -282,15 +269,15 @@ export function Trader(props: TraderProps) {
     //#region swap callback
     const onSwap = useCallback(() => {
         // no need to open the confirmation dialog if it (un)wraps the native token
-        if (trade && isNativeTokenWrapper(trade)) tradeCallback()
+        if (tradeComputed && isNativeTokenWrapper(tradeComputed)) tradeCallback()
         else setOpenConfirmDialog(true)
-    }, [trade])
+    }, [tradeComputed])
     //#endregion
 
     return (
         <div className={classes.root}>
             <TradeForm
-                trade={trade}
+                trade={tradeComputed}
                 provider={provider}
                 strategy={strategy}
                 loading={asyncTradeComputed.loading || updateBalancerPoolsLoading}
@@ -307,11 +294,11 @@ export function Trader(props: TraderProps) {
                 onTokenChipClick={onTokenChipClick}
                 onSwap={onSwap}
             />
-            {trade && !isNativeTokenWrapper(trade) && inputToken && outputToken ? (
+            {tradeComputed && !isNativeTokenWrapper(tradeComputed) && inputToken && outputToken ? (
                 <>
                     <ConfirmDialog
                         open={openConfirmDialog}
-                        trade={trade}
+                        trade={tradeComputed}
                         provider={provider}
                         inputToken={inputToken}
                         outputToken={outputToken}
@@ -320,23 +307,23 @@ export function Trader(props: TraderProps) {
                     />
                     <TradeSummary
                         classes={{ root: classes.summary }}
-                        trade={trade}
+                        trade={tradeComputed}
                         provider={provider}
                         inputToken={inputToken}
                         outputToken={outputToken}
                     />
                     {context?.IS_UNISWAP_LIKE ? (
-                        <UniswapTradeRoute classes={{ root: classes.router }} trade={trade} />
+                        <UniswapTradeRoute classes={{ root: classes.router }} trade={tradeComputed} />
                     ) : null}
                     {[TradeProvider.BALANCER].includes(provider) ? (
                         <BalancerTradeRoute
                             classes={{ root: classes.router }}
-                            trade={trade as TradeComputed<SwapResponse>}
+                            trade={tradeComputed as TradeComputed<SwapResponse>}
                         />
                     ) : null}
                     {context?.IS_UNISWAP_LIKE ? (
                         <TradePairViewer
-                            trade={trade as TradeComputed<Trade<Currency, Currency, TradeType>>}
+                            trade={tradeComputed as TradeComputed<Trade<Currency, Currency, TradeType>>}
                             provider={provider}
                         />
                     ) : null}
