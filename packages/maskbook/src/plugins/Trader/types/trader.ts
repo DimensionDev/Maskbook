@@ -53,12 +53,10 @@ export interface TradeComputed<T = unknown> {
     outputToken?: FungibleTokenDetailed
     inputAmount: BigNumber
     outputAmount: BigNumber
-    nextMidPrice: BigNumber
     executionPrice: BigNumber
     priceImpact: BigNumber
     maximumSold: BigNumber
     minimumReceived: BigNumber
-    priceImpactWithoutFee: BigNumber
     fee: BigNumber
     path?: (PartialRequired<NativeTokenDetailed, 'address'> | PartialRequired<ERC20TokenDetailed, 'address'>)[][]
     trade_?: T
@@ -81,6 +79,11 @@ export interface TradeContext {
     INIT_CODE_HASH: string
     ROUTER_CONTRACT_ADDRESS: string
     FACTORY_CONTRACT_ADDRESS: string
+    ADDITIONAL_TOKENS: {
+        [key in ChainId]?: {
+            [key: string]: ERC20TokenDetailed[]
+        }
+    }
     AGAINST_TOKENS: {
         [key in ChainId]: ERC20TokenDetailed[]
     }

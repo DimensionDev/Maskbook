@@ -1,6 +1,7 @@
 import { useContext, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { Pair, Token as UniswapToken, TokenAmount } from '@dimensiondev/uniswap-sdk'
+import { Pair } from '@uniswap/v2-sdk'
+import { CurrencyAmount, Token } from '@uniswap/sdk-core'
 import { useMutlipleContractSingleData } from '@masknet/web3-shared'
 import { getPairAddress } from '../../helpers'
 import { TradeContext } from '../useTradeContext'
@@ -12,7 +13,7 @@ export enum PairState {
     INVALID,
 }
 
-export type TokenPair = [UniswapToken, UniswapToken]
+export type TokenPair = [Token, Token]
 
 export function usePairs(tokenPairs: readonly TokenPair[]) {
     const context = useContext(TradeContext)
@@ -66,7 +67,10 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
             const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
             return [
                 PairState.EXISTS,
-                new Pair(new TokenAmount(token0, reserve0.toString()), new TokenAmount(token1, reserve1.toString())),
+                new Pair(
+                    CurrencyAmount.fromRawAmount(token0, reserve0.toString()),
+                    CurrencyAmount.fromRawAmount(token1, reserve1.toString()),
+                ),
             ] as const
         })
     }, [listOfPairAddress, listOfReserves, tokenPairs])

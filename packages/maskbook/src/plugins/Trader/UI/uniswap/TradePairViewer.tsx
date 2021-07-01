@@ -1,9 +1,10 @@
+import { useContext } from 'react'
 import { ExternalLink } from 'react-feather'
-import type { Trade } from '@dimensiondev/uniswap-sdk'
+import type { Trade } from '@uniswap/v2-sdk'
+import type { Currency, TradeType } from '@uniswap/sdk-core'
 import { Link, makeStyles, Typography } from '@material-ui/core'
 import { resolveTradePairLink } from '../../pipes'
 import type { TradeComputed, TradeProvider } from '../../types'
-import { useContext } from 'react'
 import { TradeContext } from '../../trader/useTradeContext'
 import { getPairAddress } from '../../helpers'
 
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export interface TradePairViewerProps {
-    trade: TradeComputed<Trade>
+    trade: TradeComputed<Trade<Currency, Currency, TradeType>>
     provider: TradeProvider
 }
 

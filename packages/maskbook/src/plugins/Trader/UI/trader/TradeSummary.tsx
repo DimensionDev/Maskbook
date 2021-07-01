@@ -75,16 +75,7 @@ export function TradeSummary(props: TradeSummaryProps) {
     const [priceReversed, setPriceReversed] = useState(false)
     const context = useContext(TradeContext)
 
-    const {
-        strategy,
-        inputAmount,
-        outputAmount,
-        maximumSold,
-        minimumReceived,
-        priceImpact,
-        priceImpactWithoutFee,
-        fee,
-    } = trade
+    const { strategy, inputAmount, outputAmount, maximumSold, minimumReceived, priceImpact, fee } = trade
 
     const isExactIn = strategy === TradeStrategy.ExactIn
 
@@ -175,12 +166,12 @@ export function TradeSummary(props: TradeSummaryProps) {
                 <Typography
                     className={classes.title}
                     style={{
-                        color: resolveUniswapWarningLevelColor(resolveUniswapWarningLevel(priceImpactWithoutFee)),
+                        color: resolveUniswapWarningLevelColor(resolveUniswapWarningLevel(priceImpact)),
                     }}>
-                    {priceImpactWithoutFee.isGreaterThan('0')
-                        ? priceImpactWithoutFee?.isLessThan(ONE_BIPS)
+                    {priceImpact.isGreaterThan('0')
+                        ? priceImpact?.isLessThan(ONE_BIPS)
                             ? '<0.01%'
-                            : `${formatPercentage(priceImpactWithoutFee)}`
+                            : `${formatPercentage(priceImpact)}`
                         : '-'}
                 </Typography>
             ),
@@ -189,7 +180,8 @@ export function TradeSummary(props: TradeSummaryProps) {
             title: 'Liquidity Provider Fee',
             children: (
                 <Typography className={classes.title}>
-                    {formatBalance(fee, inputToken.decimals, 6)} {inputToken.symbol}
+                    <strong className={classes.emphasis}>{formatBalance(fee, inputToken.decimals, 6)}</strong>{' '}
+                    {inputToken.symbol}
                 </Typography>
             ),
         },
