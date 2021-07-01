@@ -1,8 +1,5 @@
-import { FormattedBalance } from '@masknet/shared'
+import { FormattedBalance, formatBalance, isZero, pow10, TokenIcon } from '@masknet/shared'
 import {
-    formatBalance,
-    isZero,
-    pow10,
     getChainDetailed,
     isSameAddress,
     useAccount,
@@ -26,7 +23,6 @@ import {
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon } from '@masknet/shared'
 import { debugModeSetting } from '../../../settings/settings'
 import { useI18N } from '../../../utils'
 import { MSG_DELIMITER } from '../constants'
@@ -114,7 +110,7 @@ export interface PoolInListProps extends PoolSubgraph {
 
 export function PoolInList(props: PoolInListProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const classes = useStyles()``
     const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onRetry } = props
 
     //#region withdraw
@@ -124,6 +120,7 @@ export function PoolInList(props: PoolInListProps) {
         resetDestructCallback()
     })
     //#endregion
+
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const account = useAccount()
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)

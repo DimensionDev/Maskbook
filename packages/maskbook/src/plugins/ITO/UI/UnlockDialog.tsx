@@ -2,16 +2,13 @@ import { Link, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { FormattedAddress } from '@masknet/shared'
+import { FormattedAddress, formatBalance, isGreaterThan, pow10 } from '@masknet/shared'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
     useITOConstants,
     ERC20TokenDetailed,
     EthereumTokenType,
-    formatBalance,
-    isGreaterThan,
-    pow10,
     resolveAddressLinkOnExplorer,
     useChainId,
     useTokenBalance,

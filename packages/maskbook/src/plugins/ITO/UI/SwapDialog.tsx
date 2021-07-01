@@ -5,20 +5,18 @@ import { CircularProgress, makeStyles, Slider, Typography } from '@material-ui/c
 
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { formatBalance, pow10, ZERO } from '@masknet/shared'
 import {
     ChainId,
     currySameAddress,
     ERC20TokenDetailed,
     EthereumTokenType,
-    formatBalance,
-    FungibleTokenDetailed,
-    isNative,
-    pow10,
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
     useTokenBalance,
-    ZERO,
+    FungibleTokenDetailed,
+    isNative,
 } from '@masknet/web3-shared'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
