@@ -1,5 +1,9 @@
+name: Bot
+
 on:
   push:
+    branches: [master, develop, released]
+  pull_request:
     branches: [master, develop, released]
 
 jobs:
