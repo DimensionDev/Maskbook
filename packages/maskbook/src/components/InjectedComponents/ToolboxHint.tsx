@@ -27,9 +27,7 @@ import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
 import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
-import { useValueRef } from '@masknet/shared'
 import { useI18N } from '../../utils'
-import { currentNetworkSettings } from '../../plugins/Wallet/settings'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -125,7 +123,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
-    const networkType = useValueRef(currentNetworkSettings)
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(

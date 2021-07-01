@@ -23,7 +23,7 @@ export function useV2TradeComputed(
         inputAmount: uniswapCurrencyAmountTo(trade.inputAmount),
         outputAmount: uniswapCurrencyAmountTo(trade.outputAmount),
         executionPrice: uniswapPriceTo(trade.executionPrice),
-        priceImpact: uniswapPercentTo(trade.priceImpact),
+        priceImpact: uniswapPercentTo(breakdown?.priceImpact ?? trade.priceImpact),
         path: trade.route.path.map((x) => [uniswapTokenTo(x)]),
         maximumSold: uniswapCurrencyAmountTo(trade.maximumAmountIn(slippage)),
         minimumReceived: uniswapCurrencyAmountTo(trade.minimumAmountOut(slippage)),
