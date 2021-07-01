@@ -4,16 +4,15 @@ import { Image } from '../../components/shared/Image'
 import { useAssets } from '../../plugins/Wallet/hooks/useAssets'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import { useValueRef } from '@masknet/shared'
+import { formatBalance, formatWeiToGwei, useValueRef } from '@masknet/shared'
 import {
-    ChainId,
+    useNetworkType,
+    NetworkType,
     EthereumTokenType,
-    formatBalance,
-    formatWeiToGwei,
-    GasNow,
     getChainDetailed,
     useChainId,
     useGasPrice,
+    GasNow,
 } from '@masknet/web3-shared'
 import { currentGasNowSettings } from '../../plugins/Wallet/settings'
 import { useCallback, useMemo, useState } from 'react'
@@ -31,6 +30,7 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
     const theme = useTheme()
     const { gas } = props
     const _gasPrice = useGasPrice()
+    const networkType = useNetworkType()
     const classes = useStylesExtends(useStyles(), props)
     const gasNow = useValueRef(currentGasNowSettings)
     const [type, setType] = useState<keyof GasNow>('fast')
@@ -56,7 +56,7 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
     const { value: detailedTokens } = useAssets([])
     const nativeToken = detailedTokens.find((t) => t.token.type === EthereumTokenType.Native)
     const usdRate = nativeToken?.price?.usd
-    return chainId === ChainId.Mainnet && gas ? (
+    return networkType === NetworkType.Ethereum && gas ? (
         <>
             <Grid item xs={6}>
                 <Paper className={classes.label}>
