@@ -29,6 +29,14 @@ const useStyles = makeStyles((theme: Theme) => ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
     },
+    strong: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
+    span: {
+        maxWidth: 350,
+        display: 'inline-flex',
+    },
     time: {
         fontSize: 12,
         color: theme.palette.text.secondary,
@@ -77,6 +85,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     footer: {
         width: '100%',
         display: 'flex',
+        flexWrap: 'wrap',
         justifyContent: 'space-between',
         marginTop: theme.spacing(2),
     },
@@ -206,7 +215,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                         value={100 * (1 - Number(history.total_remaining) / Number(history.total))}
                     />
                     <section className={classes.footer}>
-                        <Typography variant="body1" className={classNames(classes.footerInfo, classes.message)}>
+                        <Typography variant="body1" className={classes.footerInfo}>
                             <Trans
                                 i18nKey="plugin_red_packet_history_claimed"
                                 components={{
@@ -218,17 +227,19 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                 }}
                             />
                         </Typography>
-                        <Typography variant="body1" className={classNames(classes.footerInfo, classes.message)}>
+                        <Typography variant="body1" className={classes.footerInfo}>
                             <Trans
                                 i18nKey="plugin_red_packet_history_total_claimed_amount"
                                 components={{
-                                    strong: <strong />,
+                                    strong: <strong className={classes.strong} />,
+                                    span: <span className={classes.span} />,
                                 }}
                                 values={{
-                                    amount: formatBalance(new BigNumber(history.total), history.token.decimals),
+                                    amount: formatBalance(new BigNumber(history.total), history.token.decimals, 6),
                                     claimedAmount: formatBalance(
                                         new BigNumber(history.total).minus(new BigNumber(history.total_remaining)),
                                         history.token.decimals,
+                                        6,
                                     ),
                                     symbol: history.token.symbol,
                                 }}
