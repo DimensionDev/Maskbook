@@ -7,6 +7,8 @@ import { About } from './About'
 import { Close } from '@material-ui/icons'
 import { Version } from './Version'
 import { getMaskColor } from '@masknet/theme'
+import links from './links.json'
+import { RoutePaths } from '../../type'
 
 const useStyles = makeStyles((theme: Theme) => ({
     navRoot: {
@@ -93,9 +95,9 @@ export function FooterLine() {
     const openVersionLink = (event: React.MouseEvent) => {
         // `MouseEvent.prototype.metaKey` on macOS (`Command` key), Windows (`Windows` key), Linux (`Super` key)
         if (process.env.build === 'stable' && !event.metaKey) {
-            open(`https://github.com/DimensionDev/Maskbook/releases/tag/v${version}`)
+            open(`${links.DOWNLOAD_LINK_STABLE_PREFIX}/v${version}`)
         } else {
-            open(`https://github.com/DimensionDev/Maskbook/tree/${process.env.COMMIT_HASH}`)
+            open(`${links.DOWNLOAD_LINK_UNSTABLE_PREFIX}/${process.env.COMMIT_HASH}`)
         }
     }
     return (
@@ -104,20 +106,15 @@ export function FooterLine() {
                 classes={{ separator: classes.separator, ol: classes.ol, root: classes.navRoot }}
                 separator="|"
                 aria-label="breadcrumb">
-                <FooterLink href="https://mask.io">Mask.io</FooterLink>
+                <FooterLink href={links.MASK_OFFICIAL_WEBSITE}>Mask.io</FooterLink>
                 <FooterLink onClick={() => setOpen(true)}>{t.about()}</FooterLink>
                 <FooterLink onClick={openVersionLink} title={process.env.VERSION}>
                     <Version />
                 </FooterLink>
-                <FooterLink href="https://mask.io/download-links/#mobile">{t.dashboard_mobile_test()}</FooterLink>
-                <FooterLink href="https://github.com/DimensionDev/Maskbook">{t.dashboard_source_code()}</FooterLink>
-                <FooterLink
-                    href={
-                        'https://github.com/DimensionDev/Maskbook/issues?q=is%3Aissue+is%3Aopen+label%3A%22Bounty%3A+Open%22'
-                    }>
-                    {t.footer_bounty_list()}
-                </FooterLink>
-                <FooterLink to="/privacy-policy">{t.privacy_policy()}</FooterLink>
+                <FooterLink href={links.MOBILE_DOWNLOAD_LINK}>{t.dashboard_mobile_test()}</FooterLink>
+                <FooterLink href={links.MASKBOOK_GITHUB}>{t.dashboard_source_code()}</FooterLink>
+                <FooterLink href={links.BOUNTY_LIST}>{t.footer_bounty_list()}</FooterLink>
+                <FooterLink to={RoutePaths.PrivacyPolicy}>{t.privacy_policy()}</FooterLink>
             </Breadcrumbs>
             <AboutDialog open={isOpen} title={''} onClose={() => setOpen(false)}>
                 <About />

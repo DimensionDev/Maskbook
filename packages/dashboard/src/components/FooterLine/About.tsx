@@ -8,6 +8,7 @@ import { useDashboardI18N } from '../../locales'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { Version } from './Version'
 import { getMaskColor } from '@masknet/theme'
+import links from './links.json'
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
@@ -67,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(0, 2),
         padding: theme.spacing(2, 2, 3, 6),
     },
-    a: {
+    link: {
         color: getMaskColor(theme).iconLight,
     },
 }))
@@ -149,14 +150,14 @@ export function About() {
                 <footer className={classes.footer}>
                     <Typography component="p" variant="inherit">
                         <span>{t.about_dialog_feedback()}</span>
-                        <Link classes={{ root: classes.a }} href={'mailto:info@dimension.im'}>
-                            info@dimension.im
+                        <Link classes={{ root: classes.link }} href={`mailto:${links.MASK_EMAIL}`}>
+                            {links.MASK_EMAIL}
                         </Link>
                     </Typography>
                     <Typography component="p" variant="inherit">
                         <span>{t.about_dialog_source_code()}</span>
-                        <Link classes={{ root: classes.a }} href={'https://github.com/DimensionDev/Maskbook'}>
-                            https://github.com/DimensionDev/Maskbook
+                        <Link classes={{ root: classes.link }} href={links.MASKBOOK_GITHUB}>
+                            {links.MASKBOOK_GITHUB}
                         </Link>
                     </Typography>
                     <Typography component="p" variant="inherit">
