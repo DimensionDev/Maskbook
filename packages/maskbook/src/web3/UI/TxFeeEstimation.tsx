@@ -1,21 +1,20 @@
+import { useCallback, useMemo, useState } from 'react'
 import { Grid, makeStyles, Paper, Typography, useTheme } from '@material-ui/core'
-import { useI18N, useRemoteControlledDialog } from '../../utils'
-import { Image } from '../../components/shared/Image'
-import { useAssets } from '../../plugins/Wallet/hooks/useAssets'
-import { WalletMessages } from '../../plugins/Wallet/messages'
-import { useStylesExtends } from '../../components/custom-ui-helper'
 import { formatBalance, formatWeiToGwei, useValueRef } from '@masknet/shared'
 import {
-    useNetworkType,
-    NetworkType,
     EthereumTokenType,
     getChainDetailed,
     useChainId,
     useGasPrice,
     GasNow,
+    ChainId,
 } from '@masknet/web3-shared'
+import { useI18N, useRemoteControlledDialog } from '../../utils'
+import { Image } from '../../components/shared/Image'
+import { useAssets } from '../../plugins/Wallet/hooks/useAssets'
+import { WalletMessages } from '../../plugins/Wallet/messages'
+import { useStylesExtends } from '../../components/custom-ui-helper'
 import { currentGasNowSettings } from '../../plugins/Wallet/settings'
-import { useCallback, useMemo, useState } from 'react'
 
 const useStyles = makeStyles(() => {})
 
@@ -30,7 +29,6 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
     const theme = useTheme()
     const { gas } = props
     const _gasPrice = useGasPrice()
-    const networkType = useNetworkType()
     const classes = useStylesExtends(useStyles(), props)
     const gasNow = useValueRef(currentGasNowSettings)
     const [type, setType] = useState<keyof GasNow>('fast')
@@ -56,7 +54,7 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
     const { value: detailedTokens } = useAssets([])
     const nativeToken = detailedTokens.find((t) => t.token.type === EthereumTokenType.Native)
     const usdRate = nativeToken?.price?.usd
-    return networkType === NetworkType.Ethereum && gas ? (
+    return chainId === ChainId.Mainnet && gas ? (
         <>
             <Grid item xs={6}>
                 <Paper className={classes.label}>
