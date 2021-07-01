@@ -5,7 +5,7 @@ import { ButtonTab } from './ButtonGroupTab'
 export interface ButtonGroupTabListProps
     extends React.PropsWithChildren<Pick<ButtonGroupProps, 'classes' | 'disabled' | 'fullWidth' | 'size'>> {
     onChange(event: object, value: string): void
-    'aria-label': string
+    'aria-label'?: string
 }
 /**
  * This component is like TabList + Tabs in the @material-ui.

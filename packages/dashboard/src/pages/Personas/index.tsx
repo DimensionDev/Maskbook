@@ -11,6 +11,7 @@ import { PersonaContext } from './hooks/usePersonaContext'
 import { useDashboardI18N } from '../../locales'
 import type { PersonaInformation } from '@masknet/shared'
 import { ContentContainer } from '../../components/ContentContainer'
+import { PersonaContent } from './components/PersonaContent'
 
 const useStyles = makeStyles((theme) => ({
     tabPanel: {
@@ -93,7 +94,18 @@ function Personas() {
                         const profile = currentPersona.linkedProfiles.find(
                             (x) => x.identifier.network === networkIdentifier,
                         )
+<<<<<<< HEAD
                         if (profile) return <TabPanel key={networkIdentifier} value={networkIdentifier} />
+||||||| parent of 445332ad4 (feat: add relatedPersonaIdentifier)
+                        if (profile) return <TabPanel key={networkIdentifier} value={networkIdentifier}></TabPanel>
+=======
+                        if (profile)
+                            return (
+                                <TabPanel key={networkIdentifier} value={networkIdentifier}>
+                                    <PersonaContent />
+                                </TabPanel>
+                            )
+>>>>>>> 445332ad4 (feat: add relatedPersonaIdentifier)
                         return (
                             <TabPanel key={networkIdentifier} value={networkIdentifier} sx={{ flex: 1 }}>
                                 <PersonaSetup

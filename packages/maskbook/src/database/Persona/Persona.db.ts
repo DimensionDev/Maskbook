@@ -14,21 +14,21 @@ import type {
     EC_Private_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
-/**
- * Database structure:
- *
- * # ObjectStore `persona`:
- * @description Store Personas.
- * @type {PersonaRecordDB}
- * @keys inline, {@link PersonaRecordDb.identifier}
- *
- * # ObjectStore `profiles`:
- * @description Store profiles.
- * @type {ProfileRecord}
- * A persona links to 0 or more profiles.
- * Each profile links to 0 or 1 persona.
- * @keys inline, {@link ProfileRecord.identifier}
- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
     1,
@@ -325,18 +325,24 @@ export async function queryProfileDB(
  */
 export async function queryProfilesDB(
     network: string | ((record: ProfileRecord) => boolean),
+    relatedPersonaIdentifier?: PersonaIdentifier,
     t?: ProfileTransaction<'readonly'>,
 ): Promise<ProfileRecord[]> {
     t = t || createTransaction(await db(), 'readonly')('profiles')
     const result: ProfileRecord[] = []
     if (typeof network === 'string') {
         result.push(
-            ...(await t.objectStore('profiles').index('network').getAll(IDBKeyRange.only(network))).map(profileOutDB),
+            ...(await t.objectStore('profiles').index('network').getAll(IDBKeyRange.only(network)))
+                .map(profileOutDB)
+                .filter((record) => {
+                    if (!relatedPersonaIdentifier) return true
+                    return record.relatedPersonaIdentifier?.equals(relatedPersonaIdentifier) || false
+                }),
         )
     } else {
         for await (const each of t.objectStore('profiles').iterate()) {
             const out = profileOutDB(each.value)
-            if (network(out)) result.push(out)
+            if (network(out) && out.relatedPersonaIdentifier?.equals(relatedPersonaIdentifier)) result.push(out)
         }
     }
     return result
@@ -485,6 +491,7 @@ export interface ProfileRecord {
     nickname?: string
     localKey?: AESJsonWebKey
     linkedPersona?: PersonaIdentifier
+    relatedPersonaIdentifier?: PersonaIdentifier
     createdAt: Date
     updatedAt: Date
 }
@@ -515,9 +522,13 @@ export interface PersonaRecord {
      */
     uninitialized?: boolean
 }
-type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey' | 'linkedPersona'> & {
+type ProfileRecordDB = Omit<
+    ProfileRecord,
+    'identifier' | 'hasPrivateKey' | 'linkedPersona' | 'relatedPersonaIdentifier'
+> & {
     identifier: string
     network: string
+    relatedPersonaIdentifier?: string
     linkedPersona?: PrototypeLess<PersonaIdentifier>
 }
 type PersonaRecordDB = Omit<PersonaRecord, 'identifier' | 'linkedProfiles'> & {
@@ -554,6 +565,7 @@ export interface PersonaDB extends DBSchema {
 function profileToDB(x: ProfileRecord): ProfileRecordDB {
     return {
         ...x,
+        relatedPersonaIdentifier: x.relatedPersonaIdentifier?.toText() || undefined,
         identifier: x.identifier.toText(),
         network: x.identifier.network,
     }
@@ -566,6 +578,9 @@ function profileOutDB({ network, ...x }: ProfileRecordDB): ProfileRecord {
         ...x,
         identifier: Identifier.fromString(x.identifier, ProfileIdentifier).unwrap(),
         linkedPersona: restorePrototype(x.linkedPersona, ECKeyIdentifier.prototype),
+        relatedPersonaIdentifier: x.relatedPersonaIdentifier
+            ? Identifier.fromString(x.relatedPersonaIdentifier, ECKeyIdentifier).unwrap()
+            : undefined,
     }
 }
 function personaRecordToDB(x: PersonaRecord): PersonaRecordDB {

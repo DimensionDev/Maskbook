@@ -30,8 +30,8 @@ export { storeAvatar, queryAvatarDataURL } from '../../database'
 //#region Profile
 export { queryProfile, queryProfilePaged } from '../../database'
 
-export function queryProfiles(network?: string): Promise<Profile[]> {
-    return queryProfilesWithQuery(network)
+export function queryProfiles(network?: string, relatedPersonaIdentifier?: PersonaIdentifier): Promise<Profile[]> {
+    return queryProfilesWithQuery(network, relatedPersonaIdentifier)
 }
 export async function queryMyProfiles(network?: string): Promise<Profile[]> {
     const myPersonas = (await queryMyPersonas(network)).filter((x) => !x.uninitialized)
@@ -48,6 +48,7 @@ export async function updateProfileInfo(
         nickname?: string | null
         avatarURL?: string | null
         forceUpdateAvatar?: boolean
+        relatedPersonaIdentifier?: PersonaIdentifier
     },
 ): Promise<void> {
     if (data.nickname) {
@@ -56,6 +57,7 @@ export async function updateProfileInfo(
             nickname: data.nickname,
             createdAt: new Date(),
             updatedAt: new Date(),
+            relatedPersonaIdentifier: data.relatedPersonaIdentifier,
         }
         await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t))
     }

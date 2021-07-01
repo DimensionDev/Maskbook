@@ -94,8 +94,11 @@ export async function queryPersona(identifier: PersonaIdentifier): Promise<Perso
 /**
  * Select a set of Profiles
  */
-export async function queryProfilesWithQuery(query?: Parameters<typeof queryProfilesDB>[0]): Promise<Profile[]> {
-    const _ = await queryProfilesDB(query || ((_) => true))
+export async function queryProfilesWithQuery(
+    network?: string,
+    relatedPersonaIdentifier?: PersonaIdentifier,
+): Promise<Profile[]> {
+    const _ = await queryProfilesDB(network || ((_) => true), relatedPersonaIdentifier)
     return Promise.all(_.map(profileRecordToProfile))
 }
 
