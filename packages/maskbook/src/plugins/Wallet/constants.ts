@@ -14,3 +14,5 @@ export enum JSON_RPC_ErrorCode {
     SERVER_ERROR_RANGE_START = -32000,
     SERVER_ERROR_RANGE_END = -32099,
 }
+
+export const UPDATE_CHAIN_STATE_DELAY = 30 /* seconds */ * 1000 /* milliseconds */
