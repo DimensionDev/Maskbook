@@ -32,7 +32,8 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages
 import { isNativeTokenWrapper } from '../../helpers'
 import { TradeContext } from '../../trader/useTradeContext'
 import { PluginTraderRPC } from '../../messages'
-import { delay, useRemoteControlledDialog } from '../../../../utils'
+import { delay } from '../../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => {
     return {

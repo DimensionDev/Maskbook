@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { DialogContent } from '@material-ui/core'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { TradeFooter } from './TradeFooter'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'

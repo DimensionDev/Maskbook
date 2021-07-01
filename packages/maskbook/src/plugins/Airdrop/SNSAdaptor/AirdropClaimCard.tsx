@@ -6,7 +6,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { AirdropIcon } from '../../../resources/AirdropIcon'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { useRemoteControlledDialog } from '../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import {
     ERC20TokenDetailed,
     formatPercentage,

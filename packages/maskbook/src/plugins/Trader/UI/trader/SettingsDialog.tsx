@@ -12,9 +12,9 @@ import {
     Paper,
     Typography,
 } from '@material-ui/core'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { useI18N, useRemoteControlledDialog } from '../../../../utils'
+import { useI18N } from '../../../../utils'
 import { TradeProvider, ZrxTradePool } from '../../types'
 import { SelectPoolPanel } from './SelectPoolPanel'
 import { SlippageSlider } from './SlippageSlider'

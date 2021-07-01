@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { TokenAmountPanel, TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import type { FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'

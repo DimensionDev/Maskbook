@@ -14,7 +14,8 @@ import {
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
 } from '../DashboardDialogs/Wallet'
-import { Flags, useMenu, useI18N, useColorStyles, useMatchXS, useRemoteControlledDialog } from '../../../utils'
+import { Flags, useMenu, useI18N, useColorStyles, useMatchXS } from '../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { WalletMessages } from '../../../plugins/Wallet/messages'

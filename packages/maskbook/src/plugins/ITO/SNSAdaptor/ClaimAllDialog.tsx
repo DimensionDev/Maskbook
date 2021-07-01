@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { flatten, uniq } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
 import { useSnackbar, VariantType } from '@masknet/theme'
-import { FormattedBalance } from '@masknet/shared'
+import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles, DialogContent, CircularProgress, Typography, List, ListItem } from '@material-ui/core'
 import {
     formatBalance,
@@ -12,7 +12,7 @@ import {
     useITOConstants,
     ChainId,
 } from '@masknet/web3-shared'
-import { useRemoteControlledDialog, useI18N } from '../../../utils'
+import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useClaimAll, SwappedToken } from './hooks/useClaimAll'
 import { WalletMessages } from '../../Wallet/messages'

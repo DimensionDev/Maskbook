@@ -3,7 +3,8 @@ import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import { CircularProgress, makeStyles, Slider, Typography } from '@material-ui/core'
 
-import { useI18N, useRemoteControlledDialog } from '../../../utils'
+import { useI18N } from '../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
     ChainId,
