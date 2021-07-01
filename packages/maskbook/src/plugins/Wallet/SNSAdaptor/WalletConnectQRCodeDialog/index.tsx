@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
-import { useRemoteControlledDialog, useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../messages'
 import Services from '../../../../extension/service'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
