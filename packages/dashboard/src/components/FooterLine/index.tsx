@@ -6,19 +6,23 @@ import { useState } from 'react'
 import { About } from './About'
 import { Close } from '@material-ui/icons'
 import { Version } from './Version'
+import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles((theme: Theme) => ({
-    footerButtons: {
-        '& ol': {
-            justifyContent: 'center',
-        },
+    navRoot: {
+        padding: '40px 0',
     },
-    footerButton: {
+    ol: {
+        justifyContent: 'center',
+    },
+    footerLink: {
+        display: 'inline-flex',
         borderRadius: '0',
         whiteSpace: 'nowrap',
-        '& > p': {
-            fontSize: 12,
-        },
+        padding: '4px 20px',
+    },
+    separator: {
+        color: getMaskColor(theme).lineLight,
     },
     closeButton: {
         color: theme.palette.text.secondary,
@@ -44,7 +48,11 @@ type FooterLinkProps = FooterLinkLinkProps | FooterLinkAnchorProps | FooterLinkA
 
 const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
     const classes = useStyles()
-    const children = <Typography variant="body2">{props.children}</Typography>
+    const children = (
+        <Typography variant="body2" component="span">
+            {props.children}
+        </Typography>
+    )
     if ('href' in props)
         return (
             <MuiLink
@@ -53,13 +61,13 @@ const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
                 target="_blank"
                 rel="noopener noreferrer"
                 color="textPrimary"
-                className={classes.footerButton}>
+                className={classes.footerLink}>
                 {children}
             </MuiLink>
         )
     if ('to' in props)
         return (
-            <MuiLink underline="none" {...props} component={Link} color="textPrimary" className={classes.footerButton}>
+            <MuiLink underline="none" {...props} component={Link} color="textPrimary" className={classes.footerLink}>
                 {children}
             </MuiLink>
         )
@@ -70,7 +78,7 @@ const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
             component="a"
             style={{ cursor: 'pointer' }}
             color="textPrimary"
-            className={classes.footerButton}>
+            className={classes.footerLink}>
             {children}
         </MuiLink>
     )
@@ -80,12 +88,10 @@ export function FooterLine() {
     const t = useDashboardI18N()
     const classes = useStyles()
     const [isOpen, setOpen] = useState(false)
-    // todo: fix type error
-    // @ts-ignore
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
     const openVersionLink = (event: React.MouseEvent) => {
         // `MouseEvent.prototype.metaKey` on macOS (`Command` key), Windows (`Windows` key), Linux (`Super` key)
-        if (process.env.build === 'stable' && event.metaKey === false) {
+        if (process.env.build === 'stable' && !event.metaKey) {
             open(`https://github.com/DimensionDev/Maskbook/releases/tag/v${version}`)
         } else {
             open(`https://github.com/DimensionDev/Maskbook/tree/${process.env.COMMIT_HASH}`)
@@ -93,7 +99,10 @@ export function FooterLine() {
     }
     return (
         <>
-            <Breadcrumbs className={classes.footerButtons} separator="-" aria-label="breadcrumb">
+            <Breadcrumbs
+                classes={{ separator: classes.separator, ol: classes.ol, root: classes.navRoot }}
+                separator="|"
+                aria-label="breadcrumb">
                 <FooterLink href="https://mask.io">Mask.io</FooterLink>
                 <FooterLink onClick={() => setOpen(true)}>{t.about()}</FooterLink>
                 <FooterLink onClick={openVersionLink} title={process.env.VERSION}>

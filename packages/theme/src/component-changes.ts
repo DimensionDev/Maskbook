@@ -204,6 +204,14 @@ export const Typography: Theme = (mode, colors) => ({
                         color: colors.textSecondary,
                     },
                 },
+                {
+                    props: { variant: 'body2', component: 'span' },
+                    style: {
+                        fontSize: 12,
+                        color: colors.textSecondary,
+                        lineHeight: '16px',
+                    },
+                },
             ],
         },
     },
