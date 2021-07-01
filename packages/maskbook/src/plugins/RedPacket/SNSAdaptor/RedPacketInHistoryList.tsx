@@ -10,7 +10,7 @@ import { formatBalance, TransactionStateType, useAccount } from '@masknet/web3-s
 import { TokenIcon } from '@masknet/shared'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { StyledLinearProgress } from '../../ITO/UI/StyledLinearProgress'
+import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useRefundCallback } from './hooks/useRefundCallback'
 import { WalletMessages } from '../../Wallet/messages'
