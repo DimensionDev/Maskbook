@@ -1,5 +1,8 @@
-import { FormattedBalance, formatBalance, isZero, pow10, TokenIcon } from '@masknet/shared'
+import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import {
+    formatBalance,
+    isZero,
+    pow10,
     getChainDetailed,
     isSameAddress,
     useAccount,
@@ -110,7 +113,7 @@ export interface PoolInListProps extends PoolSubgraph {
 
 export function PoolInList(props: PoolInListProps) {
     const { t } = useI18N()
-    const classes = useStyles()``
+    const classes = useStyles()
     const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onRetry } = props
 
     //#region withdraw

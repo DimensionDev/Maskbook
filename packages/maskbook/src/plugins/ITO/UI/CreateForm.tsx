@@ -5,7 +5,7 @@ import {
     useITOConstants,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import { formatAmount, formatBalance, isGreaterThan, isZero } from '@masknet/shared'
+import { formatAmount, formatBalance, isGreaterThan, isZero} from '@masknet/web3-shared'
 import { Box, CircularProgress, makeStyles, TextField, Typography } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
 import UnCheckIcon from '@material-ui/icons/Close'

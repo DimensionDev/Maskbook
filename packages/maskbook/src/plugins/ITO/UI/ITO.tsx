@@ -1,4 +1,10 @@
 import {
+    ZERO,
+    formatAmountPrecision,
+    formatBalance,
+    formatEthereumAddress,
+    isZero,
+    pow10,
     FungibleTokenDetailed,
     getChainDetailed,
     isSameAddress,
@@ -10,12 +16,6 @@ import {
     useTokenConstants,
 } from '@masknet/web3-shared'
 import {
-    ZERO,
-    formatAmountPrecision,
-    formatBalance,
-    formatEthereumAddress,
-    isZero,
-    pow10,
     TokenIcon,
 } from '@masknet/shared'
 import { Box, Card, Grid, Link, makeStyles, Theme, Typography } from '@material-ui/core'

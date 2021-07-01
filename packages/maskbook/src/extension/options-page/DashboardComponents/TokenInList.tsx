@@ -1,7 +1,8 @@
 import { useCallback } from 'react'
-import { formatEthereumAddress, TokenIcon } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
 import {
     currySameAddress,
+    formatEthereumAddress,
     FungibleTokenDetailed,
     resolveTokenLinkOnExplorer,
     useTokenConstants,

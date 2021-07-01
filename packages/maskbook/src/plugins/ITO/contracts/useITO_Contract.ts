@@ -17,7 +17,9 @@ export function useITO_Contract(contractAddress?: string) {
     )
 
     const networkType = useNetworkType()
-    if ([NetworkType.Binance, NetworkType.Polygon].includes(networkType)) return ITO_BSC_POLYGON_CONTRACT
+    if ([NetworkType.Binance, NetworkType.Polygon].includes(networkType)) return {
+        contract: ITO_BSC_POLYGON_CONTRACT, version: 1,
+    }
 
     return contractAddress && isSameAddress(contractAddress, ITO_CONTRACT_ADDRESS)
         ? { contract: ITO_CONTRACT, version: 1 }
