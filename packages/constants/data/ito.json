@@ -32,13 +32,24 @@
         "Matic": "0xF9F7C1496c21bC0180f4B64daBE0754ebFc8A8c0",
         "Mumbai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B"
     },
+    "ITO_BSC_POLYGON_CONTRACT_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
+        "BSCT": "0x981be454a930479d92C91a0092D204b64845A5D6",
+        "Matic": "0x981be454a930479d92C91a0092D204b64845A5D6",
+        "Mumbai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B"
+    },
     "DEFAULT_QUALIFICATION_ADDRESS": {
         "Mainnet": "0x81b6ae377e360dcad63611846a2516f4ba8c88ac",
-        "Ropsten": "",
+        "Ropsten": "0x050745919acaa000e5b116b2c499e6f4ed5ce5b6",
         "Rinkeby": "0x88AA0AB3B7cDE263073e1cBa1D06473adeC1b38E",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "",
+        "BSC": "0x5B966f3a32Db9C180843bCb40267A66b73E4f022",
         "BSCT": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
         "Matic": "0x02Ea0720254F7fa4eca7d09A1b9C783F1020EbEF",
         "Mumbai": "0x5B966f3a32Db9C180843bCb40267A66b73E4f022"
