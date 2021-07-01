@@ -1,5 +1,7 @@
-import { makeStyles, Grid, Typography } from '@material-ui/core'
+import { makeStyles, Grid, Typography, Box, Button } from '@material-ui/core'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import type { GoodGhostingInfo, Player } from '../types'
+import { getPlayerStatus } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
     infoRow: {
@@ -19,14 +21,31 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface PersonalViewProps {
-    player?: Player
     info: GoodGhostingInfo
+    currentPlayerResult: AsyncStateRetry<Player>
 }
 
 export function PersonalView(props: PersonalViewProps) {
     const classes = useStyles()
 
-    if (!props.player) {
+    const { value: currentPlayer, loading, error, retry } = props.currentPlayerResult
+
+    if (loading) {
+        return (
+            <Typography variant="h6" color="textSecondary">
+                Loading game stats
+            </Typography>
+        )
+    } else if (error) {
+        return (
+            <Box display="flex" flexDirection="column" alignItems="center">
+                <Typography color="textPrimary">Something went wrong.</Typography>
+                <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
+                    Retry
+                </Button>
+            </Box>
+        )
+    } else if (!currentPlayer) {
         return (
             <Typography variant="h6" color="textSecondary">
                 Looks like you're not a participant in this game
@@ -34,13 +53,7 @@ export function PersonalView(props: PersonalViewProps) {
         )
     }
 
-    let status = 'Unknown'
-    const mostRecentSegmentPaid = Number.parseInt(props.player.mostRecentSegmentPaid)
-    const currentSegment = props.info.currentSegment
-    if (props.player.withdrawn) status = 'Withdrawn'
-    else if (mostRecentSegmentPaid < currentSegment - 1) status = 'Ghost'
-    else if (mostRecentSegmentPaid === currentSegment - 1) status = 'Waiting'
-    else if (mostRecentSegmentPaid === currentSegment) status = 'Winning'
+    let status = getPlayerStatus(currentPlayer, props.info.currentSegment)
 
     return (
         <>
@@ -65,7 +78,7 @@ export function PersonalView(props: PersonalViewProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" color="textSecondary">
-                            {mostRecentSegmentPaid + 1} / {props.info.lastSegment}
+                            {Number.parseInt(currentPlayer.mostRecentSegmentPaid) + 1} / {props.info.lastSegment}
                         </Typography>
                     </Grid>
                 </Grid>

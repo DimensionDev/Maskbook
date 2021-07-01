@@ -9,6 +9,7 @@ import { useGameInfo } from '../hooks/useGameInfo'
 import type { GoodGhostingInfo } from '../types'
 import { useGoodGhostingPoolData } from '../hooks/useGoodGhostingPoolData'
 import { useOtherPlayerInfo } from '../hooks/useOtherPlayerInfo'
+import { useCurrentPlayer } from '../hooks/usePersonalGameInfo'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -85,6 +86,7 @@ function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
 
     const finDataResult = useGoodGhostingPoolData(props.info)
     const otherPlayerResult = useOtherPlayerInfo(props.info.numberOfPlayers)
+    const currentPlayerResult = useCurrentPlayer()
 
     return (
         <Card variant="outlined" className={classes.root} elevation={0}>
@@ -112,7 +114,7 @@ function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
                     <TimelineView info={props.info}></TimelineView>
                 </TabPanel>
                 <TabPanel value={GoodGhostingTab.Personal} sx={{ flex: 1 }}>
-                    <PersonalView info={props.info} />
+                    <PersonalView info={props.info} currentPlayerResult={currentPlayerResult} />
                 </TabPanel>
                 <TabPanel value={GoodGhostingTab.Everyone} sx={{ flex: 1 }}>
                     <OtherPlayersView info={props.info} otherPlayerResult={otherPlayerResult} />
