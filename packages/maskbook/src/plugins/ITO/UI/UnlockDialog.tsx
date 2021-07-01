@@ -17,7 +17,6 @@ import {
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
