@@ -8,7 +8,7 @@ import {
 } from '@masknet/web3-shared'
 import { pick } from 'lodash-es'
 import { getChainId } from '../../../../extension/background-script/SettingsService'
-import { tokenIntoMask } from '../../../ITO/helpers'
+import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
 import type {
     RedPacketHistory,
     RedPacketJSONPayload,
