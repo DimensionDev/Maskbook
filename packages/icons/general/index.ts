@@ -23,6 +23,11 @@ export * from './Close'
 export * from './Interaction'
 export * from './Upload'
 export * from './LinkOut'
+<<<<<<< HEAD:packages/icons/general/index.ts
 export * from './SignUpAccount'
 export * from './SignInAccount'
 export * from './Restore'
+||||||| parent of 338761087 (feat: contact ui):packages/icons/general/index.tsx
+=======
+export * from './Star'
+>>>>>>> 338761087 (feat: contact ui):packages/icons/general/index.tsx

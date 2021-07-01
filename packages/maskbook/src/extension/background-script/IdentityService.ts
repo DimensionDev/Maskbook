@@ -49,8 +49,18 @@ export async function updateProfileInfo(
         avatarURL?: string | null
         forceUpdateAvatar?: boolean
         relatedPersonaIdentifier?: PersonaIdentifier
+        favorite?: boolean
     },
 ): Promise<void> {
+    if (data.favorite !== undefined) {
+        const rec: ProfileRecord = {
+            identifier,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            favorite: data.favorite,
+        }
+        await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t))
+    }
     if (data.nickname) {
         const rec: ProfileRecord = {
             identifier,
@@ -58,6 +68,7 @@ export async function updateProfileInfo(
             createdAt: new Date(),
             updatedAt: new Date(),
             relatedPersonaIdentifier: data.relatedPersonaIdentifier,
+            favorite: data.favorite,
         }
         await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t))
     }

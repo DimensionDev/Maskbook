@@ -14,3 +14,11 @@ export interface ProfileInformation {
     nickname?: string
     identifier: ProfileIdentifier
 }
+
+export interface Contact {
+    favorite?: boolean
+    avatar?: string
+    name: string
+    fingerprint?: string
+    identifier: ProfileIdentifier
+}

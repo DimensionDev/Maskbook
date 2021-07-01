@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 import { ButtonGroupTabList } from '@masknet/theme'
 import { Box, Tab, makeStyles } from '@material-ui/core'
 import { TabContext, TabPanel } from '@material-ui/lab'
-import { Contacts } from '../Contacts'
+import { ContactsTable } from '../ContactsTable'
 
 const useStyles = makeStyles((theme) => ({
     tab: {
@@ -28,7 +28,7 @@ export const PersonaContent = memo(() => {
                 </ButtonGroupTabList>
                 <TabPanel value={PersonaContentTab.POST}>Post</TabPanel>
                 <TabPanel value={PersonaContentTab.Contacts}>
-                    <Contacts />
+                    <ContactsTable />
                 </TabPanel>
             </TabContext>
         </Box>

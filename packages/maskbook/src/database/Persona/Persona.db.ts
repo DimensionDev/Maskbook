@@ -15,21 +15,6 @@ import type {
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
     1,
     2,
@@ -492,6 +477,7 @@ export interface ProfileRecord {
     localKey?: AESJsonWebKey
     linkedPersona?: PersonaIdentifier
     relatedPersonaIdentifier?: PersonaIdentifier
+    favorite?: boolean
     createdAt: Date
     updatedAt: Date
 }
@@ -524,11 +510,12 @@ export interface PersonaRecord {
 }
 type ProfileRecordDB = Omit<
     ProfileRecord,
-    'identifier' | 'hasPrivateKey' | 'linkedPersona' | 'relatedPersonaIdentifier'
+    'identifier' | 'hasPrivateKey' | 'linkedPersona' | 'relatedPersonaIdentifier' | 'favorite'
 > & {
     identifier: string
     network: string
     relatedPersonaIdentifier?: string
+    favorite?: boolean
     linkedPersona?: PrototypeLess<PersonaIdentifier>
 }
 type PersonaRecordDB = Omit<PersonaRecord, 'identifier' | 'linkedProfiles'> & {
