@@ -42,4 +42,4 @@ export const getURLConstants = transform(URL)
 export const useURLConstants = hookTransform(getURLConstants)
 
 export const getTokenAssetBaseURLConstants = transform(TokenAssetBaseURL)
-export const useTokenAssetBaseURLConstants = hookTransform(getURLConstants)
+export const useTokenAssetBaseURLConstants = hookTransform(getTokenAssetBaseURLConstants)
