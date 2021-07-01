@@ -275,12 +275,6 @@ export function Trader(props: TraderProps) {
             open: true,
             shareLink,
             state: tradeState,
-            summary:
-                trade && inputToken && outputToken
-                    ? `Swapping ${formatBalance(trade.inputAmount, inputToken.decimals, 6)} ${
-                          inputToken.symbol
-                      } for ${formatBalance(trade.outputAmount, outputToken.decimals, 6)} ${outputToken.symbol}`
-                    : '',
         })
     }, [tradeState /* update tx dialog only if state changed */])
     //#endregion

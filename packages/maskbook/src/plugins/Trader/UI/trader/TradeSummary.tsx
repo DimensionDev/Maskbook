@@ -168,11 +168,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                     style={{
                         color: resolveUniswapWarningLevelColor(resolveUniswapWarningLevel(priceImpact)),
                     }}>
-                    {priceImpact.isGreaterThan('0')
-                        ? priceImpact?.isLessThan(ONE_BIPS)
-                            ? '<0.01%'
-                            : `${formatPercentage(priceImpact)}`
-                        : '-'}
+                    {priceImpact?.isLessThan(ONE_BIPS) ? '<0.01%' : `${formatPercentage(priceImpact)}`}
                 </Typography>
             ),
         },
@@ -196,11 +192,7 @@ export function TradeSummary(props: TradeSummaryProps) {
                     style={{
                         color: resolveUniswapWarningLevelColor(resolveUniswapWarningLevel(priceImpact)),
                     }}>
-                    {priceImpact.isGreaterThan('0')
-                        ? priceImpact?.isLessThan(ONE_BIPS)
-                            ? '<0.01%'
-                            : `${formatPercentage(priceImpact)}`
-                        : '-'}
+                    {priceImpact?.isLessThan(ONE_BIPS) ? '<0.01%' : `${formatPercentage(priceImpact)}`}
                 </Typography>
             ),
         },
