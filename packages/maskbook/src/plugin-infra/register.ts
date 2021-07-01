@@ -4,6 +4,7 @@
 import '@masknet/plugin-example'
 import '../plugins/Wallet'
 import '../plugins/RedPacket'
+import '../plugins/ITO'
 import '../plugins/Snapshot'
 import '../plugins/Collectible'
 import '../plugins/External'

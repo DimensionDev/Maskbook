@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/v2-sdk'
+import type { Currency, TradeType } from '@uniswap/sdk-core'
 
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import {
@@ -34,7 +35,6 @@ import { isNativeTokenWrapper } from '../../helpers'
 import { TradeContext } from '../../trader/useTradeContext'
 import { PluginTraderRPC } from '../../messages'
 import { delay, useRemoteControlledDialog } from '../../../../utils'
-import type { Currency, TradeType } from '@uniswap/sdk-core'
 
 const useStyles = makeStyles((theme) => {
     return {

@@ -604,6 +604,7 @@ importers:
       typeson: ^6.1.0
       typeson-registry: ^1.0.0-alpha.38
       use-subscription: ^1.5.1
+      uuid: ^8.3.2
       wallet.ts: ^1.0.1
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1
@@ -622,6 +623,7 @@ importers:
       typeson: 6.1.0
       typeson-registry: 1.0.0-alpha.39
       use-subscription: 1.5.1
+      uuid: 8.3.2
       wallet.ts: 1.0.1
 
   packages/storybook-shared:

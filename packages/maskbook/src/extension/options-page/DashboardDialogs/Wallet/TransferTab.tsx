@@ -15,7 +15,8 @@ import {
     useTokenTransferCallback,
     Wallet,
 } from '@masknet/web3-shared'
-import { useI18N, useRemoteControlledDialog } from '../../../../utils'
+import { useI18N } from '../../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 
