@@ -139,27 +139,40 @@ export function resolveUniswapWarningLevelColor(warningLevel?: WarningLevel) {
 export function resolveZrxTradePoolName(swapSource: ZrxTradePool) {
     const SWAP_SOURCE_NAME_MAP: EnumRecord<ZrxTradePool, string> = {
         [ZrxTradePool.ZRX]: 'ZRX',
-        [ZrxTradePool.Native]: 'Native',
-        [ZrxTradePool.Mesh]: 'Mesh',
         [ZrxTradePool.Uniswap]: 'Uniswap',
         [ZrxTradePool.UniswapV2]: 'Uniswap V2',
         [ZrxTradePool.Eth2Dai]: 'Eth2Dai',
         [ZrxTradePool.Kyber]: 'Kyber',
         [ZrxTradePool.Curve]: 'Curve',
-        [ZrxTradePool.LiquidityProvider]: 'LiquidityProvider',
-        [ZrxTradePool.MultiBridge]: 'MultiBridge',
         [ZrxTradePool.Balancer]: 'Balancer',
-        [ZrxTradePool.Cream]: 'CREAM',
+        [ZrxTradePool.BalancerV2]: 'BalancerV2',
         [ZrxTradePool.Bancor]: 'Bancor',
         [ZrxTradePool.MStable]: 'mStable',
         [ZrxTradePool.Mooniswap]: 'Mooniswap',
-        [ZrxTradePool.MultiHop]: 'MultiHop',
-        [ZrxTradePool.Shell]: 'Shell',
         [ZrxTradePool.Swerve]: 'Swerve',
         [ZrxTradePool.SnowSwap]: 'SnowSwap',
         [ZrxTradePool.SushiSwap]: 'SushiSwap',
+        [ZrxTradePool.Shell]: 'Shell',
+        [ZrxTradePool.MultiHop]: 'MultiHop',
         [ZrxTradePool.Dodo]: 'DODO',
+        [ZrxTradePool.DodoV2]: 'DODO V2',
+        [ZrxTradePool.Cream]: 'CREAM',
+        [ZrxTradePool.LiquidityProvider]: 'LiquidityProvider',
         [ZrxTradePool.CryptoCom]: 'CryptoCom',
+        [ZrxTradePool.Linkswap]: 'Linkswap',
+        [ZrxTradePool.Lido]: 'Lido',
+        [ZrxTradePool.MakerPsm]: 'MakerPsm',
+        [ZrxTradePool.KyberDMM]: 'KyberDMM',
+        [ZrxTradePool.Smoothy]: 'Smoothy',
+        [ZrxTradePool.Saddle]: 'Saddle',
+        [ZrxTradePool.xSigma]: 'xSigma',
+        [ZrxTradePool.UniswapV3]: 'Uniswap V3',
+        [ZrxTradePool.CurveV2]: 'Curve_V2',
+
+        // unseen in the response
+        [ZrxTradePool.Native]: 'Native',
+        [ZrxTradePool.Mesh]: 'Mesh',
+        [ZrxTradePool.MultiBridge]: 'MultiBridge',
     }
-    return SWAP_SOURCE_NAME_MAP[swapSource]
+    return SWAP_SOURCE_NAME_MAP[swapSource] ?? 'Unknwn'
 }
