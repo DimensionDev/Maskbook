@@ -9,6 +9,7 @@ export function useITO_Contract(contractAddress?: string) {
     const { ITO_CONTRACT_ADDRESS, ITO2_CONTRACT_ADDRESS } = useITOConstants()
     const ITO_CONTRACT = useContract<ITO>(ITO_CONTRACT_ADDRESS, ITO_ABI as AbiItem[])
     const ITO2_CONTRACT = useContract<ITO2>(ITO2_CONTRACT_ADDRESS, ITO2_ABI as AbiItem[])
+
     return contractAddress && isSameAddress(contractAddress, ITO_CONTRACT_ADDRESS)
         ? { contract: ITO_CONTRACT, version: 1 }
         : { contract: ITO2_CONTRACT, version: 2 }

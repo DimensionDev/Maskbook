@@ -1,4 +1,4 @@
-import { FormattedBalance, TokenIcon } from '@masknet/shared'
+import { FormattedBalance } from '@masknet/shared'
 import {
     formatBalance,
     isZero,
@@ -26,6 +26,7 @@ import {
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { TokenIcon } from '@masknet/shared'
 import { debugModeSetting } from '../../../settings/settings'
 import { useI18N } from '../../../utils'
 import { MSG_DELIMITER } from '../constants'
@@ -123,7 +124,6 @@ export function PoolInList(props: PoolInListProps) {
         resetDestructCallback()
     })
     //#endregion
-
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const account = useAccount()
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)

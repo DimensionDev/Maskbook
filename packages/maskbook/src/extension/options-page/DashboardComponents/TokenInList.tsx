@@ -1,5 +1,3 @@
-import { useCallback } from 'react'
-import { TokenIcon } from '@masknet/shared'
 import {
     currySameAddress,
     formatEthereumAddress,
@@ -10,6 +8,8 @@ import {
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import { useCallback } from 'react'
+import { TokenIcon } from '@masknet/shared'
 
 const useStyles = makeStyles((theme: Theme) => ({
     icon: {

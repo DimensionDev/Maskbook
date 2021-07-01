@@ -1,21 +1,20 @@
 import {
-    ZERO,
     formatAmountPrecision,
     formatBalance,
     formatEthereumAddress,
-    isZero,
-    pow10,
     FungibleTokenDetailed,
     getChainDetailed,
     isSameAddress,
+    isZero,
+    pow10,
     resolveLinkOnExplorer,
     TransactionStateType,
     useAccount,
     useChainId,
     useChainIdValid,
     useTokenConstants,
+    ZERO,
 } from '@masknet/web3-shared'
-import { TokenIcon } from '@masknet/shared'
 import { Box, Card, Grid, Link, makeStyles, Theme, Typography } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { BigNumber } from 'bignumber.js'
@@ -24,6 +23,7 @@ import formatDateTime from 'date-fns/format'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { TokenIcon } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { getAssetAsBlobURL, getTextUILength, useI18N, useRemoteControlledDialog } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'

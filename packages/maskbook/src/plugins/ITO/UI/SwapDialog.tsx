@@ -2,24 +2,24 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import { CircularProgress, makeStyles, Slider, Typography } from '@material-ui/core'
+
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
-    formatBalance,
-    pow10,
-    ZERO,
     ChainId,
     currySameAddress,
     ERC20TokenDetailed,
     EthereumTokenType,
+    formatBalance,
+    FungibleTokenDetailed,
+    isNative,
+    pow10,
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
     useTokenBalance,
-    FungibleTokenDetailed,
-    isNative,
+    ZERO,
 } from '@masknet/web3-shared'
-
-import { useI18N, useRemoteControlledDialog } from '../../../utils'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useSwapCallback } from '../hooks/useSwapCallback'

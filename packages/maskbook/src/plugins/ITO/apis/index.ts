@@ -55,7 +55,7 @@ export async function getTradeInfo(pid: string, trader: string) {
         body: stringify({
             query: `
             {
-                buyInfos (where: { pool: "${pid.toLowerCase()}", buyer: "${trader.toLowerCase()}" } first: 1000) {
+                buyInfos (where: { pool: "${pid.toLowerCase()}", buyer: "${trader.toLowerCase()}" }) {
                     buyer {
                         ${TRADER_FIELDS}
                     }
@@ -66,13 +66,13 @@ export async function getTradeInfo(pid: string, trader: string) {
                     amount_sold
                     amount_bought
                 }
-                sellInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" } first: 1000) {
+                sellInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" }) {
                     seller {
                         address
                     }
                     amount
                 }
-                destructInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" } first: 1000) {
+                destructInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" }) {
                     seller {
                         address
                     }
@@ -152,7 +152,7 @@ export async function getAllPoolsAsSeller(address: string, page: number) {
         body: stringify({
             query: `
             {
-                sellInfos ( orderBy: timestamp, orderDirection: desc, first: 1000, skip: ${
+                sellInfos ( orderBy: timestamp, orderDirection: desc, first: 50, skip: ${
                     page * 50
                 }, where: { seller: "${address.toLowerCase()}" }) {
                     pool {
@@ -192,7 +192,7 @@ export async function getAllPoolsAsBuyer(address: string) {
         body: stringify({
             query: `
             {
-                buyInfos (where: { buyer: "${address.toLowerCase()}" } first: 1000) {
+                buyInfos (where: { buyer: "${address.toLowerCase()}" }) {
                     pool {
                         ${POOL_FIELDS}
                         exchange_in_volumes
