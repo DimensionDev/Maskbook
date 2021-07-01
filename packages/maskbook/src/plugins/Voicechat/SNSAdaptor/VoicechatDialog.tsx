@@ -28,8 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface VoicechatDialogProps extends withClasses<'wrapper'> {
     open: boolean
-    onConfirm: (meta: VoiceChatMetadata) => void
-    onDecline: () => void
+    onClose: () => void
     DialogProps?: Partial<DialogProps>
 }
 
@@ -51,7 +50,7 @@ export const VoicechatDialog = (props: VoicechatDialogProps) => {
                 next.delete(VOICECHAT_META_KEY_1)
             }
         })
-        props.onConfirm(set)
+        props.onClose()
     }
 
     const currentMeta = useValueRef(globalTypedMessageMetadata)
@@ -63,7 +62,7 @@ export const VoicechatDialog = (props: VoicechatDialogProps) => {
     }, [props.open])
 
     return (
-        <InjectedDialog open={props.open} onClose={props.onDecline} title={t('plugin_voicechat_title')}>
+        <InjectedDialog open={props.open} onClose={props.onClose} title={t('plugin_voicechat_title')}>
             <DialogContent>
                 <FormControlLabel
                     control={

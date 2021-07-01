@@ -16,10 +16,8 @@ const definition: Plugin.SNSAdaptor.Definition = {
     },
     CompositionDialogMetadataBadgeRender: new Map([[VOICECHAT_META_KEY_1, isActive]]),
     CompositionDialogEntry: {
-        label: VoicechatDialog,
-        dialog({ open, onClose }) {
-            return <VoicechatDialog open={open} onConfirm={onClose} onDecline={onClose} />
-        },
+        label: '🔊 VoiceChat',
+        dialog: VoicechatDialog,
     },
 }
 
