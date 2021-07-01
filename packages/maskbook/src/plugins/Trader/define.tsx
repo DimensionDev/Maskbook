@@ -1,4 +1,3 @@
-import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
 import { PluginConfig, PluginStage, PluginScope } from '../types'
 import {
     TypedMessage,
@@ -12,10 +11,6 @@ import { PLUGIN_IDENTIFIER } from './constants'
 import { SettingsDialog } from './UI/trader/SettingsDialog'
 import { TraderDialog } from './UI/trader/TraderDialog'
 import { SearchResultInspector } from './UI/trending/SearchResultInspector'
-import { currentChainIdSettings } from '../Wallet/settings'
-import { currentTradeProviderSettings, currentDataProviderSettings } from './settings'
-import { DataProvider, TradeProvider } from './types'
-import { unreachable } from '@masknet/shared'
 
 const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor =>
     isTypedMessageAnchor(m) && ['cash', 'hash'].includes(m.category) && !/#[\w\d]+lbp$/i.test(m.content)
@@ -52,25 +47,3 @@ export const TraderPluginDefine: PluginConfig = {
         )
     },
 }
-
-currentChainIdSettings.addListener((chainId: ChainId) => {
-    const networkType = getNetworkTypeFromChainId(chainId)
-    switch (networkType) {
-        case NetworkType.Ethereum:
-            if ([TradeProvider.PANCAKESWAP, TradeProvider.QUICKSWAP].includes(currentTradeProviderSettings.value))
-                currentTradeProviderSettings.value = TradeProvider.UNISWAP
-            break
-        case NetworkType.Binance:
-            currentTradeProviderSettings.value = TradeProvider.PANCAKESWAP
-            if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
-                currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
-            break
-        case NetworkType.Polygon:
-            currentTradeProviderSettings.value = TradeProvider.QUICKSWAP
-            if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
-                currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
-            break
-        default:
-            unreachable(networkType)
-    }
-})
