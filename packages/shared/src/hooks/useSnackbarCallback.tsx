@@ -1,4 +1,4 @@
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@masknet/theme'
 import { useCallback } from 'react'
 import { useMaskThemeI18N } from '../locales'
 
