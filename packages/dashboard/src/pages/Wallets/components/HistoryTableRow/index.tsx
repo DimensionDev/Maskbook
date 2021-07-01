@@ -13,7 +13,7 @@ import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import classNames from 'classnames'
-import { formatEthereumAddress } from '@masknet/shared'
+import { formatEthereumAddress } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     type: {
