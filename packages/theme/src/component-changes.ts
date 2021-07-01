@@ -152,13 +152,12 @@ export const Card: Theme = (mode, colors) => ({
 
 export const Paper: Theme = (mode, colors) => ({
     components: {
-        MuiCard: {
+        MuiPaper: {
             styleOverrides: {},
             variants: [
                 {
                     props: { variant: 'outlined' },
                     style: {
-                        border: `1px solid ${colors.lineLight}`,
                         borderRadius: 12,
                     },
                 },
@@ -172,6 +171,7 @@ export const Typography: Theme = (mode, colors) => ({
         MuiTypography: {
             styleOverrides: {},
             variants: [
+                // UI component: h3
                 {
                     props: { variant: 'h3' },
                     style: {
@@ -180,6 +180,7 @@ export const Typography: Theme = (mode, colors) => ({
                         color: colors.textPrimary,
                     },
                 },
+                // UI component: h4
                 {
                     props: { variant: 'h4' },
                     style: {
@@ -189,6 +190,7 @@ export const Typography: Theme = (mode, colors) => ({
                         color: colors.textPrimary,
                     },
                 },
+                // UI component: h5
                 {
                     props: { variant: 'h5' },
                     style: {
@@ -197,6 +199,7 @@ export const Typography: Theme = (mode, colors) => ({
                         color: colors.textPrimary,
                     },
                 },
+                // UI component: P4
                 {
                     props: { variant: 'body2', paragraph: true },
                     style: {
@@ -204,6 +207,7 @@ export const Typography: Theme = (mode, colors) => ({
                         color: colors.textSecondary,
                     },
                 },
+                // UI component: P12
                 {
                     props: { variant: 'body2', component: 'span' },
                     style: {
