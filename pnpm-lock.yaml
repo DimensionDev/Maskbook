@@ -26278,7 +26278,7 @@ packages:
     dependencies:
       '@ensdomains/content-hash': 2.5.6
       '@ethersproject/abi': 5.4.0
-      '@ethersproject/address': 5.1.0
+      '@ethersproject/address': 5.4.0
       '@ethersproject/bignumber': 5.4.0
       '@ethersproject/bytes': 5.4.0
       '@ethersproject/contracts': 5.4.0
