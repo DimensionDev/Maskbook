@@ -2,7 +2,7 @@ import JSBI from 'jsbi'
 import { ChainId, ERC20TokenDetailed } from '@masknet/web3-shared'
 import { Percent } from '@uniswap/sdk-core'
 import { INIT_CODE_HASH } from '@uniswap/v2-sdk'
-import { AMPL, COMP, DAI, MKR, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WETH, WETH_ONLY } from './trader'
+import { AMPL, DAI, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WETH, WETH_ONLY } from './trader'
 
 /**
  * Some tokens can only be swapped via certain pairs,
