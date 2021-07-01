@@ -55,7 +55,7 @@ export async function getTradeInfo(pid: string, trader: string) {
         body: stringify({
             query: `
             {
-                buyInfos (where: { pool: "${pid.toLowerCase()}", buyer: "${trader.toLowerCase()}" }) {
+                buyInfos (where: { pool: "${pid.toLowerCase()}", buyer: "${trader.toLowerCase()}" } first: 1000) {
                     buyer {
                         ${TRADER_FIELDS}
                     }
@@ -66,13 +66,13 @@ export async function getTradeInfo(pid: string, trader: string) {
                     amount_sold
                     amount_bought
                 }
-                sellInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" }) {
+                sellInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" } first: 1000) {
                     seller {
                         address
                     }
                     amount
                 }
-                destructInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" }) {
+                destructInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" } first: 1000) {
                     seller {
                         address
                     }
@@ -152,7 +152,7 @@ export async function getAllPoolsAsSeller(address: string, page: number) {
         body: stringify({
             query: `
             {
-                sellInfos ( orderBy: timestamp, orderDirection: desc, first: 50, skip: ${
+                sellInfos ( orderBy: timestamp, orderDirection: desc, first: 1000, skip: ${
                     page * 50
                 }, where: { seller: "${address.toLowerCase()}" }) {
                     pool {
@@ -192,7 +192,7 @@ export async function getAllPoolsAsBuyer(address: string) {
         body: stringify({
             query: `
             {
-                buyInfos (where: { buyer: "${address.toLowerCase()}" }) {
+                buyInfos (where: { buyer: "${address.toLowerCase()}" } first: 1000) {
                     pool {
                         ${POOL_FIELDS}
                         exchange_in_volumes
