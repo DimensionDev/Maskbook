@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Grid, makeStyles, Paper, Typography, useTheme } from '@material-ui/core'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
 import {
     formatBalance,
     formatWeiToGwei,
@@ -11,7 +11,7 @@ import {
     GasNow,
     ChainId,
 } from '@masknet/web3-shared'
-import { useI18N, useRemoteControlledDialog } from '../../utils'
+import { useI18N } from '../../utils'
 import { Image } from '../../components/shared/Image'
 import { useAssets } from '../../plugins/Wallet/hooks/useAssets'
 import { WalletMessages } from '../../plugins/Wallet/messages'

@@ -17,16 +17,16 @@ import { useMenu } from '../../utils/hooks/useMenu'
 import { useCallback } from 'react'
 import { MaskMessage } from '../../utils/messages'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
+import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { FileServicePluginID } from '../../plugins/FileService/constants'
-import { ITO_CompositionEntry } from '../../plugins/ITO/define'
 import { useControlledDialog } from '../../plugins/Collectible/SNSAdaptor/useControlledDialog'
-import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
-import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
+import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
 import { useValueRef } from '@masknet/shared'
 import { useI18N } from '../../utils'
@@ -174,7 +174,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const openITO = useCallback(() => {
         openEncryptedMessage()
         setTimeout(() => {
-            ITO_CompositionEntry.onClick()
+            MaskMessage.events.activatePluginCompositionEntry.sendToLocal(ITO_PluginID)
         })
     }, [openEncryptedMessage])
     //#endregion

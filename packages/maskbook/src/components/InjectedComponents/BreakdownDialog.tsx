@@ -6,7 +6,7 @@ import { useStylesExtends } from '../custom-ui-helper'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { FormattedBalance } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
-import { ITO_Card } from '../../plugins/ITO/UI/ITO_Card'
+import { ITO_Card } from '../../plugins/ITO/SNSAdaptor/ITO_Card'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
