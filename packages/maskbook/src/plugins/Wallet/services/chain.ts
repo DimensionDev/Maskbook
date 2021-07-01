@@ -1,75 +1,83 @@
-import { ChainId, getNetworkTypeFromChainId, ProviderType } from '@masknet/web3-shared'
-import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
-import { pollingTask, startEffects } from '../../../utils'
+import { debounce } from 'lodash-es'
+import { ChainId, ProviderType, getNetworkTypeFromChainId } from '@masknet/web3-shared'
+import { WalletMessages } from '../messages'
 import {
-    currentAccountSettings,
-    currentBalanceSettings,
     currentBlockNumberSettings,
+    currentBalanceSettings,
     currentChainIdSettings,
-    currentNetworkSettings,
     currentProviderSettings,
+    currentNetworkSettings,
+    currentAccountSettings,
 } from '../settings'
-import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
-import { getWallet } from './wallet'
-
-const beats: true[] = []
-
-export async function kickToUpdateChainState() {
-    beats.push(true)
-}
-
-export async function updateChainState(chainId?: ChainId) {
-    // reset the polling task cause it will be called from service call
-    resetPoolTask()
-
-    // forget those passed beats
-    beats.length = 0
-
-    // update network type
-    if (chainId) currentNetworkSettings.value = getNetworkTypeFromChainId(chainId)
-
-    // update chain state
-    try {
-        const wallet = await getWallet()
-        ;[currentBlockNumberSettings.value, currentBalanceSettings.value] = await Promise.all([
-            getBlockNumber(),
-            wallet ? getBalance(wallet.address) : currentBalanceSettings.value,
-        ])
-    } catch (error) {
-        // do nothing
-    } finally {
-        // reset the polling if chain state updated successfully
-        resetPoolTask()
-    }
-}
-
-let resetPoolTask: () => void = () => {}
+import { pollingTask } from '../../../utils/utils'
+import { startEffects } from '../../../utils/side-effects'
+import { getWalletCached } from '../../../extension/background-script/EthereumServices/wallet'
+import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
 
 const effect = startEffects(import.meta.webpackHot)
 
-// poll the newest chain state
+//#region tracking chain state
+const resetChainState = () => {
+    currentBalanceSettings.value = '0'
+}
+const updateChainState = debounce(
+    async (chainId?: ChainId) => {
+        // update network type
+        if (chainId) currentNetworkSettings.value = getNetworkTypeFromChainId(chainId)
+
+        // update chat state
+        const wallet = getWalletCached()
+        currentBlockNumberSettings.value = await getBlockNumber()
+        if (wallet) currentBalanceSettings.value = await getBalance(wallet.address)
+
+        // reset the polling if chain state updated successfully
+        if (typeof resetPoolTask === 'function') resetPoolTask()
+    },
+    3 /* seconds */ * 1000 /* milliseconds */,
+    {
+        trailing: true,
+    },
+)
+
+// polling the newest chain state
+let resetPoolTask: () => void
 effect(() => {
-    const { reset, cancel } = pollingTask(
+    const { reset } = pollingTask(
         async () => {
-            if (beats.length <= 0) return false
             await updateChainState()
-            return false
+            return false // never stop the polling
         },
         {
-            delay: UPDATE_CHAIN_STATE_DELAY,
+            delay: 30 /* seconds */ * 1000 /* milliseconds */,
         },
     )
     resetPoolTask = reset
-    return cancel
+    return reset
 })
 
-// revalidate chain state if the chainId of current provider was changed
+// revalidate ChainState if the chainId of current provider was changed
 effect(() =>
     currentChainIdSettings.addListener((chainId) => {
+        resetChainState()
         updateChainState(chainId)
         if (currentProviderSettings.value === ProviderType.Maskbook) resetAllNonce()
     }),
 )
 
-// revalidate chain state if the current wallet was changed
-effect(() => currentAccountSettings.addListener(() => updateChainState()))
+// revaldiate if the current wallet was changed
+effect(() =>
+    currentAccountSettings.addListener(() => {
+        resetChainState()
+        updateChainState()
+    }),
+)
+//#endregion
+
+// revaldiate if the current wallet was updated
+effect(() =>
+    WalletMessages.events.walletsUpdated.on(() => {
+        resetChainState()
+        updateChainState()
+    }),
+)
+//#endregion
