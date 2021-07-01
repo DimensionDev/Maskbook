@@ -17,7 +17,7 @@ import {
     useChainIdValid,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import { useRemoteControlledDialog }  from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { TradeForm } from './TradeForm'
 import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
 import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
