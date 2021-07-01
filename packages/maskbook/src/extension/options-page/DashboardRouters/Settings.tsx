@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Appearance, Language } from '@masknet/theme'
+import { getEnumAsObject } from '@masknet/shared'
 import { getChainName, ChainId, ProviderType, useAccount } from '@masknet/web3-shared'
 
 import { useMatchXS, extendsTheme, useI18N, Flags, useValueRef } from '../../../utils'
@@ -49,7 +50,6 @@ import { useAvailableTraderProviders } from '../../../plugins/Trader/trending/us
 import { useAvailableDataProviders } from '../../../plugins/Trader/trending/useAvailableDataProviders'
 import { useCurrentTradeProvider } from '../../../plugins/Trader/trending/useCurrentTradeProvider'
 import { useCurrentDataProvider } from '../../../plugins/Trader/trending/useCurrentDataProvider'
-import { getEnumAsObject } from '@masknet/shared'
 import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
 
 const useStyles = makeStyles((theme) => ({

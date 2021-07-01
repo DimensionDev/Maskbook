@@ -1,11 +1,10 @@
 export * from './apis'
 
-//#region react to chain id
+import { unreachable } from '@dimensiondev/kit'
 import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../Wallet/settings'
 import { currentTradeProviderSettings, currentDataProviderSettings } from './settings'
 import { DataProvider, TradeProvider } from './types'
-import { unreachable } from '@masknet/shared'
 
 currentChainIdSettings.addListener((chainId: ChainId) => {
     const networkType = getNetworkTypeFromChainId(chainId)

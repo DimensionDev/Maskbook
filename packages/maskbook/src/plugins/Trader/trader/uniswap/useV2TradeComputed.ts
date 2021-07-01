@@ -1,5 +1,4 @@
-import { ZERO } from '@masknet/shared'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { ZERO, FungibleTokenDetailed } from '@masknet/web3-shared'
 import type { Trade } from '@uniswap/v2-sdk'
 import { Currency, TradeType } from '@uniswap/sdk-core'
 import { uniswapCurrencyAmountTo, uniswapPercentTo, uniswapPriceTo, uniswapTokenTo } from '../../helpers'

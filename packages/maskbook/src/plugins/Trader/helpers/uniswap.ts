@@ -2,13 +2,8 @@ import JSBI from 'jsbi'
 import BigNumber from 'bignumber.js'
 import { Currency, Token, CurrencyAmount, TradeType, Percent, Price, Ether } from '@uniswap/sdk-core'
 import type { Trade } from '@uniswap/v2-sdk'
-import { formatEthereumAddress, pow10 } from '@masknet/shared'
-import { ChainId, EthereumTokenType, FungibleTokenDetailed, isSameAddress } from '@masknet/web3-shared'
+import { formatEthereumAddress, pow10 , ChainId, EthereumTokenType, FungibleTokenDetailed, isSameAddress } from '@masknet/web3-shared'
 import { ONE_HUNDRED_PERCENT, WETH, ZERO_PERCENT } from '../constants'
-
-export function toUniswapChainId(chainId: ChainId) {
-    return chainId as number
-}
 
 export function toUniswapChainId(chainId: ChainId) {
     return chainId as number
