@@ -1,18 +1,18 @@
-import { useState, useContext } from 'react'
+import { useContext, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import {
-    makeStyles,
-    Paper,
+    IconButton,
     List,
     ListItem,
-    ListItemText,
     ListItemSecondaryAction,
+    ListItemText,
+    makeStyles,
+    Paper,
     Typography,
-    IconButton,
 } from '@material-ui/core'
 import LoopIcon from '@material-ui/icons/Loop'
-import { formatBalance, formatPercentage, isGreaterThan, pow10 } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { formatBalance, formatPercentage, isGreaterThan, pow10 } from '@masknet/web3-shared'
 import { ONE_BIPS } from '../../constants'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { SwapQuoteResponse, TradeComputed, TradeProvider, TradeStrategy } from '../../types'

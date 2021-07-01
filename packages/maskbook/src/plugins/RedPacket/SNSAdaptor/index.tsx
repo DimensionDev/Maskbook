@@ -1,6 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { formatBalance } from '@masknet/shared'
-import { EthereumTokenType, getChainDetailed, getChainIdFromName } from '@masknet/web3-shared'
+import { EthereumTokenType, formatBalance, getChainDetailed, getChainIdFromName } from '@masknet/web3-shared'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { base } from '../base'
 import { RedPacketMetaKey } from '../constants'

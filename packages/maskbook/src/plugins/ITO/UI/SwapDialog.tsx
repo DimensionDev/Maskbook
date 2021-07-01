@@ -1,22 +1,24 @@
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
-import { makeStyles, Typography, Slider, CircularProgress } from '@material-ui/core'
-import { formatBalance, pow10, ZERO } from '@masknet/shared'
+import { CircularProgress, makeStyles, Slider, Typography } from '@material-ui/core'
 
-import { useRemoteControlledDialog, useI18N } from '../../../utils'
+import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
-    FungibleTokenDetailed,
+    ChainId,
+    currySameAddress,
     ERC20TokenDetailed,
     EthereumTokenType,
-    ChainId,
-    TransactionStateType,
-    useTokenBalance,
-    resolveTransactionLinkOnExplorer,
-    useChainId,
+    formatBalance,
+    FungibleTokenDetailed,
     isNative,
-    currySameAddress,
+    pow10,
+    resolveTransactionLinkOnExplorer,
+    TransactionStateType,
+    useChainId,
+    useTokenBalance,
+    ZERO,
 } from '@masknet/web3-shared'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -24,7 +26,6 @@ import { useSwapCallback } from '../hooks/useSwapCallback'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { JSON_PayloadInMask } from '../types'
 import { SwapStatus } from './SwapGuide'
-import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { useQualificationVerify } from '../hooks/useQualificationVerify'
@@ -115,12 +116,12 @@ export function SwapDialog(props: SwapDialogProps) {
 
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
-    const ITO_CONTRACT_ADDRESS = useITO_ContractAddress()
 
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),
     )
     const [swapToken, setSwapToken] = useState<FungibleTokenDetailed>(payload.exchange_tokens[0])
+
     const [swapAmount, setSwapAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
     const [inputAmountForUI, setInputAmountForUI] = useState(
         swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken.decimals),
@@ -189,6 +190,7 @@ export function SwapDialog(props: SwapDialogProps) {
     //#region swap
     const { value: qualificationInfo, loading: loadingQualification } = useQualificationVerify(
         payload.qualification_address,
+        payload.contract_address,
     )
 
     const [swapState, swapCallback, resetSwapCallback] = useSwapCallback(
@@ -308,7 +310,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={swapAmount.toFixed()}
-                        spender={ITO_CONTRACT_ADDRESS}
+                        spender={payload.contract_address}
                         token={swapToken.type === EthereumTokenType.ERC20 ? swapToken : undefined}>
                         <ActionButton
                             className={classes.button}

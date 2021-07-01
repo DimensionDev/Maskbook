@@ -24,17 +24,19 @@ export function useQueryNavigatorPermission(needRequest: boolean, name: Permissi
         if (!needRequest || permission !== 'prompt' || Flags.has_no_WebRTC) return
         let permissionStatus: PermissionStatus
 
+        const handleChange = function (this: PermissionStatus) {
+            updatePermission(this.state)
+        }
+
         if (checkPermissionApiUsability('query')) {
             navigator.permissions
                 .query({ name })
                 .then((p) => {
                     permissionStatus = p
-                    permissionStatus.onchange = () => {
-                        updatePermission(permissionStatus.state)
-                    }
+                    permissionStatus.addEventListener('change', handleChange)
                     updatePermission(permissionStatus.state)
                 })
-                .catch((e) => {
+                .catch(() => {
                     // for some user agents which implemented `query` method
                     // but rise an error if specific permission name dose not supported
                     updatePermission('granted')
@@ -51,9 +53,7 @@ export function useQueryNavigatorPermission(needRequest: boolean, name: Permissi
         } else {
             updatePermission('granted')
         }
-        return () => {
-            if (permissionStatus) permissionStatus.onchange = null
-        }
+        return () => permissionStatus?.removeEventListener('change', handleChange)
     }, [name, needRequest, permission])
     return permission
 }

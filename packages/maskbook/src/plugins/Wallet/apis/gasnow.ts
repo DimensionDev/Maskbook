@@ -5,17 +5,17 @@ export function connectGasNow() {
     const GAS_NOW_API = 'wss://www.gasnow.org/ws'
     const gasNowSocket = new WebSocket(GAS_NOW_API)
     let timer: NodeJS.Timeout
-    gasNowSocket.onopen = () => {
+    gasNowSocket.addEventListener('open', () => {
         if (timer) clearTimeout(timer)
         console.log('GasNow websocket connected.')
-    }
-    gasNowSocket.onmessage = (event) => {
+    })
+    gasNowSocket.addEventListener('message', (event) => {
         const gasNow: GasNow = JSON.parse(event.data).data.gasPrices
         currentGasNowSettings.value = gasNow
-    }
-    gasNowSocket.onclose = () => {
-        console.log('GasNow websocket closed, try to reconnect...')
+    })
+    gasNowSocket.addEventListener('close', () => {
+        console.log('GasNow WebSocket closed, try to reconnect...')
         currentGasNowSettings.value = null
         timer = setTimeout(connectGasNow, 1000)
-    }
+    })
 }

@@ -2,13 +2,12 @@ import type { HttpProvider, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { addGasMargin, EthereumMethodType, ProviderType } from '@masknet/web3-shared'
 import type { IJsonRpcRequest } from '@walletconnect/types'
-import { safeUnreachable } from '@masknet/shared'
+import { safeUnreachable } from '@dimensiondev/kit'
 import { createWeb3 } from './web3'
 import * as WalletConnect from './providers/WalletConnect'
 import { currentAccountSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
-import { addRecentTransaction } from '../../../plugins/Wallet/services'
+import { addRecentTransaction, getWallet } from '../../../plugins/Wallet/services'
 import { commitNonce, getNonce, resetNonce } from './nonce'
-import { getWalletCached } from './wallet'
 import { getGasPrice } from './network'
 import { EthereumAddress } from 'wallet.ts'
 
@@ -26,10 +25,13 @@ export async function INTERNAL_send(
         console.log(new Error().stack)
     }
 
-    const web3 = createWeb3()
     const account = currentAccountSettings.value
-    const provider = web3.currentProvider as HttpProvider | undefined
     const providerType = currentProviderSettings.value
+    const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null
+    const web3 = createWeb3({
+        privKeys: wallet?._private_key_ ? [wallet._private_key_] : [],
+    })
+    const provider = web3.currentProvider as HttpProvider | undefined
 
     // unable to create provider
     if (!provider) {
@@ -92,7 +94,6 @@ export async function INTERNAL_send(
         // send the transaction
         switch (providerType) {
             case ProviderType.Maskbook:
-                const wallet = getWalletCached()
                 const _private_key_ = wallet?._private_key_
                 if (!wallet || !_private_key_) throw new Error('Unable to sign transaction.')
 

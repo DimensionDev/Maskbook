@@ -143,7 +143,7 @@ function PluginPostInspectorForEach({ config }: { config: PluginConfig }) {
     const post = usePostInfo()
     useEffect(() => {
         if (!ref.current || !F || typeof F === 'function') return
-        return F.init(post, {}, ref.current)
+        return F.init(post!, {}, ref.current)
     }, [F, post])
     if (!F) return null
     if (typeof F === 'function') return <F />

@@ -1,6 +1,6 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { unreachable } from '@masknet/shared'
-import { ERC20TokenDetailed, ERC721TokenDetailed, EthereumTokenType, EthereumTokenDetailedType } from '../types'
+import { unreachable } from '@dimensiondev/kit'
+import { ERC20TokenDetailed, ERC721TokenDetailed, EthereumTokenDetailedType, EthereumTokenType } from '../types'
 import { useERC20TokenDetailed } from './useERC20TokenDetailed'
 import { useERC721TokenDetailed } from './useERC721TokenDetailed'
 import { useNativeTokenDetailed } from './useNativeTokenDetailed'

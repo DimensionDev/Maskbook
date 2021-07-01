@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { formatEthereumAddress } from '@masknet/shared'
-import { EthereumTokenType, ERC20TokenDetailed } from '../types'
+import { ERC20TokenDetailed, EthereumTokenType } from '../types'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useChainId } from './useChainId'
 import { useSingleContractMultipleData } from './useMulticall'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
+import { formatEthereumAddress } from '../utils'
 
 export function useERC20TokenDetailed(address: string, token?: Partial<ERC20TokenDetailed>) {
     const chainId = useChainId()

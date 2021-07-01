@@ -1,7 +1,10 @@
-import { formatAmountPrecision, formatBalance, FormattedAddress, FormattedBalance, ONE } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import {
+    formatAmountPrecision,
+    formatBalance,
     FungibleTokenDetailed,
     isNative,
+    ONE,
     resolveAddressLinkOnExplorer,
     resolveTokenLinkOnExplorer,
     useChainId,
@@ -113,10 +116,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const classes = useStyles()
     const { t } = useI18N()
     const chainId = useChainId()
-    const { DEFAULT_QUALIFICATION_ADDRESS } = useITOConstants()
+    const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
     const showQualification =
         poolSettings?.advanceSettingData.contract &&
-        poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION_ADDRESS
+        poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION2_ADDRESS
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
     const fillParamsResult = useFillParams(poolSettings)
 

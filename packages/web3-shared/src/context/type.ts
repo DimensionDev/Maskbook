@@ -38,4 +38,5 @@ export interface Web3ProviderType {
         size?: number,
     ) => Promise<{ assets: (ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed)[]; hasNextPage: boolean }>
     getERC721TokensPaged: (index: number, count: number, query?: string) => Promise<ERC721TokenAssetDetailed[]>
+    fetchERC20TokensFromTokenLists: (urls: string[], chainId: ChainId) => Promise<ERC20TokenDetailed[]>
 }

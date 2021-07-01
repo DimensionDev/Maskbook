@@ -1,4 +1,4 @@
-import { ZERO } from '@masknet/shared'
+import { ZERO } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { ONE_BIPS, SLIPPAGE_TOLERANCE_DEFAULT } from '../../constants'

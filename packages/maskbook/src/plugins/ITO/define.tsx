@@ -1,8 +1,8 @@
 import { makeStyles } from '@material-ui/core'
-import { formatBalance, formatEthereumAddress } from '@masknet/shared'
+import { formatBalance, formatEthereumAddress } from '@masknet/web3-shared'
 import { PostInspector } from './UI/PostInspector'
 import { PluginConfig, PluginScope, PluginStage } from '../types'
-import { ITO_MetaKey, ITO_PluginID } from './constants'
+import { ITO_MetaKey, ITO_PluginID, MSG_DELIMITER } from './constants'
 import type { JSON_PayloadOutMask } from './types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
@@ -36,7 +36,7 @@ function LabelWrapper(props: LabelWrapperProps) {
 }
 
 export const [ITO_CompositionEntry, ITO_CompositionUI] = createCompositionDialog(
-    <LabelWrapper iconSize={12} labelText={'ITO'} />,
+    <LabelWrapper iconSize={12} labelText="ITO" />,
     (props) => <CompositionDialog open={props.open} onConfirm={props.onClose} onClose={props.onClose} />,
 )
 
@@ -61,7 +61,9 @@ export const ITO_PluginDefine: PluginConfig = {
         [
             ITO_MetaKey,
             (payload: JSON_PayloadOutMask) => {
-                const sellerName = payload.seller.name ?? formatEthereumAddress(payload.seller.address, 4)
+                const sellerName = payload.seller.name
+                    ? payload.seller.name
+                    : payload.message.split(MSG_DELIMITER)[0] ?? formatEthereumAddress(payload.seller.address, 4)
                 return (
                     <LabelWrapper
                         iconSize={14}

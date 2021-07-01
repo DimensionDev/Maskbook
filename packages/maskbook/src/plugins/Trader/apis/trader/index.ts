@@ -1,4 +1,4 @@
-import { safeUnreachable } from '@masknet/shared'
+import { safeUnreachable } from '@dimensiondev/kit'
 import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 import { TagType, TradeProvider } from '../../types'

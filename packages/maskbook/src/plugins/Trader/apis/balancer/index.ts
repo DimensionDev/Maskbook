@@ -1,7 +1,6 @@
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
-import { ZERO } from '@masknet/shared'
-import { ChainId, getChainDetailed, getTraderConstants, isSameAddress } from '@masknet/web3-shared'
+import { ChainId, getChainDetailed, getTraderConstants, isSameAddress, ZERO } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { first, memoize } from 'lodash-es'
 import { currentChainIdSettings } from '../../../Wallet/settings'

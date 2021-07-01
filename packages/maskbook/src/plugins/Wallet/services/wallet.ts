@@ -1,14 +1,13 @@
 import * as bip39 from 'bip39'
-import { HDKey, EthereumAddress } from 'wallet.ts'
+import { EthereumAddress, HDKey } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import type { WalletRecord } from '../database/types'
 import { WalletMessages } from '../messages'
-import { buf2hex, hex2buf, assert } from '../../../utils/utils'
-import { currySameAddress, ProviderType, resolveProviderName } from '@masknet/web3-shared'
-import { formatEthereumAddress } from '@masknet/shared'
+import { assert, buf2hex, hex2buf } from '../../../utils/utils'
+import { currySameAddress, formatEthereumAddress, ProviderType, resolveProviderName } from '@masknet/web3-shared'
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
 import { currentAccountSettings, currentProviderSettings } from '../settings'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
@@ -137,6 +136,7 @@ export function createMnemonicWords() {
 
 export async function importNewWallet(
     rec: PartialRequired<Omit<WalletRecord, 'id' | 'eth_balance' | 'createdAt' | 'updatedAt'>, 'name'>,
+    slient = false,
 ) {
     const { name, path, mnemonic = [], passphrase = '' } = rec
     const address = await getWalletAddress()
@@ -165,9 +165,11 @@ export async function importNewWallet(
         else if (!record_.mnemonic.length && !record_._private_key_)
             await t.objectStore('Wallet').put(WalletRecordIntoDB(record))
     }
-    WalletMessages.events.walletsUpdated.sendToAll(undefined)
-    currentAccountSettings.value = record.address
-    currentProviderSettings.value = ProviderType.Maskbook
+    if (!slient) {
+        WalletMessages.events.walletsUpdated.sendToAll(undefined)
+        currentAccountSettings.value = record.address
+        currentProviderSettings.value = ProviderType.Maskbook
+    }
     return address
     async function getWalletAddress() {
         if (rec.address) return rec.address

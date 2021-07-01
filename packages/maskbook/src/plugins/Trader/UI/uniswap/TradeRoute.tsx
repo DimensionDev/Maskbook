@@ -1,9 +1,9 @@
-import { Box, Breadcrumbs, Typography, makeStyles, Paper, AvatarGroup } from '@material-ui/core'
+import { AvatarGroup, Box, Breadcrumbs, makeStyles, Paper, Typography } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
-import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { TradeComputed } from '../../types'
-import { formatEthereumAddress } from '@masknet/shared'
+import { formatEthereumAddress } from '@masknet/web3-shared'
+import { TokenIcon } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {

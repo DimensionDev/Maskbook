@@ -4,7 +4,7 @@
     "rootDir": "./",
     "outDir": "./dist/"
   },
-  "include": ["./src/", "./stories/", "./src/locales/*.json"],
+  "include": ["./src/", "./stories/", "./src/**/*.json"],
   "references": [
     { "path": "../theme/" },
     { "path": "../maskbook/" },

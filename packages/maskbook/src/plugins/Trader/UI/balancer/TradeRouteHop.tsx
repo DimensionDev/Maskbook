@@ -1,5 +1,5 @@
 import { Box, makeStyles, AvatarGroup, Link } from '@material-ui/core'
-import { TokenIcon } from '../../../../extension/options-page/DashboardComponents/TokenIcon'
+import { TokenIcon } from '@masknet/shared'
 import { Hop, TradeProvider } from '../../types'
 import { resolveTradePairLink } from '../../pipes'
 

@@ -8,6 +8,7 @@ import Token from '@masknet/constants/data/token.json'
 import Trader from '@masknet/constants/data/trader.json'
 import Trending from '@masknet/constants/data/trending.json'
 import URL from '@masknet/constants/data/url.json'
+import TokenAssetBaseURL from '@masknet/constants/data/token-asset-base-url.json'
 import { hookTransform, transform } from './utils'
 
 export const getAirdropConstants = transform(Airdrop)
@@ -39,3 +40,6 @@ export const useTrendingConstants = hookTransform(getTrendingConstants)
 
 export const getURLConstants = transform(URL)
 export const useURLConstants = hookTransform(getURLConstants)
+
+export const getTokenAssetBaseURLConstants = transform(TokenAssetBaseURL)
+export const useTokenAssetBaseURLConstants = hookTransform(getURLConstants)

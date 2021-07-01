@@ -32,7 +32,7 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     injection: {},
     networkIdentifier: 'localhost',
     shouldActivate: () => false,
-    utils: {},
+    utils: { createPostContext: null! },
     notReadyForProduction: true,
     declarativePermissions: { origins: [] },
 }
@@ -73,7 +73,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     ui.collecting.profilesCollector?.(signal)
     ui.injection.pageInspector?.(signal)
-    if (Flags.toolbar_enabled) ui.injection.toolbar?.(signal)
     if (Flags.toolbox_enabled) ui.injection.toolBoxInNavBar?.(signal)
     ui.injection.setupPrompt?.(signal)
     ui.injection.newPostComposition?.start?.(signal)

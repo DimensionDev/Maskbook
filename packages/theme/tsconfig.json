@@ -5,8 +5,8 @@
     "outDir": "./dist/",
     "resolveJsonModule": true
   },
-  "include": ["./src/", "./stories", "./src/locales/*.json"],
-  "references": [{ "path": "../storybook-shared/" }, { "path": "../shared/" }],
+  "include": ["./src/", "./stories"],
+  "references": [{ "path": "../storybook-shared/" }],
   "ts-node": {
     "compilerOptions": { "module": "CommonJS" }
   }

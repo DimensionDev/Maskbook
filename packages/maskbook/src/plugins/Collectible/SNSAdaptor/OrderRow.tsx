@@ -2,11 +2,10 @@ import { Avatar, Link, makeStyles, TableCell, TableRow, Typography } from '@mate
 import { CollectibleProvider, NFTOrder } from '../types'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import BigNumber from 'bignumber.js'
-import { resolveAddressLinkOnExplorer } from '@masknet/web3-shared'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId, isZero, resolveAddressLinkOnExplorer } from '@masknet/web3-shared'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
-import { FormattedBalance, isZero } from '@masknet/shared'
+import { FormattedBalance } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => {
     return {

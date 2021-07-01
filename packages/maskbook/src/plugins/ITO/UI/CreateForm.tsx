@@ -1,7 +1,10 @@
-import { formatAmount, formatBalance, isGreaterThan, isZero } from '@masknet/shared'
 import {
     ERC20TokenDetailed,
     EthereumTokenType,
+    formatAmount,
+    formatBalance,
+    isGreaterThan,
+    isZero,
     useAccount,
     useITOConstants,
     useTokenBalance,
@@ -21,13 +24,11 @@ import { sliceTextByUILength, useI18N } from '../../../utils'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
 import type { ExchangeTokenAndAmountState } from '../hooks/useExchangeTokenAmountstate'
 import type { PoolSettings } from '../hooks/useFill'
 import { useQualificationVerify } from '../hooks/useQualificationVerify'
 import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from '../hooks/useRegion'
-import type { AdvanceSettingData } from './AdvanceSetting'
-import { AdvanceSetting } from './AdvanceSetting'
+import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
 
@@ -103,8 +104,7 @@ export function CreateForm(props: CreateFormProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
-    const ITO_CONTRACT_ADDRESS = useITO_ContractAddress()
-    const { DEFAULT_QUALIFICATION_ADDRESS } = useITOConstants()
+    const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
@@ -168,11 +168,14 @@ export function CreateForm(props: CreateFormProps) {
 
     // qualificationAddress
     const [qualificationAddress, setQualificationAddress] = useState(
-        origin?.qualificationAddress && origin.qualificationAddress !== DEFAULT_QUALIFICATION_ADDRESS
+        origin?.qualificationAddress && origin.qualificationAddress !== DEFAULT_QUALIFICATION2_ADDRESS
             ? origin.qualificationAddress
             : '',
     )
-    const { value: qualification, loading: loadingQualification } = useQualificationVerify(qualificationAddress)
+    const { value: qualification, loading: loadingQualification } = useQualificationVerify(
+        qualificationAddress,
+        ITO2_CONTRACT_ADDRESS,
+    )
 
     // advance settings
     const [advanceSettingData, setAdvanceSettingData] = useState<AdvanceSettingData>(origin?.advanceSettingData || {})
@@ -202,7 +205,7 @@ export function CreateForm(props: CreateFormProps) {
             qualificationAddress:
                 qualification?.isQualification && advanceSettingData.contract
                     ? qualificationAddress
-                    : DEFAULT_QUALIFICATION_ADDRESS,
+                    : DEFAULT_QUALIFICATION2_ADDRESS,
             startTime,
             endTime,
             unlockTime: unlockTime > endTime && advanceSettingData.delayUnlocking ? unlockTime : undefined,
@@ -412,7 +415,7 @@ export function CreateForm(props: CreateFormProps) {
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={inputTokenAmount}
-                        spender={ITO_CONTRACT_ADDRESS}
+                        spender={ITO2_CONTRACT_ADDRESS}
                         token={
                             tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined
                         }>

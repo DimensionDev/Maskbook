@@ -1,7 +1,8 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
-import { formatEthereumAddress, FormattedBalance } from '@masknet/shared'
+import { FormattedBalance } from '@masknet/shared'
 import {
+    formatEthereumAddress,
     resolveChainColor,
     useAccount,
     useChainDetailed,

@@ -4,6 +4,7 @@ import { createPluginMessage } from '../utils/createPluginMessage'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import type { TraderProps } from './UI/trader/Trader'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
 interface CashTagEvent {
     name: string

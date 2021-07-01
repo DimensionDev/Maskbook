@@ -22,6 +22,7 @@ import {
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
 import { createExternalProvider } from './helpers'
+import Services from '../extension/service'
 
 const Web3Provider = createExternalProvider()
 
@@ -54,6 +55,7 @@ export const Web3Context: Web3ProviderType = {
     getAssetList: WalletRPC.getAssetsList,
     getAssetsListNFT: WalletRPC.getAssetsListNFT,
     getERC721TokensPaged,
+    fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
 }
 
 async function getWallets() {

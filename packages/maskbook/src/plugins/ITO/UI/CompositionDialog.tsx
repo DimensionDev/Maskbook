@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { DialogContent } from '@material-ui/core'
-import { formatBalance, usePortalShadowRoot } from '@masknet/shared'
+import { usePortalShadowRoot } from '@masknet/shared'
 import { useI18N, useRemoteControlledDialog } from '../../../utils'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
 import { ITO_MetaKey, MSG_DELIMITER } from '../constants'
@@ -13,11 +13,10 @@ import { payloadOutMask } from '../helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
 import Services from '../../../extension/service'
-import { useChainId, useAccount, TransactionStateType } from '@masknet/web3-shared'
+import { formatBalance, useChainId, useAccount, TransactionStateType, useITOConstants } from '@masknet/web3-shared'
 import { PoolSettings, useFillCallback } from '../hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
-import { useITO_ContractAddress } from '../contracts/useITO_ContractAddress'
 import { WalletMessages } from '../../Wallet/messages'
 
 export enum ITOCreateFormPageStep {
@@ -36,7 +35,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const account = useAccount()
     const chainId = useChainId()
 
-    const ITO_CONTRACT_ADDRESS = useITO_ContractAddress()
+    const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
 
     //#region step
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
@@ -88,7 +87,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
             // assemble JSON payload
             const payload: JSON_PayloadInMask = {
-                contract_address: ITO_CONTRACT_ADDRESS,
+                contract_address: ITO2_CONTRACT_ADDRESS,
                 pid: FillSuccess.id,
                 password: fillSettings.password,
                 message: FillSuccess.message,

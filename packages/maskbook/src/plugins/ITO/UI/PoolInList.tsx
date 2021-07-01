@@ -1,5 +1,14 @@
-import { formatBalance, FormattedBalance, isZero, pow10 } from '@masknet/shared'
-import { getChainDetailed, isSameAddress, useAccount, useTokenConstants } from '@masknet/web3-shared'
+import { FormattedBalance } from '@masknet/shared'
+import {
+    formatBalance,
+    isZero,
+    pow10,
+    getChainDetailed,
+    isSameAddress,
+    useAccount,
+    useTokenConstants,
+    TransactionStateType,
+} from '@masknet/web3-shared'
 import {
     Box,
     Card,
@@ -17,13 +26,15 @@ import {
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
+import { TokenIcon } from '@masknet/shared'
 import { debugModeSetting } from '../../../settings/settings'
 import { useI18N } from '../../../utils'
 import { MSG_DELIMITER } from '../constants'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from '../hooks/usePoolTradeInfo'
-import { ITO_Status, JSON_PayloadInMask } from '../types'
+import { ITO_Status, JSON_PayloadInMask, PoolSubgraph } from '../types'
+import { useDestructCallback } from '../hooks/useDestructCallback'
+import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 
 const useStyles = makeStyles((theme) => ({
     top: {
@@ -96,19 +107,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface PoolInListProps {
-    pool: JSON_PayloadInMask
-    exchange_in_volumes: string[]
-    exchange_out_volumes: string[]
+export interface PoolInListProps extends PoolSubgraph {
     onSend?: (pool: JSON_PayloadInMask) => void
-    onWithdraw?: (payload: JSON_PayloadInMask) => void
+    onRetry: () => void
 }
 
 export function PoolInList(props: PoolInListProps) {
     const { t } = useI18N()
     const classes = useStyles()
-    const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onWithdraw } = props
+    const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onRetry } = props
 
+    //#region withdraw
+    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(pool.contract_address)
+    useTransactionDialog(null, destructState, TransactionStateType.CONFIRMED, () => {
+        onRetry()
+        resetDestructCallback()
+    })
+    //#endregion
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const account = useAccount()
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)
@@ -128,7 +143,7 @@ export function PoolInList(props: PoolInListProps) {
         return (
             <>
                 {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
-                    <ActionButton size="small" variant="contained" onClick={() => onWithdraw?.(pool)}>
+                    <ActionButton size="small" variant="contained" onClick={() => destructCallback(pool.pid)}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : canSend ? (

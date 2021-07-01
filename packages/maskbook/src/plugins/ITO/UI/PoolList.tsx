@@ -1,10 +1,10 @@
-import { TransactionStateType, useAccount } from '@masknet/web3-shared'
+import { useAccount } from '@masknet/web3-shared'
 import { Box, CircularProgress, makeStyles, Typography } from '@material-ui/core'
-import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { useAllPoolsAsSeller } from '../hooks/useAllPoolsAsSeller'
-import { useDestructCallback } from '../hooks/useDestructCallback'
+import { useScrollBottomEvent } from '@masknet/shared'
 import type { JSON_PayloadInMask } from '../types'
 import { PoolInList } from './PoolInList'
+import { useRef, useState, useCallback } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,19 +30,16 @@ export interface PoolListProps {
 export function PoolList(props: PoolListProps) {
     const classes = useStyles()
     const account = useAccount()
-    const { value: pools = [], loading, retry } = useAllPoolsAsSeller(account)
+    const [page, setPage] = useState(0)
+    const { value: pools = [], loading, retry } = useAllPoolsAsSeller(account, page)
 
-    //#region withdraw
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback()
-    useTransactionDialog(null, destructState, TransactionStateType.CONFIRMED, () => {
-        retry()
-        resetDestructCallback()
-    })
-    //#endregion
+    const containerRef = useRef<HTMLDivElement>(null)
+    const addPage = useCallback(() => setPage(page + 1), [page])
+    useScrollBottomEvent(containerRef, addPage)
 
     return (
-        <div className={classes.root}>
-            {loading ? (
+        <div className={classes.root} ref={containerRef}>
+            {loading && page === 0 ? (
                 <Box className={classes.content}>
                     <CircularProgress />
                 </Box>
@@ -53,15 +50,9 @@ export function PoolList(props: PoolListProps) {
             ) : (
                 <div className={classes.content}>
                     {pools.map((x) => (
-                        <PoolInList
-                            key={x.pool.pid}
-                            {...x}
-                            onSend={props.onSend}
-                            onWithdraw={(payload: JSON_PayloadInMask) => {
-                                destructCallback(payload.pid)
-                            }}
-                        />
+                        <PoolInList key={x.pool.pid} {...x} onSend={props.onSend} onRetry={retry} />
                     ))}
+                    {loading && page > 0 ? <CircularProgress /> : null}
                 </div>
             )}
         </div>

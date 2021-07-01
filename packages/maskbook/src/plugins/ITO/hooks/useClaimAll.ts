@@ -1,5 +1,12 @@
 import { useAsyncRetry } from 'react-use'
-import { getChainDetailed, useAccount, useChainId, FungibleTokenDetailed } from '@masknet/web3-shared'
+import {
+    getChainDetailed,
+    useAccount,
+    useChainId,
+    FungibleTokenDetailed,
+    useITOConstants,
+    ChainId,
+} from '@masknet/web3-shared'
 import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'
 import { useITO_Contract } from '../contracts/useITO_Contract'
 
@@ -11,15 +18,18 @@ export interface SwappedToken {
     unlockTime: Date
 }
 
-export function useClaimAll() {
+export function useClaimAll(isMainnetOld = false) {
     const account = useAccount()
     const chainId = useChainId()
-    const ITO_Contract = useITO_Contract()
+    const { ITO_CONTRACT_ADDRESS } = useITOConstants()
+    // Todo: Remove the code after the period that old ITO is being used and continues to be used for a while
+    const { contract: ITO_Contract } = useITO_Contract(isMainnetOld ? ITO_CONTRACT_ADDRESS : undefined)
     const { value: pools = [], loading } = useAllPoolsAsBuyer(account)
 
     return useAsyncRetry(async () => {
         const chainDetailed = getChainDetailed(chainId)
         if (!chainDetailed) return []
+        if (isMainnetOld && chainId !== ChainId.Mainnet) return []
         if (!ITO_Contract || loading) return undefined
         if (pools.length === 0) return []
 
