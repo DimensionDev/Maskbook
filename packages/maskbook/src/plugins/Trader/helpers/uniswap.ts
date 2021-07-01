@@ -27,6 +27,7 @@ export function toUniswapPercent(numerator: number, denominator: number) {
 }
 
 export function toUniswapCurrency(chainId: ChainId, token: FungibleTokenDetailed): UniswapCurrency {
+    if (isNative(token.address)) return WETH[chainId]
     return toUniswapToken(chainId, token)
 }
 
@@ -41,10 +42,9 @@ export function toUniswapToken(chainId: ChainId, token: FungibleTokenDetailed): 
 }
 
 export function toUniswapCurrencyAmount(chainId: ChainId, token: FungibleTokenDetailed, amount: string) {
-    return new TokenAmount(
-        toUniswapToken(chainId, isNative(token.address) ? WETH[chainId] : token),
-        JSBI.BigInt(amount),
-    )
+    return isNative(token.address)
+        ? UniswapCurrencyAmount.ether(JSBI.BigInt(amount))
+        : new TokenAmount(toUniswapToken(chainId, token), JSBI.BigInt(amount))
 }
 
 export function uniswapChainIdTo(chainId: UniswapChainId) {

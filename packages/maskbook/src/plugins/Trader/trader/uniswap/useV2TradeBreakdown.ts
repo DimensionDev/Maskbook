@@ -1,4 +1,4 @@
-import { Trade, Percent, JSBI, Fraction, TokenAmount, CurrencyAmount } from '@uniswap/sdk'
+import { Trade, Percent, JSBI, Fraction, TokenAmount, CurrencyAmount } from '@dimensiondev/uniswap-sdk'
 import { useMemo } from 'react'
 
 const BASE_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000))

@@ -1,4 +1,4 @@
-import { INIT_CODE_HASH } from '@uniswap/sdk'
+import { INIT_CODE_HASH } from '@dimensiondev/uniswap-sdk'
 import { ChainId, ERC20TokenDetailed } from '@masknet/web3-shared'
 import { AMPL, COMP, DAI, MKR, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WETH, WETH_ONLY } from './trader'
 

@@ -1,5 +1,5 @@
 import { ExternalLink } from 'react-feather'
-import type { Trade } from '@uniswap/sdk'
+import type { Trade } from '@dimensiondev/uniswap-sdk'
 import { Link, makeStyles, Typography } from '@material-ui/core'
 import { resolveTradePairLink } from '../../pipes'
 import type { TradeComputed, TradeProvider } from '../../types'

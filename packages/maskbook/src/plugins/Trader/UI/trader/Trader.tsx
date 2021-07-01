@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import { makeStyles } from '@material-ui/core'
-import type { Trade } from '@uniswap/sdk'
+import type { Trade } from '@dimensiondev/uniswap-sdk'
 
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import {

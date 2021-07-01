@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Trade, Router, Percent, JSBI, TradeType } from '@uniswap/sdk'
+import { Trade, Router, Percent, JSBI, TradeType } from '@dimensiondev/uniswap-sdk'
 import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
 import { useAccount } from '@masknet/web3-shared'
 import type { TradeComputed } from '../../types'

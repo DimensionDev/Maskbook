@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import type { SwapParameters, Trade } from '@uniswap/sdk'
+import type { SwapParameters, Trade } from '@dimensiondev/uniswap-sdk'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import {
     addGasMargin,

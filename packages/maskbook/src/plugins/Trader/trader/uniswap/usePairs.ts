@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { Pair, Token as UniswapToken, TokenAmount } from '@uniswap/sdk'
+import { Pair, Token as UniswapToken, TokenAmount } from '@dimensiondev/uniswap-sdk'
 import { useMutlipleContractSingleData } from '@masknet/web3-shared'
 import { getPairAddress } from '../../helpers'
 import { TradeContext } from '../useTradeContext'
