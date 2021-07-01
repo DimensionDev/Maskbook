@@ -110,6 +110,12 @@ export function FooterLine() {
                 </FooterLink>
                 <FooterLink href="https://mask.io/download-links/#mobile">{t.dashboard_mobile_test()}</FooterLink>
                 <FooterLink href="https://github.com/DimensionDev/Maskbook">{t.dashboard_source_code()}</FooterLink>
+                <FooterLink
+                    href={
+                        'https://github.com/DimensionDev/Maskbook/issues?q=is%3Aissue+is%3Aopen+label%3A%22Bounty%3A+Open%22'
+                    }>
+                    {t.footer_bounty_list()}
+                </FooterLink>
                 <FooterLink to="/privacy-policy">{t.privacy_policy()}</FooterLink>
             </Breadcrumbs>
             <AboutDialog open={isOpen} title={''} onClose={() => setOpen(false)}>

@@ -16,9 +16,7 @@ const Container = styled('div')(
 
 const Content = styled('div')(
     ({ theme }) => `
-    max-width: 980px;
-    min-width: 660px;
-    padding: ${theme.spacing(5)}
+    width: 950px;
 `,
 )
 
