@@ -1,5 +1,6 @@
 import { useContext } from 'react'
-import type { Trade } from '@uniswap/sdk'
+import type { Trade } from '@uniswap/v2-sdk'
+import type { Currency, TradeType } from '@uniswap/sdk-core'
 import { unreachable } from '@dimensiondev/kit'
 import { SwapQuoteResponse, SwapResponse, TradeComputed, TradeProvider } from '../types'
 import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback'
@@ -30,7 +31,9 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
     // create trade computed
     const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed)
     const tradeComputedForUniswapLike =
-        context?.IS_UNISWAP_LIKE && !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<Trade>) : null
+        context?.IS_UNISWAP_LIKE && !isNativeTokenWrapper_
+            ? (tradeComputed as TradeComputed<Trade<Currency, Currency, TradeType>>)
+            : null
     const tradeComputedForZRX = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapQuoteResponse>) : null
     const tradeComputedForBalancer = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapResponse>) : null
 

@@ -30,6 +30,7 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: UNISWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: UNISWAP_CUSTOM_BASES,
                 }
             case TradeProvider.SUSHISWAP:
@@ -41,6 +42,7 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).SUSHISWAP_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).SUSHISWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: SUSHISWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: SUSHISWAP_CUSTOM_BASES,
                 }
             case TradeProvider.SASHIMISWAP:
@@ -52,6 +54,7 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).SASHIMISWAP_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).SASHIMISWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: SASHIMISWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: SASHIMISWAP_CUSTOM_BASES,
                 }
             case TradeProvider.QUICKSWAP:
@@ -63,6 +66,7 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).QUICKSWAP_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).QUICKSWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: QUICKSWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: QUICKSWAP_CUSTOM_BASES,
                 }
             case TradeProvider.PANCAKESWAP:
@@ -74,6 +78,7 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).PANCAKESWAP_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).PANCAKESWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: PANCAKESWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: PANCAKESWAP_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
@@ -85,6 +90,7 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     ROUTER_CONTRACT_ADDRESS: '',
                     FACTORY_CONTRACT_ADDRESS: '',
                     AGAINST_TOKENS: {},
+                    ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: {},
                 } as TradeContext_
             case TradeProvider.BALANCER:
@@ -96,6 +102,7 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).BALANCER_EXCHANGE_PROXY_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: '',
                     AGAINST_TOKENS: {},
+                    ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: {},
                 } as TradeContext_
             default:

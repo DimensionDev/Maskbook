@@ -17,7 +17,7 @@ import {
     currentPortfolioDataProviderSettings,
     currentProviderSettings,
 } from '../plugins/Wallet/settings'
-import { currentTrendingDataProviderSettings } from '../plugins/Trader/settings'
+import { currentDataProviderSettings } from '../plugins/Trader/settings'
 
 export function ToBeListened() {
     return {
@@ -28,7 +28,7 @@ export function ToBeListened() {
         currentChainIdSettings,
         currentBalanceSettings,
         currentBlockNumberSettings,
-        currentTrendingDataProviderSettings,
+        currentTrendingDataProviderSettings: currentDataProviderSettings,
         disableOpenNewTabInBackgroundSettings,
         currentProviderSettings,
         currentNetworkSettings,

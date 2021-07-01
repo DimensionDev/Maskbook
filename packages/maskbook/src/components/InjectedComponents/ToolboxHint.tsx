@@ -1,13 +1,12 @@
 import { makeStyles, MenuItem, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import {
-    formatEthereumAddress,
-    NetworkType,
-    resolveChainColor,
     useAccount,
-    useChainDetailed,
     useChainId,
+    resolveChainColor,
+    useChainDetailed,
     useChainIdValid,
+    formatEthereumAddress,
 } from '@masknet/web3-shared'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
@@ -28,9 +27,7 @@ import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
-import { useValueRef } from '@masknet/shared'
 import { useI18N } from '../../utils'
-import { currentNetworkSettings } from '../../plugins/Wallet/settings'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -126,7 +123,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
-    const networkType = useValueRef(currentNetworkSettings)
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
@@ -225,7 +221,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
                 </MenuItem>
             ) : null,
-            networkType === NetworkType.Ethereum ? (
+            chainIdValid ? (
                 <MenuItem onClick={openSwapDialog} className={classes.menuItem}>
                     <Image src={ToolIconURLs.swap.image} width={19} height={19} />
                     <Typography className={classes.text}>{ToolIconURLs.swap.text}</Typography>

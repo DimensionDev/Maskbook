@@ -15,8 +15,8 @@ import {
     resolveCoinId,
     resolveNetworkType,
 } from './hotfix'
-import { NetworkType } from '@masknet/web3-shared'
-import { currentNetworkSettings } from '../../../Wallet/settings'
+import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
+import { currentChainIdSettings, currentNetworkSettings } from '../../../Wallet/settings'
 
 /**
  * Get supported currencies of specific data provider
@@ -173,12 +173,15 @@ export async function checkAvailabilityOnDataProvider(keyword: string, type: Tag
     return symbols?.has(resolveAlias(keyword, dataProvider).toLowerCase()) ?? false
 }
 
-export async function getAvailableDataProviders(type: TagType, keyword: string) {
+export async function getAvailableDataProviders(type?: TagType, keyword?: string) {
+    const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
+    if (!type || !keyword)
+        return getEnumAsArray(DataProvider)
+            .filter((x) => (networkType === NetworkType.Ethereum ? true : x.value !== DataProvider.UNISWAP_INFO))
+            .map((y) => y.value)
     const checked = await Promise.all(
         getEnumAsArray(DataProvider)
-            .filter((x) =>
-                x.value === DataProvider.UNISWAP_INFO ? currentNetworkSettings.value === NetworkType.Ethereum : true,
-            )
+            .filter((x) => (x.value === DataProvider.UNISWAP_INFO ? networkType === NetworkType.Ethereum : true))
             .map(
                 async (x) =>
                     [
