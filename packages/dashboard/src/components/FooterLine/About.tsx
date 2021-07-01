@@ -7,6 +7,7 @@ import TwitterIcon from '@material-ui/icons/Twitter'
 import { useDashboardI18N } from '../../locales'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { Version } from './Version'
+import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
@@ -26,16 +27,6 @@ const useStyles = makeStyles((theme) => ({
         height: 120,
         marginTop: 75,
     },
-    masktext: {
-        height: 22,
-        marginTop: 20,
-        marginBottom: 20,
-    },
-    masknightly: {
-        height: 48,
-        marginTop: 20,
-        marginBottom: 12,
-    },
     version: {
         color: '#FFF',
         fontSize: 12,
@@ -45,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 16,
         textAlign: 'center',
         margin: '24px 68px',
+
+        '& > p': {
+            marginBottom: '36px',
+        },
     },
     getInTouch: {
         fontSize: 16,
@@ -67,10 +62,13 @@ const useStyles = makeStyles((theme) => ({
     },
     footer: {
         borderTop: `1px solid ${theme.palette.divider}`,
-        color: theme.palette.text.secondary,
+        color: getMaskColor(theme).iconLight,
         fontSize: '0.77rem',
         margin: theme.spacing(0, 2),
         padding: theme.spacing(2, 2, 3, 6),
+    },
+    a: {
+        color: getMaskColor(theme).iconLight,
     },
 }))
 
@@ -114,13 +112,11 @@ const brands: Record<string, React.ReactNode> = {
 }
 
 const MaskIcon = () => (process.env.NODE_ENV === 'production' ? <MaskBlueIcon /> : <MaskGreyIcon />)
-// todo: adjust icon with ui design
 const MaskTitleIcon = () => (process.env.NODE_ENV === 'production' ? <MaskTextIcon /> : <MaskTextNightlyIcon />)
 
 export function About() {
     const classes = useStyles()
     const t = useDashboardI18N()
-    // @ts-ignore
     return (
         <>
             <section className={classes.wrapper}>
@@ -153,11 +149,13 @@ export function About() {
                 <footer className={classes.footer}>
                     <Typography component="p" variant="inherit">
                         <span>{t.about_dialog_feedback()}</span>
-                        <Link href={'mailto:info@dimension.im'}>info@dimension.im</Link>
+                        <Link classes={{ root: classes.a }} href={'mailto:info@dimension.im'}>
+                            info@dimension.im
+                        </Link>
                     </Typography>
                     <Typography component="p" variant="inherit">
                         <span>{t.about_dialog_source_code()}</span>
-                        <Link href={'https://github.com/DimensionDev/Maskbook'}>
+                        <Link classes={{ root: classes.a }} href={'https://github.com/DimensionDev/Maskbook'}>
                             https://github.com/DimensionDev/Maskbook
                         </Link>
                     </Typography>

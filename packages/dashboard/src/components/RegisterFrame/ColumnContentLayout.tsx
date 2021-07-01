@@ -57,13 +57,9 @@ const TipContainer = styled('div')(
 `,
 )
 
-// todo: add i18n
 export const ColumnContentLayout: React.FC = ({ children }) => {
     const navigate = useNavigate()
-
-    const handleGoBack = () => {
-        navigate(-1)
-    }
+    const handleGoBack = () => navigate(-1)
 
     return (
         <Container>
@@ -77,11 +73,7 @@ export const ColumnContentLayout: React.FC = ({ children }) => {
                 <TipContainer>
                     <InfoOutlined />
                     <Typography variant={'body2'} paragraph>
-                        As the defender of open-source software and user data privacy, Mask Network does not collect
-                        your private data such as account and password. If you need to retrieve your password, please
-                        authorize us to host your account and password. Please rest assured that we simply host your
-                        account and password. We do not save any of your private data. Consequently, we cannot restore
-                        your data or any other information.
+                        footer
                     </Typography>
                 </TipContainer>
             </Footer>

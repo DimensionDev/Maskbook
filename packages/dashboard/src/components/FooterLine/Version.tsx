@@ -3,8 +3,6 @@ import { Typography } from '@material-ui/core'
 
 export const Version = ({ className }: { className?: string }) => {
     const t = useDashboardI18N()
-    // todo: fix this ts ignore
-    // @ts-ignore
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
 
     return (
