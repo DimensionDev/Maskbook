@@ -36,12 +36,8 @@ import NewIcon from '@material-ui/icons/NewReleases'
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
-import { currentTrendingDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
-import {
-    resolveDataProviderName as resolveTraderDataProviderName,
-    resolveTradeProviderName,
-} from '../../../plugins/Trader/pipes'
-import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
+import { currentDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
+import { resolveDataProviderName, resolveTradeProviderName } from '../../../plugins/Trader/pipes'
 import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
 import { PortfolioProvider } from '../../../plugins/Wallet/types'
 import {
@@ -50,6 +46,11 @@ import {
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
 import { useAvailableTraderProviders } from '../../../plugins/Trader/trending/useAvailableTraderProviders'
+import { useAvailableDataProviders } from '../../../plugins/Trader/trending/useAvailableDataProviders'
+import { useCurrentTradeProvider } from '../../../plugins/Trader/trending/useCurrentTradeProvider'
+import { useCurrentDataProvider } from '../../../plugins/Trader/trending/useCurrentDataProvider'
+import { getEnumAsObject } from '@masknet/shared'
+import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -170,7 +171,12 @@ export default function DashboardSettingsRouter() {
         listItemIcon: classes.listItemIcon,
     }
 
+    //#region the trader plugin
+    const { value: dataProviders = [] } = useAvailableDataProviders()
     const { value: tradeProviders = [] } = useAvailableTraderProviders()
+    const dataProvider = useCurrentDataProvider(dataProviders)
+    const tradeProvider = useCurrentTradeProvider(tradeProviders)
+    //#endregion
 
     return (
         <DashboardRouterContainer title={t('settings')}>
@@ -219,29 +225,27 @@ export default function DashboardSettingsRouter() {
                                 {tradeProviders.length ? (
                                     <SettingsUIEnum
                                         classes={listStyle}
-                                        enumObject={tradeProviders.reduce(
-                                            (accumulator, x) => {
-                                                accumulator[TradeProvider[x]] = x
-                                                return accumulator
-                                            },
-                                            {} as {
-                                                [key: string]: TradeProvider
-                                            },
-                                        )}
+                                        enumObject={getEnumAsObject(tradeProviders, (v) => TradeProvider[v])}
                                         getText={resolveTradeProviderName}
-                                        icon={<SwapHorizIcon />}
+                                        icon={<TrendingUpIcon />}
                                         value={currentTradeProviderSettings}
+                                        SelectProps={{
+                                            value: tradeProvider,
+                                        }}
                                     />
                                 ) : null}
-
-                                {/* TODO: A singe 'Plugins' tab should be added for listing plugin bio and settings. */}
-                                <SettingsUIEnum
-                                    classes={listStyle}
-                                    enumObject={DataProvider}
-                                    getText={resolveTraderDataProviderName}
-                                    icon={<TrendingUpIcon />}
-                                    value={currentTrendingDataProviderSettings}
-                                />
+                                {dataProviders.length ? (
+                                    <SettingsUIEnum
+                                        classes={listStyle}
+                                        enumObject={getEnumAsObject(dataProviders, (v) => DataProvider[v])}
+                                        getText={resolveDataProviderName}
+                                        icon={<SwapHorizIcon />}
+                                        value={currentDataProviderSettings}
+                                        SelectProps={{
+                                            value: dataProvider,
+                                        }}
+                                    />
+                                ) : null}
                                 <SettingsUIEnum
                                     classes={listStyle}
                                     enumObject={PortfolioProvider}

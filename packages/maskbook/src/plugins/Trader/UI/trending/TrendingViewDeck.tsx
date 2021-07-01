@@ -17,7 +17,7 @@ import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeFooter } from '../trader/TradeFooter'
 import {
-    currentTrendingDataProviderSettings,
+    currentDataProviderSettings,
     currentTradeProviderSettings,
     getCurrentPreferredCoinIdSettings,
 } from '../../settings'
@@ -145,7 +145,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     //#region sync with settings
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentTrendingDataProviderSettings.value = option.value as DataProvider
+        currentDataProviderSettings.value = option.value as DataProvider
     }, [])
     const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {
         currentTradeProviderSettings.value = option.value as TradeProvider

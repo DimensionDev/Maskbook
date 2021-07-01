@@ -17,9 +17,9 @@ export const currentSlippageTolerance = createGlobalSettings<number>(
 )
 
 /**
- * The default trending data provider
+ * The default data provider
  */
-export const currentTrendingDataProviderSettings = createGlobalSettings<DataProvider>(
+export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
     `${PLUGIN_IDENTIFIER}+dataProvider`,
     DataProvider.COIN_MARKET_CAP,
     {
