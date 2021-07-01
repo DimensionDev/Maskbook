@@ -15,9 +15,7 @@ import {
     useChainIdValid,
     useTokenConstants,
 } from '@masknet/web3-shared'
-import {
-    TokenIcon,
-} from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
 import { Box, Card, Grid, Link, makeStyles, Theme, Typography } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { BigNumber } from 'bignumber.js'

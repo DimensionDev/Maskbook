@@ -3,7 +3,9 @@ import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
 import { CircularProgress, makeStyles, Slider, Typography } from '@material-ui/core'
 import {
-    formatBalance, pow10, ZERO,
+    formatBalance,
+    pow10,
+    ZERO,
     ChainId,
     currySameAddress,
     ERC20TokenDetailed,
