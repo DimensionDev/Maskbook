@@ -246,7 +246,6 @@ importers:
       '@ethersproject/providers': ^5.0.9
       '@ethersproject/solidity': ^5.0.4
       '@ethersproject/strings': ^5.1.0
-      '@masknet/constants': workspace:*
       '@masknet/contracts': workspace:*
       '@masknet/dashboard': workspace:*
       '@masknet/external-plugin-previewer': workspace:*
@@ -409,7 +408,6 @@ importers:
       '@ethersproject/providers': 5.1.0
       '@ethersproject/solidity': 5.1.0
       '@ethersproject/strings': 5.1.0
-      '@masknet/constants': link:../constants
       '@masknet/contracts': link:../contracts
       '@masknet/dashboard': link:../dashboard
       '@masknet/external-plugin-previewer': link:../external-plugin-previewer
@@ -26280,7 +26278,7 @@ packages:
     dependencies:
       '@ensdomains/content-hash': 2.5.6
       '@ethersproject/abi': 5.4.0
-      '@ethersproject/address': 5.4.0
+      '@ethersproject/address': 5.1.0
       '@ethersproject/bignumber': 5.4.0
       '@ethersproject/bytes': 5.4.0
       '@ethersproject/contracts': 5.4.0
