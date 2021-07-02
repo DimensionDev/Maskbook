@@ -82,6 +82,14 @@ export namespace Plugin.Shared {
          * Configuration of what environment that this plugin expects to run in.
          */
         enableRequirement: EnableRequirement
+        /**
+         * Is this plugin marked as "experimental"?
+         *
+         * If the enableRequirement.target is not "stable", it will be treated as true.
+         *
+         * This does not affect if the plugin enable or not.
+         */
+        experimentalMark?: boolean
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part

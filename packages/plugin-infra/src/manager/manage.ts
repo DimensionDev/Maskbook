@@ -77,6 +77,12 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
                 )
             }
         }
+        if (definition.enableRequirement.target !== 'stable' && !definition.experimentalMark) {
+            console.warn(
+                `[@masknet/plugin-infra] Plugin ${id} is not enabled in stable release, expected it's "experimentalMark" to be true.`,
+            )
+            definition.experimentalMark = true
+        }
 
         const activatedPlugin: ActivatedPluginInstance<T> = {
             instance: definition,
