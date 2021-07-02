@@ -27,7 +27,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const ColumnLayout: React.FC<{}> = ({ children }) => {
+interface ColumnLayoutProps extends React.PropsWithChildren<{}> {}
+
+export const ColumnLayout = ({ children }: ColumnLayoutProps) => {
     const classes = useStyles()
 
     return (

@@ -2,7 +2,7 @@ import { experimentalStyled as styled, makeStyles } from '@material-ui/core/styl
 import { Link } from 'react-router-dom'
 import { Breadcrumbs, Dialog, IconButton, Link as MuiLink, Theme, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { About } from './About'
 import { Close } from '@material-ui/icons'
 import { Version } from './Version'
@@ -86,7 +86,7 @@ const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
     )
 }
 
-export function FooterLine() {
+export const FooterLine = memo(() => {
     const t = useDashboardI18N()
     const classes = useStyles()
     const [isOpen, setOpen] = useState(false)
@@ -124,4 +124,4 @@ export function FooterLine() {
             </AboutDialog>
         </>
     )
-}
+})

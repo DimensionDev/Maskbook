@@ -6,7 +6,7 @@ export const Version = ({ className }: { className?: string }) => {
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
 
     return (
-        <Typography className={className} variant="body2" component="span" color="inherit" fontSize={'inherit'}>
+        <Typography className={className} variant="body2" component="span" color="inherit">
             {process.env.build === 'stable'
                 ? t.version_of_stable({ version })
                 : t.version_of_unstable({

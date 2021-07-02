@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { getMaskColor } from '@masknet/theme'
 import { InfoOutlined } from '@material-ui/icons'
@@ -57,7 +58,9 @@ const TipContainer = styled('div')(
 `,
 )
 
-export const ColumnContentLayout: React.FC = ({ children }) => {
+interface ColumnContentLayoutProps extends React.PropsWithChildren<{}> {}
+
+export const ColumnContentLayout = memo(({ children }: ColumnContentLayoutProps) => {
     const navigate = useNavigate()
     const handleGoBack = () => navigate(-1)
 
@@ -79,4 +82,4 @@ export const ColumnContentLayout: React.FC = ({ children }) => {
             </Footer>
         </Container>
     )
-}
+})

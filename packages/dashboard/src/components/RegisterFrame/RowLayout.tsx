@@ -1,5 +1,6 @@
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { MaskNotSquareIcon } from '@masknet/icons'
+import { memo } from 'react'
 
 const Container = styled('div')(
     ({ theme }) => `
@@ -24,7 +25,9 @@ const RightContent = styled('div')(
 `,
 )
 
-export const RowLayout: React.FC<{}> = ({ children }) => {
+interface RowLayoutProps extends React.PropsWithChildren<{}> {}
+
+export const RowLayout = memo(({ children }: RowLayoutProps) => {
     return (
         <Container>
             <LeftSide>
@@ -33,4 +36,4 @@ export const RowLayout: React.FC<{}> = ({ children }) => {
             <RightContent>{children}</RightContent>
         </Container>
     )
-}
+})
