@@ -29,6 +29,7 @@ interface SwapGuideProps
         Omit<InjectedDialogProps, 'onClose'> {
     status: SwapStatus
     shareSuccessLink: string | undefined
+    total_remaining: BigNumber
     isBuyer: boolean
     retryPayload: () => void
     onClose: () => void
@@ -37,7 +38,18 @@ interface SwapGuideProps
 
 export function SwapGuide(props: SwapGuideProps) {
     const { t } = useI18N()
-    const { status, payload, exchangeTokens, isBuyer, open, retryPayload, shareSuccessLink, onUpdate, onClose } = props
+    const {
+        status,
+        payload,
+        exchangeTokens,
+        isBuyer,
+        open,
+        retryPayload,
+        shareSuccessLink,
+        total_remaining,
+        onUpdate,
+        onClose,
+    } = props
     const [isPending, startTransition] = useTransition()
     const onCloseShareDialog = useCallback(() => {
         startTransition(() => {
@@ -46,10 +58,7 @@ export function SwapGuide(props: SwapGuideProps) {
         })
     }, [retryPayload, startTransition, onClose])
     const classes = useStyles()
-    const maxSwapAmount = useMemo(
-        () => BigNumber.min(payload.limit, payload.total_remaining),
-        [payload.limit, payload.total_remaining],
-    )
+    const maxSwapAmount = useMemo(() => BigNumber.min(payload.limit, total_remaining), [payload.limit, total_remaining])
     const initAmount = ZERO
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
     const [actualSwapAmount, setActualSwapAmount] = useState<BigNumber.Value>(0)

@@ -5,7 +5,7 @@ import { usePortalShadowRoot } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
-import { ITO_MetaKey, MSG_DELIMITER } from '../constants'
+import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
 import { DialogTabs, JSON_PayloadInMask } from '../types'
 import { CreateForm } from './CreateForm'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
@@ -19,6 +19,7 @@ import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
 import { WalletMessages } from '../../Wallet/messages'
+import { omit, set } from 'lodash-es'
 
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',
@@ -97,7 +98,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 total_remaining: FillSuccess.total,
                 seller: {
                     address: FillSuccess.creator,
-                    name: fillSettings.name,
                 },
                 buyers: [],
                 chain_id: chainId,
@@ -131,9 +131,18 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 alert('Failed to sign the password.')
                 return
             }
-            editActivatedPostMetadata((next) =>
-                payload ? next.set(ITO_MetaKey, payloadOutMask(payload)) : next.delete(ITO_MetaKey),
-            )
+            editActivatedPostMetadata((next) => {
+                const r = omit(set(payloadOutMask(payload), 'token', payload.token.address), [
+                    'creation_time',
+                    'unlock_time',
+                    'total_remaining',
+                    'buyers',
+                    'regions',
+                ])
+                console.log({ r })
+                return payload ? next.set(ITO_MetaKey_2, r) : next.delete(ITO_MetaKey_2)
+            })
+
             props.onConfirm(payload)
             // storing the created pool in DB, it helps retrieve the pool password later
             PluginITO_RPC.discoverPool('', payload)
@@ -148,7 +157,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         tabs: [
             {
                 label: t('plugin_ito_create_new'),
-                children: usePortalShadowRoot((container) => (
+                children: usePortalShadowRoot(() => (
                     <CreateForm onNext={onNext} origin={poolSettings} onChangePoolSettings={setPoolSettings} />
                 )),
                 sx: { p: 0 },

@@ -272,10 +272,10 @@ export function ITO(props: ITO_Props) {
     //#region buy info
     const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
-        (chainId === payload.chain_id &&
-            (payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase()) ||
-                tradeInfo?.buyInfo?.buyer.address.toLowerCase() === account.toLowerCase())) ||
-        new BigNumber(availability ? availability.swapped : 0).isGreaterThan(0)
+        chainId === payload.chain_id &&
+        (new BigNumber(availability ? availability.swapped : 0).isGreaterThan(0) ||
+            tradeInfo?.buyInfo?.buyer.address.toLowerCase() === account.toLowerCase())
+
     const shareSuccessLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             t('plugin_ito_claim_success_share', {
@@ -712,6 +712,7 @@ export function ITO(props: ITO_Props) {
             </Box>
             <SwapGuide
                 status={claimDialogStatus}
+                total_remaining={total_remaining}
                 payload={payload}
                 shareSuccessLink={shareSuccessLink}
                 isBuyer={isBuyer}
