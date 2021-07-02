@@ -1,18 +1,19 @@
-import { makeStyles, Avatar, Theme, AvatarProps } from '@material-ui/core'
-import { useImageFailOver } from '../../index'
-import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
-import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
+import { memo } from 'react'
 import {
     ChainId,
     currySameAddress,
     formatEthereumAddress,
-    getTokenAssetBaseURLConstants,
     getTokenConstants,
     isSameAddress,
     useBlockie,
     useChainDetailed,
+    useChainId,
+    useTokenAssetBaseURLConstants,
 } from '@masknet/web3-shared'
-import { memo } from 'react'
+import { makeStyles, Avatar, Theme, AvatarProps } from '@material-ui/core'
+import { useImageFailOver } from '../../index'
+import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
+import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
 
 //#region fix icon image
 function resolveTokenIconURLs(address: string, baseURIs: string[], chainId: ChainId, logoURI?: string) {
@@ -52,11 +53,11 @@ export interface TokenIconProps extends withClasses<never> {
 export function TokenIcon(props: TokenIconProps) {
     const { address, logoURI, name, chainId, AvatarProps, classes } = props
 
+    const chainId_ = useChainId()
     const chainDetailed = useChainDetailed()
     const tokenBlockie = useBlockie(address)
-    const { TOKEN_ASSET_BASE_URI } = getTokenAssetBaseURLConstants()
-
-    const tokenURIs = resolveTokenIconURLs(address, TOKEN_ASSET_BASE_URI, chainId ?? ChainId.Mainnet, logoURI)
+    const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId)
+    const tokenURIs = resolveTokenIconURLs(address, TOKEN_ASSET_BASE_URI, chainId ?? chainId_, logoURI)
     const { value: logoURL, loading } = useImageFailOver(chainDetailed ? tokenURIs : [], '')
 
     return (

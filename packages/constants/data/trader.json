@@ -139,7 +139,7 @@
         "Gorli": "",
         "BSC": "",
         "BSCT": "",
-        "Matic": "0xA97788A1b51938216305dBe8B16670C4aCfec612",
+        "Matic": "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff",
         "Mumbai": ""
     },
     "QUICKSWAP_FACTORY_ADDRESS": {
@@ -181,7 +181,7 @@
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+        "BSC": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
         "BSCT": "",
         "Matic": "",
         "Mumbai": ""

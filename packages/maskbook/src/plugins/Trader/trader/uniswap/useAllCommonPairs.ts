@@ -1,76 +1,73 @@
-import { FungibleTokenDetailed, useChainId } from '@masknet/web3-shared'
-import type { Pair } from '@uniswap/sdk'
-import { flatMap } from 'lodash-es'
 import { useContext, useMemo } from 'react'
-import { toUniswapChainId, toUniswapToken } from '../../helpers'
+import { flatMap } from 'lodash-es'
+import type { Pair } from '@uniswap/v2-sdk'
+import type { Currency, Token } from '@uniswap/sdk-core'
+import { useChainId, useChainIdValid } from '@masknet/web3-shared'
+import { toUniswapToken } from '../../helpers'
 import { TradeContext } from '../useTradeContext'
-import { PairState, TokenPair, usePairs } from './usePairs'
-import { useUniswapToken } from './useUniswapToken'
+import { PairState, usePairs } from './usePairs'
 
-export function useAllCommonPairs(tokenA?: FungibleTokenDetailed, tokenB?: FungibleTokenDetailed) {
+export function useAllCurrencyCombinations(currencyA?: Currency, currencyB?: Currency) {
     const chainId = useChainId()
+    const chainIdValid = useChainIdValid()
     const context = useContext(TradeContext)
-    const uniswapTokenA = useUniswapToken(tokenA)
-    const uniswapTokenB = useUniswapToken(tokenB)
 
-    const bases = useMemo(
-        () => context?.AGAINST_TOKENS[chainId].map((t) => toUniswapToken(t.chainId, t)) ?? [],
-        [chainId, context],
-    )
-    const basePairs = useMemo(
-        () =>
-            flatMap(bases, (base) => bases.map((otherBase) => [base, otherBase] as TokenPair)).filter(
-                ([t0, t1]) => t0.address !== t1.address,
-            ),
+    const [tokenA, tokenB] = chainIdValid ? [currencyA?.wrapped, currencyB?.wrapped] : [undefined, undefined]
+
+    const bases: Token[] = useMemo(() => {
+        if (!chainIdValid) return []
+        const common = context?.AGAINST_TOKENS[chainId] ?? []
+        const additionalA = tokenA ? context?.ADDITIONAL_TOKENS[chainId]?.[tokenA.address] ?? [] : []
+        const additionalB = tokenB ? context?.ADDITIONAL_TOKENS[chainId]?.[tokenB.address] ?? [] : []
+        return [...common, ...additionalA, ...additionalB].map((x) => toUniswapToken(chainId, x))
+    }, [chainId, chainIdValid, tokenA, tokenB])
+
+    const basePairs: [Token, Token][] = useMemo(
+        () => flatMap(bases, (base): [Token, Token][] => bases.map((otherBase) => [base, otherBase])),
         [bases],
     )
-    const allPairCombinations = useMemo(
+
+    return useMemo(
         () =>
-            uniswapTokenA &&
-            uniswapTokenB &&
-            uniswapTokenA.chainId === toUniswapChainId(chainId) &&
-            uniswapTokenA.chainId === uniswapTokenB.chainId
+            tokenA && tokenB
                 ? [
                       // the direct pair
-                      [uniswapTokenA, uniswapTokenB] as TokenPair,
+                      [tokenA, tokenB],
                       // token A against all bases
-                      ...bases.map((base) => [uniswapTokenA, base] as TokenPair),
+                      ...bases.map((base): [Token, Token] => [tokenA, base]),
                       // token B against all bases
-                      ...bases.map((base) => [uniswapTokenB, base] as TokenPair),
+                      ...bases.map((base): [Token, Token] => [tokenB, base]),
                       // each base against all bases
                       ...basePairs,
                   ]
-                      .filter((tokens) => Boolean(tokens[0] && tokens[1]))
-                      .filter(([t0, t1]) => t0!.address !== t1!.address)
-                      .filter(([uniswapTokenA, uniswapTokenB]) => {
-                          if (!chainId) return true
-                          const customBases = context?.CUSTOM_TOKENS[chainId]
-                          if (!customBases) return true
-                          const customBasesA = customBases[uniswapTokenA.address]
-                          const customBasesB = customBases[uniswapTokenB.address]
+                      .filter((tokens): tokens is [Token, Token] => Boolean(tokens[0] && tokens[1]))
+                      .filter(([t0, t1]) => t0.address !== t1.address)
+                      .filter(([tokenA, tokenB]) => {
+                          if (!chainIdValid) return true
+                          const customBases = context?.CUSTOM_TOKENS?.[chainId]
+
+                          const customBasesA: Token[] | undefined = customBases?.[tokenA.address]?.map((x) =>
+                              toUniswapToken(chainId, x),
+                          )
+                          const customBasesB: Token[] | undefined = customBases?.[tokenB.address]?.map((x) =>
+                              toUniswapToken(chainId, x),
+                          )
 
                           if (!customBasesA && !customBasesB) return true
-                          if (
-                              customBasesA &&
-                              !customBasesA
-                                  .map((t) => toUniswapToken(t.chainId, t))
-                                  .find((base) => uniswapTokenB!.equals(base))
-                          )
-                              return false
-                          if (
-                              customBasesB &&
-                              !customBasesB
-                                  .map((t) => toUniswapToken(t.chainId, t))
-                                  .find((base) => uniswapTokenA!.equals(base))
-                          )
-                              return false
+
+                          if (customBasesA && !customBasesA.find((base) => tokenB.equals(base))) return false
+                          if (customBasesB && !customBasesB.find((base) => tokenA.equals(base))) return false
 
                           return true
                       })
                 : [],
-        [[uniswapTokenA?.address, uniswapTokenB?.address].sort().join(), bases, basePairs, chainId, context],
+        [tokenA, tokenB, bases, basePairs, chainId, chainIdValid],
     )
-    const { value: allPairs, ...asyncResult } = usePairs(allPairCombinations)
+}
+
+export function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency) {
+    const allCurrencyCombinations = useAllCurrencyCombinations(currencyA, currencyB)
+    const { value: allPairs, ...asyncResult } = usePairs(allCurrencyCombinations)
 
     // only pass along valid pairs, non-duplicated pairs
     const allPairs_ = useMemo(

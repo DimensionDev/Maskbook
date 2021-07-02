@@ -12,11 +12,13 @@ import { WalletStatusDialog } from './WalletStatusDialog'
 import { WalletRenameWalletDialog } from './RenameWalletDialog'
 import { TransactionDialog } from './TransactionDialog'
 import { ConnectWalletDialog } from './ConnectWalletDialog'
+import { useStartWatchChainState } from '../hooks/useStartWatchChainState'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     GlobalInjection: function Component() {
+        useStartWatchChainState()
         return (
             <>
                 <TransactionDialog />

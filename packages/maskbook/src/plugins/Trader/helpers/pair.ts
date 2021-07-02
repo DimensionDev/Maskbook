@@ -1,4 +1,4 @@
-import type { Token } from '@uniswap/sdk'
+import type { Token } from '@uniswap/sdk-core'
 import { getCreate2Address } from '@ethersproject/address'
 import { pack, keccak256 } from '@ethersproject/solidity'
 

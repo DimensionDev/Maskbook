@@ -5,9 +5,9 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { MaskbookTextIcon } from '../../../../resources/MaskbookIcon'
 import type { DataProvider, TradeProvider } from '../../types'
 import { resolveDataProviderName, resolveTradeProviderName } from '../../pipes'
-import { DataProviderIcon } from '../trader/DataProviderIcon'
-import { TradeProviderIcon } from '../trader/TradeProviderIcon'
-import { FootnoteMenu, FootnoteMenuOption } from '../trader/FootnoteMenu'
+import { DataProviderIcon } from './DataProviderIcon'
+import { TradeProviderIcon } from './TradeProviderIcon'
+import { FootnoteMenu, FootnoteMenuOption } from './FootnoteMenu'
 import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles((theme) => {
