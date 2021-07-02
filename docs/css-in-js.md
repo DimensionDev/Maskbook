@@ -16,7 +16,7 @@ maintainer:
 - ✅ CSS custom variables is OK but do not abuse it. Get the variable from the theme if it is possible.
 - ✅ CSS grid is OK but you may want to use the `Grid` component. Choose the fit one based on your need.
 - 🚫 DO NOT use mystery abbreviations in the `sx` properties, e.g. `<Box sx={{ p: 5 }} />` (DON'T) but `<Box sx={{ padding: 5 }}>` (DO, easier to read).
-- 🚫 DO NOT mix two styling solution together. It may cause unknown bugs. FYI: `makeStyles` is `JSS`, `Box` and `styled` are `@emotion`.
+- 🚫 DO NOT mix two styling solution together. It may cause unknown bugs. FYI: `makeStyles` is `JSS`, `Box`, `sx` and `styled` are `@emotion`.
 
 ## Guides on the `makeStyles` style
 
@@ -30,9 +30,7 @@ const useStyle = makeStyles((theme) => ({
 
 Reason: This is the recommend way of writing way in @material-ui 4.
 
-&#9888; In @material-ui 5 the recommend way has changed to the `styled-component` style.
-
-&#9888; I (@Jack-Works) will try to convince the library team to make a emotion styled version makeStyles or make it on my own so we can get rid of 2 different CSS-in-JS framework in our project.
+&#9888; In @material-ui 5 there is [an RFC](https://github.com/mui-org/material-ui/issues/26571) about to add `makeStyles` API back and migrate to based on emotion. Even if this RFC doesn't land, there is a community solution called [tss-react](https://github.com/garronej/tss-react) that we can migrate to. Therefore it's safe to continue use the `makeStyles` API.
 
 #### Change style of MUI components
 
@@ -86,9 +84,11 @@ DO NOT do this.
 
 Reason: Not type-checked. Easy to get things wrong.
 
-### ✅ Calculated selector to the deeper elements of the library
+### &#9888; Calculated selector to the deeper elements of the library
 
-&#9888; Caution: Please aware of CSS selector. You may want `& > .${selected}` or `&.${selected}` in most cases.
+&#9888; Not recommended. Please perfer to use `makeStyles` in this case.
+
+&#9888; Caution: Please aware of CSS selector. You may want `& > .${selected}` or `&.${selected}` in most cases instead of `& .${selected}`.
 
 ```js
 import { buttonClasses } from '@material-ui/core'
