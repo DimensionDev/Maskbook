@@ -55,7 +55,11 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
         }
 
         function meetRequirement(id: string) {
-            if (!enabled.isEnabled(id)) return false
+            const define = getPluginDefine(id)
+            if (!define) return false
+            if (!define.management?.alwaysOn) {
+                if (!enabled.isEnabled(id)) return false
+            }
             if (extraCheck && !extraCheck(id)) return false
             return true
         }

@@ -89,6 +89,8 @@ export namespace Plugin.Shared {
          * This does not affect if the plugin enable or not.
          */
         experimentalMark?: boolean
+        /** Configuration of how this plugin is managed by the Mask Network. */
+        management?: ManagementProperty
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
@@ -122,6 +124,18 @@ export namespace Plugin.Shared {
         architecture: Record<'app' | 'web', boolean>
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
+    }
+    export interface ManagementProperty {
+        /** This plugin should not displayed in the plugin management page. */
+        internal?: boolean
+        /**
+         * This plugin should not allow to be "disabled" in the plugin management page.
+         *
+         * This property is for the Wallet plugin. It's the core of almost all other plugins.
+         *
+         * It should be replaced by "dependency" management in the future (if there are more cases than the Wallet one).
+         */
+        alwaysOn?: boolean
     }
     export interface SupportedNetworksDeclare {
         /**

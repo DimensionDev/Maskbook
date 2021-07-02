@@ -12,4 +12,5 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },
+    management: { alwaysOn: true },
 }
