@@ -115,7 +115,7 @@ export const CreateWallet = memo(() => {
                 <Button color="primary">{t.wallets_create_wallet_verification()}</Button>
             </ControlContainer>
             <AlertContainer>
-                <MaskAlert />
+                <MaskAlert description={t.wallets_create_wallet_alert()} />
             </AlertContainer>
         </Container>
     )
