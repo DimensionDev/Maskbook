@@ -3,7 +3,6 @@ import { Coin, Currency, DataProvider, Stat, TagType, Trending } from '../../typ
 import * as coinGeckoAPI from '../coingecko'
 import * as coinMarketCapAPI from '../coinmarketcap'
 import * as uniswapAPI from '../uniswap'
-import { Days } from '../../UI/trending/PriceChartDaysControl'
 import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import {
@@ -17,6 +16,7 @@ import {
 } from './hotfix'
 import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
 import { currentChainIdSettings, currentNetworkSettings } from '../../../Wallet/settings'
+import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
 
 /**
  * Get supported currencies of specific data provider
