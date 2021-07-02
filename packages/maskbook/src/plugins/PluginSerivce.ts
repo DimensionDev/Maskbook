@@ -8,7 +8,4 @@
  */
 
 // Please make sure you have registered your plugin UI at ./PluginUI
-import './Transak/messages'
-import './Trader/messages'
-import './ITO/messages'
 import './dHEDGE/messages'
