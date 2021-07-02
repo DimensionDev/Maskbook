@@ -76,7 +76,7 @@ export const AddTokenDialogUI = memo<AddTokenDialogUIProps>(
         }, [open])
 
         return (
-            <MaskDialog open={open} title={t.wallets_add_token()} onClose={onClose}>
+            <MaskDialog maxWidth={'md'} open={open} title={t.wallets_add_token()} onClose={onClose}>
                 {step === AddTokenStep.INFORMATION ? (
                     <AddTokenFormUI
                         address={address}
