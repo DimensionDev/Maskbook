@@ -9,7 +9,7 @@ import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { Version } from './Version'
 import { getMaskColor } from '@masknet/theme'
 import links from './links.json'
-import { LOCAL_IMAGE } from '../../assets'
+import { ABOUT_DIALOG_BACKGROUND } from '../../assets'
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        background: `url(${LOCAL_IMAGE.ABOUT_DIALOG_BACKGROUND}) no-repeat center / cover`,
+        background: `url(${ABOUT_DIALOG_BACKGROUND}) no-repeat center / cover`,
     },
     maskface: {
         width: 120,
