@@ -1,7 +1,6 @@
 import { Emitter } from '@servie/events'
 import { ALL_EVENTS } from '@masknet/shared'
 import type { Plugin } from '../types'
-import { __meetEthChainRequirement } from '../utils/internal'
 import { getPluginDefine, registeredPluginIDs } from './store'
 
 interface ActivatedPluginInstance<U extends Plugin.Shared.DefinitionWithInit> {
@@ -41,12 +40,10 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
         events,
     }
 
-    function startDaemon({ enabled, eth, signal }: Plugin.__Host.Host, extraCheck?: (id: string) => boolean) {
-        const off = eth.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
+    function startDaemon({ enabled, signal }: Plugin.__Host.Host, extraCheck?: (id: string) => boolean) {
         const off2 = enabled.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
 
         signal?.addEventListener('abort', () => [...activated.keys()].forEach(stopPlugin))
-        signal?.addEventListener('abort', off)
         signal?.addEventListener('abort', off2)
 
         checkRequirementAndStartOrStop()
@@ -58,9 +55,13 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
         }
 
         function meetRequirement(id: string) {
-            if (!enabled.isEnabled(id)) return false
+            const define = getPluginDefine(id)
+            if (!define) return false
+            if (!define.management?.alwaysOn) {
+                if (!enabled.isEnabled(id)) return false
+            }
             if (extraCheck && !extraCheck(id)) return false
-            return __meetEthChainRequirement(id, eth)
+            return true
         }
     }
 
@@ -68,6 +69,21 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
         if (activated.has(id)) return
         const definition = await __getDefinition(id)
         if (!definition) return
+
+        {
+            const icon = definition.icon
+            if (typeof icon === 'string' && (icon.codePointAt(0) || 0) < 256) {
+                console.warn(
+                    `[@masknet/plugin-infra] Plugin ${id} has a wrong icon, expected an emoji, actual ${icon}.`,
+                )
+            }
+        }
+        if (definition.enableRequirement.target !== 'stable' && !definition.experimentalMark) {
+            console.warn(
+                `[@masknet/plugin-infra] Plugin ${id} is not enabled in stable release, expected it's "experimentalMark" to be true.`,
+            )
+            definition.experimentalMark = true
+        }
 
         const activatedPlugin: ActivatedPluginInstance<T> = {
             instance: definition,

@@ -8,7 +8,6 @@ import {
     MaskDarkTheme,
     useSystemPreferencePalatte,
 } from '@masknet/theme'
-import { ChainId } from '@masknet/web3-shared'
 import { Emitter } from '@servie/events'
 import { ErrorBoundary } from '@masknet/shared'
 
@@ -27,7 +26,6 @@ const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x)
 // TODO: implement
 startPluginDashboard({
     enabled: { events: new Emitter(), isEnabled: () => true },
-    eth: { current: () => ChainId.Mainnet, events: new Emitter() },
 })
 export default function DashboardRoot() {
     const settings = useAppearance()
