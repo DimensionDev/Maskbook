@@ -1,5 +1,6 @@
 import type { TypedMessage } from '@masknet/shared'
 import type { Emitter } from '@servie/events'
+import type { Option, Result } from 'ts-results'
 
 export namespace Plugin {
     /**
@@ -233,8 +234,29 @@ export namespace Plugin.Dashboard {
 
 /** This part runs in the background page */
 export namespace Plugin.Worker {
-    // As you can see we currently don't have so much use case for an API here.
-    export interface Definition extends Shared.DefinitionWithInit {}
+    export interface Definition extends Shared.DefinitionWithInit {
+        /** TODO: this functionality has not be done yet. */
+        backup?: BackupHandler
+    }
+    export interface BackupHandler {
+        /**
+         * This function will be called when user try to generate a new backup.
+         * The return value will contribute to the backup file.
+         *
+         * If it returns a None, it will not contributes to the backup file.
+         *
+         * If it returns a Some<T>, T will be serialized by JSON.stringify and added into the backup file.
+         */
+        onBackup(): Promise<Option<unknown>>
+        /**
+         * This function will be called when the user try to restore a backup file,
+         * and there is some data associated with this plugin.
+         *
+         * @param data The serialized backup content previously returned by `onBackup`.
+         * You MUST treat the data as untrustful content because it can be modified by the user.
+         */
+        onRestore(data: unknown): Promise<Result<void, Error>>
+    }
 }
 
 // Helper types
