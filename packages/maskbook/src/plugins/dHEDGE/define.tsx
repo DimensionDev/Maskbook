@@ -41,7 +41,7 @@ export const DHedgePluginDefine: PluginConfig = {
     PageComponent() {
         return (
             <>
-                <PoolView address="" />
+                <PoolView />
                 <InvestDialog />
             </>
         )
@@ -49,7 +49,7 @@ export const DHedgePluginDefine: PluginConfig = {
     DashboardComponent() {
         return (
             <>
-                <PoolView address="" />
+                <PoolView />
                 <InvestDialog />
             </>
         )
@@ -68,7 +68,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     return (
         <MaskbookPluginWrapper pluginName="dHEDGE">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <PoolView address={address[1] ?? ''} />
+                <PoolView pool={pool} loading={loading} error={error} retry={retry} />
             </Suspense>
         </MaskbookPluginWrapper>
     )
