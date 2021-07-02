@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { TrendingPopper } from '../trending/TrendingPopper'
+import { TrendingPopper } from './TrendingPopper'
 import { DataProvider, TradeProvider, TagType } from '../../types'
 import { TraderView } from './TraderView'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'

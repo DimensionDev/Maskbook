@@ -16,7 +16,7 @@ import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewError } from './TrendingViewError'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton'
 import { TrendingViewDeck } from './TrendingViewDeck'
-import { currentTrendingDataProviderSettings } from '../../settings'
+import { currentDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
 import { EthereumTokenType, useTokenDetailed } from '@masknet/web3-shared'
@@ -145,7 +145,7 @@ export function TraderView(props: TraderViewProps) {
 
     //#region current data provider switcher
     const DataProviderSwitcher = useSettingsSwticher(
-        currentTrendingDataProviderSettings,
+        currentDataProviderSettings,
         dataProviders,
         resolveDataProviderName,
     )

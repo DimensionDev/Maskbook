@@ -22,9 +22,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
     ]),
     CompositionDialogEntry: {
         label: '📃 File Service',
-        dialog({ open, onClose }) {
-            return <FileServiceDialog open={open} onConfirm={onClose} onDecline={onClose} />
-        },
+        dialog: FileServiceDialog,
     },
 }
 

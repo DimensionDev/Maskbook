@@ -3,7 +3,7 @@ import { Button, DialogActions, DialogContent, makeStyles, Typography } from '@m
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import type BigNumber from 'bignumber.js'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
-import { TradeSummary, TradeSummaryProps } from '../trader/TradeSummary'
+import { TradeSummary, TradeSummaryProps } from './TradeSummary'
 import { TokenPanel } from './TokenPanel'
 import { PriceStaleWarnning } from './PriceStaleWarnning'
 import type { TradeComputed, TradeProvider } from '../../types'

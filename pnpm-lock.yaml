@@ -239,7 +239,6 @@ importers:
       '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/stego-js': '=0.11.1-20201027083223-8ab41be'
-      '@dimensiondev/uniswap-sdk': '=3.0.4-20210619092641-a270dc0'
       '@dimensiondev/webextension-shim': 0.0.3-20201120022530-b318b89
       '@ethersproject/address': ^5.0.4
       '@ethersproject/contracts': ^5.0.4
@@ -294,7 +293,8 @@ importers:
       '@typescript-eslint/eslint-plugin': ^4.25.0
       '@typescript-eslint/parser': ^4.25.0
       '@ungap/promise-all-settled': ^1.1.2
-      '@uniswap/sdk': ^3.0.3
+      '@uniswap/sdk-core': ^3.0.0
+      '@uniswap/v2-sdk': ^3.0.0
       '@walletconnect/client': ^1.2.2
       anchorme: ^2.1.2
       arweave: ^1.10.13
@@ -332,6 +332,7 @@ importers:
       jest-junit: ^12.1.0
       jest-puppeteer: ^5.0.4
       jest-webextension-mock: ^3.7.11
+      jsbi: ^3.1.5
       json-stable-stringify: ^1.0.1
       json2csv: ^5.0.6
       jsonwebtoken: ^8.5.1
@@ -401,7 +402,6 @@ importers:
       '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
-      '@dimensiondev/uniswap-sdk': 3.0.4-20210619092641-a270dc0_418b2ad04426b02e1076b55b7e1862e2
       '@ethersproject/address': 5.1.0
       '@ethersproject/contracts': 5.1.0
       '@ethersproject/networks': 5.1.0
@@ -440,7 +440,8 @@ importers:
       '@types/use-subscription': 1.0.0
       '@types/uuid': 8.3.0
       '@ungap/promise-all-settled': 1.1.2
-      '@uniswap/sdk': 3.0.3_418b2ad04426b02e1076b55b7e1862e2
+      '@uniswap/sdk-core': 3.0.0
+      '@uniswap/v2-sdk': 3.0.0
       '@walletconnect/client': 1.4.1
       anchorme: 2.1.2
       arweave: 1.10.13
@@ -462,6 +463,7 @@ importers:
       https-browserify: 1.0.0
       immer: 9.0.2
       isomorphic-dompurify: 0.13.0
+      jsbi: 3.1.5
       json-stable-stringify: 1.0.1
       json2csv: 5.0.6
       jsonwebtoken: 8.5.1
@@ -3603,30 +3605,6 @@ packages:
       canvas: ^2.6.0
     dependencies:
       meow: 7.1.1
-    dev: false
-
-  /@dimensiondev/uniswap-sdk/3.0.4-20210619092641-a270dc0_418b2ad04426b02e1076b55b7e1862e2:
-    resolution: {integrity: sha512-gBqLEIubW2wE94zvuJLE36bybUMF75MLbrUihzLlk0vwGcvvweKWbnDtN1iLcFWqVy5e7G2+z+1xxm9bNRDaRg==, tarball: download/@dimensiondev/uniswap-sdk/3.0.4-20210619092641-a270dc0/56ed8ddc9e83283599390103198780fd19cf8fc411155518d6367c3bb5eaffc1}
-    engines: {node: '>=10'}
-    peerDependencies:
-      '@ethersproject/address': ^5.0.0-beta
-      '@ethersproject/contracts': ^5.0.0-beta
-      '@ethersproject/networks': ^5.0.0-beta
-      '@ethersproject/providers': ^5.0.0-beta
-      '@ethersproject/solidity': ^5.0.0-beta
-    dependencies:
-      '@ethersproject/address': 5.1.0
-      '@ethersproject/contracts': 5.1.0
-      '@ethersproject/networks': 5.1.0
-      '@ethersproject/providers': 5.1.0
-      '@ethersproject/solidity': 5.1.0
-      '@uniswap/v2-core': 1.0.1
-      big.js: 5.2.2
-      decimal.js-light: 2.5.1
-      jsbi: 3.1.5
-      tiny-invariant: 1.1.0
-      tiny-warning: 1.0.3
-      toformat: 2.0.0
     dev: false
 
   /@dimensiondev/webextension-shim/0.0.3-20201120022530-b318b89:
@@ -8502,33 +8480,27 @@ packages:
     resolution: {integrity: sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==}
     dev: false
 
-  /@uniswap/sdk/3.0.3_418b2ad04426b02e1076b55b7e1862e2:
-    resolution: {integrity: sha512-t4s8bvzaCFSiqD2qfXIm3rWhbdnXp+QjD3/mRaeVDHK7zWevs6RGEb1ohMiNgOCTZANvBayb4j8p+XFdnMBadQ==}
+  /@uniswap/sdk-core/3.0.0:
+    resolution: {integrity: sha512-Yarx/5lqPZvAAzI7i+twK/IueJNl+OhqbeiiTuD4+g+NEVPCU+SMBvLFzf0/jAlM1WKz6K1psQLUDwdgAj8I3w==}
     engines: {node: '>=10'}
-    peerDependencies:
-      '@ethersproject/address': ^5.0.0-beta
-      '@ethersproject/contracts': ^5.0.0-beta
-      '@ethersproject/networks': ^5.0.0-beta
-      '@ethersproject/providers': ^5.0.0-beta
-      '@ethersproject/solidity': ^5.0.0-beta
     dependencies:
-      '@ethersproject/address': 5.1.0
-      '@ethersproject/contracts': 5.1.0
-      '@ethersproject/networks': 5.1.0
-      '@ethersproject/providers': 5.1.0
-      '@ethersproject/solidity': 5.1.0
-      '@uniswap/v2-core': 1.0.1
+      '@ethersproject/address': 5.4.0
       big.js: 5.2.2
       decimal.js-light: 2.5.1
       jsbi: 3.1.5
       tiny-invariant: 1.1.0
-      tiny-warning: 1.0.3
       toformat: 2.0.0
     dev: false
 
-  /@uniswap/v2-core/1.0.1:
-    resolution: {integrity: sha512-MtybtkUPSyysqLY2U210NBDeCHX+ltHt3oADGdjqoThZaFRDKwM6k1Nb3F0A3hk5hwuQvytFWhrWHOEq6nVJ8Q==}
+  /@uniswap/v2-sdk/3.0.0:
+    resolution: {integrity: sha512-UyAZHCQaV/4XCsgR+o+daP0E6rLUOY0H2G10P1cxGI1c3uxZe3/mXIHq+kUkeW8kxHC0622TckFYWnkiWkjULg==}
     engines: {node: '>=10'}
+    dependencies:
+      '@ethersproject/address': 5.4.0
+      '@ethersproject/solidity': 5.4.0
+      '@uniswap/sdk-core': 3.0.0
+      tiny-invariant: 1.1.0
+      tiny-warning: 1.0.3
     dev: false
 
   /@walletconnect/browser-utils/1.4.1:
@@ -10743,7 +10715,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001241
-      electron-to-chromium: 1.3.762
+      electron-to-chromium: 1.3.763
     dev: false
 
   /browserslist/4.14.2:
@@ -12395,7 +12367,7 @@ packages:
     dependencies:
       is-arguments: 1.1.0
       is-date-object: 1.0.4
-      is-regex: 1.1.3
+      is-regex: 1.0.5
       object-is: 1.1.5
       object-keys: 1.1.1
       regexp.prototype.flags: 1.3.1
@@ -12880,8 +12852,8 @@ packages:
     resolution: {integrity: sha512-P/B84AgUSQXaum7a8m11HUsYL8tj9h/Pt5f7Hg7Ty6bm5DxlFq+e5+ouHUoNQMsKDJ7u4yGfI8mOErCmSH9wyg==}
     dev: true
 
-  /electron-to-chromium/1.3.762:
-    resolution: {integrity: sha512-LehWjRpfPcK8F1Lf/NZoAwWLWnjJVo0SZeQ9j/tvnBWYcT99qDqgo4raAfS2oTKZjPrR/jxruh85DGgDUmywEA==}
+  /electron-to-chromium/1.3.763:
+    resolution: {integrity: sha512-UyvEPae0wvzsyNJhVfGeFSOlUkHEze8xSIiExO5tZQ8QTr7obFiJWGk3U4e7afFOJMQJDszqU/3Pk5jtKiaSEg==}
     dev: false
 
   /element-resize-detector/1.2.2:
@@ -16368,7 +16340,6 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       has: 1.0.3
-    dev: false
 
   /is-regex/1.1.2:
     resolution: {integrity: sha512-axvdhb5pdhEVThqJzYXwMlVuZwC+FF2DpcOhTS+y/8jVq4trxyPgfcwIxIKiyeuLlSQYKkmUaPQJ8ZE4yNKXDg==}

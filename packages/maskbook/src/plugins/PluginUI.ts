@@ -7,13 +7,9 @@ const plugins = new Set<PluginConfig>()
 export const PluginUI: ReadonlySet<PluginConfig> = plugins
 
 import { Flags } from '../utils/flags'
-import { StorybookPluginDefine } from './Storybook/define'
-import { TraderPluginDefine } from './Trader/define'
 import { sideEffect } from '../utils/side-effects'
 import { DHedgePluginDefine } from './dHEDGE/define'
 
 sideEffect.then(() => {
-    if (Flags.trader_enabled) plugins.add(TraderPluginDefine)
     if (Flags.dhedge_enabled) plugins.add(DHedgePluginDefine)
-    if (process.env.STORYBOOK) plugins.add(StorybookPluginDefine)
 })

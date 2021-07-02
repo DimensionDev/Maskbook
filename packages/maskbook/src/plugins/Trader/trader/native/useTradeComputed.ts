@@ -41,9 +41,7 @@ export function useTradeComputed(
             executionPrice: ZERO,
             maximumSold: ZERO,
             minimumReceived: tradeAmount,
-            nextMidPrice: ZERO,
             priceImpact: ZERO,
-            priceImpactWithoutFee: ZERO,
             fee: ZERO,
             trade_: {
                 isWrap:

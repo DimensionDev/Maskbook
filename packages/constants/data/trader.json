@@ -93,7 +93,7 @@
         "Rinkeby": "0xe4fe6a45f354e845f954cddee6084603cedb9410",
         "Kovan": "0xe4fe6a45f354e845f954cddee6084603cedb9410",
         "Gorli": "0xe4fe6a45f354e845f954cddee6084603cedb9410",
-        "BSC": "",
+        "BSC": "0x24cefa86fc1826fd31b4cb911034907735f8085a",
         "BSCT": "",
         "Matic": "",
         "Mumbai": ""
@@ -104,7 +104,7 @@
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "",
+        "BSC": "0x1daed74ed1dd7c9dabbe51361ac90a69d851234d",
         "BSCT": "",
         "Matic": "",
         "Mumbai": ""
@@ -126,7 +126,7 @@
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "",
+        "BSC": "0xb7b88947a6a423e784cb5512eccdfee6426797f5f681f521bc1687e844ef15be",
         "BSCT": "",
         "Matic": "",
         "Mumbai": ""
@@ -139,7 +139,7 @@
         "Gorli": "",
         "BSC": "",
         "BSCT": "",
-        "Matic": "0xA97788A1b51938216305dBe8B16670C4aCfec612",
+        "Matic": "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff",
         "Mumbai": ""
     },
     "QUICKSWAP_FACTORY_ADDRESS": {
@@ -181,7 +181,7 @@
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+        "BSC": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
         "BSCT": "",
         "Matic": "",
         "Mumbai": ""
