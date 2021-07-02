@@ -3,7 +3,7 @@ import { useChainId } from '../hooks'
 import { ChainId, Primitive } from '../types'
 
 export interface Constants {
-    [K: string]: { [K in keyof typeof ChainId]: Primitive | Primitive[] }
+    [K: string]: { [K in keyof typeof ChainId]?: Primitive | Primitive[] }
 }
 
 export function transform<T extends Constants>(constants: T, environment: Record<string, string> = {}) {

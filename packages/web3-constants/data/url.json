@@ -8,7 +8,9 @@
         "BSC": "",
         "BSCT": "",
         "Matic": "",
-        "Mumbai": ""
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
     },
     "API_URL": {
         "Mainnet": "https://api.dhedge.org/graphql",
@@ -19,6 +21,8 @@
         "BSC": "",
         "BSCT": "",
         "Matic": "",
-        "Mumbai": ""
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
     }
 }

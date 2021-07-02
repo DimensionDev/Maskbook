@@ -35,6 +35,8 @@ export function resolveNetworkAddress(networkType: NetworkType, address: string)
             return `polygon:${address}`
         case NetworkType.Ethereum:
             return `ethereum:${address}`
+        case NetworkType.Arbitrum:
+            return `arbitrum:${address}`
         default:
             safeUnreachable(networkType)
             return address
@@ -49,6 +51,8 @@ export function resolveNetworkName(networkType: NetworkType) {
             return 'Polygon'
         case NetworkType.Ethereum:
             return 'Ethereum'
+        case NetworkType.Arbitrum:
+            return 'Arbitrum'
         default:
             safeUnreachable(networkType)
             return 'Unknown'

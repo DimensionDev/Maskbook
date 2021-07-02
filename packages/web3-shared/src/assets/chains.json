@@ -145,7 +145,7 @@
         "fullName": "Binance",
         "shortName": "bnbt",
         "chain": "BSC",
-        "network": "Chapel",
+        "network": "chapel",
         "networkId": 97,
         "nativeCurrency": {
             "name": "Binance Chain Native Token",
@@ -208,6 +208,56 @@
             }
         ],
         "infoURL": "https://matic.network/"
+    },
+    {
+        "name": "Arbitrum One",
+        "chainId": 42161,
+        "fullName": "Arbitrum",
+        "shortName": "arb",
+        "chain": "Arbitrum",
+        "network": "mainnet",
+        "networkId": 42161,
+        "nativeCurrency": {
+            "name": "Arbitrum Ether",
+            "symbol": "ARETH",
+            "decimals": 18
+        },
+        "rpc": ["https://arb-mainnet.g.alchemy.com/v2/M7scY0aL_CowI-JzEmLmhwYDcrHZdTVi"],
+        "rpcWeights": [0, 0, 0, 0],
+        "faucets": [],
+        "explorers": [
+            {
+                "name": "arbitrum",
+                "url": "https://explorer.arbitrum.io",
+                "standard": "EIP3091"
+            }
+        ],
+        "infoURL": "https://arbitrum.io"
+    },
+    {
+        "name": "Arbitrum Testnet Rinkeby",
+        "chainId": 421611,
+        "fullName": "Arbitrum",
+        "shortName": "arb-rinkeby",
+        "chain": "Arbitrum",
+        "network": "rinkeby",
+        "networkId": 421611,
+        "nativeCurrency": {
+            "name": "Arbitrum Rinkeby Ether",
+            "symbol": "ARETH",
+            "decimals": 18
+        },
+        "rpc": ["https://arb-mainnet.g.alchemy.com/v2/M7scY0aL_CowI-JzEmLmhwYDcrHZdTVi"],
+        "rpcWeights": [0, 0, 0, 0],
+        "faucets": [],
+        "explorers": [
+            {
+                "name": "arbitrum-rinkeby",
+                "url": "https://rinkeby-explorer.arbitrum.io",
+                "standard": "EIP3091"
+            }
+        ],
+        "infoURL": "https://arbitrum.io"
     },
     {
         "name": "Expanse Network",

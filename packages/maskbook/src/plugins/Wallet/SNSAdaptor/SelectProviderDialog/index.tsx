@@ -113,6 +113,7 @@ const networks = [
     NetworkType.Ethereum,
     Flags.bsc_enabled ? NetworkType.Binance : undefined,
     Flags.polygon_enabled ? NetworkType.Polygon : undefined,
+    Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
 ].filter(Boolean) as NetworkType[]
 
 interface SelectProviderDialogUIProps extends withClasses<never> {}
