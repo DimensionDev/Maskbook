@@ -1,7 +1,6 @@
 import { Emitter } from '@servie/events'
 import { ALL_EVENTS } from '@masknet/shared'
 import type { Plugin } from '../types'
-import { __meetEthChainRequirement } from '../utils/internal'
 import { getPluginDefine, registeredPluginIDs } from './store'
 
 interface ActivatedPluginInstance<U extends Plugin.Shared.DefinitionWithInit> {
@@ -41,12 +40,10 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
         events,
     }
 
-    function startDaemon({ enabled, eth, signal }: Plugin.__Host.Host, extraCheck?: (id: string) => boolean) {
-        const off = eth.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
+    function startDaemon({ enabled, signal }: Plugin.__Host.Host, extraCheck?: (id: string) => boolean) {
         const off2 = enabled.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
 
         signal?.addEventListener('abort', () => [...activated.keys()].forEach(stopPlugin))
-        signal?.addEventListener('abort', off)
         signal?.addEventListener('abort', off2)
 
         checkRequirementAndStartOrStop()
@@ -60,7 +57,7 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
         function meetRequirement(id: string) {
             if (!enabled.isEnabled(id)) return false
             if (extraCheck && !extraCheck(id)) return false
-            return __meetEthChainRequirement(id, eth)
+            return true
         }
     }
 

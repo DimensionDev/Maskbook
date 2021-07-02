@@ -1,5 +1,4 @@
 import type { TypedMessage } from '@masknet/shared'
-import type { ChainId } from '@masknet/web3-shared'
 import type { Emitter } from '@servie/events'
 
 export namespace Plugin {
@@ -123,11 +122,6 @@ export namespace Plugin.Shared {
         architecture: Record<'app' | 'web', boolean>
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
-        /**
-         * undefined: The plugin manager will not take care of this plugin when the eth network changes
-         * @default undefined
-         */
-        eth?: SupportedChainsDeclare
     }
     export interface SupportedNetworksDeclare {
         /**
@@ -136,14 +130,6 @@ export namespace Plugin.Shared {
          */
         type: 'opt-in' | 'opt-out'
         networks: Partial<Record<CurrentSNSNetwork, boolean>>
-    }
-    export interface SupportedChainsDeclare {
-        /**
-         * opt-in means the listed chains is supported.
-         * out-out means the listed chains is not supported.
-         */
-        type: 'opt-in' | 'opt-out'
-        chains: Partial<Record<ChainId, boolean>>
     }
 }
 // TODO: This part is unused by the Mask but it is required to some plugins
@@ -294,13 +280,8 @@ export enum CurrentSNSNetwork {
 // ---------------------------------------------------
 export namespace Plugin.__Host {
     export interface Host {
-        eth: EthStatusReporter
         enabled: EnabledStatusReporter
         signal?: AbortSignal
-    }
-    export interface EthStatusReporter {
-        current(): ChainId
-        events: Emitter<{ change: [] }>
     }
     export interface EnabledStatusReporter {
         isEnabled(id: string): boolean
