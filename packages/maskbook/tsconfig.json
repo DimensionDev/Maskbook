@@ -12,7 +12,6 @@
   "references": [
     { "path": "../shared" },
     { "path": "../web3-shared" },
-    { "path": "../constants" },
     { "path": "../theme" },
     { "path": "../icons" },
     { "path": "../plugin-infra" },
