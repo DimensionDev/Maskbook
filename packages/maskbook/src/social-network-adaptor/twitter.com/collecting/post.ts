@@ -47,11 +47,13 @@ function registerPostCollectorInner(
     const updateProfileInfo = memoize(
         (info: PostInfo) => {
             const currentProfile = getCurrentIdentifier()
-            Services.Identity.updateProfileInfo(info.postBy.getCurrentValue(), {
-                nickname: info.nickname.getCurrentValue(),
-                avatarURL: info.avatarURL.getCurrentValue(),
-                relatedPersonaIdentifier: currentProfile.linkedPersona?.identifier,
-            })
+            if (currentProfile) {
+                Services.Identity.updateProfileInfo(info.postBy.getCurrentValue(), {
+                    nickname: info.nickname.getCurrentValue(),
+                    avatarURL: info.avatarURL.getCurrentValue(),
+                    relatedPersonaIdentifier: currentProfile.linkedPersona?.identifier,
+                })
+            }
         },
         (info: PostInfo) => info.postBy.getCurrentValue()?.toText(),
     )

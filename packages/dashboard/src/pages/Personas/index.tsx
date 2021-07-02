@@ -42,6 +42,12 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(0, 1.5),
         lineHeight: 1.375,
     },
+    tab: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+    },
 }))
 
 function firstProfileNetwork(x: PersonaInformation | undefined) {
@@ -77,7 +83,7 @@ function Personas() {
                     </IconButton>
                 </Box>
             }>
-            <ContentContainer>
+            <ContentContainer sx={{ display: 'flex', flexDirection: 'column', height: '100%', maxHeight: '100%' }}>
                 <TabContext value={activeTab}>
                     <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
                         {definedSocialNetworks.map(({ networkIdentifier }) => (
@@ -101,13 +107,20 @@ function Personas() {
 =======
                         if (profile)
                             return (
-                                <TabPanel key={networkIdentifier} value={networkIdentifier}>
-                                    <PersonaContent />
+                                <TabPanel
+                                    key={networkIdentifier}
+                                    value={networkIdentifier}
+                                    className={activeTab === networkIdentifier ? classes.tab : undefined}>
+                                    <PersonaContent network={networkIdentifier} />
                                 </TabPanel>
                             )
 >>>>>>> 445332ad4 (feat: add relatedPersonaIdentifier)
                         return (
-                            <TabPanel key={networkIdentifier} value={networkIdentifier} sx={{ flex: 1 }}>
+                            <TabPanel
+                                key={networkIdentifier}
+                                value={networkIdentifier}
+                                sx={{ flex: 1 }}
+                                className={activeTab === networkIdentifier ? classes.tab : undefined}>
                                 <PersonaSetup
                                     networkIdentifier={networkIdentifier}
                                     onConnect={() => connectPersona(currentPersona.identifier, networkIdentifier)}

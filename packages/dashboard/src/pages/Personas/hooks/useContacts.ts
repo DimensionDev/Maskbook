@@ -4,6 +4,6 @@ import { Services } from '../../../API'
 
 export const useContacts = (network: string, currentPerson?: PersonaInformation) => {
     return useAsync(async () => {
-        return Services.Identity.queryProfiles('twitter.com', currentPerson?.identifier)
+        return Services.Identity.queryProfiles(network, currentPerson?.identifier)
     }, [network, currentPerson])
 }
