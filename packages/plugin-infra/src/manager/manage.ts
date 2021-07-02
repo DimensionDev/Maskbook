@@ -69,6 +69,15 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
         const definition = await __getDefinition(id)
         if (!definition) return
 
+        {
+            const icon = definition.icon
+            if (typeof icon === 'string' && (icon.codePointAt(0) || 0) < 256) {
+                console.warn(
+                    `[@masknet/plugin-infra] Plugin ${id} has a wrong icon, expected an emoji, actual ${icon}.`,
+                )
+            }
+        }
+
         const activatedPlugin: ActivatedPluginInstance<T> = {
             instance: definition,
             controller: new AbortController(),
