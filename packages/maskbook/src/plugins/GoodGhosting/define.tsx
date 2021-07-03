@@ -12,7 +12,7 @@ const isGoodGhosting = (x: string): boolean => /^https:\/\/goodghosting.com\/#\/
 
 export const GoodGhostingPluginDefine: PluginConfig = {
     id: GOOD_GHOSTING_PLUGIN_ID,
-    pluginIcon: '🔗',
+    pluginIcon: '👻',
     pluginName: 'GoodGhosting',
     pluginDescription: 'DeFi savings dApp on Polygon.',
     identifier: GOOD_GHOSTING_PLUGIN_ID,

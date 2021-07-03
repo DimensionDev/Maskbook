@@ -15,23 +15,6 @@ const useStyles = makeStyles((theme) => ({
     root: {
         padding: theme.spacing(2),
     },
-    logo: {
-        textAlign: 'center',
-        '& > *': {
-            width: 'auto',
-            height: 100,
-        },
-    },
-    title: {
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        display: 'flex',
-        alignItems: 'center',
-        '& > :last-child': {
-            marginTop: 4,
-            marginLeft: 4,
-        },
-    },
     tabs: {
         height: 'var(--tabHeight)',
         width: '100%',
@@ -90,12 +73,6 @@ function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
 
     return (
         <Card variant="outlined" className={classes.root} elevation={0}>
-            <div className={classes.logo}>LOGO</div>
-            <div className={classes.title}>
-                <Typography variant="h6" color="textPrimary">
-                    GOOD GHOSTING
-                </Typography>
-            </div>
             <TabContext value={activeTab}>
                 <Tabs className={classes.tabs} value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
                     {[
