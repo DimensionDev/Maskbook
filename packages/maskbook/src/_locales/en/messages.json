@@ -767,6 +767,11 @@
     "plugin_good_ghosting_all_players_status_waiting": "Waiting",
     "plugin_good_ghosting_all_players_status_ghost": "Ghosts",
     "plugin_good_ghosting_all_players_status_dropout": "Drop-outs",
+    "plugin_good_ghosting_status_winning": "Winning",
+    "plugin_good_ghosting_status_waiting": "Waiting",
+    "plugin_good_ghosting_status_ghost": "Ghost",
+    "plugin_good_ghosting_status_dropout": "Withdrawn",
+    "plugin_good_ghosting_status_unknown": "Unknown",
     "plugin_good_ghosting_status": "Status",
     "plugin_good_ghosting_deposits": "Deposits made",
     "plugin_good_ghosting_not_a_participant": "Looks like you're not a participant in this game"

@@ -2,7 +2,7 @@ import { makeStyles, Grid, Typography, Box, Button } from '@material-ui/core'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useI18N } from '../../../utils'
 import type { GoodGhostingInfo, Player } from '../types'
-import { getPlayerStatus } from '../utils'
+import { getPlayerStatus, PlayerStatus } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
     infoRow: {
@@ -55,10 +55,22 @@ export function PersonalView(props: PersonalViewProps) {
         )
     }
 
-    let status = t(
-        ('plugin_good_ghosting_status_' +
-            getPlayerStatus(currentPlayer, props.info.currentSegment)) as 'plugin_good_ghosting_status_winning',
-    )
+    let status = t('plugin_good_ghosting_status_unknown')
+
+    switch (getPlayerStatus(currentPlayer, props.info.currentSegment)) {
+        case PlayerStatus.Winning:
+            status = t('plugin_good_ghosting_status_winning')
+            break
+        case PlayerStatus.Waiting:
+            status = t('plugin_good_ghosting_status_waiting')
+            break
+        case PlayerStatus.Ghost:
+            status = t('plugin_good_ghosting_status_ghost')
+            break
+        case PlayerStatus.Dropout:
+            status = t('plugin_good_ghosting_status_dropout')
+            break
+    }
 
     return (
         <>
