@@ -16,6 +16,8 @@
     "setup_page_create_restore_title": "Restoring from Identity or Backups",
     "setup_page_create_restore_subtitle": "Restoring from identity & historical backups.",
     "setup_page_create_restore_button": "Recovery or Sign In",
+    "create_account_identity_title": "Create an Identity for Mask Network",
+    "create_account_identity_warning": "Please don’t forget your identity code. Your identity code is the only proof of your user identity and the only basis for you to encrypt or decrypt social activities.",
     "wallets_transfer": "Transfer",
     "wallets_swap": "Swap",
     "wallets_red_packet": "Red packet",
