@@ -9,7 +9,6 @@ import { useGameInfo } from '../hooks/useGameInfo'
 import type { GoodGhostingInfo } from '../types'
 import { usePoolData } from '../hooks/usePoolData'
 import { useOtherPlayerInfo } from '../hooks/useOtherPlayerInfo'
-import { useCurrentPlayer } from '../hooks/usePersonalGameInfo'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -69,18 +68,15 @@ function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
 
     const finDataResult = usePoolData(props.info)
     const otherPlayerResult = useOtherPlayerInfo(props.info.numberOfPlayers)
-    const currentPlayerResult = useCurrentPlayer()
+
+    const tabs = [GoodGhostingTab.Game, GoodGhostingTab.Timeline, GoodGhostingTab.Everyone]
+    if (props.info.currentPlayer) tabs.push(GoodGhostingTab.Personal)
 
     return (
         <Card variant="outlined" className={classes.root} elevation={0}>
             <TabContext value={activeTab}>
                 <Tabs className={classes.tabs} value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
-                    {[
-                        GoodGhostingTab.Game,
-                        GoodGhostingTab.Timeline,
-                        GoodGhostingTab.Personal,
-                        GoodGhostingTab.Everyone,
-                    ].map((tab) => (
+                    {tabs.map((tab) => (
                         <Tab className={classes.tab} key={tab} value={tab} label={tab} />
                     ))}
                 </Tabs>
@@ -90,12 +86,14 @@ function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
                 <TabPanel value={GoodGhostingTab.Timeline} sx={{ flex: 1 }}>
                     <TimelineView info={props.info}></TimelineView>
                 </TabPanel>
-                <TabPanel value={GoodGhostingTab.Personal} sx={{ flex: 1 }}>
-                    <PersonalView info={props.info} currentPlayerResult={currentPlayerResult} />
-                </TabPanel>
                 <TabPanel value={GoodGhostingTab.Everyone} sx={{ flex: 1 }}>
                     <OtherPlayersView info={props.info} otherPlayerResult={otherPlayerResult} />
                 </TabPanel>
+                {props.info.currentPlayer && (
+                    <TabPanel value={GoodGhostingTab.Personal} sx={{ flex: 1 }}>
+                        <PersonalView info={props.info} />
+                    </TabPanel>
+                )}
             </TabContext>
         </Card>
     )

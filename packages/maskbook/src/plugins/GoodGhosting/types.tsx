@@ -11,6 +11,7 @@ export interface GoodGhostingInfo {
     totalGamePrincipal: string
     adaiTokenAddress: string
     lendingPoolAddress: string
+    currentPlayer: Player | undefined
 }
 
 export interface Player {

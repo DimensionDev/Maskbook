@@ -1,7 +1,6 @@
-import { makeStyles, Grid, Typography, Box, Button } from '@material-ui/core'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import { makeStyles, Grid, Typography } from '@material-ui/core'
 import { useI18N } from '../../../utils'
-import type { GoodGhostingInfo, Player } from '../types'
+import type { GoodGhostingInfo } from '../types'
 import { getPlayerStatus, PlayerStatus } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -23,31 +22,13 @@ const useStyles = makeStyles((theme) => ({
 
 interface PersonalViewProps {
     info: GoodGhostingInfo
-    currentPlayerResult: AsyncStateRetry<Player>
 }
 
 export function PersonalView(props: PersonalViewProps) {
     const classes = useStyles()
     const { t } = useI18N()
 
-    const { value: currentPlayer, loading, error, retry } = props.currentPlayerResult
-
-    if (loading) {
-        return (
-            <Typography variant="h6" color="textSecondary">
-                Loading game stats
-            </Typography>
-        )
-    } else if (error) {
-        return (
-            <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="textPrimary">Something went wrong.</Typography>
-                <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
-                    Retry
-                </Button>
-            </Box>
-        )
-    } else if (!currentPlayer) {
+    if (!props.info.currentPlayer) {
         return (
             <Typography variant="h6" color="textSecondary">
                 {t('plugin_good_ghosting_not_a_participant')}
@@ -57,7 +38,7 @@ export function PersonalView(props: PersonalViewProps) {
 
     let status = t('plugin_good_ghosting_status_unknown')
 
-    switch (getPlayerStatus(currentPlayer, props.info.currentSegment)) {
+    switch (getPlayerStatus(props.info.currentPlayer, props.info.currentSegment)) {
         case PlayerStatus.Winning:
             status = t('plugin_good_ghosting_status_winning')
             break
@@ -95,7 +76,8 @@ export function PersonalView(props: PersonalViewProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" color="textSecondary">
-                            {Number.parseInt(currentPlayer.mostRecentSegmentPaid) + 1} / {props.info.lastSegment}
+                            {Number.parseInt(props.info.currentPlayer.mostRecentSegmentPaid) + 1} /{' '}
+                            {props.info.lastSegment}
                         </Typography>
                     </Grid>
                 </Grid>

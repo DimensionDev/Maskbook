@@ -1,13 +1,14 @@
-import { useChainId, useSingleContractMultipleData } from '@masknet/web3-shared'
+import { useAccount, useSingleContractMultipleData } from '@masknet/web3-shared'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
-import type { GoodGhostingInfo } from '../types'
+import type { GoodGhostingInfo, Player } from '../types'
+import { ZERO_ADDRESS } from '../constants'
 
 export function useGameInfo() {
     const contract = useGoodGhostingContract()
-    const chainId = useChainId()
+    const account = useAccount()
     const { names, callDatas } = useMemo(() => {
         const names = [
             'segmentPayment',
@@ -22,10 +23,10 @@ export function useGameInfo() {
             'lendingPool',
         ] as any
         return {
-            names,
-            callDatas: Array(names.length).fill([]),
+            names: [...names, 'players'],
+            callDatas: [...Array(names.length).fill([]), [account]],
         }
-    }, [])
+    }, [account])
 
     const [results, calls, _, callback] = useSingleContractMultipleData(contract, names, callDatas)
     const asyncResult = useAsyncRetry(() => callback(calls), [calls, callback])
@@ -45,12 +46,15 @@ export function useGameInfo() {
             totalGamePrincipal,
             adaiToken,
             lendingPool,
+            currentPlayer,
         ] = results.map((x) => {
             if (x.error) failedToGetInfo = true
             return x.error ? '' : (x.value as string)
         })
 
         if (failedToGetInfo) return
+
+        const player = currentPlayer as any as Player
 
         return {
             segmentPayment,
@@ -63,6 +67,7 @@ export function useGameInfo() {
             totalGamePrincipal,
             adaiTokenAddress: adaiToken,
             lendingPoolAddress: lendingPool,
+            currentPlayer: player && player.addr !== ZERO_ADDRESS ? player : undefined,
         } as GoodGhostingInfo
     }, [results, contract])
 
