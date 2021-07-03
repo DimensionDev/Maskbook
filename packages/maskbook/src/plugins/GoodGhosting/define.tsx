@@ -7,8 +7,10 @@ import { extractTextFromTypedMessage } from '../../protocols/typed-message'
 import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 import { GOOD_GHOSTING_PLUGIN_ID } from './constants'
 import { PreviewCard } from './UI/PreviewCard'
+import { EthereumChainBoundary } from '../../web3/UI/EthereumChainBoundary'
+import { ChainId } from '@masknet/web3-shared'
 
-const isGoodGhosting = (x: string): boolean => /^https:\/\/goodghosting.com\/#\/beta/.test(x)
+const isGoodGhosting = (x: string): boolean => /^https:\/\/goodghosting.com/.test(x)
 
 export const GoodGhostingPluginDefine: PluginConfig = {
     id: GOOD_GHOSTING_PLUGIN_ID,
@@ -41,7 +43,9 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     return (
         <MaskbookPluginWrapper pluginName="GoodGhosting">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <PreviewCard id={id} />
+                <EthereumChainBoundary chainId={ChainId.Matic}>
+                    <PreviewCard id={id} />
+                </EthereumChainBoundary>
             </Suspense>
         </MaskbookPluginWrapper>
     )
