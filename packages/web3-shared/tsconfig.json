@@ -9,5 +9,5 @@
   "ts-node": {
     "compilerOptions": { "module": "CommonJS" }
   },
-  "references": [{ "path": "../constants" }]
+  "references": [{ "path": "../web3-constants" }]
 }
