@@ -1,5 +1,6 @@
 import { makeStyles, Grid, Typography, Box, Button } from '@material-ui/core'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import { useI18N } from '../../../utils'
 import type { GoodGhostingInfo, Player } from '../types'
 import { getPlayerStatus } from '../utils'
 
@@ -27,6 +28,7 @@ interface PersonalViewProps {
 
 export function PersonalView(props: PersonalViewProps) {
     const classes = useStyles()
+    const { t } = useI18N()
 
     const { value: currentPlayer, loading, error, retry } = props.currentPlayerResult
 
@@ -48,12 +50,15 @@ export function PersonalView(props: PersonalViewProps) {
     } else if (!currentPlayer) {
         return (
             <Typography variant="h6" color="textSecondary">
-                Looks like you're not a participant in this game
+                {t('plugin_good_ghosting_not_a_participant')}
             </Typography>
         )
     }
 
-    let status = getPlayerStatus(currentPlayer, props.info.currentSegment)
+    let status = t(
+        ('plugin_good_ghosting_status_' +
+            getPlayerStatus(currentPlayer, props.info.currentSegment)) as 'plugin_good_ghosting_status_winning',
+    )
 
     return (
         <>
@@ -61,7 +66,7 @@ export function PersonalView(props: PersonalViewProps) {
                 <Grid item container xs={6} spacing={1}>
                     <Grid item>
                         <Typography variant="body1" color="textPrimary">
-                            Status:
+                            {t('plugin_good_ghosting_status')}:
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -73,7 +78,7 @@ export function PersonalView(props: PersonalViewProps) {
                 <Grid item container xs={6} spacing={1}>
                     <Grid item>
                         <Typography variant="body1" color="textPrimary">
-                            Deposits made:
+                            {t('plugin_good_ghosting_deposits')}:
                         </Typography>
                     </Grid>
                     <Grid item>

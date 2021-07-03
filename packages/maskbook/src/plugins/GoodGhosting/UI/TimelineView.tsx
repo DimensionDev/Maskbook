@@ -4,6 +4,7 @@ import { format as formatDateTime, isBefore } from 'date-fns'
 import classNames from 'classnames'
 import addSeconds from 'date-fns/addSeconds'
 import { useMemo } from 'react'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles((theme) => ({
     text: {
@@ -81,32 +82,41 @@ interface TimelineViewProps {
 
 export function TimelineView(props: TimelineViewProps) {
     const classes = useStyles()
+    const { t } = useI18N()
 
     const getTimelineEvent = (index: number, numberOfRounds: number) => {
         if (index === 0) {
             return {
-                eventOnDate: `Game Launched`,
-                ongoingEvent: `Join Round`,
+                eventOnDate: t('plugin_good_ghosting_game_launched'),
+                ongoingEvent: t('plugin_good_ghosting_join_round'),
             }
         } else if (index === 1) {
             return {
-                eventOnDate: `Join Deadline`,
-                ongoingEvent: `Deposit ${index + 1}`,
+                eventOnDate: t('plugin_good_ghosting_join_deadline'),
+                ongoingEvent: t('plugin_good_ghosting_deposit', {
+                    index: index + 1,
+                }),
             }
         } else if (index === numberOfRounds - 1) {
             return {
-                eventOnDate: `Deposit Deadline ${numberOfRounds - 1}`,
-                ongoingEvent: `Waiting Round`,
+                eventOnDate: t('plugin_good_ghosting_deposit_deadline', {
+                    index: index,
+                }),
+                ongoingEvent: t('plugin_good_ghosting_waiting_round'),
             }
         } else if (index === numberOfRounds) {
             return {
-                eventOnDate: `Waiting Period Ends`,
-                ongoingEvent: `Withdraw`,
+                eventOnDate: t('plugin_good_ghosting_waiting_round_end'),
+                ongoingEvent: t('plugin_good_ghosting_withdraw'),
             }
         } else {
             return {
-                eventOnDate: `Deposit Deadline ${index}`,
-                ongoingEvent: `Deposit ${index + 1}`,
+                eventOnDate: t('plugin_good_ghosting_deposit_deadline', {
+                    index: index,
+                }),
+                ongoingEvent: t('plugin_good_ghosting_deposit', {
+                    index: index + 1,
+                }),
             }
         }
     }

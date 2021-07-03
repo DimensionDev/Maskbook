@@ -6,6 +6,7 @@ import type { GoodGhostingInfo, LendingPoolData } from '../types'
 import { CircularDataDisplay } from './CircularDataDisplay'
 import BigNumber from 'bignumber.js'
 import { useGameToken, useRewardToken } from '../hooks/usePoolData'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles((theme) => ({
     infoRow: {
@@ -34,6 +35,7 @@ export function GameStatsView(props: GameStatsViewProps) {
     const { value: financialData, loading, error, retry } = props.finDataResult
     const gameToken = useGameToken()
     const rewardToken = useRewardToken()
+    const { t } = useI18N()
 
     if (loading) {
         return (
@@ -72,7 +74,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                 <Grid item container xs={6} spacing={1}>
                     <Grid item>
                         <Typography variant="body1" color="textPrimary">
-                            Game Duration:
+                            {t('plugin_good_ghosting_game_duration')}:
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -84,7 +86,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                 <Grid item container xs={6} spacing={1}>
                     <Grid item>
                         <Typography variant="body1" color="textPrimary">
-                            Current Round:
+                            {t('plugin_good_ghosting_current_round')}:
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -98,7 +100,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                 <Grid item container xs={6} spacing={1}>
                     <Grid item>
                         <Typography variant="body1" color="textPrimary">
-                            Deposit Per Round:
+                            {t('plugin_good_ghosting_recurring_deposit')}:
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -110,7 +112,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                 <Grid item container xs={6} spacing={1}>
                     <Grid item>
                         <Typography variant="body1" color="textPrimary">
-                            Round Length:
+                            {t('plugin_good_ghosting_round_length')}:
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -126,7 +128,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                     <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
                         <div className={classes.circularData}>
                             <CircularDataDisplay
-                                header={'Pool APY'}
+                                header={t('plugin_good_ghosting_pool_apy')}
                                 title={financialData.poolAPY.toFixed(1)}
                                 subtitle={'%'}
                             />
@@ -135,7 +137,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                     <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
                         <div className={classes.circularData}>
                             <CircularDataDisplay
-                                header={'Pool Earnings'}
+                                header={t('plugin_good_ghosting_pool_earnings')}
                                 title={new BigNumber(
                                     formatBalance(financialData.poolEarnings, gameToken.decimals),
                                 ).toFixed(1)}
@@ -148,7 +150,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                     <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
                         <div className={classes.circularData}>
                             <CircularDataDisplay
-                                header={'Extra Rewards'}
+                                header={t('plugin_good_ghosting_extra_rewards')}
                                 title={new BigNumber(formatBalance(financialData.reward, rewardToken.decimals)).toFixed(
                                     4,
                                 )}
@@ -159,7 +161,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                     <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
                         <div className={classes.circularData}>
                             <CircularDataDisplay
-                                header={'Total Saved'}
+                                header={t('plugin_good_ghosting_total_saved')}
                                 title={formatBalance(props.info.totalGamePrincipal, gameToken.decimals)}
                                 subtitle={gameToken.symbol}
                             />

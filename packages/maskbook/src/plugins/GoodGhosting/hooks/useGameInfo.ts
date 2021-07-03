@@ -1,4 +1,4 @@
-import { createERC20Tokens, useChainId, useSingleContractMultipleData } from '@masknet/web3-shared'
+import { useChainId, useSingleContractMultipleData } from '@masknet/web3-shared'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
@@ -63,8 +63,6 @@ export function useGameInfo() {
             totalGamePrincipal,
             adaiTokenAddress: adaiToken,
             lendingPoolAddress: lendingPool,
-            gameToken: createERC20Tokens('DAI_ADDRESS', 'Dai Stablecoin', 'DAI', 18)[chainId],
-            rewardToken: createERC20Tokens('WETH_ADDRESS', 'Wrapped Matic', 'wMATIC', 18)[chainId],
         } as GoodGhostingInfo
     }, [results, contract])
 

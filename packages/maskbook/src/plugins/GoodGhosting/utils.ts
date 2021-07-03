@@ -1,11 +1,11 @@
 import type { Player } from './types'
 
 export enum PlayerStatus {
-    Winning = 'Winning',
-    Waiting = 'Waiting',
-    Ghost = 'Ghost',
-    Dropout = 'Dropout',
-    Unknown = 'Unknown',
+    Winning = 'winning',
+    Waiting = 'waiting',
+    Ghost = 'ghost',
+    Dropout = 'dropout',
+    Unknown = 'unknown',
 }
 
 export function getPlayerStatus(player: Player, currentSegment: number): PlayerStatus {
