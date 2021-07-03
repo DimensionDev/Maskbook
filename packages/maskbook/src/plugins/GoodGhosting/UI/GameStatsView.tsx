@@ -5,6 +5,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import type { GoodGhostingInfo, LendingPoolData } from '../types'
 import { CircularDataDisplay } from './CircularDataDisplay'
 import BigNumber from 'bignumber.js'
+import { useGameToken, useRewardToken } from '../hooks/usePoolData'
 
 const useStyles = makeStyles((theme) => ({
     infoRow: {
@@ -31,6 +32,8 @@ interface GameStatsViewProps {
 export function GameStatsView(props: GameStatsViewProps) {
     const classes = useStyles()
     const { value: financialData, loading, error, retry } = props.finDataResult
+    const gameToken = useGameToken()
+    const rewardToken = useRewardToken()
 
     if (loading) {
         return (
@@ -100,8 +103,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" color="textSecondary">
-                            {formatBalance(props.info.segmentPayment, props.info.gameToken.decimals)}{' '}
-                            {props.info.gameToken.symbol}
+                            {formatBalance(props.info.segmentPayment, gameToken.decimals)} {gameToken.symbol}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -135,9 +137,9 @@ export function GameStatsView(props: GameStatsViewProps) {
                             <CircularDataDisplay
                                 header={'Pool Earnings'}
                                 title={new BigNumber(
-                                    formatBalance(financialData.poolEarnings, props.info.gameToken.decimals),
+                                    formatBalance(financialData.poolEarnings, gameToken.decimals),
                                 ).toFixed(1)}
-                                subtitle={props.info.gameToken.symbol}
+                                subtitle={gameToken.symbol}
                             />
                         </div>
                     </Grid>
@@ -147,10 +149,10 @@ export function GameStatsView(props: GameStatsViewProps) {
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={'Extra Rewards'}
-                                title={new BigNumber(
-                                    formatBalance(financialData.reward, props.info.rewardToken.decimals),
-                                ).toFixed(4)}
-                                subtitle={props.info.rewardToken.symbol}
+                                title={new BigNumber(formatBalance(financialData.reward, rewardToken.decimals)).toFixed(
+                                    4,
+                                )}
+                                subtitle={rewardToken.symbol}
                             />
                         </div>
                     </Grid>
@@ -158,8 +160,8 @@ export function GameStatsView(props: GameStatsViewProps) {
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={'Total Saved'}
-                                title={formatBalance(props.info.totalGamePrincipal, props.info.gameToken.decimals)}
-                                subtitle={props.info.gameToken.symbol}
+                                title={formatBalance(props.info.totalGamePrincipal, gameToken.decimals)}
+                                subtitle={gameToken.symbol}
                             />
                         </div>
                     </Grid>

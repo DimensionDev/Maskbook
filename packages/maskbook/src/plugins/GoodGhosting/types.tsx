@@ -1,4 +1,3 @@
-import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 import type BigNumber from 'bignumber.js'
 
 export interface GoodGhostingInfo {
@@ -12,8 +11,6 @@ export interface GoodGhostingInfo {
     totalGamePrincipal: string
     adaiTokenAddress: string
     lendingPoolAddress: string
-    gameToken: ERC20TokenDetailed
-    rewardToken: ERC20TokenDetailed
 }
 
 export interface Player {
