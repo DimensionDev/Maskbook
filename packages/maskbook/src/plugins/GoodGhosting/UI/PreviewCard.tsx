@@ -7,7 +7,7 @@ import { OtherPlayersView } from './OtherPlayersView'
 import { PersonalView } from './PersonalView'
 import { useGameInfo } from '../hooks/useGameInfo'
 import type { GoodGhostingInfo } from '../types'
-import { useGoodGhostingPoolData } from '../hooks/useGoodGhostingPoolData'
+import { usePoolData } from '../hooks/usePoolData'
 import { useOtherPlayerInfo } from '../hooks/useOtherPlayerInfo'
 import { useCurrentPlayer } from '../hooks/usePersonalGameInfo'
 
@@ -67,7 +67,7 @@ function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
     const classes = useStyles()
     const [activeTab, setActiveTab] = useState(GoodGhostingTab.Game)
 
-    const finDataResult = useGoodGhostingPoolData(props.info)
+    const finDataResult = usePoolData(props.info)
     const otherPlayerResult = useOtherPlayerInfo(props.info.numberOfPlayers)
     const currentPlayerResult = useCurrentPlayer()
 

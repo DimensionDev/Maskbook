@@ -100,7 +100,8 @@ export function GameStatsView(props: GameStatsViewProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" color="textSecondary">
-                            {formatBalance(props.info.segmentPayment, 18)} DAI
+                            {formatBalance(props.info.segmentPayment, props.info.gameToken.decimals)}{' '}
+                            {props.info.gameToken.symbol}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -133,8 +134,10 @@ export function GameStatsView(props: GameStatsViewProps) {
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={'Pool Earnings'}
-                                title={new BigNumber(formatBalance(financialData.poolEarnings, 18)).toFixed(1)}
-                                subtitle={'DAI'}
+                                title={new BigNumber(
+                                    formatBalance(financialData.poolEarnings, props.info.gameToken.decimals),
+                                ).toFixed(1)}
+                                subtitle={props.info.gameToken.symbol}
                             />
                         </div>
                     </Grid>
@@ -144,8 +147,10 @@ export function GameStatsView(props: GameStatsViewProps) {
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={'Extra Rewards'}
-                                title={new BigNumber(formatBalance(financialData.reward, 18)).toFixed(4)}
-                                subtitle={'wMATIC'}
+                                title={new BigNumber(
+                                    formatBalance(financialData.reward, props.info.rewardToken.decimals),
+                                ).toFixed(4)}
+                                subtitle={props.info.rewardToken.symbol}
                             />
                         </div>
                     </Grid>
@@ -153,8 +158,8 @@ export function GameStatsView(props: GameStatsViewProps) {
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={'Total Saved'}
-                                title={formatBalance(props.info.totalGamePrincipal, 18)}
-                                subtitle={'DAI'}
+                                title={formatBalance(props.info.totalGamePrincipal, props.info.gameToken.decimals)}
+                                subtitle={props.info.gameToken.symbol}
                             />
                         </div>
                     </Grid>

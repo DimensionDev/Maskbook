@@ -7,7 +7,7 @@ import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
 import { useGoodGhostingIncentiveContract } from '../contracts/useGoodGhostingIncentivesContract'
 import type { GoodGhostingInfo, LendingPoolData } from '../types'
 
-export function useGoodGhostingPoolData(info: GoodGhostingInfo) {
+export function usePoolData(info: GoodGhostingInfo) {
     const contract = useGoodGhostingContract()
     const lendingPoolContract = useAaveLendingPoolContract(info.lendingPoolAddress)
     const adaiContract = useERC20TokenContract(info.adaiTokenAddress)
