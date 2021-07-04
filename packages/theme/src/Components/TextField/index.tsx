@@ -1,11 +1,11 @@
 import { memo } from 'react'
 import { formHelperTextClasses, makeStyles, TextField, TextFieldProps } from '@material-ui/core'
-import { getMaskColor, MaskColorVar } from '../../constants'
+import { getMaskColor } from '../../constants'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        color: MaskColorVar.textLight,
-        pointerEvents: 'inherit',
+        width: '100%',
+        marginBottom: theme.spacing(4),
     },
     label: {
         display: 'flex',
@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
         lineHeight: '16px',
     },
     field: {
+        width: '100%',
         [`& > .${formHelperTextClasses.root}`]: {
             paddingLeft: theme.spacing(0.5),
             borderLeft: 'solid 2px',

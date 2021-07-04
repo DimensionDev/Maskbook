@@ -13,7 +13,7 @@ const Container = styled('div')({
 
 export interface DesktopMnemonicConfirmProps {
     puzzleWords: string[]
-    indexes: number[]
+    indexes?: number[]
     onChange(word: string, index: number): void
 }
 export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) => {
@@ -28,8 +28,8 @@ export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) 
                     variant="filled"
                     size="small"
                     value={word}
-                    disabled={!indexes.includes(i)}
-                    onChange={(e) => onChange(e.target.value, indexes.indexOf(i))}
+                    disabled={indexes && !indexes.includes(i)}
+                    onChange={(e) => onChange(e.target.value, indexes ? indexes.indexOf(i) : i)}
                 />
             ))}
         </Container>

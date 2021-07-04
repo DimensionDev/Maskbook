@@ -9,10 +9,11 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../type'
 import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { Button, TextField } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import { ButtonGroup } from '../components/ActionGroup'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
+import { MaskTextField } from '@masknet/theme'
 
 export const PersonaCreate = () => {
     const navigate = useNavigate()
@@ -27,7 +28,7 @@ export const PersonaCreate = () => {
             <Body>
                 <SignUpAccountLogo />
                 <div>
-                    <TextField
+                    <MaskTextField
                         label="Name"
                         variant="filled"
                         InputProps={{ disableUnderline: true }}
