@@ -9,13 +9,12 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../type'
 import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { Button } from '@material-ui/core'
+import { Button, TextField } from '@material-ui/core'
 import { ButtonGroup } from '../components/ActionGroup'
 import { useDashboardI18N } from '../../../locales'
-import { MnemonicRevealLG } from '../../../components/Mnemonic'
 import { SignUpRoutePath } from '../routePath'
 
-export const MnemonicRevealForm = () => {
+export const PersonaCreate = () => {
     const navigate = useNavigate()
     const t = useDashboardI18N()
     const [words] = useMnemonicWordsPuzzle()
@@ -28,10 +27,19 @@ export const MnemonicRevealForm = () => {
             <Body>
                 <SignUpAccountLogo />
                 <div>
-                    <MnemonicRevealLG words={words} />
+                    <TextField
+                        label="Name"
+                        variant="filled"
+                        InputProps={{ disableUnderline: true }}
+                        onChange={(e) => {}}
+                    />
                     <ButtonGroup>
                         <Button color={'secondary'}>Back</Button>
-                        <Button color={'primary'} onClick={() => navigate(SignUpRoutePath.MnemonicConfirm)}>
+                        <Button
+                            color={'primary'}
+                            onClick={() => {
+                                navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedial}`)
+                            }}>
                             Next
                         </Button>
                     </ButtonGroup>

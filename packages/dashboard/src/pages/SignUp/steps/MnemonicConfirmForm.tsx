@@ -4,7 +4,6 @@ import {
     Footer,
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout'
-import { useMnemonicWordsPuzzle } from '@masknet/web3-shared'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../type'
 import { MaskAlert } from '../../../components/MaskAlert'
@@ -12,13 +11,13 @@ import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { Button } from '@material-ui/core'
 import { ButtonGroup } from '../components/ActionGroup'
 import { useDashboardI18N } from '../../../locales'
-import { MnemonicRevealLG } from '../../../components/Mnemonic'
+import { DesktopMnemonicConfirm } from '../../../components/Mnemonic'
 import { SignUpRoutePath } from '../routePath'
 
-export const MnemonicRevealForm = () => {
+export const MnemonicConfirmForm = () => {
     const navigate = useNavigate()
     const t = useDashboardI18N()
-    const [words] = useMnemonicWordsPuzzle()
+
     return (
         <ColumnContentLayout>
             <Header
@@ -28,17 +27,19 @@ export const MnemonicRevealForm = () => {
             <Body>
                 <SignUpAccountLogo />
                 <div>
-                    <MnemonicRevealLG words={words} />
+                    <DesktopMnemonicConfirm onChange={() => {}} />
                     <ButtonGroup>
                         <Button color={'secondary'}>Back</Button>
-                        <Button color={'primary'} onClick={() => navigate(SignUpRoutePath.MnemonicConfirm)}>
+                        <Button
+                            color={'primary'}
+                            onClick={() => navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.PersonaCreate}`)}>
                             Next
                         </Button>
                     </ButtonGroup>
                 </div>
                 <MaskAlert description={t.create_account_identity_warning()} type={'error'} />
             </Body>
-            <Footer></Footer>
+            <Footer />
         </ColumnContentLayout>
     )
 }

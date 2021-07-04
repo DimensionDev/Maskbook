@@ -4,6 +4,8 @@ import { Button, Card, Typography } from '@material-ui/core'
 import type { ReactNode } from 'react'
 import { SignUpAccountIcon, RestoreIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
+import { RoutePaths } from '../../type'
+import { useNavigate } from 'react-router'
 
 const Content = styled('div')(
     ({ theme }) => `
@@ -83,14 +85,15 @@ const ActionCardButton = styled('div')(
 interface ISetupActionCardProps {
     icon: ReactNode
     title: string
-    subtitle: string
+    subtitle?: string
     action: {
         type: 'secondary' | 'primary'
         text: string
+        handler: () => void
     }
 }
 
-const SetupActionCard: React.FC<ISetupActionCardProps> = ({ icon, title, subtitle, action }) => {
+export const SetupActionCard = ({ icon, title, subtitle, action }: ISetupActionCardProps) => {
     return (
         <ActionCardContainer variant="outlined">
             <ActionCardIcon>{icon}</ActionCardIcon>
@@ -103,7 +106,7 @@ const SetupActionCard: React.FC<ISetupActionCardProps> = ({ icon, title, subtitl
                 </Typography>
             </ActionCardContent>
             <ActionCardButton>
-                <Button size="small" variant="contained" color={action.type}>
+                <Button size="small" variant="contained" color={action.type} onClick={action.handler}>
                     {action.text}
                 </Button>
             </ActionCardButton>
@@ -114,6 +117,7 @@ const SetupActionCard: React.FC<ISetupActionCardProps> = ({ icon, title, subtitl
 // todo: dark theme style
 const Setup = () => {
     const t = useDashboardI18N()
+    const navigate = useNavigate()
 
     return (
         <ColumnLayout>
@@ -134,6 +138,7 @@ const Setup = () => {
                         action={{
                             type: 'primary',
                             text: t.setup_page_create_account_button(),
+                            handler: () => navigate(RoutePaths.SignUp),
                         }}
                     />
                     <SetupActionCard
@@ -143,6 +148,7 @@ const Setup = () => {
                         action={{
                             type: 'secondary',
                             text: t.setup_page_create_restore_button(),
+                            handler: () => navigate(RoutePaths.Login),
                         }}
                     />
                 </ActionCards>

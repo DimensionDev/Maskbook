@@ -2,7 +2,7 @@ import { TextField, experimentalStyled as styled } from '@material-ui/core'
 import { useRef, memo } from 'react'
 
 const Container = styled('div')({
-    display: 'inline-grid',
+    display: 'grid',
     gridTemplateColumns: 'repeat(4, 1fr)',
     gap: 24,
     '& > *': {
