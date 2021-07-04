@@ -23,7 +23,7 @@ export const MnemonicRevealForm = () => {
         <ColumnContentLayout>
             <Header
                 title={t.create_account_identity_title()}
-                action={{ name: 'Recovery & Sign In', callback: () => navigate(RoutePaths.Login) }}
+                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.Login) }}
             />
             <Body>
                 <SignUpAccountLogo />
