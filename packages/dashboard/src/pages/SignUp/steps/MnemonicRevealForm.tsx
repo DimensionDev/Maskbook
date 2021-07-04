@@ -9,16 +9,42 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../type'
 import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { Button } from '@material-ui/core'
+import { Button, makeStyles } from '@material-ui/core'
 import { ButtonGroup } from '../components/ActionGroup'
 import { useDashboardI18N } from '../../../locales'
-import { MnemonicRevealLG } from '../../../components/Mnemonic'
+import { DesktopMnemonicConfirm, MnemonicRevealLG } from '../../../components/Mnemonic'
 import { SignUpRoutePath } from '../routePath'
+import RefreshIcon from '@material-ui/icons/Refresh'
+import { useState } from 'react'
+
+const useStyles = makeStyles((theme) => ({
+    refresh: {
+        paddingBottom: 32,
+        textAlign: 'right',
+    },
+}))
+
+enum CreateWalletStep {
+    NameAndWords = 0,
+    Verify,
+}
 
 export const MnemonicRevealForm = () => {
+    const [step, setStep] = useState(CreateWalletStep.NameAndWords)
     const navigate = useNavigate()
     const t = useDashboardI18N()
-    const [words] = useMnemonicWordsPuzzle()
+    const classes = useStyles()
+    const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
+
+    const onSubmit = () => {
+        navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.PersonaCreate}`)
+    }
+
+    const onBack = () => {
+        setStep(CreateWalletStep.NameAndWords)
+        resetCallback()
+    }
+
     return (
         <ColumnContentLayout>
             <Header
@@ -27,16 +53,39 @@ export const MnemonicRevealForm = () => {
             />
             <Body>
                 <SignUpAccountLogo />
-                <div>
-                    <MnemonicRevealLG words={words} />
-                    <ButtonGroup>
-                        <Button color={'secondary'}>Back</Button>
-                        <Button color={'primary'} onClick={() => navigate(SignUpRoutePath.MnemonicConfirm)}>
-                            Next
-                        </Button>
-                    </ButtonGroup>
-                </div>
-                <MaskAlert description={t.create_account_identity_warning()} type={'error'} />
+                {step === CreateWalletStep.NameAndWords && (
+                    <div>
+                        <div className={classes.refresh}>
+                            <Button variant={'text'} startIcon={<RefreshIcon />} onClick={refreshCallback}>
+                                {t.refresh()}
+                            </Button>
+                        </div>
+                        <MnemonicRevealLG words={words} />
+                        <ButtonGroup>
+                            <Button color={'secondary'}>Back</Button>
+                            <Button color={'primary'} onClick={() => setStep(CreateWalletStep.Verify)}>
+                                Next
+                            </Button>
+                        </ButtonGroup>
+                    </div>
+                )}
+                {step === CreateWalletStep.Verify && (
+                    <div>
+                        <DesktopMnemonicConfirm indexes={indexes} puzzleWords={puzzleWords} onChange={answerCallback} />
+                        <ButtonGroup>
+                            <Button color={'secondary'} onClick={onBack}>
+                                Back
+                            </Button>
+                            <Button
+                                color={'primary'}
+                                disabled={words.join(' ') !== puzzleWords.join(' ')}
+                                onClick={onSubmit}>
+                                Next
+                            </Button>
+                        </ButtonGroup>
+                    </div>
+                )}
+                <MaskAlert description={t.create_account_identity_warning()} />
             </Body>
             <Footer></Footer>
         </ColumnContentLayout>

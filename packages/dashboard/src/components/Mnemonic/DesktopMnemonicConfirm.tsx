@@ -1,5 +1,5 @@
 import { TextField, experimentalStyled as styled } from '@material-ui/core'
-import { useRef, memo } from 'react'
+import { memo } from 'react'
 
 const Container = styled('div')({
     display: 'grid',
@@ -10,24 +10,26 @@ const Container = styled('div')({
         height: 48,
     },
 })
-const a12 = [...Array(12).keys()]
+
 export interface DesktopMnemonicConfirmProps {
-    onChange(mnemonics: (string | undefined)[]): void
+    puzzleWords: string[]
+    indexes: number[]
+    onChange(word: string, index: number): void
 }
 export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) => {
-    const value = useRef<Readonly<Record<string, string>>>({ length: 12 as any })
+    const { puzzleWords, indexes, onChange } = props
+
     return (
         <Container>
-            {a12.map((i) => (
+            {puzzleWords.map((word, i) => (
                 <TextField
                     key={i}
                     label={i + 1 + '.'}
                     variant="filled"
                     size="small"
-                    onChange={(e) => {
-                        value.current = { ...value.current, [i]: e.currentTarget.value }
-                        props.onChange(Array.from(value.current as any))
-                    }}
+                    value={word}
+                    disabled={!indexes.includes(i)}
+                    onChange={(e) => onChange(e.target.value, indexes.indexOf(i))}
                 />
             ))}
         </Container>

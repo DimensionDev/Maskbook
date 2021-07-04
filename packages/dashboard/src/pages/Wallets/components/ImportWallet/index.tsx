@@ -73,7 +73,7 @@ export const ImportWallet = memo(() => {
             privateKey: t.wallets_wallet_private_key(),
         },
         {
-            mnemonic: <DesktopMnemonicConfirm onChange={() => {}} />,
+            mnemonic: <DesktopMnemonicConfirm onChange={() => {}} indexes={[]} puzzleWords={[]} />,
             json: 'TBD',
             privateKey: (
                 <>
