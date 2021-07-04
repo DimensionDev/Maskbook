@@ -774,5 +774,7 @@
     "plugin_good_ghosting_status_unknown": "Unknown",
     "plugin_good_ghosting_status": "Status",
     "plugin_good_ghosting_deposits": "Deposits made",
+    "plugin_good_ghosting_total_deposited": "Total deposited",
+    "plugin_good_ghosting_address": "Address",
     "plugin_good_ghosting_not_a_participant": "Looks like you're not a participant in this game"
 }

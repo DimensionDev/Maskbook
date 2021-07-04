@@ -1,5 +1,7 @@
+import { formatBalance, formatEthereumAddress } from '@masknet/web3-shared'
 import { makeStyles, Grid, Typography } from '@material-ui/core'
 import { useI18N } from '../../../utils'
+import { useGameToken } from '../hooks/usePoolData'
 import type { GoodGhostingInfo } from '../types'
 import { getPlayerStatus, PlayerStatus } from '../utils'
 
@@ -27,6 +29,7 @@ interface PersonalViewProps {
 export function PersonalView(props: PersonalViewProps) {
     const classes = useStyles()
     const { t } = useI18N()
+    const gameToken = useGameToken()
 
     if (!props.info.currentPlayer) {
         return (
@@ -55,6 +58,32 @@ export function PersonalView(props: PersonalViewProps) {
 
     return (
         <>
+            <Grid className={classes.infoRow} container spacing={2}>
+                <Grid item container xs={6} spacing={1}>
+                    <Grid item>
+                        <Typography variant="body1" color="textPrimary">
+                            {t('plugin_good_ghosting_address')}:
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="body1" color="textSecondary">
+                            {formatEthereumAddress(props.info.currentPlayer.addr, 4)}
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <Grid item container xs={6} spacing={1}>
+                    <Grid item>
+                        <Typography variant="body1" color="textPrimary">
+                            {t('plugin_good_ghosting_total_deposited')}:
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="body1" color="textSecondary">
+                            {formatBalance(props.info.currentPlayer.amountPaid, gameToken.decimals)} {gameToken.symbol}
+                        </Typography>
+                    </Grid>
+                </Grid>
+            </Grid>
             <Grid className={classes.infoRow} container spacing={2}>
                 <Grid item container xs={6} spacing={1}>
                     <Grid item>

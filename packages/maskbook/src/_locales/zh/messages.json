@@ -774,5 +774,7 @@
     "plugin_good_ghosting_status_unknown": "",
     "plugin_good_ghosting_status": "",
     "plugin_good_ghosting_deposits": "",
+    "plugin_good_ghosting_total_deposited": "",
+    "plugin_good_ghosting_address": "",
     "plugin_good_ghosting_not_a_participant": ""
 }
