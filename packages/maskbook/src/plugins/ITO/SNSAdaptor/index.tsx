@@ -57,15 +57,15 @@ function Badge({ payload }: BadgeProps) {
         EthereumTokenType.ERC20,
         payload.token as string,
     )
+    const balance = formatBalance(payload.total, tokenDetailed?.decimals)
+    const symbol = tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
     const sellerName = payload.seller.name
         ? payload.seller.name
         : payload.message.split(MSG_DELIMITER)[0] ?? formatEthereumAddress(payload.seller.address, 4)
     return loadingToken ? null : (
         <div className={classes.root}>
             <ItoLabelIcon size={14} />
-            <span className={classes.span}>{`A ITO with ${formatBalance(payload.total, tokenDetailed?.decimals)} $${
-                tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
-            } from ${sellerName}`}</span>
+            <span className={classes.span}>{`A ITO with ${balance} $${symbol} from ${sellerName}`}</span>
         </div>
     )
 }

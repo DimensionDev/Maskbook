@@ -218,7 +218,7 @@ export function ITO(props: ITO_Props) {
 
     const { pid, payload } = props
     const { regions: defaultRegions = '-' } = props.payload
-    const { token, total: payload_total, exchange_amounts, exchange_tokens, limit, end_time, message } = payload
+    const { token, total: payload_total, exchange_amounts, exchange_tokens, limit, message } = payload
 
     const { t } = useI18N()
     const sellerName =
@@ -237,6 +237,9 @@ export function ITO(props: ITO_Props) {
         error: errorAvailability,
         retry: retryAvailability,
     } = useAvailabilityComputed(payload)
+
+    const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime, endTime, qualificationAddress } =
+        availabilityComputed
     //#ednregion
 
     const total = new BigNumber(payload_total)
@@ -254,10 +257,8 @@ export function ITO(props: ITO_Props) {
         value: ifQualified = false,
         loading: loadingIfQualified,
         retry: retryIfQualified,
-    } = useIfQualified(payload.qualification_address, payload.contract_address)
+    } = useIfQualified(qualificationAddress, payload.contract_address)
     //#endregion
-
-    const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime } = availabilityComputed
 
     const isAccountSeller =
         payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
@@ -273,8 +274,7 @@ export function ITO(props: ITO_Props) {
     const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
         chainId === payload.chain_id &&
-        (new BigNumber(availability ? availability.swapped : 0).isGreaterThan(0) ||
-            tradeInfo?.buyInfo?.buyer.address.toLowerCase() === account.toLowerCase())
+        (new BigNumber(availability ? availability.swapped : 0).isGreaterThan(0) || Boolean(availability?.claimed))
 
     const shareSuccessLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
@@ -374,7 +374,7 @@ export function ITO(props: ITO_Props) {
     )
 
     useEffect(() => {
-        const timeToExpired = end_time - Date.now()
+        const timeToExpired = endTime - Date.now()
         if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired)) return
 
         const timer = setTimeout(() => {
@@ -383,7 +383,7 @@ export function ITO(props: ITO_Props) {
         }, timeToExpired + TIME_WAIT_BLOCKCHAIN)
 
         return () => clearTimeout(timer)
-    }, [end_time, listOfStatus])
+    }, [endTime, listOfStatus])
 
     useEffect(() => {
         if (destructState.type === TransactionStateType.UNKNOWN) return
@@ -465,10 +465,10 @@ export function ITO(props: ITO_Props) {
     const footerEndTime = useMemo(
         () => (
             <Typography variant="body1">
-                {t('plugin_ito_swap_end_date', { date: formatDateTime(end_time, 'yyyy-MM-dd HH:mm') })}
+                {t('plugin_ito_swap_end_date', { date: formatDateTime(endTime, 'yyyy-MM-dd HH:mm') })}
             </Typography>
         ),
-        [end_time, t],
+        [endTime, t],
     )
 
     const footerSwapInfo = useMemo(
@@ -713,7 +713,7 @@ export function ITO(props: ITO_Props) {
             <SwapGuide
                 status={claimDialogStatus}
                 total_remaining={total_remaining}
-                payload={payload}
+                payload={{ ...payload, qualification_address: qualificationAddress }}
                 shareSuccessLink={shareSuccessLink}
                 isBuyer={isBuyer}
                 exchangeTokens={exchange_tokens}

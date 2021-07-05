@@ -34,6 +34,7 @@ export function PostInspector(props: PostInspectorProps) {
         EthereumTokenType.ERC20,
         typeof token === 'string' ? (token as string) : (token as FungibleTokenDetailed).address,
     )
+
     const retry = useCallback(() => {
         retryPayload()
         retryToken()

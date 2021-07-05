@@ -138,8 +138,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
                     'total_remaining',
                     'buyers',
                     'regions',
+                    'start_time',
+                    'end_time',
+                    'qualification_address',
                 ])
-                console.log({ r })
                 return payload ? next.set(ITO_MetaKey_2, r) : next.delete(ITO_MetaKey_2)
             })
 
