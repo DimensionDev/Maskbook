@@ -1,4 +1,4 @@
-import type { TypedMessage } from '@masknet/shared'
+import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
 import type { Emitter } from '@servie/events'
 import type { Option, Result } from 'ts-results'
 
@@ -110,7 +110,7 @@ export namespace Plugin.Shared {
          */
         typedMessageTransformer?: TypedMessageTransformer
     }
-    export type TypedMessageTransformer = (message: TypedMessage) => TypedMessage
+    export type TypedMessageTransformer = (message: TypedMessageTuple) => TypedMessageTuple
     /** The publisher of the plugin */
     export interface Publisher {
         /** The name of the publisher */
