@@ -1,17 +1,23 @@
-import { isTypedMessagePromise, isWellKnownTypedMessages, makeTypedMessageTuple, useValueRef } from '@masknet/shared'
-import { makeStyles, Theme } from '@material-ui/core'
+import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import {
+    isTypedMessagePromise,
+    isTypedMessageTuple,
+    isWellKnownTypedMessages,
+    makeTypedMessageTuple,
+    useValueRef,
+} from '@masknet/shared'
+import { makeStyles } from '@material-ui/core'
 import { useEffect, useMemo } from 'react'
 import { Result } from 'ts-results'
-import { PluginUI } from '../../plugins/PluginUI'
 import { allPostReplacementSettings } from '../../settings/settings'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
 
-const useStlyes = makeStyles((theme: Theme) => ({
+const useStlyes = makeStyles({
     root: {
         overflowWrap: 'break-word',
     },
-}))
+})
 
 export interface PostReplacerProps {
     zip?: () => void
@@ -24,14 +30,19 @@ export function PostReplacer(props: PostReplacerProps) {
     const postPayload = usePostInfoDetails.postPayload()
     const allPostReplacement = useValueRef(allPostReplacementSettings)
 
-    const plugins = [...PluginUI.values()]
+    const plugins = useActivatedPluginsSNSAdaptor()
     const processedPostMessage = useMemo(
         () =>
-            plugins.reduce(
-                (x, plugin) => Result.wrap(() => plugin.messageProcessor?.(x) ?? x).unwrapOr(x),
-                postMessage,
-            ),
-        [plugins.map((x) => x.identifier).join(), postMessage],
+            plugins.reduce((x, plugin) => {
+                const result = Result.wrap(() => plugin.typedMessageTransformer?.(x) ?? x).unwrapOr(x)
+                if (isTypedMessageTuple(result)) return result
+                console.warn(
+                    '[TypedMessage] typedMessageTransformer that return a non TypedMessageTuple is not supported yet. This transform is ignored',
+                    result,
+                )
+                return x
+            }, postMessage),
+        [plugins.map((x) => x.ID).join(), postMessage],
     )
     const shouldReplacePost =
         // replace all posts
