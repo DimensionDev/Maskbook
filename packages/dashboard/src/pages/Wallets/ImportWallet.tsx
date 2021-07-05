@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { Button } from '@material-ui/core'
-import { useSnackbarCallback, MaskColorVar } from '@masknet/theme'
+import { MaskColorVar } from '@masknet/theme'
+import { useSnackbarCallback } from '@masknet/shared'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import {
     ImportWalletUI,
@@ -10,7 +11,7 @@ import {
     TabIndexMap,
     TabIndex,
     BLANK_WORDS,
-} from '../../../../maskbook/src/plugins/Wallet/UI/ImportWalletDialog'
+} from '../../../../maskbook/src/plugins/Wallet/SNSAdaptor/ImportWalletDialog'
 
 const Container = styled('div')`
     width: 528px;

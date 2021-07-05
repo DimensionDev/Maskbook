@@ -1,5 +1,5 @@
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { useSnackbarCallback } from '@masknet/theme'
+import { useSnackbarCallback } from '@masknet/shared'
 import { Box, Button, DialogActions, DialogContent, makeStyles, TextField } from '@material-ui/core'
 import { FC, useMemo, useState } from 'react'
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
