@@ -1,10 +1,8 @@
 import { makeStyles, Grid, Typography } from '@material-ui/core'
-import type { GoodGhostingInfo, TimelineEvent } from '../types'
+import type { GoodGhostingInfo } from '../types'
 import { format as formatDateTime, isBefore } from 'date-fns'
 import classNames from 'classnames'
-import addSeconds from 'date-fns/addSeconds'
-import { useMemo } from 'react'
-import { useI18N } from '../../../utils'
+import { useTimeline } from '../hooks/useGameInfo'
 
 const useStyles = makeStyles((theme) => ({
     text: {
@@ -82,61 +80,8 @@ interface TimelineViewProps {
 
 export function TimelineView(props: TimelineViewProps) {
     const classes = useStyles()
-    const { t } = useI18N()
 
-    const getTimelineEvent = (index: number, numberOfRounds: number) => {
-        if (index === 0) {
-            return {
-                eventOnDate: t('plugin_good_ghosting_game_launched'),
-                ongoingEvent: t('plugin_good_ghosting_join_round'),
-            }
-        } else if (index === 1) {
-            return {
-                eventOnDate: t('plugin_good_ghosting_join_deadline'),
-                ongoingEvent: t('plugin_good_ghosting_deposit', {
-                    index: index + 1,
-                }),
-            }
-        } else if (index === numberOfRounds - 1) {
-            return {
-                eventOnDate: t('plugin_good_ghosting_deposit_deadline', {
-                    index: index,
-                }),
-                ongoingEvent: t('plugin_good_ghosting_waiting_round'),
-            }
-        } else if (index === numberOfRounds) {
-            return {
-                eventOnDate: t('plugin_good_ghosting_waiting_round_end'),
-                ongoingEvent: t('plugin_good_ghosting_withdraw'),
-            }
-        } else {
-            return {
-                eventOnDate: t('plugin_good_ghosting_deposit_deadline', {
-                    index: index,
-                }),
-                ongoingEvent: t('plugin_good_ghosting_deposit', {
-                    index: index + 1,
-                }),
-            }
-        }
-    }
-
-    const startTime = props.info.firstSegmentStart
-    const roundDuration = props.info.segmentLength
-    const numberOfRounds = props.info.lastSegment && props.info.lastSegment + 1
-
-    const timeline: TimelineEvent[] = useMemo(() => {
-        if (!startTime || !roundDuration || !numberOfRounds) return []
-        const initialDate = new Date(startTime * 1000)
-        const rounds: TimelineEvent[] = []
-        for (let i = 0; i <= numberOfRounds; i++) {
-            rounds.push({
-                date: addSeconds(initialDate, roundDuration * i),
-                ...getTimelineEvent(i, numberOfRounds),
-            })
-        }
-        return rounds
-    }, [startTime, roundDuration, numberOfRounds])
+    const timeline = useTimeline(props.info)
 
     return (
         <div className={classes.timelineWrapper}>

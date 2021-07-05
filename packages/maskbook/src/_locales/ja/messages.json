@@ -776,5 +776,9 @@
     "plugin_good_ghosting_deposits": "",
     "plugin_good_ghosting_total_deposited": "",
     "plugin_good_ghosting_address": "",
-    "plugin_good_ghosting_not_a_participant": ""
+    "plugin_good_ghosting_not_a_participant": "",
+    "plugin_good_ghosting_next_event": "",
+    "plugin_good_ghosting_game_end": "",
+    "plugin_good_ghosting_game_over": "",
+    "plugin_good_ghosting_participants_withdraw": ""
 }

@@ -9,6 +9,7 @@ import { useGameInfo } from '../hooks/useGameInfo'
 import type { GoodGhostingInfo } from '../types'
 import { usePoolData } from '../hooks/usePoolData'
 import { useOtherPlayerInfo } from '../hooks/useOtherPlayerInfo'
+import { TimelineTimer } from './TimelineTimer'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -74,6 +75,7 @@ function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
 
     return (
         <Card variant="outlined" className={classes.root} elevation={0}>
+            <TimelineTimer info={props.info} />
             <TabContext value={activeTab}>
                 <Tabs className={classes.tabs} value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
                     {tabs.map((tab) => (
