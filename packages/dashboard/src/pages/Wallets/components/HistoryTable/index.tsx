@@ -17,6 +17,7 @@ import { MaskColorVar } from '@masknet/theme'
 import { LoadingPlaceholder } from '../LoadingPlacholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { HistoryTableRow } from '../HistoryTableRow'
+import { noop } from 'lodash-es'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -138,7 +139,7 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(
                     <TablePagination
                         count={-1}
                         component="div"
-                        onPageChange={() => {}}
+                        onPageChange={noop}
                         page={page}
                         rowsPerPage={30}
                         rowsPerPageOptions={[30]}

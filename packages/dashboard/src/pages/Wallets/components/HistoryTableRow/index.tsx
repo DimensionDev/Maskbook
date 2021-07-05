@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import format from 'date-fns/format'
+import formatDateTime from 'date-fns/format'
 import type { Transaction } from '@masknet/web3-shared'
 import { Box, TableCell, TableRow, Typography, makeStyles, Link } from '@material-ui/core'
 import {
@@ -85,7 +85,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                 })}
             </TableCell>
             <TableCell className={classes.cell} align="center">
-                <Typography fontSize="inherit">{format(transaction.timeAt, 'yyyy-MM-dd HH:mm')}</Typography>
+                <Typography fontSize="inherit">{formatDateTime(transaction.timeAt, 'yyyy-MM-dd HH:mm')}</Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center">
                 <Link

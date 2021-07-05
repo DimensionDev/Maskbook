@@ -11,8 +11,7 @@
     { "path": "../web3-shared/" },
     { "path": "../storybook-shared/" },
     { "path": "../icons/" },
-    { "path": "../plugin-infra" },
-    { "path": "../constants" }
+    { "path": "../plugin-infra" }
   ],
   "ts-node": {
     "compilerOptions": { "module": "CommonJS" }

@@ -103,7 +103,7 @@ export const TokenTableUI = memo<TokenTableUIProps>(
                             {isEmpty ? <EmptyPlaceholder children={t.wallets_empty_tokens_tip()} /> : null}
                         </Box>
                     ) : (
-                        <Table stickyHeader sx={{ padding: '0px 44px' }}>
+                        <Table stickyHeader sx={{ padding: '0 44px' }}>
                             <TableHead>
                                 <TableRow>
                                     <TableCell key="Asset" align="center" variant="head" className={classes.header}>
