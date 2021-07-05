@@ -159,7 +159,7 @@ function config(opts: {
             new WatchMissingModulesPlugin(path.resolve('node_modules')),
             // Note: In development mode gitInfo will share across cache (and get inaccurate result). I (@Jack-Works) think this is a valuable trade-off.
             (mode === 'development' ? EnvironmentPluginCache : EnvironmentPluginNoCache)({
-                ...getGitInfo(),
+                ...getGitInfo(target.isReproducibleBuild),
                 ...target.runtimeEnv,
             }),
             new EnvironmentPlugin({ NODE_ENV: mode, NODE_DEBUG: false, STORYBOOK: false }),
@@ -450,8 +450,8 @@ function getCompilationInfo(argv: any) {
 
 export type Target = ReturnType<typeof getCompilationInfo>
 /** Get git info */
-function getGitInfo() {
-    if (git.isRepository())
+function getGitInfo(reproducible: boolean) {
+    if (!reproducible && git.isRepository())
         return {
             BUILD_DATE: new Date().toISOString(),
             VERSION: git.describe('--dirty'),
