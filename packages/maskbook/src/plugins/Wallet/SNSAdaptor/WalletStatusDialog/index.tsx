@@ -179,7 +179,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                             </Link>
                             <Link
                                 className={classes.link}
-                                href={`${resolveAddressLinkOnExplorer(chainId, selectedWallet.address)}`}
+                                href={resolveAddressLinkOnExplorer(chainId, selectedWallet.address)}
                                 target="_blank"
                                 title={t('plugin_wallet_view_on_explorer')}
                                 rel="noopener noreferrer">
