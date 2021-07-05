@@ -1,21 +1,20 @@
-import { getChainId } from '../../../../extension/background-script/SettingsService'
-import { pick } from 'lodash-es'
-import { tokenIntoMask } from '../../../ITO/helpers'
-import { RED_PACKET_CONSTANTS } from '../../constants'
-import type {
-    RedPacketJSONPayload,
-    RedPacketSubgraphOutMask,
-    RedPacketSubgraphInMask,
-    RedPacketHistory,
-} from '../../types'
 import {
-    EthereumTokenType,
     ChainId,
-    constantOfChain,
-    getChainName,
+    EthereumTokenType,
     getChainDetailed,
+    getChainName,
+    getRedPacketConstants,
     NativeTokenDetailed,
 } from '@masknet/web3-shared'
+import { pick } from 'lodash-es'
+import { getChainId } from '../../../../extension/background-script/SettingsService'
+import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
+import type {
+    RedPacketHistory,
+    RedPacketJSONPayload,
+    RedPacketSubgraphInMask,
+    RedPacketSubgraphOutMask,
+} from '../../types'
 
 const redPacketBasicKeys = [
     'contract_address',
@@ -72,7 +71,8 @@ const RED_PACKET_FIELDS = `
 `
 
 export async function getRedPacketTxid(rpid: string) {
-    const response = await fetch(constantOfChain(RED_PACKET_CONSTANTS, await getChainId()).SUBGRAPH_URL, {
+    const { SUBGRAPH_URL } = getRedPacketConstants(await getChainId())
+    const response = await fetch(SUBGRAPH_URL, {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({
@@ -94,7 +94,8 @@ export async function getRedPacketTxid(rpid: string) {
 }
 
 export async function getRedPacketHistory(address: string, chainId: ChainId) {
-    const response = await fetch(constantOfChain(RED_PACKET_CONSTANTS, chainId).SUBGRAPH_URL, {
+    const { SUBGRAPH_URL } = getRedPacketConstants(await getChainId())
+    const response = await fetch(SUBGRAPH_URL, {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({

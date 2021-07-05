@@ -1,4 +1,4 @@
-import { getEnumAsArray, unreachable } from '@masknet/shared'
+import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import stringify from 'json-stable-stringify'
 import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
@@ -17,9 +17,9 @@ export const currentSlippageTolerance = createGlobalSettings<number>(
 )
 
 /**
- * The default trending data provider
+ * The default data provider
  */
-export const currentTrendingDataProviderSettings = createGlobalSettings<DataProvider>(
+export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
     `${PLUGIN_IDENTIFIER}+dataProvider`,
     DataProvider.COIN_MARKET_CAP,
     {

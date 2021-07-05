@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { ZERO } from '@masknet/web3-shared'
 import type { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types'
-import { ZERO } from '@masknet/shared'
 
 export function useTradeComputed(
     trade: SwapQuoteResponse | null,
@@ -26,10 +26,6 @@ export function useTradeComputed(
             fee: new BigNumber(trade.minimumProtocolFee),
             maximumSold: new BigNumber(trade.sellAmount),
             minimumReceived: outputAmount,
-            priceImpactWithoutFee: ZERO,
-
-            // not supported fields
-            nextMidPrice: ZERO,
 
             // minimumProtocolFee
             priceImpact: ZERO,

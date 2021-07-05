@@ -11,50 +11,40 @@ export const Web3Context: Web3ProviderType = {
         getCurrentValue: () => Web3Provider,
         subscribe: () => noop,
     },
-    allowTestnet: createSubscriptionAsync(
-        Services.Settings.getWalletAllowTestChain,
-        false,
-        Messages.events.createInternalSettingsChanged.on,
-    ),
+    allowTestnet: createSubscriptionAsync(Services.Settings.getWalletAllowTestChain, false, () => {
+        return () => {}
+    }),
     account: createSubscriptionAsync(
         Services.Settings.getSelectedWalletAddress,
         '',
-        Messages.events.createInternalSettingsChanged.on,
+        Messages.events.currentAccountSettings.on,
     ),
-    nonce: createSubscriptionAsync(
-        Services.Settings.getBlockNumber,
-        0,
-        Messages.events.createInternalSettingsChanged.on,
-    ),
+    nonce: createSubscriptionAsync(Services.Settings.getBlockNumber, 0, Messages.events.currentBlockNumberSettings.on),
     gasPrice: createSubscriptionAsync(
         Services.Settings.getBlockNumber,
         0,
-        Messages.events.createInternalSettingsChanged.on,
+        Messages.events.currentBlockNumberSettings.on,
     ),
-    balance: createSubscriptionAsync(
-        Services.Settings.getBalance,
-        '0',
-        Messages.events.createInternalSettingsChanged.on,
-    ),
+    balance: createSubscriptionAsync(Services.Settings.getBalance, '0', Messages.events.currentBalanceSettings.on),
     blockNumber: createSubscriptionAsync(
         Services.Settings.getBlockNumber,
         0,
-        Messages.events.createInternalSettingsChanged.on,
+        Messages.events.currentBlockNumberSettings.on,
     ),
     chainId: createSubscriptionAsync(
         Services.Settings.getChainId,
         ChainId.Mainnet,
-        Messages.events.createInternalSettingsChanged.on,
+        Messages.events.currentChainIdSettings.on,
     ),
     providerType: createSubscriptionAsync(
         Services.Settings.getCurrentSelectedWalletProvider,
         ProviderType.Maskbook,
-        Messages.events.createInternalSettingsChanged.on,
+        Messages.events.currentProviderSettings.on,
     ),
     networkType: createSubscriptionAsync(
         Services.Settings.getCurrentSelectedWalletNetwork,
         NetworkType.Ethereum,
-        Messages.events.createInternalSettingsChanged.on,
+        Messages.events.currentNetworkSettings.on,
     ),
     wallets: createSubscriptionAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
     erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
@@ -67,11 +57,13 @@ export const Web3Context: Web3ProviderType = {
     portfolioProvider: createSubscriptionAsync(
         Services.Settings.getCurrentPortfolioDataProvider,
         PortfolioProvider.DEBANK,
-        Messages.events.createInternalSettingsChanged.on,
+        Messages.events.currentPortfolioDataProviderSettings.on,
     ),
     getAssetList: PluginServices.Wallet.getAssetsList,
     getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,
     getERC721TokensPaged,
+    fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+    createMnemonicWords: PluginServices.Wallet.createMnemonicWords,
 }
 
 export function createExternalProvider() {

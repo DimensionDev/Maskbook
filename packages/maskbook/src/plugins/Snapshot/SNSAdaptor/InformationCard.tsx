@@ -1,5 +1,5 @@
-import { formatEthereumAddress } from '@masknet/shared'
 import {
+    formatEthereumAddress,
     resolveAddressLinkOnExplorer,
     resolveBlockLinkOnExplorer,
     resolveIPFSLink,
@@ -9,7 +9,7 @@ import { Avatar, Box, Link, makeStyles, Typography } from '@material-ui/core'
 import OpenInNew from '@material-ui/icons/OpenInNew'
 import formatDateTime from 'date-fns/format'
 import { useContext } from 'react'
-import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
+import { TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
 import { SnapshotContext } from '../context'

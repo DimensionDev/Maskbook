@@ -1,7 +1,8 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
-import { formatEthereumAddress, FormattedBalance } from '@masknet/shared'
+import { FormattedBalance } from '@masknet/shared'
 import {
+    formatEthereumAddress,
     resolveChainColor,
     useAccount,
     useChainDetailed,
@@ -17,7 +18,8 @@ import { useStylesExtends } from '../../components/custom-ui-helper'
 import { WalletIcon } from '../../components/shared/WalletIcon'
 import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { Flags, useI18N, useRemoteControlledDialog } from '../../utils'
+import { Flags, useI18N } from '../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => {
     return {

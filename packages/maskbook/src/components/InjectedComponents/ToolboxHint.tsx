@@ -1,4 +1,4 @@
-import { makeStyles, Typography, MenuItem } from '@material-ui/core'
+import { makeStyles, MenuItem, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import {
     useAccount,
@@ -6,7 +6,7 @@ import {
     resolveChainColor,
     useChainDetailed,
     useChainIdValid,
-    NetworkType,
+    formatEthereumAddress,
 } from '@masknet/web3-shared'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
@@ -16,20 +16,18 @@ import { useMenu } from '../../utils/hooks/useMenu'
 import { useCallback } from 'react'
 import { MaskMessage } from '../../utils/messages'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
-import { FileServiceCompositionEntry } from '../../plugins/FileService/UI-define'
-import { ITO_CompositionEntry } from '../../plugins/ITO/define'
+import { ITO_PluginID } from '../../plugins/ITO/constants'
+import { FileServicePluginID } from '../../plugins/FileService/constants'
 import { useControlledDialog } from '../../plugins/Collectible/SNSAdaptor/useControlledDialog'
-import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags } from '../../utils/flags'
 import { useStylesExtends } from '../custom-ui-helper'
-import { ClaimAllDialog } from '../../plugins/ITO/UI/ClaimAllDialog'
+import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
-import { formatEthereumAddress, useValueRef } from '@masknet/shared'
 import { useI18N } from '../../utils'
-import { currentNetworkSettings } from '../../plugins/Wallet/settings'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -125,7 +123,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
-    const networkType = useValueRef(currentNetworkSettings)
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
@@ -164,7 +161,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const openFileService = useCallback(() => {
         openEncryptedMessage()
         setTimeout(() => {
-            FileServiceCompositionEntry.onClick()
+            MaskMessage.events.activatePluginCompositionEntry.sendToLocal(FileServicePluginID)
         })
     }, [openEncryptedMessage])
     //#endregion
@@ -173,7 +170,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const openITO = useCallback(() => {
         openEncryptedMessage()
         setTimeout(() => {
-            ITO_CompositionEntry.onClick()
+            MaskMessage.events.activatePluginCompositionEntry.sendToLocal(ITO_PluginID)
         })
     }, [openEncryptedMessage])
     //#endregion
@@ -224,7 +221,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
                 </MenuItem>
             ) : null,
-            networkType === NetworkType.Ethereum ? (
+            chainIdValid ? (
                 <MenuItem onClick={openSwapDialog} className={classes.menuItem}>
                     <Image src={ToolIconURLs.swap.image} width={19} height={19} />
                     <Typography className={classes.text}>{ToolIconURLs.swap.text}</Typography>

@@ -73,7 +73,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm install
-      - run: npm run lint:ci
+      - run: npm run lint:ci -- --max-warnings=0
       - run: npm run lint:ci -- --format junit -o reports/junit/eslint-results.xml
       - name: Upload eslint report
         uses: actions/upload-artifact@v2

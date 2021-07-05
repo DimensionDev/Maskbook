@@ -7,8 +7,7 @@ import {
     raribleHostnames,
     rariblePathnameRegexMatcher,
 } from './constants'
-import { formatBalance } from '@masknet/shared'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId, formatBalance } from '@masknet/web3-shared'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'

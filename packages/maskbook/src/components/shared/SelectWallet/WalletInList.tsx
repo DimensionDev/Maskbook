@@ -1,17 +1,16 @@
 import {
     Avatar,
     ListItem,
-    ListItemText,
-    makeStyles,
-    Theme,
-    ListTypeMap,
     ListItemAvatar,
     ListItemIcon,
+    ListItemText,
+    ListTypeMap,
+    makeStyles,
+    Theme,
 } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
-import { Wallet, useBlockie } from '@masknet/web3-shared'
-import { formatEthereumAddress } from '@masknet/shared'
+import { formatEthereumAddress, useBlockie, Wallet } from '@masknet/web3-shared'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../custom-ui-helper'
 

@@ -8,28 +8,28 @@
     "./constants": "./dist/src/constants.js"
   },
   "main": "./dist/src/theme.js",
-  "typings": "./dist/src/theme.d.ts",
+  "types": "./dist/src/theme.d.ts",
   "scripts": {
     "build-storybook": "build -- build-storybook",
     "start": "dev -- start-storybook -p 6006"
   },
   "dependencies": {
-    "@masknet/shared": "workspace:*",
     "@masknet/storybook-shared": "workspace:*",
     "classnames": "^2.3.1",
+    "fuse.js": "^6.4.6",
     "lodash-es": "^4.17.20",
     "notistack": "^1.0.9",
-    "qrcode": "^1.4.4",
+    "react-window": "^1.8.6",
     "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
-    "@storybook/addon-actions": "^6.2.9",
-    "@storybook/addon-essentials": "^6.2.9",
-    "@storybook/addon-links": "^6.2.9",
-    "@storybook/addons": "^6.2.9",
-    "@storybook/react": "^6.2.9",
-    "@storybook/theming": "^6.2.9",
+    "@storybook/addon-actions": "^6.3.0-rc.12",
+    "@storybook/addon-essentials": "^6.3.0-rc.12",
+    "@storybook/addon-links": "^6.3.0-rc.12",
+    "@storybook/addons": "^6.3.0-rc.12",
+    "@storybook/react": "^6.3.0-rc.12",
+    "@storybook/theming": "^6.3.0-rc.12",
     "@types/qrcode": "^1.3.5",
     "@types/tinycolor2": "^1.4.2",
     "babel-loader": "^8.2.2",

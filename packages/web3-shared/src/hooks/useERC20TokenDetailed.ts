@@ -1,47 +1,66 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { formatEthereumAddress } from '@masknet/shared'
-import { EthereumTokenType, ERC20TokenDetailed } from '../types'
+import { ERC20TokenDetailed, EthereumTokenType } from '../types'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useChainId } from './useChainId'
-import { useSingleContractMultipleData } from './useMulticall'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
+import { useERC20TokenBytes32Contract } from '../contracts/useERC20TokenBytes32Contract'
+import { formatEthereumAddress, parseStringOrBytes32 } from '../utils'
 
 export function useERC20TokenDetailed(address: string, token?: Partial<ERC20TokenDetailed>) {
     const chainId = useChainId()
     const erc20TokenContract = useERC20TokenContract(address)
+    const erc20TokenBytes32Contract = useERC20TokenBytes32Contract(address)
 
-    // compose calls
-    const { names, callDatas } = useMemo(
-        () => ({
-            names: ['name', 'symbol', 'decimals'] as 'name'[],
-            callDatas: [[], [], []] as [][],
-        }),
-        [],
+    // name
+    const { value: tokenName = token?.name ?? '', ...asyncTokenName } = useAsyncRetry(
+        async () => token?.name ?? (await (erc20TokenContract?.methods.name().call() ?? '')),
+        [erc20TokenContract],
+    )
+    const { value: tokenNameBytes32 = '', ...asyncTokenNameBytes32 } = useAsyncRetry(
+        async () => await (erc20TokenBytes32Contract?.methods.name().call() ?? ''),
+        [erc20TokenBytes32Contract],
     )
 
-    // validate
-    const [results, calls, _, callback] = useSingleContractMultipleData(erc20TokenContract, names, callDatas)
-    const asyncResult = useAsyncRetry(() => callback(calls), [calls, callback])
+    // symbol
+    const { value: tokenSymbol = token?.symbol ?? '', ...asyncTokenSymbol } = useAsyncRetry(
+        async () => token?.symbol ?? (await (erc20TokenContract?.methods.symbol().call() ?? '')),
+        [erc20TokenContract],
+    )
+    const { value: tokenSymbolBytes32 = '', ...asyncTokenSymbolBytes32 } = useAsyncRetry(
+        async () => await (erc20TokenBytes32Contract?.methods.symbol().call() ?? ''),
+        [erc20TokenBytes32Contract],
+    )
 
-    // compose
-    const token_ = useMemo(() => {
-        if (!erc20TokenContract) return
-        const [name, symbol, decimals] = results.map((x) => (x.error ? undefined : x.value))
-        // not a valid erc20 token
-        if (!name && !symbol && !decimals) return
+    // decimals
+    const { value: tokenDecimals = token?.decimals ?? '0', ...asyncTokenDecimals } = useAsyncRetry(
+        async () => token?.decimals ?? (await (erc20TokenContract?.methods.decimals().call() ?? '0')),
+        [erc20TokenContract],
+    )
+
+    // token detailed
+    const tokenDetailed = useMemo(() => {
         return {
             type: EthereumTokenType.ERC20,
             address: formatEthereumAddress(address),
             chainId,
-            name: name ?? token?.name ?? '',
-            symbol: symbol ?? token?.symbol ?? '',
-            decimals: decimals ? Number.parseInt(decimals, 10) : token?.decimals ?? 0,
+            symbol: parseStringOrBytes32(tokenSymbol, tokenSymbolBytes32, 'UNKNOWN'),
+            name: parseStringOrBytes32(tokenName, tokenNameBytes32, 'Unknown Token'),
+            decimals: typeof tokenDecimals === 'string' ? Number.parseInt(tokenDecimals, 10) : tokenDecimals,
         } as ERC20TokenDetailed
-    }, [erc20TokenContract, address, chainId, results, token])
+    }, [tokenName, tokenNameBytes32, tokenSymbol, tokenSymbolBytes32, tokenDecimals])
+
+    const asyncList = [
+        asyncTokenName,
+        asyncTokenNameBytes32,
+        asyncTokenSymbol,
+        asyncTokenSymbolBytes32,
+        asyncTokenDecimals,
+    ]
 
     return {
-        ...asyncResult,
-        value: token_,
-    } as AsyncStateRetry<typeof token_>
+        loading: asyncList.some((x) => x.loading),
+        error: asyncList.find((x) => !!x.error)?.error ?? null,
+        value: tokenDetailed,
+    } as AsyncStateRetry<ERC20TokenDetailed>
 }

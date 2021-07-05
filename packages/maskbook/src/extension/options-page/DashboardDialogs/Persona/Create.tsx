@@ -27,7 +27,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                 icon={<UserPlus />}
                 iconColor="#5FDD97"
                 primary={t('create_a_persona')}
-                secondary={' '}
+                secondary=" "
                 content={
                     <>
                         <form>
@@ -49,8 +49,13 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                         e.preventDefault()
-                                        createPersonaAndNext()
+                                        if (!checkInputLengthExceed(name) && name.length > 0) {
+                                            createPersonaAndNext()
+                                        }
                                     }
+                                }}
+                                inputProps={{
+                                    maxlength: WALLET_OR_PERSONA_NAME_MAX_LEN,
                                 }}
                                 variant="outlined"
                             />

@@ -1,8 +1,7 @@
 import { postsContentSelector } from '../utils/selector'
-import { IntervalWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
+import { IntervalWatcher } from '@dimensiondev/holoflows-kit'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
-import { PostInfo } from '../../../social-network/PostInfo'
-import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
+import type { PostInfo } from '../../../social-network/PostInfo'
 import { postIdParser } from '../utils/fetch'
 import { memoize } from 'lodash-es'
 import Services from '../../../extension/service'
@@ -17,11 +16,10 @@ import {
     makeTypedMessageEmpty,
     makeTypedMessagePromise,
     makeTypedMessageTuple,
-    extractTextFromTypedMessage,
 } from '../../../protocols/typed-message'
-import type { Result } from 'ts-results'
 import { twitterBase } from '../base'
-import { twitterEncoding } from '../encoding'
+import { twitterShared } from '../shared'
+import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
 
 function registerPostCollectorInner(
     postStore: Next.CollectingCapabilities.PostsProvider['posts'],
@@ -39,45 +37,38 @@ function registerPostCollectorInner(
     }
     const updateProfileInfo = memoize(
         (info: PostInfo) => {
-            Services.Identity.updateProfileInfo(info.postBy.value, {
-                nickname: info.nickname.value,
-                avatarURL: info.avatarURL.value,
+            Services.Identity.updateProfileInfo(info.postBy.getCurrentValue(), {
+                nickname: info.nickname.getCurrentValue(),
+                avatarURL: info.avatarURL.getCurrentValue(),
             })
         },
-        (info: PostInfo) => info.postBy.value?.toText(),
+        (info: PostInfo) => info.postBy.getCurrentValue()?.toText(),
     )
     const watcher = new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
-            const info: PostInfo = new (class extends PostInfo {
-                get rootNode() {
-                    return proxy.current
-                }
-                rootNodeProxy = proxy
-                commentsSelector = undefined
-                commentBoxSelector = undefined
-                postContentNode = undefined
-            })()
+            const refs = createRefsForCreatePostContext()
+            const info = twitterShared.utils.createPostContext({
+                comments: undefined,
+                rootElement: proxy,
+                suggestedInjectionPoint: tweetNode,
+                ...refs.subscriptions,
+            })
             function run() {
-                collectPostInfo(tweetNode, info, cancel)
-                collectLinks(tweetNode, info, cancel)
+                collectPostInfo(tweetNode, refs, cancel)
+                collectLinks(tweetNode, refs, cancel)
             }
             run()
-            const undo = info.postPayload.addListener((payload) => {
-                if (!payload) return
-                if (payload.err && info.postMetadataImages.size === 0) return
-                updateProfileInfo(info)
-            })
-            cancel.addEventListener('abort', undo)
-            non_overlapping_assign(
-                info.postPayload,
-                deconstructPayload(info.postContent.value, twitterEncoding.payloadDecoder),
+            cancel.addEventListener(
+                'abort',
+                info.postPayload.subscribe(() => {
+                    const payload = info.postPayload.getCurrentValue()
+                    if (!payload) return
+                    if (payload.err && refs.postMetadataImages.size === 0) return
+                    updateProfileInfo(info)
+                }),
             )
-            const undo2 = info.postContent.addListener((newValue) => {
-                non_overlapping_assign(info.postPayload, deconstructPayload(newValue, twitterEncoding.payloadDecoder))
-            })
-            cancel.addEventListener('abort', undo2)
             injectMaskIconToPostTwitter(info, cancel)
             postStore.set(proxy, info)
             return {
@@ -104,7 +95,11 @@ export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
     },
 }
 
-function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, cancel: AbortSignal) {
+function collectPostInfo(
+    tweetNode: HTMLDivElement | null,
+    info: ReturnType<typeof createRefsForCreatePostContext>,
+    cancel: AbortSignal,
+) {
     if (!tweetNode) return
     if (cancel?.aborted) return
     const { pid, messages, handle, name, avatar } = postParser(tweetNode)
@@ -112,13 +107,6 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, cance
     if (!pid) return
     const postBy = handle ? new ProfileIdentifier(twitterBase.networkIdentifier, handle) : ProfileIdentifier.unknown
     info.postID.value = pid
-    info.postContent.value = messages
-        .map((x) => {
-            const extracted = extractTextFromTypedMessage(x)
-            return extracted.ok ? extracted.val : ''
-        })
-        // add space between anchor and plain text
-        .join(' ')
     if (!info.postBy.value.equals(postBy)) info.postBy.value = postBy
     info.nickname.value = name
     info.avatarURL.value = avatar || null
@@ -137,7 +125,11 @@ function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, cance
     info.postMessage.value = makeTypedMessageTuple([...messages, makeTypedMessagePromise(images)])
 }
 
-function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo, cancel: AbortSignal) {
+function collectLinks(
+    tweetNode: HTMLDivElement | null,
+    info: ReturnType<typeof createRefsForCreatePostContext>,
+    cancel: AbortSignal,
+) {
     if (!tweetNode) return
     if (cancel?.aborted) return
     const links = [...tweetNode.querySelectorAll('a')].filter((x) => x.rel)
@@ -150,12 +142,6 @@ function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo, cancel: 
             if (cancel?.aborted) return
             if (!val) return
             info.postMetadataMentionedLinks.set(x, val)
-            const tryDecode = deconstructPayload(val, twitterEncoding.payloadDecoder)
-            non_overlapping_assign(info.postPayload, tryDecode)
         })
     }
-}
-function non_overlapping_assign(post: ValueRef<Result<Payload, Error>>, next: Result<Payload, Error>) {
-    if (post.value.ok && next.err) return // don't flush successful parse
-    post.value = next
 }

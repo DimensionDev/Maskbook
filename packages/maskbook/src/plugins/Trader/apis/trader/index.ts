@@ -1,4 +1,4 @@
-import { safeUnreachable } from '@masknet/shared'
+import { safeUnreachable } from '@dimensiondev/kit'
 import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 import { TagType, TradeProvider } from '../../types'
@@ -16,9 +16,9 @@ export async function getAvailableTraderProviders(type?: TagType, keyword?: stri
                 TradeProvider.BALANCER,
             ]
         case NetworkType.Polygon:
-            return [TradeProvider.QUICKSWAP]
+            return [TradeProvider.QUICKSWAP, TradeProvider.SUSHISWAP]
         case NetworkType.Binance:
-            return [TradeProvider.PANCAKESWAP]
+            return [TradeProvider.PANCAKESWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP]
         default:
             safeUnreachable(networkType)
             return []

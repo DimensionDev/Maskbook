@@ -27,6 +27,8 @@ import {
     UpgradeBackupJSONFile,
     BackupJSONFileLatest,
     decompressBackupFile,
+    WALLET_OR_PERSONA_NAME_MAX_LEN,
+    checkInputLengthExceed,
 } from '../../../utils'
 import ActionButton from '../DashboardComponents/ActionButton'
 import DashboardRouterContainer from './Container'
@@ -156,7 +158,8 @@ const useConsentDataCollectionStyles = makeStyles((theme) => ({
         color: theme.palette.text.primary,
         fontSize: 16,
         lineHeight: 1.75,
-        width: 660,
+        maxWidth: 660,
+        width: '100%',
         minHeight: 256,
         marginTop: 78,
     },
@@ -256,13 +259,23 @@ export function CreatePersona() {
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                                 e.preventDefault()
-                                createPersonaAndNext()
+                                if (!checkInputLengthExceed(name) && name.length > 0) {
+                                    createPersonaAndNext()
+                                }
                             }
                         }}
                         label={t('name')}
-                        helperText={' '}
+                        helperText={
+                            checkInputLengthExceed(name)
+                                ? t('input_length_exceed_prompt', {
+                                      name: t('persona_name').toLowerCase(),
+                                      length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                  })
+                                : undefined
+                        }
                         inputProps={{
                             'data-testid': 'username_input',
+                            maxlength: WALLET_OR_PERSONA_NAME_MAX_LEN,
                         }}
                         variant="outlined"
                     />
@@ -274,7 +287,7 @@ export function CreatePersona() {
                         className={setupFormClasses.button}
                         variant="contained"
                         onClick={createPersonaAndNext}
-                        disabled={!name}
+                        disabled={!name || checkInputLengthExceed(name)}
                         data-testid="next_button">
                         {t('set_up_button_next')}
                     </ActionButton>

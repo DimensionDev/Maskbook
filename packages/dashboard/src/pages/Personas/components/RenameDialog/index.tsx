@@ -23,8 +23,8 @@ export const RenameDialog = memo<RenameDialogProps>(({ open, nickname, onClose, 
         <MaskDialog open={open} title={t.personas_rename()} onClose={onClose}>
             <DialogContent>
                 <TextField
+                    placeholder={t.personas_rename_placeholder()}
                     style={{ width: '100%' }}
-                    variant="filled"
                     error={!isPersonaNameLengthValid(name)}
                     helperText={
                         !isPersonaNameLengthValid(name)

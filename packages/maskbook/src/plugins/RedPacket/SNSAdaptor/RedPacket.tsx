@@ -1,6 +1,6 @@
-import { formatBalance } from '@masknet/shared'
 import {
     ChainId,
+    formatBalance,
     getChainIdFromName,
     isDAI,
     isOKB,
@@ -17,15 +17,15 @@ import { useCallback, useEffect } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { useI18N, useRemoteControlledDialog } from '../../../utils'
+import { useI18N } from '../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumMessages } from '../../Ethereum/messages'
 import { WalletMessages } from '../../Wallet/messages'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useClaimCallback } from './hooks/useClaimCallback'
 import { useRefundCallback } from './hooks/useRefundCallback'
-import type { RedPacketJSONPayload, RedPacketAvailability } from '../types'
+import type { RedPacketAvailability, RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
 
 const useStyles = makeStyles((theme) => ({
@@ -185,7 +185,7 @@ export function RedPacket(props: RedPacketProps) {
 
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => undefined,
     )
 
@@ -230,21 +230,21 @@ export function RedPacket(props: RedPacketProps) {
                     <Skeleton
                         animation="wave"
                         variant="rectangular"
-                        width={'30%'}
+                        width="30%"
                         height={12}
                         style={{ marginTop: 16 }}
                     />
                     <Skeleton
                         animation="wave"
                         variant="rectangular"
-                        width={'40%'}
+                        width="40%"
                         height={12}
                         style={{ marginTop: 16 }}
                     />
                     <Skeleton
                         animation="wave"
                         variant="rectangular"
-                        width={'70%'}
+                        width="70%"
                         height={12}
                         style={{ marginBottom: 16 }}
                     />

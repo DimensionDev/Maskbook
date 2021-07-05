@@ -1,41 +1,38 @@
-import { useState, useRef, useCallback, useMemo, ChangeEvent, useEffect } from 'react'
-import { makeStyles, FormControl, TextField, InputLabel, Select, MenuItem, MenuProps } from '@material-ui/core'
-import { omit } from 'lodash-es'
-import { v4 as uuid } from 'uuid'
-import BigNumber from 'bignumber.js'
-
-import { formatBalance, isGreaterThan, isZero, pow10 } from '@masknet/shared'
 import {
     EthereumTokenType,
-    NetworkType,
+    formatBalance,
     FungibleTokenDetailed,
-    useAccount,
-    useConstant,
-    useChainId,
-    useNetworkType,
-    TransactionStateType,
     getChainName,
+    isGreaterThan,
+    isZero,
+    NetworkType,
+    pow10,
+    TransactionStateType,
+    useAccount,
+    useChainId,
     useNativeTokenDetailed,
+    useNetworkType,
+    useRedPacketConstants,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import { useI18N, useRemoteControlledDialog } from '../../../utils'
+import { FormControl, InputLabel, makeStyles, MenuItem, MenuProps, Select, TextField } from '@material-ui/core'
+import BigNumber from 'bignumber.js'
+import { omit } from 'lodash-es'
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { v4 as uuid } from 'uuid'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import {
-    RED_PACKET_MIN_SHARES,
-    RED_PACKET_MAX_SHARES,
-    RED_PACKET_CONSTANTS,
-    RED_PACKET_DEFAULT_SHARES,
-} from '../constants'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { useCreateCallback } from './hooks/useCreateCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { EthereumMessages } from '../../Ethereum/messages'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { useI18N } from '../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
 import { RedPacketRPC } from '../messages'
+import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
+import { useCreateCallback } from './hooks/useCreateCallback'
 
 const useStyles = makeStyles((theme) => ({
     line: {
@@ -79,7 +76,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const account = useAccount()
     const chainId = useChainId()
     const networkType = useNetworkType()
-    const { HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } = useConstant(RED_PACKET_CONSTANTS)
+    const { HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } = useRedPacketConstants()
     const contract_address =
         networkType === NetworkType.Ethereum ? HAPPY_RED_PACKET_ADDRESS_V2 : HAPPY_RED_PACKET_ADDRESS_V3
     const contract_version = networkType === NetworkType.Ethereum ? 2 : 3
@@ -173,7 +170,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
 

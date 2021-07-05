@@ -1,0 +1,13 @@
+{
+    "AIRDROP_CONTRACT_ADDRESS": {
+        "Mainnet": "0x7adcfcafb69aae283f4268e59209ba64a5db4d91",
+        "Ropsten": "0xf1276B659FF28EDf92accFb013B1E6c9F782bFfF",
+        "Rinkeby": "0x2189D088927bfc1563d0b3E447F6472402FED6DD",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": ""
+    }
+}

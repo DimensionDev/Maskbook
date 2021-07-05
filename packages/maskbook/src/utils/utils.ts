@@ -41,7 +41,7 @@ export function dispatchCustomEvents<T extends keyof CustomEvents>(
  * @param image
  */
 export async function pasteImageToActiveElements(image: File | Blob): Promise<void> {
-    const bytes = new Uint8Array(await image.arrayBuffer())
+    const bytes = new Uint8Array(await blobToArrayBuffer(image))
     dispatchCustomEvents(document.activeElement, 'paste', { type: 'image', value: Array.from(bytes) })
 }
 
@@ -131,13 +131,16 @@ export function batchReplace(source: string, group: Array<[string | RegExp, stri
 export function pollingTask(
     task: () => Promise<boolean>,
     {
+        autoStart = true,
         delay = 30 * 1000,
     }: {
+        autoStart?: boolean
         delay?: number
     } = {},
 ) {
-    let canceled = false
+    let canceled = !autoStart
     let timer: NodeJS.Timeout
+
     const runTask = async () => {
         if (canceled) return
         let stop = false
@@ -146,15 +149,21 @@ export function pollingTask(
         } catch (e) {
             console.error(e)
         }
-        if (!stop) timer = setTimeout(runTask, delay)
+        if (!stop) resetTask()
     }
-    runTask()
+    const resetTask = () => {
+        canceled = false
+        clearTimeout(timer)
+        timer = setTimeout(runTask, delay)
+    }
+    const cancelTask = () => {
+        canceled = true
+    }
+
+    if (!canceled) runTask()
     return {
-        cancel: () => (canceled = true),
-        reset: () => {
-            clearTimeout(timer)
-            timer = setTimeout(runTask, delay)
-        },
+        reset: resetTask,
+        cancel: cancelTask,
     }
 }
 export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
@@ -167,6 +176,7 @@ export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
 }
 
 import Services from '../extension/service'
+import { blobToArrayBuffer } from '@dimensiondev/kit'
 export { parseURL } from '@masknet/shared'
 /**
  * !!!! Please use the Promise constructor if possible
@@ -200,7 +210,7 @@ export function assert(x: any, ...args: any): asserts x {
 }
 
 export function checkInputLengthExceed(name: string) {
-    return Array.from(name).length >= WALLET_OR_PERSONA_NAME_MAX_LEN
+    return name.length >= WALLET_OR_PERSONA_NAME_MAX_LEN
 }
 
 export function nonNullable<T>(x: undefined | null | T): x is T {

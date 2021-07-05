@@ -1,20 +1,19 @@
 import { useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
-import { ListItem, makeStyles, Theme, Typography, Box } from '@material-ui/core'
+import { Box, ListItem, makeStyles, Theme, Typography } from '@material-ui/core'
 import { Trans } from 'react-i18next'
-import { RedPacketJSONPayload, RedPacketHistory, RedPacketStatus } from '../types'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { RedPacketHistory, RedPacketJSONPayload, RedPacketStatus } from '../types'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { formatBalance } from '@masknet/shared'
-import { useAccount, TransactionStateType } from '@masknet/web3-shared'
-import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
+import { formatBalance, TransactionStateType, useAccount } from '@masknet/web3-shared'
+import { TokenIcon } from '@masknet/shared'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { StyledLinearProgress } from '../../ITO/UI/StyledLinearProgress'
+import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useRefundCallback } from './hooks/useRefundCallback'
-import { EthereumMessages } from '../../Ethereum/messages'
+import { WalletMessages } from '../../Wallet/messages'
 
 const useStyles = makeStyles((theme: Theme) => ({
     primary: {
@@ -29,6 +28,14 @@ const useStyles = makeStyles((theme: Theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
+    },
+    strong: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
+    span: {
+        maxWidth: 350,
+        display: 'inline-flex',
     },
     time: {
         fontSize: 12,
@@ -78,6 +85,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     footer: {
         width: '100%',
         display: 'flex',
+        flexWrap: 'wrap',
         justifyContent: 'space-between',
         marginTop: theme.spacing(2),
     },
@@ -114,7 +122,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         (ev) => undefined,
     )
 
@@ -207,7 +215,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                         value={100 * (1 - Number(history.total_remaining) / Number(history.total))}
                     />
                     <section className={classes.footer}>
-                        <Typography variant="body1" className={classNames(classes.footerInfo, classes.message)}>
+                        <Typography variant="body1" className={classes.footerInfo}>
                             <Trans
                                 i18nKey="plugin_red_packet_history_claimed"
                                 components={{
@@ -219,17 +227,19 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                 }}
                             />
                         </Typography>
-                        <Typography variant="body1" className={classNames(classes.footerInfo, classes.message)}>
+                        <Typography variant="body1" className={classes.footerInfo}>
                             <Trans
                                 i18nKey="plugin_red_packet_history_total_claimed_amount"
                                 components={{
-                                    strong: <strong />,
+                                    strong: <strong className={classes.strong} />,
+                                    span: <span className={classes.span} />,
                                 }}
                                 values={{
-                                    amount: formatBalance(new BigNumber(history.total), history.token.decimals),
+                                    amount: formatBalance(new BigNumber(history.total), history.token.decimals, 6),
                                     claimedAmount: formatBalance(
                                         new BigNumber(history.total).minus(new BigNumber(history.total_remaining)),
                                         history.token.decimals,
+                                        6,
                                     ),
                                     symbol: history.token.symbol,
                                 }}

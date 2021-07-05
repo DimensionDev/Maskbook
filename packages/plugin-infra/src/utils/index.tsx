@@ -1,6 +1,6 @@
 import type { Plugin } from '../types'
 import { useEffect, useState, useRef } from 'react'
-import { ErrorBoundary } from '@masknet/theme'
+import { ErrorBoundary } from '@masknet/shared'
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
 

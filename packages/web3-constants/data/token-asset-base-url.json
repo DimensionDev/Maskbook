@@ -1,0 +1,40 @@
+{
+    "TOKEN_ASSET_BASE_URI": {
+        "Mainnet": [
+            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum",
+            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum"
+        ],
+        "Ropsten": [
+            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum",
+            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum"
+        ],
+        "Rinkeby": [
+            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum",
+            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum"
+        ],
+        "Kovan": [
+            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum",
+            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum"
+        ],
+        "Gorli": [
+            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum",
+            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum"
+        ],
+        "BSC": [
+            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain",
+            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/smartchain"
+        ],
+        "BSCT": [
+            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain",
+            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/smartchain"
+        ],
+        "Matic": [
+            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon",
+            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/polygon"
+        ],
+        "Mumbai": [
+            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon",
+            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/polygon"
+        ]
+    }
+}

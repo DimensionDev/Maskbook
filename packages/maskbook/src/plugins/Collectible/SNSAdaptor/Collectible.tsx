@@ -1,13 +1,13 @@
 import { useCallback } from 'react'
 import {
-    makeStyles,
     Avatar,
     Box,
     Button,
-    CardHeader,
-    CardContent,
     CardActions,
+    CardContent,
+    CardHeader,
     Link,
+    makeStyles,
     Paper,
     Tab,
     Tabs,
@@ -30,13 +30,13 @@ import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { PluginSkeleton } from '../../PluginSkeleton'
 import { CollectibleProvider, CollectibleTab } from '../types'
 import { currentCollectibleProviderSettings } from '../settings'
-import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/UI/trader/FootnoteMenu'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
 import { useChainId } from '@masknet/web3-shared'
-import { getEnumAsArray } from '@masknet/shared'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
 
 const useStyles = makeStyles((theme) => {
     return {

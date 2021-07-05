@@ -1,4 +1,4 @@
-import { isTypedMessageTuple, TypedMessageTuple } from '..'
+import { isTypedMessageAnchor, isTypedMessageText, isTypedMessageTuple, TypedMessageTuple } from '..'
 import type {
     NonSerializableTypedMessage,
     NonSerializableWithToJSONTypedMessage,
@@ -7,6 +7,7 @@ import type {
     TypedMessage,
 } from '../base'
 import { eq } from 'lodash-es'
+import { Err, Ok, Result } from 'ts-results'
 
 export function isSerializableTypedMessage(x: TypedMessage): x is SerializableTypedMessages {
     if ((<SerializableTypedMessage<number>>x).serializable) return true
@@ -34,4 +35,24 @@ export function isTypedMessageEqual(message1: TypedMessage, message2: TypedMessa
         return msg1.items.every((item, index) => isTypedMessageEqual(item, msg2.items[index]))
     }
     return eq(message1, message2)
+}
+
+/**
+ * Get inner text from a TypedMessage
+ * @param message message
+ */
+export function extractTextFromTypedMessage(message: TypedMessage | null): Result<string, void> {
+    if (message === null) return Err.EMPTY
+    if (isTypedMessageText(message)) return Ok(message.content)
+    if (isTypedMessageAnchor(message)) return Ok(message.content)
+    if (isTypedMessageTuple(message)) {
+        const str: string[] = []
+        for (const item of message.items) {
+            const text = extractTextFromTypedMessage(item)
+            if (text.ok) str.push(text.val)
+        }
+        if (str.length) return Ok(str.join(' '))
+        return Err.EMPTY
+    }
+    return Err.EMPTY
 }

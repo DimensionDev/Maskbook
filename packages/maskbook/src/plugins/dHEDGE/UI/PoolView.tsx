@@ -1,5 +1,5 @@
 import { RefreshIcon } from '@masknet/icons'
-import { TOKEN_CONSTANTS, useConstant, useERC20TokenDetailed } from '@masknet/web3-shared'
+import { useERC20TokenDetailed, useTokenConstants } from '@masknet/web3-shared'
 import {
     Card,
     CardActions,
@@ -15,7 +15,7 @@ import {
 import React, { useState } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useFetchPool } from '../hooks/usePool'
+import type { Pool } from '../types'
 import { PerformanceChart } from './PerformanceChart'
 import { PoolStats } from './PoolStats'
 import { PoolViewDeck } from './PoolViewDeck'
@@ -100,27 +100,26 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface PoolViewProps {
-    address: string
+    pool?: Pool
+    loading?: Boolean
+    error?: Error
+    retry?: () => void
 }
 
 export function PoolView(props: PoolViewProps) {
-    const { address } = props
+    const { pool, loading, error, retry } = props
 
     const { t } = useI18N()
     const classes = useStyles()
 
     //#region susd token
-    const { sUSD_ADDRESS } = useConstant(TOKEN_CONSTANTS)
+    const { sUSD_ADDRESS } = useTokenConstants()
     const {
         value: susdTokenDetailed,
         loading: loadingToken,
         retry: retryToken,
         error: errorToken,
     } = useERC20TokenDetailed(sUSD_ADDRESS)
-    //#endregion
-
-    //#region fetch pool
-    const { value: pool, error: errorPool, loading: loadingPool, retry: retryPool } = useFetchPool(address)
     //#endregion
 
     //#region tabs
@@ -131,25 +130,27 @@ export function PoolView(props: PoolViewProps) {
     ].filter(Boolean)
     //#endregion
 
-    if (loadingPool || loadingToken)
+    if (loading || loadingToken)
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_dhedge_loading')}
             </Typography>
         )
-    if (!pool)
+    if (!pool) {
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_dhedge_pool_not_found')}
             </Typography>
         )
-    if (errorPool || errorToken || !susdTokenDetailed)
+    }
+    if (error || errorToken || !susdTokenDetailed)
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_dhedge_smt_wrong')}
-                <RefreshIcon className={classes.refresh} color="primary" onClick={errorPool ? retryPool : retryToken} />
+                <RefreshIcon className={classes.refresh} color="primary" onClick={error ? retry : retryToken} />
             </Typography>
         )
+
     return (
         <Card className={classes.root} elevation={0}>
             <CardHeader subheader={<PoolViewDeck pool={pool} inputToken={susdTokenDetailed} />} />

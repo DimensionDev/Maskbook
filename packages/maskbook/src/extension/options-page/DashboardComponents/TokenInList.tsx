@@ -1,21 +1,20 @@
-import { useCallback } from 'react'
-import { makeStyles, Theme } from '@material-ui/core/styles'
-import { ListItem, ListItemText, Typography, ListItemIcon, Link } from '@material-ui/core'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import {
-    useConstant,
-    TOKEN_CONSTANTS,
-    resolveTokenLinkOnExplorer,
-    FungibleTokenDetailed,
     currySameAddress,
+    formatEthereumAddress,
+    FungibleTokenDetailed,
+    resolveTokenLinkOnExplorer,
+    useTokenConstants,
 } from '@masknet/web3-shared'
-import { formatEthereumAddress } from '@masknet/shared'
-import { TokenIcon } from './TokenIcon'
+import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core/styles'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import { useCallback } from 'react'
+import { TokenIcon } from '@masknet/shared'
 
 const useStyles = makeStyles((theme: Theme) => ({
     icon: {
-        width: 28,
-        height: 28,
+        width: 36,
+        height: 36,
     },
     text: {
         display: 'flex',
@@ -72,12 +71,12 @@ export interface TokenInListProps {
 
 export function TokenInList({ data, index, style }: TokenInListProps) {
     const classes = useStyles()
-    const { NATIVE_TOKEN_ADDRESS } = useConstant(TOKEN_CONSTANTS)
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
 
     const token = data.tokens[index]
     if (!token) return null
-    const { address, name, symbol } = token
+    const { address, name, symbol, logoURI } = token
     return (
         <ListItem
             button
@@ -85,7 +84,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
             disabled={data.selected.some(currySameAddress(address))}
             onClick={() => data.onSelect(address)}>
             <ListItemIcon>
-                <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} />
+                <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURI={logoURI} />
             </ListItemIcon>
             <ListItemText classes={{ primary: classes.text }}>
                 <Typography className={classes.primary} color="textPrimary" component="span">

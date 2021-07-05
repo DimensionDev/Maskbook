@@ -1,28 +1,27 @@
-import { useAsyncRetry } from 'react-use'
-import { head, uniqBy } from 'lodash-es'
-import BigNumber from 'bignumber.js'
-import { PluginCollectibleRPC } from '../messages'
-import { CollectibleToken, CollectibleProvider } from '../types'
-import { getOrderUnitPrice } from '../utils'
-import { unreachable } from '@masknet/shared'
-import { toDate, toRaribleImage, toTokenDetailed, toTokenIdentifier } from '../helpers'
-import { OpenSeaAccountURL } from '../constants'
-import { resolveRaribleUserNetwork } from '../pipes'
+import { unreachable } from '@dimensiondev/kit'
 import {
-    FungibleTokenDetailed,
+    currySameAddress,
     EthereumTokenType,
+    FungibleTokenDetailed,
     isSameAddress,
     useAccount,
     useChainId,
-    useConstant,
-    TOKEN_CONSTANTS,
-    currySameAddress,
+    useTokenConstants,
 } from '@masknet/web3-shared'
+import BigNumber from 'bignumber.js'
+import { head, uniqBy } from 'lodash-es'
+import { useAsyncRetry } from 'react-use'
+import { OpenSeaAccountURL } from '../constants'
+import { toDate, toRaribleImage, toTokenDetailed, toTokenIdentifier } from '../helpers'
+import { PluginCollectibleRPC } from '../messages'
+import { resolveRaribleUserNetwork } from '../pipes'
+import { CollectibleProvider, CollectibleToken } from '../types'
+import { getOrderUnitPrice } from '../utils'
 
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
     const account = useAccount()
     const chainId = useChainId()
-    const { WETH_ADDRESS } = useConstant(TOKEN_CONSTANTS)
+    const { WETH_ADDRESS } = useTokenConstants()
 
     return useAsyncRetry(async () => {
         if (!token) return

@@ -46,7 +46,7 @@ export function useWeb3State() {
         erc20Tokens,
         erc20TokensCount,
         portfolioProvider,
-        chainIdValid: !account || allowTestnet || chainDetailed?.network === 'mainnet',
+        chainIdValid: !account || !!(allowTestnet && chainDetailed) || chainDetailed?.network === 'mainnet',
     }
 }
 

@@ -4,12 +4,8 @@ import { CreditCard as CreditCardIcon } from 'react-feather'
 import { first } from 'lodash-es'
 import { Box, Checkbox, FormControlLabel, makeStyles, TextField, Theme, Typography } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
-import {
-    WALLET_OR_PERSONA_NAME_MAX_LEN,
-    useRemoteControlledDialog,
-    useI18N,
-    checkInputLengthExceed,
-} from '../../../../utils'
+import { WALLET_OR_PERSONA_NAME_MAX_LEN, useI18N, checkInputLengthExceed } from '../../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../../../plugins/Wallet/constants'
 import { useWallet } from '@masknet/web3-shared'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
@@ -247,12 +243,16 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
         onCreate(walletName)
     }, [state[0], walletName, hdWallet?.address, onCreate, onDeriveOrImport])
 
-    const disabled = (() => {
-        const isFill =
-            !(state[0] === 1 && walletName && keystoreContent && keystorePassword) &&
-            !(state[0] === 2 && walletName && mnemonic) &&
-            !(state[0] === 3 && walletName && privateKey)
-        return isFill || checkInputLengthExceed(walletName)
+    const formInvalid = (() => {
+        if (walletName.length === 0 || checkInputLengthExceed(walletName)) {
+            return true
+        }
+        const isFilled =
+            (state[0] === 0 && confirmed) ||
+            (state[0] === 1 && keystoreContent && keystorePassword) ||
+            (state[0] === 2 && mnemonic) ||
+            (state[0] === 3 && privateKey)
+        return !isFilled
     })()
 
     return (
@@ -264,7 +264,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
                 primary={t(state[0] === 0 ? 'plugin_wallet_on_create' : 'import_wallet')}
                 content={<AbstractTab {...tabProps} />}
                 footer={
-                    <DebounceButton variant="contained" onClick={onSubmit} disabled={disabled}>
+                    <DebounceButton variant="contained" onClick={onSubmit} disabled={formInvalid}>
                         {t(state[0] === 0 ? 'create' : 'import')}
                     </DebounceButton>
                 }

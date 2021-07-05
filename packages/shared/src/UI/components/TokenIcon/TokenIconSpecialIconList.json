@@ -1,0 +1,167 @@
+[
+    {
+        "name": "NEST",
+        "address": "0x04abEdA201850aC0124161F037Efd70c74ddC74C",
+        "logo_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/5841.png"
+    },
+    {
+        "name": "Yes KYC",
+        "address": "0x14de81C71B3F73874659082b971433514E201B27",
+        "logo_url": "https://etherscan.io/token/images/ykyctoken_32.png"
+    },
+    {
+        "name": "cWBTC",
+        "address": "0xC11b1268C1A384e55C48c2391d8d480264A3A7F4",
+        "logo_url": "https://etherscan.io/token/images/compoundwrappedbtc_32.png"
+    },
+    {
+        "name": "DANK",
+        "address": "0x0cB8D0B37C7487b11d57F1f33dEfA2B1d3cFccfE",
+        "logo_url": "https://etherscan.io/token/images/dank_32.png"
+    },
+    {
+        "name": "DSCP",
+        "address": "0x03e3f0c25965f13DbbC58246738C183E27b26a56",
+        "logo_url": "https://etherscan.io/token/images/disciplina_28.png"
+    },
+    {
+        "name": "GEE",
+        "address": "0x4F4f0Db4de903B88f2B1a2847971E231D54F8fd3",
+        "logo_url": "https://etherscan.io/token/images/geens_28.png"
+    },
+    {
+        "name": "FKX",
+        "address": "0x009e864923b49263c7F10D19B7f8Ab7a9A5AAd33",
+        "logo_url": "https://etherscan.io/token/images/knoxstertoken_32.png?v=2"
+    },
+    {
+        "name": "N0031",
+        "address": "0x075190c6130EA0a3A7E40802F1D77F4Ea8f38fE2",
+        "logo_url": "https://etherscan.io/token/images/nestyfi_32.png"
+    },
+    {
+        "name": "NFC",
+        "address": "0xb0866289e870D2efc282406cF4123Df6E5BcB652",
+        "logo_url": "https://etherscan.io/token/images/nofaketoday_28.png"
+    },
+    {
+        "name": "O3Swap",
+        "address": "0xEe9801669C6138E84bD50dEB500827b776777d28",
+        "logo_url": "https://etherscan.io/token/images/o3swaptoken_32.png"
+    },
+    {
+        "name": "QTUM",
+        "address": "0x9a642d6b3368ddc662CA244bAdf32cDA716005BC",
+        "logo_url": "https://etherscan.io/token/images/qtum_28.png"
+    },
+    {
+        "name": "REMI",
+        "address": "0x13cb85823f78Cff38f0B0E90D3e975b8CB3AAd64",
+        "logo_url": "https://etherscan.io/token/images/remiit_28.png"
+    },
+    {
+        "name": "REDC",
+        "address": "0xB563300A3BAc79FC09B93b6F84CE0d4465A2AC27",
+        "logo_url": "https://etherscan.io/token/images/redcab_28.png"
+    },
+    {
+        "name": "SBTC",
+        "address": "0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6",
+        "logo_url": "https://etherscan.io/token/images/Synthetixsbtc_32.png"
+    },
+    {
+        "name": "TPT",
+        "address": "0xC596bD09d652827b0106292D3e378D5938df4B12",
+        "logo_url": "https://etherscan.io/token/images/009-TPT-Teleport-Token-Coin-Logo.png"
+    },
+    {
+        "name": "TRL",
+        "address": "0xCed1A8529125D1bD06B54a7B01210df357D00885",
+        "logo_url": "https://etherscan.io/token/images/giraffage_28.png"
+    },
+    {
+        "name": "UPX",
+        "address": "0x5f778ec4B31a506c1Dfd8b06F131E9B451a61D39",
+        "logo_url": "https://etherscan.io/token/images/udap_28.png"
+    },
+    {
+        "name": "WYV",
+        "address": "0x056017c55aE7AE32d12AeF7C679dF83A85ca75Ff",
+        "logo_url": "https://etherscan.io/token/images/wyvern_28.png"
+    },
+    {
+        "name": "VDOC",
+        "address": "0x82BD526bDB718C6d4DD2291Ed013A5186cAE2DCa",
+        "logo_url": "https://etherscan.io/token/images/vdoc_28.png"
+    },
+    {
+        "name": "rSAI",
+        "address": "0xea8b224eDD3e342DEb514C4176c2E72Bcce6fFF9",
+        "logo_url": "https://etherscan.io/token/images/redeemabledai_32.png?v=2"
+    },
+    {
+        "name": "ALICE",
+        "address": "0xAC51066d7bEC65Dc4589368da368b212745d63E8",
+        "logo_url": "https://bscscan.com/token/images/alicetoken_32.png"
+    },
+    {
+        "name": "BP",
+        "address": "0xACB8f52DC63BB752a51186D1c55868ADbFfEe9C1",
+        "logo_url": "https://bscscan.com/token/images/bunnypark_32.png"
+    },
+    {
+        "name": "DOGGY",
+        "address": "0x74926B3d118a63F6958922d3DC05eB9C6E6E00c6",
+        "logo_url": "https://bscscan.com/token/images/doggy_32.png"
+    },
+    {
+        "name": "DCH",
+        "address": "0x14ACe3d3429408bFA8562099A253172913AD71bd",
+        "logo_url": "https://bscscan.com/token/images/dechart_32.png"
+    },
+    {
+        "name": "FRANK",
+        "address": "0x129e6d84c6CAb9b0c2F37aD1D14a9fe2E59DAb09",
+        "logo_url": "https://bscscan.com/token/images/frankenstein_32.png"
+    },
+    {
+        "name": "RFOX",
+        "address": "0x0a3A21356793B49154Fd3BbE91CBc2A16c0457f5",
+        "logo_url": "https://bscscan.com/token/images/redfoxlabs_32.png"
+    },
+    {
+        "name": "FOR",
+        "address": "0x658A109C5900BC6d2357c87549B651670E5b0539",
+        "logo_url": "https://bscscan.com/token/images/forceprotocol_32.png"
+    },
+    {
+        "name": "TPT",
+        "address": "0xECa41281c24451168a37211F0bc2b8645AF45092",
+        "logo_url": "https://bscscan.com/token/images/tokenpocket_32.png"
+    },
+    {
+        "name": "UNCL",
+        "address": "0x0E8D5504bF54D9E44260f8d153EcD5412130CaBb",
+        "logo_url": "https://bscscan.com/token/images/unicrypt-uncl_32.png"
+    },
+    {
+        "name": "UNCX",
+        "address": "0x09a6c44c3947B69E2B45F4D51b67E6a39ACfB506",
+        "logo_url": "https://bscscan.com/token/images/unicrypt_32.png"
+    },
+    {
+        "name": "WOOP",
+        "address": "0x8b303d5BbfBbf46F1a4d9741E491e06986894e18",
+        "logo_url": "https://bscscan.com/token/images/woonkly_32.png"
+    },
+    {
+        "name": "ZIL",
+        "address": "0xb86AbCb37C3A4B64f74f59301AFF131a1BEcC787",
+        "logo_url": "https://bscscan.com/token/images/zilliqa_32.png"
+    },
+    {
+        "name": "PBTC",
+        "address": "0xeD28A457A5A76596ac48d87C0f577020F6Ea1c4C",
+        "logo_url": "https://bscscan.com/token/images/ptokenbtc_32.png"
+    }
+]
