@@ -132,6 +132,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 return
             }
             editActivatedPostMetadata((next) => {
+                // To meet the max allowance of the data size of image steganography, we need to
+                //  cut off and simplify some properties, such as save the token address string only.
                 const r = omit(
                     set(
                         set(payloadOutMask(payload), 'token', payload.token.address),
