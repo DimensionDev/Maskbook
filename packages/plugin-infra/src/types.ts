@@ -105,7 +105,12 @@ export namespace Plugin.Shared {
          * to make sure the plugin can be reloaded safely.
          */
         init(signal: AbortSignal): void | Promise<void>
+        /**
+         * A pure function that convert a TypedMessage into another one
+         */
+        typedMessageTransformer?: TypedMessageTransformer
     }
+    export type TypedMessageTransformer = (message: TypedMessage) => TypedMessage
     /** The publisher of the plugin */
     export interface Publisher {
         /** The name of the publisher */
@@ -147,16 +152,7 @@ export namespace Plugin.Shared {
         networks: Partial<Record<CurrentSNSNetwork, boolean>>
     }
 }
-// TODO: This part is unused by the Mask but it is required to some plugins
-export namespace Plugin.Utils {
-    export interface Definition {
-        /**
-         * A pure function that convert a TypedMessage into another one
-         */
-        typedMessageTransformer: TypedMessageTransformer
-    }
-    export type TypedMessageTransformer = (message: TypedMessage) => TypedMessage
-}
+
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
     export interface Definition extends Shared.DefinitionWithInit {
