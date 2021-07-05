@@ -146,7 +146,7 @@ export const TokenTableUI = memo<TokenTableUIProps>(
                         </Table>
                     )}
                 </TableContainer>
-                {showPagination ? (
+                {showPagination && !isEmpty ? (
                     <Box className={classes.footer}>
                         <Pagination
                             variant="outlined"
