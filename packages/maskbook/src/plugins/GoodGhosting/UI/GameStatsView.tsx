@@ -65,8 +65,8 @@ export function GameStatsView(props: GameStatsViewProps) {
             days,
         })
     }
-    const gameLengthFormatted = getReadableInterval(props.info.segmentLength)
-    const segmentLengthFormatted = getReadableInterval(props.info.segmentLength * (props.info.lastSegment + 1))
+    const gameLengthFormatted = getReadableInterval(props.info.segmentLength * (props.info.lastSegment + 1))
+    const segmentLengthFormatted = getReadableInterval(props.info.segmentLength)
 
     return (
         <>
