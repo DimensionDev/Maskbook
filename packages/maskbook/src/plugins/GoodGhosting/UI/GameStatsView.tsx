@@ -124,7 +124,7 @@ export function GameStatsView(props: GameStatsViewProps) {
             </Grid>
 
             <div className={classes.circularDataSection}>
-                <Grid className={classes.infoRow} container justifyContent={'center'}>
+                <Grid className={classes.infoRow} container justifyContent="center">
                     <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
                         <div className={classes.circularData}>
                             <CircularDataDisplay
@@ -146,7 +146,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                         </div>
                     </Grid>
                 </Grid>
-                <Grid className={classes.infoRow} container justifyContent={'center'}>
+                <Grid className={classes.infoRow} container justifyContent="center">
                     <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
                         <div className={classes.circularData}>
                             <CircularDataDisplay

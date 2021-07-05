@@ -60,11 +60,11 @@ export function useGameInfo() {
 
         return {
             segmentPayment,
-            firstSegmentStart: Number.parseInt(firstSegmentStart),
-            currentSegment: Number.parseInt(currentSegment),
-            lastSegment: Number.parseInt(lastSegment),
-            segmentLength: Number.parseInt(segmentLength),
-            numberOfPlayers: Number.parseInt(numberOfPlayers),
+            firstSegmentStart: Number.parseInt(firstSegmentStart, 10),
+            currentSegment: Number.parseInt(currentSegment, 10),
+            lastSegment: Number.parseInt(lastSegment, 10),
+            segmentLength: Number.parseInt(segmentLength, 10),
+            numberOfPlayers: Number.parseInt(numberOfPlayers, 10),
             totalGameInterest,
             totalGamePrincipal,
             adaiTokenAddress: adaiToken,

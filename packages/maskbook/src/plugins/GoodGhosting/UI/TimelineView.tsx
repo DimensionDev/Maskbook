@@ -116,7 +116,8 @@ export function TimelineView(props: TimelineViewProps) {
                                         classes.circleIndicator,
                                         classes.circleIndicatorFilled,
                                         classes.rightAligned,
-                                    )}></div>
+                                    )}
+                                />
                             )}
                             <Typography variant="caption" color="textSecondary" className={classes.text}>
                                 {timelineEvent.ongoingEvent}

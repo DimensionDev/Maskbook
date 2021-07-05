@@ -2,7 +2,7 @@ import { formatBalance, formatEthereumAddress } from '@masknet/web3-shared'
 import { makeStyles, Grid, Typography } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 import { useGameToken } from '../hooks/usePoolData'
-import type { GoodGhostingInfo } from '../types'
+import type { GoodGhostingInfo, Player } from '../types'
 import { getPlayerStatus, PlayerStatus } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -39,22 +39,22 @@ export function PersonalView(props: PersonalViewProps) {
         )
     }
 
-    let status = t('plugin_good_ghosting_status_unknown')
-
-    switch (getPlayerStatus(props.info.currentPlayer, props.info.currentSegment)) {
-        case PlayerStatus.Winning:
-            status = t('plugin_good_ghosting_status_winning')
-            break
-        case PlayerStatus.Waiting:
-            status = t('plugin_good_ghosting_status_waiting')
-            break
-        case PlayerStatus.Ghost:
-            status = t('plugin_good_ghosting_status_ghost')
-            break
-        case PlayerStatus.Dropout:
-            status = t('plugin_good_ghosting_status_dropout')
-            break
+    const getStatus = (player: Player, currentSegment: number) => {
+        switch (getPlayerStatus(player, currentSegment)) {
+            case PlayerStatus.Winning:
+                return t('plugin_good_ghosting_status_winning')
+            case PlayerStatus.Waiting:
+                return t('plugin_good_ghosting_status_waiting')
+            case PlayerStatus.Ghost:
+                return t('plugin_good_ghosting_status_ghost')
+            case PlayerStatus.Dropout:
+                return t('plugin_good_ghosting_status_dropout')
+            default:
+                return t('plugin_good_ghosting_status_unknown')
+        }
     }
+
+    let status = getStatus(props.info.currentPlayer, props.info.currentSegment)
 
     return (
         <>
@@ -105,7 +105,7 @@ export function PersonalView(props: PersonalViewProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" color="textSecondary">
-                            {Number.parseInt(props.info.currentPlayer.mostRecentSegmentPaid) + 1} /{' '}
+                            {Number.parseInt(props.info.currentPlayer.mostRecentSegmentPaid, 10) + 1} /{' '}
                             {props.info.lastSegment}
                         </Typography>
                     </Grid>

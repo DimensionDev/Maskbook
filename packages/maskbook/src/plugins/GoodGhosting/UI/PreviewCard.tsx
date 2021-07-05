@@ -86,7 +86,7 @@ function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
                     <GameStatsView info={props.info} finDataResult={finDataResult} />
                 </TabPanel>
                 <TabPanel value={GoodGhostingTab.Timeline} sx={{ flex: 1 }}>
-                    <TimelineView info={props.info}></TimelineView>
+                    <TimelineView info={props.info} />
                 </TabPanel>
                 <TabPanel value={GoodGhostingTab.Everyone} sx={{ flex: 1 }}>
                     <OtherPlayersView info={props.info} otherPlayerResult={otherPlayerResult} />

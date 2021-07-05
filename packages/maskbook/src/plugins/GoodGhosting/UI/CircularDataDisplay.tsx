@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface CircularDataDisplayProps {
     header: string
-    title: string
+    title: string | number
     subtitle?: string
 }
 

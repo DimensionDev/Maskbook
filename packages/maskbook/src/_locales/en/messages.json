@@ -777,7 +777,7 @@
     "plugin_good_ghosting_total_deposited": "Total deposited",
     "plugin_good_ghosting_address": "Address",
     "plugin_good_ghosting_not_a_participant": "Looks like you're not a participant in this game",
-    "plugin_good_ghosting_next_event": "Next Event",
+    "plugin_good_ghosting_next_event": "Coming up next",
     "plugin_good_ghosting_game_end": "This game has ended",
     "plugin_good_ghosting_game_over": "Game Over",
     "plugin_good_ghosting_participants_withdraw": "Participants can now withdraw their earnings!"

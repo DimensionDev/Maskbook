@@ -1,5 +1,5 @@
 import { isBefore } from 'date-fns'
-import type { Player, TimelineEvent } from './types'
+import type { Player, PlayerStandings, TimelineEvent } from './types'
 
 export enum PlayerStatus {
     Winning = 'winning',
@@ -13,10 +13,10 @@ export function getPlayerStatus(player: Player, currentSegment: number): PlayerS
     const mostRecentSegmentPaid = Number.parseInt(player.mostRecentSegmentPaid)
 
     if (player.withdrawn) return PlayerStatus.Dropout
-    else if (mostRecentSegmentPaid < currentSegment - 1) return PlayerStatus.Ghost
-    else if (mostRecentSegmentPaid === currentSegment - 1) return PlayerStatus.Waiting
-    else if (mostRecentSegmentPaid === currentSegment) return PlayerStatus.Winning
-    else return PlayerStatus.Unknown
+    if (mostRecentSegmentPaid < currentSegment - 1) return PlayerStatus.Ghost
+    if (mostRecentSegmentPaid === currentSegment - 1) return PlayerStatus.Waiting
+    if (mostRecentSegmentPaid === currentSegment) return PlayerStatus.Winning
+    return PlayerStatus.Unknown
 }
 
 export function getNextTimelineIndex(timeline: TimelineEvent[]) {
@@ -27,4 +27,24 @@ export function getNextTimelineIndex(timeline: TimelineEvent[]) {
         }
     }
     return timeline.length - 1
+}
+
+export function getPlayerStandings(players: Player[], currentSegment: number) {
+    let playerStandings: PlayerStandings = {
+        winning: 0,
+        waiting: 0,
+        ghosts: 0,
+        dropouts: 0,
+    }
+
+    players.forEach((player, i) => {
+        const playerStatus = getPlayerStatus(player, currentSegment)
+
+        if (playerStatus === PlayerStatus.Dropout) playerStandings.dropouts += 1
+        else if (playerStatus === PlayerStatus.Ghost) playerStandings.ghosts += 1
+        else if (playerStatus === PlayerStatus.Waiting) playerStandings.waiting += 1
+        else if (playerStatus === PlayerStatus.Winning) playerStandings.winning += 1
+    })
+
+    return playerStandings
 }

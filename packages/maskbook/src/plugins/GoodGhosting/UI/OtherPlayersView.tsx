@@ -1,8 +1,8 @@
 import { makeStyles, Grid, Box, Typography, Button } from '@material-ui/core'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useI18N } from '../../../utils'
-import type { GoodGhostingInfo, Player, PlayerStandings } from '../types'
-import { getPlayerStatus, PlayerStatus } from '../utils'
+import type { GoodGhostingInfo, Player } from '../types'
+import { getPlayerStandings } from '../utils'
 import { CircularDataDisplay } from './CircularDataDisplay'
 
 const useStyles = makeStyles((theme) => ({
@@ -49,32 +49,16 @@ export function OtherPlayersView(props: OtherPlayersViewProps) {
         )
     }
 
-    let playerInfo: PlayerStandings = {
-        winning: 0,
-        waiting: 0,
-        ghosts: 0,
-        dropouts: 0,
-    }
-
-    if (players.length) {
-        players.forEach((player, i) => {
-            const playerStatus = getPlayerStatus(player, props.info.currentSegment)
-
-            if (playerStatus === PlayerStatus.Dropout) playerInfo.dropouts += 1
-            else if (playerStatus === PlayerStatus.Ghost) playerInfo.ghosts += 1
-            else if (playerStatus === PlayerStatus.Waiting) playerInfo.waiting += 1
-            else if (playerStatus === PlayerStatus.Winning) playerInfo.winning += 1
-        })
-    }
+    let playerStandings = getPlayerStandings(players, props.info.currentSegment)
 
     return (
         <div className={classes.circularDataSection}>
-            <Grid className={classes.infoRow} container justifyContent={'center'}>
+            <Grid className={classes.infoRow} container justifyContent="center">
                 <Grid className={classes.circularDataWrapper} item xs={6}>
                     <div className={classes.circularData}>
                         <CircularDataDisplay
                             header={t('plugin_good_ghosting_all_players_status_winning')}
-                            title={`${playerInfo.winning}`}
+                            title={playerStandings.winning}
                         />
                     </div>
                 </Grid>
@@ -82,17 +66,17 @@ export function OtherPlayersView(props: OtherPlayersViewProps) {
                     <div className={classes.circularData}>
                         <CircularDataDisplay
                             header={t('plugin_good_ghosting_all_players_status_waiting')}
-                            title={`${playerInfo.waiting}`}
+                            title={playerStandings.waiting}
                         />
                     </div>
                 </Grid>
             </Grid>
-            <Grid className={classes.infoRow} container justifyContent={'center'}>
+            <Grid className={classes.infoRow} container justifyContent="center">
                 <Grid className={classes.circularDataWrapper} item xs={6}>
                     <div className={classes.circularData}>
                         <CircularDataDisplay
                             header={t('plugin_good_ghosting_all_players_status_ghost')}
-                            title={`${playerInfo.ghosts}`}
+                            title={playerStandings.ghosts}
                         />
                     </div>
                 </Grid>
@@ -100,7 +84,7 @@ export function OtherPlayersView(props: OtherPlayersViewProps) {
                     <div className={classes.circularData}>
                         <CircularDataDisplay
                             header={t('plugin_good_ghosting_all_players_status_dropout')}
-                            title={`${playerInfo.dropouts}`}
+                            title={playerStandings.dropouts}
                         />
                     </div>
                 </Grid>

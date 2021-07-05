@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         display: 'inline-block',
         padding: theme.spacing(4),
-        margin: theme.spacing(4, 0),
+        margin: theme.spacing(2, 0),
         border: `solid 1px ${theme.palette.divider}`,
         borderRadius: theme.shape.borderRadius,
     },
