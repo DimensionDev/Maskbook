@@ -132,16 +132,23 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 return
             }
             editActivatedPostMetadata((next) => {
-                const r = omit(set(payloadOutMask(payload), 'token', payload.token.address), [
-                    'creation_time',
-                    'unlock_time',
-                    'total_remaining',
-                    'buyers',
-                    'regions',
-                    'start_time',
-                    'end_time',
-                    'qualification_address',
-                ])
+                const r = omit(
+                    set(
+                        set(payloadOutMask(payload), 'token', payload.token.address),
+                        'exchange_tokens',
+                        payload.exchange_tokens.map(({ address }) => ({ address })),
+                    ),
+                    [
+                        'creation_time',
+                        'unlock_time',
+                        'total_remaining',
+                        'buyers',
+                        'regions',
+                        'start_time',
+                        'end_time',
+                        'qualification_address',
+                    ],
+                )
                 return payload ? next.set(ITO_MetaKey_2, r) : next.delete(ITO_MetaKey_2)
             })
 

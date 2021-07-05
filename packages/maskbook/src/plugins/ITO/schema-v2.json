@@ -110,7 +110,12 @@
             "items": {
                 "anyOf": [
                     {
-                        "$ref": "#/definitions/token"
+                        "properties": {
+                            "address": {
+                                "type": "string",
+                                "title": "address"
+                            }
+                        }
                     }
                 ]
             }

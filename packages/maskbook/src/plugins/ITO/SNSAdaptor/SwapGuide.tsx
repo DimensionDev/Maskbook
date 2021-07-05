@@ -1,4 +1,11 @@
-import { ERC20TokenDetailed, EthereumTokenType, useAccount, useChainId, ZERO } from '@masknet/web3-shared'
+import {
+    ERC20TokenDetailed,
+    useAccount,
+    useChainId,
+    ZERO,
+    isSameAddress,
+    useTokenConstants,
+} from '@masknet/web3-shared'
 import { DialogContent, makeStyles } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
@@ -51,6 +58,7 @@ export function SwapGuide(props: SwapGuideProps) {
         onClose,
     } = props
     const [isPending, startTransition] = useTransition()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const onCloseShareDialog = useCallback(() => {
         startTransition(() => {
             onClose()
@@ -92,7 +100,7 @@ export function SwapGuide(props: SwapGuideProps) {
                                 <UnlockDialog
                                     tokens={
                                         payload.exchange_tokens.filter(
-                                            (x) => x.type === EthereumTokenType.ERC20,
+                                            (x) => !isSameAddress(NATIVE_TOKEN_ADDRESS, x.address),
                                         ) as ERC20TokenDetailed[]
                                     }
                                 />

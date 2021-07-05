@@ -4,6 +4,9 @@ import {
     FungibleTokenDetailed,
     resolveTokenLinkOnExplorer,
     useTokenConstants,
+    useTokenDetailed,
+    EthereumTokenType,
+    isSameAddress,
 } from '@masknet/web3-shared'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
@@ -65,16 +68,23 @@ export interface TokenInListProps {
     data: {
         tokens: FungibleTokenDetailed[]
         selected: string[]
-        onSelect(address: string): void
+        onSelect(token: FungibleTokenDetailed): void
     }
 }
 
 export function TokenInList({ data, index, style }: TokenInListProps) {
     const classes = useStyles()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
+
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
 
-    const token = data.tokens[index]
+    const _token = data.tokens[index]
+
+    const { value: token } = useTokenDetailed(
+        isSameAddress(NATIVE_TOKEN_ADDRESS, _token.address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+        _token.address,
+    )
+
     if (!token) return null
     const { address, name, symbol, logoURI } = token
     return (
@@ -82,7 +92,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
             button
             style={style}
             disabled={data.selected.some(currySameAddress(address))}
-            onClick={() => data.onSelect(address)}>
+            onClick={() => data.onSelect(token)}>
             <ListItemIcon>
                 <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURI={logoURI} />
             </ListItemIcon>
