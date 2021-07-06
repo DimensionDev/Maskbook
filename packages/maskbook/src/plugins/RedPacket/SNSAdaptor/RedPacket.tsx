@@ -9,7 +9,6 @@ import {
     useAccount,
     useChainIdValid,
     useNetworkType,
-    useTokenDetailed,
 } from '@masknet/web3-shared'
 import { Box, Card, makeStyles, Skeleton, Typography } from '@material-ui/core'
 import classNames from 'classnames'
@@ -141,14 +140,11 @@ export function RedPacket(props: RedPacketProps) {
     const chainIdValid = useChainIdValid()
     const networkType = useNetworkType()
 
-    //#region token detailed
     const {
         value: availability,
         computed: availabilityComputed,
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, payload)
-    const { value: tokenDetailed } = useTokenDetailed(payload.token_type, payload.token?.address ?? '')
-    //#ednregion
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
 
@@ -193,7 +189,7 @@ export function RedPacket(props: RedPacketProps) {
     useEffect(() => {
         const state = canClaim ? claimState : refundState
         if (state.type === TransactionStateType.UNKNOWN) return
-        if (!availability || !tokenDetailed) return
+        if (!availability || !payload.token) return
         if (state.type === TransactionStateType.HASH) {
             setTransactionDialog({
                 open: true,
@@ -203,8 +199,8 @@ export function RedPacket(props: RedPacketProps) {
                     ? t('plugin_red_packet_claiming_from', { name: payload.sender.name })
                     : canRefund
                     ? t('plugin_red_packet_refunding_for', {
-                          balance: formatBalance(availability.balance, tokenDetailed.decimals),
-                          symbol: tokenDetailed.symbol,
+                          balance: formatBalance(availability.balance, payload.token.decimals),
+                          symbol: payload.token.symbol,
                       })
                     : '',
             })
@@ -222,7 +218,7 @@ export function RedPacket(props: RedPacketProps) {
     }, [canClaim, canRefund, claimCallback, refundCallback])
 
     // the red packet can fetch without account
-    if (!availability || !tokenDetailed)
+    if (!availability || !payload.token)
         return (
             <EthereumChainBoundary
                 chainId={payload.network ? getChainIdFromName(payload.network) ?? ChainId.Mainnet : ChainId.Mainnet}>
@@ -275,8 +271,8 @@ export function RedPacket(props: RedPacketProps) {
                         {(() => {
                             if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
                                 return t('plugin_red_packet_description_refund', {
-                                    balance: formatBalance(availability.balance, tokenDetailed.decimals),
-                                    symbol: tokenDetailed.symbol,
+                                    balance: formatBalance(availability.balance, payload.token.decimals),
+                                    symbol: payload.token.symbol,
                                 })
                             if (listOfStatus.includes(RedPacketStatus.claimed))
                                 return t(
@@ -285,9 +281,9 @@ export function RedPacket(props: RedPacketProps) {
                                         ? {
                                               amount: formatBalance(
                                                   (availability as RedPacketAvailability).claimed_amount,
-                                                  tokenDetailed.decimals,
+                                                  payload.token.decimals,
                                               ),
-                                              symbol: tokenDetailed.symbol,
+                                              symbol: payload.token.symbol,
                                           }
                                         : { amount: '', symbol: '' },
                                 )
@@ -299,8 +295,8 @@ export function RedPacket(props: RedPacketProps) {
                                 return t('plugin_red_packet_description_empty')
                             if (!payload.password) return t('plugin_red_packet_description_broken')
                             return t('plugin_red_packet_description_failover', {
-                                total: formatBalance(payload.total, tokenDetailed.decimals),
-                                symbol: tokenDetailed.symbol,
+                                total: formatBalance(payload.total, payload.token.decimals),
+                                symbol: payload.token.symbol,
                                 name: payload.sender.name ?? '-',
                                 shares: payload.shares ?? '-',
                             })
