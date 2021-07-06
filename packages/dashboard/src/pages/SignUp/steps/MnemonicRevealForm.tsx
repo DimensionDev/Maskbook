@@ -15,7 +15,7 @@ import { useDashboardI18N } from '../../../locales'
 import { DesktopMnemonicConfirm, MnemonicRevealLG } from '../../../components/Mnemonic'
 import { SignUpRoutePath } from '../routePath'
 import RefreshIcon from '@material-ui/icons/Refresh'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     refresh: {
@@ -29,7 +29,7 @@ enum CreateWalletStep {
     Verify,
 }
 
-export const MnemonicRevealForm = () => {
+export const MnemonicRevealForm = memo(() => {
     const [step, setStep] = useState(CreateWalletStep.NameAndWords)
     const navigate = useNavigate()
     const t = useDashboardI18N()
@@ -37,7 +37,12 @@ export const MnemonicRevealForm = () => {
     const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
 
     const onSubmit = () => {
-        navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.PersonaCreate}`)
+        navigate(`${SignUpRoutePath.PersonaCreate}`, {
+            replace: true,
+            state: {
+                words: words,
+            },
+        })
     }
 
     const onBack = () => {
@@ -90,4 +95,4 @@ export const MnemonicRevealForm = () => {
             <Footer></Footer>
         </ColumnContentLayout>
     )
-}
+})

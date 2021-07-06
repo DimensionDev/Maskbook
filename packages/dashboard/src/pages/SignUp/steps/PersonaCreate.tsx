@@ -1,24 +1,34 @@
+import { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router'
+import { MaskTextField, useSnackbar } from '@masknet/theme'
 import {
     Body,
     ColumnContentLayout,
     Footer,
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout'
-import { useMnemonicWordsPuzzle } from '@masknet/web3-shared'
-import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../type'
 import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { Button } from '@material-ui/core'
 import { ButtonGroup } from '../components/ActionGroup'
 import { useDashboardI18N } from '../../../locales'
+import { useCreatePersonaV2 } from '../../Personas/hooks/useCreatePersonaV2'
 import { SignUpRoutePath } from '../routePath'
-import { MaskTextField } from '@masknet/theme'
 
 export const PersonaCreate = () => {
-    const navigate = useNavigate()
+    const { enqueueSnackbar } = useSnackbar()
     const t = useDashboardI18N()
-    const [words] = useMnemonicWordsPuzzle()
+    const navigate = useNavigate()
+    const location = useLocation() as { state: { words: string[] } }
+    const [, createPersona] = useCreatePersonaV2()
+    const [personaName, setPersonaName] = useState('')
+
+    const handleNext = async () => {
+        await createPersona(location.state?.words?.join(' ') ?? '', personaName)
+        navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedial}`)
+    }
+
     return (
         <ColumnContentLayout>
             <Header
@@ -32,15 +42,11 @@ export const PersonaCreate = () => {
                         label="Name"
                         variant="filled"
                         InputProps={{ disableUnderline: true }}
-                        onChange={(e) => {}}
+                        onChange={(e) => setPersonaName(e.currentTarget.value)}
                     />
                     <ButtonGroup>
                         <Button color={'secondary'}>Back</Button>
-                        <Button
-                            color={'primary'}
-                            onClick={() => {
-                                navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedial}`)
-                            }}>
+                        <Button color={'primary'} onClick={handleNext}>
                             Next
                         </Button>
                     </ButtonGroup>

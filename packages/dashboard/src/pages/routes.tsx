@@ -18,7 +18,7 @@ export function Pages() {
             <Routes>
                 <Route path={RoutePaths.Welcome} element={<Welcome />} />
                 <Route path={RoutePaths.Setup} element={<Setup />} />
-                <Route path={RoutePaths.SignUp} element={<SignUp />} />
+                <Route path={`${RoutePaths.SignUp}/*`} element={<SignUp />} />
                 <Route path={RoutePaths.Login} element={<Login />} />
                 <Route path={RoutePaths.PrivacyPolicy} element={<PrivacyPolicy />} />
                 <Route path={RoutePaths.Personas} element={frame(<Personas />)} />

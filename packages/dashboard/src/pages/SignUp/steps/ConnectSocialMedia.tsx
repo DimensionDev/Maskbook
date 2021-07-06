@@ -7,15 +7,38 @@ import {
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../type'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { Button } from '@material-ui/core'
-import { ButtonGroup } from '../components/ActionGroup'
 import { useDashboardI18N } from '../../../locales'
 import { SetupActionCard } from '../../Setup'
-import { Facebook, Instagram, Twitter } from '@material-ui/icons'
+import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
+import { upperFirst } from 'lodash-es'
+import { TwitterIcon, FacebookIcon, InstagramIcon } from '@masknet/icons'
 
+// icons maping
+const ICON_MAPPING = [
+    {
+        type: 'facebook.com',
+        icon: <FacebookIcon />,
+    },
+    {
+        type: 'twitter.com',
+        icon: <TwitterIcon />,
+    },
+    {
+        type: 'instagram.com',
+        icon: <InstagramIcon />,
+    },
+]
 export const ConnectSocialMedia = () => {
     const navigate = useNavigate()
     const t = useDashboardI18N()
+    const { currentPersona, connectPersona } = PersonaContext.useContainer()
+
+    const handleConnect = (networkIdentifier: string) => {
+        if (currentPersona) {
+            connectPersona(currentPersona.identifier, networkIdentifier)
+        }
+    }
+
     return (
         <ColumnContentLayout>
             <Header
@@ -25,42 +48,25 @@ export const ConnectSocialMedia = () => {
             <Body>
                 <SignUpAccountLogo />
                 <div>
-                    <SetupActionCard
-                        title={t.setup_page_create_restore_title()}
-                        icon={<Twitter />}
-                        action={{
-                            type: 'primary',
-                            text: t.setup_page_create_restore_button(),
-                            handler: () => {},
-                        }}
-                    />
-                    <SetupActionCard
-                        title={t.setup_page_create_restore_title()}
-                        icon={<Facebook />}
-                        action={{
-                            type: 'primary',
-                            text: t.setup_page_create_restore_button(),
-                            handler: () => {},
-                        }}
-                    />
-                    <SetupActionCard
-                        title={t.setup_page_create_restore_title()}
-                        icon={<Instagram />}
-                        action={{
-                            type: 'primary',
-                            text: t.setup_page_create_restore_button(),
-                            handler: () => {},
-                        }}
-                    />
-                    <ButtonGroup>
-                        <Button color={'secondary'}>Back</Button>
-                        <Button color={'primary'} onClick={() => {}}>
-                            Next
-                        </Button>
-                    </ButtonGroup>
+                    {ICON_MAPPING.map((d) => (
+                        <SetupActionCard
+                            key={d.type}
+                            title={t.create_account_connect_social_media({ type: upperFirst(d.type) })}
+                            icon={d.icon}
+                            action={{
+                                type: 'primary',
+                                text: t.create_account_connect_social_media_button(),
+                                handler: () => handleConnect(d.type),
+                            }}
+                        />
+                    ))}
                 </div>
             </Body>
             <Footer />
         </ColumnContentLayout>
     )
+}
+
+function usePersonaContext(): [any, any] {
+    throw new Error('Function not implemented.')
 }

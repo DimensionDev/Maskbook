@@ -21,7 +21,10 @@ import {
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
 import { queryAvatarDataURL } from '../helpers/avatar'
-import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import {
+    generate_ECDH_256k1_KeyPair_ByMnemonicWord,
+    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
+} from '../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import type {
     EC_Public_JsonWebKey,
@@ -176,6 +179,20 @@ export async function createPersonaByMnemonic(
     })
 }
 
+export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: string | undefined, password: string) {
+    const { key, mnemonicRecord: mnemonic } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWord, password)
+    const { privateKey, publicKey } = key
+    const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
+    return createPersonaByJsonWebKey({
+        privateKey,
+        publicKey,
+        localKey,
+        mnemonic,
+        nickname,
+        uninitialized: true,
+    })
+}
+
 export async function createPersonaByJsonWebKey(options: {
     publicKey: EC_Public_JsonWebKey
     privateKey: EC_Private_JsonWebKey
@@ -239,4 +256,9 @@ export async function queryLocalKey(i: ProfileIdentifier | PersonaIdentifier): P
     } else {
         return (await queryPersonaDB(i))?.localKey ?? null
     }
+}
+function cover_ECDH_256k1_KeyPair_ByMnemonicWord(
+    password: string,
+): { key: any; mnemonicRecord: any } | PromiseLike<{ key: any; mnemonicRecord: any }> {
+    throw new Error('Function not implemented.')
 }
