@@ -77,8 +77,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const chainId = useChainId()
     const networkType = useNetworkType()
     const { HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } = useRedPacketConstants()
-    const contract_address =
-        networkType === NetworkType.Ethereum ? HAPPY_RED_PACKET_ADDRESS_V2 : HAPPY_RED_PACKET_ADDRESS_V3
     const contract_version = networkType === NetworkType.Ethereum ? 2 : 3
 
     //#region select token
@@ -159,14 +157,16 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     // assemble JSON payload
     const payload = useRef<RedPacketJSONPayload>({
-        contract_address,
-        contract_version,
         network: getChainName(chainId),
     } as RedPacketJSONPayload)
 
     useEffect(() => {
+        if (createState.type !== TransactionStateType.UNKNOWN) return
+        payload.current.contract_address =
+            networkType === NetworkType.Ethereum ? HAPPY_RED_PACKET_ADDRESS_V2 : HAPPY_RED_PACKET_ADDRESS_V3
+        payload.current.contract_version = networkType === NetworkType.Ethereum ? 2 : 3
         payload.current.network = getChainName(chainId)
-    }, [chainId])
+    }, [chainId, networkType, createState])
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -338,7 +338,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 <EthereumERC20TokenApprovedBoundary
                     amount={totalAmount.toFixed()}
                     token={token?.type === EthereumTokenType.ERC20 ? token : undefined}
-                    spender={contract_address}>
+                    spender={payload.current.contract_address}>
                     <ActionButton
                         variant="contained"
                         size="large"
