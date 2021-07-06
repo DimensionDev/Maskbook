@@ -31,10 +31,10 @@ export function PoolList(props: PoolListProps) {
     const classes = useStyles()
     const account = useAccount()
     const [page, setPage] = useState(0)
-    const { value: pools = [], loading, retry } = useAllPoolsAsSeller(account, page)
-
+    const { value = { loadMore: true, pools: [] }, loading, retry } = useAllPoolsAsSeller(account, page)
+    const { pools, loadMore } = value
     const containerRef = useRef<HTMLDivElement>(null)
-    const addPage = useCallback(() => setPage(page + 1), [page])
+    const addPage = useCallback(() => (loadMore ? setPage(page + 1) : void 0), [page, loadMore])
     useScrollBottomEvent(containerRef, addPage)
 
     return (
