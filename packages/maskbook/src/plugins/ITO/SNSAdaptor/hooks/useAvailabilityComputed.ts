@@ -24,7 +24,7 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
     useInterval(() => setTicker((x) => x + 1), 1000)
     //#endregion
 
-    if (!availability || qualification_start_time === undefined)
+    if (!availability)
         return {
             ...asyncResult,
             payload,
@@ -40,18 +40,19 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
                 hasLockTime: false,
                 unlockTime: 0,
                 qualificationAddress,
-                listOfStatus: compact([availability?.expired ? ITO_Status.expired : undefined]) as ITO_Status[],
+                listOfStatus: compact([ITO_Status.expired]) as ITO_Status[],
             },
         }
-    const _startTime = payload.start_time ? payload.start_time : Number(availability.start_time) * 1000
-    const endTime = payload.end_time ? payload.start_time : Number(availability.end_time) * 1000
-    const startTime = qualification_start_time > _startTime ? qualification_start_time : _startTime
+    const _startTime =
+        Number(availability.start_time) * 1000 ? Number(availability.start_time) * 1000 : payload.start_time
+    const endTime = Number(availability.end_time) * 1000 ? Number(availability.end_time) * 1000 : payload.end_time
+    const startTime =
+        qualification_start_time && qualification_start_time > _startTime ? qualification_start_time : _startTime
     const isStarted = startTime < Date.now()
     const isExpired = availability.expired
     const unlockTime = Number(availability.unlock_time) * 1000
     const hasLockTime = unlockTime !== ITO_CONTRACT_BASE_TIMESTAMP
     const isCompleted = Number(availability.swapped) > 0
-
     return {
         ...asyncResult,
         computed: {

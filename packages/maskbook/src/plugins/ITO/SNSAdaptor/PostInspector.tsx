@@ -45,9 +45,9 @@ export function PostInspector(props: PostInspectorProps) {
             if (loading) return <ITO_Loading />
             if (error) return <ITO_Error retryPoolPayload={retry} />
         }
-        if (loadingToken && typeof token === 'string') return <ITO_Loading />
-        if ((!tokenDetailed && typeof token === 'string') || tokenDetailed?.symbol?.toUpperCase() === 'UNKNOWN')
-            return <ITO_Error retryPoolPayload={retry} />
+        if ((loadingToken && typeof token === 'string') || tokenDetailed?.symbol?.toUpperCase() === 'UNKNOWN')
+            return <ITO_Loading />
+        if (!tokenDetailed && typeof token === 'string') return <ITO_Error retryPoolPayload={retry} />
         return <ITO pid={pid} payload={typeof token === 'string' ? { ..._payload, token: tokenDetailed! } : _payload} />
     }
     return <EthereumChainBoundary chainId={chain_id}>{renderITO()}</EthereumChainBoundary>
