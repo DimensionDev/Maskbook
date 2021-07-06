@@ -27,4 +27,3 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
             unreachable(networkType)
     }
 })
-//#endregion

@@ -149,7 +149,7 @@ function getEventTarget() {
     function trigger() {
         clearTimeout(timer)
         // delay to update state to ensure that all settings to be synced globally
-        timer = setTimeout(() => event.dispatchEvent(new Event(EVENT)), 500)
+        timer = setTimeout(() => event.dispatchEvent(new Event(EVENT)), 600)
     }
     function subscribe(f: () => void) {
         event.addEventListener(EVENT, f)
