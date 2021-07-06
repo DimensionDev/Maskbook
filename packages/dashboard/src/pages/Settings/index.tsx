@@ -4,7 +4,6 @@ import SettingItem from './components/SettingItem'
 
 import LanguageIcon from '@material-ui/icons/Language'
 import PaletteIcon from '@material-ui/icons/Palette'
-import TrendingUpIcon from '@material-ui/icons/TrendingUp'
 import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows'
 import SyncIcon from '@material-ui/icons/Sync'
 import SaveIcon from '@material-ui/icons/Save'
@@ -26,7 +25,6 @@ import EmailSetting from './components/EmailSetting'
 import EmailHostSetting from './components/EmailHostSetting'
 import PasswordSetting from './components/PasswordSetting'
 import LogoutSetting from './components/LogoutSetting'
-import DataSourceSetting from './components/DataSourceSetting'
 
 import { PasswordVerifiedProvider } from './hooks/VerifyPasswordContext'
 
@@ -47,12 +45,6 @@ export default function Settings() {
                         title={t.settings_appearance_title()}
                         desc={t.settings_appearance_desc()}>
                         <AppearanceSetting />
-                    </SettingItem>
-                    <SettingItem
-                        icon={<TrendingUpIcon />}
-                        title={t.settings_data_source_title()}
-                        desc={t.settings_data_source_desc()}>
-                        <DataSourceSetting />
                     </SettingItem>
                     <SettingItem
                         icon={<DesktopWindowsIcon />}
