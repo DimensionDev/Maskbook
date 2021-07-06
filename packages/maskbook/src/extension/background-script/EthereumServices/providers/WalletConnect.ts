@@ -5,13 +5,8 @@ import WalletConnect from '@walletconnect/client'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { ProviderType, getNetworkTypeFromChainId, NetworkType, ChainId } from '@masknet/web3-shared'
 import * as Maskbook from '../providers/Maskbook'
-import { updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
-import {
-    currentChainIdSettings,
-    currentAccountSettings,
-    currentProviderSettings,
-    currentNetworkSettings,
-} from '../../../../plugins/Wallet/settings'
+import { updateAccount, updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
+import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 
 let connector: WalletConnect | null = null
 
@@ -92,9 +87,11 @@ export async function requestAccounts() {
 
 const onConnect = async () => {
     if (!connector?.accounts.length) return
-    currentChainIdSettings.value = connector.chainId
-    currentNetworkSettings.value = getNetworkTypeFromChainId(connector.chainId)
     await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, true)
+    await updateAccount({
+        chainId: connector.chainId,
+        networkType: getNetworkTypeFromChainId(connector.chainId),
+    })
 }
 
 const onUpdate = async (
@@ -108,18 +105,21 @@ const onUpdate = async (
 ) => {
     if (error) return
     if (!connector?.accounts.length) return
-    currentChainIdSettings.value = connector.chainId
-    currentNetworkSettings.value = getNetworkTypeFromChainId(connector.chainId)
     await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, false)
+    await updateAccount({
+        chainId: connector.chainId,
+        networkType: getNetworkTypeFromChainId(connector.chainId),
+    })
 }
 
 const onDisconnect = async (error: Error | null) => {
     if (connector?.connected) await connector.killSession()
     connector = null
-    if (currentProviderSettings.value === ProviderType.WalletConnect) {
-        currentAccountSettings.value = ''
-        currentNetworkSettings.value = NetworkType.Ethereum
-    }
+    if (currentProviderSettings.value !== ProviderType.WalletConnect) return
+    await updateAccount({
+        account: '',
+        networkType: NetworkType.Ethereum,
+    })
 }
 
 async function updateWalletInDB(address: string, name: string = 'WalletConnect', setAsDefault: boolean = false) {
@@ -127,16 +127,16 @@ async function updateWalletInDB(address: string, name: string = 'WalletConnect',
 
     // validate address
     if (!EthereumAddress.isValid(address)) {
-        if (providerType === ProviderType.WalletConnect) currentAccountSettings.value = ''
+        if (providerType === ProviderType.WalletConnect) await updateAccount({ account: '' })
         return
     }
 
     // update wallet in the DB
     await updateExoticWalletFromSource(ProviderType.WalletConnect, new Map([[address, { name, address }]]))
 
-    // update the selected wallet provider type
-    if (setAsDefault) currentProviderSettings.value = ProviderType.WalletConnect
-
-    // update the selected wallet address
-    if (setAsDefault || providerType === ProviderType.WalletConnect) currentAccountSettings.value = address
+    // update chain account
+    await updateAccount({
+        providerType: setAsDefault ? ProviderType.WalletConnect : undefined,
+        account: setAsDefault || providerType === ProviderType.WalletConnect ? ProviderType.WalletConnect : undefined,
+    })
 }

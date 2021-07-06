@@ -1,3 +1,4 @@
+export * from './account'
 export * from './wallet'
 export * from './chain'
 export * from './phrase'

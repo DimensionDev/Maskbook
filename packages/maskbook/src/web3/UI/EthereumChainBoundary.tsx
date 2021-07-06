@@ -14,9 +14,10 @@ import {
 } from '@masknet/web3-shared'
 import { useValueRef, delay } from '@masknet/shared'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
-import { currentChainIdSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
+import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import Services from '../../extension/service'
 import { useI18N } from '../../utils'
+import { updateAccount } from '../../plugins/Wallet/services'
 
 export interface EthereumChainBoundaryProps {
     chainId: ChainId
@@ -55,7 +56,9 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
         // if mask wallet was used it can switch network automatically
         if (providerType === ProviderType.Maskbook) {
-            currentChainIdSettings.value = expectedChainId
+            await updateAccount({
+                chainId: expectedChainId,
+            })
             return
         }
 
