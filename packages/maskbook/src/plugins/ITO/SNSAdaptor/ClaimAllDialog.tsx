@@ -71,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2.5),
+        marginBottom: theme.spacing(1.5),
         alignItems: 'baseline',
         justifyContent: 'space-between',
     },

@@ -90,9 +90,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
             itemData={{
                 tokens: renderTokens,
                 selected: [address, ...selectedTokens],
-                onSelect(address: string) {
-                    const token = renderTokens.find(currySameAddress(address))
-                    if (!token) return
+                onSelect(token: FungibleTokenDetailed) {
                     setAddress(token.address)
                     onSubmit?.(token)
                 },

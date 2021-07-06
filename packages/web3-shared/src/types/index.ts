@@ -1,3 +1,5 @@
+import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/contracts/types/types'
+
 export enum CurrencyType {
     USD = 'usd',
 }
@@ -256,3 +258,9 @@ export enum PortfolioProvider {
 export enum CollectibleProvider {
     OPENSEAN,
 }
+
+export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
+    ? R
+    : T extends PayableTransactionObject<infer S>
+    ? S
+    : T
