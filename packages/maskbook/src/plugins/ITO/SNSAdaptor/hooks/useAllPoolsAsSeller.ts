@@ -8,6 +8,6 @@ export function useAllPoolsAsSeller(address: string, page: number) {
     return useAsyncRetry(async () => {
         const pools = await PluginITO_RPC.getAllPoolsAsSeller(address, page)
         allPoolsRef.current = allPoolsRef.current.concat(pools)
-        return allPoolsRef.current
+        return { pools: allPoolsRef.current, loadMore: pools.length > 0 }
     }, [address, page])
 }
