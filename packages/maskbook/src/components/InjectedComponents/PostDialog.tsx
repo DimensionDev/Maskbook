@@ -400,8 +400,9 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
         onRequestReset()
     }, [currentIdentity, currentShareTarget, onRequestPost, onRequestReset, onlyMyself, postBoxContent])
     const onCloseButtonClicked = useCallback(() => {
+        onRequestReset()
         setOpen(false)
-    }, [setOpen])
+    }, [setOpen, onRequestReset])
     //#endregion
     //#region My Identity
     const identities = useMyIdentities()
