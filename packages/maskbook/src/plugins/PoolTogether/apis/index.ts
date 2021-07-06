@@ -1,4 +1,4 @@
-import type { ChainId } from '@dimensiondev/web3-shared'
+import type { ChainId } from '@masknet/web3-shared'
 import { API_URL } from '../constants'
 import type { Pool } from '../types'
 
