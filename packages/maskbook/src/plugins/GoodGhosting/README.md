@@ -1,4 +1,4 @@
-# Plugin: dHEDGE
+# Plugin: Good Ghosting
 
 This plugin displays data from the [Good Ghosting](https://goodghosting.com/) game that is currently running.
 

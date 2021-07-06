@@ -31,6 +31,8 @@ export function PersonalView(props: PersonalViewProps) {
     const { t } = useI18N()
     const gameToken = useGameToken()
 
+    const status = useGetStatus(props.info.currentSegment, props.info.currentPlayer)
+
     if (!props.info.currentPlayer) {
         return (
             <Typography variant="h6" color="textSecondary">
@@ -38,23 +40,6 @@ export function PersonalView(props: PersonalViewProps) {
             </Typography>
         )
     }
-
-    const getStatus = (player: Player, currentSegment: number) => {
-        switch (getPlayerStatus(player, currentSegment)) {
-            case PlayerStatus.Winning:
-                return t('plugin_good_ghosting_status_winning')
-            case PlayerStatus.Waiting:
-                return t('plugin_good_ghosting_status_waiting')
-            case PlayerStatus.Ghost:
-                return t('plugin_good_ghosting_status_ghost')
-            case PlayerStatus.Dropout:
-                return t('plugin_good_ghosting_status_dropout')
-            default:
-                return t('plugin_good_ghosting_status_unknown')
-        }
-    }
-
-    let status = getStatus(props.info.currentPlayer, props.info.currentSegment)
 
     return (
         <>
@@ -113,4 +98,21 @@ export function PersonalView(props: PersonalViewProps) {
             </Grid>
         </>
     )
+}
+
+function useGetStatus(currentSegment: number, player?: Player) {
+    const { t } = useI18N()
+
+    switch (getPlayerStatus(currentSegment, player)) {
+        case PlayerStatus.Winning:
+            return t('plugin_good_ghosting_status_winning')
+        case PlayerStatus.Waiting:
+            return t('plugin_good_ghosting_status_waiting')
+        case PlayerStatus.Ghost:
+            return t('plugin_good_ghosting_status_ghost')
+        case PlayerStatus.Dropout:
+            return t('plugin_good_ghosting_status_dropout')
+        default:
+            return t('plugin_good_ghosting_status_unknown')
+    }
 }

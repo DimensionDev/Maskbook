@@ -9,7 +9,8 @@ export enum PlayerStatus {
     Unknown = 'unknown',
 }
 
-export function getPlayerStatus(player: Player, currentSegment: number): PlayerStatus {
+export function getPlayerStatus(currentSegment: number, player?: Player): PlayerStatus {
+    if (!player) return PlayerStatus.Unknown
     const mostRecentSegmentPaid = Number.parseInt(player.mostRecentSegmentPaid)
 
     if (player.withdrawn) return PlayerStatus.Dropout
@@ -38,7 +39,7 @@ export function getPlayerStandings(players: Player[], currentSegment: number) {
     }
 
     players.forEach((player, i) => {
-        const playerStatus = getPlayerStatus(player, currentSegment)
+        const playerStatus = getPlayerStatus(currentSegment, player)
 
         if (playerStatus === PlayerStatus.Dropout) playerStandings.dropouts += 1
         else if (playerStatus === PlayerStatus.Ghost) playerStandings.ghosts += 1
