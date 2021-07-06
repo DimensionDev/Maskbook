@@ -17,7 +17,7 @@ import { ActionButtonPromise } from '../../extension/options-page/DashboardCompo
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import Services from '../../extension/service'
 import { useI18N } from '../../utils'
-import { updateAccount } from '../../plugins/Wallet/services'
+import { WalletRPC } from '../../plugins/Wallet/messages'
 
 export interface EthereumChainBoundaryProps {
     chainId: ChainId
@@ -56,7 +56,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
         // if mask wallet was used it can switch network automatically
         if (providerType === ProviderType.Maskbook) {
-            await updateAccount({
+            await WalletRPC.updateAccount({
                 chainId: expectedChainId,
             })
             return
