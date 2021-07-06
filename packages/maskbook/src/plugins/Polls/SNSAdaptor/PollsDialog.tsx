@@ -124,7 +124,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
             <Select
                 variant="standard"
                 MenuProps={{
-                    container: container,
+                    container,
                     classes: { paper: classes.menuPaper },
                 }}
                 value={defaultIndex}
