@@ -48,7 +48,8 @@ export function DashboardContactSearchDialog(props: WrappedDialogProps<{ onSearc
                             {t('search')}
                         </ActionButton>
                     </SpacedButtonGroup>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }

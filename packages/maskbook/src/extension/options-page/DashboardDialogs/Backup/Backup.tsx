@@ -84,7 +84,8 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
                             </ActionButton>
                         )}
                     </Box>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }

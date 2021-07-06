@@ -58,6 +58,7 @@
     "eslint-plugin-import": "^2.23.3",
     "eslint-plugin-lodash": "^7.1.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-unused-imports": "^1.0.0",
     "esm": "^3.2.25",

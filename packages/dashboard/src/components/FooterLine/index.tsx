@@ -116,7 +116,7 @@ export const FooterLine = memo(() => {
                 <FooterLink href={links.BOUNTY_LIST}>{t.footer_bounty_list()}</FooterLink>
                 <FooterLink to={RoutePaths.PrivacyPolicy}>{t.privacy_policy()}</FooterLink>
             </Breadcrumbs>
-            <AboutDialog open={isOpen} title={''} onClose={() => setOpen(false)}>
+            <AboutDialog open={isOpen} title="" onClose={() => setOpen(false)}>
                 <About />
                 <IconButton className={classes.closeButton} onClick={() => setOpen(false)} edge="end" color="inherit">
                     <Close />

@@ -40,7 +40,8 @@ export function DashboardContactDeleteConfirmDialog(
                             {t('cancel')}
                         </Button>
                     </SpacedButtonGroup>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }

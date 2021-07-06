@@ -258,7 +258,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     variant="outlined"
                                     onClick={requestClipboardPermission}
                                     data-testid="auto_paste_prompt">
-                                    {'Enable auto paste'}
+                                    Enable auto paste
                                 </Button>
                             )}
                         <Button

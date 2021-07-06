@@ -40,7 +40,7 @@ export default function Settings() {
                         icon={<LanguageIcon />}
                         title={t.settings_language_title()}
                         desc={t.settings_language_desc()}>
-                        <LanguageSetting></LanguageSetting>
+                        <LanguageSetting />
                     </SettingItem>
                     <SettingItem
                         icon={<PaletteIcon />}

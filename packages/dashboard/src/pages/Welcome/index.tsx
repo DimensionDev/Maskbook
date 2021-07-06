@@ -78,8 +78,8 @@ const WelcomeUI: React.FC<WelcomeUIProps> = ({ privacyPolicyURL, iframeLoadHandl
         <Content>
             <IFrame ref={iframeRef} src={privacyPolicyURL} onLoad={iframeLoadHandler} />
             <ButtonGroup>
-                <Button color={'secondary'}>Cancel</Button>
-                <Button color={'primary'} onClick={agreeHandler}>
+                <Button color="secondary">Cancel</Button>
+                <Button color="primary" onClick={agreeHandler}>
                     Agree
                 </Button>
             </ButtonGroup>
