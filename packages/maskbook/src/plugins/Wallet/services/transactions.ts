@@ -74,6 +74,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['da
                             address: token_id,
                             direction: DebankTransactionDirection.SEND,
                             amount,
+                            logoURL: token_dict[token_id].logo_url,
                         })),
                     ...transaction.receives
                         .filter(({ token_id }) => token_dict[token_id].is_verified)
@@ -83,6 +84,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['da
                             address: token_id,
                             direction: DebankTransactionDirection.RECEIVE,
                             amount,
+                            logoURL: token_dict[token_id].logo_url,
                         })),
                 ],
                 gasFee: transaction.tx
@@ -114,6 +116,7 @@ function fromZerion(data: ZerionTransactionItem[]) {
                             address: asset.asset_code,
                             direction,
                             amount: Number(new BigNumber(value).dividedBy(pow10(asset.decimals)).toString()),
+                            logoURL: asset.icon_url,
                         }
                     }) ?? [],
                 gasFee: {

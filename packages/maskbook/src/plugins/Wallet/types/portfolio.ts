@@ -15,6 +15,7 @@ export interface TransactionPair {
     address: string
     direction: TransactionDirection
     amount: number
+    logoURL?: string
 }
 
 export type TransactionGasFee = {
