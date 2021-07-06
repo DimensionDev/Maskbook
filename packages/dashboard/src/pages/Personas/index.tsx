@@ -93,7 +93,7 @@ function Personas() {
                         const profile = currentPersona.linkedProfiles.find(
                             (x) => x.identifier.network === networkIdentifier,
                         )
-                        if (profile) return <TabPanel key={networkIdentifier} value={networkIdentifier}></TabPanel>
+                        if (profile) return <TabPanel key={networkIdentifier} value={networkIdentifier} />
                         return (
                             <TabPanel key={networkIdentifier} value={networkIdentifier} sx={{ flex: 1 }}>
                                 <PersonaSetup

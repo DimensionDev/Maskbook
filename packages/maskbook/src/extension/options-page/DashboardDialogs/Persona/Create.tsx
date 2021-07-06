@@ -70,7 +70,8 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                         disabled={name.length === 0 || checkInputLengthExceed(name)}>
                         {t('create')}
                     </DebounceButton>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }

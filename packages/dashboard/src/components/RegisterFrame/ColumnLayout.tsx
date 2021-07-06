@@ -35,7 +35,7 @@ export const ColumnLayout = ({ children }: ColumnLayoutProps) => {
     return (
         <Container>
             <Content>
-                <Paper className={classes.paper} variant={'outlined'}>
+                <Paper className={classes.paper} variant="outlined">
                     <Typography>
                         <MaskNotSquareIcon />
                     </Typography>

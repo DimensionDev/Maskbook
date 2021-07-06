@@ -3,7 +3,7 @@ import type { Component } from '.'
 export const Translate: Component<{}> = () => {
     return (
         <span>
-            i18n: <slot></slot>
+            i18n: <slot />
         </span>
     )
 }

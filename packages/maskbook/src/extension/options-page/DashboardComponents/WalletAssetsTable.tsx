@@ -257,39 +257,19 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                             ? new Array(3).fill(0).map((_, i) => (
                                   <TableRow className={classes.cell} key={i}>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                   </TableRow>
                               ))

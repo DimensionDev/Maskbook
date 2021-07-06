@@ -10,5 +10,5 @@ export default function AncientPostsSetting() {
         Services.Settings.setAncientPostsCompatibiltyMode(event.target.checked)
     }
 
-    return <SettingSwitch checked={checked} onChange={handleChange}></SettingSwitch>
+    return <SettingSwitch checked={checked} onChange={handleChange} />
 }

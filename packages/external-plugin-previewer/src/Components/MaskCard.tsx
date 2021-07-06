@@ -14,7 +14,7 @@ export const MaskCard: Component<MaskCardProps> = (props) => {
                     <slot name="title" />
                 </Typography>
                 <Typography variant="body2" component="p">
-                    <slot></slot>
+                    <slot />
                 </Typography>
             </CardContent>
             <CardActions>

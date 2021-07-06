@@ -275,8 +275,7 @@ export function SwapDialog(props: SwapDialogProps) {
             <Typography className={classes.exchangeText} variant="body1" color="textSecondary">
                 {t('plugin_ito_dialog_swap_exchange')}{' '}
                 <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals)}</span>{' '}
-                {token.symbol}
-                {'.'}
+                {token.symbol}.
             </Typography>
             <TokenAmountPanel
                 amount={inputAmountForUI}

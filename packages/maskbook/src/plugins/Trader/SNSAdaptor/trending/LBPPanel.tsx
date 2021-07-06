@@ -115,7 +115,7 @@ export function LBPPanel(props: LBPPanelProps) {
                 </Link>
                 ,{' '}
                 <Link
-                    href={`https://news.mask.io/2021/02/24/mask-lbp-tutorial`}
+                    href="https://news.mask.io/2021/02/24/mask-lbp-tutorial"
                     target="_blank"
                     rel="noopener noreferrer">
                     Tutorial

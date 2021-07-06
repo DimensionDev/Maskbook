@@ -71,9 +71,9 @@ export function TokenListItem({ data, onSelect }: MaskSearchableListItemProps<As
                     ) : (
                         <Button
                             className={classes.importButton}
-                            color={'primary'}
+                            color="primary"
                             onClick={handleTokenSelect}
-                            size={'small'}>
+                            size="small">
                             Import
                         </Button>
                     )}

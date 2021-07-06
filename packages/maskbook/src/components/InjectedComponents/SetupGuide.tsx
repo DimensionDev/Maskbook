@@ -396,7 +396,8 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                             }}
                             onChange={(e) => onUsernameChange(e.target.value)}
                             onKeyDown={onKeyDown}
-                            inputProps={{ 'data-testid': 'username_input' }}></TextField>
+                            inputProps={{ 'data-testid': 'username_input' }}
+                        />
                         {gotoProfilePageImpl && xsOnly ? (
                             <IconButton
                                 className={findUsernameClasses.button}
@@ -433,7 +434,8 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     {t('confirm')}
                 </ActionButtonPromise>
             }
-            onClose={onClose}></WizardDialog>
+            onClose={onClose}
+        />
     )
 }
 //#endregion
@@ -508,7 +510,8 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                 </>
             }
             onBack={onBack}
-            onClose={onClose}></WizardDialog>
+            onClose={onClose}
+        />
     )
 }
 //#endregion

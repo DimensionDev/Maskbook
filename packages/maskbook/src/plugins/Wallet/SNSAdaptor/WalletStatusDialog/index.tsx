@@ -149,7 +149,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
         <InjectedDialog title={t('wallet_status_title')} open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
                 <section className={classes.currentAccount}>
-                    <WalletIcon size={48} badgeSize={18}></WalletIcon>
+                    <WalletIcon size={48} badgeSize={18} />
                     <div className={classes.accountInfo}>
                         <div className={classes.infoRow}>
                             <Typography className={classes.accountName}>{selectedWallet.name}</Typography>

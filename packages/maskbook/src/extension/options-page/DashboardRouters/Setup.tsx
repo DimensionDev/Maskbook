@@ -500,7 +500,7 @@ export function RestoreDatabase() {
         <SetupForm
             primary={t('set_up_restore')}
             secondary={t('set_up_restore_hint')}
-            content={<AbstractTab {...tabProps}></AbstractTab>}
+            content={<AbstractTab {...tabProps} />}
             actions={
                 <>
                     <ActionButton
@@ -671,7 +671,7 @@ export function RestoreDatabaseAdvance() {
         <SetupForm
             primary={t('set_up_advance_restore')}
             secondary={t('set_up_advance_restore_hint')}
-            content={<AbstractTab {...tabProps}></AbstractTab>}
+            content={<AbstractTab {...tabProps} />}
             actions={
                 <>
                     <ActionButton
