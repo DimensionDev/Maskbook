@@ -41,7 +41,6 @@ export const DHedgePluginDefine: PluginConfig = {
     PageComponent() {
         return (
             <>
-                <PoolView />
                 <InvestDialog />
             </>
         )
@@ -49,7 +48,6 @@ export const DHedgePluginDefine: PluginConfig = {
     DashboardComponent() {
         return (
             <>
-                <PoolView />
                 <InvestDialog />
             </>
         )
