@@ -5,6 +5,7 @@ import {
     FungibleTokenDetailed,
     getChainDetailed,
     isSameAddress,
+    currySameAddress,
     isZero,
     pow10,
     resolveLinkOnExplorer,
@@ -394,7 +395,7 @@ export function ITO(props: ITO_Props) {
             summary += ' ' + formatBalance(total_remaining, token.decimals) + ' ' + token.symbol
         }
         availability?.exchange_addrs.forEach((addr, i) => {
-            const token = exchange_tokens.find((t) => isSameAddress(t.address, addr))
+            const token = exchange_tokens.find(currySameAddress(addr))
             const comma = noRemain && i === 0 ? ' ' : ', '
             if (token) {
                 summary += comma + formatBalance(availability?.exchanged_tokens[i], token.decimals) + ' ' + token.symbol
