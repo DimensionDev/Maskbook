@@ -60,7 +60,7 @@ export default function Settings() {
                     </SettingItem>
                 </SettingCard>
 
-                <SettingCard title={t.settings_database_management()}>
+                <SettingCard title={t.settings_backup_recovery()}>
                     <SettingItem
                         icon={<SaveIcon />}
                         title={t.settings_global_backup_title()}
