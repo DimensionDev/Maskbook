@@ -15,27 +15,27 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
     // name
     const { value: tokenName = token?.name ?? '', ...asyncTokenName } = useAsyncRetry(
         async () => token?.name ?? (await (erc20TokenContract?.methods.name().call() ?? '')),
-        [erc20TokenContract],
+        [erc20TokenContract, chainId],
     )
     const { value: tokenNameBytes32 = '', ...asyncTokenNameBytes32 } = useAsyncRetry(
         async () => await (erc20TokenBytes32Contract?.methods.name().call() ?? ''),
-        [erc20TokenBytes32Contract],
+        [erc20TokenBytes32Contract, chainId],
     )
 
     // symbol
     const { value: tokenSymbol = token?.symbol ?? '', ...asyncTokenSymbol } = useAsyncRetry(
         async () => token?.symbol ?? (await (erc20TokenContract?.methods.symbol().call() ?? '')),
-        [erc20TokenContract],
+        [erc20TokenContract, chainId],
     )
     const { value: tokenSymbolBytes32 = '', ...asyncTokenSymbolBytes32 } = useAsyncRetry(
         async () => await (erc20TokenBytes32Contract?.methods.symbol().call() ?? ''),
-        [erc20TokenBytes32Contract],
+        [erc20TokenBytes32Contract, chainId],
     )
 
     // decimals
     const { value: tokenDecimals = token?.decimals ?? '0', ...asyncTokenDecimals } = useAsyncRetry(
         async () => token?.decimals ?? (await (erc20TokenContract?.methods.decimals().call() ?? '0')),
-        [erc20TokenContract],
+        [erc20TokenContract, chainId],
     )
 
     // token detailed
@@ -48,7 +48,7 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
             name: parseStringOrBytes32(tokenName, tokenNameBytes32, 'Unknown Token'),
             decimals: typeof tokenDecimals === 'string' ? Number.parseInt(tokenDecimals, 10) : tokenDecimals,
         } as ERC20TokenDetailed
-    }, [tokenName, tokenNameBytes32, tokenSymbol, tokenSymbolBytes32, tokenDecimals])
+    }, [tokenName, tokenNameBytes32, tokenSymbol, tokenSymbolBytes32, tokenDecimals, chainId])
 
     const asyncList = [
         asyncTokenName,
