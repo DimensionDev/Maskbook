@@ -11,7 +11,7 @@ import {
     FungibleTokenDetailed,
     ChainId,
     useNetworkType,
-    NetworkType,
+    resolveNetworkName,
 } from '@masknet/web3-shared'
 import { SwapStatus } from './SwapGuide'
 
@@ -136,7 +136,7 @@ export function RemindDialog(props: RemindDialogProps) {
             <section className={classes.wrapper}>
                 <Typography variant="body1" className={classNames(classes.reminderText, classes.reminderTextFirst)}>
                     {t('plugin_ito_dialog_claim_reminder_text1', {
-                        networkType: networkType === NetworkType.Binance ? 'Binance Smart Chain' : networkType,
+                        networkType: resolveNetworkName(networkType),
                     })}
                 </Typography>
                 <Typography variant="body1" className={classes.reminderText}>
