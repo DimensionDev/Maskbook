@@ -29,9 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-interface PreviewCardProps {
-    id: string
-}
+interface PreviewCardProps {}
 
 enum GoodGhostingTab {
     Game = 'Game',

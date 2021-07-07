@@ -1,6 +1,9 @@
 import { createERC20Tokens, getChainDetailed } from '@masknet/web3-shared'
 
-export const GOOD_GHOSTING_PLUGIN_ID = 'co.good_ghosting'
+export const PLUGIN_ID = 'co.good_ghosting'
+export const PLUGIN_NAME = 'GoodGhosting'
+export const PLUGIN_ICON = '👻'
+export const PLUGIN_DESCRIPTION = 'DeFi savings dApp game.'
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
