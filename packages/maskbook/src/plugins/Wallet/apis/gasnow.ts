@@ -2,7 +2,7 @@ import type { GasNow } from '@masknet/web3-shared'
 import { currentGasNowSettings } from '../settings'
 
 export function connectGasNow() {
-    const GAS_NOW_API = 'wss://www.gasnow.org/ws'
+    const GAS_NOW_API = 'wss://www.gasnow.org/ws/gasprice'
     const gasNowSocket = new WebSocket(GAS_NOW_API)
     let timer: NodeJS.Timeout
     gasNowSocket.addEventListener('open', () => {
@@ -10,7 +10,7 @@ export function connectGasNow() {
         console.log('GasNow websocket connected.')
     })
     gasNowSocket.addEventListener('message', (event) => {
-        const gasNow: GasNow = JSON.parse(event.data).data.gasPrices
+        const gasNow: GasNow = JSON.parse(event.data).data
         currentGasNowSettings.value = gasNow
     })
     gasNowSocket.addEventListener('close', () => {

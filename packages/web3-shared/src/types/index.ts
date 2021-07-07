@@ -223,6 +223,7 @@ export type GasNow = {
     standard: number
     slow: number
     custom: number
+    timestamp: number
 }
 
 export interface Asset {
