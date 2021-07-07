@@ -747,10 +747,12 @@
     "plugin_pooltogether_deposit_title": "Deposit {{token}} to win",
     "plugin_pooltogether_odds_title": "New odds of winning:",
     "plugin_pooltogether_odds_value": "1 in {{value}} every week!",
+    "plugin_pooltogether_short_odds_value": "1 in {{value}}",
     "plugin_pooltogether_my_deposits": "Total Deposits",
     "plugin_pooltogether_no_account_pool": "You don't have any pool in this network",
     "plugin_pooltogether_missing_pool": "Missing some deposits? Check the complete listing at:\n",
     "plugin_pooltogether_winning_odds": "Winning odds:",
     "plugin_pooltogether_in": "in",
-    "plugin_pooltogether_manage": "Manage"
+    "plugin_pooltogether_manage": "Manage",
+    "plugin_pooltogether_token_not_found": "Token not found!"
 }

@@ -1,3 +1,8 @@
+export interface RawNumber {
+    hex: string
+    type: string
+}
+
 export interface Ticket {
     address: string
     decimals: string
@@ -6,15 +11,9 @@ export interface Ticket {
     numberOfHolders: string
     symbol: string
     totalSupply: string
-    totalSupplyUnformatted: {
-        hex: string
-        type: string
-    }
+    totalSupplyUnformatted: RawNumber
     totalValueUsd: string
-    totalValueUsdScaled: {
-        hex: string
-        type: string
-    }
+    totalValueUsdScaled: RawNumber
     usd: number
 }
 
@@ -44,10 +43,7 @@ export interface Pool {
     name: string
     prize: {
         amount: string
-        amountUnformatted: {
-            hex: string
-            type: string
-        }
+        amountUnformatted: RawNumber
         canCompleteAward: boolean
         canStartAward: boolean
         cumulativePrizeNet: string
@@ -55,34 +51,22 @@ export interface Pool {
         currentState: string
         erc20Awards: {
             totalValueUsd: string
-            totalValueUsdScaled: {
-                hex: string
-                type: string
-            }
+            totalValueUsdScaled: RawNumber
         }
         estimatedRemainingBlocksToPrize: string
-        estimatedRemainingBlocksToPrizeUnformatted: {
-            hex: string
-            type: string
-        }
+        estimatedRemainingBlocksToPrizeUnformatted: RawNumber
         externalErc20Awards: [
             {
                 address: string
                 amount: string
-                amountUnformatted: {
-                    hex: string
-                    type: string
-                }
+                amountUnformatted: RawNumber
                 decimals: string
                 derivedETH: string
                 id: string
                 name: string
                 symbol: string
                 totalValueUsd: string
-                totalValueUsdScaled: {
-                    hex: string
-                    type: string
-                }
+                totalValueUsdScaled: RawNumber
                 usd: number
             },
         ]
@@ -96,10 +80,7 @@ export interface Pool {
                 {
                     address: string
                     amount: string
-                    amountUnformatted: {
-                        hex: string
-                        type: string
-                    }
+                    amountUnformatted: RawNumber
                     decimals: string
                     derivedETH: string
                     id: string
@@ -107,115 +88,55 @@ export interface Pool {
                     name: string
                     symbol: string
                     totalValueUsd?: string
-                    totalValueUsdScaled?: {
-                        hex: string
-                        type: string
-                    }
+                    totalValueUsdScaled?: RawNumber
                     usd: number
                 },
             ]
             // erc721Tokens: Not enough data
             id: string
             totalValueUsd: string
-            totalValueUsdScaled: {
-                hex: string
-                type: string
-            }
+            totalValueUsdScaled: RawNumber
         }
-        prizePeriodRemainingSeconds: {
-            hex: string
-            type: string
-        }
-        prizePeriodSeconds: {
-            hex: string
-            type: string
-        }
-        prizePeriodStartedAt: {
-            hex: string
-            type: string
-        }
+        prizePeriodRemainingSeconds: RawNumber
+        prizePeriodSeconds: RawNumber
+        prizePeriodStartedAt: RawNumber
         sablierStream: {
-            totalValueUsd: {
-                hex: string
-                type: string
-            }
-            totalValueUsdScaled: {
-                hex: string
-                type: string
-            }
+            totalValueUsd: RawNumber
+            totalValueUsdScaled: RawNumber
         }
         totalExternalAwardsValueUsd: string
-        totalExternalAwardsValueUsdScaled: {
-            hex: string
-            type: string
-        }
+        totalExternalAwardsValueUsdScaled: RawNumber
         totalInternalAwardsUsd: string
-        totalInternalAwardsUsdScaled: {
-            hex: string
-            type: string
-        }
+        totalInternalAwardsUsdScaled: RawNumber
         totalValueGrandPrizeWinnerUsd: string
-        totalValueGrandPrizeWinnerUsdScaled: {
-            hex: string
-            type: string
-        }
+        totalValueGrandPrizeWinnerUsdScaled: RawNumber
         totalValuePerWinnerUsd: string
-        totalValuePerWinnerUsdScaled: {
-            hex: string
-            type: string
-        }
+        totalValuePerWinnerUsdScaled: RawNumber
         totalValueUsd: string
-        totalValueUsdScaled: {
-            hex: string
-            type: string
-        }
+        totalValueUsdScaled: RawNumber
         weeklyTotalValueUsd: string
-        weeklyTotalValueUsdScaled: {
-            hex: string
-            type: string
-        }
+        weeklyTotalValueUsdScaled: RawNumber
         yield: {
             amount: string
-            amountUnformatted: {
-                hex: string
-                type: string
-            }
+            amountUnformatted: RawNumber
             comp: {
                 totalValueUsd: string
-                totalValueUsdScaled: {
-                    hex: string
-                    type: string
-                }
+                totalValueUsdScaled: RawNumber
                 unclaimedAmount: string
-                unclaimedAmountUnformatted: {
-                    hex: string
-                    type: string
-                }
+                unclaimedAmountUnformatted: RawNumber
             }
             totalValueUsd: string
-            totalValueUsdScaled: {
-                hex: string
-                type: string
-            }
+            totalValueUsdScaled: RawNumber
         }
     }
     prizePool: {
         address: string
         totalSponsorshipValueLockedUsd: string
-        totalSponsorshipValueLockedUsdScaled: {
-            hex: string
-            type: string
-        }
+        totalSponsorshipValueLockedUsdScaled: RawNumber
         totalTicketValueLockedUsd: string
-        totalTicketValueLockedUsdScaled: {
-            hex: string
-            type: string
-        }
+        totalTicketValueLockedUsdScaled: RawNumber
         totalValueLockedUsd: string
-        totalValueLockedUsdScaled: {
-            hex: string
-            type: string
-        }
+        totalValueLockedUsdScaled: RawNumber
         type: string
     }
     prizeStrategy: {
@@ -224,48 +145,30 @@ export interface Pool {
     reserve: {
         address: string
         amount: string
-        amountUnformatted: {
-            hex: string
-            type: string
-        }
+        amountUnformatted: RawNumber
         rate: string
-        rateUnformatted: {
-            hex: string
-            type: string
-        }
+        rateUnformatted: RawNumber
         registry: {
             address: string
         }
         totalValueUsd: string
-        totalValueUsdScaled: {
-            hex: string
-            type: string
-        }
+        totalValueUsdScaled: RawNumber
     }
     symbol: string
     tokenListener: {
         address: string
         apr: number
         dripRatePerDay: string
-        dripRatePerDayUnformatted: {
-            hex: string
-            type: string
-        }
+        dripRatePerDayUnformatted: RawNumber
         dripRatePerSecond: string
-        dripRatePerSecondUnformatted: {
-            hex: string
-            type: string
-        }
+        dripRatePerSecondUnformatted: RawNumber
         measure: string
     }
     tokens: {
         cToken?: {
             address: string
             derivedETH: string
-            supplyRatePerBlock: {
-                hex: string
-                type: string
-            }
+            supplyRatePerBlock: RawNumber
             usd: number
         }
         comp?: {
@@ -284,34 +187,22 @@ export interface Pool {
             numberOfHolders: string
             symbol: string
             totalSupply: string
-            totalSupplyUnformatted: {
-                hex: string
-                type: string
-            }
+            totalSupplyUnformatted: RawNumber
             totalValueUsd: string
-            totalValueUsdScaled: {
-                hex: string
-                type: string
-            }
+            totalValueUsdScaled: RawNumber
             usd: number
         }
         ticket: Ticket
         tokenFaucetDripToken?: {
             address: string
             amount: string
-            amountUnformatted: {
-                hex: string
-                type: string
-            }
+            amountUnformatted: RawNumber
             decimals: number
             derivedETH: string
             name: string
             symbol: string
             totalValueUsd: string
-            totalValueUsdScaled: {
-                hex: string
-                type: string
-            }
+            totalValueUsdScaled: RawNumber
             usd: number
         }
         underlyingToken: {

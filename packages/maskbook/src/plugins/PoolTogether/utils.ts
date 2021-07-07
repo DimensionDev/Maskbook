@@ -57,13 +57,16 @@ export const calculateOdds = (usersTicketBalance: number, totalSupply: number, n
 }
 
 export const calculateNextPrize = (pool: Pool) => {
-    return parseInt(pool.prize.weeklyTotalValueUsd) / (ONE_WEEK_SECONDS / parseInt(pool.config.prizePeriodSeconds))
+    return (
+        Number.parseInt(pool.prize.weeklyTotalValueUsd, 10) /
+        (ONE_WEEK_SECONDS / Number.parseInt(pool.config.prizePeriodSeconds, 10))
+    )
 }
 
 export const calculateSecondsRemaining = (pool: Pool) => {
     return (
-        parseInt(pool.prize.prizePeriodStartedAt.hex, 16) +
-        parseInt(pool.prize.prizePeriodSeconds.hex, 16) -
+        Number.parseInt(pool.prize.prizePeriodStartedAt.hex, 16) +
+        Number.parseInt(pool.prize.prizePeriodSeconds.hex, 16) -
         new Date().getTime() / ONE_SECOND
     )
 }

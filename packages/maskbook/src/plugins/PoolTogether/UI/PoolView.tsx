@@ -177,7 +177,7 @@ export function PoolView(props: PoolProps) {
     //#endregion
 
     //#region process data
-    const prizePeriodSeconds = parseInt(pool.config.prizePeriodSeconds)
+    const prizePeriodSeconds = Number.parseInt(pool.config.prizePeriodSeconds)
     const period =
         prizePeriodSeconds == ONE_DAY_SECONDS
             ? 'Daily'
@@ -214,11 +214,19 @@ export function PoolView(props: PoolProps) {
         )
     }
 
-    if (errorToken || !token) {
+    if (errorToken) {
         return (
             <div className={classes.root}>
                 <RefreshIcon className={classes.refresh} color="primary" onClick={retryToken} />
             </div>
+        )
+    }
+
+    if (!token) {
+        return (
+            <Typography className={classes.prize} variant="h5" fontWeight="fontWeightBold">
+                {t('plugin_pooltogether_token_not_found')}
+            </Typography>
         )
     }
 

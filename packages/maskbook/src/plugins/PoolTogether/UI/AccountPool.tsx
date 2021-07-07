@@ -114,16 +114,16 @@ export function AccountPool(props: AccountPoolProps) {
     const poolURL = useManagePoolURL(accountPool.pool)
     const chainId = useChainId()
 
-    const formatedBalance = parseFloat(
-        formatBalance(accountPool.account.ticketBalance, parseInt(accountPool.pool.tokens.ticket.decimals)),
+    const formatedBalance = Number.parseFloat(
+        formatBalance(accountPool.account.ticketBalance, Number.parseInt(accountPool.pool.tokens.ticket.decimals)),
     ).toLocaleString(undefined, {
         maximumFractionDigits: 6,
     })
 
     const odds = calculateOdds(
-        parseFloat(formatedBalance),
-        parseFloat(accountPool.pool.tokens.ticket.totalSupply),
-        parseInt(accountPool.pool.config.numberOfWinners),
+        Number.parseFloat(formatedBalance),
+        Number.parseFloat(accountPool.pool.tokens.ticket.totalSupply),
+        Number.parseInt(accountPool.pool.config.numberOfWinners, 10),
     )
 
     return (
@@ -148,7 +148,7 @@ export function AccountPool(props: AccountPoolProps) {
                     </Typography>
                     <Typography className={classes.odds} color="textSecondary" variant="subtitle2">
                         {odds
-                            ? t('plugin_pooltogether_odds_value', {
+                            ? t('plugin_pooltogether_short_odds_value', {
                                   value: odds,
                               })
                             : 'n/a'}

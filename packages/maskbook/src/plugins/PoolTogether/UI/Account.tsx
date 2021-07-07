@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface AccountProps {
-    pools: [Pool]
+    pools: Pool[]
 }
 
 export function Account(props: AccountProps) {
@@ -63,7 +63,6 @@ export function Account(props: AccountProps) {
     const classes = useStyles()
 
     const { value: balances = [], loading, retry, error } = useAccountBalance(pools)
-    console.log(balances)
 
     if (loading) {
         return <CircularProgress className={classes.progress} color="primary" size={15} />
@@ -73,11 +72,11 @@ export function Account(props: AccountProps) {
         return <RefreshIcon className={classes.refresh} color="primary" onClick={retry} />
     }
 
-    const noZeroBalances = balances.filter((balance) => parseInt(balance.account.ticketBalance) !== 0)
+    const noZeroBalances = balances.filter((balance) => Number.parseInt(balance.account.ticketBalance, 10) !== 0)
     const totalUsdBalance = noZeroBalances
         .map((balance) => {
-            const ticketBalance = parseFloat(
-                formatBalance(balance.account.ticketBalance, parseInt(balance.pool.tokens.ticket.decimals)),
+            const ticketBalance = Number.parseFloat(
+                formatBalance(balance.account.ticketBalance, Number.parseInt(balance.pool.tokens.ticket.decimals, 10)),
             )
             const ticketUsdRate = balance.pool.tokens.ticket.usd
             return ticketBalance * ticketUsdRate

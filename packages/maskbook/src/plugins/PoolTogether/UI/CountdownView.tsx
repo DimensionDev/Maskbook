@@ -3,6 +3,8 @@ import addSeconds from 'date-fns/addSeconds'
 import { subtractDates } from '../utils'
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useInterval } from 'react-use'
+import { ONE_SECOND } from '../constants'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,9 +52,9 @@ export const CountdownView = (props: CountdownProps) => {
     const { secondsRemaining, msgOnEnd } = props
     const [secs, setSecs] = useState(secondsRemaining)
 
-    // useInterval(() => {
-    //     setSecs(secs - 1)
-    // }, ONE_SECOND)
+    useInterval(() => {
+        setSecs(secs - 1)
+    }, ONE_SECOND)
 
     const currentDate = new Date()
     const futureDate = addSeconds(currentDate, secs)

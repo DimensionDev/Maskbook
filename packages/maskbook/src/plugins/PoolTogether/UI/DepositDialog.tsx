@@ -143,15 +143,13 @@ export function DepositDialog() {
         setOdds(
             pool
                 ? calculateOdds(
-                      parseFloat(rawAmount),
-                      parseFloat(pool.tokens.ticket.totalSupply),
-                      parseInt(pool.config.numberOfWinners),
+                      Number.parseFloat(rawAmount),
+                      Number.parseFloat(pool.tokens.ticket.totalSupply),
+                      Number.parseInt(pool.config.numberOfWinners, 10),
                   )
                 : undefined,
         )
     }, [rawAmount])
-
-    console.log(odds)
 
     //#region blocking
     const [depositState, depositCallback, resetDepositCallback] = useDepositCallback(
