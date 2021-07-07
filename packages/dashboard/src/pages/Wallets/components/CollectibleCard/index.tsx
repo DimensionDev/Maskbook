@@ -1,14 +1,14 @@
-import {
+import type {
     ERC1155TokenAssetDetailed,
     ERC721TokenAssetDetailed,
     ChainId,
     CollectibleProvider,
-    resolveCollectibleLink,
 } from '@masknet/web3-shared'
 import { memo } from 'react'
 import { Link, makeStyles, Typography } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
+import { resolveCollectibleLink } from '../../../../../../maskbook/src/plugins/Wallet/pipes'
 
 const useStyles = makeStyles(() => ({
     card: {

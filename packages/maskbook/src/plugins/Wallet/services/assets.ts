@@ -11,6 +11,7 @@ import {
     getChainDetailed,
     getChainIdFromName,
     getTokenConstants,
+    NetworkType,
     pow10,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
@@ -76,7 +77,11 @@ export async function getAssetsListNFT(
     }
 }
 
-export async function getAssetsList(address: string, provider: PortfolioProvider): Promise<Asset[]> {
+export async function getAssetsList(
+    address: string,
+    network: NetworkType,
+    provider: PortfolioProvider,
+): Promise<Asset[]> {
     if (!EthereumAddress.isValid(address)) return []
     switch (provider) {
         case PortfolioProvider.ZERION:
@@ -86,7 +91,7 @@ export async function getAssetsList(address: string, provider: PortfolioProvider
             const assetsList = values(payload.assets).filter((x) => x.asset.is_displayable && x.asset.icon_url)
             return formatAssetsFromZerion(assetsList)
         case PortfolioProvider.DEBANK:
-            const { data = [], error_code } = await DebankAPI.getAssetsList(address)
+            const { data = [], error_code } = await DebankAPI.getAssetsList(address, network)
             if (error_code === 0) return formatAssetsFromDebank(data)
             return []
         default:
