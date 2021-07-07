@@ -6,16 +6,7 @@ import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hoo
 import { MaskColorVar } from '@masknet/theme'
 import { Services } from '../../../../API'
 import { useDashboardI18N } from '../../../../locales'
-
-const mapContactAvatarColor = (string: string, theme: 'light' | 'dark') => {
-    const hash = [...string].reduce((prev, current) => {
-        // eslint-disable-next-line no-bitwise
-        const next = current.charCodeAt(0) + (prev << 5) - prev
-        // eslint-disable-next-line no-bitwise
-        return next & next
-    }, 0)
-    return `hsl(${hash % 360}, ${theme === 'dark' ? `78%` : '98%'}, ${theme === 'dark' ? `50%` : '70%'})`
-}
+import { mapContactAvatarColor } from '../../../../utils/mapContactAvatarColor'
 
 const useStyles = makeStyles(() => ({
     favorite: {
@@ -86,6 +77,7 @@ export interface ContactTableRowUIProps extends Omit<ContactTableRowProps, 'netw
 
 export const ContactTableRowUI = memo<ContactTableRowUIProps>(
     ({ contact, index, handleClickStar, handleClickInvite, theme }) => {
+        const t = useDashboardI18N()
         const classes = useStyles()
         const [first, last] = contact.name.split(' ')
 
@@ -125,7 +117,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                 <TableCell align="center">
                     {!contact.fingerprint ? (
                         <Button color="secondary" size="small" className={classes.button} onClick={handleClickInvite}>
-                            invite
+                            {t.personas_contacts_invite()}
                         </Button>
                     ) : null}
                 </TableCell>

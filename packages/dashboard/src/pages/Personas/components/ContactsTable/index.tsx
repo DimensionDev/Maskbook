@@ -19,6 +19,7 @@ import { ContactTableRow } from '../ContactTableRow'
 import { EmptyContactPlaceholder } from '../EmptyContactPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlacholder'
 import { ceil, sortBy } from 'lodash-es'
+import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -104,6 +105,7 @@ export interface ContactsTableUIProps extends ContactsTableProps {
 
 export const ContactsTableUI = memo<ContactsTableUIProps>(
     ({ showPagination, page, count, onPageChange, network, dataSource, isEmpty, isLoading }) => {
+        const t = useDashboardI18N()
         const classes = useStyles()
         return (
             <>
@@ -117,10 +119,10 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
                             <TableHead>
                                 <TableRow>
                                     <TableCell variant="head" align="center" className={classes.header}>
-                                        Name
+                                        {t.personas_contacts_name()}
                                     </TableCell>
                                     <TableCell variant="head" align="center" className={classes.header}>
-                                        Operation
+                                        {t.personas_contacts_operation()}
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
