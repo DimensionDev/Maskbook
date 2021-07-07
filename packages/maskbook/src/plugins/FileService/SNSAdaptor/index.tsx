@@ -5,7 +5,8 @@ import { base } from '../base'
 import { META_KEY_1, META_KEY_2 } from '../constants'
 import { FileInfoMetadataReader } from '../helpers'
 import type { FileInfo } from '../types'
-import FileServiceDialog from './MainDialog'
+import { FileServiceDialogNew } from './NewMainDialog'
+//import FileServiceDialog from './MainDialog'
 import { Preview } from './Preview'
 
 const definition: Plugin.SNSAdaptor.Definition = {
@@ -22,7 +23,8 @@ const definition: Plugin.SNSAdaptor.Definition = {
     ]),
     CompositionDialogEntry: {
         label: '📃 File Service',
-        dialog: FileServiceDialog,
+        //dialog: FileServiceDialog,
+        dialog: FileServiceDialogNew,
     },
 }
 

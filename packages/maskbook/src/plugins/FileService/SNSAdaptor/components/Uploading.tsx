@@ -52,11 +52,15 @@ export const Uploading: React.FC = () => {
     const [preparing, setPreparing] = useState(true)
     const [sendSize, setSendSize] = useState(0)
     const { state } = useLocation<RouteState>()
+    console.log('33333')
+    console.log(state)
     useEffect(() => {
         onUploading(true)
         return () => onUploading(false)
     }, [onUploading])
     const { error } = useAsync(async () => {
+        console.log('11111')
+        console.log(state)
         const payloadTxID = await timeout(
             PluginFileServiceRPC.makeAttachment({
                 key: state.key,
@@ -65,6 +69,8 @@ export const Uploading: React.FC = () => {
             }),
             60000, // ≈ 1 minute
         )
+        console.log('000000')
+        console.log(state)
         setPreparing(false)
         for await (const pctComplete of PluginFileServiceRPCGenerator.upload(payloadTxID)) {
             setSendSize(state.size * (pctComplete / 100))
