@@ -177,7 +177,7 @@ export function PoolView(props: PoolProps) {
     //#endregion
 
     //#region process data
-    const prizePeriodSeconds = Number.parseInt(pool.config.prizePeriodSeconds)
+    const prizePeriodSeconds = Number.parseInt(pool.config.prizePeriodSeconds, 10)
     const period =
         prizePeriodSeconds == ONE_DAY_SECONDS
             ? 'Daily'

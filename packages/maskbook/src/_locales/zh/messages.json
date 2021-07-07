@@ -747,10 +747,12 @@
     "plugin_pooltogether_deposit_title": "",
     "plugin_pooltogether_odds_title": "",
     "plugin_pooltogether_odds_value": "",
+    "plugin_pooltogether_short_odds_value": "",
     "plugin_pooltogether_my_deposits": "",
     "plugin_pooltogether_no_account_pool": "",
     "plugin_pooltogether_missing_pool": "",
     "plugin_pooltogether_winning_odds": "",
     "plugin_pooltogether_in": "",
-    "plugin_pooltogether_manage": ""
+    "plugin_pooltogether_manage": "",
+    "plugin_pooltogether_token_not_found": ""
 }

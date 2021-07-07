@@ -115,7 +115,7 @@ export function AccountPool(props: AccountPoolProps) {
     const chainId = useChainId()
 
     const formatedBalance = Number.parseFloat(
-        formatBalance(accountPool.account.ticketBalance, Number.parseInt(accountPool.pool.tokens.ticket.decimals)),
+        formatBalance(accountPool.account.ticketBalance, Number.parseInt(accountPool.pool.tokens.ticket.decimals, 10)),
     ).toLocaleString(undefined, {
         maximumFractionDigits: 6,
     })
