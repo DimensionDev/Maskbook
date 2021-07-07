@@ -132,20 +132,22 @@ function BrowserActionUI() {
                             sns: ui.networkIdentifier,
                         })}
                     </Typography>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                        }}>
-                        <Button
-                            className={classes.button}
-                            variant="text"
-                            onClick={() => {
-                                if (Flags.no_web_extension_dynamic_permission_request) return
-                                requestSNSAdaptorPermission(ui).then(checkPermission)
+                    {ui.networkIdentifier === 'localhost' || identities.length === 0 ? null : (
+                        <Box
+                            sx={{
+                                display: 'flex',
                             }}>
-                            {t('browser_action_request_permission')}
-                        </Button>
-                    </Box>
+                            <Button
+                                className={classes.button}
+                                variant="text"
+                                onClick={() => {
+                                    if (Flags.no_web_extension_dynamic_permission_request) return
+                                    requestSNSAdaptorPermission(ui).then(checkPermission)
+                                }}>
+                                {t('browser_action_request_permission')}
+                            </Button>
+                        </Box>
+                    )}
                 </>
             ) : null}
             {ui.networkIdentifier === 'localhost' || identities.length === 0 ? null : (
