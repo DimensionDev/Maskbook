@@ -6,7 +6,7 @@ import { DialogContent, Typography, makeStyles, DialogActions, Button } from '@m
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
 import { useCopyToClipboard } from 'react-use'
 import { useCurrentSelectedWalletNetwork } from '../../api'
-import { NetworkType, resolveNetworkName } from '@masknet/web3-shared'
+import { NetworkType, resolveNetworkAddress } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -74,7 +74,7 @@ export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
                     <Typography sx={{ marginBottom: 3.5 }}>{t.wallets_receive_tips({ chainName })}</Typography>
                     <WalletQRCodeContainer width={286} height={286} border={{ borderWidth: 15, borderHeight: 2 }}>
                         <QRCode
-                            text={`${resolveNetworkName(currentNetworkType).toLowerCase()}:${walletAddress}`}
+                            text={resolveNetworkAddress(currentNetworkType, walletAddress)}
                             options={{ width: 282 }}
                             canvasProps={{
                                 style: { display: 'block', margin: 'auto' },
