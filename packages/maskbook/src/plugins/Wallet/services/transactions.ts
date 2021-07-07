@@ -30,6 +30,11 @@ export async function getTransactionList(
             hasNextPage: false,
         }
     } else if (provider === PortfolioProvider.ZERION) {
+        if (network !== NetworkType.Ethereum)
+            return {
+                transactions: [],
+                hasNextPage: false,
+            }
         const { payload, meta } = await ZerionApi.getTransactionList(address, page)
         if (meta.status !== 'ok') throw new Error('Fail to load transactions.')
         return {
