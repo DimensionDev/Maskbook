@@ -33,14 +33,14 @@
         "Mumbai": "0x0061E06c9f640a03C4981f43762d2AE5e03873c5"
     },
     "SUBGRAPH_URL": {
-        "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mainnet",
-        "Ropsten": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-ropsten",
+        "Mainnet": "${SUBGRAPH}/mask-red-packet-mainnet",
+        "Ropsten": "${SUBGRAPH}/mask-red-packet-ropsten",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-bsc-mainnet",
+        "BSC": "${SUBGRAPH}/mask-red-packet-bsc-mainnet",
         "BSCT": "",
-        "Matic": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-polygon",
-        "Mumbai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mumbai"
+        "Matic": "${SUBGRAPH}/mask-red-packet-polygon",
+        "Mumbai": "${SUBGRAPH}/mask-red-packet-mumbai"
     }
 }

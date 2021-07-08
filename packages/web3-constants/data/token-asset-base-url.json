@@ -1,40 +1,13 @@
 {
     "TOKEN_ASSET_BASE_URI": {
-        "Mainnet": [
-            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum",
-            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum"
-        ],
-        "Ropsten": [
-            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum",
-            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum"
-        ],
-        "Rinkeby": [
-            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum",
-            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum"
-        ],
-        "Kovan": [
-            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum",
-            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum"
-        ],
-        "Gorli": [
-            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum",
-            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/ethereum"
-        ],
-        "BSC": [
-            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain",
-            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/smartchain"
-        ],
-        "BSCT": [
-            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain",
-            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/smartchain"
-        ],
-        "Matic": [
-            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon",
-            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/polygon"
-        ],
-        "Mumbai": [
-            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon",
-            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/polygon"
-        ]
+        "Mainnet": ["${GIT_RAW}/ethereum", "${GIT_HACK}/ethereum"],
+        "Ropsten": ["${GIT_RAW}/ethereum", "${GIT_HACK}/ethereum"],
+        "Rinkeby": ["${GIT_RAW}/ethereum", "${GIT_HACK}/ethereum"],
+        "Kovan": ["${GIT_RAW}/ethereum", "${GIT_HACK}/ethereum"],
+        "Gorli": ["${GIT_RAW}/ethereum", "${GIT_HACK}/ethereum"],
+        "BSC": ["${GIT_RAW}/smartchain", "${GIT_HACK}/smartchain"],
+        "BSCT": ["${GIT_RAW}/smartchain", "${GIT_HACK}/smartchain"],
+        "Matic": ["${GIT_RAW}/polygon", "${GIT_HACK}/polygon"],
+        "Mumbai": ["${GIT_RAW}/polygon", "${GIT_HACK}/polygon"]
     }
 }

@@ -6,16 +6,16 @@
             "https://www.coingecko.com/tokens_list/uniswap/defi_100/v_0_0_0.json",
             "https://gateway.ipfs.io/ipns/tokens.uniswap.org",
             "http://tokenlist.dharma.eth.link",
-            "https://dimensiondev.github.io/Mask-Token-List/mask.json"
+            "${MASK_TOKEN_LIST}"
         ],
-        "Ropsten": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
-        "Rinkeby": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
+        "Ropsten": ["${MASK_TOKEN_LIST}"],
+        "Rinkeby": ["${MASK_TOKEN_LIST}"],
         "Kovan": ["https://irhonin.github.io/kovan-token-list/kovan-token-list.json"],
         "Gorli": [],
-        "BSC": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
-        "BSCT": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
-        "Matic": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
-        "Mumbai": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"]
+        "BSC": ["${MASK_TOKEN_LIST}"],
+        "BSCT": ["${MASK_TOKEN_LIST}"],
+        "Matic": ["${MASK_TOKEN_LIST}"],
+        "Mumbai": ["${MASK_TOKEN_LIST}"]
     },
     "BALANCE_CHECKER_ADDRESS": {
         "Mainnet": "0xb1F8e55c7f64D203C1400B9D8555d050F94aDF39",
