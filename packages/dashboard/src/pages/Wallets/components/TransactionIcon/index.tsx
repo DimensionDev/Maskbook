@@ -1,11 +1,10 @@
 import { memo, useMemo } from 'react'
 import { RedPacketIcon, CloseIcon, UploadIcon, InteractionIcon, DownloadIcon } from '@masknet/icons'
-import { FilterTransactionType, isSameAddress } from '@masknet/web3-shared'
+import { FilterTransactionType, isSameAddress, useRedPacketConstants } from '@masknet/web3-shared'
 import { makeStyles } from '@material-ui/styles'
 import { Box } from '@material-ui/core'
 import classNames from 'classnames'
 import { MaskColorVar } from '@masknet/theme'
-import { useRedPacketAddress } from '../../../../hooks/useRedPacketAddress'
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -36,8 +35,13 @@ export interface TransactionIconProps {
 }
 
 export const TransactionIcon = memo<TransactionIconProps>(({ address, failed, transactionType }) => {
-    const redPacketAddress = useRedPacketAddress()
-    const isRedPacket = isSameAddress(redPacketAddress, address)
+    const { HAPPY_RED_PACKET_ADDRESS_V1, HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } =
+        useRedPacketConstants()
+
+    const isRedPacket =
+        isSameAddress(HAPPY_RED_PACKET_ADDRESS_V1, address) ||
+        isSameAddress(HAPPY_RED_PACKET_ADDRESS_V2, address) ||
+        isSameAddress(HAPPY_RED_PACKET_ADDRESS_V3, address)
 
     return <TransactionIconUI isRedPacket={isRedPacket} isFailed={failed} transactionType={transactionType} />
 })
