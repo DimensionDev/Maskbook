@@ -7,6 +7,7 @@ import { TokenIcon } from '@masknet/shared'
 export interface AddTokenConfirmUIProps {
     onBack: () => void
     onConfirm: () => void
+    aliasSymbol: string
     token?: ERC20TokenDetailed
     balance?: string
 }
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const AddTokenConfirmUI = memo<AddTokenConfirmUIProps>(({ token, balance, onBack, onConfirm }) => {
+export const AddTokenConfirmUI = memo<AddTokenConfirmUIProps>(({ token, aliasSymbol, balance, onBack, onConfirm }) => {
     const t = useDashboardI18N()
     const classes = useStyles()
 
@@ -58,7 +59,7 @@ export const AddTokenConfirmUI = memo<AddTokenConfirmUIProps>(({ token, balance,
                                 AvatarProps={{ sx: { width: 48, height: 48 } }}
                             />
                             <Typography className={classes.confirmTitle} sx={{ marginLeft: 1.2 }}>
-                                {token?.symbol}
+                                {aliasSymbol}
                             </Typography>
                         </Box>
                         <Typography className={classes.confirmTitle}>
