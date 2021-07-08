@@ -26,3 +26,7 @@ The file need to provide this information:
 - [Using git rebase on the command line](https://docs.github.com/en/github/getting-started-with-github/using-git-rebase-on-the-command-line)
 - [Configuring a remote for a fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork)
 - [Syncing a fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork)
+
+## Form
+
+If you want's create a form in your plugin, then MUST read this file [Form guide](form-guide.md)
