@@ -130,6 +130,7 @@ export namespace Plugin.Shared {
         architecture: Record<'app' | 'web', boolean>
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
+        requireChainValid?: boolean
     }
     export interface ManagementProperty {
         /** This plugin should not displayed in the plugin management page. */

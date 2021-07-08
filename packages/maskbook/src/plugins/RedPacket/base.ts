@@ -14,5 +14,6 @@ export const base: Plugin.Shared.Definition = {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
+        requireChainValid: true,
     },
 }
