@@ -15,12 +15,12 @@ export function transform<T extends Constants>(constants: T, environment: Record
             if (Array.isArray(value)) {
                 value = value.map((item) => {
                     if (typeof item === 'string') {
-                        return template(item, environment)
+                        return replaceAll(item, environment)
                     }
                     return item
                 })
             } else if (typeof value === 'string') {
-                value = template(value, environment)
+                value = replaceAll(value, environment)
             }
             return [name, value] as [string, Primitive | Primitive[]]
         })
@@ -36,6 +36,6 @@ export function hookTransform<T>(getConstants: (chainId: ChainId) => T) {
     }
 }
 
-function template(input: string, values: Record<string, string>) {
+function replaceAll(input: string, values: Record<string, string>) {
     return input.replace(/\$\{([^}]+)\}/g, (match, p1) => values[p1] ?? match)
 }
