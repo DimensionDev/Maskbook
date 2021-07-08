@@ -290,7 +290,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             popups: withBrowserPolyfill(src('./src/extension/popups/render.tsx')),
         }
         if (isManifestV3) delete main.entry['background-script']
-        if (mode === 'production') delete main.entry['dashboard-next']
+        // if (mode === 'production') delete main.entry['dashboard-next']
         for (const entry in main.entry) {
             main.entry[entry] = iOSWebExtensionShimHack(...toArray(main.entry[entry] as any))
         }
@@ -300,9 +300,10 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             getHTMLPlugin({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
             getHTMLPlugin({ chunks: ['debug'], filename: 'debug.html' }),
             getHTMLPlugin({ chunks: ['popups'], filename: 'popups.html' }),
+            getHTMLPlugin({ chunks: ['dashboard-next'], filename: 'next.html' }),
         ) // generate pages for each entry
         // if (mode === 'development')
-        main.plugins!.push(getHTMLPlugin({ chunks: ['dashboard-next'], filename: 'next.html' }))
+        // main.plugins!.push(getHTMLPlugin({ chunks: ['dashboard-next'], filename: 'next.html' }))
         if (!isManifestV3)
             main.plugins!.push(getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }))
     }
