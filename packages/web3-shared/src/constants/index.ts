@@ -14,25 +14,19 @@ import { hookTransform, transform } from './utils'
 export const getAirdropConstants = transform(Airdrop)
 export const useAirdropConstants = hookTransform(getAirdropConstants)
 
-export const getEthereumConstants = transform(Ethereum, {
-    MASK_TOKEN_LIST: 'https://dimensiondev.github.io/Mask-Token-List/mask.json',
-})
+export const getEthereumConstants = transform(Ethereum)
 export const useEthereumConstants = hookTransform(getEthereumConstants)
 
 export const getGitcoinConstants = transform(Gitcoin)
 export const useGitcoinConstants = hookTransform(getGitcoinConstants)
 
-export const getITOConstants = transform(ITO, {
-    SUBGRAPH: 'https://api.thegraph.com/subgraphs/name/dimensiondev',
-})
+export const getITOConstants = transform(ITO)
 export const useITOConstants = hookTransform(getITOConstants)
 
 export const getLBPConstants = transform(LBP)
 export const useLBPConstants = hookTransform(getLBPConstants)
 
-export const getRedPacketConstants = transform(RedPacket, {
-    SUBGRAPH: 'https://api.thegraph.com/subgraphs/name/dimensiondev',
-})
+export const getRedPacketConstants = transform(RedPacket)
 export const useRedPacketConstants = hookTransform(getRedPacketConstants)
 
 export const getTokenConstants = transform(Token)
@@ -47,8 +41,5 @@ export const useTrendingConstants = hookTransform(getTrendingConstants)
 export const getURLConstants = transform(URL)
 export const useURLConstants = hookTransform(getURLConstants)
 
-export const getTokenAssetBaseURLConstants = transform(TokenAssetBaseURL, {
-    GIT_RAW: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains',
-    GIT_HACK: 'https://rawcdn.githack.com/trustwallet/assets/master/blockchains',
-})
+export const getTokenAssetBaseURLConstants = transform(TokenAssetBaseURL)
 export const useTokenAssetBaseURLConstants = hookTransform(getTokenAssetBaseURLConstants)
