@@ -22,9 +22,9 @@ export function transform<T extends Constants>(constants: T, environment: Record
             } else if (typeof value === 'string') {
                 value = template(value, environment)
             }
-            return [name, value]
+            return [name, value] as [string, Primitive | Primitive[]]
         })
-        return Object.freeze<Entries>(Object.fromEntries(entries))
+        return Object.freeze(Object.fromEntries(entries)) as Entries
     }
 }
 
