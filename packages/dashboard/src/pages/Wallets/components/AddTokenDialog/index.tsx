@@ -50,7 +50,11 @@ export const AddTokenDialog = memo<AddTokenDialogProps>(({ open, onClose }) => {
                     t.wallets_token_been_added(),
                 ),
             symbol: zod.string().min(1).max(11, t.wallets_token_symbol_tips()),
-            decimals: zod.number().positive(t.wallets_token_decimals_tips()).max(18, t.wallets_token_decimals_tips()),
+            decimals: zod
+                .number()
+                .int()
+                .positive(t.wallets_token_decimals_tips())
+                .max(18, t.wallets_token_decimals_tips()),
         })
     }, [t, wallet])
 
@@ -60,16 +64,20 @@ export const AddTokenDialog = memo<AddTokenDialogProps>(({ open, onClose }) => {
         defaultValues: {
             address: '',
             symbol: '',
-            decimals: 0,
+            decimals: 8,
         },
     })
 
-    const { watch, formState, setValue, handleSubmit, trigger } = methods
+    const {
+        watch,
+        formState: { errors, dirtyFields },
+        setValue,
+        handleSubmit,
+    } = methods
 
-    const [address] = watch(['address'])
-
-    const { value: token } = useERC20TokenDetailed(address)
-    const { value: balance } = useERC20TokenBalance(address)
+    const address = watch('address')
+    const { value: token } = useERC20TokenDetailed(!errors.address ? address : '')
+    const { value: balance } = useERC20TokenBalance(!errors.address ? address : '')
 
     const onSubmit = useSnackbarCallback({
         executor: handleSubmit(async (data) => {
@@ -84,16 +92,14 @@ export const AddTokenDialog = memo<AddTokenDialogProps>(({ open, onClose }) => {
     })
 
     useEffect(() => {
-        if (token && token.symbol !== 'UNKNOWN' && formState.dirtyFields.address) {
-            setValue('symbol', token.symbol ?? '')
-            setValue('decimals', token.decimals)
-            // trigger form valid
-            trigger()
+        if (token && token.symbol !== 'UNKNOWN' && dirtyFields.address) {
+            setValue('symbol', token.symbol ?? '', { shouldValidate: true })
+            setValue('decimals', token.decimals, { shouldValidate: true })
         } else {
             setValue('symbol', '')
-            setValue('decimals', 0)
+            setValue('decimals', 8)
         }
-    }, [token, formState.dirtyFields.address])
+    }, [token, dirtyFields.address])
 
     return (
         <FormProvider {...methods}>
@@ -112,10 +118,8 @@ export interface AddTokenDialogUIProps {
 
 export const AddTokenDialogUI = memo<AddTokenDialogUIProps>(({ open, onClose, token, balance, onSubmit }) => {
     const t = useDashboardI18N()
-    const { reset, watch } = useFormContext()
+    const { reset } = useFormContext()
     const [step, setStep] = useState<AddTokenStep>(AddTokenStep.INFORMATION)
-
-    const [symbol] = watch(['symbol'])
 
     //#region When dialog be closed, reset step and clear address input
     useUpdateEffect(() => {
@@ -134,7 +138,6 @@ export const AddTokenDialogUI = memo<AddTokenDialogUIProps>(({ open, onClose, to
                 <>
                     <AddTokenConfirmUI
                         token={token}
-                        aliasSymbol={symbol}
                         balance={balance}
                         onBack={() => setStep(AddTokenStep.INFORMATION)}
                         onConfirm={onSubmit}

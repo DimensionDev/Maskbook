@@ -81,8 +81,8 @@ export const AddTokenFormUI = memo<AddTokenFormUIProps>(({ token, onClose, onNex
                         render={({ field }) => (
                             <TextField
                                 {...field}
+                                onChange={(e) => field.onChange(Number(e.target.value))}
                                 variant="filled"
-                                type="number"
                                 label={t.wallets_add_token_decimals()}
                                 disabled={!!token?.decimals}
                                 inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
