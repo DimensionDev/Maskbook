@@ -11,8 +11,8 @@
     "build": "build -- snowpack build"
   },
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "0.8.0-20210317064617-6c4792c",
-    "@dimensiondev/kit": "=0.0.0-20210624142900-972fd05",
+    "@dimensiondev/holoflows-kit": "=0.8.0-20210429202414-74fb9a1",
+    "@dimensiondev/kit": "=0.0.0-20210630045432-e05621c",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-example": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",

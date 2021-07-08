@@ -22,7 +22,8 @@ export function PluginSkeleton() {
                     animation="wave"
                     variant="rectangular"
                     width={i === 0 ? '80%' : '60%'}
-                    height={15}></Skeleton>
+                    height={15}
+                />
             ))}
         </>
     )

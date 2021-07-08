@@ -1,6 +1,8 @@
-import { INIT_CODE_HASH } from '@uniswap/sdk'
+import JSBI from 'jsbi'
 import { ChainId, ERC20TokenDetailed } from '@masknet/web3-shared'
-import { AMPL, COMP, DAI, MKR, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WETH, WETH_ONLY } from './trader'
+import { Percent } from '@uniswap/sdk-core'
+import { INIT_CODE_HASH } from '@uniswap/v2-sdk'
+import { AMPL, DAI, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WETH, WETH_ONLY } from './trader'
 
 /**
  * Some tokens can only be swapped via certain pairs,
@@ -20,7 +22,7 @@ export const UNISWAP_BASE_AGAINST_TOKENS: {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
 } = {
     ...WETH_ONLY,
-    [ChainId.Mainnet]: [WETH, DAI, USDC, USDT, COMP, MKR, WBTC].map((x) => x[ChainId.Mainnet]),
+    [ChainId.Mainnet]: [WETH, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Mainnet]),
     [ChainId.Rinkeby]: [WETH, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),
 }
 
@@ -29,3 +31,9 @@ export const THEGRAPH_UNISWAP_V2 = 'https://api.thegraph.com/subgraphs/name/unis
 export const UNISWAP_INIT_CODE_HASH = INIT_CODE_HASH
 
 export const MAX_HOP = 3
+
+// used to ensure the user doesn't send so much ETH so they end up with <.01
+export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(JSBI.BigInt(50), JSBI.BigInt(10000))
+
+export const ZERO_PERCENT = new Percent('0')
+export const ONE_HUNDRED_PERCENT = new Percent('1')

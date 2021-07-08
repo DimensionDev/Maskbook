@@ -166,9 +166,9 @@ function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectP
         <Select
             fullWidth
             variant="outlined"
-            {...selectProps}
             value={useValueRef(ref)}
-            onChange={(event) => change(event.target.value)}>
+            onChange={(event) => change(event.target.value)}
+            {...selectProps}>
             {enum_.map(({ key, value }) => (
                 <MenuItem value={String(value)} key={String(key)}>
                     {getText?.(value) ?? String(key)}
@@ -177,6 +177,7 @@ function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectP
         </Select>
     )
 }
+
 type useEnumSettingsParams<Q extends object> = [
     ref: ValueRef<Q[keyof Q]>,
     enumObject: Q,

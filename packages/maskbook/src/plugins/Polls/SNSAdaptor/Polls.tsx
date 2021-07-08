@@ -136,7 +136,8 @@ export function PollCardUI(props: PollCardProps) {
                                 className={classes.bar}
                                 style={{
                                     width: `${(poll.results[index] / totalVotes) * 100}%`,
-                                }}></div>
+                                }}
+                            />
                             <div className={classes.text}>{option}</div>
                         </div>
                         <div className={classes.text}>{poll.results[index]}</div>

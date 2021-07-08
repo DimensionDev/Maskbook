@@ -3,6 +3,6 @@ import { ImportWallet as C } from '../../../src/pages/Wallets/components/ImportW
 
 const { meta, of } = story(C)
 
-export default meta({ title: '/Pages/Wallet/Import Wallet' })
+export default meta({ title: 'Pages/Wallet/Import Wallet' })
 
 export const ImportWallet = of({})

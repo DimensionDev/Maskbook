@@ -62,6 +62,8 @@ export const Web3Context: Web3ProviderType = {
     getAssetList: PluginServices.Wallet.getAssetsList,
     getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,
     getERC721TokensPaged,
+    fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+    createMnemonicWords: PluginServices.Wallet.createMnemonicWords,
 }
 
 export function createExternalProvider() {
@@ -150,8 +152,11 @@ function createSubscriptionAsync<T>(
 function getEventTarget() {
     const event = new EventTarget()
     const EVENT = 'event'
+    let timer: NodeJS.Timeout
     function trigger() {
-        event.dispatchEvent(new Event(EVENT))
+        clearTimeout(timer)
+        // delay to update state to ensure that all settings to be synced globally
+        timer = setTimeout(() => event.dispatchEvent(new Event(EVENT)), 600)
     }
     function subscribe(f: () => void) {
         event.addEventListener(EVENT, f)

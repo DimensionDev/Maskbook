@@ -7,7 +7,7 @@ import {
     languageSettings,
     disableOpenNewTabInBackgroundSettings,
 } from '../../settings/settings'
-import { currentTrendingDataProviderSettings } from '../../plugins/Trader/settings'
+import { currentDataProviderSettings } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
     currentBalanceSettings,
@@ -39,7 +39,7 @@ export const [getChainId, setChainId] = create(currentChainIdSettings)
 export const [getBalance, setBalance] = create(currentBalanceSettings)
 export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
 export const [getGasNow, setGasNow] = create(currentGasNowSettings)
-export const [getTrendingDataSource, setTrendingDataSource] = create(currentTrendingDataProviderSettings)
+export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
 export const [getAncientPostsCompatibiltyMode, setAncientPostsCompatibiltyMode] = create(
     disableOpenNewTabInBackgroundSettings,
 )

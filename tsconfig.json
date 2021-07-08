@@ -3,7 +3,6 @@
     { "path": "./e2e/" },
     { "path": "./packages/maskbook/" },
     { "path": "./packages/theme/" },
-    { "path": "./packages/constants/" },
     { "path": "./packages/dashboard/" },
     { "path": "./packages/shared/" },
     { "path": "./packages/web3-shared/" },

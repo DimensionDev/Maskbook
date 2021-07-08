@@ -4,7 +4,7 @@ import type { Wallet } from '@masknet/web3-shared'
 import { WalletMessages, WalletRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 
 const useStyles = makeStyles((theme) => ({

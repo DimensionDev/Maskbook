@@ -22,6 +22,7 @@ import {
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
 import { createExternalProvider } from './helpers'
+import Services from '../extension/service'
 
 const Web3Provider = createExternalProvider()
 
@@ -54,6 +55,8 @@ export const Web3Context: Web3ProviderType = {
     getAssetList: WalletRPC.getAssetsList,
     getAssetsListNFT: WalletRPC.getAssetsListNFT,
     getERC721TokensPaged,
+    fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+    createMnemonicWords: WalletRPC.createMnemonicWords,
 }
 
 async function getWallets() {
@@ -146,7 +149,7 @@ function getEventTarget() {
     function trigger() {
         clearTimeout(timer)
         // delay to update state to ensure that all settings to be synced globally
-        timer = setTimeout(() => event.dispatchEvent(new Event(EVENT)), 500)
+        timer = setTimeout(() => event.dispatchEvent(new Event(EVENT)), 600)
     }
     function subscribe(f: () => void) {
         event.addEventListener(EVENT, f)

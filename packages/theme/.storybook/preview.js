@@ -3,7 +3,6 @@ import { ThemeProvider, StyledEngineProvider, Box } from '@material-ui/core'
 import { StylesProvider } from '@material-ui/styles'
 import { MaskDarkTheme, MaskLightTheme, applyMaskColorVars } from '../src/theme'
 import { withMatrix } from 'storybook-addon-matrix'
-import { addMaskThemeI18N } from '../src/locales'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
 import i18n from 'i18next'
 i18n.init({
@@ -13,7 +12,6 @@ i18n.init({
     fallbackLng: 'en',
 })
 i18n.use(initReactI18next)
-addMaskThemeI18N(i18n)
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
 }

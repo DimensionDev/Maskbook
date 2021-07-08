@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core'
 import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
 import Color from 'color'
-import { ErrorBoundary } from '@masknet/theme'
+import { ErrorBoundary } from '@masknet/shared'
 import { useState, useContext, useMemo, Suspense } from 'react'
 import { DashboardContext } from './context'
 import { Navigation } from './Navigation'

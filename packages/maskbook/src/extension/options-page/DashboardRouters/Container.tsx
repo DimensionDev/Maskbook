@@ -228,7 +228,7 @@ export default function DashboardRouterContainer(props: DashboardRouterContainer
                     <div className={classNames(classes.scroller, { [classes.scrollerCompact]: compact !== false })}>
                         {children}
                     </div>
-                    {empty ? <div className={classes.placeholder}></div> : null}
+                    {empty ? <div className={classes.placeholder} /> : null}
                 </main>
                 <div className={classes.floatButtonContainer}>
                     {Flags.has_native_nav_bar

@@ -29,6 +29,7 @@ importers:
       eslint-plugin-import: ^2.23.3
       eslint-plugin-lodash: ^7.1.0
       eslint-plugin-prettier: ^3.4.0
+      eslint-plugin-react: ^7.24.0
       eslint-plugin-react-hooks: ^4.2.0
       eslint-plugin-unused-imports: ^1.0.0
       esm: ^3.2.25
@@ -78,6 +79,7 @@ importers:
       eslint-plugin-import: 2.23.3_eslint@7.27.0
       eslint-plugin-lodash: 7.2.0_eslint@7.27.0
       eslint-plugin-prettier: 3.4.0_beb7720e9139e3178536fb97e1a17bf3
+      eslint-plugin-react: 7.24.0_eslint@7.27.0
       eslint-plugin-react-hooks: 4.2.0_eslint@7.27.0
       eslint-plugin-unused-imports: 1.1.1
       esm: 3.2.25
@@ -114,9 +116,6 @@ importers:
       gulp: 4.0.2
       ts-node: 10.0.0_typescript@4.3.2
 
-  packages/constants:
-    specifiers: {}
-
   packages/contracts:
     specifiers:
       '@typechain/web3-v1': ^3.0.0
@@ -137,8 +136,8 @@ importers:
   packages/dashboard:
     specifiers:
       '@babel/core': ^7.14.3
-      '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
-      '@dimensiondev/kit': '=0.0.0-20210624142900-972fd05'
+      '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
+      '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
       '@masknet/icons': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-infra': workspace:*
@@ -173,8 +172,8 @@ importers:
       use-subscription: ^1.5.1
       wallet.ts: ^1.0.1
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
-      '@dimensiondev/kit': 0.0.0-20210624142900-972fd05
+      '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1
+      '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
       '@masknet/icons': link:../icons
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-infra': link:../plugin-infra
@@ -235,11 +234,10 @@ importers:
     specifiers:
       '@balancer-labs/sor': ^1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
-      '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
-      '@dimensiondev/kit': '=0.0.0-20210624142900-972fd05'
+      '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
+      '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/stego-js': '=0.11.1-20201027083223-8ab41be'
-      '@dimensiondev/uniswap-sdk': '=3.0.4-20210619092641-a270dc0'
       '@dimensiondev/webextension-shim': 0.0.3-20201120022530-b318b89
       '@ethersproject/address': ^5.0.4
       '@ethersproject/contracts': ^5.0.4
@@ -295,7 +293,8 @@ importers:
       '@typescript-eslint/eslint-plugin': ^4.25.0
       '@typescript-eslint/parser': ^4.25.0
       '@ungap/promise-all-settled': ^1.1.2
-      '@uniswap/sdk': ^3.0.3
+      '@uniswap/sdk-core': ^3.0.0
+      '@uniswap/v2-sdk': ^3.0.0
       '@walletconnect/client': ^1.2.2
       anchorme: ^2.1.2
       arweave: ^1.10.13
@@ -316,7 +315,6 @@ importers:
       elliptic: ^6.5.3
       enzyme: ^3.11.0
       enzyme-adapter-react-16: ^1.15.5
-      eth-contract-metadata: ^1.15.0
       event-iterator: ^2.0.0
       expect-puppeteer: ^5.0.4
       fake-indexeddb: ^3.1.2
@@ -333,6 +331,7 @@ importers:
       jest-junit: ^12.1.0
       jest-puppeteer: ^5.0.4
       jest-webextension-mock: ^3.7.11
+      jsbi: ^3.1.5
       json-stable-stringify: ^1.0.1
       json2csv: ^5.0.6
       jsonwebtoken: ^8.5.1
@@ -398,11 +397,10 @@ importers:
     dependencies:
       '@balancer-labs/sor': 1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
-      '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c_webextension-polyfill@0.8.0
-      '@dimensiondev/kit': 0.0.0-20210624142900-972fd05
+      '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1_webextension-polyfill@0.8.0
+      '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
-      '@dimensiondev/uniswap-sdk': 3.0.4-20210619092641-a270dc0_418b2ad04426b02e1076b55b7e1862e2
       '@ethersproject/address': 5.1.0
       '@ethersproject/contracts': 5.1.0
       '@ethersproject/networks': 5.1.0
@@ -441,7 +439,8 @@ importers:
       '@types/use-subscription': 1.0.0
       '@types/uuid': 8.3.0
       '@ungap/promise-all-settled': 1.1.2
-      '@uniswap/sdk': 3.0.3_418b2ad04426b02e1076b55b7e1862e2
+      '@uniswap/sdk-core': 3.0.0
+      '@uniswap/v2-sdk': 3.0.0
       '@walletconnect/client': 1.4.1
       anchorme: 2.1.2
       arweave: 1.10.13
@@ -456,13 +455,13 @@ importers:
       d3: 5.16.0
       date-fns: 2.21.3
       elliptic: 6.5.4
-      eth-contract-metadata: 1.17.0
       event-iterator: 2.0.0
       fuse.js: 6.4.6
       gun: 0.2020.520
       https-browserify: 1.0.0
       immer: 9.0.2
       isomorphic-dompurify: 0.13.0
+      jsbi: 3.1.5
       json-stable-stringify: 1.0.1
       json2csv: 5.0.6
       jsonwebtoken: 8.5.1
@@ -562,7 +561,7 @@ importers:
 
   packages/plugin-infra:
     specifiers:
-      '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
+      '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
       '@masknet/shared': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared': workspace:*
@@ -571,7 +570,7 @@ importers:
       ts-results: ^3.3.0
       use-subscription: ^1.5.1
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
+      '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1
       '@masknet/shared': link:../shared
       '@masknet/theme': link:../theme
       '@masknet/web3-shared': link:../web3-shared
@@ -588,8 +587,9 @@ importers:
 
   packages/shared:
     specifiers:
-      '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
-      '@dimensiondev/kit': '=0.0.0-20210624142900-972fd05'
+      '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
+      '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
+      '@masknet/theme': workspace:*
       '@masknet/web3-shared': workspace:*
       '@servie/events': ^3.0.0
       anchorme: ^2.1.2
@@ -597,14 +597,18 @@ importers:
       bignumber.js: ^9.0.1
       immer: ^9.0.2
       lodash-es: ^4.17.21
+      qrcode: ^1.4.4
+      react-use: ^17.2.4
       ts-results: ^3.3.0
       typeson: ^6.1.0
       typeson-registry: ^1.0.0-alpha.38
       use-subscription: ^1.5.1
+      uuid: ^8.3.2
       wallet.ts: ^1.0.1
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.8.0-20210317064617-6c4792c
-      '@dimensiondev/kit': 0.0.0-20210624142900-972fd05
+      '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1
+      '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
+      '@masknet/theme': link:../theme
       '@masknet/web3-shared': link:../web3-shared
       '@servie/events': 3.0.0
       anchorme: 2.1.2
@@ -612,10 +616,13 @@ importers:
       bignumber.js: 9.0.1
       immer: 9.0.2
       lodash-es: 4.17.21
+      qrcode: 1.4.4
+      react-use: 17.2.4_f991c289939c8299bed5e4a6a5a79a62
       ts-results: 3.3.0
       typeson: 6.1.0
       typeson-registry: 1.0.0-alpha.39
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
+      uuid: 8.3.2
       wallet.ts: 1.0.1
 
   packages/storybook-shared:
@@ -629,7 +636,6 @@ importers:
   packages/theme:
     specifiers:
       '@babel/core': ^7.14.3
-      '@masknet/shared': workspace:*
       '@masknet/storybook-shared': workspace:*
       '@storybook/addon-actions': ^6.3.0-rc.12
       '@storybook/addon-essentials': ^6.3.0-rc.12
@@ -641,18 +647,19 @@ importers:
       '@types/tinycolor2': ^1.4.2
       babel-loader: ^8.2.2
       classnames: ^2.3.1
+      fuse.js: ^6.4.6
       lodash-es: ^4.17.20
       notistack: ^1.0.9
-      qrcode: ^1.4.4
+      react-window: ^1.8.6
       storybook-addon-matrix: ^1.6.0
       tinycolor2: ^1.4.2
     dependencies:
-      '@masknet/shared': link:../shared
       '@masknet/storybook-shared': link:../storybook-shared
       classnames: 2.3.1
+      fuse.js: 6.4.6
       lodash-es: 4.17.21
       notistack: 1.0.9_132ff92e0fd7328580f6380de259b809
-      qrcode: 1.4.4
+      react-window: 1.8.6_f991c289939c8299bed5e4a6a5a79a62
       tinycolor2: 1.4.2
     devDependencies:
       '@babel/core': 7.14.3
@@ -667,14 +674,18 @@ importers:
       babel-loader: 8.2.2_@babel+core@7.14.3
       storybook-addon-matrix: 1.6.0_react-dom@18.0.0-alpha-aecb3b6d1
 
+  packages/web3-constants:
+    specifiers: {}
+
   packages/web3-shared:
     specifiers:
-      '@dimensiondev/kit': '=0.0.0-20210624142900-972fd05'
-      '@masknet/constants': workspace:*
+      '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
       '@masknet/contracts': workspace:*
+      '@masknet/web3-constants': workspace:*
       '@types/use-subscription': ^1.0.0
       bignumber.js: 9.0.1
       ethereum-blockies: ^0.1.1
+      fuse.js: ^6.4.6
       lodash-es: ^4.17.21
       react-use: ^17.2.4
       unstated-next: ^1.1.0
@@ -684,11 +695,12 @@ importers:
       web3-core: ^1.3.6
       web3-utils: ^1.3.6
     dependencies:
-      '@dimensiondev/kit': 0.0.0-20210624142900-972fd05
-      '@masknet/constants': link:../constants
+      '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
       '@masknet/contracts': link:../contracts
+      '@masknet/web3-constants': link:../web3-constants
       bignumber.js: 9.0.1
       ethereum-blockies: 0.1.1
+      fuse.js: 6.4.6
       lodash-es: 4.17.21
       react-use: 17.2.4_f991c289939c8299bed5e4a6a5a79a62
       unstated-next: 1.1.0
@@ -3547,8 +3559,8 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/holoflows-kit/0.8.0-20210317064617-6c4792c:
-    resolution: {integrity: sha512-zB121+yJ3pVCkByf3LEHBUHEMy5rc/r3e4T5E+92SNb+GH/VowvGubSFPygeM2p5lFMyrO+AlvJRPvWQ8ONJTA==, tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210317064617-6c4792c/0ad5efd95cb3cbb58a6e30983f6e0ad2a2216a1cf67d7903c9e0d935a7b1ae2a}
+  /@dimensiondev/holoflows-kit/0.8.0-20210429202414-74fb9a1:
+    resolution: {integrity: sha512-KkrelGIh426YENN8uMxdgNlr2DGGEeFkZYoh8AsbW8+5YOufeINmMLFXwB2PKdmISeJEkP5wi6d3cFsHF+E9kg==, tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210429202414-74fb9a1/7d17e1f8587a91b31c2a6c84d951aeda1b19ef849c06896ecce1c8de075cd739}
     peerDependencies:
       webextension-polyfill: '*'
     dependencies:
@@ -3561,8 +3573,8 @@ packages:
       tslib: 2.2.0
     dev: false
 
-  /@dimensiondev/holoflows-kit/0.8.0-20210317064617-6c4792c_webextension-polyfill@0.8.0:
-    resolution: {integrity: sha512-zB121+yJ3pVCkByf3LEHBUHEMy5rc/r3e4T5E+92SNb+GH/VowvGubSFPygeM2p5lFMyrO+AlvJRPvWQ8ONJTA==, tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210317064617-6c4792c/0ad5efd95cb3cbb58a6e30983f6e0ad2a2216a1cf67d7903c9e0d935a7b1ae2a}
+  /@dimensiondev/holoflows-kit/0.8.0-20210429202414-74fb9a1_webextension-polyfill@0.8.0:
+    resolution: {integrity: sha512-KkrelGIh426YENN8uMxdgNlr2DGGEeFkZYoh8AsbW8+5YOufeINmMLFXwB2PKdmISeJEkP5wi6d3cFsHF+E9kg==, tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210429202414-74fb9a1/7d17e1f8587a91b31c2a6c84d951aeda1b19ef849c06896ecce1c8de075cd739}
     peerDependencies:
       webextension-polyfill: '*'
     dependencies:
@@ -3576,8 +3588,8 @@ packages:
       webextension-polyfill: 0.8.0
     dev: false
 
-  /@dimensiondev/kit/0.0.0-20210624142900-972fd05:
-    resolution: {integrity: sha512-afmIrZndLSgqg9hWUfwC10uAivJjImSlWMXbmYKhC/OUeHfyz6tbUO2PEKT1xz9L4ujFsAjgkvAKHnaeqNo9Qg==, tarball: download/@dimensiondev/kit/0.0.0-20210624142900-972fd05/2216af7740aa6220c4041d6d1b92e9124bdac3ca3594c0456ef603dfbcbf2387}
+  /@dimensiondev/kit/0.0.0-20210630045432-e05621c:
+    resolution: {integrity: sha512-RRghCa0HR3NRgGDb3fw6VpvAgCEYs8nFk8M10xXubbXQUgcwp7UVQStI3cm7mV7PTGC1lsaAv2YLTqIQB8w9YA==, tarball: download/@dimensiondev/kit/0.0.0-20210630045432-e05621c/6d03398c21a05c6d7d2e7ffd4b8d5cc435cc9217fd2ddd485c0d08538af1485e}
     dev: false
 
   /@dimensiondev/metamask-extension-provider/3.0.6-20210519045409-1835d4d:
@@ -3595,30 +3607,6 @@ packages:
       canvas: ^2.6.0
     dependencies:
       meow: 7.1.1
-    dev: false
-
-  /@dimensiondev/uniswap-sdk/3.0.4-20210619092641-a270dc0_418b2ad04426b02e1076b55b7e1862e2:
-    resolution: {integrity: sha512-gBqLEIubW2wE94zvuJLE36bybUMF75MLbrUihzLlk0vwGcvvweKWbnDtN1iLcFWqVy5e7G2+z+1xxm9bNRDaRg==, tarball: download/@dimensiondev/uniswap-sdk/3.0.4-20210619092641-a270dc0/56ed8ddc9e83283599390103198780fd19cf8fc411155518d6367c3bb5eaffc1}
-    engines: {node: '>=10'}
-    peerDependencies:
-      '@ethersproject/address': ^5.0.0-beta
-      '@ethersproject/contracts': ^5.0.0-beta
-      '@ethersproject/networks': ^5.0.0-beta
-      '@ethersproject/providers': ^5.0.0-beta
-      '@ethersproject/solidity': ^5.0.0-beta
-    dependencies:
-      '@ethersproject/address': 5.1.0
-      '@ethersproject/contracts': 5.1.0
-      '@ethersproject/networks': 5.1.0
-      '@ethersproject/providers': 5.1.0
-      '@ethersproject/solidity': 5.1.0
-      '@uniswap/v2-core': 1.0.1
-      big.js: 5.2.2
-      decimal.js-light: 2.5.1
-      jsbi: 3.1.5
-      tiny-invariant: 1.1.0
-      tiny-warning: 1.0.3
-      toformat: 2.0.0
     dev: false
 
   /@dimensiondev/webextension-shim/0.0.3-20201120022530-b318b89_typescript@4.3.2:
@@ -8722,33 +8710,27 @@ packages:
     resolution: {integrity: sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==}
     dev: false
 
-  /@uniswap/sdk/3.0.3_418b2ad04426b02e1076b55b7e1862e2:
-    resolution: {integrity: sha512-t4s8bvzaCFSiqD2qfXIm3rWhbdnXp+QjD3/mRaeVDHK7zWevs6RGEb1ohMiNgOCTZANvBayb4j8p+XFdnMBadQ==}
+  /@uniswap/sdk-core/3.0.0:
+    resolution: {integrity: sha512-Yarx/5lqPZvAAzI7i+twK/IueJNl+OhqbeiiTuD4+g+NEVPCU+SMBvLFzf0/jAlM1WKz6K1psQLUDwdgAj8I3w==}
     engines: {node: '>=10'}
-    peerDependencies:
-      '@ethersproject/address': ^5.0.0-beta
-      '@ethersproject/contracts': ^5.0.0-beta
-      '@ethersproject/networks': ^5.0.0-beta
-      '@ethersproject/providers': ^5.0.0-beta
-      '@ethersproject/solidity': ^5.0.0-beta
     dependencies:
-      '@ethersproject/address': 5.1.0
-      '@ethersproject/contracts': 5.1.0
-      '@ethersproject/networks': 5.1.0
-      '@ethersproject/providers': 5.1.0
-      '@ethersproject/solidity': 5.1.0
-      '@uniswap/v2-core': 1.0.1
+      '@ethersproject/address': 5.4.0
       big.js: 5.2.2
       decimal.js-light: 2.5.1
       jsbi: 3.1.5
       tiny-invariant: 1.1.0
-      tiny-warning: 1.0.3
       toformat: 2.0.0
     dev: false
 
-  /@uniswap/v2-core/1.0.1:
-    resolution: {integrity: sha512-MtybtkUPSyysqLY2U210NBDeCHX+ltHt3oADGdjqoThZaFRDKwM6k1Nb3F0A3hk5hwuQvytFWhrWHOEq6nVJ8Q==}
+  /@uniswap/v2-sdk/3.0.0:
+    resolution: {integrity: sha512-UyAZHCQaV/4XCsgR+o+daP0E6rLUOY0H2G10P1cxGI1c3uxZe3/mXIHq+kUkeW8kxHC0622TckFYWnkiWkjULg==}
     engines: {node: '>=10'}
+    dependencies:
+      '@ethersproject/address': 5.4.0
+      '@ethersproject/solidity': 5.4.0
+      '@uniswap/sdk-core': 3.0.0
+      tiny-invariant: 1.1.0
+      tiny-warning: 1.0.3
     dev: false
 
   /@walletconnect/browser-utils/1.4.1:
@@ -9653,7 +9635,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.1.3
-      es-abstract: 1.18.0
+      es-abstract: 1.18.3
       function-bind: 1.1.1
     dev: true
 
@@ -10963,8 +10945,8 @@ packages:
     resolution: {integrity: sha512-WHVocJYavUwVgVViC0ORikPHQquXwVh939TaelZ4WDqpWgTX/FsGhl/+P4qBUAGcRvtOgDgC+xftNWWp2RUTAQ==}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001240
-      electron-to-chromium: 1.3.759
+      caniuse-lite: 1.0.30001241
+      electron-to-chromium: 1.3.763
     dev: false
 
   /browserslist/4.14.2:
@@ -11253,8 +11235,8 @@ packages:
     resolution: {integrity: sha512-QQmLOGJ3DEgokHbMSA8cj2a+geXqmnpyOFT0lhQV6P3/YOJvGDEwoedcwxEQ30gJIwIIunHIicunJ2rzK5gB2A==}
     dev: true
 
-  /caniuse-lite/1.0.30001240:
-    resolution: {integrity: sha512-nb8mDzfMdxBDN7ZKx8chWafAdBp5DAAlpWvNyUGe5tcDWd838zpzDN3Rah9cjCqhfOKkrvx40G2SDtP0qiWX/w==}
+  /caniuse-lite/1.0.30001241:
+    resolution: {integrity: sha512-1uoSZ1Pq1VpH0WerIMqwptXHNNGfdl7d1cJUFs80CwQ/lVzdhTvsFZCeNFslze7AjsQnb4C85tzclPa1VShbeQ==}
     dev: false
 
   /capture-exit/2.0.0:
@@ -13091,8 +13073,8 @@ packages:
     resolution: {integrity: sha512-P/B84AgUSQXaum7a8m11HUsYL8tj9h/Pt5f7Hg7Ty6bm5DxlFq+e5+ouHUoNQMsKDJ7u4yGfI8mOErCmSH9wyg==}
     dev: true
 
-  /electron-to-chromium/1.3.759:
-    resolution: {integrity: sha512-nM76xH0t2FBH5iMEZDVc3S/qbdKjGH7TThezxC8k1Q7w7WHvIAyJh8lAe2UamGfdRqBTjHfPDn82LJ0ksCiB9g==}
+  /electron-to-chromium/1.3.763:
+    resolution: {integrity: sha512-UyvEPae0wvzsyNJhVfGeFSOlUkHEze8xSIiExO5tZQ8QTr7obFiJWGk3U4e7afFOJMQJDszqU/3Pk5jtKiaSEg==}
     dev: false
 
   /element-resize-detector/1.2.2:
@@ -13436,6 +13418,7 @@ packages:
       string.prototype.trimend: 1.0.4
       string.prototype.trimstart: 1.0.4
       unbox-primitive: 1.0.1
+    dev: true
 
   /es-abstract/1.18.3:
     resolution: {integrity: sha512-nQIr12dxV7SSxE6r6f1l3DtAeEYdsGpps13dR0TwJg1S8gyp4ZPgy3FZcHBgbiQqnoqSTb+oC+kO4UQ0C/J8vw==}
@@ -13701,6 +13684,27 @@ packages:
       eslint: 7.27.0
     dev: true
 
+  /eslint-plugin-react/7.24.0_eslint@7.27.0:
+    resolution: {integrity: sha512-KJJIx2SYx7PBx3ONe/mEeMz4YE0Lcr7feJTCMyyKb/341NcjuAgim3Acgan89GfPv7nxXK2+0slu0CWXYM4x+Q==}
+    engines: {node: '>=4'}
+    peerDependencies:
+      eslint: ^3 || ^4 || ^5 || ^6 || ^7
+    dependencies:
+      array-includes: 3.1.3
+      array.prototype.flatmap: 1.2.4
+      doctrine: 2.1.0
+      eslint: 7.27.0
+      has: 1.0.3
+      jsx-ast-utils: 3.2.0
+      minimatch: 3.0.4
+      object.entries: 1.1.4
+      object.fromentries: 2.0.4
+      object.values: 1.1.4
+      prop-types: 15.7.2
+      resolve: 2.0.0-next.3
+      string.prototype.matchall: 4.0.5
+    dev: true
+
   /eslint-plugin-unused-imports/1.1.1:
     resolution: {integrity: sha512-EApvRx9Q3XQI96Tg7xPPqY6OuOy95wWMXAtc8RrwdIRk9bv8vkJKwOVoE4HeWJOQhHeHcI8lUbOqmup/PxjfOw==}
     engines: {node: '>=0.10.0'}
@@ -13858,11 +13862,6 @@ packages:
       json-rpc-engine: 3.8.0
       pify: 2.3.0
       tape: 4.13.3
-    dev: false
-
-  /eth-contract-metadata/1.17.0:
-    resolution: {integrity: sha512-vlw4OiW3+9J3kJfEtPCyiSW9fhdWTqrAhXcvdMY2CevGxbhvOd5Lz59DeWerSTV3IoSXttghDurPA76dAeTV+A==}
-    deprecated: Package renamed to @metamask/contract-metadata
     dev: false
 
   /eth-ens-namehash/2.0.8:
@@ -15454,7 +15453,7 @@ packages:
       source-map: 0.6.1
       wordwrap: 1.0.0
     optionalDependencies:
-      uglify-js: 3.13.9
+      uglify-js: 3.13.10
     dev: false
 
   /har-schema/2.0.0:
@@ -18040,6 +18039,14 @@ packages:
       tiny-warning: 1.0.3
     dev: false
 
+  /jsx-ast-utils/3.2.0:
+    resolution: {integrity: sha512-EIsmt3O3ljsU6sot/J4E1zDRxfBNrhjyf/OKjlydwgEimQuznlM4Wv7U+ueONJMyEn1WRE0K8dhi3dVAXYT24Q==}
+    engines: {node: '>=4.0'}
+    dependencies:
+      array-includes: 3.1.3
+      object.assign: 4.1.2
+    dev: true
+
   /jsx-jsonml-devtools-renderer/1.4.3:
     resolution: {integrity: sha512-U1Ayx2VUF6plTLrQkNnJAg8UInToPseWqugxYTKEyaWG8G83Vqpx8BpyW9MObK1kPHdtMkevKfLi+PVwqp5Rtw==}
     dependencies:
@@ -19759,13 +19766,22 @@ packages:
       has: 1.0.3
     dev: true
 
+  /object.entries/1.1.4:
+    resolution: {integrity: sha512-h4LWKWE+wKQGhtMjZEBud7uLGhqyLwj8fpHOarZhD2uY3C9cRtk57VQ89ke3moByLXMedqs3XCHzyb4AmA2DjA==}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      call-bind: 1.0.2
+      define-properties: 1.1.3
+      es-abstract: 1.18.3
+    dev: true
+
   /object.fromentries/2.0.4:
     resolution: {integrity: sha512-EsFBshs5RUUpQEY1D4q/m59kMfz4YJvxuNCJcv/jWwOJr34EaVnG11ZrZa0UHB3wnzV1wx8m58T4hQL8IuNXlQ==}
     engines: {node: '>= 0.4'}
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.1.3
-      es-abstract: 1.18.0
+      es-abstract: 1.18.3
       has: 1.0.3
     dev: true
 
@@ -19808,6 +19824,15 @@ packages:
       define-properties: 1.1.3
       es-abstract: 1.18.2
       has: 1.0.3
+    dev: true
+
+  /object.values/1.1.4:
+    resolution: {integrity: sha512-TnGo7j4XSnKQoK3MfvkzqKCi0nVe/D9I9IjwTNYdb/fxYHpjrluHVOgw0AF6jrRFGMPHdfuidR09tIDiIvnaSg==}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      call-bind: 1.0.2
+      define-properties: 1.1.3
+      es-abstract: 1.18.3
     dev: true
 
   /objectorarray/1.0.4:
@@ -20298,7 +20323,6 @@ packages:
 
   /path-parse/1.0.7:
     resolution: {integrity: sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==}
-    dev: false
 
   /path-root-regex/0.1.2:
     resolution: {integrity: sha1-v8zcjfWxLcUsi0PsONGNcsBLqW0=}
@@ -22076,6 +22100,13 @@ packages:
       is-core-module: 2.4.0
       path-parse: 1.0.6
 
+  /resolve/2.0.0-next.3:
+    resolution: {integrity: sha512-W8LucSynKUIDu9ylraa7ueVZ7hc0uAgJBxVsQSKOXOyle8a93qXhcz+XAXZ8bIq2d6i4Ehddn6Evt+0/UwKk6Q==}
+    dependencies:
+      is-core-module: 2.4.0
+      path-parse: 1.0.7
+    dev: true
+
   /responselike/1.0.2:
     resolution: {integrity: sha1-kYcg7ztjHFZCvgaPFa3lpG9Loec=}
     dependencies:
@@ -23164,13 +23195,12 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.1.3
-      es-abstract: 1.18.2
+      es-abstract: 1.18.3
       get-intrinsic: 1.1.1
       has-symbols: 1.0.2
       internal-slot: 1.0.3
       regexp.prototype.flags: 1.3.1
       side-channel: 1.0.4
-    dev: false
 
   /string.prototype.padend/3.1.2:
     resolution: {integrity: sha512-/AQFLdYvePENU3W5rgurfWSMU6n+Ww8n/3cUt7E+vPBB/D7YDG8x+qjoFs4M/alR2bW7Qg6xMjVwWUOvuQ0XpQ==}
@@ -24347,8 +24377,8 @@ packages:
       uglify-to-browserify: 1.0.2
     dev: false
 
-  /uglify-js/3.13.9:
-    resolution: {integrity: sha512-wZbyTQ1w6Y7fHdt8sJnHfSIuWeDgk6B5rCb4E/AM6QNNPbOMIZph21PW5dRB3h7Df0GszN+t7RuUH6sWK5bF0g==}
+  /uglify-js/3.13.10:
+    resolution: {integrity: sha512-57H3ACYFXeo1IaZ1w02sfA71wI60MGco/IQFjOqK+WtKoprh7Go2/yvd2HPtoJILO2Or84ncLccI4xoHMTSbGg==}
     engines: {node: '>=0.8.0'}
     hasBin: true
     dev: false
@@ -26208,12 +26238,8 @@ packages:
   /y18n/3.2.2:
     resolution: {integrity: sha512-uGZHXkHnhF0XeeAPgnKfPv1bgKAYyVvmNL1xlKsPYZPaIHxGti2hHqvOCQv71XMsLxu1QjergkqogUnms5D3YQ==}
 
-  /y18n/4.0.1:
-    resolution: {integrity: sha512-wNcy4NvjMYL8gogWWYAO7ZFWFfHcbdbE57tZO8e4cbpj8tfUcwrwqSl3ad8HxpYWCdXcJUCeKKZS62Av1affwQ==}
-
   /y18n/4.0.3:
     resolution: {integrity: sha512-JKhqTOwSrqNA1NY5lSztJ1GrBiUodLMmIZuLiDaMRJ+itFd+ABVE8XBjOvIWL+rSqNDC74LCSFmlb/U4UZ4hJQ==}
-    dev: true
 
   /y18n/5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
@@ -26310,7 +26336,7 @@ packages:
       set-blocking: 2.0.0
       string-width: 3.1.0
       which-module: 2.0.0
-      y18n: 4.0.1
+      y18n: 4.0.3
       yargs-parser: 13.1.2
 
   /yargs/16.2.0:

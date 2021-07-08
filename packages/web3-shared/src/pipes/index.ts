@@ -28,10 +28,24 @@ export function resolveProviderName(providerType: ProviderType) {
     }
 }
 
+export function resolveNetworkAddress(networkType: NetworkType, address: string) {
+    switch (networkType) {
+        case NetworkType.Binance:
+            return `binance:${address}`
+        case NetworkType.Polygon:
+            return `polygon:${address}`
+        case NetworkType.Ethereum:
+            return `ethereum:${address}`
+        default:
+            safeUnreachable(networkType)
+            return address
+    }
+}
+
 export function resolveNetworkName(networkType: NetworkType) {
     switch (networkType) {
         case NetworkType.Binance:
-            return 'Binance'
+            return 'Binance Smart Chain'
         case NetworkType.Polygon:
             return 'Polygon'
         case NetworkType.Ethereum:

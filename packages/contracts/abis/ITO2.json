@@ -190,6 +190,12 @@
                 "internalType": "uint128",
                 "name": "input_total",
                 "type": "uint128"
+            },
+            {
+                "indexed": false,
+                "internalType": "bool",
+                "name": "claimed",
+                "type": "bool"
             }
         ],
         "name": "SwapSuccess",
@@ -282,6 +288,26 @@
                 "internalType": "uint128[]",
                 "name": "exchanged_tokens",
                 "type": "uint128[]"
+            },
+            {
+                "internalType": "bool",
+                "name": "claimed",
+                "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "start_time",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "end_time",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "qualification_addr",
+                "type": "address"
             }
         ],
         "stateMutability": "view",

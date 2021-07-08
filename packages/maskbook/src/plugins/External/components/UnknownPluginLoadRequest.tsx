@@ -42,7 +42,7 @@ export function UnknownPluginLoadRequestUI({ plugins, onConfirm }: UnknownPlugin
                             <ListItemIcon>
                                 <Checkbox disableRipple edge="start" tabIndex={-1} checked={!!get(x.url)} />
                             </ListItemIcon>
-                            <ListItemText primary={x.url}></ListItemText>
+                            <ListItemText primary={x.url} />
                         </ListItem>
                     ))}
                 </List>

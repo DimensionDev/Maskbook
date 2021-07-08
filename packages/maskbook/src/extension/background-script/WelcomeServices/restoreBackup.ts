@@ -51,9 +51,9 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
             })
         }
 
-        for (const x of data.wallets) {
+        for (const [i, x] of data.wallets.entries()) {
             const record = WalletRecordFromJSONFormat(x)
-            if (record.mnemonic || record._private_key_) await importNewWallet(record)
+            if (record.mnemonic || record._private_key_) await importNewWallet(record, i !== 0)
         }
 
         for (const x of data.posts) {

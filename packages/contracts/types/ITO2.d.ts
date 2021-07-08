@@ -77,6 +77,7 @@ export type SwapSuccess = ContractEventLog<{
     from_value: string
     to_value: string
     input_total: string
+    claimed: boolean
     0: string
     1: string
     2: string
@@ -84,6 +85,7 @@ export type SwapSuccess = ContractEventLog<{
     4: string
     5: string
     6: string
+    7: boolean
 }>
 export type WithdrawSuccess = ContractEventLog<{
     id: string
@@ -109,6 +111,10 @@ export interface ITO2 extends BaseContract {
             unlock_time: string
             swapped: string
             exchanged_tokens: string[]
+            claimed: boolean
+            start_time: string
+            end_time: string
+            qualification_addr: string
             0: string[]
             1: string
             2: boolean
@@ -117,6 +123,10 @@ export interface ITO2 extends BaseContract {
             5: string
             6: string
             7: string[]
+            8: boolean
+            9: string
+            10: string
+            11: string
         }>
 
         claim(ito_ids: (string | number[])[]): NonPayableTransactionObject<void>

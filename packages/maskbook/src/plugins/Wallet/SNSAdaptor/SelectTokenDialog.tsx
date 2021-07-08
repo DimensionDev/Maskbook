@@ -5,7 +5,8 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 import { WalletMessages } from '../../Wallet/messages'
-import { delay, useRemoteControlledDialog, useI18N } from '../../../utils'
+import { delay, useI18N } from '../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 
 const useStyles = makeStyles((theme: Theme) => ({
     search: {

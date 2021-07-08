@@ -170,9 +170,7 @@ export default function Drawer(props: DrawerProps) {
                                             component={Link}
                                             to={item[1]}
                                             button>
-                                            <ListItemIcon
-                                                className={classes.drawerItemIcon}
-                                                children={item[2]}></ListItemIcon>
+                                            <ListItemIcon className={classes.drawerItemIcon} children={item[2]} />
                                             <ListItemText
                                                 className={classes.drawerItemText}
                                                 primary={item[0]}

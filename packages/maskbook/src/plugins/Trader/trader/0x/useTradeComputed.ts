@@ -26,10 +26,6 @@ export function useTradeComputed(
             fee: new BigNumber(trade.minimumProtocolFee),
             maximumSold: new BigNumber(trade.sellAmount),
             minimumReceived: outputAmount,
-            priceImpactWithoutFee: ZERO,
-
-            // not supported fields
-            nextMidPrice: ZERO,
 
             // minimumProtocolFee
             priceImpact: ZERO,

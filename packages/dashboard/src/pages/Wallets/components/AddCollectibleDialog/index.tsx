@@ -1,5 +1,6 @@
 import { memo, useMemo, useState } from 'react'
-import { MaskColorVar, MaskDialog, useSnackbarCallback } from '@masknet/theme'
+import { MaskColorVar, MaskDialog } from '@masknet/theme'
+import { useSnackbarCallback } from '@masknet/shared'
 import { Box, Button, DialogActions, DialogContent, makeStyles, TextField } from '@material-ui/core'
 import { useERC721TokenAssetDetailed, useERC721TokenDetailed, useWallet } from '@masknet/web3-shared'
 import { PluginServices } from '../../../../API'

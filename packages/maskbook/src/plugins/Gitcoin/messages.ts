@@ -1,6 +1,7 @@
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { GITCOIN_PLUGIN_ID } from './constants'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
 type DonationDialogUpdated =
     | {
@@ -21,7 +22,8 @@ interface GitcoinMessages {
     rpc: unknown
 }
 
-export const PluginGitcoinMessages = createPluginMessage<GitcoinMessages>(GITCOIN_PLUGIN_ID)
+export const PluginGitcoinMessages: WebExtensionMessage<GitcoinMessages> =
+    createPluginMessage<GitcoinMessages>(GITCOIN_PLUGIN_ID)
 export const PluginGitcoinRPC = createPluginRPC(
     GITCOIN_PLUGIN_ID,
     () => import('./services'),

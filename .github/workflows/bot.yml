@@ -1,0 +1,18 @@
+name: Bot
+
+on:
+  push:
+    branches: [master, develop, released]
+  pull_request:
+    branches: [master, develop, released]
+
+jobs:
+  triage:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: mschilde/auto-label-merge-conflicts@master
+        with:
+          CONFLICT_LABEL_NAME: "Blocked: Has Conflict"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAX_RETRIES: 5
+          WAIT_MS: 5000

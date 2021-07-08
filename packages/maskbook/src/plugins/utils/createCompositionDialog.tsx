@@ -20,7 +20,7 @@ export function createCompositionDialog(
         },
         () => {
             const opening = useValueRef(open)
-            return <DialogComponent open={opening} onClose={() => (open.value = false)}></DialogComponent>
+            return <DialogComponent open={opening} onClose={() => (open.value = false)} />
         },
     ]
 }

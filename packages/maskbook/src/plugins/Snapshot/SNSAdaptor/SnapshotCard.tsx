@@ -43,9 +43,7 @@ export function SnapshotCard(props: SnapshotCardProps) {
 
     return (
         <Card className={classes.root} variant="outlined">
-            <CardHeader
-                className={classes.header}
-                title={<Typography className={classes.title}>{title}</Typography>}></CardHeader>
+            <CardHeader className={classes.header} title={<Typography className={classes.title}>{title}</Typography>} />
             <CardContent className={classes.content}>{children}</CardContent>
         </Card>
     )

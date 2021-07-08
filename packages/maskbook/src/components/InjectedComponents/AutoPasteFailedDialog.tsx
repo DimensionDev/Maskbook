@@ -63,7 +63,8 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                             <Box
                                 sx={{
                                     marginBottom: 1,
-                                }}></Box>
+                                }}
+                            />
                             <Button
                                 variant="contained"
                                 onClick={() => {
@@ -85,7 +86,8 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     <Box
                         sx={{
                             marginBottom: 1,
-                        }}></Box>
+                        }}
+                    />
                     <div style={{ textAlign: permission === 'granted' ? 'left' : 'center' }}>
                         {data.image ? (
                             // It must be img
@@ -94,7 +96,8 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                         <Box
                             sx={{
                                 marginBottom: 1,
-                            }}></Box>
+                            }}
+                        />
                         {permission === 'granted' ? (
                             <Button
                                 variant="contained"
@@ -148,7 +151,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     </div>
                 </DialogContent>
                 {/* To leave some bottom padding */}
-                <DialogActions></DialogActions>
+                <DialogActions />
             </Paper>
         </DraggableDiv>
     )

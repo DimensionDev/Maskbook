@@ -49,8 +49,13 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                         e.preventDefault()
-                                        createPersonaAndNext()
+                                        if (!checkInputLengthExceed(name) && name.length > 0) {
+                                            createPersonaAndNext()
+                                        }
                                     }
+                                }}
+                                inputProps={{
+                                    maxlength: WALLET_OR_PERSONA_NAME_MAX_LEN,
                                 }}
                                 variant="outlined"
                             />
@@ -65,7 +70,8 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                         disabled={name.length === 0 || checkInputLengthExceed(name)}>
                         {t('create')}
                     </DebounceButton>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }

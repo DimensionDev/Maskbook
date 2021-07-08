@@ -24,8 +24,8 @@ export function useQueryNavigatorPermission(needRequest: boolean, name: Permissi
         if (!needRequest || permission !== 'prompt' || Flags.has_no_WebRTC) return
         let permissionStatus: PermissionStatus
 
-        const handleChange = () => {
-            updatePermission(permissionStatus.state)
+        const handleChange = function (this: PermissionStatus) {
+            updatePermission(this.state)
         }
 
         if (checkPermissionApiUsability('query')) {

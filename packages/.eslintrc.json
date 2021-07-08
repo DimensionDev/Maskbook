@@ -7,7 +7,7 @@
         "project": "./tsconfig.eslint.json"
     },
     "extends": ["plugin:import/typescript"],
-    "plugins": ["@typescript-eslint", "unused-imports", "lodash", "import", "react-hooks"],
+    "plugins": ["@typescript-eslint", "unused-imports", "lodash", "import", "react-hooks", "react"],
     "rules": {
         "import/no-deprecated": "warn",
         "no-restricted-imports": [
@@ -19,6 +19,20 @@
         "lodash/import-scope": ["error", "member"],
         "unused-imports/no-unused-imports-ts": "warn",
         "@typescript-eslint/await-thenable": "error",
-        "@typescript-eslint/no-for-in-array": "error"
+        "@typescript-eslint/no-for-in-array": "error",
+        "react/jsx-curly-brace-presence": [
+            "warn",
+            {
+                "props": "never",
+                "children": "never"
+            }
+        ],
+        "react/self-closing-comp": [
+            "warn",
+            {
+                "component": true,
+                "html": true
+            }
+        ]
     }
 }
