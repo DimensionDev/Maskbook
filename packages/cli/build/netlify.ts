@@ -1,9 +1,8 @@
 import { spawn } from 'child_process'
-import { parallel, series, src, dest } from 'gulp'
+import { parallel, series, src, dest, TaskFunction } from 'gulp'
 import { relative, resolve } from 'path'
 import { build } from './typescript'
 import { NETLIFY_PATH, PKG_PATH } from '../utils'
-import { renameSync } from 'fs'
 
 const createBuildStorybook6 = (basePath: string, output: string, name: string) => {
     const fn = () => {
@@ -73,4 +72,4 @@ const icons = series(
         return from.pipe(to)
     },
 )
-export const buildNetlify = series(build, parallel(icons, dashboardSB, themeSB /* , dashboard */))
+export const buildNetlify: TaskFunction = series(build, parallel(icons, dashboardSB, themeSB /* , dashboard */))
