@@ -14,7 +14,7 @@ import {
 } from '@masknet/web3-shared'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useClaimAll, SwappedToken } from './hooks/useClaimAll'
+import { useClaimablePools, SwappedToken } from './hooks/useClaimablePools'
 import { WalletMessages } from '../../Wallet/messages'
 import { useClaimCallback } from './hooks/useClaimCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -102,10 +102,10 @@ interface ClaimAllDialogProps {
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
-    const { value: swappedTokens, loading, retry } = useClaimAll()
+    const { value: swappedTokens, loading, retry } = useClaimablePools()
     const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
     // Todo: Remove the code after the period that old ITO is being used and continues to be used for a while
-    const { value: swappedTokensOld, loading: loadingOld, retry: retryOld } = useClaimAll(true)
+    const { value: swappedTokensOld, loading: loadingOld, retry: retryOld } = useClaimablePools(true)
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
     const popEnqueueSnackbar = useCallback(
@@ -267,31 +267,9 @@ function Content(props: ContentProps) {
         <>
             <List className={classes.tokenCardWrapper}>
                 {swappedTokens.map((swappedToken, i) => (
-                    <ListItem key={i} className={classes.tokenCard}>
-                        <div className={classes.cardHeader}>
-                            <Typography>
-                                {swappedToken.token.symbol}{' '}
-                                {swappedToken.isClaimable
-                                    ? t('plugin_ito_claim_all_status_unclaimed')
-                                    : t('plugin_ito_claim_all_status_locked')}
-                                :
-                            </Typography>
-                            {swappedToken.isClaimable ? null : (
-                                <Typography>
-                                    {t('plugin_ito_claim_all_unlock_time', {
-                                        time: formatDateTime(swappedToken.unlockTime, 'yyyy-MM-dd HH:mm:ss'),
-                                    })}
-                                </Typography>
-                            )}
-                        </div>
-                        <Typography className={classes.cardContent}>
-                            <FormattedBalance
-                                value={swappedToken.amount}
-                                decimals={swappedToken.token.decimals}
-                                symbol={swappedToken.token.symbol}
-                            />
-                        </Typography>
-                    </ListItem>
+                    <div key={i}>
+                        <SwappedToken i={i} swappedToken={swappedToken} />
+                    </div>
                 ))}
             </List>
             <EthereumWalletConnectedBoundary>
@@ -306,4 +284,42 @@ function Content(props: ContentProps) {
             </EthereumWalletConnectedBoundary>
         </>
     )
+}
+
+interface SwappedTokensProps {
+    i: number
+    swappedToken: SwappedToken
+}
+
+function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
+    const { t } = useI18N()
+    const classes = useStyles()
+
+    return swappedToken.token ? (
+        <ListItem key={i} className={classes.tokenCard}>
+            <div className={classes.cardHeader}>
+                <Typography>
+                    {swappedToken.token.symbol}{' '}
+                    {swappedToken.isClaimable
+                        ? t('plugin_ito_claim_all_status_unclaimed')
+                        : t('plugin_ito_claim_all_status_locked')}
+                    :
+                </Typography>
+                {swappedToken.isClaimable ? null : (
+                    <Typography>
+                        {t('plugin_ito_claim_all_unlock_time', {
+                            time: formatDateTime(swappedToken.unlockTime, 'yyyy-MM-dd HH:mm:ss'),
+                        })}
+                    </Typography>
+                )}
+            </div>
+            <Typography className={classes.cardContent}>
+                <FormattedBalance
+                    value={swappedToken.amount}
+                    decimals={swappedToken.token.decimals}
+                    symbol={swappedToken.token.symbol}
+                />
+            </Typography>
+        </ListItem>
+    ) : null
 }
