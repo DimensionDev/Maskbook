@@ -203,7 +203,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     <Paper className={classes.data}>
                         <Typography>
                             <FormattedBalance
-                                value={poolSettings?.total}
+                                value={poolSettings?.limit}
                                 decimals={poolSettings?.token?.decimals}
                                 symbol={poolSettings?.token?.symbol}
                             />
