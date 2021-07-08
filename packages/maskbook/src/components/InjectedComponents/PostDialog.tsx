@@ -502,7 +502,7 @@ function PluginRenderer() {
         Result.wrap(() => {
             const entry = plugin.CompositionDialogEntry
             const unstable = plugin.enableRequirement.target !== 'stable'
-            const requireChainValid = Boolean(plugin.enableRequirement.requireChainValid)
+            const requireChainValid = Boolean(plugin.enableRequirement.web3?.compositionEntryRequiresChainIDValid)
             if (!entry || (!chainIdValid && requireChainValid)) return null
 
             return (
