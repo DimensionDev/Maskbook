@@ -188,15 +188,15 @@ export default function DashboardSettingsRouter() {
                         </Typography>
                         <Card elevation={0}>
                             <List className={classes.list} disablePadding>
-                                {process.env.NODE_ENV === 'development' && (
-                                    <ListItem button onClick={() => (location.href = '/next.html')}>
-                                        <ListItemIcon children={<NewIcon />} />
-                                        <ListItemText
-                                            primary="Open new dashboard (integrated) (dev-only)"
-                                            secondary="/packages/dashboard/"
-                                        />
-                                    </ListItem>
-                                )}
+                                {/*{process.env.NODE_ENV === 'development' && (*/}
+                                <ListItem button onClick={() => (location.href = '/next.html')}>
+                                    <ListItemIcon children={<NewIcon />} />
+                                    <ListItemText
+                                        primary="Open new dashboard (integrated) (dev-only)"
+                                        secondary="/packages/dashboard/"
+                                    />
+                                </ListItem>
+                                {/*)}*/}
                                 <SettingsUIEnum
                                     classes={listStyle}
                                     enumObject={Language}
