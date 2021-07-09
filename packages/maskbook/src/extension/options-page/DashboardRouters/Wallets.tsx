@@ -131,7 +131,6 @@ export default function DashboardWalletsRouter() {
                 <div className={classes.root}>
                     <div className={classes.content}>
                         <div className={classes.wrapper}>
-                            <pre>{process.env.WEB3_CONSTANTS_RPC}</pre>
                             {selectedWallet ? <WalletContent wallet={selectedWallet} /> : null}
                         </div>
                     </div>
