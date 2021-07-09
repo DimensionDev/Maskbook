@@ -40,7 +40,7 @@ declare module NodeJS {
         /**
          * Web3 Constants
          */
-         WEB3_CONSTANTS_RPC: string
+        WEB3_CONSTANTS_RPC: string
     }
 }
 
