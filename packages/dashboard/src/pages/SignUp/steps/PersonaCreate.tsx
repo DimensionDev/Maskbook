@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
-import { MaskTextField, useSnackbar } from '@masknet/theme'
+import { MaskTextField } from '@masknet/theme'
 import {
     Body,
     ColumnContentLayout,
@@ -8,26 +8,29 @@ import {
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { RoutePaths } from '../../../type'
-import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { Button } from '@material-ui/core'
 import { ButtonGroup } from '../components/ActionGroup'
 import { useDashboardI18N } from '../../../locales'
 import { useCreatePersonaV2 } from '../../Personas/hooks/useCreatePersonaV2'
 import { SignUpRoutePath } from '../routePath'
+import { useSnackbarCallback } from '@masknet/shared'
 
 export const PersonaCreate = () => {
-    const { enqueueSnackbar } = useSnackbar()
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const location = useLocation() as { state: { words: string[] } }
-    const [, createPersona] = useCreatePersonaV2()
+    const createPersona = useCreatePersonaV2()
     const [personaName, setPersonaName] = useState('')
 
-    const handleNext = async () => {
-        await createPersona(location.state?.words?.join(' ') ?? '', personaName)
-        navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedial}`)
-    }
+    const handleNext = useSnackbarCallback({
+        executor: () => createPersona(location.state?.words?.join(' ') ?? '', personaName),
+        onSuccess: () => navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedial}`),
+        onError: () => {
+            navigate(`${RoutePaths.SignUp}`)
+        },
+        deps: [],
+    })
 
     return (
         <ColumnContentLayout>
@@ -39,21 +42,23 @@ export const PersonaCreate = () => {
                 <SignUpAccountLogo />
                 <div>
                     <MaskTextField
+                        required
                         label="Name"
                         variant="filled"
                         InputProps={{ disableUnderline: true }}
                         onChange={(e) => setPersonaName(e.currentTarget.value)}
                     />
                     <ButtonGroup>
-                        <Button color={'secondary'}>Back</Button>
-                        <Button color={'primary'} onClick={handleNext}>
+                        <Button color={'secondary'} onClick={() => navigate(-1)}>
+                            Back
+                        </Button>
+                        <Button color={'primary'} onClick={handleNext} disabled={!personaName}>
                             Next
                         </Button>
                     </ButtonGroup>
                 </div>
-                <MaskAlert description={t.create_account_identity_warning()} type={'error'} />
             </Body>
-            <Footer></Footer>
+            <Footer />
         </ColumnContentLayout>
     )
 }

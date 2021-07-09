@@ -28,6 +28,7 @@ export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) 
                     variant="filled"
                     size="small"
                     value={word}
+                    InputProps={{ disableUnderline: true }}
                     disabled={indexes && !indexes.includes(i)}
                     onChange={(e) => onChange(e.target.value, indexes ? indexes.indexOf(i) : i)}
                 />

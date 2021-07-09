@@ -44,7 +44,7 @@ export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(
 ): Promise<MnemonicGenerationInformation> {
     const verify = bip39.validateMnemonic(mnemonicWord)
     if (!verify) {
-        console.warn('Verify error')
+        throw new Error('Verify error')
     }
     const seed = await bip39.mnemonicToSeed(mnemonicWord, password)
     const masterKey = wallet.HDKey.parseMasterSeed(seed)

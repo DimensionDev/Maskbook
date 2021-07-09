@@ -16,6 +16,8 @@ import { DesktopMnemonicConfirm, MnemonicRevealLG } from '../../../components/Mn
 import { SignUpRoutePath } from '../routePath'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { memo, useState } from 'react'
+import { some } from 'lodash-es'
+import { useSnackbar } from '@masknet/theme'
 
 const useStyles = makeStyles((theme) => ({
     refresh: {
@@ -32,17 +34,20 @@ enum CreateWalletStep {
 export const MnemonicRevealForm = memo(() => {
     const [step, setStep] = useState(CreateWalletStep.NameAndWords)
     const navigate = useNavigate()
+    const { enqueueSnackbar } = useSnackbar()
     const t = useDashboardI18N()
     const classes = useStyles()
     const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
 
     const onSubmit = () => {
-        navigate(`${SignUpRoutePath.PersonaCreate}`, {
-            replace: true,
-            state: {
-                words: words,
-            },
-        })
+        if (words.join(' ') !== puzzleWords.join(' ')) {
+            enqueueSnackbar('test', { variant: 'error' })
+        } else {
+            navigate(`${SignUpRoutePath.PersonaCreate}`, {
+                replace: true,
+                state: { words: words },
+            })
+        }
     }
 
     const onBack = () => {
@@ -69,7 +74,7 @@ export const MnemonicRevealForm = memo(() => {
                         <ButtonGroup>
                             <Button color={'secondary'}>Back</Button>
                             <Button color={'primary'} onClick={() => setStep(CreateWalletStep.Verify)}>
-                                Next
+                                Verify
                             </Button>
                         </ButtonGroup>
                     </div>
@@ -81,18 +86,15 @@ export const MnemonicRevealForm = memo(() => {
                             <Button color={'secondary'} onClick={onBack}>
                                 Back
                             </Button>
-                            <Button
-                                color={'primary'}
-                                disabled={words.join(' ') !== puzzleWords.join(' ')}
-                                onClick={onSubmit}>
-                                Next
+                            <Button color={'primary'} disabled={some(puzzleWords, (word) => !word)} onClick={onSubmit}>
+                                Confirm
                             </Button>
                         </ButtonGroup>
                     </div>
                 )}
-                <MaskAlert description={t.create_account_identity_warning()} />
+                <MaskAlert description={t.create_account_identity_warning()} type={'error'} />
             </Body>
-            <Footer></Footer>
+            <Footer />
         </ColumnContentLayout>
     )
 })
