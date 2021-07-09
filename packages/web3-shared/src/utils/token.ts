@@ -65,12 +65,12 @@ export function getChainDetailedCAIP(chainId = ChainId.Mainnet) {
 
 export function getChainName(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
-    return chainDetailed?.name ?? 'Unknown'
+    return chainDetailed?.name ?? 'Unknown Network'
 }
 
 export function getChainFullName(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
-    return chainDetailed?.fullName ?? 'Unknown'
+    return chainDetailed?.fullName ?? 'Unknown Network'
 }
 
 export function getChainIdFromName(name: string) {
