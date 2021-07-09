@@ -1,6 +1,5 @@
 import { formatBalance, resolveTokenLinkOnExplorer } from '@masknet/web3-shared'
 import { Grid, Link, makeStyles, Paper, Typography } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
 import { isNative } from 'lodash-es'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
@@ -92,14 +91,11 @@ export function ConfirmRedPacketForm(props: ConfirmRedPacketFormProps) {
                     </Grid>
                     <Grid item xs={6}>
                         <Typography variant="body1" color="textPrimary" align="right">
-                            {`${
-                                settings?.isRandom
-                                    ? formatBalance(new BigNumber(settings?.total ?? 0), settings?.token?.decimals ?? 0)
-                                    : formatBalance(
-                                          new BigNumber(settings?.total ?? 0).div(settings?.shares ?? 1),
-                                          settings?.token?.decimals ?? 18,
-                                      )
-                            } ${settings?.token?.symbol}`}
+                            <FormattedBalance
+                                value={settings?.total}
+                                decimals={settings?.token?.decimals}
+                                symbol={settings?.token?.symbol}
+                            />
                         </Typography>
                     </Grid>
                 </>
@@ -136,7 +132,7 @@ export function ConfirmRedPacketForm(props: ConfirmRedPacketFormProps) {
             <Grid item xs={6}>
                 <ActionButton variant="contained" size="large" fullWidth onClick={onCreate}>
                     {t('plugin_red_packet_send_symbol', {
-                        amount: formatBalance(new BigNumber(settings?.total ?? 0), settings?.token?.decimals ?? 0),
+                        amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
                         symbol: settings?.token?.symbol,
                     })}
                 </ActionButton>
