@@ -1,15 +1,6 @@
-import { safeUnreachable, unreachable } from '@dimensiondev/kit'
+import { unreachable, safeUnreachable } from '@dimensiondev/kit'
 import { getTokenConstants } from '../constants'
-import {
-    ChainId,
-    CollectibleProvider,
-    ERC20Token,
-    ERC721Token,
-    NativeToken,
-    NetworkType,
-    NonFungibleTokenDetailed,
-    ProviderType,
-} from '../types'
+import { ChainId, CollectibleProvider, ERC20Token, ERC721Token, NativeToken, NetworkType, NonFungibleTokenDetailed, ProviderType } from '../types'
 import { formatEthereumAddress, getChainDetailed } from '../utils'
 
 export function resolveProviderName(providerType: ProviderType) {
