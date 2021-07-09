@@ -29,4 +29,4 @@ The file need to provide this information:
 
 ## Form
 
-If you want's create a form in your plugin, then MUST read this file [Form guide](form-guide.md)
+If you want to create a form in your plugin, then you MUST read this file [Form guide](form-guide.md)

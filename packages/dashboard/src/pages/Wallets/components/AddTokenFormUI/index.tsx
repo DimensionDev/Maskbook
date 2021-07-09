@@ -3,7 +3,6 @@ import { useDashboardI18N } from '../../../../locales'
 import { Button, DialogActions, DialogContent, makeStyles, TextField } from '@material-ui/core'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 import { useFormContext, Controller } from 'react-hook-form'
-import type { AddTokenFormData } from '../AddTokenDialog'
 
 export interface AddTokenFormUIProps {
     onNext: () => void
@@ -34,6 +33,12 @@ const useStyles = makeStyles((theme) => ({
         },
     },
 }))
+
+type AddTokenFormData = {
+    address: string
+    symbol: string
+    decimals: number
+}
 
 export const AddTokenFormUI = memo<AddTokenFormUIProps>(({ token, onClose, onNext }) => {
     const t = useDashboardI18N()

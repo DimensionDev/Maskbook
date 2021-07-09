@@ -6,54 +6,48 @@ We use [`react-hook-form`](https://react-hook-form.com/) and [`zod`](https://git
 
 ### 1. Use `zod` to create form field schema
 
+You can set error message with i18n, you can read this file to learn about [i18n](i18n-guide.md)
+
 ```js
 import { z as zod } from 'zod'
-
+const t = useI18n() // Set errror messge with i18n.
 const schema = zod.object({
   name: zod.string(), // string
-  age: zod.number('The age need be a number').positive('The age need to greater than 0'), // > 0
-  country: zod.string('The country need be a string').optional(), // string | undefiend
+  age: zod.number(t.needBeNumber).positive(t.needGreaterThanZero), // > 0
+  country: zod.string(t.countyNeedBeString).optional(), // string | undefiend
   address: zod
     .string()
     .min(1)
-    .refine((address) => ValidAddress(address), 'Invalid Address'), // You can use other methods to validate this field
+    .refine((address) => ValidAddress(address), t.InvalidAddress), // You can use other methods to validate this field
 })
 ```
 
-### 2. Create type to be compatible with schema
-
-```
-type formType = {
-  name: string
-  age: number
-  country?: string
-  address: string
-}
-```
-
-### 3. Call `useForm` to get the method collection
+### 2. Call `useForm` to get the method collection
 
 ```js
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-const methods = useForm<formType>({
-    resolver: zodResolver(schema)
+const methods =
+  useForm <
+  formType >
+  {
+    resolver: zodResolver(schema),
     defaultValues: {
-        name: '',
-        age: 1,
-        address: ''
-    }
-})
+      name: '',
+      age: 1,
+      address: '',
+    },
+  }
 ```
 
 `react-hook-form` provides [optional argumenjs](https://react-hook-form.com/api/useform) and you can change to meet your expectations
 
-### 4. Create form UI with `Controller` and Material-UI component
+### 3. Create form UI with `Controller` and Material-UI component
 
 The `react-hook-form` provides the `Controller` component without import other packages to support UI libraries
 
-```js
+```tsx
 const {
   control,
   handleSubmit,
@@ -77,9 +71,9 @@ return (
 
 ### Use `useFormContext` to get methods in children component
 
-In practice, you may encounter situations where you need to get form methods in the children component. You can use `useFormContext` and `FormProvider` to resolve this question.
+In practice, you may need to get form methods in the children component. You can use `useFormContext` and `FormProvider` to resolve this problem.
 
-```js
+```tsx
 // Parent component
 const methods = useForm()
 return <FormProvider {...methods}>....</FormProvider>
@@ -92,7 +86,7 @@ const { control, register, formState } = useFormContext()
 
 Sometimes we need set some field from remote data. You can use `setValue` to change these field. If you want to trigger valid while setting the field, you can add the `shouldValid` option
 
-```js
+```tsx
 const { watch, setValue } = useForm()
 
 // You can use watch to monitor some field change
@@ -105,4 +99,4 @@ useEffect(() => {
 
 ### Be careful with watch
 
-Sometimes we need to listen the field update to do something. Although you can use `watch` to listen field. But it will cause re-render problem. At the time of use you can think about whether you can use `getValues` to accomplish your needs.
+Sometimes we need to listen to the field update to do something. Although you can use `watch` to react to a field. But it will cause extra renders and cause a potential performance problem. Try to use `getValues` if that suits you.

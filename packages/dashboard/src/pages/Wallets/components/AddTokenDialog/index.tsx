@@ -28,12 +28,6 @@ enum AddTokenStep {
     CONFIRM,
 }
 
-export type AddTokenFormData = {
-    address: string
-    symbol: string
-    decimals: number
-}
-
 export const AddTokenDialog = memo<AddTokenDialogProps>(({ open, onClose }) => {
     const t = useDashboardI18N()
 
@@ -58,7 +52,7 @@ export const AddTokenDialog = memo<AddTokenDialogProps>(({ open, onClose }) => {
         })
     }, [t, wallet])
 
-    const methods = useForm<AddTokenFormData>({
+    const methods = useForm<zod.infer<typeof schema>>({
         mode: 'onChange',
         resolver: zodResolver(schema),
         defaultValues: {
