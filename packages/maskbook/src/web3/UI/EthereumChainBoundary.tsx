@@ -37,6 +37,8 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     // if false then it will not guide the user to switch the network
     const isAllowed = chainIdValid && !!account
+    // if false then the user should switch network manually
+    const isSwitchable = true
 
     const onSwitch = useCallback(async () => {
         // a short time loading makes the user fells better
