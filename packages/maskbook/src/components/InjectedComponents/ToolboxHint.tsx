@@ -133,19 +133,8 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     //#region Wallet
     const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+        WalletMessages.events.selectProviderDialogUpdated,
     )
-
-    const { openDialog: openCreateImportDialog } = useRemoteControlledDialog(
-        WalletMessages.events.createImportWalletDialogUpdated,
-    )
-    const openWallet = useCallback(() => {
-        if (account) {
-            openSelectWalletDialog()
-        } else {
-            openCreateImportDialog()
-        }
-    }, [account])
     //#endregion
 
     //#region Red packet
@@ -259,7 +248,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
             </div>
             {menu}
 
-            <div className={classes.wrapper} onClick={openWallet}>
+            <div className={classes.wrapper} onClick={openSelectWalletDialog}>
                 <div className={classes.button}>
                     {account && chainIdValid ? (
                         <WalletIcon />
