@@ -118,7 +118,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                         chainId={getChainIdFromName(asset.chain)}
                     />
                     <Typography className={classes.name}>{asset.token.symbol}</Typography>
-                    {asset.chain !== chainDetailed.shortName.toLowerCase() ? (
+                    {asset.chain !== chainDetailed.chain.toLowerCase() ? (
                         <Chip className={classes.chain} label={asset.chain} size="small" />
                     ) : null}
                 </Box>,

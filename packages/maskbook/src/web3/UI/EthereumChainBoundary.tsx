@@ -2,9 +2,10 @@ import { useCallback } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import {
     ChainId,
-    getChainDetailed,
     getChainDetailedCAIP,
     getChainName,
+    getNetworkTypeFromChainId,
+    NetworkType,
     ProviderType,
     resolveProviderName,
     useAccount,
@@ -37,7 +38,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const actualNetwork = getChainName(acutalChainId)
 
     // if false then the user should switch network manually
-    const isSwitchable = providerType === ProviderType.Maskbook || getChainDetailed(expectedChainId)?.chain !== 'ETH'
+    const isSwitchable = true
 
     // if testnets were not allowed it will not guide the user to switch the network
     const isAllowed = allowTestnet || chainDetailed?.network === 'mainnet'
@@ -47,7 +48,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         await delay(1000)
 
         if (!isAllowed) return
-        if (!isSwitchable) return
 
         // read the chain detailed from the built-in chain list
         const chainDetailedCAIP = getChainDetailedCAIP(expectedChainId)
@@ -60,7 +60,9 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         }
 
         // request ethereum-compatiable network
-        await Services.Ethereum.addEthereumChain(chainDetailedCAIP, account)
+        if (getNetworkTypeFromChainId(expectedChainId) === NetworkType.Ethereum)
+            await Services.Ethereum.switchEthereumChain(expectedChainId)
+        else await Services.Ethereum.addEthereumChain(chainDetailedCAIP, account)
     }, [account, isAllowed, isSwitchable, providerType, expectedChainId])
 
     if (acutalChainId === expectedChainId) return <>{props.children}</>

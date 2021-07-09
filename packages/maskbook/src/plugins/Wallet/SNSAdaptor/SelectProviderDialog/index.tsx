@@ -30,7 +30,6 @@ import { Provider } from '../Provider'
 import { MetaMaskIcon } from '../../../../resources/MetaMaskIcon'
 import { MaskbookIcon } from '../../../../resources/MaskbookIcon'
 import { WalletConnectIcon } from '../../../../resources/WalletConnectIcon'
-import Services from '../../../../extension/service'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../messages'
 import { DashboardRoute } from '../../../../extension/options-page/Route'
@@ -142,6 +141,12 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     )
     //#endregion
 
+    //#region create or import wallet dialog
+    const { openDialog: openCreateImportDialog } = useRemoteControlledDialog(
+        WalletMessages.events.createImportWalletDialogUpdated,
+    )
+    //#endregion
+
     //#region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
@@ -183,7 +188,9 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     // create a new wallet
                     if (isEnvironment(Environment.ManifestOptions))
                         history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
-                    else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
+                    else {
+                        openCreateImportDialog()
+                    }
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:
@@ -248,7 +255,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                 </Box>
                 <Box className={classes.step}>
                     <Typography className={classes.stepTitle} variant="h2" component="h2">
-                        {`${Flags.bsc_enabled ? '2. ' : ''}Choose Wallet`}
+                        2. Choose Wallet
                     </Typography>
                     <ImageList
                         className={classnames(classes.stepContent, classes.grid)}
