@@ -189,7 +189,6 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     if (isEnvironment(Environment.ManifestOptions))
                         history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
                     else {
-                        // await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
                         openCreateImportDialog()
                     }
                     break
