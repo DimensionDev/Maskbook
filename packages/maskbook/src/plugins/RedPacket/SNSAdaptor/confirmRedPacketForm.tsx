@@ -6,6 +6,7 @@ import { useI18N } from '../../../utils'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 import LaunchIcon from '@material-ui/icons/Launch'
 import { FormattedBalance } from '@masknet/shared'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) => ({
     link: {},
@@ -92,7 +93,7 @@ export function ConfirmRedPacketForm(props: ConfirmRedPacketFormProps) {
                     <Grid item xs={6}>
                         <Typography variant="body1" color="textPrimary" align="right">
                             <FormattedBalance
-                                value={settings?.total}
+                                value={new BigNumber(settings?.total ?? 0).div(settings?.shares ?? 1)}
                                 decimals={settings?.token?.decimals}
                                 symbol={settings?.token?.symbol}
                             />
