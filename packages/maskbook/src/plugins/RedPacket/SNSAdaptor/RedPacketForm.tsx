@@ -127,11 +127,11 @@ export function RedPacketForm(props: RedPacketFormProps) {
     // amount
     const [rawAmount, setRawAmount] = useState(
         origin?.isRandom
-            ? formatBalance(new BigNumber(origin?.total || 0), origin.token?.decimals ?? 0)
-            : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares || 1), origin?.token?.decimals ?? 0),
+            ? formatBalance(new BigNumber(origin?.total ?? 0), origin.token?.decimals ?? 0)
+            : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
     )
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
-    const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares || '0')
+    const amount = new BigNumber(rawAmount ?? '0').multipliedBy(pow10(token?.decimals ?? 0))
+    const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares ?? '0')
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
