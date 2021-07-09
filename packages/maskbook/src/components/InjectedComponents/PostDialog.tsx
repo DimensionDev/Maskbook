@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
+import { useChainIdValid } from '@masknet/web3-shared'
 import {
     makeStyles,
     InputBase,
@@ -6,8 +7,6 @@ import {
     Typography,
     Box,
     Chip,
-    ThemeProvider,
-    Theme,
     DialogProps,
     Tooltip,
     CircularProgressProps,
@@ -35,7 +34,6 @@ import {
     isTypedMessageText,
 } from '../../protocols/typed-message'
 import { EthereumTokenType, isDAI, isOKB } from '@masknet/web3-shared'
-import { PluginRedPacketTheme } from '../../plugins/RedPacket/SNSAdaptor/RedPacketThemeOverride'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
 import { PluginUI } from '../../plugins/PluginUI'
 import { Result } from 'ts-results'
@@ -69,7 +67,6 @@ const useStyles = makeStyles({
 })
 
 export interface PostDialogUIProps extends withClasses<never> {
-    theme?: Theme
     open: boolean
     onlyMyself: boolean
     shareToEveryone: boolean
@@ -153,126 +150,113 @@ export function PostDialogUI(props: PostDialogUIProps) {
         }).unwrapOr(null),
     )
     return (
-        <>
-            <ThemeProvider theme={props.theme ?? defaultTheme}>
-                <InjectedDialog open={props.open} onClose={props.onCloseButtonClicked} title={t('post_dialog__title')}>
-                    <DialogContent>
-                        <BadgeRenderer meta={props.postContent.meta} />
-                        {oldMetadataBadge}
-                        <InputBase
-                            classes={{
-                                root: classes.MUIInputRoot,
-                                input: classes.MUIInputInput,
-                            }}
-                            autoFocus
-                            value={props.postContent.content}
-                            onChange={onPostContentChange}
-                            fullWidth
-                            multiline
-                            placeholder={t('post_dialog__placeholder')}
-                            inputProps={{ 'data-testid': 'text_textarea' }}
+        <InjectedDialog open={props.open} onClose={props.onCloseButtonClicked} title={t('post_dialog__title')}>
+            <DialogContent>
+                <BadgeRenderer meta={props.postContent.meta} />
+                {oldMetadataBadge}
+                <InputBase
+                    classes={{
+                        root: classes.MUIInputRoot,
+                        input: classes.MUIInputInput,
+                    }}
+                    autoFocus
+                    value={props.postContent.content}
+                    onChange={onPostContentChange}
+                    fullWidth
+                    multiline
+                    placeholder={t('post_dialog__placeholder')}
+                    inputProps={{ 'data-testid': 'text_textarea' }}
+                />
+
+                <Typography style={{ marginBottom: 10 }}>
+                    Plugins <sup>(Experimental)</sup>
+                </Typography>
+                <Box
+                    style={{ marginBottom: 10 }}
+                    sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                    }}>
+                    <PluginRenderer />
+                    {oldPluginEntries}
+                </Box>
+                <Typography style={{ marginBottom: 10 }}>{t('post_dialog__select_recipients_title')}</Typography>
+                <Box
+                    style={{ marginBottom: 10 }}
+                    sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                    }}>
+                    <SelectRecipientsUI
+                        items={props.availableShareTarget}
+                        selected={props.currentShareTarget}
+                        onSetSelected={props.onSetSelected}
+                        {...props.SelectRecipientsUIProps}>
+                        <ClickableChip
+                            checked={props.shareToEveryone}
+                            label={t('post_dialog__select_recipients_share_to_everyone')}
+                            data-testid="_everyone_group_"
+                            onClick={() => props.onShareToEveryoneChanged(!props.shareToEveryone)}
                         />
+                        <ClickableChip
+                            checked={props.onlyMyself}
+                            label={t('post_dialog__select_recipients_only_myself')}
+                            data-testid="_only_myself_group_"
+                            onClick={() => props.onOnlyMyselfChanged(!props.onlyMyself)}
+                        />
+                    </SelectRecipientsUI>
+                </Box>
 
-                        <Typography style={{ marginBottom: 10 }}>
-                            Plugins <sup>(Experimental)</sup>
-                        </Typography>
-                        <Box
-                            style={{ marginBottom: 10 }}
-                            sx={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                            }}>
-                            <PluginRenderer />
-                            {oldPluginEntries}
-                        </Box>
-                        <Typography style={{ marginBottom: 10 }}>
-                            {t('post_dialog__select_recipients_title')}
-                        </Typography>
-                        <Box
-                            style={{ marginBottom: 10 }}
-                            sx={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                            }}>
-                            <SelectRecipientsUI
-                                items={props.availableShareTarget}
-                                selected={props.currentShareTarget}
-                                onSetSelected={props.onSetSelected}
-                                {...props.SelectRecipientsUIProps}>
-                                <ClickableChip
-                                    checked={props.shareToEveryone}
-                                    label={t('post_dialog__select_recipients_share_to_everyone')}
-                                    data-testid="_everyone_group_"
-                                    onClick={() => props.onShareToEveryoneChanged(!props.shareToEveryone)}
-                                />
-                                <ClickableChip
-                                    checked={props.onlyMyself}
-                                    label={t('post_dialog__select_recipients_only_myself')}
-                                    data-testid="_only_myself_group_"
-                                    onClick={() => props.onOnlyMyselfChanged(!props.onlyMyself)}
-                                />
-                            </SelectRecipientsUI>
-                        </Box>
-
-                        <Typography style={{ marginBottom: 10 }}>{t('post_dialog__more_options_title')}</Typography>
-                        <Box
-                            style={{ marginBottom: 10 }}
-                            sx={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                            }}>
-                            <ClickableChip
-                                checked={props.imagePayload}
-                                label={
-                                    <>
-                                        {t('post_dialog__image_payload')}
-                                        {Flags.image_payload_marked_as_beta && (
-                                            <sup className={classes.sup}>(Beta)</sup>
-                                        )}
-                                    </>
-                                }
-                                onClick={() => props.onImagePayloadSwitchChanged(!props.imagePayload)}
-                                data-testid="image_chip"
-                                disabled={props.imagePayloadUnchangeable}
-                            />
-                            {isDebug && (
-                                <Chip label="Post metadata inspector" onClick={() => setShowPostMetadata((e) => !e)} />
-                            )}
-                            {showPostMetadata && (
-                                <DebugMetadataInspector
-                                    onNewMetadata={(meta) => (globalTypedMessageMetadata.value = meta)}
-                                    onExit={() => setShowPostMetadata(false)}
-                                    meta={props.postContent.meta || new Map()}
-                                />
-                            )}
-                        </Box>
-                    </DialogContent>
-                    <DialogActions>
-                        {isTypedMessageText(props.postContent) && props.maxLength ? (
-                            <CharLimitIndicator value={props.postContent.content.length} max={props.maxLength} />
-                        ) : null}
-                        {isMinds(activatedSocialNetworkUI) &&
-                            currentImagePayloadStatus[activatedSocialNetworkUI.networkIdentifier].value === 'true' &&
-                            !clipboardReadPermissionGranted && (
-                                <Button
-                                    variant="outlined"
-                                    onClick={requestClipboardPermission}
-                                    data-testid="auto_paste_prompt">
-                                    Enable auto paste
-                                </Button>
-                            )}
-                        <Button
-                            className={classes.button}
-                            variant="contained"
-                            disabled={props.postBoxButtonDisabled}
-                            onClick={props.onFinishButtonClicked}
-                            data-testid="finish_button">
-                            {t('post_dialog__button')}
+                <Typography style={{ marginBottom: 10 }}>{t('post_dialog__more_options_title')}</Typography>
+                <Box
+                    style={{ marginBottom: 10 }}
+                    sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                    }}>
+                    <ClickableChip
+                        checked={props.imagePayload}
+                        label={
+                            <>
+                                {t('post_dialog__image_payload')}
+                                {Flags.image_payload_marked_as_beta && <sup className={classes.sup}>(Beta)</sup>}
+                            </>
+                        }
+                        onClick={() => props.onImagePayloadSwitchChanged(!props.imagePayload)}
+                        data-testid="image_chip"
+                        disabled={props.imagePayloadUnchangeable}
+                    />
+                    {isDebug && <Chip label="Post metadata inspector" onClick={() => setShowPostMetadata((e) => !e)} />}
+                    {showPostMetadata && (
+                        <DebugMetadataInspector
+                            onNewMetadata={(meta) => (globalTypedMessageMetadata.value = meta)}
+                            onExit={() => setShowPostMetadata(false)}
+                            meta={props.postContent.meta || new Map()}
+                        />
+                    )}
+                </Box>
+            </DialogContent>
+            <DialogActions>
+                {isTypedMessageText(props.postContent) && props.maxLength ? (
+                    <CharLimitIndicator value={props.postContent.content.length} max={props.maxLength} />
+                ) : null}
+                {isMinds(activatedSocialNetworkUI) &&
+                    currentImagePayloadStatus[activatedSocialNetworkUI.networkIdentifier].value === 'true' &&
+                    !clipboardReadPermissionGranted && (
+                        <Button variant="outlined" onClick={requestClipboardPermission} data-testid="auto_paste_prompt">
+                            Enable auto paste
                         </Button>
-                    </DialogActions>
-                </InjectedDialog>
-            </ThemeProvider>
-        </>
+                    )}
+                <Button
+                    className={classes.button}
+                    variant="contained"
+                    disabled={props.postBoxButtonDisabled}
+                    onClick={props.onFinishButtonClicked}
+                    data-testid="finish_button">
+                    {t('post_dialog__button')}
+                </Button>
+            </DialogActions>
+        </InjectedDialog>
     )
 }
 
@@ -435,7 +419,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     //#region Red Packet
     // TODO: move into the plugin system
     const hasRedPacket = RedPacketMetadataReader(postBoxContent.meta).ok
-    const theme = hasRedPacket ? PluginRedPacketTheme : undefined
     const mustSelectShareToEveryone = hasRedPacket && !shareToEveryone
 
     useEffect(() => {
@@ -450,7 +433,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
 
     return (
         <PostDialogUI
-            theme={theme}
             shareToEveryone={shareToEveryoneLocal}
             onlyMyself={onlyMyself}
             availableShareTarget={availableShareTarget}
@@ -515,11 +497,14 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
 }
 
 function PluginRenderer() {
+    const chainIdValid = useChainIdValid()
     const result = useActivatedPluginsSNSAdaptor().map((plugin) =>
         Result.wrap(() => {
             const entry = plugin.CompositionDialogEntry
-            if (!entry) return null
             const unstable = plugin.enableRequirement.target !== 'stable'
+            const requireChainValid = Boolean(plugin.enableRequirement.web3?.compositionEntryRequiresChainIDValid)
+            if (!entry || (!chainIdValid && requireChainValid)) return null
+
             return (
                 <ErrorBoundary subject={`Plugin "${plugin.name.fallback}"`} key={plugin.ID}>
                     {'onClick' in entry ? (

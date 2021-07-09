@@ -6,7 +6,13 @@ import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon } from '@masknet/shared'
-import { resolveLinkOnExplorer, FungibleTokenDetailed, ChainId, useNetworkType } from '@masknet/web3-shared'
+import {
+    resolveLinkOnExplorer,
+    FungibleTokenDetailed,
+    ChainId,
+    useNetworkType,
+    resolveNetworkName,
+} from '@masknet/web3-shared'
 import { SwapStatus } from './SwapGuide'
 
 const useStyles = makeStyles((theme) => ({
@@ -130,7 +136,7 @@ export function RemindDialog(props: RemindDialogProps) {
             <section className={classes.wrapper}>
                 <Typography variant="body1" className={classNames(classes.reminderText, classes.reminderTextFirst)}>
                     {t('plugin_ito_dialog_claim_reminder_text1', {
-                        networkType,
+                        networkType: resolveNetworkName(networkType),
                     })}
                 </Typography>
                 <Typography variant="body1" className={classes.reminderText}>

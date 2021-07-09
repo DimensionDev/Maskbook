@@ -98,11 +98,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             // connection failed
             if (!account || !networkType) throw new Error(`Failed to connect ${resolveProviderName(providerType)}.`)
 
-            if (networkType === NetworkType.Ethereum) {
-                // it's unable to send a request for switching to ethereum networks
-                if (chainId !== ChainId.Mainnet) throw new Error('Make sure your wallet is on the Ethereum Mainnet.')
-                return true
-            } else if (chainId === Number.parseInt(chainDetailedCAIP.chainId)) return true
+            // no need to switch the chain
+            if (chainId === Number.parseInt(chainDetailedCAIP.chainId)) return true
 
             // request ethereum-compatiable network
             try {
@@ -111,7 +108,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                         await delay(30 /* seconds */ * 1000 /* milliseconds */)
                         throw new Error('Timeout!')
                     })(),
-                    Services.Ethereum.addEthereumChain(chainDetailedCAIP, account),
+                    networkType === NetworkType.Ethereum
+                        ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet)
+                        : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account),
                 ])
             } catch (e) {
                 throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)

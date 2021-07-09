@@ -1,5 +1,5 @@
 import type { SignedTransaction, Transaction, TransactionConfig, TransactionReceipt } from 'web3-core'
-import { EthereumChainDetailed, EthereumMethodType } from '@masknet/web3-shared'
+import { ChainId, EthereumChainDetailed, EthereumMethodType } from '@masknet/web3-shared'
 import { request } from './request'
 
 export async function getGasPrice() {
@@ -70,6 +70,17 @@ export async function addEthereumChain(chainDetailed: EthereumChainDetailed, add
     return request<boolean>({
         method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
         params: [chainDetailed, address].filter(Boolean),
+    })
+}
+
+export async function switchEthereumChain(chainId: ChainId) {
+    return request<boolean>({
+        method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
+        params: [
+            {
+                chainId: `0x${chainId.toString(16)}`,
+            },
+        ],
     })
 }
 

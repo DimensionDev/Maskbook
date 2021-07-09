@@ -104,9 +104,6 @@ function BrowserActionUI() {
     }, [openSelectProviderDailog])
 
     const Trademark = memo(() => {
-        if (ui.networkIdentifier !== 'localhost') {
-            return null
-        }
         const src =
             process.env.NODE_ENV === 'production'
                 ? new URL('./MB--ComboCircle--Blue.svg', import.meta.url)
@@ -116,8 +113,9 @@ function BrowserActionUI() {
 
     return (
         <Paper className={classes.container} elevation={0}>
-            <Trademark />
-            {hasPermission === false ? (
+            {ui.networkIdentifier === 'localhost' || identities.length === 0 ? <Trademark /> : null}
+
+            {hasPermission === false && identities.length !== 0 ? (
                 <>
                     <Box
                         className={classes.header}
@@ -132,6 +130,7 @@ function BrowserActionUI() {
                             sns: ui.networkIdentifier,
                         })}
                     </Typography>
+
                     <Box
                         sx={{
                             display: 'flex',
