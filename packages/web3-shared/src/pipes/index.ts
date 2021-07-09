@@ -24,7 +24,7 @@ export function resolveProviderName(providerType: ProviderType) {
             return 'CustomNetwork'
         default:
             safeUnreachable(providerType)
-            return 'Unknown'
+            return 'Unknown Network'
     }
 }
 
