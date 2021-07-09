@@ -43,6 +43,10 @@ For general introductions, see [Mask.io](https://mask.io).
 
 Please check out [docs](docs)
 
+## Work for Mask Network
+
+Please submit your **resume** to `jobs (at) mask.io`
+
 ## Donation
 
 Help us by donating us:
