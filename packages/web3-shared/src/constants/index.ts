@@ -10,7 +10,7 @@ import Trending from '@masknet/web3-constants/data/trending.json'
 import URL from '@masknet/web3-constants/data/url.json'
 import RPC from '@masknet/web3-constants/data/rpc.json'
 import TokenAssetBaseURL from '@masknet/web3-constants/data/token-asset-base-url.json'
-import { hookTransform, transform } from './utils'
+import { hookTransform, transform, transformFromJSON } from './utils'
 
 export const getAirdropConstants = transform(Airdrop)
 export const useAirdropConstants = hookTransform(getAirdropConstants)
@@ -42,7 +42,7 @@ export const useTrendingConstants = hookTransform(getTrendingConstants)
 export const getURLConstants = transform(URL)
 export const useURLConstants = hookTransform(getURLConstants)
 
-export const getRPCConstants = transform(RPC)
+export const getRPCConstants = transformFromJSON(process.env.WEB3_CONSTANTS_RPC ?? '', RPC)
 export const useRPCConstants = hookTransform(getRPCConstants)
 
 export const getTokenAssetBaseURLConstants = transform(TokenAssetBaseURL)
