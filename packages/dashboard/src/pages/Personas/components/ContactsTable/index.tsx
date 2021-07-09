@@ -75,9 +75,9 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
                 identifier: profile.identifier,
                 avatar: profile.avatar,
             })),
-            (item) => item.favorite,
+            (item) => !item.favorite,
         ).slice((page - 1) * 20, page * 20)
-    }, [value])
+    }, [value, page])
 
     return (
         <ContactsTableUI

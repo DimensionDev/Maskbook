@@ -18,9 +18,6 @@ const useStyles = makeStyles(() => ({
     avatarContainer: {
         position: 'relative',
     },
-    name: {
-        marginLeft: 17,
-    },
     maskIcon: {
         position: 'absolute',
         width: 16,
@@ -31,6 +28,16 @@ const useStyles = makeStyles(() => ({
     button: {
         padding: '3px 24px',
         borderRadius: 14,
+    },
+    info: {
+        display: 'flex',
+        flexDirection: 'column',
+        marginLeft: 17,
+        justifyContent: 'space-between',
+    },
+    userId: {
+        fontSize: 12,
+        color: MaskColorVar.normalText,
     },
 }))
 
@@ -111,7 +118,10 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                             </Avatar>
                             {contact.fingerprint ? <MaskNetworkIcon className={classes.maskIcon} /> : null}
                         </Box>
-                        <Typography className={classes.name}>{contact.name}</Typography>
+                        <Box className={classes.info}>
+                            <Typography>{contact.name}</Typography>
+                            <Typography className={classes.userId}>@{contact.identifier.userId}</Typography>
+                        </Box>
                     </Box>
                 </TableCell>
                 <TableCell align="center">
