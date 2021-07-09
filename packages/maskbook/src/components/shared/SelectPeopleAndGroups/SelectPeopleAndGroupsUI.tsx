@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, CSSProperties } from 'react'
 import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 import type { Profile, Group } from '../../../database'
@@ -7,6 +7,7 @@ import { ProfileOrGroupInList, ProfileOrGroupInListProps } from './PersonOrGroup
 import { ProfileOrGroupInChip, ProfileOrGroupInChipProps } from './PersonOrGroupInChip'
 import { ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import { useStylesExtends } from '../../custom-ui-helper'
+import { FixedSizeList } from 'react-window'
 
 type ProfileOrGroup = Group | Profile
 export interface SelectProfileAndGroupsUIProps<ServeType extends Group | Profile = Group | Profile>
@@ -140,12 +141,21 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
                             <ListItemText primary={t('no_search_result')} />
                         </ListItem>
                     )}
-                    {listAfterSearch.map(PeopleListItem)}
+                    <FixedSizeList
+                        itemSize={56}
+                        itemCount={listAfterSearch.length}
+                        overscanCount={5}
+                        width="100%"
+                        height={400}>
+                        {({ index, style }) =>
+                            listAfterSearch[index] ? PeopleListItem(listAfterSearch[index], style) : null
+                        }
+                    </FixedSizeList>
                 </List>
             </Box>
         </div>
     )
-    function PeopleListItem(item: ProfileOrGroup) {
+    function PeopleListItem(item: ProfileOrGroup, style: CSSProperties) {
         if (ignoreMyself && myself && item.identifier.equals(myself.identifier)) return null
         return (
             <ProfileOrGroupInList
@@ -163,6 +173,7 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
                     else onSetSelected(selected.concat(item) as ServeType[])
                     setSearch('')
                 }}
+                ListItemProps={{ ...props.ProfileOrGroupInListProps?.ListItemProps, style }}
                 {...props.ProfileOrGroupInListProps}
             />
         )

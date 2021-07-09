@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { ListItem, Theme, ListItemAvatar, ListItemText } from '@material-ui/core'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import type { ListItemTypeMap } from '@material-ui/core/ListItem'
@@ -37,62 +37,95 @@ const useStyle = makeStyles((theme: Theme) => ({
 /**
  * Item in the list
  */
-export function ProfileOrGroupInList(props: ProfileOrGroupInListProps) {
-    const { t } = useI18N()
+export const ProfileOrGroupInList = memo<ProfileOrGroupInListProps>((props) => {
     const classes = useStylesExtends(useStyle(), props)
-    const nicknamePreviewsForGroup = useNickNamesFromList(isGroup(props.item) ? props.item.members : [])
-    const listFormat = useIntlListFormat()
 
     const { disabled, ListItemProps: listItemProps, onClick, showAtNetwork } = props
-    let name = ''
-    let avatar: ReturnType<typeof Avatar>
-    let secondaryText: string | undefined = undefined
-    const groupName = useResolveSpecialGroupName(props.item)
-    if (isGroup(props.item)) {
-        const group = props.item
-        name = groupName
-        avatar = (
-            <MuiAvatar>
-                <GroupIcon />
-            </MuiAvatar>
+
+    if (isGroup(props.item))
+        return (
+            <ListItem button disabled={disabled} onClick={onClick} {...listItemProps}>
+                <GroupListItemContent group={props.item} showAtNetwork={showAtNetwork} />
+            </ListItem>
         )
-        const joined = listFormat(nicknamePreviewsForGroup)
-        const groupSize = group.members.length
-        const data = { people: joined, count: groupSize }
-        if (groupSize === 0) {
-            secondaryText = t('person_or_group_in_list_0')
-        } else if (nicknamePreviewsForGroup.length === 0) {
-            secondaryText = t('person_or_group_in_list_many_no_preview', data)
-        } else if (groupSize > nicknamePreviewsForGroup.length) {
-            secondaryText = t('person_or_group_in_list_many', data)
-        } else {
-            secondaryText = joined
-        }
-    } else {
-        const person = props.item
-        name = person.nickname || person.identifier.userId
-        avatar = <Avatar person={person} />
-        secondaryText = person.linkedPersona?.fingerprint.toLowerCase()
-    }
-    const withNetwork = (
-        <>
-            {name}
-            <span className={classes.networkHint}> @ {props.item.identifier.network}</span>
-        </>
-    )
+
+    const name = props.item.nickname || props.item.identifier.userId
+
     return (
         <ListItem button disabled={disabled} onClick={onClick} {...listItemProps}>
-            <ListItemAvatar>{avatar}</ListItemAvatar>
+            <ListItemAvatar>
+                <Avatar person={props.item} />
+            </ListItemAvatar>
             <ListItemText
                 classes={{
                     root: classes.root,
                     primary: classes.overflow,
                     secondary: classes.overflow,
                 }}
-                primary={showAtNetwork ? withNetwork : name}
-                secondary={secondaryText}
+                primary={
+                    showAtNetwork ? (
+                        <>
+                            {name}
+                            <span className={classes.networkHint}> @ {props.item.identifier.network}</span>
+                        </>
+                    ) : (
+                        name
+                    )
+                }
+                secondary={props.item.linkedPersona?.fingerprint.toLowerCase()}
             />
         </ListItem>
+    )
+})
+
+function GroupListItemContent({ group, showAtNetwork }: { group: Group; showAtNetwork?: boolean }) {
+    const { t } = useI18N()
+    const classes = useStyle()
+    const nicknamePreviewsForGroup = useNickNamesFromList(group.members)
+    const listFormat = useIntlListFormat()
+    const groupName = useResolveSpecialGroupName(group)
+
+    const joined = listFormat(nicknamePreviewsForGroup)
+    const groupSize = group.members.length
+    const data = { people: joined, count: groupSize }
+
+    let secondaryText: string | undefined = undefined
+    if (groupSize === 0) {
+        secondaryText = t('person_or_group_in_list_0')
+    } else if (nicknamePreviewsForGroup.length === 0) {
+        secondaryText = t('person_or_group_in_list_many_no_preview', data)
+    } else if (groupSize > nicknamePreviewsForGroup.length) {
+        secondaryText = t('person_or_group_in_list_many', data)
+    } else {
+        secondaryText = joined
+    }
+
+    return (
+        <>
+            <ListItemAvatar>
+                <MuiAvatar>
+                    <GroupIcon />
+                </MuiAvatar>
+            </ListItemAvatar>
+            <ListItemText
+                classes={{
+                    root: classes.root,
+                    primary: classes.overflow,
+                    secondary: classes.overflow,
+                }}
+                primary={
+                    showAtNetwork ? (
+                        <>
+                            {groupName}
+                            <span className={classes.networkHint}> @ {group.identifier.network}</span>
+                        </>
+                    ) : (
+                        groupName
+                    )
+                }
+                secondary={secondaryText}
+            />
+        </>
     )
 }
 
