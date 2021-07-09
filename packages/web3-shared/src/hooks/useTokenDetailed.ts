@@ -1,9 +1,18 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { unreachable } from '@dimensiondev/kit'
-import { ERC20TokenDetailed, ERC721TokenDetailed, EthereumTokenDetailedType, EthereumTokenType } from '../types'
-import { useERC20TokenDetailed } from './useERC20TokenDetailed'
+import {
+    ERC20TokenDetailed,
+    ERC721TokenDetailed,
+    FungibleTokenDetailed,
+    EthereumTokenDetailedType,
+    FungibleToken,
+    NativeToken,
+    EthereumTokenType,
+    ERC20Token,
+} from '../types'
+import { useERC20TokenDetailed, useERC20TokensDetailed } from './useERC20TokenDetailed'
 import { useERC721TokenDetailed } from './useERC721TokenDetailed'
-import { useNativeTokenDetailed } from './useNativeTokenDetailed'
+import { useNativeTokenDetailed, useNativeTokensDetailed } from './useNativeTokenDetailed'
 
 export function useTokenDetailed<P extends EthereumTokenType, Q extends EthereumTokenDetailedType<P>>(
     type: P,
@@ -33,4 +42,35 @@ export function useTokenDetailed<P extends EthereumTokenType, Q extends Ethereum
         default:
             unreachable(type_)
     }
+}
+
+export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'address' | 'type'>[]) {
+    const nativeTokenOrders: number[] = []
+    const listOfNativeToken = listOfToken.filter((t, i) => {
+        if (t.type === EthereumTokenType.Native) {
+            nativeTokenOrders.push(i)
+            return true
+        }
+        return false
+    })
+    const listOfERC20Token = listOfToken.filter((t) => t.type === EthereumTokenType.ERC20)
+
+    const { value: nativeTokensDetailed = [], ...asyncNativeResult } = useNativeTokensDetailed(
+        listOfNativeToken as Pick<NativeToken, 'type' | 'address'>[],
+    )
+    const { value: erc20TokensDetailed = [], ...asyncErc20Result } = useERC20TokensDetailed(
+        listOfERC20Token as Pick<ERC20Token, 'type' | 'address'>[],
+    )
+
+    const asyncList = [asyncNativeResult, asyncErc20Result]
+
+    const tokensDetailed = erc20TokensDetailed
+
+    nativeTokenOrders.forEach((order, i) => tokensDetailed.splice(order, 0, nativeTokensDetailed[i]))
+
+    return {
+        value: tokensDetailed,
+        loading: asyncList.some((x) => x.loading),
+        error: asyncList.find((x) => !!x.error)?.error ?? null,
+    } as AsyncStateRetry<FungibleTokenDetailed[]>
 }
