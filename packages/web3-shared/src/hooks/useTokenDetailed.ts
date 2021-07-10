@@ -5,6 +5,7 @@ import {
     ERC721TokenDetailed,
     FungibleTokenDetailed,
     EthereumTokenDetailedType,
+    LoadingFailTokenDetailed,
     FungibleToken,
     NativeToken,
     EthereumTokenType,
@@ -72,5 +73,5 @@ export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'addr
         value: tokensDetailed,
         loading: asyncList.some((x) => x.loading),
         error: asyncList.find((x) => !!x.error)?.error ?? null,
-    } as AsyncStateRetry<FungibleTokenDetailed[]>
+    } as AsyncStateRetry<(FungibleTokenDetailed | LoadingFailTokenDetailed)[]>
 }

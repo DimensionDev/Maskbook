@@ -13,8 +13,10 @@ import {
     ERC721TokenAssetDetailed,
     EthereumTokenType,
     NativeTokenDetailed,
+    LoadingFailTokenDetailed,
     NetworkType,
 } from '../types'
+import { formatEthereumAddress } from '../utils'
 
 export function isSameAddress(addrA: string, addrB: string) {
     return addrA.toLowerCase() === addrB.toLowerCase()
@@ -178,6 +180,14 @@ export function createERC1155Token(
         uri,
         asset,
     }
+}
+
+export function createLoadingFailToken(address: string, chainId: ChainId, reason: PromiseRejectedResult['reason']) {
+    return {
+        address: formatEthereumAddress(address),
+        chainId,
+        reason,
+    } as LoadingFailTokenDetailed
 }
 
 export function createERC20Tokens(

@@ -1,13 +1,19 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { ERC20TokenDetailed, EthereumTokenType, ChainId, ERC20Token, FungibleTokenDetailed } from '../types'
+import type { ERC20TokenDetailed, ERC20Token, FungibleTokenDetailed, LoadingFailTokenDetailed } from '../types'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useChainId } from './useChainId'
 import type { ERC20 } from '@masknet/contracts/types/ERC20'
 import type { ERC20Bytes32 } from '@masknet/contracts/types/ERC20Bytes32'
 import { useERC20TokenContract, useERC20TokenContracts } from '../contracts/useERC20TokenContract'
 import { useERC20TokenBytes32Contract, useERC20TokenBytes32Contracts } from '../contracts/useERC20TokenBytes32Contract'
-import { formatEthereumAddress, parseStringOrBytes32 } from '../utils'
+import { parseStringOrBytes32, createLoadingFailToken, createERC20Token } from '../utils'
+
+export const LOADING_FAIL_TOKEN_NAME = 'TOKEN LOADING FAIL'
+
+export function checkTokenLoadingFailed(name: string) {
+    return name === LOADING_FAIL_TOKEN_NAME
+}
 
 export function useERC20TokenDetailed(address: string, token?: Partial<ERC20TokenDetailed>) {
     const chainId = useChainId()
@@ -27,7 +33,17 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
         return getToken(erc20TokenContract, erc20TokenBytes32Contract, token)
     }, [erc20TokenContract, erc20TokenBytes32Contract, token, chainId])
 
-    const tokenDetailed = useMemo(() => createTokenDetailed(address, _token, chainId), [_token, chainId])
+    const tokenDetailed = useMemo(
+        () =>
+            createERC20Token(
+                chainId,
+                address,
+                typeof _token.decimals === 'string' ? Number(_token.decimals) : _token.decimals,
+                parseStringOrBytes32(_token.name, _token.nameBytes32, 'Unknown Token'),
+                parseStringOrBytes32(_token.name, _token.nameBytes32, 'Unknown Token'),
+            ),
+        [_token, chainId],
+    )
 
     return {
         loading: asyncToken.loading,
@@ -38,19 +54,12 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
 
 export function useERC20TokensDetailed(listOfToken: Pick<ERC20Token, 'type' | 'address'>[]) {
     const chainId = useChainId()
-    const listOfAddress = listOfToken.map((t) => t.address)
+    const listOfAddress = useMemo(() => listOfToken.map((t) => t.address), [JSON.stringify(listOfToken)])
     const erc20TokenContracts = useERC20TokenContracts(listOfAddress)
     const erc20TokenBytes32Contracts = useERC20TokenBytes32Contracts(listOfAddress)
-    const initTokens = listOfToken.map((token) => ({
-        name: '',
-        address: token.address,
-        nameBytes32: '',
-        symbol: '',
-        symbolBytes32: '',
-        decimals: '0',
-    }))
-    const { value: tokens = initTokens, ...asyncTokens } = useAsyncRetry(async () => {
-        return await Promise.all(
+
+    const { value: tokens, ...asyncTokens } = useAsyncRetry(async () => {
+        return Promise.allSettled(
             listOfToken.map(async (token, i) => {
                 const erc20TokenContract = erc20TokenContracts[i]
                 const erc20TokenBytes32Contract = erc20TokenBytes32Contracts[i]
@@ -58,18 +67,38 @@ export function useERC20TokensDetailed(listOfToken: Pick<ERC20Token, 'type' | 'a
                 return { address: token.address, ..._token }
             }),
         )
-    }, [chainId, erc20TokenContracts, erc20TokenBytes32Contracts])
+    }, [
+        chainId,
+        JSON.stringify(erc20TokenContracts),
+        JSON.stringify(erc20TokenBytes32Contracts),
+        JSON.stringify(listOfToken),
+    ])
 
     const tokensDetailed = useMemo(
-        () => tokens.map((token) => (token ? createTokenDetailed(token.address, token, chainId) : null)),
-        [tokens, chainId],
+        () =>
+            tokens
+                ? tokens.map((token, i) =>
+                      token.status === 'fulfilled'
+                          ? createERC20Token(
+                                chainId,
+                                token.value.address,
+                                typeof token.value.decimals === 'string'
+                                    ? Number(token.value.decimals)
+                                    : token.value.decimals,
+                                parseStringOrBytes32(token.value.name, token.value.nameBytes32, 'Unknown Token'),
+                                parseStringOrBytes32(token.value.symbol, token.value.symbolBytes32, 'Unknown Token'),
+                            )
+                          : createLoadingFailToken(listOfToken[i].address, chainId, token.reason),
+                  )
+                : [],
+        [JSON.stringify(tokens), chainId],
     )
 
     return {
         loading: asyncTokens.loading,
         error: asyncTokens.error ?? null,
         value: tokensDetailed,
-    } as AsyncStateRetry<FungibleTokenDetailed[]>
+    } as AsyncStateRetry<(FungibleTokenDetailed | LoadingFailTokenDetailed)[]>
 }
 
 async function getToken(
@@ -83,25 +112,4 @@ async function getToken(
     const symbolBytes32 = await (erc20TokenBytes32Contract?.methods.symbol().call() ?? '')
     const decimals = token?.decimals ?? (await (erc20TokenContract?.methods.decimals().call() ?? '0'))
     return { name, nameBytes32, symbol, symbolBytes32, decimals }
-}
-
-function createTokenDetailed(
-    address: string,
-    token: {
-        name: string
-        nameBytes32: string
-        symbol: string
-        symbolBytes32: string
-        decimals: string | number
-    },
-    chainId: ChainId,
-) {
-    return {
-        type: EthereumTokenType.ERC20,
-        address: formatEthereumAddress(address),
-        chainId,
-        symbol: parseStringOrBytes32(token.symbol, token.symbolBytes32, 'UNKNOWN'),
-        name: parseStringOrBytes32(token.name, token.nameBytes32, 'Unknown Token'),
-        decimals: typeof token.decimals === 'string' ? Number.parseInt(token.decimals, 10) : token.decimals,
-    } as FungibleTokenDetailed
 }
