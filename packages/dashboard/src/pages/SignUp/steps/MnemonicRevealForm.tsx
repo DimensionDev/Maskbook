@@ -18,6 +18,7 @@ import RefreshIcon from '@material-ui/icons/Refresh'
 import { memo, useState } from 'react'
 import { some } from 'lodash-es'
 import { useSnackbar } from '@masknet/theme'
+import { useCreateIdentity } from '../../../hooks/useIndentity'
 
 const useStyles = makeStyles((theme) => ({
     refresh: {
@@ -33,16 +34,18 @@ enum CreateWalletStep {
 
 export const MnemonicRevealForm = memo(() => {
     const [step, setStep] = useState(CreateWalletStep.NameAndWords)
+    const [, createIdentity] = useCreateIdentity()
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar()
     const t = useDashboardI18N()
     const classes = useStyles()
     const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         if (words.join(' ') !== puzzleWords.join(' ')) {
-            enqueueSnackbar('test', { variant: 'error' })
+            enqueueSnackbar('Faild', { variant: 'error' })
         } else {
+            await createIdentity(words.join(' '))
             navigate(`${SignUpRoutePath.PersonaCreate}`, {
                 replace: true,
                 state: { words: words },

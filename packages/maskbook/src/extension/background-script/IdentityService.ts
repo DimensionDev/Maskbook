@@ -23,12 +23,15 @@ import { decompressBackupFile } from '../../utils/type-transform/BackupFileShort
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { PersonaInformation, ProfileInformation } from '@masknet/shared'
+import { createInternalSettings, InternalSettings } from '../../settings/createSettings'
 assertEnvironment(Environment.ManifestBackground)
 
 export { storeAvatar, queryAvatarDataURL } from '../../database'
 
 //#region Profile
 export { queryProfile, queryProfilePaged } from '../../database'
+
+export { createIdentityByMnemonic, queryIdentityByKey } from '../../database'
 
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)

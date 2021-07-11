@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 import { MaskTextField } from '@masknet/theme'
 import {
     Body,
@@ -12,19 +12,26 @@ import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { Button } from '@material-ui/core'
 import { ButtonGroup } from '../components/ActionGroup'
 import { useDashboardI18N } from '../../../locales'
-import { useCreatePersonaV2 } from '../../Personas/hooks/useCreatePersonaV2'
 import { SignUpRoutePath } from '../routePath'
 import { useSnackbarCallback } from '@masknet/shared'
+import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
+import { useIdentity } from '../../../hooks/useIndentity'
 
 export const PersonaCreate = () => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
-    const location = useLocation() as { state: { words: string[] } }
     const createPersona = useCreatePersonaV2()
     const [personaName, setPersonaName] = useState('')
+    const { loading, value: identity } = useIdentity()
+
+    useEffect(() => {
+        if (!loading && !identity) {
+            navigate(RoutePaths.SignUp)
+        }
+    }, [loading])
 
     const handleNext = useSnackbarCallback({
-        executor: () => createPersona(location.state?.words?.join(' ') ?? '', personaName),
+        executor: () => createPersona(identity?.mnemonic?.words ?? '', personaName),
         onSuccess: () => navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedial}`),
         onError: () => {
             navigate(`${RoutePaths.SignUp}`)

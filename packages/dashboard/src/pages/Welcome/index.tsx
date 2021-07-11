@@ -4,6 +4,7 @@ import { RoutePaths } from '../../type'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
+import { useIdentity } from '../../hooks/useIndentity'
 
 const Content = styled('div')(
     ({ theme }) => `
@@ -31,7 +32,14 @@ const IFrame = styled('iframe')(
 export default function Welcome() {
     const iframeRef = useRef<HTMLIFrameElement | null>(null)
     const navigate = useNavigate()
+    const { loading, value: currentIdentity } = useIdentity()
     const privacyPolicyURL = new URL('./en.html', import.meta.url).toString()
+
+    useEffect(() => {
+        if (currentIdentity) {
+            navigate(RoutePaths.Personas)
+        }
+    }, [loading])
 
     useEffect(
         () => () => {
@@ -52,7 +60,6 @@ export default function Welcome() {
     }
 
     const handleLinkClick = useCallback(() => {
-        console.log(RoutePaths.PrivacyPolicy)
         window.open(`next.html#${RoutePaths.PrivacyPolicy}`)
     }, [])
 
