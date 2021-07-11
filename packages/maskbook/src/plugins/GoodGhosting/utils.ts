@@ -30,6 +30,10 @@ export function getNextTimelineIndex(timeline: TimelineEvent[]) {
     return timeline.length - 1
 }
 
+export function getIsEndOfTimeline(timelineIndex: number, timeline: TimelineEvent[]) {
+    return timelineIndex === timeline.length - 1 && isBefore(timeline[timelineIndex].date, new Date())
+}
+
 export function getPlayerStandings(players: Player[], currentSegment: number) {
     let playerStandings: PlayerStandings = {
         winning: 0,
