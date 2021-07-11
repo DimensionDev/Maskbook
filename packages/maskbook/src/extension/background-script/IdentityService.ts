@@ -31,7 +31,7 @@ export { storeAvatar, queryAvatarDataURL } from '../../database'
 //#region Profile
 export { queryProfile, queryProfilePaged } from '../../database'
 
-export { createIdentityByMnemonic, queryIdentityByKey } from '../../database'
+export { createIdentityByMnemonic, recoverIdentityByMnemonic, queryIdentityByKey } from '../../database'
 
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)

@@ -1,12 +1,39 @@
-import { useRef, useState } from 'react'
 import { DesktopMnemonicConfirm } from '../Mnemonic'
+import { Services } from '../../API'
+import { useList } from 'react-use'
+import { Button } from '@material-ui/core'
+import { ControlContainer } from './index'
+import { useDashboardI18N } from '../../locales'
+import { useNavigate } from 'react-router'
+import { RoutePaths } from '../../type'
+import { some } from 'lodash-es'
 
 export const RestoreFromMnemonic = () => {
-    const [file, setFile] = useState<File | null>(null)
-    const values = useRef<Readonly<Record<string, string>>>({ length: 12 as any })
+    const t = useDashboardI18N()
+    const navigate = useNavigate()
+    const [values, { updateAt }] = useList(new Array(12).fill(''))
 
-    const handleOnChange = (word: string, index: number) => {
-        values.current = { ...values.current, [index]: word }
+    const handleSubmit = async () => {
+        try {
+            const identity = await Services.Identity.recoverIdentityByMnemonic(values.join(' '), '')
+            if (identity) {
+                Services.Identity.setCurrentIdentity(identity.identifier)
+                navigate(RoutePaths.Personas)
+            }
+        } catch (e) {
+            // todo: handle error
+        }
     }
-    return <DesktopMnemonicConfirm onChange={handleOnChange} puzzleWords={Array.from(values.current as any)} />
+
+    return (
+        <>
+            <DesktopMnemonicConfirm onChange={(word, index) => updateAt(index, word)} puzzleWords={values} />
+            <ControlContainer>
+                <Button color="secondary">{t.wallets_import_wallet_cancel()}</Button>
+                <Button color="primary" onClick={handleSubmit} disabled={some(values, (value) => !value)}>
+                    {t.wallets_import_wallet_import()}
+                </Button>
+            </ControlContainer>
+        </>
+    )
 }

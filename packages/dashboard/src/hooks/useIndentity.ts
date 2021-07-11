@@ -7,7 +7,6 @@ export const [useCurrentIdentity] = createGlobalState(Services.Identity.getCurre
 )
 export function useIdentity() {
     const currentIdentityInStore = useCurrentIdentity()
-
     return useAsync(() => Services.Identity.queryIdentityByKey(currentIdentityInStore), [currentIdentityInStore])
 }
 

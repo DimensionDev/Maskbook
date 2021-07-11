@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Button, experimentalStyled as styled, makeStyles } from '@material-ui/core'
+import { experimentalStyled as styled, makeStyles } from '@material-ui/core'
 import { useTabs } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { RestoreFromJson } from './RestoreFromJson'
@@ -14,7 +14,7 @@ const Container = styled('div')`
     align-items: center;
 `
 
-const ControlContainer = styled('div')(
+export const ControlContainer = styled('div')(
     ({ theme }) => `
     margin-top: ${theme.spacing(6)};
     display: grid;
@@ -47,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const Restore = memo(() => {
     const classes = useStyles()
-
     const t = useDashboardI18N()
 
     const tabs = useTabs(
@@ -71,10 +70,6 @@ export const Restore = memo(() => {
     return (
         <Container>
             {tabs}
-            <ControlContainer>
-                <Button color="secondary">{t.wallets_import_wallet_cancel()}</Button>
-                <Button color="primary">{t.wallets_import_wallet_import()}</Button>
-            </ControlContainer>
             <AlertContainer>
                 <MaskAlert description={t.sign_in_account_identity_warning()} />
             </AlertContainer>
