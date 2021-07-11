@@ -40,7 +40,7 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
                 address,
                 typeof _token.decimals === 'string' ? Number(_token.decimals) : _token.decimals,
                 parseStringOrBytes32(_token.name, _token.nameBytes32, 'Unknown Token'),
-                parseStringOrBytes32(_token.name, _token.nameBytes32, 'Unknown Token'),
+                parseStringOrBytes32(_token.symbol, _token.symbolBytes32, 'Unknown'),
             ),
         [_token, chainId],
     )
@@ -86,7 +86,7 @@ export function useERC20TokensDetailed(listOfToken: Pick<ERC20Token, 'type' | 'a
                                     ? Number(token.value.decimals)
                                     : token.value.decimals,
                                 parseStringOrBytes32(token.value.name, token.value.nameBytes32, 'Unknown Token'),
-                                parseStringOrBytes32(token.value.symbol, token.value.symbolBytes32, 'Unknown Token'),
+                                parseStringOrBytes32(token.value.symbol, token.value.symbolBytes32, 'Unknown'),
                             )
                           : createLoadingFailToken(listOfToken[i].address, chainId, token.reason),
                   )
