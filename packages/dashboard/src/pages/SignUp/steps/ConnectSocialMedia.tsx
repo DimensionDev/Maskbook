@@ -12,6 +12,8 @@ import { SetupActionCard } from '../../Setup'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 import { upperFirst } from 'lodash-es'
 import { TwitterIcon, FacebookIcon, InstagramIcon } from '@masknet/icons'
+import { ButtonGroup } from '../components/ActionGroup'
+import { Button } from '@material-ui/core'
 
 // icons maping
 const ICON_MAPPING = [
@@ -61,6 +63,14 @@ export const ConnectSocialMedia = () => {
                         />
                     ))}
                 </div>
+                <ButtonGroup>
+                    <Button color={'secondary'} onClick={() => navigate(-1)}>
+                        Back
+                    </Button>
+                    <Button color={'primary'} onClick={() => navigate(RoutePaths.Personas)}>
+                        Skip
+                    </Button>
+                </ButtonGroup>
             </Body>
             <Footer />
         </ColumnContentLayout>
