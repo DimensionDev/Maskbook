@@ -1,4 +1,4 @@
-import { formatBalance, resolveTokenLinkOnExplorer } from '@masknet/web3-shared'
+import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared'
 import { Grid, Link, makeStyles, Paper, Typography } from '@material-ui/core'
 import { isNative } from 'lodash-es'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -7,6 +7,7 @@ import type { RedPacketSettings } from './hooks/useCreateCallback'
 import LaunchIcon from '@material-ui/icons/Launch'
 import { FormattedBalance } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
+import { useEffect } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     link: {
@@ -35,13 +36,19 @@ const useStyles = makeStyles((theme) => ({
 export interface ConfirmRedPacketFormProps {
     onBack: () => void
     onCreate: () => void
+    onClose: () => void
     settings?: Omit<RedPacketSettings, 'password'>
 }
 
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const { t } = useI18N()
-    const { onBack, settings, onCreate } = props
+    const { onBack, settings, onCreate, onClose } = props
     const classes = useStyles()
+    const chainId = useChainId()
+
+    useEffect(() => {
+        if (settings?.token?.chainId !== chainId) onClose()
+    }, [chainId, onClose])
 
     return (
         <Grid container spacing={2} className={classes.grid}>
