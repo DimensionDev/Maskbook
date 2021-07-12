@@ -1,5 +1,5 @@
-import type { HappyRedPacketV2 } from '@masknet/contracts/types/HappyRedPacketV2'
-import type { PayableTx } from '@masknet/contracts/types/types'
+import type { HappyRedPacketV2 } from '@masknet/web3-contracts/types/HappyRedPacketV2'
+import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,

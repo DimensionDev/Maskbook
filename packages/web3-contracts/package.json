@@ -1,5 +1,5 @@
 {
-  "name": "@masknet/contracts",
+  "name": "@masknet/web3-contracts",
   "private": true,
   "scripts": {
     "start": "ts-node compile-contracts.ts"

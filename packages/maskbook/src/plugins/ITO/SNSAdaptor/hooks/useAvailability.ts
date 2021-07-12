@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { useAccount } from '@masknet/web3-shared'
-import type { ITO2 } from '@masknet/contracts/types/ITO2'
+import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
 import { useITO_Contract } from './useITO_Contract'
 
 export function useAvailability(id?: string, contract_address?: string) {
