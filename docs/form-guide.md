@@ -10,16 +10,21 @@ You can set error message with i18n, you can read this file to learn about [i18n
 
 ```js
 import { z as zod } from 'zod'
-const t = useI18n() // Set errror messge with i18n.
-const schema = zod.object({
-  name: zod.string(), // string
-  age: zod.number(t.needBeNumber).positive(t.needGreaterThanZero), // > 0
-  country: zod.string(t.countyNeedBeString).optional(), // string | undefiend
-  address: zod
-    .string()
-    .min(1)
-    .refine((address) => ValidAddress(address), t.InvalidAddress), // You can use other methods to validate this field
-})
+
+export function ComponentForm() {
+  const t = useI18n() // Set errror messge with i18n.
+  const schema = zod.object({
+    name: zod.string(), // string
+    age: zod.number(t.needBeNumber).positive(t.needGreaterThanZero), // > 0
+    country: zod.string(t.countyNeedBeString).optional(), // string | undefiend
+    address: zod
+      .string()
+      .min(1)
+      .refine((address) => ValidAddress(address), t.InvalidAddress), // You can use other methods to validate this field
+  })
+
+  // ...
+}
 ```
 
 ### 2. Call `useForm` to get the method collection
