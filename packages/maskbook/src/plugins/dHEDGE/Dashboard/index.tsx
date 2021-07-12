@@ -6,11 +6,7 @@ const dashboard: Plugin.Dashboard.Definition = {
     ...base,
     init(signal) {},
     GlobalInjection: function Component() {
-        return (
-            <>
-                <InvestDialog />
-            </>
-        )
+        return <InvestDialog />
     },
 }
 
