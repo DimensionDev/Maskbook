@@ -7,7 +7,7 @@ import {
     useNonce,
     useTransactionState,
 } from '@masknet/web3-shared'
-import type { NonPayableTx } from '@masknet/contracts/types/types'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import type { TransactionReceipt } from 'web3-core'
 
 export function useRefundCallback(version: number, from: string, id?: string) {

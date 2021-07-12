@@ -1,5 +1,5 @@
-import BalanceCheckerABI from '@masknet/contracts/abis/BalanceChecker.json'
-import type { BalanceChecker } from '@masknet/contracts/types/BalanceChecker'
+import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
+import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker'
 import type { AbiItem } from 'web3-utils'
 import { useEthereumConstants } from '../constants'
 import { useContract } from '../hooks/useContract'

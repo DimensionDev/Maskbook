@@ -1,5 +1,5 @@
-import ERC20ABI from '@masknet/contracts/abis/ERC20.json'
-import type { ERC20 } from '@masknet/contracts/types/ERC20'
+import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
+import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import type { AbiItem } from 'web3-utils'
 import { useContract } from '../hooks/useContract'
 

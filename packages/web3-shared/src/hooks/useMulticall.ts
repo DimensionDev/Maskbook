@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import type { AbiOutput } from 'web3-utils'
 import type { UnboxTransactionObject } from '../types'
-import type { BaseContract } from '@masknet/contracts/types/types'
+import type { BaseContract } from '@masknet/web3-contracts/types/types'
 import { useMulticallContract } from '../contracts/useMulticallContract'
 import { decodeOutputString } from '../utils'
 import { useWeb3 } from './useWeb3'
