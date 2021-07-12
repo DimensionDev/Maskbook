@@ -275,7 +275,7 @@ export function CreatePersona() {
                         }
                         inputProps={{
                             'data-testid': 'username_input',
-                            maxlength: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                            maxLength: WALLET_OR_PERSONA_NAME_MAX_LEN,
                         }}
                         variant="outlined"
                     />
