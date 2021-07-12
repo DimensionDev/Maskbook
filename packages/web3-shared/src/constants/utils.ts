@@ -28,6 +28,19 @@ export function transform<T extends Constants>(constants: T, environment: Record
     }
 }
 
+export function transformFromJSON<T extends Constants>(
+    json: string,
+    fallbackConstants: T,
+    environment: Record<string, string> = {},
+) {
+    try {
+        const constants = JSON.parse(json) as T
+        return transform(constants, environment)
+    } catch (e) {
+        return transform(fallbackConstants, environment)
+    }
+}
+
 export function hookTransform<T>(getConstants: (chainId: ChainId) => T) {
     return function useConstants(chainId?: ChainId) {
         const current = useChainId()

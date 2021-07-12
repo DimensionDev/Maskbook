@@ -12,12 +12,6 @@
             "symbol": "ETH",
             "decimals": 18
         },
-        "rpc": [
-            "https://damp-holy-water.quiknode.pro/d5bcb6c5e265afd11fecb0d52275afa961487a29/",
-            "https://mainnet.infura.io/v3/50676f4e9b9d4780a34fc8a503ff7f4f",
-            "https://throbbing-blue-bird.quiknode.io/73e66978-1a45-4f91-97f3-25d59b51a00e/YScEAjYfzZqNphokjzn-Zt3sZsOd0Nav5sauA3j03se0LOseR8PQFyBfINzhYStWrg44VfLLfCFE34FR2CA_kQ==/"
-        ],
-        "rpcWeights": [0, 1, 1, 2],
         "faucets": [],
         "explorers": [
             {
@@ -41,8 +35,6 @@
             "symbol": "ROP",
             "decimals": 18
         },
-        "rpc": ["https://ropsten.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5"],
-        "rpcWeights": [0, 0, 0, 0],
         "faucets": ["https://faucet.ropsten.be?${ADDRESS}"],
         "explorers": [
             {
@@ -66,8 +58,6 @@
             "symbol": "RIN",
             "decimals": 18
         },
-        "rpc": ["https://rinkeby.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5"],
-        "rpcWeights": [0, 0, 0, 0],
         "faucets": ["https://faucet.rinkeby.io"],
         "explorers": [
             {
@@ -91,8 +81,6 @@
             "symbol": "KOV",
             "decimals": 18
         },
-        "rpc": ["https://kovan.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5"],
-        "rpcWeights": [0, 0, 0, 0],
         "faucets": ["https://faucet.kovan.network", "https://gitter.im/kovan-testnet/faucet"],
         "explorers": [
             {
@@ -116,8 +104,6 @@
             "symbol": "GOR",
             "decimals": 18
         },
-        "rpc": ["https://goerli.infura.io/v3/11f8b6b36f4a408e85d8a4e52d31edc5"],
-        "rpcWeights": [0, 0, 0, 0],
         "faucets": ["https://goerli-faucet.slock.it/?address=${ADDRESS}", "https://faucet.goerli.mudit.blog"],
         "explorers": [
             {
@@ -141,8 +127,6 @@
             "symbol": "BNB",
             "decimals": 18
         },
-        "rpc": ["https://bsc-dataseed.binance.org/"],
-        "rpcWeights": [0, 0, 0, 0],
         "faucets": [],
         "explorers": [
             {
@@ -166,8 +150,6 @@
             "symbol": "tBNB",
             "decimals": 18
         },
-        "rpc": ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-        "rpcWeights": [0, 0, 0, 0],
         "faucets": ["https://testnet.binance.org/faucet-smart"],
         "explorers": [
             {
@@ -191,8 +173,6 @@
             "symbol": "MATIC",
             "decimals": 18
         },
-        "rpc": ["https://polygon-mainnet.infura.io/v3/50676f4e9b9d4780a34fc8a503ff7f4f"],
-        "rpcWeights": [0, 0, 0, 0],
         "faucets": [],
         "explorers": [
             {
@@ -216,8 +196,6 @@
             "symbol": "tMATIC",
             "decimals": 18
         },
-        "rpc": ["https://polygon-mumbai.infura.io/v3/50676f4e9b9d4780a34fc8a503ff7f4f"],
-        "rpcWeights": [0, 0, 0, 0],
         "faucets": ["https://faucet.matic.network/"],
         "explorers": [
             {

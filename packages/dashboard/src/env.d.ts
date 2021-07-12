@@ -35,5 +35,10 @@ declare module NodeJS {
         BRANCH_NAME: string
         DIRTY: boolean
         TAG_DIRTY: boolean
+
+        /**
+         * Web3 Constants
+         */
+        WEB3_CONSTANTS_RPC: string
     }
 }
