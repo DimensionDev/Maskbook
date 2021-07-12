@@ -26,7 +26,7 @@ import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit } from 'lodash-es'
 import { RedPacketRPC } from '../messages'
-import { ConfirmRedPacketForm } from './confirmRedPacketForm'
+import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 
 enum CreateRedPacketPageStep {
     NewRedPacketPage = 'new',
@@ -228,7 +228,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             <DialogContent>
                 {step === CreateRedPacketPageStep.NewRedPacketPage ? <AbstractTab height={320} {...tabProps} /> : null}
                 {step === CreateRedPacketPageStep.ConfirmPage ? (
-                    <ConfirmRedPacketForm onBack={onBack} onCreate={createCallback} settings={settings} />
+                    <RedPacketConfirmDialog onBack={onBack} onCreate={createCallback} settings={settings} />
                 ) : null}
             </DialogContent>
         </InjectedDialog>

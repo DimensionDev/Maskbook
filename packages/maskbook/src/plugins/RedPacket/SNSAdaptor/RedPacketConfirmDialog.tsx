@@ -38,7 +38,7 @@ export interface ConfirmRedPacketFormProps {
     settings?: Omit<RedPacketSettings, 'password'>
 }
 
-export function ConfirmRedPacketForm(props: ConfirmRedPacketFormProps) {
+export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const { t } = useI18N()
     const { onBack, settings, onCreate } = props
     const classes = useStyles()
