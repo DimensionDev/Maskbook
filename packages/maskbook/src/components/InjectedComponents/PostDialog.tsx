@@ -29,23 +29,18 @@ import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import {
     TypedMessage,
     extractTextFromTypedMessage,
-    renderWithMetadataUntyped,
     makeTypedMessageText,
     isTypedMessageText,
 } from '../../protocols/typed-message'
 import { EthereumTokenType, isDAI, isOKB } from '@masknet/web3-shared'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
-import { PluginUI } from '../../plugins/PluginUI'
 import { Result } from 'ts-results'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
-import { PluginStage } from '../../plugins/types'
 import { editActivatedPostMetadata, globalTypedMessageMetadata } from '../../protocols/typed-message/global-state'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { SteganographyTextPayload } from './SteganographyTextPayload'
-
-const defaultTheme = {}
 
 const useStyles = makeStyles({
     MUIInputRoot: {
@@ -115,45 +110,10 @@ export function PostDialogUI(props: PostDialogUIProps) {
     }
 
     if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
-    const oldMetadataBadge = [...PluginUI].flatMap((plugin) =>
-        Result.wrap(() => {
-            const knownMeta = plugin.postDialogMetadataBadge
-            if (!knownMeta) return undefined
-            return [...knownMeta.entries()].map(([metadataKey, tag]) => {
-                return renderWithMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
-                    <MetaBadge key={metadataKey} meta={metadataKey} title={`Provided by plugin "${plugin.pluginName}"`}>
-                        {tag(r)}
-                    </MetaBadge>
-                ))
-            })
-        }).unwrapOr(null),
-    )
-    const oldPluginEntries = [...PluginUI].flatMap((plugin) =>
-        Result.wrap(() => {
-            const entries = plugin.postDialogEntries
-            if (!entries) return null
-            return entries.map((opt, index) => {
-                return (
-                    <ErrorBoundary subject={`Plugin "${plugin.pluginName}"`} key={plugin.identifier + ' ' + index}>
-                        <ClickableChip
-                            label={
-                                <>
-                                    {opt.label}
-                                    {plugin.stage === PluginStage.Beta && <sup className={classes.sup}>(Beta)</sup>}
-                                </>
-                            }
-                            onClick={opt.onClick}
-                        />
-                    </ErrorBoundary>
-                )
-            })
-        }).unwrapOr(null),
-    )
     return (
         <InjectedDialog open={props.open} onClose={props.onCloseButtonClicked} title={t('post_dialog__title')}>
             <DialogContent>
                 <BadgeRenderer meta={props.postContent.meta} />
-                {oldMetadataBadge}
                 <InputBase
                     classes={{
                         root: classes.MUIInputRoot,
@@ -178,7 +138,6 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         flexWrap: 'wrap',
                     }}>
                     <PluginRenderer />
-                    {oldPluginEntries}
                 </Box>
                 <Typography style={{ marginBottom: 10 }}>{t('post_dialog__select_recipients_title')}</Typography>
                 <Box
