@@ -115,7 +115,6 @@ export default function DashboardContactsRouter() {
     const [searchUI, setSearchUI] = useState('')
     const [searchContactDialog, , openSearchContactDialog] = useModal(DashboardContactSearchDialog)
 
-    console.log(items)
     const actions = [
         <TextField
             placeholder={t('search')}

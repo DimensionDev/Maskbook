@@ -4,7 +4,7 @@ import { Services } from '../../../API'
 
 export function useAddContactToFavorite() {
     return useAsyncFn(async (identifier: ProfileIdentifier) => {
-        Services.Identity.updateProfileInfo(identifier, {
+        await Services.Identity.updateProfileInfo(identifier, {
             favorite: true,
         })
     }, [])
@@ -12,7 +12,7 @@ export function useAddContactToFavorite() {
 
 export function useRemoveContactFromFavorite() {
     return useAsyncFn(async (identifier: ProfileIdentifier) => {
-        Services.Identity.updateProfileInfo(identifier, {
+        await Services.Identity.updateProfileInfo(identifier, {
             favorite: false,
         })
     })
