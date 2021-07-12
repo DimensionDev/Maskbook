@@ -29,21 +29,18 @@ export function ComponentForm() {
 
 ### 2. Call `useForm` to get the method collection
 
-```js
+```tsx
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-const methods =
-  useForm <
-  formType >
-  {
-    resolver: zodResolver(schema),
-    defaultValues: {
-      name: '',
-      age: 1,
-      address: '',
-    },
-  }
+const methods = useForm<formType>({
+  resolver: zodResolver(schema),
+  defaultValues: {
+    name: '',
+    age: 1,
+    address: '',
+  },
+})
 ```
 
 `react-hook-form` provides [optional argumenjs](https://react-hook-form.com/api/useform) and you can change to meet your expectations
