@@ -136,7 +136,7 @@ async function updateWalletInDB(address: string, name: string = 'WalletConnect',
 
     // update chain account
     await updateAccount({
-        account: (setAsDefault || providerType === ProviderType.WalletConnect) ? address : undefined,
+        account: setAsDefault || providerType === ProviderType.WalletConnect ? address : undefined,
         providerType: setAsDefault ? ProviderType.WalletConnect : undefined,
     })
 }

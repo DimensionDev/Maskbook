@@ -89,7 +89,7 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
 
     // update chain account
     await updateAccount({
-        account: (setAsDefault || providerType === ProviderType.MetaMask) ? address : undefined,
+        account: setAsDefault || providerType === ProviderType.MetaMask ? address : undefined,
         providerType: setAsDefault ? ProviderType.MetaMask : undefined,
     })
 }
