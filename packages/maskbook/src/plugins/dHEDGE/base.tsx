@@ -7,7 +7,7 @@ export const base: Plugin.Shared.Definition = {
     icon: <DHEDGEIcon />,
     name: { fallback: 'dHEDGE' },
     description: { fallback: 'Decentralized hedge funds on Ethereum.' },
-    publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
+    publisher: { name: { fallback: 'iRhonin' }, link: 'https://github.com/iRhonin' },
     enableRequirement: {
         architecture: { app: false, web: true },
         networks: { type: 'opt-out', networks: {} },
