@@ -8,15 +8,15 @@ We use [`react-hook-form`](https://react-hook-form.com/) and [`zod`](https://git
 
 You can set error message with i18n, you can read this file to learn about [i18n](i18n-guide.md)
 
-```js
+```tsx
 import { z as zod } from 'zod'
 
 export function ComponentForm() {
-  const t = useI18n() // Set errror messge with i18n.
+  const t = useComponentI18N() // Set errror messge with i18n.
   const schema = zod.object({
     name: zod.string(), // string
-    age: zod.number(t.needBeNumber).positive(t.needGreaterThanZero), // > 0
-    country: zod.string(t.countyNeedBeString).optional(), // string | undefiend
+    age: zod.number(t.needBeNumber()).positive(t.needGreaterThanZero()), // > 0
+    country: zod.string(t.countyNeedBeString()).optional(), // string | undefiend
     address: zod
       .string()
       .min(1)
