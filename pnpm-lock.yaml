@@ -238,7 +238,7 @@ importers:
       '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/stego-js': '=0.11.1-20201027083223-8ab41be'
-      '@dimensiondev/webextension-shim': 0.0.3-20201120022530-b318b89
+      '@dimensiondev/webextension-shim': 0.0.3-20210708053012-57a254d
       '@ethersproject/address': ^5.0.4
       '@ethersproject/contracts': ^5.0.4
       '@ethersproject/networks': ^5.0.4
@@ -507,7 +507,7 @@ importers:
       webextension-polyfill: 0.8.0
       z-schema: 5.0.1
     devDependencies:
-      '@dimensiondev/webextension-shim': 0.0.3-20201120022530-b318b89_typescript@4.3.5
+      '@dimensiondev/webextension-shim': 0.0.3-20210708053012-57a254d_typescript@4.3.5
       '@pmmmwh/react-refresh-webpack-plugin': 0.5.0-rc.0_dae7018c5b5576f32207b1e2608a9d18
       '@sinonjs/text-encoding': 0.7.1
       '@testing-library/react-hooks': 7.0.0_1959de3a9153879cff3acd96b46ed70f
@@ -3607,14 +3607,15 @@ packages:
       meow: 7.1.1
     dev: false
 
-  /@dimensiondev/webextension-shim/0.0.3-20201120022530-b318b89_typescript@4.3.5:
-    resolution: {integrity: sha512-f8Rmnc4RUTrBVMS7+edMu/J3S5pkM2DOY4nff5SHZKkDQUP5ES1/1YNkks2rXkeiVuyUTKbokKIV3o8XoeaNLw==, tarball: download/@dimensiondev/webextension-shim/0.0.3-20201120022530-b318b89/7cb726fb8ffa9cde3fa59a32c44c9ea981ba4820742bfaffc7e23e41a28bfffa}
+  /@dimensiondev/webextension-shim/0.0.3-20210708053012-57a254d_typescript@4.3.5:
+    resolution: {integrity: sha512-0O0Nc3j2Vxo9Gfvgeq8pWuMHKMSU3tDjRnzE0U5oWvYoY+ZO61NniKp4xf/C+J6Py6lhQFutjd2tqlporqRwlw==, tarball: download/@dimensiondev/webextension-shim/0.0.3-20210708053012-57a254d/a2ee1bed40822a7f6b9c60ce4296930c9bab00828e82637aa56060498a135ac7}
     hasBin: true
     peerDependencies:
       typescript: ^3.8.3
     dependencies:
       async-call-rpc: 4.2.1
-      systemjs: 6.8.3
+      buffer: 6.0.3
+      systemjs: 6.3.2
       typescript: 4.3.5
       web-ext-types: 3.2.1
     dev: true
@@ -10938,7 +10939,6 @@ packages:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
-    dev: false
 
   /bufferutil/4.0.3:
     resolution: {integrity: sha512-yEYTwGndELGvfXsImMBLop58eaGW+YdONi1fNjTINSY98tmMmFijBG6WXgdkfuLNt4imzQNtIE+eBp1PVpMCSw==}
@@ -23329,8 +23329,8 @@ packages:
       object.getownpropertydescriptors: 2.1.2
     dev: true
 
-  /systemjs/6.8.3:
-    resolution: {integrity: sha512-UcTY+FEA1B7e+bpJk1TI+a9Na6LG7wFEqW7ED16cLqLuQfI/9Ri0rsXm3tKlIgNoHyLHZycjdAOijzNbzelgwA==}
+  /systemjs/6.3.2:
+    resolution: {integrity: sha512-zcALS1RIYtsQBG4fbaE+cJzKx+UoEuSM8xCkGGH99i7p7Ym3ALvhi9QrpF2lo0CMQaejqrE1GnbkuG2m/+H7ew==}
     dev: true
 
   /table/6.0.9:

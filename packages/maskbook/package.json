@@ -120,7 +120,7 @@
     "z-schema": "^5.0.1"
   },
   "devDependencies": {
-    "@dimensiondev/webextension-shim": "0.0.3-20201120022530-b318b89",
+    "@dimensiondev/webextension-shim": "0.0.3-20210708053012-57a254d",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.0-rc.0",
     "@sinonjs/text-encoding": "^0.7.1",
     "@testing-library/react-hooks": "^7.0.0",
