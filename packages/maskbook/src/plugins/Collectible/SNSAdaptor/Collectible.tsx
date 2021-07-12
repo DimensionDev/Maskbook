@@ -16,6 +16,7 @@ import {
 import { Trans } from 'react-i18next'
 import { findIndex } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
+import isValidDate from 'date-fns/isValid'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { useI18N, useSettingsSwticher } from '../../../utils'
@@ -300,7 +301,7 @@ export function Collectible(props: CollectibleProps) {
                     </div>
                 </CardActions>
             </CollectibleCard>
-            {asset.value?.end_time && (
+            {asset.value?.end_time && isValidDate(asset.value.end_time) && (
                 <Box sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
                         {t('plugin_collectible_sale_end', {
