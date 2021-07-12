@@ -3,7 +3,7 @@ import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import WalletConnect from '@walletconnect/client'
 import type { IJsonRpcRequest } from '@walletconnect/types'
-import { ProviderType, getNetworkTypeFromChainId, NetworkType, ChainId } from '@masknet/web3-shared'
+import { ProviderType, NetworkType, ChainId } from '@masknet/web3-shared'
 import * as Maskbook from '../providers/Maskbook'
 import { updateAccount, updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
@@ -87,10 +87,10 @@ export async function requestAccounts() {
 
 const onConnect = async () => {
     if (!connector?.accounts.length) return
-    await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, true)
     await updateAccount({
         chainId: connector.chainId,
     })
+    await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, true)
 }
 
 const onUpdate = async (
@@ -104,10 +104,10 @@ const onUpdate = async (
 ) => {
     if (error) return
     if (!connector?.accounts.length) return
-    await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, false)
     await updateAccount({
         chainId: connector.chainId,
     })
+    await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, false)
 }
 
 const onDisconnect = async (error: Error | null) => {

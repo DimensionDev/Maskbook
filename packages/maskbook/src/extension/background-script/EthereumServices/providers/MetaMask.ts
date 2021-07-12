@@ -3,7 +3,7 @@ import type { provider as Provider } from 'web3-core'
 import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
-import { ChainId, getNetworkTypeFromChainId, NetworkType, ProviderType } from '@masknet/web3-shared'
+import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared'
 import { updateAccount, updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import { currentIsMetamaskLockedSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 

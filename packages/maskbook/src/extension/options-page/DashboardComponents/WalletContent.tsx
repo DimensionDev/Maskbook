@@ -191,11 +191,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
 
     return (
         <div className={classes.root} ref={ref}>
-            {!chainIdValid ? (
-                <Alert className={classes.alert} severity="warning">
-                    {t('plugin_wallet_wrong_network_tip')}
-                </Alert>
-            ) : null}
             <Box
                 className={classes.caption}
                 sx={{
