@@ -43,7 +43,7 @@ const methods = useForm<formType>({
 })
 ```
 
-`react-hook-form` provides [optional argumenjs](https://react-hook-form.com/api/useform) and you can change to meet your expectations
+`react-hook-form` provides [optional argumenjs](https://react-hook-form.com/api/useform), you can change it on demand.
 
 ### 3. Create form UI with `Controller` and Material-UI component
 
