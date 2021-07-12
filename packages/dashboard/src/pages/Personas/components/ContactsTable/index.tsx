@@ -132,7 +132,7 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
                                         <ContactTableRow
                                             key={index}
                                             contact={item}
-                                            index={index + 1}
+                                            index={(page - 1) * 20 + index + 1}
                                             network={network}
                                         />
                                     ))}
