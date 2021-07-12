@@ -23,7 +23,6 @@ async function onChainIdChanged(id: string) {
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
     await updateAccount({
         chainId,
-        networkType: getNetworkTypeFromChainId(chainId),
     })
 }
 

@@ -29,7 +29,6 @@ export async function updateChainState(chainId?: ChainId) {
     if (chainId)
         await updateAccount({
             chainId,
-            networkType: getNetworkTypeFromChainId(chainId),
         })
 
     // update chain state

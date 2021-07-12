@@ -1,4 +1,10 @@
-import { ChainId, ProviderType, NetworkType } from '@masknet/web3-shared'
+import {
+    ChainId,
+    ProviderType,
+    NetworkType,
+    getNetworkTypeFromChainId,
+    getChainIdFromNetworkType,
+} from '@masknet/web3-shared'
 import {
     currentAccountSettings,
     currentChainIdSettings,
@@ -16,6 +22,9 @@ export async function updateAccount(
 ) {
     console.log('DEBUG: update account')
     console.log(options)
+
+    if (!options?.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
+    if (options?.chainId && !options?.networkType) options.networkType = getNetworkTypeFromChainId(options.chainId)
     if (options?.account) currentAccountSettings.value = options?.account
     if (options?.chainId) currentChainIdSettings.value = options?.chainId
     if (options?.providerType) currentProviderSettings.value = options?.providerType

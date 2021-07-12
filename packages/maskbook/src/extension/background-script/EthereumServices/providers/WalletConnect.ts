@@ -90,7 +90,6 @@ const onConnect = async () => {
     await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, true)
     await updateAccount({
         chainId: connector.chainId,
-        networkType: getNetworkTypeFromChainId(connector.chainId),
     })
 }
 
@@ -108,7 +107,6 @@ const onUpdate = async (
     await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, false)
     await updateAccount({
         chainId: connector.chainId,
-        networkType: getNetworkTypeFromChainId(connector.chainId),
     })
 }
 
