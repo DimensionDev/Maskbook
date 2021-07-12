@@ -111,7 +111,7 @@ export function getNetworkTypeFromChainId(chainId: ChainId) {
         case 'Matic':
             return NetworkType.Polygon
         default:
-            throw new Error('Unknown chain id.')
+            return
     }
 }
 //#endregion

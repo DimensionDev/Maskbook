@@ -20,6 +20,7 @@ async function onChainIdChanged(id: string) {
     const chainId_ = Number.parseInt(id, 16)
     const chainId = chainId_ === 0 ? ChainId.Mainnet : chainId_
     currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked())
+    if (currentProviderSettings.value !== ProviderType.MetaMask) return
     await updateAccount({
         chainId,
         networkType: getNetworkTypeFromChainId(chainId),

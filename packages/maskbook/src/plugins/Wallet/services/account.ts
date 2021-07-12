@@ -14,6 +14,8 @@ export async function updateAccount(
         providerType?: ProviderType
     } = {},
 ) {
+    console.log('DEBUG: update account')
+    console.log(options)
     if (options?.account) currentAccountSettings.value = options?.account
     if (options?.chainId) currentChainIdSettings.value = options?.chainId
     if (options?.providerType) currentProviderSettings.value = options?.providerType
