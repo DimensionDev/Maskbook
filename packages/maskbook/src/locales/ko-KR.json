@@ -909,5 +909,10 @@
     "popups_password_do_not_match": "잘못된 백업 비밀번호",
     "popups_backup_password": "백업 비밀번호",
     "popups_rename_error_tip": "최대 길이는 {{length}} 자입니다.",
-    "nft_button_set_avatar": "NFT 아바타 설정"
+    "nft_button_set_avatar": "NFT 아바타 설정",
+    "plugin_augur_market_not_found": "",
+    "plugin_augur_loading": "",
+    "plugin_augur_smt_wrong": "",
+    "plugin_augur_tab_description": "",
+    "plugin_augur_tab_chart": ""
 }

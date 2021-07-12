@@ -12,9 +12,7 @@ export function useMarketURL(address: string) {
 
 export function useMarketUrlPattern() {
     const baseURL = useBaseUrl()
-    const a = new RegExp(`${escapeRegExp(baseURL.concat('/#!/market?id='))}(\\w+)`)
-    console.log(a)
-    return a
+    return new RegExp(`${escapeRegExp(baseURL.concat('/#!/market?id='))}([x0-9A-Fa-f-]+$)`)
 }
 
 export function useIsMarketUrl() {
