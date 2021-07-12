@@ -180,6 +180,13 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
         }
     }, [tabIndex, classes, wallet, transactionType])
 
+    if (!chainIdValid)
+        return <div className={classes.root} ref={ref}>
+            <Alert className={classes.alert} severity="warning">
+                {t('plugin_wallet_wrong_network_tip')}
+            </Alert>
+        </div>
+
     return (
         <div className={classes.root} ref={ref}>
             {!chainIdValid ? (
