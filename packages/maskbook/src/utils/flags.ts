@@ -31,11 +31,8 @@ export const Flags = {
     /** Prohibit the use of test networks in production */
     wallet_allow_testnet: betaOrInsiderOnly || process.env.NODE_ENV !== 'production',
     transak_enabled: webOnly,
-    trader_enabled: true,
     trader_zrx_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
-    ito_enabled: webOnly,
-    dhedge_enabled: webOnly,
     metamask_support_enabled: webOnly,
     toolbox_enabled: webOnly,
     wallet_mnemonic_words_backup_enabled: false,

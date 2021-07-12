@@ -6,10 +6,6 @@ import type { PluginConfig } from './types'
 const plugins = new Set<PluginConfig>()
 export const PluginUI: ReadonlySet<PluginConfig> = plugins
 
-import { Flags } from '../utils/flags'
 import { sideEffect } from '../utils/side-effects'
-import { DHedgePluginDefine } from './dHEDGE/define'
 
-sideEffect.then(() => {
-    if (Flags.dhedge_enabled) plugins.add(DHedgePluginDefine)
-})
+sideEffect.then(() => {})
