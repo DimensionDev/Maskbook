@@ -14,5 +14,5 @@ export function useNativeTokensDetailed(listOfToken: Pick<NativeToken, 'address'
 
     return useAsyncRetry(async (): Promise<FungibleTokenDetailed[]> => {
         return listOfToken.map(() => createNativeToken(chainId))
-    }, [chainId])
+    }, [chainId, JSON.stringify(listOfToken)])
 }

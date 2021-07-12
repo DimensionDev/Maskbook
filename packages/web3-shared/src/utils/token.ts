@@ -182,8 +182,14 @@ export function createERC1155Token(
     }
 }
 
-export function createLoadingFailToken(address: string, chainId: ChainId, reason: PromiseRejectedResult['reason']) {
+export function createLoadingFailToken(
+    address: string,
+    chainId: ChainId,
+    type: EthereumTokenType,
+    reason: PromiseRejectedResult['reason'],
+) {
     return {
+        type,
         address: formatEthereumAddress(address),
         chainId,
         reason,

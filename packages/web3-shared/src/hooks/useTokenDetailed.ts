@@ -47,13 +47,14 @@ export function useTokenDetailed<P extends EthereumTokenType, Q extends Ethereum
 
 export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'address' | 'type'>[]) {
     const nativeTokenOrders: number[] = []
-    const listOfNativeToken = listOfToken.filter((t, i) => {
-        if (t.type === EthereumTokenType.Native) {
-            nativeTokenOrders.push(i)
-            return true
-        }
-        return false
-    })
+    const listOfNativeToken = listOfToken
+        .map((t, i) => {
+            if (t.type === EthereumTokenType.Native) {
+                nativeTokenOrders.push(i)
+            }
+            return t
+        })
+        .filter((t) => t.type === EthereumTokenType.Native)
     const listOfERC20Token = listOfToken.filter((t) => t.type === EthereumTokenType.ERC20)
 
     const { value: nativeTokensDetailed = [], ...asyncNativeResult } = useNativeTokensDetailed(
@@ -65,12 +66,10 @@ export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'addr
 
     const asyncList = [asyncNativeResult, asyncErc20Result]
 
-    const tokensDetailed = erc20TokensDetailed
-
-    nativeTokenOrders.forEach((order, i) => tokensDetailed.splice(order, 0, nativeTokensDetailed[i]))
+    nativeTokenOrders.forEach((order, i) => erc20TokensDetailed.splice(order, 0, nativeTokensDetailed[i]))
 
     return {
-        value: tokensDetailed,
+        value: erc20TokensDetailed,
         loading: asyncList.some((x) => x.loading),
         error: asyncList.find((x) => !!x.error)?.error ?? null,
     } as AsyncStateRetry<(FungibleTokenDetailed | LoadingFailTokenDetailed)[]>

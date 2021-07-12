@@ -1,6 +1,12 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { ERC20TokenDetailed, ERC20Token, FungibleTokenDetailed, LoadingFailTokenDetailed } from '../types'
+import {
+    ERC20TokenDetailed,
+    ERC20Token,
+    FungibleTokenDetailed,
+    LoadingFailTokenDetailed,
+    EthereumTokenType,
+} from '../types'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useChainId } from './useChainId'
 import type { ERC20 } from '@masknet/contracts/types/ERC20'
@@ -8,12 +14,6 @@ import type { ERC20Bytes32 } from '@masknet/contracts/types/ERC20Bytes32'
 import { useERC20TokenContract, useERC20TokenContracts } from '../contracts/useERC20TokenContract'
 import { useERC20TokenBytes32Contract, useERC20TokenBytes32Contracts } from '../contracts/useERC20TokenBytes32Contract'
 import { parseStringOrBytes32, createLoadingFailToken, createERC20Token } from '../utils'
-
-export const LOADING_FAIL_TOKEN_NAME = 'TOKEN LOADING FAIL'
-
-export function checkTokenLoadingFailed(name: string) {
-    return name === LOADING_FAIL_TOKEN_NAME
-}
 
 export function useERC20TokenDetailed(address: string, token?: Partial<ERC20TokenDetailed>) {
     const chainId = useChainId()
@@ -59,20 +59,16 @@ export function useERC20TokensDetailed(listOfToken: Pick<ERC20Token, 'type' | 'a
     const erc20TokenBytes32Contracts = useERC20TokenBytes32Contracts(listOfAddress)
 
     const { value: tokens, ...asyncTokens } = useAsyncRetry(async () => {
-        return Promise.allSettled(
+        const r = await Promise.allSettled(
             listOfToken.map(async (token, i) => {
                 const erc20TokenContract = erc20TokenContracts[i]
                 const erc20TokenBytes32Contract = erc20TokenBytes32Contracts[i]
-                const _token = await getToken(erc20TokenContract, erc20TokenBytes32Contract, token)
-                return { address: token.address, ..._token }
+                const _token = getToken(erc20TokenContract, erc20TokenBytes32Contract, token)
+                return _token
             }),
         )
-    }, [
-        chainId,
-        JSON.stringify(erc20TokenContracts),
-        JSON.stringify(erc20TokenBytes32Contracts),
-        JSON.stringify(listOfToken),
-    ])
+        return r
+    }, [chainId, JSON.stringify(listOfAddress)])
 
     const tokensDetailed = useMemo(
         () =>
@@ -88,7 +84,12 @@ export function useERC20TokensDetailed(listOfToken: Pick<ERC20Token, 'type' | 'a
                                 parseStringOrBytes32(token.value.name, token.value.nameBytes32, 'Unknown Token'),
                                 parseStringOrBytes32(token.value.symbol, token.value.symbolBytes32, 'Unknown'),
                             )
-                          : createLoadingFailToken(listOfToken[i].address, chainId, token.reason),
+                          : createLoadingFailToken(
+                                listOfToken[i].address,
+                                chainId,
+                                EthereumTokenType.ERC20,
+                                token.reason,
+                            ),
                   )
                 : [],
         [JSON.stringify(tokens), chainId],
@@ -111,5 +112,5 @@ async function getToken(
     const symbol = token?.symbol ?? (await (erc20TokenContract?.methods.symbol().call() ?? ''))
     const symbolBytes32 = await (erc20TokenBytes32Contract?.methods.symbol().call() ?? '')
     const decimals = token?.decimals ?? (await (erc20TokenContract?.methods.decimals().call() ?? '0'))
-    return { name, nameBytes32, symbol, symbolBytes32, decimals }
+    return { name, nameBytes32, symbol, symbolBytes32, decimals, address: token?.address ?? '' }
 }

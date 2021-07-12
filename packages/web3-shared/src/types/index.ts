@@ -152,6 +152,7 @@ export type NonFungibleTokenDetailed = ERC721TokenDetailed | ERC1155TokenDetaile
 
 //#region loading fail token
 export interface LoadingFailTokenDetailed {
+    type: EthereumTokenType
     address: string
     chainId: ChainId
     reason: PromiseRejectedResult['reason']
