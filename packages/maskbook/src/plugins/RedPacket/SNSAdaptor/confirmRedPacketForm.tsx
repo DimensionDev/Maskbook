@@ -9,16 +9,26 @@ import { FormattedBalance } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) => ({
-    link: {},
+    link: {
+        display: 'flex',
+        marginLeft: theme.spacing(0.5),
+    },
     grid: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
     },
     hit: {
+        fontSize: 14,
+        fontWeight: 300,
+        borderRadius: 8,
         backgroundColor: theme.palette.divider,
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
+        padding: theme.spacing(1, 0),
         marginBottom: theme.spacing(1),
+    },
+    token: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
     },
 }))
 
@@ -46,10 +56,11 @@ export function ConfirmRedPacketForm(props: ConfirmRedPacketFormProps) {
                 </Typography>
             </Grid>
             <Grid item xs={6}>
-                <Typography variant="body1" color="textPrimary" align="right">
-                    {settings?.token?.symbol}
+                <Typography variant="body1" color="textPrimary" align="right" className={classes.token}>
+                    <span>{settings?.token?.symbol}</span>
                     {isNative(settings?.token?.address!) ? null : (
                         <Link
+                            color="textPrimary"
                             className={classes.link}
                             href={resolveTokenLinkOnExplorer(settings?.token!)}
                             target="_blank"
