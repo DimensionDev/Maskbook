@@ -63,8 +63,9 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         }
 
         // request ethereum-compatiable network
-        if (getNetworkTypeFromChainId(expectedChainId) === NetworkType.Ethereum)
-            await Services.Ethereum.switchEthereumChain(expectedChainId)
+        const networkType = getNetworkTypeFromChainId(expectedChainId)
+        if (!networkType) return
+        if (networkType === NetworkType.Ethereum) await Services.Ethereum.switchEthereumChain(expectedChainId)
         else await Services.Ethereum.addEthereumChain(chainDetailedCAIP, account)
     }, [account, isAllowed, isSwitchable, providerType, expectedChainId])
 

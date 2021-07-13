@@ -1,4 +1,4 @@
-import { ChainId, getNetworkTypeFromChainId, ProviderType } from '@masknet/web3-shared'
+import { ChainId, ProviderType } from '@masknet/web3-shared'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
 import { pollingTask, startEffects } from '../../../utils'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
@@ -29,7 +29,6 @@ export async function updateChainState(chainId?: ChainId) {
     if (chainId)
         await updateAccount({
             chainId,
-            networkType: getNetworkTypeFromChainId(chainId),
         })
 
     // update chain state

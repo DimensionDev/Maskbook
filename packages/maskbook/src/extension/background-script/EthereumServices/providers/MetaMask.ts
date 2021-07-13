@@ -3,7 +3,7 @@ import type { provider as Provider } from 'web3-core'
 import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
-import { ChainId, getNetworkTypeFromChainId, NetworkType, ProviderType } from '@masknet/web3-shared'
+import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared'
 import { updateAccount, updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
 import { currentIsMetamaskLockedSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 
@@ -20,9 +20,9 @@ async function onChainIdChanged(id: string) {
     const chainId_ = Number.parseInt(id, 16)
     const chainId = chainId_ === 0 ? ChainId.Mainnet : chainId_
     currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked())
+    if (currentProviderSettings.value !== ProviderType.MetaMask) return
     await updateAccount({
         chainId,
-        networkType: getNetworkTypeFromChainId(chainId),
     })
 }
 
@@ -89,7 +89,7 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
 
     // update chain account
     await updateAccount({
+        account: setAsDefault || providerType === ProviderType.MetaMask ? address : undefined,
         providerType: setAsDefault ? ProviderType.MetaMask : undefined,
-        account: setAsDefault || providerType === ProviderType.MetaMask ? ProviderType.MetaMask : undefined,
     })
 }
