@@ -1,9 +1,16 @@
-import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared'
+import {
+    formatBalance,
+    resolveTokenLinkOnExplorer,
+    useChainId,
+    useNetworkType,
+    NetworkType,
+} from '@masknet/web3-shared'
 import { Grid, Link, makeStyles, Paper, Typography } from '@material-ui/core'
 import { isNative } from 'lodash-es'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../../utils'
-import type { RedPacketSettings } from './hooks/useCreateCallback'
+import { Flags, useI18N } from '../../../utils'
+import { RedPacketSettings, useCreateParams } from './hooks/useCreateCallback'
+import { TxFeeEstimation } from '../../../web3/UI/TxFeeEstimation'
 import LaunchIcon from '@material-ui/icons/Launch'
 import { FormattedBalance } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
@@ -31,6 +38,27 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
+    data: {
+        textAlign: 'right',
+        color: theme.palette.text.primary,
+    },
+    label: {
+        textAlign: 'left',
+        color: theme.palette.text.secondary,
+    },
+    button: {
+        padding: theme.spacing(2),
+    },
+    gasEstimation: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        cursor: 'pointer',
+        '& > p': {
+            marginRight: 5,
+            color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
+        },
+    },
 }))
 
 export interface ConfirmRedPacketFormProps {
@@ -45,6 +73,9 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const { onBack, settings, onCreate, onClose } = props
     const classes = useStyles()
     const chainId = useChainId()
+    const networkType = useNetworkType()
+    const contract_version = networkType === NetworkType.Ethereum ? 2 : 3
+    const paramsResult = useCreateParams(settings, contract_version)
 
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()
@@ -134,7 +165,9 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                     />
                 </Typography>
             </Grid>
-
+            {Flags.wallet_gas_price_dialog_enable && paramsResult?.gas ? (
+                <TxFeeEstimation classes={classes} gas={paramsResult?.gas} />
+            ) : null}
             <Grid item xs={12}>
                 <Paper className={classes.hit}>
                     <Typography variant="body1" color="textPrimary" align="center">
