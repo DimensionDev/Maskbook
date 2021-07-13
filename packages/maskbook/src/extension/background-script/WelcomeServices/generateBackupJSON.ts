@@ -14,6 +14,8 @@ import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupForm
 import { ProfileIdentifier, PersonaIdentifier, Identifier } from '../../../database/type'
 import { getWallets } from '../../../plugins/Wallet/services'
 import { WalletRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
+import { activatedPluginsWorker } from '@masknet/plugin-infra'
+import { timeout } from '@masknet/shared'
 
 export type { BackupPreview } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 export interface BackupOptions {
@@ -22,6 +24,7 @@ export interface BackupOptions {
     noWallets: boolean
     noPersonas: boolean
     noProfiles: boolean
+    noPlugins: boolean
     hasPrivateKeyOnly: boolean
     filter: { type: 'persona'; wanted: PersonaIdentifier[] }
 }
@@ -31,6 +34,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     const wallets: BackupJSONFileLatest['wallets'] = []
     const profiles: BackupJSONFileLatest['profiles'] = []
     const userGroups: BackupJSONFileLatest['userGroups'] = []
+    const plugins: NonNullable<BackupJSONFileLatest['plugin']> = {}
 
     if (!opts.filter) {
         if (!opts.noPersonas) await backupPersonas()
@@ -49,8 +53,9 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     if (!opts.noUserGroups) await backupAllUserGroups()
     if (!opts.noPosts) await backupAllPosts()
     if (!opts.noWallets) await backupAllWallets()
+    if (!opts.noPlugins) await backupAllPlugins()
 
-    return {
+    const file: BackupJSONFileLatest = {
         _meta_: {
             createdAt: Date.now(),
             maskbookVersion: browser.runtime.getManifest().version,
@@ -64,6 +69,8 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         profiles,
         userGroups,
     }
+    if (Object.keys(plugins).length) file.plugin = plugins
+    return file
 
     async function backupAllPosts() {
         posts.push(...(await queryPostsDB(() => true)).map(PostRecordToJSONFormat))
@@ -101,6 +108,29 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     async function backupAllWallets() {
         const wallets_ = (await getWallets(ProviderType.Maskbook)).map(WalletRecordToJSONFormat)
         wallets.push(...wallets_)
+    }
+
+    async function backupAllPlugins() {
+        await Promise.all(
+            [...activatedPluginsWorker]
+                // generate backup
+                .map(async (plugin) => {
+                    const f = plugin.backup?.onBackup
+                    if (!f) return
+
+                    async function backupPlugin() {
+                        const object = await timeout(f!(), 3000)
+                        if (object.none) return
+                        // We limit the plugin contributed backups must be simple objects.
+                        // We may allow plugin to store binary if we're moving to binary backup format like messagepack.
+                        plugins[plugin.ID] = object.map(JSON.stringify).map(JSON.parse).val
+                    }
+                    if (process.env.NODE_ENV === 'development') return backupPlugin()
+                    return backupPlugin().catch((e) =>
+                        console.error(`[@masknet/plugin-infra] Plugin ${plugin.ID} failed to backup`, e),
+                    )
+                }),
+        )
     }
 }
 

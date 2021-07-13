@@ -81,6 +81,7 @@ export interface BackupJSONFileVersion2 {
         updatedAt: number // Unix timestamp
     }>
     grantedHostPermissions: string[]
+    plugin?: Record<string, any>
 }
 
 export function isBackupJSONFileVersion2(obj: object): obj is BackupJSONFileVersion2 {
