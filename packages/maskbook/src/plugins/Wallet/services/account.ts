@@ -20,6 +20,8 @@ export async function updateAccount(
         providerType?: ProviderType
     } = {},
 ) {
+    console.debug('DEBUG: update account')
+    console.debug(options)
     if (!options?.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
     if (options?.chainId && !options?.networkType) options.networkType = getNetworkTypeFromChainId(options.chainId)
     if (options?.account) currentAccountSettings.value = options?.account

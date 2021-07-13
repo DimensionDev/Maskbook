@@ -87,10 +87,7 @@ export async function requestAccounts() {
 
 const onConnect = async () => {
     if (!connector?.accounts.length) return
-    await updateAccount({
-        chainId: connector.chainId,
-    })
-    await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, true)
+    await updateWalletInDB(first(connector.accounts) ?? '', connector.chainId, connector.peerMeta?.name, true)
 }
 
 const onUpdate = async (
@@ -104,10 +101,7 @@ const onUpdate = async (
 ) => {
     if (error) return
     if (!connector?.accounts.length) return
-    await updateAccount({
-        chainId: connector.chainId,
-    })
-    await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, false)
+    await updateWalletInDB(first(connector.accounts) ?? '', connector.chainId, connector.peerMeta?.name, false)
 }
 
 const onDisconnect = async (error: Error | null) => {
@@ -120,7 +114,12 @@ const onDisconnect = async (error: Error | null) => {
     })
 }
 
-async function updateWalletInDB(address: string, name: string = 'WalletConnect', setAsDefault: boolean = false) {
+async function updateWalletInDB(
+    address: string,
+    chainId?: ChainId,
+    name: string = 'WalletConnect',
+    setAsDefault: boolean = false,
+) {
     const providerType = currentProviderSettings.value
 
     // validate address
@@ -135,6 +134,7 @@ async function updateWalletInDB(address: string, name: string = 'WalletConnect',
     // update chain account
     await updateAccount({
         account: setAsDefault || providerType === ProviderType.WalletConnect ? address : undefined,
+        chainId,
         providerType: setAsDefault ? ProviderType.WalletConnect : undefined,
     })
 }

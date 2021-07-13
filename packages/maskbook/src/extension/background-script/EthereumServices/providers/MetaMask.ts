@@ -60,22 +60,15 @@ export function createWeb3() {
 
 export async function requestAccounts() {
     const web3 = createWeb3()
-
-    // update accounts
     const accounts = await web3.eth.requestAccounts()
-    await updateWalletInDB(first(accounts) ?? '', true)
-
-    // update chain id
     const chainId = await web3.eth.getChainId()
-    onChainIdChanged(chainId.toString(16))
-
     return {
         chainId,
         accounts,
     }
 }
 
-async function updateWalletInDB(address: string, setAsDefault: boolean = false) {
+async function updateWalletInDB(address: string, chainId?: ChainId, setAsDefault: boolean = false) {
     const providerType = currentProviderSettings.value
 
     // validate address
@@ -90,6 +83,7 @@ async function updateWalletInDB(address: string, setAsDefault: boolean = false) 
     // update chain account
     await updateAccount({
         account: setAsDefault || providerType === ProviderType.MetaMask ? address : undefined,
+        chainId,
         providerType: setAsDefault ? ProviderType.MetaMask : undefined,
     })
 }
