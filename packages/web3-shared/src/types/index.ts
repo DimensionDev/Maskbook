@@ -150,15 +150,6 @@ export type NonFungibleToken = ERC721Token | ERC1155Token
 export type NonFungibleTokenDetailed = ERC721TokenDetailed | ERC1155TokenDetailed
 //#endregion
 
-//#region loading fail token
-export interface LoadingFailTokenDetailed {
-    type: EthereumTokenType
-    address: string
-    chainId: ChainId
-    reason: PromiseRejectedResult['reason']
-}
-//#endregion
-
 interface TokenDetailedMap {
     [EthereumTokenType.Native]: NativeTokenDetailed
     [EthereumTokenType.ERC20]: ERC20TokenDetailed
