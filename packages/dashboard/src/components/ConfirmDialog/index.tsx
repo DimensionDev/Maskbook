@@ -1,22 +1,5 @@
 import { MaskDialog } from '@masknet/theme'
-import {
-    DialogContent,
-    DialogActions,
-    Button,
-    dialogContentClasses,
-    experimentalStyled as styled,
-    buttonClasses,
-} from '@material-ui/core'
-
-const StyledDialogContent = styled(DialogContent)(() => ({
-    [`&.${dialogContentClasses.root}`]: {
-        paddingLeft: 90,
-        paddingRight: 90,
-        minHeight: 168,
-        display: 'flex',
-        alignItems: 'center',
-    },
-}))
+import { DialogContent, DialogActions, Button, experimentalStyled as styled, buttonClasses } from '@material-ui/core'
 
 const StyledButton: typeof Button = styled(Button)(() => ({
     [`&.${buttonClasses.root}`]: {
@@ -30,6 +13,7 @@ export interface ConfirmDialogProps extends React.PropsWithChildren<{}> {
     cancelText?: React.ReactNode | string
     confirmText?: React.ReactNode | string
     confirmDisabled?: boolean
+    maxWidth?: false | 'sm' | 'xs' | 'md' | 'lg' | 'xl' | undefined
     onClose(): void
     onConfirm(): void
 }
@@ -41,13 +25,14 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
         onClose,
         onConfirm,
         children,
+        maxWidth = 'sm',
         cancelText = 'Cancel',
         confirmText = 'Confirm',
         confirmDisabled = false,
     } = props
     return (
-        <MaskDialog title={title} fullWidth maxWidth="sm" open={open} onClose={onClose}>
-            <StyledDialogContent>{children}</StyledDialogContent>
+        <MaskDialog title={title} fullWidth maxWidth={maxWidth} open={open} onClose={onClose}>
+            <DialogContent>{children}</DialogContent>
             <DialogActions>
                 <StyledButton onClick={onClose} color="secondary">
                     {cancelText}
