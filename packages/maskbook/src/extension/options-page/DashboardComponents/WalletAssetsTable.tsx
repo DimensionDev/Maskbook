@@ -116,6 +116,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                         classes={{ icon: classes.coin }}
                         name={asset.token.name}
                         address={asset.token.address}
+                        logoURI={asset.token.logoURI}
                         chainId={getChainIdFromName(asset.chain)}
                     />
                     <Typography className={classes.name}>{asset.token.symbol}</Typography>
