@@ -7,6 +7,7 @@ import {
     getTokenConstants,
     isSameAddress,
     useBlockie,
+    useChainId,
     useTokenAssetBaseURLConstants,
 } from '@masknet/web3-shared'
 import { Avatar, AvatarProps, makeStyles, Theme } from '@material-ui/core'
@@ -48,14 +49,11 @@ export interface TokenIconProps extends withClasses<never> {
 
 export function TokenIcon(props: TokenIconProps) {
     const { address, logoURI, name, chainId, AvatarProps, classes } = props
+    const _chainId = useChainId()
     let _logoURI = logoURI
 
-    if (
-        !logoURI &&
-        chainId &&
-        isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, formatEthereumAddress(address))
-    ) {
-        const nativeToken = getChainDetailed(chainId)
+    if (!logoURI && isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, formatEthereumAddress(address))) {
+        const nativeToken = getChainDetailed(chainId ?? _chainId)
         _logoURI = nativeToken?.nativeCurrency.logoURI
     }
 
@@ -67,7 +65,7 @@ export function TokenIcon(props: TokenIconProps) {
         ? Array.isArray(_logoURI)
             ? [..._logoURI, ...fallbackLogos]
             : [_logoURI, ...fallbackLogos]
-        : []
+        : fallbackLogos
     const { value: trustedLogoURI, loading } = useImageFailOver(images, '')
 
     return (
