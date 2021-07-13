@@ -14,7 +14,7 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
-import { Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { I18NStringField, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 import { useValueRef } from '@masknet/shared'
 import { CompositionEvent, MaskMessage, useI18N, Flags } from '../../utils'
 import { isMinds } from '../../social-network-adaptor/minds.com/base'
@@ -41,6 +41,7 @@ import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { editActivatedPostMetadata, globalTypedMessageMetadata } from '../../protocols/typed-message/global-state'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { SteganographyTextPayload } from './SteganographyTextPayload'
+import { PluginI18NFieldRender, usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 
 const useStyles = makeStyles({
     MUIInputRoot: {
@@ -457,6 +458,7 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
 
 function PluginRenderer() {
     const chainIdValid = useChainIdValid()
+    const pluginField = usePluginI18NField()
     const result = useActivatedPluginsSNSAdaptor().map((plugin) =>
         Result.wrap(() => {
             const entry = plugin.CompositionDialogEntry
@@ -465,7 +467,7 @@ function PluginRenderer() {
             if (!entry || (!chainIdValid && requireChainValid)) return null
 
             return (
-                <ErrorBoundary subject={`Plugin "${plugin.name.fallback}"`} key={plugin.ID}>
+                <ErrorBoundary subject={`Plugin "${pluginField(plugin.ID, plugin.name)}"`} key={plugin.ID}>
                     {'onClick' in entry ? (
                         <PluginKindCustom {...entry} unstable={unstable} id={plugin.ID} />
                     ) : (
@@ -479,6 +481,7 @@ function PluginRenderer() {
 }
 function BadgeRenderer({ meta }: { meta: TypedMessage['meta'] }) {
     const plugins = useActivatedPluginsSNSAdaptor()
+    const i18n = usePluginI18NField()
     if (!meta) return null
     const metadata = [...meta.entries()]
     return (
@@ -489,10 +492,12 @@ function BadgeRenderer({ meta }: { meta: TypedMessage['meta'] }) {
                     if (!render) return null
 
                     if (typeof render === 'function') {
-                        if (process.env.NODE_ENV === 'development')
-                            return normalizeBadgeDescriptor(key, plugin, render(key, value))
+                        if (process.env.NODE_ENV === 'development') {
+                            // crash early in dev
+                            return normalizeBadgeDescriptor(key, plugin, render(key, value), i18n)
+                        }
                         try {
-                            return normalizeBadgeDescriptor(key, plugin, render(key, value))
+                            return normalizeBadgeDescriptor(key, plugin, render(key, value), i18n)
                         } catch (e) {
                             console.error(e)
                             return null
@@ -500,10 +505,12 @@ function BadgeRenderer({ meta }: { meta: TypedMessage['meta'] }) {
                     } else {
                         const f = render.get(key)
                         if (!f) return null
-                        if (process.env.NODE_ENV === 'development')
-                            return normalizeBadgeDescriptor(key, plugin, f(value))
+                        if (process.env.NODE_ENV === 'development') {
+                            // crash early in dev
+                            return normalizeBadgeDescriptor(key, plugin, f(value), i18n)
+                        }
                         try {
-                            return normalizeBadgeDescriptor(key, plugin, f(value))
+                            return normalizeBadgeDescriptor(key, plugin, f(value), i18n)
                         } catch (e) {
                             console.error(e)
                             return null
@@ -518,9 +525,10 @@ function normalizeBadgeDescriptor(
     meta: string,
     plugin: Plugin.SNSAdaptor.Definition,
     desc: Plugin.SNSAdaptor.BadgeDescriptor | string | null,
+    i18n: (id: string, field: I18NStringField) => string,
 ) {
     if (!desc) return null
-    if (typeof desc === 'string') desc = { text: desc, tooltip: `Provided by plugin "${plugin.name.fallback}"` }
+    if (typeof desc === 'string') desc = { text: desc, tooltip: `Provided by plugin "${i18n(plugin.ID, plugin.name)}"` }
     return (
         <MetaBadge key={meta + ';' + plugin.ID} title={desc.tooltip || ''} meta={meta}>
             {desc.text}
@@ -538,11 +546,7 @@ function MetaBadge({ title, children, meta: key }: React.PropsWithChildren<{ tit
         </Box>
     )
 }
-function renderLabel(label: Plugin.SNSAdaptor.CompositionDialogEntry['label']): React.ReactNode {
-    if (!label) return null
-    if (typeof label === 'object' && 'fallback' in label) return label.fallback
-    return label
-}
+
 type ExtraPluginProps = { unstable: boolean; id: string }
 function PluginKindCustom(props: Plugin.SNSAdaptor.CompositionDialogEntryCustom & ExtraPluginProps) {
     const classes = useStyles()
@@ -552,7 +556,7 @@ function PluginKindCustom(props: Plugin.SNSAdaptor.CompositionDialogEntryCustom 
         <ClickableChip
             label={
                 <>
-                    {renderLabel(label)}
+                    <PluginI18NFieldRender field={label} pluginID={id} />
                     {unstable && <sup className={classes.sup}>(Beta)</sup>}
                 </>
             }
@@ -572,7 +576,7 @@ function PluginKindDialog(props: Plugin.SNSAdaptor.CompositionDialogEntryDialog 
         <ClickableChip
             label={
                 <>
-                    {renderLabel(label)}
+                    <PluginI18NFieldRender field={label} pluginID={id} />
                     {unstable && <sup className={classes.sup}>(Beta)</sup>}
                 </>
             }

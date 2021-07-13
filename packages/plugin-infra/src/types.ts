@@ -193,7 +193,7 @@ export namespace Plugin.SNSAdaptor {
          * A label that will be rendered in the CompositionDialog as a chip.
          * @example {fallback: "🧧 Red Packet"}
          */
-        label: I18NStringField | React.ReactNode
+        label: I18NFieldOrReactNode
         /** This callback will be called when the user clicked on the chip. */
         onClick(): void
     }
@@ -202,7 +202,7 @@ export namespace Plugin.SNSAdaptor {
          * A label that will be rendered in the CompositionDialog as a chip.
          * @example {fallback: "🧧 Red Packet"}
          */
-        label: I18NStringField | React.ReactNode
+        label: I18NFieldOrReactNode
         /** A React dialog component that receives `open` and `onClose`. The dialog will be opened when the chip clicked. */
         dialog: React.ComponentType<CompositionDialogEntry_DialogProps>
         /**
@@ -306,6 +306,7 @@ export interface I18NStringField {
     /** The fallback content to display if there is no i18n string found. */
     fallback: string
 }
+export type I18NFieldOrReactNode = I18NStringField | React.ReactNode
 
 /**
  * The current running SocialNetwork.
