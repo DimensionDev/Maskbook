@@ -1,7 +1,7 @@
-import { queryUserGroupDatabase } from '../group'
-import { GroupIdentifier } from '../type'
-import { createDefaultFriendsGroup } from '../helpers/group'
-import { queryMyProfiles } from '../../extension/background-script/IdentityService'
+import { queryUserGroupDatabase } from '../../../../database/group'
+import { GroupIdentifier } from '@masknet/shared'
+import { createDefaultFriendsGroup } from '../../UserGroupService'
+import { queryMyProfiles } from '../../IdentityService'
 
 /**
  * If an identity has no default user group, create one
