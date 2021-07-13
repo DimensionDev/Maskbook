@@ -4,9 +4,6 @@ import {
     FungibleTokenDetailed,
     resolveTokenLinkOnExplorer,
     useTokenConstants,
-    useTokenDetailed,
-    EthereumTokenType,
-    isSameAddress,
 } from '@masknet/web3-shared'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
@@ -78,15 +75,9 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
 
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
 
-    const _token = data.tokens[index]
-
-    const { value: token } = useTokenDetailed(
-        isSameAddress(NATIVE_TOKEN_ADDRESS, _token.address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
-        _token.address,
-    )
-
-    if (!token) return null
+    const token = data.tokens[index]
     const { address, name, symbol, logoURI } = token
+
     return (
         <ListItem
             button
