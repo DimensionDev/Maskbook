@@ -9,11 +9,12 @@ import SyncIcon from '@material-ui/icons/Sync'
 import SaveIcon from '@material-ui/icons/Save'
 import SaveAltIcon from '@material-ui/icons/SaveAlt'
 import PermIdentityIcon from '@material-ui/icons/PermIdentity'
-import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone'
 import LogoutIcon from '@material-ui/icons/Logout'
 
 import { useDashboardI18N } from '../../locales'
+
+import PasswordSettingItem from './components/PasswordSettingItem'
 
 import LanguageSetting from './components/LanguageSetting'
 import AppearanceSetting from './components/AppearanceSetting'
@@ -22,7 +23,6 @@ import RestoreSetting from './components/RestoreSetting'
 import MobileSyncSetting from './components/MobileSyncSetting'
 import EmailSetting from './components/EmailSetting'
 import PhoneNumberSetting from './components/PhoneNumberSetting'
-import PasswordSetting from './components/PasswordSetting'
 import LogoutSetting from './components/LogoutSetting'
 import DataSourceSetting from './components/DataSourceSetting'
 
@@ -31,6 +31,7 @@ import { UserProvider } from './hooks/UserContext'
 
 export default function Settings() {
     const t = useDashboardI18N()
+
     return (
         <PageFrame title={t.settings()} noBackgroundFill>
             <UserProvider>
@@ -74,12 +75,8 @@ export default function Settings() {
                             desc={t.settings_restore_database_desc()}>
                             <RestoreSetting />
                         </SettingItem>
-                        <SettingItem
-                            icon={<VpnKeyIcon />}
-                            title={t.settings_change_passowrd_title()}
-                            desc={t.settings_change_passowrd_desc()}>
-                            <PasswordSetting />
-                        </SettingItem>
+
+                        <PasswordSettingItem />
                     </SettingCard>
 
                     <SettingCard title={t.settings_profile()}>
