@@ -248,7 +248,7 @@ export interface Asset {
     value?: {
         [key in CurrencyType]: string
     }
-    logoURL?: string
+    logoURI?: string
 }
 
 export enum PortfolioProvider {
