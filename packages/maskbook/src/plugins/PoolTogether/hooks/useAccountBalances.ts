@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useAccount, useMutlipleContractSingleData } from '@masknet/web3-shared'
 import { usePoolTogetherTicketContracts } from '../contracts/usePoolTogetherTicket'
-import type { PoolTogetherTicket } from '@masknet/contracts/types/PoolTogetherTicket'
+import type { PoolTogetherTicket } from '@masknet/web3-contracts/types/PoolTogetherTicket'
 import { useAsyncRetry } from 'react-use'
 import type { AccountPool, Pool } from '../types'
 
