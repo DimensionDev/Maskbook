@@ -5,7 +5,7 @@ import { formatEthereumAddress, formatBalance, useTokenDetailed, EthereumTokenTy
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
-import type { JSON_PayloadOutMask } from '../types'
+import type { JSON_PayloadComposeMask } from '../types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { CompositionDialog } from './CompositionDialog'
@@ -45,18 +45,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
 }
 
-function onAttached_ITO(payload: JSON_PayloadOutMask) {
+function onAttached_ITO(payload: JSON_PayloadComposeMask) {
     return { text: <Badge payload={payload} /> }
 }
 interface BadgeProps {
-    payload: JSON_PayloadOutMask
+    payload: JSON_PayloadComposeMask
 }
 function Badge({ payload }: BadgeProps) {
     const classes = useStyles()
-    const { value: tokenDetailed, loading: loadingToken } = useTokenDetailed(
-        EthereumTokenType.ERC20,
-        payload.token as string,
-    )
+    const { value: tokenDetailed, loading: loadingToken } = useTokenDetailed(EthereumTokenType.ERC20, payload.token)
     const balance = formatBalance(payload.total, tokenDetailed?.decimals)
     const symbol = tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
     const sellerName = payload.seller.name

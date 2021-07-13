@@ -14,8 +14,6 @@ import {
     useChainId,
     useChainIdValid,
     useTokenConstants,
-    useTokenDetailed,
-    EthereumTokenType,
     ZERO,
 } from '@masknet/web3-shared'
 import { Box, Card, Grid, Link, makeStyles, Theme, Typography } from '@material-ui/core'
@@ -543,11 +541,17 @@ export function ITO(props: ITO_Props) {
                         .sort(sortTokens)
                         .map((exchangeToken, i) => (
                             <div className={classes.rationWrap} key={i}>
-                                <ExchangeToken
-                                    i={i}
-                                    exchange_token={exchangeToken}
-                                    exchange_amounts={exchange_amounts}
+                                <TokenItem
+                                    price={formatBalance(
+                                        new BigNumber(exchange_amounts[i * 2])
+                                            .dividedBy(exchange_amounts[i * 2 + 1])
+                                            .multipliedBy(pow10(token.decimals - exchangeToken.decimals))
+                                            .multipliedBy(pow10(exchangeToken.decimals))
+                                            .integerValue(),
+                                        exchangeToken.decimals,
+                                    )}
                                     token={token}
+                                    exchangeToken={exchangeToken}
                                 />
                             </div>
                         ))}
@@ -764,34 +768,4 @@ export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }
             </ActionButton>
         </Card>
     )
-}
-interface ExchangeTokenProps {
-    i: number
-    exchange_amounts: string[]
-    exchange_token: FungibleTokenDetailed
-    token: FungibleTokenDetailed
-}
-function ExchangeToken({ i, exchange_amounts, exchange_token, token }: ExchangeTokenProps) {
-    const classes = useStyles({})
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const { value: exchangeToken } = useTokenDetailed(
-        isSameAddress(NATIVE_TOKEN_ADDRESS, exchange_token.address)
-            ? EthereumTokenType.Native
-            : EthereumTokenType.ERC20,
-        exchange_token.address,
-    )
-    return exchangeToken ? (
-        <TokenItem
-            price={formatBalance(
-                new BigNumber(exchange_amounts[i * 2])
-                    .dividedBy(exchange_amounts[i * 2 + 1])
-                    .multipliedBy(pow10(token.decimals - exchangeToken.decimals))
-                    .multipliedBy(pow10(exchangeToken.decimals))
-                    .integerValue(),
-                exchangeToken.decimals,
-            )}
-            token={token}
-            exchangeToken={exchangeToken}
-        />
-    ) : null
 }
