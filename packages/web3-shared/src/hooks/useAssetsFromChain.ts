@@ -1,8 +1,10 @@
 import type { Asset, FungibleTokenDetailed } from '../types'
 import { useTokensBalance } from './useTokensBalance'
 import { useAssetsMerged } from './useAssetsMerged'
+import { useChainDetailed } from './useChainDetailed'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[]) {
+    const chainDetailed = useChainDetailed()
     const { value: listOfBalance = [], loading, error, retry } = useTokensBalance(tokens.map((y) => y.address))
     return {
         value: useAssetsMerged(
@@ -10,7 +12,7 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[]) {
             listOfBalance.length === tokens.length
                 ? listOfBalance.map(
                       (balance, idx): Asset => ({
-                          chain: 'eth',
+                          chain: chainDetailed?.chain.toLowerCase() ?? 'unknown',
                           token: tokens[idx],
                           balance,
                       }),
