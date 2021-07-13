@@ -8,21 +8,19 @@ import TrendingUpIcon from '@material-ui/icons/TrendingUp'
 import SyncIcon from '@material-ui/icons/Sync'
 import SaveIcon from '@material-ui/icons/Save'
 import SaveAltIcon from '@material-ui/icons/SaveAlt'
-import PermIdentityIcon from '@material-ui/icons/PermIdentity'
-import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone'
 import LogoutIcon from '@material-ui/icons/Logout'
 
 import { useDashboardI18N } from '../../locales'
 
 import PasswordSettingItem from './components/PasswordSettingItem'
+import EmailSettingItem from './components/EmailSettingItem'
+import PhoneNumberSettingItem from './components/PhoneNumberSettingItem'
 
 import LanguageSetting from './components/LanguageSetting'
 import AppearanceSetting from './components/AppearanceSetting'
 import BackupSetting from './components/BackupSetting'
 import RestoreSetting from './components/RestoreSetting'
 import MobileSyncSetting from './components/MobileSyncSetting'
-import EmailSetting from './components/EmailSetting'
-import PhoneNumberSetting from './components/PhoneNumberSetting'
 import LogoutSetting from './components/LogoutSetting'
 import DataSourceSetting from './components/DataSourceSetting'
 
@@ -80,18 +78,8 @@ export default function Settings() {
                     </SettingCard>
 
                     <SettingCard title={t.settings_profile()}>
-                        <SettingItem
-                            icon={<PermIdentityIcon />}
-                            title={t.settigns_email_title()}
-                            desc="alice@example.com">
-                            <EmailSetting />
-                        </SettingItem>
-                        <SettingItem
-                            icon={<PhoneIphoneIcon />}
-                            title={t.settings_phone_number_title()}
-                            desc="+86 13888888888">
-                            <PhoneNumberSetting />
-                        </SettingItem>
+                        <EmailSettingItem />
+                        <PhoneNumberSettingItem />
                         <SettingItem
                             icon={<LogoutIcon />}
                             title={t.settings_log_out_title()}
