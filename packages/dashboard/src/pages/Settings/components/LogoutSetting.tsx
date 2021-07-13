@@ -1,5 +1,5 @@
 import SettingButton from './SettingButton'
 
 export default function LogoutSetting() {
-    return <SettingButton>Log out</SettingButton>
+    return <SettingButton color="error">Log out</SettingButton>
 }
