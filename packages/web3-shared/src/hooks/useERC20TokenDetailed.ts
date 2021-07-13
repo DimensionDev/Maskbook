@@ -29,7 +29,7 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
         ...asyncToken
     } = useAsyncRetry(
         async () => getToken(erc20TokenContract, erc20TokenBytes32Contract, token),
-        [chainId, token, erc20TokenContract, erc20TokenBytes32Contract],
+        [token, erc20TokenContract, erc20TokenBytes32Contract],
     )
 
     const tokenDetailed = useMemo(
@@ -65,7 +65,7 @@ export function useERC20TokensDetailed(listOfToken: Pick<ERC20Token, 'type' | 'a
                     return getToken(erc20TokenContract, erc20TokenBytes32Contract, token)
                 }),
             ),
-        [chainId, listOfToken, erc20TokenContracts, erc20TokenBytes32Contracts],
+        [listOfToken, erc20TokenContracts, erc20TokenBytes32Contracts],
     )
 
     const tokensDetailed = useMemo(
@@ -83,7 +83,7 @@ export function useERC20TokensDetailed(listOfToken: Pick<ERC20Token, 'type' | 'a
                       )
                     : null,
             ) ?? [],
-        [JSON.stringify(results), chainId],
+        [chainId, results],
     )
 
     return {

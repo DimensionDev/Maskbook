@@ -3,17 +3,12 @@ import { unreachable } from '@dimensiondev/kit'
 import {
     ERC20TokenDetailed,
     ERC721TokenDetailed,
-    FungibleTokenDetailed,
     EthereumTokenDetailedType,
-    LoadingFailTokenDetailed,
-    FungibleToken,
-    NativeToken,
     EthereumTokenType,
-    ERC20Token,
 } from '../types'
-import { useERC20TokenDetailed, useERC20TokensDetailed } from './useERC20TokenDetailed'
+import { useERC20TokenDetailed } from './useERC20TokenDetailed'
 import { useERC721TokenDetailed } from './useERC721TokenDetailed'
-import { useNativeTokenDetailed, useNativeTokensDetailed } from './useNativeTokenDetailed'
+import { useNativeTokenDetailed } from './useNativeTokenDetailed'
 
 export function useTokenDetailed<P extends EthereumTokenType, Q extends EthereumTokenDetailedType<P>>(
     type: P,
@@ -43,34 +38,4 @@ export function useTokenDetailed<P extends EthereumTokenType, Q extends Ethereum
         default:
             unreachable(type_)
     }
-}
-
-export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'address' | 'type'>[]) {
-    const nativeTokenOrders: number[] = []
-    const listOfNativeToken = listOfToken
-        .map((t, i) => {
-            if (t.type === EthereumTokenType.Native) {
-                nativeTokenOrders.push(i)
-            }
-            return t
-        })
-        .filter((t) => t.type === EthereumTokenType.Native)
-    const listOfERC20Token = listOfToken.filter((t) => t.type === EthereumTokenType.ERC20)
-
-    const { value: nativeTokensDetailed = [], ...asyncNativeResult } = useNativeTokensDetailed(
-        listOfNativeToken as Pick<NativeToken, 'type' | 'address'>[],
-    )
-    const { value: erc20TokensDetailed = [], ...asyncErc20Result } = useERC20TokensDetailed(
-        listOfERC20Token as Pick<ERC20Token, 'type' | 'address'>[],
-    )
-
-    const asyncList = [asyncNativeResult, asyncErc20Result]
-
-    nativeTokenOrders.forEach((order, i) => erc20TokensDetailed.splice(order, 0, nativeTokensDetailed[i]))
-
-    return {
-        value: erc20TokensDetailed,
-        loading: asyncList.some((x) => x.loading),
-        error: asyncList.find((x) => !!x.error)?.error ?? null,
-    } as AsyncStateRetry<(FungibleTokenDetailed | LoadingFailTokenDetailed)[]>
 }
