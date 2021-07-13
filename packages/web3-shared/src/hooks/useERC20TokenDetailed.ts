@@ -1,11 +1,9 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import {
+import type {
     ERC20TokenDetailed,
     ERC20Token,
     FungibleTokenDetailed,
-    LoadingFailTokenDetailed,
-    EthereumTokenType,
 } from '../types'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useChainId } from './useChainId'
@@ -13,7 +11,7 @@ import type { ERC20 } from '@masknet/contracts/types/ERC20'
 import type { ERC20Bytes32 } from '@masknet/contracts/types/ERC20Bytes32'
 import { useERC20TokenContract, useERC20TokenContracts } from '../contracts/useERC20TokenContract'
 import { useERC20TokenBytes32Contract, useERC20TokenBytes32Contracts } from '../contracts/useERC20TokenBytes32Contract'
-import { parseStringOrBytes32, createLoadingFailToken, createERC20Token } from '../utils'
+import { parseStringOrBytes32, createERC20Token } from '../utils'
 
 export function useERC20TokenDetailed(address: string, token?: Partial<ERC20TokenDetailed>) {
     const chainId = useChainId()
@@ -29,16 +27,17 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
             decimals: token?.decimals ?? '0',
         },
         ...asyncToken
-    } = useAsyncRetry(async () => {
-        return getToken(erc20TokenContract, erc20TokenBytes32Contract, token)
-    }, [erc20TokenContract, erc20TokenBytes32Contract, token, chainId])
+    } = useAsyncRetry(
+        async () => getToken(erc20TokenContract, erc20TokenBytes32Contract, token),
+        [chainId, token, erc20TokenContract, erc20TokenBytes32Contract],
+    )
 
     const tokenDetailed = useMemo(
         () =>
             createERC20Token(
                 chainId,
                 address,
-                typeof _token.decimals === 'string' ? Number(_token.decimals) : _token.decimals,
+                typeof _token.decimals === 'string' ? Number.parseInt(_token.decimals) : _token.decimals,
                 parseStringOrBytes32(_token.name, _token.nameBytes32, 'Unknown Token'),
                 parseStringOrBytes32(_token.symbol, _token.symbolBytes32, 'Unknown'),
             ),
@@ -46,60 +45,51 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
     )
 
     return {
-        loading: asyncToken.loading,
-        error: asyncToken.error ?? null,
+        ...asyncToken,
         value: tokenDetailed,
     } as AsyncStateRetry<ERC20TokenDetailed>
 }
 
 export function useERC20TokensDetailed(listOfToken: Pick<ERC20Token, 'type' | 'address'>[]) {
     const chainId = useChainId()
-    const listOfAddress = useMemo(() => listOfToken.map((t) => t.address), [JSON.stringify(listOfToken)])
+    const listOfAddress = listOfToken.map((t) => t.address)
     const erc20TokenContracts = useERC20TokenContracts(listOfAddress)
     const erc20TokenBytes32Contracts = useERC20TokenBytes32Contracts(listOfAddress)
 
-    const { value: tokens, ...asyncTokens } = useAsyncRetry(async () => {
-        const r = await Promise.allSettled(
-            listOfToken.map(async (token, i) => {
-                const erc20TokenContract = erc20TokenContracts[i]
-                const erc20TokenBytes32Contract = erc20TokenBytes32Contracts[i]
-                const _token = getToken(erc20TokenContract, erc20TokenBytes32Contract, token)
-                return _token
-            }),
-        )
-        return r
-    }, [chainId, JSON.stringify(listOfAddress)])
+    const { value: results, ...asyncResults } = useAsyncRetry(
+        async () =>
+            Promise.allSettled(
+                listOfToken.map(async (token, i) => {
+                    const erc20TokenContract = erc20TokenContracts[i]
+                    const erc20TokenBytes32Contract = erc20TokenBytes32Contracts[i]
+                    return getToken(erc20TokenContract, erc20TokenBytes32Contract, token)
+                }),
+            ),
+        [chainId, listOfToken, erc20TokenContracts, erc20TokenBytes32Contracts],
+    )
 
     const tokensDetailed = useMemo(
         () =>
-            tokens
-                ? tokens.map((token, i) =>
-                      token.status === 'fulfilled'
-                          ? createERC20Token(
-                                chainId,
-                                token.value.address,
-                                typeof token.value.decimals === 'string'
-                                    ? Number(token.value.decimals)
-                                    : token.value.decimals,
-                                parseStringOrBytes32(token.value.name, token.value.nameBytes32, 'Unknown Token'),
-                                parseStringOrBytes32(token.value.symbol, token.value.symbolBytes32, 'Unknown'),
-                            )
-                          : createLoadingFailToken(
-                                listOfToken[i].address,
-                                chainId,
-                                EthereumTokenType.ERC20,
-                                token.reason,
-                            ),
-                  )
-                : [],
-        [JSON.stringify(tokens), chainId],
+            results?.map((result, i) =>
+                result.status === 'fulfilled'
+                    ? createERC20Token(
+                          chainId,
+                          result.value.address,
+                          typeof result.value.decimals === 'string'
+                              ? Number.parseInt(result.value.decimals)
+                              : result.value.decimals,
+                          parseStringOrBytes32(result.value.name, result.value.nameBytes32, 'Unknown Token'),
+                          parseStringOrBytes32(result.value.symbol, result.value.symbolBytes32, 'Unknown'),
+                      )
+                    : null,
+            ) ?? [],
+        [JSON.stringify(results), chainId],
     )
 
     return {
-        loading: asyncTokens.loading,
-        error: asyncTokens.error ?? null,
+        ...asyncResults,
         value: tokensDetailed,
-    } as AsyncStateRetry<(FungibleTokenDetailed | LoadingFailTokenDetailed)[]>
+    } as AsyncStateRetry<(FungibleTokenDetailed | null)[]>
 }
 
 async function getToken(
