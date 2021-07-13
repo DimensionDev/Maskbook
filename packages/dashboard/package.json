@@ -21,7 +21,7 @@
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared": "workspace:*",
     "@servie/events": "^3.0.0",
-    "@types/color": "^3.0.1",
+    "@types/color": "^3.0.2",
     "async-call-rpc": "^5.1.0",
     "bignumber.js": "^9.0.1",
     "classnames": "^2.3.1",
@@ -37,17 +37,17 @@
     "wallet.ts": "^1.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.3",
+    "@babel/core": "^7.14.6",
     "@snowpack/plugin-dotenv": "^2.1.0",
     "@snowpack/plugin-react-refresh": "^2.5.0",
-    "@storybook/addon-actions": "^6.3.0-rc.12",
-    "@storybook/addon-essentials": "^6.3.0-rc.12",
-    "@storybook/addon-links": "^6.3.0-rc.12",
-    "@storybook/addons": "^6.3.0-rc.12",
-    "@storybook/react": "^6.3.0-rc.12",
-    "@storybook/theming": "^6.3.0-rc.12",
-    "@types/snowpack-env": "^2.3.2",
+    "@storybook/addon-actions": "^6.3.4",
+    "@storybook/addon-essentials": "^6.3.4",
+    "@storybook/addon-links": "^6.3.4",
+    "@storybook/addons": "^6.3.4",
+    "@storybook/react": "^6.3.4",
+    "@storybook/theming": "^6.3.4",
+    "@types/snowpack-env": "^2.3.4",
     "babel-loader": "^8.2.2",
-    "snowpack": "^3.5.1"
+    "snowpack": "^3.8.1"
   }
 }

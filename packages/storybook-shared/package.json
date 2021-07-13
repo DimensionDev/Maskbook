@@ -3,8 +3,8 @@
   "private": true,
   "types": "./index.d.ts",
   "devDependencies": {
-    "@storybook/addons": "^6.2.9",
-    "@storybook/react": "^6.2.9"
+    "@storybook/addons": "^6.3.4",
+    "@storybook/react": "^6.3.4"
   },
   "peerDependencies": {
     "@storybook/addons": "^6",

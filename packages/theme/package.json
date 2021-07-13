@@ -23,15 +23,15 @@
     "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.3",
-    "@storybook/addon-actions": "^6.3.0-rc.12",
-    "@storybook/addon-essentials": "^6.3.0-rc.12",
-    "@storybook/addon-links": "^6.3.0-rc.12",
-    "@storybook/addons": "^6.3.0-rc.12",
-    "@storybook/react": "^6.3.0-rc.12",
-    "@storybook/theming": "^6.3.0-rc.12",
-    "@types/qrcode": "^1.3.5",
-    "@types/tinycolor2": "^1.4.2",
+    "@babel/core": "^7.14.6",
+    "@storybook/addon-actions": "^6.3.4",
+    "@storybook/addon-essentials": "^6.3.4",
+    "@storybook/addon-links": "^6.3.4",
+    "@storybook/addons": "^6.3.4",
+    "@storybook/react": "^6.3.4",
+    "@storybook/theming": "^6.3.4",
+    "@types/qrcode": "^1.4.1",
+    "@types/tinycolor2": "^1.4.3",
     "babel-loader": "^8.2.2",
     "storybook-addon-matrix": "^1.6.0"
   }
