@@ -10,7 +10,7 @@ import SaveIcon from '@material-ui/icons/Save'
 import SaveAltIcon from '@material-ui/icons/SaveAlt'
 import PermIdentityIcon from '@material-ui/icons/PermIdentity'
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
-import BeachAccessIcon from '@material-ui/icons/BeachAccess'
+import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone'
 import LogoutIcon from '@material-ui/icons/Logout'
 
 import { useDashboardI18N } from '../../locales'
@@ -22,83 +22,89 @@ import BackupSetting from './components/BackupSetting'
 import RestoreSetting from './components/RestoreSetting'
 import MobileSyncSetting from './components/MobileSyncSetting'
 import EmailSetting from './components/EmailSetting'
-import EmailHostSetting from './components/EmailHostSetting'
+import PhoneNumberSetting from './components/PhoneNumberSetting'
 import PasswordSetting from './components/PasswordSetting'
 import LogoutSetting from './components/LogoutSetting'
 
 import { PasswordVerifiedProvider } from './hooks/VerifyPasswordContext'
+import { UserProvider } from './hooks/UserContext'
 
 export default function Settings() {
     const t = useDashboardI18N()
     return (
         <PageFrame title={t.settings()} noBackgroundFill>
-            <PasswordVerifiedProvider>
-                <SettingCard title={t.settings_general()}>
-                    <SettingItem
-                        icon={<LanguageIcon />}
-                        title={t.settings_language_title()}
-                        desc={t.settings_language_desc()}>
-                        <LanguageSetting />
-                    </SettingItem>
-                    <SettingItem
-                        icon={<PaletteIcon />}
-                        title={t.settings_appearance_title()}
-                        desc={t.settings_appearance_desc()}>
-                        <AppearanceSetting />
-                    </SettingItem>
-                    <SettingItem
-                        icon={<DesktopWindowsIcon />}
-                        title={t.settings_ancient_post_compatibility_mode_title()}
-                        desc={t.settings_ancient_post_compatibility_mode_desc()}>
-                        <AncientPostsSetting />
-                    </SettingItem>
-                    <SettingItem
-                        icon={<SyncIcon />}
-                        title={t.settings_sync_with_mobile_title()}
-                        desc={t.settings_sync_with_mobile_desc()}>
-                        <MobileSyncSetting />
-                    </SettingItem>
-                </SettingCard>
+            <UserProvider>
+                <PasswordVerifiedProvider>
+                    <SettingCard title={t.settings_general()}>
+                        <SettingItem
+                            icon={<LanguageIcon />}
+                            title={t.settings_language_title()}
+                            desc={t.settings_language_desc()}>
+                            <LanguageSetting />
+                        </SettingItem>
+                        <SettingItem
+                            icon={<PaletteIcon />}
+                            title={t.settings_appearance_title()}
+                            desc={t.settings_appearance_desc()}>
+                            <AppearanceSetting />
+                        </SettingItem>
+                        <SettingItem
+                            icon={<DesktopWindowsIcon />}
+                            title={t.settings_ancient_post_compatibility_mode_title()}
+                            desc={t.settings_ancient_post_compatibility_mode_desc()}>
+                            <AncientPostsSetting />
+                        </SettingItem>
+                        <SettingItem
+                            icon={<SyncIcon />}
+                            title={t.settings_sync_with_mobile_title()}
+                            desc={t.settings_sync_with_mobile_desc()}>
+                            <MobileSyncSetting />
+                        </SettingItem>
+                    </SettingCard>
 
-                <SettingCard title={t.settings_backup_recovery()}>
-                    <SettingItem
-                        icon={<SaveIcon />}
-                        title={t.settings_global_backup_title()}
-                        desc={t.settings_global_backup_desc()}>
-                        <BackupSetting />
-                    </SettingItem>
-                    <SettingItem
-                        icon={<SaveAltIcon />}
-                        title={t.settings_restore_database_title()}
-                        desc={t.settings_restore_database_desc()}>
-                        <RestoreSetting />
-                    </SettingItem>
-                </SettingCard>
+                    <SettingCard title={t.settings_backup_recovery()}>
+                        <SettingItem
+                            icon={<SaveIcon />}
+                            title={t.settings_global_backup_title()}
+                            desc={t.settings_global_backup_desc()}>
+                            <BackupSetting />
+                        </SettingItem>
+                        <SettingItem
+                            icon={<SaveAltIcon />}
+                            title={t.settings_restore_database_title()}
+                            desc={t.settings_restore_database_desc()}>
+                            <RestoreSetting />
+                        </SettingItem>
+                        <SettingItem
+                            icon={<VpnKeyIcon />}
+                            title={t.settings_change_passowrd_title()}
+                            desc={t.settings_change_passowrd_desc()}>
+                            <PasswordSetting />
+                        </SettingItem>
+                    </SettingCard>
 
-                <SettingCard title={t.settings_profile()}>
-                    <SettingItem icon={<PermIdentityIcon />} title={t.settigns_email_title()} desc="xxx@xxx">
-                        <EmailSetting />
-                    </SettingItem>
-                    <SettingItem
-                        icon={<VpnKeyIcon />}
-                        title={t.settings_change_passowrd_title()}
-                        desc={t.settings_change_passowrd_desc()}>
-                        <PasswordSetting />
-                    </SettingItem>
-                    <SettingItem
-                        icon={<BeachAccessIcon />}
-                        title={t.settings_email_hosting_service_title()}
-                        desc={t.settings_email_hosting_service_desc()}>
-                        <EmailHostSetting />
-                    </SettingItem>
-                    <SettingItem
-                        icon={<LogoutIcon />}
-                        title={t.settings_log_out_title()}
-                        desc={t.settings_log_out_desc()}>
-                        <LogoutSetting />
-                    </SettingItem>
-                </SettingCard>
-            </PasswordVerifiedProvider>
+                    <SettingCard title={t.settings_profile()}>
+                        <SettingItem
+                            icon={<PermIdentityIcon />}
+                            title={t.settigns_email_title()}
+                            desc="alice@example.com">
+                            <EmailSetting />
+                        </SettingItem>
+                        <SettingItem
+                            icon={<PhoneIphoneIcon />}
+                            title={t.settings_phone_number_title()}
+                            desc="+86 13888888888">
+                            <PhoneNumberSetting />
+                        </SettingItem>
+                        <SettingItem
+                            icon={<LogoutIcon />}
+                            title={t.settings_log_out_title()}
+                            desc={t.settings_log_out_desc()}>
+                            <LogoutSetting />
+                        </SettingItem>
+                    </SettingCard>
+                </PasswordVerifiedProvider>
+            </UserProvider>
         </PageFrame>
     )
 }

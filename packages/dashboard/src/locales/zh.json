@@ -82,5 +82,6 @@
     "settings_email_hosting_service_title": "",
     "settings_email_hosting_service_desc": "",
     "settings_log_out_title": "",
-    "settings_log_out_desc": ""
+    "settings_log_out_desc": "",
+    "settings_password_rule": ""
 }
