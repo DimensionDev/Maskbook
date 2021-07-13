@@ -1,6 +1,7 @@
 import {
+    Asset,
     currySameAddress,
-    formatEthereumAddress,
+    formatBalance,
     FungibleTokenDetailed,
     resolveTokenLinkOnExplorer,
     useTokenConstants,
@@ -63,7 +64,7 @@ export interface TokenInListProps {
     index: number
     style: any
     data: {
-        tokens: FungibleTokenDetailed[]
+        assets: Asset[]
         selected: string[]
         onSelect(token: FungibleTokenDetailed): void
     }
@@ -75,7 +76,11 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
 
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
 
-    const token = data.tokens[index]
+    const currentAsset = data.assets[index]
+    const token = currentAsset.token
+    const balance = currentAsset.balance
+
+    if (!token) return null
     const { address, name, symbol, logoURI } = token
 
     return (
@@ -89,12 +94,6 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
             </ListItemIcon>
             <ListItemText classes={{ primary: classes.text }}>
                 <Typography className={classes.primary} color="textPrimary" component="span">
-                    <span className={classes.name}>{name}</span>
-                    <span className={classes.address}>
-                        {token.address !== NATIVE_TOKEN_ADDRESS ? formatEthereumAddress(token.address, 8) : null}
-                    </span>
-                </Typography>
-                <Typography className={classes.secondary} color="textSecondary" component="span">
                     <span className={classes.symbol}>{symbol}</span>
                     {token.address !== NATIVE_TOKEN_ADDRESS ? (
                         <Link
@@ -106,6 +105,10 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
                             <OpenInNewIcon className={classes.openIcon} />
                         </Link>
                     ) : null}
+                    <span className={classes.name}>{name}</span>
+                </Typography>
+                <Typography className={classes.secondary} color="textSecondary" component="span">
+                    {balance !== null && formatBalance(balance, token.decimals)}
                 </Typography>
             </ListItemText>
         </ListItem>
