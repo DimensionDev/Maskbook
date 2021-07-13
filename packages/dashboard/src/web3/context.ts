@@ -11,50 +11,50 @@ export const Web3Context: Web3ProviderType = {
         getCurrentValue: () => Web3Provider,
         subscribe: () => noop,
     },
-    allowTestnet: createSubscriptionAsync(Services.Settings.getWalletAllowTestChain, false, () => {
+    allowTestnet: createSubscriptionFromAsync(Services.Settings.getWalletAllowTestChain, false, () => {
         return () => {}
     }),
-    account: createSubscriptionAsync(
+    account: createSubscriptionFromAsync(
         Services.Settings.getSelectedWalletAddress,
         '',
         Messages.events.currentAccountSettings.on,
     ),
-    nonce: createSubscriptionAsync(Services.Settings.getBlockNumber, 0, Messages.events.currentBlockNumberSettings.on),
-    gasPrice: createSubscriptionAsync(
+    nonce: createSubscriptionFromAsync(Services.Settings.getBlockNumber, 0, Messages.events.currentBlockNumberSettings.on),
+    gasPrice: createSubscriptionFromAsync(
         Services.Settings.getBlockNumber,
         0,
         Messages.events.currentBlockNumberSettings.on,
     ),
-    balance: createSubscriptionAsync(Services.Settings.getBalance, '0', Messages.events.currentBalanceSettings.on),
-    blockNumber: createSubscriptionAsync(
+    balance: createSubscriptionFromAsync(Services.Settings.getBalance, '0', Messages.events.currentBalanceSettings.on),
+    blockNumber: createSubscriptionFromAsync(
         Services.Settings.getBlockNumber,
         0,
         Messages.events.currentBlockNumberSettings.on,
     ),
-    chainId: createSubscriptionAsync(
+    chainId: createSubscriptionFromAsync(
         Services.Settings.getChainId,
         ChainId.Mainnet,
         Messages.events.currentChainIdSettings.on,
     ),
-    providerType: createSubscriptionAsync(
+    providerType: createSubscriptionFromAsync(
         Services.Settings.getCurrentSelectedWalletProvider,
         ProviderType.Maskbook,
         Messages.events.currentProviderSettings.on,
     ),
-    networkType: createSubscriptionAsync(
+    networkType: createSubscriptionFromAsync(
         Services.Settings.getCurrentSelectedWalletNetwork,
         NetworkType.Ethereum,
         Messages.events.currentNetworkSettings.on,
     ),
-    wallets: createSubscriptionAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
-    erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
-    erc20TokensCount: createSubscriptionAsync(
+    wallets: createSubscriptionFromAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
+    erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
+    erc20TokensCount: createSubscriptionFromAsync(
         PluginServices.Wallet.getERC20TokensCount,
         0,
         PluginMessages.Wallet.events.erc20TokensUpdated.on,
     ),
     getERC20TokensPaged,
-    portfolioProvider: createSubscriptionAsync(
+    portfolioProvider: createSubscriptionFromAsync(
         Services.Settings.getCurrentPortfolioDataProvider,
         PortfolioProvider.DEBANK,
         Messages.events.currentPortfolioDataProviderSettings.on,
@@ -126,7 +126,7 @@ async function getERC721Tokens() {
     return []
 }
 
-function createSubscriptionAsync<T>(
+function createSubscriptionFromAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,
     onChange: (callback: () => void) => () => void,
