@@ -1,5 +1,8 @@
-import { unreachable } from '@dimensiondev/kit'
+import { safeUnreachable, unreachable } from '@dimensiondev/kit'
+import { NetworkType } from '@masknet/web3-shared'
 import { PortfolioProvider } from '../types'
+
+export { resolveCollectibleProviderLink, resolveCollectibleLink } from '@masknet/web3-shared'
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
     switch (provider) {
@@ -12,4 +15,16 @@ export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
     }
 }
 
-export { resolveCollectibleProviderLink, resolveCollectibleLink } from '@masknet/web3-shared'
+export function resolveDebankChainName(network: NetworkType) {
+    switch (network) {
+        case NetworkType.Ethereum:
+            return 'eth'
+        case NetworkType.Binance:
+            return 'bsc'
+        case NetworkType.Polygon:
+            return 'matic'
+        default:
+            safeUnreachable(network)
+            return ''
+    }
+}
