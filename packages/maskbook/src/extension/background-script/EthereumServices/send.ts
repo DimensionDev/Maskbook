@@ -10,6 +10,7 @@ import { addRecentTransaction, getWallet } from '../../../plugins/Wallet/service
 import { commitNonce, getNonce, resetNonce } from './nonce'
 import { getGasPrice } from './network'
 import { currentAccountSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
+import { debugModeSetting } from '../../../settings/settings'
 
 /**
  * This API is only used internally. Please use requestSend instead in order to share the same payload id globally.
@@ -22,7 +23,7 @@ export async function INTERNAL_send(
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
     rpc?: string,
 ) {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
         console.table(payload)
         console.debug(new Error().stack)
     }
