@@ -52,6 +52,7 @@ export function getChainFullName(chainId: ChainId) {
 }
 
 export function getChainIdFromName(name: string) {
+    if (!name) return
     const chainDetailed = CHAINS.find((x) =>
         [x.chain, x.network, x.name, x.shortName, x.fullName ?? '']
             .filter(Boolean)
