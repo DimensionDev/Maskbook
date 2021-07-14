@@ -23,6 +23,8 @@ export function resolveDebankChainName(network: NetworkType) {
             return 'bsc'
         case NetworkType.Polygon:
             return 'matic'
+        case NetworkType.Arbitrum:
+            return 'arbitrum'
         default:
             safeUnreachable(network)
             return ''
