@@ -18,7 +18,7 @@
         ],
         "BSCT": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
         "Matic": [
-            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/feat/deliver-token-list-by-chain-id/dist/latest/97/tokens.json",
+            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/feat/deliver-token-list-by-chain-id/dist/latest/137/tokens.json",
             "https://api.1inch.exchange/v3.0/137/tokens"
         ],
         "Mumbai": [
