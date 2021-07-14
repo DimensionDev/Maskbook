@@ -102,15 +102,16 @@ export async function getAssetsList(
 
 function formatAssetsFromDebank(data: BalanceRecord[]) {
     return data
-        .filter((x) => getChainIdFromName(x.id))
+        .filter((x) => getChainIdFromName(x.chain))
         .map((y): Asset => {
-            const chainId = getChainIdFromName(y.id) ?? ChainId.Mainnet
-            const chainId_ = getChainIdFromName(y.chain) ?? ChainId.Mainnet
+            const chainId = getChainIdFromName(y.chain) ?? ChainId.Mainnet
+            // the asset id is the token address or the name of the chain
+            const chainIdFormId = getChainIdFromName(y.id)
             return {
                 chain: y.chain,
-                token: isChainIdMainnet(chainId)
+                token: chainIdFormId && isChainIdMainnet(chainIdFormId)
                     ? createNativeToken(chainId)
-                    : createERC20Token(chainId_, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
+                    : createERC20Token(chainId, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
                 balance: new BigNumber(y.balance).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price).toFixed(),
