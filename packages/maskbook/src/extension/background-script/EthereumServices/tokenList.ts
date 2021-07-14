@@ -8,6 +8,8 @@ import {
 } from '@masknet/web3-shared'
 import { groupBy } from 'lodash-es'
 
+const NATIVE_TOKEN_ADDRESS_IN_1INCH = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+
 interface Token {
     address: string
     chainId: number
@@ -56,11 +58,7 @@ async function fetch1inchERC20TokensFromTokenList(
     const tokens = ((await fetchTokenList(url)) as TokenObject).tokens
     const _tokens = Object.values(tokens)
     return _tokens
-        .filter((x) =>
-            process.env.NODE_ENV === 'production' && process.env.build === 'stable'
-                ? getChainDetailed(chainId)?.network === 'mainanet'
-                : true,
-        )
+        .filter((x) => x.address.toLowerCase() !== NATIVE_TOKEN_ADDRESS_IN_1INCH)
         .map((x) => ({
             type: EthereumTokenType.ERC20,
             ...x,
