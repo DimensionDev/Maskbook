@@ -1,3 +1,5 @@
+import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
+
 export enum CurrencyType {
     USD = 'usd',
 }
@@ -70,6 +72,7 @@ export interface NativeTokenDetailed extends NativeToken {
     name: string
     symbol: string
     decimals: number
+    logoURI?: string
 }
 //#endregion
 
@@ -84,6 +87,7 @@ export interface ERC20TokenDetailed extends ERC20Token {
     name?: string
     symbol?: string
     decimals: number
+    logoURI?: string
 }
 //#endregion
 
@@ -187,6 +191,7 @@ export enum EthereumTokenType {
 export enum EthereumMethodType {
     PERSONAL_SIGN = 'personal_sign',
     WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
+    WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_GAS_PRICE = 'eth_gasPrice',
@@ -254,3 +259,9 @@ export enum PortfolioProvider {
 export enum CollectibleProvider {
     OPENSEAN,
 }
+
+export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
+    ? R
+    : T extends PayableTransactionObject<infer S>
+    ? S
+    : T

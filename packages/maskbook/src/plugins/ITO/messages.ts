@@ -23,4 +23,8 @@ interface ITO_Message {
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 export const PluginITO_Messages: WebExtensionMessage<ITO_Message> = createPluginMessage<ITO_Message>(ITO_PluginID)
-export const PluginITO_RPC = createPluginRPC(ITO_PluginID, () => import('./services'), PluginITO_Messages.events.rpc)
+export const PluginITO_RPC = createPluginRPC(
+    ITO_PluginID,
+    () => import('./Worker/services'),
+    PluginITO_Messages.events.rpc,
+)

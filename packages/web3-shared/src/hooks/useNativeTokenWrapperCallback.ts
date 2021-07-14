@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import type { NonPayableTx, PayableTx } from '@masknet/contracts/types/types'
+import type { NonPayableTx, PayableTx } from '@masknet/web3-contracts/types/types'
 import { useNativeTokenWrapperContract } from '../contracts/useWrappedEtherContract'
 import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'

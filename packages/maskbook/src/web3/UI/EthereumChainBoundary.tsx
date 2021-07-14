@@ -4,6 +4,8 @@ import {
     ChainId,
     getChainDetailedCAIP,
     getChainName,
+    getNetworkTypeFromChainId,
+    NetworkType,
     ProviderType,
     resolveProviderName,
     useAccount,
@@ -13,9 +15,10 @@ import {
 } from '@masknet/web3-shared'
 import { useValueRef, delay } from '@masknet/shared'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
-import { currentChainIdSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
+import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import Services from '../../extension/service'
 import { useI18N } from '../../utils'
+import { WalletRPC } from '../../plugins/Wallet/messages'
 
 export interface EthereumChainBoundaryProps {
     chainId: ChainId
@@ -30,22 +33,22 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const allowTestnet = useAllowTestnet()
     const providerType = useValueRef(currentProviderSettings)
 
+    const expectedChainId = props.chainId
+    const expectedNetwork = getChainName(expectedChainId)
+    const acutalChainId = chainId
+    const actualNetwork = getChainName(acutalChainId)
+
     // if false then the user should switch network manually
-    const isSwitchable = providerType === ProviderType.Maskbook || chainDetailed?.chain !== 'ETH'
+    const isSwitchable = true
 
     // if testnets were not allowed it will not guide the user to switch the network
     const isAllowed = allowTestnet || chainDetailed?.network === 'mainnet'
-
-    const expectedChainId = props.chainId
-    const actualNetwork = getChainName(chainId)
-    const expectedNetwork = getChainName(props.chainId)
 
     const onSwitch = useCallback(async () => {
         // a short time loading makes the user fells better
         await delay(1000)
 
         if (!isAllowed) return
-        if (!isSwitchable) return
 
         // read the chain detailed from the built-in chain list
         const chainDetailedCAIP = getChainDetailedCAIP(expectedChainId)
@@ -53,15 +56,20 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
         // if mask wallet was used it can switch network automatically
         if (providerType === ProviderType.Maskbook) {
-            currentChainIdSettings.value = expectedChainId
+            await WalletRPC.updateAccount({
+                chainId: expectedChainId,
+            })
             return
         }
 
         // request ethereum-compatiable network
-        await Services.Ethereum.addEthereumChain(chainDetailedCAIP, account)
+        const networkType = getNetworkTypeFromChainId(expectedChainId)
+        if (!networkType) return
+        if (networkType === NetworkType.Ethereum) await Services.Ethereum.switchEthereumChain(expectedChainId)
+        else await Services.Ethereum.addEthereumChain(chainDetailedCAIP, account)
     }, [account, isAllowed, isSwitchable, providerType, expectedChainId])
 
-    if (chainId === expectedChainId) return <>{props.children}</>
+    if (acutalChainId === expectedChainId) return <>{props.children}</>
 
     if (!isAllowed)
         return (

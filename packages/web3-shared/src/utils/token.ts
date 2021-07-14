@@ -1,9 +1,9 @@
 import { getEnumAsArray, safeUnreachable } from '@dimensiondev/kit'
 import BigNumber from 'bignumber.js'
 import type Web3 from 'web3'
-import type { AbiOutput } from 'web3-utils'
+import { AbiOutput, hexToBytes, toAscii } from 'web3-utils'
 import CHAINS from '../assets/chains.json'
-import { getTokenConstants } from '../constants'
+import { getRPCConstants, getTokenConstants } from '../constants'
 import {
     Asset,
     ChainId,
@@ -49,12 +49,13 @@ export function getChainDetailed(chainId = ChainId.Mainnet) {
 // Learn more: https://github.com/ChainAgnostic/CAIPs/blob/master/CAIPs/caip-2.md
 export function getChainDetailedCAIP(chainId = ChainId.Mainnet) {
     const chainDetailed = getChainDetailed(chainId)
+    const { RPC } = getRPCConstants(chainId)
     if (!chainDetailed) return
     return {
         chainId: `0x${chainDetailed.chainId.toString(16)}`,
         chainName: chainDetailed.name,
         nativeCurrency: chainDetailed.nativeCurrency,
-        rpcUrls: chainDetailed.rpc,
+        rpcUrls: RPC,
         blockExplorerUrls: [
             chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
                 ? chainDetailed.explorers[0].url
@@ -63,19 +64,28 @@ export function getChainDetailedCAIP(chainId = ChainId.Mainnet) {
     }
 }
 
+export function getChainRPC(chainId: ChainId, seed: number) {
+    const { RPC, RPC_WEIGHTS } = getRPCConstants(chainId)
+    if (!RPC || !RPC_WEIGHTS) throw new Error('Unknown chain id.')
+    return RPC[RPC_WEIGHTS[seed]]
+}
+
 export function getChainName(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
-    return chainDetailed?.name ?? 'Unknown'
+    return chainDetailed?.name ?? 'Unknown Network'
 }
 
 export function getChainFullName(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
-    return chainDetailed?.fullName ?? 'Unknown'
+    return chainDetailed?.fullName ?? 'Unknown Network'
 }
 
 export function getChainIdFromName(name: string) {
     const chainDetailed = CHAINS.find((x) =>
-        [x.chain, x.network, x.name, x.shortName, x.fullName].map((y) => y.toLowerCase()).includes(name.toLowerCase()),
+        [x.chain, x.network, x.name, x.shortName, x.fullName ?? '']
+            .filter(Boolean)
+            .map((y) => y.toLowerCase())
+            .includes(name.toLowerCase()),
     )
     return chainDetailed?.chainId as ChainId | undefined
 }
@@ -104,7 +114,7 @@ export function getNetworkTypeFromChainId(chainId: ChainId) {
         case 'Matic':
             return NetworkType.Polygon
         default:
-            throw new Error('Unknown chain id.')
+            return
     }
 }
 //#endregion
@@ -207,6 +217,22 @@ export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string
     if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)
     if (abis.length > 1) return web3.eth.abi.decodeParameters(abis, output)
     return
+}
+
+// parse a name or symbol from a token response
+const BYTES32_REGEX = /^0x[a-fA-F0-9]{64}$/
+
+export function parseStringOrBytes32(
+    str: string | undefined,
+    bytes32: string | undefined,
+    defaultValue: string,
+): string {
+    return str && str.length > 0
+        ? str
+        : // need to check for proper bytes string and valid terminator
+        bytes32 && BYTES32_REGEX.test(bytes32) && hexToBytes(bytes32)[31] === 0
+        ? toAscii(bytes32)
+        : defaultValue
 }
 
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)

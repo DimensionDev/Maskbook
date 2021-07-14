@@ -1,4 +1,4 @@
-import { safeUnreachable, unreachable } from '@dimensiondev/kit'
+import { unreachable, safeUnreachable } from '@dimensiondev/kit'
 import { getTokenConstants } from '../constants'
 import {
     ChainId,
@@ -24,14 +24,28 @@ export function resolveProviderName(providerType: ProviderType) {
             return 'CustomNetwork'
         default:
             safeUnreachable(providerType)
-            return 'Unknown'
+            return 'Unknown Network'
+    }
+}
+
+export function resolveNetworkAddress(networkType: NetworkType, address: string) {
+    switch (networkType) {
+        case NetworkType.Binance:
+            return `binance:${address}`
+        case NetworkType.Polygon:
+            return `polygon:${address}`
+        case NetworkType.Ethereum:
+            return `ethereum:${address}`
+        default:
+            safeUnreachable(networkType)
+            return address
     }
 }
 
 export function resolveNetworkName(networkType: NetworkType) {
     switch (networkType) {
         case NetworkType.Binance:
-            return 'Binance'
+            return 'Binance Smart Chain'
         case NetworkType.Polygon:
             return 'Polygon'
         case NetworkType.Ethereum:

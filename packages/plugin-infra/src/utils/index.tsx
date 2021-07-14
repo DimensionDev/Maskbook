@@ -1,13 +1,13 @@
 import type { Plugin } from '../types'
 import { useEffect, useState, useRef } from 'react'
-import { ErrorBoundary } from '@masknet/theme'
+import { ErrorBoundary } from '@masknet/shared'
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
 
 export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType>(
     usePlugins: () => PluginDefinition[],
     pickInjector: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
-): React.ComponentType<PropsType> {
+): React.FunctionComponent<PropsType> {
     const picker = (plugin: PluginDefinition) => ({
         key: plugin.ID,
         name: plugin.name,

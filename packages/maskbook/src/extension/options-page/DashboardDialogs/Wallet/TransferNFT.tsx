@@ -8,7 +8,8 @@ import {
     TransactionStateType,
     useTokenTransferCallback,
 } from '@masknet/web3-shared'
-import { useI18N, useRemoteControlledDialog } from '../../../../utils'
+import { useI18N } from '../../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { Image } from '../../../../components/shared/Image'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'

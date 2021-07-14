@@ -1,5 +1,6 @@
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { PLUGIN_IDENTIFIER } from './constants'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
 type BuyTokenDialogEvent =
     | {
@@ -16,4 +17,5 @@ interface PluginTransakMessage {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const PluginTransakMessages = createPluginMessage<PluginTransakMessage>(PLUGIN_IDENTIFIER)
+export const PluginTransakMessages: WebExtensionMessage<PluginTransakMessage> =
+    createPluginMessage<PluginTransakMessage>(PLUGIN_IDENTIFIER)

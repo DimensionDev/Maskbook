@@ -1,5 +1,6 @@
 import { memo, useState } from 'react'
-import { MaskDialog, useSnackbarCallback } from '@masknet/theme'
+import { MaskDialog } from '@masknet/theme'
+import { useSnackbarCallback } from '@masknet/shared'
 import { ERC20TokenDetailed, useERC20TokenBalance, useERC20TokenDetailed, useWallet } from '@masknet/web3-shared'
 import { useUpdateEffect } from 'react-use'
 import { PluginServices } from '../../../../API'
@@ -75,7 +76,7 @@ export const AddTokenDialogUI = memo<AddTokenDialogUIProps>(
         }, [open])
 
         return (
-            <MaskDialog open={open} title={t.wallets_add_token()} onClose={onClose}>
+            <MaskDialog maxWidth="md" open={open} title={t.wallets_add_token()} onClose={onClose}>
                 {step === AddTokenStep.INFORMATION ? (
                     <AddTokenFormUI
                         address={address}

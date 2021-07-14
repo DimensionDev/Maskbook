@@ -14,7 +14,8 @@ import {
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
 } from '../DashboardDialogs/Wallet'
-import { Flags, useMenu, useI18N, useColorStyles, useMatchXS, useRemoteControlledDialog } from '../../../utils'
+import { Flags, useMenu, useI18N, useColorStyles, useMatchXS } from '../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
@@ -179,13 +180,17 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
         }
     }, [tabIndex, classes, wallet, transactionType])
 
-    return (
-        <div className={classes.root} ref={ref}>
-            {!chainIdValid ? (
+    if (!chainIdValid)
+        return (
+            <div className={classes.root} ref={ref}>
                 <Alert className={classes.alert} severity="warning">
                     {t('plugin_wallet_wrong_network_tip')}
                 </Alert>
-            ) : null}
+            </div>
+        )
+
+    return (
+        <div className={classes.root} ref={ref}>
             <Box
                 className={classes.caption}
                 sx={{

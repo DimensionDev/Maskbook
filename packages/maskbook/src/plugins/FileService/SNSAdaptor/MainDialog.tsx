@@ -11,8 +11,7 @@ import { Exchange } from './hooks/Exchange'
 import type { FileInfo } from '../types'
 
 interface Props extends InjectedDialogProps {
-    onConfirm: (file: FileInfo | undefined) => void
-    onDecline: () => void
+    onClose: () => void
 }
 
 const useStyles = makeStyles({
@@ -46,11 +45,11 @@ const FileServiceDialog: React.FC<Props> = (props) => {
                 next.delete(META_KEY_2)
             }
         })
-        props.onConfirm(selectedFileInfo)
+        props.onClose()
     }
     const onDecline = () => {
         if (!uploading) {
-            props.onDecline()
+            props.onClose()
             return
         }
         snackbar.enqueueSnackbar(t('plugin_file_service_uploading_on_cancal'))

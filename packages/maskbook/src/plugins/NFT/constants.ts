@@ -1,6 +1,6 @@
 export const PLUGIN_NAME = 'NFT'
-export const PLUGIN_DESCRIPTION = '🖼'
-export const PLUGIN_ICON = 'An NFT collectible viewer.'
+export const PLUGIN_DESCRIPTION = 'An NFT collectible viewer.'
+export const PLUGIN_ICON = '🖼'
 export const PLUGIN_IDENTIFIER = 'com.maskbook.nft'
 
 export const openseaHostname = 'opensea.io'

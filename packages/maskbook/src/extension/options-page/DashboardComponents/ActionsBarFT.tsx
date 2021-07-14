@@ -9,7 +9,8 @@ import {
     useChainIdMatched,
     getChainIdFromName,
 } from '@masknet/web3-shared'
-import { useMenu, useI18N, useRemoteControlledDialog } from '../../../utils'
+import { useMenu, useI18N } from '../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogFT } from '../DashboardDialogs/Wallet'

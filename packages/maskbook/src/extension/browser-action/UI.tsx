@@ -3,7 +3,8 @@ import { noop } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import { makeStyles, Theme, withStyles } from '@material-ui/core/styles'
 import { Button, Paper, Typography, Box } from '@material-ui/core'
-import { useI18N, delay, useRemoteControlledDialog, Flags } from '../../utils'
+import { useI18N, delay, Flags } from '../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -103,9 +104,6 @@ function BrowserActionUI() {
     }, [openSelectProviderDailog])
 
     const Trademark = memo(() => {
-        if (ui.networkIdentifier !== 'localhost') {
-            return null
-        }
         const src =
             process.env.NODE_ENV === 'production'
                 ? new URL('./MB--ComboCircle--Blue.svg', import.meta.url)
@@ -115,8 +113,9 @@ function BrowserActionUI() {
 
     return (
         <Paper className={classes.container} elevation={0}>
-            <Trademark />
-            {hasPermission === false ? (
+            {ui.networkIdentifier === 'localhost' || identities.length === 0 ? <Trademark /> : null}
+
+            {hasPermission === false && identities.length !== 0 ? (
                 <>
                     <Box
                         className={classes.header}
@@ -131,6 +130,7 @@ function BrowserActionUI() {
                             sns: ui.networkIdentifier,
                         })}
                     </Typography>
+
                     <Box
                         sx={{
                             display: 'flex',

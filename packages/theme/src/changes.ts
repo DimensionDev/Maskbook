@@ -17,6 +17,25 @@ export const Breakpoints: ThemeOptions = {
 }
 
 /**
+ * ? Paper shadow should follow Mask UI
+ */
+export const Shadows: ThemeOptions = {
+    components: {
+        MuiPaper: {
+            styleOverrides: {},
+            variants: [
+                {
+                    props: { variant: 'outlined' },
+                    style: {
+                        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.04)',
+                    },
+                },
+            ],
+        },
+    },
+}
+
+/**
  * ? Paper should be used as the main building block in the page
  * ? Paper should be 12px
  * ? Dialog should be 12px

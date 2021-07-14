@@ -11,6 +11,7 @@ import {
     getChainDetailed,
     getChainIdFromName,
     getTokenConstants,
+    NetworkType,
     pow10,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
@@ -76,17 +77,22 @@ export async function getAssetsListNFT(
     }
 }
 
-export async function getAssetsList(address: string, provider: PortfolioProvider): Promise<Asset[]> {
+export async function getAssetsList(
+    address: string,
+    network: NetworkType,
+    provider: PortfolioProvider,
+): Promise<Asset[]> {
     if (!EthereumAddress.isValid(address)) return []
     switch (provider) {
         case PortfolioProvider.ZERION:
+            if (network !== NetworkType.Ethereum) return []
             const { meta, payload } = await ZerionAPI.getAssetsList(address)
             if (meta.status !== 'ok') throw new Error('Fail to load assets.')
             // skip NFT assets
             const assetsList = values(payload.assets).filter((x) => x.asset.is_displayable && x.asset.icon_url)
             return formatAssetsFromZerion(assetsList)
         case PortfolioProvider.DEBANK:
-            const { data = [], error_code } = await DebankAPI.getAssetsList(address)
+            const { data = [], error_code } = await DebankAPI.getAssetsList(address, network)
             if (error_code === 0) return formatAssetsFromDebank(data)
             return []
         default:
@@ -135,9 +141,15 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
                     name: asset.name,
                     symbol: asset.symbol,
                     decimals: asset.decimals,
-                    address: asset.name === 'Ether' ? getTokenConstants().NATIVE_TOKEN_ADDRESS : asset.asset_code,
+                    address:
+                        asset.name === 'Ether' || asset.name === 'Ethereum'
+                            ? getTokenConstants().NATIVE_TOKEN_ADDRESS
+                            : asset.asset_code,
                     chainId: ChainId.Mainnet,
-                    type: asset.name === 'Ether' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                    type:
+                        asset.name === 'Ether' || asset.name === 'Ethereum'
+                            ? EthereumTokenType.Native
+                            : EthereumTokenType.ERC20,
                 },
                 chain: 'eth',
                 balance: quantity,

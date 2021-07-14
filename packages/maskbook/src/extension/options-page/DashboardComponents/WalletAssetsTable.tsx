@@ -34,9 +34,8 @@ import {
     Wallet,
 } from '@masknet/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { FormattedCurrency } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { useI18N, useMatchXS } from '../../../utils'
-import { TokenIcon } from './TokenIcon'
 import { ActionsBarFT } from './ActionsBarFT'
 import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
@@ -86,6 +85,7 @@ const useStyles = makeStyles<
         display: 'flex',
         justifyContent: 'center',
         marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
     },
 }))
 
@@ -258,39 +258,19 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                             ? new Array(3).fill(0).map((_, i) => (
                                   <TableRow className={classes.cell} key={i}>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                   </TableRow>
                               ))

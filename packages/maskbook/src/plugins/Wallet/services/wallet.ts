@@ -11,6 +11,7 @@ import { currySameAddress, formatEthereumAddress, ProviderType, resolveProviderN
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
 import { currentAccountSettings, currentProviderSettings } from '../settings'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
+import { updateAccount } from './account'
 
 function sortWallet(a: WalletRecord, b: WalletRecord) {
     const address = currentAccountSettings.value
@@ -136,6 +137,7 @@ export function createMnemonicWords() {
 
 export async function importNewWallet(
     rec: PartialRequired<Omit<WalletRecord, 'id' | 'eth_balance' | 'createdAt' | 'updatedAt'>, 'name'>,
+    slient = false,
 ) {
     const { name, path, mnemonic = [], passphrase = '' } = rec
     const address = await getWalletAddress()
@@ -164,9 +166,13 @@ export async function importNewWallet(
         else if (!record_.mnemonic.length && !record_._private_key_)
             await t.objectStore('Wallet').put(WalletRecordIntoDB(record))
     }
-    WalletMessages.events.walletsUpdated.sendToAll(undefined)
-    currentAccountSettings.value = record.address
-    currentProviderSettings.value = ProviderType.Maskbook
+    if (!slient) {
+        WalletMessages.events.walletsUpdated.sendToAll(undefined)
+        await updateAccount({
+            account: record.address,
+            providerType: ProviderType.Maskbook,
+        })
+    }
     return address
     async function getWalletAddress() {
         if (rec.address) return rec.address

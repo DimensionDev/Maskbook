@@ -1,22 +1,22 @@
+import { useCallback, useMemo, useState } from 'react'
 import { Grid, makeStyles, Paper, Typography, useTheme } from '@material-ui/core'
-import { useI18N, useRemoteControlledDialog } from '../../utils'
+import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
+import {
+    formatBalance,
+    formatWeiToGwei,
+    EthereumTokenType,
+    getChainDetailed,
+    useChainId,
+    useGasPrice,
+    GasNow,
+    ChainId,
+} from '@masknet/web3-shared'
+import { useI18N } from '../../utils'
 import { Image } from '../../components/shared/Image'
 import { useAssets } from '../../plugins/Wallet/hooks/useAssets'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useStylesExtends } from '../../components/custom-ui-helper'
-import { useValueRef } from '@masknet/shared'
-import {
-    ChainId,
-    EthereumTokenType,
-    formatBalance,
-    formatWeiToGwei,
-    GasNow,
-    getChainDetailed,
-    useChainId,
-    useGasPrice,
-} from '@masknet/web3-shared'
 import { currentGasNowSettings } from '../../plugins/Wallet/settings'
-import { useCallback, useMemo, useState } from 'react'
 
 const useStyles = makeStyles(() => {})
 

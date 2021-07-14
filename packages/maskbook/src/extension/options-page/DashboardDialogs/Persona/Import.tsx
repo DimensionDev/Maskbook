@@ -97,7 +97,8 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                         placeholder={t('dashboard_paste_database_base64_hint')}
                         onChange={(e) => setBase64Value(e.target.value)}
                         value={base64Value}
-                        variant="outlined"></TextField>
+                        variant="outlined"
+                    />
                 ),
                 sx: { p: 0, display: 'flex' },
             },
@@ -142,7 +143,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                 iconColor="#5FDD97"
                 primary={t('import_your_persona')}
                 secondary={t('dashboard_persona_import_dialog_hint')}
-                content={<AbstractTab {...tabProps}></AbstractTab>}
+                content={<AbstractTab {...tabProps} />}
                 footer={
                     <DebounceButton
                         variant="contained"
@@ -169,7 +170,8 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                         data-testid="import_button">
                         {t('import')}
                     </DebounceButton>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }

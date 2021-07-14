@@ -52,7 +52,7 @@ export const MnemonicTab: FC<MnemonicTabProps> = ({ words, onChange }) => {
             {words.map((word, i) => (
                 <TextField
                     className={classNames(classes.word, classes.wordTextfield)}
-                    placeholder={`${i + 1}`}
+                    placeholder={String(i + 1)}
                     key={i}
                     size="small"
                     value={word}

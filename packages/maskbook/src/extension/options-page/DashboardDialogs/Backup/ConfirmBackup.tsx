@@ -98,7 +98,8 @@ export function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackup
                                 confirmBackupClasses.dashboardPreviewCardTable,
                             ),
                         }}
-                        records={records}></DatabasePreviewCard>
+                        records={records}
+                    />
                     {imported === true ? (
                         <ActionButton className={confirmBackupClasses.doneButton} variant="contained" onClick={onDone}>
                             {t('set_up_button_done')}

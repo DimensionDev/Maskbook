@@ -15,6 +15,8 @@ export function useERC20TokenBalance(address: string) {
     const erc20Contract = useERC20TokenContract(address)
     return useAsyncRetry(async () => {
         if (!account || !address || !erc20Contract) return undefined
-        return erc20Contract.methods.balanceOf(account).call()
+        return erc20Contract.methods.balanceOf(account).call({
+            from: account,
+        })
     }, [account, blockNumber, chainId, address, erc20Contract])
 }

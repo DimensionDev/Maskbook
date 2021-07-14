@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import type { NonPayableTx } from '@masknet/contracts/types/types'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionStateType, useTransactionState } from './useTransactionState'

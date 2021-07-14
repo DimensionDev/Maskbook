@@ -1,14 +1,18 @@
 import { memo } from 'react'
 import { Box, Button, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
-import { TokenIcon } from '../TokenIcon'
 import { FormattedCurrency } from '@masknet/shared'
 import { Asset, CurrencyType, formatBalance, formatCurrency, getTokenUSDValue, pow10 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 import { useDashboardI18N } from '../../../../locales'
+import { TokenIcon } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
+    icon: {
+        width: 36,
+        height: 36,
+    },
     symbol: {
         marginLeft: 14,
         fontSize: theme.typography.pxToRem(14),
@@ -31,6 +35,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
             <TableCell className={classes.cell} align="center" variant="body">
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <TokenIcon
+                        classes={{ icon: classes.icon }}
                         address={asset.token.address}
                         name={asset.token.name}
                         chainId={asset.token.chainId}

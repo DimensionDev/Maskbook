@@ -94,13 +94,12 @@ export function createGlobalSettings<T extends browser.storage.StorageValue>(
     return settings
 }
 
+export interface NetworkSettingsCache {
+    [networkKey: string]: ValueRef<string> & { ready: boolean; readyPromise: Promise<string> }
+}
+
 export function createNetworkSettings(settingsKey: string) {
-    const cached: {
-        [networkKey: string]: ValueRef<string> & {
-            ready: boolean
-            readyPromise: Promise<string>
-        }
-    } = {}
+    const cached: NetworkSettingsCache = {}
     MaskMessage.events.createNetworkSettingsReady.on((networkKey) => {
         if (!(networkKey in cached)) cached[networkKey] = createInternalSettings(`${networkKey}+${settingsKey}`, '')
     })

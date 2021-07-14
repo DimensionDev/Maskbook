@@ -10,7 +10,8 @@ import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletIcon } from '../../../../components/shared/WalletIcon'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import Services from '../../../../extension/service'
-import { useI18N, useRemoteControlledDialog } from '../../../../utils'
+import { useI18N } from '../../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useWallet } from '../../hooks/useWallet'
 import { WalletMessages } from '../../messages'
 import { currentProviderSettings } from '../../settings'
@@ -148,7 +149,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
         <InjectedDialog title={t('wallet_status_title')} open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
                 <section className={classes.currentAccount}>
-                    <WalletIcon size={48} badgeSize={18}></WalletIcon>
+                    <WalletIcon size={48} badgeSize={18} />
                     <div className={classes.accountInfo}>
                         <div className={classes.infoRow}>
                             <Typography className={classes.accountName}>{selectedWallet.name}</Typography>
@@ -178,7 +179,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                             </Link>
                             <Link
                                 className={classes.link}
-                                href={`${resolveAddressLinkOnExplorer(chainId, selectedWallet.address)}`}
+                                href={resolveAddressLinkOnExplorer(chainId, selectedWallet.address)}
                                 target="_blank"
                                 title={t('plugin_wallet_view_on_explorer')}
                                 rel="noopener noreferrer">
