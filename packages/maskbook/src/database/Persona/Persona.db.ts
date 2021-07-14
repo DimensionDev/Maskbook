@@ -28,6 +28,12 @@ import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-Json
  * A persona links to 0 or more profiles.
  * Each profile links to 0 or 1 persona.
  * @keys inline, {@link ProfileRecord.identifier}
+ *
+ * # ObjectStore `relations`:
+ * @description Store relations.
+ * @type {RelationRecord}
+ * Save the relationship between persona and profile.
+ * @keys inline {@link RelationRecord.linked  @link RelationRecord.profile}
  */
 
 const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
@@ -496,6 +502,9 @@ export async function createRelationDB(record: RelationRecord, t: RelationTransa
     MaskMessage.events.relationsChanged.sendToAll([{ of: record.profile, reason: 'update' }])
 }
 
+/**
+ * Query many relations
+ */
 export async function queryRelationsDB(
     query: (record: RelationRecord) => boolean,
     t?: RelationTransaction<'readonly'>,
