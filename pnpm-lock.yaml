@@ -121,6 +121,7 @@ importers:
       '@babel/core': ^7.14.6
       '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
       '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
+      '@hookform/resolvers': ^2.6.0
       '@masknet/icons': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-infra': workspace:*
@@ -147,6 +148,7 @@ importers:
       history: ^5.0.0
       json-stable-stringify: ^1.0.1
       lodash-es: ^4.17.21
+      react-hook-form: ^7.10.1
       react-router: ^6.0.0-beta.0
       react-router-dom: ^6.0.0-beta.0
       react-use: ^17.2.4
@@ -154,9 +156,11 @@ importers:
       unstated-next: ^1.1.0
       use-subscription: ^1.5.1
       wallet.ts: ^1.0.1
+      zod: ^3.5.1
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1
       '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
+      '@hookform/resolvers': 2.6.0_react-hook-form@7.10.1
       '@masknet/icons': link:../icons
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-infra': link:../plugin-infra
@@ -173,12 +177,14 @@ importers:
       history: 5.0.0
       json-stable-stringify: 1.0.1
       lodash-es: 4.17.21
+      react-hook-form: 7.10.1_react@18.0.0-alpha-aecb3b6d1
       react-router: 6.0.0-beta.0_dd3df4049b9a65e1e2d003c7940c4871
       react-router-dom: 6.0.0-beta.0_66263521e705c985f663eeac15167a50
       react-use: 17.2.4_f991c289939c8299bed5e4a6a5a79a62
       unstated-next: 1.1.0
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
       wallet.ts: 1.0.1
+      zod: 3.5.1
     devDependencies:
       '@babel/core': 7.14.6
       '@snowpack/plugin-dotenv': 2.1.0
@@ -4762,6 +4768,14 @@ packages:
     dependencies:
       '@hapi/hoek': 9.2.0
     dev: true
+
+  /@hookform/resolvers/2.6.0_react-hook-form@7.10.1:
+    resolution: {integrity: sha512-1Pbxjc4HEzATEcRsyDfkEQR/3OWaQwbemW9HTTYH+ZiLF2mzafl5Pn++65gwNnJSGzXUp5LIq3Nz2+Cz4m2U8A==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.10.1_react@18.0.0-alpha-aecb3b6d1
+    dev: false
 
   /@humanwhocodes/config-array/0.5.0:
     resolution: {integrity: sha512-FagtKFz74XrTl7y6HCzQpwDfXP0yhxe9lHLD1UZxjvZIcbyRz8zTFF/yYNfSfzU414eDwZ1SrO0Qvtyf+wFMQg==}
@@ -21645,8 +21659,16 @@ packages:
       react: 18.0.0-alpha-aecb3b6d1
     dev: false
 
+  /react-hook-form/7.10.1_react@18.0.0-alpha-aecb3b6d1:
+    resolution: {integrity: sha512-YRSkOZ0DJKjJ+PuCB6caFbFSbz6I4JQcGXVb/OeEIVE3YuXXYYJ/YQwodRy8HsZ5WA+DryoThWIeZZzPd5f9lQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17
+    dependencies:
+      react: 18.0.0-alpha-aecb3b6d1
+    dev: false
+
   /react-i18next/11.11.1_44b15288743ca8758b7bd6a3c957a6b2:
-    resolution: {integrity: sha512-MtfzPEOvx0ev2cz0HmrEcduuqkktSa5bfeN8Flp0cvN0xP3H3MRSTa8P6pxPtqstHbRe1cD9QBOr5T/FEV2gOw==}
+    resolution: { integrity: sha512-MtfzPEOvx0ev2cz0HmrEcduuqkktSa5bfeN8Flp0cvN0xP3H3MRSTa8P6pxPtqstHbRe1cD9QBOr5T/FEV2gOw== }
     peerDependencies:
       i18next: '>= 19.0.0'
       react: '>= 16.8.0'
@@ -26835,6 +26857,10 @@ packages:
       validator: 13.6.0
     optionalDependencies:
       commander: 2.20.3
+    dev: false
+
+  /zod/3.5.1:
+    resolution: {integrity: sha512-Gg9GTai0iDHowuYM9VNhdFMmesgt44ufzqaE5CPHshpuK5fCzbibdqCnrWuYH6ZmOn/N+BlGmwZtVSijhKmhKw==}
     dev: false
 
   /zwitch/1.0.5:
