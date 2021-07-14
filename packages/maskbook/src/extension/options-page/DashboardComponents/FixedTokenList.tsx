@@ -73,13 +73,13 @@ export function FixedTokenList(props: FixedTokenListProps) {
     )
 
     const {
-        loading: loadingBalance,
+        loading: loadingAssets,
         value: assets,
         error,
     } = useAssetsFromChain(renderTokens.filter((x) => EthereumAddress.isValid(x.address)))
 
     const renderAssets =
-        error || !account
+        error || !account || loadingAssets
             ? renderTokens.map((token) => ({ token: token, balance: null }))
             : assets.sort((a, b) => {
                   if (a.balance > b.balance) return -1
@@ -95,8 +95,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     )
     //#endregion
 
-    if (state === TokenListsState.LOADING_TOKEN_LISTS || loadingBalance)
-        return renderPlaceholder('Loading token lists...')
+    if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
     if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token...')
     if (!filteredERC20TokensDetailed.length) return renderPlaceholder('No token found')
 
