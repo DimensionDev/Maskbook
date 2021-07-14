@@ -34,6 +34,7 @@ export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'addr
                     const erc20TokenContract = erc20TokenContracts[i]
                     const erc20TokenBytes32Contract = erc20TokenBytes32Contracts[i]
                     return getERC20TokenDetailed(
+                        token.address,
                         chainId,
                         erc20TokenContract,
                         erc20TokenBytes32Contract,
