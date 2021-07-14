@@ -70,6 +70,10 @@ const useStyles = makeStyles((theme) => ({
     },
     words: {
         color: '#FAF2BF',
+        whiteSpace: 'pre',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        width: '85%',
     },
     button: {
         color: theme.palette.common.white,
