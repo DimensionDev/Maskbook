@@ -46,19 +46,19 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
         signal?.addEventListener('abort', () => [...activated.keys()].forEach(stopPlugin))
         signal?.addEventListener('abort', off2)
 
-        checkRequirementAndStartOrStop()
-        function checkRequirementAndStartOrStop() {
+        checkRequirementAndStartOrStop().catch(console.error)
+        async function checkRequirementAndStartOrStop() {
             for (const id of registeredPluginIDs) {
-                if (meetRequirement(id)) activatePlugin(id).catch(console.error)
+                if (await meetRequirement(id)) activatePlugin(id).catch(console.error)
                 else stopPlugin(id)
             }
         }
 
-        function meetRequirement(id: string) {
+        async function meetRequirement(id: string) {
             const define = getPluginDefine(id)
             if (!define) return false
             if (!define.management?.alwaysOn) {
-                if (!enabled.isEnabled(id)) return false
+                if (!(await enabled.isEnabled(id))) return false
             }
             if (extraCheck && !extraCheck(id)) return false
             return true

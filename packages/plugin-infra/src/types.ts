@@ -322,7 +322,7 @@ export namespace Plugin.__Host {
         signal?: AbortSignal
     }
     export interface EnabledStatusReporter {
-        isEnabled(id: string): boolean
+        isEnabled(id: string): boolean | Promise<boolean>
         events: Emitter<{ enabled: [id: string]; disabled: [id: string] }>
     }
 }
