@@ -185,12 +185,12 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const onClose = useCallback(() => {
         const [, setValue] = state
-        setValue(DialogTabs.create)
         setStep(ITOCreateFormPageStep.NewItoPage)
+        setPoolSettings(undefined)
+        setValue(DialogTabs.create)
         // After close this tx dialog, it should set the gas price to zero
         //  to let Metamask to determine the gas price for the further tx.
         currentGasPriceSettings.value = 0
-        setPoolSettings(undefined)
         props.onClose()
     }, [props, state, currentGasPriceSettings])
 
@@ -217,7 +217,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 <DialogContent>
                     {step === ITOCreateFormPageStep.NewItoPage ? <AbstractTab height={540} {...tabProps} /> : null}
                     {step === ITOCreateFormPageStep.ConfirmItoPage ? (
-                        <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={onDone} />
+                        <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={onDone} onClose={onClose} />
                     ) : null}
                 </DialogContent>
             </InjectedDialog>
