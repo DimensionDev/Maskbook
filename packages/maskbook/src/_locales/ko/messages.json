@@ -10,6 +10,8 @@
     "add_token_search_hint": "토큰 검색",
     "add_asset": "자산 추가",
     "additional_post_box__encrypted_post_pre": "#mask_io로 이 게시물을 해독하기. {{encrypted}}",
+    "additional_post_box__encrypted_post_pre_red_packet_twitter": "",
+    "additional_post_box__encrypted_post_pre_red_packet": "",
     "additional_post_box__steganography_post_pre": "암호화된 이미지입니다. 📪🔑 mask.io 설치하고 해독하세요. {{random}}",
     "auto_paste_failed_dialog_title": "수동으로 붙여넣기",
     "auto_paste_failed_dialog_content": "아래의 문자와 이미지(있으면)를 복사하고 공유하세요",
