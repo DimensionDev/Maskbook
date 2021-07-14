@@ -3,7 +3,7 @@ import type { DebankTransactionDirection } from './debank'
 
 export enum FilterTransactionType {
     ALL = 'all',
-    SENT = 'sent',
+    SEND = 'send',
     RECEIVE = 'receive',
 }
 
