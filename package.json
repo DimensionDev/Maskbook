@@ -41,7 +41,6 @@
     "i18next": "^20.3.2",
     "idb": "5.0.8",
     "jss": "10.5.1",
-    "notistack": "1.0.9",
     "react": "=18.0.0-alpha-aecb3b6d1",
     "react-dom": "=18.0.0-alpha-aecb3b6d1",
     "react-i18next": "^11.11.1"
