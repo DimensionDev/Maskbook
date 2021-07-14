@@ -9,8 +9,11 @@ export function useERC20TokenDetailedFromTokenLists(address: string) {
     const chainId = useChainId()
     const { fetchERC20TokensFromTokenLists } = useWeb3Context()
     const { value: allTokens = [], loading: loadingAllTokens } = useAsync(
-        async () => fetchERC20TokensFromTokenLists(ERC20_TOKEN_LISTS, chainId),
-        [chainId, address],
+        async () =>
+            !ERC20_TOKEN_LISTS || ERC20_TOKEN_LISTS.length === 0
+                ? []
+                : fetchERC20TokensFromTokenLists(ERC20_TOKEN_LISTS, chainId),
+        [chainId, ERC20_TOKEN_LISTS?.sort().join()],
     )
 
     return {

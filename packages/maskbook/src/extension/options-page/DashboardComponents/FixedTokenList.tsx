@@ -65,8 +65,8 @@ export function FixedTokenList(props: FixedTokenListProps) {
     const renderTokens = uniqBy([...tokens, ...filteredTokens], (x) => x.address.toLowerCase()).sort((a, z) => {
         if (a.type === EthereumTokenType.Native) return -1
         if (z.type === EthereumTokenType.Native) return 1
-        if (isSameAddress(a.address, MASK_ADDRESS)) return -1
-        if (isSameAddress(z.address, MASK_ADDRESS)) return 1
+        if (isSameAddress(a.address, MASK_ADDRESS ?? '')) return -1
+        if (isSameAddress(z.address, MASK_ADDRESS ?? '')) return 1
         return 0
     })
 

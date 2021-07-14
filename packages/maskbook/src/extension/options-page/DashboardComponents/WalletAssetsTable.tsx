@@ -208,8 +208,6 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         retry: detailedTokensRetry,
     } = useAssets(erc20Tokens)
 
-    console.log(detailedTokens)
-
     const [more, setMore] = useState(false)
 
     if (detailedTokensError)
