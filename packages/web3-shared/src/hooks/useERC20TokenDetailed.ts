@@ -56,7 +56,7 @@ async function getERC20TokenDetailed(
     erc20TokenBytes32Contract: ERC20Bytes32 | null,
     token?: Partial<ERC20TokenDetailed>,
 ) {
-    const address = token?.address ?? ''
+    const address = token?.address ?? erc20TokenContract?.options.address ?? ''
     const results = await Promise.allSettled([
         token?.name ?? (await (erc20TokenContract?.methods.name().call() ?? '')),
         token?.name ? '' : await (erc20TokenBytes32Contract?.methods.name().call() ?? ''),
