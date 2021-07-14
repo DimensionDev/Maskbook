@@ -1,5 +1,10 @@
 import { useState } from 'react'
-import { TypedMessageAnchor, registerTypedMessageRenderer } from '../../../protocols/typed-message'
+import {
+    TypedMessageAnchor,
+    registerTypedMessageRenderer,
+    TypedMessage,
+    isTypedMessageAnchor,
+} from '../../../protocols/typed-message'
 import { Link, Typography } from '@material-ui/core'
 import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
 import { PluginTraderMessages, PluginTraderRPC } from '../messages'
@@ -10,6 +15,8 @@ export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type
     readonly name: string
 }
 
+export const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor =>
+    isTypedMessageAnchor(m) && ['cash', 'hash'].includes(m.category) && !/#[\w\d]+lbp$/i.test(m.content)
 export function makeTypedMessageCashTrending(message: TypedMessageAnchor) {
     return {
         ...message,

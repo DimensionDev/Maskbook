@@ -97,7 +97,7 @@ export namespace Plugin.Shared {
      * This part is shared between Dashboard, SNSAdaptor and Worker part
      * which you should include the information above in those three parts.
      */
-    export interface DefinitionWithInit extends Definition {
+    export interface DefinitionDeferred extends Definition, Utilities {
         /**
          * This function is called when the plugin is initialized.
          *
@@ -105,6 +105,8 @@ export namespace Plugin.Shared {
          * to make sure the plugin can be reloaded safely.
          */
         init(signal: AbortSignal): void | Promise<void>
+    }
+    export interface Utilities {
         /**
          * A pure function that convert a TypedMessage into another one
          */
@@ -161,7 +163,7 @@ export namespace Plugin.Shared {
 
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
-    export interface Definition extends Shared.DefinitionWithInit {
+    export interface Definition extends Shared.DefinitionDeferred {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
@@ -228,7 +230,7 @@ export namespace Plugin.SNSAdaptor {
 /** This part runs in the dashboard */
 export namespace Plugin.Dashboard {
     // As you can see we currently don't have so much use case for an API here.
-    export interface Definition extends Shared.DefinitionWithInit {
+    export interface Definition extends Shared.DefinitionDeferred {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
     }
@@ -236,7 +238,7 @@ export namespace Plugin.Dashboard {
 
 /** This part runs in the background page */
 export namespace Plugin.Worker {
-    export interface Definition extends Shared.DefinitionWithInit {
+    export interface Definition extends Shared.DefinitionDeferred {
         /** TODO: this functionality has not be done yet. */
         backup?: BackupHandler
     }
