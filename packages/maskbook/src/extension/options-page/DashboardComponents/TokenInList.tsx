@@ -38,24 +38,20 @@ const useStyles = makeStyles((theme: Theme) => ({
         position: 'relative',
     },
     link: {
+        display: 'flex',
+        alignItems: 'center',
+        position: 'absolute',
         top: 0,
         right: 0,
         bottom: 0,
         left: 'auto',
         margin: 'auto',
-        position: 'absolute',
     },
     openIcon: {
         fontSize: 16,
         width: 16,
         height: 16,
         marginLeft: theme.spacing(0.5),
-    },
-    address: {
-        color: theme.palette.text.disabled,
-        fontSize: 12,
-        display: 'block',
-        marginTop: theme.spacing(0.25),
     },
     symbol: {},
 }))
@@ -105,10 +101,12 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
                             <OpenInNewIcon className={classes.openIcon} />
                         </Link>
                     ) : null}
-                    <span className={classes.name}>{name}</span>
+                    <Typography className={classes.name} color="textSecondary">
+                        {name}
+                    </Typography>
                 </Typography>
-                <Typography className={classes.secondary} color="textSecondary" component="span">
-                    {balance !== null && formatBalance(balance, token.decimals)}
+                <Typography className={classes.secondary} color="textPrimary" component="span">
+                    {balance !== null && formatBalance(balance, token.decimals, 4)}
                 </Typography>
             </ListItemText>
         </ListItem>
