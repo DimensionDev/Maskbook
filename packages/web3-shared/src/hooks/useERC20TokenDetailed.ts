@@ -14,8 +14,8 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
     const erc20TokenBytes32Contract = useERC20TokenBytes32Contract(address)
 
     return useAsyncRetry(
-        async () => getERC20TokenDetailed(chainId, erc20TokenContract, erc20TokenBytes32Contract, token),
-        [chainId, token, erc20TokenContract, erc20TokenBytes32Contract],
+        async () => getERC20TokenDetailed(address, chainId, erc20TokenContract, erc20TokenBytes32Contract, token),
+        [chainId, token, erc20TokenContract, erc20TokenBytes32Contract, address],
     )
 }
 
@@ -34,6 +34,7 @@ export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'addr
                     const erc20TokenContract = erc20TokenContracts[i]
                     const erc20TokenBytes32Contract = erc20TokenBytes32Contracts[i]
                     return getERC20TokenDetailed(
+                        token.address,
                         chainId,
                         erc20TokenContract,
                         erc20TokenBytes32Contract,
@@ -51,12 +52,12 @@ export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'addr
 }
 
 async function getERC20TokenDetailed(
+    address: string,
     chainId: ChainId,
     erc20TokenContract: ERC20 | null,
     erc20TokenBytes32Contract: ERC20Bytes32 | null,
     token?: Partial<ERC20TokenDetailed>,
 ) {
-    const address = token?.address ?? ''
     const results = await Promise.allSettled([
         token?.name ?? (await (erc20TokenContract?.methods.name().call() ?? '')),
         token?.name ? '' : await (erc20TokenBytes32Contract?.methods.name().call() ?? ''),
