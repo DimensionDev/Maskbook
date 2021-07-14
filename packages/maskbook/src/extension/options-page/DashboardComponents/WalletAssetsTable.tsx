@@ -120,7 +120,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                         chainId={getChainIdFromName(asset.chain)}
                     />
                     <Typography className={classes.name}>{asset.token.symbol}</Typography>
-                    {asset.chain !== chainDetailed.chain.toLowerCase() ? (
+                    {asset.chain.toLowerCase() !== chainDetailed.chain.toLowerCase() ? (
                         <Chip className={classes.chain} label={asset.chain} size="small" />
                     ) : null}
                 </Box>,
@@ -188,6 +188,7 @@ export interface WalletAssetsTableProps extends withClasses<never> {
 export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const { t } = useI18N()
     const { wallet } = props
+    console.log(wallet)
 
     const isMobile = useMatchXS()
     const classes = useStylesExtends(useStyles({ isMobile }), props)
@@ -206,6 +207,8 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         loading: detailedTokensLoading,
         retry: detailedTokensRetry,
     } = useAssets(erc20Tokens)
+
+    console.log(detailedTokens)
 
     const [more, setMore] = useState(false)
 
