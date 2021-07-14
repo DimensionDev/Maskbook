@@ -1,11 +1,12 @@
 import { useAsyncRetry } from 'react-use'
-import type { ERC20TokenDetailed, ERC20Token, ChainId } from '../types'
+import { ERC20TokenDetailed, FungibleToken, ChainId, EthereumTokenType, FungibleTokenDetailed } from '../types'
 import { useChainId } from './useChainId'
 import type { ERC20 } from '@masknet/contracts/types/ERC20'
 import type { ERC20Bytes32 } from '@masknet/contracts/types/ERC20Bytes32'
 import { useERC20TokenContract, useERC20TokenContracts } from '../contracts/useERC20TokenContract'
 import { useERC20TokenBytes32Contract, useERC20TokenBytes32Contracts } from '../contracts/useERC20TokenBytes32Contract'
-import { parseStringOrBytes32, createERC20Token } from '../utils'
+import { parseStringOrBytes32, createERC20Token, createNativeToken } from '../utils'
+import { useMemo } from 'react'
 
 export function useERC20TokenDetailed(address: string, token?: Partial<ERC20TokenDetailed>) {
     const chainId = useChainId()
@@ -18,22 +19,34 @@ export function useERC20TokenDetailed(address: string, token?: Partial<ERC20Toke
     )
 }
 
-export function useERC20TokensDetailed(listOfToken: Pick<ERC20Token, 'type' | 'address'>[]) {
+export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'address' | 'type'>[]) {
     const chainId = useChainId()
-    const listOfAddress = listOfToken.map((t) => t.address)
+    const listOfAddress = useMemo(() => listOfToken.map((t) => t.address), [JSON.stringify(listOfToken)])
     const erc20TokenContracts = useERC20TokenContracts(listOfAddress)
     const erc20TokenBytes32Contracts = useERC20TokenBytes32Contracts(listOfAddress)
 
-    return useAsyncRetry(
+    return useAsyncRetry<FungibleTokenDetailed[]>(
         async () =>
             Promise.all(
                 listOfToken.map(async (token, i) => {
+                    if (token.type === EthereumTokenType.Native) return createNativeToken(chainId)
+
                     const erc20TokenContract = erc20TokenContracts[i]
                     const erc20TokenBytes32Contract = erc20TokenBytes32Contracts[i]
-                    return getERC20TokenDetailed(chainId, erc20TokenContract, erc20TokenBytes32Contract, token)
+                    return getERC20TokenDetailed(
+                        chainId,
+                        erc20TokenContract,
+                        erc20TokenBytes32Contract,
+                        token as Partial<ERC20TokenDetailed>,
+                    )
                 }),
             ),
-        [chainId, listOfToken, erc20TokenContracts, erc20TokenBytes32Contracts],
+        [
+            chainId,
+            JSON.stringify(listOfToken),
+            JSON.stringify(erc20TokenContracts),
+            JSON.stringify(erc20TokenBytes32Contracts),
+        ],
     )
 }
 
