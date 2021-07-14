@@ -26,7 +26,7 @@ export default async function cleanProfileWithNoLinkedPersona(signal: AbortSigna
     )
     const expired = new Date(Date.now() - 1000 * 60 * 60 * 24 * 14 /** days */)
     await consistentPersonaDBWriteAccess(async (t) => {
-        if (signal.aborted) throw new Error('')
+        if (signal.aborted) throw new Error('Abort')
         for await (const x of t.objectStore('profiles')) {
             if (x.value.linkedPersona) continue
             if (expired < x.value.updatedAt) continue
