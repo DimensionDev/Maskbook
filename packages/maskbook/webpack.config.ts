@@ -473,6 +473,7 @@ function getGitInfo(reproducible: boolean) {
             BRANCH_NAME: git.branchName(),
             DIRTY: git.isDirty(),
             TAG_DIRTY: git.isTagDirty(),
+            WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
         }
     return {
         BUILD_DATE: new Date(0).toISOString(),
@@ -484,6 +485,7 @@ function getGitInfo(reproducible: boolean) {
         BRANCH_NAME: 'N/A',
         DIRTY: false,
         TAG_DIRTY: false,
+        WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
     }
 }
 

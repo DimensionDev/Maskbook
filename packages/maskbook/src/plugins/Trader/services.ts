@@ -8,6 +8,7 @@ import { DataProvider, TradeProvider } from './types'
 
 currentChainIdSettings.addListener((chainId: ChainId) => {
     const networkType = getNetworkTypeFromChainId(chainId)
+    if (!networkType) return
     switch (networkType) {
         case NetworkType.Ethereum:
             if ([TradeProvider.PANCAKESWAP, TradeProvider.QUICKSWAP].includes(currentTradeProviderSettings.value))

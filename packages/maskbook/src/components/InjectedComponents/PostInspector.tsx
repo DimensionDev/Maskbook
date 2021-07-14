@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { DecryptPost, DecryptPostProps } from './DecryptedPost/DecryptedPost'
 import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
@@ -10,10 +10,7 @@ import { useValueRef } from '@masknet/shared'
 import { debugModeSetting } from '../../settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
 import type { TypedMessageTuple } from '@masknet/shared'
-import type { PluginConfig } from '../../plugins/types'
-import { PluginUI } from '../../plugins/PluginUI'
-import { usePostInfoDetails, usePostInfo } from '../DataSource/usePostInfo'
-import { ErrorBoundary } from '../shared/ErrorBoundary'
+import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import type { PayloadAlpha40_Or_Alpha39, PayloadAlpha38 } from '../../utils/type-transform/Payload'
 import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
@@ -119,33 +116,9 @@ export function PostInspector(props: PostInspectorProps) {
                 {props.slotPosition !== 'after' && slot}
                 {x}
                 <PluginHooksRenderer />
-                <OldPluginPostInspector />
                 {debugInfo}
                 {props.slotPosition !== 'before' && slot}
             </>
         )
     }
-}
-function OldPluginPostInspector() {
-    return (
-        <>
-            {[...PluginUI.values()].map((x) => (
-                <ErrorBoundary subject={`Plugin "${x.pluginName}"`} key={x.identifier}>
-                    <PluginPostInspectorForEach config={x} />
-                </ErrorBoundary>
-            ))}
-        </>
-    )
-}
-function PluginPostInspectorForEach({ config }: { config: PluginConfig }) {
-    const ref = useRef<HTMLDivElement>(null)
-    const F = config.postInspector
-    const post = usePostInfo()
-    useEffect(() => {
-        if (!ref.current || !F || typeof F === 'function') return
-        return F.init(post!, {}, ref.current)
-    }, [F, post])
-    if (!F) return null
-    if (typeof F === 'function') return <F />
-    return <div ref={ref} />
 }

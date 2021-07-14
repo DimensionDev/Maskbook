@@ -1,16 +1,16 @@
-import { ChainId, getNetworkTypeFromChainId, ProviderType } from '@masknet/web3-shared'
+import { ChainId, ProviderType } from '@masknet/web3-shared'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
 import { pollingTask, startEffects } from '../../../utils'
+import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
+import { getWallet } from './wallet'
 import {
     currentAccountSettings,
     currentBalanceSettings,
     currentBlockNumberSettings,
     currentChainIdSettings,
-    currentNetworkSettings,
     currentProviderSettings,
 } from '../settings'
-import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
-import { getWallet } from './wallet'
+import { updateAccount } from './account'
 
 const beats: true[] = []
 
@@ -26,7 +26,10 @@ export async function updateChainState(chainId?: ChainId) {
     beats.length = 0
 
     // update network type
-    if (chainId) currentNetworkSettings.value = getNetworkTypeFromChainId(chainId)
+    if (chainId)
+        await updateAccount({
+            chainId,
+        })
 
     // update chain state
     try {

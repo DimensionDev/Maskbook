@@ -85,6 +85,7 @@ const useStyles = makeStyles<
         display: 'flex',
         justifyContent: 'center',
         marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
     },
 }))
 

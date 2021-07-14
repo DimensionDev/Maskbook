@@ -83,7 +83,7 @@ Run the following command to start the React Devtools. It doesn't work if you in
 
 > pnpx react-devtools
 
-Due to bug https://github.com/facebook/react/issues/20377, React Devtools is conflict with React Fast Refresh.
+Due to bug <https://github.com/facebook/react/issues/20377>, React Devtools is conflict with React Fast Refresh.
 
 Please use the following command, it will start the development process in profile mode, which disables React Fast Refresh and enables React Devtools.
 

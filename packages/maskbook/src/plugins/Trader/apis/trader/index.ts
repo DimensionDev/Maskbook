@@ -5,7 +5,7 @@ import { TagType, TradeProvider } from '../../types'
 
 export async function getAvailableTraderProviders(type?: TagType, keyword?: string) {
     const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
-
+    if (!networkType) return []
     switch (networkType) {
         case NetworkType.Ethereum:
             return [

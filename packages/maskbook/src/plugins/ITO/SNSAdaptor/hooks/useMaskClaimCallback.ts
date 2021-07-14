@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import type { NonPayableTx } from '@masknet/contracts/types/types'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import {
     TransactionEventType,
     TransactionStateType,

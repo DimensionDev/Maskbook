@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
-import type { Pair } from '@masknet/contracts/types/Pair'
-import PairABI from '@masknet/contracts/abis/Pair.json'
+import type { Pair } from '@masknet/web3-contracts/types/Pair'
+import PairABI from '@masknet/web3-contracts/abis/Pair.json'
 import { useContract, useContracts } from '@masknet/web3-shared'
 
 export function usePairContract(address: string) {

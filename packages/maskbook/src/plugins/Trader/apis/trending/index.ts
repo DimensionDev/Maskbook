@@ -175,6 +175,7 @@ export async function checkAvailabilityOnDataProvider(keyword: string, type: Tag
 
 export async function getAvailableDataProviders(type?: TagType, keyword?: string) {
     const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
+    if (!networkType) return []
     if (!type || !keyword)
         return getEnumAsArray(DataProvider)
             .filter((x) => (networkType === NetworkType.Ethereum ? true : x.value !== DataProvider.UNISWAP_INFO))

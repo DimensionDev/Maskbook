@@ -1,4 +1,4 @@
-import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/contracts/types/types'
+import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
 
 export enum CurrencyType {
     USD = 'usd',

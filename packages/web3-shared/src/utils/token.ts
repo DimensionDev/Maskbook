@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import type Web3 from 'web3'
 import { AbiOutput, hexToBytes, toAscii } from 'web3-utils'
 import CHAINS from '../assets/chains.json'
-import { getTokenConstants } from '../constants'
+import { getRPCConstants, getTokenConstants } from '../constants'
 import {
     Asset,
     ChainId,
@@ -49,18 +49,25 @@ export function getChainDetailed(chainId = ChainId.Mainnet) {
 // Learn more: https://github.com/ChainAgnostic/CAIPs/blob/master/CAIPs/caip-2.md
 export function getChainDetailedCAIP(chainId = ChainId.Mainnet) {
     const chainDetailed = getChainDetailed(chainId)
+    const { RPC } = getRPCConstants(chainId)
     if (!chainDetailed) return
     return {
         chainId: `0x${chainDetailed.chainId.toString(16)}`,
         chainName: chainDetailed.name,
         nativeCurrency: chainDetailed.nativeCurrency,
-        rpcUrls: chainDetailed.rpc,
+        rpcUrls: RPC,
         blockExplorerUrls: [
             chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
                 ? chainDetailed.explorers[0].url
                 : chainDetailed.infoURL,
         ],
     }
+}
+
+export function getChainRPC(chainId: ChainId, seed: number) {
+    const { RPC, RPC_WEIGHTS } = getRPCConstants(chainId)
+    if (!RPC || !RPC_WEIGHTS) throw new Error('Unknown chain id.')
+    return RPC[RPC_WEIGHTS[seed]]
 }
 
 export function getChainName(chainId: ChainId) {
@@ -75,7 +82,10 @@ export function getChainFullName(chainId: ChainId) {
 
 export function getChainIdFromName(name: string) {
     const chainDetailed = CHAINS.find((x) =>
-        [x.chain, x.network, x.name, x.shortName, x.fullName].map((y) => y.toLowerCase()).includes(name.toLowerCase()),
+        [x.chain, x.network, x.name, x.shortName, x.fullName ?? '']
+            .filter(Boolean)
+            .map((y) => y.toLowerCase())
+            .includes(name.toLowerCase()),
     )
     return chainDetailed?.chainId as ChainId | undefined
 }
@@ -104,7 +114,7 @@ export function getNetworkTypeFromChainId(chainId: ChainId) {
         case 'Matic':
             return NetworkType.Polygon
         default:
-            throw new Error('Unknown chain id.')
+            return
     }
 }
 //#endregion
