@@ -42,7 +42,7 @@ export default sns
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     return (
-        <MaskbookPluginWrapper pluginName="dHEDGE">
+        <MaskbookPluginWrapper pluginName="PoolTogether">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <PoolTogetherView />
             </Suspense>
