@@ -277,6 +277,11 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     !!shareToEveryone,
                 )
                 const activeUI = activatedSocialNetworkUI
+
+                const redPacketPreText = isTwitter(activeUI)
+                    ? t('additional_post_box__encrypted_post_pre_red_packet_twitter', { encrypted })
+                    : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted })
+
                 // TODO: move into the plugin system
                 const redPacketMetadata = RedPacketMetadataReader(typedMessageMetadata)
                 if (imagePayloadEnabled || imageOnly) {
@@ -289,9 +294,11 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     const isDai = isErc20 && redPacketMetadata.ok && isDAI(redPacketMetadata.val.token?.address ?? '')
                     const isOkb = isErc20 && redPacketMetadata.ok && isOKB(redPacketMetadata.val.token?.address ?? '')
 
-                    const relatedText = t('additional_post_box__steganography_post_pre', {
-                        random: new Date().toLocaleString(),
-                    })
+                    const relatedText = redPacketMetadata.ok
+                        ? redPacketPreText.replace(encrypted, '')
+                        : t('additional_post_box__steganography_post_pre', {
+                              random: new Date().toLocaleString(),
+                          })
                     activeUI.automation.nativeCompositionDialog?.appendText?.(relatedText, {
                         recover: false,
                     })
@@ -304,21 +311,14 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                         relatedTextPayload: relatedText,
                     })
                 } else {
-                    let text = t('additional_post_box__encrypted_post_pre', { encrypted })
-                    if (redPacketMetadata.ok) {
-                        if (i18n.language?.includes('zh')) {
-                            text = isTwitter(activeUI)
-                                ? `用 #mask_io @realMaskbook 開啟紅包 ${encrypted}`
-                                : `用 #mask_io 開啟紅包 ${encrypted}`
-                        } else {
-                            text = isTwitter(activeUI)
-                                ? `Claim this Red Packet with #mask_io @realMaskbook ${encrypted}`
-                                : `Claim this Red Packet with #mask_io ${encrypted}`
-                        }
-                    }
-                    activeUI.automation.nativeCompositionDialog?.appendText?.(text, {
-                        recover: true,
-                    })
+                    const text = t('additional_post_box__encrypted_post_pre', { encrypted })
+
+                    activeUI.automation.nativeCompositionDialog?.appendText?.(
+                        redPacketMetadata.ok ? redPacketPreText : text,
+                        {
+                            recover: true,
+                        },
+                    )
                 }
                 // This step write data on gun.
                 // there is nothing to write if it shared with public
