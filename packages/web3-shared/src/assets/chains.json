@@ -258,7 +258,7 @@
     },
     {
         "name": "Optimistic Ethereum",
-        "chain": "ETH",
+        "chain": "OPT",
         "network": "mainnet",
         "rpc": ["https://mainnet.optimism.io/"],
         "faucets": [],
@@ -367,7 +367,7 @@
     },
     {
         "name": "ELA-ETH-Sidechain Mainnet",
-        "chain": "ETH",
+        "chain": "ELA-ETH",
         "network": "mainnet",
         "rpc": ["https://mainrpc.elaeth.io"],
         "faucets": [],
@@ -379,7 +379,7 @@
     },
     {
         "name": "ELA-ETH-Sidechain Testnet",
-        "chain": "ETH",
+        "chain": "ELA-ETH",
         "network": "testnet",
         "rpc": ["https://rpc.elaeth.io"],
         "faucets": ["https://faucet.elaeth.io/"],
@@ -391,7 +391,7 @@
     },
     {
         "name": "ELA-DID-Sidechain Mainnet",
-        "chain": "ETH",
+        "chain": "ELA-ETH",
         "network": "mainnet",
         "rpc": [],
         "faucets": [],
@@ -403,7 +403,7 @@
     },
     {
         "name": "ELA-DID-Sidechain Testnet",
-        "chain": "ETH",
+        "chain": "ELA-ETH",
         "network": "testnet",
         "rpc": [],
         "faucets": [],
@@ -729,7 +729,7 @@
     },
     {
         "name": "Optimistic Ethereum Testnet Kovan",
-        "chain": "ETH",
+        "chain": "OPT",
         "network": "kovan",
         "rpc": ["https://kovan.optimism.io/"],
         "faucets": [],
@@ -1028,7 +1028,7 @@
     },
     {
         "name": "HOO Smart Chain Testnet",
-        "chain": "ETH",
+        "chain": "HOO",
         "network": "testnet",
         "rpc": ["https://http-testnet.hoosmartchain.com"],
         "faucets": ["https://faucet-testnet.hscscan.com/"],
@@ -1142,7 +1142,7 @@
     },
     {
         "name": "Optimistic Ethereum Testnet Goerli",
-        "chain": "ETH",
+        "chain": "OPT",
         "network": "goerli",
         "rpc": ["https://goerli.optimism.io/"],
         "faucets": [],
@@ -1936,7 +1936,7 @@
     },
     {
         "name": "Firenze test network",
-        "chain": "ETH",
+        "chain": "FIR",
         "network": "testnet",
         "rpc": ["https://ethnode.primusmoney.com/firenze"],
         "faucets": [],
