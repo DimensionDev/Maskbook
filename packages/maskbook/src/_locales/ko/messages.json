@@ -93,7 +93,7 @@
     "error_gas_feed_exceeds": "스마트 컨트랙트를 활성화할 때 오류가 생겼습니다.",
     "error_insufficient_balance": "이 월렛의 잔액이 부족합니다.",
     "error_unknown": "미지의 오류",
-    "eanble_or_disable_plugin": "플러그인 사용/사용 안 함",
+    "enable_or_disable_plugin": "플러그인 사용/사용 안 함",
     "feedback": "피드백",
     "fingerprint": "지문",
     "buy": "매수하기",

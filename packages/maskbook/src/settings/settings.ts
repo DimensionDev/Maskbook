@@ -1,4 +1,4 @@
-import { createGlobalSettings, createNetworkSettings, NetworkSettingsCache } from './createSettings'
+import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { LaunchPage } from './types'
@@ -67,9 +67,12 @@ export const enableGroupSharingSettings = createGlobalSettings<boolean>('experim
  *      PluginTraderMessages: packages/maskbook/src/plugins/Trader/messages.ts
  *      PluginTransakMessages: packages/maskbook/src/plugins/Transak/messages.ts
  */
-export const currentImagePayloadStatus: NetworkSettingsCache = createNetworkSettings('currentImagePayloadStatus')
-export const currentSelectedIdentity: NetworkSettingsCache = createNetworkSettings('currentSelectedIdentity')
-export const currentSetupGuideStatus: NetworkSettingsCache = createNetworkSettings('currentSetupGuideStatus')
+export const currentImagePayloadStatus: NetworkSettings<string> = createNetworkSettings('currentImagePayloadStatus', '')
+export const currentSelectedIdentity: NetworkSettings<string> = createNetworkSettings('currentSelectedIdentity', '')
+export const currentSetupGuideStatus: NetworkSettings<string> = createNetworkSettings('currentSetupGuideStatus', '')
+// This is a misuse of concept "NetworkSettings" as "namespaced settings"
+// The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884
+export const currentPluginEnabledStatus: NetworkSettings<boolean> = createNetworkSettings('pluginsEnabled', true)
 export const currentImportingBackup = createGlobalSettings<boolean>('importingBackup', false, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })

@@ -94,25 +94,27 @@ export function createGlobalSettings<T extends browser.storage.StorageValue>(
     return settings
 }
 
-export interface NetworkSettingsCache {
-    [networkKey: string]: ValueRef<string> & { ready: boolean; readyPromise: Promise<string> }
+export interface NetworkSettings<T> {
+    [networkKey: string]: ValueRef<T> & { ready: boolean; readyPromise: Promise<T> }
 }
 
-export function createNetworkSettings(settingsKey: string) {
-    const cached: NetworkSettingsCache = {}
+export function createNetworkSettings<T extends browser.storage.StorageValue>(settingsKey: string, defaultValue: T) {
+    const cached: NetworkSettings<T> = {}
     MaskMessage.events.createNetworkSettingsReady.on((networkKey) => {
-        if (!(networkKey in cached)) cached[networkKey] = createInternalSettings(`${networkKey}+${settingsKey}`, '')
+        if (networkKey.startsWith('plugin:') || settingsKey === 'pluginsEnabled') return
+        if (!(networkKey in cached))
+            cached[networkKey] = createInternalSettings(`${networkKey}+${settingsKey}`, defaultValue)
     })
     return new Proxy(cached, {
         get(target, networkKey: string) {
             if (!(networkKey in target)) {
-                const settings = createInternalSettings(`${networkKey}+${settingsKey}`, '')
+                const settings = createInternalSettings(`${networkKey}+${settingsKey}`, defaultValue)
                 target[networkKey] = settings
                 settings.readyPromise.then(() => MaskMessage.events.createNetworkSettingsReady.sendToAll(networkKey))
             }
             return target[networkKey]
         },
-        set(target, settingKey: string, value: string) {
+        set(target, settingKey: string, value: T) {
             const settings = target[settingKey]
             settings.value = value
             return true
