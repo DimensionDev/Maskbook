@@ -37,9 +37,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const acutalChainId = chainId
     const actualNetwork = getChainName(acutalChainId)
 
-    // if false then the user should switch network manually
-    const isSwitchable = true
-
     // if testnets were not allowed it will not guide the user to switch the network
     const isAllowed = allowTestnet || chainDetailed?.network === 'mainnet'
 
@@ -63,7 +60,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         if (getNetworkTypeFromChainId(expectedChainId) === NetworkType.Ethereum)
             await Services.Ethereum.switchEthereumChain(expectedChainId)
         else await Services.Ethereum.addEthereumChain(chainDetailedCAIP, account)
-    }, [account, isAllowed, isSwitchable, providerType, expectedChainId])
+    }, [account, isAllowed, providerType, expectedChainId])
 
     if (acutalChainId === expectedChainId) return <>{props.children}</>
 
@@ -88,35 +85,25 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         network: actualNetwork,
                     })}
                 </span>
-                {isSwitchable ? null : (
-                    <span>
-                        {t('plugin_wallet_swtich_to', {
-                            network: expectedNetwork,
-                            provider: resolveProviderName(providerType),
-                        })}
-                    </span>
-                )}
             </Typography>
-            {isSwitchable ? (
-                <ActionButtonPromise
-                    variant="contained"
-                    size="small"
-                    sx={{ marginTop: 1.5 }}
-                    init={t('plugin_wallet_switch_network', {
-                        network: expectedNetwork,
-                    })}
-                    waiting={t('plugin_wallet_switch_network_under_going', {
-                        network: expectedNetwork,
-                    })}
-                    complete={t('plugin_wallet_switch_network', {
-                        network: expectedNetwork,
-                    })}
-                    failed={t('retry')}
-                    executor={onSwitch}
-                    completeOnClick={onSwitch}
-                    failedOnClick="use executor"
-                />
-            ) : null}
+            <ActionButtonPromise
+                variant="contained"
+                size="small"
+                sx={{ marginTop: 1.5 }}
+                init={t('plugin_wallet_switch_network', {
+                    network: expectedNetwork,
+                })}
+                waiting={t('plugin_wallet_switch_network_under_going', {
+                    network: expectedNetwork,
+                })}
+                complete={t('plugin_wallet_switch_network', {
+                    network: expectedNetwork,
+                })}
+                failed={t('retry')}
+                executor={onSwitch}
+                completeOnClick={onSwitch}
+                failedOnClick="use executor"
+            />{' '}
         </Box>
     )
 }
