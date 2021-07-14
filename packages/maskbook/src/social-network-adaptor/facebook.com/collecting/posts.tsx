@@ -162,7 +162,7 @@ function getPostID(node: DOMProxy): null | string {
 }
 
 function getMetadataImages(node: DOMProxy): string[] {
-    const parent = node.current.parentElement
+    const parent = node.current.parentElement?.parentElement
 
     if (!parent) return []
     const imgNodes = isMobileFacebook

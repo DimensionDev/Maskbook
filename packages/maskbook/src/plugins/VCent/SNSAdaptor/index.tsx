@@ -11,6 +11,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!tweetAddress) return null
         return <VCentDialog tweetAddress={tweetAddress} />
     },
+    PostInspector() {
+        const tweetAddress = usePostInfoDetails.postID()
+        if (!tweetAddress) return null
+        return <VCentDialog tweetAddress={tweetAddress} />
+    },
 }
 
 export default sns

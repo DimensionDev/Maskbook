@@ -4,8 +4,9 @@ import {
     ERC20TokenDetailed,
     EthereumTokenType,
     formatEthereumAddress,
-    getChainDetailed,
+    isChainIdValid,
 } from '@masknet/web3-shared'
+import { Flags } from '../../../utils'
 
 interface TokenList {
     keywords: string[]
@@ -45,13 +46,7 @@ export async function fetchERC20TokensFromTokenList(
     chainId = ChainId.Mainnet,
 ): Promise<ERC20TokenDetailed[]> {
     return (await fetchTokenList(url)).tokens
-        .filter(
-            (x) =>
-                x.chainId === chainId &&
-                (process.env.NODE_ENV === 'production' && process.env.build === 'stable'
-                    ? getChainDetailed(chainId)?.network === 'mainnet'
-                    : true),
-        )
+        .filter((x) => x.chainId === chainId && isChainIdValid(chainId, Flags.wallet_allow_testnet))
         .map((x) => ({
             type: EthereumTokenType.ERC20,
             ...x,

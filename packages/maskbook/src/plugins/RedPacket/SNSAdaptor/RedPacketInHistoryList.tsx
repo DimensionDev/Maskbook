@@ -71,6 +71,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         height: 27,
     },
     title: {
+        whiteSpace: 'break-spaces',
         fontWeight: 500,
         fontSize: 16,
     },

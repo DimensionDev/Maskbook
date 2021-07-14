@@ -1,10 +1,11 @@
-import type { HappyRedPacketV2 } from '@masknet/contracts/types/HappyRedPacketV2'
-import type { PayableTx } from '@masknet/contracts/types/types'
+import type { HappyRedPacketV2 } from '@masknet/web3-contracts/types/HappyRedPacketV2'
+import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
     isLessThan,
     TransactionEventType,
+    TransactionState,
     TransactionStateType,
     useAccount,
     useChainId,
@@ -12,7 +13,10 @@ import {
     useNonce,
     useTokenConstants,
     useTransactionState,
+    FAKE_SIGN_PASSWORD,
 } from '@masknet/web3-shared'
+import { omit } from 'lodash-es'
+import { useAsync } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import type { TransactionReceipt } from 'web3-core'
@@ -32,6 +36,96 @@ export interface RedPacketSettings {
     token?: FungibleTokenDetailed
 }
 
+type paramsObjType = {
+    password: string
+    shares: number
+    isRandom: boolean
+    duration: number
+    seed: string
+    message: string
+    name: string
+    tokenType: number
+    tokenAddress: string
+    total: string
+    token?: FungibleTokenDetailed
+}
+
+function checkParams(
+    paramsObj: paramsObjType,
+    setCreateState?: (value: React.SetStateAction<TransactionState>) => void,
+) {
+    if (isLessThan(paramsObj.total, paramsObj.shares)) {
+        setCreateState?.({
+            type: TransactionStateType.FAILED,
+            error: new Error('At least [number of red packets] tokens to your red packet.'),
+        })
+        return false
+    }
+
+    if (paramsObj.shares <= 0) {
+        setCreateState?.({
+            type: TransactionStateType.FAILED,
+            error: Error('At least 1 person should be able to claim the red packet.'),
+        })
+        return false
+    }
+
+    if (paramsObj.tokenType !== EthereumTokenType.Native && paramsObj.tokenType !== EthereumTokenType.ERC20) {
+        setCreateState?.({
+            type: TransactionStateType.FAILED,
+            error: Error('Token not supported'),
+        })
+        return false
+    }
+
+    return true
+}
+
+export function useCreateParams(redPacketSettings: Omit<RedPacketSettings, 'password'> | undefined, version: number) {
+    const redPacketContract = useRedPacketContract(version)
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
+    const account = useAccount()
+    return useAsync(async () => {
+        if (!redPacketSettings || !redPacketContract) return null
+        const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
+        const seed = Math.random().toString()
+
+        const paramsObj: paramsObjType = {
+            password: FAKE_SIGN_PASSWORD,
+            shares,
+            isRandom,
+            duration,
+            seed: Web3Utils.sha3(seed)!,
+            message,
+            name,
+            tokenType: token!.type === EthereumTokenType.Native ? 0 : 1,
+            tokenAddress: token!.type === EthereumTokenType.Native ? NATIVE_TOKEN_ADDRESS : token!.address,
+            total,
+            token,
+        }
+
+        if (!checkParams(paramsObj)) return null
+
+        const params = Object.values(omit(paramsObj, ['token'])) as Parameters<
+            HappyRedPacketV2['methods']['create_red_packet']
+        >
+
+        let gasError = null as Error | null
+        const value = new BigNumber(paramsObj.token?.type === EthereumTokenType.Native ? total : '0').toFixed()
+
+        const gas = (await redPacketContract.methods
+            .create_red_packet(...params)
+            .estimateGas({
+                from: account,
+                value,
+            })
+            .catch((err: Error) => {
+                gasError = err
+            })) as number | undefined
+        return { gas, params, paramsObj, gasError }
+    }, [redPacketSettings, account, redPacketContract]).value
+}
+
 export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'password'>, version: number) {
     const nonce = useNonce()
     const gasPrice = useGasPrice()
@@ -41,45 +135,34 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
+    const paramResult = useCreateParams(redPacketSettings, version)
 
     const createCallback = useCallback(async () => {
-        const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
+        const { token } = redPacketSettings
 
-        if (!token || !redPacketContract) {
+        if (!token || !redPacketContract || !paramResult) {
             setCreateState({
                 type: TransactionStateType.UNKNOWN,
             })
             return
         }
 
-        // error handling
-        if (isLessThan(total, shares)) {
+        const { gas, params, paramsObj, gasError } = paramResult
+
+        if (gasError) {
             setCreateState({
                 type: TransactionStateType.FAILED,
-                error: new Error('At least [number of red packets] tokens to your red packet.'),
-            })
-            return
-        }
-        if (shares <= 0) {
-            setCreateState({
-                type: TransactionStateType.FAILED,
-                error: Error('At least 1 person should be able to claim the red packet.'),
-            })
-            return
-        }
-        if (token.type !== EthereumTokenType.Native && token.type !== EthereumTokenType.ERC20) {
-            setCreateState({
-                type: TransactionStateType.FAILED,
-                error: Error('Token not supported'),
+                error: gasError,
             })
             return
         }
 
+        if (!checkParams(paramsObj, setCreateState)) return
+
         // error: unable to sign password
         let signedPassword = ''
         try {
-            signedPassword = await Services.Ethereum.personalSign(Web3Utils.sha3(message) ?? '', account)
+            signedPassword = await Services.Ethereum.personalSign(Web3Utils.sha3(paramsObj.message) ?? '', account)
         } catch (error) {
             setCreateState({
                 type: TransactionStateType.FAILED,
@@ -104,38 +187,14 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const seed = Math.random().toString()
-        const params: Parameters<HappyRedPacketV2['methods']['create_red_packet']> = [
-            Web3Utils.sha3(signedPassword)!,
-            shares,
-            isRandom,
-            duration,
-            Web3Utils.sha3(seed)!,
-            message,
-            name,
-            token.type === EthereumTokenType.Native ? 0 : 1,
-            token.type === EthereumTokenType.Native ? NATIVE_TOKEN_ADDRESS : token.address, // this field must be a valid address
-            total,
-        ]
+        params[0] = Web3Utils.sha3(signedPassword)!
 
         // estimate gas and compose transaction
-        const value = new BigNumber(token.type === EthereumTokenType.Native ? total : '0').toFixed()
+        const value = new BigNumber(token.type === EthereumTokenType.Native ? paramsObj.total : '0').toFixed()
         const config = {
             from: account,
             value,
-            gas: await redPacketContract.methods
-                .create_red_packet(...params)
-                .estimateGas({
-                    from: account,
-                    value,
-                })
-                .catch((error) => {
-                    setCreateState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    throw error
-                }),
+            gas,
             gasPrice,
             nonce,
         }
@@ -176,7 +235,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
                 reject(error)
             })
         })
-    }, [nonce, gasPrice, account, redPacketContract, redPacketSettings, chainId])
+    }, [nonce, gasPrice, account, redPacketContract, redPacketSettings, chainId, paramResult])
 
     const resetCallback = useCallback(() => {
         setCreateState({
