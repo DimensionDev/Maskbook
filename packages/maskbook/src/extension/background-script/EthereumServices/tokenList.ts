@@ -110,25 +110,24 @@ function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.Mainnet
  * @param urls
  * @param chainId
  */
-export async function fetchERC20TokensFromTokenLists(
-    urls: string[],
-    chainId = ChainId.Mainnet,
-): Promise<ERC20TokenDetailed[]> {
-    const tokens = (await Promise.allSettled(fetchERC20TokensFromTokenList(urls, chainId))).flatMap((x) =>
-        x.status === 'fulfilled' ? x.value : [],
-    )
+export const fetchERC20TokensFromTokenLists = memoizePromise(
+    async (urls: string[], chainId = ChainId.Mainnet): Promise<ERC20TokenDetailed[]> => {
+        const tokens = (await Promise.allSettled(fetchERC20TokensFromTokenList(urls, chainId))).flatMap((x) =>
+            x.status === 'fulfilled' ? x.value : [],
+        )
+        const groupedToken = groupBy(tokens, (x) => x.address.toLowerCase())
 
-    const groupedToken = groupBy(tokens, (x) => x.address.toLowerCase())
-
-    return Object.values(groupedToken).map((tokenList) => {
-        const logoURIs = tokenList
-            .map((token) => token.logoURI)
-            .flat()
-            .filter((token) => !!token) as string[]
-        return {
-            ...tokenList[0],
-            ...{ address: formatEthereumAddress(tokenList[0].address) },
-            ...{ logoURI: logoURIs },
-        }
-    })
-}
+        return Object.values(groupedToken).map((tokenList) => {
+            const logoURIs = tokenList
+                .map((token) => token.logoURI)
+                .flat()
+                .filter((token) => !!token) as string[]
+            return {
+                ...tokenList[0],
+                ...{ address: formatEthereumAddress(tokenList[0].address) },
+                ...{ logoURI: logoURIs },
+            }
+        })
+    },
+    (urls, chainId) => `${chainId}-${urls.join()}`,
+)

@@ -51,26 +51,24 @@ export function FixedTokenList(props: FixedTokenListProps) {
     const [address, setAddress] = useState('')
     const { MASK_ADDRESS } = useTokenConstants()
 
-    const filteredTokensAddress = ERC20_TOKEN_LISTS.filter(
-        (address) =>
-            (!includeTokens.length || includeTokens.some(currySameAddress(address))) &&
-            (!excludeTokens.length || !excludeTokens.some(currySameAddress(address))),
-    )
-
-    const { state, tokensDetailed: filteredERC20TokensDetailed } = useERC20TokensDetailedFromTokenLists(
-        filteredTokensAddress,
+    const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(
+        ERC20_TOKEN_LISTS,
         keyword,
     )
 
-    const renderTokens = uniqBy([...tokens, ...filteredERC20TokensDetailed], (x) => x.address.toLowerCase()).sort(
-        (a, z) => {
-            if (a.type === EthereumTokenType.Native) return -1
-            if (z.type === EthereumTokenType.Native) return 1
-            if (isSameAddress(a.address, MASK_ADDRESS)) return -1
-            if (isSameAddress(z.address, MASK_ADDRESS)) return 1
-            return 0
-        },
+    const filteredTokens = erc20TokensDetailed.filter(
+        (token) =>
+            (!includeTokens.length || includeTokens.some(currySameAddress(token.address))) &&
+            (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
     )
+
+    const renderTokens = uniqBy([...tokens, ...filteredTokens], (x) => x.address.toLowerCase()).sort((a, z) => {
+        if (a.type === EthereumTokenType.Native) return -1
+        if (z.type === EthereumTokenType.Native) return 1
+        if (isSameAddress(a.address, MASK_ADDRESS)) return -1
+        if (isSameAddress(z.address, MASK_ADDRESS)) return 1
+        return 0
+    })
 
     const {
         loading: loadingAssets,
