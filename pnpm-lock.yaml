@@ -38,7 +38,6 @@ importers:
       idb: 5.0.8
       jss: 10.5.1
       lint-staged: ^11.0.0
-      notistack: 1.0.9
       npm-run-all: ^4.1.5
       only-allow: ^1.0.0
       patch-package: ./patches/patch-package-6.4.7.tgz
@@ -63,7 +62,6 @@ importers:
       i18next: 20.3.2
       idb: 5.0.8
       jss: 10.5.1
-      notistack: 1.0.9_132ff92e0fd7328580f6380de259b809
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       react-i18next: 11.11.1_44b15288743ca8758b7bd6a3c957a6b2
@@ -630,7 +628,7 @@ importers:
       classnames: ^2.3.1
       fuse.js: ^6.4.6
       lodash-es: ^4.17.20
-      notistack: ^1.0.9
+      notistack: 1.0.6-next.1
       react-window: ^1.8.6
       storybook-addon-matrix: ^1.6.0
       tinycolor2: ^1.4.2
@@ -639,7 +637,7 @@ importers:
       classnames: 2.3.1
       fuse.js: 6.4.6
       lodash-es: 4.17.21
-      notistack: 1.0.9_132ff92e0fd7328580f6380de259b809
+      notistack: 1.0.6-next.1_132ff92e0fd7328580f6380de259b809
       react-window: 1.8.6_f991c289939c8299bed5e4a6a5a79a62
       tinycolor2: 1.4.2
     devDependencies:
@@ -723,7 +721,7 @@ packages:
       bintrees: 1.0.2
       bn.js: 4.12.0
       compare-versions: 3.6.0
-      ethereumjs-abi: 0.6.6
+      ethereumjs-abi: 0.6.8
       ethereumjs-blockstream: 2.0.7
       ethereumjs-util: 5.2.1
       find-versions: 2.0.0
@@ -4151,7 +4149,7 @@ packages:
       '@ethersproject/bignumber': 5.4.0
       '@ethersproject/bytes': 5.4.0
       '@ethersproject/logger': 5.4.0
-      '@ethersproject/networks': 5.4.0
+      '@ethersproject/networks': 5.4.1
       '@ethersproject/properties': 5.4.0
       '@ethersproject/transactions': 5.4.0
       '@ethersproject/web': 5.4.0
@@ -4421,16 +4419,10 @@ packages:
       '@ethersproject/logger': 5.2.0
     dev: false
 
-  /@ethersproject/networks/5.4.0:
-    resolution: {integrity: sha512-5fywtKRDcnaVeA5SjxXH3DOQqe/IbeD/plwydi94SdPps1fbDUrnO6SzDExaruBZXxpxJcO9upG9UComsei4bg==}
-    dependencies:
-      '@ethersproject/logger': 5.4.0
-
   /@ethersproject/networks/5.4.1:
     resolution: {integrity: sha512-8SvowCKz9Uf4xC5DTKI8+il8lWqOr78kmiqAVLYT9lzB8aSmJHQMD1GSuJI0CW4hMAnzocpGpZLgiMdzsNSPig==}
     dependencies:
       '@ethersproject/logger': 5.4.0
-    dev: false
 
   /@ethersproject/properties/5.1.0:
     resolution: {integrity: sha512-519KKTwgmH42AQL3+GFV3SX6khYEfHsvI6v8HYejlkigSDuqttdgVygFTDsGlofNFchhDwuclrxQnD5B0YLNMg==}
@@ -7843,6 +7835,7 @@ packages:
     resolution: {integrity: sha512-e8iyLJ8vMLpWxXpVWrIt0ujqsfHWgVe5XAz9IMhBYoDirK6th7J+mHjzp797OLc62ZX419nrlwwzsNAA0a0mKg==}
     dependencies:
       '@types/bn.js': 4.11.6
+    dev: false
 
   /@types/enzyme-adapter-react-16/1.0.6:
     resolution: {integrity: sha512-VonDkZ15jzqDWL8mPFIQnnLtjwebuL9YnDkqeCDYnB4IVgwUm0mwKkqhrxLL6mb05xm7qqa3IE95m8CZE9imCg==}
@@ -8202,7 +8195,7 @@ packages:
   /@types/pbkdf2/3.1.0:
     resolution: {integrity: sha512-Cf63Rv7jCQ0LaL8tNXmEyqTHuIJxRdlS5vMh1mj5voN4+QFhVZnlZruezqpWYDiJ8UTzhP0VmeLXCmBk66YrMQ==}
     dependencies:
-      '@types/node': 15.12.5
+      '@types/node': 16.3.1
     dev: false
 
   /@types/prettier/2.2.3:
@@ -8381,7 +8374,7 @@ packages:
   /@types/secp256k1/4.0.2:
     resolution: {integrity: sha512-QMg+9v0bbNJ2peLuHRWxzmy0HRJIG6gFZNhaRSp7S3ggSbCCxiqQB2/ybvhXyhHOCequpNkrx7OavNhrWOsW0A==}
     dependencies:
-      '@types/node': 15.12.5
+      '@types/node': 16.3.1
     dev: false
 
   /@types/serve-static/1.13.10:
@@ -14077,11 +14070,11 @@ packages:
       setimmediate: 1.0.5
     dev: false
 
-  /ethereumjs-abi/0.6.6:
-    resolution: {integrity: sha512-w8KubDsA/+OAuqtIR9RGsMcoZ5nhM8vxwjJAJvEIY+clhxA3BHoLG3+ClYQaQhD0n3mlDt3U5rBrmSVJvI3c8A==}
+  /ethereumjs-abi/0.6.8:
+    resolution: {integrity: sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==}
     dependencies:
       bn.js: 4.12.0
-      ethereumjs-util: 5.2.1
+      ethereumjs-util: 6.2.1
     dev: false
 
   /ethereumjs-account/2.0.5:
@@ -14872,6 +14865,18 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+
+  /follow-redirects/1.14.1_debug@4.3.1:
+    resolution: {integrity: sha512-HWqDgT7ZEkqRzBvc2s64vSZ/hfOceEol3ac/7tKwzuvEyWx3/4UegXh5oBOIotkGsObyk3xznnSRVADBgWSQVg==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dependencies:
+      debug: 4.3.1_supports-color@6.1.0
+    dev: true
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
@@ -16098,7 +16103,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.14.1
+      follow-redirects: 1.14.1_debug@4.3.1
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -19867,10 +19872,10 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /notistack/1.0.9_132ff92e0fd7328580f6380de259b809:
-    resolution: {integrity: sha512-Dal2HtTpWrdYCZ3t0HhJt47NJZwVSPee36WzORRbqUkFR0k9pxFszxBuPSWshBLwF6Av8s86XPP+ED5zRz0CGw==}
+  /notistack/1.0.6-next.1_132ff92e0fd7328580f6380de259b809:
+    resolution: {integrity: sha512-deshn1cnse70pRFKuDC4mKUohjspAF3KjyjoolAFLCNGlFpjpBgHcFR8+gnO4XV0ijuXVz+oDfzBAdw/YMtkkg==}
     peerDependencies:
-      '@material-ui/core': ^4.0.0
+      '@material-ui/core': ^5.0.0-alpha.15
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
