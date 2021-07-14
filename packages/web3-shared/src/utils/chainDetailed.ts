@@ -8,7 +8,7 @@ export function isChainIdValid(chainId: ChainId, allowTestnet = false) {
     return !!getNetworkTypeFromChainId(chainId) && (chainDetailed?.network === 'mainnet' || allowTestnet)
 }
 
-export function isChainMainnet(chainId: ChainId) {
+export function isChainIdMainnet(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     return chainDetailed?.network === 'mainnet'
 }

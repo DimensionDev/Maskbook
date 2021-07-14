@@ -10,7 +10,7 @@ import {
     formatEthereumAddress,
     getChainIdFromName,
     getTokenConstants,
-    isChainMainnet,
+    isChainIdMainnet,
     NetworkType,
     pow10,
 } from '@masknet/web3-shared'
@@ -108,7 +108,7 @@ function formatAssetsFromDebank(data: BalanceRecord[]) {
             const chainId_ = getChainIdFromName(y.chain) ?? ChainId.Mainnet
             return {
                 chain: y.chain,
-                token: isChainMainnet(chainId)
+                token: isChainIdMainnet(chainId)
                     ? createNativeToken(chainId)
                     : createERC20Token(chainId_, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
                 balance: new BigNumber(y.balance).toFixed(),
