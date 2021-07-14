@@ -50,11 +50,11 @@ export async function getTransactionList(
 
 function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['data']) {
     return history_list
-        .filter((transaction) => transaction.tx?.name ?? transaction.cate_id)
+        .filter((transaction) => transaction.tx?.name || transaction.cate_id)
         .filter(({ cate_id }) => cate_id !== 'approve')
         .map((transaction) => {
             let type = transaction.tx?.name
-            if (isNil(type) && !isNil(transaction.cate_id)) {
+            if (!type && !isNil(transaction.cate_id)) {
                 type = cate_dict[transaction.cate_id].en
             } else if (type === '') {
                 type = 'contract interaction'
