@@ -109,9 +109,10 @@ function formatAssetsFromDebank(data: BalanceRecord[]) {
             const chainIdFormId = getChainIdFromName(y.id)
             return {
                 chain: y.chain,
-                token: chainIdFormId && isChainIdMainnet(chainIdFormId)
-                    ? createNativeToken(chainId)
-                    : createERC20Token(chainId, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
+                token:
+                    chainIdFormId && isChainIdMainnet(chainIdFormId)
+                        ? createNativeToken(chainId)
+                        : createERC20Token(chainId, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
                 balance: new BigNumber(y.balance).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price).toFixed(),
