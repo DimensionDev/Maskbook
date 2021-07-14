@@ -42,7 +42,6 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                     db.createObjectStore('relations', { keyPath: ['linked', 'profile'] })
                     transaction.objectStore('profiles').createIndex('network', 'network', { unique: false })
                     transaction.objectStore('personas').createIndex('hasPrivateKey', 'hasPrivateKey', { unique: false })
-                    transaction.objectStore('relations').createIndex('network', 'network', { unique: false })
                 }
                 async function v1_v2() {
                     const persona = transaction.objectStore('personas')
