@@ -1,5 +1,11 @@
 import * as bip39 from 'bip39'
-import { queryProfilesWithQuery, personaRecordToPersona, storeAvatar, queryProfile } from '../../database'
+import {
+    queryProfilesWithQuery,
+    personaRecordToPersona,
+    storeAvatar,
+    queryProfile,
+    queryRelationsWithQuery,
+} from '../../database'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import type { Profile, Persona } from '../../database/Persona/types'
 import {
@@ -13,6 +19,8 @@ import {
     ProfileRecord,
     createOrUpdateProfileDB,
     consistentPersonaDBWriteAccess,
+    createRelationDB,
+    updateRelationDB,
 } from '../../database/Persona/Persona.db'
 import { queryPersona } from '../../database'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
@@ -30,8 +38,12 @@ export { storeAvatar, queryAvatarDataURL } from '../../database'
 //#region Profile
 export { queryProfile, queryProfilePaged } from '../../database'
 
-export function queryProfiles(network?: string, relatedPersonaIdentifier?: PersonaIdentifier): Promise<Profile[]> {
-    return queryProfilesWithQuery(network, relatedPersonaIdentifier)
+export function queryProfiles(network?: string): Promise<Profile[]> {
+    return queryProfilesWithQuery(network)
+}
+
+export function queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]) {
+    return queryProfilesWithQuery((record) => identifiers.some((x) => record.identifier.equals(x)))
 }
 export async function queryMyProfiles(network?: string): Promise<Profile[]> {
     const myPersonas = (await queryMyPersonas(network)).filter((x) => !x.uninitialized)
@@ -48,27 +60,14 @@ export async function updateProfileInfo(
         nickname?: string | null
         avatarURL?: string | null
         forceUpdateAvatar?: boolean
-        relatedPersonaIdentifier?: PersonaIdentifier
-        favorite?: boolean
     },
 ): Promise<void> {
-    if (data.favorite !== undefined) {
-        const rec: ProfileRecord = {
-            identifier,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            favorite: data.favorite,
-        }
-        await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t))
-    }
     if (data.nickname) {
         const rec: ProfileRecord = {
             identifier,
             nickname: data.nickname,
             createdAt: new Date(),
             updatedAt: new Date(),
-            relatedPersonaIdentifier: data.relatedPersonaIdentifier,
-            favorite: data.favorite,
         }
         await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t))
     }
@@ -165,6 +164,28 @@ export async function attachProfile(
 export { detachProfileDB as detachProfile } from '../../database/Persona/Persona.db'
 //#endregion
 
+//#region Relation
+export async function createNewRelation(profile: ProfileIdentifier, linked: PersonaIdentifier) {
+    await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked }, t))
+}
+
+export async function queryRelations(network: string, persona?: PersonaIdentifier) {
+    return queryRelationsWithQuery(network, persona)
+}
+
+export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: boolean) {
+    await consistentPersonaDBWriteAccess((t) =>
+        updateRelationDB(
+            {
+                profile,
+                linked,
+                favor,
+            },
+            t,
+        ),
+    )
+}
+//#endregion
 /**
  * In older version of Mask, identity is marked as `ProfileIdentifier(network, '$unknown')` or `ProfileIdentifier(network, '$self')`. After upgrading to the newer version of Mask, Mask will try to find the current user in that network and call this function to replace old identifier into a "resolved" identity.
  * @param identifier The resolved identity

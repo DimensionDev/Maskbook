@@ -13,7 +13,8 @@ export const [useOwnedPersonas, , currentPersonas] = createGlobalState(
     (x) => {
         const a = Messages.events.personaChanged.on(x)
         const b = Messages.events.profilesChanged.on(x)
-        return () => void [a(), b()]
+        const c = Messages.events.relationsChanged.on(x)
+        return () => void [a(), b(), c()]
     },
 )
 

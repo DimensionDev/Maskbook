@@ -2,11 +2,12 @@ import type { Contact } from '@masknet/shared'
 import { memo, useCallback } from 'react'
 import { Box, TableCell, TableRow, Typography, makeStyles, Avatar, useTheme, Button } from '@material-ui/core'
 import { StarIcon, MaskNetworkIcon } from '@masknet/icons'
-import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact'
 import { MaskColorVar } from '@masknet/theme'
 import { Services } from '../../../../API'
 import { useDashboardI18N } from '../../../../locales'
 import { mapContactAvatarColor } from '../../../../utils/mapContactAvatarColor'
+import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact'
+import { PersonaContext } from '../../hooks/usePersonaContext'
 
 const useStyles = makeStyles(() => ({
     favorite: {
@@ -49,14 +50,19 @@ export interface ContactTableRowProps {
 
 export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, index }) => {
     const t = useDashboardI18N()
+    const { currentPersona } = PersonaContext.useContainer()
     const [, addContactToFavorite] = useAddContactToFavorite()
     const [, removeContactFromFavorite] = useRemoveContactFromFavorite()
 
     const theme = useTheme().palette.mode
 
     const handleClickStar = useCallback(() => {
-        contact.favorite ? removeContactFromFavorite(contact.identifier) : addContactToFavorite(contact.identifier)
-    }, [addContactToFavorite, removeContactFromFavorite, contact])
+        if (currentPersona) {
+            contact.favorite
+                ? removeContactFromFavorite(contact.identifier, currentPersona)
+                : addContactToFavorite(contact.identifier, currentPersona)
+        }
+    }, [contact, currentPersona])
 
     const handleClickInvite = useCallback(() => {
         Services.Helper.queryPasteIntoPostBox(

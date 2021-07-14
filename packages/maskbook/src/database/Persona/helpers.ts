@@ -18,6 +18,7 @@ import {
     updatePersonaDB,
     createOrUpdatePersonaDB,
     queryProfilesPagedDB,
+    queryRelationsDB,
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
 import { queryAvatarDataURL } from '../helpers/avatar'
@@ -94,11 +95,8 @@ export async function queryPersona(identifier: PersonaIdentifier): Promise<Perso
 /**
  * Select a set of Profiles
  */
-export async function queryProfilesWithQuery(
-    network?: Parameters<typeof queryProfilesDB>[0],
-    relatedPersonaIdentifier?: Parameters<typeof queryProfilesDB>[1],
-): Promise<Profile[]> {
-    const _ = await queryProfilesDB(network || ((_) => true), relatedPersonaIdentifier)
+export async function queryProfilesWithQuery(query?: Parameters<typeof queryProfilesDB>[0]): Promise<Profile[]> {
+    const _ = await queryProfilesDB(query || ((_) => true))
     return Promise.all(_.map(profileRecordToProfile))
 }
 
@@ -242,4 +240,8 @@ export async function queryLocalKey(i: ProfileIdentifier | PersonaIdentifier): P
     } else {
         return (await queryPersonaDB(i))?.localKey ?? null
     }
+}
+
+export async function queryRelationsWithQuery(network: string, i?: PersonaIdentifier) {
+    return queryRelationsDB((record) => record.profile.network === network && record.linked.equals(i))
 }

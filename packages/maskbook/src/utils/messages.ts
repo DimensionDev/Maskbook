@@ -48,6 +48,7 @@ export interface MaskMessages extends SettingsEvents {
     compositionUpdated: CompositionEvent
     personaChanged: (UpdateEvent<PersonaIdentifier> & { owned: boolean })[]
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
+    relationsChanged: (UpdateEvent<ProfileIdentifier> & { favor?: boolean })[]
     /** Public Key found / Changed */
     linkedProfilesChanged: {
         of: ProfileIdentifier

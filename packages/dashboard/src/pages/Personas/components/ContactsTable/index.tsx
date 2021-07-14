@@ -69,7 +69,7 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
         if (!value) return []
         return sortBy(
             value.map<Contact>((profile) => ({
-                favorite: profile.favorite,
+                favorite: profile.favor,
                 name: profile.nickname || profile.identifier.userId || '',
                 fingerprint: profile.linkedPersona?.fingerprint,
                 identifier: profile.identifier,
