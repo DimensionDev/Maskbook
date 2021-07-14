@@ -95,6 +95,6 @@
       ]
     },
     "transpileOnly": true,
-    "compiler": "ttypescript"
+    "compiler": "typescript"
   }
 }

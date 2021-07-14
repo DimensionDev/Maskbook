@@ -3,16 +3,12 @@ import { postEditorToolbarSelector } from '../utils/selector'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogIcon } from '../../../components/InjectedComponents/PostDialogIcon'
 import { MaskMessage } from '../../../utils/messages'
-import { isCompose, isMobile } from '../utils/postBox'
 import { makeStyles, Theme } from '@material-ui/core'
 import { startWatch } from '../../../utils/watcher'
 
 export function injectPostDialogIconAtTwitter(signal: AbortSignal) {
     const emptyNode = document.createElement('div')
-    renderPostDialogIconTo(
-        postEditorToolbarSelector().map((x) => (isMobile() && isCompose() ? x : emptyNode)),
-        signal,
-    )
+    renderPostDialogIconTo(postEditorToolbarSelector(), signal)
 }
 
 function renderPostDialogIconTo<T>(ls: LiveSelector<T, true>, signal: AbortSignal) {

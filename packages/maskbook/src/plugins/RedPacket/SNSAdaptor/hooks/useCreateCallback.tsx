@@ -7,6 +7,7 @@ import {
     TransactionEventType,
     TransactionState,
     TransactionStateType,
+    resolveTransactionLinkOnExplorer,
     useAccount,
     useChainId,
     useGasPrice,
@@ -15,10 +16,11 @@ import {
     useTransactionState,
     FAKE_SIGN_PASSWORD,
 } from '@masknet/web3-shared'
+import { useSnackbar, CustomSnackbarContent, CustomSnackbarContentProps } from '@masknet/theme'
 import { omit } from 'lodash-es'
 import { useAsync } from 'react-use'
 import BigNumber from 'bignumber.js'
-import { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import Services from '../../../../extension/service'
@@ -126,7 +128,7 @@ export function useCreateParams(redPacketSettings: Omit<RedPacketSettings, 'pass
                 gasError = err
             })) as number | undefined
         return { gas, params, paramsObj, gasError }
-    }, [redPacketSettings, account, redPacketContract]).value
+    }, [JSON.stringify(redPacketSettings), account, JSON.stringify(redPacketContract)]).value
 }
 
 export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'password'>, version: number) {
@@ -139,6 +141,28 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
     const paramResult = useCreateParams(redPacketSettings, version)
+    const snackbar = useSnackbar()
+    const transactionLinkRef = useRef<string>('')
+
+    const snackbarKeyRef = useRef<string | number>()
+    const enqueueSnackbar = useCallback(
+        (options: Partial<CustomSnackbarContentProps & { persist: boolean }>) => {
+            if (snackbarKeyRef.current) {
+                snackbar.closeSnackbar(snackbarKeyRef.current)
+            }
+            snackbarKeyRef.current = snackbar.enqueueSnackbar('Create a Red Packet', {
+                variant: options.variant,
+                persist: options.persist ?? true,
+                content: (key, title) => {
+                    return <CustomSnackbarContent id={key} title={title} {...options} />
+                },
+            })
+            return () => {
+                snackbar.closeSnackbar(snackbarKeyRef.current)
+            }
+        },
+        [snackbar],
+    )
 
     const createCallback = useCallback(async () => {
         const { token } = redPacketSettings
@@ -165,6 +189,10 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
         // error: unable to sign password
         let signedPassword = ''
         try {
+            enqueueSnackbar({
+                processing: true,
+                message: 'Comfirm this transaction in your  wallet',
+            })
             signedPassword = await Services.Ethereum.personalSign(Web3Utils.sha3(paramsObj.message) ?? '', account)
         } catch (error) {
             setCreateState({
@@ -205,37 +233,59 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = redPacketContract.methods.create_red_packet(...params).send(config as PayableTx)
-            promiEvent.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
+            promiEvent.once(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
                 setCreateState({
                     type: TransactionStateType.WAIT_FOR_CONFIRMING,
                     hash,
                 })
+                transactionLinkRef.current = resolveTransactionLinkOnExplorer(token.chainId, hash)
+                enqueueSnackbar({
+                    processing: true,
+                    message: 'Transaction Submitted',
+                    link: transactionLinkRef.current,
+                })
             })
-            promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+            promiEvent.once(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                 setCreateSettings({ ...redPacketSettings, password: signedPassword })
                 setCreateState({
                     type: TransactionStateType.CONFIRMED,
                     no: 0,
                     receipt,
                 })
+                enqueueSnackbar({
+                    persist: false,
+                    variant: 'success',
+                    message: `Sent ${value}${token.symbol}  success`,
+                    link: transactionLinkRef.current,
+                })
             })
 
-            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+            promiEvent.once(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
                 setCreateSettings({ ...redPacketSettings, password: signedPassword })
                 setCreateState({
                     type: TransactionStateType.CONFIRMED,
                     no,
                     receipt,
                 })
+                enqueueSnackbar({
+                    processing: true,
+                    message: 'Transaction Submitted',
+                    link: transactionLinkRef.current,
+                })
                 resolve()
             })
 
-            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
+            promiEvent.once(TransactionEventType.ERROR, (error: Error) => {
                 setCreateState({
                     type: TransactionStateType.FAILED,
                     error,
                 })
                 reject(error)
+                enqueueSnackbar({
+                    variant: 'error',
+                    message: 'Transation rejected',
+                    link: transactionLinkRef.current,
+                })
             })
         })
     }, [nonce, gasPrice, account, redPacketContract, redPacketSettings, chainId, paramResult])

@@ -1,3 +1,4 @@
+import { useRemoteControlledDialog } from '@masknet/shared'
 import {
     EthereumTokenType,
     formatBalance,
@@ -20,17 +21,19 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { TxFeeEstimation } from '../../../web3/UI/TxFeeEstimation'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
-import type { RedPacketJSONPayload } from '../types'
-import type { RedPacketSettings } from './hooks/useCreateCallback'
+import { RedPacketSettings, useCreateParams } from './hooks/useCreateCallback'
+
+// seconds of 1 day
+const duration = 60 * 60 * 24
 
 const useStyles = makeStyles((theme) => ({
-    line: {
+    field: {
         display: 'flex',
         margin: theme.spacing(1),
     },
@@ -56,10 +59,23 @@ const useStyles = makeStyles((theme) => ({
     inputShrinkLabel: {
         transform: 'translate(17px, -3px) scale(0.75) !important',
     },
+    label: {
+        textAlign: 'left',
+        color: theme.palette.text.secondary,
+    },
+    gasEstimation: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        cursor: 'pointer',
+        '& > p': {
+            marginRight: 5,
+            color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
+        },
+    },
 }))
 
 export interface RedPacketFormProps extends withClasses<never> {
-    onCreate?(payload: RedPacketJSONPayload): void
     SelectMenuProps?: Partial<MenuProps>
     onChange(settings: Omit<RedPacketSettings, 'password'>): void
     origin?: Omit<RedPacketSettings, 'password'>
@@ -76,6 +92,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const { HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } = useRedPacketConstants()
     const contract_address =
         networkType === NetworkType.Ethereum ? HAPPY_RED_PACKET_ADDRESS_V2 : HAPPY_RED_PACKET_ADDRESS_V3
+    const contract_version = networkType === NetworkType.Ethereum ? 2 : 3
 
     //#region select token
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
@@ -131,7 +148,10 @@ export function RedPacketForm(props: RedPacketFormProps) {
             : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
     )
     const amount = new BigNumber(rawAmount ?? '0').multipliedBy(pow10(token?.decimals ?? 0))
-    const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares ?? '0')
+    const totalAmount = useMemo(
+        () => (isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares ?? '0')),
+        [amount, shares],
+    )
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
@@ -151,23 +171,30 @@ export function RedPacketForm(props: RedPacketFormProps) {
         return ''
     }, [account, amount, totalAmount, shares, token, tokenBalance])
 
-    const onClick = useCallback(() => {
-        onChange({
-            duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
+    const creatingParams = useMemo(
+        () => ({
+            duration,
             isRandom: Boolean(isRandom),
             name: senderName,
             message: message || t('plugin_red_packet_best_wishes'),
             shares: shares || 0,
             token,
             total: totalAmount.toFixed(),
-        })
+        }),
+        [isRandom, senderName, message, t('plugin_red_packet_best_wishes'), shares, token, totalAmount],
+    )
+
+    const onClick = useCallback(() => {
+        onChange(creatingParams)
         onNext()
-    }, [onChange, totalAmount, token, shares, senderName, isRandom])
+    }, [creatingParams, onChange, onNext])
+
+    const creatingResult = useCreateParams(creatingParams, contract_version)
 
     if (!token) return null
     return (
         <>
-            <div className={classes.line}>
+            <div className={classes.field}>
                 <FormControl className={classes.input} variant="outlined">
                     <InputLabel className={classes.selectShrinkLabel}>{t('plugin_red_packet_split_mode')}</InputLabel>
                     <Select
@@ -206,7 +233,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     onChange={onShareChange}
                 />
             </div>
-            <div className={classes.line}>
+            <div className={classes.field}>
                 <TokenAmountPanel
                     classes={{ root: classes.input }}
                     label={isRandom ? 'Total Amount' : t('plugin_red_packet_amount_per_share')}
@@ -222,7 +249,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     }}
                 />
             </div>
-            <div className={classes.line}>
+            <div className={classes.field}>
                 <TextField
                     className={classes.input}
                     onChange={(e) => setMessage(e.target.value)}
@@ -237,6 +264,11 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     value={message}
                 />
             </div>
+            {creatingResult?.gas && (
+                <div className={classes.field}>
+                    <TxFeeEstimation classes={classes} gas={creatingResult.gas} />
+                </div>
+            )}
             <EthereumWalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
                     amount={totalAmount.toFixed()}
