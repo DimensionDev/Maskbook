@@ -92,6 +92,8 @@ export namespace Plugin.Shared {
         experimentalMark?: boolean
         /** Configuration of how this plugin is managed by the Mask Network. */
         management?: ManagementProperty
+        /** i18n resources of this plugin */
+        i18n?: I18NResource
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
@@ -157,6 +159,10 @@ export namespace Plugin.Shared {
         type: 'opt-in' | 'opt-out'
         networks: Partial<Record<CurrentSNSNetwork, boolean>>
     }
+    export type I18NLanguage = string
+    export type I18NKey = string
+    export type I18NValue = string
+    export type I18NResource = Record<I18NLanguage, Record<I18NKey, I18NValue>>
 }
 
 /** This part runs in the SNSAdaptor */
@@ -187,7 +193,7 @@ export namespace Plugin.SNSAdaptor {
          * A label that will be rendered in the CompositionDialog as a chip.
          * @example {fallback: "🧧 Red Packet"}
          */
-        label: I18NStringField | React.ReactNode
+        label: I18NFieldOrReactNode
         /** This callback will be called when the user clicked on the chip. */
         onClick(): void
     }
@@ -196,7 +202,7 @@ export namespace Plugin.SNSAdaptor {
          * A label that will be rendered in the CompositionDialog as a chip.
          * @example {fallback: "🧧 Red Packet"}
          */
-        label: I18NStringField | React.ReactNode
+        label: I18NFieldOrReactNode
         /** A React dialog component that receives `open` and `onClose`. The dialog will be opened when the chip clicked. */
         dialog: React.ComponentType<CompositionDialogEntry_DialogProps>
         /**
@@ -294,13 +300,13 @@ export namespace Plugin {
     export type InjectUIReact<Props> = React.ComponentType<Props>
 }
 // TODO: Plugin i18n is not read today.
-// TODO: Add an entry for i18n JSON files, and provide hooks.
 export interface I18NStringField {
     /** The i18n key of the string content. */
     i18nKey?: string
     /** The fallback content to display if there is no i18n string found. */
     fallback: string
 }
+export type I18NFieldOrReactNode = I18NStringField | React.ReactNode
 
 /**
  * The current running SocialNetwork.
@@ -319,6 +325,7 @@ export enum CurrentSNSNetwork {
 export namespace Plugin.__Host {
     export interface Host {
         enabled: EnabledStatusReporter
+        addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void
         signal?: AbortSignal
     }
     export interface EnabledStatusReporter {

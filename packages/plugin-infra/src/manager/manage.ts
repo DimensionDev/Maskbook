@@ -1,7 +1,7 @@
 import { Emitter } from '@servie/events'
 import { ALL_EVENTS } from '@masknet/shared'
 import type { Plugin } from '../types'
-import { getPluginDefine, registeredPluginIDs } from './store'
+import { getPluginDefine, registeredPluginIDs, registeredPlugins } from './store'
 
 interface ActivatedPluginInstance<U extends Plugin.Shared.DefinitionWithInit> {
     instance: U
@@ -40,11 +40,16 @@ export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: Cre
         events,
     }
 
-    function startDaemon({ enabled, signal }: Plugin.__Host.Host, extraCheck?: (id: string) => boolean) {
+    function startDaemon(host: Plugin.__Host.Host, extraCheck?: (id: string) => boolean) {
+        const { enabled, signal, addI18NResource } = host
         const off2 = enabled.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
 
         signal?.addEventListener('abort', () => [...activated.keys()].forEach(stopPlugin))
         signal?.addEventListener('abort', off2)
+
+        for (const plugin of registeredPlugins) {
+            plugin.i18n && addI18NResource(plugin.ID, plugin.i18n)
+        }
 
         checkRequirementAndStartOrStop()
         function checkRequirementAndStartOrStop() {
