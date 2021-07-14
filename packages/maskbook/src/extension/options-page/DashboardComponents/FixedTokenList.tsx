@@ -97,7 +97,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
 
     if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
     if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token...')
-    if (!filteredERC20TokensDetailed.length) return renderPlaceholder('No token found')
+    if (!renderAssets.length) return renderPlaceholder('No token found')
 
     return (
         <FixedSizeList
