@@ -3,10 +3,9 @@ import classNames from 'classnames'
 import { FormattedBalance } from '@masknet/shared'
 import {
     formatEthereumAddress,
-    resolveChainColor,
     useAccount,
+    useChainColor,
     useChainDetailed,
-    useChainId,
     useChainIdValid,
     useWallet,
     useNativeTokenBalance,
@@ -59,7 +58,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
-    const chainId = useChainId()
+    const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
     const { value: balance = '0' } = useNativeTokenBalance()
@@ -108,7 +107,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
                     <FiberManualRecordIcon
                         className={classes.chainIcon}
                         style={{
-                            color: resolveChainColor(chainId),
+                            color: chainColor,
                         }}
                     />
                 ) : null}
