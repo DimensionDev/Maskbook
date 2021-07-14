@@ -7,7 +7,6 @@ import {
     getNetworkTypeFromChainId,
     NetworkType,
     ProviderType,
-    resolveProviderName,
     useAccount,
     useAllowTestnet,
     useChainDetailed,
