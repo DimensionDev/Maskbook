@@ -267,17 +267,19 @@ export function PoolView(props: PoolProps) {
                     </Button>
                 </Grid>
                 <Grid container item className={classes.info}>
-                    {pool.tokenListener.apr && pool.tokens.tokenFaucetDripToken ? (
+                    {pool.tokenFaucets.length !== 0 &&
+                    !!pool.tokens.tokenFaucetDripTokens &&
+                    pool.tokens.tokenFaucetDripTokens?.length !== 0 ? (
                         <Grid item>
                             <Typography className={classes.apr} fontSize="0.7rem" variant="subtitle2">
                                 <TokenIcon
-                                    address={pool.tokens.tokenFaucetDripToken.address}
-                                    name={pool.tokens.tokenFaucetDripToken.symbol}
+                                    address={pool.tokens.tokenFaucetDripTokens[0].address}
+                                    name={pool.tokens.tokenFaucetDripTokens[0].symbol}
                                     classes={{ icon: classes.poolIcon }}
                                 />
                                 {t('plugin_pooltogether_apr', {
-                                    apr: pool.tokenListener.apr.toFixed(2),
-                                    token: pool.tokens.tokenFaucetDripToken.symbol,
+                                    apr: pool.tokenFaucets[0].apr.toFixed(2),
+                                    token: pool.tokens.tokenFaucetDripTokens[0].symbol,
                                 })}
                             </Typography>
                         </Grid>
