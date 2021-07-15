@@ -11,6 +11,7 @@ import { currySameAddress, formatEthereumAddress, ProviderType, resolveProviderN
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
 import { currentAccountSettings, currentProviderSettings } from '../settings'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
+import { updateAccount } from './account'
 
 function sortWallet(a: WalletRecord, b: WalletRecord) {
     const address = currentAccountSettings.value
@@ -167,8 +168,10 @@ export async function importNewWallet(
     }
     if (!slient) {
         WalletMessages.events.walletsUpdated.sendToAll(undefined)
-        currentAccountSettings.value = record.address
-        currentProviderSettings.value = ProviderType.Maskbook
+        await updateAccount({
+            account: record.address,
+            providerType: ProviderType.Maskbook,
+        })
     }
     return address
     async function getWalletAddress() {

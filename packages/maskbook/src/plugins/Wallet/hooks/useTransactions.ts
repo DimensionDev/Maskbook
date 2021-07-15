@@ -5,12 +5,14 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { WalletRPC } from '../messages'
 import { currentPortfolioDataProviderSettings } from '../settings'
 import { PortfolioProvider, Transaction } from '../types'
+import { useNetworkType } from '@masknet/web3-shared'
 
 export function useTransactions(
     address: string,
     page?: number,
 ): AsyncStateRetry<{ transactions: Transaction[]; hasNextPage: boolean }> {
     const provider = useValueRef(currentPortfolioDataProviderSettings)
+    const network = useNetworkType()
 
     return useAsyncRetry(async () => {
         if (!address)
@@ -21,13 +23,11 @@ export function useTransactions(
 
         switch (provider) {
             case PortfolioProvider.DEBANK:
-                return WalletRPC.getTransactionList(address.toLowerCase(), provider, page)
-
+                return WalletRPC.getTransactionList(address.toLowerCase(), network, provider, page)
             case PortfolioProvider.ZERION:
-                return await WalletRPC.getTransactionList(address.toLowerCase(), provider, page)
-
+                return await WalletRPC.getTransactionList(address.toLowerCase(), network, provider, page)
             default:
                 unreachable(provider)
         }
-    }, [address, provider, page])
+    }, [address, network, provider, page])
 }

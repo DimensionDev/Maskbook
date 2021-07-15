@@ -49,6 +49,11 @@ export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 
     exchange_tokens: TokenOutMask[]
 }
 
+export interface JSON_PayloadComposeMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
+    token: string
+    exchange_tokens: { address: string }[]
+}
+
 export enum ITO_Status {
     waited = 'waited',
     started = 'started',

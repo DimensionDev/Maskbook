@@ -1,5 +1,5 @@
-import BulkCheckoutABI from '@masknet/contracts/abis/BulkCheckout.json'
-import type { BulkCheckout } from '@masknet/contracts/types/BulkCheckout'
+import BulkCheckoutABI from '@masknet/web3-contracts/abis/BulkCheckout.json'
+import type { BulkCheckout } from '@masknet/web3-contracts/types/BulkCheckout'
 import { useContract, useGitcoinConstants } from '@masknet/web3-shared'
 import type { AbiItem } from 'web3-utils'
 

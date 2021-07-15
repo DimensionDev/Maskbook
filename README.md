@@ -5,20 +5,22 @@
 
 # Mask Network
 
-[![GitHub license][badge-license]](https://github.com/DimensionDev/Maskbook/blob/master/LICENSE)
-[![Circle CI][badge-ci]](https://circleci.com/gh/DimensionDev/Maskbook)
-[![Join the chat at https://gitter.im/Maskbook/community][badge-gitter]](https://gitter.im/Maskbook/community)
+[![GitHub license][badge-license]][license]
+[![Circle CI][badge-ci]][circle-ci]
+[![Join the chat at https://gitter.im/Maskbook/community][badge-gitter]][gitter]
 [![Chrome Web Store][badge-chrome]][client-chrome]
 [![Mozilla Add-on][badge-firefox]][client-firefox]
 [![FOSSA Status][badge-fossa]][fossa]
 
-Mask Network (originally named as Maskbook) is a portal to the new, open internet. With Mask Network, you can send encrypted posts to your friends, participate in cryptocurrencies lucky-draws, and share encrypted files on the platforms you are already using.
+Mask Network (originally named as Maskbook) is a portal to the new, open internet.
+With Mask Network, you can send encrypted posts to your friends,
+participate in cryptocurrencies lucky-draws, and share encrypted files on the platforms you are already using.
 
 For general introductions, see [Mask.io](https://mask.io).
 
 /_I thought what I'd do was, I'd pretend I was one of those deaf-mutes._/
 
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook.svg?type=large)][fossa]
+[![FOSSA Status][fossa-status]][fossa]
 
 ## Downloads
 
@@ -41,6 +43,10 @@ For general introductions, see [Mask.io](https://mask.io).
 
 Please check out [docs](docs)
 
+## Work for Mask Network
+
+Please submit your **resume** to `jobs (at) mask.io`
+
 ## Donation
 
 Help us by donating us:
@@ -57,5 +63,10 @@ Help us by donating us:
 [client-chrome]: https://chrome.google.com/webstore/detail/maskbook/jkoeaghipilijlahjplgbfiocjhldnap/
 [client-firefox]: https://addons.mozilla.org/en-US/firefox/addon/maskbook/
 [client-ios]: https://testflight.apple.com/join/OGmGmIg1
+[bounty]: https://github.com/DimensionDev/Maskbook/issues?q=is%3Aopen+is%3Aissue+label%3A%22Bounty%3A+Open%22
+[license]: https://github.com/DimensionDev/Maskbook/blob/master/LICENSE
+[circle-ci]: https://circleci.com/gh/DimensionDev/Maskbook
 [fossa]: https://app.fossa.io/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook
+[fossa-status]: https://app.fossa.io/api/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook.svg?type=large
+[gitter]: https://gitter.im/Maskbook/community
 [report-bug]: https://github.com/DimensionDev/Maskbook/issues/new?template=bug.md&assignees=jack-works&projects=DimensionDev/Maskbook/3&title=%5BBug%5D%20&labels=Type%3A%20Bug

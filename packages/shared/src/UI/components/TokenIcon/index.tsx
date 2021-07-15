@@ -19,7 +19,7 @@ import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
 function resolveTokenIconURLs(address: string, baseURIs: string[], chainId: ChainId, logoURI?: string) {
     const checkSummedAddress = formatEthereumAddress(address)
 
-    if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
+    if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS ?? '', checkSummedAddress)) {
         return baseURIs.map((x) => `${x}/info/logo.png`)
     }
 
@@ -57,7 +57,7 @@ export function TokenIcon(props: TokenIconProps) {
     const chainDetailed = useChainDetailed()
     const tokenBlockie = useBlockie(address)
     const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId)
-    const tokenURIs = resolveTokenIconURLs(address, TOKEN_ASSET_BASE_URI, chainId ?? chainId_, logoURI)
+    const tokenURIs = resolveTokenIconURLs(address, TOKEN_ASSET_BASE_URI ?? [], chainId ?? chainId_, logoURI)
     const { value: logoURL, loading } = useImageFailOver(chainDetailed ? tokenURIs : [], '')
 
     return (

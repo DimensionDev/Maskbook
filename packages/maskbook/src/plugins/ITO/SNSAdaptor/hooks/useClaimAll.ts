@@ -7,7 +7,7 @@ import {
     useITOConstants,
     ChainId,
 } from '@masknet/web3-shared'
-import type { ITO2 } from '@masknet/contracts/types/ITO2'
+import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
 import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'
 import { useITO_Contract } from './useITO_Contract'
 

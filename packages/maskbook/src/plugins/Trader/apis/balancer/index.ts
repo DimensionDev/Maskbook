@@ -1,6 +1,6 @@
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
-import { ChainId, getChainDetailed, getTraderConstants, isSameAddress, ZERO } from '@masknet/web3-shared'
+import { ChainId, getRPCConstants, getTraderConstants, isSameAddress, ZERO } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { first, memoize } from 'lodash-es'
 import { currentChainIdSettings } from '../../../Wallet/settings'
@@ -13,11 +13,12 @@ import { fetchLBP_PoolsByTokenAddress, fetchLBP_PoolTokenPrices, fetchLBP_PoolTo
 //#region create cached SOR
 const createSOR_ = memoize(
     (chainId: ChainId) => {
-        const rpc = getChainDetailed(chainId)?.rpc[0]
-        if (!rpc) throw new Error('Unknown chain id.')
+        const { RPC } = getRPCConstants(chainId)
+        const provderURL = first(RPC)
+        if (!provderURL) throw new Error('Unknown chain id.')
         return new SOR(
             // we choose a fixed provider cause it's only used here.
-            new JsonRpcProvider(rpc),
+            new JsonRpcProvider(provderURL),
             BALANCER_SOR_GAS_PRICE,
             BALANCER_MAX_NO_POOLS,
             chainId,
