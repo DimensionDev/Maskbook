@@ -1,3 +1,10 @@
+---
+author: Jack-Works
+maintainer:
+  - Jack-Works
+  - Septs
+---
+
 # Plugin Development Guide
 
 ## Minimum File Structure
@@ -24,12 +31,6 @@ The file need to provide this information:
 - Feature-set as TODOs
 - Reference resource list
 - Known issues / Caveats
-
-## Using Git
-
-- [Using git rebase on the command line](https://docs.github.com/en/github/getting-started-with-github/using-git-rebase-on-the-command-line)
-- [Configuring a remote for a fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork)
-- [Syncing a fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork)
 
 ## Plugin APIs
 
