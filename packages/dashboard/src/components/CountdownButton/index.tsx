@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Button, ButtonProps } from '@material-ui/core'
 
-export interface CountdownButtonProps extends React.PropsWithChildren<ButtonProps> {
+export interface CountdownButtonProps extends ButtonProps {
     duration?: number
 }
 

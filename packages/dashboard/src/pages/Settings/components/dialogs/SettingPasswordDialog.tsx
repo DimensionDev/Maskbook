@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from 'react'
 import { Box, TextField } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
+import { passwordRegexp } from '../../regexp'
 
 interface SettingPasswordDialogProps {
     open: boolean
@@ -18,7 +19,6 @@ export default function SettingPasswordDialog({ open, onClose }: SettingPassword
     const [password, setPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [repeatPassword, setRepeatPassword] = useState('')
-    const reg = /^(?=.{8,20}$)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).*/
     const passwordRule = t.settings_password_rule()
 
     const handleClose = () => {
@@ -45,7 +45,7 @@ export default function SettingPasswordDialog({ open, onClose }: SettingPassword
     const validCheck = () => {
         if (!newPassword) return
 
-        const isValid = reg.test(newPassword)
+        const isValid = passwordRegexp.test(newPassword)
         setValidState(isValid)
     }
 
