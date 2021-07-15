@@ -4,23 +4,27 @@ import {
     ERC20TokenDetailed,
     EthereumTokenType,
     formatEthereumAddress,
-    isChainIdValid,
+    getChainDetailed,
 } from '@masknet/web3-shared'
-import { Flags } from '../../../utils'
+import { groupBy } from 'lodash-es'
+
+const NATIVE_TOKEN_ADDRESS_IN_1INCH = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+
+interface Token {
+    address: string
+    chainId: number
+    name: string
+    symbol: string
+    decimals: number
+    logoURI?: string
+}
 
 interface TokenList {
     keywords: string[]
     logoURI: string
     name: string
     timestamp: string
-    tokens: {
-        address: string
-        chainId: number
-        name: string
-        symbol: string
-        decimals: number
-        logoURI?: string
-    }[]
+    tokens: Token[]
     version: {
         major: number
         minor: number
@@ -28,29 +32,77 @@ interface TokenList {
     }
 }
 
+interface TokenObject {
+    tokens: {
+        [key: string]: Token
+    }
+}
+
 const fetchTokenList = memoizePromise(
     async (url: string) => {
         const response = await fetch(url, { cache: 'force-cache' })
-        return response.json() as Promise<TokenList>
+        return response.json() as Promise<TokenList | TokenObject>
     },
     (url) => url,
 )
 
 /**
- * Fetch tokens from token list
+ * Fetch tokens from 1inch token list
  * @param url
  * @param chainId
  */
-export async function fetchERC20TokensFromTokenList(
+async function fetch1inchERC20TokensFromTokenList(
     url: string,
     chainId = ChainId.Mainnet,
 ): Promise<ERC20TokenDetailed[]> {
-    return (await fetchTokenList(url)).tokens
-        .filter((x) => x.chainId === chainId && isChainIdValid(chainId, Flags.wallet_allow_testnet))
+    const tokens = ((await fetchTokenList(url)) as TokenObject).tokens
+    const _tokens = Object.values(tokens)
+    return _tokens
+        .filter((x) => x.address.toLowerCase() !== NATIVE_TOKEN_ADDRESS_IN_1INCH)
         .map((x) => ({
             type: EthereumTokenType.ERC20,
             ...x,
+            chainId: chainId,
+            logoURI: x.logoURI ? [x.logoURI] : [],
         }))
+}
+
+/**
+ * Fetch tokens from common token list
+ * @param url
+ * @param chainId
+ */
+async function fetchCommonERC20TokensFromTokenList(
+    url: string,
+    chainId = ChainId.Mainnet,
+): Promise<ERC20TokenDetailed[]> {
+    return ((await fetchTokenList(url)) as TokenList).tokens
+        .filter(
+            (x) =>
+                x.chainId === chainId &&
+                (process.env.NODE_ENV === 'production' && process.env.build === 'stable'
+                    ? getChainDetailed(chainId)?.network === 'mainnet'
+                    : true),
+        )
+        .map((x) => ({
+            type: EthereumTokenType.ERC20,
+            ...x,
+            logoURI: x.logoURI ? [x.logoURI] : [],
+        }))
+}
+
+/**
+ * Fetch tokens adapter
+ * @param urls
+ * @param chainId
+ */
+function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.Mainnet) {
+    return urls.map((x) => {
+        if (x.includes('1inch')) {
+            return fetch1inchERC20TokensFromTokenList(x, chainId)
+        }
+        return fetchCommonERC20TokensFromTokenList(x, chainId)
+    })
 }
 
 /**
@@ -58,23 +110,24 @@ export async function fetchERC20TokensFromTokenList(
  * @param urls
  * @param chainId
  */
-export async function fetchERC20TokensFromTokenLists(
-    urls: string[],
-    chainId = ChainId.Mainnet,
-): Promise<ERC20TokenDetailed[]> {
-    const uniqueSet = new Set<string>()
-    const tokens = (await Promise.allSettled(urls.map((x) => fetchERC20TokensFromTokenList(x, chainId)))).flatMap((x) =>
-        x.status === 'fulfilled' ? x.value : [],
-    )
-    return tokens.filter((x) => {
-        // checksummed address in one loop
-        x.address = formatEthereumAddress(x.address)
+export const fetchERC20TokensFromTokenLists = memoizePromise(
+    async (urls: string[], chainId = ChainId.Mainnet): Promise<ERC20TokenDetailed[]> => {
+        const tokens = (await Promise.allSettled(fetchERC20TokensFromTokenList(urls, chainId))).flatMap((x) =>
+            x.status === 'fulfilled' ? x.value : [],
+        )
+        const groupedToken = groupBy(tokens, (x) => x.address.toLowerCase())
 
-        const key = x.address.toLowerCase()
-        if (uniqueSet.has(key)) return false
-        else {
-            uniqueSet.add(key)
-            return true
-        }
-    })
-}
+        return Object.values(groupedToken).map((tokenList) => {
+            const logoURIs = tokenList
+                .map((token) => token.logoURI)
+                .flat()
+                .filter((token) => !!token) as string[]
+            return {
+                ...tokenList[0],
+                ...{ address: formatEthereumAddress(tokenList[0].address) },
+                ...{ logoURI: logoURIs },
+            }
+        })
+    },
+    (urls, chainId) => `${chainId}-${urls.join()}`,
+)
