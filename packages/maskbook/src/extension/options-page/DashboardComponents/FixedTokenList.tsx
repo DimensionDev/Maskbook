@@ -12,7 +12,7 @@ import {
 } from '@masknet/web3-shared'
 import { makeStyles, Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { TokenInList } from './TokenInList'
@@ -29,7 +29,7 @@ export interface FixedTokenListProps extends withClasses<never> {
     blacklist?: string[]
     tokens?: FungibleTokenDetailed[]
     selectedTokens?: string[]
-    onSubmit?(token: FungibleTokenDetailed): void
+    onSelect?(token: FungibleTokenDetailed | null): void
     FixedSizeListProps?: Partial<FixedSizeListProps>
 }
 
@@ -43,12 +43,12 @@ export function FixedTokenList(props: FixedTokenListProps) {
         blacklist: excludeTokens = [],
         selectedTokens = [],
         tokens = [],
-        onSubmit,
+        onSelect,
         FixedSizeListProps,
     } = props
 
-    const { ERC20_TOKEN_LISTS } = useEthereumConstants()
     const [address, setAddress] = useState('')
+    const { ERC20_TOKEN_LISTS } = useEthereumConstants()
     const { MASK_ADDRESS } = useTokenConstants()
 
     const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(
@@ -97,6 +97,10 @@ export function FixedTokenList(props: FixedTokenListProps) {
     )
     //#endregion
 
+    //#region deselect token
+    useEffect(() => onSelect?.(null), [keyword])
+    //#endregion
+
     if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
     if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token...')
     if (!renderAssets.length) return renderPlaceholder('No token found')
@@ -113,7 +117,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
                 selected: [address, ...selectedTokens],
                 onSelect(token: FungibleTokenDetailed) {
                     setAddress(token.address)
-                    onSubmit?.(token)
+                    onSelect?.(token)
                 },
             }}
             itemCount={renderAssets.length}
