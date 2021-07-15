@@ -51,7 +51,7 @@ export function PostInspector(props: PostInspectorProps) {
                 (t) =>
                     ({
                         address: t.address,
-                        type: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS)
+                        type: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS ?? '')
                             ? EthereumTokenType.Native
                             : EthereumTokenType.ERC20,
                     } as Pick<FungibleToken, 'address' | 'type'>),
