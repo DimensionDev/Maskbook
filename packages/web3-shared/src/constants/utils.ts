@@ -7,7 +7,7 @@ export interface Constants {
 }
 
 export function transform<T extends Constants>(constants: T, environment: Record<string, string> = {}) {
-    type Entries = { [key in keyof T]: T[key]['Mainnet'] }
+    type Entries = { [key in keyof T]?: T[key]['Mainnet'] }
     return (chainId = ChainId.Mainnet) => {
         const chainName = ChainId[chainId] as keyof typeof ChainId
         const entries = Object.keys(constants).map((name: keyof T) => {
