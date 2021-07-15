@@ -195,12 +195,10 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:
                     if (
-                        account &&
-                        providerType === selectedProviderType &&
-                        getChainIdFromNetworkType(undeterminedNetworkType) === chainId
+                        !account ||
+                        providerType !== selectedProviderType ||
+                        getChainIdFromNetworkType(undeterminedNetworkType) !== chainId
                     ) {
-                        openWalletStatusDialog()
-                    } else {
                         setConnectWalletDialog({
                             open: true,
                             providerType,
