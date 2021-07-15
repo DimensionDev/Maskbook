@@ -20,7 +20,7 @@ interface PoolTogetherMessages {
 
     rpc: unknown
 }
-
+import.meta.webpackHot?.accept()
 export const PluginPoolTogetherMessages: WebExtensionMessage<PoolTogetherMessages> =
     createPluginMessage<PoolTogetherMessages>(POOLTOGETHER_PLUGIN_ID)
 
