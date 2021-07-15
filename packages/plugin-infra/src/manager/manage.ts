@@ -3,18 +3,18 @@ import { ALL_EVENTS } from '@masknet/shared'
 import type { Plugin } from '../types'
 import { getPluginDefine, registeredPluginIDs, registeredPlugins } from './store'
 
-interface ActivatedPluginInstance<U extends Plugin.Shared.DefinitionWithInit> {
+interface ActivatedPluginInstance<U extends Plugin.Shared.DefinitionDeferred> {
     instance: U
     controller: AbortController
 }
-export interface CreateManagerOptions<T extends Plugin.Shared.DefinitionWithInit> {
+export interface CreateManagerOptions<T extends Plugin.Shared.DefinitionDeferred> {
     getLoader(deferred: Plugin.DeferredDefinition): undefined | Plugin.Loader<T>
 }
 // Plugin state machine
 // not-loaded => loaded
 // loaded => activated (activatePlugin)
 // activated => loaded (stopPlugin)
-export function createManager<T extends Plugin.Shared.DefinitionWithInit>(_: CreateManagerOptions<T>) {
+export function createManager<T extends Plugin.Shared.DefinitionDeferred>(_: CreateManagerOptions<T>) {
     const { getLoader } = _
 
     const resolved = new Map<string, T>()
