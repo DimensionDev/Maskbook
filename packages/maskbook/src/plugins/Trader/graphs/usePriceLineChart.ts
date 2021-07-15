@@ -125,7 +125,9 @@ export function usePriceLineChart(
                 return data[index]
             }
 
-            const { date, value } = bisect(d3.mouse(this)[0])
+            const v: { date: Date; value: number } | undefined = bisect(d3.mouse(this)[0])
+            if (!v) return
+            const { date, value } = v
 
             tooltip.attr('transform', `translate(${Number(x(date)) - 18},${y(value)})`).call(
                 callout,
