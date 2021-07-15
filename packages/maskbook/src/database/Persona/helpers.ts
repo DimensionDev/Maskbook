@@ -18,7 +18,6 @@ import {
     updatePersonaDB,
     createOrUpdatePersonaDB,
     queryProfilesPagedDB,
-    queryRelationsDB,
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
 import { queryAvatarDataURL } from '../helpers/avatar'
@@ -240,8 +239,4 @@ export async function queryLocalKey(i: ProfileIdentifier | PersonaIdentifier): P
     } else {
         return (await queryPersonaDB(i))?.localKey ?? null
     }
-}
-
-export async function queryRelationsWithQuery(network: string, i?: PersonaIdentifier) {
-    return queryRelationsDB((record) => record.profile.network === network && record.linked.equals(i))
 }

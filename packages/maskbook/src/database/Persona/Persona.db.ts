@@ -1,19 +1,20 @@
 /// <reference path="../global.d.ts" />
 import Fuse from 'fuse.js'
-import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
+import { ECKeyIdentifier, Identifier, PersonaIdentifier, ProfileIdentifier } from '../type'
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
 import { MaskMessage } from '../../utils/messages'
-import { IDBPSafeTransaction, createTransaction, createDBAccessWithAsyncUpgrade } from '../helpers/openDB'
+import { createDBAccessWithAsyncUpgrade, createTransaction, IDBPSafeTransaction } from '../helpers/openDB'
 import { queryProfile } from './helpers'
 import { assertPersonaDBConsistency } from './consistency'
 import type {
     AESJsonWebKey,
-    EC_Public_JsonWebKey,
     EC_Private_JsonWebKey,
+    EC_Public_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+
 /**
  * Database structure:
  *
@@ -48,6 +49,7 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                     db.createObjectStore('relations', { keyPath: ['linked', 'profile'] })
                     transaction.objectStore('profiles').createIndex('network', 'network', { unique: false })
                     transaction.objectStore('personas').createIndex('hasPrivateKey', 'hasPrivateKey', { unique: false })
+                    transaction.objectStore('relations').createIndex('linked', 'linked', { unique: false })
                 }
                 async function v1_v2() {
                     const persona = transaction.objectStore('personas')
@@ -506,17 +508,13 @@ export async function createRelationDB(record: RelationRecord, t: RelationTransa
  * Query many relations
  */
 export async function queryRelationsDB(
-    query: (record: RelationRecord) => boolean,
+    linked: PersonaIdentifier,
     t?: RelationTransaction<'readonly'>,
 ): Promise<RelationRecord[]> {
     t = t || createTransaction(await db(), 'readonly')('relations')
-    const result: RelationRecord[] = []
-    for await (const each of t.objectStore('relations').iterate()) {
-        const out = relationRecordOutDB(each.value)
-        if (query(out)) result.push(out)
-    }
-
-    return result
+    return (await t.objectStore('relations').index('linked').getAll(IDBKeyRange.only(linked.toText()))).map(
+        relationRecordOutDB,
+    )
 }
 
 /**
@@ -628,7 +626,7 @@ export interface PersonaDB extends DBSchema {
         key: IDBArrayKey
         value: RelationRecordDB
         indexes: {
-            network: string
+            linked: string
         }
     }
 }

@@ -1,5 +1,4 @@
 import { Dispatch, memo, SetStateAction, useMemo, useState } from 'react'
-import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useContacts } from '../../hooks/useContacts'
 import type { Contact } from '@masknet/shared'
 import {
@@ -61,9 +60,8 @@ export interface ContactsTableProps {
 
 export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
     const [page, setPage] = useState(1)
-    const { currentPersona } = PersonaContext.useContainer()
 
-    const { value, error, loading } = useContacts(network, currentPersona)
+    const { value, error, loading } = useContacts(network)
 
     const dataSource = useMemo(() => {
         if (!value) return []

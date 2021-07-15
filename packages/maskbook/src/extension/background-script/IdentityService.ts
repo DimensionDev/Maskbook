@@ -1,11 +1,5 @@
 import * as bip39 from 'bip39'
-import {
-    queryProfilesWithQuery,
-    personaRecordToPersona,
-    storeAvatar,
-    queryProfile,
-    queryRelationsWithQuery,
-} from '../../database'
+import { queryProfilesWithQuery, personaRecordToPersona, storeAvatar, queryProfile } from '../../database'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import type { Profile, Persona } from '../../database/Persona/types'
 import {
@@ -21,6 +15,7 @@ import {
     consistentPersonaDBWriteAccess,
     createRelationDB,
     updateRelationDB,
+    queryRelationsDB,
 } from '../../database/Persona/Persona.db'
 import { queryPersona } from '../../database'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
@@ -31,6 +26,7 @@ import { decompressBackupFile } from '../../utils/type-transform/BackupFileShort
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { PersonaInformation, ProfileInformation } from '@masknet/shared'
+import { getCurrentPersonaIdentifier } from './SettingsService'
 assertEnvironment(Environment.ManifestBackground)
 
 export { storeAvatar, queryAvatarDataURL } from '../../database'
@@ -169,8 +165,12 @@ export async function createNewRelation(profile: ProfileIdentifier, linked: Pers
     await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked }, t))
 }
 
-export async function queryRelations(network: string, persona?: PersonaIdentifier) {
-    return queryRelationsWithQuery(network, persona)
+export async function queryRelations() {
+    const currentPersona = await getCurrentPersonaIdentifier()
+    if (currentPersona) {
+        return queryRelationsDB(currentPersona)
+    }
+    return []
 }
 
 export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: boolean) {

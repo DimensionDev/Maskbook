@@ -1,12 +1,11 @@
 import { useAsync } from 'react-use'
-import type { PersonaInformation } from '@masknet/shared'
 import { Services } from '../../../API'
+import { useRelations } from '../api'
 
-export const useContacts = (network: string, currentPerson?: PersonaInformation) => {
+export const useContacts = (network: string) => {
+    const relations = useRelations()
     return useAsync(async () => {
-        const relations = await Services.Identity.queryRelations(network, currentPerson?.identifier)
-
-        const targets = relations.map((x) => x.profile)
+        const targets = relations.filter((x) => x.profile.network === network).map((x) => x.profile)
 
         const profiles = await Services.Identity.queryProfilesWithIdentifiers(targets)
 
@@ -17,5 +16,5 @@ export const useContacts = (network: string, currentPerson?: PersonaInformation)
                 ...profile,
             }
         })
-    }, [network, currentPerson])
+    }, [network, relations])
 }

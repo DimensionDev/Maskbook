@@ -13,8 +13,7 @@ export const [useOwnedPersonas, , currentPersonas] = createGlobalState(
     (x) => {
         const a = Messages.events.personaChanged.on(x)
         const b = Messages.events.profilesChanged.on(x)
-        const c = Messages.events.relationsChanged.on(x)
-        return () => void [a(), b(), c()]
+        return () => void [a(), b()]
     },
 )
 
@@ -24,4 +23,8 @@ export const [useAppearance] = createGlobalState(Services.Settings.getTheme, (x)
 
 export const [useCurrentPersonaIdentifier] = createGlobalState(Services.Settings.getCurrentPersonaIdentifier, (x) =>
     Messages.events.currentPersonaIdentifier.on(x),
+)
+
+export const [useRelations] = createGlobalState(Services.Identity.queryRelations, (x) =>
+    Messages.events.relationsChanged.on(x),
 )
