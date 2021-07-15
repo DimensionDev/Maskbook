@@ -3,6 +3,7 @@ import {
     currySameAddress,
     formatBalance,
     FungibleTokenDetailed,
+    isSameAddress,
     resolveTokenLinkOnExplorer,
     useTokenConstants,
 } from '@masknet/web3-shared'
@@ -73,8 +74,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
 
     const currentAsset = data.assets[index]
-    const token = currentAsset.token
-    const balance = currentAsset.balance
+    const { token, balance } = currentAsset
 
     if (!token) return null
     const { address, name, symbol, logoURI } = token
@@ -91,7 +91,7 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
             <ListItemText classes={{ primary: classes.text }}>
                 <Typography className={classes.primary} color="textPrimary" component="span">
                     <span className={classes.symbol}>{symbol}</span>
-                    {token.address !== NATIVE_TOKEN_ADDRESS ? (
+                    {!isSameAddress(token.address, NATIVE_TOKEN_ADDRESS) ? (
                         <Link
                             className={classes.link}
                             href={resolveTokenLinkOnExplorer(token)}

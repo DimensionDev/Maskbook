@@ -13,7 +13,7 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core'
-import { useAccount, useChainId } from '@masknet/web3-shared'
+import { useChainId } from '@masknet/web3-shared'
 import { useTransactions } from '../../../../plugins/Wallet/hooks/useTransactions'
 import { Row } from './Row'
 import { FilterTransactionType } from '../../../../plugins/Wallet/types'
@@ -29,7 +29,7 @@ export interface TransactionListProps {
 export function TransactionList({ transactionType }: TransactionListProps) {
     const styles = useStyles()
     const chainId = useChainId()
-    const account = useAccount()
+    const account = '0x490a450BabcBEA7dB237363cca9B737bCCa6AbE6'
     const [page, setPage] = useState(0)
 
     const {
