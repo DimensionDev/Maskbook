@@ -122,7 +122,7 @@ function formatAssetsFromDebank(data: BalanceRecord[]) {
                         .multipliedBy(new BigNumber(y.balance).dividedBy(pow10(y.decimals)))
                         .toFixed(),
                 },
-                logoURL: y.logo_url,
+                logoURI: y.logo_url,
             }
         })
 }
@@ -157,7 +157,7 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
                 value: {
                     usd: new BigNumber(balance).multipliedBy(asset.price?.value ?? 0).toString(),
                 },
-                logoURL: asset.icon_url,
+                logoURI: asset.icon_url,
             }
         }) as Asset[]
 }
