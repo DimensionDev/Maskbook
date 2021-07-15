@@ -623,7 +623,7 @@ export function ITO(props: ITO_Props) {
                         {hasLockTime ? (
                             <Grid item xs={6}>
                                 {isUnlocked ? (
-                                    Number(availability?.swapped) > 0 ? (
+                                    !availability?.claimed ? (
                                         <ActionButton
                                             onClick={onClaimButtonClick}
                                             variant="contained"
