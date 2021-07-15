@@ -188,7 +188,6 @@ export interface WalletAssetsTableProps extends withClasses<never> {
 export function WalletAssetsTable(props: WalletAssetsTableProps) {
     const { t } = useI18N()
     const { wallet } = props
-    console.log(wallet)
 
     const isMobile = useMatchXS()
     const classes = useStylesExtends(useStyles({ isMobile }), props)
