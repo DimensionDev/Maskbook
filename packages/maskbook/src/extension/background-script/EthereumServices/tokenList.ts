@@ -41,7 +41,7 @@ interface TokenObject {
 const fetchTokenList = memoizePromise(
     async (url: string) => {
         const response = await fetch(url, { cache: 'force-cache' })
-        return (await response.json()) as Promise<TokenList | TokenObject>
+        return response.json() as Promise<TokenList | TokenObject>
     },
     (url) => url,
 )
