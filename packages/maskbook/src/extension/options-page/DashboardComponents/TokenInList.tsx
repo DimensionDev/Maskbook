@@ -81,6 +81,8 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
 
     return (
         <ListItem
+            // force react not to reuse dom node
+            key={token.address}
             button
             style={style}
             disabled={data.selected.some(currySameAddress(address))}
