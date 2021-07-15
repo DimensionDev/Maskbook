@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, CSSProperties } from 'react'
-import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from '@material-ui/core'
+import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 import type { Profile, Group } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
@@ -88,6 +88,7 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
     )
     const showSelectAll = !hideSelectAll && listAfterSearch.length > 0 && typeof maxSelection === 'undefined'
     const showSelectNone = !hideSelectNone && selected.length > 0
+
     return (
         <div className={classes.root}>
             <Box
@@ -96,21 +97,30 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
                     display: 'flex',
                 }}>
                 {frozenSelected.map((x) => FrozenChip(x, props.ProfileOrGroupInChipProps))}
-                {selected
-                    .filter((item) => !frozenSelected.includes(item as ServeType))
-                    .map((item) => (
-                        <ProfileOrGroupInChip
-                            disabled={disabled}
-                            key={item.identifier.toText()}
-                            item={item}
-                            onDelete={() =>
-                                onSetSelected(
-                                    selected.filter((x) => !x.identifier.equals(item.identifier)) as ServeType[],
-                                )
-                            }
-                            {...props.ProfileOrGroupInChipProps}
-                        />
-                    ))}
+                {!listBeforeSearch.length ? (
+                    <Chip
+                        style={{ marginRight: 6, marginBottom: 6 }}
+                        color="primary"
+                        onDelete={() => onSetSelected([])}
+                        label={t('all_friends')}
+                    />
+                ) : (
+                    selected
+                        .filter((item) => !frozenSelected.includes(item as ServeType))
+                        .map((item) => (
+                            <ProfileOrGroupInChip
+                                disabled={disabled}
+                                key={item.identifier.toText()}
+                                item={item}
+                                onDelete={() =>
+                                    onSetSelected(
+                                        selected.filter((x) => !x.identifier.equals(item.identifier)) as ServeType[],
+                                    )
+                                }
+                                {...props.ProfileOrGroupInChipProps}
+                            />
+                        ))
+                )}
                 <InputBase
                     className={classes.input}
                     value={disabled ? '' : search}
