@@ -96,30 +96,35 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
                 sx={{
                     display: 'flex',
                 }}>
-                {frozenSelected.map((x) => FrozenChip(x, props.ProfileOrGroupInChipProps))}
-                {!listBeforeSearch.length ? (
+                {frozenSelected.length === items.length || !listBeforeSearch.length ? (
                     <Chip
+                        disabled={disabled}
                         style={{ marginRight: 6, marginBottom: 6 }}
                         color="primary"
-                        onDelete={() => onSetSelected([])}
+                        onDelete={frozenSelected.length !== items.length ? () => onSetSelected([]) : undefined}
                         label={t('all_friends')}
                     />
                 ) : (
-                    selected
-                        .filter((item) => !frozenSelected.includes(item as ServeType))
-                        .map((item) => (
-                            <ProfileOrGroupInChip
-                                disabled={disabled}
-                                key={item.identifier.toText()}
-                                item={item}
-                                onDelete={() =>
-                                    onSetSelected(
-                                        selected.filter((x) => !x.identifier.equals(item.identifier)) as ServeType[],
-                                    )
-                                }
-                                {...props.ProfileOrGroupInChipProps}
-                            />
-                        ))
+                    <>
+                        {frozenSelected.map((x) => FrozenChip(x, props.ProfileOrGroupInChipProps))}
+                        {selected
+                            .filter((item) => !frozenSelected.includes(item as ServeType))
+                            .map((item) => (
+                                <ProfileOrGroupInChip
+                                    disabled={disabled}
+                                    key={item.identifier.toText()}
+                                    item={item}
+                                    onDelete={() =>
+                                        onSetSelected(
+                                            selected.filter(
+                                                (x) => !x.identifier.equals(item.identifier),
+                                            ) as ServeType[],
+                                        )
+                                    }
+                                    {...props.ProfileOrGroupInChipProps}
+                                />
+                            ))}
+                    </>
                 )}
                 <InputBase
                     className={classes.input}
