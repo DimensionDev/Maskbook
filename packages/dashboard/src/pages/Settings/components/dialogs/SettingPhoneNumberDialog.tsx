@@ -5,7 +5,7 @@ import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
 import CountdownButton from '../../../../components/CountdownButton'
 import { sendCode, verifyCode } from '../../api'
-import { emailRegexp } from '../../regexp'
+import { phoneRegexp } from '../../regexp'
 
 const useStyles = makeStyles({
     container: {
@@ -15,47 +15,53 @@ const useStyles = makeStyles({
     },
 })
 
-interface SettingEmailDialogProps {
+interface SettingPhoneNumberDialogProps {
     open: boolean
     onClose(): void
 }
 
-export default function SettingEmailDialog({ open, onClose }: SettingEmailDialogProps) {
+export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhoneNumberDialogProps) {
     const t = useDashboardI18N()
     const classes = useStyles()
     const { user, updateUser } = useContext(UserContext)
-    const [step, setStep] = useState(user.email ? 0 : 1)
-    const [email, setEmail] = useState(user.email ?? '')
+    const [step, setStep] = useState(user.phone ? 0 : 1)
+    const [countryCode, setCountryCode] = useState(user.phone ? user.phone.split(' ')[0] : '')
+    const [phone, setPhone] = useState(user.phone ? user.phone.split(' ')[1] : '')
     const [code, setCode] = useState('')
-    const [invalidEmail, setInvalidEmail] = useState(false)
+    const [invalidPhone, setInvalidPhone] = useState(false)
     const [invalidCode, setInvalidCode] = useState(false)
+
+    const handleCountryCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value
+        const prefix = /^\+/.test(event.target.value) ? '' : '+'
+        setCountryCode(prefix + value)
+    }
 
     const handleClose = () => {
         onClose()
     }
     const handleConfirm = async () => {
         if (step === 1) {
-            if (!invalidEmail) {
+            if (!invalidPhone) {
                 setStep(2)
             }
         } else {
             const result = await verifyCode({
-                account: email,
-                type: 'email',
+                account: countryCode + phone,
+                type: 'phone',
                 code,
             })
 
             if (result.message) {
-                // incorrect code
-                setInvalidCode(true)
             } else {
                 if (step === 0) {
                     // original email verified
-                    setEmail('')
+                    setCountryCode('')
+                    setPhone('')
                     setCode('')
                     setStep(1)
                 } else {
-                    updateUser({ email })
+                    updateUser({ phone: `${countryCode} ${phone}` })
                     onClose()
                 }
             }
@@ -63,45 +69,53 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
     }
 
     const validCheck = () => {
-        if (!email) return
+        if (!phone) return
 
-        const isValid = emailRegexp.test(email)
-        setInvalidEmail(!isValid)
+        const isValid = phoneRegexp.test(phone)
+        setInvalidPhone(!isValid)
     }
 
     const sendValidationEmail = () => {
         sendCode({
-            account: email,
-            type: 'email',
+            account: countryCode + phone,
+            type: 'phone',
         })
     }
 
     return (
         <ConfirmDialog
-            title={`${user.email ? 'Change' : 'Setting'} Email`}
+            title={`${user.phone ? 'Change' : 'Setting'} Phone Number`}
             maxWidth="xs"
             open={open}
             onClose={handleClose}
             onConfirm={handleConfirm}>
             {step === 1 ? (
-                <Box className={classes.container} sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box
+                    className={classes.container}
+                    sx={{ display: 'flex', alignItems: 'flex-start', paddingTop: '48px' }}>
+                    <TextField
+                        value={countryCode}
+                        onChange={handleCountryCodeChange}
+                        variant="outlined"
+                        placeholder="+86"
+                        sx={{ marginRight: '10px', width: '120px' }}
+                    />
                     <TextField
                         fullWidth
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        value={phone}
+                        onChange={(event) => setPhone(event.target.value)}
                         onBlur={validCheck}
-                        type="email"
-                        label="Input your email"
+                        type="text"
                         variant="outlined"
-                        error={invalidEmail}
-                        helperText={invalidEmail ? 'The email address is incorrect.' : ''}
+                        error={invalidPhone}
+                        helperText={invalidPhone ? 'The phone number is incorrect.' : ''}
                     />
                 </Box>
             ) : (
                 <Box className={classes.container} sx={{ paddingTop: '24px' }}>
-                    <Typography>The current email for validation is </Typography>
+                    <Typography>The current phone number for validation is </Typography>
                     <Typography color="primary" fontWeight="bold" variant="h4">
-                        {email}
+                        {countryCode} {phone}
                     </Typography>
                     <Box sx={{ display: 'flex', paddingTop: '10px', alignItems: 'flex-start' }}>
                         <TextField
