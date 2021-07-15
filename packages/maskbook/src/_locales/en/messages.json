@@ -7,6 +7,7 @@
     "about_dialog_license": "License: ",
     "add_to_key_store_success": "The public key has been added to the Keystore",
     "add_token": "Add Token",
+    "add_token_symbol": "Add {{symbol}}",
     "add_token_search_hint": "Search Tokens",
     "add_asset": "Add Asset",
     "additional_post_box__encrypted_post_pre": "Decrypt this post with #mask_io ! {{encrypted}}",

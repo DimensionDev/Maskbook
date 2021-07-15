@@ -91,7 +91,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                 <FixedTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     keyword={keyword}
-                    onSubmit={onSubmit}
+                    onSelect={onSubmit}
                     {...{
                         ...FixedTokenListProps,
                         tokens: [

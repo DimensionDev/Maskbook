@@ -7,6 +7,7 @@
     "about_dialog_license": "ライセンス:",
     "add_to_key_store_success": "公開鍵はキーストアに追加されました。",
     "add_token": "トークンを追加",
+    "add_token_symbol": "",
     "add_token_search_hint": "トークンを検索。",
     "add_asset": "資産を追加する",
     "additional_post_box__encrypted_post_pre": "#mask_io で復号しましょう！ {{encrypted}}",
