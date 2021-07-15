@@ -1,79 +1,158 @@
 # TypedMessage binary format
 
-## Motivation
-
-Currently Mask only support text payload + metadata.
-
 ## Design target
 
-- Must be a binary format.
-- Must be compatible with both future and past. (Old client can parse the extended TypedMessage payload though may not be able to use it. New client can parse the old payload).
+- MUST be a binary format.
+- MUST be compatible with both forward compatible and backward compatible.
 
 ## Design
+
+### Encoding
+
+To avoid reinvention of a new binary format, this RFC chooses to convert data into a format that can be represented in the MessagePack binary format.
+
+Type `Integer`, `Float`, `Nil`, `Boolean`, `String`, `Binary`, `Array` and `Map` is defined in the [msgpack specification](https://github.com/msgpack/msgpack/blob/master/spec.md). Other type defined in this RFC is written in the TypeScript syntax.
+
+To avoid encoding field names into the binary (this is space-wasting), this RFC chooses to use tuple (`Array` in MessagePack), in which the order of the fields represented its meaning.
+
+In extra, we define the following helper types:
+
+```typescript
+type Number = Integer | Float
+type Any = Integer | Nil | Boolean | Float | String | Binary | Array<Any> | Map
+```
+
+In this specification, any form of MessagePack extension (like a timestamp) is NOT used. An implementation MAY treat data including extensions as invalid.
+
+`Array` in this specification is used as `Tuple` with an arbitrary size, which means items in the Array don't have to be the same type.
+
+e.g. `[1, "string"]` is a valid Array that has the type `Array<String | Integer>`.
+If the order is meaningful, the type should be `[Integer, String]`.
+
+All Tuple in this specification MUST be treated as non-fixed length. This means `[1, "string", true]` is valid when `[Integer, String]` is required. An implementation MUST NOT fail due to the extra item unless especially specified.
 
 ### `Document` type
 
 This is the top-most data type.
 
 ```typescript
-type Document = [
-  version: 1,
-  // constant table is reversed for metadata
-  // if the metadata key appears multiple times
-  // in the whole payload, we can refer that key
-  // by a index in the constant table.
-  // Or maybe we should use a compress algorithm like gzip?
-  constantTable: UTF8String[],
-  message: TupleFormatOf<TypedMessage>,
-]
+type Document = [version: Integer, message: TypedMessageArray]
+interface TypedMessageArray extends Array<TypedMessageBase> {}
 ```
 
-Use [msgpack](https://github.com/msgpack/msgpack/blob/master/spec.md) to compress the `Document` into a binary format.
+#### `version` field
 
-### TypedMessage
+This field represents the format version.
 
-All TypedMessage must starts with the following format:
+When encoding, the implementation MUST use `0` as the value of this field.
+
+When decoding, the implementation MUST fail when this field is not `0`.
+
+#### Example
+
+This is an example of an empty `Document`.
+
+- Object format: `[0, []]`
+- Uint8 array: `[146, 0, 144]`
+
+### TypedMessageBase
+
+All TypedMessage must starts with the following fields:
 
 ```typescript
-type TypedMessageTupleBase = [
-  type: TypedMessageTypeEnum | string,
-  // Every TypedMessage can store metadata
-  metadata: object | null,
-  ...rest: any[]
-]
+type TypedMessageBase = [type: TypedMessageTypeEnum | String, metadata: Map | Nil, ...rest: Array<Any>]
 enum TypedMessageTypeEnum {
-  Compound = 0,
+  Tuple = 0,
   Text = 1,
-  Image = 2,
 }
 ```
 
-For unknown TypedMessage type, the client should ignore the content or render a TypedMessageUnknown hint.
+#### `type` field
 
-### Compound
+This field represents the type of this TypedMessage.
 
-```typescript
-type TypedMessageCompoundTuple = [
-  type: TypedMessageTypeEnum.Compound
-  metadata: object | null,
-  // Ordered
-  items: TypedMessageTuple[],
-]
-```
+It is a `TypedMessageTypeEnum` or a UTF-8 string.
+
+When it is `TypedMessageTypeEnum`, it represents a well-known TypedMessage defined in this specification.
+
+When it is a `String`, it represents a custom extension of TypedMessage.
+
+An implementation MAY ignore an unknown type or render a hint.
+
+#### `metadata`
+
+This field represents the metadata this TypedMessage contains.
+
+An implementation MUST NOT assume the data structure inside the metadata.
 
 ### Text
 
 ```typescript
-type TypedMessageTextTuple = [
-  type: TypedMessageTypeEnum.Text
-  metadata: object | null,
-  textType: TextType,
-  content: string,
-]
-enum TextType {
+type TypedMessageText = [type: TypedMessageTypeEnum.Text, metadata: Map | Nil, content: String, textFormat?: TextFormat]
+enum TextFormat {
   PlainText = 0,
-  Markdown = 1
+  Markdown = 1,
 }
 ```
 
-For unknown textType (might comes from the future version), the client must treat it as `TextType.PlainText`.
+#### `content` field
+
+This field represents a text message. The interpretation of content depends on the `textFormat` field.
+
+#### `textFormat` field
+
+This is an optional field that represents the interpretation of the `content` field.
+
+`PlainText` means it is plain text.
+
+`Markdown` means it is a Markdown. The Markdown flavor is not specified so the rendering effect might be different depends on the library.
+
+When decoding, lack of content field should be treated as `TextFormat.PlainText`
+
+#### Example
+
+This is an example of a `Document` that contains a text message `"Hello, world"` in Markdown format with metadata `{"com.example.test": "hi"}`.
+
+- Object format: `[0, [[1, { "com.example.test": "hi" }, "Hello, world", 1]]]`
+- Uint8 array:
+
+```plaintext
+[
+  146,   0, 145, 148,   1, 129, 176,  99,
+  111, 109,  46, 101, 120,  97, 109, 112,
+  108, 101,  46, 116, 101, 115, 116, 162,
+  104, 105, 172,  72, 101, 108, 108, 111,
+   44,  32, 119, 111, 114, 108, 100,   1
+]
+```
+
+### TypedMessageTuple
+
+```typescript
+type TypedMessageTuple = [
+  type: TypedMessageTypeEnum.Tuple
+  metadata: Map | Nil,
+  items: TypedMessageArray,
+]
+```
+
+#### `items` field
+
+This field represents an ordered list of a TypedMessage.
+
+#### Example
+
+This is an example of a `Document` that contains two text messages `"Hello, world"` with no metadata.
+
+- Object format: `[0, [ [0, null, [ [1, null, "Hello, world"], [1, null, "Hello, world"] ]] ]]`
+- Uint8 array:
+
+```plaintext
+ [
+  146,   0, 145, 147,   0, 192, 146, 147,
+    1, 192, 172,  72, 101, 108, 108, 111,
+   44,  32, 119, 111, 114, 108, 100, 147,
+    1, 192, 172,  72, 101, 108, 108, 111,
+   44,  32, 119, 111, 114, 108, 100
+]
+```
