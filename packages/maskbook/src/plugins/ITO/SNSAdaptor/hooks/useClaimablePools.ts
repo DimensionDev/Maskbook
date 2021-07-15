@@ -5,7 +5,7 @@ import {
     useAccount,
     useChainId,
     FungibleTokenDetailed,
-    useERC20TokensDetailed,
+    useFungibleTokensDetailed,
     ERC20Token,
     useITOConstants,
     ChainId,
@@ -47,7 +47,7 @@ export function useClaimablePools(isMainnetOld = false) {
     )
 
     // No need to fetch token details again since subgraph returns it.
-    const { value: tokens, loading: loadingTokens } = useERC20TokensDetailed(isPoolsFromWeb3Empty ? [] : _tokens)
+    const { value: tokens, loading: loadingTokens } = useFungibleTokensDetailed(isPoolsFromWeb3Empty ? [] : _tokens)
 
     const pools = isPoolsFromWeb3Empty
         ? _pools
