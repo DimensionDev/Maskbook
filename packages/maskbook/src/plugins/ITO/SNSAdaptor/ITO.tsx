@@ -186,7 +186,11 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 
     return (
         <>
-            <TokenIcon classes={{ icon: classes.tokenIcon }} address={exchangeToken.address} />
+            <TokenIcon
+                classes={{ icon: classes.tokenIcon }}
+                address={exchangeToken.address}
+                logoURI={exchangeToken.logoURI}
+            />
             <Typography component="span">
                 <strong>{price}</strong>{' '}
                 {isSameAddress(exchangeToken.address, NATIVE_TOKEN_ADDRESS)

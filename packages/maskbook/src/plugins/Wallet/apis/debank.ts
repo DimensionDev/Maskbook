@@ -12,8 +12,6 @@ export async function getTransactionList(address: string, network: NetworkType) 
 }
 
 export async function getAssetsList(address: string, network: NetworkType) {
-    const response = await fetch(
-        `${DEBANK_API}/token/balance_list?user_addr=${address.toLowerCase()}`,
-    )
+    const response = await fetch(`${DEBANK_API}/token/balance_list?user_addr=${address.toLowerCase()}`)
     return (await response.json()) as BalanceListResponse
 }
