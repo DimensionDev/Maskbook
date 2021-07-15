@@ -53,6 +53,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
             })
 
             if (result.message) {
+                setInvalidCode(true)
             } else {
                 if (step === 0) {
                     // original email verified
