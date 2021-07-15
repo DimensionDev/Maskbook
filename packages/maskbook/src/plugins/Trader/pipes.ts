@@ -89,7 +89,7 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider) {
 export function resolveTradePairLink(tradeProvider: TradeProvider, address: string) {
     switch (tradeProvider) {
         case TradeProvider.UNISWAP:
-            return `https://info.uniswap.org/pair/${address}`
+            return `https://v2.info.uniswap.org/pair/${address}`
         case TradeProvider.ZRX:
             return ''
         case TradeProvider.SUSHISWAP:
