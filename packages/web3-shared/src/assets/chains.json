@@ -10,7 +10,8 @@
         "nativeCurrency": {
             "name": "Ether",
             "symbol": "ETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "rpc": [
             "https://damp-holy-water.quiknode.pro/d5bcb6c5e265afd11fecb0d52275afa961487a29/",
@@ -139,7 +140,8 @@
         "nativeCurrency": {
             "name": "Binance Chain Native Token",
             "symbol": "BNB",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/bsc_token/logo_url/bsc/8bfdeaa46fe9be8f5cd43a53b8d1eea1.png"
         },
         "rpc": ["https://bsc-dataseed.binance.org/"],
         "rpcWeights": [0, 0, 0, 0],
@@ -189,7 +191,8 @@
         "nativeCurrency": {
             "name": "Matic",
             "symbol": "MATIC",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
         },
         "rpc": ["https://polygon-mainnet.infura.io/v3/50676f4e9b9d4780a34fc8a503ff7f4f"],
         "rpcWeights": [0, 0, 0, 0],

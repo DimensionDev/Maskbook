@@ -28,8 +28,6 @@ export const Flags = {
     support_eth_network_switch: betaOrInsiderOnly,
     //#region Experimental features
     image_payload_marked_as_beta: appOnly,
-    /** Prohibit the use of test networks in production */
-    wallet_allow_testnet: betaOrInsiderOnly || process.env.NODE_ENV !== 'production',
     transak_enabled: webOnly,
     trader_enabled: true,
     trader_zrx_enabled: webOnly,
@@ -38,13 +36,14 @@ export const Flags = {
     dhedge_enabled: webOnly,
     metamask_support_enabled: webOnly,
     toolbox_enabled: webOnly,
+    /** Prohibit the use of test networks in production */
+    wallet_allow_testnet: betaOrInsiderOnly || process.env.NODE_ENV !== 'production',
     wallet_mnemonic_words_backup_enabled: false,
     wallet_private_key_backup_enabled: true,
     wallet_gas_price_dialog_enable: true,
     /* construct LBP for all ERC20 tokens */
     LBP_enabled: false,
     LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
-    vcent_enabled: false,
     plugin_switch_enabled: betaOrInsiderOnly,
     //#endregion
 

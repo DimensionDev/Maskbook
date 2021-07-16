@@ -12,6 +12,7 @@ import {
     ChainId,
     useNetworkType,
     resolveNetworkName,
+    useERC20TokenDetailedFromTokenLists,
 } from '@masknet/web3-shared'
 import { SwapStatus } from './SwapGuide'
 
@@ -130,6 +131,7 @@ export function RemindDialog(props: RemindDialogProps) {
     const classes = useStylesExtends(useStyles(), {})
     const [agreeReminder, setAgreeReminder] = useState(false)
     const networkType = useNetworkType()
+    const { tokensDetailed } = useERC20TokenDetailedFromTokenLists(token.address)
 
     return (
         <>
@@ -150,7 +152,11 @@ export function RemindDialog(props: RemindDialogProps) {
                 </Typography>
             </section>
             <section className={classNames(classes.wrapper, classes.tokenWrapper)}>
-                <TokenIcon address={token.address} classes={{ icon: classes.tokenIcon }} />
+                <TokenIcon
+                    address={token.address}
+                    classes={{ icon: classes.tokenIcon }}
+                    logoURI={tokensDetailed?.logoURI}
+                />
                 <div className={classes.tokenTextWrapper}>
                     <Typography variant="h5" className={classes.tokenSymbol}>
                         {token.name}

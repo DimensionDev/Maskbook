@@ -133,19 +133,8 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     //#region Wallet
     const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+        WalletMessages.events.selectProviderDialogUpdated,
     )
-
-    const { openDialog: openCreateImportDialog } = useRemoteControlledDialog(
-        WalletMessages.events.createImportWalletDialogUpdated,
-    )
-    const openWallet = useCallback(() => {
-        if (account) {
-            openSelectWalletDialog()
-        } else {
-            openCreateImportDialog()
-        }
-    }, [account])
     //#endregion
 
     //#region Red packet
@@ -203,18 +192,22 @@ export function ToolboxHint(props: ToolboxHintProps) {
                 <Image src={ToolIconURLs.encryptedmsg.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
             </MenuItem>,
-            <MenuItem onClick={openRedPacket} className={classes.menuItem}>
-                <Image src={ToolIconURLs.redpacket.image} width={19} height={19} />
-                <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
-            </MenuItem>,
+            chainIdValid ? (
+                <MenuItem onClick={openRedPacket} className={classes.menuItem}>
+                    <Image src={ToolIconURLs.redpacket.image} width={19} height={19} />
+                    <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
+                </MenuItem>
+            ) : null,
             <MenuItem onClick={openFileService} className={classes.menuItem}>
                 <Image src={ToolIconURLs.files.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
             </MenuItem>,
-            <MenuItem onClick={openITO} className={classes.menuItem}>
-                <Image src={ToolIconURLs.markets.image} width={19} height={19} />
-                <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
-            </MenuItem>,
+            chainIdValid ? (
+                <MenuItem onClick={openITO} className={classes.menuItem}>
+                    <Image src={ToolIconURLs.markets.image} width={19} height={19} />
+                    <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
+                </MenuItem>
+            ) : null,
             account && Flags.transak_enabled ? (
                 <MenuItem onClick={openBuyCurrency} className={classes.menuItem}>
                     <Image src={ToolIconURLs.token.image} width={19} height={19} />
@@ -227,10 +220,12 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     <Typography className={classes.text}>{ToolIconURLs.swap.text}</Typography>
                 </MenuItem>
             ) : null,
-            <MenuItem onClick={onClaimAllDialogOpen} className={classes.menuItem}>
-                <Image src={ToolIconURLs.claim.image} width={19} height={19} />
-                <Typography className={classes.text}>{ToolIconURLs.claim.text}</Typography>
-            </MenuItem>,
+            chainIdValid ? (
+                <MenuItem onClick={onClaimAllDialogOpen} className={classes.menuItem}>
+                    <Image src={ToolIconURLs.claim.image} width={19} height={19} />
+                    <Typography className={classes.text}>{ToolIconURLs.claim.text}</Typography>
+                </MenuItem>
+            ) : null,
         ],
         false,
         {
@@ -253,7 +248,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
             </div>
             {menu}
 
-            <div className={classes.wrapper} onClick={openWallet}>
+            <div className={classes.wrapper} onClick={openSelectWalletDialog}>
                 <div className={classes.button}>
                     {account && chainIdValid ? (
                         <WalletIcon />

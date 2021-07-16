@@ -14,13 +14,13 @@ export enum TokenListsState {
     LOADING_SEARCHED_TOKEN,
 }
 
-export function useERC20TokensDetailedFromTokenLists(lists: string[], keyword: string = '') {
+export function useERC20TokensDetailedFromTokenLists(lists?: string[], keyword: string = '') {
     //#region fetch token lists
     const chainId = useChainId()
     const { fetchERC20TokensFromTokenLists } = useWeb3Context()
     const { value: allTokens = [], loading: loadingAllTokens } = useAsync(
-        async () => (lists.length === 0 ? [] : fetchERC20TokensFromTokenLists(lists, chainId)),
-        [chainId, lists.sort().join()],
+        async () => (!lists || lists.length === 0 ? [] : fetchERC20TokensFromTokenLists(lists, chainId)),
+        [chainId, lists?.sort().join()],
     )
     //#endregion
 

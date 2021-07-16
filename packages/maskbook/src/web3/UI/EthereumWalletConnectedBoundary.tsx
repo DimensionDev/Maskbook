@@ -88,7 +88,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    if (!chainIdValid)
+    if (!chainIdValid && !offChain)
         return (
             <Grid container>
                 <ActionButton className={classes.button} disabled fullWidth variant="contained" size="large">
