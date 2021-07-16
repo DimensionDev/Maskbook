@@ -48,12 +48,14 @@ When encoding, the implementation MUST use `0` as the value of this field.
 
 When decoding, the implementation MUST fail when this field is not `0`.
 
+Version less than 0 is invalid.
+
 #### Example
 
 This is an example of an empty `Document`.
 
 - Object format: `[0, []]`
-- Uint8 array: `[146, 0, 144]`
+- Binary data: `[146, 0, 144]`
 
 ### TypedMessageBase
 
@@ -114,7 +116,7 @@ When decoding, lack of content field should be treated as `TextFormat.PlainText`
 This is an example of a `Document` that contains a text message `"Hello, world"` in Markdown format with metadata `{"com.example.test": "hi"}`.
 
 - Object format: `[0, [[1, { "com.example.test": "hi" }, "Hello, world", 1]]]`
-- Uint8 array:
+- Binary data:
 
 ```plaintext
 [
@@ -145,7 +147,7 @@ This field represents an ordered list of a TypedMessage.
 This is an example of a `Document` that contains two text messages `"Hello, world"` with no metadata.
 
 - Object format: `[0, [ [0, null, [ [1, null, "Hello, world"], [1, null, "Hello, world"] ]] ]]`
-- Uint8 array:
+- Binary data:
 
 ```plaintext
  [
