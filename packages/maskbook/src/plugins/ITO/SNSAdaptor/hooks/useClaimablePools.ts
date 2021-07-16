@@ -6,7 +6,7 @@ import {
     useChainId,
     FungibleTokenDetailed,
     useFungibleTokensDetailed,
-    ERC20Token,
+    FungibleToken,
     useITOConstants,
     ChainId,
 } from '@masknet/web3-shared'
@@ -42,17 +42,23 @@ export function useClaimablePools(isMainnetOld = false) {
 
     //#region fetch list of token detail
     const _tokens = useMemo(
-        () => _pools.map((p) => p.token as Pick<ERC20Token, 'address' | 'type'>),
+        () =>
+            _pools.reduce<Pick<FungibleToken, 'address' | 'type'>[]>((acc, cur) => {
+                if (acc.every((p) => p.address !== cur.token.address)) acc.push(cur.token)
+                return acc
+            }, []),
         [JSON.stringify(_pools)],
     )
 
     // No need to fetch token details again since subgraph returns it.
-    const { value: tokens, loading: loadingTokens } = useFungibleTokensDetailed(isPoolsFromWeb3Empty ? [] : _tokens)
-
+    const { value: tokens, loading: loadingTokens } = useFungibleTokensDetailed(_tokens)
     const pools = isPoolsFromWeb3Empty
         ? _pools
         : _pools.map((p, i) => {
-              if (tokens) p.token = tokens[i]
+              if (tokens) {
+                  const token = tokens.find((t) => t.address === p.token.address)
+                  if (token) p.token = token
+              }
               return p
           })
     //#endregion

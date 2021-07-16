@@ -12,10 +12,10 @@ import {
     EthereumTokenType,
     useGetPastLogsParams,
     ChainId,
-    getPastLogs,
 } from '@masknet/web3-shared'
 import type { ClaimablePool } from '../../types'
 import { useMemo } from 'react'
+import Services from '../../../../extension/service'
 
 const SWAP_SUCCESS_TOPIC = sha3('SwapSuccess(bytes32,address,address,address,uint256,uint256,uint128,bool)')
 const SWAP_SUCCESS_TYPES = [
@@ -46,23 +46,25 @@ export function useClaimablePoolsByWeb3() {
     return useAsyncRetry(async () => {
         const logs = flatten<Log>(
             await Promise.all(
-                queryParams.map(async (queryParam: PastLogsOptions) => await getPastLogs(queryParam, chainId)),
+                queryParams.map(
+                    async (queryParam: PastLogsOptions) => await Services.Ethereum.getPastLogs(queryParam, chainId),
+                ),
             ),
         )
         const results = logs.reduce<ClaimablePool[]>((acc, log) => {
             const data = web3.eth.abi.decodeParameters(SWAP_SUCCESS_TYPES, log.data) as {
-                claimable: boolean
+                claimed: boolean
                 to_address: string
             }
-            if (data.claimable) {
+            const pid = log.topics[1]
+            if (!data.claimed && acc.every((p) => p.pid !== pid)) {
                 acc.push({
-                    pid: log.topics[1],
+                    pid,
                     token: { address: data.to_address, type: EthereumTokenType.ERC20 } as FungibleTokenDetailed,
                 })
             }
             return acc
         }, [])
-
         return results
     }, [account, address, chainId, JSON.stringify(queryParams)])
 }
