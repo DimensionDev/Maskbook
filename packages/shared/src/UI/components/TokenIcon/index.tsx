@@ -23,7 +23,6 @@ function getFallbackIcons(address: string, baseURIs: string[]) {
     }
 
     const specialIcon = SPECIAL_ICON_LIST.find(currySameAddress(address))
-
     if (specialIcon) return [specialIcon.logo_url]
 
     // load from remote
