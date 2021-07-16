@@ -30,7 +30,7 @@ export function getNextTimelineIndex(timeline: TimelineEvent[]) {
     return timeline.length - 1
 }
 
-export function getIsEndOfTimeline(timelineIndex: number, timeline: TimelineEvent[]) {
+export function isEndOfTimeline(timelineIndex: number, timeline: TimelineEvent[]) {
     return timelineIndex === timeline.length - 1 && isBefore(timeline[timelineIndex].date, new Date())
 }
 

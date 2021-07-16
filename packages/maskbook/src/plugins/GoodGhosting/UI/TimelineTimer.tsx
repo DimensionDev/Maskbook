@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { useTimeline } from '../hooks/useGameInfo'
 import type { GoodGhostingInfo } from '../types'
-import { getIsEndOfTimeline, getNextTimelineIndex } from '../utils'
+import { isEndOfTimeline, getNextTimelineIndex } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
     timer: {
@@ -32,14 +32,14 @@ export function TimelineTimer(props: TimelineTimerProps) {
     const timeline = useTimeline(props.info)
 
     const [timelineIndex, setTimelineIndex] = useState(getNextTimelineIndex(timeline))
-    const [isLastEvent, setIsLastEvent] = useState(getIsEndOfTimeline(timelineIndex, timeline))
+    const [isLastEvent, setIsLastEvent] = useState(isEndOfTimeline(timelineIndex, timeline))
 
     const nextTimelineEvent = timeline[timelineIndex]
 
     const updateTargetDate = () => {
         const index = getNextTimelineIndex(timeline)
         setTimelineIndex(index)
-        setIsLastEvent(getIsEndOfTimeline(timelineIndex, timeline))
+        setIsLastEvent(isEndOfTimeline(timelineIndex, timeline))
     }
 
     return (
