@@ -105,7 +105,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         if (createState.type !== TransactionStateType.UNKNOWN) return
         const contractAddress =
             networkType === NetworkType.Ethereum ? HAPPY_RED_PACKET_ADDRESS_V2 : HAPPY_RED_PACKET_ADDRESS_V3
-        if (!contractAddress) return
+        if (!contractAddress) {
+            onClose()
+            return
+        }
         payload.current.contract_address = contractAddress
         payload.current.contract_version = networkType === NetworkType.Ethereum ? 2 : 3
         payload.current.network = getChainName(chainId)
