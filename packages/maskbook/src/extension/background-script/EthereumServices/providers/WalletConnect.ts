@@ -87,7 +87,12 @@ export async function requestAccounts() {
 
 const onConnect = async () => {
     if (!connector?.accounts.length) return
-    await updateWalletInDB(first(connector.accounts) ?? '', connector.chainId, connector.peerMeta?.name, true)
+    await updateAccount({
+        name: connector.peerMeta?.name,
+        account: first(connector.accounts),
+        chainId: connector.chainId,
+        providerType: ProviderType.WalletConnect,
+    })
 }
 
 const onUpdate = async (
@@ -101,7 +106,13 @@ const onUpdate = async (
 ) => {
     if (error) return
     if (!connector?.accounts.length) return
-    await updateWalletInDB(first(connector.accounts) ?? '', connector.chainId, connector.peerMeta?.name, false)
+    if (currentProviderSettings.value === ProviderType.WalletConnect)
+        await updateAccount({
+            name: connector.peerMeta?.name,
+            account: first(connector.accounts),
+            chainId: connector.chainId,
+            providerType: ProviderType.WalletConnect,
+        })
 }
 
 const onDisconnect = async (error: Error | null) => {
