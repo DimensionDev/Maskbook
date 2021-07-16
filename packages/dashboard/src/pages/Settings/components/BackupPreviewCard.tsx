@@ -2,6 +2,7 @@ import { MaskColorVar } from '@masknet/theme'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
+import { useDashboardI18N } from '../../../locales'
 export interface BackupPreview {
     email?: string
     personas: number
@@ -34,39 +35,40 @@ export interface Props {
 }
 
 export default function BackupPreviewCard({ json }: Props) {
+    const t = useDashboardI18N()
     const classes = useStyles()
 
     const records = [
         {
-            name: 'Account',
+            name: t.settings_backup_preview_account(),
             value: json.email,
         },
         {
-            name: 'Personas',
+            name: t.settings_backup_preview_personas(),
             value: json.personas,
         },
         {
-            name: 'Associated account',
+            name: t.settings_backup_preview_associated_account(),
             value: json.accounts,
             sub: true,
         },
         {
-            name: 'Encrypted Post',
+            name: t.settings_backup_preview_posts(),
             value: json.posts,
             sub: true,
         },
         {
-            name: 'Contacts',
+            name: t.settings_backup_preview_contacts(),
             value: json.contacts,
             sub: true,
         },
         {
-            name: 'File',
+            name: t.settings_backup_preview_fils(),
             value: json.files,
             sub: true,
         },
         {
-            name: 'Local Wallet',
+            name: t.settings_backup_preview_wallets(),
             value: json.wallets,
         },
     ]

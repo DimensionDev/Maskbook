@@ -78,7 +78,7 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
 
     return (
         <ConfirmDialog
-            title={`${user.email ? 'Change' : 'Setting'} Email`}
+            title={user.email ? t.settings_dialogs_change_email() : t.settings_dialogs_setting_email()}
             maxWidth="xs"
             open={open}
             onClose={handleClose}
@@ -99,7 +99,7 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
                 </Box>
             ) : (
                 <Box className={classes.container} sx={{ paddingTop: '24px' }}>
-                    <Typography>The current email for validation is </Typography>
+                    <Typography>{t.settings_dialogs_current_email_validation()}</Typography>
                     <Typography color="primary" fontWeight="bold" variant="h4">
                         {email}
                     </Typography>
@@ -110,13 +110,13 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
                             value={code}
                             onChange={(event) => setCode(event.target.value)}
                             error={invalidCode}
-                            helperText={invalidCode ? 'The verification code is incorrect.' : ''}
+                            helperText={invalidCode ? t.settings_dialogs_incorrect_email() : ''}
                         />
                         <CountdownButton
                             size="medium"
                             sx={{ width: '100px', height: '40px' }}
                             onClick={sendValidationEmail}>
-                            Send
+                            {t.settings_button_send()}
                         </CountdownButton>
                     </Box>
                 </Box>
