@@ -66,26 +66,22 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['da
                 toAddress: transaction.other_addr,
                 failed: transaction.tx?.status === 0,
                 pairs: [
-                    ...transaction.sends
-                        .filter(({ token_id }) => token_dict[token_id].is_verified)
-                        .map(({ amount, token_id }) => ({
-                            name: token_dict[token_id].name,
-                            symbol: token_dict[token_id].optimized_symbol,
-                            address: token_id,
-                            direction: DebankTransactionDirection.SEND,
-                            amount,
-                            logoURI: token_dict[token_id].logo_url,
-                        })),
-                    ...transaction.receives
-                        .filter(({ token_id }) => token_dict[token_id].is_verified)
-                        .map(({ amount, token_id }) => ({
-                            name: token_dict[token_id].name,
-                            symbol: token_dict[token_id].optimized_symbol,
-                            address: token_id,
-                            direction: DebankTransactionDirection.RECEIVE,
-                            amount,
-                            logoURI: token_dict[token_id].logo_url,
-                        })),
+                    ...transaction.sends.map(({ amount, token_id }) => ({
+                        name: token_dict[token_id].name,
+                        symbol: token_dict[token_id].optimized_symbol,
+                        address: token_id,
+                        direction: DebankTransactionDirection.SEND,
+                        amount,
+                        logoURI: token_dict[token_id].logo_url,
+                    })),
+                    ...transaction.receives.map(({ amount, token_id }) => ({
+                        name: token_dict[token_id].name,
+                        symbol: token_dict[token_id].optimized_symbol,
+                        address: token_id,
+                        direction: DebankTransactionDirection.RECEIVE,
+                        amount,
+                        logoURI: token_dict[token_id].logo_url,
+                    })),
                 ],
                 gasFee: transaction.tx
                     ? { eth: transaction.tx.eth_gas_fee, usd: transaction.tx.usd_gas_fee }
