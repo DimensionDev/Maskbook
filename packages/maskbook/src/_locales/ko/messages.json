@@ -190,6 +190,7 @@
     "search_box_placeholder": "여기서 검색하기",
     "select_all": "전체 선택",
     "select_none": "전체 선택 취소",
+    "all_friends": "",
     "select_specific_friends_dialog__button": "닫기",
     "select_specific_friends_dialog__title": "지정 연락처 선택",
     "service_decryption_failed": "해독 실패",

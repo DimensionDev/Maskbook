@@ -1,6 +1,6 @@
-import { setStorage } from '../../utils/browser.storage'
-import { queryPersonasWithPrivateKey } from '../Persona/Persona.db'
-import { deletePersona } from '../Persona/helpers'
+import { setStorage } from '../../../../utils/browser.storage'
+import { queryPersonasWithPrivateKey } from '../../../../database/Persona/Persona.db'
+import { deletePersona } from '../../../../database/Persona/helpers'
 
 /**
  * There is a bug that when use QR to import key, the private ket lost its secret.

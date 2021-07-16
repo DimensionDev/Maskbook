@@ -1,5 +1,4 @@
 /* eslint-disable import/no-deprecated */
-/// <reference path="../global.d.ts" />
 /**
  * @deprecated
  * This database is deprecated since Mask 1.8.10
@@ -24,12 +23,12 @@
  * @type {Record<string, AESJsonWebKey>} Record of <userId, CryptoKey>
  * @keys outline, string, which means network.
  */
-import { GroupIdentifier, Identifier, ProfileIdentifier } from '../type'
+import { GroupIdentifier, Identifier, ProfileIdentifier } from '../../../../database/type'
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
-import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../../../utils/type-transform/CryptoKey-JsonWebKey'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { createDBAccess } from '../helpers/openDB'
-import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
+import { createDBAccess } from '../../../../database/helpers/openDB'
+import type { AESJsonWebKey } from '../../../../modules/CryptoAlgorithm/interfaces/utils'
 
 assertEnvironment(Environment.ManifestBackground)
 //#region Type and utils
