@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
-import AaveLendingPoolABI from '@masknet/contracts/abis/AaveLendingPool.json'
-import type { AaveLendingPool } from '@masknet/contracts/types/AaveLendingPool'
+import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.json'
+import type { AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool'
 import { useContract } from '@masknet/web3-shared'
 
 export function useAaveLendingPoolContract(address: string) {

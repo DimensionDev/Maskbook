@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
-import type { GoodGhostingPolygon } from '@masknet/contracts/types/GoodGhostingPolygon'
-import GoodGhostingPolygonABI from '@masknet/contracts/abis/GoodGhostingPolygon.json'
+import type { GoodGhostingPolygon } from '@masknet/web3-contracts/types/GoodGhostingPolygon'
+import GoodGhostingPolygonABI from '@masknet/web3-contracts/abis/GoodGhostingPolygon.json'
 import { useContract, useGoodGhostingConstants } from '@masknet/web3-shared'
 
 export function useGoodGhostingContract() {
