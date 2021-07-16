@@ -85,7 +85,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
 
     return (
         <ConfirmDialog
-            title={`${user.phone ? 'Change' : 'Setting'} Phone Number`}
+            title={user.phone ? t.settings_dialogs_change_phone_number() : t.settings_dialogs_setting_phone_number()}
             maxWidth="xs"
             open={open}
             onClose={handleClose}
@@ -114,7 +114,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                 </Box>
             ) : (
                 <Box className={classes.container} sx={{ paddingTop: '24px' }}>
-                    <Typography>The current phone number for validation is </Typography>
+                    <Typography>{t.settings_dialogs_current_phone_validation()}</Typography>
                     <Typography color="primary" fontWeight="bold" variant="h4">
                         {countryCode} {phone}
                     </Typography>
@@ -125,13 +125,13 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                             value={code}
                             onChange={(event) => setCode(event.target.value)}
                             error={invalidCode}
-                            helperText={invalidCode ? 'The verification code is incorrect.' : ''}
+                            helperText={invalidCode ? t.settings_dialogs_incorrect_phone() : ''}
                         />
                         <CountdownButton
                             size="medium"
                             sx={{ width: '100px', height: '40px' }}
                             onClick={sendValidationEmail}>
-                            Send
+                            {t.settings_button_send()}
                         </CountdownButton>
                     </Box>
                 </Box>

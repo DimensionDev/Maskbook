@@ -60,7 +60,11 @@ export default function SettingPasswordDialog({ open, onClose }: SettingPassword
 
     return (
         <ConfirmDialog
-            title={`${user.backupPassword ? 'Change' : 'Setting'} Backup Password`}
+            title={
+                user.backupPassword
+                    ? t.settings_dialogs_change_backup_password()
+                    : t.settings_dialogs_setting_backup_password()
+            }
             maxWidth="xs"
             open={open}
             onClose={handleClose}
@@ -72,11 +76,11 @@ export default function SettingPasswordDialog({ open, onClose }: SettingPassword
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
                         type="password"
-                        label="Backup Password"
+                        label={t.settings_label_backup_password()}
                         variant="outlined"
                         sx={{ marginBottom: '10px' }}
                         error={incorrectPassword}
-                        helperText={incorrectPassword ? 'Incorrect password.' : ''}
+                        helperText={incorrectPassword ? t.settings_dialogs_incorrect_password() : ''}
                     />
                 ) : null}
 
@@ -86,7 +90,11 @@ export default function SettingPasswordDialog({ open, onClose }: SettingPassword
                     onChange={(event) => setNewPassword(event.target.value)}
                     onBlur={validCheck}
                     type="password"
-                    label={`${user.backupPassword ? 'New ' : ''}Backup Password`}
+                    label={
+                        user.backupPassword
+                            ? t.settings_label_backup_password()
+                            : t.settings_label_new_backup_password()
+                    }
                     variant="outlined"
                     sx={{ marginBottom: '10px' }}
                     error={!passwordValid}
@@ -96,10 +104,10 @@ export default function SettingPasswordDialog({ open, onClose }: SettingPassword
                     value={repeatPassword}
                     onChange={(event) => setRepeatPassword(event.target.value)}
                     type="password"
-                    label="Re-enter"
+                    label={t.settings_label_re_enter()}
                     variant="outlined"
                     error={!passwordMatched || !passwordValid}
-                    helperText={!passwordMatched ? 'Password inconsistency.' : passwordRule}
+                    helperText={!passwordMatched ? t.settings_dialogs_inconsistency_password() : passwordRule}
                 />
             </Box>
         </ConfirmDialog>

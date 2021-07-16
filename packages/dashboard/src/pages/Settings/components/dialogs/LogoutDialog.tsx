@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import { useContext } from 'react'
+import { useDashboardI18N } from '../../../../locales'
 
 const StyledButton: typeof Button = styled(Button)(() => ({
     [`&.${buttonClasses.root}`]: {
@@ -22,25 +23,23 @@ export interface LogoutDialogProps {
 }
 
 export default function LogoutDialog({ open, onClose }: LogoutDialogProps) {
+    const t = useDashboardI18N()
     const { updateUser } = useContext(UserContext)
     const onConfirm = () => {
         updateUser({ backupPassword: null, email: null, phone: null })
         onClose()
     }
     return (
-        <MaskDialog title="Log out" maxWidth="xs" open={open} onClose={onClose}>
+        <MaskDialog title={t.settings_log_out_title()} maxWidth="xs" open={open} onClose={onClose}>
             <DialogContent sx={{ padding: '16px 44px 64px' }}>
-                <Typography sx={{ fontSize: '14px' }}>
-                    The data of Mask Network is stored in your current browser. Please don’t delete Mask Network plugin
-                    randomly. Remember to back up your current data of Mask Network plugin in time before you log out.
-                </Typography>
+                <Typography sx={{ fontSize: '14px' }}>{t.settings_log_out_tips()}</Typography>
             </DialogContent>
             <DialogActions>
                 <StyledButton onClick={onClose} color="secondary">
                     Cancel
                 </StyledButton>
                 <StyledButton onClick={onConfirm} color="error">
-                    Log out
+                    {t.settings_log_out_title()}
                 </StyledButton>
             </DialogActions>
         </MaskDialog>

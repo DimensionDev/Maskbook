@@ -1,5 +1,6 @@
 import { MaskDialog } from '@masknet/theme'
 import { DialogContent, DialogActions, Button, experimentalStyled as styled, buttonClasses } from '@material-ui/core'
+import { useDashboardI18N } from '../../locales'
 
 const StyledButton: typeof Button = styled(Button)(() => ({
     [`&.${buttonClasses.root}`]: {
@@ -19,6 +20,7 @@ export interface ConfirmDialogProps extends React.PropsWithChildren<{}> {
 }
 
 export default function ConfirmDialog(props: ConfirmDialogProps) {
+    const t = useDashboardI18N()
     const {
         title,
         open,
@@ -26,8 +28,8 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
         onConfirm,
         children,
         maxWidth = 'sm',
-        cancelText = 'Cancel',
-        confirmText = 'Confirm',
+        cancelText = t.settigns_button_cancel(),
+        confirmText = t.settings_button_confirm(),
         confirmDisabled = false,
     } = props
     return (
