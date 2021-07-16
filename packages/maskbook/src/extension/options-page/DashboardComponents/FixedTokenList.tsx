@@ -12,7 +12,7 @@ import {
 } from '@masknet/web3-shared'
 import { makeStyles, Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { TokenInList } from './TokenInList'
@@ -95,10 +95,6 @@ export function FixedTokenList(props: FixedTokenListProps) {
             {message}
         </Typography>
     )
-    //#endregion
-
-    //#region deselect token
-    useEffect(() => onSelect?.(null), [keyword])
     //#endregion
 
     if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
