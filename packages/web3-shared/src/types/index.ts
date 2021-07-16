@@ -1,4 +1,4 @@
-import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/contracts/types/types'
+import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
 
 export enum CurrencyType {
     USD = 'usd',
@@ -87,7 +87,7 @@ export interface ERC20TokenDetailed extends ERC20Token {
     name?: string
     symbol?: string
     decimals: number
-    logoURI?: string
+    logoURI?: string[]
 }
 //#endregion
 
@@ -248,7 +248,7 @@ export interface Asset {
     value?: {
         [key in CurrencyType]: string
     }
-    logoURL?: string
+    logoURI?: string
 }
 
 export enum PortfolioProvider {

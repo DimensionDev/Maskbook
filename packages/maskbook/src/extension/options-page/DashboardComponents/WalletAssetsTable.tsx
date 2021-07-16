@@ -85,6 +85,7 @@ const useStyles = makeStyles<
         display: 'flex',
         justifyContent: 'center',
         marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
     },
 }))
 
@@ -115,10 +116,11 @@ function ViewDetailed(props: ViewDetailedProps) {
                         classes={{ icon: classes.coin }}
                         name={asset.token.name}
                         address={asset.token.address}
+                        logoURI={asset.token.logoURI}
                         chainId={getChainIdFromName(asset.chain)}
                     />
                     <Typography className={classes.name}>{asset.token.symbol}</Typography>
-                    {asset.chain !== chainDetailed.shortName.toLowerCase() ? (
+                    {asset.chain.toLowerCase() !== chainDetailed.chain.toLowerCase() ? (
                         <Chip className={classes.chain} label={asset.chain} size="small" />
                     ) : null}
                 </Box>,

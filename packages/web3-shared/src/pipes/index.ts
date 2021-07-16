@@ -1,4 +1,4 @@
-import { safeUnreachable, unreachable } from '@dimensiondev/kit'
+import { unreachable, safeUnreachable } from '@dimensiondev/kit'
 import { getTokenConstants } from '../constants'
 import {
     ChainId,
@@ -24,7 +24,7 @@ export function resolveProviderName(providerType: ProviderType) {
             return 'CustomNetwork'
         default:
             safeUnreachable(providerType)
-            return 'Unknown'
+            return 'Unknown Network'
     }
 }
 

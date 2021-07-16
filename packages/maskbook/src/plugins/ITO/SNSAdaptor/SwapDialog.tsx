@@ -9,7 +9,6 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import {
     ChainId,
     currySameAddress,
-    ERC20TokenDetailed,
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
@@ -179,7 +178,6 @@ export function SwapDialog(props: SwapDialogProps) {
             disableNativeToken: !exchangeTokens.some((x) => isNative(x.address)),
             disableSearchBar: true,
             FixedTokenListProps: {
-                tokens: exchangeTokens.filter((x) => !isNative(x.address)) as ERC20TokenDetailed[],
                 whitelist: exchangeTokens.map((x) => x.address),
             },
         })

@@ -1,5 +1,5 @@
-import MaskITO_ABI from '@masknet/contracts/abis/MaskITO.json'
-import type { MaskITO } from '@masknet/contracts/types/MaskITO'
+import MaskITO_ABI from '@masknet/web3-contracts/abis/MaskITO.json'
+import type { MaskITO } from '@masknet/web3-contracts/types/MaskITO'
 import { useContract, useITOConstants } from '@masknet/web3-shared'
 import type { AbiItem } from 'web3-utils'
 

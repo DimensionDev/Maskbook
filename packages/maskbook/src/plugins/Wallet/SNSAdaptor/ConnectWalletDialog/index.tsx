@@ -41,12 +41,6 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     })
     //#endregion
 
-    //#region wallet status dialog
-    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
-    )
-    //#endregion
-
     //#region walletconnect
     const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
@@ -133,10 +127,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
         // switch to the wallet status dialog
         closeDialog()
-        openWalletStatusDialog()
 
         return true
-    }, [open, providerType, connectTo, openWalletStatusDialog])
+    }, [open, providerType, connectTo])
 
     if (!providerType) return null
 

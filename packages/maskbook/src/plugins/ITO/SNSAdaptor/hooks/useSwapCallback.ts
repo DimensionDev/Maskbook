@@ -1,8 +1,8 @@
-import type { ITO } from '@masknet/contracts/types/ITO'
-import type { ITO2 } from '@masknet/contracts/types/ITO2'
-import type { Qualification } from '@masknet/contracts/types/Qualification'
-import type { Qualification2 } from '@masknet/contracts/types/Qualification2'
-import type { PayableTx } from '@masknet/contracts/types/types'
+import type { ITO } from '@masknet/web3-contracts/types/ITO'
+import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
+import type { Qualification } from '@masknet/web3-contracts/types/Qualification'
+import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2'
+import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     currySameAddress,
     EthereumTokenType,

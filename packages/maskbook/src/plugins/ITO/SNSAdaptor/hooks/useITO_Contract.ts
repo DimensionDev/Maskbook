@@ -1,8 +1,8 @@
 import type { AbiItem } from 'web3-utils'
-import ITO_ABI from '@masknet/contracts/abis/ITO.json'
-import ITO2_ABI from '@masknet/contracts/abis/ITO2.json'
-import type { ITO } from '@masknet/contracts/types/ITO'
-import type { ITO2 } from '@masknet/contracts/types/ITO2'
+import ITO_ABI from '@masknet/web3-contracts/abis/ITO.json'
+import ITO2_ABI from '@masknet/web3-contracts/abis/ITO2.json'
+import type { ITO } from '@masknet/web3-contracts/types/ITO'
+import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
 import { useITOConstants, useContract, isSameAddress } from '@masknet/web3-shared'
 
 export function useITO_Contract(contractAddress?: string) {

@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    env:
+      WEB3_CONSTANTS_RPC: ${{ secrets.WEB3_CONSTANTS_RPC }}
     steps:
       - name: Get cache date
         id: get-date

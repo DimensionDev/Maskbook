@@ -9,7 +9,7 @@ import {
     useSystemPreferencePalatte,
 } from '@masknet/theme'
 import { Emitter } from '@servie/events'
-import { ErrorBoundary } from '@masknet/shared'
+import { createI18NBundle, ErrorBoundary } from '@masknet/shared'
 
 import i18n from 'i18next'
 import { I18nextProvider } from 'react-i18next'
@@ -23,9 +23,14 @@ import { Web3Context } from '../web3/context'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
-// TODO: implement
-startPluginDashboard({
-    enabled: { events: new Emitter(), isEnabled: () => true },
+setTimeout(() => {
+    // TODO: implement enabled
+    startPluginDashboard({
+        enabled: { events: new Emitter(), isEnabled: () => true },
+        addI18NResource(plugin, resource) {
+            createI18NBundle(plugin, resource)(i18n)
+        },
+    })
 })
 export default function DashboardRoot() {
     const settings = useAppearance()

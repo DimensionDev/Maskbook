@@ -8,8 +8,8 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: 'rob-low' }, link: 'https://github.com/rob-lw' },
     enableRequirement: {
-        architecture: { app: false, web: true },
+        architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
-        target: 'insider',
+        target: 'stable',
     },
 }

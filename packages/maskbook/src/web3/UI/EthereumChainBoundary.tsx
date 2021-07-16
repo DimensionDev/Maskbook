@@ -2,21 +2,21 @@ import { useCallback } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import {
     ChainId,
-    getChainDetailed,
     getChainDetailedCAIP,
     getChainName,
+    getNetworkTypeFromChainId,
+    NetworkType,
     ProviderType,
-    resolveProviderName,
     useAccount,
-    useAllowTestnet,
-    useChainDetailed,
     useChainId,
+    useChainIdValid,
 } from '@masknet/web3-shared'
 import { useValueRef, delay } from '@masknet/shared'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
-import { currentChainIdSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
+import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import Services from '../../extension/service'
 import { useI18N } from '../../utils'
+import { WalletRPC } from '../../plugins/Wallet/messages'
 
 export interface EthereumChainBoundaryProps {
     chainId: ChainId
@@ -27,8 +27,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const { t } = useI18N()
     const account = useAccount()
     const chainId = useChainId()
-    const chainDetailed = useChainDetailed()
-    const allowTestnet = useAllowTestnet()
+    const chainIdValid = useChainIdValid()
     const providerType = useValueRef(currentProviderSettings)
 
     const expectedChainId = props.chainId
@@ -36,18 +35,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const acutalChainId = chainId
     const actualNetwork = getChainName(acutalChainId)
 
-    // if false then the user should switch network manually
-    const isSwitchable = providerType === ProviderType.Maskbook || getChainDetailed(expectedChainId)?.chain !== 'ETH'
-
-    // if testnets were not allowed it will not guide the user to switch the network
-    const isAllowed = allowTestnet || chainDetailed?.network === 'mainnet'
+    // if false then it will not guide the user to switch the network
+    const isAllowed = chainIdValid && !!account
 
     const onSwitch = useCallback(async () => {
         // a short time loading makes the user fells better
         await delay(1000)
 
         if (!isAllowed) return
-        if (!isSwitchable) return
 
         // read the chain detailed from the built-in chain list
         const chainDetailedCAIP = getChainDetailedCAIP(expectedChainId)
@@ -55,14 +50,20 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
         // if mask wallet was used it can switch network automatically
         if (providerType === ProviderType.Maskbook) {
-            currentChainIdSettings.value = expectedChainId
+            await WalletRPC.updateAccount({
+                chainId: expectedChainId,
+            })
             return
         }
 
         // request ethereum-compatiable network
-        await Services.Ethereum.addEthereumChain(chainDetailedCAIP, account)
-    }, [account, isAllowed, isSwitchable, providerType, expectedChainId])
+        const networkType = getNetworkTypeFromChainId(expectedChainId)
+        if (!networkType) return
+        if (networkType === NetworkType.Ethereum) await Services.Ethereum.switchEthereumChain(expectedChainId)
+        else await Services.Ethereum.addEthereumChain(chainDetailedCAIP, account)
+    }, [account, isAllowed, providerType, expectedChainId])
 
+    // matched
     if (acutalChainId === expectedChainId) return <>{props.children}</>
 
     if (!isAllowed)
@@ -86,16 +87,8 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         network: actualNetwork,
                     })}
                 </span>
-                {isSwitchable ? null : (
-                    <span>
-                        {t('plugin_wallet_swtich_to', {
-                            network: expectedNetwork,
-                            provider: resolveProviderName(providerType),
-                        })}
-                    </span>
-                )}
             </Typography>
-            {isSwitchable ? (
+            {isAllowed ? (
                 <ActionButtonPromise
                     variant="contained"
                     size="small"
