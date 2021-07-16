@@ -1,5 +1,4 @@
 import { unreachable, safeUnreachable } from '@dimensiondev/kit'
-import { getTokenConstants } from '../constants'
 import {
     ChainId,
     CollectibleProvider,
@@ -10,7 +9,7 @@ import {
     NonFungibleTokenDetailed,
     ProviderType,
 } from '../types'
-import { formatEthereumAddress, getChainDetailed } from '../utils'
+import { getChainDetailed } from '../utils'
 
 export function resolveProviderName(providerType: ProviderType) {
     switch (providerType) {
