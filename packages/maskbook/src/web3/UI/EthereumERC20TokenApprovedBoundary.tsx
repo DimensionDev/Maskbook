@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 export interface EthereumERC20TokenApprovedBoundaryProps {
     amount: string
-    spender: string
+    spender?: string
     token?: ERC20TokenDetailed
     children?: React.ReactNode | ((allowance: string) => React.ReactNode)
 }

@@ -18,10 +18,12 @@ import { getChainDetailed } from './chainDetailed'
 export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) throw new Error('Unknown chain id.')
+    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
+    if (!NATIVE_TOKEN_ADDRESS) throw new Error('Failed to create token.')
     return {
         type: EthereumTokenType.Native,
         chainId,
-        address: getTokenConstants().NATIVE_TOKEN_ADDRESS,
+        address: NATIVE_TOKEN_ADDRESS,
         ...chainDetailed.nativeCurrency,
     }
 }
@@ -98,7 +100,7 @@ export function createERC20Tokens(
         accumulator[chainId] = {
             type: EthereumTokenType.ERC20,
             chainId,
-            address: getTokenConstants(chainId)[key],
+            address: getTokenConstants(chainId)[key] ?? '',
             name: evaludator(name),
             symbol: evaludator(symbol),
             decimals: evaludator(decimals),

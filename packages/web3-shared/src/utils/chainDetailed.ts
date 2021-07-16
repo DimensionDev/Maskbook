@@ -20,7 +20,7 @@ export function getChainDetailed(chainId = ChainId.Mainnet) {
 // Learn more: https://github.com/ChainAgnostic/CAIPs/blob/master/CAIPs/caip-2.md
 export function getChainDetailedCAIP(chainId = ChainId.Mainnet) {
     const chainDetailed = getChainDetailed(chainId)
-    const { RPC } = getRPCConstants(chainId)
+    const { RPC = [] } = getRPCConstants(chainId)
     if (!chainDetailed) return
     return {
         chainId: `0x${chainDetailed.chainId.toString(16)}`,

@@ -70,6 +70,9 @@ export function CompositionDialog(props: CompositionDialogProps) {
             // reset state
             resetFillCallback()
 
+            // no contract is available
+            if (!ITO2_CONTRACT_ADDRESS) return
+
             // the settings is not available
             if (!fillSettings?.token) return
 

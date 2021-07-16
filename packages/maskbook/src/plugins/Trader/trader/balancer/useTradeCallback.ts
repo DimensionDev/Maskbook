@@ -33,7 +33,7 @@ export function useTradeCallback(
     const tradeAmount = useTradeAmount(trade, allowedSlippage)
 
     const tradeCallback = useCallback(async () => {
-        if (!trade || !trade.inputToken || !trade.outputToken || !exchangeProxyContract) {
+        if (!trade || !trade.inputToken || !trade.outputToken || !exchangeProxyContract || !BALANCER_ETH_ADDRESS) {
             setTradeState({
                 type: TransactionStateType.UNKNOWN,
             })

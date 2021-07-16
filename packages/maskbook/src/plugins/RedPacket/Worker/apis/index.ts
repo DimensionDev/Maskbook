@@ -6,9 +6,11 @@ import {
     getRedPacketConstants,
     NativeTokenDetailed,
 } from '@masknet/web3-shared'
-import { pick } from 'lodash-es'
+import stringify from 'json-stable-stringify'
+import { first, pick } from 'lodash-es'
 import { getChainId } from '../../../../extension/background-script/SettingsService'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
+import { currentChainIdSettings } from '../../../Wallet/settings'
 import type {
     RedPacketHistory,
     RedPacketJSONPayload,
@@ -70,50 +72,44 @@ const RED_PACKET_FIELDS = `
     }
 `
 
-export async function getRedPacketTxid(rpid: string) {
-    const { SUBGRAPH_URL } = getRedPacketConstants(await getChainId())
-    const response = await fetch(SUBGRAPH_URL, {
+async function fetchFromRedPacketSubgraph<T>(query: string) {
+    const subgraphURL = getRedPacketConstants(currentChainIdSettings.value).SUBGRAPH_URL
+    if (!subgraphURL) return null
+    const response = await fetch(subgraphURL, {
         method: 'POST',
         mode: 'cors',
-        body: JSON.stringify({
-            query: `
-            {
-                redPackets (where: { rpid: "${rpid.toLowerCase()}" }) {
-                    ${RED_PACKET_FIELDS}
-                }
-            }
-            `,
-        }),
+        body: stringify({ query }),
     })
+    const { data } = (await response.json()) as {
+        data: T
+    }
+    return data
+}
 
-    const {
-        data: { redPackets },
-    } = (await response.json()) as { data: { redPackets: RedPacketSubgraphOutMask[] } }
-
-    return redPackets[0] ? redPackets[0].txid : null
+export async function getRedPacketTxid(rpid: string) {
+    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedPacketSubgraphOutMask[] }>(`
+    {
+        redPackets (where: { rpid: "${rpid.toLowerCase()}" }) {
+            ${RED_PACKET_FIELDS}
+        }
+    }
+    `)
+    const redPacket = first(data?.redPackets)
+    return redPacket?.txid
 }
 
 export async function getRedPacketHistory(address: string, chainId: ChainId) {
     const { SUBGRAPH_URL } = getRedPacketConstants(await getChainId())
-    const response = await fetch(SUBGRAPH_URL, {
-        method: 'POST',
-        mode: 'cors',
-        body: JSON.stringify({
-            query: `
-            {
-                redPackets (where: { creator: "${address.toLowerCase()}" }) {
-                    ${RED_PACKET_FIELDS}
-                }
-            }
-            `,
-        }),
-    })
+    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedPacketSubgraphOutMask[] }>(`
+    {
+        redPackets (where: { creator: "${address.toLowerCase()}" }) {
+            ${RED_PACKET_FIELDS}
+        }
+    }
+    `)
 
-    const {
-        data: { redPackets },
-    } = (await response.json()) as { data: { redPackets: RedPacketSubgraphOutMask[] } }
-
-    return redPackets
+    if (!data?.redPackets) return []
+    return data.redPackets
         .map((x) => {
             const redPacketSubgraphInMask = { ...x, token: tokenIntoMask(x.token) } as RedPacketSubgraphInMask
             const redPacketBasic = pick(redPacketSubgraphInMask, redPacketBasicKeys)

@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from 'react'
 import {
     useChainId,
     useTokenDetailed,
@@ -7,13 +8,13 @@ import {
     useFungibleTokensDetailed,
     isSameAddress,
     useTokenConstants,
+    ChainId,
 } from '@masknet/web3-shared'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { isCompactPayload } from './helpers'
 import { usePoolPayload } from './hooks/usePoolPayload'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO, ITO_Error, ITO_Loading } from './ITO'
-import { useCallback, useMemo } from 'react'
 
 export interface PostInspectorProps {
     payload: JSON_PayloadInMask
@@ -51,7 +52,7 @@ export function PostInspector(props: PostInspectorProps) {
                 (t) =>
                     ({
                         address: t.address,
-                        type: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS ?? '')
+                        type: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS)
                             ? EthereumTokenType.Native
                             : EthereumTokenType.ERC20,
                     } as Pick<FungibleToken, 'address' | 'type'>),

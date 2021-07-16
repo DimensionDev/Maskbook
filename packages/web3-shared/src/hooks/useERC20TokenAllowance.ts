@@ -4,7 +4,7 @@ import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
 import { useBlockNumber } from './useBlockNumber'
 
-export function useERC20TokenAllowance(address: string, spender?: string) {
+export function useERC20TokenAllowance(address?: string, spender?: string) {
     const account = useAccount()
     const chainId = useChainId()
     const blockNumber = useBlockNumber()
