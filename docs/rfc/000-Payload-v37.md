@@ -234,7 +234,7 @@ function toJsonWebKey(key) {
 }
 ```
 
-## Q&A
+## FAQ
 
 ### Why the version number is negative?
 
