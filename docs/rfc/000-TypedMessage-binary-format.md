@@ -1,5 +1,7 @@
 # TypedMessage binary format
 
+Playground: copy [the playground file](./000-TypedMessage-and-Payload-37-playground.js) into a https: web page.
+
 ## Design target
 
 - MUST be a binary format.

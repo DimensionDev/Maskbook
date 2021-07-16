@@ -1,5 +1,7 @@
 # Payload version -37
 
+Playground: copy [the playground file](./000-TypedMessage-and-Payload-37-playground.js) into a https: web page.
+
 ## Design target
 
 - MUST be a binary format.
@@ -54,7 +56,7 @@ The implementation MUST fail when the payload is not a `Payload37` after decodin
 
 #### `signature` field
 
-This field represents the EC signature of the payload.
+This field represents the EC signature of the payload. The implementation MUST use SHA-256 algorithm.
 
 ### `Payload37`
 
@@ -63,6 +65,7 @@ type PayloadAlpha37 = [
   version: Integer,
   authorNetwork: String | SocialNetworkEnum,
   authorID: String,
+  authorPublicKeyAlgorithm: String | PublicKeyAlgorithmEnum,
   authorPublicKey: Binary,
   encryption: Encryption,
   data: Binary,
@@ -72,6 +75,11 @@ enum SocialNetworkEnum {
   Twitter = 1,
   Instgram = 2,
   Minds = 3,
+}
+enum PublicKeyAlgorithmEnum {
+  ed25519 = 0,
+  secp256p1 = 1, // P-256
+  secp256k1 = 2, // K-256
 }
 ```
 
@@ -93,6 +101,16 @@ When it is `String`, it represents a SocialNetwork cannot be expressed within th
 #### `authorID` field
 
 This field represents the identifiable ID of the author of this payload belongs to. In the case of an anonymous post, this field should be an empty string.
+
+#### `authorPublicKeyAlgorithm` field
+
+This field represents the algorithm that the public key is using.
+
+When it is `PublicKeyAlgorithmEnum`, it represents a well-known asymmetric algorithm.
+
+When it is `String`, it represents a asymmetric algorithm that not covered in this specification.
+
+The implementation MUST fail if the algorithm is not supported.
 
 #### `authorPublicKey` field
 
@@ -194,6 +212,8 @@ This type is used in this specification to represent section 6.4 of a [JsonWebKe
 
 The implementation MUST fail when the `alg` is not recognized as a known algorithm.
 The implementation MUST fail when the `k` is not valid for the given `alg`.
+
+When encrypting with AES key, the implementation MUST NOT use `additionalData`, the `tagLength` MUST be 128.
 
 #### Encoding from JsonWebKey `jwk`
 
