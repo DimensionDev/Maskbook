@@ -13,7 +13,9 @@ Playground: copy [the playground file](./000-TypedMessage-and-Payload-37-playgro
 
 To avoid reinvention of a new binary format, this RFC chooses to convert data into a format that can be represented in the MessagePack binary format.
 
-Type `Integer`, `Float`, `Nil`, `Boolean`, `String`, `Binary`, `Array` and `Map` is defined in the [msgpack specification](https://github.com/msgpack/msgpack/blob/master/spec.md). Other type defined in this RFC is written in the TypeScript syntax.
+Type `Integer`, `Float`, `Nil`, `Boolean`, `String`, `Binary`, `Array` and `Map` is defined in the [msgpack specification][msgpack-spec]. Other type defined in this RFC is written in the TypeScript syntax.
+
+[msgpack-spec]: https://github.com/msgpack/msgpack/blob/master/spec.md
 
 To avoid encoding field names into the binary (this is space-wasting), this RFC chooses to use tuple (`Array` in MessagePack), in which the order of the fields represented its meaning.
 
