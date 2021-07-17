@@ -38,8 +38,7 @@ All Tuple in this specification MUST be treated as non-fixed length. This means 
 This is the top-most data type.
 
 ```typescript
-type Document = [version: Integer, message: TypedMessageArray]
-interface TypedMessageArray extends Array<TypedMessageBase> {}
+type Document = [version: Integer, message: TypedMessageBase]
 ```
 
 #### `version` field
@@ -51,13 +50,6 @@ When encoding, the implementation MUST use `0` as the value of this field.
 When decoding, the implementation MUST fail when this field is not `0`.
 
 Version less than 0 is invalid.
-
-#### Example
-
-This is an example of an empty `Document`.
-
-- Object format: `[0, []]`
-- Binary data: `[146, 0, 144]`
 
 ### TypedMessageBase
 
@@ -117,22 +109,23 @@ When decoding, lack of content field should be treated as `TextFormat.PlainText`
 
 This is an example of a `Document` that contains a text message `"Hello, world"` in Markdown format with metadata `{"com.example.test": "hi"}`.
 
-- Object format: `[0, [[1, { "com.example.test": "hi" }, "Hello, world", 1]]]`
+- Object format: `[0, [1, { "com.example.test": "hi" }, "Hello, world", 1]]`
 - Binary data:
 
 ```plaintext
 [
-  146,   0, 145, 148,   1, 129, 176,  99,
-  111, 109,  46, 101, 120,  97, 109, 112,
-  108, 101,  46, 116, 101, 115, 116, 162,
-  104, 105, 172,  72, 101, 108, 108, 111,
-   44,  32, 119, 111, 114, 108, 100,   1
+  146,   0, 148,   1, 129, 176,  99, 111,
+  109,  46, 101, 120,  97, 109, 112, 108,
+  101,  46, 116, 101, 115, 116, 162, 104,
+  105, 172,  72, 101, 108, 108, 111,  44,
+   32, 119, 111, 114, 108, 100,   1
 ]
 ```
 
 ### TypedMessageTuple
 
 ```typescript
+interface TypedMessageArray extends Array<TypedMessageBase> {}
 type TypedMessageTuple = [
   type: TypedMessageTypeEnum.Tuple
   metadata: Map | Nil,
@@ -148,15 +141,15 @@ This field represents an ordered list of a TypedMessage.
 
 This is an example of a `Document` that contains two text messages `"Hello, world"` with no metadata.
 
-- Object format: `[0, [ [0, null, [ [1, null, "Hello, world"], [1, null, "Hello, world"] ]] ]]`
+- Object format: `[0, [0, null, [ [1, null, "Hello, world"], [1, null, "Hello, world"] ]] ]`
 - Binary data:
 
 ```plaintext
- [
-  146,   0, 145, 147,   0, 192, 146, 147,
-    1, 192, 172,  72, 101, 108, 108, 111,
-   44,  32, 119, 111, 114, 108, 100, 147,
-    1, 192, 172,  72, 101, 108, 108, 111,
-   44,  32, 119, 111, 114, 108, 100
+[
+  146,   0, 147,   0, 192, 146, 147,  1,
+  192, 172,  72, 101, 108, 108, 111, 44,
+   32, 119, 111, 114, 108, 100, 147,  1,
+  192, 172,  72, 101, 108, 108, 111, 44,
+   32, 119, 111, 114, 108, 100
 ]
 ```

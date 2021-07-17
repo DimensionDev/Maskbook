@@ -9,9 +9,9 @@
 // decodeTypedMessage(result)
 
 var TextFormat = { PlainText: 0, Markdown: 1 }
-async function encodeTypedMessage(...messages) {
+async function encodeTypedMessage(message) {
     let MessagePack = await import('https://cdn.skypack.dev/@msgpack/msgpack')
-    let document = [0, messages]
+    let document = [0, message]
     let result = MessagePack.encode(document)
     return result
 }
@@ -132,7 +132,7 @@ async function decodePayload37(result) {
 
     // payload
     let typedMessage = MessagePack.decode(decrypted)
-    let friendlyTypedMessage = typedMessage[1].map(debugTypedMessage)
+    let friendlyTypedMessage = debugTypedMessage(typedMessage[1])
 
     let debugInfo = {
         verifyResult,
