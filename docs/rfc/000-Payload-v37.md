@@ -254,4 +254,6 @@ The pre 1.0 version of the Mask Network extension (called Maskbook) uses `-42` a
 
 ### Why not uses the `raw` format defined in the Web Crypto specification for AES key?
 
-According to [the Web Crypto specification](https://w3c.github.io/webcrypto/#dfn-CryptoKey-slot-handle), `raw` format is NOT standardized therefore it might have a co-operational problem.
+According to [the Web Crypto specification][webcrypto], `raw` format is NOT standardized therefore it might have a co-operational problem.
+
+[webcrypto]: https://w3c.github.io/webcrypto/#dfn-CryptoKey-slot-handle
