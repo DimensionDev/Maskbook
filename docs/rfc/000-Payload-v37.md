@@ -13,7 +13,9 @@ Playground: copy [the playground file](./000-TypedMessage-and-Payload-37-playgro
 
 To avoid reinvention of a new binary format, this RFC chooses to convert data into a format that can be represented in the MessagePack binary format.
 
-Type `Integer`, `Float`, `Nil`, `Boolean`, `String`, `Binary`, `Array` and `Map` is defined in the [msgpack specification](https://github.com/msgpack/msgpack/blob/master/spec.md). Other type defined in this RFC is written in the TypeScript syntax.
+Type `Integer`, `Float`, `Nil`, `Boolean`, `String`, `Binary`, `Array` and `Map` is defined in the [msgpack specification][msgpack-spec]. Other type defined in this RFC is written in the TypeScript syntax.
+
+[msgpack-spec]: https://github.com/msgpack/msgpack/blob/master/spec.md
 
 To avoid encoding field names into the binary (this is space-wasting), this RFC chooses to use tuple (`Array` in MessagePack), in which the order of the fields represented its meaning.
 
@@ -88,7 +90,7 @@ enum PublicKeyAlgorithmEnum {
 This field represents the format version.
 
 The first and the current binary version is `-37`.
-The implementation MUST fail when the version is less than -37 (e.g. `-38`).
+The implementation MUST fail when the version is less than `-37` (e.g. `-38`).
 
 #### `authorNetwork` field
 
@@ -116,7 +118,9 @@ The implementation MUST fail if the algorithm is not supported.
 
 This field represents the public key of the author.
 
-The value is in the DER encoding of the SubjectPublicKeyInfo (`spki`) structure from [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.7).
+The value is in the DER encoding of the SubjectPublicKeyInfo (`spki`) structure from [RFC 5280][rfc5280].
+
+[rfc5280]: https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.7
 
 #### `encryption` field
 
@@ -188,7 +192,9 @@ The implementation MUST fail when the decryption result is NOT a valid TypedMess
 
 ### `secp256k1`
 
-When `spki` is mentioned in this spec, the implementation MUST be able to recognize the SubjectPublicKeyInfo of the curve [`secp256k1`](https://en.bitcoin.it/wiki/Secp256k1). This curve is widely used in the Mask Network.
+When `spki` is mentioned in this spec, the implementation MUST be able to recognize the SubjectPublicKeyInfo of the curve [`secp256k1`][secp256k1]. This curve is widely used in the Mask Network.
+
+[secp256k1]: https://en.bitcoin.it/wiki/Secp256k1
 
 Here is an example of the `secp256k1` public key in Binary.
 
@@ -211,7 +217,10 @@ Here is an example of the `secp256k1` public key in Binary.
 type AES_KEY = [alg: String, k: String]
 ```
 
-This type is used in this specification to represent section 6.4 of a [JsonWebKey](https://datatracker.ietf.org/doc/html/rfc7518) of [AES family key](https://datatracker.ietf.org/doc/html/rfc7518#section-6.4).
+This type is used in this specification to represent section 6.4 of a [JsonWebKey][rfc7518] of [AES family key][rfc7518-aes-family-key].
+
+[rfc7518]: https://datatracker.ietf.org/doc/html/rfc7518
+[rfc7518-aes-family-key]: https://datatracker.ietf.org/doc/html/rfc7518#section-6.4
 
 The implementation MUST fail when the `alg` is not recognized as a known algorithm.
 The implementation MUST fail when the `k` is not valid for the given `alg`.
