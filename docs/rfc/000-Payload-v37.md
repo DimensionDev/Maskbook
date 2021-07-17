@@ -157,7 +157,7 @@ type PeerToPeerEncrypted = [
   kind: EncryptionKind.PeerToPeer,
   ownerAESKeyEncrypted: Binary,
   iv: Binary,
-  authorEphemeralPublicKey: Binary[],
+  authorEphemeralPublicKey: Map<PublicKeyAlgorithmEnum, Binary>,
 ]
 ```
 
@@ -171,9 +171,12 @@ This field represents the iv used to encrypt the message.
 
 ###### `authorEphemeralPublicKey` field
 
-This field is an Array of the DER encoding of the SubjectPublicKeyInfo (`spki`) structure from [RFC5280].
+This field is a Map of the DER encoding of the SubjectPublicKeyInfo (`spki`) structure from [RFC5280].
 
-The implementation MUST NOT fail when an item is Binary but not a recognizable SubjectPublicKeyInfo.
+The key indicates its format.
+
+The implementation MUST NOT fail when an unknown key appears.
+The implementation MUST ignore the invalid key for the given public key format.
 
 This field is used to support ephemeral encryption with different curves.
 
