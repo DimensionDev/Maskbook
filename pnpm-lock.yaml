@@ -115,6 +115,7 @@ importers:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       ts-node: 10.1.0_typescript@4.3.5
 =======
 =======
@@ -161,6 +162,9 @@ importers:
       ts-node: 10.1.0_typescript@4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      ts-node: 10.1.0_typescript@4.3.5
+>>>>>>> fix: share text
 
   packages/dashboard:
     specifiers:
@@ -226,6 +230,7 @@ importers:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> fix: refactored to new plugin system
@@ -268,12 +273,17 @@ importers:
 >>>>>>> fix: refactored to new plugin system
 =======
 =======
+=======
+>>>>>>> fix: share text
       react-hook-form: 7.11.0_react@18.0.0-alpha-aecb3b6d1
       react-router: 6.0.0-beta.0_dd3df4049b9a65e1e2d003c7940c4871
       react-router-dom: 6.0.0-beta.0_66263521e705c985f663eeac15167a50
       react-use: 17.2.4_f991c289939c8299bed5e4a6a5a79a62
+<<<<<<< HEAD
 >>>>>>> fix: rebased with develop
 >>>>>>> fix: rebased with develop
+=======
+>>>>>>> fix: share text
       unstated-next: 1.1.0
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
       wallet.ts: 1.0.1
@@ -281,6 +291,7 @@ importers:
     devDependencies:
       '@babel/core': 7.14.6
       '@snowpack/plugin-dotenv': 2.1.0
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -304,6 +315,8 @@ importers:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@snowpack/plugin-react-refresh': 2.5.0_f991c289939c8299bed5e4a6a5a79a62
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -317,9 +330,12 @@ importers:
       '@storybook/react': 6.3.4_3725f572d4f33e7e9dab01322e5a2d20
       '@storybook/theming': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+>>>>>>> fix: share text
       '@types/snowpack-env': 2.3.4
       babel-loader: 8.2.2_@babel+core@7.14.6
       snowpack: 3.8.2
@@ -623,6 +639,7 @@ importers:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@dimensiondev/webextension-shim': 0.0.3-20210708053012-57a254d_typescript@4.3.5
 =======
 =======
@@ -640,9 +657,10 @@ importers:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
       '@pmmmwh/react-refresh-webpack-plugin': 0.5.0-rc.0_eb8360582ca042a872e09cbae549ba78
 =======
+=======
+>>>>>>> fix: share text
       '@dimensiondev/webextension-shim': 0.0.3-20210708053012-57a254d_typescript@4.3.5
       '@pmmmwh/react-refresh-webpack-plugin': 0.5.0-rc.2_eb8360582ca042a872e09cbae549ba78
->>>>>>> fix: refactored to new plugin system
       '@sinonjs/text-encoding': 0.7.1
       '@testing-library/react-hooks': 7.0.1_1959de3a9153879cff3acd96b46ed70f
       '@types/enzyme': 3.10.9
@@ -668,6 +686,7 @@ importers:
       file-loader: 6.2.0_webpack@5.44.0
       html-webpack-plugin: 5.3.2_webpack@5.44.0
 <<<<<<< HEAD
+<<<<<<< HEAD
       jest: 27.0.6_ts-node@10.1.0
 =======
 <<<<<<< HEAD
@@ -688,6 +707,9 @@ importers:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      jest: 27.0.6_ts-node@10.1.0
+>>>>>>> fix: share text
       jest-environment-jsdom-fourteen: 1.0.1
       jest-esm-transformer: 1.0.0
       jest-junit: 12.2.0
@@ -696,6 +718,7 @@ importers:
       openzeppelin-solidity: 3.4.1
       react-devtools-core: 4.13.5
       react-refresh: 0.10.0
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -719,6 +742,10 @@ importers:
       react-test-renderer: 17.0.2_react@18.0.0-alpha-aecb3b6d1
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      react-refresh-typescript: 2.0.2_07d643ea690a1c588819a69f1ef8f0ab
+      react-test-renderer: 17.0.2_react@18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: share text
       rimraf: 3.0.2
       source-map-loader: 3.0.0_webpack@5.44.0
       ts-jest: 27.0.3_jest@27.0.6+typescript@4.3.5
@@ -805,6 +832,7 @@ importers:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/react': 6.3.4_90bc8abf0686c79bfa49c88a2e6943ae
 =======
@@ -849,6 +877,10 @@ importers:
       '@storybook/react': 6.3.4_90bc8abf0686c79bfa49c88a2e6943ae
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+      '@storybook/react': 6.3.4_90bc8abf0686c79bfa49c88a2e6943ae
+>>>>>>> fix: share text
 
   packages/theme:
     specifiers:
@@ -875,6 +907,7 @@ importers:
       classnames: 2.3.1
       fuse.js: 6.4.6
       lodash-es: 4.17.21
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -917,6 +950,10 @@ importers:
       react-window: 1.8.6_f991c289939c8299bed5e4a6a5a79a62
 >>>>>>> fix: rebased with develop
 >>>>>>> fix: rebased with develop
+=======
+      notistack: 1.0.6-next.1_132ff92e0fd7328580f6380de259b809
+      react-window: 1.8.6_f991c289939c8299bed5e4a6a5a79a62
+>>>>>>> fix: share text
       tinycolor2: 1.4.2
     devDependencies:
       '@babel/core': 7.14.6
@@ -929,6 +966,7 @@ importers:
       '@types/qrcode': 1.4.1
       '@types/tinycolor2': 1.4.3
       babel-loader: 8.2.2_@babel+core@7.14.6
+<<<<<<< HEAD
 <<<<<<< HEAD
       storybook-addon-matrix: 1.6.0_react-dom@18.0.0-alpha-aecb3b6d1
 =======
@@ -957,6 +995,9 @@ importers:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      storybook-addon-matrix: 1.6.0_react-dom@18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: share text
 
   packages/web3-constants:
     specifiers: {}
@@ -971,6 +1012,7 @@ importers:
       web3-eth-contract: ^1.3.4
     dependencies:
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@typechain/web3-v1': 3.0.0_typechain@5.0.0
 <<<<<<< HEAD
       typechain: 5.0.0_typescript@4.3.5
@@ -981,6 +1023,10 @@ importers:
       typechain: 5.1.1_typescript@4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      '@typechain/web3-v1': 3.0.0_typechain@5.1.1
+      typechain: 5.1.1_typescript@4.3.5
+>>>>>>> fix: share text
     devDependencies:
       bn.js: 4.12.0
       promievent: 0.1.5
@@ -1035,7 +1081,7 @@ packages:
       bintrees: 1.0.2
       bn.js: 4.12.0
       compare-versions: 3.6.0
-      ethereumjs-abi: 0.6.6
+      ethereumjs-abi: 0.6.8
       ethereumjs-blockstream: 2.0.7
       ethereumjs-util: 5.2.1
       find-versions: 2.0.0
@@ -3715,6 +3761,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@dimensiondev/webextension-shim/0.0.3-20210708053012-57a254d_typescript@4.3.5:
 =======
 =======
@@ -3732,6 +3779,9 @@ packages:
   /@dimensiondev/webextension-shim/0.0.3-20210708053012-57a254d_typescript@4.3.5:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@dimensiondev/webextension-shim/0.0.3-20210708053012-57a254d_typescript@4.3.5:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-0O0Nc3j2Vxo9Gfvgeq8pWuMHKMSU3tDjRnzE0U5oWvYoY+ZO61NniKp4xf/C+J6Py6lhQFutjd2tqlporqRwlw==, tarball: download/@dimensiondev/webextension-shim/0.0.3-20210708053012-57a254d/a2ee1bed40822a7f6b9c60ce4296930c9bab00828e82637aa56060498a135ac7}
     hasBin: true
     peerDependencies:
@@ -3740,6 +3790,7 @@ packages:
       async-call-rpc: 4.2.1
       buffer: 6.0.3
       systemjs: 6.3.2
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       typescript: 4.3.5
@@ -3772,6 +3823,9 @@ packages:
       typescript: 4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      typescript: 4.3.5
+>>>>>>> fix: share text
       web-ext-types: 3.2.1
     dev: true
 
@@ -4348,6 +4402,7 @@ packages:
       react-hook-form: ^7.0.0
     dependencies:
 <<<<<<< HEAD
+<<<<<<< HEAD
       react-hook-form: 7.10.1_react@18.0.0-alpha-aecb3b6d1
 =======
 <<<<<<< HEAD
@@ -4356,6 +4411,9 @@ packages:
       react-hook-form: 7.11.0_react@18.0.0-alpha-aecb3b6d1
 >>>>>>> fix: rebased with develop
 >>>>>>> fix: rebased with develop
+=======
+      react-hook-form: 7.11.0_react@18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: share text
     dev: false
 
   /@humanwhocodes/config-array/0.5.0:
@@ -4412,6 +4470,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@jest/core/27.0.6_ts-node@10.1.0:
 =======
 =======
@@ -4425,6 +4484,9 @@ packages:
   /@jest/core/27.0.6_ts-node@10.1.0:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@jest/core/27.0.6_ts-node@10.1.0:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-SsYBm3yhqOn5ZLJCtccaBcvD/ccTLCeuDv8U41WJH/V1MW5eKUkeMHT9U+Pw/v1m1AIWlnIW/eM2XzQr0rEmow==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     peerDependencies:
@@ -5550,6 +5612,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@storybook/addon-actions/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
 =======
 =======
@@ -5563,6 +5626,9 @@ packages:
   /@storybook/addon-actions/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/addon-actions/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-+fTTaWepSaMeMD96zsNap0AcFUu3xyGepIucNMvkpfJfQnyYzr7S0qyjpsW84DLKHPcjujNvOOi98y7cAKV6tw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -5573,6 +5639,7 @@ packages:
       react-dom:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -5591,14 +5658,19 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/client-api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/components': 6.3.4_cd4de1c9bac509f067bb35206cbee47e
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+>>>>>>> fix: share text
       '@storybook/core-events': 6.3.4
       '@storybook/theming': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       core-js: 3.15.2
@@ -5620,6 +5692,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@storybook/addon-backgrounds/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
 =======
 =======
@@ -5633,6 +5706,9 @@ packages:
   /@storybook/addon-backgrounds/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/addon-backgrounds/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-Ck0AdZtAJl5sCA6qSqPUY2tEk4X2hmsiEfT/melDoSLE9s+D98CtWRfnajPtAypTlg+a81UjX0wEtWSXWKRjfg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -5643,6 +5719,7 @@ packages:
       react-dom:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -5661,6 +5738,10 @@ packages:
       '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+      '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+>>>>>>> fix: share text
       '@storybook/client-logger': 6.3.4
       '@storybook/components': 6.3.4_cd4de1c9bac509f067bb35206cbee47e
       '@storybook/core-events': 6.3.4
@@ -5679,6 +5760,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@storybook/addon-controls/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
 =======
 =======
@@ -5692,6 +5774,9 @@ packages:
   /@storybook/addon-controls/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/addon-controls/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-+MIKcWqsIF6vLoKxukK2m6ADYwyNHOmaMgnJSHKlcNKc7Qxv2w0FZJxIjjkWHXRBIC5MQXxv7/L4sY+EnPdjyg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -5702,6 +5787,7 @@ packages:
       react-dom:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -5720,10 +5806,13 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/client-api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/components': 6.3.4_cd4de1c9bac509f067bb35206cbee47e
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
@@ -5756,11 +5845,19 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      '@storybook/node-logger': 6.3.4
+      '@storybook/theming': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+      core-js: 3.15.2
+      react: 18.0.0-alpha-aecb3b6d1
+      react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: share text
       ts-dedent: 2.1.1
     transitivePeerDependencies:
       - '@types/react'
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -5781,6 +5878,9 @@ packages:
   /@storybook/addon-docs/6.3.4_90bc8abf0686c79bfa49c88a2e6943ae:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/addon-docs/6.3.4_90bc8abf0686c79bfa49c88a2e6943ae:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-KoC6GImsC5ZVvco228Jw3+1k/eGeDabjF3+V4In4rPWnOyv0qsFIlE7wcwOCRKcGrPfkBSCWYajH/h+rD0bzUw==}
     peerDependencies:
       '@storybook/angular': 6.3.4
@@ -5832,6 +5932,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@mdx-js/react': 1.6.22_react@18.0.0-alpha-aecb3b6d1
 =======
 =======
@@ -5850,6 +5951,8 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@mdx-js/react': 1.6.22_react@18.0.0-alpha-aecb3b6d1
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -5861,9 +5964,12 @@ packages:
       '@storybook/builder-webpack4': 6.3.4_90bc8abf0686c79bfa49c88a2e6943ae
       '@storybook/client-api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+>>>>>>> fix: share text
       '@storybook/client-logger': 6.3.4
       '@storybook/components': 6.3.4_cd4de1c9bac509f067bb35206cbee47e
       '@storybook/core': 6.3.4_3725f572d4f33e7e9dab01322e5a2d20
@@ -5872,6 +5978,7 @@ packages:
       '@storybook/csf-tools': 6.3.4_@babel+core@7.14.6
       '@storybook/node-logger': 6.3.4
       '@storybook/postinstall': 6.3.4
+<<<<<<< HEAD
 <<<<<<< HEAD
       '@storybook/source-loader': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/theming': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -5917,6 +6024,10 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      '@storybook/source-loader': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+      '@storybook/theming': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+>>>>>>> fix: share text
       acorn: 7.4.1
       acorn-jsx: 5.3.2_acorn@7.4.1
       acorn-walk: 7.2.0
@@ -5953,6 +6064,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@storybook/addon-essentials/6.3.4_4ea4abde0e2fad8ddf22dfb99f25b6d4:
 =======
 =======
@@ -5970,6 +6082,9 @@ packages:
   /@storybook/addon-essentials/6.3.4_4ea4abde0e2fad8ddf22dfb99f25b6d4:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/addon-essentials/6.3.4_4ea4abde0e2fad8ddf22dfb99f25b6d4:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-z06IhJaHkledTPc1TdkMikDwcJhPQZCEoQftSj0MwjafdjntYUbNYsGlD40Lo/wmEW4OtUiHOx/3TWaC1WiIbw==}
     peerDependencies:
       '@babel/core': ^7.9.6
@@ -6011,6 +6126,7 @@ packages:
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       regenerator-runtime: 0.13.7
 <<<<<<< HEAD
+<<<<<<< HEAD
       storybook-addon-outline: 1.4.1_cd4de1c9bac509f067bb35206cbee47e
 =======
 <<<<<<< HEAD
@@ -6042,6 +6158,9 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      storybook-addon-outline: 1.4.1_cd4de1c9bac509f067bb35206cbee47e
+>>>>>>> fix: share text
       ts-dedent: 2.1.1
     transitivePeerDependencies:
       - '@storybook/angular'
@@ -6064,6 +6183,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@storybook/addon-links/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
 =======
 =======
@@ -6077,6 +6197,9 @@ packages:
   /@storybook/addon-links/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/addon-links/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-qIey6kNcrg43vsmMmEGXGMbO1Wjqc6hbcMaLstUn3xN29vZnjUcv7PVPFlJsBBYIxW7gXBtRmqjdxN5UD0bvZA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -6087,6 +6210,7 @@ packages:
       react-dom:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -6102,6 +6226,9 @@ packages:
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+>>>>>>> fix: share text
       '@storybook/client-logger': 6.3.4
       '@storybook/core-events': 6.3.4
       '@storybook/csf': 0.0.1
@@ -6119,6 +6246,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@storybook/addon-measure/2.0.0_575513464df262de1255b81400a50034:
 =======
 =======
@@ -6132,6 +6260,9 @@ packages:
   /@storybook/addon-measure/2.0.0_575513464df262de1255b81400a50034:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/addon-measure/2.0.0_575513464df262de1255b81400a50034:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-ZhdT++cX+L9LwjhGYggvYUUVQH/MGn2rwbrAwCMzA/f2QTFvkjxzX8nDgMxIhaLCDC+gHIxfJG2wrWN0jkBr3g==}
     peerDependencies:
       '@storybook/addons': ^6.3.0
@@ -6149,6 +6280,7 @@ packages:
     dependencies:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> fix: refactored to new plugin system
@@ -6164,15 +6296,20 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/theming': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+>>>>>>> fix: share text
     dev: true
 
   /@storybook/addon-toolbars/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
@@ -6186,6 +6323,7 @@ packages:
       react-dom:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -6210,6 +6348,8 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/client-api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -6218,6 +6358,7 @@ packages:
       core-js: 3.15.2
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
       '@storybook/addons': 6.3.0
@@ -6234,11 +6375,14 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       regenerator-runtime: 0.13.7
     transitivePeerDependencies:
       - '@types/react'
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   /@storybook/addon-viewport/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
@@ -6254,6 +6398,9 @@ packages:
   /@storybook/addon-viewport/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/addon-viewport/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-6h52s1F+MkIkdAuUgmDv4L9aYRMPB+8gWnPGbBAkm8PsHglddr1QkWZAG7yZJR1+mm4oM5oCyRMvZ0V/oKePhg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -6264,6 +6411,7 @@ packages:
       react-dom:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -6282,6 +6430,10 @@ packages:
       '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+      '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+>>>>>>> fix: share text
       '@storybook/client-logger': 6.3.4
       '@storybook/components': 6.3.4_cd4de1c9bac509f067bb35206cbee47e
       '@storybook/core-events': 6.3.4
@@ -6314,6 +6466,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@storybook/addons/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
 =======
 =======
@@ -6327,11 +6480,15 @@ packages:
   /@storybook/addons/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/addons/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-rf8K8X3JrB43gq5nw5SYgfucQkFg2QgUMWdByf7dQ4MyIl5zet+2MYiSXJ9lfbhGKJZ8orc81rmMtiocW4oBjg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -6347,12 +6504,16 @@ packages:
       '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+>>>>>>> fix: share text
       '@storybook/channels': 6.3.4
       '@storybook/client-logger': 6.3.4
       '@storybook/core-events': 6.3.4
       '@storybook/router': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/theming': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       core-js: 3.15.2
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
       '@storybook/api': 6.2.9
@@ -6389,12 +6550,15 @@ packages:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       global: 4.4.0
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       regenerator-runtime: 0.13.7
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
   /@storybook/api/5.3.18:
@@ -6405,6 +6569,9 @@ packages:
   /@storybook/api/5.3.18_react-dom@18.0.0-alpha-aecb3b6d1:
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+  /@storybook/api/5.3.18_react-dom@18.0.0-alpha-aecb3b6d1:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-QXaccNCARHzPWOuxYndiebGWBZmwiUvRgB9ji0XTJBS3y8K0ZPb5QyuqiKPaEWUj8dBA8rzdDtkW3Yt95Namaw==}
     peerDependencies:
       regenerator-runtime: '*'
@@ -6440,6 +6607,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@storybook/api/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
 =======
 =======
@@ -6453,11 +6621,15 @@ packages:
   /@storybook/api/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/api/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-12q6dvSR4AtyuZbKAy3Xt+ZHzZ4ePPRV1q20xtgYBoiFEgB9vbh4XKEeeZD0yIeTamQ2x1Hn87R79Rs1GIdKRQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@reach/router': 1.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -6471,11 +6643,12 @@ packages:
       '@storybook/client-logger': 6.2.9
       '@storybook/core-events': 6.2.9
 =======
+=======
+>>>>>>> fix: share text
       '@reach/router': 1.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/channels': 6.3.4
       '@storybook/client-logger': 6.3.4
       '@storybook/core-events': 6.3.4
->>>>>>> fix: refactored to new plugin system
       '@storybook/csf': 0.0.1
       '@storybook/router': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/semver': 7.3.2
@@ -6506,6 +6679,7 @@ packages:
       typescript:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@reach/router': 1.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -6669,6 +6843,8 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@babel/core': 7.14.6
       '@babel/plugin-proposal-class-properties': 7.14.5_@babel+core@7.14.6
       '@babel/plugin-proposal-decorators': 7.14.5_@babel+core@7.14.6
@@ -6725,6 +6901,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       pnp-webpack-plugin: 1.6.4_typescript@4.3.5
 =======
 =======
@@ -6753,6 +6930,9 @@ packages:
       pnp-webpack-plugin: 1.6.4_typescript@4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      pnp-webpack-plugin: 1.6.4_typescript@4.3.5
+>>>>>>> fix: share text
       postcss: 7.0.36
       postcss-flexbugs-fixes: 4.2.1
       postcss-loader: 4.3.0_postcss@7.0.36+webpack@4.46.0
@@ -6767,6 +6947,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typescript: 4.3.5
 =======
 =======
@@ -6792,6 +6973,9 @@ packages:
       typescript: 4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      typescript: 4.3.5
+>>>>>>> fix: share text
       url-loader: 4.1.1_file-loader@6.2.0+webpack@4.46.0
       util-deprecate: 1.0.2
       webpack: 4.46.0
@@ -6832,6 +7016,7 @@ packages:
       util-deprecate: 1.0.2
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   /@storybook/client-api/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
@@ -6882,11 +7067,15 @@ packages:
   /@storybook/client-api/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/client-api/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-lOrfz8ic3+nHZzqIdNH2I7Q3Wp0kS/Ic0PD/3QKvI2f6iVIapIjjWW1xAuor80Dl7rMhOn8zxgXta+7G7Pn2yQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -6902,6 +7091,9 @@ packages:
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+>>>>>>> fix: share text
       '@storybook/channel-postmessage': 6.3.4
       '@storybook/channels': 6.3.4
       '@storybook/client-logger': 6.3.4
@@ -6947,6 +7139,7 @@ packages:
       '@storybook/csf': 0.0.1
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@storybook/theming': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
 =======
 =======
@@ -6967,6 +7160,9 @@ packages:
       '@storybook/theming': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      '@storybook/theming': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+>>>>>>> fix: share text
       '@types/color-convert': 2.0.0
       '@types/overlayscrollbars': 1.12.1
       '@types/react-syntax-highlighter': 11.0.5
@@ -6980,6 +7176,7 @@ packages:
       overlayscrollbars: 1.13.1
       polished: 4.1.3
       prop-types: 15.7.2
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -6998,12 +7195,15 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       react: 18.0.0-alpha-aecb3b6d1
       react-colorful: 5.3.0_f991c289939c8299bed5e4a6a5a79a62
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       react-popper-tooltip: 3.1.1_f991c289939c8299bed5e4a6a5a79a62
       react-syntax-highlighter: 13.5.3_react@18.0.0-alpha-aecb3b6d1
       react-textarea-autosize: 8.3.3_7133d8ccc1901f54543c95a1a683a948
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
@@ -7016,6 +7216,8 @@ packages:
       react-syntax-highlighter: 13.5.3
       react-textarea-autosize: 8.3.2
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+>>>>>>> fix: share text
       regenerator-runtime: 0.13.7
       ts-dedent: 2.1.1
 =======
@@ -7025,6 +7227,7 @@ packages:
       - '@types/react'
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7081,6 +7284,9 @@ packages:
   /@storybook/core-client/6.3.4_5f72a3b5deb0304f512f2a52d28eaf32:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/core-client/6.3.4_5f72a3b5deb0304f512f2a52d28eaf32:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-DIxDWnSoUEwqyu01EygoAhkNwvEIIooFXZleTesZYkjAbEQJJ6KUmgehaVC9BKoTKYf2OQW6HdFkqrW034n93g==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -7091,6 +7297,7 @@ packages:
       typescript:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -7106,11 +7313,15 @@ packages:
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+>>>>>>> fix: share text
       '@storybook/channel-postmessage': 6.3.4
       '@storybook/client-api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/client-logger': 6.3.4
       '@storybook/core-events': 6.3.4
       '@storybook/csf': 0.0.1
+<<<<<<< HEAD
 <<<<<<< HEAD
       '@storybook/ui': 6.3.4_cd4de1c9bac509f067bb35206cbee47e
 =======
@@ -7135,6 +7346,9 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      '@storybook/ui': 6.3.4_cd4de1c9bac509f067bb35206cbee47e
+>>>>>>> fix: share text
       airbnb-js-shims: 2.2.1
       ansi-to-html: 0.6.15
       core-js: 3.15.2
@@ -7148,6 +7362,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typescript: 4.3.5
 =======
 =======
@@ -7173,6 +7388,9 @@ packages:
       typescript: 4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      typescript: 4.3.5
+>>>>>>> fix: share text
       unfetch: 4.2.0
       util-deprecate: 1.0.2
       webpack: 4.46.0
@@ -7180,6 +7398,7 @@ packages:
       - '@types/react'
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7200,6 +7419,9 @@ packages:
   /@storybook/core-client/6.3.4_90bc8abf0686c79bfa49c88a2e6943ae:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/core-client/6.3.4_90bc8abf0686c79bfa49c88a2e6943ae:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-DIxDWnSoUEwqyu01EygoAhkNwvEIIooFXZleTesZYkjAbEQJJ6KUmgehaVC9BKoTKYf2OQW6HdFkqrW034n93g==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -7210,6 +7432,7 @@ packages:
       typescript:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -7225,6 +7448,9 @@ packages:
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+>>>>>>> fix: share text
       '@storybook/channel-postmessage': 6.3.4
       '@storybook/client-api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/client-logger': 6.3.4
@@ -7244,6 +7470,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typescript: 4.3.5
 =======
 =======
@@ -7269,14 +7496,16 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 =======
+=======
+>>>>>>> fix: share text
       typescript: 4.3.5
->>>>>>> fix: refactored to new plugin system
       unfetch: 4.2.0
       util-deprecate: 1.0.2
     transitivePeerDependencies:
       - '@types/react'
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7297,6 +7526,9 @@ packages:
   /@storybook/core-common/6.3.4_9b3d47eb09d7549fa7cd0a3f71caf27d:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/core-common/6.3.4_9b3d47eb09d7549fa7cd0a3f71caf27d:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-RL+Q7RMbCQrqNMi+pKB1IdtoUnRY6PuEnabcbaUrQBkc+DyR6Q8iOz71NR3PxRZgVbHNwlN8QEroeF31PFzUEg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -7357,6 +7589,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typescript: 4.3.5
 =======
 =======
@@ -7382,6 +7615,9 @@ packages:
       typescript: 4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      typescript: 4.3.5
+>>>>>>> fix: share text
       util-deprecate: 1.0.2
       webpack: 4.46.0
     transitivePeerDependencies:
@@ -7405,6 +7641,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@storybook/core-server/6.3.4_3725f572d4f33e7e9dab01322e5a2d20:
 =======
 =======
@@ -7422,6 +7659,9 @@ packages:
   /@storybook/core-server/6.3.4_3725f572d4f33e7e9dab01322e5a2d20:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/core-server/6.3.4_3725f572d4f33e7e9dab01322e5a2d20:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-BIhTYoLbxd8RY1wVji3WbEaZ1LxhccZhF/q2jviXRCdeBQqFcFFvMjRixrGFnr8/FTh06pSSoD8XsIMyK5y9fA==}
     peerDependencies:
       '@storybook/builder-webpack5': 6.3.4
@@ -7437,6 +7677,7 @@ packages:
       typescript:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -7456,15 +7697,20 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/builder-webpack4': 6.3.4_90bc8abf0686c79bfa49c88a2e6943ae
       '@storybook/core-client': 6.3.4_5f72a3b5deb0304f512f2a52d28eaf32
       '@storybook/core-common': 6.3.4_9b3d47eb09d7549fa7cd0a3f71caf27d
       '@storybook/csf-tools': 6.3.4_@babel+core@7.14.6
       '@storybook/manager-webpack4': 6.3.4_90bc8abf0686c79bfa49c88a2e6943ae
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+>>>>>>> fix: share text
       '@storybook/node-logger': 6.3.4
       '@storybook/semver': 7.3.2
       '@types/node': 14.17.5
@@ -7489,6 +7735,7 @@ packages:
       pretty-hrtime: 1.0.3
       prompts: 2.4.1
 <<<<<<< HEAD
+<<<<<<< HEAD
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       regenerator-runtime: 0.13.7
@@ -7501,12 +7748,15 @@ packages:
       serve-favicon: 2.5.0
       ts-dedent: 2.1.1
 =======
+=======
+>>>>>>> fix: share text
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       regenerator-runtime: 0.13.7
       serve-favicon: 2.5.0
       ts-dedent: 2.1.1
       typescript: 4.3.5
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -7523,6 +7773,8 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       util-deprecate: 1.0.2
       webpack: 4.46.0
     transitivePeerDependencies:
@@ -7533,6 +7785,7 @@ packages:
       - webpack-command
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7553,6 +7806,9 @@ packages:
   /@storybook/core-server/6.3.4_90bc8abf0686c79bfa49c88a2e6943ae:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/core-server/6.3.4_90bc8abf0686c79bfa49c88a2e6943ae:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-BIhTYoLbxd8RY1wVji3WbEaZ1LxhccZhF/q2jviXRCdeBQqFcFFvMjRixrGFnr8/FTh06pSSoD8XsIMyK5y9fA==}
     peerDependencies:
       '@storybook/builder-webpack5': 6.3.4
@@ -7568,6 +7824,7 @@ packages:
       typescript:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7592,15 +7849,20 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/builder-webpack4': 6.3.4_90bc8abf0686c79bfa49c88a2e6943ae
       '@storybook/core-client': 6.3.4_5f72a3b5deb0304f512f2a52d28eaf32
       '@storybook/core-common': 6.3.4_9b3d47eb09d7549fa7cd0a3f71caf27d
       '@storybook/csf-tools': 6.3.4
       '@storybook/manager-webpack4': 6.3.4_90bc8abf0686c79bfa49c88a2e6943ae
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+>>>>>>> fix: share text
       '@storybook/node-logger': 6.3.4
       '@storybook/semver': 7.3.2
       '@types/node': 14.17.5
@@ -7632,6 +7894,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typescript: 4.3.5
 =======
 =======
@@ -7654,6 +7917,9 @@ packages:
 =======
       typescript: 4.3.5
 >>>>>>> fix: refactored to new plugin system
+=======
+      typescript: 4.3.5
+>>>>>>> fix: share text
       util-deprecate: 1.0.2
       webpack: 4.46.0
     transitivePeerDependencies:
@@ -7664,6 +7930,7 @@ packages:
       - webpack-command
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7684,6 +7951,9 @@ packages:
   /@storybook/core/6.3.4_2ec1c339879f09d33718e96496835840:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/core/6.3.4_2ec1c339879f09d33718e96496835840:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-OmzcTKYFLr9KaFnC0JF1Hb/zy7Y7HKrL5FUrcQdJz1td/8Kb6woH9CXAPhX39HUrTNNu69BdM1qQGbzd37j4dA==}
     peerDependencies:
       '@storybook/builder-webpack5': 6.3.4
@@ -7696,6 +7966,7 @@ packages:
       typescript:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7718,11 +7989,14 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/core-client': 6.3.4_5f72a3b5deb0304f512f2a52d28eaf32
       '@storybook/core-server': 6.3.4_3725f572d4f33e7e9dab01322e5a2d20
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       typescript: 4.3.5
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -7740,6 +8014,8 @@ packages:
 >>>>>>> fix: pnpm-lock conflict
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
     transitivePeerDependencies:
       - '@babel/core'
       - '@storybook/manager-webpack5'
@@ -7750,6 +8026,7 @@ packages:
       - webpack-command
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7770,6 +8047,9 @@ packages:
   /@storybook/core/6.3.4_3725f572d4f33e7e9dab01322e5a2d20:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/core/6.3.4_3725f572d4f33e7e9dab01322e5a2d20:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-OmzcTKYFLr9KaFnC0JF1Hb/zy7Y7HKrL5FUrcQdJz1td/8Kb6woH9CXAPhX39HUrTNNu69BdM1qQGbzd37j4dA==}
     peerDependencies:
       '@storybook/builder-webpack5': 6.3.4
@@ -7782,6 +8062,7 @@ packages:
       typescript:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7804,11 +8085,14 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/core-client': 6.3.4_90bc8abf0686c79bfa49c88a2e6943ae
       '@storybook/core-server': 6.3.4_3725f572d4f33e7e9dab01322e5a2d20
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       typescript: 4.3.5
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -7829,6 +8113,8 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
     transitivePeerDependencies:
       - '@babel/core'
       - '@storybook/manager-webpack5'
@@ -7839,6 +8125,7 @@ packages:
       - webpack-command
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7859,6 +8146,9 @@ packages:
   /@storybook/core/6.3.4_5f72a3b5deb0304f512f2a52d28eaf32:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/core/6.3.4_5f72a3b5deb0304f512f2a52d28eaf32:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-OmzcTKYFLr9KaFnC0JF1Hb/zy7Y7HKrL5FUrcQdJz1td/8Kb6woH9CXAPhX39HUrTNNu69BdM1qQGbzd37j4dA==}
     peerDependencies:
       '@storybook/builder-webpack5': 6.3.4
@@ -7871,6 +8161,7 @@ packages:
       typescript:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7893,11 +8184,14 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/core-client': 6.3.4_5f72a3b5deb0304f512f2a52d28eaf32
       '@storybook/core-server': 6.3.4_90bc8abf0686c79bfa49c88a2e6943ae
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       typescript: 4.3.5
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -7918,6 +8212,8 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
     transitivePeerDependencies:
       - '@babel/core'
       - '@storybook/manager-webpack5'
@@ -7981,6 +8277,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@storybook/manager-webpack4/6.3.4_90bc8abf0686c79bfa49c88a2e6943ae:
 =======
 =======
@@ -7998,6 +8295,9 @@ packages:
   /@storybook/manager-webpack4/6.3.4_90bc8abf0686c79bfa49c88a2e6943ae:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/manager-webpack4/6.3.4_90bc8abf0686c79bfa49c88a2e6943ae:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-iH6cXhHcHC2RZEhbhtUhvPzAz5zLZQsZo/l+iNqynNvpXcSxvRuh+dytGBy7Np8yzYeaIenU43nNXm85SewdlQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -8034,6 +8334,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       pnp-webpack-plugin: 1.6.4_typescript@4.3.5
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
@@ -8068,6 +8369,11 @@ packages:
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      pnp-webpack-plugin: 1.6.4_typescript@4.3.5
+      react: 18.0.0-alpha-aecb3b6d1
+      react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: share text
       read-pkg-up: 7.0.1
       regenerator-runtime: 0.13.7
       resolve-from: 5.0.0
@@ -8078,6 +8384,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typescript: 4.3.5
 =======
 =======
@@ -8098,8 +8405,9 @@ packages:
 >>>>>>> fix: pnpm-lock conflict
 >>>>>>> fix: pnpm-lock conflict
 =======
+=======
+>>>>>>> fix: share text
       typescript: 4.3.5
->>>>>>> fix: refactored to new plugin system
       url-loader: 4.1.1_file-loader@6.2.0+webpack@4.46.0
       util-deprecate: 1.0.2
       webpack: 4.46.0
@@ -8131,6 +8439,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@storybook/react-docgen-typescript-plugin/1.0.2-canary.253f8c1.0_typescript@4.3.5+webpack@4.46.0:
 =======
 =======
@@ -8148,6 +8457,9 @@ packages:
   /@storybook/react-docgen-typescript-plugin/1.0.2-canary.253f8c1.0_typescript@4.3.5+webpack@4.46.0:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/react-docgen-typescript-plugin/1.0.2-canary.253f8c1.0_typescript@4.3.5+webpack@4.46.0:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-mmoRG/rNzAiTbh+vGP8d57dfcR2aP+5/Ll03KKFyfy5FqWFm/Gh7u27ikx1I3LmVMI8n6jh5SdWMkMKon7/tDw==}
     peerDependencies:
       typescript: '>= 3.x'
@@ -8158,6 +8470,7 @@ packages:
       find-cache-dir: 3.3.1
       flat-cache: 3.0.4
       micromatch: 4.0.4
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -8201,11 +8514,17 @@ packages:
       typescript: 4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      react-docgen-typescript: 2.0.0_typescript@4.3.5
+      tslib: 2.3.0
+      typescript: 4.3.5
+>>>>>>> fix: share text
       webpack: 4.46.0
     transitivePeerDependencies:
       - supports-color
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -8226,6 +8545,9 @@ packages:
   /@storybook/react/6.3.4_3725f572d4f33e7e9dab01322e5a2d20:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/react/6.3.4_3725f572d4f33e7e9dab01322e5a2d20:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-A4wycYqu/IcIaFb0cw2dPi8azhDj3SWZZModSRaQP3GkKi1LH5p14corP8RLKu2+dWC3FP4ZR6Yyaq/ymPGMzA==}
     engines: {node: '>=10.13.0'}
     hasBin: true
@@ -8244,6 +8566,7 @@ packages:
       '@babel/preset-flow': 7.14.5_@babel+core@7.14.6
       '@babel/preset-react': 7.14.5_@babel+core@7.14.6
       '@pmmmwh/react-refresh-webpack-plugin': 0.4.3_133f2312fd2dfba9fc3b3697533854a6
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -8269,11 +8592,14 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/core': 6.3.4_2ec1c339879f09d33718e96496835840
       '@storybook/core-common': 6.3.4_9b3d47eb09d7549fa7cd0a3f71caf27d
       '@storybook/node-logger': 6.3.4
       '@storybook/react-docgen-typescript-plugin': 1.0.2-canary.253f8c1.0_typescript@4.3.5+webpack@4.46.0
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -8295,6 +8621,8 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/semver': 7.3.2
       '@types/webpack-env': 1.16.2
       babel-plugin-add-react-displayname: 0.0.5
@@ -8306,6 +8634,7 @@ packages:
       prop-types: 15.7.2
       react: 18.0.0-alpha-aecb3b6d1
       react-dev-utils: 11.0.4
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -8342,6 +8671,9 @@ packages:
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: share text
       react-refresh: 0.8.3
       read-pkg-up: 7.0.1
       regenerator-runtime: 0.13.7
@@ -8349,6 +8681,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typescript: 4.3.5
 =======
 =======
@@ -8374,6 +8707,9 @@ packages:
       typescript: 4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      typescript: 4.3.5
+>>>>>>> fix: share text
       webpack: 4.46.0
     transitivePeerDependencies:
       - '@storybook/builder-webpack5'
@@ -8390,6 +8726,7 @@ packages:
       - webpack-plugin-serve
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -8410,6 +8747,9 @@ packages:
   /@storybook/react/6.3.4_90bc8abf0686c79bfa49c88a2e6943ae:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/react/6.3.4_90bc8abf0686c79bfa49c88a2e6943ae:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-A4wycYqu/IcIaFb0cw2dPi8azhDj3SWZZModSRaQP3GkKi1LH5p14corP8RLKu2+dWC3FP4ZR6Yyaq/ymPGMzA==}
     engines: {node: '>=10.13.0'}
     hasBin: true
@@ -8427,6 +8767,7 @@ packages:
       '@babel/preset-flow': 7.14.5
       '@babel/preset-react': 7.14.5
       '@pmmmwh/react-refresh-webpack-plugin': 0.4.3_133f2312fd2dfba9fc3b3697533854a6
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -8452,11 +8793,14 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/core': 6.3.4_5f72a3b5deb0304f512f2a52d28eaf32
       '@storybook/core-common': 6.3.4_9b3d47eb09d7549fa7cd0a3f71caf27d
       '@storybook/node-logger': 6.3.4
       '@storybook/react-docgen-typescript-plugin': 1.0.2-canary.253f8c1.0_typescript@4.3.5+webpack@4.46.0
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -8488,6 +8832,8 @@ packages:
 >>>>>>> fix: pnpm-lock conflict
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/semver': 7.3.2
       '@types/webpack-env': 1.16.2
       babel-plugin-add-react-displayname: 0.0.5
@@ -8507,6 +8853,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typescript: 4.3.5
 =======
 =======
@@ -8532,6 +8879,9 @@ packages:
       typescript: 4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      typescript: 4.3.5
+>>>>>>> fix: share text
       webpack: 4.46.0
     transitivePeerDependencies:
       - '@storybook/builder-webpack5'
@@ -8569,6 +8919,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@storybook/router/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
 =======
 =======
@@ -8582,11 +8933,15 @@ packages:
   /@storybook/router/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/router/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-cNG2bT0BBfqJyaW6xKUnEB/XXSdMkYeI9ShwJ2gh/2Bnidm7eZ/RKUOZ4q5equMm+SxxyZgpBulqnFN+TqPbOA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@reach/router': 1.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -8602,6 +8957,9 @@ packages:
       '@reach/router': 1.3.4_f991c289939c8299bed5e4a6a5a79a62
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      '@reach/router': 1.3.4_f991c289939c8299bed5e4a6a5a79a62
+>>>>>>> fix: share text
       '@storybook/client-logger': 6.3.4
       '@types/reach__router': 1.3.9
       core-js: 3.15.2
@@ -8626,6 +8984,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@storybook/source-loader/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
 =======
 =======
@@ -8639,11 +8998,15 @@ packages:
   /@storybook/source-loader/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/source-loader/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-6gHuWDJ5MLMSOO5X6R7CbKoZDY+P78vZsZBBY2TB+xIQ3pT9MaSl2aA7bxSO7JCSoFG0GiStHHyYx220nNgaWQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -8659,6 +9022,9 @@ packages:
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+>>>>>>> fix: share text
       '@storybook/client-logger': 6.3.4
       '@storybook/csf': 0.0.1
       core-js: 3.15.2
@@ -8694,6 +9060,7 @@ packages:
       ts-dedent: 1.2.0
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   /@storybook/theming/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
@@ -8746,6 +9113,10 @@ packages:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+  /@storybook/theming/6.3.4_f991c289939c8299bed5e4a6a5a79a62:
+    resolution: {integrity: sha512-L0lJcwUi7mse+U7EBAv5NVt81mH1MtUzk9paik8hMAc68vDtR/X0Cq4+zPsgykCROOTtEGrQ/JUUrpcEqeprTQ==}
+>>>>>>> fix: share text
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
@@ -8753,8 +9124,11 @@ packages:
       '@emotion/core': 10.1.1_react@18.0.0-alpha-aecb3b6d1
       '@emotion/is-prop-valid': 0.8.8
       '@emotion/styled': 10.0.27_0969515b2e564c6f8da5ffe0dd24efb6
+<<<<<<< HEAD
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+>>>>>>> fix: share text
       '@storybook/client-logger': 6.3.4
       core-js: 3.15.2
       deep-object-diff: 1.1.0
@@ -8762,6 +9136,7 @@ packages:
       global: 4.4.0
       memoizerific: 1.11.3
       polished: 4.1.3
+<<<<<<< HEAD
 <<<<<<< HEAD
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
@@ -8781,10 +9156,15 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      react: 18.0.0-alpha-aecb3b6d1
+      react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: share text
       resolve-from: 5.0.0
       ts-dedent: 2.1.1
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   /@storybook/ui/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
@@ -8800,11 +9180,15 @@ packages:
   /@storybook/ui/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@storybook/ui/6.3.4_cd4de1c9bac509f067bb35206cbee47e:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-vO2365MEFpqc6Lvg8dK6qBnvcWjdIWi8imXGyWEPPhx27bdAiteCewtXTKX11VM2EmHkJvekbcqNhTIKYPPG7g==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@emotion/core': 10.1.1_react@18.0.0-alpha-aecb3b6d1
@@ -8826,6 +9210,11 @@ packages:
       '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      '@emotion/core': 10.1.1_react@18.0.0-alpha-aecb3b6d1
+      '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+      '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
+>>>>>>> fix: share text
       '@storybook/channels': 6.3.4
       '@storybook/client-logger': 6.3.4
       '@storybook/components': 6.3.4_cd4de1c9bac509f067bb35206cbee47e
@@ -8837,6 +9226,7 @@ packages:
       copy-to-clipboard: 3.3.1
       core-js: 3.15.2
       core-js-pure: 3.15.2
+<<<<<<< HEAD
 <<<<<<< HEAD
       downshift: 6.1.3_react@18.0.0-alpha-aecb3b6d1
       emotion-theming: 10.0.27_0969515b2e564c6f8da5ffe0dd24efb6
@@ -8873,6 +9263,10 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      downshift: 6.1.3_react@18.0.0-alpha-aecb3b6d1
+      emotion-theming: 10.0.27_0969515b2e564c6f8da5ffe0dd24efb6
+>>>>>>> fix: share text
       fuse.js: 3.6.1
       global: 4.4.0
       lodash: 4.17.21
@@ -9002,6 +9396,7 @@ packages:
       '@types/react-test-renderer': 17.0.1
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> fix: refactored to new plugin system
@@ -9016,10 +9411,13 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       react-error-boundary: 3.1.3_react@18.0.0-alpha-aecb3b6d1
       react-test-renderer: 17.0.2_react@18.0.0-alpha-aecb3b6d1
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -9036,6 +9434,8 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
     dev: true
 
   /@tootallnate/once/1.1.2:
@@ -9067,6 +9467,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typechain: 5.0.0_typescript@4.3.5
 =======
 =======
@@ -9095,6 +9496,9 @@ packages:
       typechain: 5.1.1_typescript@4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      typechain: 5.1.1_typescript@4.3.5
+>>>>>>> fix: share text
     dev: false
 
   /@types/asn1js/2.0.2:
@@ -9693,10 +10097,6 @@ packages:
   /@types/node/16.3.2:
     resolution: {integrity: sha512-jJs9ErFLP403I+hMLGnqDRWT0RYKSvArxuBVh2veudHV7ifEC1WAmjJADacZ7mRbA2nWgHtn8xyECMAot0SkAw==}
 
-  /@types/node/16.3.2:
-    resolution: {integrity: sha512-jJs9ErFLP403I+hMLGnqDRWT0RYKSvArxuBVh2veudHV7ifEC1WAmjJADacZ7mRbA2nWgHtn8xyECMAot0SkAw==}
-    dev: false
-
   /@types/node/8.10.66:
     resolution: {integrity: sha512-tktOkFUA4kXx2hhhrB8bIFb5TbwzS4uOhKEmwiD+NoiL0qtP2OQ9mFldbgD4dV1djrlBYP6eBuQZiWjuHUpqFw==}
     dev: false
@@ -9726,22 +10126,7 @@ packages:
   /@types/pbkdf2/3.1.0:
     resolution: {integrity: sha512-Cf63Rv7jCQ0LaL8tNXmEyqTHuIJxRdlS5vMh1mj5voN4+QFhVZnlZruezqpWYDiJ8UTzhP0VmeLXCmBk66YrMQ==}
     dependencies:
-<<<<<<< HEAD
-<<<<<<< HEAD
       '@types/node': 16.3.2
-=======
-      '@types/node': 16.3.1
-<<<<<<< HEAD
->>>>>>> fix: refactored to new plugin system
-    dev: false
-
-  /@types/prettier/2.2.3:
-    resolution: {integrity: sha512-PijRCG/K3s3w1We6ynUKdxEc5AcuuH3NBmMDP8uvKVp6X43UY7NQlTzczakXP3DJR0F4dfNQIGjU2cUeRYs2AA==}
-=======
->>>>>>> fix: refactored to new plugin system
-=======
-      '@types/node': 16.3.2
->>>>>>> fix: rebased with develop
     dev: false
 
   /@types/prettier/2.3.2:
@@ -10052,6 +10437,7 @@ packages:
     dev: true
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@typescript-eslint/eslint-plugin/4.28.3_8da3816a7c3fb8ebc9f4c4b3e4b2e38f:
 =======
 <<<<<<< HEAD
@@ -10068,9 +10454,10 @@ packages:
     resolution: {integrity: sha512-Qfs3dWkTMKkKwt78xp2O/KZQB8MPS1UQ5D3YW2s6LQWBE1074BE+Rym+b1pXZIX3M3fSvPUDaCvZLKV2ylVYYQ==}
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 =======
+=======
+>>>>>>> fix: share text
   /@typescript-eslint/eslint-plugin/4.28.3_8da3816a7c3fb8ebc9f4c4b3e4b2e38f:
     resolution: {integrity: sha512-jW8sEFu1ZeaV8xzwsfi6Vgtty2jf7/lJmQmDkDruBjYAbx5DA8JtbcMnP0rNPUG+oH5GoQBTSp+9613BzuIpYg==}
->>>>>>> fix: refactored to new plugin system
     engines: {node: ^10.12.0 || >=12.0.0}
     peerDependencies:
       '@typescript-eslint/parser': ^4.0.0
@@ -10080,6 +10467,7 @@ packages:
       typescript:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -10111,6 +10499,8 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@typescript-eslint/experimental-utils': 4.28.3_eslint@7.30.0+typescript@4.3.5
       '@typescript-eslint/parser': 4.28.3_eslint@7.30.0+typescript@4.3.5
       '@typescript-eslint/scope-manager': 4.28.3
@@ -10119,6 +10509,7 @@ packages:
       functional-red-black-tree: 1.0.1
       regexpp: 3.2.0
       semver: 7.3.5
+<<<<<<< HEAD
 <<<<<<< HEAD
       tsutils: 3.21.0
 <<<<<<< HEAD
@@ -10131,13 +10522,15 @@ packages:
 >>>>>>> fix: pnpm-lock conflict
 >>>>>>> fix: pnpm-lock conflict
 =======
+=======
+>>>>>>> fix: share text
       tsutils: 3.21.0_typescript@4.3.5
       typescript: 4.3.5
->>>>>>> fix: refactored to new plugin system
     transitivePeerDependencies:
       - supports-color
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -10158,6 +10551,9 @@ packages:
   /@typescript-eslint/experimental-utils/4.28.3_eslint@7.30.0+typescript@4.3.5:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@typescript-eslint/experimental-utils/4.28.3_eslint@7.30.0+typescript@4.3.5:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-zZYl9TnrxwEPi3FbyeX0ZnE8Hp7j3OCR+ELoUfbwGHGxWnHg9+OqSmkw2MoCVpZksPCZYpQzC559Ee9pJNHTQw==}
     engines: {node: ^10.12.0 || >=12.0.0}
     peerDependencies:
@@ -10166,6 +10562,7 @@ packages:
       '@types/json-schema': 7.0.8
       '@typescript-eslint/scope-manager': 4.28.3
       '@typescript-eslint/types': 4.28.3
+<<<<<<< HEAD
 <<<<<<< HEAD
       '@typescript-eslint/typescript-estree': 4.28.3_typescript@4.3.5
       eslint: 7.30.0
@@ -10196,6 +10593,10 @@ packages:
 >>>>>>> fix: pnpm-lock conflict
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+      '@typescript-eslint/typescript-estree': 4.28.3_typescript@4.3.5
+      eslint: 7.30.0
+>>>>>>> fix: share text
       eslint-scope: 5.1.1
       eslint-utils: 3.0.0_eslint@7.30.0
     transitivePeerDependencies:
@@ -10203,6 +10604,7 @@ packages:
       - typescript
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -10223,6 +10625,9 @@ packages:
   /@typescript-eslint/parser/4.28.3_eslint@7.30.0+typescript@4.3.5:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@typescript-eslint/parser/4.28.3_eslint@7.30.0+typescript@4.3.5:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-ZyWEn34bJexn/JNYvLQab0Mo5e+qqQNhknxmc8azgNd4XqspVYR5oHq9O11fLwdZMRcj4by15ghSlIEq+H5ltQ==}
     engines: {node: ^10.12.0 || >=12.0.0}
     peerDependencies:
@@ -10236,6 +10641,7 @@ packages:
       '@typescript-eslint/types': 4.28.3
       '@typescript-eslint/typescript-estree': 4.28.3_typescript@4.3.5
       debug: 4.3.2
+<<<<<<< HEAD
 <<<<<<< HEAD
       eslint: 7.30.0
       typescript: 4.3.5
@@ -10261,6 +10667,10 @@ packages:
 >>>>>>> fix: pnpm-lock conflict
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+      eslint: 7.30.0
+      typescript: 4.3.5
+>>>>>>> fix: share text
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -10281,6 +10691,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@typescript-eslint/typescript-estree/4.28.3_typescript@4.3.5:
 =======
 =======
@@ -10298,6 +10709,9 @@ packages:
   /@typescript-eslint/typescript-estree/4.28.3_typescript@4.3.5:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /@typescript-eslint/typescript-estree/4.28.3_typescript@4.3.5:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-YAb1JED41kJsqCQt1NcnX5ZdTA93vKFCMP4lQYG6CFxd0VzDJcKttRlMrlG+1qiWAw8+zowmHU1H0OzjWJzR2w==}
     engines: {node: ^10.12.0 || >=12.0.0}
     peerDependencies:
@@ -10315,6 +10729,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       tsutils: 3.21.0_typescript@4.3.5
       typescript: 4.3.5
 =======
@@ -10346,6 +10761,10 @@ packages:
       typescript: 4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      tsutils: 3.21.0_typescript@4.3.5
+      typescript: 4.3.5
+>>>>>>> fix: share text
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -12578,18 +12997,8 @@ packages:
     resolution: {integrity: sha512-WHVocJYavUwVgVViC0ORikPHQquXwVh939TaelZ4WDqpWgTX/FsGhl/+P4qBUAGcRvtOgDgC+xftNWWp2RUTAQ==}
     hasBin: true
     dependencies:
-<<<<<<< HEAD
-<<<<<<< HEAD
-      caniuse-lite: 1.0.30001245
-      electron-to-chromium: 1.3.776
-=======
-      caniuse-lite: 1.0.30001244
-      electron-to-chromium: 1.3.774
->>>>>>> fix: refactored to new plugin system
-=======
       caniuse-lite: 1.0.30001245
       electron-to-chromium: 1.3.775
->>>>>>> fix: rebased with develop
     dev: false
 
   /browserslist/4.14.2:
@@ -12900,31 +13309,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-  /caniuse-lite/1.0.30001205:
-    resolution: {integrity: sha512-TL1GrS5V6LElbitPazidkBMD9sa448bQDDLrumDqaggmKFcuU2JW1wTOHJPukAcOMtEmLcmDJEzfRrf+GjM0Og==}
-    dev: true
-
-  /caniuse-lite/1.0.30001228:
-    resolution: {integrity: sha512-QQmLOGJ3DEgokHbMSA8cj2a+geXqmnpyOFT0lhQV6P3/YOJvGDEwoedcwxEQ30gJIwIIunHIicunJ2rzK5gB2A==}
-    dev: true
-
-  /caniuse-lite/1.0.30001243:
-    resolution: {integrity: sha512-vNxw9mkTBtkmLFnJRv/2rhs1yufpDfCkBZexG3Y0xdOH2Z/eE/85E4Dl5j1YUN34nZVsSp6vVRFQRrez9wJMRA==}
-    dev: true
-
   /caniuse-lite/1.0.30001245:
     resolution: {integrity: sha512-768fM9j1PKXpOCKws6eTo3RHmvTUsG9UrpT4WoREFeZgJBTi4/X9g565azS/rVUGtqb8nt7FjLeF5u4kukERnA==}
-    dev: false
-=======
-  /caniuse-lite/1.0.30001244:
-    resolution: {integrity: sha512-Wb4UFZPkPoJoKKVfELPWytRzpemjP/s0pe22NriANru1NoI+5bGNxzKtk7edYL8rmCWTfQO8eRiF0pn1Dqzx7Q==}
->>>>>>> fix: refactored to new plugin system
-=======
-  /caniuse-lite/1.0.30001245:
-    resolution: {integrity: sha512-768fM9j1PKXpOCKws6eTo3RHmvTUsG9UrpT4WoREFeZgJBTi4/X9g565azS/rVUGtqb8nt7FjLeF5u4kukERnA==}
->>>>>>> fix: rebased with develop
 
   /capture-exit/2.0.0:
     resolution: {integrity: sha512-PiT/hQmTonHhl/HFGN+Lx3JJUznrVYJ3+AQsnthneZbvW7x+f08Tk7yLJTLEOUvBTbduLeeBkxEaYXUOUrRq6g==}
@@ -14712,31 +15098,8 @@ packages:
     resolution: {integrity: sha512-Hj+GY0mf2NNBcgg0v6DsV0/EYI5xDLUICZ5BSLVC+8uFEzoWpWw2VR6e3eWKgGjL2YEybUdg89UXDEHaBmi03Q==}
     dev: false
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-  /electron-to-chromium/1.3.703:
-    resolution: {integrity: sha512-SVBVhNB+4zPL+rvtWLw7PZQkw/Eqj1HQZs22xtcqW36+xoifzEOEEDEpkxSMfB6RFeSIOcG00w6z5mSqLr1Y6w==}
-    dev: true
-
-  /electron-to-chromium/1.3.737:
-    resolution: {integrity: sha512-P/B84AgUSQXaum7a8m11HUsYL8tj9h/Pt5f7Hg7Ty6bm5DxlFq+e5+ouHUoNQMsKDJ7u4yGfI8mOErCmSH9wyg==}
-    dev: true
-
-  /electron-to-chromium/1.3.773:
-    resolution: {integrity: sha512-Y44FtvE3Lpr7ka/kPdQbIYzUBCWddW8Ky5QzKbasDeqFdJYK9izaiiAIRAoE3Kdu7+GPBVwwyWDaQ2yyeNqWRA==}
-    dev: true
-
-  /electron-to-chromium/1.3.776:
-    resolution: {integrity: sha512-V0w7eFSBoFPpdw4xexjVPZ770UDZIevSwkkj4W97XbE3IsCsTRFpa7/yXGZ88EOQAUEA09JMMsWK0xsw0kRAYw==}
-    dev: false
-=======
-  /electron-to-chromium/1.3.774:
-    resolution: {integrity: sha512-Fggh17Q1yyv1uMzq8Qn1Ci58P50qcRXMXd2MBcB9sxo6rJxjUutWcNw8uCm3gFWMdcblBO6mDT5HzX/RVRRECA==}
->>>>>>> fix: refactored to new plugin system
-=======
   /electron-to-chromium/1.3.775:
     resolution: {integrity: sha512-EGuiJW4yBPOTj2NtWGZcX93ZE8IGj33HJAx4d3ouE2zOfW2trbWU+t1e0yzLr1qQIw81++txbM3BH52QwSRE6Q==}
->>>>>>> fix: rebased with develop
 
   /element-resize-detector/1.2.3:
     resolution: {integrity: sha512-+dhNzUgLpq9ol5tyhoG7YLoXL3ssjfFW+0gpszXPwRU6NjGr1fVHMEAF8fVzIiRJq57Nre0RFeIjJwI8Nh2NmQ==}
@@ -15626,11 +15989,11 @@ packages:
       setimmediate: 1.0.5
     dev: false
 
-  /ethereumjs-abi/0.6.6:
-    resolution: {integrity: sha512-w8KubDsA/+OAuqtIR9RGsMcoZ5nhM8vxwjJAJvEIY+clhxA3BHoLG3+ClYQaQhD0n3mlDt3U5rBrmSVJvI3c8A==}
+  /ethereumjs-abi/0.6.8:
+    resolution: {integrity: sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==}
     dependencies:
       bn.js: 4.12.0
-      ethereumjs-util: 5.2.1
+      ethereumjs-util: 6.2.1
     dev: false
 
   /ethereumjs-account/2.0.5:
@@ -18606,6 +18969,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /jest-cli/27.0.6_ts-node@10.1.0:
 =======
 =======
@@ -18619,6 +18983,9 @@ packages:
   /jest-cli/27.0.6_ts-node@10.1.0:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /jest-cli/27.0.6_ts-node@10.1.0:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-qUUVlGb9fdKir3RDE+B10ULI+LQrz+MCflEH2UJyoUjoHHCbxDrMxSzjQAPUMsic4SncI62ofYCcAvW6+6rhhg==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     hasBin: true
@@ -18628,6 +18995,7 @@ packages:
       node-notifier:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@jest/core': 27.0.6_ts-node@10.1.0
@@ -18643,12 +19011,16 @@ packages:
       '@jest/core': 27.0.6_ts-node@10.1.0
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      '@jest/core': 27.0.6_ts-node@10.1.0
+>>>>>>> fix: share text
       '@jest/test-result': 27.0.6
       '@jest/types': 27.0.6
       chalk: 4.1.1
       exit: 0.1.2
       graceful-fs: 4.2.6
       import-local: 3.0.2
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       jest-config: 27.0.6_ts-node@10.1.0
@@ -18664,6 +19036,9 @@ packages:
       jest-config: 27.0.6_ts-node@10.1.0
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      jest-config: 27.0.6_ts-node@10.1.0
+>>>>>>> fix: share text
       jest-util: 27.0.6
       jest-validate: 27.0.6
       prompts: 2.4.1
@@ -18676,6 +19051,7 @@ packages:
       - utf-8-validate
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   /jest-config/27.0.6_ts-node@10.1.0:
@@ -18691,6 +19067,9 @@ packages:
   /jest-config/27.0.6_ts-node@10.1.0:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /jest-config/27.0.6_ts-node@10.1.0:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-JZRR3I1Plr2YxPBhgqRspDE2S5zprbga3swYNrvY3HfQGu7p/GjyLOqwrYad97tX3U3mzT53TPHVmozacfP/3w==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     peerDependencies:
@@ -18720,6 +19099,7 @@ packages:
       jest-validate: 27.0.6
       micromatch: 4.0.4
       pretty-format: 27.0.6
+<<<<<<< HEAD
 <<<<<<< HEAD
       ts-node: 10.1.0_typescript@4.3.5
 =======
@@ -18757,6 +19137,9 @@ packages:
 >>>>>>> fix: pnpm-lock conflict
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+      ts-node: 10.1.0_typescript@4.3.5
+>>>>>>> fix: share text
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -19369,6 +19752,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /jest/27.0.6_ts-node@10.1.0:
 =======
 =======
@@ -19382,6 +19766,9 @@ packages:
   /jest/27.0.6_ts-node@10.1.0:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /jest/27.0.6_ts-node@10.1.0:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-EjV8aETrsD0wHl7CKMibKwQNQc3gIRBXlTikBmmHUeVMKaPFxdcUIBfoDqTSXDoGJIivAYGqCWVlzCSaVjPQsA==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     hasBin: true
@@ -19391,6 +19778,7 @@ packages:
       node-notifier:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@jest/core': 27.0.6_ts-node@10.1.0
@@ -19423,6 +19811,11 @@ packages:
       jest-cli: 27.0.6_ts-node@10.1.0
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      '@jest/core': 27.0.6_ts-node@10.1.0
+      import-local: 3.0.2
+      jest-cli: 27.0.6_ts-node@10.1.0
+>>>>>>> fix: share text
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -20490,6 +20883,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /markdown-to-jsx/7.1.3_react@18.0.0-alpha-aecb3b6d1:
 =======
 =======
@@ -20517,6 +20911,9 @@ packages:
   /markdown-to-jsx/7.1.3_react@18.0.0-alpha-aecb3b6d1:
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+  /markdown-to-jsx/7.1.3_react@18.0.0-alpha-aecb3b6d1:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-jtQ6VyT7rMT5tPV0g2EJakEnXLiPksnvlYtwQsVVZ611JsWGN8bQ1tVSDX4s6JllfEH6wmsYxNjTUAMrPmNA8w==}
     engines: {node: '>= 10'}
     peerDependencies:
@@ -22335,6 +22732,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /pnp-webpack-plugin/1.6.4_typescript@4.3.5:
     resolution: {integrity: sha512-7Wjy+9E3WwLOEL30D+m8TSTF7qJJUJLONBnwQp0518siuMxUQUbgZwssaFX+QKlZkjHZcw/IpZCt/H0srrntSg==}
     engines: {node: '>=6'}
@@ -22353,11 +22751,14 @@ packages:
       ts-pnp: 1.2.0
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> fix: share text
   /pnp-webpack-plugin/1.6.4_typescript@4.3.5:
     resolution: {integrity: sha512-7Wjy+9E3WwLOEL30D+m8TSTF7qJJUJLONBnwQp0518siuMxUQUbgZwssaFX+QKlZkjHZcw/IpZCt/H0srrntSg==}
     engines: {node: '>=6'}
     dependencies:
       ts-pnp: 1.2.0_typescript@4.3.5
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> fix: pnpm-lock conflict
@@ -22382,6 +22783,8 @@ packages:
     dependencies:
       ts-pnp: 1.2.0_typescript@4.3.5
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
     transitivePeerDependencies:
       - typescript
     dev: true
@@ -22995,6 +23398,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /react-colorful/5.2.3_f991c289939c8299bed5e4a6a5a79a62:
 =======
 =======
@@ -23012,9 +23416,10 @@ packages:
     resolution: {integrity: sha512-FRt9jz6xjiPqQ6bIAQ26kd0oJhHbGBwsA4BDz/F8FDCFuQJDiEl0wVUARNiqRyvQjwfKuhM42P/bMYI0l92hRw==}
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 =======
+=======
+>>>>>>> fix: share text
   /react-colorful/5.3.0_f991c289939c8299bed5e4a6a5a79a62:
     resolution: {integrity: sha512-zWE5E88zmjPXFhv6mGnRZqKin9s5vip1O3IIGynY9EhZxN8MATUxZkT3e/9OwTEm4DjQBXc6PFWP6AetY+Px+A==}
->>>>>>> fix: refactored to new plugin system
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -23063,6 +23468,7 @@ packages:
       - utf-8-validate
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -23119,12 +23525,15 @@ packages:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
   /react-docgen-typescript/2.0.0_typescript@4.3.5:
     resolution: {integrity: sha512-lPf+KJKAo6a9klKyK4y8WwgaX+6t5/HkVjHOpJDMbmaXfXcV7zP0QgWtnEOc3ccEUXKvlHMGUMIS9f6Zgo1BSw==}
     peerDependencies:
       typescript: '>= 4.3.x'
     dependencies:
       typescript: 4.3.5
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -23153,6 +23562,8 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
     dev: true
 
   /react-docgen/5.4.0:
@@ -23205,6 +23616,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /react-error-boundary/3.1.3_react@18.0.0-alpha-aecb3b6d1:
 =======
 =======
@@ -23218,12 +23630,16 @@ packages:
   /react-error-boundary/3.1.3_react@18.0.0-alpha-aecb3b6d1:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /react-error-boundary/3.1.3_react@18.0.0-alpha-aecb3b6d1:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-A+F9HHy9fvt9t8SNDlonq01prnU8AmkjvGKV4kk8seB9kU3xMEO8J/PQlLVmoOIDODl5U2kufSBs4vrWIqhsAA==}
     engines: {node: '>=10', npm: '>=6'}
     peerDependencies:
       react: '>=16.13.1'
     dependencies:
       '@babel/runtime': 7.14.6
+<<<<<<< HEAD
 <<<<<<< HEAD
       react: 18.0.0-alpha-aecb3b6d1
 =======
@@ -23241,6 +23657,9 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      react: 18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: share text
     dev: true
 
   /react-error-overlay/6.0.9:
@@ -23287,6 +23706,7 @@ packages:
     dev: false
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   /react-hook-form/7.10.1_react@18.0.0-alpha-aecb3b6d1:
 =======
 <<<<<<< HEAD
@@ -23294,22 +23714,18 @@ packages:
 >>>>>>> fix: rebased with develop
     resolution: {integrity: sha512-YRSkOZ0DJKjJ+PuCB6caFbFSbz6I4JQcGXVb/OeEIVE3YuXXYYJ/YQwodRy8HsZ5WA+DryoThWIeZZzPd5f9lQ==}
 =======
+=======
+>>>>>>> fix: share text
   /react-hook-form/7.11.0_react@18.0.0-alpha-aecb3b6d1:
     resolution: {integrity: sha512-aJVvL5VV6JqUWvwx9fbrhc6La83aQAfXfqQr+TD/sWy3LPdqYBgBIHBt8WAKWzKRm3g29YV2CLfn4wkhNB9b+g==}
->>>>>>> fix: rebased with develop
     peerDependencies:
       react: ^16.8.0 || ^17
     dependencies:
       react: 18.0.0-alpha-aecb3b6d1
     dev: false
 
-<<<<<<< HEAD
-  /react-i18next/11.11.1_44b15288743ca8758b7bd6a3c957a6b2:
-    resolution: {integrity: sha512-MtfzPEOvx0ev2cz0HmrEcduuqkktSa5bfeN8Flp0cvN0xP3H3MRSTa8P6pxPtqstHbRe1cD9QBOr5T/FEV2gOw==}
-=======
   /react-i18next/11.11.2_8e798a02287a2985f183ca7f42b29e56:
     resolution: {integrity: sha512-42tWoD0X12mJyYtTnK99Hihi2nCc3WIJ23WpUiDwojTWj7w5rfa/cCqo57QLhTFOoYSpG+ydr6Cr1hjtkvmVPw==}
->>>>>>> fix: rebased with develop
     peerDependencies:
       i18next: '>= 19.0.0'
       react: '>= 16.8.0'
@@ -23380,6 +23796,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /react-refresh-typescript/2.0.2_07d643ea690a1c588819a69f1ef8f0ab:
 =======
 =======
@@ -23397,6 +23814,9 @@ packages:
   /react-refresh-typescript/2.0.2_07d643ea690a1c588819a69f1ef8f0ab:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /react-refresh-typescript/2.0.2_07d643ea690a1c588819a69f1ef8f0ab:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-Gevwf67IgOFZW2ub/tZ8gmcXawWnhMuoFjCW85v4LcOzMgD2PMrH2zkr3sie2Y2bvLp/7tpRdhbG0yshxlJYHw==}
     peerDependencies:
       react-refresh: 0.10.x
@@ -23406,6 +23826,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typescript: 4.3.5
 =======
 =======
@@ -23431,6 +23852,9 @@ packages:
       typescript: 4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      typescript: 4.3.5
+>>>>>>> fix: share text
     dev: true
 
   /react-refresh/0.10.0:
@@ -23569,6 +23993,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /react-textarea-autosize/8.3.3_7133d8ccc1901f54543c95a1a683a948:
 =======
 =======
@@ -23582,12 +24007,16 @@ packages:
   /react-textarea-autosize/8.3.3_7133d8ccc1901f54543c95a1a683a948:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /react-textarea-autosize/8.3.3_7133d8ccc1901f54543c95a1a683a948:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-2XlHXK2TDxS6vbQaoPbMOfQ8GK7+irc2fVK6QFIcC8GOnH3zI/v481n+j1L0WaPVvKxwesnY93fEfH++sus2rQ==}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
     dependencies:
       '@babel/runtime': 7.14.6
+<<<<<<< HEAD
 <<<<<<< HEAD
       react: 18.0.0-alpha-aecb3b6d1
       use-composed-ref: 1.1.0_react@18.0.0-alpha-aecb3b6d1
@@ -23613,6 +24042,11 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      react: 18.0.0-alpha-aecb3b6d1
+      use-composed-ref: 1.1.0_react@18.0.0-alpha-aecb3b6d1
+      use-latest: 1.2.0_7133d8ccc1901f54543c95a1a683a948
+>>>>>>> fix: share text
     transitivePeerDependencies:
       - '@types/react'
     dev: true
@@ -25340,6 +25774,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /storybook-addon-outline/1.4.1_cd4de1c9bac509f067bb35206cbee47e:
 =======
 =======
@@ -25353,11 +25788,15 @@ packages:
   /storybook-addon-outline/1.4.1_cd4de1c9bac509f067bb35206cbee47e:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /storybook-addon-outline/1.4.1_cd4de1c9bac509f067bb35206cbee47e:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-Qvv9X86CoONbi+kYY78zQcTGmCgFaewYnOVR6WL7aOFJoW7TrLiIc/O4hH5X9PsEPZFqjfXEPUPENWVUQim6yw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
@@ -25378,12 +25817,15 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       '@storybook/addons': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/api': 6.3.4_f991c289939c8299bed5e4a6a5a79a62
       '@storybook/components': 6.3.4_cd4de1c9bac509f067bb35206cbee47e
       '@storybook/core-events': 6.3.4
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
       '@storybook/addons': 6.3.0
@@ -25398,6 +25840,8 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       ts-dedent: 2.1.1
     transitivePeerDependencies:
       - '@types/react'
@@ -26255,6 +26699,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /ts-essentials/7.0.1_typescript@4.3.5:
 =======
 =======
@@ -26272,15 +26717,17 @@ packages:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
     resolution: {integrity: sha512-8lwh3QJtIc1UWhkQtr9XuksXu3O0YQdEE5g79guDfhCaU1FWTDIEDZ1ZSx4HTHUmlJZ8L812j3BZQ4a0aOUkSA==}
 =======
+=======
+>>>>>>> fix: share text
   /ts-essentials/7.0.2_typescript@4.3.5:
     resolution: {integrity: sha512-qWPVC1xZGdefbsgFP7tPo+bsgSA2ZIXL1XeEe5M2WoMZxIOr/HbsHxP/Iv75IFhiMHMDGL7cOOwi5SXcgx9mHw==}
->>>>>>> fix: refactored to new plugin system
     peerDependencies:
       typescript: '>=3.7.0'
     dependencies:
       typescript: 4.3.5
     dev: false
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   /ts-jest/27.0.3_jest@27.0.6+typescript@4.3.5:
@@ -26296,6 +26743,9 @@ packages:
   /ts-jest/27.0.3_jest@27.0.6+typescript@4.3.5:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+  /ts-jest/27.0.3_jest@27.0.6+typescript@4.3.5:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-U5rdMjnYam9Ucw+h0QvtNDbc5+88nxt7tbIvqaZUhFrfG4+SkWhMXjejCLVGcpILTPuV+H3W/GZDZrnZFpPeXw==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     hasBin: true
@@ -26306,6 +26756,7 @@ packages:
       bs-logger: 0.2.6
       buffer-from: 1.1.1
       fast-json-stable-stringify: 2.1.0
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       jest: 27.0.6_ts-node@10.1.0
@@ -26321,12 +26772,16 @@ packages:
       jest: 27.0.6_ts-node@10.1.0
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+      jest: 27.0.6_ts-node@10.1.0
+>>>>>>> fix: share text
       jest-util: 27.0.6
       json5: 2.2.0
       lodash: 4.17.21
       make-error: 1.3.6
       mkdirp: 1.0.4
       semver: 7.3.5
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -26351,13 +26806,18 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       typescript: 4.3.5
       yargs-parser: 20.2.9
     dev: true
 
   /ts-loader/9.2.3_typescript@4.3.5+webpack@5.44.0:
+<<<<<<< HEAD
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+>>>>>>> fix: share text
     resolution: {integrity: sha512-sEyWiU3JMHBL55CIeC4iqJQadI0U70A5af0kvgbNLHVNz2ACztQg0j/9x10bjjIht8WfFYLKfn4L6tkZ+pu+8Q==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -26368,6 +26828,7 @@ packages:
       enhanced-resolve: 5.8.2
       micromatch: 4.0.4
       semver: 7.3.5
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -26461,16 +26922,13 @@ packages:
 =======
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       typescript: 4.3.5
       webpack: 5.44.0_webpack-cli@4.7.2
 >>>>>>> fix: refactored to new plugin system
     dev: true
 
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> feat: implemented pooltogether plugin, closes #3343
-=======
->>>>>>> fix: refactored to new plugin system
   /ts-node/10.1.0_typescript@4.3.5:
     resolution: {integrity: sha512-6szn3+J9WyG2hE+5W8e0ruZrzyk1uFLYye6IGMBadnOzDh8aP7t8CbFpsfCiEx2+wMixAhjFt7lOZC4+l+WbEA==}
     engines: {node: '>=12.0.0'}
@@ -26517,6 +26975,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /ts-pnp/1.2.0_typescript@4.3.5:
 =======
 =======
@@ -26545,6 +27004,9 @@ packages:
   /ts-pnp/1.2.0_typescript@4.3.5:
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+  /ts-pnp/1.2.0_typescript@4.3.5:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==}
     engines: {node: '>=6'}
     peerDependencies:
@@ -26555,6 +27017,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     dependencies:
       typescript: 4.3.5
 =======
@@ -26583,6 +27046,10 @@ packages:
       typescript: 4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+    dependencies:
+      typescript: 4.3.5
+>>>>>>> fix: share text
     dev: true
 
   /ts-results/3.3.0:
@@ -26659,6 +27126,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /tsutils/3.21.0_typescript@4.3.5:
 =======
 =======
@@ -26687,6 +27155,9 @@ packages:
   /tsutils/3.21.0_typescript@4.3.5:
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+  /tsutils/3.21.0_typescript@4.3.5:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
     engines: {node: '>= 6'}
     peerDependencies:
@@ -26696,6 +27167,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typescript: 4.3.5
 =======
 =======
@@ -26721,6 +27193,9 @@ packages:
       typescript: 4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      typescript: 4.3.5
+>>>>>>> fix: share text
     dev: true
 
   /tty-browserify/0.0.0:
@@ -26762,6 +27237,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /type-coverage-core/2.17.5_typescript@4.3.5:
 =======
 =======
@@ -26790,6 +27266,9 @@ packages:
   /type-coverage-core/2.17.5_typescript@4.3.5:
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+  /type-coverage-core/2.17.5_typescript@4.3.5:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-FfkH2kIgQkkgC47V2WHJZWBbjYjMw2ZpQRdRGTcMBAnkijmRCp9I1LpOuI+Gv4MDtniRLnkAo8htGGt2iExFgA==}
     peerDependencies:
       typescript: 2 || 3 || 4
@@ -26798,6 +27277,7 @@ packages:
       minimatch: 3.0.4
       normalize-path: 3.0.0
       tslib: 2.3.0
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       tsutils: 3.21.0_typescript@4.3.5
@@ -26821,13 +27301,18 @@ packages:
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
       tsutils: 3.21.0_typescript@4.3.5
       typescript: 4.3.5
     dev: true
 
   /type-coverage/2.18.0_typescript@4.3.5:
+<<<<<<< HEAD
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
 >>>>>>> feat: implemented pooltogether plugin, closes #3343
+=======
+>>>>>>> fix: share text
     resolution: {integrity: sha512-SAyrR6Xl7GfHNcXU8Y3wSnJfGftdCvf/b2JlJJtt7gt74T0dCF077/ukhlLjI/MsWmRCxW8k8x/d4AjrFiLSpQ==}
     hasBin: true
     dependencies:
@@ -26835,6 +27320,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       type-coverage-core: 2.17.5_typescript@4.3.5
 =======
 =======
@@ -26863,6 +27349,9 @@ packages:
       type-coverage-core: 2.17.5_typescript@4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      type-coverage-core: 2.17.5_typescript@4.3.5
+>>>>>>> fix: share text
     transitivePeerDependencies:
       - typescript
     dev: true
@@ -26915,6 +27404,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /typechain/5.0.0_typescript@4.3.5:
 =======
 =======
@@ -26939,9 +27429,10 @@ packages:
 >>>>>>> fix: pnpm-lock conflict
     resolution: {integrity: sha512-Ko2/8co0FUmPUkaXPcb8PC3ncWa5P72nvkiNMgcomd4OAInltJlITF0kcW2cZmI2sFkvmaHV5TZmCnOHgo+i5Q==}
 =======
+=======
+>>>>>>> fix: share text
   /typechain/5.1.1_typescript@4.3.5:
     resolution: {integrity: sha512-zN4ylCc3gSw2BXy5Zlpmw8q0lf5pQ+U8gYd5WCWRfDVuUkKyZBURz31VLjkPY/nfOr+P6EcwTC4Ae5VNVqrv/g==}
->>>>>>> fix: refactored to new plugin system
     hasBin: true
     dependencies:
       '@types/prettier': 2.3.2
@@ -26951,6 +27442,7 @@ packages:
       glob: 7.1.7
       js-sha3: 0.8.0
       lodash: 4.17.21
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       prettier: 2.3.1
@@ -26987,6 +27479,11 @@ packages:
       ts-essentials: 7.0.2_typescript@4.3.5
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      mkdirp: 1.0.4
+      prettier: 2.3.2
+      ts-essentials: 7.0.2_typescript@4.3.5
+>>>>>>> fix: share text
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -27397,6 +27894,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /use-isomorphic-layout-effect/1.1.1_7133d8ccc1901f54543c95a1a683a948:
 =======
 =======
@@ -27417,6 +27915,9 @@ packages:
   /use-isomorphic-layout-effect/1.1.1_7133d8ccc1901f54543c95a1a683a948:
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+  /use-isomorphic-layout-effect/1.1.1_7133d8ccc1901f54543c95a1a683a948:
+>>>>>>> fix: share text
     resolution: {integrity: sha512-L7Evj8FGcwo/wpbv/qvSfrkHFtOpCzvM5yl2KVyDJoylVuSvzphiiasmjgQPttIGBAy2WKiBNR98q8w7PiNgKQ==}
     peerDependencies:
       '@types/react': '*'
@@ -27426,6 +27927,7 @@ packages:
         optional: true
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     dependencies:
       '@types/react': 17.0.14
       react: 18.0.0-alpha-aecb3b6d1
@@ -27443,12 +27945,15 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
     dependencies:
       '@types/react': 17.0.14
       react: 18.0.0-alpha-aecb3b6d1
     dev: true
 
   /use-latest/1.2.0_7133d8ccc1901f54543c95a1a683a948:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     dev: true
@@ -27462,6 +27967,8 @@ packages:
 =======
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+>>>>>>> fix: share text
     resolution: {integrity: sha512-d2TEuG6nSLKQLAfW3By8mKr8HurOlTkul0sOpxbClIv4SQ4iOd7BYr7VIzdbktUCnv7dua/60xzd8igMU6jmyw==}
     peerDependencies:
       '@types/react': '*'
@@ -27472,6 +27979,7 @@ packages:
     dependencies:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@types/react': 17.0.14
       react: 18.0.0-alpha-aecb3b6d1
       use-isomorphic-layout-effect: 1.1.1_7133d8ccc1901f54543c95a1a683a948
@@ -27498,6 +28006,11 @@ packages:
       use-isomorphic-layout-effect: 1.1.1_7133d8ccc1901f54543c95a1a683a948
 >>>>>>> fix: refactored to new plugin system
 >>>>>>> fix: refactored to new plugin system
+=======
+      '@types/react': 17.0.14
+      react: 18.0.0-alpha-aecb3b6d1
+      use-isomorphic-layout-effect: 1.1.1_7133d8ccc1901f54543c95a1a683a948
+>>>>>>> fix: share text
     dev: true
 
   /use-subscription/1.5.1_react@18.0.0-alpha-aecb3b6d1:

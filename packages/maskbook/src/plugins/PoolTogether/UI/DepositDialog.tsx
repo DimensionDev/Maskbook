@@ -196,10 +196,10 @@ export function DepositDialog() {
         .getShareLinkURL?.(
             token
                 ? t('plugin_pooltogether_share', {
-                      amount: formatBalance(amount, 6),
+                      amount: rawAmount,
                       cashTag: cashTag,
                       symbol: token.symbol,
-                      pool: pool?.name,
+                      pool: pool?.name ?? `${pool?.tokens.underlyingToken.symbol} Pool`,
                   })
                 : '',
         )
