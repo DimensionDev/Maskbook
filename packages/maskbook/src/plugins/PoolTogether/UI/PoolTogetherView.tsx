@@ -1,6 +1,6 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/constants'
-import { formatBalance, usePooltogetherConstants } from '@masknet/web3-shared'
+import { usePooltogetherConstants } from '@masknet/web3-shared'
 import {
     Card,
     CardActions,
@@ -14,10 +14,12 @@ import {
     Typography,
 } from '@material-ui/core'
 import React, { useState } from 'react'
+import { useEffect } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { PoolTogetherIcon } from '../../../resources/PoolTogetherIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { usePool, usePoolAwardBalance, usePools } from '../hooks/usePools'
+import { usePool, usePools } from '../hooks/usePools'
+import type { Pool } from '../types'
 import { Account } from './Account'
 import { PoolsView } from './PoolsView'
 
@@ -116,9 +118,11 @@ interface PoolTogetherViewProps {}
 export function PoolTogetherView(props: PoolTogetherViewProps) {
     const { t } = useI18N()
     const classes = useStyles()
+    const [pools, setPools] = useState<Pool[]>([])
 
     //#region pools
     const { value: _pools = [], error: error, loading: loading, retry: retry } = usePools()
+    _pools.sort((x, y) => Number(y.prize.weeklyTotalValueUsd) - Number(x.prize.weeklyTotalValueUsd))
     //#endregion
 
     //#region mask pool
@@ -128,14 +132,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
         error: errorMask,
         loading: loadingMask,
         retry: retryMask,
-    } = usePool(MASK_POOL_ADDRESS, MASK_POOL_SUBGRAPH)
-
-    const {
-        value: maskAwardBalance,
-        error: errorMaskAwardBalance,
-        loading: loadingMaskAwardBalance,
-        retry: retryMaskAwardBalance,
-    } = usePoolAwardBalance(MASK_POOL_ADDRESS)
+    } = usePool(MASK_POOL_ADDRESS, MASK_POOL_SUBGRAPH, true)
     //#endregion
 
     //#region tabs
@@ -146,41 +143,28 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     ].filter(Boolean)
     //#endregion
 
-    if (loading || loadingMask || loadingMaskAwardBalance) {
+    useEffect(() => {
+        if (maskPool) {
+            setPools([maskPool, ..._pools])
+        } else {
+            setPools(_pools)
+        }
+    }, [_pools, maskPool])
+
+    if (loading || loadingMask) {
         return <CircularProgress className={classes.progress} color="primary" size={15} />
     }
 
-    if (error || errorMask || errorMaskAwardBalance) {
-        return (
-            <RefreshIcon
-                className={classes.refresh}
-                color="primary"
-                onClick={error ? retry : errorMask ? retryMask : retryMaskAwardBalance}
-            />
-        )
+    if (error || errorMask) {
+        return <RefreshIcon className={classes.refresh} color="primary" onClick={error ? retry : retryMask} />
     }
 
-    if (_pools.length === 0 && !maskPool) {
+    if (pools.length === 0) {
         return (
             <Typography className={classes.message} color={DarkColor.textPrimary}>
                 {t('plugin_pooltogether_no_pool')}
             </Typography>
         )
-    }
-
-    let pools = []
-    if (maskPool) {
-        maskPool.isCommunityPool = true
-        pools = [maskPool, ..._pools]
-
-        if (maskAwardBalance) {
-            maskPool.prize.amount = formatBalance(
-                maskAwardBalance,
-                Number.parseInt(maskPool.tokens.underlyingToken.decimals, 10),
-            )
-        }
-    } else {
-        pools = _pools
     }
 
     return (

@@ -25,11 +25,9 @@ export function PoolsView(props: PoolsProps) {
 
     return (
         <div className={classes.root}>
-            {pools
-                .sort((x, y) => Number(y.prize.weeklyTotalValueUsd) - Number(x.prize.weeklyTotalValueUsd))
-                .map((pool) => (
-                    <PoolView key={pool.prizePool.address} pool={pool} />
-                ))}
+            {pools.map((pool) => (
+                <PoolView key={pool.prizePool.address} pool={pool} />
+            ))}
         </div>
     )
 }

@@ -6,7 +6,7 @@ import { usePoolURL } from '../hooks/usePoolURL'
 import { CountdownView } from './CountdownView'
 import { ONE_DAY_SECONDS, ONE_WEEK_SECONDS } from '../constants'
 import { PluginPoolTogetherMessages } from '../messages'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { calculateNextPrize, calculateSecondsRemaining } from '../utils'
 import { NetworkView } from './NetworkVIew'
 import { useI18N } from '../../../utils'
@@ -166,6 +166,8 @@ export function PoolView(props: PoolProps) {
 
     const poolURL = usePoolURL(pool)
     const chainId = useChainId()
+    const [prize, setPrize] = useState('TBD')
+    const [period, setPeriod] = useState('Custom Period')
 
     //#region pool token
     const {
@@ -178,14 +180,16 @@ export function PoolView(props: PoolProps) {
 
     //#region process data
     const prizePeriodSeconds = Number.parseInt(pool.config.prizePeriodSeconds, 10)
-    const period =
-        prizePeriodSeconds == ONE_DAY_SECONDS
-            ? 'Daily'
-            : prizePeriodSeconds == ONE_WEEK_SECONDS
-            ? 'Weekly'
-            : 'Custom Period'
-
-    const prize = calculateNextPrize(pool)
+    useEffect(() => {
+        setPrize(calculateNextPrize(pool))
+        setPeriod(
+            prizePeriodSeconds == ONE_DAY_SECONDS
+                ? 'Daily'
+                : prizePeriodSeconds == ONE_WEEK_SECONDS
+                ? 'Weekly'
+                : 'Custom Period',
+        )
+    }, [pool])
     //#endregion
 
     //#region the deposit dialog
