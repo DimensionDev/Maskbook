@@ -10,6 +10,7 @@ import { Services } from '../../API'
 import { ControlContainer } from './index'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { PersonaInfo, PersonaSelector } from './PersonaSelector'
+import { MaskAlert } from '../MaskAlert'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
     },
     file: {
         display: 'none',
+    },
+    alter: {
+        marginTop: theme.spacing(6),
+        width: '100%',
     },
 }))
 
@@ -147,6 +152,9 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
                     {t.wallets_import_wallet_import()}
                 </Button>
             </ControlContainer>
+            <div className={classes.alter}>
+                <MaskAlert description={t.sign_in_account_local_backup_warning()} />
+            </div>
         </>
     )
 }

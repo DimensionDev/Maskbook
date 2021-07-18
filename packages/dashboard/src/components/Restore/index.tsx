@@ -5,7 +5,6 @@ import { useDashboardI18N } from '../../locales'
 import { RestoreFromJson } from './RestoreFromJson'
 import { RestoreFromMnemonic } from './RestoreFromMnemonic'
 import { RestoreFromCloud } from './RestoreFromCloud'
-import { MaskAlert } from '../MaskAlert'
 
 const Container = styled('div')`
     display: flex;
@@ -67,12 +66,5 @@ export const Restore = memo(() => {
             buttonTabGroupClasses: { root: classes.tabs },
         },
     )
-    return (
-        <Container>
-            {tabs}
-            <AlertContainer>
-                <MaskAlert description={t.sign_in_account_identity_warning()} />
-            </AlertContainer>
-        </Container>
-    )
+    return <Container>{tabs}</Container>
 })
