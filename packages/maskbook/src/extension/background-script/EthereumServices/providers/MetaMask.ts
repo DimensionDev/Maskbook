@@ -48,6 +48,7 @@ export function createProvider() {
         provider.off('accountsChanged', onAccountsChanged)
         provider.off('chainChanged', onChainIdChanged)
         provider.off('error', onError)
+        provider.removeAllListeners()
     }
     provider = createMetaMaskProvider()
     if (!provider) throw new Error('Unable to create in page provider.')
