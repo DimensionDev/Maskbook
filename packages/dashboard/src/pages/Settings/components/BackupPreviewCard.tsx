@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
 import { useDashboardI18N } from '../../../locales'
 export interface BackupPreview {
+    identity?: string
     email?: string
     personas: number
     accounts: number
@@ -11,6 +12,7 @@ export interface BackupPreview {
     contacts: number
     files: number
     wallets: number
+    backupTime?: string
 }
 
 const useStyles = makeStyles(() => ({
@@ -19,6 +21,7 @@ const useStyles = makeStyles(() => ({
         minHeight: 205,
         borderRadius: 8,
         background: MaskColorVar.infoBackground,
+        width: '100%',
     },
     item: {
         paddingBottom: 10,
@@ -46,6 +49,7 @@ export default function BackupPreviewCard({ json }: Props) {
         {
             name: t.settings_backup_preview_personas(),
             value: json.personas,
+            sub: true,
         },
         {
             name: t.settings_backup_preview_associated_account(),
@@ -70,6 +74,10 @@ export default function BackupPreviewCard({ json }: Props) {
         {
             name: t.settings_backup_preview_wallets(),
             value: json.wallets,
+        },
+        {
+            name: 'Backup Time',
+            value: json.backupTime,
         },
     ]
 

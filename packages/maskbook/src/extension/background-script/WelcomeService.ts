@@ -1,27 +1,30 @@
-import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
-import { delay } from '../../utils/utils'
+import { encodeText } from '@dimensiondev/kit'
+import { delay } from '@masknet/shared'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey } from '../../database'
 import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Persona.db'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import type { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
+import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/shared'
 import { generateBackupJSON, BackupOptions } from './WelcomeServices/generateBackupJSON'
-import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
+import type { AESJsonWebKey } from '@masknet/shared'
 import { saveAsFileFromBuffer } from './HelperService'
 import type { DashboardRoute } from '../options-page/Route'
 export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
 export * from './WelcomeServices/restoreBackup'
 import {
     BackupJSONFileLatest,
+    decompressBackupFileForV3,
     getBackupPreviewInfo,
-    UpgradeBackupJSONFile,
-} from '../../utils/type-transform/BackupFormat/JSON/latest'
+    UpgradeBackupJSONFileForV3,
+} from '../../utils'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { decompressBackupFile, extraPermissions, requestPermissions } from '../../utils'
+import { extraPermissions, requestPermissions } from '../../utils'
 import { v4 as uuid } from 'uuid'
 import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
 assertEnvironment(Environment.ManifestBackground)
+
+export type { BackupJSONFileLatest } from '../../utils'
 
 /**
  * Recover new identity by a password and mnemonic words
@@ -104,13 +107,14 @@ export async function openOptionsPage(route?: DashboardRoute, search?: string) {
 }
 
 export { createPersonaByMnemonic } from '../../database'
+export { decompressBackupFile, decompressBackupFileForV3 } from '../../utils'
 
-export function parseBackupStr(str: string) {
-    const json = UpgradeBackupJSONFile(decompressBackupFile(str))
+export function parseBackupStr(str: string, identifier?: string) {
+    const json = UpgradeBackupJSONFileForV3(decompressBackupFileForV3(str), undefined, identifier)
     if (json) {
         const info = getBackupPreviewInfo(json)
         const id = uuid()
-        setUnconfirmedBackup(id, json)
+        setUnconfirmedBackup(id, json as unknown as BackupJSONFileLatest)
         return { info, id }
     } else {
         return null

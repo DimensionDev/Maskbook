@@ -22,7 +22,7 @@ export const ControlContainer = styled('div')(
     grid-template-columns: repeat(2, 180px);
     gap: 24px;
     /* TODO: mobile */
-    width: 584px;
+    max-width: 584px;
 `,
 )
 
