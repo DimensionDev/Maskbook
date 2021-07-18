@@ -1,32 +1,56 @@
 import { memo } from 'react'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { Button, Typography } from '@material-ui/core'
+import { MaskColorVar } from '@masknet/theme'
 
 const HeaderContainer = styled('div')(
     ({ theme }) => `
-    flex: 2;
+    flex: 1;
+    width: 78%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;`,
+)
+
+const TitleContainer = styled('div')(
+    ({ theme }) => `
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 78%;
 `,
 )
 
-export interface HeaderUIProps {
+const Subtitle = styled(Typography)(
+    ({ theme }) => `
+    padding-top: 30px;
+`,
+)
+
+const Action = styled(Button)(
+    ({ theme }) => `
+    color: ${theme.palette.mode === 'dark' ? MaskColorVar.textPrimary : MaskColorVar.primary}
+`,
+)
+
+export interface HeaderProps {
     title: string
+    subtitle?: string
     action: {
         name: string
         callback(): void
     }
 }
 
-export const Header = memo(({ title, action }: HeaderUIProps) => {
+export const Header = memo(({ title, subtitle, action }: HeaderProps) => {
     return (
         <HeaderContainer>
-            <Typography variant={'h3'}>{title}</Typography>
-            <Button variant={'text'} onClick={() => action.callback()}>
-                {action.name}
-            </Button>
+            <TitleContainer>
+                <Typography variant={'h3'}>{title}</Typography>
+                <Action variant={'text'} onClick={() => action.callback()}>
+                    {action.name}
+                </Action>
+            </TitleContainer>
+            {subtitle && <Subtitle variant={'h5'}>{subtitle}</Subtitle>}
         </HeaderContainer>
     )
 })

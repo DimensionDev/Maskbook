@@ -36,13 +36,15 @@ export const PersonaCreate = () => {
         onError: () => {
             navigate(`${RoutePaths.SignUp}`)
         },
+        successText: t.create_account_persona_successfully(),
         deps: [],
     })
 
     return (
         <ColumnContentLayout>
             <Header
-                title={t.create_account_identity_title()}
+                title={t.create_account_persona_title()}
+                subtitle={t.create_account_persona_subtitle()}
                 action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.Login) }}
             />
             <Body>

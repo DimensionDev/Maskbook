@@ -43,7 +43,7 @@ export const MnemonicRevealForm = memo(() => {
 
     const onSubmit = async () => {
         if (words.join(' ') !== puzzleWords.join(' ')) {
-            enqueueSnackbar('Faild', { variant: 'error' })
+            enqueueSnackbar(t.create_account_mnemonic_confirm_failed(), { variant: 'error' })
         } else {
             await createIdentity(words.join(' '))
             navigate(`${SignUpRoutePath.PersonaCreate}`, {

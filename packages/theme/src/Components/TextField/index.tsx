@@ -27,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
     },
     input: {
         padding: theme.spacing(1),
-        background: getMaskColor(theme).normalBackground,
+        background:
+            theme.palette.mode === 'dark' ? getMaskColor(theme).lightBackground : getMaskColor(theme).normalBackground,
         fontSize: 12,
         lineHeight: '16px',
     },

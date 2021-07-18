@@ -14,7 +14,7 @@ const Container = styled('div')`
 const WordCard = styled(Typography)(
     ({ theme }) => `
     border-radius: 6px;
-    color: ${MaskColorVar.primary};
+    color: ${theme.palette.mode === 'dark' ? MaskColorVar.textPrimary : MaskColorVar.primary}
     font-size: 14;
     background-color: ${MaskColorVar.blue.alpha(0.1)};
     display: flex;
