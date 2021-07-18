@@ -1,4 +1,5 @@
 import { RefreshIcon } from '@masknet/icons'
+import { DarkColor } from '@masknet/theme/constants'
 import { formatBalance, usePooltogetherConstants } from '@masknet/web3-shared'
 import {
     Card,
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
         borderBottom: `solid 1px ${theme.palette.divider}`,
         width: '100%',
         minHeight: 'unset',
+        color: DarkColor.textPrimary,
     },
     tab: {
         minHeight: 'unset',
@@ -160,7 +162,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
 
     if (_pools.length === 0 && !maskPool) {
         return (
-            <Typography className={classes.message} color="textPrimary">
+            <Typography className={classes.message} color={DarkColor.textPrimary}>
                 {t('plugin_pooltogether_no_pool')}
             </Typography>
         )
@@ -187,7 +189,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                 <Tabs
                     className={classes.tabs}
                     indicatorColor="primary"
-                    textColor="primary"
+                    textColor="inherit"
                     variant="fullWidth"
                     value={tabIndex}
                     onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
@@ -204,11 +206,10 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                 </Paper>
             </CardContent>
             <CardActions className={classes.footer}>
-                <Typography className={classes.footnote} variant="subtitle2">
+                <Typography color={DarkColor.textSecondary} className={classes.footnote} variant="subtitle2">
                     <span>{t('plugin_powered_by')} </span>
                     <Link
                         className={classes.footLink}
-                        color="textSecondary"
                         target="_blank"
                         rel="noopener noreferrer"
                         title="Mask"
@@ -216,12 +217,11 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                         <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
                     </Link>
                 </Typography>
-                <Typography className={classes.footnote} variant="subtitle2">
+                <Typography className={classes.footnote} color={DarkColor.textSecondary} variant="subtitle2">
                     <span>Supported by</span>
                     <Link
                         className={classes.footLink}
                         target="_blank"
-                        color="textSecondary"
                         rel="noopener noreferrer"
                         title="PoolTogether"
                         href="https://pooltogether.com/">

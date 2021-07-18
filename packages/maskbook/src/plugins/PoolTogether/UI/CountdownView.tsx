@@ -5,6 +5,7 @@ import { Box, Grid, makeStyles, Typography } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useInterval } from 'react-use'
 import { ONE_SECOND } from '../constants'
+import { DarkColor } from '@masknet/theme/constants'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -62,7 +63,7 @@ export const CountdownView = (props: CountdownProps) => {
 
     if (secs === 0 || (days === 0 && hours === 0 && minutes === 0 && seconds === 0)) {
         return (
-            <Typography variant="h6" color="textSecondary" className={classes.end}>
+            <Typography variant="h6" color={DarkColor.textSecondary} className={classes.end}>
                 {msgOnEnd}
             </Typography>
         )

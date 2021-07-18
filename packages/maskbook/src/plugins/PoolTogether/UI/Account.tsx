@@ -1,4 +1,5 @@
 import { RefreshIcon } from '@masknet/icons'
+import { DarkColor } from '@masknet/theme/constants'
 import { formatBalance } from '@masknet/web3-shared'
 import { CircularProgress, Grid, Link, makeStyles, Typography } from '@material-ui/core'
 import { useI18N } from '../../../utils'
@@ -33,9 +34,11 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 4),
         borderRadius: theme.spacing(1),
         marginBottom: theme.spacing(1),
+        color: DarkColor.textSecondary,
     },
     noAccountPool: {
         padding: theme.spacing(2, 4),
+        color: DarkColor.textSecondary,
     },
     missingPool: {
         padding: theme.spacing(2, 4),
@@ -89,21 +92,17 @@ export function Account(props: AccountProps) {
         <Grid container direction="column" className={classes.root}>
             {noZeroBalances.length === 0 ? (
                 <Grid item>
-                    <Typography
-                        className={classes.noAccountPool}
-                        color="textSecondary"
-                        variant="h5"
-                        fontWeight="fontWeightBold">
+                    <Typography className={classes.noAccountPool} variant="h5" fontWeight="fontWeightBold">
                         {t('plugin_pooltogether_no_account_pool')}
                     </Typography>
                 </Grid>
             ) : (
                 <>
                     <Grid item className={classes.totalDeposits}>
-                        <Typography color="textSecondary" variant="h5" fontWeight="fontWeightBold">
+                        <Typography variant="h5" fontWeight="fontWeightBold">
                             {t('plugin_pooltogether_my_deposits')}
                         </Typography>
-                        <Typography color="textSecondary" variant="h5" fontWeight="fontWeightBold">
+                        <Typography variant="h5" fontWeight="fontWeightBold">
                             ${totalUsdBalance}
                         </Typography>
                     </Grid>

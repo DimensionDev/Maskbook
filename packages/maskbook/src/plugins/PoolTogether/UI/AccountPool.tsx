@@ -1,5 +1,5 @@
 import { TokenIcon } from '@masknet/shared'
-import { MaskColorVar } from '@masknet/theme'
+import { DarkColor } from '@masknet/theme/constants'
 import { formatBalance, useChainId } from '@masknet/web3-shared'
 import { Grid, Link, makeStyles, Typography } from '@material-ui/core'
 import { PoolTogetherTrophy } from '../../../resources/PoolTogetherIcon'
@@ -85,10 +85,10 @@ const useStyles = makeStyles((theme) => ({
     },
     countdownDigit: {
         backgroundColor: 'transparent',
-        color: MaskColorVar.textSecondary,
+        color: DarkColor.textSecondary,
     },
     countdownSeperator: {
-        color: MaskColorVar.textSecondary,
+        color: DarkColor.textSecondary,
     },
     odds: {
         fontSize: '0.6rem',
@@ -136,20 +136,20 @@ export function AccountPool(props: AccountPoolProps) {
                     <TokenIcon address={token.address} name={token.symbol} />
                 </Grid>
                 <Grid item>
-                    <Typography color="textSecondary" variant="subtitle1" fontWeight="fontWeightBold">
+                    <Typography color={DarkColor.textSecondary} variant="subtitle1" fontWeight="fontWeightBold">
                         {token.symbol}
                     </Typography>
                 </Grid>
             </Grid>
             <Grid container item xs={9} className={classes.info}>
                 <Grid item className={classes.item}>
-                    <Typography color="textSecondary" variant="h5" fontWeight="fontWeightBold">
+                    <Typography color={DarkColor.textSecondary} variant="h5" fontWeight="fontWeightBold">
                         {formatedBalance}
                     </Typography>
-                    <Typography className={classes.odds} color="textSecondary" variant="subtitle2">
+                    <Typography className={classes.odds} color={DarkColor.textSecondary} variant="subtitle2">
                         {t('plugin_pooltogether_winning_odds')}
                     </Typography>
-                    <Typography className={classes.odds} color="textSecondary" variant="subtitle2">
+                    <Typography className={classes.odds} color={DarkColor.textSecondary} variant="subtitle2">
                         {odds
                             ? t('plugin_pooltogether_short_odds_value', {
                                   value: odds,
@@ -162,14 +162,14 @@ export function AccountPool(props: AccountPoolProps) {
                         <PoolTogetherTrophy className={classes.trophy} />
                         <Typography
                             className={classes.prizeAmount}
-                            color="textSecondary"
+                            color={DarkColor.textSecondary}
                             variant="subtitle2"
                             fontWeight="fontWeightBold">
                             {calculateNextPrize(accountPool.pool)}
                         </Typography>
                         <Typography
                             className={classes.in}
-                            color="textSecondary"
+                            color={DarkColor.textSecondary}
                             variant="subtitle2"
                             fontWeight="fontWeightBold">
                             {t('plugin_pooltogether_in')}
