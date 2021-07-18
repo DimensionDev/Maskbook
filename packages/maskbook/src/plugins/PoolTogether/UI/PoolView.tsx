@@ -186,9 +186,6 @@ export function PoolView(props: PoolProps) {
             : 'Custom Period'
 
     const prize = calculateNextPrize(pool)
-    const formatedPrize = prize.toLocaleString(undefined, {
-        maximumFractionDigits: 0,
-    })
     //#endregion
 
     //#region the deposit dialog
@@ -239,7 +236,7 @@ export function PoolView(props: PoolProps) {
                     </Grid>
                     <Grid item>
                         <Typography className={classes.prize} variant="h4" fontWeight="fontWeightBold">
-                            ${formatedPrize}
+                            {prize}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -263,14 +260,14 @@ export function PoolView(props: PoolProps) {
                 </Grid>
                 <Grid item>
                     <Button className={classes.deposit} variant="contained" fullWidth size="small" onClick={onDeposit}>
-                        {t('plugin_pooltogether_deposit', { token: pool.tokens.underlyingToken.symbol })}
+                        {t('plugin_pooltogether_deposit', { token: token.symbol })}
                     </Button>
                 </Grid>
                 <Grid container item className={classes.info}>
-                    {pool.tokenFaucets.length !== 0 &&
-                    !!pool.tokens.tokenFaucetDripTokens &&
-                    pool.tokens.tokenFaucetDripTokens?.length !== 0 ? (
-                        <Grid item>
+                    <Grid item>
+                        {pool.tokenFaucets.length !== 0 &&
+                        !!pool.tokens.tokenFaucetDripTokens &&
+                        pool.tokens.tokenFaucetDripTokens?.length !== 0 ? (
                             <Typography className={classes.apr} fontSize="0.7rem" variant="subtitle2">
                                 <TokenIcon
                                     address={pool.tokens.tokenFaucetDripTokens[0].address}
@@ -282,8 +279,8 @@ export function PoolView(props: PoolProps) {
                                     token: pool.tokens.tokenFaucetDripTokens[0].symbol,
                                 })}
                             </Typography>
-                        </Grid>
-                    ) : null}
+                        ) : null}
+                    </Grid>
                     <Grid item>
                         <a className={classes.viewPool} target="_blank" rel="noopener noreferrer" href={poolURL}>
                             <Typography fontSize="0.7rem" variant="subtitle2">

@@ -55,9 +55,12 @@ const useStyles = makeStyles((theme) => ({
         margin: 'auto',
     },
     prizeAmount: {
+        margin: 'auto',
         marginRight: theme.spacing(0.5),
+        textAlign: 'center',
     },
     in: {
+        margin: 'auto',
         marginRight: theme.spacing(0.5),
     },
     manage: {
@@ -160,12 +163,9 @@ export function AccountPool(props: AccountPoolProps) {
                         <Typography
                             className={classes.prizeAmount}
                             color="textSecondary"
-                            variant="h6"
+                            variant="subtitle2"
                             fontWeight="fontWeightBold">
-                            $
-                            {calculateNextPrize(accountPool.pool).toLocaleString(undefined, {
-                                maximumFractionDigits: 0,
-                            })}
+                            {calculateNextPrize(accountPool.pool)}
                         </Typography>
                         <Typography
                             className={classes.in}

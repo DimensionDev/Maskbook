@@ -9,6 +9,7 @@ import Trader from '@masknet/web3-constants/data/trader.json'
 import Trending from '@masknet/web3-constants/data/trending.json'
 import URL from '@masknet/web3-constants/data/url.json'
 import RPC from '@masknet/web3-constants/data/rpc.json'
+import Pooltogether from '@masknet/web3-constants/data/pooltogether.json'
 import TokenAssetBaseURL from '@masknet/web3-constants/data/token-asset-base-url.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
@@ -47,6 +48,9 @@ export const useRPCConstants = hookTransform(getRPCConstants)
 
 export const getTokenAssetBaseURLConstants = transform(TokenAssetBaseURL)
 export const useTokenAssetBaseURLConstants = hookTransform(getTokenAssetBaseURLConstants)
+
+export const getPooltogetherConstants = transform(Pooltogether)
+export const usePooltogetherConstants = hookTransform(getPooltogetherConstants)
 
 // for estimate gas
 export const FAKE_SIGN_PASSWORD = '0x75466cc969717b172b14253aaeebdc958f2b5037a852c1337650ed4978242dd9'

@@ -1,16 +1,21 @@
-import { useChainDetailed } from '@masknet/web3-shared'
-import { APP_URL } from '../constants'
+import { ChainId, useChainId } from '@masknet/web3-shared'
+import { APP_URL, COMMINUTY_URL } from '../constants'
 import type { Pool } from '../types'
 
 export function usePoolURL(pool: Pool) {
-    const chainDetail = useChainDetailed()
-    return new URL(`/pools/${chainDetail?.fullName ?? ''.toLowerCase()}/${pool.symbol}`, APP_URL).toString()
+    const chainId = useChainId()
+    const chainName = (ChainId[chainId] as keyof typeof ChainId).toLowerCase()
+
+    return pool.isCommunityPool
+        ? new URL(`/pools/${chainName}/${pool.address}`, COMMINUTY_URL).toString()
+        : new URL(`/pools/${chainName}/${pool.symbol}`, APP_URL).toString()
 }
 
 export function useManagePoolURL(pool: Pool) {
-    const chainDetail = useChainDetailed()
-    return new URL(
-        `/account/pools/${chainDetail?.fullName ?? ''.toLowerCase()}/${pool.symbol}/manage-tickets`,
-        APP_URL,
-    ).toString()
+    const chainId = useChainId()
+    const chainName = (ChainId[chainId] as keyof typeof ChainId).toLowerCase()
+
+    return pool.isCommunityPool
+        ? new URL(`/pools/${chainName}/${pool.address}/home`, COMMINUTY_URL).toString()
+        : new URL(`/account/pools/${chainName}/${pool.symbol}/manage-tickets`, APP_URL).toString()
 }

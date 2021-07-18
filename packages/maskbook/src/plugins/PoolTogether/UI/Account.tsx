@@ -79,6 +79,7 @@ export function Account(props: AccountProps) {
                 formatBalance(balance.account.ticketBalance, Number.parseInt(balance.pool.tokens.ticket.decimals, 10)),
             )
             const ticketUsdRate = balance.pool.tokens.ticket.usd
+            if (!ticketUsdRate) return 0
             return ticketBalance * ticketUsdRate
         })
         .reduce((x, y) => x + y, 0)

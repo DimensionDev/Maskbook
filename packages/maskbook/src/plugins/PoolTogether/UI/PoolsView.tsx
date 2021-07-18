@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface PoolsProps {
-    pools: [Pool]
+    pools: Pool[]
 }
 
 export function PoolsView(props: PoolsProps) {

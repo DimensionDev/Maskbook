@@ -57,10 +57,20 @@ export const calculateOdds = (usersTicketBalance: number, totalSupply: number, n
 }
 
 export const calculateNextPrize = (pool: Pool) => {
-    return (
+    const rawPrize =
         Number.parseInt(pool.prize.weeklyTotalValueUsd, 10) /
         (ONE_WEEK_SECONDS / Number.parseInt(pool.config.prizePeriodSeconds, 10))
-    )
+
+    let formatedPrize
+    if (!isNaN(rawPrize)) {
+        formatedPrize = `\$${rawPrize.toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+    } else {
+        const pirzeAmount = Number.parseFloat(pool.prize.amount)
+        formatedPrize = `${pirzeAmount.toLocaleString(undefined, {
+            maximumFractionDigits: pirzeAmount >= 10 ? 0 : 2,
+        })} ${pool.tokens.underlyingToken.symbol}`
+    }
+    return formatedPrize
 }
 
 export const calculateSecondsRemaining = (pool: Pool) => {
