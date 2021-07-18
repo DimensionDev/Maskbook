@@ -1,5 +1,5 @@
+import { MaskBannerIcon } from '@masknet/icons'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
-import { MaskNotSquareIcon } from '@masknet/icons'
 import { memo } from 'react'
 
 const Container = styled('div')(
@@ -14,7 +14,8 @@ const Container = styled('div')(
 const LeftSide = styled('div')(
     ({ theme }) => `
     width: 30%;
-    background: ${theme.palette.mode === 'dark' ? theme.palette.text : theme.palette.primary.main};
+    padding: 40px;
+    background: ${theme.palette.primary.main};
 `,
 )
 
@@ -31,7 +32,7 @@ export const RowLayout = memo(({ children }: RowLayoutProps) => {
     return (
         <Container>
             <LeftSide>
-                <MaskNotSquareIcon />
+                <MaskBannerIcon />
             </LeftSide>
             <RightContent>{children}</RightContent>
         </Container>
