@@ -222,8 +222,6 @@
             "symbol": "ARETH",
             "decimals": 18
         },
-        "rpc": ["https://arb-mainnet.g.alchemy.com/v2/M7scY0aL_CowI-JzEmLmhwYDcrHZdTVi"],
-        "rpcWeights": [0, 0, 0, 0],
         "faucets": [],
         "explorers": [
             {
@@ -247,8 +245,6 @@
             "symbol": "ARETH",
             "decimals": 18
         },
-        "rpc": ["https://arb-mainnet.g.alchemy.com/v2/M7scY0aL_CowI-JzEmLmhwYDcrHZdTVi"],
-        "rpcWeights": [0, 0, 0, 0],
         "faucets": [],
         "explorers": [
             {
