@@ -122,11 +122,11 @@ export function AccountPool(props: AccountPoolProps) {
         Number.parseInt(accountPool.pool.tokens.ticket.decimals, 10),
     )
     const formattedBalance = Number.parseFloat(balance).toLocaleString(undefined, {
-        maximumFractionDigits: 6
+        maximumFractionDigits: 6,
     })
 
     const odds = calculateOdds(
-        Number.parseFloat(formatedBalance),
+        Number.parseFloat(formattedBalance),
         Number.parseFloat(accountPool.pool.tokens.ticket.totalSupply),
         Number.parseInt(accountPool.pool.config.numberOfWinners, 10),
     )
@@ -146,7 +146,7 @@ export function AccountPool(props: AccountPoolProps) {
             <Grid container item xs={9} className={classes.info}>
                 <Grid item className={classes.item}>
                     <Typography color={DarkColor.textSecondary} variant="h5" fontWeight="fontWeightBold">
-                        {formatedBalance}
+                        {formattedBalance}
                     </Typography>
                     <Typography className={classes.odds} color={DarkColor.textSecondary} variant="subtitle2">
                         {t('plugin_pooltogether_winning_odds')}
