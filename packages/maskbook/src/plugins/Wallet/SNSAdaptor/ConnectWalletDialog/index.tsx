@@ -93,10 +93,11 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             if (!account || !networkType) throw new Error(`Failed to connect ${resolveProviderName(providerType)}.`)
 
             // need to switch chain
-            if (chainId !== Number.parseInt(chainDetailedCAIP.chainId, 16)) {
+            const expectedChainId = Number.parseInt(chainDetailedCAIP.chainId, 16)
+            if (chainId !== expectedChainId) {
                 try {
                     const overrides = {
-                        chainId,
+                        chainId: expectedChainId,
                         providerType,
                     }
                     await Promise.race([
