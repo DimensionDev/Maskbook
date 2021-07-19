@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { parseSeconds } from '../utils'
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useInterval } from 'react-use'
 import { ONE_SECOND } from '../constants'
 import { DarkColor } from '@masknet/theme/constants'
+import { intervalToDuration } from 'date-fns'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -56,7 +56,7 @@ export const CountdownView = (props: CountdownProps) => {
         setSecs(secs - 1)
     }, ONE_SECOND)
 
-    const { days, hours, minutes, seconds } = parseSeconds(secs)
+    const { days, hours, minutes, seconds } = intervalToDuration({ start: 0, end: secs * 1000 })
 
     if (secs === 0 || (days === 0 && hours === 0 && minutes === 0 && seconds === 0)) {
         return (
@@ -66,10 +66,10 @@ export const CountdownView = (props: CountdownProps) => {
         )
     }
 
-    const daysArray = days.toString().split('')
-    const hoursArray = hours.toString().split('')
-    const minutesArray = minutes.toString().split('')
-    const secondsArray = seconds.toString().split('')
+    const daysArray = days?.toString().split('') ?? [0, 0]
+    const hoursArray = hours?.toString().split('') ?? [0, 0]
+    const minutesArray = minutes?.toString().split('') ?? [0, 0]
+    const secondsArray = seconds?.toString().split('') ?? [0, 0]
 
     // 86400 seconds = 1 day
     // 3600 seconds = 1 hour
