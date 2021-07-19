@@ -10,7 +10,7 @@ importers:
     specifiers:
       '@commitlint/cli': ^12.1.4
       '@commitlint/config-conventional': ^12.1.4
-      '@dimensiondev/patch-package': ^6.2.2
+      '@dimensiondev/patch-package': ^6.4.7
       '@emotion/cache': ^11.4.0
       '@emotion/react': ^11.4.0
       '@emotion/styled': ^11.3.0
@@ -68,7 +68,7 @@ importers:
     devDependencies:
       '@commitlint/cli': 12.1.4
       '@commitlint/config-conventional': 12.1.4
-      '@dimensiondev/patch-package': 6.2.2
+      '@dimensiondev/patch-package': 6.4.7
       '@magic-works/commonjs-import.meta': 1.0.1_typescript@4.3.5
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.3.5
       '@masknet/cli': link:packages/cli
@@ -3778,18 +3778,19 @@ packages:
       extension-port-stream: 1.0.0
     dev: false
 
-  /@dimensiondev/patch-package/6.2.2:
-    resolution: {integrity: sha512-mX4FY83FBliYHZawN2ZH7/hKebl8XtN4x7K6XG+cM7p7HybmjBWUWVmC81HebIKIkiaJ1/9fUyYPepLfcOVckw==, tarball: download/@dimensiondev/patch-package/6.2.2/cd37cf7ba615172f357b9d16340d2f03a83d42b582fda75d085fc1c136fd1060}
+  /@dimensiondev/patch-package/6.4.7:
+    resolution: {integrity: sha512-HPH5R5sDqd+NLf/NK2u/H5ENdFDFbFUYz4CJh2c4H1Y1oRdDUh6HgMhgpVfCM9TykWlG98fP704i8tEZfLjPcg==, tarball: download/@dimensiondev/patch-package/6.4.7/f4926fc70b7e2eaebecb37fecf835ab156f902bbf7b81f0007573aa94c4f1bfd}
     hasBin: true
     dependencies:
       '@yarnpkg/lockfile': 1.1.0
       chalk: 2.4.2
       cross-spawn: 6.0.5
-      find-yarn-workspace-root: 1.2.1
+      find-yarn-workspace-root: 2.0.0
       fs-extra: 7.0.1
       is-ci: 2.0.0
       klaw-sync: 6.0.0
       minimist: 1.2.5
+      open: 7.4.2
       rimraf: 2.7.1
       semver: 5.7.1
       slash: 2.0.0
@@ -14829,11 +14830,10 @@ packages:
       semver-regex: 1.0.0
     dev: false
 
-  /find-yarn-workspace-root/1.2.1:
-    resolution: {integrity: sha512-dVtfb0WuQG+8Ag2uWkbG79hOUzEsRrhBzgfn86g2sJPkzmcpGdghbNTfUKGTxymFrY/tLIodDzLoW9nOJ4FY8Q==}
+  /find-yarn-workspace-root/2.0.0:
+    resolution: {integrity: sha512-1IMnbjt4KzsQfnhnzNd8wUEgXZ44IzZaZmnLYx7D5FZlaHt2gW20Cri8Q+E/t5tIj4+epTBub+2Zxu/vNILzqQ==}
     dependencies:
-      fs-extra: 4.0.3
-      micromatch: 3.1.10
+      micromatch: 4.0.4
     dev: true
 
   /findup-sync/2.0.0:
@@ -15037,6 +15037,7 @@ packages:
       graceful-fs: 4.2.6
       jsonfile: 4.0.0
       universalify: 0.1.2
+    dev: false
 
   /fs-extra/7.0.1:
     resolution: {integrity: sha512-YJDaCJZEnBmcbw13fvdAM9AwNOJwOzrE4pqMqBq5nFiEqXUqHwlK4B+3pUw6JNvfSPtX05xFHtYy/1ni01eGCw==}
