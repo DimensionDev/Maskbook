@@ -40,8 +40,8 @@ export const useTraderConstants = hookTransform(getTraderConstants)
 export const getTrendingConstants = transform(Trending)
 export const useTrendingConstants = hookTransform(getTrendingConstants)
 
-export const getURLConstants = transform(URL)
-export const useURLConstants = hookTransform(getURLConstants)
+export const getDHedgeConstants = transform(URL)
+export const useDHedgeConstants = hookTransform(getDHedgeConstants)
 
 export const getRPCConstants = transformFromJSON(process.env.WEB3_CONSTANTS_RPC ?? '', RPC)
 export const useRPCConstants = hookTransform(getRPCConstants)

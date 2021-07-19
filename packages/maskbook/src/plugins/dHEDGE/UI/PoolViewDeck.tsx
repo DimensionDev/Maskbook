@@ -1,16 +1,15 @@
-import { FungibleTokenDetailed, resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared'
-import { Avatar, Button, Chip, Grid, Link, makeStyles, Typography } from '@material-ui/core'
+import { resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared'
+import { Avatar, Button, Grid, Link, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { PluginTraderMessages } from '../../Trader/messages'
-import type { Coin } from '../../Trader/types'
 import { useAvatar } from '../hooks/useManager'
 import { usePoolURL } from '../hooks/useUrl'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -56,11 +55,11 @@ const useStyles = makeStyles((theme) => ({
 
 interface PoolDeckProps {
     pool: Pool
-    inputToken: FungibleTokenDetailed
+    inputTokens: string[]
 }
 
 export function PoolViewDeck(props: PoolDeckProps) {
-    const { pool, inputToken } = props
+    const { pool, inputTokens } = props
 
     const classes = useStyles()
     const { t } = useI18N()
@@ -77,24 +76,6 @@ export function PoolViewDeck(props: PoolDeckProps) {
 
     //#endregion
 
-    //#region Swap
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
-    const openSwap = useCallback(() => {
-        openSwapDialog({
-            open: true,
-            traderProps: {
-                coin: {
-                    id: inputToken.address,
-                    name: inputToken.name ?? '',
-                    symbol: inputToken.symbol ?? '',
-                    contract_address: inputToken.address,
-                    decimals: inputToken.decimals,
-                } as Coin,
-            },
-        })
-    }, [openSwapDialog])
-    //#endregion
-
     //#region the invest dialog
     const { setDialog: openInvestDialog } = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated)
     const onInvest = useCallback(() => {
@@ -102,7 +83,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
         openInvestDialog({
             open: true,
             pool: pool,
-            token: inputToken,
+            tokens: inputTokens,
         })
     }, [pool, openInvestDialog])
     //#endregion
@@ -114,7 +95,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
                     <Avatar src={blockie} className={classes.avatar} />
                 </Link>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
                 <div className={classes.title}>
                     <Link color="primary" target="_blank" rel="noopener noreferrer" href={poolUrl}>
                         <Typography variant="h6">{pool.name.toUpperCase()}</Typography>
@@ -155,18 +136,12 @@ export function PoolViewDeck(props: PoolDeckProps) {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item alignSelf="right" xs={2}>
-                <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
-                    {t('plugin_dhedge_invest')}
-                </Button>
-                <Chip
-                    className={classes.chip}
-                    label={t('plugin_dhedge_buy_token', { symbol: inputToken.symbol })}
-                    clickable
-                    color="primary"
-                    variant="outlined"
-                    onClick={openSwap}
-                />
+            <Grid item alignSelf="right" xs={4} textAlign="center">
+                <EthereumChainBoundary chainId={pool.chainId}>
+                    <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
+                        {t('plugin_dhedge_invest')}
+                    </Button>
+                </EthereumChainBoundary>
             </Grid>
         </Grid>
     )
