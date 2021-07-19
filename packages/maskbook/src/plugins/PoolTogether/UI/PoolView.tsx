@@ -8,7 +8,7 @@ import { ONE_DAY_SECONDS, ONE_WEEK_SECONDS } from '../constants'
 import { PluginPoolTogetherMessages } from '../messages'
 import { useCallback, useEffect, useState } from 'react'
 import { calculateNextPrize, calculateSecondsRemaining } from '../utils'
-import { NetworkView } from './NetworkVIew'
+import { NetworkView } from './NetworkView'
 import { useI18N } from '../../../utils'
 import { TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
 

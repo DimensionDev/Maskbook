@@ -1,6 +1,6 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/constants'
-import { usePooltogetherConstants } from '@masknet/web3-shared'
+import { usePoolTogetherConstants } from '@masknet/web3-shared'
 import {
     Card,
     CardActions,
@@ -126,7 +126,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     //#endregion
 
     //#region mask pool
-    const { MASK_POOL_ADDRESS, MASK_POOL_SUBGRAPH } = usePooltogetherConstants()
+    const { MASK_POOL_ADDRESS, MASK_POOL_SUBGRAPH } = usePoolTogetherConstants()
     const {
         value: maskPool,
         error: errorMask,

@@ -8,7 +8,7 @@ import { useManagePoolURL } from '../hooks/usePoolURL'
 import type { AccountPool } from '../types'
 import { calculateNextPrize, calculateOdds, calculateSecondsRemaining } from '../utils'
 import { CountdownView } from './CountdownView'
-import { NetworkView } from './NetworkVIew'
+import { NetworkView } from './NetworkView'
 
 const useStyles = makeStyles((theme) => ({
     root: {

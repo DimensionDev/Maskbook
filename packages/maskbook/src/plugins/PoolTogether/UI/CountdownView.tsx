@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import addSeconds from 'date-fns/addSeconds'
-import { subtractDates } from '../utils'
+import { parseSeconds } from '../utils'
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useInterval } from 'react-use'
@@ -57,9 +56,7 @@ export const CountdownView = (props: CountdownProps) => {
         setSecs(secs - 1)
     }, ONE_SECOND)
 
-    const currentDate = new Date()
-    const futureDate = addSeconds(currentDate, secs)
-    const { days, hours, minutes, seconds } = subtractDates(futureDate, currentDate)
+    const { days, hours, minutes, seconds } = parseSeconds(secs)
 
     if (secs === 0 || (days === 0 && hours === 0 && minutes === 0 && seconds === 0)) {
         return (

@@ -2,35 +2,35 @@ import { ChainId } from '@masknet/web3-shared'
 import { ONE_SECOND, ONE_WEEK_SECONDS } from './constants'
 import type { Pool } from './types'
 
-export const subtractDates = (dateA: Date, dateB: Date) => {
-    // https://github.com/pooltogether/pooltogether-community-ui/blob/master/lib/utils/subtractDates.js
-
-    let msA = dateA.getTime()
-    let msB = dateB.getTime()
-
-    let diff = msA - msB
+/**
+ * Converts seconds to days, hours, minutes, seconds
+ * @param totalSeconds
+ * @return {days,hours,minutes,seconds}
+ **/
+export const parseSeconds = (totalSeconds: number) => {
+    let secs = totalSeconds
 
     let days = 0
-    if (diff >= 86400000) {
-        days = Math.floor(diff / 86400000)
-        diff -= days * 86400000
+    if (secs >= 86400) {
+        days = Math.floor(secs / 86400)
+        secs -= days * 86400
     }
 
     let hours = 0
-    if (days || diff >= 3600000) {
-        hours = Math.floor(diff / 3600000)
-        diff -= hours * 3600000
+    if (days || secs >= 3600) {
+        hours = Math.floor(secs / 3600)
+        secs -= hours * 3600
     }
 
     let minutes = 0
-    if (hours || diff >= 60000) {
-        minutes = Math.floor(diff / 60000)
-        diff -= minutes * 60000
+    if (hours || secs >= 60) {
+        minutes = Math.floor(secs / 60)
+        secs -= minutes * 60
     }
 
     let seconds = 0
-    if (minutes || diff >= 1000) {
-        seconds = Math.floor(diff / 1000)
+    if (minutes || secs >= 1) {
+        seconds = Math.floor(secs / 1)
     }
 
     return {
@@ -42,7 +42,7 @@ export const subtractDates = (dateA: Date, dateB: Date) => {
 }
 
 export const calculateOdds = (usersTicketBalance: number, totalSupply: number, numberOfWinners: number) => {
-    if (usersTicketBalance === 0 || isNaN(usersTicketBalance)) {
+    if (usersTicketBalance === 0 || Number.isNaN(usersTicketBalance)) {
         return undefined
     }
 
@@ -62,7 +62,7 @@ export const calculateNextPrize = (pool: Pool) => {
         (ONE_WEEK_SECONDS / Number.parseInt(pool.config.prizePeriodSeconds, 10))
 
     let formatedPrize
-    if (!isNaN(rawPrize)) {
+    if (!Number.isNaN(rawPrize)) {
         formatedPrize = `\$${rawPrize.toLocaleString(undefined, { maximumFractionDigits: 0 })}`
     } else {
         const pirzeAmount = Number.parseFloat(pool.prize.amount)
@@ -74,11 +74,9 @@ export const calculateNextPrize = (pool: Pool) => {
 }
 
 export const calculateSecondsRemaining = (pool: Pool) => {
-    return (
-        Number.parseInt(pool.prize.prizePeriodStartedAt.hex, 16) +
-        Number.parseInt(pool.prize.prizePeriodSeconds.hex, 16) -
-        new Date().getTime() / ONE_SECOND
-    )
+    const startedAt = Number.parseInt(pool.prize.prizePeriodStartedAt.hex, 16)
+    const seconds = Number.parseInt(pool.prize.prizePeriodSeconds.hex, 16)
+    return startedAt + seconds - Date.now() / ONE_SECOND
 }
 
 export const getNetworkColor = (chainId: ChainId) => {
@@ -88,7 +86,6 @@ export const getNetworkColor = (chainId: ChainId) => {
         case ChainId.Matic:
             return '#7b41da'
         // add more if needed
-        default:
-            return '#f1f1f1'
     }
+    return '#f1f1f1'
 }
