@@ -8,6 +8,7 @@ import {
     isChainIdValid,
     NetworkType,
     ProviderType,
+    resolveNetworkName,
     useAccount,
     useChainId,
 } from '@masknet/web3-shared'
@@ -58,8 +59,23 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         // request ethereum-compatiable network
         const networkType = getNetworkTypeFromChainId(expectedChainId)
         if (!networkType) return
-        if (networkType === NetworkType.Ethereum) await Services.Ethereum.switchEthereumChain(expectedChainId)
-        else await Services.Ethereum.addEthereumChain(chainDetailedCAIP, account)
+        try {
+            const overrides = {
+                chainId: expectedChainId,
+                providerType,
+            }
+            await Promise.race([
+                (async () => {
+                    await delay(30 /* seconds */ * 1000 /* milliseconds */)
+                    throw new Error('Timeout!')
+                })(),
+                networkType === NetworkType.Ethereum
+                    ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
+                    : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
+            ])
+        } catch (e) {
+            throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
+        }
     }, [account, isAllowed, providerType, expectedChainId])
 
     // matched
