@@ -4,7 +4,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useInterval } from 'react-use'
 import { ONE_SECOND } from '../constants'
 import { DarkColor } from '@masknet/theme/constants'
-import { intervalToDuration } from 'date-fns'
+import intervalToDuration from 'date-fns/intervalToDuration'
 
 const useStyles = makeStyles((theme) => ({
     root: {
