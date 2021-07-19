@@ -72,11 +72,11 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
     const validCheck = () => {
         if (!phone) return
 
-        const isValid = phoneRegexp.test(phone)
+        const isValid = phoneRegexp.test(countryCode + phone)
         setInvalidPhone(!isValid)
     }
 
-    const sendValidationEmail = () => {
+    const sendValidationCode = () => {
         sendCode({
             account: countryCode + phone,
             type: 'phone',
@@ -130,7 +130,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                         <CountdownButton
                             size="medium"
                             sx={{ width: '100px', height: '40px' }}
-                            onClick={sendValidationEmail}>
+                            onClick={sendValidationCode}>
                             {t.settings_button_send()}
                         </CountdownButton>
                     </Box>
