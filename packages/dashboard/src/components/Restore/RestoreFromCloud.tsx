@@ -1,9 +1,10 @@
 import { memo } from 'react'
 import { useDashboardI18N } from '../../locales'
-import { MaskColorVar, MaskTextField } from '@masknet/theme'
+import { MaskColorVar } from '@masknet/theme'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/core'
 import { MaskAlert } from '../MaskAlert'
+import { Code } from './code'
 
 const Container = styled('div')`
     width: 100%;
@@ -33,8 +34,7 @@ export const RestoreFromCloud = memo(() => {
     return (
         <>
             <Container>
-                <MaskTextField label={t.sign_in_account_cloud_backup_email_or_phone_number()} onChange={() => {}} />
-                <MaskTextField label={t.sign_in_account_cloud_backup_password()} onChange={() => {}} />
+                <Code />
             </Container>
             <div className={classes.alter}>
                 <MaskAlert description={t.sign_in_account_cloud_backup_warning()} />

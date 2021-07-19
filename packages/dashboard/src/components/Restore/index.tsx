@@ -15,12 +15,12 @@ const Container = styled('div')`
 
 export const ControlContainer = styled('div')(
     ({ theme }) => `
+    margin: 0 auto;
     margin-top: ${theme.spacing(6)};
     display: grid;
     justify-content: center;
     grid-template-columns: repeat(2, 180px);
     gap: 24px;
-    /* TODO: mobile */
     max-width: 584px;
 `,
 )
@@ -33,7 +33,10 @@ const AlertContainer = styled('div')(
 )
 
 const useStyles = makeStyles((theme) => ({
-    tabs: { width: 582, justifyContent: 'center' },
+    tabs: {
+        width: 582,
+        justifyContent: 'center',
+    },
     panels: {
         display: 'flex',
         flexDirection: 'column',

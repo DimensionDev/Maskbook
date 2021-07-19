@@ -96,16 +96,12 @@ export function upgradeFromBackupJSONFileVersion2(
     json: BackupJSONFileVersion2,
     identifier: string,
 ): BackupJSONFileVersion3 {
-    console.log(json)
     const personas: BackupJSONFileVersion2['personas'] = json.personas
     const profiles: BackupJSONFileVersion2['profiles'] = json.profiles
     const userGroups: BackupJSONFileVersion2['userGroups'] = []
 
     const getIdentityByPersonaIdentifier = (id: string) => {
-        console.log(personas)
-        console.log(identifier)
         const persona = personas.find((x) => x.identifier === id)!
-        console.log(persona)
         return {
             identifier: identifier,
             mnemonic: persona.mnemonic,
