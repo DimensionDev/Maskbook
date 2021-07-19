@@ -117,10 +117,12 @@ export function AccountPool(props: AccountPoolProps) {
     const poolURL = useManagePoolURL(accountPool.pool)
     const chainId = useChainId()
 
-    const formatedBalance = Number.parseFloat(
-        formatBalance(accountPool.account.ticketBalance, Number.parseInt(accountPool.pool.tokens.ticket.decimals, 10)),
-    ).toLocaleString(undefined, {
-        maximumFractionDigits: 6,
+    const balance = formatBalance(
+        accountPool.account.ticketBalance,
+        Number.parseInt(accountPool.pool.tokens.ticket.decimals, 10),
+    )
+    const formattedBalance = Number.parseFloat(balance).toLocaleString(undefined, {
+        maximumFractionDigits: 6
     })
 
     const odds = calculateOdds(
