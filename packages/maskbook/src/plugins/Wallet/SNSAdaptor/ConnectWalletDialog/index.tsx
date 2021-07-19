@@ -53,7 +53,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             if (!networkType) throw new Error('Unknown network type.')
 
             // read the chain detailed from the built-in chain list
-            const chainDetailedCAIP = getChainDetailedCAIP(getChainIdFromNetworkType(networkType))
+            const expectedChainId = getChainIdFromNetworkType(networkType)
+            const chainDetailedCAIP = getChainDetailedCAIP(expectedChainId)
             if (!chainDetailedCAIP) throw new Error('Unknown network type.')
 
             // a short time loading makes the user fells better
@@ -93,7 +94,6 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             if (!account || !networkType) throw new Error(`Failed to connect ${resolveProviderName(providerType)}.`)
 
             // need to switch chain
-            const expectedChainId = Number.parseInt(chainDetailedCAIP.chainId, 16)
             if (chainId !== expectedChainId) {
                 try {
                     const overrides = {
@@ -117,6 +117,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             // update account
             await WalletRPC.updateAccount({
                 account,
+                chainId: expectedChainId,
                 providerType,
                 networkType,
             })

@@ -20,6 +20,7 @@ async function onAccountsChanged(accounts: string[]) {
         account: first(accounts),
         chainId: typeof provider?.chainId === 'string' ? Number.parseInt(provider.chainId, 16) : undefined,
         providerType: ProviderType.MetaMask,
+        networkType: undefined,
     })
 }
 

@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { ProviderType, useWallets, useWallet, NetworkType, ChainId } from '@masknet/web3-shared'
+import { ProviderType, useWallets, useWallet, NetworkType } from '@masknet/web3-shared'
 import { delay, useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -42,7 +42,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
             closeDialog()
             await WalletRPC.updateAccount({
                 account: address,
-                chainId: ChainId.Mainnet,
+                chainId: undefined,
                 providerType: ProviderType.Maskbook,
                 networkType,
             })

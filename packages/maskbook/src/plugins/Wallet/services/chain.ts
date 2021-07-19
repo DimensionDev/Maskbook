@@ -18,18 +18,12 @@ export async function kickToUpdateChainState() {
     beats.push(true)
 }
 
-export async function updateChainState(chainId?: ChainId) {
+export async function updateChainState() {
     // reset the polling task cause it will be called from service call
     resetPoolTask()
 
     // forget those passed beats
     beats.length = 0
-
-    // update network type
-    if (chainId)
-        await updateAccount({
-            chainId,
-        })
 
     // update chain state
     try {
@@ -68,8 +62,8 @@ effect(() => {
 
 // revalidate chain state if the chainId of current provider was changed
 effect(() =>
-    currentChainIdSettings.addListener((chainId) => {
-        updateChainState(chainId)
+    currentChainIdSettings.addListener(() => {
+        updateChainState()
         if (currentProviderSettings.value === ProviderType.Maskbook) resetAllNonce()
     }),
 )

@@ -103,6 +103,7 @@ const onUpdate = async (
         account: first(connector.accounts),
         chainId: connector.chainId,
         providerType: ProviderType.WalletConnect,
+        networkType: undefined,
     })
 }
 
