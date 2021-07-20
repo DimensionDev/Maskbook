@@ -13,6 +13,7 @@
   "dependencies": {
     "@dimensiondev/holoflows-kit": "=0.8.0-20210429202414-74fb9a1",
     "@dimensiondev/kit": "=0.0.0-20210630045432-e05621c",
+    "@hookform/resolvers": "^2.6.0",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-example": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
@@ -29,12 +30,14 @@
     "history": "^5.0.0",
     "json-stable-stringify": "^1.0.1",
     "lodash-es": "^4.17.21",
+    "react-hook-form": "^7.10.1",
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-use": "^17.2.4",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.5.1",
-    "wallet.ts": "^1.0.1"
+    "wallet.ts": "^1.0.1",
+    "zod": "^3.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",

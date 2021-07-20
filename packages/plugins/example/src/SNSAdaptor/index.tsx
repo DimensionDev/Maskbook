@@ -11,10 +11,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
     // SearchBoxComponent: HelloWorld,
     // DecryptedInspector: HelloWorld,
     // GlobalInjection: GlobalComponent,
-    // CompositionDialogEntry: {
-    //     label: '🤔 Example',
-    //     onClick: () => alert('It works ™!'),
-    // },
+    CompositionDialogEntry: {
+        label: { i18nKey: '__entry__', fallback: '🤔 Example' },
+        onClick: () => alert('It works ™!'),
+    },
     // CompositionDialogEntry: {
     //     label: '🤣 Example Dialog',
     //     dialog: PluginDialog,

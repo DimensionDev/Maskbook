@@ -7,8 +7,8 @@
         "Gorli": ["https://goerli.infura.io/v3/d65858b010d249419cf8687eca12b094"],
         "BSC": ["https://bsc-dataseed.binance.org/"],
         "BSCT": ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-        "Matic": ["https://polygon-mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
-        "Mumbai": ["https://polygon-mumbai.infura.io/v3/d65858b010d249419cf8687eca12b094"]
+        "Matic": ["https://matic-mainnet--jsonrpc.datahub.figment.io/apikey/ade4322bac48ecb3fad64b13105b5e65/"],
+        "Mumbai": ["https://matic-mumbai--jsonrpc.datahub.figment.io/apikey/ade4322bac48ecb3fad64b13105b5e65/"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 0, 0, 0],

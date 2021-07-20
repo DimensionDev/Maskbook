@@ -2,7 +2,7 @@ import { useContext, createContext } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
 import type { Web3ProviderType } from './type'
-import { getChainDetailed } from '../utils'
+import { getChainDetailed, isChainIdValid } from '../utils'
 
 export type { Web3ProviderType } from './type'
 
@@ -46,7 +46,7 @@ export function useWeb3State() {
         erc20Tokens,
         erc20TokensCount,
         portfolioProvider,
-        chainIdValid: !account || !!(allowTestnet && chainDetailed) || chainDetailed?.network === 'mainnet',
+        chainIdValid: !account || isChainIdValid(chainId, allowTestnet),
     }
 }
 

@@ -10,6 +10,7 @@ importers:
     specifiers:
       '@commitlint/cli': ^12.1.4
       '@commitlint/config-conventional': ^12.1.4
+      '@dimensiondev/patch-package': ^6.4.7
       '@emotion/cache': ^11.4.0
       '@emotion/react': ^11.4.0
       '@emotion/styled': ^11.3.0
@@ -38,10 +39,8 @@ importers:
       idb: 5.0.8
       jss: 10.5.1
       lint-staged: ^11.0.0
-      notistack: 1.0.9
       npm-run-all: ^4.1.5
       only-allow: ^1.0.0
-      patch-package: ./patches/patch-package-6.4.7.tgz
       prettier: ^2.3.2
       react: '=18.0.0-alpha-aecb3b6d1'
       react-dom: '=18.0.0-alpha-aecb3b6d1'
@@ -63,13 +62,13 @@ importers:
       i18next: 20.3.2
       idb: 5.0.8
       jss: 10.5.1
-      notistack: 1.0.9_132ff92e0fd7328580f6380de259b809
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       react-i18next: 11.11.1_44b15288743ca8758b7bd6a3c957a6b2
     devDependencies:
       '@commitlint/cli': 12.1.4
       '@commitlint/config-conventional': 12.1.4
+      '@dimensiondev/patch-package': 6.4.7
       '@magic-works/commonjs-import.meta': 1.0.1_typescript@4.3.5
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.3.5
       '@masknet/cli': link:packages/cli
@@ -87,7 +86,6 @@ importers:
       lint-staged: 11.0.0
       npm-run-all: 4.1.5
       only-allow: 1.0.0
-      patch-package: file:patches/patch-package-6.4.7.tgz
       prettier: 2.3.2
       ts-node: 10.1.0_typescript@4.3.5
       ttypescript: 1.5.12_ts-node@10.1.0+typescript@4.3.5
@@ -121,6 +119,7 @@ importers:
       '@babel/core': ^7.14.6
       '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
       '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
+      '@hookform/resolvers': ^2.6.0
       '@masknet/icons': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-infra': workspace:*
@@ -147,6 +146,7 @@ importers:
       history: ^5.0.0
       json-stable-stringify: ^1.0.1
       lodash-es: ^4.17.21
+      react-hook-form: ^7.10.1
       react-router: ^6.0.0-beta.0
       react-router-dom: ^6.0.0-beta.0
       react-use: ^17.2.4
@@ -154,9 +154,11 @@ importers:
       unstated-next: ^1.1.0
       use-subscription: ^1.5.1
       wallet.ts: ^1.0.1
+      zod: ^3.5.1
     dependencies:
       '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1
       '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
+      '@hookform/resolvers': 2.6.0_react-hook-form@7.10.1
       '@masknet/icons': link:../icons
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-infra': link:../plugin-infra
@@ -173,12 +175,14 @@ importers:
       history: 5.0.0
       json-stable-stringify: 1.0.1
       lodash-es: 4.17.21
+      react-hook-form: 7.10.1_react@18.0.0-alpha-aecb3b6d1
       react-router: 6.0.0-beta.0_dd3df4049b9a65e1e2d003c7940c4871
       react-router-dom: 6.0.0-beta.0_66263521e705c985f663eeac15167a50
       react-use: 17.2.4_f991c289939c8299bed5e4a6a5a79a62
       unstated-next: 1.1.0
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
       wallet.ts: 1.0.1
+      zod: 3.5.1
     devDependencies:
       '@babel/core': 7.14.6
       '@snowpack/plugin-dotenv': 2.1.0
@@ -328,7 +332,6 @@ importers:
       promievent: ^0.1.4
       pvtsutils: ^1.0.14
       qrcode: ^1.4.4
-      react-dev-utils: ^11.0.1
       react-devtools-core: ^4.13.5
       react-draggable: ^4.4.3
       react-feather: ^2.0.9
@@ -523,7 +526,6 @@ importers:
       jest-puppeteer: 5.0.4
       jest-webextension-mock: 3.7.17
       openzeppelin-solidity: 3.4.1
-      react-dev-utils: 11.0.4
       react-devtools-core: 4.13.5
       react-refresh: 0.10.0
       react-refresh-typescript: 2.0.2_07d643ea690a1c588819a69f1ef8f0ab
@@ -630,7 +632,7 @@ importers:
       classnames: ^2.3.1
       fuse.js: ^6.4.6
       lodash-es: ^4.17.20
-      notistack: ^1.0.9
+      notistack: 1.0.6-next.1
       react-window: ^1.8.6
       storybook-addon-matrix: ^1.6.0
       tinycolor2: ^1.4.2
@@ -639,7 +641,7 @@ importers:
       classnames: 2.3.1
       fuse.js: 6.4.6
       lodash-es: 4.17.21
-      notistack: 1.0.9_132ff92e0fd7328580f6380de259b809
+      notistack: 1.0.6-next.1_132ff92e0fd7328580f6380de259b809
       react-window: 1.8.6_f991c289939c8299bed5e4a6a5a79a62
       tinycolor2: 1.4.2
     devDependencies:
@@ -723,7 +725,7 @@ packages:
       bintrees: 1.0.2
       bn.js: 4.12.0
       compare-versions: 3.6.0
-      ethereumjs-abi: 0.6.6
+      ethereumjs-abi: 0.6.8
       ethereumjs-blockstream: 2.0.7
       ethereumjs-util: 5.2.1
       find-versions: 2.0.0
@@ -3776,6 +3778,25 @@ packages:
       extension-port-stream: 1.0.0
     dev: false
 
+  /@dimensiondev/patch-package/6.4.7:
+    resolution: {integrity: sha512-HPH5R5sDqd+NLf/NK2u/H5ENdFDFbFUYz4CJh2c4H1Y1oRdDUh6HgMhgpVfCM9TykWlG98fP704i8tEZfLjPcg==, tarball: download/@dimensiondev/patch-package/6.4.7/f4926fc70b7e2eaebecb37fecf835ab156f902bbf7b81f0007573aa94c4f1bfd}
+    hasBin: true
+    dependencies:
+      '@yarnpkg/lockfile': 1.1.0
+      chalk: 2.4.2
+      cross-spawn: 6.0.5
+      find-yarn-workspace-root: 2.0.0
+      fs-extra: 7.0.1
+      is-ci: 2.0.0
+      klaw-sync: 6.0.0
+      minimist: 1.2.5
+      open: 7.4.2
+      rimraf: 2.7.1
+      semver: 5.7.1
+      slash: 2.0.0
+      tmp: 0.0.33
+    dev: true
+
   /@dimensiondev/stego-js/0.11.1-20201027083223-8ab41be:
     resolution: {integrity: sha512-lm49qcX2O40Nn+AGKN6J4qrpPHaffGnvUI3mCh+obyiZxT9H5/vZv1B+SUm2bXq8r2LeLHIeW90x1lpyg1roTQ==, tarball: download/@dimensiondev/stego-js/0.11.1-20201027083223-8ab41be/2d41418365c7ea41e10de432e82b0707c3a3a3b70a20a3733276162eeb6c4bcd}
     hasBin: true
@@ -4151,7 +4172,7 @@ packages:
       '@ethersproject/bignumber': 5.4.0
       '@ethersproject/bytes': 5.4.0
       '@ethersproject/logger': 5.4.0
-      '@ethersproject/networks': 5.4.0
+      '@ethersproject/networks': 5.4.1
       '@ethersproject/properties': 5.4.0
       '@ethersproject/transactions': 5.4.0
       '@ethersproject/web': 5.4.0
@@ -4421,16 +4442,10 @@ packages:
       '@ethersproject/logger': 5.2.0
     dev: false
 
-  /@ethersproject/networks/5.4.0:
-    resolution: {integrity: sha512-5fywtKRDcnaVeA5SjxXH3DOQqe/IbeD/plwydi94SdPps1fbDUrnO6SzDExaruBZXxpxJcO9upG9UComsei4bg==}
-    dependencies:
-      '@ethersproject/logger': 5.4.0
-
   /@ethersproject/networks/5.4.1:
     resolution: {integrity: sha512-8SvowCKz9Uf4xC5DTKI8+il8lWqOr78kmiqAVLYT9lzB8aSmJHQMD1GSuJI0CW4hMAnzocpGpZLgiMdzsNSPig==}
     dependencies:
       '@ethersproject/logger': 5.4.0
-    dev: false
 
   /@ethersproject/properties/5.1.0:
     resolution: {integrity: sha512-519KKTwgmH42AQL3+GFV3SX6khYEfHsvI6v8HYejlkigSDuqttdgVygFTDsGlofNFchhDwuclrxQnD5B0YLNMg==}
@@ -4762,6 +4777,14 @@ packages:
     dependencies:
       '@hapi/hoek': 9.2.0
     dev: true
+
+  /@hookform/resolvers/2.6.0_react-hook-form@7.10.1:
+    resolution: {integrity: sha512-1Pbxjc4HEzATEcRsyDfkEQR/3OWaQwbemW9HTTYH+ZiLF2mzafl5Pn++65gwNnJSGzXUp5LIq3Nz2+Cz4m2U8A==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.10.1_react@18.0.0-alpha-aecb3b6d1
+    dev: false
 
   /@humanwhocodes/config-array/0.5.0:
     resolution: {integrity: sha512-FagtKFz74XrTl7y6HCzQpwDfXP0yhxe9lHLD1UZxjvZIcbyRz8zTFF/yYNfSfzU414eDwZ1SrO0Qvtyf+wFMQg==}
@@ -7576,7 +7599,7 @@ packages:
   /@types/bn.js/5.1.0:
     resolution: {integrity: sha512-QSSVYj7pYFN49kW77o2s9xTCwZ8F2xLbjLLSEVh8D2F4JUhZtPAGOFLTD+ffqksBx/u4cE/KImFjyhqCjn/LIA==}
     dependencies:
-      '@types/node': 16.3.1
+      '@types/node': 16.3.2
     dev: false
 
   /@types/body-parser/1.19.1:
@@ -7829,10 +7852,6 @@ packages:
       '@types/d3-zoom': 1.8.2
     dev: false
 
-  /@types/dashdash/1.14.1:
-    resolution: {integrity: sha512-3UAiw52g6LARDS9I5lpYwUzj/nBuMvor/0BWiza7ibuOIEaNIo+m3whnVBLLj/ue0DzlcX+96c24YdZCuDwOiQ==}
-    dev: true
-
   /@types/dompurify/2.2.2:
     resolution: {integrity: sha512-8nNWfAa8/oZjH3OLY5Wsxu9ueo0NwVUotIi353g0P2+N5BuTLJyAVOnF4xBUY0NyFUGJHY05o1pO2bqLto+lmA==}
     dependencies:
@@ -7843,6 +7862,7 @@ packages:
     resolution: {integrity: sha512-e8iyLJ8vMLpWxXpVWrIt0ujqsfHWgVe5XAz9IMhBYoDirK6th7J+mHjzp797OLc62ZX419nrlwwzsNAA0a0mKg==}
     dependencies:
       '@types/bn.js': 4.11.6
+    dev: false
 
   /@types/enzyme-adapter-react-16/1.0.6:
     resolution: {integrity: sha512-VonDkZ15jzqDWL8mPFIQnnLtjwebuL9YnDkqeCDYnB4IVgwUm0mwKkqhrxLL6mb05xm7qqa3IE95m8CZE9imCg==}
@@ -8173,6 +8193,10 @@ packages:
   /@types/node/16.3.1:
     resolution: {integrity: sha512-N87VuQi7HEeRJkhzovao/JviiqKjDKMVKxKMfUvSKw+MbkbW8R0nA3fi/MQhhlxV2fQ+2ReM+/Nt4efdrJx3zA==}
 
+  /@types/node/16.3.2:
+    resolution: {integrity: sha512-jJs9ErFLP403I+hMLGnqDRWT0RYKSvArxuBVh2veudHV7ifEC1WAmjJADacZ7mRbA2nWgHtn8xyECMAot0SkAw==}
+    dev: false
+
   /@types/node/8.10.66:
     resolution: {integrity: sha512-tktOkFUA4kXx2hhhrB8bIFb5TbwzS4uOhKEmwiD+NoiL0qtP2OQ9mFldbgD4dV1djrlBYP6eBuQZiWjuHUpqFw==}
     dev: false
@@ -8202,7 +8226,7 @@ packages:
   /@types/pbkdf2/3.1.0:
     resolution: {integrity: sha512-Cf63Rv7jCQ0LaL8tNXmEyqTHuIJxRdlS5vMh1mj5voN4+QFhVZnlZruezqpWYDiJ8UTzhP0VmeLXCmBk66YrMQ==}
     dependencies:
-      '@types/node': 15.12.5
+      '@types/node': 16.3.2
     dev: false
 
   /@types/prettier/2.2.3:
@@ -8381,7 +8405,7 @@ packages:
   /@types/secp256k1/4.0.2:
     resolution: {integrity: sha512-QMg+9v0bbNJ2peLuHRWxzmy0HRJIG6gFZNhaRSp7S3ggSbCCxiqQB2/ybvhXyhHOCequpNkrx7OavNhrWOsW0A==}
     dependencies:
-      '@types/node': 15.12.5
+      '@types/node': 16.3.2
     dev: false
 
   /@types/serve-static/1.13.10:
@@ -10802,7 +10826,7 @@ packages:
       extend-shallow: 2.0.1
       fill-range: 4.0.0
       isobject: 3.0.1
-      repeat-element: 1.1.3
+      repeat-element: 1.1.4
       snapdragon: 0.8.2
       snapdragon-node: 2.1.1
       split-string: 3.1.0
@@ -10873,8 +10897,8 @@ packages:
     resolution: {integrity: sha512-WHVocJYavUwVgVViC0ORikPHQquXwVh939TaelZ4WDqpWgTX/FsGhl/+P4qBUAGcRvtOgDgC+xftNWWp2RUTAQ==}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001243
-      electron-to-chromium: 1.3.773
+      caniuse-lite: 1.0.30001245
+      electron-to-chromium: 1.3.776
     dev: false
 
   /browserslist/4.14.2:
@@ -11219,6 +11243,11 @@ packages:
 
   /caniuse-lite/1.0.30001243:
     resolution: {integrity: sha512-vNxw9mkTBtkmLFnJRv/2rhs1yufpDfCkBZexG3Y0xdOH2Z/eE/85E4Dl5j1YUN34nZVsSp6vVRFQRrez9wJMRA==}
+    dev: true
+
+  /caniuse-lite/1.0.30001245:
+    resolution: {integrity: sha512-768fM9j1PKXpOCKws6eTo3RHmvTUsG9UrpT4WoREFeZgJBTi4/X9g565azS/rVUGtqb8nt7FjLeF5u4kukERnA==}
+    dev: false
 
   /capture-exit/2.0.0:
     resolution: {integrity: sha512-PiT/hQmTonHhl/HFGN+Lx3JJUznrVYJ3+AQsnthneZbvW7x+f08Tk7yLJTLEOUvBTbduLeeBkxEaYXUOUrRq6g==}
@@ -12506,13 +12535,6 @@ packages:
     dependencies:
       assert-plus: 1.0.0
 
-  /dashdash/2.0.0:
-    resolution: {integrity: sha512-ElMoAPlrzmF4l0OscF5pPBZv8LhUJBnwh7rHKllUOrwabAr47R1aQIIwC53rc59ycCb7k5Sj1/es+A3Bep/x5w==}
-    engines: {node: '>=10.x'}
-    dependencies:
-      assert-plus: 1.0.0
-    dev: true
-
   /data-urls/1.1.0:
     resolution: {integrity: sha512-YTWYI9se1P55u58gL5GkQHW4P6VJBJ5iBT+B5a7i2Tjadhv52paJG0qHX4A0OR6/t52odI64KP2YvFpkDOi3eQ==}
     dependencies:
@@ -13148,6 +13170,11 @@ packages:
 
   /electron-to-chromium/1.3.773:
     resolution: {integrity: sha512-Y44FtvE3Lpr7ka/kPdQbIYzUBCWddW8Ky5QzKbasDeqFdJYK9izaiiAIRAoE3Kdu7+GPBVwwyWDaQ2yyeNqWRA==}
+    dev: true
+
+  /electron-to-chromium/1.3.776:
+    resolution: {integrity: sha512-V0w7eFSBoFPpdw4xexjVPZ770UDZIevSwkkj4W97XbE3IsCsTRFpa7/yXGZ88EOQAUEA09JMMsWK0xsw0kRAYw==}
+    dev: false
 
   /element-resize-detector/1.2.3:
     resolution: {integrity: sha512-+dhNzUgLpq9ol5tyhoG7YLoXL3ssjfFW+0gpszXPwRU6NjGr1fVHMEAF8fVzIiRJq57Nre0RFeIjJwI8Nh2NmQ==}
@@ -14077,11 +14104,11 @@ packages:
       setimmediate: 1.0.5
     dev: false
 
-  /ethereumjs-abi/0.6.6:
-    resolution: {integrity: sha512-w8KubDsA/+OAuqtIR9RGsMcoZ5nhM8vxwjJAJvEIY+clhxA3BHoLG3+ClYQaQhD0n3mlDt3U5rBrmSVJvI3c8A==}
+  /ethereumjs-abi/0.6.8:
+    resolution: {integrity: sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==}
     dependencies:
       bn.js: 4.12.0
-      ethereumjs-util: 5.2.1
+      ethereumjs-util: 6.2.1
     dev: false
 
   /ethereumjs-account/2.0.5:
@@ -19867,10 +19894,10 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /notistack/1.0.9_132ff92e0fd7328580f6380de259b809:
-    resolution: {integrity: sha512-Dal2HtTpWrdYCZ3t0HhJt47NJZwVSPee36WzORRbqUkFR0k9pxFszxBuPSWshBLwF6Av8s86XPP+ED5zRz0CGw==}
+  /notistack/1.0.6-next.1_132ff92e0fd7328580f6380de259b809:
+    resolution: {integrity: sha512-deshn1cnse70pRFKuDC4mKUohjspAF3KjyjoolAFLCNGlFpjpBgHcFR8+gnO4XV0ijuXVz+oDfzBAdw/YMtkkg==}
     peerDependencies:
-      '@material-ui/core': ^4.0.0
+      '@material-ui/core': ^5.0.0-alpha.15
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
@@ -21645,6 +21672,14 @@ packages:
       react: 18.0.0-alpha-aecb3b6d1
     dev: false
 
+  /react-hook-form/7.10.1_react@18.0.0-alpha-aecb3b6d1:
+    resolution: {integrity: sha512-YRSkOZ0DJKjJ+PuCB6caFbFSbz6I4JQcGXVb/OeEIVE3YuXXYYJ/YQwodRy8HsZ5WA+DryoThWIeZZzPd5f9lQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17
+    dependencies:
+      react: 18.0.0-alpha-aecb3b6d1
+    dev: false
+
   /react-i18next/11.11.1_44b15288743ca8758b7bd6a3c957a6b2:
     resolution: {integrity: sha512-MtfzPEOvx0ev2cz0HmrEcduuqkktSa5bfeN8Flp0cvN0xP3H3MRSTa8P6pxPtqstHbRe1cD9QBOr5T/FEV2gOw==}
     peerDependencies:
@@ -22354,8 +22389,8 @@ packages:
       strip-ansi: 3.0.1
     dev: true
 
-  /repeat-element/1.1.3:
-    resolution: {integrity: sha512-ahGq0ZnV5m5XtZLMb+vP76kcAM5nkLqk0lpqAuojSKGgQtn4eRi4ZZGm2olo2zKFH+sMsWaqOCW1dqAnOru72g==}
+  /repeat-element/1.1.4:
+    resolution: {integrity: sha512-LFiNfRcSu7KK3evMyYOuCzv3L10TW7yC1G2/+StMjK8Y6Vqd2MG7r/Qjw4ghtuCOjFvlnms/iMmLqpvW/ES/WQ==}
     engines: {node: '>=0.10.0'}
 
   /repeat-string/1.6.1:
@@ -23068,10 +23103,6 @@ packages:
 
   /shellwords/0.1.1:
     resolution: {integrity: sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==}
-    dev: true
-
-  /shlex/2.1.0:
-    resolution: {integrity: sha512-Tk8PjohJbWpGu2NtAlsEi/9AS4GU2zW2ZWLFrWRDskZpSJmyBIU3nTkBtocxD90r3w4BwRevsNtIqIP9HMuYiQ==}
     dev: true
 
   /side-channel/1.0.4:
@@ -26837,32 +26868,12 @@ packages:
       commander: 2.20.3
     dev: false
 
+  /zod/3.5.1:
+    resolution: {integrity: sha512-Gg9GTai0iDHowuYM9VNhdFMmesgt44ufzqaE5CPHshpuK5fCzbibdqCnrWuYH6ZmOn/N+BlGmwZtVSijhKmhKw==}
+    dev: false
+
   /zwitch/1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
-    dev: true
-
-  file:patches/patch-package-6.4.7.tgz:
-    resolution: {integrity: sha512-ahMzuSJOT2NhXPuoCysQy/lu6Z41Mj303MQhNpG0yphnoYj7zJ1qEYHbWNpPrZphxYUizg/s9OO/8TUPJ2zOVg==, tarball: file:patches/patch-package-6.4.7.tgz}
-    name: patch-package
-    version: 6.4.7
-    engines: {npm: '>5'}
-    hasBin: true
-    dependencies:
-      '@types/dashdash': 1.14.1
-      '@yarnpkg/lockfile': 1.1.0
-      chalk: 2.4.2
-      cross-spawn: 6.0.5
-      dashdash: 2.0.0
-      find-yarn-workspace-root: 2.0.0
-      fs-extra: 7.0.1
-      is-ci: 2.0.0
-      klaw-sync: 6.0.0
-      open: 7.4.2
-      rimraf: 2.7.1
-      semver: 5.7.1
-      shlex: 2.1.0
-      slash: 2.0.0
-      tmp: 0.0.33
     dev: true
 
   github.com/ProjectOpenSea/wyvern-js/fabb7660f23f2252c141077e32193d281036299e:

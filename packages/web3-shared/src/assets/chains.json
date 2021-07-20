@@ -10,7 +10,8 @@
         "nativeCurrency": {
             "name": "Ether",
             "symbol": "ETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "faucets": [],
         "explorers": [
@@ -125,7 +126,8 @@
         "nativeCurrency": {
             "name": "Binance Chain Native Token",
             "symbol": "BNB",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/bsc_token/logo_url/bsc/8bfdeaa46fe9be8f5cd43a53b8d1eea1.png"
         },
         "faucets": [],
         "explorers": [
@@ -171,7 +173,8 @@
         "nativeCurrency": {
             "name": "Matic",
             "symbol": "MATIC",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
         },
         "faucets": [],
         "explorers": [
@@ -258,7 +261,7 @@
     },
     {
         "name": "Optimistic Ethereum",
-        "chain": "ETH",
+        "chain": "OPT",
         "network": "mainnet",
         "rpc": ["https://mainnet.optimism.io/"],
         "faucets": [],
@@ -367,7 +370,7 @@
     },
     {
         "name": "ELA-ETH-Sidechain Mainnet",
-        "chain": "ETH",
+        "chain": "ELA-ETH",
         "network": "mainnet",
         "rpc": ["https://mainrpc.elaeth.io"],
         "faucets": [],
@@ -379,7 +382,7 @@
     },
     {
         "name": "ELA-ETH-Sidechain Testnet",
-        "chain": "ETH",
+        "chain": "ELA-ETH",
         "network": "testnet",
         "rpc": ["https://rpc.elaeth.io"],
         "faucets": ["https://faucet.elaeth.io/"],
@@ -391,7 +394,7 @@
     },
     {
         "name": "ELA-DID-Sidechain Mainnet",
-        "chain": "ETH",
+        "chain": "ELA-ETH",
         "network": "mainnet",
         "rpc": [],
         "faucets": [],
@@ -403,7 +406,7 @@
     },
     {
         "name": "ELA-DID-Sidechain Testnet",
-        "chain": "ETH",
+        "chain": "ELA-ETH",
         "network": "testnet",
         "rpc": [],
         "faucets": [],
@@ -729,7 +732,7 @@
     },
     {
         "name": "Optimistic Ethereum Testnet Kovan",
-        "chain": "ETH",
+        "chain": "OPT",
         "network": "kovan",
         "rpc": ["https://kovan.optimism.io/"],
         "faucets": [],
@@ -1028,7 +1031,7 @@
     },
     {
         "name": "HOO Smart Chain Testnet",
-        "chain": "ETH",
+        "chain": "HOO",
         "network": "testnet",
         "rpc": ["https://http-testnet.hoosmartchain.com"],
         "faucets": ["https://faucet-testnet.hscscan.com/"],
@@ -1142,7 +1145,7 @@
     },
     {
         "name": "Optimistic Ethereum Testnet Goerli",
-        "chain": "ETH",
+        "chain": "OPT",
         "network": "goerli",
         "rpc": ["https://goerli.optimism.io/"],
         "faucets": [],
@@ -1936,7 +1939,7 @@
     },
     {
         "name": "Firenze test network",
-        "chain": "ETH",
+        "chain": "FIR",
         "network": "testnet",
         "rpc": ["https://ethnode.primusmoney.com/firenze"],
         "faucets": [],
