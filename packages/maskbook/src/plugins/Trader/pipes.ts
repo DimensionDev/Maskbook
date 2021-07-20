@@ -1,6 +1,6 @@
 import type BigNumber from 'bignumber.js'
 import { Currency, DataProvider, TradeProvider, WarningLevel, ZrxTradePool } from './types'
-import { unreachable } from '@dimensiondev/kit'
+import { safeUnreachable, unreachable } from '@dimensiondev/kit'
 import {
     BIPS_BASE,
     PRICE_IMPACT_HIGH,
@@ -95,10 +95,13 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return ''
         case TradeProvider.SUSHISWAP:
             switch (networkType) {
-                case NetworkType.Ethereum: return `https://analytics.sushi.com/pairs/${address}`
-                case NetworkType.Binance: return `https://analytics-bsc.sushi.com/pairs/${address}`
-                case NetworkType.Polygon: return `https://analytics-polygon.sushi.com/pairs/${address}`
-                default: 
+                case NetworkType.Ethereum:
+                    return `https://analytics.sushi.com/pairs/${address}`
+                case NetworkType.Binance:
+                    return `https://analytics-bsc.sushi.com/pairs/${address}`
+                case NetworkType.Polygon:
+                    return `https://analytics-polygon.sushi.com/pairs/${address}`
+                default:
                     safeUnreachable(networkType)
                     return ''
             }
