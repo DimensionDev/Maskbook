@@ -2,6 +2,7 @@ import { Box, makeStyles, AvatarGroup, Link } from '@material-ui/core'
 import { TokenIcon } from '@masknet/shared'
 import { Hop, TradeProvider } from '../../types'
 import { resolveTradePairLink } from '../../pipes'
+import { useChainId } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,6 +26,7 @@ export interface TradeRouteHopProps {
 export function TradeRouteHop(props: TradeRouteHopProps) {
     const { hop } = props
     const classes = useStyles()
+    const chainId = useChainId()
 
     return (
         <div className={classes.root}>
@@ -38,7 +40,7 @@ export function TradeRouteHop(props: TradeRouteHopProps) {
                     className={classes.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={resolveTradePairLink(TradeProvider.BALANCER, hop.pool.address)}>
+                    href={resolveTradePairLink(chainId, TradeProvider.BALANCER, hop.pool.address)}>
                     {hop.pool.tokens.map((token) => (
                         <Box display="flex" alignItems="center" key={token.address}>
                             <TokenIcon address={token.address} />
