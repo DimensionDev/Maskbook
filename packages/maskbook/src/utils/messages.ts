@@ -64,6 +64,8 @@ export interface MaskMessages extends SettingsEvents {
     }
     /** Plugin ID */
     activatePluginCompositionEntry: string
+    pluginEnabled: string
+    pluginDisabled: string
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })

@@ -96,7 +96,7 @@
     "error_gas_feed_exceeds": "Error occurred when invoking the smart contract.",
     "error_insufficient_balance": "Your allowance in this wallet is not sufficient to do that.",
     "error_unknown": "Unknown Error.",
-    "eanble_or_disable_plugin": "enable/disable plugin",
+    "enable_or_disable_plugin": "enable/disable plugin",
     "feedback": "Feedback",
     "fingerprint": "Fingerprint",
     "buy": "Buy",

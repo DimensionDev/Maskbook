@@ -96,7 +96,7 @@
     "error_gas_feed_exceeds": "呼叫智慧合約時出錯。",
     "error_insufficient_balance": "你錢包裡的餘額不足以完成這個操作。",
     "error_unknown": "未知的錯誤。",
-    "eanble_or_disable_plugin": "開啟/關閉插件",
+    "enable_or_disable_plugin": "開啟/關閉插件",
     "feedback": "提供建議",
     "fingerprint": "指紋",
     "buy": "購買",
