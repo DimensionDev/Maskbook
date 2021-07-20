@@ -3,6 +3,8 @@ import './plugins'
 import { Emitter } from '@servie/events'
 import { startPluginDashboard, Plugin } from '@masknet/plugin-infra'
 import { Services, Messages } from '../API'
+import { createI18NBundle } from '@masknet/shared'
+import i18n from 'i18next'
 
 const PluginHost: Plugin.__Host.Host = {
     enabled: {
@@ -10,6 +12,9 @@ const PluginHost: Plugin.__Host.Host = {
         isEnabled: (id) => {
             return Services.Settings.isPluginEnabled(id)
         },
+    },
+    addI18NResource(plugin, resource) {
+        createI18NBundle(plugin, resource)(i18n)
     },
 }
 setTimeout(() => {

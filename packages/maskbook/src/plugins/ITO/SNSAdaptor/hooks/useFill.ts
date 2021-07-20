@@ -20,10 +20,11 @@ import {
     FungibleTokenDetailed,
     ERC20TokenDetailed,
     TransactionState,
+    FAKE_SIGN_PASSWORD,
 } from '@masknet/web3-shared'
 import { useITO_Contract } from './useITO_Contract'
 import { gcd, sortTokens } from '../helpers'
-import { FAKE_SIGN_PASSWORD, ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants'
+import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants'
 import type { AdvanceSettingData } from '../AdvanceSetting'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 

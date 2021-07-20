@@ -36,7 +36,9 @@ export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<Wal
                 }
                 footer={
                     <DebounceButton disabled={!token} variant="contained" onClick={onSubmit}>
-                        {t('add_token')}
+                        {t('add_token_symbol', {
+                            symbol: token?.symbol ?? 'Token',
+                        })}
                     </DebounceButton>
                 }
             />

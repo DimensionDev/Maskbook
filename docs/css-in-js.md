@@ -12,11 +12,16 @@ maintainer:
 - ✅ For recommendations
 - &#9888; For warnings
 - 🚫 For forbiddens
-- ✅ Use [the Box component provided by the library](https://next.material-ui.com/components/box/#main-content) when the CSS is simple and only used once.
-- ✅ CSS custom variables is OK but do not abuse it. Get the variable from the theme if it is possible.
-- ✅ CSS grid is OK but you may want to use the `Grid` component. Choose the fit one based on your need.
-- 🚫 DO NOT use mystery abbreviations in the `sx` properties, e.g. `<Box sx={{ p: 5 }} />` (DON'T) but `<Box sx={{ padding: 5 }}>` (DO, easier to read).
-- 🚫 DO NOT mix two styling solution together. It may cause unknown bugs. FYI: `makeStyles` is `JSS`, `Box`, `sx` and `styled` are `@emotion`.
+- ✅ Use [the Box component provided by the library](https://next.material-ui.com/components/box/#main-content)
+  when the CSS is simple and only used once.
+- ✅ CSS custom variables is OK but do not abuse it.
+  Get the variable from the theme if it is possible.
+- ✅ CSS grid is OK but you may want to use the `Grid` component.
+  Choose the fit one based on your need.
+- 🚫 DO NOT use mystery abbreviations in the `sx` properties, e.g. `<Box sx={{ p: 5 }} />`
+  (DON'T) but `<Box sx={{ padding: 5 }}>` (DO, easier to read).
+- 🚫 DO NOT mix two styling solution together. It may cause unknown bugs.
+  FYI: `makeStyles` is `JSS`, `Box`, `sx` and `styled` are `@emotion`.
 
 ## Guides on the `makeStyles` style
 
@@ -30,7 +35,10 @@ const useStyle = makeStyles((theme) => ({
 
 Reason: This is the recommend way of writing way in @material-ui 4.
 
-&#9888; In @material-ui 5 there is [an RFC](https://github.com/mui-org/material-ui/issues/26571) about to add `makeStyles` API back and migrate to based on emotion. Even if this RFC doesn't land, there is a community solution called [tss-react](https://github.com/garronej/tss-react) that we can migrate to. Therefore it's safe to continue use the `makeStyles` API.
+&#9888; In @material-ui 5 there is [an RFC](https://github.com/mui-org/material-ui/issues/26571)
+about to add `makeStyles` API back and migrate to based on emotion.
+Even if this RFC doesn't land, there is a community solution called [tss-react](https://github.com/garronej/tss-react)
+that we can migrate to. Therefore it's safe to continue use the `makeStyles` API.
 
 #### Change style of MUI components
 
@@ -88,7 +96,8 @@ Reason: Not type-checked. Easy to get things wrong.
 
 &#9888; Not recommended. Please perfer to use `makeStyles` in this case.
 
-&#9888; Caution: Please aware of CSS selector. You may want `& > .${selected}` or `&.${selected}` in most cases instead of `& .${selected}`.
+&#9888; Caution: Please aware of CSS selector.
+You may want `& > .${selected}` or `&.${selected}` in most cases instead of `& .${selected}`.
 
 ```js
 import { buttonClasses } from '@material-ui/core'
@@ -117,4 +126,5 @@ const MyExample = styled(Example)`
 <Parent ExampleComponent={MyExample} />
 ```
 
-&#9888; No every component has this kind of API that allowing to overwrite the inner component so this method may not be able to use.
+&#9888; No every component has this kind of API that allowing to overwrite
+the inner component so this method may not be able to use.

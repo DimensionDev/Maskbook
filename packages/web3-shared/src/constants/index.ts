@@ -47,3 +47,6 @@ export const useRPCConstants = hookTransform(getRPCConstants)
 
 export const getTokenAssetBaseURLConstants = transform(TokenAssetBaseURL)
 export const useTokenAssetBaseURLConstants = hookTransform(getTokenAssetBaseURLConstants)
+
+// for estimate gas
+export const FAKE_SIGN_PASSWORD = '0x75466cc969717b172b14253aaeebdc958f2b5037a852c1337650ed4978242dd9'

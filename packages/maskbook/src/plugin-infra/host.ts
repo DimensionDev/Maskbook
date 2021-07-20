@@ -6,6 +6,9 @@ import { Emitter } from '@servie/events'
 import { currentPluginEnabledStatus } from '../settings/settings'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { MaskMessage } from '../utils'
+import i18nNextInstance from '../utils/i18n-next'
+import { createI18NBundle } from '@masknet/shared'
+
 export function createPluginHost(signal?: AbortSignal): Plugin.__Host.Host {
     const listening = new Set<string>()
     const enabled: Plugin.__Host.EnabledStatusReporter = {
@@ -28,5 +31,11 @@ export function createPluginHost(signal?: AbortSignal): Plugin.__Host.Host {
         },
         events: new Emitter(),
     }
-    return { signal, enabled }
+    return {
+        signal,
+        enabled,
+        addI18NResource(plugin, resource) {
+            createI18NBundle(plugin, resource)(i18nNextInstance)
+        },
+    }
 }
