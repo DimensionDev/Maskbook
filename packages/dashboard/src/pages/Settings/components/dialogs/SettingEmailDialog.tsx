@@ -3,10 +3,9 @@ import { forwardRef, useContext, useImperativeHandle, useRef, useState } from 'r
 import { Box, Typography, makeStyles } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
-import CountdownButton from '../../../../components/CountdownButton'
 import { sendCode, verifyCode } from '../../api'
 import { emailRegexp } from '../../regexp'
-import { MaskTextField } from '@masknet/theme'
+import { MaskTextField, CountdownButton } from '@masknet/theme'
 
 const useStyles = makeStyles({
     container: {

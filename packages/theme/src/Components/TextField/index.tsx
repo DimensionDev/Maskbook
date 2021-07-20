@@ -42,7 +42,7 @@ export const MaskTextField = memo((props: MaskTextFieldProps) => {
 
     return (
         <div className={classes.root}>
-            <label className={classes.label}>{label}</label>
+            {label && <label className={classes.label}>{label}</label>}
             <TextField
                 {...rest}
                 classes={{ root: classes.field }}

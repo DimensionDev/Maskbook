@@ -5,8 +5,8 @@ export interface CountdownButtonProps extends ButtonProps {
     duration?: number
 }
 
-export default function CountdownButton(props: CountdownButtonProps) {
-    const { duration = 60, children, onClick, ...others } = props
+export function CountdownButton(props: CountdownButtonProps) {
+    const { duration = 60, children, onClick, disabled, ...others } = props
     const [countdown, setCountdown] = useState(0)
     const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setCountdown(duration)
@@ -22,7 +22,7 @@ export default function CountdownButton(props: CountdownButtonProps) {
     }, [countdown])
 
     return (
-        <Button {...others} onClick={handleClick} disabled={!!countdown}>
+        <Button {...others} onClick={handleClick} disabled={!!countdown || disabled}>
             {children}
             {countdown ? ` (${countdown})` : ''}
         </Button>

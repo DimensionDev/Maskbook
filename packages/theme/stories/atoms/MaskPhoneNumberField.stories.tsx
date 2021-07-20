@@ -3,7 +3,7 @@ import { PhoneNumberFieldExample } from './PhoneNumberFieldExample'
 
 const { meta, of } = story(PhoneNumberFieldExample)
 export default meta({
-    title: 'Atoms/PhoneNumberTextField',
+    title: 'Atoms/PhoneNumberField',
     parameters: {},
 })
 
