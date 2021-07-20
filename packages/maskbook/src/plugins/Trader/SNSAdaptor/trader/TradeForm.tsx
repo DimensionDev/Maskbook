@@ -111,7 +111,7 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region remote controlled swap settings dialog
-    const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated)
+    const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
     //#endregion
 
     //#region form controls

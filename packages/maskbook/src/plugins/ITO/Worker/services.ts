@@ -1,5 +1,4 @@
 import type { JSON_PayloadInMask, PoolRecord } from '../types'
-import { PluginITO_Messages } from '../messages'
 import * as subgraph from './apis'
 import * as database from './database'
 import { getChainDetailed } from '@masknet/web3-shared'
@@ -59,5 +58,4 @@ export async function discoverPool(from: string, payload: JSON_PayloadInMask) {
         },
     }
     await database.addPoolIntoDB(record)
-    PluginITO_Messages.events.poolUpdated.sendToAll(undefined)
 }

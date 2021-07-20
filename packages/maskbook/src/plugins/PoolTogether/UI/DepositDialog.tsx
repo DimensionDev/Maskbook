@@ -90,15 +90,12 @@ export function DepositDialog() {
     const account = useAccount()
 
     //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(
-        PluginPoolTogetherMessages.events.DepositDialogUpdated,
-        (ev) => {
-            if (ev.open) {
-                setPool(ev.pool)
-                setToken(ev.token)
-            }
-        },
-    )
+    const { open, closeDialog } = useRemoteControlledDialog(PluginPoolTogetherMessages.DepositDialogUpdated, (ev) => {
+        if (ev.open) {
+            setPool(ev.pool)
+            setToken(ev.token)
+        }
+    })
     const onClose = useCallback(() => {
         closeDialog()
     }, [closeDialog])
@@ -163,7 +160,7 @@ export function DepositDialog() {
 
     //#region Swap
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
-        PluginTraderMessages.events.swapDialogUpdated,
+        PluginTraderMessages.swapDialogUpdated,
         useCallback(
             (ev) => {
                 if (!ev.open) {

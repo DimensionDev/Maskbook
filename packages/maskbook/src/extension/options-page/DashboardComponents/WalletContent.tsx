@@ -141,7 +141,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     ])
 
     //#region remote controlled buy dialog
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
     //#endregion
 
     //#region tab

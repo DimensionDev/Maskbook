@@ -1,6 +1,4 @@
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type {
-    ERC20TokenDetailed,
     FungibleTokenDetailed,
     GasNow,
     NetworkType,
@@ -9,20 +7,9 @@ import type {
     Wallet,
 } from '@masknet/web3-shared'
 import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
-import { createPluginMessage } from '../utils/createPluginMessage'
+import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { PLUGIN_IDENTIFIER } from './constants'
-
-export type UnlockERC20TokenDialogEvent =
-    | {
-          open: true
-          token: ERC20TokenDetailed
-          amount: string
-          spender: string
-      }
-    | {
-          open: false
-      }
 
 export type TransactionDialogEvent =
     | {
@@ -121,11 +108,6 @@ export type SelectTokenDialogEvent =
 
 export interface WalletMessage {
     /**
-     * Unlock token dialog
-     */
-    unlockERC20TokenDialogUpdated: UnlockERC20TokenDialogEvent
-
-    /**
      * Transaction dialog
      */
     transactionDialogUpdated: TransactionDialogEvent
@@ -194,5 +176,7 @@ export interface WalletMessage {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const WalletMessages: WebExtensionMessage<WalletMessage> = createPluginMessage<WalletMessage>(PLUGIN_IDENTIFIER)
+export const WalletMessages: { events: PluginMessageEmitter<WalletMessage> } = {
+    events: createPluginMessage<WalletMessage>(PLUGIN_IDENTIFIER),
+}
 export const WalletRPC = createPluginRPC(PLUGIN_IDENTIFIER, () => import('./services'), WalletMessages.events.rpc)

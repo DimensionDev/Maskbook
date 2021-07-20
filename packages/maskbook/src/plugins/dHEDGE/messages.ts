@@ -1,5 +1,4 @@
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { createPluginMessage } from '../utils/createPluginMessage'
+import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { DHEDGE_PLUGIN_ID } from './constants'
 import type { Pool } from './types'
@@ -23,10 +22,5 @@ interface DHedgeMessages {
     rpc: unknown
 }
 
-export const PluginDHedgeMessages: WebExtensionMessage<DHedgeMessages> =
-    createPluginMessage<DHedgeMessages>(DHEDGE_PLUGIN_ID)
-export const PluginDHedgeRPC = createPluginRPC(
-    DHEDGE_PLUGIN_ID,
-    () => import('./services'),
-    PluginDHedgeMessages.events.rpc,
-)
+export const PluginDHedgeMessages: PluginMessageEmitter<DHedgeMessages> = createPluginMessage(DHEDGE_PLUGIN_ID)
+export const PluginDHedgeRPC = createPluginRPC(DHEDGE_PLUGIN_ID, () => import('./services'), PluginDHedgeMessages.rpc)
