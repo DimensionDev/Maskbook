@@ -143,7 +143,7 @@ This type represents this payload is encrypted, but the AES key is shared with e
 Which means the message is NOT shared.
 
 ```typescript
-type PublicShared = [kind: EncryptionKind.Public, AES_KEY: AES_KEY, iv: Binary]
+type PublicEncrypted = [kind: EncryptionKind.Public, AES_KEY: AES_KEY, iv: Binary]
 ```
 
 ###### `AES_KEY`
